@@ -583,10 +583,10 @@
             "box4_title": "En developpement actif",
             "box1_text": "Le projet est entièrement libre (code sous licence CeCILL, compatible avec la GNU GPL).<br>Il repose sur une suite moderne de technologies libres et open-source et il est possible de déployer sa propre instance de l'application.",
             "box2_text": "Les rapports d'erreurs et contributions sont les bienvenues. Ils sont possibles via le <a href=\"/contact\">formulaire de contact</a> et via la plateforme <a href=\"https://github.com/riatelab/magrit\">GitHub</a>.",
-            "box3_text": "Le code a été préparé pour permettre la traduction et deux langages sont déjà disponibles.",
+            "box3_text": "Le code a été préparé pour permettre la traduction et deux langues sont déjà disponibles.",
             "box4_text": "Le projet est toujours en developpement. De nouvelles fonctionnalités sont actuellement en préparation!",
             "hypotheses1": "Vivant",
-            "hypotheses2": "L'application est également adossée à un <a href=\"http://magrit.hypotheses.org/\">carnet de recherche</a> qui contient des didactitels ainsi que les actualités sur les évolutions de l'application.",
+            "hypotheses2": "L'application est également adossée à un <a href=\"http://magrit.hypotheses.org/\">carnet de recherche</a> qui contient des didactitiels ainsi que les actualités sur les évolutions de l'application.",
             "browser": "Ce site web est optimisé pour Mozilla Firefox et Chromium (Google Chrome, Opera, etc.)"
         },
         "cookie_div": {
