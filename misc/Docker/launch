@@ -15,7 +15,7 @@ then
 	cd nginx/
 	docker build -t "nginx:latest" .
 	cd ..
-	docker run -dP --name magritapp "magrit_app:$(date +%y%m%d)"
+	docker run -dP --name magritapp --sysctl=net.core.somaxconn=511 "magrit_app:$(date +%y%m%d)"
 	docker run --publish "80:80" -dP --name nginx --link magritapp:magritapp nginx
 elif [ "$1" == "update" ]
 then
@@ -32,6 +32,6 @@ then
 	docker build -t "magrit_app:$(date +%y%m%d)" --build-arg CACHEBUST=$(date +%s) .
 	cd ..
 	docker kill magritapp nginx && docker rm magritapp nginx
-	docker run -dP --name magritapp "magrit_app:$(date +%y%m%d)"
+	docker run -dP --name magritapp --sysctl=net.core.somaxconn=511 "magrit_app:$(date +%y%m%d)"
 	docker run --publish "80:80" -dP --name nginx --link magritapp:magritapp nginx
 fi
