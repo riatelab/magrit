@@ -12,8 +12,9 @@ module.exports = [
       vendor: [
         'alertifyjs', 'colorbrewer',
         'i18next', 'i18next-xhr-backend',
-        'jschardet', 'loc-i18next', 'tippy.js',
-      ]
+        'jschardet', 'loc-i18next', 'proj4',
+        'sortablejs', 'tippy.js', 'topojson',
+      ],
     },
     output: {
       filename: '[name].[hash:6].js',
@@ -32,44 +33,44 @@ module.exports = [
           test: /\.js$/,
           use: 'babel-loader',
           exclude: [
-            /node_modules/
-          ]
+            /node_modules/,
+          ],
         },
-       {
-         test:/\.css$/,
-         use:['style-loader','css-loader']
-       }
-      ]
+        {
+          test: /\.css$/,
+          use: ['style-loader', 'css-loader'],
+        },
+      ],
     },
     optimization: {
       splitChunks: {
-          cacheGroups: {
-            commons: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendor',
-              chunks: 'all'
-            }
-          }
+        cacheGroups: {
+          commons: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendor',
+            chunks: 'all',
+          },
         },
-        minimizer: [
-          new UglifyJsPlugin({
-            cache: true,
-            parallel: true,
-            uglifyOptions: {
-              compress: false,
-              ecma: 6,
-              mangle: false
-            },
-            sourceMap: true
-          })
-        ]
+      },
+      minimizer: [
+        new UglifyJsPlugin({
+          cache: true,
+          parallel: true,
+          uglifyOptions: {
+            compress: false,
+            ecma: 6,
+            mangle: false,
+          },
+          sourceMap: true,
+        }),
+      ],
     },
     plugins: [
       new CleanWebpackPlugin(['dist'], {
         watch: true,
       }),
       new webpack.ProvidePlugin({
-          'Promise': 'bluebird',
+        Promise: 'bluebird',
       }),
       new ReplaceHashWebpackPlugin({
         cwd: './',
@@ -87,18 +88,18 @@ module.exports = [
               if (stderr) process.stderr.write(stderr);
             });
           });
-        }
+        },
       },
     ],
     watchOptions: {
-      poll: true
-    }
+      poll: true,
+    },
   },
   {
-    entry: "./js/d3_custom.js",
+    entry: './js/d3_custom.js',
     output: {
-      filename: "d3-custom.min.js",
-      library: "d3"
+      filename: 'd3-custom.min.js',
+      library: 'd3',
     },
     mode: 'production',
     module: {
@@ -107,10 +108,10 @@ module.exports = [
           test: /\.js$/,
           use: 'babel-loader',
           exclude: [
-            /node_modules/
-          ]
+            /node_modules/,
+          ],
         },
-      ]
+      ],
     },
     optimization: {
       minimizer: [
@@ -120,10 +121,10 @@ module.exports = [
           uglifyOptions: {
             compress: false,
             ecma: 6,
-            mangle: false
-          }
-        })
-      ]
+            mangle: false,
+          },
+        }),
+      ],
     },
     plugins: [{
       apply: (compiler) => {
@@ -133,7 +134,7 @@ module.exports = [
             if (stderr) process.stderr.write(stderr);
           });
         });
-      }
+      },
     }],
   },
 ];

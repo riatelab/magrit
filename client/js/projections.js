@@ -1,3 +1,4 @@
+import proj4 from 'proj4';
 import { make_dialog_container, overlay_under_modal } from './dialogs';
 import { accordionize2, getTargetLayerProps } from './helpers';
 import { scale_to_bbox } from './helpers_calc';

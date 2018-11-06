@@ -237,16 +237,18 @@ export function redraw_legends_symbols(targeted_node) {
     if (!rendered_field && type_lgd_layout === 'Point') {
       const text_value = legend_nodes[i].querySelector('g.lg.legend_0 > text').innerHTML;
       legend_nodes[i].remove();
-      createLegend_layout(layer_name,
-                          type_lgd_layout,
-                          lgd_title,
-                          lgd_subtitle,
-                          rect_fill_value,
-                          text_value,
-                          notes);
+      createLegend_layout(
+        layer_name,
+        type_lgd_layout,
+        lgd_title,
+        lgd_subtitle,
+        rect_fill_value,
+        text_value,
+        notes,
+      );
 
       new_lgd = document.querySelector(['#legend_root_layout.lgdf_', layer_id].join(''));
-    } else if (rendered_field  && ['Carto_doug', 'OlsonCarto'].indexOf(data_manager.current_layers[layer_name].renderer) < 0) {
+    } else if (rendered_field && ['Carto_doug', 'OlsonCarto'].indexOf(data_manager.current_layers[layer_name].renderer) < 0) {
       const nested = legend_nodes[i].getAttribute('nested'),
         join_line = legend_nodes[i].getAttribute('join_line');
 

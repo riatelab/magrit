@@ -1,5 +1,7 @@
 import alertify from 'alertifyjs';
 import jschardet from 'jschardet';
+import proj4 from 'proj4';
+import * as topojson from 'topojson';
 import { rgb2hex } from './colors_helpers';
 import { make_confirm_dialog2 } from './dialogs';
 import { available_fonts } from './fonts';

@@ -1,5 +1,6 @@
-import { Mmax, /*Mmin, Mpow,*/ Msqrt, Mabs, Mround, /*Mceil*/ } from './helpers_math';
+import { Mmax, Msqrt, Mabs, Mround } from './helpers_math';
 import { reproj_symbol_layer, zoom_without_redraw } from './map_ctrl';
+
 const sin = Math.sin;
 const cos = Math.cos;
 const atan2 = Math.atan2;
@@ -86,8 +87,8 @@ export const round_value = function (val, nb) {
   if (nb === undefined) { return val; }
   const dec_mult = +['1', Array(Mabs(nb)).fill('0').join('')].join('');
   return nb >= 0
-        ? Mround(+val * dec_mult) / dec_mult
-        : Mround(+val / dec_mult) * dec_mult;
+    ? Mround(+val * dec_mult) / dec_mult
+    : Mround(+val / dec_mult) * dec_mult;
 };
 
 export function get_nb_decimals(nb) {
@@ -277,8 +278,7 @@ export function coslaw_dist(A, B) {
     phi2 = lat2 * pi_dr,
     d_lambda = (lon2 - lon1) * pi_dr;
   return Math.acos(Math.sin(phi1) * Math.sin(phi2) +
-                Math.cos(phi1) * Math.cos(phi2) * Math.cos(d_lambda),
-                ) * 6371;
+    Math.cos(phi1) * Math.cos(phi2) * Math.cos(d_lambda)) * 6371;
 }
 
 // /**
@@ -306,7 +306,7 @@ function getStdDev(values, mean_val) {
   // const pow = Math.pow;
   let s = 0;
   for (let i = 0; i < nb_val; i++) {
-      // s += pow(values[i] - mean_val, 2);
+    // s += pow(values[i] - mean_val, 2);
     s += (values[i] - mean_val) ** 2;
   }
   return Msqrt((1 / nb_val) * s);

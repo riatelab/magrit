@@ -1,3 +1,5 @@
+import proj4 from 'proj4';
+import * as topojson from 'topojson';
 import ContextMenu from './context-menu';
 import { Colors, rgb2hex } from './colors_helpers';
 import {
@@ -632,7 +634,7 @@ function rehandle_legend(layer_name, properties) {
         prop.rect_fill_value,
         prop.rounding_precision,
         prop.bottom_note,
-       );
+      );
     } else if (prop.type === 'legend_root_lines_class') {
       createLegend_discont_links(
         layer_name,
@@ -737,7 +739,7 @@ export function apply_user_preferences(json_pref) {
       }));
     }
   };
-  const restorePreviousPosWaffle = (layer_id, current_position /*, type_symbol*/) => {
+  const restorePreviousPosWaffle = (layer_id, current_position /* , type_symbol */) => {
     map.select(`#${layer_id}`)
       .selectAll('g')
       .attr('transform', (d, i) => current_position[i]);
@@ -940,7 +942,9 @@ export function apply_user_preferences(json_pref) {
     let custom_name = Object.keys(_app.epsg_projections)
       .map(d => [d, _app.epsg_projections[d]])
       .filter(ft => ft[1].proj4 === _app.last_projection);
-    custom_name = custom_name && custom_name.length > 0 && custom_name[0].length > 1 ? custom_name[0][1].name : undefined;
+    custom_name = custom_name
+      && custom_name.length > 0
+      && custom_name[0].length > 1 ? custom_name[0][1].name : undefined;
     addLastProjectionSelect(_app.current_proj_name, _app.last_projection, custom_name);
   } else {
     proj = d3[available_projections.get(_app.current_proj_name).name]();
@@ -1321,5 +1325,5 @@ export const beforeUnloadWindow = (event) => {
   // eslint-disable-next-line no-param-reassign
   event.returnValue = (global._app.targeted_layer_added
     || Object.getOwnPropertyNames(data_manager.result_data).length > 0)
-      ? 'Confirm exit' : undefined;
+    ? 'Confirm exit' : undefined;
 };

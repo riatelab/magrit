@@ -113,9 +113,9 @@
         },
         "table": {
             "search": "Recherche...",
-            "entries_page": "{{ select }} entrées par page",
+            "entries_page": "{select} entrées par page",
             "no_rows": "Pas d'entrées trouvées",
-            "info": "Affichage des entitées {{ start }} à {{ end }} sur {{ rows }}"
+            "info": "Affichage des entitées {start} à {end} sur {rows}"
         },
         "notification":{
             "brush_map_cancelled": "Pas de rectangle détecté. L'opération a été annulée.",

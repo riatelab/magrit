@@ -487,8 +487,8 @@ export function fetch_min_max_table_value(parent_id) {
   const sorted_min = mins.sort(comp_fun);
   const sorted_max = maxs.sort(comp_fun);
   const sorted_sizes = sizes.sort(comp_fun);
-// Some verification regarding the input values provided by the user :
-// - Values are ordered :
+  // Some verification regarding the input values provided by the user :
+  // - Values are ordered :
   if (!(r_mins.every((d, i) => sorted_min[i] === d)
       && r_maxs.every((d, i) => sorted_max[i] === d)
       && r_sizes.every((d, i) => sorted_sizes[i] === d))) {
@@ -506,7 +506,12 @@ function fillMenu_TwoStocks() {
     .attrs({ class: 'i18n', 'data-i18n': '[html]app_page.func_options.twostocks.fields' })
     .html(_tr('app_page.func_options.twostocks.fields'));
   f1.insert('select')
-    .attrs({ class: 'params', id: 'TwoStocks_fields', multiple: 'multiple', size: 2 });
+    .attrs({
+      class: 'params',
+      id: 'TwoStocks_fields',
+      multiple: 'multiple',
+      size: 2,
+    });
 
   // const f2 = dv2.append('p').attr('class', 'params_section2');
   // f2.append('span')
@@ -650,7 +655,8 @@ const fields_TwoStocks = {
       let t_max = 0;
       for (let i = 0; i < rendering_params.fields.length; i++) {
         const field = rendering_params.fields[i];
-        t_max += max_fast(data_manager.user_data[layer].map(obj => +obj[field])) / rendering_params.ratio;
+        t_max += max_fast(data_manager.user_data[layer]
+            .map(obj => +obj[field])) / rendering_params.ratio;
       }
 
       if (t_max > 900) {
@@ -694,9 +700,14 @@ export function render_twostocks_waffle(layer, rendering_params) {
     }
     return res;
   };
-  const round = Math.round;
-  const floor = Math.floor;
-  const { ratio, symbol_type, nCol, fields, new_name: layer_to_add } = rendering_params;
+  const {
+    ratio,
+    symbol_type,
+    nCol,
+    fields,
+    new_name: layer_to_add,
+  } = rendering_params;
+  const { floor, round } = Math.round;
   const nbVar = fields.length;
   const colors = [];
   const sums = [];

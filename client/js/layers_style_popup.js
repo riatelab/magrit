@@ -797,10 +797,10 @@ function createStyleBox_Line(layer_name) {
             ? prev_min_display * data_manager.current_layers[layer_name].n_features
             : -1;
           selection.style('fill-opacity', 0)
-           .style('stroke', fill_prev.single)
-           .style('stroke-opacity', border_opacity)
-           .style('display', (d, i) => (+i <= lim ? null : 'none'))
-           .style('stroke-width', d => d.properties.prop_val);
+            .style('stroke', fill_prev.single)
+            .style('stroke-opacity', border_opacity)
+            .style('display', (d, i) => (+i <= lim ? null : 'none'))
+            .style('stroke-width', d => d.properties.prop_val);
         } else {
           if (fill_meth === 'single') {
             selection.style('stroke', fill_prev.single)
@@ -927,7 +927,12 @@ function createStyleBox_Line(layer_name) {
     // The legend will be updated in order to start on the minimum value displayed instead of
     //   using the minimum value of the serie (skipping unused class if necessary)
     threshold_section.insert('input')
-      .attrs({ type: 'range', min: 0, max: max_val, step: 0.5 })
+      .attrs({
+        type: 'range',
+        min: 0,
+        max: max_val,
+        step: 0.5,
+      })
       .styles({
         width: '58px',
         'vertical-align': 'middle',
@@ -1059,7 +1064,12 @@ function createStyleBox_Line(layer_name) {
     prop_val_content.append('span').html(_tr('app_page.layer_style_popup.symbol_fixed_size'));
     prop_val_content.insert('input')
       .styles({ width: '60px', float: 'right' })
-      .attrs({ type: 'number', id: 'max_size_range', min: 0.1, step: 'any' })
+      .attrs({
+        type: 'number',
+        id: 'max_size_range',
+        min: 0.1,
+        step: 'any',
+      })
       .property('value', data_manager.current_layers[layer_name].size[1])
       .on('change', function () {
         const f_size = +this.value;
@@ -1068,8 +1078,8 @@ function createStyleBox_Line(layer_name) {
         redraw_prop_val(prop_values);
       });
     prop_val_content.append('span')
-        .style('float', 'right')
-        .html('(px)');
+      .style('float', 'right')
+      .html('(px)');
 
     const prop_val_content2 = popup.append('p').attr('class', 'line_elem');
     prop_val_content2.append('span').html(_tr('app_page.layer_style_popup.on_value'));
@@ -1244,7 +1254,12 @@ function createStyleBox(layer_name) {
     const pt_size = popup.append('p').attr('class', 'line_elem');
     pt_size.append('span').html(_tr('app_page.layer_style_popup.point_radius'));
     pt_size.append('input')
-      .attrs({ type: 'range', min: 0, max: 80, id: 'point_radius_size' })
+      .attrs({
+        type: 'range',
+        min: 0,
+        max: 80,
+        id: 'point_radius_size',
+      })
       .styles({
         width: '58px',
         'vertical-align': 'middle',
@@ -1291,11 +1306,11 @@ function createStyleBox(layer_name) {
       const fill_method = popup.append('p').html(_tr('app_page.layer_style_popup.fill_color')).insert('select');
       [
         [_tr('app_page.layer_style_popup.single_color'), 'single'],
-         [_tr('app_page.layer_style_popup.categorical_color'), 'categorical'],
-         [_tr('app_page.layer_style_popup.random_color'), 'random']
-       ].forEach((d) => {
-         fill_method.append('option').text(d[0]).attr('value', d[1]);
-       });
+        [_tr('app_page.layer_style_popup.categorical_color'), 'categorical'],
+        [_tr('app_page.layer_style_popup.random_color'), 'random'],
+      ].forEach((d) => {
+        fill_method.append('option').text(d[0]).attr('value', d[1]);
+      });
       popup.append('div').attrs({ id: 'fill_color_section' });
       fill_method.on('change', function () {
         d3.select('#fill_color_section').html('').on('click', null);
@@ -1353,30 +1368,31 @@ function createStyleBox(layer_name) {
         const _opts = rendering_params
           ? { schema: rendering_params.schema, colors: rendering_params.colors, no_data: rendering_params.no_data, type: rendering_params.type, breaks: rendering_params.breaks, extra_options: rendering_params.extra_options }
           : data_manager.current_layers[layer_name].options_disc;
-        display_discretization(layer_name,
-                               data_manager.current_layers[layer_name].rendered_field,
-                               _opts.breaks.length - 1,
-                               _opts)
-          .then((confirmed) => {
-            container.modal.show();
-            if (confirmed) {
-              rendering_params = {
-                nb_class: confirmed[0],
-                type: confirmed[1],
-                breaks: confirmed[2],
-                colors: confirmed[3],
-                colorsByFeature: confirmed[4],
-                schema: confirmed[5],
-                no_data: confirmed[6],
-                //  renderer:"Choropleth",
-                field: data_manager.current_layers[layer_name].rendered_field,
-                extra_options: confirmed[7],
-              };
-              //  let opacity_val = fill_opacity_section ? +fill_opacity_section.node().value : 0.9
-              selection.transition()
-                .style('fill', (d, i) => rendering_params.colorsByFeature[i]);
-            }
-          });
+        display_discretization(
+          layer_name,
+          data_manager.current_layers[layer_name].rendered_field,
+          _opts.breaks.length - 1,
+          _opts,
+        ).then((confirmed) => {
+          container.modal.show();
+          if (confirmed) {
+            rendering_params = {
+              nb_class: confirmed[0],
+              type: confirmed[1],
+              breaks: confirmed[2],
+              colors: confirmed[3],
+              colorsByFeature: confirmed[4],
+              schema: confirmed[5],
+              no_data: confirmed[6],
+              //  renderer:"Choropleth",
+              field: data_manager.current_layers[layer_name].rendered_field,
+              extra_options: confirmed[7],
+            };
+            //  let opacity_val = fill_opacity_section ? +fill_opacity_section.node().value : 0.9
+            selection.transition()
+              .style('fill', (d, i) => rendering_params.colorsByFeature[i]);
+          }
+        });
       });
   } else if (renderer === 'Gridded') {
     const field_to_discretize = data_manager.current_layers[layer_name].rendered_field;
@@ -1389,30 +1405,31 @@ function createStyleBox(layer_name) {
         const _opts = rendering_params
           ? { schema: rendering_params.schema, colors: rendering_params.colors, no_data: rendering_params.no_data, type: rendering_params.type, breaks: rendering_params.breaks, extra_options: rendering_params.extra_options }
           : data_manager.current_layers[layer_name].options_disc;
-        display_discretization(layer_name,
-                               field_to_discretize,
-                               _opts.breaks.length - 1,
-                               _opts)
-            .then((confirmed) => {
-              container.modal.show();
-              if (confirmed) {
-                rendering_params = {
-                  nb_class: confirmed[0],
-                  type: confirmed[1],
-                  breaks: confirmed[2],
-                  colors: confirmed[3],
-                  colorsByFeature: confirmed[4],
-                  schema: confirmed[5],
-                  no_data: confirmed[6],
-                  renderer: 'Choropleth',
-                  field: field_to_discretize,
-                  extra_options: confirmed[7],
-                };
-                // let opacity_val = fill_opacity_section ? +fill_opacity_section.node().value : 0.9
-                selection.transition()
-                  .style('fill', (d, i) => rendering_params.colorsByFeature[i]);
-              }
-            });
+        display_discretization(
+          layer_name,
+          field_to_discretize,
+          _opts.breaks.length - 1,
+          _opts,
+        ).then((confirmed) => {
+          container.modal.show();
+          if (confirmed) {
+            rendering_params = {
+              nb_class: confirmed[0],
+              type: confirmed[1],
+              breaks: confirmed[2],
+              colors: confirmed[3],
+              colorsByFeature: confirmed[4],
+              schema: confirmed[5],
+              no_data: confirmed[6],
+              renderer: 'Choropleth',
+              field: field_to_discretize,
+              extra_options: confirmed[7],
+            };
+            // let opacity_val = fill_opacity_section ? +fill_opacity_section.node().value : 0.9
+            selection.transition()
+              .style('fill', (d, i) => rendering_params.colorsByFeature[i]);
+          }
+        });
       });
   }
 
@@ -1420,8 +1437,19 @@ function createStyleBox(layer_name) {
   fill_opacity_section.append('span')
     .html(_tr('app_page.layer_style_popup.fill_opacity'));
   fill_opacity_section.insert('input')
-    .attrs({ type: 'range', min: 0, max: 1, step: 0.1 })
-    .styles({ width: '58px', 'vertical-align': 'middle', display: 'inline', float: 'right', 'margin-right': '0px' })
+    .attrs({
+      type: 'range',
+      min: 0,
+      max: 1,
+      step: 0.1,
+    })
+    .styles({
+      width: '58px',
+      'vertical-align': 'middle',
+      display: 'inline',
+      float: 'right',
+      'margin-right': '0px',
+    })
     .property('value', opacity)
     .on('change', function () {
       selection.style('fill-opacity', this.value);
@@ -1542,7 +1570,10 @@ function createStyleBoxStewart(layer_name) {
       rendering_params.breaks[i][1] = new_coloramp[i];
     }
     selection.transition().style('fill', (d, i) => new_coloramp[i]);
-    data_manager.current_layers[layer_name].color_palette = { name: coloramp_name, reversed: reversed };
+    data_manager.current_layers[layer_name].color_palette = {
+      name: coloramp_name,
+      reversed: reversed,
+    };
   };
   const fill_prev = cloneObj(data_manager.current_layers[layer_name].fill_color);
   const rendering_params = { breaks: [].concat(data_manager.current_layers[layer_name].colors_breaks) };
@@ -1640,8 +1671,19 @@ function createStyleBoxStewart(layer_name) {
   fill_opacity_section.append('span')
     .html(_tr('app_page.layer_style_popup.fill_opacity'));
   fill_opacity_section.insert('input')
-    .attrs({ type: 'range', min: 0, max: 1, step: 0.1 })
-    .styles({ width: '58px', 'vertical-align': 'middle', display: 'inline', float: 'right', 'margin-right': '0px' })
+    .attrs({
+      type: 'range',
+      min: 0,
+      max: 1,
+      step: 0.1,
+    })
+    .styles({
+      width: '58px',
+      'vertical-align': 'middle',
+      display: 'inline',
+      float: 'right',
+      'margin-right': '0px',
+    })
     .property('value', opacity)
     .on('change', function () {
       selection.style('fill-opacity', this.value);
@@ -1668,8 +1710,18 @@ function createStyleBoxStewart(layer_name) {
   opacity_section.insert('span')
     .html(_tr('app_page.layer_style_popup.border_opacity'));
   opacity_section.insert('input')
-    .attrs({ type: 'range', min: 0, max: 1, step: 0.1 })
-    .styles({ width: '58px', 'vertical-align': 'middle', display: 'inline', float: 'right' })
+    .attrs({
+      type: 'range',
+      min: 0,
+      max: 1,
+      step: 0.1,
+    })
+    .styles({
+      width: '58px',
+      'vertical-align': 'middle',
+      display: 'inline',
+      float: 'right',
+    })
     .property('value', 'border_opacity')
     .on('change', function () {
       opacity_section.select('#opacity_val_txt').html(` ${this.value}`);
@@ -1701,7 +1753,7 @@ function createStyleBoxStewart(layer_name) {
     .property('checked', map.select(g_lyr_name).attr('filter') ? true : null)
     .attrs({
       type: 'checkbox',
-      id: 'checkbox_shadow_layer'
+      id: 'checkbox_shadow_layer',
     });
   shadow_section.insert('label')
     .attr('for', 'checkbox_shadow_layer')
@@ -1792,8 +1844,8 @@ function make_generate_labels_section(parent_node, layer_name) {
           confirmButtonText: _tr('app_page.common.confirm'),
           inputOptions: input_fields,
           onOpen: () => {
-            const sel = d3.select('#label_box_field')
-            _fields.forEach(f_name => { sel.append('option').property('value', f_name).text(f_name); });
+            const sel = d3.select('#label_box_field');
+            _fields.forEach((f_name) => { sel.append('option').property('value', f_name).text(f_name); });
             if (fields_num.length > 0) {
               const section_filter = d3.select('#label_box_filter_section');
               section_filter.append('input')
@@ -1810,7 +1862,7 @@ function make_generate_labels_section(parent_node, layer_name) {
                 .html(_tr('app_page.layer_style_popup.filter_label'));
               const subsection_filter_label = section_filter.append('div').style('display', 'none');
               const sel2 = subsection_filter_label.append('select').attr('id', 'label_box_filter_field');
-              fields_num.forEach(f_name => { sel2.append('option').property('value', f_name).text(f_name); });
+              fields_num.forEach((f_name) => { sel2.append('option').property('value', f_name).text(f_name); });
               const sel3 = subsection_filter_label.append('select').attr('id', 'label_box_filter_type');
               sel3.append('option').property('value', 'sup').text('>');
               sel3.append('option').property('value', 'inf').text('<');
@@ -1820,7 +1872,7 @@ function make_generate_labels_section(parent_node, layer_name) {
           },
           preConfirm: () => new Promise((resolve, reject) => {
             setTimeout(() => {
-              let selected_field = document.getElementById('label_box_field').value;
+              const selected_field = document.getElementById('label_box_field').value;
               let filter_options = undefined;
               if (fields_num.length > 0) {
                 let to_filter = document.getElementById('label_box_filter_chk').checked;
@@ -1930,8 +1982,18 @@ function createStyleBoxWaffle(layer_name) {
 
   fill_opacity_section.append('span').html(_tr('app_page.layer_style_popup.fill_opacity'));
   fill_opacity_section.insert('input')
-    .attrs({ type: 'range', min: 0, max: 1, step: 0.1 })
-    .styles({ width: '58px', 'vertical-align': 'middle', display: 'inline', float: 'right' })
+    .attrs({
+      type: 'range',
+      min: 0,
+      max: 1,
+      step: 0.1,
+    })
+    .styles({
+      width: '58px',
+      'vertical-align': 'middle',
+      display: 'inline',
+      float: 'right',
+    })
     .property('value', previous_params.fill_opacity)
     .on('change', function () {
       selection.selectAll(symbol).style('fill-opacity', +this.value);
@@ -2047,7 +2109,8 @@ function createStyleBoxWaffle(layer_name) {
     .property('checked', data_manager.current_layers[layer_name].draggable ? true : null)
     .attrs({
       type: 'checkbox',
-      id: 'checkbox_move_symbol' });
+      id: 'checkbox_move_symbol',
+    });
   allow_move_section.insert('label')
     .attr('for', 'checkbox_move_symbol')
     .html(_tr('app_page.layer_style_popup.let_draggable'));
@@ -2212,10 +2275,12 @@ function createStyleBox_ProbSymbol(layer_name) {
             .style('stroke-opacity', border_opacity)
             .style('stroke', stroke_prev);
         } else if (fill_meth === 'categorical') {
-          fill_categorical(layer_name,
-                           fill_prev.categorical[0],
-                           type_symbol,
-                           fill_prev.categorical[1]);
+          fill_categorical(
+            layer_name,
+            fill_prev.categorical[0],
+            type_symbol,
+            fill_prev.categorical[1],
+          );
         }
         data_manager.current_layers[layer_name].fill_color = fill_prev;
         if (data_manager.current_layers[layer_name].size[1] !== old_size[1]) {
@@ -2259,10 +2324,11 @@ function createStyleBox_ProbSymbol(layer_name) {
         const _opts = rendering_params
           ? { schema: rendering_params.schema, colors: rendering_params.colors, no_data: rendering_params.no_data, type: rendering_params.type, breaks: rendering_params.breaks, extra_options: rendering_params.extra_options }
           : data_manager.current_layers[layer_name].options_disc;
-        display_discretization(layer_name,
-                               field_color,
-                               _opts.breaks.length - 1,
-                               _opts)
+        display_discretization(
+          layer_name,
+          field_color,
+          _opts.breaks.length - 1,
+          _opts)
           .then((confirmed) => {
             container.modal.show();
             if (confirmed) {
@@ -2377,8 +2443,18 @@ function createStyleBox_ProbSymbol(layer_name) {
   fill_opct_section.append('span').html(_tr('app_page.layer_style_popup.fill_opacity'));
 
   fill_opct_section.insert('input')
-    .attrs({ type: 'range', min: 0, max: 1, step: 0.1 })
-    .styles({ width: '58px', 'vertical-align': 'middle', display: 'inline', float: 'right' })
+    .attrs({
+      type: 'range',
+      min: 0,
+      max: 1,
+      step: 0.1,
+    })
+    .styles({
+      width: '58px',
+      'vertical-align': 'middle',
+      display: 'inline',
+      float: 'right',
+    })
     .property('value', opacity)
     .on('change', function () {
       selection.style('fill-opacity', this.value);
@@ -2405,8 +2481,18 @@ function createStyleBox_ProbSymbol(layer_name) {
   border_opacity_section.append('span').html(_tr('app_page.layer_style_popup.border_opacity'));
 
   border_opacity_section.insert('input')
-    .attrs({ type: 'range', min: 0, max: 1, step: 0.1 })
-    .styles({ width: '58px', 'vertical-align': 'middle', display: 'inline', float: 'right' })
+    .attrs({
+      type: 'range',
+      min: 0,
+      max: 1,
+      step: 0.1,
+    })
+    .styles({
+      width: '58px',
+      'vertical-align': 'middle',
+      display: 'inline',
+      float: 'right',
+    })
     .property('value', border_opacity)
     .on('change', function () {
       selection.style('stroke-opacity', this.value);
@@ -2434,12 +2520,21 @@ function createStyleBox_ProbSymbol(layer_name) {
   prop_val_content.append('span').html(_tr('app_page.layer_style_popup.symbol_fixed_size'));
   prop_val_content.insert('input')
     .styles({ width: '60px', float: 'right' })
-    .attrs({ type: 'number', id: 'max_size_range', min: 0.1, step: 'any' })
+    .attrs({
+      type: 'number',
+      id: 'max_size_range',
+      min: 0.1,
+      step: 'any',
+    })
     .property('value', data_manager.current_layers[layer_name].size[1])
     .on('change', function () {
       const f_size = +this.value;
       const prop_values = prop_sizer3_e(
-        d_values, data_manager.current_layers[layer_name].size[0], f_size, type_symbol);
+        d_values,
+        data_manager.current_layers[layer_name].size[0],
+        f_size,
+        type_symbol,
+      );
       data_manager.current_layers[layer_name].size[1] = f_size;
       redraw_prop_val(prop_values);
     });
@@ -2456,7 +2551,11 @@ function createStyleBox_ProbSymbol(layer_name) {
     .on('change', function () {
       const f_val = +this.value;
       const prop_values = prop_sizer3_e(
-        d_values, f_val, data_manager.current_layers[layer_name].size[1], type_symbol);
+        d_values,
+        f_val,
+        data_manager.current_layers[layer_name].size[1],
+        type_symbol,
+      );
       redraw_prop_val(prop_values);
       data_manager.current_layers[layer_name].size[0] = f_val;
     });
@@ -2467,7 +2566,7 @@ function createStyleBox_ProbSymbol(layer_name) {
     .property('checked', data_manager.current_layers[layer_name].draggable ? true : null)
     .attrs({
       type: 'checkbox',
-      id: 'checkbox_move_symbol'
+      id: 'checkbox_move_symbol',
     });
   allow_move_section.insert('label')
     .attr('for', 'checkbox_move_symbol')
@@ -2540,7 +2639,13 @@ export function make_style_box_indiv_label(label_node) {
   const a = box_content.append('p').attr('class', 'line_elem');
   a.insert('span').html(_tr('app_page.func_options.label.font_size'));
   a.append('input')
-    .attrs({ type: 'number', id: 'font_size', min: 0, max: 34, step: 'any' })
+    .attrs({
+      type: 'number',
+      id: 'font_size',
+      min: 0,
+      max: 34,
+      step: 'any',
+    })
     .styles({ width: '70px', float: 'right' })
     .property('value', +label_node.style.fontSize.slice(0, -2))
     .on('change', function () {
@@ -2663,11 +2768,12 @@ function change_layer_name(old_name, new_name) {
   list_elem.setAttribute('layer_name', new_name);
   list_elem.innerHTML = list_elem.innerHTML.replace(
     get_display_name_on_layer_list(old_name),
-    get_display_name_on_layer_list(new_name));
+    get_display_name_on_layer_list(new_name),
+  );
   const b = svg_map.querySelector(`#${old_id}`);
   b.id = new_id;
   const lgd_elems = document.querySelectorAll(`g[layer_name="${old_name}"]`);
-  lgd_elems.forEach(lgd_elem => {
+  lgd_elems.forEach((lgd_elem) => {
     lgd_elem.setAttribute('layer_name', new_name);
     lgd_elem.classList.remove(`lgdf_${old_id}`);
     lgd_elem.classList.add(`lgdf_${new_id}`);

@@ -1,3 +1,4 @@
+import { default as Sortable } from 'sortablejs';
 import { hexToRgb, randomColor, rgb2hex } from './../colors_helpers';
 import { make_dialog_container, overlay_under_modal, reOpenParent } from './../dialogs';
 

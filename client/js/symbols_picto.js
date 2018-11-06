@@ -1,3 +1,4 @@
+import { default as Sortable } from 'sortablejs';
 import { make_dialog_container, make_confirm_dialog2, overlay_under_modal, reOpenParent } from './dialogs';
 import { cloneObj } from './helpers';
 

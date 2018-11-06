@@ -1,3 +1,5 @@
+import proj4 from 'proj4';
+import * as topojson from 'topojson';
 import { ColorsSelected } from './colors_helpers';
 import { check_remove_existing_box, make_confirm_dialog2 } from './dialogs';
 import { check_layer_name } from './function';

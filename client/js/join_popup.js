@@ -218,9 +218,8 @@ function prepare_join_on(layer_name, field1, field2) {
     _app.waitingOverlay.display();
     const jointure_worker = new Worker('static/dist/webworker_jointure.js');
     _app.webworker_to_cancel = jointure_worker;
-    jointure_worker.postMessage(
-      [join_values1, join_values2]);
-    jointure_worker.onmessage = function (e) {
+    jointure_worker.postMessage([join_values1, join_values2]);
+    jointure_worker.onmessage = function jointure_worker_onmessage(e) {
       const [join_map, _hits] = e.data;
       _app.webworker_to_cancel = undefined;
       hits = _hits;
@@ -351,11 +350,12 @@ ${_tr('app_page.join_box.ext_dataset_field')}<br></p>
 };
 
 const removeExistingJointure = (layer_name) => {
-  if (!global.data_manager.user_data[layer_name] || global.data_manager.user_data[layer_name].length < 1) return;
-  const dataLayer = global.data_manager.user_data[layer_name];
-  const original_fields = data_manager.current_layers[layer_name].original_fields;
-  const fieldDifference = Object.getOwnPropertyNames(
-    dataLayer[0]).filter(f => !original_fields.has(f));
+  const { user_data } = global.data_manager;
+  if (!user_data[layer_name] || user_data[layer_name].length < 1) return;
+  const dataLayer = user_data[layer_name];
+  const original_fields = global.data_manager.current_layers[layer_name];
+  const fieldDifference = Object.getOwnPropertyNames(dataLayer[0])
+    .filter(f => !original_fields.has(f));
   const nbFields = fieldDifference.length;
   for (let i = 0, nbFt = dataLayer.length; i < nbFt; i++) {
     for (let j = 0; j < nbFields; j++) {

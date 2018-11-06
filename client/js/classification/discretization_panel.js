@@ -500,14 +500,13 @@ export const display_discretization = (layer_name, field_name, nb_class, options
           const jenks_worker = new Worker('static/js/webworker_jenks.js');
           _app.webworker_to_cancel = jenks_worker;
           _app.waitingOverlay.display({ zIndex: 5000 });
-          jenks_worker.postMessage(
-            [values, nb_class]);
+          jenks_worker.postMessage([values, nb_class]);
           jenks_worker.onmessage = function (e) {
             breaks = e.data;
             serie.setClassManually(breaks);
             serie.doCount();
             stock_class = Array.prototype.slice.call(serie.counter);
-           _app.waitingOverlay.hide();
+            _app.waitingOverlay.hide();
             _app.webworker_to_cancel = undefined;
             bins = [];
             for (let i = 0, len = stock_class.length; i < len; i++) {
@@ -610,8 +609,7 @@ export const display_discretization = (layer_name, field_name, nb_class, options
             right_palette = document.querySelector('.color_params_right').value,
             ctl_class_value = +document.getElementById('centr_class').value,
             ctl_class_color = document.querySelector('.central_color > input').checked
-                              ? document.getElementById('central_color_val').value
-                              : [];
+              ? document.getElementById('central_color_val').value : [];
 
           const class_right = nb_class - ctl_class_value + 1,
             class_left = ctl_class_value - 1,
@@ -795,7 +793,6 @@ export const display_discretization = (layer_name, field_name, nb_class, options
       redisplay.compute().then((v) => {
         if (v) redisplay.draw();
       });
-
     });
 
   available_functions.forEach((func) => {
@@ -856,8 +853,18 @@ export const display_discretization = (layer_name, field_name, nb_class, options
   });
   document.getElementById(`button_stddev_${std_dev_params.role_mean}`).checked = true;
   let txt_nb_class = discretization_panel.append('input')
-    .attrs({ type: 'number', class: 'without_spinner', min: 2, max: max_nb_class, step: 1 })
-    .styles({ width: '30px', margin: '0 10px', 'vertical-align': 'calc(20%)' })
+    .attrs({
+      type: 'number',
+      class: 'without_spinner',
+      min: 2,
+      max: max_nb_class,
+      step: 1,
+    })
+    .styles({
+      width: '30px',
+      margin: '0 10px',
+      'vertical-align': 'calc(20%)',
+    })
     .property('value', nb_class)
     .on('change', function () {
       const a = disc_nb_class.node();
@@ -904,7 +911,7 @@ export const display_discretization = (layer_name, field_name, nb_class, options
             if (ctl_class > nb_class) ctl_class.value = Mround(nb_class / 2);
           }
         }
-      })
+      });
     });
 
   const ref_histo_box = newBox.append('div').attr('id', 'ref_histo_box');
@@ -988,10 +995,10 @@ export const display_discretization = (layer_name, field_name, nb_class, options
   make_overlay_elements();
 
   svg_histo.append('g')
-    .attrs({ class: 'x_axis', transform: `translate(0,${height})`})
+    .attrs({ class: 'x_axis', transform: `translate(0,${height})` })
     .call(d3.axisBottom()
-    .scale(x)
-    .tickFormat(formatCount));
+      .scale(x)
+      .tickFormat(formatCount));
 
   newBox.append('button')
     .attrs({ class: 'accordion_disc active', id: 'btn_acc_disc_color' })

@@ -1,3 +1,4 @@
+import { default as Sortable } from 'sortablejs';
 import { displayInfoOnMove } from './../interface';
 
 export default function makeSection3() {

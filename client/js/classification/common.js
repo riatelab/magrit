@@ -274,19 +274,24 @@ export const prepare_ref_histo = (parent_node, serie, formatCount) => {
           width: Mabs(x(d.x1)) - Mabs(x(d.x0)),
           height: m_height - y(d.length),
           x: 0,
-          transform: 'translate(' + x(d.x0) + ',' + y(d.length) + ')',
+          transform: `translate(${x(d.x0)},${y(d.length)})`,
         }))
         .styles({ fill: 'beige', stroke: 'black', 'stroke-width': '0.4px' });
 
       svg_ref_histo.append('g')
         .style('font-size', '10px')
-        .attrs({ class: 'x_axis', transform: 'translate(0,' + m_height + ')' })
+        .attrs({ class: 'x_axis', transform: `translate(0,${m_height})` })
         .call(d3.axisBottom()
           .scale(x)
           .ticks(4)
           .tickFormat(formatCount))
         .selectAll('text')
-        .attrs({ x: -4, y: 4, dy: '.45em', transform: 'rotate(-40)' })
+        .attrs({
+          x: -4,
+          y: 4,
+          dy: '.45em',
+          transform: 'rotate(-40)',
+        })
         .style('text-anchor', 'end');
 
       svg_ref_histo.append('g')
@@ -299,13 +304,18 @@ export const prepare_ref_histo = (parent_node, serie, formatCount) => {
     } else if (type === 'box_plot') {
       svg_ref_histo.append('g')
         .style('font-size', '10px')
-        .attrs({ class: 'x_axis', transform: 'translate(0,' + m_height + ')' })
+        .attrs({ class: 'x_axis', transform: `translate(0,${m_height})` })
         .call(d3.axisBottom()
           .scale(x)
           .ticks(4)
           .tickFormat(formatCount))
         .selectAll('text')
-        .attrs({ x: -4, y: 4, dy: '.45em', transform: 'rotate(-40)' })
+        .attrs({
+          x: -4,
+          y: 4,
+          dy: '.45em',
+          transform: 'rotate(-40)',
+        })
         .style('text-anchor', 'end');
 
       const y_mid = (m_margin.top + m_height - m_margin.bottom) / 2;
@@ -337,13 +347,33 @@ export const prepare_ref_histo = (parent_node, serie, formatCount) => {
 
       svg_ref_histo.append('g')
         .insert('line')
-        .attrs({ x1: x(q5[0]), y1: y_mid, x2: x(q5[1]), y2: y_mid })
-        .styles({ 'stroke-width': 1, stroke: 'black', fill: 'none', 'stroke-dasharray': '3,3' });
+        .attrs({
+          x1: x(q5[0]),
+          y1: y_mid,
+          x2: x(q5[1]),
+          y2: y_mid,
+        })
+        .styles({
+          'stroke-width': 1,
+          stroke: 'black',
+          fill: 'none',
+          'stroke-dasharray': '3,3',
+        });
 
       svg_ref_histo.append('g')
         .insert('line')
-        .attrs({ x1: x(q5[3]), y1: y_mid, x2: x(q5[4]), y2: y_mid })
-        .styles({ 'stroke-width': 1, stroke: 'black', fill: 'none', 'stroke-dasharray': '3,3' });
+        .attrs({
+          x1: x(q5[3]),
+          y1: y_mid,
+          x2: x(q5[4]),
+          y2: y_mid,
+        })
+        .styles({
+          'stroke-width': 1,
+          stroke: 'black',
+          fill: 'none',
+          'stroke-dasharray': '3,3',
+        });
     } else if (type === 'beeswarm') {
       const data = values.map(v => ({ value: +v }));
 
@@ -358,13 +388,18 @@ export const prepare_ref_histo = (parent_node, serie, formatCount) => {
       }
       svg_ref_histo.append('g')
         .style('font-size', '10px')
-        .attrs({ class: 'x_axis', transform: 'translate(0,' + m_height + ')' })
+        .attrs({ class: 'x_axis', transform: `translate(0,${m_height})` })
         .call(d3.axisBottom()
           .scale(x)
           .ticks(4)
           .tickFormat(formatCount))
         .selectAll('text')
-        .attrs({ x: -4, y: 4, dy: '.45em', transform: 'rotate(-40)' })
+        .attrs({
+          x: -4,
+          y: 4,
+          dy: '.45em',
+          transform: 'rotate(-40)',
+        })
         .style('text-anchor', 'end');
 
       const cell = svg_ref_histo.append('g')
@@ -383,7 +418,8 @@ export const prepare_ref_histo = (parent_node, serie, formatCount) => {
           if (d) {
             return {
               r: data.lenght < 250 ? 2.5 : data.lenght < 500 ? 1.5 : 1,
-              transform: `translate(${d.data.x},${d.data.y})` };
+              transform: `translate(${d.data.x},${d.data.y})`,
+            };
           }
           return undefined;
         });

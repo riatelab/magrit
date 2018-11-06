@@ -16,11 +16,8 @@
     "i18next": true,
     "localize": true,
     "Modal": true,
-    "proj4": true,
-    "Sortable": true,
     "swal": true,
     "Tooltip": true,
-    "topojson": true,
     # Global variables created by the application:
     "_app": true,
     "_tr": true,

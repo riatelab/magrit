@@ -120,7 +120,13 @@ export const drag_elem_geo2 = d3.drag()
     centroid[0] = centroid[0] * zoom.k + zoom.x;
     centroid[1] = centroid[1] * zoom.k + zoom.y;
     map.append('rect')
-      .attrs({ x: centroid[0] - 2, y: centroid[1] - 2, height: 4, width: 4, id: 'ref_symbol_location' })
+      .attrs({
+        x: centroid[0] - 2,
+        y: centroid[1] - 2,
+        height: 4,
+        width: 4,
+        id: 'ref_symbol_location',
+      })
       .style('fill', 'red');
   })
   .on('end', () => {
@@ -214,6 +220,7 @@ export function path_to_geojson2(layerName) {
 }
 
 export function display_error_during_computation(msg) {
+  // FIXME :
   const message = message ? `<br><i>${_tr('app_page.common.details')}:</i> ${msg}` : '';
   swal({
     title: `${_tr('app_page.common.error')}!`,
@@ -310,6 +317,7 @@ export function copy_layer(ref_layer, new_name, type_result, fields_to_copy) {
   const id_new_layer = encodeId(new_name);
   const id_ref_layer = global._app.layer_to_id.get(ref_layer);
   const node_ref_layer = svg_map.querySelector(`#${id_ref_layer}`);
+  const { current_layers } = global.data_manager;
   global._app.layer_to_id.set(new_name, id_new_layer);
   global._app.id_to_layer.set(id_new_layer, new_name);
   svg_map.appendChild(node_ref_layer.cloneNode(true));
@@ -317,13 +325,13 @@ export function copy_layer(ref_layer, new_name, type_result, fields_to_copy) {
   const node_new_layer = document.getElementById(id_new_layer);
   svg_map.insertBefore(node_new_layer, svg_map.querySelector('.legend'));
   data_manager.result_data[new_name] = [];
-  data_manager.current_layers[new_name] = {
-    n_features: data_manager.current_layers[ref_layer].n_features,
-    type: data_manager.current_layers[ref_layer].type,
+  current_layers[new_name] = {
+    n_features: current_layers[ref_layer].n_features,
+    type: current_layers[ref_layer].type,
     ref_layer_name: ref_layer,
   };
-  if (data_manager.current_layers[ref_layer].pointRadius) {
-    data_manager.current_layers[new_name].pointRadius = data_manager.current_layers[ref_layer].pointRadius;
+  if (current_layers[ref_layer].pointRadius) {
+    current_layers[new_name].pointRadius = current_layers[ref_layer].pointRadius;
   }
   const selec_src = node_ref_layer.getElementsByTagName('path'),
     selec_dest = node_new_layer.getElementsByTagName('path');
@@ -334,7 +342,11 @@ export function copy_layer(ref_layer, new_name, type_result, fields_to_copy) {
     }
   } else {
     for (let i = 0; i < selec_src.length; i++) {
-      selec_dest[i].__data__ = { type: 'Feature', properties: {}, geometry: cloneObj(selec_src[i].__data__.geometry) };
+      selec_dest[i].__data__ = {
+        type: 'Feature',
+        properties: {},
+        geometry: cloneObj(selec_src[i].__data__.geometry),
+      };
       const nb_field_to_copy = fields_to_copy.length;
       for (let j = 0; j < nb_field_to_copy; j++) {
         const f = fields_to_copy[j];
@@ -349,7 +361,12 @@ export function copy_layer(ref_layer, new_name, type_result, fields_to_copy) {
   node_new_layer.style.visibility = '';
   node_new_layer.removeAttribute('filter');
   // Create an entry in the layer manager:
-  create_li_layer_elem(new_name, data_manager.current_layers[new_name].n_features, [data_manager.current_layers[new_name].type, type_result], 'result');
+  create_li_layer_elem(
+    new_name,
+    current_layers[new_name].n_features,
+    [current_layers[new_name].type, type_result],
+    'result',
+  );
 }
 
 /**
@@ -416,7 +433,7 @@ export function create_li_layer_elem(layerName, nbFt, typeGeom, typeLayer) {
   li.setAttribute('layer_name', layerName);
   if (typeLayer === 'result') {
     li.setAttribute('class', ['sortable_result ', layerId].join(''));
-    const promotable = [ 'flow', 'grid', 'discont', 'cartogram', 'smooth'];
+    const promotable = ['flow', 'grid', 'discont', 'cartogram', 'smooth'];
     const legend_but = typeGeom[1] !== 'cartogram'
       ? button_legend : undefined;
     const replace_but = promotable.indexOf(typeGeom[1]) > -1
@@ -501,7 +518,7 @@ export const type_col = function type_col(layerName, target) {
       tmpType = typeof table[i][field];
       if (tmpType === 'string' && table[i][field].length === 0) {
         tmpType = 'empty';
-      } else if ((tmpType === 'string' && !isNaN(Number(table[i][field]))) || tmpType === 'number') {
+      } else if ((tmpType === 'string' && !isNaN(Number(table[i][field]))) || tmpType === 'number') {
         tmpType = 'number';
       } else if (tmpType === 'object' && isFinite(table[i][field])) {
         tmpType = 'empty';
@@ -611,9 +628,10 @@ export const getFieldsType = function getFieldsType(type, layerName, ref) {
 
 export function make_box_type_fields(layerName) {
   make_dialog_container(
-      'box_type_fields',
-      _tr('app_page.box_type_fields.title'),
-      'dialog');
+    'box_type_fields',
+    _tr('app_page.box_type_fields.title'),
+    'dialog',
+  );
   d3.select('#box_type_fields').select('.modal-dialog').style('width', '500px');
   const newbox = d3.select('#box_type_fields').select('.modal-body');
   const tmp = type_col2(data_manager.user_data[layerName]);
@@ -637,7 +655,7 @@ export function make_box_type_fields(layerName) {
     if (f.length === 0) { // If the user dont have already selected the type :
       fields_type = tmp.slice();
       container.querySelector('.btn_cancel').remove(); // Disabled cancel button to force the user to choose
-      const _onclose = () => {  // Or use the default values if he use the X  close button
+      const _onclose = () => { // Or use the default values if he use the X  close button
         data_manager.current_layers[layerName].fields_type = tmp.slice();
         getAvailablesFunctionnalities(layerName);
         resolve(false);
@@ -650,7 +668,7 @@ export function make_box_type_fields(layerName) {
         if (f.indexOf(d.name) === -1) { fields_type.push(d); }
       });
       container.querySelector('.btn_cancel').remove(); // Disabled cancel button to force the user to choose
-      const _onclose = () => {  // Or use the default values if he use the X  close button
+      const _onclose = () => { // Or use the default values if he use the X  close button
         data_manager.current_layers[layerName].fields_type = tmp.slice();
         getAvailablesFunctionnalities(layerName);
         resolve(false);
@@ -788,25 +806,29 @@ export function getAvailablesFunctionnalities(layerName) {
     func_ratio = section.querySelectorAll('#button_choro, #button_choroprop, #button_discont');
     func_categ = section.querySelectorAll('#button_typo, #button_proptypo, #button_typosymbol');
   }
+  /* eslint-disable no-param-reassign */
+  const to_unactive = (d) => { d.style.filter = 'grayscale(100%)'; };
+  const to_active = (d) => { d.style.filter = 'invert(0%) saturate(100%)'; };
+  /* eslint-enable no-param-reassign */
   if (fields_stock.length === 0) {
-    Array.prototype.forEach.call(func_stock, d => d.style.filter = 'grayscale(100%)');
+    Array.prototype.forEach.call(func_stock, to_unactive);
   } else {
-    Array.prototype.forEach.call(func_stock, d => d.style.filter = 'invert(0%) saturate(100%)');
+    Array.prototype.forEach.call(func_stock, to_active);
   }
   if (fields_ratio.length === 0) {
-    Array.prototype.forEach.call(func_ratio, d => d.style.filter = 'grayscale(100%)');
+    Array.prototype.forEach.call(func_ratio, to_unactive);
   } else {
-    Array.prototype.forEach.call(func_ratio, d => d.style.filter = 'invert(0%) saturate(100%)');
+    Array.prototype.forEach.call(func_ratio, to_active);
   }
   if (fields_categ.length === 0) {
-    Array.prototype.forEach.call(func_categ, d => d.style.filter = 'grayscale(100%)');
+    Array.prototype.forEach.call(func_categ, to_unactive);
   } else {
-    Array.prototype.forEach.call(func_categ, d => d.style.filter = 'invert(0%) saturate(100%)');
+    Array.prototype.forEach.call(func_categ, to_active);
   }
   if (fields_id.length === 0) {
-    Array.prototype.forEach.call(func_id, d => d.style.filter = 'grayscale(100%)');
+    Array.prototype.forEach.call(func_id, to_unactive);
   } else {
-    Array.prototype.forEach.call(func_id, d => d.style.filter = 'invert(0%) saturate(100%)');
+    Array.prototype.forEach.call(func_id, to_active);
   }
 
   // That representation needs both Stock and Ratio variables:
@@ -888,6 +910,7 @@ export const cloneObj = (obj) => {
 
 
 export function prepareFileExt(files_to_send) {
+  /* eslint-disable no-param-reassign */
   Array.prototype.forEach.call(files_to_send, (f) => {
     f._ext = '';
     if (f.name.indexOf('.') > -1) {
@@ -897,6 +920,7 @@ export function prepareFileExt(files_to_send) {
       f._ext = ext.toLowerCase();
     }
   });
+  /* eslint-enable no-param-reassign */
   return files_to_send;
 }
 

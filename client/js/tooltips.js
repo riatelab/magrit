@@ -26,9 +26,7 @@ function parseMatrix(matrixString) {
   };
 }
 /* eslint-enable object-property-newline */
-const asin = Math.asin;
-const cos = Math.cos;
-const atan2 = Math.atan2;
+const { asin, atan2, cos } = Math;
 
 function getTransform(elem) {
   const matrix = parseMatrix(getComputedStyle(elem, null).transform);
