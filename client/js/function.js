@@ -707,7 +707,7 @@ export function render_twostocks_waffle(layer, rendering_params) {
     fields,
     new_name: layer_to_add,
   } = rendering_params;
-  const { floor, round } = Math.round;
+  const { floor, round } = Math;
   const nbVar = fields.length;
   const colors = [];
   const sums = [];
