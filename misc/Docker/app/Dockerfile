@@ -83,4 +83,4 @@ RUN cd /home/app/magrit/ \
 EXPOSE 9999
 
 CMD redis-server /etc/redis/redis.conf \
-    & gunicorn "magrit_app.app:create_app()" --bind 0.0.0.0:9999 --worker-class aiohttp.worker.GunicornUVLoopWebWorker --workers 2 --chdir /home/app/magrit/
+    & gunicorn "magrit_app.app:create_app()" --bind 0.0.0.0:9999 --worker-class aiohttp.worker.GunicornUVLoopWebWorker --max-requests 600 --max-requests-jitter 50 --workers 3 --chdir /home/app/magrit/
