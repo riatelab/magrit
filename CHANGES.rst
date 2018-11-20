@@ -1,6 +1,18 @@
 Changes
 =======
 
+0.8.10 (2018-11-xx)
+------------------
+
+- Fix typo on documentation and french interface with *semis* de point.
+
+- Fix incorrect 'REVENUS' and 'REVENUS_PAR_MENAGE' values on Grand Paris dataset.
+
+- Fix bug with the displaying of information on table dialog in french interface (such as "20 entrées par page").
+
+- Start gunicorn with some "max-requests" value to automatically restart the workers and minimize the potential memory leak impact.
+
+
 0.8.9 (2018-10-15)
 ------------------
 

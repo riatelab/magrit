@@ -1,5 +1,17 @@
 # Historique des versions et des changements effectués
 
+
+#### 0.8.10 (2018-11-xx)
+
+- Corrige l'erreur dans la documentation et l'interface en français avec "*semis* de point".
+
+- Corrige les valeurs incorrectes de 'REVENUS' et 'REVENUS_PAR_MENAGE' sur le jeu de données du Grand Paris.
+
+- Corrige un bug dans l'affichage d'information (comme "20 entrées par page") dans la fenêtre affichant la table de données.
+
+- Démarre Gunicorn avec une valeur pour le paramètre "max-requests" pour automatiquement redémarrer les worker et minimiser l'impact d'une éventuelle fuite de mémoire.
+
+
 #### 0.8.9 (2018-10-15)
 
 - Corrige bug de traduction de la page d'acceuil.
