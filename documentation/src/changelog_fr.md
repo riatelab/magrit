@@ -93,7 +93,7 @@
 
 - Suppression de la méthode de discrétisation "progression arithmétique".
 
-- Nouveauté: autorise également la création de symboles proportionnels lors de l'analyse d'un semi de points.
+- Nouveauté: autorise également la création de symboles proportionnels lors de l'analyse d'un semis de points.
 
 - Permet d'utiliser des angles arrondis pour les rectangles utilisés en éléments d'habillage.
 
@@ -115,7 +115,7 @@
 
 #### 0.7.0 (2018-03-05)
 
-- Nouveauté : permet l'analyse d'un semi de points par 2 moyens : via une grille régulière ou un maillage existant. Les informations calculés peuvent être la densité d'item (nombre d'item par km²), pondéré ou non, dans chaque cellule/polygone ou un résumé statistique (moyenne ou écart type) sur les items localisés dans chaque cellule/polygone.
+- Nouveauté : permet l'analyse d'un semis de points par 2 moyens : via une grille régulière ou un maillage existant. Les informations calculés peuvent être la densité d'item (nombre d'item par km²), pondéré ou non, dans chaque cellule/polygone ou un résumé statistique (moyenne ou écart type) sur les items localisés dans chaque cellule/polygone.
 
 
 #### 0.6.7 (2018-02-01)

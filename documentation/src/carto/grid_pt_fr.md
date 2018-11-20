@@ -1,6 +1,6 @@
-# Analyse d'un semi de points à travers un maillage
+# Analyse d'un semis de points à travers un maillage
 
-Cette méthode d'analyse permet de transformer et de reporter les informations contenues dans un semi de points sur un maillage choisi par l'utilisateur.
+Cette méthode d'analyse permet de transformer et de reporter les informations contenues dans un semis de points sur un maillage choisi par l'utilisateur.
 
 Deux possibilités sont offertes à l'utilisateur concernant le choix du maillage à utiliser :
 - utilisation d'une grille régulière (choix de la taille et de la forme des carreaux) créée par l'application
