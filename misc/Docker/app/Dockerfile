@@ -73,6 +73,7 @@ ARG CACHEBUST=1
 
 RUN mkdir /home/app && cd /home/app && mkdir magrit
 COPY magrit /home/app/magrit
+COPY redis.conf /etc/redis/redis.conf
 
 RUN cd /home/app/magrit/ \
     && pip3.6 install -U setuptools numpy \
