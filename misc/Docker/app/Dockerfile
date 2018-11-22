@@ -33,7 +33,6 @@ RUN apt-get update && apt-get install -y software-properties-common && add-apt-r
         libxslt1-dev libxml2 libxml2-dev libkml-dev locales \
     && npm -g install topojson \
     && rm -rf /var/lib/apt/lists/* \
-    && sed -e '/save/ s/^#*/#/' -i /etc/redis/redis.conf \
     && sysctl vm.overcommit_memory=1 \
     && locale-gen fr_FR.UTF-8
 
@@ -84,4 +83,4 @@ RUN cd /home/app/magrit/ \
 EXPOSE 9999
 
 CMD redis-server /etc/redis/redis.conf \
-    & gunicorn "magrit_app.app:create_app()" --bind 0.0.0.0:9999 --worker-class aiohttp.worker.GunicornUVLoopWebWorker --max-requests 600 --max-requests-jitter 50 --workers 3 --chdir /home/app/magrit/
+    & gunicorn "magrit_app.app:create_app()" --bind 0.0.0.0:9999 --worker-class aiohttp.worker.GunicornUVLoopWebWorker --max-requests 450 --max-requests-jitter 50 --workers 3 --chdir /home/app/magrit/
