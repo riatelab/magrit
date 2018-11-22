@@ -60,6 +60,6 @@
     "minify": "NODE_ENV=production ./node_modules/webpack/bin/webpack.js",
     "watch": "./node_modules/webpack/bin/webpack.js --watch"
   },
-  "version": "0.8.9",
+  "version": "0.8.10",
   "homepage": "https://github.com/riatelab/magrit"
 }

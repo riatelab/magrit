@@ -1,15 +1,17 @@
 # Historique des versions et des changements effectués
 
 
-#### 0.8.10 (2018-11-xx)
+#### 0.8.10 (2018-11-22)
 
-- Corrige l'erreur dans la documentation et l'interface en français avec "*semis* de point".
+- Corrige l'erreur dans la documentation et l'interface en français avec "*semis* de point". (<a href="https://github.com/riatelab/magrit/issues/32">issue Github #32</a>)
 
-- Corrige les valeurs incorrectes de 'REVENUS' et 'REVENUS_PAR_MENAGE' sur le jeu de données du Grand Paris.
+- Corrige les valeurs incorrectes de 'REVENUS' et 'REVENUS_PAR_MENAGE' sur le jeu de données du Grand Paris. (<a href="https://github.com/riatelab/magrit/issues/33">issue Github #33</a>)
 
-- Corrige un bug dans l'affichage d'information (comme "20 entrées par page") dans la fenêtre affichant la table de données.
+- Corrige un bug dans l'affichage d'information (comme "20 entrées par page") dans la fenêtre affichant la table de données. (<a href="https://github.com/riatelab/magrit/issues/29">issue Github #29</a>)
 
 - Démarre Gunicorn avec une valeur pour le paramètre "max-requests" pour automatiquement redémarrer les worker et minimiser l'impact d'une éventuelle fuite de mémoire.
+
+- Corrige un bug avec le bouton 'Inverser la palette' dans la boite de dialogue des propriétés des cartes lissées. (<a href="https://github.com/riatelab/magrit/issues/31">issue Github #31</a>)
 
 
 #### 0.8.9 (2018-10-15)

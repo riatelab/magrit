@@ -1,16 +1,18 @@
 Changes
 =======
 
-0.8.10 (2018-11-xx)
+0.8.10 (2018-11-22)
 ------------------
 
-- Fix typo on documentation and french interface with *semis* de point.
+- Fix typo on documentation and french interface with *semis* de point. (#32)
 
-- Fix incorrect 'REVENUS' and 'REVENUS_PAR_MENAGE' values on Grand Paris dataset.
+- Fix incorrect 'REVENUS' and 'REVENUS_PAR_MENAGE' values on Grand Paris dataset. (#33)
 
-- Fix bug with the displaying of information on table dialog in french interface (such as "20 entrées par page").
+- Fix bug with the displaying of information on table dialog in french interface (such as "20 entrées par page"). (#29)
 
 - Start gunicorn with some "max-requests" value to automatically restart the workers and minimize the potential memory leak impact.
+
+- Fix bug with 'reverse palette' button on smoothed map properties dialog. (#31)
 
 
 0.8.9 (2018-10-15)
@@ -56,7 +58,7 @@ Changes
 
 - Fix unexpected GeoJSON file also present in zip archive when exporting to shapefile.
 
-- Fix incorect behavior when editing scalebar properties (+ fix the behaviour of the its cancel button).
+- Fix incorrect behavior when editing scalebar properties (+ fix the behavior of the its cancel button).
 
 
 0.8.4 (2018-06-08)
@@ -118,7 +120,7 @@ Changes
 
 - Removes arithmetic progression classification method.
 
-- Also allow to create proportionnal symbols map when analyzing a layer of points.
+- Also allow to create proportional symbols map when analyzing a layer of points.
 
 - Allow to use rounded corners on rectangles available as layout features.
 
@@ -126,7 +128,7 @@ Changes
 
 - Fix the "fit-zoom" behavior when using Armadillo projection and a layer at world scale.
 
-- Change the stewart implementation to consume less memory (smoomapy package is dropped temporarily).
+- Change the Stewart implementation to consume less memory (smoomapy package is dropped temporarily).
 
 
 0.7.1 (2018-03-09)
@@ -134,7 +136,7 @@ Changes
 
 - Fix typos in documentation.
 
-- Add a new option for proportionnal symbols legends, allowing to display a line between the symbol and the value.
+- Add a new option for proportional symbols legends, allowing to display a line between the symbol and the value.
 
 - Enable the (still experimental) auto-alignment feature for text annotation.
 
@@ -156,21 +158,21 @@ Changes
 
 - Fix/improve some styling options in links menu and in links classification box.
 
-- Fix error occuring on labels creation when using a target layer with empty geometries and warn the user if it's the case (as for the other representations).
+- Fix error occurring on labels creation when using a target layer with empty geometries and warn the user if it's the case (as for the other representations).
 
 
 0.6.5 (2018-01-12)
 ------------------
 
-- Be more tolerant with in the regular expression used to filter the name of exported maps (by allowing dot, dash and parantheses for example).
+- Be more tolerant with in the regular expression used to filter the name of exported maps (by allowing dot, dash and parentheses for example).
 
 - Fix the displaying of the "waiting" overlay when loading a TopoJSON layer.
 
-- Fix the displaying of the "horizontal layout" option for legend when used on a categorical choropleth map + rounding precision for "horizontal layout" legend and "proportionnal symbols" legend.
+- Fix the displaying of the "horizontal layout" option for legend when used on a categorical choropleth map + rounding precision for "horizontal layout" legend and "proportional symbols" legend.
 
-- Fix bug when changing layer name when using particularily long names.
+- Fix bug when changing layer name when using particularly long names.
 
-- Compute jenks natural breaks in a web worker if the dataset contains more than 7500 features.
+- Compute Jenks natural breaks in a web worker if the dataset contains more than 7500 features.
 
 
 0.6.4 (2017-12-22)
@@ -208,7 +210,7 @@ Changes
 
 - New: allow to create labels according to the values of a given field (such as creating "Name" labels only for cities with larger "Population" than xxx)
 
-- Fix some bugs occuring while loading user files and improve the support for tabular file containing coordinates.
+- Fix some bugs occurring while loading user files and improve the support for tabular file containing coordinates.
 
 - Fix some typos in the interface and improve the displaying of the projection name when the projection is coming from a proj.4 string.
 
@@ -220,7 +222,7 @@ Changes
 
 - New: ask the user if he wants to remove the un-joined features from his basemap (after a partial join).
 
-- New: allow to make proportionnal links (ie. without data classification, only graduated links were available until now).
+- New: allow to make proportional links (ie. without data classification, only graduated links were available until now).
 
 - New: add some new basemaps for France.
 
@@ -248,13 +250,13 @@ Changes
 0.5.4 (2017-10-01)
 ------------------
 
-- Change the default font used in text/tspan SVG elements (in favor of verdana). Should fix (for real this time?) the bug occuring while trying to open the resulting SVG file with some software on systems where the font in use is not available (notably Adobe Illustrator v16.0 CS6 on MacOSX).
+- Change the default font used in text/tspan SVG elements (in favor of verdana). Should fix (for real this time?) the bug occurring while trying to open the resulting SVG file with some software on systems where the font in use is not available (notably Adobe Illustrator v16.0 CS6 on MacOSX).
 
 - Disable the ability to use sphere and graticule with lambert conic conformal projection (the generated path, which is currently not clipped when using Proj4 projections, could be very heavy due to the conical nature of the projection).
 
 - Allow to cancel the ongoing addition of a layout item by pressing Esc (and so inform the user about that in the notification).
 
-- Improve the legend for proportionnal symbols (only for "single color" ones) by also using the stroke color of the result layer in the legend.
+- Improve the legend for proportional symbols (only for "single color" ones) by also using the stroke color of the result layer in the legend.
 
 - Add "Bertin 1953" projection to the list of available projections.
 
@@ -262,7 +264,7 @@ Changes
 0.5.3 (2017-09-22)
 ------------------
 
-- Change the default font used in text/tspan SVG elements (in favor of Arial). Should fix the bug occuring while trying to open the resulting SVG file with some software on systems where the font in use is not available (notably Adobe Illustrator v16.0 CS6 on MacOSX).
+- Change the default font used in text/tspan SVG elements (in favor of Arial). Should fix the bug occurring while trying to open the resulting SVG file with some software on systems where the font in use is not available (notably Adobe Illustrator v16.0 CS6 on MacOSX).
 
 
 0.5.2 (2017-09-13)
@@ -316,7 +318,7 @@ Changes
 0.4.0 (2017-07-24)
 ------------------
 
-- Fix error occuring on some representations when using a target layer with empty geometries and warn the user if it's the case.
+- Fix error occurring on some representations when using a target layer with empty geometries and warn the user if it's the case.
 
 - Introduce a new representation, waffle map, for mapping two (or more) comparable stocks together.
 
@@ -326,7 +328,7 @@ Changes
 
 - Fix error on jointure.
 
-- Fix location of red square when moving proportionnal symbols.
+- Fix location of red square when moving proportional symbols.
 
 - Fix legend size on links and discontinuities when zooming.
 
@@ -340,7 +342,7 @@ Changes
 0.3.5 (2017-06-28)
 ------------------
 
-- Allow to edit the location of proportionnal symbols
+- Allow to edit the location of proportional symbols
 
 - Slightly change the behavior with proj4 projections when layers are added/removed
 
