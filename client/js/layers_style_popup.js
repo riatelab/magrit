@@ -1561,8 +1561,8 @@ function createStyleBoxStewart(layer_name) {
   const nb_ft = data_manager.current_layers[layer_name].n_features;
   const prev_palette = cloneObj(data_manager.current_layers[layer_name].color_palette);
 
-  const recolor_stewart = function (coloramp_name, reversed) {
-    const new_coloramp = getColorBrewerArray(nb_ft, coloramp_name);
+  const recolor_stewart = (coloramp_name, reversed) => {
+    const new_coloramp = getColorBrewerArray(nb_ft, coloramp_name).slice();
     if (reversed === false) {
       new_coloramp.reverse();
     }
@@ -1576,7 +1576,9 @@ function createStyleBoxStewart(layer_name) {
     };
   };
   const fill_prev = cloneObj(data_manager.current_layers[layer_name].fill_color);
-  const rendering_params = { breaks: [].concat(data_manager.current_layers[layer_name].colors_breaks) };
+  const rendering_params = {
+    breaks: [].concat(data_manager.current_layers[layer_name].colors_breaks),
+  };
   let prev_col_breaks;
   if (data_manager.current_layers[layer_name].colors_breaks
       && data_manager.current_layers[layer_name].colors_breaks instanceof Array) {
@@ -1644,7 +1646,7 @@ function createStyleBoxStewart(layer_name) {
     .attr('id', 'coloramp_params')
     .style('float', 'right')
     .on('change', function () {
-      recolor_stewart(this.value, false);
+      recolor_stewart(this.value, document.getElementById('chckbox_reverse_palette').checked);
     });
 
   [
@@ -1656,16 +1658,19 @@ function createStyleBoxStewart(layer_name) {
       .attr('value', name);
   });
   seq_color_select.node().value = prev_palette.name;
-  popup.insert('p')
-    .attr('class', 'line_elem')
-    .styles({ 'text-align': 'center', margin: '0 !important' })
-    .insert('button')
-    .attrs({ class: 'button_st3', id: 'reverse_colramp' })
-    .html(_tr('app_page.layer_style_popup.reverse_palette'))
-    .on('click', () => {
+  const reversed_section = popup.append('div')
+    .style('margin-bottom', '10px');
+  reversed_section.append('input')
+    .property('checked', prev_palette.reversed ? true : false)
+    .attrs({ id: 'chckbox_reverse_palette', type: 'checkbox' })
+    .style('margin', 'auto')
+    .on('change', function onchangerevpal() {
       const pal_name = document.getElementById('coloramp_params').value;
-      recolor_stewart(pal_name, true);
+      recolor_stewart(pal_name, this.checked);
     });
+  reversed_section.append('label')
+    .attr('for', 'chckbox_reverse_palette')
+    .html(_tr('app_page.layer_style_popup.reverse_palette'));
 
   const fill_opacity_section = popup.append('p').attr('class', 'line_elem');
   fill_opacity_section.append('span')

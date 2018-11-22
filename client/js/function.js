@@ -1853,7 +1853,7 @@ function render_stewart() {
       data_manager.current_layers[n_layer_name].renderer = 'Stewart';
       data_manager.current_layers[n_layer_name].colors_breaks = colors_breaks;
       data_manager.current_layers[n_layer_name].rendered_field = field1_n;
-      data_manager.current_layers[n_layer_name].color_palette = { name: 'Oranges', reversed: true };
+      data_manager.current_layers[n_layer_name].color_palette = { name: 'Oranges', reversed: false };
       data_manager.current_layers[n_layer_name].options_disc = {
         breaks: [].concat(class_lim.max[0], class_lim.min).reverse(),
       };
