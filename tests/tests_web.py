@@ -815,7 +815,7 @@ class MainFunctionnalitiesTest(TestBase):
         self.clickWaitTransition('#sample_link')
         Select(
             driver.find_element_by_css_selector('select.sample_target')
-            ).select_by_value('world_country')
+            ).select_by_value('world_countries_data')
         driver.find_element_by_css_selector(".btn_ok").click()
         self.waitClickButtonTypeLayer(type_layer='layout')
         self.waitClickButtonSwal()
@@ -824,7 +824,7 @@ class MainFunctionnalitiesTest(TestBase):
         # Open the box allowing to modify style properties:
         self.click_elem_retry(
             driver.find_element_by_css_selector(
-                "li.L_world_country > div > .style_target_layer"))
+                "li.L_country > div > .style_target_layer"))
         time.sleep(0.4)
         # Create a legend:
         driver.find_element_by_id('checkbox_layout_legend').click()
@@ -834,8 +834,8 @@ class MainFunctionnalitiesTest(TestBase):
         # Is the legend displayed ?
         if not self.try_element_present(
                 By.CSS_SELECTOR,
-                '.lgdf_L_world_country', 5):
-            self.fail('Legend not displayed for layout layer of points')
+                '.lgdf_L_country', 5):
+            self.fail('Legend not displayed for layout layer of polygons')
 
 
     def test_f_Gridded(self):
