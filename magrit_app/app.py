@@ -1519,7 +1519,6 @@ async def init(loop, addr='0.0.0.0', port=None, watch_change=False, use_redis=Tr
     add_route('GET', '/modules', serve_main_page)
     add_route('GET', '/modules/', serve_main_page)
     add_route('GET', '/modules/{expr}', serve_main_page)
-    # add_route('GET', '/layers', list_user_layers)
     add_route('POST', '/layers/add', receiv_layer)
     add_route('POST', '/layers/delete', remove_layer)
     add_route('GET', '/extrabasemaps', get_extrabasemaps)
@@ -1533,18 +1532,16 @@ async def init(loop, addr='0.0.0.0', port=None, watch_change=False, use_redis=Tr
     add_route('POST', '/convert_csv_geo', convert_csv_geo)
     add_route('POST', '/convert_extrabasemap', convert_extrabasemap)
     add_route('POST', '/convert_tabular', convert_tabular)
-    # add_route('POST', '/cache_topojson/{params}', cache_input_topojson)
     add_route('POST', '/helpers/calc', calc_helper)
     app.router.add_static('/static/', path='static', name='static')
 
     # Store in the 'app' variable a reference to each variable we will need
     # to reuse a various place (to avoid global variables):
-    # app['redis_conn'] = redis_conn
     app['app_users'] = set()
     app['logger'] = logger
     app['version'] = get_version()
     with open('static/json/sample_layers.json', 'r') as f:
-        app['db_layers'] = json.loads(f.read())
+        app['db_layers'] = {n['name']: n['path'] for n in json.loads(f.read())}
     app['ThreadPool'] = ThreadPoolExecutor(6)
     app['ProcessPool'] = \
         ProcessPoolExecutor(6) if not IS_WINDOWS else ThreadPoolExecutor(6)

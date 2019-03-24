@@ -1,13 +1,19 @@
 Changes
 =======
 
+0.8.12 (2019-xx-xx)
+-------------------
+
+- Allow more flexibility to customize the set of sample layers to use when deploying Magrit.
+
+
 0.8.11 (2019-03-20)
-------------------
+-------------------
 
 - Allow to specify the address to use to create the server.
 
 - Fix join operation when using a webworker (should fix #38).
-  
+
 - Replace some absolute paths at forgotten places.
 
 - Bump webpack / webpack-cli version.
@@ -28,7 +34,7 @@ Changes
 
 
 0.8.10 (2018-11-22)
-------------------
+-------------------
 
 - Fix typo on documentation and french interface with *semis* de point. (#32)
 

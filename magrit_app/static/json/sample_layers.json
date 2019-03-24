@@ -1,1 +1,427 @@
-{"commune_dep_974":"static\/data_sample\/topo\/commune_D974_2016_2-2.topojson","communes_reg_94":"static\/data_sample\/topo\/communes_REG_94_2016_2-2.topojson","departements_2016_2-2":"static\/data_sample\/topo\/departements_2016_2-2.topojson","nuts2-2013-data":"static\/data_sample\/topo\/nuts2-2013-data.topojson","tissot":"static\/data_sample\/topo\/tissot.topojson","communes_reg_84":"static\/data_sample\/topo\/communes_REG_84_2016_2-2.topojson","communes_reg_93":"static\/data_sample\/topo\/communes_REG_93_2016_2-2.topojson","twincities":"static\/data_sample\/topo\/twincities.csv","martinique":"static\/data_sample\/topo\/martinique.topojson","world_cities":"static\/data_sample\/topo\/world_cities_extract5000.topojson","regions_2016_2-2":"static\/data_sample\/topo\/regions_2016_2-2.topojson","nuts2":"static\/data_sample\/topo\/nuts2.topojson","world_countries_data":"static\/data_sample\/topo\/country.topojson","commune_dep_971":"static\/data_sample\/topo\/commune_D971_2016_2-2.topojson","communes_reg_76":"static\/data_sample\/topo\/communes_REG_76_2016_2-2.topojson","communes_reg_24":"static\/data_sample\/topo\/communes_REG_24_2016_2-2.topojson","world_country":"static\/data_sample\/topo\/World.topojson","nuts0":"static\/data_sample\/topo\/nuts0.topojson","GrandParisMunicipalities":"static\/data_sample\/topo\/GrandParisMunicipalities.topojson","nuts1":"static\/data_sample\/topo\/nuts1.topojson","france_contour_2016_2-2":"static\/data_sample\/topo\/france_contour_2016_2-2.topojson","voronoi_communes_2016_2-2":"static\/data_sample\/topo\/voronoi_communes_2016_2-2_id.topojson","communes_reg_44":"static\/data_sample\/topo\/communes_REG_44_2016_2-2.topojson","communes_reg_11":"static\/data_sample\/topo\/communes_REG_11_2016_2-2.topojson","commune_dep_973":"static\/data_sample\/topo\/commune_D973_2016_2-2.topojson","communes_reg_32":"static\/data_sample\/topo\/communes_REG_32_2016_2-2.topojson","paris_quartiers":"static\/data_sample\/topo\/quartier_paris.topojson","communes_reg_27":"static\/data_sample\/topo\/communes_REG_27_2016_2-2.topojson","communes_reg_75":"static\/data_sample\/topo\/communes_REG_75_2016_2-2.topojson","communes_reg_53":"static\/data_sample\/topo\/communes_REG_53_2016_2-2.topojson","commune_dep_972":"static\/data_sample\/topo\/commune_D972_2016_2-2.topojson","brazil":"static\/data_sample\/topo\/brazil.topojson","commune_dep_976":"static\/data_sample\/topo\/commune_D976_2016_2-2.topojson","communes_reg_52":"static\/data_sample\/topo\/communes_REG_52_2016_2-2.topojson","communes_reg_28":"static\/data_sample\/topo\/communes_REG_28_2016_2-2.topojson","departements_vor_2016_2-2":"static\/data_sample\/topo\/departements_vor_2016_2-2.topojson","quartier_paris":"static\/data_sample\/topo\/quartier_paris_pop.topojson"}
+[
+  {
+    "path": "static/data_sample/topo/GrandParisMunicipalities.topojson",
+    "fields_type": [
+      {"name": "DEPARTEMENT", "type": "category", "has_duplicate": "true"},
+      {"name": "IDCOM", "type": "id"},
+      {"name": "EPT", "type": "category", "has_duplicate": "true"},
+      {"name": "REVENUS", "type": "stock"},
+      {"name": "LIBCOM", "type": "id"},
+      {"name": "LIBEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "MENAGES_FISCAUX", "type": "stock"},
+      {"name": "UID", "type": "id"},
+      {"name": "REVENUS_PAR_MENAGE", "type": "ratio"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "grandparismunicipalities"
+  },
+  {
+    "path": "static/data_sample/topo/quartier_paris_pop.topojson",
+    "fields_type": [
+      {"name": "n_sq_qu", "type": "id"},
+      {"name": "c_qu", "type": "id"},
+      {"name": "c_quinsee", "type": "id"},
+      {"name": "l_qu", "type": "id"},
+      {"name": "c_ar", "type": "category", "has_duplicate": "true"},
+      {"name": "n_sq_ar", "type": "category", "has_duplicate": "true"},
+      {"name": "surface", "type": "stock"},
+      {"name": "P12_POP", "type": "stock"},
+      {"name": "P07_POP", "type": "stock"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "quartier_paris"
+  },
+  {
+    "path": "static/data_sample/topo/martinique.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id", "not_number": "true"},
+      {"name": "STATUT", "type": "category", "has_duplicate": "true"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "P13_POP", "type": "stock"},
+      {"name": "P13_LOG", "type": "stock"},
+      {"name": "P13_LOGVAC", "type": "stock"},
+      {"name": "Part_Logements_Vacants", "type": "ratio"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2973"],
+    "name": "martinique"
+  },
+  {
+    "path": "static/data_sample/topo/brazil.topojson",
+    "fields_type": [
+      {"name": "ADMIN_NAME", "type": "id", "not_number": "true"},
+      {"name": "Abbreviation", "type": "id", "not_number": "true"},
+      {"name": "Capital", "type": "id", "not_number": "true"},
+      {"name": "GDP_per_capita_2012", "type": "stock"},
+      {"name": "Life_expectancy_2014", "type": "ratio"},
+      {"name": "Pop2014", "type": "stock"},
+      {"name": "REGIONS", "type": "category", "has_duplicate": "true"},
+      {"name": "STATE2010", "type": "id"},
+      {"name": "popdensity2014", "type": "ratio"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:5527"],
+    "name": "brazil"
+  },
+  {
+    "path": "static/data_sample/topo/nuts2-2013-data.topojson",
+    "fields_type": [
+      {"name": "id", "type": "id", "not_number": "true"},
+      {"name": "name", "type": "id", "not_number": "true"},
+      {"name": "POP", "type": "stock"},
+      {"name": "GDP", "type": "stock"},
+      {"name": "UNEMP", "type": "ratio"},
+      {"name": "COUNTRY", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:3035"],
+    "name": "nuts2_data"
+  },
+  {
+    "path": "static/data_sample/topo/country.topojson",
+    "fields_type": [
+      {"name": "ISO2", "type": "id", "not_number": "true"},
+      {"name": "ISO3", "type": "id", "not_number": "true"},
+      {"name": "ISONUM", "type": "id"},
+      {"name": "NAMEen", "type": "id", "not_number": "true"},
+      {"name": "NAMEfr", "type": "id", "not_number": "true"},
+      {"name": "UNRegion", "type": "category", "has_duplicate": "true"},
+      {"name": "GrowthRate", "type": "ratio"},
+      {"name": "PopDensity", "type": "ratio"},
+      {"name": "PopTotal", "type": "stock"},
+      {"name": "JamesBond", "type": "stock"}
+    ],
+    "suggested_projection": ["d3", "NaturalEarth2"],
+    "name": "world_countries_data"
+  },
+  {
+    "path": "static/data_sample/topo/departements_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "CODE_DEPT", "type": "id"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "departements_2016_2-2"
+  },
+  {
+    "path": "static/data_sample/topo/departements_vor_2016_2-2.topojson",
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "departements_vor_2016_2-2"
+  },
+  {
+    "path": "static/data_sample/topo/regions_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "CODE_REG", "type": "id"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "regions_2016_2-2"
+  },
+  {
+    "path": "static/data_sample/topo/france_contour_2016_2-2.topojson",
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "france_contour_2016_2-2"
+  },
+  {
+    "path": "static/data_sample/topo/voronoi_communes_2016_2-2_id.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "voronoi_communes_2016_2-2"
+  },
+  {
+    "path": "static/data_sample/topo/nuts0.topojson",
+    "suggested_projection": ["proj4", "EPSG:3035"],
+    "name": "nuts0"
+  },
+  {
+    "path": "static/data_sample/topo/nuts1.topojson",
+    "suggested_projection": ["proj4", "EPSG:3035"],
+    "name": "nuts1"
+  },
+  {
+    "path": "static/data_sample/topo/nuts2.topojson",
+    "suggested_projection": ["proj4", "EPSG:3035"],
+    "name": "nuts2"
+  },
+  {
+    "path": "static/data_sample/topo/world_cities_extract5000.topojson",
+    "name": "world_capitals"
+  },
+  {
+    "path": "static/data_sample/topo/World.topojson",
+    "name": "world_countries"
+  },
+  {
+    "path": "static/data_sample/topo/tissot.topojson",
+    "name": "tissot"
+  },
+  {
+    "path": "static/data_sample/topo/communes_REG_11_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "communes_reg_11"
+  },
+  {
+    "path": "static/data_sample/topo/communes_REG_24_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "communes_reg_24"
+  },
+  {
+    "path": "static/data_sample/topo/communes_REG_44_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "communes_reg_44"
+  },
+  {
+    "path": "static/data_sample/topo/communes_REG_76_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "communes_reg_76"
+  },
+  {
+    "path": "static/data_sample/topo/communes_REG_84_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "communes_reg_84"
+  },
+  {
+    "path": "static/data_sample/topo/communes_REG_93_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "communes_reg_93"
+  },
+  {
+    "path": "static/data_sample/topo/communes_REG_94_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "communes_reg_94"
+  },
+  {
+    "path": "static/data_sample/topo/communes_REG_32_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "communes_reg_32"
+  },
+  {
+    "path": "static/data_sample/topo/communes_REG_27_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "communes_reg_27"
+  },
+  {
+    "path": "static/data_sample/topo/communes_REG_75_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "communes_reg_75"
+  },
+  {
+    "path": "static/data_sample/topo/communes_REG_53_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "communes_reg_53"
+  },
+  {
+    "path": "static/data_sample/topo/communes_REG_52_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "communes_reg_52"
+  },
+  {
+    "path": "static/data_sample/topo/communes_REG_28_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2154"],
+    "name": "communes_reg_28"
+  },
+  {
+    "path": "static/data_sample/topo/commune_D972_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:32620"],
+    "name": "commune_dep_972"
+  },
+  {
+    "path": "static/data_sample/topo/commune_D976_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:7075"],
+    "name": "commune_dep_976"
+  },
+  {
+    "path": "static/data_sample/topo/commune_D974_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2975"],
+    "name": "commune_dep_974"
+  },
+  {
+    "path": "static/data_sample/topo/commune_D973_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:2972"],
+    "name": "commune_dep_973"
+  },
+  {
+    "path": "static/data_sample/topo/commune_D971_2016_2-2.topojson",
+    "fields_type": [
+      {"name": "INSEE_COM", "type": "id"},
+      {"name": "NOM_COM", "type": "id"},
+      {"name": "SUPERFICIE", "type": "stock"},
+      {"name": "POPULATION", "type": "stock"},
+      {"name": "CODE_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_DEPT", "type": "category", "has_duplicate": "true"},
+      {"name": "CODE_REG", "type": "category", "has_duplicate": "true"},
+      {"name": "NOM_REG", "type": "category", "has_duplicate": "true"}
+    ],
+    "suggested_projection": ["proj4", "EPSG:32620"],
+    "name": "commune_dep_971"
+  }
+]

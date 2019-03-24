@@ -126,19 +126,12 @@ function loadI18next(lang) {
   });
 }
 
-function getEpsgProjection() {
-  return xhrequest('GET', 'static/json/epsg.json', undefined, false);
-}
-
 (() => {
-  Object.assign(global, makeSvgMap());
-  // const { map_div, map, svg_map, defs } = makeSvgMap();
-  // global.map_div = map_div;
-  // global.map = map;
-  // global.svg_map = svg_map;
-  // global.defs = defs;
-  let lang = docCookies.getItem('user_lang') || window.navigator.language.split('-')[0];
+  const getEpsgProjection = () => xhrequest('GET', 'static/json/epsg.json', undefined, false);
+  const getSampleLayers = () => xhrequest('GET', 'static/json/sample_layers.json', undefined, false);
   const params = {};
+  Object.assign(global, makeSvgMap());
+
   document.querySelector('noscript').remove();
   window.isIE = (() => (/MSIE/i.test(navigator.userAgent)
     || /Trident\/\d./i.test(navigator.userAgent)
@@ -157,18 +150,33 @@ function getEpsgProjection() {
       history.replaceState(obj, obj.Page, obj.Url);
     }
   }
-
+  let lang = docCookies.getItem('user_lang') || window.navigator.language.split('-')[0];
   lang = _app.existing_lang.indexOf(lang) > -1 ? lang : 'en';
+
   Promise.all([
     loadI18next(lang),
     getEpsgProjection(),
+    getSampleLayers(),
   ]).then((results) => {
-    const [tr, epsg_proj] = results;
-    window.localize = locI18next.init(i18next);
+    const [tr, epsg_proj, sample_layers] = results;
+
+    global.localize = locI18next.init(i18next);
     _app.epsg_projections = JSON.parse(epsg_proj);
+    _app.sample_layers = JSON.parse(sample_layers);
+
     setUpInterface(params.reload);
     localize('.i18n');
     bindTooltips();
+  }).catch((e) => {
+    // TODO: ...
+    swal({
+      title: 'Erreur de chargement de la page',
+      text: 'Erreur de chargement de la page',
+      type: 'error',
+      customClass: 'swal2_custom',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    });
   });
 })();
 

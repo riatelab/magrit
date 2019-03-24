@@ -35,139 +35,10 @@ export function add_sample_layer() {
   if (!_app.list_extrabasemaps) {
     prepare_extra_dataset_availables();
   }
-  const fields_type_sample = new Map([
-    ['quartier_paris', [
-      { name: 'n_sq_qu', type: 'id' },
-      { name: 'c_qu', type: 'id' },
-      { name: 'c_quinsee', type: 'id' },
-      { name: 'l_qu', type: 'id' },
-      { name: 'c_ar', type: 'category', has_duplicate: true },
-      { name: 'n_sq_ar', type: 'category', has_duplicate: true },
-      { name: 'surface', type: 'stock' },
-      { name: 'P12_POP', type: 'stock' },
-      { name: 'P07_POP', type: 'stock' }]],
-    ['GrandParisMunicipalities', [
-      { name: 'DEPARTEMENT', type: 'category', has_duplicate: true },
-      { name: 'IDCOM', type: 'id' },
-      { name: 'EPT', type: 'category', has_duplicate: true },
-      { name: 'REVENUS', type: 'stock' },
-      { name: 'LIBCOM', type: 'id' },
-      { name: 'LIBEPT', type: 'category', has_duplicate: true },
-      { name: 'MENAGES_FISCAUX', type: 'stock' },
-      { name: 'UID', type: 'id' },
-      { name: 'REVENUS_PAR_MENAGE', type: 'ratio' }]],
-    ['martinique', [
-      { name: 'INSEE_COM', type: 'id' },
-      { name: 'NOM_COM', type: 'id', not_number: true },
-      { name: 'STATUT', type: 'category', has_duplicate: true },
-      { name: 'SUPERFICIE', type: 'stock' },
-      { name: 'P13_POP', type: 'stock' },
-      { name: 'P13_LOG', type: 'stock' },
-      { name: 'P13_LOGVAC', type: 'stock' },
-      { name: 'Part_Logements_Vacants', type: 'ratio' }]],
-    ['nuts2-2013-data', [
-      { name: 'id', type: 'id', not_number: true },
-      { name: 'name', type: 'id', not_number: true },
-      { name: 'POP', type: 'stock' },
-      { name: 'GDP', type: 'stock' },
-      { name: 'UNEMP', type: 'ratio' },
-      { name: 'COUNTRY', type: 'category', has_duplicate: true }]],
-    ['voronoi_communes_2016_2-2', [
-      { name: 'INSEE_COM', type: 'id' }]],
-    ['regions_2016_2-2', [
-      { name: 'CODE_REG', type: 'id' }]],
-    ['departements_2016_2-2', [
-      { name: 'CODE_DEPT', type: 'id' },
-      { name: 'CODE_REG', type: 'category', has_duplicate: true }]],
-    ['brazil', [
-      { name: 'ADMIN_NAME', type: 'id', not_number: true },
-      { name: 'Abbreviation', type: 'id', not_number: true },
-      { name: 'Capital', type: 'id', not_number: true },
-      { name: 'GDP_per_capita_2012', type: 'stock' },
-      { name: 'Life_expectancy_2014', type: 'ratio' },
-      { name: 'Pop2014', type: 'stock' },
-      { name: 'REGIONS', type: 'category', has_duplicate: true },
-      { name: 'STATE2010', type: 'id' },
-      { name: 'popdensity2014', type: 'ratio' }]],
-    ['FR_communes', [
-      { name: 'INSEE_COM', type: 'id' },
-      { name: 'NOM_COM', type: 'id' },
-      { name: 'SUPERFICIE', type: 'stock' },
-      { name: 'POPULATION', type: 'stock' },
-      { name: 'CODE_DEPT', type: 'category', has_duplicate: true },
-      { name: 'NOM_DEPT', type: 'category', has_duplicate: true },
-      { name: 'CODE_REG', type: 'category', has_duplicate: true },
-      { name: 'NOM_REG', type: 'category', has_duplicate: true }]],
-    ['world_countries_data', [
-      { name: 'ISO2', type: 'id', not_number: true },
-      { name: 'ISO3', type: 'id', not_number: true },
-      { name: 'ISONUM', type: 'id' },
-      { name: 'NAMEen', type: 'id', not_number: true },
-      { name: 'NAMEfr', type: 'id', not_number: true },
-      { name: 'UNRegion', type: 'category', has_duplicate: true },
-      { name: 'GrowthRate', type: 'ratio' },
-      { name: 'PopDensity', type: 'ratio' },
-      { name: 'PopTotal', type: 'stock' },
-      { name: 'JamesBond', type: 'stock' }]],
-  ]);
 
-  const suggested_projection = new Map([
-    ['quartier_paris', ['proj4', 'EPSG:2154']],
-    ['GrandParisMunicipalities', ['proj4', 'EPSG:2154']],
-    ['martinique', ['proj4', 'EPSG:2973']],
-    ['nuts2-2013-data', ['proj4', 'EPSG:3035']],
-    ['voronoi_communes_2016_2-2', ['proj4', 'EPSG:2154']],
-    ['departements_2016_2-2', ['proj4', 'EPSG:2154']],
-    ['brazil', ['proj4', 'EPSG:5527']],
-    ['world_countries_data', ['d3', 'NaturalEarth2']],
-    ['commune_dep_971', ['proj4', 'EPSG:32620']],
-    ['commune_dep_972', ['proj4', 'EPSG:32620']],
-    ['commune_dep_973', ['proj4', 'EPSG:2972']],
-    ['commune_dep_974', ['proj4', 'EPSG:2975']],
-    ['commune_dep_976', ['proj4', 'EPSG:7075']],
-  ]);
-  const target_layers = [
-    [_tr('app_page.sample_layer_box.layer'), ''],
-    [_tr('app_page.sample_layer_box.grandparismunicipalities'), 'GrandParisMunicipalities'],
-    [_tr('app_page.sample_layer_box.quartier_paris'), 'quartier_paris'],
-    [_tr('app_page.sample_layer_box.martinique'), 'martinique'],
-    [_tr('app_page.sample_layer_box.departements_2016_2-2'), 'departements_2016_2-2'],
-    [_tr('app_page.layout_layer_box.departements_vor_2016_2-2'), 'departements_vor_2016_2-2'],
-    [_tr('app_page.sample_layer_box.regions_2016_2-2'), 'regions_2016_2-2'],
-    [_tr('app_page.layout_layer_box.france_contour_2016_2-2'), 'france_contour_2016_2-2'],
-    [_tr('app_page.sample_layer_box.nuts2_data'), 'nuts2-2013-data'],
-    [_tr('app_page.sample_layer_box.brazil'), 'brazil'],
-    [_tr('app_page.sample_layer_box.world_countries'), 'world_countries_data'],
-    [_tr('app_page.sample_layer_box.communes_reg_11'), 'communes_reg_11'],
-    [_tr('app_page.sample_layer_box.communes_reg_24'), 'communes_reg_24'],
-    [_tr('app_page.sample_layer_box.communes_reg_27'), 'communes_reg_27'],
-    [_tr('app_page.sample_layer_box.communes_reg_28'), 'communes_reg_28'],
-    [_tr('app_page.sample_layer_box.communes_reg_32'), 'communes_reg_32'],
-    [_tr('app_page.sample_layer_box.communes_reg_44'), 'communes_reg_44'],
-    [_tr('app_page.sample_layer_box.communes_reg_52'), 'communes_reg_52'],
-    [_tr('app_page.sample_layer_box.communes_reg_53'), 'communes_reg_53'],
-    [_tr('app_page.sample_layer_box.communes_reg_75'), 'communes_reg_75'],
-    [_tr('app_page.sample_layer_box.communes_reg_76'), 'communes_reg_76'],
-    [_tr('app_page.sample_layer_box.communes_reg_84'), 'communes_reg_84'],
-    [_tr('app_page.sample_layer_box.communes_reg_93'), 'communes_reg_93'],
-    [_tr('app_page.sample_layer_box.communes_reg_94'), 'communes_reg_94'],
-    [_tr('app_page.sample_layer_box.commune_dep_971'), 'commune_dep_971'],
-    [_tr('app_page.sample_layer_box.commune_dep_972'), 'commune_dep_972'],
-    [_tr('app_page.sample_layer_box.commune_dep_973'), 'commune_dep_973'],
-    [_tr('app_page.sample_layer_box.commune_dep_974'), 'commune_dep_974'],
-    [_tr('app_page.sample_layer_box.commune_dep_976'), 'commune_dep_976'],
-    [_tr('app_page.sample_layer_box.voronoi_communes_2016_2-2'), 'voronoi_communes_2016_2-2'],
-    [_tr('app_page.layout_layer_box.nuts0'), 'nuts0'],
-    [_tr('app_page.layout_layer_box.nuts1'), 'nuts1'],
-    [_tr('app_page.layout_layer_box.nuts2'), 'nuts2'],
-    [_tr('app_page.sample_layer_box.world_countries'), 'world_countries_data'],
-    [_tr('app_page.layout_layer_box.world_countries'), 'world_country'],
-    [_tr('app_page.layout_layer_box.world_capitals'), 'world_cities'],
-    [_tr('app_page.layout_layer_box.tissot'), 'tissot'],
-  ];
-  let selec,
-    selec_url,
-    content;
+  let selec;
+  let selec_url;
+  let content;
 
   make_confirm_dialog2('sampleDialogBox', _tr('app_page.sample_layer_box.title'))
     .then((confirmed) => {
@@ -177,16 +48,11 @@ export function add_sample_layer() {
             const target_layer = _type_layer.indexOf('target') > -1;
             if (content.attr('id') === 'panel1') {
               if (selec) {
-                const sugg_proj = selec.indexOf('communes_reg') > -1
-                  ? ['proj4', 'EPSG:2154']
-                  : suggested_projection.get(selec);
-                const _fields_type = (selec.indexOf('communes_reg') > -1 || selec.indexOf('commune_dep') > 1)
-                  ? fields_type_sample.get('FR_communes')
-                  : fields_type_sample.get(selec);
+                const layer_info = _app.sample_layers.find(_o => _o.name === selec);
                 add_sample_geojson(selec, {
                   target_layer_on_add: target_layer,
-                  fields_type: _fields_type,
-                  default_projection: sugg_proj,
+                  fields_type: layer_info['fields_type'], // Can be undefined
+                  default_projection: layer_info['suggested_projection'],  // Can be undefined
                 });
               }
             } else if (content.attr('id') === 'panel2') {
@@ -200,7 +66,7 @@ export function add_sample_layer() {
                   display_error_during_computation();
                 });
             }
-          }, dismiss => { console.log(dismiss); });
+          }, (dismiss) => { console.log(dismiss); });
       }
     });
 
@@ -257,12 +123,23 @@ export function add_sample_layer() {
     content = box_body.append('div').attr('id', 'panel1');
     content.append('h3').html(_tr('app_page.sample_layer_box.subtitle1'));
 
-    const t_layer_selec = content.append('p').html('')
-      .insert('select').attr('class', 'sample_target');
-    target_layers.forEach((layer_info) => {
-      t_layer_selec.append('option').html(layer_info[0]).attr('value', layer_info[1]);
+    const t_layer_selec = content.append('p')
+      .html('')
+      .insert('select')
+      .attr('class', 'sample_target')
+      .on('change', function () { selec = this.value; });
+
+    t_layer_selec.append('option')
+      .attr('value', '')
+      .html(_tr('app_page.sample_layer_box.layer'));
+
+    _app.sample_layers.forEach((layer_info) => {
+      const n = layer_info['name'];
+      t_layer_selec.append('option')
+        .attr('value', n)
+        .html(_tr(`app_page.sample_layer_box.${n}`));
     });
-    t_layer_selec.on('change', function () { selec = this.value; });
+
     content.append('p')
       .styles({ margin: 'auto', 'text-align': 'right', cursor: 'pointer' })
       .append('span')
@@ -270,6 +147,7 @@ export function add_sample_layer() {
       .on('click', () => {
         make_panel2();
       });
+
     if (selec) {
       setSelected(t_layer_selec.node(), selec);
     }

@@ -1,5 +1,10 @@
 # Historique des versions et des changements effectués
 
+#### 0.8.11 (2019-xx-xx)
+
+- Permet une personnalisation plus simple des jeux de couches d'exemple lors du déploiement de Magrit.
+
+
 #### 0.8.11 (2019-03-20)
 
 - Permet de spécifier une adresse pour créer le serveur. 
