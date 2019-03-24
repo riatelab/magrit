@@ -52,7 +52,6 @@ addons:
       - redis-server
       - nodejs
       - nodejs-dev
-      - node-gyp
       - libxslt1-dev
       - libxml2
       - libxml2-dev
