@@ -797,7 +797,7 @@ class MainFunctionnalitiesTest(TestBase):
         # Open the box allowing to modify style properties:
         self.click_elem_retry(
             driver.find_element_by_css_selector(
-                "li.L_world_capitals > div > .style_target_layer"))
+                "li.L_world_cities > div > .style_target_layer"))
         time.sleep(0.4)
         # Create a legend:
         driver.find_element_by_id('checkbox_layout_legend').click()
@@ -807,7 +807,7 @@ class MainFunctionnalitiesTest(TestBase):
         # Is the legend displayed ?
         if not self.try_element_present(
                 By.CSS_SELECTOR,
-                '.lgdf_L_world_capitals', 5):
+                '.lgdf_L_world_cities', 5):
             self.fail('Legend not displayed for layout layer of points')
 
         # Add a layout layer of polygons:
@@ -897,7 +897,7 @@ class MainFunctionnalitiesTest(TestBase):
         self.open_menu_section(3)
         self.click_elem_retry(
             driver.find_element_by_css_selector(
-                "li.L_nuts2_data > div > .style_target_layer"))
+                "li.L_nuts2-2013-data > div > .style_target_layer"))
         time.sleep(0.5)
         self.clickWaitTransition("#generate_labels")
         Select(
@@ -908,7 +908,7 @@ class MainFunctionnalitiesTest(TestBase):
         self.click_element_with_retry(".btn_ok")
         time.sleep(0.5)
         labels = driver.find_element_by_id(
-            "L_Labels_id_nuts2_data"
+            "L_Labels_id_nuts2-2013-data"
             ).find_elements_by_css_selector("text")
         self.assertIsInstance(labels, list)
         self.assertGreater(len(labels), 0)
@@ -941,7 +941,7 @@ class MainFunctionnalitiesTest(TestBase):
         self.assertEqual(proj_name, "HEALPix")
         # Layer have a clip-path (as this projection is interrupted) :
         clip_path_value = driver.execute_script('''
-val = document.getElementById("L_nuts2_data").getAttribute("clip-path");
+val = document.getElementById("L_nuts2-2013-data").getAttribute("clip-path");
 return val;''')
         self.assertEqual("url(#clip)", clip_path_value)
 
@@ -957,7 +957,7 @@ return val;''')
         self.assertEqual(proj_name, "Robinson")
         # Layer don't have a clip-path anymore :
         clip_path_value = driver.execute_script('''
-val = document.getElementById("L_nuts2_data").getAttribute("clip-path");
+val = document.getElementById("L_nuts2-2013-data").getAttribute("clip-path");
 return val;''')
         self.assertEqual(None, clip_path_value)
 
@@ -971,7 +971,7 @@ return val;''')
         # Click on the "fit-zoom" button of the targeted layer :
         self.click_elem_retry(
             driver.find_element_by_css_selector(
-                "li.L_nuts2_data > div > #zoom_fit_button"))
+                "li.L_nuts2-2013-data > div > #zoom_fit_button"))
 
         # Fetch again the current zoom value :
         zoom_val2 = driver.execute_script(
@@ -1269,8 +1269,8 @@ return val;''')
         expected_layers = {
             'Sphere',
             'Graticule',
-            'nuts2_data',
-            'Gridded_GDP_nuts2_data'
+            'nuts2-2013-data',
+            'Gridded_GDP_nuts2-2013-data'
             }
         self.assertEqual(len(expected_layers), len(layers))
         for name in layers:
@@ -1321,7 +1321,7 @@ return val;''')
         with open(self.tmp_folder + "export.svg", "r") as f:
             svg_data = f.read()
         self.assertIn('<svg', svg_data)
-        self.assertIn('nuts2_data', svg_data)
+        self.assertIn('nuts2-2013-data', svg_data)
         os.remove(self.tmp_folder + "export.svg")
 
         # Test export to png:
@@ -1344,40 +1344,40 @@ return val;''')
         time.sleep(0.2)
         Select(
             driver.find_element_by_id("layer_to_export")
-            ).select_by_visible_text("nuts2_data")
+            ).select_by_visible_text("nuts2-2013-data")
         Select(
             driver.find_element_by_id("datatype_to_use")
             ).select_by_value("GeoJSON")
         driver.find_element_by_id("export_button_section5b").click()
 
         time.sleep(2)
-        with open(self.tmp_folder + "nuts2_data.geojson", "r") as f:
+        with open(self.tmp_folder + "nuts2-2013-data.geojson", "r") as f:
             raw_geojson = f.read()
         parsed_geojson = json.loads(raw_geojson)
         self.assertIn("features", parsed_geojson)
         self.assertIn("type", parsed_geojson)
         self.assertEqual(len(parsed_geojson["features"]), 323)
-        os.remove(self.tmp_folder + "nuts2_data.geojson")
+        os.remove(self.tmp_folder + "nuts2-2013-data.geojson")
 
         # Test export to KML (from the source layer):
         Select(
             driver.find_element_by_id("layer_to_export")
-            ).select_by_visible_text("nuts2_data")
+            ).select_by_visible_text("nuts2-2013-data")
         Select(
             driver.find_element_by_id("datatype_to_use")
             ).select_by_value("KML")
         driver.find_element_by_id("export_button_section5b").click()
 
         time.sleep(3)
-        with open(self.tmp_folder + "nuts2_data.kml", "r") as f:
+        with open(self.tmp_folder + "nuts2-2013-data.kml", "r") as f:
             raw_kml_file = f.read()
         self.assertIn("<kml xmlns=", raw_kml_file)
-        os.remove(self.tmp_folder + "nuts2_data.kml")
+        os.remove(self.tmp_folder + "nuts2-2013-data.kml")
 
         # Test export to GML (from the source layer):
         Select(
             driver.find_element_by_id("layer_to_export")
-            ).select_by_visible_text("nuts2_data")
+            ).select_by_visible_text("nuts2-2013-data")
         Select(
             driver.find_element_by_id("datatype_to_use")
             ).select_by_value("GML")
@@ -1385,13 +1385,13 @@ return val;''')
 
         time.sleep(2)
         self.assertEqual(
-            True, os.path.exists(self.tmp_folder + "nuts2_data.zip"))
-        os.remove(self.tmp_folder + "nuts2_data.zip")
+            True, os.path.exists(self.tmp_folder + "nuts2-2013-data.zip"))
+        os.remove(self.tmp_folder + "nuts2-2013-data.zip")
 
         # Test export to Shapefile (from the source layer):
         Select(
             driver.find_element_by_id("layer_to_export")
-            ).select_by_visible_text("nuts2_data")
+            ).select_by_visible_text("nuts2-2013-data")
         Select(
             driver.find_element_by_id("datatype_to_use")
             ).select_by_value("ESRI Shapefile")
@@ -1399,8 +1399,8 @@ return val;''')
 
         time.sleep(2)
         self.assertEqual(
-            True, os.path.exists(self.tmp_folder + "nuts2_data.zip"))
-        os.remove(self.tmp_folder + "nuts2_data.zip")
+            True, os.path.exists(self.tmp_folder + "nuts2-2013-data.zip"))
+        os.remove(self.tmp_folder + "nuts2-2013-data.zip")
 
     def test_about_box_and_version(self):
         driver = self.driver
@@ -1548,7 +1548,7 @@ return val;''')
 
         self.open_menu_section(3)
         driver.find_element_by_css_selector(
-            "li.L_nuts2_data"
+            "li.L_nuts2-2013-data"
             ).find_elements_by_css_selector("#browse_data_button")[0].click()
         time.sleep(1)
 
@@ -1682,7 +1682,7 @@ return val;''')
         # Change the name of the target layer:
         self.click_elem_retry(
             driver.find_element_by_css_selector(
-                "li.L_nuts2_data > div > .style_target_layer"))
+                "li.L_nuts2-2013-data > div > .style_target_layer"))
         time.sleep(0.3)
         namezone = driver.find_element_by_css_selector('input#lyr_change_name')
         namezone.clear()
@@ -1697,8 +1697,8 @@ return val;''')
                 Object.keys(data_manager.user_data)
             ];
         ''')
-        self.assertNotIn('nuts2_data', current_layers)
-        self.assertNotIn('nuts2_data', data_layer_name)
+        self.assertNotIn('nuts2-2013-data', current_layers)
+        self.assertNotIn('nuts2-2013-data', data_layer_name)
         self.assertIn('SomeNewNameForMyLayer', current_layers)
         self.assertIn('SomeNewNameForMyLayer', data_layer_name)
 
@@ -1777,7 +1777,7 @@ return val;''')
         driver.find_element_by_id("stewart_span").send_keys("60")
         Select(
             driver.find_element_by_id("stewart_mask")
-            ).select_by_visible_text("nuts2_data")
+            ).select_by_visible_text("nuts2-2013-data")
         output_name = driver.find_element_by_id("stewart_output_name")
         output_name.clear()
         output_name.send_keys('my_result_0')
@@ -1947,7 +1947,7 @@ return val;''')
 
         self.open_menu_section(3)
         driver.find_element_by_css_selector(
-            "li.L_nuts2_data"
+            "li.L_nuts2-2013-data"
             ).find_elements_by_css_selector("#browse_data_button")[0].click()
         time.sleep(1)
 
