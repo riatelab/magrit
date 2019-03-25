@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y software-properties-common && add-apt-r
 		&& apt-get install -y gcc libpython3.6-dev libopenblas-dev libopenblas-base \
         python3.6 python3.6-dev libgeos-dev \
         libfreetype6-dev libfreetype6 libproj-dev libspatialindex-dev libv8-3.14-dev libffi-dev \
-        nodejs nodejs-dev node-gyp npm redis-server libuv1-dev git wget \
+        nodejs nodejs-dev npm redis-server libuv1-dev git wget \
         libxslt1-dev libxml2 libxml2-dev libkml-dev locales \
     && npm -g install topojson \
     && rm -rf /var/lib/apt/lists/* \
