@@ -41,6 +41,7 @@
             "error_waffle_too_many": "El número de símbolos para dibujar es demasiado alto. Por favor, seleccione una mayor proporción.",
             "error_multiple_fields": "Por favor elija al menos dos campos.",
             "error_background_needed": "Se requiere un mapa de fondo (capa de polígonos) para esta funcionalidad.",
+            "error_loading_page": "Error al cargar. Compruebe su conexión de red e intente volver a cargar la página.",
             "warning_multiple_layers": "Las capas de tipo TopoJSON deben ser añadidas una por una. Sólo se agregará la primera.",
             "warning_not_adapted_classification": "¡La discretización escogida no parece estar adaptada al modo de distribución!",
             "warning_empty_geom": "Tenga en cuenta que la capa contiene una entidad sin geometría!",

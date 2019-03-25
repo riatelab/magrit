@@ -168,10 +168,9 @@ function loadI18next(lang) {
     localize('.i18n');
     bindTooltips();
   }).catch((e) => {
-    // TODO: ...
     swal({
-      title: 'Erreur de chargement de la page',
-      text: 'Erreur de chargement de la page',
+      title: _tr('app_page.common.error'),
+      text: _tr('app_page.common.error_loading_page'),
       type: 'error',
       customClass: 'swal2_custom',
       allowOutsideClick: false,

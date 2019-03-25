@@ -41,6 +41,7 @@
             "error_waffle_too_many": "Le nombre de symboles à dessiner est trop important. Veuillez sélectionner un ratio plus élevé.",
             "error_multiple_fields": "Veuillez sélectionner au minimum 2 champs.",
             "error_background_needed": "Un fond de carte (couche de polygones) est requis pour cette fonctionnalité.",
+            "error_loading_page": "Erreur lors du chargement. Veuillez vérifier votre connexion au réseau et essayer de recharger la page.",
             "warning_multiple_layers": "Les couches provenant de TopoJSON doivent être ajoutées une par une. Seule la 1ère va être ajoutée",
             "warning_not_adapted_classification": "La discrétisation choisie ne semble pas adaptée à la forme de la distribution!",
             "warning_empty_geom": "Attention, la couche contient une entité sans géométrie !",

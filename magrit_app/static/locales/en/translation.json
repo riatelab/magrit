@@ -41,6 +41,7 @@
             "error_waffle_too_many": "The number of symbols to be drawn is too large. Please select a higher ratio.",
             "error_multiple_fields": "Please select at least 2 fields.",
             "error_background_needed": "A background map (polygon layer) is required for this functionality.",
+            "error_loading_page": "Error loading. Please check your network connection and try to reload the page.",
             "warning_multiple_layers": "Layers from TopoJSON have to be provided one by one. Only the first one will be added.",
             "warning_not_adapted_classification": "The choosen classification method doesn't seems to fit the serie distribution.",
             "warning_empty_geom": "Look out, the layer contains one feature without geometry!",
