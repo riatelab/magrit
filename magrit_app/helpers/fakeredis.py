@@ -5,17 +5,17 @@
 """
 
 import time
-from threading import Timer
 from collections import deque
-from asyncio import Lock
+from asyncio import Lock, get_event_loop
 
 class FakeAioRedisConnection:
-    def __init__(self, max_age_seconds=120):
+    def __init__(self, max_age_seconds=120, loop=None):
         assert max_age_seconds >= 1
         self.store = {}
         self.max_age = max_age_seconds
         self.lock = Lock()
         self.closed = False
+        self.loop = loop or get_event_loop()
         self.clean_keys()
 
     async def pexpire(self, key, pexpire):
@@ -155,4 +155,7 @@ class FakeAioRedisConnection:
                 item = self.store[k]
                 if time.time() > item[1]:
                     del self.store[k]
-        Timer(self.max_age, self.clean_keys).start()
+        self.loop.call_soon_threadsafe(
+            self.loop.call_later,
+            self.max_age,
+            self.clean_keys)

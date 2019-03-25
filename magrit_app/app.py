@@ -57,7 +57,6 @@ from concurrent.futures._base import CancelledError
 from pyexcel import get_book
 from ipaddress import ip_address
 # Web related stuff :
-# from aioredis import create_pool, create_redis_pool
 from aiohttp import web, ClientSession
 from aiohttp_session import (
     cookie_storage, get_session, session_middleware, redis_storage,
@@ -1510,7 +1509,9 @@ async def init(loop, addr='0.0.0.0', port=None, watch_change=False, use_redis=Tr
             middlewares=[error_middleware])
         aiohttp_session_setup(
             app, cookie_storage.EncryptedCookieStorage(secret_key))
-        app['redis_conn'] = FakeAioRedisConnection(max_age_seconds=3600)
+        app['redis_conn'] = FakeAioRedisConnection(
+            max_age_seconds=3600,
+            loop=loop)
 
     add_route = app.router.add_route
     add_route('GET', '/', index_handler)
