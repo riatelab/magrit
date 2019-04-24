@@ -25,7 +25,7 @@ install:
   - python setup.py install
   - python setup.py build_ext --inplace
 before_script:
-  - ln -s /usr/lib/chromium-browser/chromedriver ~/bin/chromedriver
+  - cd /tmp && wget https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_linux64.zip && unzip chromedriver_linux64.zip -d ~/bin/
 script:
   - magrit --help
   - py.test tests/test.py -p no:flaky
@@ -56,4 +56,3 @@ addons:
       - libxml2-dev
       - libkml-dev
       - fluxbox
-      - chromium-chromedriver
