@@ -25,7 +25,7 @@ install:
   - python setup.py install
   - python setup.py build_ext --inplace
 before_script:
-  - cd /tmp && wget https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_linux64.zip && unzip chromedriver_linux64.zip -d ~/bin/
+  - pushd /tmp && wget https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_linux64.zip && unzip chromedriver_linux64.zip -d ~/bin/ && popd
 script:
   - magrit --help
   - py.test tests/test.py -p no:flaky
