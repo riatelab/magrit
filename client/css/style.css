@@ -525,6 +525,14 @@ a.logo {
   position: unset !important;
 }
 
+.dataTable-table > thead > tr > th {
+  vertical-align: middle;
+}
+
+.dataTable-table a.dataTable-sorter {
+  margin: 3px 5px;
+}
+
 .button_sys_run {
   border-color: transparent;
   color: transparent;
