@@ -17,7 +17,7 @@ Rtree == 0.8.3
 scipy == 1.1.0
 Shapely == 1.6.4
 ujson == 1.35
-psutil == 5.4.7
+psutil == 5.6.6
 pyexcel == 0.5.1.1
 pyexcel-io == 0.4.2
 pyexcel-ods == 0.4.0
