@@ -1,7 +1,7 @@
 aiohttp == 3.5.4
 aiohttp-session == 2.5.1
 cchardet == 2.1.4
-cryptography == 2.3.1
+cryptography == 3.2
 Cython >= 0.28
 docopt >= 0.6.2
 Fiona == 1.8.5
