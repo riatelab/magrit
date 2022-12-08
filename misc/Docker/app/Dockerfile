@@ -9,11 +9,18 @@ RUN apt-get update \
         libgeos-c1v5 libgeos-dev libgdal30 libgdal-dev libspatialindex-dev libffi-dev \
         nodejs npm libuv1 libuv1-dev unzip wget git \
         libxslt1.1 libxslt1-dev libxml2 libxml2-dev libkml-dev locales \
+        libfftw3-3 libfftw3-dev autoconf automake libcjson1 libcjson-dev \
+        build-essential pkg-config \
     && npm -g install topojson \
     && rm -rf /var/lib/apt/lists/* \
     && locale-gen fr_FR.UTF-8
 
 ENV LANG='fr_FR.UTF-8' LANGUAGE='fr_FR' LC_ALL='fr_FR.UTF-8' NODE_ENV='PRODUCTION'
+
+RUN cd /home \
+    && git clone https://github.com/mthh/go_cart/ \
+    && cd go_cart \
+    && ./autogen.sh && ./configure && make && make install .
 
 RUN mkdir /home/app && cd /home/app && mkdir magrit
 COPY . /home/app/magrit
