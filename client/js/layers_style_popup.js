@@ -1738,7 +1738,8 @@ function createStyleBox(layer_name) {
 
   if (data_manager.current_layers[layer_name].renderer === undefined
       || data_manager.current_layers[layer_name].renderer === 'Carto_doug'
-      || data_manager.current_layers[layer_name].renderer === 'OlsonCarto') {
+      || data_manager.current_layers[layer_name].renderer === 'OlsonCarto'
+      || data_manager.current_layers[layer_name].renderer === 'Carto_gastner') {
     const generate_legend_section = popup.append('div')
       .attr('class', 'line_elem');
 

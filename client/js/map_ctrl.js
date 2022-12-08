@@ -281,7 +281,7 @@ export function redraw_legends_symbols(targeted_node) {
       );
 
       new_lgd = document.querySelector(['#legend_root_layout.lgdf_', layer_id].join(''));
-    } else if (rendered_field && ['Carto_doug', 'OlsonCarto'].indexOf(data_manager.current_layers[layer_name].renderer) < 0) {
+    } else if (rendered_field && ['Carto_doug', 'OlsonCarto', 'Carto_gastner'].indexOf(data_manager.current_layers[layer_name].renderer) < 0) {
       const nested = legend_nodes[i].getAttribute('nested'),
         join_line = legend_nodes[i].getAttribute('join_line');
 

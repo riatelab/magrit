@@ -2049,11 +2049,17 @@ const fields_Anamorphose = {
     }
     algo_selec.on('change', function () {
       if (this.value === 'olson') {
-        section2.selectAll('.opt_dougenik').style('display', 'none');
         section2.selectAll('.opt_olson').style('display', undefined);
+        section2.selectAll('.opt_dougenik').style('display', 'none');
+        section2.selectAll('.opt_gastner').style('display', 'none');
       } else if (this.value === 'dougenik') {
         section2.selectAll('.opt_olson').style('display', 'none');
         section2.selectAll('.opt_dougenik').style('display', undefined);
+        section2.selectAll('.opt_gastner').style('display', 'none');
+      } else if (this.value === 'gastner') {
+        section2.selectAll('.opt_olson').style('display', 'none');
+        section2.selectAll('.opt_dougenik').style('display', 'none');
+        section2.selectAll('.opt_gastner').style('display', undefined);
       }
     });
     section2.selectAll('.params').attr('disabled', null);
@@ -2183,6 +2189,50 @@ const fields_Anamorphose = {
             display_error_during_computation();
             console.log(error);
           });
+      } else if (algo === 'gastner') {
+        const formToSend = new FormData(),
+          var_to_send = {};
+
+        var_to_send[field_name] = [];
+        if (!data_manager.current_layers[layer].original_fields.has(field_name)) {
+          const table = data_manager.user_data[layer],
+            to_send = var_to_send[field_name];
+          for (let i = 0, i_len = table.length; i < i_len; ++i) {
+            to_send.push(+table[i][field_name]);
+          }
+        }
+        formToSend.append('json', JSON.stringify({
+          topojson: data_manager.current_layers[layer].key_name,
+          var_name: var_to_send,
+        }));
+
+        xhrequest('POST', 'compute/carto_gastner', formToSend, true)
+          .then((data) => {
+            const options = {
+              choosed_name: check_layer_name(new_user_layer_name.length > 0 ? new_user_layer_name : ['Cartogram', field_name, layer].join('_')),
+              func_name: 'cartogram',
+              result_layer_on_add: true,
+            };
+
+            const n_layer_name = add_layer_topojson(data, options);
+            data_manager.current_layers[n_layer_name].fill_color = { random: true };
+            data_manager.current_layers[n_layer_name].is_result = true;
+            data_manager.current_layers[n_layer_name]['stroke-width-const'] = 0.8;
+            data_manager.current_layers[n_layer_name].renderer = 'Carto_gastner';
+            data_manager.current_layers[n_layer_name].rendered_field = field_name;
+
+            map.select(`#${_app.layer_to_id.get(n_layer_name)}`)
+              .selectAll('path')
+              .style('fill', () => randomColor())
+              .style('fill-opacity', 0.8)
+              .style('stroke', 'black')
+              .style('stroke-opacity', 0.8);
+
+            switch_accordion_section();
+          }, (error) => {
+            display_error_during_computation();
+            console.log(error);
+          });
       }
     });
     setSelected(field_selec.node(), field_selec.node().options[0].value);
@@ -2201,11 +2251,12 @@ function fillMenu_Anamorphose() {
 
   const algo_choice = dialog_content.append('p')
     .attr('class', 'params_section2');
-  algo_choice.append('span')
+  algo_choice.append('p')
     .attrs({ class: 'i18n', 'data-i18n': '[html]app_page.func_options.cartogram.algo' })
     .html(_tr('app_page.func_options.cartogram.algo'));
   const algo_selec = algo_choice.insert('select')
-    .attrs({ id: 'Anamorph_algo', class: 'params i18n' });
+    .attrs({ id: 'Anamorph_algo', class: 'params i18n' })
+    .style('margin-top', '2.5px');
 
   const field_choice = dialog_content.append('p').attr('class', 'params_section2');
   field_choice.append('p')
@@ -2226,6 +2277,7 @@ function fillMenu_Anamorphose() {
   [
     ['Dougenik & al. (1985)', 'dougenik'],
     ['Olson (2005)', 'olson'],
+    ['Gastner, Seguy & More (2018)', 'gastner'],
   ].forEach((fun_name) => {
     algo_selec.append('option').text(fun_name[0]).attr('value', fun_name[1]);
   });
