@@ -420,32 +420,6 @@ def make_gastner_seguy_more_cartogram(tmp_dir, file_path, name, field_name):
     # to have a "cartogram_id" property.
     gdf['cartogram_id'] = [str(i) for i in range(1, len(gdf) + 1)]
 
-    # # Prepare the .gen and .dat files expected by Gastner-Seguy-More code
-    # data = json.loads(gdf.to_json())
-    # res_geom = []
-    # res_data = []
-    # for i, ft in enumerate(data['features']):
-    #     res_data.append('{} {}'.format(i + 1, float(ft['properties'][field_name])))
-    #     if ft['geometry']['type'] == 'Polygon':
-    #         for ring in ft['geometry']['coordinates']:
-    #             res_geom.append('{}'.format(i + 1))
-    #             for a, b in ring:
-    #                 res_geom.append('{:.5f} {:.5f}'.format(a, b))
-    #             res_geom.append('END')
-    #     elif ft['geometry']['type'] == 'MultiPolygon':
-    #         for polygon in ft['geometry']['coordinates']:
-    #             for ring in polygon:
-    #                 res_geom.append('{}'.format(i + 1))
-    #                 for a, b in ring:
-    #                     res_geom.append('{:.5f} {:.5f}'.format(a, b))
-    #                 res_geom.append('END')
-    # res_geom.append('END')
-    #
-    # with open('{}/{}.gen'.format(tmp_dir, name), 'w') as f:
-    #     f.write('\n'.join(res_geom))
-    # with open('{}/{}.dat'.format(tmp_dir, name), 'w') as f:
-    #     f.write('\n'.join(res_data))
-
     # Prepare the .json and .csv files expected by Gastner-Seguy-More code
     data = json.loads(gdf.to_json())
     # Gastner-Seguy-More code expects the .json file to have a "bbox" key
@@ -473,47 +447,6 @@ def make_gastner_seguy_more_cartogram(tmp_dir, file_path, name, field_name):
     ], stdout=PIPE, stderr=PIPE, cwd=tmp_dir)
 
     out, err = p.communicate()
-    print(out, err)
-
-    # # Read the file containing the relative error by area
-    # with open('{}/area_error.dat'.format(tmp_dir), 'r') as f:
-    #     relative_error = f.readlines()
-
-    # # Read the generated .gen file (contains the new geometries)
-    # with open('{}/cartogram.gen'.format(tmp_dir), 'r') as f:
-    #     data_result = f.readlines()
-
-    # relative_error = [float(a[a.find('error = ') + len('error = '):]) for a in relative_error]
-    # print(len(relative_error))
-    # features = []
-    # pol = []
-    # i = 0
-    # for line in data_result:
-    #     li = line.split(' ')
-    #     if len(li) == 1 and len(pol) == 0:
-    #         continue
-    #     if 'END' in line:
-    #         print(i)
-    #         features.append({
-    #             "type": "Feature",
-    #             "properties": {
-    #                 "id": i,
-    #                 "relative_error": relative_error[i]
-    #             },
-    #             "geometry": {
-    #                 "type": "Polygon", "coordinates": [pol]
-    #             }
-    #         })
-    #         i += 1
-    #         pol = []
-    #     else:
-    #         pol.append([float(li[0]), float(li[1])])
-    #
-    # result_obj = {"type": "FeatureCollection", "features": features}
-    #
-    # gdf = GeoDataFrame.from_features(result_obj)
-    # gdf.set_crs(proj_robinson, allow_override=True, inplace=True)
-    # gdf.to_crs("epsg:4326", inplace=True)
 
     # Read the file containing the relative error by area
     with open('{}/area_error.dat'.format(tmp_dir), 'r') as f:
