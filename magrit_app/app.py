@@ -83,7 +83,8 @@ try:
     from helpers.geo import (
         reproj_convert_layer_kml, reproj_convert_layer, make_carto_doug,
         check_projection, olson_transform, get_proj4_string,
-        make_geojson_links, TopologicalError, ogr_to_geojson, read_gml_crs, read_shp_crs)
+        make_geojson_links, TopologicalError, ogr_to_geojson, read_gml_crs, read_shp_crs,
+        make_gastner_seguy_more_cartogram)
     from helpers.stewart_smoomapy import quick_stewart_mod
     from helpers.grid_layer import get_grid_layer
     from helpers.grid_layer_pt import get_grid_layer_pt
@@ -97,7 +98,8 @@ except:
     from .helpers.geo import (
         reproj_convert_layer_kml, reproj_convert_layer, make_carto_doug,
         check_projection, olson_transform, get_proj4_string,
-        make_geojson_links, TopologicalError, ogr_to_geojson, read_gml_crs, read_shp_crs)
+        make_geojson_links, TopologicalError, ogr_to_geojson, read_gml_crs, read_shp_crs,
+        make_gastner_seguy_more_cartogram)
     from .helpers.stewart_smoomapy import quick_stewart_mod
     from .helpers.grid_layer import get_grid_layer
     from .helpers.grid_layer_pt import get_grid_layer_pt
@@ -636,6 +638,45 @@ async def convert_extrabasemap(request):
             return web.Response(text=''.join(
                 ['{"key":', str(hashed_input), ',"file":', result, '}']))
 
+async def carto_gastner_seguy_more(posted_data, user_id, app):
+    posted_data = json.loads(posted_data.get('json'))
+    f_name = '_'.join([user_id, str(posted_data['topojson'])])
+    ref_layer = await app['redis_conn'].get(f_name)
+    ref_layer = json.loads(ref_layer.decode())
+    new_field = posted_data['var_name']
+    n_field_name = list(new_field.keys())[0]
+    if len(new_field[n_field_name]) > 0:
+        join_field_topojson(ref_layer, new_field[n_field_name], n_field_name)
+
+    with TemporaryDirectory() as tmp_dir:
+        tmp_name = get_name()
+        tmp_path = path_join(tmp_dir, '{}.geojson'.format(tmp_name))
+        savefile(tmp_path, topojson_to_geojson(ref_layer).encode())
+
+        with _ProcessPoolExecutor(max_workers=1) as executor:
+            loop = asyncio.get_running_loop()
+            fut = loop.run_in_executor(
+                executor,
+                make_gastner_seguy_more_cartogram,
+                tmp_dir,
+                tmp_path,
+                tmp_name,
+                n_field_name,
+            )
+
+            asyncio.ensure_future(
+                kill_after_timeout(600, list(executor._processes.values())[0].pid))
+
+            result = await fut
+
+        new_name = '_'.join(["Carto_gastner", n_field_name])
+        res = await geojson_to_topojson(result, new_name)
+        hash_val = mmh3_hash(res)
+        asyncio.ensure_future(
+            app['redis_conn'].set('_'.join([
+                user_id, str(hash_val)]), res, pexpire=14400000))
+
+        return ''.join(['{"key":', str(hash_val), ',"file":', res, '}'])
 
 async def carto_doug(posted_data, user_id, app):
     posted_data = json.loads(posted_data.get("json"))
@@ -946,7 +987,7 @@ async def compute_stewart(posted_data, user_id, app):
 async def geo_compute(request):
     """
     Function dispatching between the various available functionalities
-    (smoothed map, links creation, dougenik or olson cartogram, etc.)
+    (smoothed map, links creation, dougenik, olson and gastner cartograms, etc.)
     and returning (if nothing went wrong) the result to be added on the map.
     """
     s_t = time.time()
@@ -1696,7 +1737,8 @@ async def init(loop, addr='0.0.0.0', port=None, watch_change=False, use_redis=Tr
         "gridded_point": carto_gridded_point,
         "links": links_map,
         "carto_doug": carto_doug,
-        "olson": compute_olson
+        "olson": compute_olson,
+        "carto_gastner": carto_gastner_seguy_more,
     }
     if watch_change:
         webpack_logger = logging.getLogger("webpack")

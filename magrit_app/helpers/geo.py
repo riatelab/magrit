@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import re
 import numpy as np
+import os
 import ujson as json
 import tempfile
 from charset_normalizer import detect
@@ -397,6 +398,143 @@ def make_carto_doug(file_path, field_name, iterations):
     repairCoordsPole(result_json)
     return json.dumps(result_json).encode()
 
+
+def make_gastner_seguy_more_cartogram(tmp_dir, file_path, name, field_name):
+    gdf, replaced_id_field = try_open_geojson(file_path)
+    proj_robinson = (
+            "+proj=robin +lon_0=0 +x_0=0 +y_0=0 "
+            "+ellps=WGS84 +datum=WGS84 +units=m +no_defs")
+
+    gdf.to_crs(proj_robinson, inplace=True)
+    if replaced_id_field and field_name == 'id':
+        field_name = '_id'
+
+    if not gdf[field_name].dtype in (int, float):
+        gdf.loc[:, field_name] = gdf[field_name].replace('', np.NaN)
+        gdf.loc[:, field_name] = gdf[field_name].astype(float)
+    # Remove features with no value / null value
+    gdf = gdf[gdf[field_name].notnull()]
+    gdf = gdf.iloc[gdf[field_name].to_numpy().nonzero()]
+    gdf.index = range(len(gdf))
+    # Gastner-Seguy-More code expects features in the GeoJSON file
+    # to have a "cartogram_id" property.
+    gdf['cartogram_id'] = [str(i) for i in range(1, len(gdf) + 1)]
+
+    # # Prepare the .gen and .dat files expected by Gastner-Seguy-More code
+    # data = json.loads(gdf.to_json())
+    # res_geom = []
+    # res_data = []
+    # for i, ft in enumerate(data['features']):
+    #     res_data.append('{} {}'.format(i + 1, float(ft['properties'][field_name])))
+    #     if ft['geometry']['type'] == 'Polygon':
+    #         for ring in ft['geometry']['coordinates']:
+    #             res_geom.append('{}'.format(i + 1))
+    #             for a, b in ring:
+    #                 res_geom.append('{:.5f} {:.5f}'.format(a, b))
+    #             res_geom.append('END')
+    #     elif ft['geometry']['type'] == 'MultiPolygon':
+    #         for polygon in ft['geometry']['coordinates']:
+    #             for ring in polygon:
+    #                 res_geom.append('{}'.format(i + 1))
+    #                 for a, b in ring:
+    #                     res_geom.append('{:.5f} {:.5f}'.format(a, b))
+    #                 res_geom.append('END')
+    # res_geom.append('END')
+    #
+    # with open('{}/{}.gen'.format(tmp_dir, name), 'w') as f:
+    #     f.write('\n'.join(res_geom))
+    # with open('{}/{}.dat'.format(tmp_dir, name), 'w') as f:
+    #     f.write('\n'.join(res_data))
+
+    # Prepare the .json and .csv files expected by Gastner-Seguy-More code
+    data = json.loads(gdf.to_json())
+    # Gastner-Seguy-More code expects the .json file to have a "bbox" key
+    data['bbox'] = gdf.total_bounds.tolist()
+
+    with open('{}/{}.json'.format(tmp_dir, name), 'w') as f:
+        f.write(json.dumps(data))
+
+    # Gastner-Seguy-More code expects a .csv file
+    # with two columns : "Region Id" that contains the cartogram_id
+    # and Region Data that contains the value of the field
+    # to be cartogramed
+    data_csv = gdf[['cartogram_id', field_name]].copy()
+    data_csv.columns = ['Region Id', 'Region Data']
+
+    with open('{}/{}.csv'.format(tmp_dir, name), 'w') as f:
+        f.write(data_csv.to_csv(index=False))
+
+    # Run the 'cartogram' executable
+    # (in the future we could use a Python binding to Gastner-Seguy-More code)
+    p = Popen([
+        'cartogram',
+        '-g', '{}/{}.json'.format(tmp_dir, name),
+        '-a', '{}/{}.csv'.format(tmp_dir, name)
+    ], stdout=PIPE, stderr=PIPE, cwd=tmp_dir)
+
+    out, err = p.communicate()
+    print(out, err)
+
+    # # Read the file containing the relative error by area
+    # with open('{}/area_error.dat'.format(tmp_dir), 'r') as f:
+    #     relative_error = f.readlines()
+
+    # # Read the generated .gen file (contains the new geometries)
+    # with open('{}/cartogram.gen'.format(tmp_dir), 'r') as f:
+    #     data_result = f.readlines()
+
+    # relative_error = [float(a[a.find('error = ') + len('error = '):]) for a in relative_error]
+    # print(len(relative_error))
+    # features = []
+    # pol = []
+    # i = 0
+    # for line in data_result:
+    #     li = line.split(' ')
+    #     if len(li) == 1 and len(pol) == 0:
+    #         continue
+    #     if 'END' in line:
+    #         print(i)
+    #         features.append({
+    #             "type": "Feature",
+    #             "properties": {
+    #                 "id": i,
+    #                 "relative_error": relative_error[i]
+    #             },
+    #             "geometry": {
+    #                 "type": "Polygon", "coordinates": [pol]
+    #             }
+    #         })
+    #         i += 1
+    #         pol = []
+    #     else:
+    #         pol.append([float(li[0]), float(li[1])])
+    #
+    # result_obj = {"type": "FeatureCollection", "features": features}
+    #
+    # gdf = GeoDataFrame.from_features(result_obj)
+    # gdf.set_crs(proj_robinson, allow_override=True, inplace=True)
+    # gdf.to_crs("epsg:4326", inplace=True)
+
+    # Read the file containing the relative error by area
+    with open('{}/area_error.dat'.format(tmp_dir), 'r') as f:
+        relative_error = f.readlines()
+
+    # By a mappping between the cartogram_id and the relative error
+    relative_error = {
+        int(a[len('region '): a.find(':')]): float(a[a.find('error = ') + len('error = '):])
+        for a in relative_error
+    }
+
+    # Read the generated .geojson file (contains the new geometries)
+    gdf_result = GeoDataFrame.from_features(json.loads(open('{}/cartogram.json'.format(tmp_dir)).read()))
+    # Store the relative error
+    gdf_result['relative_error'] = [relative_error[int(v)] for v in gdf_result['cartogram_id']]
+    # It was in Robinson projection ...
+    gdf_result.set_crs(proj_robinson, allow_override=True, inplace=True)
+    # ... and we need to convert it back to WGS84
+    gdf_result.to_crs("epsg:4326", inplace=True)
+
+    return gdf_result.to_json().encode()
 
 def olson_transform(geojson, scale_values):
     """
