@@ -6,6 +6,9 @@ Unreleased
 
 - New: Add option to use Gastner, Seguy and More (2018) method to compute cartograms.
 
+- Fix bug that was preventing to do some new cartographic portrayals after promoting a layout layer to target layer.
+
+
 0.12.1 (2022-12-06)
 -------------------
 

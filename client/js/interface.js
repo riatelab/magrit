@@ -1430,8 +1430,6 @@ function changeTargetLayer(new_target) {
   update_section1_layout();
   if (!data_manager.current_layers[new_target].fields_type) {
     data_manager.current_layers[new_target].original_fields = new Set(fields);
-  }
-  if (!data_manager.current_layers[new_target].fields_type) {
     data_manager.current_layers[new_target].fields_type = type_col2(data_manager.user_data[new_target]);
   }
   document.getElementById('btn_type_fields').removeAttribute('disabled');

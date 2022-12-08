@@ -363,12 +363,19 @@ export function add_layer_topojson(text, options = {}) {
     });
   d3.select('#layer_to_export').append('option').attr('value', lyr_name_to_add).text(lyr_name_to_add);
   update_section1_layout();
+
   if (target_layer_on_add) {
-    data_manager.current_layers[lyr_name_to_add].original_fields = new Set(Object.getOwnPropertyNames(data_manager.user_data[lyr_name_to_add][0]));
+    // Remember which field were originally present in the layer
+    // (in case we join a tabular dataset to it later):
+    data_manager.current_layers[lyr_name_to_add].original_fields = new Set(
+      Object.getOwnPropertyNames(data_manager.user_data[lyr_name_to_add][0]),
+    );
+    // Update the section 1 of the left menu with new information about the target layer;
     if (data_manager.joined_dataset.length !== 0) {
       valid_join_check_display(false);
     }
     update_section1(type, nb_fields, nb_ft, lyr_name_to_add);
+    // Create the entry in the layer list:
     create_li_layer_elem(lyr_name_to_add, nb_ft, type, 'target');
     _app.targeted_layer_added = true;
     window._target_layer_file = topoObj;
@@ -376,6 +383,9 @@ export function add_layer_topojson(text, options = {}) {
       scale_to_lyr(lyr_name_to_add);
       center_map(lyr_name_to_add);
     }
+    // Update the third section of the left menu
+    // to propose cartographic methods according to the type
+    // of the field of the target layer:
     if (_app.current_functionnality !== undefined) {
       fields_handler.fill(lyr_name_to_add);
     }
@@ -389,6 +399,12 @@ export function add_layer_topojson(text, options = {}) {
         : '[title]app_page.func_description.grid');
     localize('#button_grid');
   } else if (result_layer_on_add) {
+    // Remember which field were originally present in the layer
+    // (in case we join a tabular dataset to it later):
+    data_manager.current_layers[lyr_name_to_add].original_fields = new Set(
+      Object.getOwnPropertyNames(data_manager.result_data[lyr_name_to_add][0]),
+    );
+    // Create the entry in the layer list:
     create_li_layer_elem(
       lyr_name_to_add,
       nb_ft,
@@ -396,6 +412,14 @@ export function add_layer_topojson(text, options = {}) {
       'result',
     );
   } else {
+    // Remember which field were originally present in the layer
+    // (in case we join a tabular dataset to it later):
+    data_manager.current_layers[lyr_name_to_add].original_fields = new Set(
+      Object.getOwnPropertyNames(
+        document.querySelector(`#${_app.layer_to_id.get(lyr_name_to_add)}`).querySelector('path').__data__.properties
+      ),
+    );
+    // Create the entry in the layer list:
     create_li_layer_elem(lyr_name_to_add, nb_ft, type, '');
   }
 
