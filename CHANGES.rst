@@ -1,6 +1,11 @@
 Changes
 =======
 
+Unreleased
+----------
+
+- New: Add option to use Gastner, Seguy and More (2018) method to compute cartograms.
+
 0.12.1 (2022-12-06)
 -------------------
 
