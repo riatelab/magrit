@@ -1,0 +1,25 @@
+.layer-manager-item {
+    background-color: #f5f5f5;
+    border: 1px solid #e5e5e5;
+    padding: 10px;
+    width: 100%;
+}
+
+.layer-manager-item__name {
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+.layer-manager-item__icons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.layer-manager-item__icons-right > svg,
+.layer-manager-item__icons-left > svg {
+    margin-left: 3px;
+}
+
+.layer-manager-item.target {
+    background-color: yellow;
+}

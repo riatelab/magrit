@@ -1,0 +1,23 @@
+/*
+The left menu is:
+- fixed on the left of the window
+- occupying the whole height of the window minus the navbar
+- with a grey background color
+- with a 1px solid grey border
+*/
+.left-menu {
+    position: fixed;
+    left: 0;
+    top: 50px;
+    height: calc(100% - 50px);
+    background-color: #f5f5f5;
+    border: 1px solid #e5e5e5;
+    width: 300px;
+    max-width: 300px;
+}
+
+.left-menu__title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    padding: 10px;
+}

@@ -1,0 +1,31 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "solid"],
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:solid/typescript",
+    "airbnb-base",
+    "airbnb-typescript/base"
+  ],
+  "rules": {
+//    "import/no-named-as-default": 0,
+//    "import/prefer-default-export": ["warn"],
+//    "indent": ["error", 2],
+//    "linebreak-style": ["error", "unix"],
+//    "quotes": ["error", "single"],
+//    "semi": ["error", "always"],
+//    "comma-dangle": ["error", "always-multiline"],
+//    "prefer-spread": ["error"],
+//    "prefer-rest-params": ["error"],
+//    "spaced-comment": ["error", "always"],
+//    "no-trailing-spaces": ["error"],
+//    "space-before-blocks": ["error", "always"],
+//    "space-before-function-paren": ["error", { "anonymous": "never", "named": "always" }],
+//    "no-multiple-empty-lines": ["error", { "max": 2 }],
+//    "no-multi-spaces": ["error"]
+  },
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
+}
