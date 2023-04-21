@@ -10,12 +10,12 @@ export default function DefaultModal(): JSX.Element {
   const confirmCallback = modalStore.confirmCallback || (() => {});
   const cancelCallback = modalStore.cancelCallback || (() => {});
 
-  return <div class="modal" style="display: unset;">
+  return <div class="modal" style="display: flex;">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">{ modalStore.title }</p>
-        <button class="delete" aria-label="close"></button>
+        {/* <button class="delete" aria-label="close"></button> */}
       </header>
       <section class="modal-card-body">
         { modalStore.content }
@@ -23,11 +23,11 @@ export default function DefaultModal(): JSX.Element {
       <footer class="modal-card-foot">
         <button
           class="button is-success"
-          onClick={ () => { setModalStore({ show: false }); confirmCallback(); } }
+          onClick={ () => { confirmCallback(); setModalStore({ show: false }); } }
         >{ successButton }</button>
         <button
           class="button"
-          onClick={ () => { setModalStore({ show: false }); cancelCallback(); } }
+          onClick={ () => { cancelCallback(); setModalStore({ show: false }); } }
         >{ cancelButton }</button>
       </footer>
     </div>

@@ -18,9 +18,9 @@ function loadAndSetLocal(locale: Locales, setter: (locale: Locales) => void): vo
 export default function DropdownLanguage() {
   const { locale, setLocale } = useI18nContext();
   onMount(handleDropdownMenu);
-  return <div class="dropdown">
+  return <div class="dropdown is-right">
     <div class="dropdown-trigger">
-      <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+      <button class="button is-primary" aria-haspopup="true" aria-controls="dropdown-menu">
         <span>{ locale }</span>
         <span class="icon is-small">
           <FaSolidAngleDown />
@@ -28,9 +28,11 @@ export default function DropdownLanguage() {
       </button>
     </div>
     <div class="dropdown-menu" id="dropdown-menu" role="menu">
-      <div class="dropdown-content">
-        <a class={ locale() === 'en' ? 'dropdown-item is-active' : 'dropdown-item'} onClick={() => loadAndSetLocal('en' as Locales, setLocale)}>en</a>
-        <a class={ locale() === 'fr' ? 'dropdown-item is-active' : 'dropdown-item'} onClick={() => loadAndSetLocal('fr' as Locales, setLocale)}>fr</a>
+      <div class="dropdown-content" style="background-color: #00d1b2;">
+        <a
+          classList={{ 'dropdown-item is-primary button': true, 'is-active': locale() === 'en' }} onClick={() => loadAndSetLocal('en' as Locales, setLocale)}>en</a>
+        <a
+          classList={{ 'dropdown-item is-primary button': true, 'is-active': locale() === 'fr' }} onClick={() => loadAndSetLocal('fr' as Locales, setLocale)}>fr</a>
       </div>
     </div>
   </div>;
