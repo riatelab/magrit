@@ -18,6 +18,14 @@ type RootTranslation = {
 	 * S​t​a​r​t​ ​A​p​p​l​i​c​a​t​i​o​n
 	 */
 	StartApplication: string
+	/**
+	 * C​o​n​f​i​r​m
+	 */
+	SuccessButton: string
+	/**
+	 * C​a​n​c​e​l
+	 */
+	CancelButton: string
 }
 
 export type TranslationFunctions = {
@@ -25,6 +33,14 @@ export type TranslationFunctions = {
 	 * Start Application
 	 */
 	StartApplication: () => LocalizedString
+	/**
+	 * Confirm
+	 */
+	SuccessButton: () => LocalizedString
+	/**
+	 * Cancel
+	 */
+	CancelButton: () => LocalizedString
 }
 
 export type Formatters = {}

@@ -2,12 +2,16 @@ import initGdalJs from 'gdal3.js';
 import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'; // eslint-disable-line import/extensions
 import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url';
 import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url';
-import { For, JSX, onMount } from 'solid-js';
+import {
+  For, JSX, onMount, Show,
+} from 'solid-js';
 import { HeaderBarApp } from './header.tsx';
 import { useI18nContext } from './i18n/i18n-solid';
-import { globalStore, setGlobalStore } from './GlobalStore';
-import { layersDescriptionStore } from './LayersDescriptionStore';
+import { globalStore, setGlobalStore } from './store/GlobalStore';
+import { layersDescriptionStore } from './store/LayersDescriptionStore';
 import LeftMenu from './LeftMenu.tsx';
+import DefaultModal from './ModalWindow.tsx';
+import { modalStore, setModalStore } from './store/ModalStore';
 
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
   paths: {
@@ -51,7 +55,21 @@ const AppPage: () => JSX.Element = () => {
           }
         </For>
       </div>
+      <Show when={modalStore.show}>
+        <DefaultModal />
+      </Show>
     </main>
+    <button style="position: absolute; right: 0; top; 200;" onClick={
+      () => {
+        setModalStore({
+          show: true,
+          title: 'My super title',
+          content: <><h2>My super content</h2><div>Lorem ipsum</div></>,
+          confirmCallback: (): void => { console.log('confirm'); },
+          cancelCallback: (): void => { console.log('cancel'); },
+        });
+      }
+    }>Click me</button>
   </>;
 };
 
