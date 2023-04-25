@@ -16,6 +16,22 @@ const typeIcons = {
   raster: 'fg-finish',
 };
 
+const onClickEye = (id: string) => {
+  console.log('click eye on item ', id);
+};
+
+const onCLickMagnifyingGlass = (id: string) => {
+  console.log('click magnifying glass on item ', id);
+};
+
+const onClickTable = (id: string) => {
+  console.log('click magnifying glass on item ', id);
+};
+
+const onClickTrash = (id: string) => {
+  console.log('click magnifying glass on item ', id);
+};
+
 export default function LayerManagerItem(props): JSX.Element {
   return <div class="layer-manager-item">
     <div class="layer-manager-item__name">
@@ -25,7 +41,7 @@ export default function LayerManagerItem(props): JSX.Element {
       <div class="layer-manager-item__icons-left">
         <Show
           when={props.type === 'table'}
-          fallback={<i class={typeIcons[props.type]}></i>}
+          fallback={<i class={typeIcons[props.type]} />}
         >
           <FaSolidTableCells />
         </Show>
@@ -33,11 +49,11 @@ export default function LayerManagerItem(props): JSX.Element {
     </div>
     <div class="layer-manager-item__icons-right">
       <Show when={props.type !== 'table'}>
-        <FaSolidEye />
-        <FaSolidMagnifyingGlass />
+        <FaSolidEye onClick={() => { onClickEye(props.id); }} />
+        <FaSolidMagnifyingGlass onClick={() => { onCLickMagnifyingGlass(props.id); }} />
       </Show>
-      <FaSolidTable />
-      <FaSolidTrash />
+      <FaSolidTable onClick={() => { onClickTable(props.id); }} />
+      <FaSolidTrash onClick={() => { onClickTrash(props.id); }} />
     </div>
   </div>
   </div>;

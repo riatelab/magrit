@@ -4,7 +4,7 @@ import { layersDescriptionStore, setLayersDescriptionStore } from './store/Layer
 import LayerManagerItem from './LayerManagerItem.tsx';
 import './styles/LayerManager.css';
 
-const setLayersDescriptionStoreWrapper = (newLayersDescriptionStore) => {
+const setLayersDescriptionStoreWrapper = (newLayersDescriptionStore: []) => {
   setLayersDescriptionStore({
     layers: newLayersDescriptionStore,
   });
@@ -16,7 +16,7 @@ const LayerManager = (): JSX.Element => <div class="layer-manager">
     items={layersDescriptionStore.layers}
     setItems={setLayersDescriptionStoreWrapper}
   >
-    {(item) => <LayerManagerItem type={item.type} name={item.name} />}
+    {(item) => <LayerManagerItem type={item.type} name={item.name} id={item.id} />}
   </Sortable>
 </div>;
 export default LayerManager;

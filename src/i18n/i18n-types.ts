@@ -26,6 +26,26 @@ type RootTranslation = {
 	 * C​a​n​c​e​l
 	 */
 	CancelButton: string
+	/**
+	 * D​r​o​p​ ​y​o​u​r​ ​f​i​l​e​(​s​)​ ​h​e​r​e​ ​!
+	 */
+	DropFilesHere: string
+	/**
+	 * S​u​p​p​o​r​t​e​d​ ​v​e​c​t​o​r​ ​f​o​r​m​a​t​s​ ​a​r​e​:​ ​E​S​R​I​ ​S​h​a​p​e​f​i​l​e​ ​(​.​s​h​p​,​ ​.​s​h​x​,​ ​.​d​b​f​,​ ​.​p​r​f​,​ ​.​c​p​g​)​,​ ​G​e​o​J​S​O​N​ ​(​.​j​s​o​n​ ​o​u​ ​.​g​e​o​j​s​o​n​)​,​ ​T​o​p​o​J​S​O​N​ ​(​.​t​o​p​o​j​s​o​n​ ​o​u​ ​.​j​s​o​n​)​,​ ​G​M​L​ ​(​.​g​m​l​)​ ​a​n​d​ ​K​M​L​ ​(​.​k​m​l​)​.
+	 */
+	SupportedVectorFormats: string
+	/**
+	 * S​u​p​p​o​r​t​e​d​ ​t​a​b​u​l​a​r​ ​f​o​r​m​a​t​s​ ​a​r​e​:​ ​E​x​c​e​l​ ​(​.​x​l​s​,​ ​.​x​l​s​x​)​,​ ​C​S​V​ ​(​.​c​s​v​)​ ​a​n​d​ ​O​p​e​n​D​o​c​u​m​e​n​t​ ​S​p​r​e​a​d​s​h​e​e​t​ ​(​.​o​d​s​)​.
+	 */
+	SupportedTabularFormats: string
+	/**
+	 * U​n​s​u​p​p​o​r​t​e​d​ ​f​o​r​m​a​t
+	 */
+	UnsupportedFormat: string
+	/**
+	 * {​{​O​n​e​ ​f​i​l​e​ ​d​e​t​e​c​t​e​d​|​?​?​ ​f​i​l​e​s​ ​d​e​t​e​c​t​e​d​}​}
+	 */
+	FilesDetected: string
 }
 
 export type TranslationFunctions = {
@@ -41,6 +61,26 @@ export type TranslationFunctions = {
 	 * Cancel
 	 */
 	CancelButton: () => LocalizedString
+	/**
+	 * Drop your file(s) here !
+	 */
+	DropFilesHere: () => LocalizedString
+	/**
+	 * Supported vector formats are: ESRI Shapefile (.shp, .shx, .dbf, .prf, .cpg), GeoJSON (.json ou .geojson), TopoJSON (.topojson ou .json), GML (.gml) and KML (.kml).
+	 */
+	SupportedVectorFormats: () => LocalizedString
+	/**
+	 * Supported tabular formats are: Excel (.xls, .xlsx), CSV (.csv) and OpenDocument Spreadsheet (.ods).
+	 */
+	SupportedTabularFormats: () => LocalizedString
+	/**
+	 * Unsupported format
+	 */
+	UnsupportedFormat: () => LocalizedString
+	/**
+	 * {{One file detected|?? files detected}}
+	 */
+	FilesDetected: (arg0: number | string | boolean) => LocalizedString
 }
 
 export type Formatters = {}

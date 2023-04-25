@@ -1,21 +1,21 @@
-import { createStore, Store, SetStoreFunction } from 'solid-js/store';
+import { createStore } from 'solid-js/store';
 
-interface GlobalStoreType {
-  nDrivers: number,
-  gdalObj: any,
-}
+type GlobalStoreType = {
+  nDrivers: number | null,
+  isLoading: boolean,
+  workerToCancel: Array<Worker>,
+  mapDimensions: { width: number, height: number },
+};
 
-type GlobalStoreFunctions = [
-  get: Store<GlobalStoreType>,
-  set: SetStoreFunction<GlobalStoreType>,
-];
 const [
   globalStore,
   setGlobalStore,
-]: GlobalStoreFunctions = createStore({
+] = createStore({
   nDrivers: null,
-  gdalObj: null,
-});
+  isLoading: false,
+  workerToCancel: [],
+  mapDimensions: { width: 0, height: 0 },
+} as GlobalStoreType);
 
 export {
   globalStore,

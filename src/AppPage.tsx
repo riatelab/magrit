@@ -3,18 +3,19 @@ import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'; // eslint-disable-li
 import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url';
 import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url';
 import {
-  For, JSX, onMount, Show,
+  JSX, onMount, Show,
 } from 'solid-js';
-import { HeaderBarApp } from './header.tsx';
+import { HeaderBarApp } from './Headers.tsx';
 import { useI18nContext } from './i18n/i18n-solid';
 import { globalStore, setGlobalStore } from './store/GlobalStore';
-import { layersDescriptionStore } from './store/LayersDescriptionStore';
 import LeftMenu from './LeftMenu.tsx';
 import DefaultModal from './ModalWindow.tsx';
 import OverlayDrop from './OverlayDrop.tsx';
 import { modalStore, setModalStore } from './store/ModalStore';
 import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
-import { prepareFileExtensions } from './helpers/fileUpload';
+import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
+import MapZone from './MapZone.tsx';
+import LoadingOverlay from './LoadingOverlay.tsx';
 
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
   paths: {
@@ -24,8 +25,6 @@ const loadGdal = async (): Promise<Gdal> => initGdalJs({
   },
   useWorker: true,
 });
-
-let Gdal: any = null;
 
 const SomeElement = (): JSX.Element => {
   const onClick = () => console.log('Logged from SomeElement');
@@ -38,19 +37,22 @@ const SomeElement = (): JSX.Element => {
 
 let timeout: NodeJS.Timeout | null | undefined = null;
 
-const dragEnterHandler = (e: DragEvent): void => {
+const dragEnterHandler = (e: Event): void => {
   e.preventDefault();
   e.stopPropagation();
-  if (!e.dataTransfer?.types.some((el) => el === 'Files')) {
-    return;
-  }
+  // Only files should trigger the opening of the drop overlay
+  if (!draggedElementsAreFiles(e as DragEvent)) return;
+
   setOverlayDropStore({ show: true });
   // clearTimeout(timeout);
 };
 
-const dragOverHandler = (e: DragEvent): void => {
+const dragOverHandler = (e: Event): void => {
   e.preventDefault();
   e.stopPropagation();
+  // Only files should trigger the opening of the drop overlay
+  if (!draggedElementsAreFiles(e as DragEvent)) return;
+
   setOverlayDropStore({ show: true });
   if (timeout) {
     clearTimeout(timeout);
@@ -61,9 +63,13 @@ const dragOverHandler = (e: DragEvent): void => {
   }
 };
 
-const dragLeaveHandler = (e: DragEvent): void => {
+const dragLeaveHandler = (e: Event): void => {
   e.preventDefault();
   e.stopPropagation();
+  if (!draggedElementsAreFiles(e as DragEvent)) return;
+
+  // We want the drop overlay to close if the cursor leaves the drop area
+  // and there are no files in the drop area
   timeout = setTimeout(() => {
     if (overlayDropStore.files.length < 1) {
       setOverlayDropStore({ show: false, files: [] });
@@ -72,10 +78,12 @@ const dragLeaveHandler = (e: DragEvent): void => {
   }, 1000);
 };
 
-const dropHandler = (e: DragEvent): void => {
+const dropHandler = (e: Event): void => {
   e.preventDefault();
   e.stopPropagation();
-  const files = prepareFileExtensions(e.dataTransfer.files);
+  if (!draggedElementsAreFiles(e as DragEvent)) return;
+  // Store name and type of the files dropped in a new array (CustomFileList) of FileEntry.
+  const files = prepareFileExtensions((e as DragEvent).dataTransfer.files);
   setOverlayDropStore({ files });
   if (timeout) {
     clearTimeout(timeout);
@@ -91,59 +99,36 @@ const AppPage: () => JSX.Element = () => {
   setLocale('en');
 
   onMount(async () => {
-    document.querySelector('div#root').addEventListener(
-      'dragenter',
-      dragEnterHandler,
-    );
+    // Add event listeners to the root element and the overlay drop
+    // in order to handle drag and drop events (for files upload only)
+    document.querySelectorAll('div#root, .overlay-drop')
+      .forEach((el) => {
+        el.addEventListener('dragenter', dragEnterHandler);
+        el.addEventListener('dragover', dragOverHandler);
+        el.addEventListener('dragleave', dragLeaveHandler);
+        el.addEventListener('drop', dropHandler);
+      });
 
-    document.querySelector('div#root').addEventListener(
-      'dragover',
-      dragOverHandler,
-    );
+    // Load GDAL
+    window.Gdal = await loadGdal();
 
-    document.querySelector('div#root').addEventListener(
-      'dragleave',
-      dragLeaveHandler,
-    );
+    const maxMapDimensions = {
+      width: window.innerWidth - 310,
+      height: window.innerHeight - 66,
+    };
 
-    document.querySelector('div#root').addEventListener(
-      'drop',
-      dropHandler,
-    );
-
-    document.querySelector('.overlay-drop').addEventListener(
-      'dragenter',
-      dragEnterHandler,
-    );
-
-    document.querySelector('.overlay-drop').addEventListener(
-      'dragover',
-      dragOverHandler,
-    );
-
-    document.querySelector('.overlay-drop').addEventListener(
-      'dragleave',
-      dragLeaveHandler,
-    );
-
-    document.querySelector('.overlay-drop').addEventListener(
-      'drop',
-      dropHandler,
-    );
-
-    Gdal = await loadGdal();
     setGlobalStore({
       nDrivers: Object.keys(Gdal.drivers.raster).length + Object.keys(Gdal.drivers.vector).length,
+      mapDimensions: maxMapDimensions,
     });
   });
 
   return <>
     <HeaderBarApp />
     <main class="is-fullhd">
-      <hr></hr>
       <LeftMenu />
-      <div style="width: calc(100vw - 300px); position: fixed; left: 300px;">
-        <div>{ globalStore.nDrivers } GDAL drivers</div>
+      <MapZone />
+{/*      <div style="width: calc(100vw - 300px); position: fixed; left: 300px;">
         <For each={ layersDescriptionStore.layers }>
           {
             (d) => {
@@ -156,7 +141,10 @@ const AppPage: () => JSX.Element = () => {
             }
           }
         </For>
-      </div>
+      </div> */}
+      <Show when={globalStore.isLoading }>
+        <LoadingOverlay />
+      </Show>
       <Show when={modalStore.show}>
         <DefaultModal />
       </Show>

@@ -1,16 +1,28 @@
 import { For, JSX } from 'solid-js';
 import { overlayDropStore } from './store/OverlayDropStore';
 import './styles/OverlayDrop.css';
+import { useI18nContext } from './i18n/i18n-solid';
+import { isAuthorizedFile } from './helpers/fileUpload';
 
 const displayFiles = (files: CustomFileList): JSX.Element => {
-  if (files.length === 0) return <p>Drop your file(s) here !</p>;
+  const { LL } = useI18nContext();
+
+  if (files.length === 0) return <p>{ LL().DropFilesHere() }</p>;
+  console.log(window.Gdal, window.Gdal.drivers.raster);
+
   return <>
     <p>
-      { files.length } file{ files.length > 1 ? 's' : '' } detected:
+      { LL().FilesDetected(files.length) }
     </p>
     <ul>
       <For each={files}>
-        {(file) => <li>{ file.name }</li>}
+        {
+          (file) => {
+            const authorized = isAuthorizedFile(file);
+            const prop = authorized ? {} : { 'data-tooltip': LL().UnsupportedFormat() };
+            return <li classList={{ authorized }} {...prop}>{file.name}</li>;
+          }
+        }
       </For>
     </ul>
   </>;

@@ -7,6 +7,8 @@ import TypesafeI18n from './i18n/i18n-solid';
 import { loadLocale } from './i18n/i18n-util.sync';
 
 import 'bulma/css/bulma.min.css';
+import '@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css';
+import './styles/Main.css';
 
 import WelcomePage from './WelcomePage.tsx';
 import AppPage from './AppPage.tsx';

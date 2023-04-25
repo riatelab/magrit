@@ -2,6 +2,7 @@ import { JSX, onMount } from 'solid-js';
 import { NavLink } from '@solidjs/router';
 import { useI18nContext } from './i18n/i18n-solid';
 import DropdownLanguage from './DropdownLanguage.tsx';
+import './styles/Headers.css';
 
 const handleBurgerClick = () => {
   // Get all "navbar-burger" elements
@@ -77,11 +78,10 @@ export function HeaderBarApp(): JSX.Element {
         {/* <a class="navbar-item" to="/about">About</a> */}
         {/* <a class="navbar-item" to="/documentation">Documentation</a> */}
       </div>
-      <div className="navbar-end">
-        <div className="navbar-item">
+      <div class="navbar-end">
+        <div class="navbar-item">
           <DropdownLanguage/>
-          <div className="buttons">
-          </div>
+          <div class="buttons" />
         </div>
       </div>
     </div>

@@ -1,6 +1,10 @@
 export {}
 
 declare global {
+  interface GlobalStoreType {
+    nDrivers: number,
+    gdalObj: any,
+  }
 
   interface FileEntry {
     name: string,

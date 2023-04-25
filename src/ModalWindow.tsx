@@ -10,7 +10,7 @@ export default function DefaultModal(): JSX.Element {
   const confirmCallback = modalStore.confirmCallback || (() => {});
   const cancelCallback = modalStore.cancelCallback || (() => {});
 
-  return <div class="modal" style="display: flex;">
+  return <div class="modal" style={{ display: 'flex' }}>
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">

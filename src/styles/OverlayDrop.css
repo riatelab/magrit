@@ -33,3 +33,14 @@
   list-style: none;
   font-size: 1.5rem;
 }
+
+.overlay-drop__content li.authorized {
+  color: var(--success-color);
+  margin: 1rem 0;
+}
+
+
+.overlay-drop__content li {
+  color: var(--danger-color);
+  margin: 1rem 0;
+}

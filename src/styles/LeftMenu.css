@@ -12,8 +12,8 @@ The left menu is:
     height: calc(100% - 50px);
     background-color: #f5f5f5;
     border-right: 1px solid #e5e5e5;
-    width: 300px;
-    max-width: 300px;
+    width: var(--left-menu-size);
+    max-width: var(--left-menu-size);
     border-left: solid 2px gray;
     border-right: solid 2px gray;
     border-bottom: solid 2px gray;

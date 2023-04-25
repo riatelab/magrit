@@ -20,6 +20,10 @@
     margin-left: 3px;
 }
 
+.layer-manager-item__icons-right > svg {
+    cursor: pointer;
+}
+
 .layer-manager-item.target {
     background-color: yellow;
 }

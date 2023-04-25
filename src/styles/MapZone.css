@@ -1,0 +1,11 @@
+.map-zone {
+  width: calc(100vw - var(--left-menu-size));
+  position: fixed;
+  left: var(--left-menu-size);
+  height: calc(100vh - var(--header-height));
+}
+
+.map-zone__inner {
+  width: 100%;
+  height: 100%;
+}
