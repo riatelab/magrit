@@ -13,3 +13,23 @@
   display: block;
 }
 
+.overlay-drop__content {
+  margin: 10vh 10vw;
+  width: 80vw;
+  height: 80vh;
+  border: dashed 4px #fff;
+  border-radius: 10px;
+}
+
+.overlay-drop__content__title {
+  font-size: 2rem;
+  color: #fff;
+  text-align: center;
+  position: relative;
+  top: 40vh;
+}
+
+.overlay-drop__content ul {
+  list-style: none;
+  font-size: 1.5rem;
+}

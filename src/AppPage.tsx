@@ -13,7 +13,8 @@ import LeftMenu from './LeftMenu.tsx';
 import DefaultModal from './ModalWindow.tsx';
 import OverlayDrop from './OverlayDrop.tsx';
 import { modalStore, setModalStore } from './store/ModalStore';
-import { setOverlayDropStore } from './store/OverlayDropStore';
+import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
+import { prepareFileExtensions } from './helpers/fileUpload';
 
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
   paths: {
@@ -35,31 +36,54 @@ const SomeElement = (): JSX.Element => {
   ></>;
 };
 
-let timeout = null;
+let timeout: NodeJS.Timeout | null | undefined = null;
 
-const dragEnterHandler = (/* e: DragEvent */): void => {
-  // console.log('dragEnterHandler', e);
+const dragEnterHandler = (e: DragEvent): void => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (!e.dataTransfer?.types.some((el) => el === 'Files')) {
+    return;
+  }
   setOverlayDropStore({ show: true });
-  clearTimeout(timeout);
+  // clearTimeout(timeout);
 };
 
-const dragOverHandler = (/* e: DragEvent */): void => {
-  // console.log('dragOverHandler', e);
+const dragOverHandler = (e: DragEvent): void => {
+  e.preventDefault();
+  e.stopPropagation();
   setOverlayDropStore({ show: true });
-  clearTimeout(timeout);
+  if (timeout) {
+    clearTimeout(timeout);
+    // timeout = setTimeout(() => {
+    //   setOverlayDropStore({ show: false });
+    //   timeout = null;
+    // }, 2500);
+  }
 };
 
-const dragLeaveHandler = (/* e: DragEvent */): void => {
-  // console.log('dragLeaveHandler', e);
+const dragLeaveHandler = (e: DragEvent): void => {
+  e.preventDefault();
+  e.stopPropagation();
   timeout = setTimeout(() => {
-    setOverlayDropStore({ show: false });
-  }, 150);
+    if (overlayDropStore.files.length < 1) {
+      setOverlayDropStore({ show: false, files: [] });
+      timeout = null;
+    }
+  }, 1000);
 };
 
 const dropHandler = (e: DragEvent): void => {
-  clearTimeout(timeout);
-  console.log('dropHandler', e);
   e.preventDefault();
+  e.stopPropagation();
+  const files = prepareFileExtensions(e.dataTransfer.files);
+  setOverlayDropStore({ files });
+  if (timeout) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      // setOverlayDropStore({ show: false, files: [] });
+      timeout = null;
+    }, 500);
+  }
 };
 
 const AppPage: () => JSX.Element = () => {
@@ -67,22 +91,22 @@ const AppPage: () => JSX.Element = () => {
   setLocale('en');
 
   onMount(async () => {
-    document.querySelector('body').addEventListener(
+    document.querySelector('div#root').addEventListener(
       'dragenter',
       dragEnterHandler,
     );
 
-    document.querySelector('body').addEventListener(
+    document.querySelector('div#root').addEventListener(
       'dragover',
       dragOverHandler,
     );
 
-    document.querySelector('body').addEventListener(
+    document.querySelector('div#root').addEventListener(
       'dragleave',
       dragLeaveHandler,
     );
 
-    document.querySelector('body').addEventListener(
+    document.querySelector('div#root').addEventListener(
       'drop',
       dropHandler,
     );
