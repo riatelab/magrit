@@ -1,11 +1,6 @@
 export {}
 
 declare global {
-  interface GlobalStoreType {
-    nDrivers: number,
-    gdalObj: any,
-  }
-
   interface FileEntry {
     name: string,
     ext: string,
@@ -14,4 +9,9 @@ declare global {
 
   type CustomFileList = FileEntry[];
 
+  interface LayerDescription {
+    id: number,
+    name: string,
+    type: string,
+  }
 }

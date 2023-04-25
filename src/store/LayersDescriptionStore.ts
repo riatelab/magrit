@@ -1,7 +1,7 @@
 import { createStore } from 'solid-js/store';
 
 type LayersDescriptionStoreType = {
-  layers: Array<{ id: number, name: string, type: string }>,
+  layers: Array<LayerDescription>,
 };
 
 const [
