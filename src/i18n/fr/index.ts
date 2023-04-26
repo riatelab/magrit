@@ -9,6 +9,7 @@ const fr = {
   SupportedTabularFormats: 'Les formats de fichiers tabulaires supportés sont : Excel (.xls, .xlsx), CSV (.csv) et les feuilles de calculs OpenDocument (.ods).',
   UnsupportedFormat: 'Format non supporté',
   FilesDetected: '{{ Un fichier détecté | ?? fichiers détectés }}',
+  ImportFiles: 'Importer les fichiers',
 } satisfies BaseTranslation;
 
 export default fr;

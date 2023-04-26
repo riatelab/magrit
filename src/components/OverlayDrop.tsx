@@ -35,6 +35,7 @@ const convertDroppedFiles = async (files: CustomFileList) => {
       id: uuidv4(),
       name: files[0].name,
       type: geomType,
+      data: res,
     },
   ];
   setLayersDescriptionStore({

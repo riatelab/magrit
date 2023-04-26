@@ -46,6 +46,10 @@ type RootTranslation = {
 	 * {​{​O​n​e​ ​f​i​l​e​ ​d​e​t​e​c​t​e​d​|​?​?​ ​f​i​l​e​s​ ​d​e​t​e​c​t​e​d​}​}
 	 */
 	FilesDetected: string
+	/**
+	 * I​m​p​o​r​t​ ​f​i​l​e​s
+	 */
+	ImportFiles: string
 }
 
 export type TranslationFunctions = {
@@ -81,6 +85,10 @@ export type TranslationFunctions = {
 	 * {{One file detected|?? files detected}}
 	 */
 	FilesDetected: (arg0: number | string | boolean) => LocalizedString
+	/**
+	 * Import files
+	 */
+	ImportFiles: () => LocalizedString
 }
 
 export type Formatters = {}

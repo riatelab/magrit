@@ -38,7 +38,7 @@ export function prepareFileExtensions(files: FileList): CustomFileList {
     const o: { name: string, ext: string, file: File } = {
       ext,
       file,
-      name: [name, ext].join('.'),
+      name,
     };
     return o;
   });

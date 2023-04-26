@@ -9,6 +9,7 @@ const en = {
   SupportedTabularFormats: 'Supported tabular formats are: Excel (.xls, .xlsx), CSV (.csv) and OpenDocument Spreadsheet (.ods).',
   UnsupportedFormat: 'Unsupported format',
   FilesDetected: '{{ One file detected | ?? files detected }}',
+  ImportFiles: 'Import files',
 } satisfies BaseTranslation;
 
 export default en;

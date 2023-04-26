@@ -5,7 +5,6 @@ import '../styles/LeftMenu.css';
 
 export default function LeftMenu(): JSX.Element {
   const [expandedSection, setExpandedSection] = createSignal(1);
-
   return <div class="left-menu">
     <div class="left-menu__title" onClick={() => setExpandedSection(1)}>Import des données</div>
     <Collapse value={expandedSection() === 1} >
