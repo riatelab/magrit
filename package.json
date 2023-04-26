@@ -35,6 +35,7 @@
     "bulma": "^0.9.4",
     "d3": "^7.8.4",
     "d3-geo": "^3.1.0",
+    "d3-geo-projection": "^4.0.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "font-gis": "^1.0.5",
     "gdal3.js": "^2.4.0",

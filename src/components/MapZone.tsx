@@ -1,18 +1,14 @@
 import { createEffect, For, JSX } from 'solid-js';
-import { geoPath, geoNaturalEarth1 } from 'd3-geo';
+import d3 from '../helpers/d3-custom';
 // import { v4 as uuidv4 } from 'uuid';
 import { globalStore } from '../store/GlobalStore';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import '../styles/MapZone.css';
-
-const d3 = {
-  geoPath,
-  geoNaturalEarth1,
-};
+import { unproxify } from '../helpers/common';
 
 export default function MapZone(): JSX.Element {
   const sphere = { type: 'Sphere' };
-  const projection = geoNaturalEarth1();
+  const projection = d3.geoNaturalEarth1();
   const pathGenerator = d3.geoPath(projection);
 
   createEffect(() => {
@@ -43,13 +39,17 @@ export default function MapZone(): JSX.Element {
             (layerDescription: LayerDescription) => <g id={layerDescription.name}>
                 <For each={ layerDescription.data.features }>
                   {
-                    (feature) => <path
-                        __data__={feature}
+                    (feature) => {
+                      const el = <path
                         d={pathGenerator(feature)}
                         fill="black"
                         stroke="white"
                         clip-path="url(#clip-sphere)"
-                      />
+                      />;
+                      // Todo: we probably dont need to do what follows
+                      el.__data__ = unproxify(feature); // eslint-disable-line no-underscore-dangle
+                      return el;
+                    }
                   }
                 </For>
               </g>
