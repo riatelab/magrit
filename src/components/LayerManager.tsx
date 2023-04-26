@@ -1,8 +1,8 @@
 import Sortable from 'solid-sortablejs';
 import { JSX } from 'solid-js';
-import { layersDescriptionStore, setLayersDescriptionStore } from './store/LayersDescriptionStore';
+import { layersDescriptionStore, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
 import LayerManagerItem from './LayerManagerItem.tsx';
-import './styles/LayerManager.css';
+import '../styles/LayerManager.css';
 
 const setLayersDescriptionStoreWrapper = (newLayersDescriptionStore: []) => {
   setLayersDescriptionStore({

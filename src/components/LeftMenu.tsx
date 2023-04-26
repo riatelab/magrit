@@ -1,7 +1,7 @@
 import { JSX, createSignal } from 'solid-js';
 import { Collapse } from 'solid-collapse';
 import LayerManager from './LayerManager.tsx';
-import './styles/LeftMenu.css';
+import '../styles/LeftMenu.css';
 
 export default function LeftMenu(): JSX.Element {
   const [expandedSection, setExpandedSection] = createSignal(1);

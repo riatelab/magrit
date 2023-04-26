@@ -6,13 +6,13 @@ import {
   FaSolidTrash,
   FaSolidTableCells,
 } from 'solid-icons/fa';
-import { layersDescriptionStore, setLayersDescriptionStore } from './store/LayersDescriptionStore';
-import './styles/LayerManagerItem.css';
+import { layersDescriptionStore, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
+import '../styles/LayerManagerItem.css';
 import 'font-gis/css/font-gis.css';
 
-const typeIcons: { polygon: string; line: string; raster: string; point: string } = {
+const typeIcons: { polygon: string; linestring: string; raster: string; point: string } = {
   point: 'fg-point',
-  line: 'fg-polyline',
+  linestring: 'fg-polyline',
   polygon: 'fg-polygon-o',
   raster: 'fg-finish',
 };
@@ -45,7 +45,7 @@ export default function LayerManagerItem(props: LayerDescription): JSX.Element {
       <div class="layer-manager-item__icons-left">
         <Show
           when={props.type === 'table'}
-          fallback={<i class={typeIcons[props.type as ('point' | 'line' | 'polygon' | 'raster')]} />}
+          fallback={<i class={typeIcons[props.type as ('point' | 'linestring' | 'polygon' | 'raster')]} />}
         >
           <FaSolidTableCells />
         </Show>

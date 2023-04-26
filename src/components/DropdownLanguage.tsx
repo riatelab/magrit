@@ -1,8 +1,8 @@
 import { FaSolidAngleDown } from 'solid-icons/fa';
 import { onMount } from 'solid-js';
-import { useI18nContext } from './i18n/i18n-solid';
-import { loadLocale } from './i18n/i18n-util.sync';
-import { Locales } from './i18n/i18n-types';
+import { useI18nContext } from '../i18n/i18n-solid';
+import { loadLocale } from '../i18n/i18n-util.sync';
+import { Locales } from '../i18n/i18n-types';
 
 function handleDropdownMenu(): void {
   const dropdown: Element | null = document.querySelector('.dropdown');

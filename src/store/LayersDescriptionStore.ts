@@ -1,4 +1,5 @@
 import { createStore } from 'solid-js/store';
+import { v4 as uuidv4 } from 'uuid';
 
 type LayersDescriptionStoreType = {
   layers: Array<LayerDescription>,
@@ -9,13 +10,13 @@ const [
   setLayersDescriptionStore,
 ] = createStore({
   layers: [
-    { id: 1, name: 'John', type: 'raster' },
-    { id: 2, name: 'Jane', type: 'point' },
+    { id: uuidv4(), name: 'John', type: 'raster' },
+    { id: uuidv4(), name: 'Jane', type: 'point' },
     {
-      id: 3, name: 'Jimmy', target: true, type: 'polygon',
+      id: uuidv4(), name: 'Jimmy', target: true, type: 'polygon',
     },
-    { id: 4, name: 'Jill', type: 'line' },
-    { id: 5, name: 'Jack', type: 'table' },
+    { id: uuidv4(), name: 'Jill', type: 'linestring' },
+    { id: uuidv4(), name: 'Jack', type: 'table' },
   ],
 } as LayersDescriptionStoreType);
 

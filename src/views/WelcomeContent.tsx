@@ -1,6 +1,6 @@
-import './styles/Welcome.css';
+import '../styles/Welcome.css';
 import { NavLink } from '@solidjs/router';
-import { useI18nContext } from './i18n/i18n-solid';
+import { useI18nContext } from '../i18n/i18n-solid';
 
 export default function WelcomeContent() {
   const { LL } = useI18nContext();

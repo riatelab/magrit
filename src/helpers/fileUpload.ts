@@ -12,12 +12,16 @@ const allowedMimeTypes: string[] = [
   // For geojson
   'application/json',
   'application/geo+json',
+  // For geopackage
+  'application/geopackage+sqlite3',
   // For topojson
   'application/json',
   // For gml
   'application/gml+xml',
   // For kml
   'application/vnd.google-earth.kml+xml',
+  // For flatgeobuf
+  '', // Currently flatgeobuf files come without mime type in Firefox / Chrome
   // For csv
   'text/csv',
   'text/plain',
@@ -30,7 +34,7 @@ export function prepareFileExtensions(files: FileList): CustomFileList {
   return Array.from(files).map((file: File) => {
     const name = file.name.substring(0, file.name.lastIndexOf('.'));
     const ext = file.name.substring(file.name.lastIndexOf('.') + 1, file.name.length).toLowerCase();
-    console.log(file.type);
+    console.log(file.type, name, ext, file);
     const o: { name: string, ext: string, file: File } = {
       ext,
       file,
