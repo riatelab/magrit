@@ -6,6 +6,8 @@ import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import '../styles/MapZone.css';
 import { unproxify } from '../helpers/common';
 
+console.log(d3);
+
 export default function MapZone(): JSX.Element {
   const sphere = { type: 'Sphere' };
   const projection = d3.geoNaturalEarth1();

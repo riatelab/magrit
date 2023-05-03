@@ -8,19 +8,19 @@ import { geoNaturalEarth2 } from 'd3-geo-projection';
 // (deprecated and incompatible with new 'd3-selection' versions)
 // to be available on the 'd3-selection' module.
 function attrsFunctionSelection(_selection, map) {
-  return _selection.each(function () {
-    const x = map.apply(this, arguments);
+  return _selection.each(function (...args) {
+    const x = map.apply(this, args);
     const s = select(this);
-    for (const name in x) {
-      s.attr(name, x[name]);
-    }
+    Object.entries(x).forEach(([k, v]) => {
+      s.attr(k, v);
+    });
   });
 }
 
 function attrsObjectSelection(_selection, map) {
-  for (const name in map) {
-    _selection.attr(name, map[name]);
-  }
+  Object.entries(map).forEach(([k, v]) => {
+    _selection.attr(k, v);
+  });
   return _selection;
 }
 
@@ -29,19 +29,19 @@ const attrsSelection = function (map) {
 };
 
 function propertiesFunctionSelection(_selection, map) {
-  return _selection.each(function () {
-    const x = map.apply(this, arguments);
+  return _selection.each(function (...args) {
+    const x = map.apply(this, args);
     const s = select(this);
-    for (const name in x) {
-      s.property(name, x[name]);
-    }
+    Object.entries(x).forEach(([k, v]) => {
+      s.property(k, v);
+    });
   });
 }
 
 function propertiesObjectSelection(_selection, map) {
-  for (const name in map) {
-    _selection.property(name, map[name]);
-  }
+  Object.entries(map).forEach(([k, v]) => {
+    _selection.property(k, v);
+  });
   return _selection;
 }
 
@@ -49,20 +49,24 @@ const propertiesSelection = function (map) {
   return (
     typeof map === 'function'
       ? propertiesFunctionSelection
-      : propertiesObjectSelectio
+      : propertiesObjectSelection
   )(this, map);
 };
 
 function stylesFunctionSelection(_selection, map, priority) {
-  return _selection.each(function () {
-    const x = map.apply(this, arguments);
+  return _selection.each(function (...args) {
+    const x = map.apply(this, args);
     const s = select(this);
-    for (const name in x) s.style(name, x[name], priority);
+    Object.entries(x).forEach(([k, v]) => {
+      s.style(k, v, priority);
+    });
   });
 }
 
 function stylesObjectSelection(_selection, map, priority) {
-  for (const name in map) _selection.style(name, map[name], priority);
+  Object.entries(map).forEach(([k, v]) => {
+    _selection.style(k, v, priority);
+  });
   return _selection;
 }
 
@@ -79,15 +83,19 @@ selection.prototype.styles = stylesSelection;
 selection.prototype.properties = propertiesSelection;
 
 function attrsFunctionTransition(_transition, map) {
-  return _transition.each(function () {
-    const x = map.apply(this, arguments);
+  return _transition.each(function (...args) {
+    const x = map.apply(this, args);
     const t = select(this).transition(_transition);
-    for (const name in x) t.attr(name, x[name]);
+    Object.entries(x).forEach(([k, v]) => {
+      t.attr(k, v);
+    });
   });
 }
 
 function attrsObjectTransition(_transition, map) {
-  for (const name in map) _transition.attr(name, map[name]);
+  Object.entries(map).forEach(([k, v]) => {
+    _transition.attr(k, v);
+  });
   return _transition;
 }
 
@@ -96,19 +104,19 @@ const attrsTransition = function (map) {
 };
 
 function stylesFunctionTransition(_transition, map, priority) {
-  return _transition.each(function () {
-    const x = map.apply(this, arguments);
+  return _transition.each(function (...args) {
+    const x = map.apply(this, args);
     const t = select(this).transition(_transition);
-    for (const name in x) {
-      t.style(name, x[name], priority);
-    }
+    Object.entries(x).forEach(([k, v]) => {
+      t.style(k, v, priority);
+    });
   });
 }
 
 function stylesObjectTransition(_transition, map, priority) {
-  for (const name in map) {
-    _transition.style(name, map[name], priority);
-  }
+  Object.entries(map).forEach(([k, v]) => {
+    _transition.style(k, v, priority);
+  });
   return _transition;
 }
 
@@ -122,7 +130,6 @@ const stylesTransition = function (map, priority) {
 
 transition.prototype.attrs = attrsTransition;
 transition.prototype.styles = stylesTransition;
-
 
 export default {
   geoPath,
