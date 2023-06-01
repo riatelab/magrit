@@ -1,4 +1,4 @@
-import { selection, select } from 'd3-selection';
+import { selection, select, selectAll } from 'd3-selection';
 import { transition } from 'd3-transition';
 import { zoom } from 'd3-zoom';
 import { geoPath, geoNaturalEarth1 } from 'd3-geo';
@@ -137,6 +137,7 @@ export default {
   geoNaturalEarth2,
   selection,
   select,
+  selectAll,
   transition,
   zoom,
 };

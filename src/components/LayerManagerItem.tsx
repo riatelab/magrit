@@ -9,6 +9,7 @@ import {
 import { layersDescriptionStore, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
 import '../styles/LayerManagerItem.css';
 import 'font-gis/css/font-gis.css';
+import { setNiceAlertStore } from '../store/NiceAlertStore';
 
 const typeIcons: { polygon: string; linestring: string; raster: string; point: string } = {
   point: 'fg-point',
@@ -31,9 +32,26 @@ const onClickTable = (id: number) => {
 
 const onClickTrash = (id: number) => {
   console.log('click trash on item ', id);
-  const layers = layersDescriptionStore.layers
-    .filter((layerDescription) => layerDescription.id !== id);
-  setLayersDescriptionStore({ layers });
+  const SomeElement = (): JSX.Element => <>
+    <div class="f-modal-icon f-modal-warning scaleWarning">
+      <span class="f-modal-body pulseWarningIns"></span>
+      <span class="f-modal-dot pulseWarningIns"></span>
+    </div>
+    <p>Delete { id } ?</p>
+  </>;
+
+  const onDeleteConfirmed = (): void => {
+    const layers = layersDescriptionStore.layers
+      .filter((layerDescription) => layerDescription.id !== id);
+    setLayersDescriptionStore({ layers });
+  };
+
+  setNiceAlertStore({
+    show: true,
+    content: SomeElement(),
+    confirmCallback: onDeleteConfirmed,
+    cancelCallback: (): void => null,
+  });
 };
 
 export default function LayerManagerItem(props: LayerDescription): JSX.Element {

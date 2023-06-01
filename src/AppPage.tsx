@@ -16,6 +16,8 @@ import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore'
 import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
 import MapZone from './components/MapZone.tsx';
 import LoadingOverlay from './components/LoadingOverlay.tsx';
+import { niceAlertStore } from './store/NiceAlertStore';
+import NiceAlert from './components/NiceAlert.tsx';
 
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
   paths: {
@@ -147,6 +149,9 @@ const AppPage: () => JSX.Element = () => {
       </Show>
       <Show when={modalStore.show}>
         <DefaultModal />
+      </Show>
+      <Show when={niceAlertStore.show}>
+        <NiceAlert />
       </Show>
     </main>
     <button style="position: absolute; right: 0; top; 200;" onClick={
