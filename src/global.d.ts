@@ -17,6 +17,7 @@ declare global {
     name: string,
     type: string,
     data: GeoJSONFeatureCollection,
+    visible: boolean,
   }
 
   interface GeoJSONFeature {

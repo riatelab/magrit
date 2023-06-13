@@ -9,7 +9,23 @@ const en = {
   SupportedTabularFormats: 'Supported tabular formats are: Excel (.xls, .xlsx), CSV (.csv) and OpenDocument Spreadsheet (.ods).',
   UnsupportedFormat: 'Unsupported format',
   FilesDetected: '{{ One file detected | ?? files detected }}',
-  ImportFiles: 'Import files',
+  ImportFiles: 'Import file(s)',
+  LeftMenu: {
+    Import: 'Data import',
+    LayerManager: 'Layer manager',
+    RepresentationChoice: 'Representation choice',
+  },
+  LayerManager: {
+    point: 'Point layer',
+    line: 'Line layer',
+    polygon: 'Polygon layer',
+    raster: 'Raster layer',
+    table: 'Data table',
+    Delete: 'Remove layer',
+    AttributeTable: 'Attribute table',
+    FitZoom: 'Zoom on layer',
+    ToggleVisibility: 'Toggle visibility',
+  },
 } satisfies BaseTranslation;
 
 export default en;

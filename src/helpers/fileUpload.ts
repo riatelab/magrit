@@ -8,7 +8,11 @@ const allowedMimeTypes: string[] = [
   'application/octet-stream',
   'application/x-octet-stream',
   'application/x-binary',
-  'application/x-shp',
+  'application/x-shp', // For .shp files
+  'application/x-esri-shape', // For .shx files
+  'application/x-esri-crs', // For .prj files
+  'application/x-dbf', // For .dbf files
+  '', // For .cpg files
   // For geojson
   'application/json',
   'application/geo+json',
@@ -28,6 +32,25 @@ const allowedMimeTypes: string[] = [
   // For xls, xlsx
   'application/vnd.ms-excel',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+];
+
+const allowedFileExtensions: string[] = [
+  'zip',
+  'shp',
+  'shx',
+  'prj',
+  'dbf',
+  'cpg',
+  'json',
+  'geojson',
+  'gpkg',
+  'topojson',
+  'gml',
+  'kml',
+  'flatgeobuf',
+  'csv',
+  'xls',
+  'xlsx',
 ];
 
 export function prepareFileExtensions(files: FileList): CustomFileList {
@@ -55,7 +78,10 @@ export function draggedElementsAreFiles(e: DragEvent): boolean {
 }
 
 export function isAuthorizedFile(file: FileEntry): boolean {
-  if (allowedMimeTypes.indexOf(file.file.type) > -1) {
+  if (
+    allowedMimeTypes.indexOf(file.file.type) > -1
+    && allowedFileExtensions.indexOf(file.ext) > -1
+  ) {
     return true;
   }
   return false;

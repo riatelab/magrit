@@ -20,7 +20,7 @@ const convertDroppedFiles = async (files: CustomFileList) => {
   let res;
   let geomType;
   try {
-    res = await convertToGeoJSON(files[0].file);
+    res = await convertToGeoJSON(files.map((f) => f.file));
     geomType = getGeometryType(res);
     console.log('res', res);
   } catch (e) {
@@ -36,6 +36,7 @@ const convertDroppedFiles = async (files: CustomFileList) => {
       name: files[0].name,
       type: geomType,
       data: res,
+      visible: true,
     },
   ];
   setLayersDescriptionStore({
@@ -69,14 +70,21 @@ const displayFiles = (files: CustomFileList): JSX.Element => {
 };
 
 export default function OverlayDrop(): JSX.Element {
+  const { LL } = useI18nContext();
+
   return <div class="overlay-drop" classList={{ visible: overlayDropStore.show }}>
     <div class="overlay-drop__content">
       <div class="overlay-drop__content__title">
         { displayFiles(overlayDropStore.files) }
       </div>
-      <button class="button is-success" onClick={async () => { await convertDroppedFiles(overlayDropStore.files); }}>
-        Importer le(s) fichier(s)
-      </button>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-half">
+          <button class="button is-success" onClick={async () => { await convertDroppedFiles(overlayDropStore.files); }}>
+            { LL().ImportFiles() }
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>;
 }

@@ -11,7 +11,8 @@
     "types": ["vite/client", "@testing-library/jest-dom"],
     "lib": [
       "ESNext",
-      "ES2015.Proxy"
+      "ES2015.Proxy",
+      "dom"
     ]
   }
 }

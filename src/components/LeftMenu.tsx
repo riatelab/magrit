@@ -2,19 +2,28 @@ import { JSX, createSignal } from 'solid-js';
 import { Collapse } from 'solid-collapse';
 import LayerManager from './LayerManager.tsx';
 import '../styles/LeftMenu.css';
+import { useI18nContext } from '../i18n/i18n-solid';
 
 export default function LeftMenu(): JSX.Element {
+  const { LL } = useI18nContext();
+
   const [expandedSection, setExpandedSection] = createSignal(1);
   return <div class="left-menu">
-    <div class="left-menu__title" onClick={() => setExpandedSection(1)}>Import des données</div>
+    <div class="left-menu__title" onClick={() => setExpandedSection(1)}>
+      { LL().LeftMenu.Import() }
+    </div>
     <Collapse value={expandedSection() === 1} >
       <div> Le super menu d'import des couches </div>
     </Collapse>
-    <div class="left-menu__title" onClick={() => setExpandedSection(2)}>Gestion des couches</div>
+    <div class="left-menu__title" onClick={() => setExpandedSection(2)}>
+      { LL().LeftMenu.LayerManager() }
+    </div>
     <Collapse value={expandedSection() === 2}>
       <LayerManager />
     </Collapse>
-    <div class="left-menu__title" onClick={() => setExpandedSection(3)}>Choix de la représentation</div>
+    <div class="left-menu__title" onClick={() => setExpandedSection(3)}>
+      { LL().LeftMenu.RepresentationChoice() }
+    </div>
     <Collapse value={expandedSection() === 3}>
       <div>Le super menu de choix d'une représentation ...</div>
     </Collapse>

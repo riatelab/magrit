@@ -16,7 +16,14 @@ const LayerManager = (): JSX.Element => <div class="layer-manager">
     items={layersDescriptionStore.layers}
     setItems={setLayersDescriptionStoreWrapper}
   >
-    {(item) => <LayerManagerItem type={item.type} name={item.name} id={item.id} />}
+    {
+      (item) => <LayerManagerItem
+        type={item.type}
+        name={item.name}
+        id={item.id}
+        visible={item.visible}
+      />
+    }
   </Sortable>
 </div>;
 export default LayerManager;

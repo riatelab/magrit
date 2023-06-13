@@ -2,6 +2,7 @@ import { JSX, Show } from 'solid-js';
 import {
   FaSolidTable,
   FaSolidEye,
+  FaSolidEyeSlash,
   FaSolidMagnifyingGlass,
   FaSolidTrash,
   FaSolidTableCells,
@@ -10,6 +11,7 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../store/Laye
 import '../styles/LayerManagerItem.css';
 import 'font-gis/css/font-gis.css';
 import { setNiceAlertStore } from '../store/NiceAlertStore';
+import { useI18nContext } from '../i18n/i18n-solid';
 
 const typeIcons: { polygon: string; linestring: string; raster: string; point: string } = {
   point: 'fg-point',
@@ -20,6 +22,12 @@ const typeIcons: { polygon: string; linestring: string; raster: string; point: s
 
 const onClickEye = (id: number) => {
   console.log('click eye on item ', id);
+  const visibilityState = layersDescriptionStore.layers.find((l) => l.id === id)?.visible;
+  setLayersDescriptionStore(
+    'layers',
+    (l) => l.id === id,
+    { visible: !visibilityState },
+  );
 };
 
 const onCLickMagnifyingGlass = (id: number) => {
@@ -55,6 +63,8 @@ const onClickTrash = (id: number) => {
 };
 
 export default function LayerManagerItem(props: LayerDescription): JSX.Element {
+  const { LL } = useI18nContext();
+
   return <div class="layer-manager-item">
     <div class="layer-manager-item__name">
       <span>{ props.name }</span>
@@ -63,19 +73,42 @@ export default function LayerManagerItem(props: LayerDescription): JSX.Element {
       <div class="layer-manager-item__icons-left">
         <Show
           when={props.type === 'table'}
-          fallback={<i class={typeIcons[props.type as ('point' | 'linestring' | 'polygon' | 'raster')]} />}
+          fallback={
+            <div title={ LL().LayerManager[props.type]() }>
+              <i
+                class={ typeIcons[props.type as ('point' | 'linestring' | 'polygon' | 'raster')] }
+              />
+            </div>
+          }
         >
-          <FaSolidTableCells />
+          <div title={ LL().LayerManager.table() }>
+            <FaSolidTableCells />
+          </div>
         </Show>
 
     </div>
     <div class="layer-manager-item__icons-right">
       <Show when={props.type !== 'table'}>
-        <FaSolidEye onClick={() => { onClickEye(props.id); }} />
-        <FaSolidMagnifyingGlass onClick={() => { onCLickMagnifyingGlass(props.id); }} />
+        <Show when={props.visible}>
+          <div title={ LL().LayerManager.ToggleVisibility() }>
+            <FaSolidEye onClick={() => { onClickEye(props.id); }} />
+          </div>
+        </Show>
+        <Show when={!props.visible}>
+          <div title={ LL().LayerManager.ToggleVisibility() }>
+            <FaSolidEyeSlash onClick={() => { onClickEye(props.id); }} />
+          </div>
+        </Show>
+        <div title={ LL().LayerManager.FitZoom() }>
+          <FaSolidMagnifyingGlass onClick={() => { onCLickMagnifyingGlass(props.id); }} />
+        </div>
       </Show>
-      <FaSolidTable onClick={() => { onClickTable(props.id); }} />
-      <FaSolidTrash onClick={() => { onClickTrash(props.id); }} />
+      <div title={ LL().LayerManager.AttributeTable() }>
+        <FaSolidTable onClick={() => { onClickTable(props.id); }} />
+      </div>
+      <div title={ LL().LayerManager.Delete() }>
+        <FaSolidTrash onClick={() => { onClickTrash(props.id); }} />
+      </div>
     </div>
   </div>
   </div>;

@@ -15,12 +15,13 @@
     justify-content: space-between;
 }
 
-.layer-manager-item__icons-right > svg,
-.layer-manager-item__icons-left > svg {
+.layer-manager-item__icons-right > div,
+.layer-manager-item__icons-left > div {
     margin-left: 3px;
+    display: inline-block;
 }
 
-.layer-manager-item__icons-right > svg {
+.layer-manager-item__icons-right > div {
     cursor: pointer;
 }
 

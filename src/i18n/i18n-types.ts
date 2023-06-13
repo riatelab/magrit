@@ -47,9 +47,61 @@ type RootTranslation = {
 	 */
 	FilesDetected: string
 	/**
-	 * I​m​p​o​r​t​ ​f​i​l​e​s
+	 * I​m​p​o​r​t​ ​f​i​l​e​(​s​)
 	 */
 	ImportFiles: string
+	LeftMenu: {
+		/**
+		 * D​a​t​a​ ​i​m​p​o​r​t
+		 */
+		Import: string
+		/**
+		 * L​a​y​e​r​ ​m​a​n​a​g​e​r
+		 */
+		LayerManager: string
+		/**
+		 * R​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​c​h​o​i​c​e
+		 */
+		RepresentationChoice: string
+	}
+	LayerManager: {
+		/**
+		 * P​o​i​n​t​ ​l​a​y​e​r
+		 */
+		point: string
+		/**
+		 * L​i​n​e​ ​l​a​y​e​r
+		 */
+		line: string
+		/**
+		 * P​o​l​y​g​o​n​ ​l​a​y​e​r
+		 */
+		polygon: string
+		/**
+		 * R​a​s​t​e​r​ ​l​a​y​e​r
+		 */
+		raster: string
+		/**
+		 * D​a​t​a​ ​t​a​b​l​e
+		 */
+		table: string
+		/**
+		 * R​e​m​o​v​e​ ​l​a​y​e​r
+		 */
+		Delete: string
+		/**
+		 * A​t​t​r​i​b​u​t​e​ ​t​a​b​l​e
+		 */
+		AttributeTable: string
+		/**
+		 * Z​o​o​m​ ​o​n​ ​l​a​y​e​r
+		 */
+		FitZoom: string
+		/**
+		 * T​o​g​g​l​e​ ​v​i​s​i​b​i​l​i​t​y
+		 */
+		ToggleVisibility: string
+	}
 }
 
 export type TranslationFunctions = {
@@ -86,9 +138,61 @@ export type TranslationFunctions = {
 	 */
 	FilesDetected: (arg0: number | string | boolean) => LocalizedString
 	/**
-	 * Import files
+	 * Import file(s)
 	 */
 	ImportFiles: () => LocalizedString
+	LeftMenu: {
+		/**
+		 * Data import
+		 */
+		Import: () => LocalizedString
+		/**
+		 * Layer manager
+		 */
+		LayerManager: () => LocalizedString
+		/**
+		 * Representation choice
+		 */
+		RepresentationChoice: () => LocalizedString
+	}
+	LayerManager: {
+		/**
+		 * Point layer
+		 */
+		point: () => LocalizedString
+		/**
+		 * Line layer
+		 */
+		line: () => LocalizedString
+		/**
+		 * Polygon layer
+		 */
+		polygon: () => LocalizedString
+		/**
+		 * Raster layer
+		 */
+		raster: () => LocalizedString
+		/**
+		 * Data table
+		 */
+		table: () => LocalizedString
+		/**
+		 * Remove layer
+		 */
+		Delete: () => LocalizedString
+		/**
+		 * Attribute table
+		 */
+		AttributeTable: () => LocalizedString
+		/**
+		 * Zoom on layer
+		 */
+		FitZoom: () => LocalizedString
+		/**
+		 * Toggle visibility
+		 */
+		ToggleVisibility: () => LocalizedString
+	}
 }
 
 export type Formatters = {}

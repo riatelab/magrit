@@ -6,7 +6,7 @@ import d3 from '../helpers/d3-custom';
 import { globalStore } from '../store/GlobalStore';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import '../styles/MapZone.css';
-import { unproxify } from '../helpers/common';
+// import { unproxify } from '../helpers/common';
 
 console.log(d3);
 
@@ -50,7 +50,7 @@ export default function MapZone(): JSX.Element {
       {/* Generate SVG path for each layer */}
         <For each={ layersDescriptionStore.layers }>
           {
-            (layerDescription: LayerDescription) => <g id={layerDescription.name}>
+            (layerDescription: LayerDescription) => <g id={layerDescription.name} visibility={ layerDescription.visible ? 'undefined' : 'hidden' }>
                 <For each={ layerDescription.data.features }>
                   {
                     (feature) => {
@@ -58,10 +58,12 @@ export default function MapZone(): JSX.Element {
                         d={pathGenerator(feature)}
                         fill="black"
                         stroke="white"
+                        stroke-width="0.1"
                         clip-path="url(#clip-sphere)"
                       />;
                       // Todo: we probably dont need to do what follows
-                      el.__data__ = unproxify(feature); // eslint-disable-line no-underscore-dangle
+                      // eslint-disable-next-line no-underscore-dangle
+                      // el.__data__ = unproxify(feature);
                       return el;
                     }
                   }
