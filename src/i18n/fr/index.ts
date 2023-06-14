@@ -14,6 +14,7 @@ const fr = {
     Import: 'Import des données',
     LayerManager: 'Gestion des couches',
     RepresentationChoice: 'Choix de la représentation',
+    ExportSection: 'Export des données',
   },
   LayerManager: {
     point: 'Couche de points',

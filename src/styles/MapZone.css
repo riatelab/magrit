@@ -8,4 +8,19 @@
 .map-zone__inner {
   width: 100%;
   height: 100%;
+  display: flex;
+}
+
+.map-zone__map {
+  margin: auto;
+  width: 90%;
+  height: 90%;
+  border: dashed 2px grey
+}
+
+path {
+  stroke-width: 0.25px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
 }

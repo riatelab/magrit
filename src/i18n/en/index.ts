@@ -14,6 +14,7 @@ const en = {
     Import: 'Data import',
     LayerManager: 'Layer manager',
     RepresentationChoice: 'Representation choice',
+    ExportSection: 'Map and data export',
   },
   LayerManager: {
     point: 'Point layer',

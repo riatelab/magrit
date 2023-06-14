@@ -63,6 +63,10 @@ type RootTranslation = {
 		 * R​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​c​h​o​i​c​e
 		 */
 		RepresentationChoice: string
+		/**
+		 * M​a​p​ ​a​n​d​ ​d​a​t​a​ ​e​x​p​o​r​t
+		 */
+		ExportSection: string
 	}
 	LayerManager: {
 		/**
@@ -154,6 +158,10 @@ export type TranslationFunctions = {
 		 * Representation choice
 		 */
 		RepresentationChoice: () => LocalizedString
+		/**
+		 * Map and data export
+		 */
+		ExportSection: () => LocalizedString
 	}
 	LayerManager: {
 		/**
