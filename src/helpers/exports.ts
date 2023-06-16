@@ -1,16 +1,33 @@
+/**
+ * Get the dimensions of the SVG map element.
+ * @param {SVGElement} map
+ * @returns {{height: number, width: number}}
+ */
 const getMapDimension = (map: SVGElement): { height: number, width: number } => {
   const { width, height } = map.getBoundingClientRect();
   return { width, height };
 };
 
+/**
+ * Clean the given output name to ensure it is a valid file name.
+ *
+ * @param {string} outputName
+ * @param {string} extension
+ * @returns {string}
+ */
 const cleanOutputName = (outputName: string, extension: string) => {
+  // Remove any extension from the output name
   const newName = outputName.toLowerCase().indexOf(extension) > -1
     ? outputName.substring(0, outputName.lastIndexOf('.'))
     : outputName;
+
+  // Remove any invalid characters from the output name and ensure it is not too long
   const regexpName = /^[().a-z0-9_-]+$/i;
   if (regexpName.test(newName) && newName.length < 250) {
     return `${newName}.${extension}`;
   }
+
+  // Otherwise, return a default name
   return `export.${extension}`;
 };
 
@@ -49,37 +66,117 @@ const clickLinkFromDataUrl = async (url: string, fileName: string) => {
   URL.revokeObjectURL(blobUrl);
 };
 
+interface LoadableImage {
+  onload: any;
+  onerror: any;
+  src: string | null;
+}
+
+/**
+ * Set the image source and return a promise that resolves when the image is loaded.
+ *
+ * @param {LoadableImage} obj
+ * @param {string} src
+ * @returns {Promise<LoadableImage>}
+ */
+function setImageSrc<T extends LoadableImage>(obj: T, src: string): Promise<T> {
+  obj.src = src; // eslint-disable-line no-param-reassign
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-param-reassign
+    obj.onload = () => resolve(obj);
+    // eslint-disable-next-line no-param-reassign
+    obj.onerror = reject;
+  });
+}
+
+/**
+ * Get the SVG map element.
+ *
+ * @returns {SVGElement}
+ * @throws {Error} - If the SVG element could not be found.
+ */
+const getTargetSvg = () : SVGElement => {
+  const targetSvg = document.querySelector('svg.map-zone__map');
+  if (!targetSvg) {
+    throw new Error('Could not find SVG element');
+  }
+  return targetSvg as SVGElement;
+};
+
+/**
+ * Export the current map to an SVG file.
+ *
+ * @param {string} outputName - The name of the output file.
+ * @param {boolean} clipToViewPort - Whether to clip the SVG to the viewport.
+ * @param {object} options - Additional options.
+ * @returns {Promise<boolean>}
+ */
 export async function exportMapToSvg(
   outputName: string,
   clipToViewPort: boolean,
   options: object = {},
 ) {
+  const targetSvg = getTargetSvg();
   // eslint-disable-next-line no-param-reassign
-  outputName = cleanOutputName(outputName);
-  console.log(outputName, clipToViewPort, options);
-  return Promise.resolve(true);
+  outputName = cleanOutputName(outputName, 'svg');
+
+  const serializer = new XMLSerializer();
+  let source = serializer.serializeToString(targetSvg);
+
+  if (!source.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
+    source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+  }
+  if (!source.match(/^<svg[^>]+"http:\/\/www\.w3\.org\/1999\/xlink"/)) {
+    source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+  }
+
+  source = ['<?xml version="1.0" standalone="no"?>\r\n', source].join('');
+
+  const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(source)}`;
+
+  console.log(outputName, clipToViewPort, options, targetSvg);
+
+  return clickLinkFromDataUrl(url, outputName)
+    .then(() => {
+      Promise.resolve(true);
+    })
+    .catch((err) => {
+      console.warn('Error while downloading SVG file', err);
+      Promise.reject(err);
+    });
 }
 
+/**
+ * Export the current map to a PNG file.
+ *
+ * @param {string} outputName - The name of the output file.
+ * @param {number} scaleFactor - The scale factor to apply to the image.
+ * @returns {Promise<boolean>}
+ */
 export async function exportMapToPng(outputName: string, scaleFactor = 1) {
-  // eslint-disable-next-line no-param-reassign
-  outputName = cleanOutputName(outputName);
-
-  const mapDimensions = getMapDimension(document.querySelector('svg.map-zone__map'));
+  const targetSvg = getTargetSvg();
+  const mapDimensions = getMapDimension(targetSvg);
   const targetCanvas = document.createElement('canvas');
   targetCanvas.width = mapDimensions.width;
   targetCanvas.height = mapDimensions.height;
   document.body.appendChild(targetCanvas);
-  const targetSvg = document.querySelector('svg.map-zone__map');
+
+  // eslint-disable-next-line no-param-reassign
+  outputName = cleanOutputName(outputName, 'png');
 
   const mimeType = 'image/png';
 
   let svgXml;
-  let context;
-  let image;
+  let context: CanvasRenderingContext2D;
+  let image: HTMLImageElement;
 
   try {
     svgXml = (new XMLSerializer()).serializeToString(targetSvg);
-    context = targetCanvas.getContext('2d');
+    const tContext = targetCanvas.getContext('2d');
+    if (!tContext) {
+      throw new Error('Could not get canvas context');
+    }
+    context = tContext;
     image = new Image();
   } catch (err) {
     console.warn('Error serializing SVG', err);
@@ -96,24 +193,27 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
     }
   }
   let imgUrl;
-  image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgXml)}`;
-  image.onload = function () {
-    context.drawImage(image, 0, 0);
-    try {
-      imgUrl = targetCanvas.toDataURL(mimeType);
-    } catch (err) {
-      targetCanvas.remove();
-      console.warn('Error when converting image to data url', err);
-      return;
-    }
 
-    clickLinkFromDataUrl(imgUrl, outputName).then(() => {
-      targetCanvas.remove();
-    }).catch((err) => {
-      console.warn('Error when using the data url version of the image', err);
-      return Promise.reject(err);
-    });
-  };
+  await setImageSrc(
+    image,
+    `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgXml)}`,
+  );
 
-  return Promise.resolve(true);
+  // image.onload = function () {
+  context.drawImage(image, 0, 0);
+  try {
+    imgUrl = targetCanvas.toDataURL(mimeType);
+  } catch (err) {
+    targetCanvas.remove();
+    console.warn('Error when converting image to data url', err);
+    return Promise.reject(err);
+  }
+
+  return clickLinkFromDataUrl(imgUrl, outputName).then(() => {
+    targetCanvas.remove();
+    return Promise.resolve(true);
+  }).catch((err) => {
+    console.warn('Error when using the data url version of the image', err);
+    return Promise.reject(err);
+  });
 }

@@ -8,8 +8,6 @@ import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import '../styles/MapZone.css';
 import { unproxify } from '../helpers/common';
 
-console.log(d3);
-
 export default function MapZone(): JSX.Element {
   let svgElem;
   const sphere = { type: 'Sphere' };
@@ -17,7 +15,7 @@ export default function MapZone(): JSX.Element {
   const initialTranslate = projection.translate();
   const initialScale = projection.scale();
   const pathGenerator = d3.geoPath(projection);
-  const redraw = (e, redrawWhenZooming) => {
+  const redraw = (e, redrawWhenZooming: boolean) => {
     if (!redrawWhenZooming) {
       d3.selectAll('g').attr('transform', e.transform);
     } else {
@@ -35,7 +33,7 @@ export default function MapZone(): JSX.Element {
       redraw(e, false);
     })
     .on('zoom.end', (e) => {
-      redraw(e, true);
+      redraw(e, false);
     });
 
   const getSphere = () => {
