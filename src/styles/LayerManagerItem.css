@@ -8,6 +8,8 @@
 .layer-manager-item__name {
     font-size: 0.8rem;
     font-weight: 800;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .layer-manager-item__icons {

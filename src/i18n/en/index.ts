@@ -10,6 +10,9 @@ const en = {
   UnsupportedFormat: 'Unsupported format',
   FilesDetected: '{{ One file detected | ?? files detected }}',
   ImportFiles: 'Import file(s)',
+  Alerts: {
+    DeleteLayer: 'Delete layer',
+  },
   LeftMenu: {
     Import: 'Data import',
     LayerManager: 'Layer manager',
@@ -26,6 +29,10 @@ const en = {
     AttributeTable: 'Attribute table',
     FitZoom: 'Zoom on layer',
     ToggleVisibility: 'Toggle visibility',
+    Settings: 'Settings',
+  },
+  LayerSettings: {
+    LayerSettings: 'Layer settings',
   },
 } satisfies BaseTranslation;
 

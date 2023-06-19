@@ -10,6 +10,9 @@ const fr = {
   UnsupportedFormat: 'Format non supporté',
   FilesDetected: '{{ Un fichier détecté | ?? fichiers détectés }}',
   ImportFiles: 'Importer le(s) fichier(s)',
+  Alerts: {
+    DeleteLayer: 'Supprimer la couche',
+  },
   LeftMenu: {
     Import: 'Import des données',
     LayerManager: 'Gestion des couches',
@@ -26,6 +29,10 @@ const fr = {
     AttributeTable: 'Table attributaire',
     FitZoom: 'Zoom sur la couche',
     ToggleVisibility: 'Afficher / Masquer',
+    Settings: 'Paramètres',
+  },
+  LayerSettings: {
+    LayerSettings: 'Paramètres de la couche',
   },
 } satisfies BaseTranslation;
 

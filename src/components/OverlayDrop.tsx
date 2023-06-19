@@ -8,6 +8,34 @@ import { useI18nContext } from '../i18n/i18n-solid';
 import { isAuthorizedFile } from '../helpers/fileUpload';
 import { convertToGeoJSON, getGeometryType } from '../helpers/formatConversion';
 
+const getDefaultRenderingParams = (geomType: string) => {
+  if (geomType === 'point') {
+    return {
+      strokeColor: '#000000',
+      strokeWidth: 1,
+      strokeOpacity: 1,
+      fillColor: '#fedeab',
+      fillOpacity: 1,
+    };
+  }
+  if (geomType === 'line') {
+    return {
+      strokeColor: '#000000',
+      strokeWidth: 2,
+      strokeOpacity: 1,
+    };
+  }
+  if (geomType === 'polygon') {
+    return {
+      strokeColor: '#000000',
+      strokeWidth: 1,
+      strokeOpacity: 1,
+      fillColor: '#000000',
+      fillOpacity: 0.5,
+    };
+  }
+  return {};
+};
 const convertDroppedFiles = async (files: CustomFileList) => {
   console.log('convertDroppedFiles', files);
   const authorizedFiles = files.filter(isAuthorizedFile);
@@ -18,7 +46,7 @@ const convertDroppedFiles = async (files: CustomFileList) => {
   });
   setGlobalStore({ isLoading: true });
   let res;
-  let geomType;
+  let geomType: string;
   try {
     res = await convertToGeoJSON(files.map((f) => f.file));
     geomType = getGeometryType(res);
@@ -29,6 +57,7 @@ const convertDroppedFiles = async (files: CustomFileList) => {
   setGlobalStore({ isLoading: false });
   // Add the new layer to the LayerManager by adding it
   // to the layersDescriptionStore
+  console.log(getDefaultRenderingParams(geomType));
   const newLayersDescriptionStore = [
     ...layersDescriptionStore.layers,
     {
@@ -37,6 +66,7 @@ const convertDroppedFiles = async (files: CustomFileList) => {
       type: geomType,
       data: res,
       visible: true,
+      ...getDefaultRenderingParams(geomType),
     },
   ];
   setLayersDescriptionStore({

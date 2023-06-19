@@ -112,6 +112,7 @@
     opacity: 0;
     position: absolute;
     width: 100%;
+    left: 0%;
 }
 .f-modal-alert .f-modal-icon.f-modal-warning:after {
     background-color: #fff;

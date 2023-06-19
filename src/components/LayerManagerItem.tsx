@@ -1,17 +1,21 @@
-import { JSX, Show } from 'solid-js';
+import { Accessor, JSX, Show } from 'solid-js';
 import {
   FaSolidTable,
   FaSolidEye,
   FaSolidEyeSlash,
+  FaSolidGears,
   FaSolidMagnifyingGlass,
   FaSolidTrash,
   FaSolidTableCells,
 } from 'solid-icons/fa';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
-import '../styles/LayerManagerItem.css';
-import 'font-gis/css/font-gis.css';
+import { setModalStore } from '../store/ModalStore';
 import { setNiceAlertStore } from '../store/NiceAlertStore';
+import LayerSettings from './LayerSettings.tsx';
 import { useI18nContext } from '../i18n/i18n-solid';
+import 'font-gis/css/font-gis.css';
+import '../styles/LayerManagerItem.css';
+import { TranslationFunctions } from '../i18n/i18n-types';
 
 const typeIcons: { polygon: string; linestring: string; raster: string; point: string } = {
   point: 'fg-point',
@@ -38,14 +42,10 @@ const onClickTable = (id: number) => {
   console.log('click table on item ', id);
 };
 
-const onClickTrash = (id: number) => {
+const onClickTrash = (id: number, LL: Accessor<TranslationFunctions>) => {
   console.log('click trash on item ', id);
-  const SomeElement = (): JSX.Element => <>
-    <div class="f-modal-icon f-modal-warning scaleWarning">
-      <span class="f-modal-body pulseWarningIns"></span>
-      <span class="f-modal-dot pulseWarningIns"></span>
-    </div>
-    <p>Delete { id } ?</p>
+  const innerElement = <>
+    <p>{ LL().Alerts.DeleteLayer } { id } ?</p>
   </>;
 
   const onDeleteConfirmed = (): void => {
@@ -56,27 +56,42 @@ const onClickTrash = (id: number) => {
 
   setNiceAlertStore({
     show: true,
-    content: SomeElement(),
+    type: 'warning',
+    content: innerElement,
     confirmCallback: onDeleteConfirmed,
     cancelCallback: (): void => null,
   });
 };
 
-export default function LayerManagerItem(props: LayerDescription): JSX.Element {
+const onClickSettings = (id: number, LL: Accessor<TranslationFunctions>) => {
+  console.log('click settings on item ', id);
+  // Create a new modal window with the settings of the layer
+  const layerDescription = layersDescriptionStore.layers.find((l) => l.id === id);
+  console.log('layerDescription', layerDescription);
+  setModalStore({
+    show: true,
+    content: LayerSettings({}, LL),
+    title: LL().LayerSettings.LayerSettings,
+    confirmCallback: (): void => { console.log('confirm'); },
+    cancelCallback: (): void => { console.log('cancel'); },
+  });
+};
+
+export default function LayerManagerItem(props: { 'props': LayerDescription }): JSX.Element {
   const { LL } = useI18nContext();
 
   return <div class="layer-manager-item">
-    <div class="layer-manager-item__name">
-      <span>{ props.name }</span>
+    <div class="layer-manager-item__name" title={ props.props.name }>
+      <span>{ props.props.name }</span>
     </div>
     <div class="layer-manager-item__icons">
       <div class="layer-manager-item__icons-left">
         <Show
-          when={props.type === 'table'}
+          when={props.props.type === 'table'}
           fallback={
-            <div title={ LL().LayerManager[props.type]() }>
+            <div title={ LL().LayerManager[props.props.type]() }>
               <i
-                class={ typeIcons[props.type as ('point' | 'linestring' | 'polygon' | 'raster')] }
+                class={ typeIcons[props.props.type as ('point' | 'linestring' | 'polygon' | 'raster')] }
               />
             </div>
           }
@@ -88,26 +103,29 @@ export default function LayerManagerItem(props: LayerDescription): JSX.Element {
 
     </div>
     <div class="layer-manager-item__icons-right">
-      <Show when={props.type !== 'table'}>
-        <Show when={props.visible}>
+      <Show when={props.props.type !== 'table'}>
+        <div title={ LL().LayerManager.Settings() }>
+          <FaSolidGears onClick={() => { onClickSettings(props.props.id, LL); }} />
+        </div>
+        <Show when={props.props.visible}>
           <div title={ LL().LayerManager.ToggleVisibility() }>
-            <FaSolidEye onClick={() => { onClickEye(props.id); }} />
+            <FaSolidEye onClick={() => { onClickEye(props.props.id); }} />
           </div>
         </Show>
-        <Show when={!props.visible}>
+        <Show when={!props.props.visible}>
           <div title={ LL().LayerManager.ToggleVisibility() }>
-            <FaSolidEyeSlash onClick={() => { onClickEye(props.id); }} />
+            <FaSolidEyeSlash onClick={() => { onClickEye(props.props.id); }} />
           </div>
         </Show>
         <div title={ LL().LayerManager.FitZoom() }>
-          <FaSolidMagnifyingGlass onClick={() => { onCLickMagnifyingGlass(props.id); }} />
+          <FaSolidMagnifyingGlass onClick={() => { onCLickMagnifyingGlass(props.props.id); }} />
         </div>
       </Show>
       <div title={ LL().LayerManager.AttributeTable() }>
-        <FaSolidTable onClick={() => { onClickTable(props.id); }} />
+        <FaSolidTable onClick={() => { onClickTable(props.props.id); }} />
       </div>
       <div title={ LL().LayerManager.Delete() }>
-        <FaSolidTrash onClick={() => { onClickTrash(props.id); }} />
+        <FaSolidTrash onClick={() => { onClickTrash(props.props.id); }} />
       </div>
     </div>
   </div>

@@ -18,6 +18,11 @@ declare global {
     type: string,
     data: GeoJSONFeatureCollection,
     visible: boolean,
+    strokeColor: string,
+    strokeWidth: number,
+    strokeOpacity: number,
+    fillColor: string,
+    fillOpacity: number,
   }
 
   interface GeoJSONFeature {

@@ -17,4 +17,5 @@ export default function ExportSection(): JSX.Element {
   </div>;
 }
 
-console.log(exportMapToPng, exportMapToSvg);
+console.log(exportMapToPng);
+console.log(exportMapToSvg);

@@ -18,10 +18,7 @@ const LayerManager = (): JSX.Element => <div class="layer-manager">
   >
     {
       (item) => <LayerManagerItem
-        type={item.type}
-        name={item.name}
-        id={item.id}
-        visible={item.visible}
+        props={item}
       />
     }
   </Sortable>

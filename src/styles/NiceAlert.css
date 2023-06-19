@@ -16,3 +16,7 @@
 .nice-alert .modal-card-foot {
     justify-content: center;
 }
+
+.nice-alert .modal-card-head {
+    border-bottom: transparent;
+}

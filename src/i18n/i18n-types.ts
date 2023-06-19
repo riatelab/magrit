@@ -50,6 +50,12 @@ type RootTranslation = {
 	 * I​m​p​o​r​t​ ​f​i​l​e​(​s​)
 	 */
 	ImportFiles: string
+	Alerts: {
+		/**
+		 * D​e​l​e​t​e​ ​l​a​y​e​r
+		 */
+		DeleteLayer: string
+	}
 	LeftMenu: {
 		/**
 		 * D​a​t​a​ ​i​m​p​o​r​t
@@ -105,6 +111,16 @@ type RootTranslation = {
 		 * T​o​g​g​l​e​ ​v​i​s​i​b​i​l​i​t​y
 		 */
 		ToggleVisibility: string
+		/**
+		 * S​e​t​t​i​n​g​s
+		 */
+		Settings: string
+	}
+	LayerSettings: {
+		/**
+		 * L​a​y​e​r​ ​s​e​t​t​i​n​g​s
+		 */
+		LayerSettings: string
 	}
 }
 
@@ -145,6 +161,12 @@ export type TranslationFunctions = {
 	 * Import file(s)
 	 */
 	ImportFiles: () => LocalizedString
+	Alerts: {
+		/**
+		 * Delete layer
+		 */
+		DeleteLayer: () => LocalizedString
+	}
 	LeftMenu: {
 		/**
 		 * Data import
@@ -200,6 +222,16 @@ export type TranslationFunctions = {
 		 * Toggle visibility
 		 */
 		ToggleVisibility: () => LocalizedString
+		/**
+		 * Settings
+		 */
+		Settings: () => LocalizedString
+	}
+	LayerSettings: {
+		/**
+		 * Layer settings
+		 */
+		LayerSettings: () => LocalizedString
 	}
 }
 

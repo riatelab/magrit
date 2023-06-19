@@ -1,8 +1,10 @@
 import { createStore } from 'solid-js/store';
+import { JSX } from 'solid-js';
 
 type NiceAlertStoreType = {
   show: boolean,
-  content: string | null,
+  content: JSX.Element | null,
+  type: 'success' | 'error' | 'warning' | null,
   confirmCallback: (() => void) | null,
   cancelCallback: (() => void) | null,
   successButton: string | null,
@@ -15,6 +17,7 @@ const [
 ] = createStore({
   show: false,
   content: null,
+  type: null,
   confirmCallback: null,
   cancelCallback: null,
   successButton: null,

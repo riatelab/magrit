@@ -2,6 +2,7 @@ import { LocalizedString } from 'typesafe-i18n';
 import { JSX } from 'solid-js';
 import { useI18nContext } from '../i18n/i18n-solid';
 import { modalStore, setModalStore } from '../store/ModalStore';
+import '../styles/ModalWindow.css';
 
 export default function DefaultModal(): JSX.Element {
   const { LL } = useI18nContext();

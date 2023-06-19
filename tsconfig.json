@@ -8,6 +8,7 @@
     "esModuleInterop": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
+    "allowImportingTsExtensions": true,
     "types": ["vite/client", "@testing-library/jest-dom"],
     "lib": [
       "ESNext",
