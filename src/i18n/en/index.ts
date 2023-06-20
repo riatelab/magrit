@@ -33,6 +33,12 @@ const en = {
   },
   LayerSettings: {
     LayerSettings: 'Layer settings',
+    Name: 'Name',
+    FillColor: 'Fill color',
+    StrokeColor: 'Stroke color',
+    FillOpacity: 'Fill opacity',
+    StrokeOpacity: 'Stroke opacity',
+    StrokeWidth: 'Stroke width',
   },
 } satisfies BaseTranslation;
 

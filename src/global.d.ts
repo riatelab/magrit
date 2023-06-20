@@ -19,7 +19,7 @@ declare global {
     data: GeoJSONFeatureCollection,
     visible: boolean,
     strokeColor: string,
-    strokeWidth: number,
+    strokeWidth: string,
     strokeOpacity: number,
     fillColor: string,
     fillOpacity: number,

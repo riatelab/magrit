@@ -17,10 +17,3 @@
   height: 90%;
   border: dashed 2px grey
 }
-
-path {
-  stroke-width: 0.25px;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
-}

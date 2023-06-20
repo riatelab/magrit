@@ -1,0 +1,15 @@
+.field {
+    display: flex;
+    justify-content: space-between;
+}
+
+.field .control .number {
+    margin-right: 0;
+    height: 1.3em;
+}
+
+.field .control .color {
+    width: 133px;
+    border-radius: 1em;
+    height: 1.9em;
+}

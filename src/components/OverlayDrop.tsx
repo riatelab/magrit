@@ -12,7 +12,7 @@ const getDefaultRenderingParams = (geomType: string) => {
   if (geomType === 'point') {
     return {
       strokeColor: '#000000',
-      strokeWidth: 1,
+      strokeWidth: '1px',
       strokeOpacity: 1,
       fillColor: '#fedeab',
       fillOpacity: 1,
@@ -21,14 +21,14 @@ const getDefaultRenderingParams = (geomType: string) => {
   if (geomType === 'line') {
     return {
       strokeColor: '#000000',
-      strokeWidth: 2,
+      strokeWidth: '1.5px',
       strokeOpacity: 1,
     };
   }
   if (geomType === 'polygon') {
     return {
       strokeColor: '#000000',
-      strokeWidth: 1,
+      strokeWidth: '0.5px',
       strokeOpacity: 1,
       fillColor: '#000000',
       fillOpacity: 0.5,

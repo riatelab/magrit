@@ -33,6 +33,12 @@ const fr = {
   },
   LayerSettings: {
     LayerSettings: 'Paramètres de la couche',
+    Name: 'Nom',
+    FillColor: 'Couleur de remplissage',
+    StrokeColor: 'Couleur de la ligne',
+    FillOpacity: 'Opacité du remplissage',
+    StrokeOpacity: 'Opacité de la ligne',
+    StrokeWidth: 'Épaisseur de la ligne',
   },
 } satisfies BaseTranslation;
 

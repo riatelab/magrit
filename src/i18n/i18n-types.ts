@@ -121,6 +121,30 @@ type RootTranslation = {
 		 * L​a​y​e​r​ ​s​e​t​t​i​n​g​s
 		 */
 		LayerSettings: string
+		/**
+		 * N​a​m​e
+		 */
+		Name: string
+		/**
+		 * F​i​l​l​ ​c​o​l​o​r
+		 */
+		FillColor: string
+		/**
+		 * S​t​r​o​k​e​ ​c​o​l​o​r
+		 */
+		StrokeColor: string
+		/**
+		 * F​i​l​l​ ​o​p​a​c​i​t​y
+		 */
+		FillOpacity: string
+		/**
+		 * S​t​r​o​k​e​ ​o​p​a​c​i​t​y
+		 */
+		StrokeOpacity: string
+		/**
+		 * S​t​r​o​k​e​ ​w​i​d​t​h
+		 */
+		StrokeWidth: string
 	}
 }
 
@@ -232,6 +256,30 @@ export type TranslationFunctions = {
 		 * Layer settings
 		 */
 		LayerSettings: () => LocalizedString
+		/**
+		 * Name
+		 */
+		Name: () => LocalizedString
+		/**
+		 * Fill color
+		 */
+		FillColor: () => LocalizedString
+		/**
+		 * Stroke color
+		 */
+		StrokeColor: () => LocalizedString
+		/**
+		 * Fill opacity
+		 */
+		FillOpacity: () => LocalizedString
+		/**
+		 * Stroke opacity
+		 */
+		StrokeOpacity: () => LocalizedString
+		/**
+		 * Stroke width
+		 */
+		StrokeWidth: () => LocalizedString
 	}
 }
 

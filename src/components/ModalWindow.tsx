@@ -24,11 +24,11 @@ export default function DefaultModal(): JSX.Element {
       <footer class="modal-card-foot">
         <button
           class="button is-success"
-          onClick={ () => { confirmCallback(); setModalStore({ show: false }); } }
+          onClick={ () => { confirmCallback(); setModalStore({ show: false, content: null }); } }
         >{ successButton }</button>
         <button
           class="button"
-          onClick={ () => { cancelCallback(); setModalStore({ show: false }); } }
+          onClick={ () => { cancelCallback(); setModalStore({ show: false, content: null }); } }
         >{ cancelButton }</button>
       </footer>
     </div>

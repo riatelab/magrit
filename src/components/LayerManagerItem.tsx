@@ -1,4 +1,5 @@
 import { Accessor, JSX, Show } from 'solid-js';
+import { render } from 'solid-js/web';
 import {
   FaSolidTable,
   FaSolidEye,
@@ -67,14 +68,26 @@ const onClickSettings = (id: number, LL: Accessor<TranslationFunctions>) => {
   console.log('click settings on item ', id);
   // Create a new modal window with the settings of the layer
   const layerDescription = layersDescriptionStore.layers.find((l) => l.id === id);
+  const initialLayerDescription = { ...layerDescription };
   console.log('layerDescription', layerDescription);
   setModalStore({
     show: true,
-    content: LayerSettings({}, LL),
-    title: LL().LayerSettings.LayerSettings,
-    confirmCallback: (): void => { console.log('confirm'); },
-    cancelCallback: (): void => { console.log('cancel'); },
+    content: null,
+    title: LL().LayerSettings.LayerSettings(),
+    confirmCallback: (): void => {
+      console.log('Changes confirmed for layer ', id);
+    },
+    cancelCallback: (): void => {
+      console.log('Changes cancelled for layer ', id);
+      // Reset the layerDescription for this layer
+      setLayersDescriptionStore(
+        'layers',
+        (l) => l.id === id,
+        initialLayerDescription,
+      );
+    },
   });
+  render(() => <LayerSettings id={ id } LL={ LL } />, document.querySelector('.modal-card-body')!);
 };
 
 export default function LayerManagerItem(props: { 'props': LayerDescription }): JSX.Element {
