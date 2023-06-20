@@ -2,22 +2,25 @@ import initGdalJs from 'gdal3.js';
 import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'; // eslint-disable-line import/extensions
 import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url';
 import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url';
-import {
-  JSX, onMount, Show,
-} from 'solid-js';
-import { HeaderBarApp } from './components/Headers.tsx';
+import { JSX, onMount, Show } from 'solid-js';
+import { Toaster } from 'solid-toast';
+
 import { useI18nContext } from './i18n/i18n-solid';
-import { globalStore, setGlobalStore } from './store/GlobalStore';
+
+import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
+
+import { HeaderBarApp } from './components/Headers.tsx';
 import LeftMenu from './components/LeftMenu.tsx';
+import LoadingOverlay from './components/LoadingOverlay.tsx';
+import MapZone from './components/MapZone.tsx';
 import DefaultModal from './components/ModalWindow.tsx';
 import OverlayDrop from './components/OverlayDrop.tsx';
-import { modalStore, setModalStore } from './store/ModalStore';
-import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
-import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
-import MapZone from './components/MapZone.tsx';
-import LoadingOverlay from './components/LoadingOverlay.tsx';
-import { niceAlertStore } from './store/NiceAlertStore';
 import NiceAlert from './components/NiceAlert.tsx';
+
+import { globalStore, setGlobalStore } from './store/GlobalStore';
+import { modalStore, setModalStore } from './store/ModalStore';
+import { niceAlertStore } from './store/NiceAlertStore';
+import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
 
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
   paths: {
@@ -165,6 +168,7 @@ const AppPage: () => JSX.Element = () => {
         });
       }
     }>Click me</button>
+    <Toaster />
     <OverlayDrop />
   </>;
 };

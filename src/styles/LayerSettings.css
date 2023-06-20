@@ -6,6 +6,7 @@
 .field .control .number {
     margin-right: 0;
     height: 1.3em;
+    width: 133px;
 }
 
 .field .control .color {

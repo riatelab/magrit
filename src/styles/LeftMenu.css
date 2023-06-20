@@ -23,4 +23,44 @@ The left menu is:
     font-size: 0.8rem;
     font-weight: 800;
     padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    border: solid 1px black;
+}
+
+.expanded-collapse-menu {
+    height: auto;
+    overflow: unset;
+}
+
+.collapse-transition {
+    transition: height var(--sc-auto-duration) cubic-bezier(0.65, 0, 0.35, 1);
+    border: solid 1px black !important;
+}
+
+.chevron-button {
+    padding: 5px;
+    background-color: blue;
+    border: none;
+    display: flex;
+    cursor: pointer;
+    border: 1px solid pink;
+    aspect-ratio: 1;
+    border-radius: 5px;
+    align-items: center;
+    transition: background-color 200ms ease-out, border 200ms ease-out;
+}
+
+.chevron-button svg {
+    transform: rotate(0deg);
+    stroke: white;
+}
+
+.chevron-button .is-active {
+    background-color: black;
+    border: 1px solid red;
+}
+
+.chevron-button.is-active svg {
+    transform: rotate(180deg);
 }
