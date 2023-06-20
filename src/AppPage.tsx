@@ -2,7 +2,9 @@ import initGdalJs from 'gdal3.js';
 import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'; // eslint-disable-line import/extensions
 import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url';
 import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url';
-import { JSX, onMount, Show } from 'solid-js';
+import {
+  JSX, onCleanup, onMount, Show,
+} from 'solid-js';
 import { Toaster } from 'solid-toast';
 
 import { useI18nContext } from './i18n/i18n-solid';
@@ -18,7 +20,7 @@ import OverlayDrop from './components/OverlayDrop.tsx';
 import NiceAlert from './components/NiceAlert.tsx';
 
 import { globalStore, setGlobalStore } from './store/GlobalStore';
-import { modalStore, setModalStore } from './store/ModalStore';
+import { modalStore } from './store/ModalStore';
 import { niceAlertStore } from './store/NiceAlertStore';
 import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
 
@@ -30,15 +32,6 @@ const loadGdal = async (): Promise<Gdal> => initGdalJs({
   },
   useWorker: true,
 });
-
-const SomeElement = (): JSX.Element => {
-  const onClick = () => console.log('Logged from SomeElement');
-
-  return <>
-    <h2>My super content</h2>
-    <div onClick={onClick}>Lorem ipsum</div
-  ></>;
-};
 
 let timeout: NodeJS.Timeout | null | undefined = null;
 
@@ -103,7 +96,28 @@ const AppPage: () => JSX.Element = () => {
   const { setLocale } = useI18nContext();
   setLocale('en');
 
+  const onResize = (event: Event): void => {
+    console.log(event);
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    setGlobalStore({
+      windowDimensions: {
+        width,
+        height,
+      },
+      mapDimensions: {
+        width: (width - 310) * 0.9,
+        height: (height - 66) * 0.9,
+      },
+    });
+  };
+
+  onCleanup(() => {
+    window.removeEventListener('resize', onResize);
+  });
+
   onMount(async () => {
+    window.addEventListener('resize', onResize);
     // Add event listeners to the root element and the overlay drop
     // in order to handle drag and drop events (for files upload only)
     document.querySelectorAll('div#root, .overlay-drop')
@@ -118,12 +132,16 @@ const AppPage: () => JSX.Element = () => {
     window.Gdal = await loadGdal();
 
     const maxMapDimensions = {
-      width: window.innerWidth - 310,
-      height: window.innerHeight - 66,
+      width: (window.innerWidth - 310) * 0.9,
+      height: (window.innerHeight - 66) * 0.9,
     };
 
     setGlobalStore({
       nDrivers: Object.keys(Gdal.drivers.raster).length + Object.keys(Gdal.drivers.vector).length,
+      windowDimensions: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      },
       mapDimensions: maxMapDimensions,
     });
   });
@@ -133,20 +151,6 @@ const AppPage: () => JSX.Element = () => {
     <main class="is-fullhd">
       <LeftMenu />
       <MapZone />
-{/*      <div style="width: calc(100vw - 300px); position: fixed; left: 300px;">
-        <For each={ layersDescriptionStore.layers }>
-          {
-            (d) => {
-              const {
-                id, name, type, target,
-              } = d;
-              return <div>
-                <span classList={{ 'is-active': !!target }}>{`${id} ${name} ${type}`}</span>
-              </div>;
-            }
-          }
-        </For>
-      </div> */}
       <Show when={globalStore.isLoading }>
         <LoadingOverlay />
       </Show>
@@ -157,7 +161,7 @@ const AppPage: () => JSX.Element = () => {
         <NiceAlert />
       </Show>
     </main>
-    <button style="position: absolute; right: 0; top; 200;" onClick={
+{/*    <button style="position: absolute; right: 0; top; 200;" onClick={
       () => {
         setModalStore({
           show: true,
@@ -167,7 +171,7 @@ const AppPage: () => JSX.Element = () => {
           cancelCallback: (): void => { console.log('cancel'); },
         });
       }
-    }>Click me</button>
+    }>Click me</button> */}
     <Toaster />
     <OverlayDrop />
   </>;

@@ -13,7 +13,7 @@
 
 .map-zone__map {
   margin: auto;
-  width: 90%;
-  height: 90%;
+  /*width: 90%;*/
+  /*height: 90%;*/
   border: dashed 2px grey
 }

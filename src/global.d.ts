@@ -28,7 +28,7 @@ declare global {
   interface GeoJSONFeature {
     type: string,
     geometry: GeoJSONGeometry,
-    properties: {},
+    properties: object,
   }
 
   interface GeoJSONGeometry {

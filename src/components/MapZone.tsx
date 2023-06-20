@@ -2,8 +2,7 @@ import {
   createEffect, For, JSX, JSXElement, onMount,
 } from 'solid-js';
 import d3 from '../helpers/d3-custom';
-// import { v4 as uuidv4 } from 'uuid';
-// import { globalStore } from '../store/GlobalStore';
+import { globalStore } from '../store/GlobalStore';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import '../styles/MapZone.css';
 import { unproxify } from '../helpers/common';
@@ -67,8 +66,8 @@ export default function MapZone(): JSX.Element {
     <div class="map-zone__inner">
       <svg
         ref={svgElem}
-        // width={globalStore.mapDimensions.width}
-        // height={globalStore.mapDimensions.height}
+        width={globalStore.mapDimensions.width}
+        height={globalStore.mapDimensions.height}
         class="map-zone__map"
       >
         <defs>

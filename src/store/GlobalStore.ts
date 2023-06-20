@@ -5,6 +5,7 @@ type GlobalStoreType = {
   isLoading: boolean,
   workerToCancel: Array<Worker>,
   mapDimensions: { width: number, height: number },
+  windowDimensions: { width: number, height: number },
 };
 
 const [
@@ -15,6 +16,7 @@ const [
   isLoading: false,
   workerToCancel: [],
   mapDimensions: { width: 0, height: 0 },
+  windowDimensions: { width: 0, height: 0 },
 } as GlobalStoreType);
 
 export {
