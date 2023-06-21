@@ -1,3 +1,7 @@
+import { topology } from 'topojson-server';
+import { SupportedGeoFileTypes } from './supportedFormats';
+import { convertFromGeoJSON } from './formatConversion';
+
 /**
  * Get the dimensions of the SVG map element.
  * @param {SVGElement} map
@@ -216,4 +220,55 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
     console.warn('Error when using the data url version of the image', err);
     return Promise.reject(err);
   });
+}
+
+export async function exportToGeo(
+  layer: GeoJSONFeatureCollection,
+  layerName: string,
+  format: SupportedGeoFileTypes,
+  crs = 'EPSG:4326',
+) {
+  console.log(layer, format, crs);
+  let result = '';
+  let filename = '';
+  const ext = `${format}`;
+  if (format === SupportedGeoFileTypes.GeoJSON) {
+    result = JSON.stringify(layer);
+    filename = `${layerName}.${ext}`;
+  } else if (format === SupportedGeoFileTypes.TopoJSON) {
+    result = JSON.stringify(topology({ layerName: layer }));
+    filename = `${layerName}.${ext}`;
+  } else if (format === SupportedGeoFileTypes.KML) {
+    result = await convertFromGeoJSON(layer, layerName, 'KML', crs);
+    filename = `${layerName}.${ext}`;
+  } else if (format === SupportedGeoFileTypes.Shapefile) {
+    result = await convertFromGeoJSON(layer, layerName, 'ESRI Shapefile', crs);
+    filename = `${layerName}.zip`;
+  } else if (format === SupportedGeoFileTypes.GML) {
+    result = await convertFromGeoJSON(layer, layerName, 'GML', crs);
+    filename = `${layerName}.${ext}`;
+  } else if (format === SupportedGeoFileTypes.GeoPackage) {
+    result = await convertFromGeoJSON(layer, layerName, 'GPKG', crs);
+    filename = `${layerName}.gpkg`;
+  } else {
+    throw new Error(`Unsupported file format: ${format}`);
+  }
+
+  let dataStr = '';
+  if (format === SupportedGeoFileTypes.GeoJSON || format === SupportedGeoFileTypes.TopoJSON) {
+    dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(result)}`;
+  } else if (format === SupportedGeoFileTypes.KML || format === SupportedGeoFileTypes.GML) {
+    dataStr = `data:text/xml;charset=utf-8,${encodeURIComponent(result)}`;
+  } else if (format === SupportedGeoFileTypes.Shapefile) {
+    dataStr = `data:application/zip;base64,${result}`;
+  } else if (format === SupportedGeoFileTypes.GeoPackage) {
+    dataStr = `data:application/geopackage+sqlite3;base64,${result}`;
+  }
+
+  return clickLinkFromDataUrl(dataStr, filename)
+    .then(() => Promise.resolve(true))
+    .catch((err) => {
+      console.warn('Error when using the data url version of the exported layer', err);
+      return Promise.reject(err);
+    });
 }

@@ -46,7 +46,7 @@ const onClickTable = (id: number) => {
 const onClickTrash = (id: number, LL: Accessor<TranslationFunctions>) => {
   console.log('click trash on item ', id);
   const innerElement = <>
-    <p>{ LL().Alerts.DeleteLayer } { id } ?</p>
+    <p>{ LL().Alerts.DeleteLayer() } { id } ?</p>
   </>;
 
   const onDeleteConfirmed = (): void => {
@@ -138,7 +138,7 @@ export default function LayerManagerItem(props: { 'props': LayerDescription }): 
         <FaSolidTable onClick={() => { onClickTable(props.props.id); }} />
       </div>
       <div title={ LL().LayerManager.Delete() }>
-        <FaSolidTrash onClick={() => { onClickTrash(props.props.id); }} />
+        <FaSolidTrash onClick={() => { onClickTrash(props.props.id, LL); }} />
       </div>
     </div>
   </div>

@@ -1,4 +1,4 @@
-import { GeoJSONFeatureCollection } from '../global';
+import JSZip from 'jszip';
 
 /**
  * Convert the given file(s) to a GeoJSON feature collection.
@@ -49,4 +49,85 @@ export function getGeometryType(geojsonLayer: GeoJSONFeatureCollection): string 
 }
 
 export function convertTabularDataset() {
+}
+
+async function uintArrayToBase64(data: Uint8Array): Promise<string> {
+  const base64url: string = await new Promise((r) => {
+    const reader = new FileReader();
+    reader.onload = () => r(reader.result);
+    reader.readAsDataURL(new Blob([data]));
+  });
+
+  return base64url;
+}
+
+/**
+ * Convert the given GeoJSON FeatureCollection to the asked format.
+ *
+ * @param {GeoJSONFeatureCollection} featureCollection - The GeoJSON FeatureCollection to convert
+ * @param layerName - The name of the layer
+ * @param format - The format to convert to
+ * @param crs - The destination CRS to use
+ * @returns {Promise<string>} The converted file as a string (base64 encoded if binary)
+ */
+export async function convertFromGeoJSON(
+  featureCollection: GeoJSONFeatureCollection,
+  layerName: string,
+  format: string,
+  crs: string,
+): Promise<string> {
+  // Store the input GeoJSON in a temporary file
+  const inputFile = new File(
+    [JSON.stringify(featureCollection)],
+    `${layerName}.geojson`,
+    { type: 'application/geo+json' },
+  );
+  // Open the GeoJSON file
+  const input = await window.Gdal.open(inputFile);
+  // Set the options for the conversion
+  const options = [
+    '-f', format,
+    '-t_srs', crs,
+  ];
+  // Convert the GeoJSON to the asked format
+  if (format === 'ESRI Shapefile') {
+    options.push('-lco', 'ENCODING=UTF-8');
+    const output = await window.Gdal.ogr2ogr(input.datasets[0], options);
+    // We will return a zip file (encoded in base 64) containing all the shapefile files
+    const zip = new JSZip();
+    // Add the cpg file
+    zip.file(`${layerName}.cpg`, 'UTF-8');
+    // Add the other files
+    await ['shp', 'shx', 'dbf', 'prj']
+      .forEach(async (ext) => {
+        const outputPath = {
+          local: output.local.replace('.shp', `.${ext}`),
+          real: output.real.replace('.shp', `.${ext}`),
+        };
+        const rawData = await window.Gdal.getFileBytes(outputPath);
+        const blob = new Blob([rawData], { type: '' });
+        zip.file(`${layerName}.${ext}`, blob, { binary: true });
+      });
+    await window.Gdal.close(input);
+    // Generate the zip file (base64 encoded)
+    const resZip = await zip.generateAsync({ type: 'base64' });
+    return resZip;
+  }
+  if (format === 'KML' || format === 'GML') {
+    // For KML and GML, we only return a text file
+    options.push('-lco', 'ENCODING=UTF-8');
+    const output = await window.Gdal.ogr2ogr(input.datasets[0], options);
+    const bytes = await window.Gdal.getFileBytes(output);
+    await window.Gdal.close(input);
+    return new TextDecoder().decode(bytes);
+  }
+  if (format === 'GPKG') {
+    // For GPKG, we return the binary file, encoded in base64
+    const output = await window.Gdal.ogr2ogr(input.datasets[0], options);
+    const bytes = await window.Gdal.getFileBytes(output);
+    await window.Gdal.close(input);
+    const b64Data = await uintArrayToBase64(bytes);
+    return b64Data.replace('data:application/octet-stream;base64,', '');
+  }
+  return '';
 }

@@ -43,11 +43,15 @@
     "eslint-config-airbnb-typescript": "^17.0.0",
     "font-gis": "^1.0.5",
     "gdal3.js": "^2.4.0",
+    "jszip": "^3.10.1",
     "solid-icons": "^1.0.8",
     "solid-js": "^1.7.6",
     "solid-sortablejs": "^2.0.9",
     "solid-toast": "^0.5.0",
     "statsbreaks": "^0.5.0",
+    "topojson-client": "^3.1.0",
+    "topojson-server": "^3.0.1",
+    "topojson-simplify": "^3.0.3",
     "typesafe-i18n": "^5.24.3",
     "uuid": "^9.0.0"
   }

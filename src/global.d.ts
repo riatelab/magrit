@@ -1,4 +1,4 @@
-export {}
+export {};
 
 declare global {
   interface Window {
@@ -40,4 +40,5 @@ declare global {
     type: string,
     features: GeoJSONFeature[],
   }
+
 }

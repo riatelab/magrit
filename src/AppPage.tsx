@@ -23,6 +23,7 @@ import { globalStore, setGlobalStore } from './store/GlobalStore';
 import { modalStore } from './store/ModalStore';
 import { niceAlertStore } from './store/NiceAlertStore';
 import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
+import { round } from './helpers/math';
 
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
   paths: {
@@ -132,8 +133,8 @@ const AppPage: () => JSX.Element = () => {
     window.Gdal = await loadGdal();
 
     const maxMapDimensions = {
-      width: (window.innerWidth - 310) * 0.9,
-      height: (window.innerHeight - 66) * 0.9,
+      width: round((window.innerWidth - 310) * 0.9, 0),
+      height: round((window.innerHeight - 66) * 0.9, 0),
     };
 
     setGlobalStore({

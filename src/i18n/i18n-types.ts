@@ -116,6 +116,32 @@ type RootTranslation = {
 		 */
 		Settings: string
 	}
+	ExportSection: {
+		/**
+		 * S​e​l​e​c​t​ ​a​ ​l​a​y​e​r
+		 */
+		SelectLayers: string
+		/**
+		 * S​e​l​e​c​t​ ​a​ ​f​o​r​m​a​t
+		 */
+		SelectFormat: string
+		/**
+		 * L​a​y​e​r​s
+		 */
+		Layers: string
+		/**
+		 * E​x​p​o​r​t
+		 */
+		Export: string
+		/**
+		 * E​x​p​o​r​t​ ​a​s​ ​P​N​G
+		 */
+		ExportPng: string
+		/**
+		 * E​x​p​o​r​t​ ​a​s​ ​S​V​G
+		 */
+		ExportSvg: string
+	}
 	LayerSettings: {
 		/**
 		 * L​a​y​e​r​ ​s​e​t​t​i​n​g​s
@@ -250,6 +276,32 @@ export type TranslationFunctions = {
 		 * Settings
 		 */
 		Settings: () => LocalizedString
+	}
+	ExportSection: {
+		/**
+		 * Select a layer
+		 */
+		SelectLayers: () => LocalizedString
+		/**
+		 * Select a format
+		 */
+		SelectFormat: () => LocalizedString
+		/**
+		 * Layers
+		 */
+		Layers: () => LocalizedString
+		/**
+		 * Export
+		 */
+		Export: () => LocalizedString
+		/**
+		 * Export as PNG
+		 */
+		ExportPng: () => LocalizedString
+		/**
+		 * Export as SVG
+		 */
+		ExportSvg: () => LocalizedString
 	}
 	LayerSettings: {
 		/**

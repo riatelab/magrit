@@ -11,10 +11,12 @@ export default function MapZone(): JSX.Element {
   let svgElem;
   let svg;
   const sphere = { type: 'Sphere' };
-  const projection = d3.geoNaturalEarth1();
+  const projection = d3.geoNaturalEarth1()
+    .translate([-globalStore.mapDimensions.width / 2, -globalStore.mapDimensions.height / 2]);
   const initialTranslate = projection.translate();
   const initialScale = projection.scale();
   const pathGenerator = d3.geoPath(projection);
+
   const redraw = (e, redrawWhenZooming: boolean) => {
     if (!redrawWhenZooming) {
       svg.selectAll('g').attr('transform', e.transform);
@@ -28,6 +30,7 @@ export default function MapZone(): JSX.Element {
       svg.selectAll('path').attr('d', pathGenerator); // eslint-disable-line no-underscore-dangle
     }
   };
+
   const zoom = d3.zoom()
     .on('zoom', (e) => {
       redraw(e, false);

@@ -31,6 +31,14 @@ const en = {
     ToggleVisibility: 'Toggle visibility',
     Settings: 'Settings',
   },
+  ExportSection: {
+    SelectLayers: 'Select a layer',
+    SelectFormat: 'Select a format',
+    Layers: 'Layers',
+    Export: 'Export',
+    ExportPng: 'Export as PNG',
+    ExportSvg: 'Export as SVG',
+  },
   LayerSettings: {
     LayerSettings: 'Layer settings',
     Name: 'Name',

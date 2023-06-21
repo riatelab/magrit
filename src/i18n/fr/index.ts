@@ -31,6 +31,14 @@ const fr = {
     ToggleVisibility: 'Afficher / Masquer',
     Settings: 'Paramètres',
   },
+  ExportSection: {
+    SelectLayers: 'Sélectionner une couche',
+    SelectFormat: 'Sélectionner un format',
+    Layers: 'Couches',
+    Export: 'Exporter',
+    ExportPng: 'Exporter en PNG',
+    ExportSvg: 'Exporter en SVG',
+  },
   LayerSettings: {
     LayerSettings: 'Paramètres de la couche',
     Name: 'Nom',

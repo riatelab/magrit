@@ -1,8 +1,11 @@
-import { JSX /* , createSignal */ } from 'solid-js';
+import { For, JSX } from 'solid-js';
+import { FaSolidAngleDown } from 'solid-icons/fa';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
-import { exportMapToPng, exportMapToSvg } from '../helpers/exports';
+import { exportMapToPng, exportMapToSvg, exportToGeo } from '../helpers/exports';
+import { useI18nContext } from '../i18n/i18n-solid';
+import { SupportedGeoFileTypes } from '../helpers/supportedFormats';
 
-function onClickButton(event: Event, tab: string) {
+function onClickTabButton(event: Event, tab: string) {
   // Change the active tab
   const tabButtons = document.getElementsByClassName('is-active');
   for (let i = 0; i < tabButtons.length; i++) { // eslint-disable-line no-plusplus
@@ -18,6 +21,23 @@ function onClickButton(event: Event, tab: string) {
   document.getElementById(`tab-content-${tab}`).classList.remove('is-hidden');
 }
 
+function setDropdownItemTarget(event: Event) {
+  const target = event.currentTarget as HTMLElement;
+  const dropdownItemTarget = target
+    .parentElement
+    .parentElement
+    .parentElement
+    .querySelector('.dropdown-item-target');
+  dropdownItemTarget.textContent = target.textContent;
+}
+
+function exportToGeoWrapper() {
+  const layerName = document.querySelector('.dropdown__layer .dropdown-item-target').textContent;
+  const format = document.querySelector('.dropdown__format .dropdown-item-target').textContent;
+  const layer = layersDescriptionStore.layers.find((l) => l.name === layerName);
+  const result = exportToGeo(layer.data, layer.name, SupportedGeoFileTypes[format]);
+  console.log(result);
+}
 /**
  * This component is responsible for exporting the current map to a file as well as for exporting
  * the data from the current map to a file.
@@ -25,25 +45,23 @@ function onClickButton(event: Event, tab: string) {
  * @constructor
  */
 export default function ExportSection(): JSX.Element {
-  // const { LL } = useI18nContext();
-  const layerNames = layersDescriptionStore.layers.map((layer) => layer.name);
-  console.log(layerNames);
+  const { LL } = useI18nContext();
   return <>
     <div class="tabs is-centered is-boxed is-fullwidth">
-      <ul>
+      <ul class="ml-0">
         <li class="is-active">
-          <a onClick={(ev) => onClickButton(ev, 'svg')}>
+          <a onClick={(ev) => onClickTabButton(ev, 'svg')}>
             <span>SVG</span>
           </a>
         </li>
         <li>
-          <a onClick={(ev) => onClickButton(ev, 'png')}>
+          <a onClick={(ev) => onClickTabButton(ev, 'png')}>
             <span>PNG</span>
           </a>
         </li>
         <li>
-          <a onClick={(ev) => onClickButton(ev, 'geo')}>
-            <span>Données</span>
+          <a onClick={(ev) => onClickTabButton(ev, 'geo')}>
+            <span>{ LL().ExportSection.Layers() }</span>
           </a>
         </li>
       </ul>
@@ -51,51 +69,71 @@ export default function ExportSection(): JSX.Element {
     <div class="tab-content">
       <div id="tab-content-svg">
         <button
-          onClick={ () => { exportMapToSvg('export.svg'); } }
+          onClick={ async () => { await exportMapToSvg('export.svg', false); } }
           class="button is-success"
         >
-          Exporter en SVG
+          { LL().ExportSection.ExportSvg() }
         </button>
       </div>
       <div id="tab-content-png" class="is-hidden">
         <button
-          onClick={ () => { exportMapToPng('export.png', 1); } }
+          onClick={ async () => { await exportMapToPng('export.png', 1); } }
           class="button is-success"
         >
-          Exporter en PNG
+          { LL().ExportSection.ExportPng() }
         </button>
       </div>
       <div id="tab-content-geo" class="is-hidden">
-        <div class="dropdown is-hoverable">
+        <div class="dropdown is-hoverable dropdown__layer">
           <div class="dropdown-trigger">
-            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo">
-              <span>Click me</span>
+            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-file">
+              <span class="dropdown-item-target">{ LL().ExportSection.SelectLayers() }</span>
               <span class="icon is-small">
-                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                <FaSolidAngleDown />
               </span>
             </button>
           </div>
-          <div class="dropdown-menu" id="dropdown-menu-export-geo" role="menu">
+          <div class="dropdown-menu" id="dropdown-menu-export-geo-file" role="menu">
             <div class="dropdown-content">
-              <a href="#" class="dropdown-item">
-                Overview
-              </a>
-              <a href="#" class="dropdown-item">
-                Modifiers
-              </a>
+              <For each={layersDescriptionStore.layers.map((layer) => layer.name)}>
+                {(layerName) => (
+                  <a href="#" class="dropdown-item" onClick={ setDropdownItemTarget }>
+                    {layerName}
+                  </a>
+                )}
+              </For>
+            </div>
+          </div>
+        </div>
+        <div class="dropdown is-hoverable dropdown__format">
+          <div class="dropdown-trigger">
+            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-format">
+              <span class="dropdown-item-target">{ LL().ExportSection.SelectFormat() }</span>
+              <span class="icon is-small">
+                <FaSolidAngleDown />
+              </span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu-export-geo-format" role="menu">
+            <div class="dropdown-content">
+              <For each={Object.keys(SupportedGeoFileTypes)}>
+                {(formatName) => (
+                  <a href="#" class="dropdown-item" onClick={ setDropdownItemTarget }>
+                    {formatName}
+                  </a>
+                )}
+              </For>
             </div>
           </div>
         </div>
         <br/>
         <button
-          class="button is-success"
+          class="button is-success text-align-center"
+          onClick={ exportToGeoWrapper }
         >
-          Exporter en GeoJSON
+          { LL().ExportSection.Export() }
         </button>
       </div>
     </div>
   </>;
 }
-
-console.log(exportMapToPng);
-console.log(exportMapToSvg);
