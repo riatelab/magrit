@@ -19,7 +19,7 @@ export default function LeftMenu(): JSX.Element {
       </span>
     </div>
     <Collapse value={expandedSection() === 1} >
-      <div> Le super menu d'import des couches </div>
+      <div class="left-menu__section-container"> Le super menu d'import des couches </div>
     </Collapse>
 
     <div class="left-menu__title" onClick={() => setExpandedSection(2)}>
@@ -29,7 +29,9 @@ export default function LeftMenu(): JSX.Element {
       </span>
     </div>
     <Collapse value={expandedSection() === 2} >
-      <LayerManager />
+      <div class="left-menu__section-container">
+        <LayerManager />
+      </div>
     </Collapse>
 
     <div class="left-menu__title" onClick={() => setExpandedSection(3)}>
@@ -39,7 +41,7 @@ export default function LeftMenu(): JSX.Element {
       </span>
     </div>
     <Collapse value={expandedSection() === 3} >
-      <div>Le super menu de choix d'une représentation ...</div>
+      <div class="left-menu__section-container">Le super menu de choix d'une représentation ...</div>
     </Collapse>
 
     <div class="left-menu__title" onClick={() => setExpandedSection(4)}>
@@ -49,7 +51,9 @@ export default function LeftMenu(): JSX.Element {
       </span>
     </div>
     <Collapse value={expandedSection() === 4} >
-      { ExportSection() }
+      <div class="left-menu__section-container">
+        <ExportSection />
+      </div>
     </Collapse>
 
   </div>;

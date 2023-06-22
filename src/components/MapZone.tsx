@@ -2,7 +2,7 @@ import {
   createEffect, For, JSX, JSXElement, onMount,
 } from 'solid-js';
 import d3 from '../helpers/d3-custom';
-import { globalStore } from '../store/GlobalStore';
+import { globalStore, setGlobalStore } from '../store/GlobalStore';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import '../styles/MapZone.css';
 // import { unproxify } from '../helpers/common';
@@ -114,6 +114,14 @@ export default function MapZone(): JSX.Element {
   const initialScale = projection.scale();
   const pathGenerator = d3.geoPath(projection);
 
+  setGlobalStore(
+    'projection',
+    () => projection,
+  );
+  setGlobalStore(
+    'pathGenerator',
+    () => pathGenerator,
+  );
   const redraw = (e, redrawWhenZooming: boolean) => {
     if (!redrawWhenZooming) {
       svg.selectAll('g').attr('transform', e.transform);
@@ -124,7 +132,7 @@ export default function MapZone(): JSX.Element {
         e.transform.y - initialTranslate[1],
       ]);
       svg.selectAll('g').attr('transform', null);
-      svg.selectAll('path').attr('d', pathGenerator); // eslint-disable-line no-underscore-dangle
+      svg.selectAll('path').attr('d', pathGenerator);
     }
   };
 

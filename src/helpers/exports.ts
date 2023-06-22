@@ -56,7 +56,7 @@ function changeResolution(canvas: HTMLCanvasElement, scaleFactor: number) {
  * @param {string} url
  * @param {string} fileName
  */
-const clickLinkFromDataUrl = async (url: string, fileName: string) => {
+export const clickLinkFromDataUrl = async (url: string, fileName: string) => {
   const res = await fetch(url);
   const blob = await res.blob();
   const blobUrl = URL.createObjectURL(blob);

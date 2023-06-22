@@ -55,6 +55,10 @@ type RootTranslation = {
 		 * D​e​l​e​t​e​ ​l​a​y​e​r
 		 */
 		DeleteLayer: string
+		/**
+		 * S​a​v​e​ ​c​h​a​n​g​e​s​ ​?
+		 */
+		SaveEditedData: string
 	}
 	LeftMenu: {
 		/**
@@ -136,6 +140,10 @@ type RootTranslation = {
 		 */
 		SelectFormat: string
 		/**
+		 * S​e​l​e​c​t​ ​a​ ​C​R​S
+		 */
+		SelectCRS: string
+		/**
 		 * L​a​y​e​r​s
 		 */
 		Layers: string
@@ -151,6 +159,10 @@ type RootTranslation = {
 		 * E​x​p​o​r​t​ ​a​s​ ​S​V​G
 		 */
 		ExportSvg: string
+		/**
+		 * C​u​s​t​o​m​ ​C​R​S
+		 */
+		CustomCRS: string
 	}
 	LayerSettings: {
 		/**
@@ -185,6 +197,28 @@ type RootTranslation = {
 		 * P​o​i​n​t​ ​r​a​d​i​u​s
 		 */
 		PointRadius: string
+	}
+	DataTable: {
+		/**
+		 * A​t​t​r​i​b​u​t​e​ ​t​a​b​l​e
+		 */
+		titleGeo: string
+		/**
+		 * D​a​t​a​ ​t​a​b​l​e
+		 */
+		titleTabular: string
+		/**
+		 * {​{​O​n​e​ ​f​e​a​t​u​r​e​|​?​?​ ​f​e​a​t​u​r​e​s​}​}
+		 */
+		Features: string
+		/**
+		 * {​{​O​n​e​ ​c​o​l​u​m​n​|​?​?​ ​c​o​l​u​m​n​s​}​}
+		 */
+		Columns: string
+		/**
+		 * E​x​p​o​r​t​ ​a​s​ ​C​S​V​.​.​.
+		 */
+		ExportCsv: string
 	}
 }
 
@@ -230,6 +264,10 @@ export type TranslationFunctions = {
 		 * Delete layer
 		 */
 		DeleteLayer: () => LocalizedString
+		/**
+		 * Save changes ?
+		 */
+		SaveEditedData: () => LocalizedString
 	}
 	LeftMenu: {
 		/**
@@ -311,6 +349,10 @@ export type TranslationFunctions = {
 		 */
 		SelectFormat: () => LocalizedString
 		/**
+		 * Select a CRS
+		 */
+		SelectCRS: () => LocalizedString
+		/**
 		 * Layers
 		 */
 		Layers: () => LocalizedString
@@ -326,6 +368,10 @@ export type TranslationFunctions = {
 		 * Export as SVG
 		 */
 		ExportSvg: () => LocalizedString
+		/**
+		 * Custom CRS
+		 */
+		CustomCRS: () => LocalizedString
 	}
 	LayerSettings: {
 		/**
@@ -360,6 +406,28 @@ export type TranslationFunctions = {
 		 * Point radius
 		 */
 		PointRadius: () => LocalizedString
+	}
+	DataTable: {
+		/**
+		 * Attribute table
+		 */
+		titleGeo: () => LocalizedString
+		/**
+		 * Data table
+		 */
+		titleTabular: () => LocalizedString
+		/**
+		 * {{One feature|?? features}}
+		 */
+		Features: (arg0: number | string | boolean) => LocalizedString
+		/**
+		 * {{One column|?? columns}}
+		 */
+		Columns: (arg0: number | string | boolean) => LocalizedString
+		/**
+		 * Export as CSV...
+		 */
+		ExportCsv: () => LocalizedString
 	}
 }
 

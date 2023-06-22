@@ -42,7 +42,6 @@ The left menu is:
 .chevron-button {
     padding: 5px;
     background-color: blue;
-    border: none;
     display: flex;
     cursor: pointer;
     border: 1px solid pink;
@@ -64,4 +63,8 @@ The left menu is:
 
 .chevron-button.is-active svg {
     transform: rotate(180deg);
+}
+
+.left-menu__section-container {
+    padding: 10px 5px;
 }

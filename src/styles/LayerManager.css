@@ -1,6 +1,6 @@
 .layer-manager {
   display: inline-block;
-  background: gray;
+  /*background: gray;*/
   padding: 10px 10px 10px 8px;
   width: 100%;
 }

@@ -13,9 +13,10 @@ declare global {
   type CustomFileList = FileEntry[];
 
   interface LayerDescription {
-    id: number,
+    id: string,
     name: string,
     type: string,
+    renderer: string,
     data: GeoJSONFeatureCollection,
     visible: boolean,
     strokeColor: string,

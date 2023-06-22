@@ -1,4 +1,6 @@
-import { For, JSX } from 'solid-js';
+import {
+  createSignal, For, JSX, Show,
+} from 'solid-js';
 import { FaSolidAngleDown } from 'solid-icons/fa';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import { exportMapToPng, exportMapToSvg, exportToGeo } from '../helpers/exports';
@@ -22,6 +24,20 @@ function onClickTabButton(event: Event, tab: string) {
   document.getElementById(`export-section__content__${tab}`).classList.remove('is-hidden');
 }
 
+function isButtonDisabled(
+  selectedLayer: string | null,
+  selectedFormat: string | null,
+  selectedCrs: string | null,
+  customCrs: string,
+): boolean {
+  console.log(customCrs);
+  if (!selectedLayer) return true;
+  if (!selectedFormat) return true;
+  if (!['GeoJSON', 'CSV', 'KML'].includes(selectedFormat) && !selectedCrs) return true;
+  if (typeof selectedCrs === 'string' && selectedCrs.indexOf('EPSG') && customCrs === '') return true;
+  return false;
+}
+
 function setDropdownItemTarget(event: Event) {
   const target = event.currentTarget as HTMLElement;
   const dropdownItemTarget = target
@@ -32,13 +48,19 @@ function setDropdownItemTarget(event: Event) {
   dropdownItemTarget.textContent = target.textContent;
 }
 
-function exportToGeoWrapper() {
-  const layerName = document.querySelector('.dropdown__layer .dropdown-item-target').textContent;
-  const format = document.querySelector('.dropdown__format .dropdown-item-target').textContent;
-  const layer = layersDescriptionStore.layers.find((l) => l.name === layerName);
-  const result = exportToGeo(layer.data, layer.name, SupportedGeoFileTypes[format]);
-  console.log(result);
+async function exportToGeoWrapper(
+  selectedLayer: string,
+  selectedFormat: string,
+  selectedCrs: string,
+  customCrs: string,
+) {
+  const layer = layersDescriptionStore.layers
+    .find((l) => l.name === selectedLayer);
+  const crs = selectedCrs.indexOf('EPSG') === 0 ? selectedCrs : customCrs;
+  // TODO : validate CRS if custom
+  await exportToGeo(layer.data, layer.name, SupportedGeoFileTypes[selectedFormat], crs);
 }
+
 /**
  * This component is responsible for exporting the current map to a file as well as for exporting
  * the data from the current map to a file.
@@ -47,6 +69,17 @@ function exportToGeoWrapper() {
  */
 export default function ExportSection(): JSX.Element {
   const { LL } = useI18nContext();
+  const predefinedCrs = [
+    'EPSG:4326',
+    'EPSG:3857',
+    'EPSG:2154',
+    'EPSG:3035',
+    LL().ExportSection.CustomCRS(),
+  ];
+  const [selectedLayer, setSelectedLayer] = createSignal(null);
+  const [selectedFormat, setSelectedFormat] = createSignal(null);
+  const [selectedCrs, setSelectedCrs] = createSignal(null);
+  const [customCrs, setCustomCrs] = createSignal('');
   return <div class="export-section">
     <div class="export-section__tabs tabs is-centered is-boxed is-fullwidth">
       <ul class="ml-0">
@@ -69,20 +102,25 @@ export default function ExportSection(): JSX.Element {
     </div>
     <div class="export-section__content">
       <div id="export-section__content__svg">
-        <button
-          onClick={ async () => { await exportMapToSvg('export.svg', false); } }
-          class="button is-success"
-        >
-          { LL().ExportSection.ExportSvg() }
-        </button>
+        <div class="has-text-centered">
+          <button
+            onClick={ async () => { await exportMapToSvg('export.svg', false); } }
+            class="button is-success"
+          >
+            { LL().ExportSection.ExportSvg() }
+          </button>
+        </div>
+
       </div>
       <div id="export-section__content__png" class="is-hidden">
-        <button
-          onClick={ async () => { await exportMapToPng('export.png', 1); } }
-          class="button is-success"
-        >
-          { LL().ExportSection.ExportPng() }
-        </button>
+        <div class="has-text-centered">
+          <button
+            onClick={ async () => { await exportMapToPng('export.png', 1); } }
+            class="button is-success"
+          >
+            { LL().ExportSection.ExportPng() }
+          </button>
+        </div>
       </div>
       <div id="export-section__content__geo" class="is-hidden">
         <div class="dropdown is-hoverable dropdown__layer">
@@ -98,7 +136,10 @@ export default function ExportSection(): JSX.Element {
             <div class="dropdown-content">
               <For each={layersDescriptionStore.layers.map((layer) => layer.name)}>
                 {(layerName) => (
-                  <a href="#" class="dropdown-item" onClick={ setDropdownItemTarget }>
+                  <a href="#" class="dropdown-item" onClick={ (ev) => {
+                    setDropdownItemTarget(ev);
+                    setSelectedLayer(layerName);
+                  } }>
                     {layerName}
                   </a>
                 )}
@@ -106,6 +147,7 @@ export default function ExportSection(): JSX.Element {
             </div>
           </div>
         </div>
+        <br/><br/>
         <div class="dropdown is-hoverable dropdown__format">
           <div class="dropdown-trigger">
             <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-format">
@@ -119,7 +161,10 @@ export default function ExportSection(): JSX.Element {
             <div class="dropdown-content">
               <For each={Object.keys(SupportedGeoFileTypes)}>
                 {(formatName) => (
-                  <a href="#" class="dropdown-item" onClick={ setDropdownItemTarget }>
+                  <a href="#" class="dropdown-item" onClick={ (ev) => {
+                    setDropdownItemTarget(ev);
+                    setSelectedFormat(formatName);
+                  } }>
                     {formatName}
                   </a>
                 )}
@@ -128,12 +173,68 @@ export default function ExportSection(): JSX.Element {
           </div>
         </div>
         <br/>
-        <button
-          class="button is-success text-align-center"
-          onClick={ exportToGeoWrapper }
-        >
-          { LL().ExportSection.Export() }
-        </button>
+        <br/>
+        <Show when={ !['CSV', 'GeoJSON', 'KML'].includes(selectedFormat()) }>
+          <div class="dropdown is-hoverable dropdown__crs">
+            <div class="dropdown-trigger">
+              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-crs">
+                <span class="dropdown-item-target">{ LL().ExportSection.SelectCRS() }</span>
+                <span class="icon is-small">
+                  <FaSolidAngleDown />
+                </span>
+              </button>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu-export-geo-crs" role="menu">
+              <div class="dropdown-content">
+                <For each={predefinedCrs}>
+                  {(crsName) => (
+                    <a href="#" class="dropdown-item" onClick={ (ev) => {
+                      setDropdownItemTarget(ev);
+                      setSelectedCrs(crsName);
+                    } }>
+                      {crsName}
+                    </a>
+                  )}
+                </For>
+              </div>
+            </div>
+          </div>
+          <br/>
+          <br/>
+        </Show>
+        <Show when={ selectedCrs() === LL().ExportSection.CustomCRS() }>
+          <div>
+            <input
+              class="input"
+              type="text"
+              placeholder="+proj=moll +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +type=crs"
+              onChange={ (ev) => setCustomCrs(ev.target.value) }
+            />
+          </div>
+          <br/>
+          <br/>
+        </Show>
+        <div class="has-text-centered">
+          <button
+            class="button is-success text-align-center"
+            disabled={ isButtonDisabled(
+              selectedLayer(),
+              selectedFormat(),
+              selectedCrs(),
+              customCrs(),
+            )}
+            onClick={ async () => {
+              await exportToGeoWrapper(
+                selectedLayer(),
+                selectedFormat(),
+                selectedCrs(),
+                customCrs(),
+              );
+            } }
+          >
+            { LL().ExportSection.Export() }
+          </button>
+        </div>
       </div>
     </div>
   </div>;

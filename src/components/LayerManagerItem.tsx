@@ -9,14 +9,20 @@ import {
   FaSolidTrash,
   FaSolidTableCells,
 } from 'solid-icons/fa';
+import d3 from '../helpers/d3-custom';
+
+import { globalStore } from '../store/GlobalStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
 import { setModalStore } from '../store/ModalStore';
 import { setNiceAlertStore } from '../store/NiceAlertStore';
+import { setTableWindowStore } from '../store/TableWindowStore';
+
 import LayerSettings from './LayerSettings.tsx';
 import { useI18nContext } from '../i18n/i18n-solid';
 import 'font-gis/css/font-gis.css';
 import '../styles/LayerManagerItem.css';
 import { TranslationFunctions } from '../i18n/i18n-types';
+import { unproxify } from '../helpers/common';
 
 const typeIcons: { polygon: string; linestring: string; raster: string; point: string } = {
   point: 'fg-point',
@@ -37,10 +43,28 @@ const onClickEye = (id: number) => {
 
 const onCLickMagnifyingGlass = (id: number) => {
   console.log('click magnifying glass on item ', id);
+  const { projection, pathGenerator } = globalStore;
+  console.log(projection.scale(), projection.translate());
+  console.log(unproxify(layersDescriptionStore.layers.find((l) => l.id === id)?.data));
+  const a = globalStore.projection.fitExtent(
+    [[0, 0], [globalStore.width, globalStore.height]],
+    unproxify(layersDescriptionStore.layers.find((l) => l.id === id)?.data),
+  );
+  console.log('a', a);
+  console.log(projection.scale(), projection.translate());
+  d3.select('.map-zone__inner svg')
+    .selectAll('g').attr('transform', null);
+  d3.select('.map-zone__inner svg')
+    .selectAll('path').attr('d', pathGenerator);
 };
 
 const onClickTable = (id: number) => {
   console.log('click table on item ', id);
+  setTableWindowStore({
+    editable: true, // TODO: only allow edition on some layers
+    layerId: id,
+    show: true,
+  });
 };
 
 const onClickTrash = (id: number, LL: Accessor<TranslationFunctions>) => {

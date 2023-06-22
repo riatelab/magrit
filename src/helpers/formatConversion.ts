@@ -113,9 +113,8 @@ export async function convertFromGeoJSON(
     const resZip = await zip.generateAsync({ type: 'base64' });
     return resZip;
   }
-  if (format === 'KML' || format === 'GML') {
+  if (format === 'GML' || format === 'KML') {
     // For KML and GML, we only return a text file
-    options.push('-lco', 'ENCODING=UTF-8');
     const output = await window.Gdal.ogr2ogr(input.datasets[0], options);
     const bytes = await window.Gdal.getFileBytes(output);
     await window.Gdal.close(input);

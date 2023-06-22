@@ -12,6 +12,7 @@ const en = {
   ImportFiles: 'Import file(s)',
   Alerts: {
     DeleteLayer: 'Delete layer',
+    SaveEditedData: 'Save changes ?',
   },
   LeftMenu: {
     Import: 'Data import',
@@ -38,10 +39,12 @@ const en = {
   ExportSection: {
     SelectLayers: 'Select a layer',
     SelectFormat: 'Select a format',
+    SelectCRS: 'Select a CRS',
     Layers: 'Layers',
     Export: 'Export',
     ExportPng: 'Export as PNG',
     ExportSvg: 'Export as SVG',
+    CustomCRS: 'Custom CRS',
   },
   LayerSettings: {
     LayerSettings: 'Layer settings',
@@ -52,6 +55,13 @@ const en = {
     StrokeOpacity: 'Stroke opacity',
     StrokeWidth: 'Stroke width',
     PointRadius: 'Point radius',
+  },
+  DataTable: {
+    titleGeo: 'Attribute table',
+    titleTabular: 'Data table',
+    Features: '{{One feature | ?? features}}',
+    Columns: '{{One column | ?? columns}}',
+    ExportCsv: 'Export as CSV...',
   },
 } satisfies BaseTranslation;
 

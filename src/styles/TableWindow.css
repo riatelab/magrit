@@ -1,0 +1,7 @@
+.table-window .modal-card {
+    width: 80vw;
+}
+
+.table-window .modal-card-foot {
+    justify-content: space-between;
+}

@@ -1,8 +1,23 @@
 import { selection, select, selectAll } from 'd3-selection';
+import { csvFormat } from 'd3-dsv';
 import { transition } from 'd3-transition';
 import { zoom } from 'd3-zoom';
-import { geoPath, geoNaturalEarth1 } from 'd3-geo';
 import {
+  // Some functions for spherical math
+  geoArea,
+  geoBounds,
+  geoCentroid,
+  geoContains,
+  geoDistance,
+  geoLength,
+  geoGraticule,
+  geoPath,
+  // Projections that will be available in the application
+  geoNaturalEarth1,
+  geoEqualEarth,
+} from 'd3-geo';
+import {
+  // Other projections that will be available in the application
   geoAiry,
   geoAitoff,
   geoArmadillo,
@@ -70,7 +85,7 @@ const attrsSelection = function (map) {
 };
 
 function propertiesFunctionSelection(_selection, map) {
-  return _selection.each(function (...args) {
+  return _selection.each(function onEachPropertiesFunctionSelection(...args) {
     const x = map.apply(this, args);
     const s = select(this);
     Object.entries(x).forEach(([k, v]) => {
@@ -86,16 +101,16 @@ function propertiesObjectSelection(_selection, map) {
   return _selection;
 }
 
-const propertiesSelection = function (map) {
+function propertiesSelection(map) {
   return (
     typeof map === 'function'
       ? propertiesFunctionSelection
       : propertiesObjectSelection
   )(this, map);
-};
+}
 
 function stylesFunctionSelection(_selection, map, priority) {
-  return _selection.each(function (...args) {
+  return _selection.each(function onEachStylesFunctionSelection(...args) {
     const x = map.apply(this, args);
     const s = select(this);
     Object.entries(x).forEach(([k, v]) => {
@@ -111,20 +126,20 @@ function stylesObjectSelection(_selection, map, priority) {
   return _selection;
 }
 
-const stylesSelection = function (map, priority) {
+function stylesSelection(map, priority) {
   return (
     typeof map === 'function'
       ? stylesFunctionSelection
       : stylesObjectSelection
   )(this, map, priority == null ? '' : priority);
-};
+}
 
 selection.prototype.attrs = attrsSelection;
 selection.prototype.styles = stylesSelection;
 selection.prototype.properties = propertiesSelection;
 
 function attrsFunctionTransition(_transition, map) {
-  return _transition.each(function (...args) {
+  return _transition.each(function onEachAttrsFunctionTransition(...args) {
     const x = map.apply(this, args);
     const t = select(this).transition(_transition);
     Object.entries(x).forEach(([k, v]) => {
@@ -140,12 +155,12 @@ function attrsObjectTransition(_transition, map) {
   return _transition;
 }
 
-const attrsTransition = function (map) {
+function attrsTransition(map) {
   return (typeof map === 'function' ? attrsFunctionTransition : attrsObjectTransition)(this, map);
-};
+}
 
 function stylesFunctionTransition(_transition, map, priority) {
-  return _transition.each(function (...args) {
+  return _transition.each(function onEachStylesFunctionTransition(...args) {
     const x = map.apply(this, args);
     const t = select(this).transition(_transition);
     Object.entries(x).forEach(([k, v]) => {
@@ -161,13 +176,13 @@ function stylesObjectTransition(_transition, map, priority) {
   return _transition;
 }
 
-const stylesTransition = function (map, priority) {
+function stylesTransition(map, priority) {
   return (
     typeof map === 'function'
       ? stylesFunctionTransition
       : stylesObjectTransition
   )(this, map, priority == null ? '' : priority);
-};
+}
 
 transition.prototype.attrs = attrsTransition;
 transition.prototype.styles = stylesTransition;
@@ -175,6 +190,7 @@ transition.prototype.styles = stylesTransition;
 export default {
   geoPath,
   geoNaturalEarth1,
+  geoEqualEarth,
   geoAiry,
   geoAitoff,
   geoArmadillo,
@@ -215,9 +231,17 @@ export default {
   geoHufnagel,
   geoHyperelliptical,
   geoNaturalEarth2,
+  geoArea,
+  geoBounds,
+  geoCentroid,
+  geoContains,
+  geoDistance,
+  geoLength,
+  geoGraticule,
   selection,
   select,
   selectAll,
   transition,
   zoom,
+  csvFormat,
 };

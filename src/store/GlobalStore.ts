@@ -6,6 +6,8 @@ type GlobalStoreType = {
   workerToCancel: Array<Worker>,
   mapDimensions: { width: number, height: number },
   windowDimensions: { width: number, height: number },
+  projection: any,
+  pathGenerator: any,
 };
 
 const [
@@ -17,6 +19,8 @@ const [
   workerToCancel: [],
   mapDimensions: { width: 0, height: 0 },
   windowDimensions: { width: 0, height: 0 },
+  projection: null,
+  pathGenerator: null,
 } as GlobalStoreType);
 
 export {

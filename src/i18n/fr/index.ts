@@ -12,6 +12,7 @@ const fr = {
   ImportFiles: 'Importer le(s) fichier(s)',
   Alerts: {
     DeleteLayer: 'Supprimer la couche',
+    SaveEditedData: 'Sauvegarder les modifications effectuées ?',
   },
   LeftMenu: {
     Import: 'Import des données',
@@ -38,10 +39,12 @@ const fr = {
   ExportSection: {
     SelectLayers: 'Sélectionner une couche',
     SelectFormat: 'Sélectionner un format',
+    SelectCRS: 'Sélectionner un SCR',
     Layers: 'Couches',
     Export: 'Exporter',
     ExportPng: 'Exporter en PNG',
     ExportSvg: 'Exporter en SVG',
+    CustomCRS: 'SCR personnalisé',
   },
   LayerSettings: {
     LayerSettings: 'Paramètres de la couche',
@@ -52,6 +55,13 @@ const fr = {
     StrokeOpacity: 'Opacité de la ligne',
     StrokeWidth: 'Épaisseur de la ligne',
     PointRadius: 'Rayon du point',
+  },
+  DataTable: {
+    titleGeo: 'Table attributaire',
+    titleTabular: 'Tableau de données',
+    Features: '{{Une entité | ?? entités}}',
+    Columns: '{{Une colonne | ?? colonnes}}',
+    ExportCsv: 'Exporter en CSV...',
   },
 } satisfies BaseTranslation;
 

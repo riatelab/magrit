@@ -14,7 +14,7 @@ import WelcomePage from './WelcomePage.tsx';
 import AppPage from './AppPage.tsx';
 
 if (Array.prototype.toReversed === undefined) {
-  Array.prototype.toReversed = function () { // eslint-disable-line no-extend-native
+  Array.prototype.toReversed = function arrayToReversed() { // eslint-disable-line no-extend-native
     return this.slice().reverse();
   };
 }

@@ -9,20 +9,22 @@ import { Toaster } from 'solid-toast';
 
 import { useI18nContext } from './i18n/i18n-solid';
 
-import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
-
-import { HeaderBarApp } from './components/Headers.tsx';
+import DefaultModal from './components/ModalWindow.tsx';
 import LeftMenu from './components/LeftMenu.tsx';
 import LoadingOverlay from './components/LoadingOverlay.tsx';
 import MapZone from './components/MapZone.tsx';
-import DefaultModal from './components/ModalWindow.tsx';
-import OverlayDrop from './components/OverlayDrop.tsx';
 import NiceAlert from './components/NiceAlert.tsx';
+import OverlayDrop from './components/OverlayDrop.tsx';
+import TableWindow from './components/TableWindow.tsx';
+import { HeaderBarApp } from './components/Headers.tsx';
 
 import { globalStore, setGlobalStore } from './store/GlobalStore';
 import { modalStore } from './store/ModalStore';
 import { niceAlertStore } from './store/NiceAlertStore';
 import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
+import { tableWindowStore } from './store/TableWindowStore';
+
+import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
 import { round } from './helpers/math';
 
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
@@ -160,6 +162,9 @@ const AppPage: () => JSX.Element = () => {
       </Show>
       <Show when={niceAlertStore.show}>
         <NiceAlert />
+      </Show>
+      <Show when={tableWindowStore.show}>
+        <TableWindow />
       </Show>
     </main>
 {/*    <button style="position: absolute; right: 0; top; 200;" onClick={
