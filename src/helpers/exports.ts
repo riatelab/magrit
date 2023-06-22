@@ -71,8 +71,8 @@ const clickLinkFromDataUrl = async (url: string, fileName: string) => {
 };
 
 interface LoadableImage {
-  onload: any;
-  onerror: any;
+  onload: ((this: any, ev: any) => any) | null;
+  onerror: ((reason?: any) => void) | null;
   src: string | null;
 }
 

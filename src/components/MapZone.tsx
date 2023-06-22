@@ -5,7 +5,104 @@ import d3 from '../helpers/d3-custom';
 import { globalStore } from '../store/GlobalStore';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import '../styles/MapZone.css';
-import { unproxify } from '../helpers/common';
+// import { unproxify } from '../helpers/common';
+
+function defaultPolygonRenderer(
+  layerDescription: LayerDescription,
+  pathGenerator: any,
+): JSX.Element {
+  return <g
+    id={layerDescription.name}
+    class="layer default"
+    visibility={ layerDescription.visible ? undefined : 'hidden' }
+    fill={ layerDescription.fillColor }
+    fill-opacity={ layerDescription.fillOpacity }
+    stroke={ layerDescription.strokeColor }
+    stroke-width={ layerDescription.strokeWidth }
+    stroke-opacity={ layerDescription.strokeOpacity }
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    clip-path="url(#clip-sphere)"
+  >
+    <For each={ layerDescription.data.features }>
+      {
+        (feature) => {
+          const el: JSXElement = <path
+            d={pathGenerator(feature)}
+            vector-effect="non-scaling-stroke"
+          />;
+          // el.__data__ = unproxify(feature); // eslint-disable-line no-underscore-dangle
+          el.__data__ = feature; // eslint-disable-line no-underscore-dangle
+          return el;
+        }
+      }
+    </For>
+  </g>;
+}
+
+function defaultPointRenderer(
+  layerDescription: LayerDescription,
+  pathGenerator: any,
+): JSX.Element {
+  return <g
+    id={layerDescription.name}
+    class="layer default"
+    visibility={ layerDescription.visible ? undefined : 'hidden' }
+    fill={ layerDescription.fillColor }
+    fill-opacity={ layerDescription.fillOpacity }
+    stroke={ layerDescription.strokeColor }
+    stroke-width={ layerDescription.strokeWidth }
+    stroke-opacity={ layerDescription.strokeOpacity }
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    clip-path="url(#clip-sphere)"
+  >
+    <For each={ layerDescription.data.features }>
+      {
+        (feature) => {
+          const el: JSXElement = <path
+            d={pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
+            vector-effect="non-scaling-stroke"
+          />;
+          // el.__data__ = unproxify(feature); // eslint-disable-line no-underscore-dangle
+          el.__data__ = feature; // eslint-disable-line no-underscore-dangle
+          return el;
+        }
+      }
+    </For>
+  </g>;
+}
+
+function defaultLineRenderer(
+  layerDescription: LayerDescription,
+  pathGenerator: any,
+): JSX.Element {
+  return <g
+    id={layerDescription.name}
+    class="layer default"
+    visibility={ layerDescription.visible ? undefined : 'hidden' }
+    stroke={ layerDescription.strokeColor }
+    stroke-width={ layerDescription.strokeWidth }
+    stroke-opacity={ layerDescription.strokeOpacity }
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    clip-path="url(#clip-sphere)"
+  >
+    <For each={ layerDescription.data.features }>
+      {
+        (feature) => {
+          const el: JSXElement = <path
+            d={pathGenerator(feature)}
+            vector-effect="non-scaling-stroke"
+          />;
+          // el.__data__ = unproxify(feature); // eslint-disable-line no-underscore-dangle
+          el.__data__ = feature; // eslint-disable-line no-underscore-dangle
+          return el;
+        }
+      }
+    </For>
+  </g>;
+}
 
 export default function MapZone(): JSX.Element {
   let svgElem;
@@ -81,34 +178,18 @@ export default function MapZone(): JSX.Element {
 
         {/* Generate SVG path for each layer */}
         <For each={ layersDescriptionStore.layers.toReversed() }>
-          {
-            (layerDescription: LayerDescription) => <g
-              id={layerDescription.name}
-              class="layer default"
-              visibility={ layerDescription.visible ? undefined : 'hidden' }
-              fill={ layerDescription.fillColor }
-              fill-opacity={ layerDescription.fillOpacity }
-              stroke={ layerDescription.strokeColor }
-              stroke-width={ layerDescription.strokeWidth }
-              stroke-opacity={ layerDescription.strokeOpacity }
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              clip-path="url(#clip-sphere)"
-            >
-              <For each={ layerDescription.data.features }>
-                {
-                  (feature) => {
-                    const el: JSXElement = <path
-                      d={pathGenerator(feature)}
-                      vector-effect="non-scaling-stroke"
-                    />;
-                    el.__data__ = unproxify(feature); // eslint-disable-line no-underscore-dangle
-                    return el;
-                  }
-                }
-              </For>
-            </g>
-          }
+          {(layer) => {
+            if (layer.type === 'polygon') {
+              return defaultPolygonRenderer(layer, pathGenerator);
+            }
+            if (layer.type === 'point') {
+              return defaultPointRenderer(layer, pathGenerator);
+            }
+            if (layer.type === 'line') {
+              return defaultLineRenderer(layer, pathGenerator);
+            }
+            return null;
+          }}
         </For>
       </svg>
     </div>

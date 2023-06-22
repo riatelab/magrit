@@ -16,6 +16,7 @@ const getDefaultRenderingParams = (geomType: string) => {
       strokeOpacity: 1,
       fillColor: '#fedeab',
       fillOpacity: 1,
+      pointRadius: 5,
     };
   }
   if (geomType === 'line') {

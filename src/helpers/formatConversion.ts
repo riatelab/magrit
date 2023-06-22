@@ -58,7 +58,7 @@ async function uintArrayToBase64(data: Uint8Array): Promise<string> {
     reader.readAsDataURL(new Blob([data]));
   });
 
-  return base64url;
+  return base64url.substring(base64url.indexOf(',') + 1);
 }
 
 /**
@@ -127,7 +127,7 @@ export async function convertFromGeoJSON(
     const bytes = await window.Gdal.getFileBytes(output);
     await window.Gdal.close(input);
     const b64Data = await uintArrayToBase64(bytes);
-    return b64Data.replace('data:application/octet-stream;base64,', '');
+    return b64Data;
   }
   return '';
 }

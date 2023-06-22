@@ -74,6 +74,16 @@ type RootTranslation = {
 		 */
 		ExportSection: string
 	}
+	ImportSection: {
+		/**
+		 * O​p​e​n​ ​g​e​o​s​p​a​t​i​a​l​ ​f​i​l​e​.​.​.
+		 */
+		OpenGeospatialFile: string
+		/**
+		 * O​p​e​n​ ​t​a​b​u​l​a​r​ ​f​i​l​e​.​.​.
+		 */
+		OpenTabularFile: string
+	}
 	LayerManager: {
 		/**
 		 * P​o​i​n​t​ ​l​a​y​e​r
@@ -171,6 +181,10 @@ type RootTranslation = {
 		 * S​t​r​o​k​e​ ​w​i​d​t​h
 		 */
 		StrokeWidth: string
+		/**
+		 * P​o​i​n​t​ ​r​a​d​i​u​s
+		 */
+		PointRadius: string
 	}
 }
 
@@ -234,6 +248,16 @@ export type TranslationFunctions = {
 		 * Map and data export
 		 */
 		ExportSection: () => LocalizedString
+	}
+	ImportSection: {
+		/**
+		 * Open geospatial file...
+		 */
+		OpenGeospatialFile: () => LocalizedString
+		/**
+		 * Open tabular file...
+		 */
+		OpenTabularFile: () => LocalizedString
 	}
 	LayerManager: {
 		/**
@@ -332,6 +356,10 @@ export type TranslationFunctions = {
 		 * Stroke width
 		 */
 		StrokeWidth: () => LocalizedString
+		/**
+		 * Point radius
+		 */
+		PointRadius: () => LocalizedString
 	}
 }
 

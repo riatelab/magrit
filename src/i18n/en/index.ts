@@ -19,6 +19,10 @@ const en = {
     RepresentationChoice: 'Representation choice',
     ExportSection: 'Map and data export',
   },
+  ImportSection: {
+    OpenGeospatialFile: 'Open geospatial file...',
+    OpenTabularFile: 'Open tabular file...',
+  },
   LayerManager: {
     point: 'Point layer',
     line: 'Line layer',
@@ -47,6 +51,7 @@ const en = {
     FillOpacity: 'Fill opacity',
     StrokeOpacity: 'Stroke opacity',
     StrokeWidth: 'Stroke width',
+    PointRadius: 'Point radius',
   },
 } satisfies BaseTranslation;
 

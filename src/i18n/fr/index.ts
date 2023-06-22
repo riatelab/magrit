@@ -19,6 +19,10 @@ const fr = {
     RepresentationChoice: 'Choix de la représentation',
     ExportSection: 'Export des données',
   },
+  ImportSection: {
+    OpenGeospatialFile: 'Ouvrir un fichier géospatial...',
+    OpenTabularFile: 'Ouvrir un fichier tabulaire...',
+  },
   LayerManager: {
     point: 'Couche de points',
     line: 'Couche de lignes',
@@ -47,6 +51,7 @@ const fr = {
     FillOpacity: 'Opacité du remplissage',
     StrokeOpacity: 'Opacité de la ligne',
     StrokeWidth: 'Épaisseur de la ligne',
+    PointRadius: 'Rayon du point',
   },
 } satisfies BaseTranslation;
 

@@ -72,6 +72,20 @@ function makeOnchangeStrokeWidth(props: LayerDescription): () => void {
     }
   };
 }
+
+function makeOnchangePointRadius(props: LayerDescription): () => void {
+  return function onChangePointRadius() {
+    // Mutate the store for the layer
+    const layer = layersDescriptionStore.layers.find((l) => l.id === props.id);
+    if (layer) {
+      setLayersDescriptionStore(
+        'layers',
+        (l) => l.id === props.id,
+        { pointRadius: +this.value },
+      );
+    }
+  };
+}
 function makeSettingsDefaultPoint(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
@@ -80,19 +94,19 @@ function makeSettingsDefaultPoint(
   console.log(props.strokeColor, props.fillColor);
   return <div>
     <div class="field">
-      <label class="label">{ LL().LayerSettings.FillColor }</label>
+      <label class="label">{ LL().LayerSettings.FillColor() }</label>
       <div class="control">
         <input class="color" type="color" onChange={makeOnChangeFillColor(props)} value={props.fillColor} />
       </div>
     </div>
     <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeColor }</label>
+      <label class="label">{ LL().LayerSettings.StrokeColor() }</label>
       <div class="control">
         <input class="color" type="color" onChange={makeOnChangeStrokeColor(props)} value={props.strokeColor} />
       </div>
     </div>
     <div class="field">
-      <label class="label">{ LL().LayerSettings.FillOpacity }</label>
+      <label class="label">{ LL().LayerSettings.FillOpacity() }</label>
       <div class="control">
         <input
           class="number"
@@ -106,7 +120,7 @@ function makeSettingsDefaultPoint(
       </div>
     </div>
     <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeOpacity }</label>
+      <label class="label">{ LL().LayerSettings.StrokeOpacity() }</label>
       <div class="control">
         <input
           class="number"
@@ -120,7 +134,7 @@ function makeSettingsDefaultPoint(
       </div>
     </div>
     <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeWidth }</label>
+      <label class="label">{ LL().LayerSettings.StrokeWidth() }</label>
       <div class="control">
         <input
           class="number"
@@ -133,6 +147,20 @@ function makeSettingsDefaultPoint(
         />
       </div>
     </div>
+    <div class="field">
+      <label class="label">{ LL().LayerSettings.PointRadius() }</label>
+      <div class="control">
+        <input
+          class="number"
+          type="number"
+          onChange={makeOnchangePointRadius(props)}
+          value={props.pointRadius}
+          min="1"
+          max="20"
+          step="1"
+        />
+      </div>
+    </div>
   </div>;
 }
 
@@ -140,17 +168,15 @@ function makeSettingsDefaultLine(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  console.log(props);
-  console.log(props.strokeColor, props.fillColor);
   return <div>
     <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeColor }</label>
+      <label class="label">{ LL().LayerSettings.StrokeColor() }</label>
       <div class="control">
         <input class="color" type="color" onChange={makeOnChangeStrokeColor(props)} value={props.strokeColor} />
       </div>
     </div>
     <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeOpacity }</label>
+      <label class="label">{ LL().LayerSettings.StrokeOpacity() }</label>
       <div class="control">
         <input
           class="number"
@@ -164,7 +190,7 @@ function makeSettingsDefaultLine(
       </div>
     </div>
     <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeWidth }</label>
+      <label class="label">{ LL().LayerSettings.StrokeWidth() }</label>
       <div class="control">
         <input
           class="number"
@@ -188,19 +214,19 @@ function makeSettingsDefaultPolygon(
   console.log(props.strokeColor, props.fillColor);
   return <div>
     <div class="field">
-      <label class="label">{ LL().LayerSettings.FillColor }</label>
+      <label class="label">{ LL().LayerSettings.FillColor() }</label>
       <div class="control">
         <input class="color" type="color" onChange={makeOnChangeFillColor(props)} value={props.fillColor} />
       </div>
     </div>
     <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeColor }</label>
+      <label class="label">{ LL().LayerSettings.StrokeColor() }</label>
       <div class="control">
         <input class="color" type="color" onChange={makeOnChangeStrokeColor(props)} value={props.strokeColor} />
       </div>
     </div>
     <div class="field">
-      <label class="label">{ LL().LayerSettings.FillOpacity }</label>
+      <label class="label">{ LL().LayerSettings.FillOpacity() }</label>
       <div class="control">
         <input
           class="number"
@@ -214,7 +240,7 @@ function makeSettingsDefaultPolygon(
       </div>
     </div>
     <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeOpacity }</label>
+      <label class="label">{ LL().LayerSettings.StrokeOpacity() }</label>
       <div class="control">
         <input
           class="number"
@@ -228,7 +254,7 @@ function makeSettingsDefaultPolygon(
       </div>
     </div>
     <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeWidth }</label>
+      <label class="label">{ LL().LayerSettings.StrokeWidth() }</label>
       <div class="control">
         <input
           class="number"

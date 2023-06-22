@@ -23,6 +23,7 @@ declare global {
     strokeOpacity: number,
     fillColor: string,
     fillOpacity: number,
+    pointRadius: number | undefined,
   }
 
   interface GeoJSONFeature {

@@ -26,6 +26,7 @@ The left menu is:
     display: flex;
     justify-content: space-between;
     border: solid 1px black;
+    align-items: center;
 }
 
 .expanded-collapse-menu {

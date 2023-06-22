@@ -6,19 +6,20 @@ import { useI18nContext } from '../i18n/i18n-solid';
 import { SupportedGeoFileTypes } from '../helpers/supportedFormats';
 
 function onClickTabButton(event: Event, tab: string) {
+  const tabsParentElement = event.currentTarget.parentElement.parentElement.parentElement;
   // Change the active tab
-  const tabButtons = document.getElementsByClassName('is-active');
+  const tabButtons = tabsParentElement.querySelectorAll('li.is-active');
   for (let i = 0; i < tabButtons.length; i++) { // eslint-disable-line no-plusplus
     tabButtons[i].classList.remove('is-active');
   }
   event.currentTarget.parentElement.classList.add('is-active');
   // Get all elements with class="tab-content" and hide them
-  const tabContent = document.querySelectorAll('.tab-content > div');
+  const tabContent = document.querySelectorAll('.export-section__content > div');
   for (let i = 0; i < tabContent.length; i++) { // eslint-disable-line no-plusplus
     tabContent[i].classList.add('is-hidden');
   }
   // Remove the class 'is-hidden' on the tab that should be opened by the button
-  document.getElementById(`tab-content-${tab}`).classList.remove('is-hidden');
+  document.getElementById(`export-section__content__${tab}`).classList.remove('is-hidden');
 }
 
 function setDropdownItemTarget(event: Event) {
@@ -46,8 +47,8 @@ function exportToGeoWrapper() {
  */
 export default function ExportSection(): JSX.Element {
   const { LL } = useI18nContext();
-  return <>
-    <div class="tabs is-centered is-boxed is-fullwidth">
+  return <div class="export-section">
+    <div class="export-section__tabs tabs is-centered is-boxed is-fullwidth">
       <ul class="ml-0">
         <li class="is-active">
           <a onClick={(ev) => onClickTabButton(ev, 'svg')}>
@@ -66,8 +67,8 @@ export default function ExportSection(): JSX.Element {
         </li>
       </ul>
     </div>
-    <div class="tab-content">
-      <div id="tab-content-svg">
+    <div class="export-section__content">
+      <div id="export-section__content__svg">
         <button
           onClick={ async () => { await exportMapToSvg('export.svg', false); } }
           class="button is-success"
@@ -75,7 +76,7 @@ export default function ExportSection(): JSX.Element {
           { LL().ExportSection.ExportSvg() }
         </button>
       </div>
-      <div id="tab-content-png" class="is-hidden">
+      <div id="export-section__content__png" class="is-hidden">
         <button
           onClick={ async () => { await exportMapToPng('export.png', 1); } }
           class="button is-success"
@@ -83,7 +84,7 @@ export default function ExportSection(): JSX.Element {
           { LL().ExportSection.ExportPng() }
         </button>
       </div>
-      <div id="tab-content-geo" class="is-hidden">
+      <div id="export-section__content__geo" class="is-hidden">
         <div class="dropdown is-hoverable dropdown__layer">
           <div class="dropdown-trigger">
             <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-file">
@@ -135,5 +136,5 @@ export default function ExportSection(): JSX.Element {
         </button>
       </div>
     </div>
-  </>;
+  </div>;
 }
