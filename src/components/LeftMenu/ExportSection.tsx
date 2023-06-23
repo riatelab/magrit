@@ -2,10 +2,10 @@ import {
   createSignal, For, JSX, Show,
 } from 'solid-js';
 import { FaSolidAngleDown } from 'solid-icons/fa';
-import { layersDescriptionStore } from '../store/LayersDescriptionStore';
-import { exportMapToPng, exportMapToSvg, exportToGeo } from '../helpers/exports';
-import { useI18nContext } from '../i18n/i18n-solid';
-import { SupportedGeoFileTypes } from '../helpers/supportedFormats';
+import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { exportMapToPng, exportMapToSvg, exportToGeo } from '../../helpers/exports';
+import { useI18nContext } from '../../i18n/i18n-solid';
+import { SupportedGeoFileTypes } from '../../helpers/supportedFormats';
 
 function onClickTabButton(event: Event, tab: string) {
   const tabsParentElement = event.currentTarget.parentElement.parentElement.parentElement;

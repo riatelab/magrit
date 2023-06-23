@@ -4,16 +4,16 @@ import AgGridSolid from 'ag-grid-solid';
 import 'ag-grid-community/styles/ag-grid.css'; // grid core CSS
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // optional theme
 
-import { unproxify } from '../helpers/common';
-import { useI18nContext } from '../i18n/i18n-solid';
+import { unproxify } from '../../helpers/common';
+import { useI18nContext } from '../../i18n/i18n-solid';
 
-import { layersDescriptionStore, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
-import { setNiceAlertStore } from '../store/NiceAlertStore';
-import { tableWindowStore, setTableWindowStore } from '../store/TableWindowStore';
+import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { setNiceAlertStore } from '../../store/NiceAlertStore';
+import { tableWindowStore, setTableWindowStore } from '../../store/TableWindowStore';
 
-import '../styles/TableWindow.css';
-import d3 from '../helpers/d3-custom';
-import { clickLinkFromDataUrl } from '../helpers/exports';
+import '../../styles/TableWindow.css';
+import d3 from '../../helpers/d3-custom';
+import { clickLinkFromDataUrl } from '../../helpers/exports';
 
 export default function TableWindow(): JSX.Element {
   const { LL } = useI18nContext();

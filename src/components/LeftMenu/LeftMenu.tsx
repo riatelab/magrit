@@ -1,10 +1,10 @@
 import { JSX, createSignal } from 'solid-js';
-import Collapse from './Collapse.tsx';
+import Collapse from '../Collapse.tsx';
 import LayerManager from './LayerManager.tsx';
 import ExportSection from './ExportSection.tsx';
-import '../styles/LeftMenu.css';
-import { useI18nContext } from '../i18n/i18n-solid';
-import ChevronIcon from './ChevronIcon.tsx';
+import '../../styles/LeftMenu.css';
+import { useI18nContext } from '../../i18n/i18n-solid';
+import ChevronIcon from '../Icons/ChevronIcon.tsx';
 
 export default function LeftMenu(): JSX.Element {
   const { LL } = useI18nContext();

@@ -9,13 +9,13 @@ import { Toaster } from 'solid-toast';
 
 import { useI18nContext } from './i18n/i18n-solid';
 
-import DefaultModal from './components/ModalWindow.tsx';
-import LeftMenu from './components/LeftMenu.tsx';
+import DefaultModal from './components/Modals/ModalWindow.tsx';
+import LeftMenu from './components/LeftMenu/LeftMenu.tsx';
 import LoadingOverlay from './components/LoadingOverlay.tsx';
 import MapZone from './components/MapZone.tsx';
-import NiceAlert from './components/NiceAlert.tsx';
+import NiceAlert from './components/Modals/NiceAlert.tsx';
 import OverlayDrop from './components/OverlayDrop.tsx';
-import TableWindow from './components/TableWindow.tsx';
+import TableWindow from './components/Modals/TableWindow.tsx';
 import { HeaderBarApp } from './components/Headers.tsx';
 
 import { globalStore, setGlobalStore } from './store/GlobalStore';

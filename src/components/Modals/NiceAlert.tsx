@@ -1,9 +1,9 @@
 import { LocalizedString } from 'typesafe-i18n';
 import { JSX } from 'solid-js';
-import { useI18nContext } from '../i18n/i18n-solid';
-import { niceAlertStore, setNiceAlertStore } from '../store/NiceAlertStore';
-import '../styles/NiceAlert.css';
-import '../styles/AlertAnimations.css';
+import { useI18nContext } from '../../i18n/i18n-solid';
+import { niceAlertStore, setNiceAlertStore } from '../../store/NiceAlertStore';
+import '../../styles/NiceAlert.css';
+import '../../styles/AlertAnimations.css';
 
 function makeAnimation(type: string): JSX.Element {
   if (type === 'warning') {

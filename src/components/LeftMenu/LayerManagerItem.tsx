@@ -9,20 +9,20 @@ import {
   FaSolidTrash,
   FaSolidTableCells,
 } from 'solid-icons/fa';
-import d3 from '../helpers/d3-custom';
+import d3 from '../../helpers/d3-custom';
 
-import { globalStore } from '../store/GlobalStore';
-import { layersDescriptionStore, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
-import { setModalStore } from '../store/ModalStore';
-import { setNiceAlertStore } from '../store/NiceAlertStore';
-import { setTableWindowStore } from '../store/TableWindowStore';
+import { globalStore } from '../../store/GlobalStore';
+import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { setModalStore } from '../../store/ModalStore';
+import { setNiceAlertStore } from '../../store/NiceAlertStore';
+import { setTableWindowStore } from '../../store/TableWindowStore';
 
-import LayerSettings from './LayerSettings.tsx';
-import { useI18nContext } from '../i18n/i18n-solid';
+import LayerSettings from '../Modals/LayerSettings.tsx';
+import { useI18nContext } from '../../i18n/i18n-solid';
 import 'font-gis/css/font-gis.css';
-import '../styles/LayerManagerItem.css';
-import { TranslationFunctions } from '../i18n/i18n-types';
-import { unproxify } from '../helpers/common';
+import '../../styles/LayerManagerItem.css';
+import { TranslationFunctions } from '../../i18n/i18n-types';
+import { unproxify } from '../../helpers/common';
 
 const typeIcons: { polygon: string; linestring: string; raster: string; point: string } = {
   point: 'fg-point',
