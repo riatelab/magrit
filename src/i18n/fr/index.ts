@@ -63,6 +63,18 @@ const fr = {
     Columns: '{{Une colonne | ?? colonnes}}',
     ExportCsv: 'Exporter en CSV...',
   },
+  FieldsTyping: {
+    ModalTitle: 'Typage des champs',
+    FieldName: 'Nom du champ',
+    FieldType: 'Type du champ',
+    VariableTypes: {
+      identifier: 'Identifiant',
+      ratio: 'Ratio',
+      stock: 'Stock',
+      categorical: 'Catégoriel',
+      unknown: 'Inconnu',
+    },
+  },
 } satisfies BaseTranslation;
 
 export default fr;

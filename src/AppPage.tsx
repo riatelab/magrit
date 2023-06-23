@@ -9,6 +9,7 @@ import { Toaster } from 'solid-toast';
 
 import { useI18nContext } from './i18n/i18n-solid';
 
+import FieldTypingModal from './components/Modals/FieldTypingModal.tsx';
 import DefaultModal from './components/Modals/ModalWindow.tsx';
 import LeftMenu from './components/LeftMenu/LeftMenu.tsx';
 import LoadingOverlay from './components/LoadingOverlay.tsx';
@@ -18,6 +19,7 @@ import OverlayDrop from './components/OverlayDrop.tsx';
 import TableWindow from './components/Modals/TableWindow.tsx';
 import { HeaderBarApp } from './components/Headers.tsx';
 
+import { fieldTypingModalStore } from './store/FieldTypingModalStore';
 import { globalStore, setGlobalStore } from './store/GlobalStore';
 import { modalStore } from './store/ModalStore';
 import { niceAlertStore } from './store/NiceAlertStore';
@@ -165,6 +167,9 @@ const AppPage: () => JSX.Element = () => {
       </Show>
       <Show when={tableWindowStore.show}>
         <TableWindow />
+      </Show>
+      <Show when={fieldTypingModalStore.show}>
+          <FieldTypingModal />
       </Show>
     </main>
 {/*    <button style="position: absolute; right: 0; top; 200;" onClick={

@@ -220,6 +220,42 @@ type RootTranslation = {
 		 */
 		ExportCsv: string
 	}
+	FieldsTyping: {
+		/**
+		 * F​i​e​l​d​s​ ​t​y​p​i​n​g
+		 */
+		ModalTitle: string
+		/**
+		 * F​i​e​l​d​ ​n​a​m​e
+		 */
+		FieldName: string
+		/**
+		 * F​i​e​l​d​ ​t​y​p​e
+		 */
+		FieldType: string
+		VariableTypes: {
+			/**
+			 * I​d​e​n​t​i​f​i​e​r
+			 */
+			identifier: string
+			/**
+			 * R​a​t​i​o
+			 */
+			ratio: string
+			/**
+			 * S​t​o​c​k
+			 */
+			stock: string
+			/**
+			 * C​a​t​e​g​o​r​i​c​a​l
+			 */
+			categorical: string
+			/**
+			 * U​n​k​n​o​w​n
+			 */
+			unknown: string
+		}
+	}
 }
 
 export type TranslationFunctions = {
@@ -428,6 +464,42 @@ export type TranslationFunctions = {
 		 * Export as CSV...
 		 */
 		ExportCsv: () => LocalizedString
+	}
+	FieldsTyping: {
+		/**
+		 * Fields typing
+		 */
+		ModalTitle: () => LocalizedString
+		/**
+		 * Field name
+		 */
+		FieldName: () => LocalizedString
+		/**
+		 * Field type
+		 */
+		FieldType: () => LocalizedString
+		VariableTypes: {
+			/**
+			 * Identifier
+			 */
+			identifier: () => LocalizedString
+			/**
+			 * Ratio
+			 */
+			ratio: () => LocalizedString
+			/**
+			 * Stock
+			 */
+			stock: () => LocalizedString
+			/**
+			 * Categorical
+			 */
+			categorical: () => LocalizedString
+			/**
+			 * Unknown
+			 */
+			unknown: () => LocalizedString
+		}
 	}
 }
 

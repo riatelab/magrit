@@ -11,4 +11,7 @@ export function unproxify(value: Proxy<(Array<any> | object)>): (Array<any> | ob
   return value;
 }
 
-export function noop() {}
+export function isNumber(value: any): boolean {
+  // eslint-disable-next-line no-restricted-globals
+  return value !== null && value !== '' && isFinite(value);
+}

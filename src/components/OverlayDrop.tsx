@@ -7,6 +7,7 @@ import '../styles/OverlayDrop.css';
 import { useI18nContext } from '../i18n/i18n-solid';
 import { isAuthorizedFile } from '../helpers/fileUpload';
 import { convertToGeoJSON, getGeometryType } from '../helpers/formatConversion';
+import { setFieldTypingModalStore } from '../store/FieldTypingModalStore';
 
 const getDefaultRenderingParams = (geomType: string) => {
   if (geomType === 'point') {
@@ -56,13 +57,16 @@ const convertDroppedFiles = async (files: CustomFileList) => {
     console.error(e);
   }
   setGlobalStore({ isLoading: false });
+
+  const layerId = uuidv4();
+
   // Add the new layer to the LayerManager by adding it
   // to the layersDescriptionStore
   console.log(getDefaultRenderingParams(geomType));
   const newLayersDescriptionStore = [
     ...layersDescriptionStore.layers,
     {
-      id: uuidv4(),
+      id: layerId,
       name: files[0].name,
       type: geomType,
       data: res,
@@ -72,6 +76,11 @@ const convertDroppedFiles = async (files: CustomFileList) => {
   ];
   setLayersDescriptionStore({
     layers: newLayersDescriptionStore,
+  });
+
+  setFieldTypingModalStore({
+    show: true,
+    layerId,
   });
 };
 
