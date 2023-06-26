@@ -26,7 +26,7 @@ const en = {
   },
   LayerManager: {
     point: 'Point layer',
-    line: 'Line layer',
+    linestring: 'Line layer',
     polygon: 'Polygon layer',
     raster: 'Raster layer',
     table: 'Data table',
@@ -39,6 +39,7 @@ const en = {
   PortrayalSection: {
     RepresentationChoice: 'Representation choice',
     TargetLayer: 'Target layer',
+    CreateLayer: 'Create layer',
   },
   ExportSection: {
     SelectLayers: 'Select a layer',

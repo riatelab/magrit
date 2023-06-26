@@ -158,7 +158,7 @@ export default function ExportSection(): JSX.Element {
           </div>
         </div>
         <br/><br/>
-          <div class="dropdown is-hoverable dropdown__format" style={{ width: '100%' }}>
+        <div class="dropdown is-hoverable dropdown__format" style={{ width: '100%' }}>
           <div class="dropdown-trigger" style={{ width: '100%' }}>
             <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-format" style={{ width: '100%' }}>
               <span
@@ -229,8 +229,8 @@ export default function ExportSection(): JSX.Element {
               </div>
             </div>
           </div>
-          <br/>
-          <br/>
+        <br/>
+        <br/>
         </Show>
         <Show when={ selectedCrs() === LL().ExportSection.CustomCRS() }>
           <div>

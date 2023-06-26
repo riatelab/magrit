@@ -18,18 +18,32 @@ interface DropdownMenuProps {
 
 function setDropdownItemTarget(event: Event) {
   const target = event.currentTarget as HTMLElement;
-  const dropdownItemTarget = target
+
+  // Reference to the root of the dropdown component
+  const dropdownRoot = target
     .parentElement
     .parentElement
-    .parentElement
+    .parentElement;
+
+  // Set the dropdown item target
+  const dropdownItemTarget = dropdownRoot
     .querySelector('.dropdown-item-target');
   dropdownItemTarget.textContent = target.textContent;
   dropdownItemTarget.value = target.value;
+
+  // Close the dropdown (collapse the dropdown menu)
+  dropdownRoot.querySelector('.dropdown-menu').classList.toggle('is-block');
+}
+
+function onClickDropdown(event: Event) {
+  // Expand the dropdown menu
+  const target = event.currentTarget as HTMLElement;
+  target.parentElement.querySelector('.dropdown-menu').classList.toggle('is-block');
 }
 
 export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
-  return <div class="dropdown is-hoverable dropdown__layer" style={{ width: '100%' }}>
-    <div class="dropdown-trigger" style={{ width: '100%' }}>
+  return <div class="dropdown dropdown__layer" style={{ width: '100%' }}>
+    <div class="dropdown-trigger" style={{ width: '100%' }} onclick={ onClickDropdown }>
       <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-file" style={{ width: '100%' }}>
         <span
           class="dropdown-item-target"

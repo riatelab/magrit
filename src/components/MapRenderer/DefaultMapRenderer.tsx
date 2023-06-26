@@ -1,4 +1,5 @@
 import { For, JSX, JSXElement } from 'solid-js';
+import { LayerDescription } from '../../global';
 
 export function defaultPolygonRenderer(
   layerDescription: LayerDescription,
@@ -48,7 +49,7 @@ export function defaultPointRenderer(
     stroke-opacity={layerDescription.strokeOpacity}
     stroke-linecap="round"
     stroke-linejoin="round"
-    clip-path="url(#clip-sphere)"
+    // clip-path="url(#clip-sphere)"
   >
     <For each={layerDescription.data.features}>
       {
@@ -74,6 +75,7 @@ export function defaultLineRenderer(
     id={layerDescription.name}
     class="layer default"
     visibility={layerDescription.visible ? undefined : 'hidden'}
+    fill="none"
     stroke={layerDescription.strokeColor}
     stroke-width={layerDescription.strokeWidth}
     stroke-opacity={layerDescription.strokeOpacity}

@@ -26,7 +26,7 @@ const fr = {
   },
   LayerManager: {
     point: 'Couche de points',
-    line: 'Couche de lignes',
+    linestring: 'Couche de lignes',
     polygon: 'Couche de polygones',
     raster: 'Couche raster',
     table: 'Tableau de données',
@@ -39,6 +39,7 @@ const fr = {
   PortrayalSection: {
     RepresentationChoice: 'Choix de la représentation',
     TargetLayer: 'Couche cible',
+    CreateLayer: 'Créer la couche',
   },
   ExportSection: {
     SelectLayers: 'Sélectionner une couche',

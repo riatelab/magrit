@@ -3,7 +3,7 @@ import { JSX } from 'solid-js';
 
 type NiceAlertStoreType = {
   show: boolean,
-  content: JSX.Element | null,
+  content: JSX.Element | (() => JSX.Element),
   type: 'success' | 'error' | 'warning' | null,
   confirmCallback: (() => void) | null,
   cancelCallback: (() => void) | null,

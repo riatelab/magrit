@@ -31,6 +31,9 @@ export async function convertToGeoJSON(
  * @returns {string}
  */
 export function getGeometryType(geojsonLayer: GeoJSONFeatureCollection): string {
+  if (geojsonLayer.type === 'Sphere') {
+    return 'polygon';
+  }
   // Extract the geometry type from the GeoJSON layer
   // (we don't care if it is a multi geometry - we just want the base type)
   const types: Set<string> = new Set();

@@ -16,7 +16,7 @@ export default function MapZone(): JSX.Element {
   let svgElem;
   let svg;
   const sphere = { type: 'Sphere' };
-  const projection = d3.geoNaturalEarth1()
+  const projection = d3.geoArmadillo()
     .translate([-globalStore.mapDimensions.width / 2, -globalStore.mapDimensions.height / 2]);
   const initialTranslate = projection.translate();
   const initialScale = projection.scale();
@@ -101,7 +101,7 @@ export default function MapZone(): JSX.Element {
             if (layer.type === 'point') {
               return defaultPointRenderer(layer, pathGenerator);
             }
-            if (layer.type === 'line') {
+            if (layer.type === 'linestring') {
               return defaultLineRenderer(layer, pathGenerator);
             }
             return null;

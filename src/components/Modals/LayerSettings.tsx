@@ -278,7 +278,7 @@ export default function LayerSettings(
   console.log(layerDescription, LL);
   const innerElement = {
     point: makeSettingsDefaultPoint,
-    line: makeSettingsDefaultLine,
+    linestring: makeSettingsDefaultLine,
     polygon: makeSettingsDefaultPolygon,
   }[layerDescription.type](layerDescription, LL);
   return <div class="layer-settings">

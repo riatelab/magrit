@@ -96,7 +96,7 @@ type RootTranslation = {
 		/**
 		 * L​i​n​e​ ​l​a​y​e​r
 		 */
-		line: string
+		linestring: string
 		/**
 		 * P​o​l​y​g​o​n​ ​l​a​y​e​r
 		 */
@@ -139,6 +139,10 @@ type RootTranslation = {
 		 * T​a​r​g​e​t​ ​l​a​y​e​r
 		 */
 		TargetLayer: string
+		/**
+		 * C​r​e​a​t​e​ ​l​a​y​e​r
+		 */
+		CreateLayer: string
 	}
 	ExportSection: {
 		/**
@@ -351,7 +355,7 @@ export type TranslationFunctions = {
 		/**
 		 * Line layer
 		 */
-		line: () => LocalizedString
+		linestring: () => LocalizedString
 		/**
 		 * Polygon layer
 		 */
@@ -394,6 +398,10 @@ export type TranslationFunctions = {
 		 * Target layer
 		 */
 		TargetLayer: () => LocalizedString
+		/**
+		 * Create layer
+		 */
+		CreateLayer: () => LocalizedString
 	}
 	ExportSection: {
 		/**

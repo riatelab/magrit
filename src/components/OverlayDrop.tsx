@@ -8,6 +8,7 @@ import { useI18nContext } from '../i18n/i18n-solid';
 import { isAuthorizedFile } from '../helpers/fileUpload';
 import { convertToGeoJSON, getGeometryType } from '../helpers/formatConversion';
 import { setFieldTypingModalStore } from '../store/FieldTypingModalStore';
+import { CustomFileList } from '../global';
 
 const getDefaultRenderingParams = (geomType: string) => {
   if (geomType === 'point') {
@@ -20,7 +21,7 @@ const getDefaultRenderingParams = (geomType: string) => {
       pointRadius: 5,
     };
   }
-  if (geomType === 'line') {
+  if (geomType === 'linestring') {
     return {
       strokeColor: '#000000',
       strokeWidth: '1.5px',
@@ -38,6 +39,35 @@ const getDefaultRenderingParams = (geomType: string) => {
   }
   return {};
 };
+
+function addLayer(geojson: GeoJSON.FeatureCollection | object, name: string) {
+  const geomType = getGeometryType(geojson);
+  const layerId = uuidv4();
+
+  // Add the new layer to the LayerManager by adding it
+  // to the layersDescriptionStore
+  console.log(getDefaultRenderingParams(geomType));
+  const newLayersDescriptionStore = [
+    {
+      id: layerId,
+      name,
+      type: geomType,
+      data: geojson,
+      visible: true,
+      ...getDefaultRenderingParams(geomType),
+    },
+    ...layersDescriptionStore.layers,
+  ];
+  setLayersDescriptionStore({
+    layers: newLayersDescriptionStore,
+  });
+
+  setFieldTypingModalStore({
+    show: true,
+    layerId,
+  });
+}
+
 const convertDroppedFiles = async (files: CustomFileList) => {
   console.log('convertDroppedFiles', files);
   const authorizedFiles = files.filter(isAuthorizedFile);
@@ -48,40 +78,15 @@ const convertDroppedFiles = async (files: CustomFileList) => {
   });
   setGlobalStore({ isLoading: true });
   let res;
-  let geomType: string;
   try {
     res = await convertToGeoJSON(files.map((f) => f.file));
-    geomType = getGeometryType(res);
     console.log('res', res);
   } catch (e) {
     console.error(e);
   }
   setGlobalStore({ isLoading: false });
 
-  const layerId = uuidv4();
-
-  // Add the new layer to the LayerManager by adding it
-  // to the layersDescriptionStore
-  console.log(getDefaultRenderingParams(geomType));
-  const newLayersDescriptionStore = [
-    ...layersDescriptionStore.layers,
-    {
-      id: layerId,
-      name: files[0].name,
-      type: geomType,
-      data: res,
-      visible: true,
-      ...getDefaultRenderingParams(geomType),
-    },
-  ];
-  setLayersDescriptionStore({
-    layers: newLayersDescriptionStore,
-  });
-
-  setFieldTypingModalStore({
-    show: true,
-    layerId,
-  });
+  addLayer(res, files[0].name);
 };
 
 const displayFiles = (files: CustomFileList): JSX.Element => {

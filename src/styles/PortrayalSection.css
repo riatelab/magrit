@@ -1,0 +1,15 @@
+.portrayal-section__portrayal-selection > ul {
+    list-style: none;
+    padding: 0;
+    margin: 2em 0.5em;
+}
+
+.portrayal-section__portrayal-selection > ul > li {
+    border: solid 1px grey;
+    padding: 0.6em;
+}
+
+.portrayal-section__portrayal-selection > ul > li.selected {
+    border: solid 2px grey;
+    box-shadow: inset 4px 4px 25px rgba(0, 128, 0, 0.54), inset -4px -4px 25px rgba(0, 128, 0, 0.54);
+}

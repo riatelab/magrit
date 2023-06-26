@@ -13,7 +13,7 @@ type CustomFileList = FileEntry[];
 interface LayerDescription {
   id: string,
   name: string,
-  type: string,
+  type: 'point' | 'linestring' | 'polygon' | 'raster' | 'table',
   renderer: string,
   data: GeoJSONFeatureCollection,
   fields: Variable[],

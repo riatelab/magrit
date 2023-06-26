@@ -5,3 +5,7 @@
 .button-header-bar {
   margin-right: 0.5em;
 }
+
+.button-header-bar svg {
+  transform: scale(1.25);
+}

@@ -66,7 +66,7 @@ export default function TableWindow(): JSX.Element {
       setNiceAlertStore({
         show: true,
         type: 'warning',
-        content: <p>{ LL().Alerts.SaveEditedData() }</p>,
+        content: (): JSX.Element => <p>{ LL().Alerts.SaveEditedData() }</p>,
         confirmCallback: onConfirm,
       });
     }
@@ -97,8 +97,8 @@ export default function TableWindow(): JSX.Element {
       <section class="modal-card-body">
         <h3>
           { layerName }
-          - { LL().DataTable.Features(rowData.length) }
-          - { LL().DataTable.Columns(columnDefs.length) }
+          &nbsp;- { LL().DataTable.Features(rowData.length) }
+          &nbsp;- { LL().DataTable.Columns(columnDefs.length) }
         </h3>
         <div class="ag-theme-alpine" style="height: 70vh;">
           <AgGridSolid
