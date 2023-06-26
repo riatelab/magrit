@@ -36,6 +36,10 @@ const en = {
     ToggleVisibility: 'Toggle visibility',
     Settings: 'Settings',
   },
+  PortrayalSection: {
+    RepresentationChoice: 'Representation choice',
+    TargetLayer: 'Target layer',
+  },
   ExportSection: {
     SelectLayers: 'Select a layer',
     SelectFormat: 'Select a format',

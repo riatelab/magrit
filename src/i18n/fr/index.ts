@@ -36,6 +36,10 @@ const fr = {
     ToggleVisibility: 'Afficher / Masquer',
     Settings: 'Paramètres',
   },
+  PortrayalSection: {
+    RepresentationChoice: 'Choix de la représentation',
+    TargetLayer: 'Couche cible',
+  },
   ExportSection: {
     SelectLayers: 'Sélectionner une couche',
     SelectFormat: 'Sélectionner un format',

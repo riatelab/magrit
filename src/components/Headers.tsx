@@ -1,5 +1,10 @@
 import { JSX, onMount } from 'solid-js';
 import { NavLink } from '@solidjs/router';
+import {
+  FaSolidCircleQuestion,
+  FaSolidFloppyDisk,
+  FaSolidFolderOpen,
+} from 'solid-icons/fa';
 import { useI18nContext } from '../i18n/i18n-solid';
 import DropdownLanguage from './DropdownLanguage.tsx';
 import '../styles/Headers.css';
@@ -74,12 +79,18 @@ export function HeaderBarApp(): JSX.Element {
 
     <div id="navBarHome" class="navbar-menu">
       <div class="navbar-start">
-        {/* <a class="navbar-item" to="/">Home</a> */}
-        {/* <a class="navbar-item" to="/about">About</a> */}
-        {/* <a class="navbar-item" to="/documentation">Documentation</a> */}
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
+          <button class="button button-header-bar" id="button-import-project">
+            <FaSolidFolderOpen />
+          </button>
+          <button class="button button-header-bar" id="button-export-project">
+            <FaSolidFloppyDisk />
+          </button>
+          <button class="button button-header-bar" id="button-about-magrit">
+            <FaSolidCircleQuestion />
+          </button>
           <DropdownLanguage/>
           <div class="buttons" />
         </div>

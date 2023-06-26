@@ -69,7 +69,7 @@ const onClickTable = (id: number) => {
 
 const onClickTrash = (id: number, LL: Accessor<TranslationFunctions>) => {
   console.log('click trash on item ', id);
-  const innerElement = <>
+  const innerElement = () => <>
     <p>{ LL().Alerts.DeleteLayer() } { id } ?</p>
   </>;
 

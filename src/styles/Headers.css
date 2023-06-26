@@ -1,3 +1,7 @@
 .navbar {
   height: var(--header-height);
 }
+
+.button-header-bar {
+  margin-right: 0.5em;
+}

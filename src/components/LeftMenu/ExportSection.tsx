@@ -123,10 +123,20 @@ export default function ExportSection(): JSX.Element {
         </div>
       </div>
       <div id="export-section__content__geo" class="is-hidden">
-        <div class="dropdown is-hoverable dropdown__layer">
-          <div class="dropdown-trigger">
-            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-file">
-              <span class="dropdown-item-target">{ LL().ExportSection.SelectLayers() }</span>
+        <div class="dropdown is-hoverable dropdown__layer" style={{ width: '100%' }}>
+          <div class="dropdown-trigger" style={{ width: '100%' }}>
+            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-file" style={{ width: '100%' }}>
+              <span
+                class="dropdown-item-target"
+                style={{
+                  width: '100%',
+                  'text-overflow': 'ellipsis',
+                  overflow: 'hidden',
+                  'text-align': 'left',
+                }}
+              >
+                { LL().ExportSection.SelectLayers() }
+              </span>
               <span class="icon is-small">
                 <FaSolidAngleDown />
               </span>
@@ -148,10 +158,20 @@ export default function ExportSection(): JSX.Element {
           </div>
         </div>
         <br/><br/>
-        <div class="dropdown is-hoverable dropdown__format">
-          <div class="dropdown-trigger">
-            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-format">
-              <span class="dropdown-item-target">{ LL().ExportSection.SelectFormat() }</span>
+          <div class="dropdown is-hoverable dropdown__format" style={{ width: '100%' }}>
+          <div class="dropdown-trigger" style={{ width: '100%' }}>
+            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-format" style={{ width: '100%' }}>
+              <span
+                class="dropdown-item-target"
+                style={{
+                  width: '100%',
+                  'text-overflow': 'ellipsis',
+                  overflow: 'hidden',
+                  'text-align': 'left',
+                }}
+              >
+                { LL().ExportSection.SelectFormat() }
+              </span>
               <span class="icon is-small">
                 <FaSolidAngleDown />
               </span>
@@ -175,10 +195,20 @@ export default function ExportSection(): JSX.Element {
         <br/>
         <br/>
         <Show when={ !['CSV', 'GeoJSON', 'KML'].includes(selectedFormat()) }>
-          <div class="dropdown is-hoverable dropdown__crs">
-            <div class="dropdown-trigger">
-              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-crs">
-                <span class="dropdown-item-target">{ LL().ExportSection.SelectCRS() }</span>
+          <div class="dropdown is-hoverable dropdown__crs" style={{ width: '100%' }}>
+            <div class="dropdown-trigger" style={{ width: '100%' }}>
+              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-crs" style={{ width: '100%' }}>
+                <span
+                  class="dropdown-item-target"
+                  style={{
+                    width: '100%',
+                    'text-overflow': 'ellipsis',
+                    overflow: 'hidden',
+                    'text-align': 'left',
+                  }}
+                >
+                  { LL().ExportSection.SelectCRS() }
+                </span>
                 <span class="icon is-small">
                   <FaSolidAngleDown />
                 </span>

@@ -130,6 +130,16 @@ type RootTranslation = {
 		 */
 		Settings: string
 	}
+	PortrayalSection: {
+		/**
+		 * R​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​c​h​o​i​c​e
+		 */
+		RepresentationChoice: string
+		/**
+		 * T​a​r​g​e​t​ ​l​a​y​e​r
+		 */
+		TargetLayer: string
+	}
 	ExportSection: {
 		/**
 		 * S​e​l​e​c​t​ ​a​ ​l​a​y​e​r
@@ -374,6 +384,16 @@ export type TranslationFunctions = {
 		 * Settings
 		 */
 		Settings: () => LocalizedString
+	}
+	PortrayalSection: {
+		/**
+		 * Representation choice
+		 */
+		RepresentationChoice: () => LocalizedString
+		/**
+		 * Target layer
+		 */
+		TargetLayer: () => LocalizedString
 	}
 	ExportSection: {
 		/**

@@ -21,11 +21,13 @@ import { HeaderBarApp } from './components/Headers.tsx';
 
 import { fieldTypingModalStore } from './store/FieldTypingModalStore';
 import { globalStore, setGlobalStore } from './store/GlobalStore';
-import { modalStore } from './store/ModalStore';
+import { layersDescriptionStore, setLayersDescriptionStore } from './store/LayersDescriptionStore';
+import { modalStore, setModalStore } from './store/ModalStore';
 import { niceAlertStore } from './store/NiceAlertStore';
 import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
 import { tableWindowStore } from './store/TableWindowStore';
 
+import { clickLinkFromDataUrl } from './helpers/exports';
 import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
 import { round } from './helpers/math';
 
@@ -149,6 +151,53 @@ const AppPage: () => JSX.Element = () => {
       },
       mapDimensions: maxMapDimensions,
     });
+
+    document.getElementById('button-export-project')
+      ?.addEventListener('click', () => {
+        const { layers } = layersDescriptionStore;
+        const obj = {
+          layers,
+          mapDimensions: globalStore.mapDimensions,
+        };
+        const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(obj))}`;
+        return clickLinkFromDataUrl(dataStr, 'export-project.mjson');
+      });
+
+    document.getElementById('button-import-project')
+      ?.addEventListener('click', () => {
+        const elem = document.createElement('input');
+        elem.type = 'file';
+        elem.accept = '.mjson';
+        elem.onchange = (e) => {
+          const file = e.target.files[0];
+          console.log(file);
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const result = event.target?.result;
+            if (!result) return;
+            const obj = JSON.parse(result.toString());
+            const { layers, mapDimensions } = obj;
+            setLayersDescriptionStore({ layers });
+            setGlobalStore({ mapDimensions });
+            console.log(layersDescriptionStore);
+            console.log(globalStore);
+          };
+          reader.readAsText(file);
+        };
+        elem.click();
+      });
+
+    document.getElementById('button-about-magrit')
+      ?.addEventListener('click', () => {
+        setModalStore({
+          show: true,
+          title: 'About Magrit',
+          content: <p>
+            Magrit is a web application for the visualization and analysis of geospatial data.
+          </p>,
+        });
+      });
   });
 
   return <>
@@ -172,17 +221,6 @@ const AppPage: () => JSX.Element = () => {
           <FieldTypingModal />
       </Show>
     </main>
-{/*    <button style="position: absolute; right: 0; top; 200;" onClick={
-      () => {
-        setModalStore({
-          show: true,
-          title: 'My super title',
-          content: SomeElement(),
-          confirmCallback: (): void => { console.log('confirm'); },
-          cancelCallback: (): void => { console.log('cancel'); },
-        });
-      }
-    }>Click me</button> */}
     <Toaster />
     <OverlayDrop />
   </>;

@@ -5,6 +5,7 @@ import ExportSection from './ExportSection.tsx';
 import '../../styles/LeftMenu.css';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import ChevronIcon from '../Icons/ChevronIcon.tsx';
+import PortrayalSection from './PortrayalSection.tsx';
 
 export default function LeftMenu(): JSX.Element {
   const { LL } = useI18nContext();
@@ -41,7 +42,9 @@ export default function LeftMenu(): JSX.Element {
       </span>
     </div>
     <Collapse value={expandedSection() === 3} >
-      <div class="left-menu__section-container">Le super menu de choix d'une représentation ...</div>
+      <div class="left-menu__section-container">
+        <PortrayalSection />
+      </div>
     </Collapse>
 
     <div class="left-menu__title" onClick={() => setExpandedSection(4)}>
