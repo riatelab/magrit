@@ -2,6 +2,7 @@ import { Accessor, JSX } from 'solid-js';
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 import '../../styles/LayerSettings.css';
+import { LayerDescription } from '../../global';
 
 function makeOnChangeFillColor(props: LayerDescription): () => void {
   return function onChangeFillColor() {

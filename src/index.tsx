@@ -14,15 +14,14 @@ import WelcomePage from './WelcomePage.tsx';
 import AppPage from './AppPage.tsx';
 
 if (Array.prototype.toReversed === undefined) {
-  Array.prototype.toReversed = function arrayToReversed() { // eslint-disable-line no-extend-native
+  // eslint-disable-next-line no-extend-native
+  Array.prototype.toReversed = function arrayToReversed(): any[] {
     return this.slice().reverse();
   };
 }
 
 const root: HTMLElement = document.getElementById('root');
 root.classList.add('content');
-
-console.log('app root', 'root');
 
 if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   throw new Error(

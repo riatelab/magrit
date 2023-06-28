@@ -1,6 +1,12 @@
 .field {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5em !important;
+}
+
+.field label.label {
+    margin-bottom: unset;
 }
 
 .field .control .number {

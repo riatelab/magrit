@@ -1,9 +1,32 @@
 import { createStore } from 'solid-js/store';
+import { ProjectionDefinition } from '../global';
 
 type MapStoreType = {
-  projection: string,
+  projection: ProjectionDefinition,
   translate: number[],
   scale: number,
   center: number[],
   rotate: number[],
-}
+  mapDimensions: { width: number, height: number },
+};
+
+const [
+  mapStore,
+  setMapStore,
+] = createStore({
+  projection: {
+    type: 'd3',
+    value: 'geoArmadillo',
+    name: 'Armadillo',
+  },
+  translate: [0, 0],
+  scale: 1,
+  center: [0, 0],
+  rotate: [0, 0, 0],
+  mapDimensions: { width: 0, height: 0 },
+} as MapStoreType);
+
+export {
+  mapStore,
+  setMapStore,
+};

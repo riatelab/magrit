@@ -32,7 +32,6 @@ function isButtonDisabled(
   selectedCrs: string | null,
   customCrs: string,
 ): boolean {
-  console.log(customCrs);
   if (!selectedLayer) return true;
   if (!selectedFormat) return true;
   if (!noCrsFormats.includes(selectedFormat) && !selectedCrs) return true;

@@ -2,6 +2,7 @@ import { JSX, createSignal } from 'solid-js';
 import Collapse from '../Collapse.tsx';
 import LayerManager from './LayerManager.tsx';
 import ExportSection from './ExportSection.tsx';
+import MapConfiguration from './MapConfiguration.tsx';
 import '../../styles/LeftMenu.css';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import ChevronIcon from '../Icons/ChevronIcon.tsx';
@@ -24,36 +25,48 @@ export default function LeftMenu(): JSX.Element {
     </Collapse>
 
     <div class="left-menu__title" onClick={() => setExpandedSection(2)}>
-      { LL().LeftMenu.LayerManager() }
+      { LL().LeftMenu.MapConfiguration() }
       <span class={`chevron-button ${expandedSection() === 2 ? 'is-active' : ''}`}>
         <ChevronIcon />
       </span>
     </div>
     <Collapse value={expandedSection() === 2} >
       <div class="left-menu__section-container">
-        <LayerManager />
+        <MapConfiguration />
       </div>
     </Collapse>
 
     <div class="left-menu__title" onClick={() => setExpandedSection(3)}>
-      { LL().LeftMenu.RepresentationChoice() }
+      { LL().LeftMenu.LayerManager() }
       <span class={`chevron-button ${expandedSection() === 3 ? 'is-active' : ''}`}>
         <ChevronIcon />
       </span>
     </div>
     <Collapse value={expandedSection() === 3} >
       <div class="left-menu__section-container">
-        <PortrayalSection />
+        <LayerManager />
       </div>
     </Collapse>
 
     <div class="left-menu__title" onClick={() => setExpandedSection(4)}>
-      { LL().LeftMenu.ExportSection() }
+      { LL().LeftMenu.RepresentationChoice() }
       <span class={`chevron-button ${expandedSection() === 4 ? 'is-active' : ''}`}>
         <ChevronIcon />
       </span>
     </div>
     <Collapse value={expandedSection() === 4} >
+      <div class="left-menu__section-container">
+        <PortrayalSection />
+      </div>
+    </Collapse>
+
+    <div class="left-menu__title" onClick={() => setExpandedSection(5)}>
+      { LL().LeftMenu.ExportSection() }
+      <span class={`chevron-button ${expandedSection() === 5 ? 'is-active' : ''}`}>
+        <ChevronIcon />
+      </span>
+    </div>
+    <Collapse value={expandedSection() === 5} >
       <div class="left-menu__section-container">
         <ExportSection />
       </div>

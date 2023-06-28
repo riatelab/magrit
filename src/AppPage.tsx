@@ -21,6 +21,7 @@ import { HeaderBarApp } from './components/Headers.tsx';
 
 import { fieldTypingModalStore } from './store/FieldTypingModalStore';
 import { globalStore, setGlobalStore } from './store/GlobalStore';
+import { mapStore, setMapStore } from './store/MapStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from './store/LayersDescriptionStore';
 import { modalStore, setModalStore } from './store/ModalStore';
 import { niceAlertStore } from './store/NiceAlertStore';
@@ -112,6 +113,9 @@ const AppPage: () => JSX.Element = () => {
         width,
         height,
       },
+    });
+
+    setMapStore({
       mapDimensions: {
         width: (width - 310) * 0.9,
         height: (height - 66) * 0.9,
@@ -149,6 +153,9 @@ const AppPage: () => JSX.Element = () => {
         width: window.innerWidth,
         height: window.innerHeight,
       },
+    });
+
+    setMapStore({
       mapDimensions: maxMapDimensions,
     });
 
@@ -157,7 +164,7 @@ const AppPage: () => JSX.Element = () => {
         const { layers } = layersDescriptionStore;
         const obj = {
           layers,
-          mapDimensions: globalStore.mapDimensions,
+          mapDimensions: mapStore.mapDimensions,
         };
         const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(obj))}`;
         return clickLinkFromDataUrl(dataStr, 'export-project.mjson');
@@ -179,7 +186,7 @@ const AppPage: () => JSX.Element = () => {
             const obj = JSON.parse(result.toString());
             const { layers, mapDimensions } = obj;
             setLayersDescriptionStore({ layers });
-            setGlobalStore({ mapDimensions });
+            setMapStore({ mapDimensions });
             console.log(layersDescriptionStore);
             console.log(globalStore);
           };

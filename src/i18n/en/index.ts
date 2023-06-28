@@ -16,6 +16,7 @@ const en = {
   },
   LeftMenu: {
     Import: 'Data import',
+    MapConfiguration: 'Map configuration',
     LayerManager: 'Layer manager',
     RepresentationChoice: 'Representation choice',
     ExportSection: 'Map and data export',
@@ -23,6 +24,14 @@ const en = {
   ImportSection: {
     OpenGeospatialFile: 'Open geospatial file...',
     OpenTabularFile: 'Open tabular file...',
+  },
+  MapConfiguration: {
+    Dimensions: 'Dimensions',
+    Width: 'Width',
+    Height: 'Height',
+    Projection: 'Projection',
+    MoreProjection: 'More projections',
+    CustomProjection: 'Custom projection',
   },
   LayerManager: {
     point: 'Point layer',

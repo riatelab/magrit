@@ -2,7 +2,7 @@ import {
   createEffect, For, JSX, onMount,
 } from 'solid-js';
 import d3 from '../helpers/d3-custom';
-import { globalStore, setGlobalStore } from '../store/GlobalStore';
+import { setGlobalStore } from '../store/GlobalStore';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import '../styles/MapZone.css';
 import {
@@ -10,6 +10,7 @@ import {
   defaultPointRenderer,
   defaultPolygonRenderer,
 } from './MapRenderer/DefaultMapRenderer.tsx';
+import { mapStore } from '../store/MapStore';
 // import { unproxify } from '../helpers/common';
 
 export default function MapZone(): JSX.Element {
@@ -17,7 +18,7 @@ export default function MapZone(): JSX.Element {
   let svg;
   const sphere = { type: 'Sphere' };
   const projection = d3.geoArmadillo()
-    .translate([-globalStore.mapDimensions.width / 2, -globalStore.mapDimensions.height / 2]);
+    .translate([-mapStore.mapDimensions.width / 2, -mapStore.mapDimensions.height / 2]);
   const initialTranslate = projection.translate();
   const initialScale = projection.scale();
   const pathGenerator = d3.geoPath(projection);
@@ -82,8 +83,8 @@ export default function MapZone(): JSX.Element {
     <div class="map-zone__inner">
       <svg
         ref={svgElem}
-        width={globalStore.mapDimensions.width}
-        height={globalStore.mapDimensions.height}
+        width={mapStore.mapDimensions.width}
+        height={mapStore.mapDimensions.height}
         class="map-zone__map"
       >
         <defs>

@@ -66,6 +66,10 @@ type RootTranslation = {
 		 */
 		Import: string
 		/**
+		 * M​a​p​ ​c​o​n​f​i​g​u​r​a​t​i​o​n
+		 */
+		MapConfiguration: string
+		/**
 		 * L​a​y​e​r​ ​m​a​n​a​g​e​r
 		 */
 		LayerManager: string
@@ -87,6 +91,32 @@ type RootTranslation = {
 		 * O​p​e​n​ ​t​a​b​u​l​a​r​ ​f​i​l​e​.​.​.
 		 */
 		OpenTabularFile: string
+	}
+	MapConfiguration: {
+		/**
+		 * D​i​m​e​n​s​i​o​n​s
+		 */
+		Dimensions: string
+		/**
+		 * W​i​d​t​h
+		 */
+		Width: string
+		/**
+		 * H​e​i​g​h​t
+		 */
+		Height: string
+		/**
+		 * P​r​o​j​e​c​t​i​o​n
+		 */
+		Projection: string
+		/**
+		 * M​o​r​e​ ​p​r​o​j​e​c​t​i​o​n​s
+		 */
+		MoreProjection: string
+		/**
+		 * C​u​s​t​o​m​ ​p​r​o​j​e​c​t​i​o​n
+		 */
+		CustomProjection: string
 	}
 	LayerManager: {
 		/**
@@ -325,6 +355,10 @@ export type TranslationFunctions = {
 		 */
 		Import: () => LocalizedString
 		/**
+		 * Map configuration
+		 */
+		MapConfiguration: () => LocalizedString
+		/**
 		 * Layer manager
 		 */
 		LayerManager: () => LocalizedString
@@ -346,6 +380,32 @@ export type TranslationFunctions = {
 		 * Open tabular file...
 		 */
 		OpenTabularFile: () => LocalizedString
+	}
+	MapConfiguration: {
+		/**
+		 * Dimensions
+		 */
+		Dimensions: () => LocalizedString
+		/**
+		 * Width
+		 */
+		Width: () => LocalizedString
+		/**
+		 * Height
+		 */
+		Height: () => LocalizedString
+		/**
+		 * Projection
+		 */
+		Projection: () => LocalizedString
+		/**
+		 * More projections
+		 */
+		MoreProjection: () => LocalizedString
+		/**
+		 * Custom projection
+		 */
+		CustomProjection: () => LocalizedString
 	}
 	LayerManager: {
 		/**

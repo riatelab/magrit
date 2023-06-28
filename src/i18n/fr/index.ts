@@ -16,6 +16,7 @@ const fr = {
   },
   LeftMenu: {
     Import: 'Import des données',
+    MapConfiguration: 'Configuration de la carte',
     LayerManager: 'Gestion des couches',
     RepresentationChoice: 'Choix de la représentation',
     ExportSection: 'Export des données',
@@ -23,6 +24,14 @@ const fr = {
   ImportSection: {
     OpenGeospatialFile: 'Ouvrir un fichier géospatial...',
     OpenTabularFile: 'Ouvrir un fichier tabulaire...',
+  },
+  MapConfiguration: {
+    Dimensions: 'Dimensions',
+    Width: 'Largeur',
+    Height: 'Hauteur',
+    Projection: 'Projection',
+    MoreProjection: 'Plus de projections',
+    CustomProjection: 'Projection personnalisée',
   },
   LayerManager: {
     point: 'Couche de points',

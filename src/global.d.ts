@@ -63,4 +63,10 @@ interface Variable {
   type: VariableTypes,
   dataType: DataTypes,
 }
+
+interface ProjectionDefinition {
+  type: string,
+  name: string,
+  value: string,
+}
 // }
