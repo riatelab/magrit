@@ -1,6 +1,7 @@
 import { topology } from 'topojson-server';
 import { SupportedGeoFileTypes } from './supportedFormats';
 import { convertFromGeoJSON } from './formatConversion';
+import { GeoJSONFeatureCollection } from '../global';
 
 /**
  * Get the dimensions of the SVG map element.

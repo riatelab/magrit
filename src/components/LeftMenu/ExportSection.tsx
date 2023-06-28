@@ -7,6 +7,8 @@ import { exportMapToPng, exportMapToSvg, exportToGeo } from '../../helpers/expor
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { SupportedGeoFileTypes } from '../../helpers/supportedFormats';
 
+const noCrsFormats = ['GeoJSON', 'CSV', 'KML', 'TopoJSON'];
+
 function onClickTabButton(event: Event, tab: string) {
   const tabsParentElement = event.currentTarget.parentElement.parentElement.parentElement;
   // Change the active tab
@@ -33,7 +35,7 @@ function isButtonDisabled(
   console.log(customCrs);
   if (!selectedLayer) return true;
   if (!selectedFormat) return true;
-  if (!['GeoJSON', 'CSV', 'KML'].includes(selectedFormat) && !selectedCrs) return true;
+  if (!noCrsFormats.includes(selectedFormat) && !selectedCrs) return true;
   if (typeof selectedCrs === 'string' && selectedCrs.indexOf('EPSG') && customCrs === '') return true;
   return false;
 }
@@ -56,7 +58,13 @@ async function exportToGeoWrapper(
 ) {
   const layer = layersDescriptionStore.layers
     .find((l) => l.name === selectedLayer);
-  const crs = selectedCrs.indexOf('EPSG') === 0 ? selectedCrs : customCrs;
+
+  // eslint-disable-next-line no-nested-ternary
+  const crs = noCrsFormats.includes(selectedFormat)
+    ? null
+    : selectedCrs.indexOf('EPSG') === 0
+      ? selectedCrs
+      : customCrs;
   // TODO : validate CRS if custom
   await exportToGeo(layer.data, layer.name, SupportedGeoFileTypes[selectedFormat], crs);
 }
@@ -194,7 +202,7 @@ export default function ExportSection(): JSX.Element {
         </div>
         <br/>
         <br/>
-        <Show when={ !['CSV', 'GeoJSON', 'KML'].includes(selectedFormat()) }>
+        <Show when={ !noCrsFormats.includes(selectedFormat()) }>
           <div class="dropdown is-hoverable dropdown__crs" style={{ width: '100%' }}>
             <div class="dropdown-trigger" style={{ width: '100%' }}>
               <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-crs" style={{ width: '100%' }}>

@@ -1,4 +1,5 @@
 import JSZip from 'jszip';
+import { GeoJSONFeatureCollection } from '../global';
 
 /**
  * Convert the given file(s) to a GeoJSON feature collection.
@@ -90,10 +91,10 @@ export async function convertFromGeoJSON(
   // Set the options for the conversion
   const options = [
     '-f', format,
-    '-t_srs', crs,
   ];
   // Convert the GeoJSON to the asked format
   if (format === 'ESRI Shapefile') {
+    options.push('-t_srs', crs);
     options.push('-lco', 'ENCODING=UTF-8');
     const output = await window.Gdal.ogr2ogr(input.datasets[0], options);
     // We will return a zip file (encoded in base 64) containing all the shapefile files
@@ -116,7 +117,15 @@ export async function convertFromGeoJSON(
     const resZip = await zip.generateAsync({ type: 'base64' });
     return resZip;
   }
-  if (format === 'GML' || format === 'KML') {
+  if (format === 'GML') {
+    options.push('-t_srs', crs);
+    // For KML and GML, we only return a text file
+    const output = await window.Gdal.ogr2ogr(input.datasets[0], options);
+    const bytes = await window.Gdal.getFileBytes(output);
+    await window.Gdal.close(input);
+    return new TextDecoder().decode(bytes);
+  }
+  if (format === 'KML') {
     // For KML and GML, we only return a text file
     const output = await window.Gdal.ogr2ogr(input.datasets[0], options);
     const bytes = await window.Gdal.getFileBytes(output);
@@ -124,6 +133,7 @@ export async function convertFromGeoJSON(
     return new TextDecoder().decode(bytes);
   }
   if (format === 'GPKG') {
+    options.push('-t_srs', crs);
     // For GPKG, we return the binary file, encoded in base64
     const output = await window.Gdal.ogr2ogr(input.datasets[0], options);
     const bytes = await window.Gdal.getFileBytes(output);
