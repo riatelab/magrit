@@ -1,9 +1,9 @@
 import { For, JSX, JSXElement } from 'solid-js';
+import { globalStore } from '../../store/GlobalStore';
 import { LayerDescription } from '../../global';
 
 export function defaultPolygonRenderer(
   layerDescription: LayerDescription,
-  pathGenerator: any,
 ): JSX.Element {
   return <g
     id={layerDescription.name}
@@ -22,7 +22,7 @@ export function defaultPolygonRenderer(
       {
         (feature) => {
           const el: JSXElement = <path
-            d={pathGenerator(feature)}
+            d={globalStore.pathGenerator(feature)}
             vector-effect="non-scaling-stroke"
           />;
           // el.__data__ = unproxify(feature); // eslint-disable-line no-underscore-dangle
@@ -36,7 +36,6 @@ export function defaultPolygonRenderer(
 
 export function defaultPointRenderer(
   layerDescription: LayerDescription,
-  pathGenerator: any,
 ): JSX.Element {
   return <g
     id={layerDescription.name}
@@ -55,7 +54,7 @@ export function defaultPointRenderer(
       {
         (feature) => {
           const el: JSXElement = <path
-            d={pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
+            d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
             vector-effect="non-scaling-stroke"
           />;
           // el.__data__ = unproxify(feature); // eslint-disable-line no-underscore-dangle
@@ -69,7 +68,6 @@ export function defaultPointRenderer(
 
 export function defaultLineRenderer(
   layerDescription: LayerDescription,
-  pathGenerator: any,
 ): JSX.Element {
   return <g
     id={layerDescription.name}
@@ -87,7 +85,7 @@ export function defaultLineRenderer(
       {
         (feature) => {
           const el: JSXElement = <path
-            d={pathGenerator(feature)}
+            d={globalStore.pathGenerator(feature)}
             vector-effect="non-scaling-stroke"
           />;
           // el.__data__ = unproxify(feature); // eslint-disable-line no-underscore-dangle

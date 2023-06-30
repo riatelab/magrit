@@ -44,18 +44,24 @@ const onClickEye = (id: number) => {
 const onCLickMagnifyingGlass = (id: number) => {
   console.log('click magnifying glass on item ', id);
   const { projection, pathGenerator } = globalStore;
-  console.log(projection.scale(), projection.translate());
+  console.log(projection.scale(), projection.translate(), d3);
   console.log(unproxify(layersDescriptionStore.layers.find((l) => l.id === id)?.data));
   const a = globalStore.projection.fitExtent(
     [[0, 0], [globalStore.width, globalStore.height]],
     unproxify(layersDescriptionStore.layers.find((l) => l.id === id)?.data),
   );
   console.log('a', a);
-  console.log(projection.scale(), projection.translate());
-  d3.select('.map-zone__inner svg')
-    .selectAll('g').attr('transform', null);
-  d3.select('.map-zone__inner svg')
-    .selectAll('path').attr('d', pathGenerator);
+  // console.log(projection.scale(), projection.translate());
+  // d3.select('.map-zone__inner svg')
+  //   .selectAll('g').attr('transform', null);
+  // d3.select('.map-zone__inner svg')
+  //   .selectAll('path').attr('d', pathGenerator);
+  document.querySelectorAll('.map-zone__inner svg g').forEach((g) => {
+    g.setAttribute('transform', null); // eslint-disable-line no-underscore-dangle
+  });
+  document.querySelectorAll('.map-zone__inner svg path').forEach((p) => {
+    p.setAttribute('d', pathGenerator); // eslint-disable-line no-underscore-dangle
+  });
 };
 
 const onClickTable = (id: number) => {
