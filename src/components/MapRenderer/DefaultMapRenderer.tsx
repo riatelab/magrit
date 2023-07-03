@@ -96,3 +96,26 @@ export function defaultLineRenderer(
     </For>
   </g>;
 }
+
+export function sphereRenderer(layerDescription: LayerDescription): JSX.Element {
+  const el = <path
+    vector-effect="non-scaling-stroke"
+    d={globalStore.pathGenerator(layerDescription.data)}
+  />;
+  // eslint-disable-next-line no-underscore-dangle
+  el.__data__ = layerDescription.data;
+  return <g
+    class="layer sphere"
+    id={layerDescription.name}
+    visibility={layerDescription.visible ? undefined : 'hidden'}
+    fill={layerDescription.fillColor}
+    fill-opacity={layerDescription.fillOpacity}
+    stroke={layerDescription.strokeColor}
+    stroke-width={layerDescription.strokeWidth}
+    stroke-opacity={layerDescription.strokeOpacity}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    { el }
+  </g>;
+}

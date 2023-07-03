@@ -9,18 +9,19 @@ import {
   defaultLineRenderer,
   defaultPointRenderer,
   defaultPolygonRenderer,
+  sphereRenderer,
 } from './MapRenderer/DefaultMapRenderer.tsx';
 import { mapStore, setMapStore } from '../store/MapStore';
 // import { unproxify } from '../helpers/common';
 
 export default function MapZone(): JSX.Element {
   let svgElem;
-  let svg;
-  const sphere = { type: 'Sphere' };
-  const projection = d3[mapStore.projection.value]()
-    .translate([-mapStore.mapDimensions.width / 2, -mapStore.mapDimensions.height / 2]);
+  const projection = d3[mapStore.projection.value]();
+  projection
+    .translate([mapStore.mapDimensions.width / 2, mapStore.mapDimensions.height / 2]);
   const initialTranslate = projection.translate();
   const initialScale = projection.scale();
+  const initialCenter = projection.center();
   const pathGenerator = d3.geoPath(projection);
 
   setGlobalStore(
@@ -31,6 +32,7 @@ export default function MapZone(): JSX.Element {
     'pathGenerator',
     () => pathGenerator,
   );
+
   const redraw = (e, redrawWhenZooming: boolean) => {
     if (!redrawWhenZooming) {
       // svg.selectAll('g').attr('transform', e.transform);
@@ -40,8 +42,8 @@ export default function MapZone(): JSX.Element {
     } else {
       const scaleValue = e.transform.k * initialScale;
       const translateValue = [
-        e.transform.x - initialTranslate[0],
-        e.transform.y - initialTranslate[1],
+        e.transform.x,
+        e.transform.y,
       ];
       globalStore.projection.scale(scaleValue);
       globalStore.projection.translate(translateValue);
@@ -58,6 +60,12 @@ export default function MapZone(): JSX.Element {
       svgElem?.querySelectorAll('path').forEach((p) => {
         p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
       });
+      console.log({
+        scale: scaleValue,
+        translate: translateValue,
+        center: centerValue,
+        rotate: rotateValue,
+      });
       setMapStore({
         scale: scaleValue,
         translate: translateValue,
@@ -70,25 +78,17 @@ export default function MapZone(): JSX.Element {
   const zoom = d3.zoom()
     .on('zoom', (e) => {
       redraw(e, false);
+      console.log('foo');
     })
     .on('zoom.end', (e) => {
       redraw(e, true);
+      console.log('bar');
     });
 
-  const getSphere = () => {
-    const el = <path
-        d={globalStore.pathGenerator(sphere)}
-        fill="#f2f2f7"
-      />;
-    // eslint-disable-next-line no-underscore-dangle
-    el.__data__ = sphere;
-    return <g class="layer sphere">{ el }</g>;
-  };
-
   const getClipSphere = () => {
-    const el = <path d={globalStore.pathGenerator(sphere)} />;
+    const el = <path d={globalStore.pathGenerator({ type: 'Sphere' })} />;
     // eslint-disable-next-line no-underscore-dangle
-    el.__data__ = sphere;
+    el.__data__ = { type: 'Sphere' };
     return <defs><clipPath id="clip-sphere">{ el }</clipPath></defs>;
   };
 
@@ -114,11 +114,12 @@ export default function MapZone(): JSX.Element {
           { getClipSphere() }
         </defs>
 
-        { getSphere() }
-
         {/* Generate SVG path for each layer */}
         <For each={ layersDescriptionStore.layers.toReversed() }>
           {(layer) => {
+            if (layer.renderer === 'sphere') {
+              return sphereRenderer(layer);
+            }
             if (layer.type === 'polygon') {
               return defaultPolygonRenderer(layer);
             }

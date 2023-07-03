@@ -1,11 +1,11 @@
 import {
-  createSignal, For, JSX, Show,
+  createSignal, JSX, Show,
 } from 'solid-js';
-import { FaSolidAngleDown } from 'solid-icons/fa';
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 import { exportMapToPng, exportMapToSvg, exportToGeo } from '../../helpers/exports';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { SupportedGeoFileTypes } from '../../helpers/supportedFormats';
+import DropdownMenu from '../DropdownMenu.tsx';
 
 const noCrsFormats = ['GeoJSON', 'CSV', 'KML', 'TopoJSON'];
 
@@ -37,16 +37,6 @@ function isButtonDisabled(
   if (!noCrsFormats.includes(selectedFormat) && !selectedCrs) return true;
   if (typeof selectedCrs === 'string' && selectedCrs.indexOf('EPSG') && customCrs === '') return true;
   return false;
-}
-
-function setDropdownItemTarget(event: Event) {
-  const target = event.currentTarget as HTMLElement;
-  const dropdownItemTarget = target
-    .parentElement
-    .parentElement
-    .parentElement
-    .querySelector('.dropdown-item-target');
-  dropdownItemTarget.textContent = target.textContent;
 }
 
 async function exportToGeoWrapper(
@@ -130,112 +120,32 @@ export default function ExportSection(): JSX.Element {
         </div>
       </div>
       <div id="export-section__content__geo" class="is-hidden">
-        <div class="dropdown is-hoverable dropdown__layer" style={{ width: '100%' }}>
-          <div class="dropdown-trigger" style={{ width: '100%' }}>
-            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-file" style={{ width: '100%' }}>
-              <span
-                class="dropdown-item-target"
-                style={{
-                  width: '100%',
-                  'text-overflow': 'ellipsis',
-                  overflow: 'hidden',
-                  'text-align': 'left',
-                }}
-              >
-                { LL().ExportSection.SelectLayers() }
-              </span>
-              <span class="icon is-small">
-                <FaSolidAngleDown />
-              </span>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-menu-export-geo-file" role="menu">
-            <div class="dropdown-content">
-              <For each={layersDescriptionStore.layers.map((layer) => layer.name)}>
-                {(layerName) => (
-                  <a href="#" class="dropdown-item" onClick={ (ev) => {
-                    setDropdownItemTarget(ev);
-                    setSelectedLayer(layerName);
-                  } }>
-                    {layerName}
-                  </a>
-                )}
-              </For>
-            </div>
-          </div>
-        </div>
-        <br/><br/>
-        <div class="dropdown is-hoverable dropdown__format" style={{ width: '100%' }}>
-          <div class="dropdown-trigger" style={{ width: '100%' }}>
-            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-format" style={{ width: '100%' }}>
-              <span
-                class="dropdown-item-target"
-                style={{
-                  width: '100%',
-                  'text-overflow': 'ellipsis',
-                  overflow: 'hidden',
-                  'text-align': 'left',
-                }}
-              >
-                { LL().ExportSection.SelectFormat() }
-              </span>
-              <span class="icon is-small">
-                <FaSolidAngleDown />
-              </span>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-menu-export-geo-format" role="menu">
-            <div class="dropdown-content">
-              <For each={Object.keys(SupportedGeoFileTypes)}>
-                {(formatName) => (
-                  <a href="#" class="dropdown-item" onClick={ (ev) => {
-                    setDropdownItemTarget(ev);
-                    setSelectedFormat(formatName);
-                  } }>
-                    {formatName}
-                  </a>
-                )}
-              </For>
-            </div>
-          </div>
-        </div>
+        <DropdownMenu
+          entries={
+            layersDescriptionStore.layers
+              .map((layer) => ({ name: layer.name, value: layer.name }))
+          }
+          defaultEntry={{ name: LL().ExportSection.SelectLayers() }}
+          onChange={(layerName) => setSelectedLayer(layerName)}
+        />
+        <br/>
+        <br/>
+        <DropdownMenu
+          entries={
+            Object.keys(SupportedGeoFileTypes)
+              .map((format) => ({ name: format, value: format }))
+          }
+          defaultEntry={{ name: LL().ExportSection.SelectFormat() }}
+          onChange={(formatName) => setSelectedFormat(formatName)}
+        />
         <br/>
         <br/>
         <Show when={ !noCrsFormats.includes(selectedFormat()) }>
-          <div class="dropdown is-hoverable dropdown__crs" style={{ width: '100%' }}>
-            <div class="dropdown-trigger" style={{ width: '100%' }}>
-              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-crs" style={{ width: '100%' }}>
-                <span
-                  class="dropdown-item-target"
-                  style={{
-                    width: '100%',
-                    'text-overflow': 'ellipsis',
-                    overflow: 'hidden',
-                    'text-align': 'left',
-                  }}
-                >
-                  { LL().ExportSection.SelectCRS() }
-                </span>
-                <span class="icon is-small">
-                  <FaSolidAngleDown />
-                </span>
-              </button>
-            </div>
-            <div class="dropdown-menu" id="dropdown-menu-export-geo-crs" role="menu">
-              <div class="dropdown-content">
-                <For each={predefinedCrs}>
-                  {(crsName) => (
-                    <a href="#" class="dropdown-item" onClick={ (ev) => {
-                      setDropdownItemTarget(ev);
-                      setSelectedCrs(crsName);
-                    } }>
-                      {crsName}
-                    </a>
-                  )}
-                </For>
-              </div>
-            </div>
-          </div>
+          <DropdownMenu
+            entries={ predefinedCrs.map((n) => ({ name: n, value: n })) }
+            defaultEntry={{ name: LL().ExportSection.SelectCRS() }}
+            onChange={(crsName) => setSelectedCrs(crsName)}
+          />
         <br/>
         <br/>
         </Show>
@@ -245,7 +155,7 @@ export default function ExportSection(): JSX.Element {
               class="input"
               type="text"
               placeholder="+proj=moll +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +type=crs"
-              onChange={ (ev) => setCustomCrs(ev.target.value) }
+              onKeyUp={ (ev) => setCustomCrs(ev.target.value) }
             />
           </div>
           <br/>

@@ -19,6 +19,7 @@ import NiceAlert from './components/Modals/NiceAlert.tsx';
 import OverlayDrop from './components/OverlayDrop.tsx';
 import TableWindow from './components/Modals/TableWindow.tsx';
 import { HeaderBarApp } from './components/Headers.tsx';
+// import ReloadPrompt from './components/ReloadPrompt.tsx';
 
 import { fieldTypingModalStore } from './store/FieldTypingModalStore';
 import { globalStore, setGlobalStore } from './store/GlobalStore';
@@ -32,7 +33,6 @@ import { tableWindowStore } from './store/TableWindowStore';
 import { clickLinkFromDataUrl } from './helpers/exports';
 import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
 import { round } from './helpers/math';
-import ReloadPrompt from './components/ReloadPrompt.tsx';
 
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
   paths: {
@@ -169,6 +169,7 @@ const AppPage: () => JSX.Element = () => {
           layers,
           map,
         };
+        console.log(map);
         const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(obj))}`;
         return clickLinkFromDataUrl(dataStr, 'export-project.mjson');
       });
@@ -188,10 +189,10 @@ const AppPage: () => JSX.Element = () => {
             if (!result) return;
             const obj = JSON.parse(result.toString());
             const { layers, map } = obj;
-            setLayersDescriptionStore({ layers });
             setMapStore(map);
+            console.log(map);
             const projection = d3[map.projection.value]()
-              .center(map.center)
+              // .center(map.center)
               .scale(map.scale)
               .translate(map.translate);
             const pathGenerator = d3.geoPath(projection);
@@ -203,8 +204,7 @@ const AppPage: () => JSX.Element = () => {
               'pathGenerator',
               () => pathGenerator,
             );
-            console.log(layersDescriptionStore);
-            console.log(globalStore);
+            setLayersDescriptionStore({ layers });
           };
           reader.readAsText(file);
         };
@@ -246,7 +246,7 @@ const AppPage: () => JSX.Element = () => {
     </main>
     <Toaster />
     <OverlayDrop />
-    <ReloadPrompt />
+    {/* <ReloadPrompt /> */}
   </>;
 };
 

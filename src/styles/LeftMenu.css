@@ -20,13 +20,23 @@ The left menu is:
 }
 
 .left-menu__title {
-    font-size: 0.8rem;
+    font-size: 1.1rem;
     font-weight: 800;
     padding: 10px;
     display: flex;
     justify-content: space-between;
     border: solid 1px black;
     align-items: center;
+}
+
+.left-menu__title-inner {
+    display: flex;
+    align-items: center;
+}
+
+.left-menu__title-inner svg {
+    margin-right: 0.8rem;
+    transform: scale(1.5);
 }
 
 .expanded-collapse-menu {
@@ -41,10 +51,10 @@ The left menu is:
 
 .chevron-button {
     padding: 5px;
-    background-color: blue;
+    background-color: #c7c7c7;
     display: flex;
     cursor: pointer;
-    border: 1px solid pink;
+    border: 1px solid #888888;
     aspect-ratio: 1;
     border-radius: 5px;
     align-items: center;

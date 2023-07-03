@@ -16,7 +16,16 @@ interface DropdownMenuProps {
   onChange: (value: string) => void;
 }
 
-function setDropdownItemTarget(event: Event) {
+function onClickOutsideDropdown(): void {
+  // Close all dropdown menus
+  const dropdowns = document.querySelectorAll('.dropdown-menu.is-block');
+  for (let i = 0; i < dropdowns.length; i++) { // eslint-disable-line no-plusplus
+    dropdowns[i].classList.remove('is-block');
+  }
+  document.removeEventListener('click', onClickOutsideDropdown);
+}
+
+function setDropdownItemTarget(event: Event): void {
   const target = event.currentTarget as HTMLElement;
 
   // Reference to the root of the dropdown component
@@ -35,10 +44,18 @@ function setDropdownItemTarget(event: Event) {
   dropdownRoot.querySelector('.dropdown-menu').classList.toggle('is-block');
 }
 
-function onClickDropdown(event: Event) {
+function onClickDropdown(event: Event): void {
+  // Collapse all other dropdown menus
+  const dropdowns = document.querySelectorAll('.dropdown-menu.is-block');
+  for (let i = 0; i < dropdowns.length; i++) { // eslint-disable-line no-plusplus
+    dropdowns[i].classList.remove('is-block');
+  }
   // Expand the dropdown menu
   const target = event.currentTarget as HTMLElement;
   target.parentElement.querySelector('.dropdown-menu').classList.toggle('is-block');
+
+  // Add an event listener to close the dropdown menu when clicking outside
+  document.addEventListener('click', onClickOutsideDropdown);
 }
 
 export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {

@@ -1,4 +1,8 @@
 import { JSX, createSignal } from 'solid-js';
+import { AiOutlineLayout, AiOutlineBarChart } from 'solid-icons/ai';
+import { FiLayers } from 'solid-icons/fi';
+import { TbFileImport } from 'solid-icons/tb';
+import { TiExportOutline } from 'solid-icons/ti';
 import Collapse from '../Collapse.tsx';
 import LayerManager from './LayerManager.tsx';
 import ExportSection from './ExportSection.tsx';
@@ -15,7 +19,10 @@ export default function LeftMenu(): JSX.Element {
   return <div class="left-menu">
 
     <div class="left-menu__title" onClick={() => setExpandedSection(1)}>
-      { LL().LeftMenu.Import() }
+      <div class="left-menu__title-inner">
+        <TbFileImport />
+        { LL().LeftMenu.Import() }
+      </div>
       <span class={`chevron-button ${expandedSection() === 1 ? 'is-active' : ''}`}>
         <ChevronIcon />
       </span>
@@ -25,7 +32,10 @@ export default function LeftMenu(): JSX.Element {
     </Collapse>
 
     <div class="left-menu__title" onClick={() => setExpandedSection(2)}>
-      { LL().LeftMenu.MapConfiguration() }
+      <div class="left-menu__title-inner">
+        <AiOutlineLayout />
+        { LL().LeftMenu.MapConfiguration() }
+      </div>
       <span class={`chevron-button ${expandedSection() === 2 ? 'is-active' : ''}`}>
         <ChevronIcon />
       </span>
@@ -37,7 +47,10 @@ export default function LeftMenu(): JSX.Element {
     </Collapse>
 
     <div class="left-menu__title" onClick={() => setExpandedSection(3)}>
-      { LL().LeftMenu.LayerManager() }
+      <div class="left-menu__title-inner">
+        <FiLayers />
+        { LL().LeftMenu.LayerManager() }
+      </div>
       <span class={`chevron-button ${expandedSection() === 3 ? 'is-active' : ''}`}>
         <ChevronIcon />
       </span>
@@ -49,7 +62,10 @@ export default function LeftMenu(): JSX.Element {
     </Collapse>
 
     <div class="left-menu__title" onClick={() => setExpandedSection(4)}>
-      { LL().LeftMenu.RepresentationChoice() }
+      <div class="left-menu__title-inner">
+        <AiOutlineBarChart />
+        { LL().LeftMenu.RepresentationChoice() }
+      </div>
       <span class={`chevron-button ${expandedSection() === 4 ? 'is-active' : ''}`}>
         <ChevronIcon />
       </span>
@@ -61,7 +77,10 @@ export default function LeftMenu(): JSX.Element {
     </Collapse>
 
     <div class="left-menu__title" onClick={() => setExpandedSection(5)}>
-      { LL().LeftMenu.ExportSection() }
+      <div class="left-menu__title-inner">
+        <TiExportOutline />
+        { LL().LeftMenu.ExportSection() }
+      </div>
       <span class={`chevron-button ${expandedSection() === 5 ? 'is-active' : ''}`}>
         <ChevronIcon />
       </span>

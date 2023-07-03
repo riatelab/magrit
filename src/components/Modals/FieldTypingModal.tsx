@@ -9,8 +9,7 @@ import { detectTypeField } from '../../helpers/typeDetection';
 const makeDropDownVariableType = (
   type: VariableTypes,
   LL: Accessor<TranslationFunctions>,
-): JSX.Element => <div class="field">
-  <div class="control">
+): JSX.Element => <div class="control">
     <div class="select">
       <select>
         <option value="identifier" selected={type === VariableTypes.identifier}>
@@ -30,8 +29,7 @@ const makeDropDownVariableType = (
         </option>
       </select>
     </div>
-  </div>
-</div>;
+  </div>;
 
 export default function FieldTypingModal(): JSX.Element {
   const { LL } = useI18nContext();

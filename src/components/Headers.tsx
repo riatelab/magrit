@@ -1,5 +1,6 @@
 import { JSX, onMount } from 'solid-js';
 import { NavLink } from '@solidjs/router';
+import { CgDarkMode } from 'solid-icons/cg';
 import {
   FaSolidCircleQuestion,
   FaSolidFloppyDisk,
@@ -7,6 +8,7 @@ import {
 } from 'solid-icons/fa';
 import { useI18nContext } from '../i18n/i18n-solid';
 import DropdownLanguage from './DropdownLanguage.tsx';
+import img from '../magrit.svg';
 import '../styles/Headers.css';
 
 const handleBurgerClick = () => {
@@ -33,7 +35,7 @@ export function HeaderBarWelcome(): JSX.Element {
   return <nav class="navbar is-black" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="#">
-        <img src="https://magrit.cnrs.fr/static/img/logo_magrit.png" style={{ 'background-color': 'black' }} alt="magrit-logo"/>
+        <img src={img} style={{ 'background-color': 'black', width: '100%' }} alt="magrit-logo"/>
       </a>
 
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navBarHome">
@@ -67,7 +69,7 @@ export function HeaderBarApp(): JSX.Element {
   return <nav class="navbar is-black" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="#">
-        <img src="https://magrit.cnrs.fr/static/img/logo_magrit.png" style={{ 'background-color': 'black' }} alt="magrit-logo"/>
+        <img src={img} style={{ 'background-color': 'black', width: '100%' }} alt="magrit-logo"/>
       </a>
 
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navBarHome">
@@ -82,6 +84,9 @@ export function HeaderBarApp(): JSX.Element {
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
+          <button class="button button-header-bar" id="button-new-project">
+            <CgDarkMode />
+          </button>
           <button class="button button-header-bar" id="button-import-project">
             <FaSolidFolderOpen />
           </button>
