@@ -8,6 +8,7 @@ import {
 import { Toaster } from 'solid-toast';
 
 import { useI18nContext } from './i18n/i18n-solid';
+import d3 from './helpers/d3-custom';
 
 import FieldTypingModal from './components/Modals/FieldTypingModal.tsx';
 import DefaultModal from './components/Modals/ModalWindow.tsx';
@@ -31,6 +32,7 @@ import { tableWindowStore } from './store/TableWindowStore';
 import { clickLinkFromDataUrl } from './helpers/exports';
 import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
 import { round } from './helpers/math';
+import ReloadPrompt from './components/ReloadPrompt.tsx';
 
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
   paths: {
@@ -162,9 +164,10 @@ const AppPage: () => JSX.Element = () => {
     document.getElementById('button-export-project')
       ?.addEventListener('click', () => {
         const { layers } = layersDescriptionStore;
+        const map = { ...mapStore };
         const obj = {
           layers,
-          mapDimensions: mapStore.mapDimensions,
+          map,
         };
         const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(obj))}`;
         return clickLinkFromDataUrl(dataStr, 'export-project.mjson');
@@ -184,9 +187,22 @@ const AppPage: () => JSX.Element = () => {
             const result = event.target?.result;
             if (!result) return;
             const obj = JSON.parse(result.toString());
-            const { layers, mapDimensions } = obj;
+            const { layers, map } = obj;
             setLayersDescriptionStore({ layers });
-            setMapStore({ mapDimensions });
+            setMapStore(map);
+            const projection = d3[map.projection.value]()
+              .center(map.center)
+              .scale(map.scale)
+              .translate(map.translate);
+            const pathGenerator = d3.geoPath(projection);
+            setGlobalStore(
+              'projection',
+              () => projection,
+            );
+            setGlobalStore(
+              'pathGenerator',
+              () => pathGenerator,
+            );
             console.log(layersDescriptionStore);
             console.log(globalStore);
           };
@@ -230,6 +246,7 @@ const AppPage: () => JSX.Element = () => {
     </main>
     <Toaster />
     <OverlayDrop />
+    <ReloadPrompt />
   </>;
 };
 

@@ -6,24 +6,24 @@ import DropdownMenu from '../DropdownMenu.tsx';
 import d3 from '../../helpers/d3-custom';
 
 const availableProjections = [
-  'geoAiry',
-  'geoAitoff',
-  'geoArmadillo',
-  'geoAugust',
-  'geoBaker',
-  'geoBerghaus',
-  'geoBertin1953',
-  'geoBoggs',
-  'geoBonne',
-  'geoBottomley',
-  'geoBromley',
-  'geoChamberlin',
-  'geoChamberlinAfrica',
-  'geoCollignon',
-  'geoCraig',
-  'geoCraster',
-  'geoCylindricalEqualArea',
-  'geoCylindricalStereographic',
+  'Airy',
+  'Aitoff',
+  'Armadillo',
+  'August',
+  'Baker',
+  'Berghaus',
+  'Bertin1953',
+  'Boggs',
+  'Bonne',
+  'Bottomley',
+  'Bromley',
+  'Chamberlin',
+  'ChamberlinAfrica',
+  'Collignon',
+  'Craig',
+  'Craster',
+  'CylindricalEqualArea',
+  'CylindricalStereographic',
 ];
 
 const projectionEntries = availableProjections.map((projection) => ({
@@ -32,8 +32,21 @@ const projectionEntries = availableProjections.map((projection) => ({
 }));
 
 function onChangeProjectionEntry(value: string) {
-  const projection = d3[value]();
+  const functionName = `geo${value}`;
+  const projection = d3[functionName]()
+    .center(mapStore.center)
+    .translate(mapStore.translate)
+    .scale(mapStore.scale);
   const pathGenerator = d3.geoPath(projection);
+
+  setMapStore(
+    'projection',
+    {
+      name: value,
+      value: functionName,
+      type: 'd3',
+    },
+  );
 
   setGlobalStore(
     'projection',
@@ -90,7 +103,7 @@ export default function MapConfiguration(): JSX.Element {
     </div>
     <DropdownMenu
       entries={projectionEntries}
-      defaultEntry={projectionEntries[0]}
+      defaultEntry={mapStore.projection}
       onChange={ onChangeProjectionEntry }
     />
   </div>;

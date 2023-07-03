@@ -10,14 +10,14 @@ import {
   defaultPointRenderer,
   defaultPolygonRenderer,
 } from './MapRenderer/DefaultMapRenderer.tsx';
-import { mapStore } from '../store/MapStore';
+import { mapStore, setMapStore } from '../store/MapStore';
 // import { unproxify } from '../helpers/common';
 
 export default function MapZone(): JSX.Element {
   let svgElem;
   let svg;
   const sphere = { type: 'Sphere' };
-  const projection = d3.geoArmadillo()
+  const projection = d3[mapStore.projection.value]()
     .translate([-mapStore.mapDimensions.width / 2, -mapStore.mapDimensions.height / 2]);
   const initialTranslate = projection.translate();
   const initialScale = projection.scale();
@@ -38,11 +38,18 @@ export default function MapZone(): JSX.Element {
         g.setAttribute('transform', e.transform);
       });
     } else {
-      globalStore.projection.scale(e.transform.k * initialScale);
-      globalStore.projection.translate([
+      const scaleValue = e.transform.k * initialScale;
+      const translateValue = [
         e.transform.x - initialTranslate[0],
         e.transform.y - initialTranslate[1],
+      ];
+      globalStore.projection.scale(scaleValue);
+      globalStore.projection.translate(translateValue);
+      const centerValue = globalStore.projection.invert([
+        mapStore.mapDimensions.width / 2,
+        mapStore.mapDimensions.height / 2,
       ]);
+      const rotateValue = globalStore.projection.rotate();
       // svg.selectAll('g').attr('transform', null);
       // svg.selectAll('path').attr('d', pathGenerator);
       svgElem?.querySelectorAll('g').forEach((g) => {
@@ -50,6 +57,12 @@ export default function MapZone(): JSX.Element {
       });
       svgElem?.querySelectorAll('path').forEach((p) => {
         p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
+      });
+      setMapStore({
+        scale: scaleValue,
+        translate: translateValue,
+        center: centerValue,
+        rotate: rotateValue,
       });
     }
   };

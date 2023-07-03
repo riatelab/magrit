@@ -3,10 +3,51 @@
 
 import { defineConfig } from 'vite';
 import eslint from 'vite-plugin-eslint';
+import { VitePWA } from 'vite-plugin-pwa';
 import solidPlugin from 'vite-plugin-solid';
 
 export default defineConfig({
-  plugins: [solidPlugin(), eslint()],
+  plugins: [
+    solidPlugin({ ssr: false }),
+    VitePWA({
+      injectRegister: 'script',
+      registerType: 'autoUpdate',
+      devOptions: {
+        enabled: true,
+      },
+      workbox: {
+        globPatterns: ['**/*'],
+      },
+      includeAssets: ['**/*'],
+      manifest: {
+        name: 'Magrit',
+        description: 'A thematic cartography tool',
+        short_name: 'Magrit',
+        theme_color: '#ffffff',
+        scope: '/',
+        start_url: '/app',
+        icons: [
+          {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable',
+          },
+        ],
+      },
+    }),
+    eslint(),
+  ],
   server: {
     port: 3000,
   },
