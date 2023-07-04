@@ -1,0 +1,17 @@
+.slide-fade-enter-active, .slide-fade-exit-active {
+    transition: opacity 0.3s;
+}
+.slide-fade-enter, .slide-fade-exit-to {
+    opacity: 0;
+}
+
+
+.slide-fade-enter-active .modal-card, .slide-fade-exit-active .modal-card{
+    transition: transform 0.3s;
+    transform: translateY(0px);
+}
+
+.slide-fade-enter .modal-card {
+    transform: translateY(-1000px);
+    transition: transform 0.3s;
+}

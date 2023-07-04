@@ -4,6 +4,7 @@ import {
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 import { exportMapToPng, exportMapToSvg, exportToGeo } from '../../helpers/exports';
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { isExportableLayer } from '../../helpers/layerDescription';
 import { SupportedGeoFileTypes } from '../../helpers/supportedFormats';
 import DropdownMenu from '../DropdownMenu.tsx';
 
@@ -73,6 +74,7 @@ export default function ExportSection(): JSX.Element {
     'EPSG:3035',
     LL().ExportSection.CustomCRS(),
   ];
+
   const [selectedLayer, setSelectedLayer] = createSignal(null);
   const [selectedFormat, setSelectedFormat] = createSignal(null);
   const [selectedCrs, setSelectedCrs] = createSignal(null);
@@ -123,6 +125,7 @@ export default function ExportSection(): JSX.Element {
         <DropdownMenu
           entries={
             layersDescriptionStore.layers
+              .filter(isExportableLayer)
               .map((layer) => ({ name: layer.name, value: layer.name }))
           }
           defaultEntry={{ name: LL().ExportSection.SelectLayers() }}
@@ -130,17 +133,21 @@ export default function ExportSection(): JSX.Element {
         />
         <br/>
         <br/>
-        <DropdownMenu
-          entries={
-            Object.keys(SupportedGeoFileTypes)
-              .map((format) => ({ name: format, value: format }))
-          }
-          defaultEntry={{ name: LL().ExportSection.SelectFormat() }}
-          onChange={(formatName) => setSelectedFormat(formatName)}
-        />
-        <br/>
-        <br/>
-        <Show when={ !noCrsFormats.includes(selectedFormat()) }>
+        <Show when={ selectedLayer() !== null }>
+          <DropdownMenu
+            entries={
+              Object.keys(SupportedGeoFileTypes)
+                .map((format) => ({ name: format, value: format }))
+            }
+            defaultEntry={{ name: LL().ExportSection.SelectFormat() }}
+            onChange={(formatName) => setSelectedFormat(formatName)}
+          />
+          <br/>
+          <br/>
+        </Show>
+        <Show
+          when={selectedLayer() && selectedFormat() && !noCrsFormats.includes(selectedFormat())}
+        >
           <DropdownMenu
             entries={ predefinedCrs.map((n) => ({ name: n, value: n })) }
             defaultEntry={{ name: LL().ExportSection.SelectCRS() }}
@@ -149,7 +156,14 @@ export default function ExportSection(): JSX.Element {
         <br/>
         <br/>
         </Show>
-        <Show when={ selectedCrs() === LL().ExportSection.CustomCRS() }>
+        <Show
+          when={
+            selectedLayer()
+            && selectedFormat()
+            && !noCrsFormats.includes(selectedFormat())
+            && selectedCrs() === LL().ExportSection.CustomCRS()
+          }
+        >
           <div>
             <input
               class="input"

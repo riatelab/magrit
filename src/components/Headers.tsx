@@ -8,7 +8,7 @@ import {
 } from 'solid-icons/fa';
 import { useI18nContext } from '../i18n/i18n-solid';
 import DropdownLanguage from './DropdownLanguage.tsx';
-import img from '../magrit.svg';
+import img from '../assets/magrit.svg';
 import '../styles/Headers.css';
 
 const handleBurgerClick = () => {

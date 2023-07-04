@@ -1,13 +1,30 @@
-import { JSX, Show, createSignal } from 'solid-js';
+import {
+  JSX,
+  Show,
+  createSignal,
+  Accessor,
+  Setter,
+} from 'solid-js';
 import { useI18nContext } from '../../i18n/i18n-solid';
 
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+
+import { isCandidateForRepresentation } from '../../helpers/layerDescription';
 import DropdownMenu from '../DropdownMenu.tsx';
 
 import '../../styles/PortrayalSection.css';
 
 function layerAvailableVariables(layerId: string) {
   const layer = layersDescriptionStore.layers.find((l) => l.id === layerId);
+
+  if (!layer || !layer.fields) {
+    return {
+      hasCategorical: false,
+      hasStock: false,
+      hasRatio: false,
+      hasIdentifier: false,
+    };
+  }
 
   const hasCategorical = layer.fields.some((f) => f.type === 'categorical');
   const hasStock = layer.fields.some((f) => f.type === 'stock');
@@ -40,14 +57,24 @@ function onClickPortrayal(event: Event) {
 export default function PortrayalSection(): JSX.Element {
   const { LL } = useI18nContext();
 
-  const [targetLayer, setTargetLayer] = createSignal(null);
-  const [availableVariables, setAvailableVariables] = createSignal(null);
-  const [selectedPortrayal, setSelectedPortrayal] = createSignal(null);
+  const [
+    targetLayer,
+    setTargetLayer,
+  ]: [Accessor<null | string>, Setter<null | string>] = createSignal(null);
+  const [
+    availableVariables,
+    setAvailableVariables,
+  ]: [Accessor<null | any>, Setter<null | any>] = createSignal(null);
+  const [
+    selectedPortrayal,
+    setSelectedPortrayal,
+  ]: [Accessor<null | string>, Setter<null | string>] = createSignal(null);
 
   return <div class="portrayal-section">
     <DropdownMenu
       entries={
         layersDescriptionStore.layers
+          .filter(isCandidateForRepresentation)
           .map((layer) => ({ name: layer.name, value: layer.id }))}
       defaultEntry={ { name: LL().PortrayalSection.TargetLayer() } }
       onChange={ (value) => {

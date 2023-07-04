@@ -60,12 +60,6 @@ export default function MapZone(): JSX.Element {
       svgElem?.querySelectorAll('path').forEach((p) => {
         p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
       });
-      console.log({
-        scale: scaleValue,
-        translate: translateValue,
-        center: centerValue,
-        rotate: rotateValue,
-      });
       setMapStore({
         scale: scaleValue,
         translate: translateValue,
@@ -78,11 +72,9 @@ export default function MapZone(): JSX.Element {
   const zoom = d3.zoom()
     .on('zoom', (e) => {
       redraw(e, false);
-      console.log('foo');
     })
     .on('zoom.end', (e) => {
-      redraw(e, true);
-      console.log('bar');
+      // redraw(e, true);
     });
 
   const getClipSphere = () => {

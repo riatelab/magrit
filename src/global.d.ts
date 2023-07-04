@@ -16,7 +16,7 @@ interface LayerDescription {
   type: 'point' | 'linestring' | 'polygon' | 'raster' | 'table',
   renderer: string,
   data: GeoJSONFeatureCollection,
-  fields: Variable[],
+  fields: Variable[] | undefined,
   visible: boolean,
   strokeColor: string,
   strokeWidth: string,

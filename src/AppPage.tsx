@@ -5,6 +5,7 @@ import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url';
 import {
   JSX, onCleanup, onMount, Show,
 } from 'solid-js';
+import { Transition } from 'solid-transition-group';
 import { Toaster } from 'solid-toast';
 
 import { useI18nContext } from './i18n/i18n-solid';
@@ -33,6 +34,8 @@ import { tableWindowStore } from './store/TableWindowStore';
 import { clickLinkFromDataUrl } from './helpers/exports';
 import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
 import { round } from './helpers/math';
+
+import './styles/Transitions.css';
 
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
   paths: {
@@ -190,7 +193,6 @@ const AppPage: () => JSX.Element = () => {
             const obj = JSON.parse(result.toString());
             const { layers, map } = obj;
             setMapStore(map);
-            console.log(map);
             const projection = d3[map.projection.value]()
               // .center(map.center)
               .scale(map.scale)
@@ -231,18 +233,20 @@ const AppPage: () => JSX.Element = () => {
       <Show when={globalStore.isLoading }>
         <LoadingOverlay />
       </Show>
-      <Show when={modalStore.show}>
-        <DefaultModal />
-      </Show>
-      <Show when={niceAlertStore.show}>
-        <NiceAlert />
-      </Show>
-      <Show when={tableWindowStore.show}>
-        <TableWindow />
-      </Show>
-      <Show when={fieldTypingModalStore.show}>
-          <FieldTypingModal />
-      </Show>
+      <Transition name="slide-fade">
+        <Show when={modalStore.show}>
+          <DefaultModal />
+        </Show>
+        <Show when={niceAlertStore.show}>
+          <NiceAlert />
+        </Show>
+        <Show when={tableWindowStore.show}>
+          <TableWindow />
+        </Show>
+        <Show when={fieldTypingModalStore.show}>
+            <FieldTypingModal />
+        </Show>
+      </Transition>
     </main>
     <Toaster />
     <OverlayDrop />

@@ -23,6 +23,7 @@ import 'font-gis/css/font-gis.css';
 import '../../styles/LayerManagerItem.css';
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { unproxify } from '../../helpers/common';
+import { LayerDescription } from '../../global';
 
 const typeIcons: { polygon: string; linestring: string; raster: string; point: string } = {
   point: 'fg-point',
@@ -164,9 +165,11 @@ export default function LayerManagerItem(props: { 'props': LayerDescription }): 
           <FaSolidMagnifyingGlass onClick={() => { onCLickMagnifyingGlass(props.props.id); }} />
         </div>
       </Show>
-      <div title={ LL().LayerManager.AttributeTable() }>
-        <FaSolidTable onClick={() => { onClickTable(props.props.id); }} />
-      </div>
+      <Show when={props.props.fields}>
+        <div title={ LL().LayerManager.AttributeTable() }>
+          <FaSolidTable onClick={() => { onClickTable(props.props.id); }} />
+        </div>
+      </Show>
       <div title={ LL().LayerManager.Delete() }>
         <FaSolidTrash onClick={() => { onClickTrash(props.props.id, LL); }} />
       </div>
