@@ -49,6 +49,14 @@ const en = {
     RepresentationChoice: 'Representation choice',
     TargetLayer: 'Target layer',
     CreateLayer: 'Create layer',
+    ResultName: 'Result name',
+    ChoroplethOptions: {
+      Choropleth: 'Choropleth',
+      Variable: 'Variable',
+      Classification: 'Classification',
+      ColorScheme: 'Color scheme',
+      ColorSchemeInvert: 'Invert color scheme',
+    },
   },
   ExportSection: {
     SelectLayers: 'Select a layer',

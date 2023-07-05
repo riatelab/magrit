@@ -1,4 +1,4 @@
-import { For, JSX, JSXElement } from 'solid-js';
+import { For, JSX } from 'solid-js';
 import { globalStore } from '../../store/GlobalStore';
 import { LayerDescription } from '../../global';
 
@@ -21,7 +21,7 @@ export function defaultPolygonRenderer(
     <For each={layerDescription.data.features}>
       {
         (feature) => {
-          const el: JSXElement = <path
+          const el: JSX.Element = <path
             d={globalStore.pathGenerator(feature)}
             vector-effect="non-scaling-stroke"
           />;
@@ -53,7 +53,7 @@ export function defaultPointRenderer(
     <For each={layerDescription.data.features}>
       {
         (feature) => {
-          const el: JSXElement = <path
+          const el: JSX.Element = <path
             d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
             vector-effect="non-scaling-stroke"
           />;
@@ -84,7 +84,7 @@ export function defaultLineRenderer(
     <For each={layerDescription.data.features}>
       {
         (feature) => {
-          const el: JSXElement = <path
+          const el: JSX.Element = <path
             d={globalStore.pathGenerator(feature)}
             vector-effect="non-scaling-stroke"
           />;

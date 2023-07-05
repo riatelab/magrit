@@ -43,6 +43,7 @@
     "d3-selection": "^3.0.0",
     "d3-transition": "^3.0.1",
     "d3-zoom": "^3.0.0",
+    "dicopal": "^0.3.0",
     "font-gis": "^1.0.5",
     "gdal3.js": "^2.4.0",
     "jszip": "^3.10.1",

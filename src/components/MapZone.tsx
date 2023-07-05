@@ -74,7 +74,7 @@ export default function MapZone(): JSX.Element {
       redraw(e, false);
     })
     .on('zoom.end', (e) => {
-      // redraw(e, true);
+      redraw(e, true);
     });
 
   const getClipSphere = () => {
@@ -112,14 +112,16 @@ export default function MapZone(): JSX.Element {
             if (layer.renderer === 'sphere') {
               return sphereRenderer(layer);
             }
-            if (layer.type === 'polygon') {
-              return defaultPolygonRenderer(layer);
-            }
-            if (layer.type === 'point') {
-              return defaultPointRenderer(layer);
-            }
-            if (layer.type === 'linestring') {
-              return defaultLineRenderer(layer);
+            if (layer.renderer === 'default') {
+              if (layer.type === 'polygon') {
+                return defaultPolygonRenderer(layer);
+              }
+              if (layer.type === 'point') {
+                return defaultPointRenderer(layer);
+              }
+              if (layer.type === 'linestring') {
+                return defaultLineRenderer(layer);
+              }
             }
             return null;
           }}

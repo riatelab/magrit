@@ -173,6 +173,32 @@ type RootTranslation = {
 		 * C​r​e​a​t​e​ ​l​a​y​e​r
 		 */
 		CreateLayer: string
+		/**
+		 * R​e​s​u​l​t​ ​n​a​m​e
+		 */
+		ResultName: string
+		ChoroplethOptions: {
+			/**
+			 * C​h​o​r​o​p​l​e​t​h
+			 */
+			Choropleth: string
+			/**
+			 * V​a​r​i​a​b​l​e
+			 */
+			Variable: string
+			/**
+			 * C​l​a​s​s​i​f​i​c​a​t​i​o​n
+			 */
+			Classification: string
+			/**
+			 * C​o​l​o​r​ ​s​c​h​e​m​e
+			 */
+			ColorScheme: string
+			/**
+			 * I​n​v​e​r​t​ ​c​o​l​o​r​ ​s​c​h​e​m​e
+			 */
+			ColorSchemeInvert: string
+		}
 	}
 	ExportSection: {
 		/**
@@ -462,6 +488,32 @@ export type TranslationFunctions = {
 		 * Create layer
 		 */
 		CreateLayer: () => LocalizedString
+		/**
+		 * Result name
+		 */
+		ResultName: () => LocalizedString
+		ChoroplethOptions: {
+			/**
+			 * Choropleth
+			 */
+			Choropleth: () => LocalizedString
+			/**
+			 * Variable
+			 */
+			Variable: () => LocalizedString
+			/**
+			 * Classification
+			 */
+			Classification: () => LocalizedString
+			/**
+			 * Color scheme
+			 */
+			ColorScheme: () => LocalizedString
+			/**
+			 * Invert color scheme
+			 */
+			ColorSchemeInvert: () => LocalizedString
+		}
 	}
 	ExportSection: {
 		/**

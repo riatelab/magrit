@@ -14,7 +14,7 @@ interface LayerDescription {
   id: string,
   name: string,
   type: 'point' | 'linestring' | 'polygon' | 'raster' | 'table',
-  renderer: string,
+  renderer: RepresentationTypes,
   data: GeoJSONFeatureCollection,
   fields: Variable[] | undefined,
   visible: boolean,
@@ -24,6 +24,8 @@ interface LayerDescription {
   fillColor: string,
   fillOpacity: number,
   pointRadius: number | undefined,
+  // For choropleth:
+  classification: ClassificationParameters | undefined,
 }
 
 interface GeoJSONFeature {
@@ -69,4 +71,35 @@ interface ProjectionDefinition {
   name: string,
   value: string,
 }
+
+export enum ClassificationMethods {
+  equalInterval = 'equalInterval',
+  quantile = 'quantile',
+  jenks = 'jenks',
+  standardDeviation = 'standardDeviation',
+  q6 = 'q6',
+  pretty = 'pretty',
+  geometricProgression = 'geometricProgression',
+  arithmeticProgression = 'arithmeticProgression',
+  headTail = 'headTail',
+  manual = 'manual',
+}
+
+interface ClassificationParameters {
+  variable: string,
+  method: ClassificationMethods,
+  classes: number,
+  breaks: number[],
+  palette: {
+    name: string,
+    provider: string,
+  };
+  colors: string[],
+  nodataColor: string,
+}
 // }
+
+export enum RepresentationTypes {
+  choropleth = 'choropleth',
+  default = 'default',
+}

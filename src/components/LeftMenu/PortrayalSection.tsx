@@ -10,7 +10,9 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 import { isCandidateForRepresentation } from '../../helpers/layerDescription';
+
 import DropdownMenu from '../DropdownMenu.tsx';
+import ChoroplethSettings from '../ChoroplethSettings.tsx';
 
 import '../../styles/PortrayalSection.css';
 
@@ -111,19 +113,11 @@ export default function PortrayalSection(): JSX.Element {
       </ul>
     </div>
     <div class="portrayal-section__portrayal-options">
+
       <Show when={ selectedPortrayal() === 'choropleth' }>
-        <div class="portrayal-section__portrayal-options-choropleth">
-          <div>
-            Field
-          </div>
-          <div>
-            Discrétisation
-          </div>
-          <div>
-            Color palette
-          </div>
-        </div>
+        <ChoroplethSettings layerId={ targetLayer() } />
       </Show>
+
       <Show when={ selectedPortrayal() === 'propsymbols' }>
         <div class="portrayal-section__portrayal-options-choropleth">
           <div>
@@ -137,6 +131,7 @@ export default function PortrayalSection(): JSX.Element {
           </div>
         </div>
       </Show>
+
       <Show when={ selectedPortrayal() === 'foo' }>
         <div class="portrayal-section__portrayal-options-choropleth">
           <div>
@@ -149,13 +144,6 @@ export default function PortrayalSection(): JSX.Element {
             Foo
           </div>
         </div>
-      </Show>
-    </div>
-    <div>
-      <Show when={ selectedPortrayal() !== null }>
-        <button class="button is-success">
-          { LL().PortrayalSection.CreateLayer() }
-        </button>
       </Show>
     </div>
   </div>;

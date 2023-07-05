@@ -49,6 +49,14 @@ const fr = {
     RepresentationChoice: 'Choix de la représentation',
     TargetLayer: 'Couche cible',
     CreateLayer: 'Créer la couche',
+    ResultName: 'Nom du résultat',
+    ChoroplethOptions: {
+      Choropleth: 'Choroplèthe',
+      Variable: 'Variable',
+      Classification: 'Classification',
+      ColorScheme: 'Palette de couleurs',
+      ColorSchemeInvert: 'Inverser la palette',
+    },
   },
   ExportSection: {
     SelectLayers: 'Sélectionner une couche',

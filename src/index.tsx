@@ -3,6 +3,9 @@ import {
   Route, Router, Routes,
 } from '@solidjs/router';
 import { JSX } from 'solid-js';
+
+import { getPalette } from 'dicopal';
+
 // import { useRegisterSW } from 'virtual:pwa-register/solid';
 
 // import { registerSW } from 'virtual:pwa-register';
@@ -21,6 +24,8 @@ import AppPage from './AppPage.tsx';
 //   console.log('foo');
 //   registerSW();
 // }
+
+console.log(getPalette);
 
 if (Array.prototype.toReversed === undefined) {
   // eslint-disable-next-line no-extend-native
