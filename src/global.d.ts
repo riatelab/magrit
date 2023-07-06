@@ -21,11 +21,12 @@ interface LayerDescription {
   strokeColor: string,
   strokeWidth: string,
   strokeOpacity: number,
-  fillColor: string,
-  fillOpacity: number,
-  pointRadius: number | undefined,
+  fillColor?: string,
+  fillOpacity?: number,
+  pointRadius?: number,
   // For choropleth:
-  classification: ClassificationParameters | undefined,
+  classification?: ClassificationParameters,
+  legend?: LegendParameters,
 }
 
 interface GeoJSONFeature {
@@ -72,7 +73,7 @@ interface ProjectionDefinition {
   value: string,
 }
 
-export enum ClassificationMethods {
+export enum ClassificationMethod {
   equalInterval = 'equalInterval',
   quantile = 'quantile',
   jenks = 'jenks',
@@ -87,12 +88,13 @@ export enum ClassificationMethods {
 
 interface ClassificationParameters {
   variable: string,
-  method: ClassificationMethods,
+  method: ClassificationMethod,
   classes: number,
   breaks: number[],
   palette: {
     name: string,
     provider: string,
+    reversed: boolean,
   };
   colors: string[],
   nodataColor: string,
@@ -102,4 +104,34 @@ interface ClassificationParameters {
 export enum RepresentationTypes {
   choropleth = 'choropleth',
   default = 'default',
+}
+
+interface LegendParameters {
+  title: {
+    text: string,
+    fontSize: number,
+    fontFamily: string,
+    fontColor: string,
+    fontStyle: string,
+    fontWeight: string,
+    position: string,
+  }
+  subtitle: {
+    text: string,
+    fontSize: number,
+    fontFamily: string,
+    fontColor: string,
+    fontStyle: string,
+    fontWeight: string,
+    position: string,
+  },
+  type: LegendType
+  position: [number, number],
+  visible: boolean,
+}
+
+export enum LegendType {
+  choropleth = 'choropleth',
+  proportional = 'proportional',
+  categorical = 'categorical',
 }

@@ -50,6 +50,7 @@ const fr = {
     TargetLayer: 'Couche cible',
     CreateLayer: 'Créer la couche',
     ResultName: 'Nom du résultat',
+    NewLayer: 'Nouvelle_couche',
     ChoroplethOptions: {
       Choropleth: 'Choroplèthe',
       Variable: 'Variable',

@@ -10,29 +10,29 @@ import {
   QuantileClassifier,
   Q6Classifier,
 } from 'statsbreaks';
-import { ClassificationMethods } from '../global.d';
+import { ClassificationMethod } from '../global.d';
 
-export const getClassifier = (method: ClassificationMethods) => {
+export const getClassifier = (method: ClassificationMethod) => {
   switch (method) {
-    case ClassificationMethods.arithmeticProgression:
+    case ClassificationMethod.arithmeticProgression:
       return ArithmeticProgressionClassifier();
-    case ClassificationMethods.manual:
+    case ClassificationMethod.manual:
       return CustomBreaksClassifier;
-    case ClassificationMethods.equalInterval:
+    case ClassificationMethod.equalInterval:
       return EqualClassifier;
-    case ClassificationMethods.geometricProgression:
+    case ClassificationMethod.geometricProgression:
       return GeometricProgressionClassifier;
-    case ClassificationMethods.headTail:
+    case ClassificationMethod.headTail:
       return HeadTailClassifier;
-    case ClassificationMethods.jenks:
+    case ClassificationMethod.jenks:
       return JenksClassifier;
-    case ClassificationMethods.standardDeviation:
+    case ClassificationMethod.standardDeviation:
       return MsdClassifier;
-    case ClassificationMethods.pretty:
+    case ClassificationMethod.pretty:
       return PrettyBreaksClassifier;
-    case ClassificationMethods.quantile:
+    case ClassificationMethod.quantile:
       return QuantileClassifier;
-    case ClassificationMethods.q6:
+    case ClassificationMethod.q6:
       return Q6Classifier;
     default:
       throw new Error(`Unknown classification method: ${method}`);

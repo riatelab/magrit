@@ -12,6 +12,12 @@ import {
   sphereRenderer,
 } from './MapRenderer/DefaultMapRenderer.tsx';
 import { mapStore, setMapStore } from '../store/MapStore';
+import {
+  choroplethLineRenderer,
+  choroplethPointRenderer,
+  choroplethPolygonRenderer,
+} from './MapRenderer/ChoroplethMapRenderer.tsx';
+import legendChoropleth from './LegendRenderer/ChoroplethLegend.tsx';
 // import { unproxify } from '../helpers/common';
 
 export default function MapZone(): JSX.Element {
@@ -36,7 +42,7 @@ export default function MapZone(): JSX.Element {
   const redraw = (e, redrawWhenZooming: boolean) => {
     if (!redrawWhenZooming) {
       // svg.selectAll('g').attr('transform', e.transform);
-      svgElem.querySelectorAll('g').forEach((g) => {
+      svgElem.querySelectorAll('g.layer').forEach((g) => {
         g.setAttribute('transform', e.transform);
       });
     } else {
@@ -54,7 +60,7 @@ export default function MapZone(): JSX.Element {
       const rotateValue = globalStore.projection.rotate();
       // svg.selectAll('g').attr('transform', null);
       // svg.selectAll('path').attr('d', pathGenerator);
-      svgElem?.querySelectorAll('g').forEach((g) => {
+      svgElem?.querySelectorAll('g.layer').forEach((g) => {
         g.removeAttribute('transform');
       });
       svgElem?.querySelectorAll('path').forEach((p) => {
@@ -71,11 +77,11 @@ export default function MapZone(): JSX.Element {
 
   const zoom = d3.zoom()
     .on('zoom', (e) => {
-      redraw(e, false);
-    })
-    .on('zoom.end', (e) => {
       redraw(e, true);
     });
+    // .on('zoom.end', (e) => {
+    //   redraw(e, true);
+    // });
 
   const getClipSphere = () => {
     const el = <path d={globalStore.pathGenerator({ type: 'Sphere' })} />;
@@ -106,7 +112,7 @@ export default function MapZone(): JSX.Element {
           { getClipSphere() }
         </defs>
 
-        {/* Generate SVG path for each layer */}
+        {/* Generate SVG group for each layer */}
         <For each={ layersDescriptionStore.layers.toReversed() }>
           {(layer) => {
             if (layer.renderer === 'sphere') {
@@ -122,6 +128,19 @@ export default function MapZone(): JSX.Element {
               if (layer.type === 'linestring') {
                 return defaultLineRenderer(layer);
               }
+            } else if (layer.renderer === 'choropleth') {
+              if (layer.type === 'polygon') return choroplethPolygonRenderer(layer);
+              if (layer.type === 'point') return choroplethPointRenderer(layer);
+              if (layer.type === 'linestring') return choroplethLineRenderer(layer);
+            }
+            return null;
+          }}
+        </For>
+        {/* Generate legend group for each layer */}
+        <For each={ layersDescriptionStore.layers.toReversed() }>
+          {(layer) => {
+            if (layer.renderer === 'choropleth') {
+              return legendChoropleth(layer);
             }
             return null;
           }}

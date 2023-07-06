@@ -13,6 +13,7 @@ import { CustomFileList } from '../global';
 const getDefaultRenderingParams = (geomType: string) => {
   if (geomType === 'point') {
     return {
+      renderer: 'default',
       strokeColor: '#000000',
       strokeWidth: '1px',
       strokeOpacity: 1,
@@ -23,6 +24,7 @@ const getDefaultRenderingParams = (geomType: string) => {
   }
   if (geomType === 'linestring') {
     return {
+      renderer: 'default',
       strokeColor: '#000000',
       strokeWidth: '1.5px',
       strokeOpacity: 1,
@@ -30,6 +32,7 @@ const getDefaultRenderingParams = (geomType: string) => {
   }
   if (geomType === 'polygon') {
     return {
+      renderer: 'default',
       strokeColor: '#000000',
       strokeWidth: '0.5px',
       strokeOpacity: 1,

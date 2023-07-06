@@ -1,14 +1,10 @@
 import { render } from 'solid-js/web';
-import {
-  Route, Router, Routes,
-} from '@solidjs/router';
+import { Route, Router, Routes } from '@solidjs/router';
 import { JSX } from 'solid-js';
 
-import { getPalette } from 'dicopal';
-
 // import { useRegisterSW } from 'virtual:pwa-register/solid';
-
 // import { registerSW } from 'virtual:pwa-register';
+
 import TypesafeI18n from './i18n/i18n-solid';
 import { loadLocale } from './i18n/i18n-util.sync';
 
@@ -24,8 +20,6 @@ import AppPage from './AppPage.tsx';
 //   console.log('foo');
 //   registerSW();
 // }
-
-console.log(getPalette);
 
 if (Array.prototype.toReversed === undefined) {
   // eslint-disable-next-line no-extend-native
@@ -47,10 +41,10 @@ loadLocale('en');
 
 render(
   () => (
-  <TypesafeI18n>
+  <TypesafeI18n locale={'en'}>
     <Router>
       <Routes>
-        <Route path="/" end element={ <WelcomePage /> } />
+        <Route path="/" element={ <WelcomePage /> } />
         <Route path="/app" element={ <AppPage /> } />
       </Routes>
     </Router>

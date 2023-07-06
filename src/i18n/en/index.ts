@@ -50,6 +50,7 @@ const en = {
     TargetLayer: 'Target layer',
     CreateLayer: 'Create layer',
     ResultName: 'Result name',
+    NewLayer: 'New_layer',
     ChoroplethOptions: {
       Choropleth: 'Choropleth',
       Variable: 'Variable',

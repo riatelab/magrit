@@ -177,6 +177,10 @@ type RootTranslation = {
 		 * R​e​s​u​l​t​ ​n​a​m​e
 		 */
 		ResultName: string
+		/**
+		 * N​e​w​_​l​a​y​e​r
+		 */
+		NewLayer: string
 		ChoroplethOptions: {
 			/**
 			 * C​h​o​r​o​p​l​e​t​h
@@ -492,6 +496,10 @@ export type TranslationFunctions = {
 		 * Result name
 		 */
 		ResultName: () => LocalizedString
+		/**
+		 * New_layer
+		 */
+		NewLayer: () => LocalizedString
 		ChoroplethOptions: {
 			/**
 			 * Choropleth
