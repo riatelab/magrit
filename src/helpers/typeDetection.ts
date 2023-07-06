@@ -1,4 +1,4 @@
-import { DataTypes, VariableTypes } from '../global.d';
+import { DataType, VariableType } from '../global.d';
 import { isNumber } from './common';
 
 export function noOp() { }
@@ -8,7 +8,7 @@ export function noOp() { }
 // - its VariableType
 export function detectTypeField(
   values: any[],
-): { dataType: DataTypes, variableType: VariableTypes, hasMissingValues: boolean } {
+): { dataType: DataType, variableType: VariableType, hasMissingValues: boolean } {
   // We will loop through the values of the field and try to detect the type of the field
   // We will use the following rules:
   // - if all values are numbers (or can be converted to number), the field has datatype 'number'
@@ -21,8 +21,8 @@ export function detectTypeField(
   //   - if all values are not different, the field has variable type 'categorical'
 
   // We will use the following variables to store the results of the detection
-  let dataType: DataTypes = DataTypes.string;
-  let variableType: VariableTypes = VariableTypes.unknown;
+  let dataType: DataType = DataType.string;
+  let variableType: VariableType = VariableType.unknown;
   const tf = ['true', 'false'];
   const dt = [];
 
@@ -31,41 +31,41 @@ export function detectTypeField(
     if (values[i] === null || values[i] === '' || values[i] === undefined) {
       dt.push(null);
     } else if (isNumber(values[i])) {
-      dt.push(DataTypes.number);
+      dt.push(DataType.number);
     } else if (typeof values[i] === 'boolean' || tf.includes(values[i])) {
-      dt.push(DataTypes.boolean);
+      dt.push(DataType.boolean);
     } else {
-      dt.push(DataTypes.string);
+      dt.push(DataType.string);
     }
   }
 
   const filteredValues = dt.filter((v) => v !== null);
   const hasMissingValues = filteredValues.length !== dt.length;
 
-  if (filteredValues.every((d) => d === DataTypes.number)) {
-    dataType = DataTypes.number;
+  if (filteredValues.every((d) => d === DataType.number)) {
+    dataType = DataType.number;
     if (values.every((v) => Number.isInteger(v))) {
       if (values.every((v) => values.indexOf(v) === values.lastIndexOf(v))) {
-        variableType = VariableTypes.identifier;
+        variableType = VariableType.identifier;
       } else {
-        variableType = VariableTypes.stock;
+        variableType = VariableType.stock;
       }
     } else {
-      variableType = VariableTypes.ratio;
+      variableType = VariableType.ratio;
     }
-  } else if (filteredValues.every((d) => d === DataTypes.boolean)) {
-    dataType = DataTypes.boolean;
-    variableType = VariableTypes.categorical;
-  } else if (filteredValues.every((d) => d === DataTypes.string)) {
-    dataType = DataTypes.string;
+  } else if (filteredValues.every((d) => d === DataType.boolean)) {
+    dataType = DataType.boolean;
+    variableType = VariableType.categorical;
+  } else if (filteredValues.every((d) => d === DataType.string)) {
+    dataType = DataType.string;
     if (values.every((v) => values.indexOf(v) === values.lastIndexOf(v))) {
-      variableType = VariableTypes.identifier;
+      variableType = VariableType.identifier;
     } else {
-      variableType = VariableTypes.categorical;
+      variableType = VariableType.categorical;
     }
   } else {
-    dataType = DataTypes.string;
-    variableType = VariableTypes.unknown;
+    dataType = DataType.string;
+    variableType = VariableType.unknown;
   }
 
   return {

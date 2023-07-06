@@ -50,6 +50,12 @@ export default defineConfig({
   ],
   server: {
     port: 3000,
+    headers: {
+      'Cache-Control': 'no-cache; max-age=1',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Resource-Policy': 'cross-origin',
+    },
   },
   test: {
     environment: 'jsdom',

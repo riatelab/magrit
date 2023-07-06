@@ -1,6 +1,7 @@
 import { render } from 'solid-js/web';
 import { Route, Router, Routes } from '@solidjs/router';
 import { JSX } from 'solid-js';
+// import { WebR } from '@r-wasm/webr';
 
 // import { useRegisterSW } from 'virtual:pwa-register/solid';
 // import { registerSW } from 'virtual:pwa-register';
@@ -20,6 +21,11 @@ import AppPage from './AppPage.tsx';
 //   console.log('foo');
 //   registerSW();
 // }
+
+// const webR = new WebR();
+// console.log(WebR);
+// await webR.init();
+// console.log(webR);
 
 if (Array.prototype.toReversed === undefined) {
   // eslint-disable-next-line no-extend-native

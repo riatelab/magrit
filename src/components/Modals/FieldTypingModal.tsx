@@ -3,28 +3,28 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/L
 import { fieldTypingModalStore, setFieldTypingModalStore } from '../../store/FieldTypingModalStore';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
-import { VariableTypes, Variable } from '../../global.d';
+import { VariableType, Variable } from '../../global.d';
 import { detectTypeField } from '../../helpers/typeDetection';
 
 const makeDropDownVariableType = (
-  type: VariableTypes,
+  type: VariableType,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element => <div class="control">
     <div class="select">
       <select>
-        <option value="identifier" selected={type === VariableTypes.identifier}>
+        <option value="identifier" selected={type === VariableType.identifier}>
           { LL().FieldsTyping.VariableTypes.identifier() }
         </option>
-        <option value="stock" selected={type === VariableTypes.stock}>
+        <option value="stock" selected={type === VariableType.stock}>
           { LL().FieldsTyping.VariableTypes.stock() }
         </option>
-        <option value="ratio" selected={type === VariableTypes.ratio}>
+        <option value="ratio" selected={type === VariableType.ratio}>
           { LL().FieldsTyping.VariableTypes.ratio() }
         </option>
-        <option value="categorical" selected={type === VariableTypes.categorical}>
+        <option value="categorical" selected={type === VariableType.categorical}>
           { LL().FieldsTyping.VariableTypes.categorical() }
         </option>
-        <option value="unknown" selected={type === VariableTypes.unknown}>
+        <option value="unknown" selected={type === VariableType.unknown}>
           { LL().FieldsTyping.VariableTypes.unknown() }
         </option>
       </select>
@@ -61,7 +61,7 @@ export default function FieldTypingModal(): JSX.Element {
     descriptions.forEach((field, i) => {
       selects[i].querySelectorAll('option').forEach((option) => {
         if (option.selected) {
-          field.type = option.value as VariableTypes; // eslint-disable-line no-param-reassign
+          field.type = option.value as VariableType; // eslint-disable-line no-param-reassign
         }
       });
     });

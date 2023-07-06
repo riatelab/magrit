@@ -1,21 +1,27 @@
 import { createSignal, For } from 'solid-js';
 import { v4 as uuidv4 } from 'uuid';
 import { getPalette } from 'dicopal';
+
 import { layersDescriptionStore, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
+
 import { getClassifier } from '../helpers/classification';
-import {
-  ClassificationMethod,
-  ClassificationParameters,
-  LayerDescription, LegendParameters,
-  RepresentationTypes,
-  VariableTypes,
-} from '../global.d';
+import { isNumber } from '../helpers/common';
+
 import { useI18nContext } from '../i18n/i18n-solid';
+
 import imgQuantiles from '../assets/quantiles.png';
 import imgEqualIntervals from '../assets/equal_intervals.png';
 import imgQ6 from '../assets/q6.png';
 import imgJenks from '../assets/jenks.png';
-import { isNumber } from '../helpers/common';
+
+import {
+  ChoroplethLegendParameters,
+  ClassificationMethod,
+  ClassificationParameters,
+  LayerDescription, LegendParameters, LegendTextElement, LegendType, Orientation,
+  RepresentationType,
+  VariableType,
+} from '../global.d';
 
 const defaultNoDataColor = '#ffffff';
 
@@ -52,7 +58,7 @@ function onClickValidate(
     data: referenceLayerDescription.data,
     type: referenceLayerDescription.type,
     fields: referenceLayerDescription.fields,
-    renderer: 'choropleth' as RepresentationTypes,
+    renderer: 'choropleth' as RepresentationType,
     visible: true,
     strokeColor: '#000000',
     strokeWidth: '1px',
@@ -60,21 +66,35 @@ function onClickValidate(
     // fillColor: '#ffffff',
     fillOpacity: 1,
     classification: {
-      method: classification,
       variable: targetVariable,
+      method: classification,
+      classes: nClasses,
       breaks,
       palette: {
         name: 'OrRd',
         provider: 'colorbrewer',
+        reversed: false,
       },
       colors,
-      classes: nClasses,
       nodataColor: defaultNoDataColor,
     } as ClassificationParameters,
     legend: {
-      visible: true,
+      title: {
+        text: targetVariable,
+        fontSize: '12px',
+        fontFamily: 'Arial',
+        fontColor: '#000000',
+        fontStyle: 'normal',
+        fontWeight: 'bold',
+      } as LegendTextElement,
+      type: LegendType.choropleth,
+      orientation: Orientation.horizontal,
+      boxWidth: 62,
+      boxHeight: 18,
+      boxSpacing: 4,
       position: [100, 100],
-    } as LegendParameters,
+      visible: true,
+    } as ChoroplethLegendParameters,
   } as LayerDescription;
 
   console.log(newLayerDescription);
@@ -85,6 +105,8 @@ function onClickValidate(
       ...layersDescriptionStore.layers,
     ],
   });
+
+  console.log('foo');
 }
 export default function ChoroplethSettings(props): JSX.Element {
   const { LL } = useI18nContext();
@@ -97,7 +119,7 @@ export default function ChoroplethSettings(props): JSX.Element {
   }
 
   const targetFields = layerDescription
-    .fields.filter((variable) => variable.type === VariableTypes.ratio);
+    .fields.filter((variable) => variable.type === VariableType.ratio);
   // Signals for the current component:
   // the target variable, the target layer name and the classification method
   const [targetVariable, setTargetVariable] = createSignal<string>(targetFields[0].name);
