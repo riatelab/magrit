@@ -1,7 +1,15 @@
-import { For, JSX } from 'solid-js';
+import { For, JSX, onMount } from 'solid-js';
 import { getColors } from 'dicopal';
 
-import { makeLegendSubtitle, makeLegendTitle, makeLegendNote } from './common.tsx';
+import {
+  makeLegendSubtitle,
+  makeLegendTitle,
+  makeLegendNote,
+  distanceBoxContent,
+  makeRectangleBox,
+  computeRectangleBox,
+  bindMouseEnterLeave, bindDragBehavior,
+} from './common.tsx';
 
 // Import some type descriptions
 import { LayerDescription } from '../../global';
@@ -27,19 +35,37 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
     layer.classification.palette.name,
     layer.classification.classes,
     layer.classification.palette.reversed,
-  );
+  ) as string[]; // this can't be undefined because we checked it above
 
   if (!colors) {
     throw new Error(`Could not get colors for scheme ${layer.classification.palette.name}`);
   }
 
-  const distanceToTop = layer.legend.title && layer.legend.subtitle ? 40 : 20;
+  let distanceToTop = 0;
+  if (layer.legend.title) {
+    distanceToTop += +(layer.legend.title.fontSize.replace('px', '')) + 10;
+  }
+  if (layer.legend.subtitle) {
+    distanceToTop += +(layer.legend.subtitle.fontSize.replace('px', '')) + 10;
+  }
+  const boxHeightAndSpacing = layer.legend.boxHeight + layer.legend.boxSpacing;
+  // const totalLegendHeight = distanceToTop + colors.length * boxHeightAndSpacing + 20;
+  // const totalLegendWidth = layer.legend.boxWidth + layer.legend.boxSpacing + 30;
+
+  let refElement: SVGElement;
+  onMount(() => {
+    computeRectangleBox(refElement);
+    bindMouseEnterLeave(refElement);
+    bindDragBehavior(refElement);
+  });
 
   return <g
+    ref={refElement}
     class="legend choropleth"
     transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
   >
+    { makeRectangleBox() }
     { makeLegendTitle(layer.legend.title) }
     { makeLegendSubtitle(layer.legend.subtitle) }
     { makeLegendNote(layer.legend.note) }
@@ -48,8 +74,8 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
         {
           (color, i) => <rect
             fill={color}
-            x={0}
-            y={distanceToTop + i() * (layer.legend.boxHeight + layer.legend.boxSpacing)}
+            x={distanceBoxContent}
+            y={distanceBoxContent + distanceToTop + i() * boxHeightAndSpacing}
             width={layer.legend.boxWidth}
             height={layer.legend.boxHeight}
           />
@@ -95,17 +121,26 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
     layer.classification.palette.name,
     layer.classification.classes,
     layer.classification.palette.reversed,
-  );
+  ) as string[]; // this can't be undefined because we checked it above
 
   if (!colors) {
     throw new Error(`Could not get colors for scheme ${layer.classification.palette.name}`);
   }
 
+  let refElement: SVGElement;
+  onMount(() => {
+    computeRectangleBox(refElement);
+    bindMouseEnterLeave(refElement);
+    bindDragBehavior(refElement);
+  });
+
   return <g
+    ref={refElement}
     class="legend choropleth"
     transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
   >
+    { makeRectangleBox() }
     { makeLegendTitle(layer.legend.title) }
     { makeLegendSubtitle(layer.legend.subtitle) }
     { makeLegendNote(layer.legend.note) }

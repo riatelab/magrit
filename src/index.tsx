@@ -8,6 +8,7 @@ import { JSX } from 'solid-js';
 
 import TypesafeI18n from './i18n/i18n-solid';
 import { loadLocale } from './i18n/i18n-util.sync';
+import './helpers/array.extension';
 
 import 'bulma/css/bulma.min.css';
 import '@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css';
@@ -27,21 +28,8 @@ import AppPage from './AppPage.tsx';
 // await webR.init();
 // console.log(webR);
 
-if (Array.prototype.toReversed === undefined) {
-  // eslint-disable-next-line no-extend-native
-  Array.prototype.toReversed = function arrayToReversed(): any[] {
-    return this.slice().reverse();
-  };
-}
-
-const root: HTMLElement = document.getElementById('root');
+const root = document.getElementById('root') as HTMLElement;
 root.classList.add('content');
-
-if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
-  throw new Error(
-    'Root element not found. Did you forget to add it to your index.html? Or maybe the id attribute got misspelled?',
-  );
-}
 
 loadLocale('en');
 

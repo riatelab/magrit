@@ -18,7 +18,11 @@ import {
   ChoroplethLegendParameters,
   ClassificationMethod,
   ClassificationParameters,
-  LayerDescription, LegendParameters, LegendTextElement, LegendType, Orientation,
+  LayerDescription,
+  LegendParameters,
+  LegendTextElement,
+  LegendType,
+  Orientation,
   RepresentationType,
   VariableType,
 } from '../global.d';
@@ -44,6 +48,10 @@ function onClickValidate(
   const classifier = new (getClassifier(classification))(values);
   const breaks = classifier.classify(nClasses);
   const pal = getPalette('OrRd', nClasses);
+
+  if (!pal) {
+    throw Error('Unexpected Error: Palette not found');
+  }
 
   const colors = values.map((v) => (
     isNumber(v)
@@ -81,7 +89,7 @@ function onClickValidate(
     legend: {
       title: {
         text: targetVariable,
-        fontSize: '12px',
+        fontSize: '13px',
         fontFamily: 'Arial',
         fontColor: '#000000',
         fontStyle: 'normal',
