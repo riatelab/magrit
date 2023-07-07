@@ -1,15 +1,17 @@
 import { JSX } from 'solid-js';
+import { LegendTextElement } from '../../global';
 
-export function makeLegendTitle(props): JSX.Element {
+export function makeLegendTitle(props: LegendTextElement): JSX.Element {
   if (!props) return <></>;
   return <g class="legend-title">
-    <text>
+    <text style={{ 'user-select': 'none' }}>
       <tspan
         x="10"
         y="10"
         font-size={props.fontSize}
         font-weight={props.fontWeight}
         font-style={props.fontStyle}
+        pointer-events={'none'}
       >
         { props.text }
       </tspan>
@@ -17,16 +19,17 @@ export function makeLegendTitle(props): JSX.Element {
   </g>;
 }
 
-export function makeLegendSubtitle(props): JSX.Element {
+export function makeLegendSubtitle(props: LegendTextElement): JSX.Element {
   if (!props) return <></>;
   return <g class="legend-subtitle">
-    <text>
+    <text style={{ 'user-select': 'none' }}>
       <tspan
         x="10"
         y={props.fontSize + 10}
         font-size={props.fontSize}
         font-weight={props.fontWeight}
         font-style={props.fontStyle}
+        pointer-events={'none'}
       >
         { props.text }
       </tspan>
@@ -34,16 +37,17 @@ export function makeLegendSubtitle(props): JSX.Element {
   </g>;
 }
 
-export function makeLegendNote(props): JSX.Element {
+export function makeLegendNote(props: LegendTextElement): JSX.Element {
   if (!props) return <></>;
   return <g class="legend-note">
-    <text>
+    <text style={{ 'user-select': 'none' }}>
       <tspan
         x="0"
         y="0"
         font-size={props.fontSize}
         font-weight={props.fontWeight}
         font-style={props.fontStyle}
+        pointer-events={'none'}
       >
         { props.text }
       </tspan>
@@ -53,9 +57,9 @@ export function makeLegendNote(props): JSX.Element {
 
 export const distanceBoxContent = 10;
 
-export function computeRectangleBox(refElement: SVGElement): JSX.Element {
+export function computeRectangleBox(refElement: SVGElement) {
   const bbox = refElement.getBBox();
-  const rectangleBoxLegend = refElement.querySelector('.legend-box');
+  const rectangleBoxLegend = refElement.querySelector('.legend-box') as SVGElement;
   rectangleBoxLegend.setAttribute('width', `${bbox.width + distanceBoxContent * 2}px`);
   rectangleBoxLegend.setAttribute('height', `${bbox.height + distanceBoxContent * 2}px`);
   rectangleBoxLegend.setAttribute('x', `${bbox.x - distanceBoxContent}px`);
@@ -76,12 +80,12 @@ export function makeRectangleBox(width = 0, height = 0): JSX.Element {
 export function bindMouseEnterLeave(refElement: SVGElement): void {
   // Color the .legend-box element when the mouse is over the refElement group
   refElement.addEventListener('mouseenter', () => {
-    const rectangleBoxLegend = refElement.querySelector('.legend-box');
+    const rectangleBoxLegend = refElement.querySelector('.legend-box') as SVGRectElement;
     rectangleBoxLegend.setAttribute('style', 'fill: green; fill-opacity: 0.1');
   });
   refElement.addEventListener('mouseleave', () => {
-    const rectangleBoxLegend = refElement.querySelector('.legend-box');
-    rectangleBoxLegend.setAttribute('style', 'fill: none');
+    const rectangleBoxLegend = refElement.querySelector('.legend-box') as SVGRectElement;
+    rectangleBoxLegend.setAttribute('style', 'fill-opacity: 0');
   });
 }
 
@@ -105,7 +109,8 @@ export function bindDragBehavior(refElement: SVGElement): void {
     if (isDragging) {
       const dx = e.clientX - x;
       const dy = e.clientY - y;
-      const transform = refElement.getAttribute('transform');
+      // transform is not null because we create every legend group with a transform attribute
+      const transform = refElement.getAttribute('transform') as string;
       const translate = transform
         .replace(/translate\((.*),(.*)\)/, (match, p1, p2) => `translate(${Number(p1) + dx},${Number(p2) + dy})`);
       refElement.setAttribute('transform', translate);

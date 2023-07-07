@@ -170,7 +170,9 @@ interface LegendParameters {
 
 interface LegendTextElement {
   // Actual text to display
-  text: string,
+  // (optional because LegendTextElement can be used to describe multiple text elements
+  // for the labels of the legends)
+  text?: string,
   // The font size of the text (stored as a string, e.g. '12px')
   fontSize: string,
   // The font family of the text (might include a fallback)
@@ -179,8 +181,8 @@ interface LegendTextElement {
   fontColor: string,
   // The font style of the text (e.g. 'italic', or 'normal')
   fontStyle: string,
-  // The font weight of the text (e.g. 'bold', or null)
-  fontWeight: string | null,
+  // The font weight of the text (e.g. 'bold', or 'normal')
+  fontWeight: string,
 }
 
 interface ChoroplethLegendParameters extends LegendParameters {
@@ -192,8 +194,10 @@ interface ChoroplethLegendParameters extends LegendParameters {
   boxHeight: number,
   // The (horizontal or vertical,  wrt. 'orientation') spacing between boxes
   boxSpacing: number,
-  // The label for the no-data box
-  noDataLabel: string,
+  // The corner radius of each box (rx and ry of each rect)
+  boxCornerRadius: number,
+  // The text properties of the labels
+  labels: LegendTextElement,
 }
 
 export enum LegendType {

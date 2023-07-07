@@ -1,4 +1,6 @@
-import { For, JSX, onMount } from 'solid-js';
+import {
+  For, JSX, onMount,
+} from 'solid-js';
 import { getColors } from 'dicopal';
 
 import {
@@ -12,7 +14,7 @@ import {
 } from './common.tsx';
 
 // Import some type descriptions
-import { LayerDescription } from '../../global';
+import { LayerDescription, Orientation } from '../../global.d';
 
 function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
   // Check that the layer has all the required attributes
@@ -76,6 +78,8 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
             fill={color}
             x={distanceBoxContent}
             y={distanceBoxContent + distanceToTop + i() * boxHeightAndSpacing}
+            rx={layer.legend.boxCornerRadius}
+            ry={layer.legend.boxCornerRadius}
             width={layer.legend.boxWidth}
             height={layer.legend.boxHeight}
           />
@@ -86,11 +90,12 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
           (value, i) => <text
             x={layer.legend.boxWidth + layer.legend.boxSpacing}
             y={distanceToTop + i() * (layer.legend.boxHeight + layer.legend.boxSpacing)}
-            font-size={layer.legend.title.fontSize}
-            font-family={layer.legend.title.fontFamily}
-            font-color={layer.legend.title.fontColor}
-            font-style={layer.legend.title.fontStyle}
-            font-weight={layer.legend.title.fontWeight}
+            font-size={layer.legend.labels.fontSize}
+            font-family={layer.legend.labels.fontFamily}
+            font-color={layer.legend.labels.fontColor}
+            font-style={layer.legend.labels.fontStyle}
+            font-weight={layer.legend.labels.fontWeight}
+            style={{ 'user-select': 'none' }}
             text-anchor="start"
             alignment-baseline="middle"
           >{ value }</text>
@@ -144,7 +149,7 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
     { makeLegendTitle(layer.legend.title) }
     { makeLegendSubtitle(layer.legend.subtitle) }
     { makeLegendNote(layer.legend.note) }
-    <g class="legend-content">
+    <g class="legend-content" pointer-events={'none'}>
       <For each={colors}>
         {
           (color, i) => <rect
@@ -153,6 +158,8 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
             y={0}
             width={layer.legend.boxWidth}
             height={layer.legend.boxHeight}
+            rx={20}
+            ry={20}
           />
         }
       </For>
@@ -161,11 +168,12 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
           (value, i) => <text
             x={(i() * (layer.legend.boxWidth + layer.legend.boxSpacing)) - 10}
             y={layer.legend.boxHeight + layer.legend.boxSpacing}
-            font-size={layer.legend.title.fontSize}
-            font-family={layer.legend.title.fontFamily}
-            font-color={layer.legend.title.fontColor}
-            font-style={layer.legend.title.fontStyle}
-            font-weight={layer.legend.title.fontWeight}
+            font-size={layer.legend.labels.fontSize}
+            font-family={layer.legend.labels.fontFamily}
+            font-color={layer.legend.labels.fontColor}
+            font-style={layer.legend.labels.fontStyle}
+            font-weight={layer.legend.labels.fontWeight}
+            style={{ 'user-select': 'none' }}
             text-anchor="start"
             alignment-baseline="middle"
           >{ value }</text>
@@ -176,8 +184,7 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
 }
 
 export default function legendChoropleth(layer: LayerDescription): JSX.Element {
-  if (layer.legend.orientation === 'vertical') {
-    return choroplethVerticalLegend(layer);
-  }
-  return choroplethHorizontalLegend(layer);
+  return layer.legend.orientation === Orientation.vertical
+    ? choroplethVerticalLegend(layer)
+    : choroplethHorizontalLegend(layer);
 }
