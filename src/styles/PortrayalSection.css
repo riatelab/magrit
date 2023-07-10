@@ -13,3 +13,14 @@
     border: solid 2px grey;
     box-shadow: inset 4px 4px 25px rgba(0, 128, 0, 0.54), inset -4px -4px 25px rgba(0, 128, 0, 0.54);
 }
+
+.mini-button {
+    margin: 0.2em;
+    border: solid 1px transparent;
+}
+
+.mini-button.selected {
+    border: solid 1px grey;
+    border-radius: 0.5em;
+    cursor: pointer;
+}

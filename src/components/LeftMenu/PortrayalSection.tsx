@@ -74,6 +74,7 @@ export default function PortrayalSection(): JSX.Element {
 
   return <div class="portrayal-section">
     <DropdownMenu
+      id={'portrayal-section__portrayal-dropdown'}
       entries={
         layersDescriptionStore.layers
           .filter(isCandidateForRepresentation)

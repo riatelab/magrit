@@ -1,9 +1,10 @@
 // declare global {
-interface Window {
-  Gdal: any;
+declare namespace globalThis {
+  let Gdal: typeof Gdal;
+  let Dexie: DexieConstructor;
+  // db is an instance of Dexie
+  let db: typeof Dexie;
 }
-
-declare let Gdal: Window['Gdal'];
 
 // A file, dropped by the user
 interface FileEntry {

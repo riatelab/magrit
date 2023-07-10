@@ -13,6 +13,7 @@ const fr = {
   Alerts: {
     DeleteLayer: 'Supprimer la couche',
     SaveEditedData: 'Sauvegarder les modifications effectuées ?',
+    ReloadLastProject: 'Un projet a été sauvegardé automatiquement lors de la fermetture de la page le {}. Recharger le ce projet ?',
   },
   LeftMenu: {
     Import: 'Import des données',

@@ -7,6 +7,7 @@ import {
 } from 'solid-js';
 import { Transition } from 'solid-transition-group';
 import { Toaster } from 'solid-toast';
+import { Dexie } from 'dexie';
 
 import { useI18nContext } from './i18n/i18n-solid';
 import d3 from './helpers/d3-custom';
@@ -27,7 +28,7 @@ import { globalStore, setGlobalStore } from './store/GlobalStore';
 import { mapStore, setMapStore } from './store/MapStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from './store/LayersDescriptionStore';
 import { modalStore, setModalStore } from './store/ModalStore';
-import { niceAlertStore } from './store/NiceAlertStore';
+import { niceAlertStore, setNiceAlertStore } from './store/NiceAlertStore';
 import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
 import { tableWindowStore } from './store/TableWindowStore';
 
@@ -47,6 +48,24 @@ const loadGdal = async (): Promise<Gdal> => initGdalJs({
 });
 
 let timeout: NodeJS.Timeout | null | undefined = null;
+
+globalThis.Dexie = Dexie;
+globalThis.db = new globalThis.Dexie('MagritProjectDb');
+globalThis.db.version(1).stores({
+  projects: '++id, date',
+});
+
+const onBeforeUnloadWindow = async (ev) => {
+  console.log('onBeforeUnloadWindow', ev);
+  const { layers } = layersDescriptionStore;
+  const map = { ...mapStore };
+  const obj = {
+    layers,
+    map,
+  };
+  globalThis.db.projects.add({ date: new Date(), data: JSON.parse(JSON.stringify(obj)) });
+  ev.returnValue = 'Confirm exit ?'; // eslint-disable-line no-param-reassign
+};
 
 const dragEnterHandler = (e: Event): void => {
   e.preventDefault();
@@ -105,8 +124,27 @@ const dropHandler = (e: Event): void => {
   }
 };
 
+const reloadFromProjectObject = (obj): void => {
+  const { layers, map } = obj;
+  setMapStore(map);
+  const projection = d3[map.projection.value]()
+    // .center(map.center)
+    .scale(map.scale)
+    .translate(map.translate);
+  const pathGenerator = d3.geoPath(projection);
+  setGlobalStore(
+    'projection',
+    () => projection,
+  );
+  setGlobalStore(
+    'pathGenerator',
+    () => pathGenerator,
+  );
+  setLayersDescriptionStore({ layers });
+};
+
 const AppPage: () => JSX.Element = () => {
-  const { setLocale } = useI18nContext();
+  const { setLocale, LL } = useI18nContext();
   setLocale('en');
 
   const onResize = (event: Event): void => {
@@ -129,10 +167,13 @@ const AppPage: () => JSX.Element = () => {
   };
 
   onCleanup(() => {
+    // When app is unmounted, remove event listeners
     window.removeEventListener('resize', onResize);
+    window.removeEventListener('beforeunload', onBeforeUnloadWindow);
   });
 
   onMount(async () => {
+    // Add event listener to the window to handle resize events
     window.addEventListener('resize', onResize);
     // Add event listeners to the root element and the overlay drop
     // in order to handle drag and drop events (for files upload only)
@@ -144,8 +185,11 @@ const AppPage: () => JSX.Element = () => {
         el.addEventListener('drop', dropHandler);
       });
 
+    // Add event listener to the window to handle beforeunload events
+    window.addEventListener('beforeunload', onBeforeUnloadWindow);
+
     // Load GDAL
-    window.Gdal = await loadGdal();
+    globalThis.Gdal = await loadGdal();
 
     const maxMapDimensions = {
       width: round((window.innerWidth - 310) * 0.9, 0),
@@ -164,6 +208,7 @@ const AppPage: () => JSX.Element = () => {
       mapDimensions: maxMapDimensions,
     });
 
+    // Event listeners for the buttons of the header bar
     document.getElementById('button-export-project')
       ?.addEventListener('click', () => {
         const { layers } = layersDescriptionStore;
@@ -172,7 +217,6 @@ const AppPage: () => JSX.Element = () => {
           layers,
           map,
         };
-        console.log(map);
         const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(obj))}`;
         return clickLinkFromDataUrl(dataStr, 'export-project.mjson');
       });
@@ -191,22 +235,7 @@ const AppPage: () => JSX.Element = () => {
             const result = event.target?.result;
             if (!result) return;
             const obj = JSON.parse(result.toString());
-            const { layers, map } = obj;
-            setMapStore(map);
-            const projection = d3[map.projection.value]()
-              // .center(map.center)
-              .scale(map.scale)
-              .translate(map.translate);
-            const pathGenerator = d3.geoPath(projection);
-            setGlobalStore(
-              'projection',
-              () => projection,
-            );
-            setGlobalStore(
-              'pathGenerator',
-              () => pathGenerator,
-            );
-            setLayersDescriptionStore({ layers });
+            reloadFromProjectObject(obj);
           };
           reader.readAsText(file);
         };
@@ -223,6 +252,20 @@ const AppPage: () => JSX.Element = () => {
           </p>,
         });
       });
+
+    // Is there a project in the DB ?
+    const project = await globalThis.db.projects.toArray();
+    // If there is a project, propose to reload it
+    // and delete it from the DB
+    if (project.length > 0) {
+      const { date, data } = project[0];
+      setNiceAlertStore({
+        show: true,
+        content: () => <p>{ LL().Alerts.ReloadLastProject(date.toLocaleDateString())}</p>,
+        confirmCallback: () => { reloadFromProjectObject(data); },
+      });
+      globalThis.db.projects.clear();
+    }
   });
 
   return <>

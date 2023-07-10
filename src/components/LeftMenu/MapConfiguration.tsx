@@ -24,6 +24,28 @@ const availableProjections = [
   'Craster',
   'CylindricalEqualArea',
   'CylindricalStereographic',
+  'NaturalEarth2',
+  'Eckert1',
+  'Eckert2',
+  'Eckert3',
+  'Eckert4',
+  'Eckert5',
+  'Eckert6',
+  'Eisenlohr',
+  'Fahey',
+  'Foucaut',
+  'FoucautSinusoidal',
+  'Gilbert',
+  'Gingery',
+  'Gringorten',
+  'Guyou',
+  'Hammer',
+  'HammerRetroazimuthal',
+  'Healpix',
+  'Hill',
+  'Homolosine',
+  'Hufnagel',
+  'Hyperelliptical',
 ];
 
 const projectionEntries = availableProjections.map((projection) => ({
@@ -102,6 +124,7 @@ export default function MapConfiguration(): JSX.Element {
       </div>
     </div>
     <DropdownMenu
+      id={ 'map-configuration__projection-dropdown' }
       entries={projectionEntries}
       defaultEntry={mapStore.projection}
       onChange={ onChangeProjectionEntry }

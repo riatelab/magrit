@@ -144,7 +144,7 @@ export default function ChoroplethSettings(props): JSX.Element {
   const [
     targetClassification,
     setTargetClassification,
-  ] = createSignal<ClassificationMethod | null>(null);
+  ] = createSignal<ClassificationMethod>(ClassificationMethod.quantile);
 
   return <div class="portrayal-section__portrayal-options-choropleth">
     <div class="field">
@@ -161,18 +161,22 @@ export default function ChoroplethSettings(props): JSX.Element {
       <label class="label">{ LL().PortrayalSection.ChoroplethOptions.Classification() }</label>
       <div style={{ width: '50%', display: 'flex', 'justify-content': 'space-between' }}>
         <img
+          class={`mini-button${targetClassification() === ClassificationMethod.quantile ? ' selected' : ''}`}
           src={imgQuantiles}
           onClick={ () => { setTargetClassification(ClassificationMethod.quantile); }}
         />
         <img
+          class={`mini-button${targetClassification() === ClassificationMethod.equalInterval ? ' selected' : ''}`}
           src={imgEqualIntervals}
           onClick={ () => { setTargetClassification(ClassificationMethod.equalInterval); }}
         />
         <img
+          class={`mini-button${targetClassification() === ClassificationMethod.q6 ? ' selected' : ''}`}
           src={imgQ6}
           onClick={ () => { setTargetClassification(ClassificationMethod.q6); }}
         />
         <img
+          class={`mini-button${targetClassification() === ClassificationMethod.jenks ? ' selected' : ''}`}
           src={imgJenks}
           onClick={ () => { setTargetClassification(ClassificationMethod.jenks); }}
         />

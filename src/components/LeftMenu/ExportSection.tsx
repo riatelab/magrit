@@ -123,6 +123,7 @@ export default function ExportSection(): JSX.Element {
       </div>
       <div id="export-section__content__geo" class="is-hidden">
         <DropdownMenu
+          id={'export-section__content__geo__layers'}
           entries={
             layersDescriptionStore.layers
               .filter(isExportableLayer)
@@ -135,6 +136,7 @@ export default function ExportSection(): JSX.Element {
         <br/>
         <Show when={ selectedLayer() !== null }>
           <DropdownMenu
+            id={'export-section__content__geo__formats'}
             entries={
               Object.keys(SupportedGeoFileTypes)
                 .map((format) => ({ name: format, value: format }))
@@ -149,6 +151,7 @@ export default function ExportSection(): JSX.Element {
           when={selectedLayer() && selectedFormat() && !noCrsFormats.includes(selectedFormat())}
         >
           <DropdownMenu
+            id={'export-section__content__geo__crs'}
             entries={ predefinedCrs.map((n) => ({ name: n, value: n })) }
             defaultEntry={{ name: LL().ExportSection.SelectCRS() }}
             onChange={(crsName) => setSelectedCrs(crsName)}

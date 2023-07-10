@@ -78,3 +78,9 @@ The left menu is:
 .left-menu__section-container {
     padding: 10px 5px;
 }
+
+/* MapConfiguration section of the left menu */
+#map-configuration__projection-dropdown {
+    max-height: 50vh;
+    overflow-y: scroll;
+}

@@ -16,8 +16,8 @@ const [
 ] = createStore({
   projection: {
     type: 'd3',
-    value: 'geoArmadillo',
-    name: 'Armadillo',
+    value: 'geoNaturalEarth2',
+    name: 'NaturalEarth2',
   },
   translate: [0, 0],
   scale: 1,

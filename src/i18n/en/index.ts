@@ -13,6 +13,7 @@ const en = {
   Alerts: {
     DeleteLayer: 'Delete layer',
     SaveEditedData: 'Save changes ?',
+    ReloadLastProject: 'A project was automatically saved when the page was closed on {}. Reload this project ?',
   },
   LeftMenu: {
     Import: 'Data import',

@@ -18,3 +18,14 @@ html {
 .button {
   box-shadow: 0 0.5rem 0.8rem hsla(208,7%,46%,.3);
 }
+
+/* Somehow large outline to make visible which button is focused */
+button.button:focus {
+  outline: -webkit-focus-ring-color auto thin;
+  outline: Highlight auto thin;
+  outline: revert;
+}
+
+button.button:active, button.button:focus {
+  border-color: unset !important;
+}

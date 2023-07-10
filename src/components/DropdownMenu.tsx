@@ -11,6 +11,7 @@ interface DropdownMenuPlaceholder {
 }
 
 interface DropdownMenuProps {
+  id: string,
   entries: DropdownMenuEntry[];
   defaultEntry: DropdownMenuEntry | DropdownMenuPlaceholder;
   onChange: (value: string) => void;
@@ -61,7 +62,7 @@ function onClickDropdown(event: Event): void {
 export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
   return <div class="dropdown dropdown__layer" style={{ width: '100%' }}>
     <div class="dropdown-trigger" style={{ width: '100%' }} onclick={ onClickDropdown }>
-      <button class="button" aria-haspopup="true" aria-controls="dropdown-menu-export-geo-file" style={{ width: '100%' }}>
+      <button class="button" aria-haspopup="true" aria-controls={ props.id } style={{ width: '100%' }}>
         <span
           class="dropdown-item-target"
           style={{
@@ -78,7 +79,7 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
         </span>
       </button>
     </div>
-    <div class="dropdown-menu" id="dropdown-menu-export-geo-file" role="menu">
+    <div class="dropdown-menu" id={ props.id } role="menu">
       <div class="dropdown-content">
         <For each={props.entries}>
           {(entry) => (

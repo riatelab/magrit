@@ -1,4 +1,9 @@
-import { Accessor, For, JSX } from 'solid-js';
+import {
+  Accessor,
+  For,
+  JSX,
+  onMount,
+} from 'solid-js';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 import { fieldTypingModalStore, setFieldTypingModalStore } from '../../store/FieldTypingModalStore';
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -68,7 +73,17 @@ export default function FieldTypingModal(): JSX.Element {
     return descriptions;
   };
 
-  return <div class="modal-window modal" style={{ display: 'flex' }}>
+  let refParentNode: HTMLDivElement;
+
+  onMount(() => {
+    // Set focus on the confirm button when the modal is shown
+    const confirmButton = (refParentNode as HTMLDivElement).querySelector('.button.is-success') as HTMLElement;
+    if (confirmButton) {
+      confirmButton.focus();
+    }
+  });
+
+  return <div class="modal-window modal" style={{ display: 'flex' }} ref={refParentNode}>
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">

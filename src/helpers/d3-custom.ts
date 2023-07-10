@@ -1,7 +1,7 @@
 import { selection, select, selectAll } from 'd3-selection';
 import { csvFormat } from 'd3-dsv';
 import { transition } from 'd3-transition';
-import { zoom } from 'd3-zoom';
+import { zoom, zoomIdentity, zoomTransform } from 'd3-zoom';
 import {
   // Some functions for spherical math
   geoArea,
@@ -243,5 +243,7 @@ export default {
   selectAll,
   transition,
   zoom,
+  zoomIdentity,
+  zoomTransform,
   csvFormat,
 };
