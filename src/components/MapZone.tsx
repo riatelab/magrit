@@ -1,6 +1,4 @@
-import {
-  createEffect, For, JSX, onMount,
-} from 'solid-js';
+import { For, JSX, onMount } from 'solid-js';
 import d3 from '../helpers/d3-custom';
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
@@ -19,58 +17,81 @@ import {
 } from './MapRenderer/ChoroplethMapRenderer.tsx';
 import legendChoropleth from './LegendRenderer/ChoroplethLegend.tsx';
 import { debounce } from '../helpers/common';
-// import { unproxify } from '../helpers/common';
 
 export default function MapZone(): JSX.Element {
   let svgElem;
-  const projection = d3[mapStore.projection.value]();
-  projection
-    .translate([mapStore.mapDimensions.width / 2, mapStore.mapDimensions.height / 2]);
-  let initialTranslate = projection.translate();
-  let initialScale = projection.scale();
-  const initialCenter = projection.center();
+
+  // Set up the map when the component is created
+  const initialScale = 160;
+  const initialTranslate = [mapStore.mapDimensions.width / 2, mapStore.mapDimensions.height / 2];
+
+  setMapStore({
+    scale: initialScale,
+    translate: initialTranslate,
+  });
+
+  const projection = d3[mapStore.projection.value]()
+    .translate(mapStore.translate)
+    .scale(mapStore.scale);
+
   const pathGenerator = d3.geoPath(projection);
-  let lastTransform;
 
   setGlobalStore(
     'projection',
     () => projection,
   );
+
   setGlobalStore(
     'pathGenerator',
     () => pathGenerator,
   );
 
-  const redraw = (e, redrawWhenZooming: boolean) => {
-    if (!redrawWhenZooming) {
+  // When applyZoomPan is called with redraw = false,
+  // the map is not redrawn, but we set the 'transform' attribute
+  // of the layers to the current transform value.
+  // When applyZoomPan is called with redraw = true,
+  // we change the projection scale and translate values
+  // so that the map paths are redrawn with the new values (the map
+  // should not change visually, so we need to use
+  // the values used in the transform attribute up to now
+  // and remove the transform attribute from the elements on
+  // which it was defined).
+  const applyZoomPan = (e, redraw: boolean) => {
+    if (!redraw) {
+      // We just change the transform attribute of the layers
       svgElem.querySelectorAll('g.layer').forEach((g) => {
         g.setAttribute('transform', e.transform);
       });
-      lastTransform = e.transform;
     } else {
-      // const scaleValue = e.transform.k * initialScale;
-      // const translateValue = [
-      //   e.transform.x + initialTranslate[0],
-      //   e.transform.y + initialTranslate[1],
-      // ];
-      const t = d3.zoomTransform(svgElem);
-      console.log(t, e.transform);
-      const scaleValue = t.k * initialScale;
-      const translateValue = [
-        (t.x) / initialScale,
-        (t.y) / initialScale,
-      ];
+      // We change the projection scale and translate values
+      const proj = globalStore.projection;
+      const previousProjectionScale = mapStore.scale;
+      const previousProjectionTranslate = mapStore.translate;
+      // const initialRotate = mapStore.rotate;
 
-      globalStore.projection.translate(translateValue);
-      globalStore.projection.scale(scaleValue);
-      const centerValue = globalStore.projection.invert([
-        mapStore.mapDimensions.width / 2,
-        mapStore.mapDimensions.height / 2,
-      ]);
-      const rotateValue = globalStore.projection.rotate();
-      // svg.selectAll('g').attr('transform', null);
-      // svg.selectAll('path').attr('d', pathGenerator);
+      // Parse last transform from svg element
+      const lastTransform = svgElem.querySelector('g.layer').getAttribute('transform');
+      const lastTranslate = lastTransform.match(/translate\(([^)]+)\)/)[1].split(',').map((d) => +d);
+      const lastScale = +lastTransform.match(/scale\(([^)]+)\)/)[1];
+
+      // Compute new values for scale and translate
+      const scaleValue = lastScale * previousProjectionScale;
+      const translateValue = [
+        lastTranslate[0] + previousProjectionTranslate[0] * lastScale,
+        lastTranslate[1] + previousProjectionTranslate[1] * lastScale,
+      ];
+      // Keep rotation value
+      const rotateValue = proj.rotate();
+
+      // Update projection
+      proj.scale(scaleValue)
+        .translate(translateValue)
+        .rotate(rotateValue);
+
+      // We also need to reset the __zoom property of the svg element
+      // to the new values, otherwise the zoom will not work anymore.
       svgElem.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
+
       svgElem?.querySelectorAll('g.layer').forEach((g) => {
         g.removeAttribute('transform');
       });
@@ -80,21 +101,20 @@ export default function MapZone(): JSX.Element {
       setMapStore({
         scale: scaleValue,
         translate: translateValue,
-        center: centerValue,
-        rotate: rotateValue,
       });
-      initialScale = scaleValue;
-      initialTranslate = translateValue;
     }
   };
 
+  // Debounce the applyZoomPan function to avoid redrawing the map
+  // too often when zooming
   const redrawDebounced = debounce((e) => {
-    redraw(e, true);
-  }, 1000);
+    applyZoomPan(e, true);
+  }, 650);
 
+  // Set up the zoom behavior
   const zoom = d3.zoom()
     .on('zoom', (e) => {
-      redraw(e, false);
+      applyZoomPan(e, false);
     })
     .on('zoom.end', (e) => {
       redrawDebounced(e);
@@ -106,10 +126,6 @@ export default function MapZone(): JSX.Element {
     el.__data__ = { type: 'Sphere' };
     return <defs><clipPath id="clip-sphere">{ el }</clipPath></defs>;
   };
-
-  createEffect(() => {
-    console.log('layersDescriptionStore.layers', layersDescriptionStore.layers);
-  });
 
   onMount(() => {
     // svg = d3.select(svgElem);
@@ -136,15 +152,9 @@ export default function MapZone(): JSX.Element {
               return sphereRenderer(layer);
             }
             if (layer.renderer === 'default') {
-              if (layer.type === 'polygon') {
-                return defaultPolygonRenderer(layer);
-              }
-              if (layer.type === 'point') {
-                return defaultPointRenderer(layer);
-              }
-              if (layer.type === 'linestring') {
-                return defaultLineRenderer(layer);
-              }
+              if (layer.type === 'polygon') return defaultPolygonRenderer(layer);
+              if (layer.type === 'point') return defaultPointRenderer(layer);
+              if (layer.type === 'linestring') return defaultLineRenderer(layer);
             } else if (layer.renderer === 'choropleth') {
               if (layer.type === 'polygon') return choroplethPolygonRenderer(layer);
               if (layer.type === 'point') return choroplethPointRenderer(layer);
