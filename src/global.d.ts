@@ -1,9 +1,13 @@
 // declare global {
+import { WebR } from '@r-wasm/webr/webr-main';
+
 declare namespace globalThis {
   let Gdal: typeof Gdal;
   let Dexie: DexieConstructor;
   // db is an instance of Dexie
   let db: typeof Dexie;
+  // WebR instance
+  let webR: WebR;
 }
 
 // A file, dropped by the user
