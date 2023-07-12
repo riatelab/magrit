@@ -104,6 +104,9 @@ function onClickValidate(
       boxHeight: 40,
       boxSpacing: 4,
       boxCornerRadius: 10,
+      note: {
+        text: 'Wesh yo',
+      },
       labels: {
         fontSize: '12px',
         fontFamily: 'Arial',

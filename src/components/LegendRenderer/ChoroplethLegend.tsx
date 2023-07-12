@@ -7,14 +7,16 @@ import {
   makeLegendSubtitle,
   makeLegendTitle,
   makeLegendNote,
-  distanceBoxContent,
   makeRectangleBox,
   computeRectangleBox,
-  bindMouseEnterLeave, bindDragBehavior,
+  bindMouseEnterLeave,
+  bindDragBehavior, getTextSize,
 } from './common.tsx';
 
 // Import some type descriptions
 import { LayerDescription, Orientation } from '../../global.d';
+
+const defaultSpacing = 5;
 
 function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
   // Check that the layer has all the required attributes
@@ -58,8 +60,16 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
   onMount(() => {
     computeRectangleBox(refElement);
     bindMouseEnterLeave(refElement);
-    bindDragBehavior(refElement);
+    bindDragBehavior(refElement, layer);
   });
+
+  console.log(
+    getTextSize(
+      layer.legend.title.text,
+      layer.legend.title.fontSize,
+      layer.legend.title.fontFamily,
+    ),
+  );
 
   return <g
     ref={refElement}
@@ -76,8 +86,8 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
         {
           (color, i) => <rect
             fill={color}
-            x={distanceBoxContent}
-            y={distanceBoxContent + distanceToTop + i() * boxHeightAndSpacing}
+            x={0}
+            y={distanceToTop + i() * boxHeightAndSpacing}
             rx={layer.legend.boxCornerRadius}
             ry={layer.legend.boxCornerRadius}
             width={layer.legend.boxWidth}
@@ -132,11 +142,51 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
     throw new Error(`Could not get colors for scheme ${layer.classification.palette.name}`);
   }
 
+  // We need to compute the position of:
+  // - the legend title
+  // - the legend (optional) subtitle
+  // - the legend note
+  // To do so, we need to know the size of each of these elements (and the presence / absence of
+  // each of them).
+  const heightTitle = getTextSize(
+    layer.legend.title.text,
+    layer.legend.title.fontSize,
+    layer.legend.title.fontFamily,
+  ).height + defaultSpacing;
+
+  const heightSubtitle = layer.legend.subtitle
+    ? getTextSize(
+      layer.legend.subtitle.text,
+      layer.legend.subtitle.fontSize,
+      layer.legend.subtitle.fontFamily,
+    ).height + defaultSpacing
+    : 0;
+
+  const heightBox = layer.legend.boxHeight + defaultSpacing;
+
+  const heightLegendLabels = getTextSize(
+    '12.75',
+    layer.legend.labels.fontSize,
+    layer.legend.labels.fontFamily,
+  ).height + defaultSpacing;
+
+  // The y-position at which the boxes should be placed
+  const distanceBoxesToTop = heightTitle + heightSubtitle;
+
+  // The y-position at which the legend labels should be placed
+  const distanceLabelsToTop = heightTitle + heightSubtitle + heightBox;
+
+  // The y-position at which the legend note should be placed
+  const distanceNoteToTop = heightTitle
+    + heightSubtitle
+    + heightBox
+    + heightLegendLabels;
+
   let refElement: SVGElement;
   onMount(() => {
     computeRectangleBox(refElement);
     bindMouseEnterLeave(refElement);
-    bindDragBehavior(refElement);
+    bindDragBehavior(refElement, layer);
   });
 
   return <g
@@ -146,20 +196,20 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
   >
     { makeRectangleBox() }
-    { makeLegendTitle(layer.legend.title) }
-    { makeLegendSubtitle(layer.legend.subtitle) }
-    { makeLegendNote(layer.legend.note) }
+    { makeLegendTitle(layer.legend.title, [0, 0]) }
+    { makeLegendSubtitle(layer.legend.subtitle, [0, 0]) }
+    { makeLegendNote(layer.legend.note, [0, distanceNoteToTop]) }
     <g class="legend-content" pointer-events={'none'}>
       <For each={colors}>
         {
           (color, i) => <rect
             fill={color}
             x={i() * (layer.legend.boxWidth + layer.legend.boxSpacing)}
-            y={0}
+            y={distanceBoxesToTop}
+            rx={layer.legend.boxCornerRadius}
+            ry={layer.legend.boxCornerRadius}
             width={layer.legend.boxWidth}
             height={layer.legend.boxHeight}
-            rx={20}
-            ry={20}
           />
         }
       </For>
@@ -167,7 +217,7 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
         {
           (value, i) => <text
             x={(i() * (layer.legend.boxWidth + layer.legend.boxSpacing)) - 10}
-            y={layer.legend.boxHeight + layer.legend.boxSpacing}
+            y={distanceLabelsToTop}
             font-size={layer.legend.labels.fontSize}
             font-family={layer.legend.labels.fontFamily}
             font-color={layer.legend.labels.fontColor}
