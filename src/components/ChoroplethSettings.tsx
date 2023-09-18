@@ -1,8 +1,11 @@
 import { createSignal, For } from 'solid-js';
+import { render } from 'solid-js/web';
+
 import { v4 as uuidv4 } from 'uuid';
 import { getPalette } from 'dicopal';
 
 import { layersDescriptionStore, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
+import { setClassificationPanelStore } from '../store/ClassificationPanelStore';
 
 import { getClassifier } from '../helpers/classification';
 import { isNumber } from '../helpers/common';
@@ -13,6 +16,7 @@ import imgQuantiles from '../assets/quantiles.png';
 import imgEqualIntervals from '../assets/equal_intervals.png';
 import imgQ6 from '../assets/q6.png';
 import imgJenks from '../assets/jenks.png';
+import imgMoreOption from '../assets/buttons2.svg';
 
 import {
   ChoroplethLegendParameters,
@@ -141,7 +145,7 @@ export default function ChoroplethSettings(props): JSX.Element {
   // Signals for the current component:
   // the target variable, the target layer name and the classification method
   const [targetVariable, setTargetVariable] = createSignal<string>(targetFields[0].name);
-  const [targetLayerName, setTargetLayerName] = createSignal<string | null>(null);
+  const [targetLayerName, setTargetLayerName] = createSignal<string | null>(layerDescription.name);
   const [
     targetClassification,
     setTargetClassification,
@@ -180,6 +184,22 @@ export default function ChoroplethSettings(props): JSX.Element {
           class={`mini-button${targetClassification() === ClassificationMethod.jenks ? ' selected' : ''}`}
           src={imgJenks}
           onClick={ () => { setTargetClassification(ClassificationMethod.jenks); }}
+        />
+        <img
+          class={`mini-button${targetClassification() === ClassificationMethod.manual ? ' selected' : ''}`}
+          src={imgMoreOption}
+          onClick={ () => {
+            setTargetClassification(ClassificationMethod.manual);
+            setClassificationPanelStore({
+              show: true,
+              layerName: targetLayerName(),
+              variableName: targetVariable(),
+              series: layerDescription.data.features.map((f) => f.properties[targetVariable()]),
+              nClasses: 6,
+              colorScheme: 'OrRd',
+              invertColorScheme: false,
+            });
+          }}
         />
       </div>
     </div>

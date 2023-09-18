@@ -3,6 +3,14 @@ import { csvFormat } from 'd3-dsv';
 import { transition } from 'd3-transition';
 import { zoom, zoomIdentity, zoomTransform } from 'd3-zoom';
 import {
+  nice,
+  extent,
+  ticks,
+  mean,
+  median,
+  quantile,
+} from 'd3-array';
+import {
   // Some functions for spherical math
   geoArea,
   geoBounds,
@@ -246,4 +254,10 @@ export default {
   zoomIdentity,
   zoomTransform,
   csvFormat,
+  nice,
+  extent,
+  ticks,
+  mean,
+  median,
+  quantile,
 };

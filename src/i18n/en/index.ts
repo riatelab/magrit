@@ -99,6 +99,9 @@ const en = {
       unknown: 'Unknown',
     },
   },
+  ClassificationPanel: {
+    title: 'Classification',
+  },
 } satisfies BaseTranslation;
 
 export default en;

@@ -99,6 +99,9 @@ const fr = {
       unknown: 'Inconnu',
     },
   },
+  ClassificationPanel: {
+    title: 'Discrétisation',
+  },
 } satisfies BaseTranslation;
 
 export default fr;

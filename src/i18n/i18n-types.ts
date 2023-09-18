@@ -335,6 +335,12 @@ type RootTranslation = {
 			unknown: string
 		}
 	}
+	ClassificationPanel: {
+		/**
+		 * C​l​a​s​s​i​f​i​c​a​t​i​o​n
+		 */
+		title: string
+	}
 }
 
 export type TranslationFunctions = {
@@ -657,6 +663,12 @@ export type TranslationFunctions = {
 			 */
 			unknown: () => LocalizedString
 		}
+	}
+	ClassificationPanel: {
+		/**
+		 * Classification
+		 */
+		title: () => LocalizedString
 	}
 }
 

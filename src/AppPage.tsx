@@ -20,9 +20,11 @@ import MapZone from './components/MapZone.tsx';
 import NiceAlert from './components/Modals/NiceAlert.tsx';
 import OverlayDrop from './components/OverlayDrop.tsx';
 import TableWindow from './components/Modals/TableWindow.tsx';
+import ClassificationPanel from './components/Modals/ClassificationPanel.tsx';
 import { HeaderBarApp } from './components/Headers.tsx';
 // import ReloadPrompt from './components/ReloadPrompt.tsx';
 
+import { classificationPanelStore } from './store/ClassificationPanelStore';
 import { fieldTypingModalStore } from './store/FieldTypingModalStore';
 import { globalStore, setGlobalStore } from './store/GlobalStore';
 import { mapStore, setMapStore } from './store/MapStore';
@@ -287,6 +289,9 @@ const AppPage: () => JSX.Element = () => {
         </Show>
         <Show when={fieldTypingModalStore.show}>
             <FieldTypingModal />
+        </Show>
+        <Show when={classificationPanelStore.show}>
+          <ClassificationPanel />
         </Show>
       </Transition>
     </main>
