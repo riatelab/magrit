@@ -89,7 +89,7 @@ export function makeRectangleBox(width = 0, height = 0): JSX.Element {
 
 export function bindMouseEnterLeave(refElement: SVGElement): void {
   // Color the .legend-box element when the mouse is over the refElement group
-  refElement.addEventListener('mouseenter', () => {
+  refElement.addEventListener('mouseover', () => {
     const rectangleBoxLegend = refElement.querySelector('.legend-box') as SVGRectElement;
     rectangleBoxLegend.setAttribute('style', 'fill: green; fill-opacity: 0.1');
   });
@@ -104,46 +104,100 @@ export function bindDragBehavior(refElement: SVGElement, layer: LayerDescription
   // by dragging it on the screen.
   // To do we will change the transform attribute of the refElement group.
   // We will also change the cursor to indicate that the group is draggable.
-  let isDragging = false;
   let x = 0;
   let y = 0;
-  refElement.addEventListener('mousedown', (e) => {
-    e.stopPropagation();
-    isDragging = true;
+  // let isDragging = false;
+  let outerSvg;
+  let elem;
+
+  const moveElement = (e) => {
+    const dx = e.clientX - x;
+    const dy = e.clientY - y;
+
+    setLayersDescriptionStore(
+      'layers',
+      (l) => l.id === layer.id,
+      'legend',
+      {
+        position: [
+          layer.legend.position[0] + dx,
+          layer.legend.position[1] + dy,
+        ],
+      },
+    );
+
     x = e.clientX;
     y = e.clientY;
-    refElement.style.cursor = 'grabbing'; // eslint-disable-line no-param-reassign
-  });
+  };
 
-  refElement.addEventListener('mousemove', (e) => {
-    e.stopPropagation();
-    if (isDragging) {
-      const dx = e.clientX - x;
-      const dy = e.clientY - y;
-
-      // Store the new position of the legend,
-      // it will update the transform attribute of the refElement group.
-      setLayersDescriptionStore(
-        'layers',
-        (l) => l.id === layer.id,
-        'legend',
-        {
-          position: [
-            layer.legend.position[0] + dx,
-            layer.legend.position[1] + dy,
-          ],
-        },
-      );
-      x = e.clientX;
-      y = e.clientY;
-    }
-  });
-
-  refElement.addEventListener('mouseup', (e) => {
-    e.stopPropagation();
-    isDragging = false;
+  const deselectElement = (e) => {
     refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
+    outerSvg.style.cursor = null; // eslint-disable-line no-param-reassign
+    outerSvg.removeEventListener('mousemove', moveElement);
+    outerSvg.removeEventListener('mouseup', deselectElement);
+  };
+
+  refElement.addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+    // isDragging = true;
+    x = e.clientX;
+    y = e.clientY;
+
+    elem = refElement;
+    // Find the parent SVG element and listen to mousemove and mouseup events on it
+    // instead of the refElement group, because the mouse can move faster than
+    // the mousemove event is triggered, and we want to be able to move the
+    // refElement group even if the mouse is not over it.
+    while (true) {
+      if (elem.tagName.toLowerCase() === 'svg') {
+        outerSvg = elem;
+        break;
+      } else {
+        elem = elem.parentElement;
+      }
+    }
+    // Listen on events on the parent SVG element
+    outerSvg.addEventListener('mousemove', moveElement);
+    outerSvg.addEventListener('mouseup', deselectElement);
+    // Cursor style
+    outerSvg.style.cursor = 'grabbing'; // eslint-disable-line no-param-reassign
+    // Maybe we should disable pointer events on the refElement group ?
+    // For now we will keep them enabled (so that we can keep
+    // the green color of the legend box when the mouse is over it when dragging)
+    // In case we remove pointer events here, we should
+    // put them back when the mouse is released (in deselectElement)
   });
+
+  // refElement.addEventListener('mousemove', (e) => {
+  //   e.stopPropagation();
+  //   if (isDragging) {
+  //     const dx = e.clientX - x;
+  //     const dy = e.clientY - y;
+  //
+  //     // Store the new position of the legend,
+  //     // it will update the transform attribute of the refElement group.
+  //     setLayersDescriptionStore(
+  //       'layers',
+  //       (l) => l.id === layer.id,
+  //       'legend',
+  //       {
+  //         position: [
+  //           layer.legend.position[0] + dx,
+  //           layer.legend.position[1] + dy,
+  //         ],
+  //       },
+  //     );
+  //     x = e.clientX;
+  //     y = e.clientY;
+  //   }
+  // });
+  //
+  // refElement.addEventListener('mouseup', (e) => {
+  //   console.log('mouseup triggered');
+  //   e.stopPropagation();
+  //   isDragging = false;
+  //   refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
+  // });
 }
 
 // Determine the size of an SVG text element before displaying it

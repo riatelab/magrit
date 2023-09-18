@@ -43,7 +43,7 @@ function onClickValidate(
     throw Error('Unexpected Error: Reference layer not found');
   }
 
-  const nClasses = 5;
+  const nClasses = 6;
   const values = referenceLayerDescription.data.features.map((f) => f.properties[targetVariable]);
   const classifier = new (getClassifier(classification))(values);
   const breaks = classifier.classify(nClasses);
@@ -125,8 +125,6 @@ function onClickValidate(
       ...layersDescriptionStore.layers,
     ],
   });
-
-  console.log('foo');
 }
 export default function ChoroplethSettings(props): JSX.Element {
   const { LL } = useI18nContext();

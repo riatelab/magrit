@@ -20,10 +20,10 @@ const defaultSpacing = 5;
 
 function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
   // Check that the layer has all the required attributes
-  // Since this is done during layer creation, this should not happen in practice
+  // Since this is done during layer creation, this should not happen in practice,
   // and the following checks are here:
   // - to make Typescript happy
-  // - to make sure that the layer is correctly defined.
+  // - to make sure the layer is correctly defined.
   // In the future, we might want to remove these checks.
   if (!layer.classification) {
     throw new Error('Classification attribute is not defined - this should not happen');
@@ -61,6 +61,7 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
     computeRectangleBox(refElement);
     bindMouseEnterLeave(refElement);
     bindDragBehavior(refElement, layer);
+    refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
   });
 
   console.log(
@@ -187,6 +188,7 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
     computeRectangleBox(refElement);
     bindMouseEnterLeave(refElement);
     bindDragBehavior(refElement, layer);
+    refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
   });
 
   return <g
