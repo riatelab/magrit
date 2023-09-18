@@ -1,7 +1,7 @@
 import { render } from 'solid-js/web';
 import { Route, Router, Routes } from '@solidjs/router';
 import { JSX } from 'solid-js';
-import { WebR } from '@r-wasm/webr';
+// import { WebR } from '@r-wasm/webr';
 
 // import { useRegisterSW } from 'virtual:pwa-register/solid';
 // import { registerSW } from 'virtual:pwa-register';
@@ -26,10 +26,10 @@ import AppPage from './AppPage.tsx';
 // Maybe we should use https://www.npmjs.com/package/vite-plugin-static-copy
 // to copy all WebR files to the dist folder
 // and then use the '/dist/' baseUrl to load them from there
-globalThis.webR = new WebR({
-  baseUrl: '/node_modules/@r-wasm/webr/dist/',
-});
-globalThis.webR.init();
+// globalThis.webR = new WebR({
+//   baseUrl: '/node_modules/@r-wasm/webr/dist/',
+// });
+// globalThis.webR.init();
 
 const root = document.getElementById('root') as HTMLElement;
 root.classList.add('content');
