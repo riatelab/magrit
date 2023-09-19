@@ -15,6 +15,7 @@ interface DropdownMenuProps {
   entries: DropdownMenuEntry[];
   defaultEntry: DropdownMenuEntry | DropdownMenuPlaceholder;
   onChange: (value: string) => void;
+  style?: { [key: string]: string };
 }
 
 function onClickOutsideDropdown(): void {
@@ -59,8 +60,12 @@ function onClickDropdown(event: Event): void {
   document.addEventListener('click', onClickOutsideDropdown);
 }
 
+const defaultStyleDropdown = {
+  width: '100%',
+};
+
 export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
-  return <div class="dropdown dropdown__layer" style={{ width: '100%' }}>
+  return <div class="dropdown" style={{ ...defaultStyleDropdown, ...props.style }}>
     <div class="dropdown-trigger" style={{ width: '100%' }} onclick={ onClickDropdown }>
       <button class="button" aria-haspopup="true" aria-controls={ props.id } style={{ width: '100%' }}>
         <span
@@ -80,7 +85,7 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
       </button>
     </div>
     <div class="dropdown-menu" id={ props.id } role="menu">
-      <div class="dropdown-content">
+      <div class="dropdown-content" style={{ position: 'fixed', 'z-index': 1001 }}>
         <For each={props.entries}>
           {(entry) => (
             <a href="#" class="dropdown-item" value={entry.value} onClick={ (ev) => {

@@ -340,6 +340,148 @@ type RootTranslation = {
 		 * C​l​a​s​s​i​f​i​c​a​t​i​o​n
 		 */
 		title: string
+		/**
+		 * B​o​x
+		 */
+		box: string
+		/**
+		 * H​i​s​t​o​g​r​a​m
+		 */
+		histogram: string
+		/**
+		 * B​e​e​s​w​a​r​m
+		 */
+		beeswarm: string
+		/**
+		 * D​o​t​ ​h​i​s​t​o​g​r​a​m
+		 */
+		dotHistogram: string
+		/**
+		 * V​a​l​u​e​s​ ​d​i​s​t​r​i​b​u​t​i​o​n
+		 */
+		distribution: string
+		/**
+		 * S​u​m​m​a​r​y
+		 */
+		summary: string
+		/**
+		 * P​o​p​u​l​a​t​i​o​n​ ​(​n​o​n​-​n​u​l​l​ ​v​a​l​u​e​s​)
+		 */
+		population: string
+		/**
+		 * M​i​n​i​m​u​m
+		 */
+		minimum: string
+		/**
+		 * M​a​x​i​m​u​m
+		 */
+		maximum: string
+		/**
+		 * M​e​a​n
+		 */
+		mean: string
+		/**
+		 * M​e​d​i​a​n
+		 */
+		median: string
+		/**
+		 * S​t​a​n​d​a​r​d​ ​d​e​v​i​a​t​i​o​n
+		 */
+		standardDeviation: string
+		/**
+		 * V​a​r​i​a​n​c​e
+		 */
+		variance: string
+		/**
+		 * V​a​r​i​a​n​c​e​ ​c​o​e​f​f​i​c​i​e​n​t
+		 */
+		varianceCoefficient: string
+		/**
+		 * S​k​e​w​n​e​s​s
+		 */
+		skewness: string
+		/**
+		 * C​l​a​s​s​i​f​i​c​a​t​i​o​n
+		 */
+		classification: string
+		/**
+		 * C​l​a​s​s​i​f​i​c​a​t​i​o​n​ ​m​e​t​h​o​d
+		 */
+		classificationMethod: string
+		classificationMethods: {
+			/**
+			 * E​q​u​a​l​ ​i​n​t​e​r​v​a​l
+			 */
+			equalInterval: string
+			/**
+			 * Q​u​a​n​t​i​l​e
+			 */
+			quantile: string
+			/**
+			 * J​e​n​k​s
+			 */
+			jenks: string
+			/**
+			 * S​t​a​n​d​a​r​d​ ​d​e​v​i​a​t​i​o​n
+			 */
+			standardDeviation: string
+			/**
+			 * Q​6
+			 */
+			q6: string
+			/**
+			 * P​r​e​t​t​y
+			 */
+			pretty: string
+			/**
+			 * G​e​o​m​e​t​r​i​c​ ​p​r​o​g​r​e​s​s​i​o​n
+			 */
+			geometricProgression: string
+			/**
+			 * A​r​i​t​h​m​e​t​i​c​ ​p​r​o​g​r​e​s​s​i​o​n
+			 */
+			arithmeticProgression: string
+			/**
+			 * H​e​a​d​/​t​a​i​l
+			 */
+			headTail: string
+			/**
+			 * M​a​n​u​a​l
+			 */
+			manual: string
+		}
+		/**
+		 * N​u​m​b​e​r​ ​o​f​ ​c​l​a​s​s​e​s
+		 */
+		numberOfClasses: string
+		/**
+		 * M​e​a​n​ ​v​a​l​u​e​ ​p​o​s​i​t​i​o​n
+		 */
+		meanPosition: string
+		/**
+		 * C​l​a​s​s​ ​c​e​n​t​e​r
+		 */
+		meanPositionCenter: string
+		/**
+		 * C​l​a​s​s​ ​b​o​u​n​d​a​r​y
+		 */
+		meanPositionBoundary: string
+		/**
+		 * A​m​p​l​i​t​u​d​e
+		 */
+		amplitude: string
+		/**
+		 * s​t​a​n​d​a​r​d​ ​d​e​v​i​a​t​i​o​n​s
+		 */
+		howManyStdDev: string
+		/**
+		 * L​o​g​a​r​i​t​h​m​i​c​ ​s​c​a​l​e
+		 */
+		logarithmicScale: string
+		/**
+		 * E​n​t​e​r​ ​c​l​a​s​s​ ​b​o​u​n​d​a​r​y
+		 */
+		breaksInput: string
 	}
 }
 
@@ -669,6 +811,148 @@ export type TranslationFunctions = {
 		 * Classification
 		 */
 		title: () => LocalizedString
+		/**
+		 * Box
+		 */
+		box: () => LocalizedString
+		/**
+		 * Histogram
+		 */
+		histogram: () => LocalizedString
+		/**
+		 * Beeswarm
+		 */
+		beeswarm: () => LocalizedString
+		/**
+		 * Dot histogram
+		 */
+		dotHistogram: () => LocalizedString
+		/**
+		 * Values distribution
+		 */
+		distribution: () => LocalizedString
+		/**
+		 * Summary
+		 */
+		summary: () => LocalizedString
+		/**
+		 * Population (non-null values)
+		 */
+		population: () => LocalizedString
+		/**
+		 * Minimum
+		 */
+		minimum: () => LocalizedString
+		/**
+		 * Maximum
+		 */
+		maximum: () => LocalizedString
+		/**
+		 * Mean
+		 */
+		mean: () => LocalizedString
+		/**
+		 * Median
+		 */
+		median: () => LocalizedString
+		/**
+		 * Standard deviation
+		 */
+		standardDeviation: () => LocalizedString
+		/**
+		 * Variance
+		 */
+		variance: () => LocalizedString
+		/**
+		 * Variance coefficient
+		 */
+		varianceCoefficient: () => LocalizedString
+		/**
+		 * Skewness
+		 */
+		skewness: () => LocalizedString
+		/**
+		 * Classification
+		 */
+		classification: () => LocalizedString
+		/**
+		 * Classification method
+		 */
+		classificationMethod: () => LocalizedString
+		classificationMethods: {
+			/**
+			 * Equal interval
+			 */
+			equalInterval: () => LocalizedString
+			/**
+			 * Quantile
+			 */
+			quantile: () => LocalizedString
+			/**
+			 * Jenks
+			 */
+			jenks: () => LocalizedString
+			/**
+			 * Standard deviation
+			 */
+			standardDeviation: () => LocalizedString
+			/**
+			 * Q6
+			 */
+			q6: () => LocalizedString
+			/**
+			 * Pretty
+			 */
+			pretty: () => LocalizedString
+			/**
+			 * Geometric progression
+			 */
+			geometricProgression: () => LocalizedString
+			/**
+			 * Arithmetic progression
+			 */
+			arithmeticProgression: () => LocalizedString
+			/**
+			 * Head/tail
+			 */
+			headTail: () => LocalizedString
+			/**
+			 * Manual
+			 */
+			manual: () => LocalizedString
+		}
+		/**
+		 * Number of classes
+		 */
+		numberOfClasses: () => LocalizedString
+		/**
+		 * Mean value position
+		 */
+		meanPosition: () => LocalizedString
+		/**
+		 * Class center
+		 */
+		meanPositionCenter: () => LocalizedString
+		/**
+		 * Class boundary
+		 */
+		meanPositionBoundary: () => LocalizedString
+		/**
+		 * Amplitude
+		 */
+		amplitude: () => LocalizedString
+		/**
+		 * standard deviations
+		 */
+		howManyStdDev: () => LocalizedString
+		/**
+		 * Logarithmic scale
+		 */
+		logarithmicScale: () => LocalizedString
+		/**
+		 * Enter class boundary
+		 */
+		breaksInput: () => LocalizedString
 	}
 }
 

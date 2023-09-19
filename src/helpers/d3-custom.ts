@@ -9,6 +9,10 @@ import {
   mean,
   median,
   quantile,
+  min,
+  max,
+  deviation,
+  variance,
 } from 'd3-array';
 import {
   // Some functions for spherical math
@@ -260,4 +264,8 @@ export default {
   mean,
   median,
   quantile,
+  min,
+  max,
+  deviation,
+  variance,
 };

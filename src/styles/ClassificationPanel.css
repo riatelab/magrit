@@ -1,3 +1,35 @@
 .modal-window.classification-panel > .modal-card {
     width: 1100px;
 }
+
+.modal-window.classification-panel table tr td:first-child {
+    text-align: left;
+}
+
+.modal-window.classification-panel table tr td:last-child {
+    text-align: right;
+}
+
+.modal-window.classification-panel table {
+    width: 70%;
+    margin: 12% auto 0 auto;
+}
+
+.modal-window.classification-panel p.label {
+    margin-top: 1em !important;
+    margin-bottom: 0 !important;
+}
+
+.modal-window.classification-panel input[type="number"] {
+    width: 120px;
+}
+
+.modal-window.classification-panel input[type="number"] + span {
+    margin-left: 0.5em;
+    vertical-align: -webkit-baseline-middle;
+    vertical-align: -moz-middle-with-baseline;
+}
+
+.modal-window.classification-panel svg[class*='plot'] {
+    border: solid 0.5px silver;
+}

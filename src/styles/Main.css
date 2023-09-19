@@ -19,6 +19,10 @@ html {
   box-shadow: 0 0.5rem 0.8rem hsla(208,7%,46%,.3);
 }
 
+.dropdown-trigger > .button {
+  box-shadow: unset !important;
+}
+
 /* Somehow large outline to make visible which button is focused */
 button.button:focus {
   outline: -webkit-focus-ring-color auto thin;
@@ -28,4 +32,12 @@ button.button:focus {
 
 button.button:active, button.button:focus {
   border-color: unset !important;
+}
+
+svg[class*='plot'] {
+  margin: auto;
+}
+input[type=checkbox], input[type=radio] {
+  vertical-align: baseline;
+  margin-right: 0.4em;
 }
