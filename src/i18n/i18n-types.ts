@@ -479,9 +479,13 @@ type RootTranslation = {
 		 */
 		logarithmicScale: string
 		/**
-		 * E​n​t​e​r​ ​c​l​a​s​s​ ​b​o​u​n​d​a​r​y
+		 * E​n​t​e​r​ ​c​l​a​s​s​ ​l​i​m​i​t​s
 		 */
 		breaksInput: string
+		/**
+		 * {​{​O​n​e​ ​f​e​a​t​u​r​e​ ​w​i​t​h​o​u​t​ ​d​a​t​a​|​?​?​ ​f​e​a​t​u​r​e​ ​w​i​t​h​o​u​t​ ​d​a​t​a​}​}
+		 */
+		missingValues: string
 	}
 }
 
@@ -950,9 +954,13 @@ export type TranslationFunctions = {
 		 */
 		logarithmicScale: () => LocalizedString
 		/**
-		 * Enter class boundary
+		 * Enter class limits
 		 */
 		breaksInput: () => LocalizedString
+		/**
+		 * {{One feature without data|?? feature without data}}
+		 */
+		missingValues: (arg0: number | string | boolean) => LocalizedString
 	}
 }
 

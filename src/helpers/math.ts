@@ -1,3 +1,5 @@
+import d3 from './d3-custom';
+
 export const Mmax = Math.max;
 export const Mmin = Math.min;
 export const Mabs = Math.abs;
@@ -103,4 +105,30 @@ export function haversineDistance(A: [number, number], B: [number, number]) {
     + Mcos(lat1 * piDr) * Mcos(lat2 * piDr)
     * Msin(dLon / 2) * Msin(dLon / 2);
   return 6371 * 2 * Matan2(Msqrt(a), Msqrt(1 - a));
+}
+
+/**
+ * Compute the Interquartile Range (IQR) of a dataset.
+ *
+ * @param {number[]} values - The dataset
+ * @returns {number} - The IQR
+ */
+export function IQR(values: number[]): number {
+  return d3.quantile(values, 0.75) - d3.quantile(values, 0.25);
+}
+
+
+/**
+ * Compute the bandwidth that will be used to plot kernel density estimation
+ * of a dataset.
+ * This is ported from the `bw.nrd0` function of the R stats package.
+ *
+ * @param values
+ * @returns {number} - The bandwidth
+ */
+export function getBandwidth(values: number[]): number {
+  const hi = d3.deviation(values) as number;
+  let lo = Math.min(hi, IQR(values) / 1.34);
+  if (lo === 0) lo = hi || Math.abs(values[0]) || 1;
+  return 0.9 * lo * (values.length ** -0.2);
 }

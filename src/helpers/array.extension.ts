@@ -1,10 +1,10 @@
-interface Array {
-  toReversed(): any[];
+interface Array<T> {
+  toReversed(): T[];
 }
 
 if (Array.prototype.toReversed === undefined) {
   // eslint-disable-next-line no-extend-native
-  Array.prototype.toReversed = function arrayToReversed(): any[] {
+  Array.prototype.toReversed = function arrayToReversed(): T[] {
     return this.slice().reverse();
   };
 }

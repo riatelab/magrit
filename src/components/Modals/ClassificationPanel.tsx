@@ -5,20 +5,19 @@ import {
   Show,
 } from 'solid-js';
 import * as Plot from '@observablehq/plot';
+import { getPalette } from 'dicopal';
+import type { Palette } from 'dicopal/dist/index.d';
 
 import { useI18nContext } from '../../i18n/i18n-solid';
 import d3 from '../../helpers/d3-custom';
-import {
-  classificationPanelStore,
-  setClassificationPanelStore,
-} from '../../store/ClassificationPanelStore';
+import { classificationPanelStore, setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 
 import '../../styles/ClassificationPanel.css';
 import DropdownMenu from '../DropdownMenu.tsx';
 import { getClassifier } from '../../helpers/classification';
 import { isNumber } from '../../helpers/common';
-import { round } from '../../helpers/math';
-import { ClassificationMethod } from '../../global.d';
+import { getBandwidth, hasNegative, round } from '../../helpers/math';
+import { ClassificationMethod, ClassificationParameters, CustomPalette } from '../../global.d';
 
 enum DistributionPlotType {
   box,
@@ -26,6 +25,7 @@ enum DistributionPlotType {
   dotHistogram,
   beeswarm,
   violin,
+  histogramAndDensity,
 }
 
 enum OptionsClassification {
@@ -121,8 +121,43 @@ function makeDistributionPlot(
       ],
     });
   }
-  if (type === DistributionPlotType.beeswarm) {
+  if (type === DistributionPlotType.histogramAndDensity) {
+    const thresholds = d3.ticks(...d3.nice(...d3.extent(series), 10), 60);
+    const density = kde(
+      epanechnikov(getBandwidth(series)),
+      thresholds,
+      series,
+    );
     return Plot.plot({
+      height: 300,
+      // width: 400,
+      marginLeft: 50,
+      x: { nice: true, type: logTransform ? 'log' : 'linear' },
+      y: { nice: true },
+      marks: [
+        Plot.rectY(
+          series,
+          Plot.binX(
+            { y: 'count' },
+            {
+              x: (d) => d,
+              thresholds: 'scott',
+              tip: true,
+            },
+          ),
+        ),
+        Plot.line(density, {
+          y: (d) => -d[1],
+          x: (d) => d[0],
+          stroke: 'red',
+          curve: 'natural',
+        }),
+        Plot.ruleY([0]),
+      ],
+    });
+  }
+  if (type === DistributionPlotType.beeswarm) {
+    let ppp = Plot.plot({
       height: 300,
       // width: 400,
       marginLeft: 50,
@@ -130,17 +165,47 @@ function makeDistributionPlot(
       marks: [
         Plot.dot(
           series,
-          Plot.dodgeY('middle', {
+          Plot.dodgeY('bottom', {
             x: (d) => d,
-            r: getRadiusBeeswarm(series),
+            r: 2,
+            padding: 1,
+            fill: 'black',
           }),
         ),
       ],
     });
+    const th = ppp.querySelector('g[aria-label="dot"]').getBBox().height;
+    console.log(th);
+    if (th > 300) {
+      const ratio = 300 / th;
+      console.log(ratio);
+      ppp = Plot.plot({
+        height: 300,
+        // width: 400,
+        marginLeft: 50,
+        x: { nice: true, type: logTransform ? 'log' : 'linear' },
+        marks: [
+          Plot.dot(
+            series,
+            Plot.dodgeY('bottom', {
+              x: (d) => d,
+              r: 2 * ratio,
+              padding: 1 * ratio,
+              fill: 'black',
+            }),
+          ),
+        ],
+      });
+    }
+    return ppp;
   }
   if (type === DistributionPlotType.violin) {
     const thresholds = d3.ticks(...d3.nice(...d3.extent(series), 10), 40);
-    const density = kde(epanechnikov(0.4), thresholds, classificationPanelStore.series);
+    const density = kde(
+      epanechnikov(getBandwidth(series)),
+      thresholds,
+      classificationPanelStore.series,
+    );
     return Plot.plot({
       height: 300,
       width: 400,
@@ -182,6 +247,14 @@ const classificationMethodHasOption = (
   return t.options.includes(option);
 };
 
+const makeColorNbIndiv = (
+  classifParam: ClassificationParameters,
+): { color: string, indiv: number }[] => classifParam.entitiesByClass
+  .map((n, i) => ({
+    color: classifParam.palette.colors[i],
+    indiv: n,
+  }));
+
 function prepareStatisticalSummary(series: number[]) {
   return {
     population: series.length,
@@ -195,16 +268,68 @@ function prepareStatisticalSummary(series: number[]) {
   };
 }
 
+function parseUserDefinedBreaks(series: number[], breaksString: string): number[] {
+  const separator = hasNegative(series) ? '- ' : '-';
+  const breaks = breaksString.split(separator).map((d) => +d);
+  if (breaks.length < 2) {
+    throw new Error('The number of breaks must be at least 2.');
+  }
+  return breaks;
+}
+
 export default function ClassificationPanel(): JSX.Element {
   // Function to recompute the classification given the current options.
   // We scope it here to facilitate the use of the signals that are defined below...
-  const computeClassification = (series: number[], method: ClassificationMethod, options: any) => {
-    const classifier = new (getClassifier(method))(series);
-    const breaks = classifier.classify(options.nbClasses);
-    const entitiesByClass = classifier.countByClass();
-    setCurrentBreaks(breaks); // eslint-disable-line @typescript-eslint/no-use-before-define
-    return breaks;
+
+  const updateClassificationParameters = () => {
+    /* eslint-disable @typescript-eslint/no-use-before-define */
+    const cp = makeClassificationParameters();
+    setCurrentBreaksInfo(cp);
+    setCustomBreaks(cp.breaks);
+    /* eslint-enable @typescript-eslint/no-use-before-define */
   };
+
+  const makeClassificationParameters = (): ClassificationParameters => {
+    /* eslint-disable @typescript-eslint/no-use-before-define */
+    const classifier = new (getClassifier(classificationMethod()))(filteredSeries);
+    let breaks;
+    let classes;
+    if (
+      !([
+        ClassificationMethod.standardDeviation,
+        ClassificationMethod.manual,
+      ].includes(classificationMethod()))
+    ) {
+      breaks = classifier.classify(numberOfClasses());
+      classes = numberOfClasses();
+    } else if (classificationMethod() === ClassificationMethod.standardDeviation) {
+      breaks = classifier.classify(amplitude(), meanPositionRole() === 'center');
+      console.log(breaks);
+      classes = breaks.length - 1;
+    } else if (classificationMethod() === ClassificationMethod.manual) {
+      breaks = parseUserDefinedBreaks(filteredSeries, customBreaks());
+      classes = breaks.length - 1;
+    }
+    const entitiesByClass = classifier.countByClass();
+    const palName = paletteName();
+    const palette = getPalette(palName, numberOfClasses());
+
+    if (!palette) {
+      throw new Error('Palette not found !');
+    }
+
+    const classificationParameters = {
+      variable: classificationPanelStore.variableName,
+      method: classificationMethod(),
+      classes,
+      breaks,
+      palette,
+      nodataColor: noDataColor(),
+      entitiesByClass,
+    } as ClassificationParameters;
+
+    return classificationParameters;
+  }; /* eslint-enable @typescript-eslint/no-use-before-define */
 
   const { LL } = useI18nContext();
 
@@ -212,6 +337,8 @@ export default function ClassificationPanel(): JSX.Element {
   const filteredSeries = classificationPanelStore.series
     .filter((d) => isNumber(d))
     .map((d) => +d);
+
+  const missingValues = classificationPanelStore.series.length - filteredSeries.length;
 
   // Basic statistical summary displayed to the user
   const statSummary = prepareStatisticalSummary(filteredSeries);
@@ -237,12 +364,6 @@ export default function ClassificationPanel(): JSX.Element {
     numberOfClasses,
     setNumberOfClasses,
   ] = createSignal<number>(6);
-  // - the breaks chosen by the user for the
-  //   current classification method (only if 'manual' is chosen)
-  const [
-    customBreaks,
-    setCustomBreaks,
-  ] = createSignal<number[]>([]);
   // - the amplitude chosen by the user for the
   //   current classification method (only if 'standard deviation' is chosen)
   const [
@@ -255,14 +376,27 @@ export default function ClassificationPanel(): JSX.Element {
     meanPositionRole,
     setMeanPositionRole,
   ] = createSignal<'center' | 'boundary'>('center');
+  // - the color palette chosen by the user for the current classification method
+  const [
+    paletteName,
+    setPaletteName,
+  ] = createSignal<Palette | CustomPalette>('OrRd');
+  // - the color chosen by the user for the no data values
+  const [
+    noDataColor,
+    setNoDataColor,
+  ] = createSignal<string>('#bebebe');
   // - the current breaks (given the last option that changed, or the default breaks)
   const [
-    currentBreaks,
-    setCurrentBreaks,
-  ] = createSignal<number[]>(
-    (new (getClassifier(classificationMethod()))(filteredSeries)).classify(numberOfClasses()),
-  );
-  console.log(currentBreaks());
+    currentBreaksInfo,
+    setCurrentBreaksInfo,
+  ] = createSignal<ClassificationParameters>(makeClassificationParameters());
+  // - the breaks chosen by the user for the
+  //   current classification method (only if 'manual' is chosen)
+  const [
+    customBreaks,
+    setCustomBreaks,
+  ] = createSignal<number[]>(currentBreaksInfo().breaks);
 
   let refParentNode: HTMLDivElement;
 
@@ -271,6 +405,8 @@ export default function ClassificationPanel(): JSX.Element {
     { name: LL().ClassificationPanel.box(), value: DistributionPlotType.box },
     { name: LL().ClassificationPanel.dotHistogram(), value: DistributionPlotType.dotHistogram },
     { name: LL().ClassificationPanel.beeswarm(), value: DistributionPlotType.beeswarm },
+    { name: 'Violin', value: DistributionPlotType.violin },
+    { name: 'Histogram and density', value: DistributionPlotType.histogramAndDensity },
   ];
 
   const entriesClassificationMethod = [
@@ -369,6 +505,7 @@ export default function ClassificationPanel(): JSX.Element {
             <div
               style={{
                 display: 'flex',
+                padding: '1em',
                 'justify-content': 'space-evenly',
                 'flex-direction': 'row',
                 'align-items': 'center',
@@ -397,19 +534,16 @@ export default function ClassificationPanel(): JSX.Element {
         <hr />
         <div style={{ 'text-align': 'center' }}>
           <h3> { LL().ClassificationPanel.classification() } </h3>
-          <div class={'is-flex'}>
+          <div class={'is-flex is-flex-direction-column'}>
             <div style={{ width: '50%' }}>
               <DropdownMenu
                 id={'classification-method'}
+                style={{ width: '220px' }}
                 entries={entriesClassificationMethod}
                 defaultEntry={entriesClassificationMethod[0]}
                 onChange={(value) => {
                   setClassificationMethod(value);
-                  computeClassification(
-                    filteredSeries,
-                    classificationMethod(),
-                    { nbClasses: numberOfClasses() },
-                  );
+                  updateClassificationParameters();
                 }}
               />
               <Show when={
@@ -426,11 +560,7 @@ export default function ClassificationPanel(): JSX.Element {
                   value={6}
                   onchange={(event) => {
                     setNumberOfClasses(event.target.value);
-                    computeClassification(
-                      filteredSeries,
-                      classificationMethod(),
-                      { nbClasses: numberOfClasses() },
-                    );
+                    updateClassificationParameters();
                   }}
                 />
               </Show>
@@ -442,7 +572,19 @@ export default function ClassificationPanel(): JSX.Element {
                 )
               }>
                 <p class="label">{ LL().ClassificationPanel.amplitude() }</p>
-                <input class={'input'} type={'number'} value={1} min={0.1} max={10} step={0.1}/>
+                <input
+                  class={'input'}
+                  type={'number'}
+                  value={1}
+                  min={0.1}
+                  max={10}
+                  step={0.1}
+                  onChange={(event) => {
+                    setAmplitude(event.target.value);
+                    console.log(amplitude());
+                    updateClassificationParameters();
+                  }}
+                />
                 <span>{ LL().ClassificationPanel.howManyStdDev() }</span>
               </Show>
               <Show when={
@@ -455,11 +597,28 @@ export default function ClassificationPanel(): JSX.Element {
                 <p class="label">{ LL().ClassificationPanel.meanPosition() }</p>
                 <div class="control">
                   <label class="radio" for="mean-position-center">
-                    <input type={'radio'} name={'mean-position'} id={'mean-position-center'} checked />
+                    <input
+                      type={'radio'}
+                      name={'mean-position'}
+                      id={'mean-position-center'}
+                      onChange={() => {
+                        setMeanPositionRole('center');
+                        updateClassificationParameters();
+                      }}
+                      checked
+                    />
                     { LL().ClassificationPanel.meanPositionCenter() }
                   </label>
                   <label class="radio" for="mean-position-break">
-                    <input type={'radio'} name={'mean-position'} id={'mean-position-break'}>Borne de classe</input>
+                    <input
+                      type={'radio'}
+                      name={'mean-position'}
+                      id={'mean-position-break'}
+                      onChange={() => {
+                        setMeanPositionRole('boundary');
+                        updateClassificationParameters();
+                      }}
+                    />
                     { LL().ClassificationPanel.meanPositionBoundary() }
                   </label>
                 </div>
@@ -471,13 +630,62 @@ export default function ClassificationPanel(): JSX.Element {
                   entriesClassificationMethod,
                 )
               }>
-                <p class="label">{ LL().ClassificationPanel.breaks() }</p>
-                <textarea class={'textarea'} />
+                { /* <p class="label">{ LL().ClassificationPanel.breaks() }</p> */ }
+                <textarea class={'textarea'} value={'yo'}>
+                  { currentBreaksInfo().breaks.join(' - ') }
+                </textarea>
               </Show>
             </div>
           </div>
           <div>
-            <p>{ currentBreaks().join(' - ')}</p>
+            <p>{ currentBreaksInfo().breaks.join(' - ')}</p>
+            <div>
+              {
+                Plot.plot({
+                  x: { ticks: false },
+                  y: { axis: false },
+                  height: 75,
+                  marks: [
+                    Plot.rect(
+                      makeColorNbIndiv(currentBreaksInfo()),
+                      {
+                        fill: 'color',
+                        x1: (d, i) => i * 10,
+                        x2: (d, i) => i * 10 + 10,
+                        y1: 0,
+                        y2: 10,
+                      },
+                    ),
+                    Plot.rect(
+                      makeColorNbIndiv(currentBreaksInfo()),
+                      {
+                        fill: 'white',
+                        x1: (d, i) => i * 10 + 3,
+                        x2: (d, i) => i * 10 + 7,
+                        y1: 2.5,
+                        y2: 7.5,
+                      },
+                    ),
+                    Plot.text(
+                      makeColorNbIndiv(currentBreaksInfo()),
+                      {
+                        text: 'indiv',
+                        x: (d, i) => i * 10 + 5,
+                        textAnchor: 'middle',
+                        frameAnchor: 'middle',
+                        fontSize: 16,
+                      },
+                    ),
+                  ],
+                })
+              }
+            </div>
+            <Show when={missingValues > 0}>
+              <p class="label">{ LL().ClassificationPanel.missingValues(missingValues) }</p>
+              <div class="control">
+                <input class="color" type="color" />
+              </div>
+            </Show>
           </div>
         </div>
 

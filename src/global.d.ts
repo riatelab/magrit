@@ -1,5 +1,6 @@
 // declare global {
 // import { WebR } from '@r-wasm/webr/webr-main';
+import type { Palette } from 'dicopal/dist/index.d';
 
 declare namespace globalThis {
   let Gdal: typeof Gdal;
@@ -127,6 +128,23 @@ export enum ClassificationMethod {
   manual = 'manual',
 }
 
+interface CustomPalette {
+  // Internal unique identifier of the palette
+  id: string,
+  // The name of the palette (given by the user)
+  name: string,
+  // The number of classes of the palette
+  number: number,
+  // The kind of palette (sequential, diverging, qualitative)
+  type: 'sequential' | 'diverging' | 'qualitative',
+  // The colors of the palette
+  colors: string[],
+  // Custom flag (true if the palette was created by the user)
+  // This flag is used to distinguish Palette from CustomPalette
+  // but we may rely on the type system in the future instead...
+  custom: true
+}
+
 interface ClassificationParameters {
   // The name of the variable classified
   variable: string,
@@ -137,18 +155,11 @@ interface ClassificationParameters {
   // The break values (computed or manually set)
   breaks: number[],
   // Description of the palette used for the choropleth
-  palette: {
-    // Palette name
-    name: string,
-    // Palette provider
-    provider: string,
-    // Whether the palette is reversed or not
-    reversed: boolean,
-  };
-  // Array describing the color of each feature
-  colors: string[],
+  palette: Palette | CustomPalette,
   // The color to use for features with no data
   nodataColor: string,
+  // Entities by class
+  entitiesByClass: number[],
 }
 
 export enum RepresentationType {

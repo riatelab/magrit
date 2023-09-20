@@ -138,6 +138,7 @@ const fr = {
     howManyStdDev: 'écart-types',
     logarithmicScale: 'Échelle logarithmique',
     breaksInput: 'Saisir les limites de classes',
+    missingValues: '{{ Une entité sans données | ?? entités sans données }}',
   },
 } satisfies BaseTranslation;
 

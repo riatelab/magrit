@@ -130,7 +130,7 @@ export function bindDragBehavior(refElement: SVGElement, layer: LayerDescription
     y = e.clientY;
   };
 
-  const deselectElement = (e) => {
+  const deselectElement = () => {
     refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
     outerSvg.style.cursor = null; // eslint-disable-line no-param-reassign
     outerSvg.removeEventListener('mousemove', moveElement);

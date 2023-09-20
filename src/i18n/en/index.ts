@@ -138,6 +138,7 @@ const en = {
     howManyStdDev: 'standard deviations',
     logarithmicScale: 'Logarithmic scale',
     breaksInput: 'Enter class limits',
+    missingValues: '{{ One feature without data | ?? feature without data }}',
   },
 } satisfies BaseTranslation;
 
