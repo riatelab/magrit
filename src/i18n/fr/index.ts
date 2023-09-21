@@ -105,6 +105,7 @@ const fr = {
     histogram: 'Histogramme',
     beeswarm: 'Essaim d\'abeilles',
     dotHistogram: 'Histogramme en points',
+    histogramAndDensity: 'Histogramme et densité',
     distribution: 'Distribution des valeurs',
     summary: 'Résumé',
     population: 'Population (valeurs non-nulles)',

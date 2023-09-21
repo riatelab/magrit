@@ -6,6 +6,7 @@ import {
   nice,
   extent,
   ticks,
+  sum,
   mean,
   median,
   quantile,
@@ -13,6 +14,9 @@ import {
   max,
   deviation,
   variance,
+  thresholdFreedmanDiaconis,
+  thresholdScott,
+  thresholdSturges,
 } from 'd3-array';
 import {
   // Some functions for spherical math
@@ -261,6 +265,7 @@ export default {
   nice,
   extent,
   ticks,
+  sum,
   mean,
   median,
   quantile,
@@ -268,4 +273,7 @@ export default {
   max,
   deviation,
   variance,
+  thresholdFreedmanDiaconis,
+  thresholdScott,
+  thresholdSturges,
 };

@@ -357,6 +357,10 @@ type RootTranslation = {
 		 */
 		dotHistogram: string
 		/**
+		 * H​i​s​t​o​g​r​a​m​ ​a​n​d​ ​d​e​n​s​i​t​y
+		 */
+		histogramAndDensity: string
+		/**
 		 * V​a​l​u​e​s​ ​d​i​s​t​r​i​b​u​t​i​o​n
 		 */
 		distribution: string
@@ -831,6 +835,10 @@ export type TranslationFunctions = {
 		 * Dot histogram
 		 */
 		dotHistogram: () => LocalizedString
+		/**
+		 * Histogram and density
+		 */
+		histogramAndDensity: () => LocalizedString
 		/**
 		 * Values distribution
 		 */

@@ -105,6 +105,7 @@ const en = {
     histogram: 'Histogram',
     beeswarm: 'Beeswarm',
     dotHistogram: 'Dot histogram',
+    histogramAndDensity: 'Histogram and density',
     distribution: 'Values distribution',
     summary: 'Summary',
     population: 'Population (non-null values)',

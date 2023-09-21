@@ -1,8 +1,5 @@
 import {
-  createSignal,
-  JSX,
-  onMount,
-  Show,
+  createSignal, JSX, onMount, Show,
 } from 'solid-js';
 import * as Plot from '@observablehq/plot';
 import { getPalette } from 'dicopal';
@@ -16,7 +13,13 @@ import '../../styles/ClassificationPanel.css';
 import DropdownMenu from '../DropdownMenu.tsx';
 import { getClassifier } from '../../helpers/classification';
 import { isNumber } from '../../helpers/common';
-import { getBandwidth, hasNegative, round } from '../../helpers/math';
+import {
+  epanechnikov,
+  getBandwidth,
+  hasNegative,
+  kde,
+  round,
+} from '../../helpers/math';
 import { ClassificationMethod, ClassificationParameters, CustomPalette } from '../../global.d';
 
 enum DistributionPlotType {
@@ -24,7 +27,6 @@ enum DistributionPlotType {
   histogram,
   dotHistogram,
   beeswarm,
-  violin,
   histogramAndDensity,
 }
 
@@ -35,24 +37,6 @@ enum OptionsClassification {
   breaks,
 }
 
-function kde(
-  kernel: (x: number) => number,
-  thresholds: number[],
-  data: number[],
-): [number, number | undefined][] {
-  return thresholds
-    .map((t) => [t, d3.mean(data, (d) => kernel(t - d))]);
-}
-
-function epanechnikov(bandwidth: number) {
-  return (x: number): number => {
-    const xb = x / bandwidth;
-    return Math.abs(xb) <= 1
-      ? (0.75 * (1 - x * x)) / bandwidth
-      : 0;
-  };
-}
-
 function getRadiusBeeswarm(series: number[]) {
   if (series.length < 100) {
     return 3;
@@ -61,6 +45,28 @@ function getRadiusBeeswarm(series: number[]) {
     return 2;
   }
   return 1;
+}
+
+function makeBeeswarmPlot(series: number[], logTransform: boolean, sizeRatio = 1) {
+  const r = sizeRatio === 1 ? 2.5 : 2.75 * sizeRatio;
+  const padding = sizeRatio === 1 ? 1.25 : 0.8 * sizeRatio;
+  return Plot.plot({
+    height: 300,
+    // width: 400,
+    marginLeft: 50,
+    x: { nice: true, type: logTransform ? 'log' : 'linear' },
+    marks: [
+      Plot.dot(
+        series,
+        Plot.dodgeY('middle', {
+          x: (d) => d,
+          r,
+          padding,
+          fill: 'black',
+        }),
+      ),
+    ],
+  });
 }
 
 function makeDistributionPlot(
@@ -104,7 +110,7 @@ function makeDistributionPlot(
       // width: 400,
       marginLeft: 50,
       x: { nice: true, type: logTransform ? 'log' : 'linear' },
-      y: { nice: true },
+      y: { nice: true, label: 'Count' },
       marks: [
         Plot.rectY(
           series,
@@ -122,12 +128,24 @@ function makeDistributionPlot(
     });
   }
   if (type === DistributionPlotType.histogramAndDensity) {
-    const thresholds = d3.ticks(...d3.nice(...d3.extent(series), 10), 60);
-    const density = kde(
+    const [min, max] = d3.extent(series);
+    // How many bin ?
+    const n = d3.thresholdScott(series, min, max);
+    // Threshold values for the bins
+    const thresholds = d3.ticks(min, max, n);
+    // Density values for the bins, using the epanechnikov kernel
+    // and the bandwidth computed with bw.nrd0 of R stats package.
+    const dens = kde(
       epanechnikov(getBandwidth(series)),
       thresholds,
       series,
     );
+    // Sum of the density values
+    const sum = d3.sum(dens, (d) => d[1]);
+    // Normalize so that integral = 1
+    const density = dens.map((d) => [d[0], d[1] / sum]);
+    // Todo: we should rename Y axis and add tooltip for the number of individuals
+    //       in each rectangle of the histogram.
     return Plot.plot({
       height: 300,
       // width: 400,
@@ -138,7 +156,7 @@ function makeDistributionPlot(
         Plot.rectY(
           series,
           Plot.binX(
-            { y: 'count' },
+            { y: 'proportion' },
             {
               x: (d) => d,
               thresholds: 'scott',
@@ -147,7 +165,7 @@ function makeDistributionPlot(
           ),
         ),
         Plot.line(density, {
-          y: (d) => -d[1],
+          y: (d) => d[1],
           x: (d) => d[0],
           stroke: 'red',
           curve: 'natural',
@@ -157,80 +175,26 @@ function makeDistributionPlot(
     });
   }
   if (type === DistributionPlotType.beeswarm) {
-    let ppp = Plot.plot({
-      height: 300,
-      // width: 400,
-      marginLeft: 50,
-      x: { nice: true, type: logTransform ? 'log' : 'linear' },
-      marks: [
-        Plot.dot(
-          series,
-          Plot.dodgeY('bottom', {
-            x: (d) => d,
-            r: 2,
-            padding: 1,
-            fill: 'black',
-          }),
-        ),
-      ],
-    });
-    const th = ppp.querySelector('g[aria-label="dot"]').getBBox().height;
-    console.log(th);
+    // Currently, beeswarm using the dogdeY transform may plot points outside the plot area
+    // (i think this is tracked in https://github.com/observablehq/plot/issues/905).
+    // So the trick is :
+    // - me make a first plot,
+    // - we add it to the DOM so we can compute the height of <g> element that contains the dots,
+    // - we remove the plot from the DOM,
+    // - if the height of the <g> element is greater than 300px, we make a second plot
+    //   with a lower radius and padding (so that the dots are smaller),
+    //   to do so, we compute a ratio between the height of the <g> element and 300px,
+    //   make a second plot and return it,
+    // - otherwise we return the first plot.
+    let ppp = makeBeeswarmPlot(series, logTransform);
+    document.body.append(ppp);
+    const th = ppp.querySelector('g[aria-label="dot"]').getBoundingClientRect().height;
+    ppp.remove();
     if (th > 300) {
       const ratio = 300 / th;
-      console.log(ratio);
-      ppp = Plot.plot({
-        height: 300,
-        // width: 400,
-        marginLeft: 50,
-        x: { nice: true, type: logTransform ? 'log' : 'linear' },
-        marks: [
-          Plot.dot(
-            series,
-            Plot.dodgeY('bottom', {
-              x: (d) => d,
-              r: 2 * ratio,
-              padding: 1 * ratio,
-              fill: 'black',
-            }),
-          ),
-        ],
-      });
+      ppp = makeBeeswarmPlot(series, logTransform, ratio);
     }
     return ppp;
-  }
-  if (type === DistributionPlotType.violin) {
-    const thresholds = d3.ticks(...d3.nice(...d3.extent(series), 10), 40);
-    const density = kde(
-      epanechnikov(getBandwidth(series)),
-      thresholds,
-      classificationPanelStore.series,
-    );
-    return Plot.plot({
-      height: 300,
-      width: 400,
-      x: { axis: null },
-      // y: { reverse: true },
-      marks: [
-        Plot.areaX(density, {
-          curve: 'natural',
-          x1: (d) => d[1],
-          x2: (d) => -d[1],
-          y: (d) => d[0],
-          fill: '#eee',
-        }),
-        Plot.lineX(density, {
-          curve: 'natural',
-          x: (d) => d[1],
-          y: (d) => d[0],
-        }),
-        Plot.lineX(density, {
-          curve: 'natural',
-          x: (d) => -d[1],
-          y: (d) => d[0],
-        }),
-      ],
-    });
   }
   return <div />;
 }
@@ -286,6 +250,7 @@ export default function ClassificationPanel(): JSX.Element {
     const cp = makeClassificationParameters();
     setCurrentBreaksInfo(cp);
     setCustomBreaks(cp.breaks);
+    setNumberOfClasses(cp.classes);
     /* eslint-enable @typescript-eslint/no-use-before-define */
   };
 
@@ -298,13 +263,16 @@ export default function ClassificationPanel(): JSX.Element {
       !([
         ClassificationMethod.standardDeviation,
         ClassificationMethod.manual,
+        ClassificationMethod.q6,
       ].includes(classificationMethod()))
     ) {
       breaks = classifier.classify(numberOfClasses());
       classes = numberOfClasses();
+    } else if (classificationMethod() === ClassificationMethod.q6) {
+      breaks = classifier.classify();
+      classes = 6;
     } else if (classificationMethod() === ClassificationMethod.standardDeviation) {
       breaks = classifier.classify(amplitude(), meanPositionRole() === 'center');
-      console.log(breaks);
       classes = breaks.length - 1;
     } else if (classificationMethod() === ClassificationMethod.manual) {
       breaks = parseUserDefinedBreaks(filteredSeries, customBreaks());
@@ -312,7 +280,7 @@ export default function ClassificationPanel(): JSX.Element {
     }
     const entitiesByClass = classifier.countByClass();
     const palName = paletteName();
-    const palette = getPalette(palName, numberOfClasses());
+    const palette = getPalette(palName, classes);
 
     if (!palette) {
       throw new Error('Palette not found !');
@@ -380,7 +348,7 @@ export default function ClassificationPanel(): JSX.Element {
   const [
     paletteName,
     setPaletteName,
-  ] = createSignal<Palette | CustomPalette>('OrRd');
+  ] = createSignal<string>('OrRd');
   // - the color chosen by the user for the no data values
   const [
     noDataColor,
@@ -405,7 +373,6 @@ export default function ClassificationPanel(): JSX.Element {
     { name: LL().ClassificationPanel.box(), value: DistributionPlotType.box },
     { name: LL().ClassificationPanel.dotHistogram(), value: DistributionPlotType.dotHistogram },
     { name: LL().ClassificationPanel.beeswarm(), value: DistributionPlotType.beeswarm },
-    { name: 'Violin', value: DistributionPlotType.violin },
     { name: 'Histogram and density', value: DistributionPlotType.histogramAndDensity },
   ];
 
@@ -452,6 +419,7 @@ export default function ClassificationPanel(): JSX.Element {
   onMount(() => {
     // We could set focus on the confirm button when the modal is shown
     // as in some other modal, although it is not as important here...
+
   });
 
   return <div class="modal-window modal classification-panel" style={{ display: 'flex' }} ref={refParentNode}>
@@ -559,7 +527,7 @@ export default function ClassificationPanel(): JSX.Element {
                   type={'number'}
                   value={6}
                   onchange={(event) => {
-                    setNumberOfClasses(event.target.value);
+                    setNumberOfClasses(+event.target.value);
                     updateClassificationParameters();
                   }}
                 />
@@ -580,8 +548,7 @@ export default function ClassificationPanel(): JSX.Element {
                   max={10}
                   step={0.1}
                   onChange={(event) => {
-                    setAmplitude(event.target.value);
-                    console.log(amplitude());
+                    setAmplitude(+event.target.value);
                     updateClassificationParameters();
                   }}
                 />

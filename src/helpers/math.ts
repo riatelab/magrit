@@ -117,13 +117,12 @@ export function IQR(values: number[]): number {
   return d3.quantile(values, 0.75) - d3.quantile(values, 0.25);
 }
 
-
 /**
  * Compute the bandwidth that will be used to plot kernel density estimation
  * of a dataset.
  * This is ported from the `bw.nrd0` function of the R stats package.
  *
- * @param values
+ * @param values - The dataset
  * @returns {number} - The bandwidth
  */
 export function getBandwidth(values: number[]): number {
@@ -131,4 +130,35 @@ export function getBandwidth(values: number[]): number {
   let lo = Math.min(hi, IQR(values) / 1.34);
   if (lo === 0) lo = hi || Math.abs(values[0]) || 1;
   return 0.9 * lo * (values.length ** -0.2);
+}
+
+/**
+ * Compute the kernel density estimation of a dataset.
+ *
+ * @param {function(number): number} kernel
+ * @param {number[]} thresholds
+ * @param {number[]} data
+ */
+export function kde(
+  kernel: (x: number) => number,
+  thresholds: number[],
+  data: number[],
+): [number, number | undefined][] {
+  return thresholds
+    .map((t) => [t, d3.mean(data, (d) => kernel(t - d))]);
+}
+
+/**
+ * Epanechnikov kernel function for kernel density estimation.
+ *
+ * @param bandwidth - The bandwidth
+ * @returns {function(number): number} - The kernel function
+ */
+export function epanechnikov(bandwidth: number) {
+  return (x: number): number => {
+    const xb = x / bandwidth;
+    return Math.abs(xb) <= 1
+      ? (0.75 * (1 - x * x)) / bandwidth
+      : 0;
+  };
 }
