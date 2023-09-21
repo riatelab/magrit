@@ -7,7 +7,7 @@ export function noOp() { }
 // - its DataType
 // - its VariableType
 export function detectTypeField(
-  values: any[],
+  values: never[],
 ): { dataType: DataType, variableType: VariableType, hasMissingValues: boolean } {
   // We will loop through the values of the field and try to detect the type of the field
   // We will use the following rules:

@@ -66,7 +66,7 @@ const defaultStyleDropdown = {
 
 export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
   return <div class="dropdown" style={{ ...defaultStyleDropdown, ...props.style }}>
-    <div class="dropdown-trigger" style={{ width: '100%' }} onclick={ onClickDropdown }>
+    <div class="dropdown-trigger" style={{ width: '100%' }} onClick={ onClickDropdown }>
       <button class="button" aria-haspopup="true" aria-controls={ props.id } style={{ width: '100%' }}>
         <span
           class="dropdown-item-target"

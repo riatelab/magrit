@@ -1,4 +1,5 @@
 import { allowedFileExtensions, allowedMimeTypes } from './supportedFormats';
+import { CustomFileList } from '../global.d';
 
 export function prepareFileExtensions(files: FileList): CustomFileList {
   return Array.from(files).map((file: File) => {

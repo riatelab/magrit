@@ -1,3 +1,5 @@
+import { transition } from 'd3-transition';
+
 export default function ChevronIcon() {
   return <svg
     aria-hidden="true"
@@ -10,7 +12,7 @@ export default function ChevronIcon() {
     stroke-width="2"
     stroke-linecap="round"
     stroke-linejoin="round"
-    style="transition: transform 200ms ease-out;"
+    style={{ transition: 'transform 200ms ease-out' }}
   >
     <polyline points="6 9 12 15 18 9"></polyline>
   </svg>;

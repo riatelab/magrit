@@ -1,9 +1,8 @@
 import {
-  createSignal, JSX, onMount, Show,
+  createSignal, JSX, onCleanup, onMount, Show,
 } from 'solid-js';
 import * as Plot from '@observablehq/plot';
 import { getPalette } from 'dicopal';
-import type { Palette } from 'dicopal/dist/index.d';
 
 import { useI18nContext } from '../../i18n/i18n-solid';
 import d3 from '../../helpers/d3-custom';
@@ -15,6 +14,7 @@ import { getClassifier } from '../../helpers/classification';
 import { isNumber } from '../../helpers/common';
 import {
   epanechnikov,
+  extent,
   getBandwidth,
   hasNegative,
   kde,
@@ -35,16 +35,6 @@ enum OptionsClassification {
   amplitude,
   meanPosition,
   breaks,
-}
-
-function getRadiusBeeswarm(series: number[]) {
-  if (series.length < 100) {
-    return 3;
-  }
-  if (series.length < 1000) {
-    return 2;
-  }
-  return 1;
 }
 
 function makeBeeswarmPlot(series: number[], logTransform: boolean, sizeRatio = 1) {
@@ -128,7 +118,7 @@ function makeDistributionPlot(
     });
   }
   if (type === DistributionPlotType.histogramAndDensity) {
-    const [min, max] = d3.extent(series);
+    const [min, max] = d3.nice(...extent(series), 1);
     // How many bin ?
     const n = d3.thresholdScott(series, min, max);
     // Threshold values for the bins
@@ -220,10 +210,12 @@ const makeColorNbIndiv = (
   }));
 
 function prepareStatisticalSummary(series: number[]) {
+  const [min, max] = extent(series);
+
   return {
     population: series.length,
-    minimum: d3.min(series),
-    maximum: d3.max(series),
+    minimum: min,
+    maximum: max,
     mean: d3.mean(series),
     median: d3.median(series),
     standardDeviation: d3.deviation(series),
@@ -416,10 +408,23 @@ export default function ClassificationPanel(): JSX.Element {
 
   console.log(filteredSeries, statSummary);
 
+  const listenerEscKey = (event: KeyboardEvent) => {
+    const isEscape = event.key
+      ? (event.key === 'Escape' || event.key === 'Esc')
+      : (event.keyCode === 27);
+    if (isEscape) {
+      (refParentNode.querySelector('.classification-panel__cancel-button') as HTMLElement).click();
+    }
+  };
+
   onMount(() => {
     // We could set focus on the confirm button when the modal is shown
     // as in some other modal, although it is not as important here...
+    document.body.addEventListener('keydown', listenerEscKey);
+  });
 
+  onCleanup(() => {
+    document.body.removeEventListener('keydown', listenerEscKey);
   });
 
   return <div class="modal-window modal classification-panel" style={{ display: 'flex' }} ref={refParentNode}>
@@ -659,12 +664,18 @@ export default function ClassificationPanel(): JSX.Element {
       </section>
       <footer class="modal-card-foot">
         <button
-          class="button is-success"
-          onClick={ () => { setClassificationPanelStore({ show: false }); } }
+          class="button is-success classification-panel__confirm-button"
+          onClick={() => {
+            classificationPanelStore.onConfirm(currentBreaksInfo());
+            setClassificationPanelStore({ show: false });
+          }}
         >{ LL().SuccessButton() }</button>
         <button
-          class="button"
-          onClick={ () => { setClassificationPanelStore({ show: false }); } }
+          class="button classification-panel__cancel-button"
+          onClick={() => {
+            classificationPanelStore.onCancel();
+            setClassificationPanelStore({ show: false });
+          }}
         >{ LL().CancelButton() }</button>
       </footer>
     </div>

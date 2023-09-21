@@ -1,10 +1,20 @@
 import { For, JSX } from 'solid-js';
 import { globalStore } from '../../store/GlobalStore';
-import { LayerDescription } from '../../global';
+import { ClassificationMethod, LayerDescription } from '../../global.d';
+import { getClassifier } from '../../helpers/classification';
+import { isNumber } from '../../helpers/common';
 
 export function choroplethPolygonRenderer(
   layerDescription: LayerDescription,
 ): JSX.Element {
+  const Cls = getClassifier(ClassificationMethod.manual);
+  const classifier = new Cls(null, null, layerDescription.classification?.breaks);
+  const colors = layerDescription.classification?.palette.colors as string[];
+  const fieldName = layerDescription.classification?.variable as string;
+  const noDataColor = layerDescription.classification?.nodataColor as string;
+
+  console.log(layerDescription.classification?.breaks, colors, fieldName, noDataColor);
+
   return <g
     id={layerDescription.name}
     class="layer choropleth"
@@ -20,9 +30,13 @@ export function choroplethPolygonRenderer(
   >
     <For each={layerDescription.data.features}>
       {
-        (feature, i) => {
+        (feature) => {
           const el: JSX.Element = <path
-            fill={layerDescription.classification?.colors[i()]}
+            fill={
+              isNumber(feature.properties[fieldName])
+                ? colors[classifier.getClass(feature.properties[fieldName])]
+                : noDataColor
+            }
             d={globalStore.pathGenerator(feature)}
             vector-effect="non-scaling-stroke"
           />;
@@ -38,6 +52,12 @@ export function choroplethPolygonRenderer(
 export function choroplethPointRenderer(
   layerDescription: LayerDescription,
 ): JSX.Element {
+  const Cls = getClassifier(ClassificationMethod.manual);
+  const classifier = new Cls(null, null, layerDescription.classification?.breaks);
+  const colors = layerDescription.classification?.palette.colors as string[];
+  const fieldName = layerDescription.classification?.variable as string;
+  const noDataColor = layerDescription.classification?.nodataColor as string;
+
   return <g
     id={layerDescription.name}
     class="layer default"
@@ -53,9 +73,13 @@ export function choroplethPointRenderer(
   >
     <For each={layerDescription.data.features}>
       {
-        (feature, i) => {
+        (feature) => {
           const el: JSX.Element = <path
-            fill={layerDescription.classification?.colors[i()]}
+            fill={
+              isNumber(feature.properties[fieldName])
+                ? colors[classifier.getClass(feature.properties[fieldName])]
+                : noDataColor
+            }
             d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
             vector-effect="non-scaling-stroke"
           />;
@@ -71,6 +95,12 @@ export function choroplethPointRenderer(
 export function choroplethLineRenderer(
   layerDescription: LayerDescription,
 ): JSX.Element {
+  const Cls = getClassifier(ClassificationMethod.manual);
+  const classifier = new Cls(null, null, layerDescription.classification?.breaks);
+  const colors = layerDescription.classification?.palette.colors as string[];
+  const fieldName = layerDescription.classification?.variable as string;
+  const noDataColor = layerDescription.classification?.nodataColor as string;
+
   return <g
     id={layerDescription.name}
     class="layer default"
@@ -85,9 +115,13 @@ export function choroplethLineRenderer(
   >
     <For each={layerDescription.data.features}>
       {
-        (feature, i) => {
+        (feature) => {
           const el: JSX.Element = <path
-            stroke={layerDescription.classification?.colors[i()]}
+            stroke={
+              isNumber(feature.properties[fieldName])
+                ? colors[classifier.getClass(feature.properties[fieldName])]
+                : noDataColor
+            }
             d={globalStore.pathGenerator(feature)}
             vector-effect="non-scaling-stroke"
           />;

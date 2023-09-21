@@ -1,4 +1,4 @@
-import { For, JSX } from 'solid-js';
+import { For, JSX, Show } from 'solid-js';
 import { v4 as uuidv4 } from 'uuid';
 import { overlayDropStore, setOverlayDropStore } from '../store/OverlayDropStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
@@ -95,25 +95,28 @@ const convertDroppedFiles = async (files: CustomFileList) => {
 const displayFiles = (files: CustomFileList): JSX.Element => {
   const { LL } = useI18nContext();
 
-  if (files.length === 0) return <p>{ LL().DropFilesHere() }</p>;
-
   return <>
-    <p>
-      { LL().FilesDetected(files.length) }
-    </p>
-    <ul>
-      <For each={files}>
-        {
-          (file) => {
-            const authorized = isAuthorizedFile(file);
-            const prop = authorized ? {} : { 'data-tooltip': LL().UnsupportedFormat() };
-            return <li classList={{ authorized }} {...prop}>
-              {file.name} ({file.file.size / 1000} kb)
-            </li>;
+    <Show when={files.length === 0}>
+      <p>{ LL().DropFilesHere() }</p>
+    </Show>
+    <Show when={files.length > 0}>
+      <p>
+        { LL().FilesDetected(files.length) }
+      </p>
+      <ul>
+        <For each={files}>
+          {
+            (file) => {
+              const authorized = isAuthorizedFile(file);
+              const prop = authorized ? {} : { 'data-tooltip': LL().UnsupportedFormat() };
+              return <li classList={{ authorized }} {...prop}>
+                {file.name} ({file.file.size / 1000} kb)
+              </li>;
+            }
           }
-        }
-      </For>
-    </ul>
+        </For>
+      </ul>
+    </Show>
   </>;
 };
 

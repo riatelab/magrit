@@ -12,9 +12,10 @@ import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 import { isCandidateForRepresentation } from '../../helpers/layerDescription';
 
 import DropdownMenu from '../DropdownMenu.tsx';
-import ChoroplethSettings from '../ChoroplethSettings.tsx';
+import ChoroplethSettings from './PortrayalOption/ChoroplethSettings.tsx';
 
 import '../../styles/PortrayalSection.css';
+import ProportionalSymbolsSettings from './PortrayalOption/ProportionalSymbolsSettings.tsx';
 
 function layerAvailableVariables(layerId: string) {
   const layer = layersDescriptionStore.layers.find((l) => l.id === layerId);
@@ -43,19 +44,6 @@ function layerAvailableVariables(layerId: string) {
   };
 }
 
-function onClickPortrayal(event: Event) {
-  // Remove the selected class on all other elements
-  const selectedElement = document
-    .querySelector('.portrayal-section__portrayal-selection li.selected');
-
-  if (selectedElement) {
-    selectedElement.classList.remove('selected');
-  }
-
-  const target = event.currentTarget as HTMLElement;
-  target.classList.add('selected');
-}
-
 export default function PortrayalSection(): JSX.Element {
   const { LL } = useI18nContext();
 
@@ -81,33 +69,37 @@ export default function PortrayalSection(): JSX.Element {
           .map((layer) => ({ name: layer.name, value: layer.id }))}
       defaultEntry={ { name: LL().PortrayalSection.TargetLayer() } }
       onChange={ (value) => {
+        // Deselect the portrayal selected if any
+        setSelectedPortrayal(null);
+        // Set the target layer...
         setTargetLayer(value);
+        // ...and compute the available portrayals for the variable of this layer
         setAvailableVariables(layerAvailableVariables(targetLayer()));
       } }
     />
     <div class="portrayal-section__portrayal-selection">
       <ul>
         <li
-          onClick={ (ev) => { onClickPortrayal(ev); setSelectedPortrayal('choropleth'); } }
-          classList={{ 'is-hidden': !availableVariables()?.hasRatio }}
+          onClick={ (ev) => { setSelectedPortrayal('choropleth'); } }
+          classList={{ 'is-hidden': !availableVariables()?.hasRatio, selected: selectedPortrayal() === 'choropleth' }}
         >
-          Choropleth
+          { LL().PortrayalSection.PortrayalTypes.Choropleth() }
         </li>
         <li
-          onClick={ (ev) => { onClickPortrayal(ev); setSelectedPortrayal('propsymbols'); } }
-          classList={{ 'is-hidden': !availableVariables()?.hasStock }}
+          onClick={ (ev) => { setSelectedPortrayal('propsymbols'); } }
+          classList={{ 'is-hidden': !availableVariables()?.hasStock, selected: selectedPortrayal() === 'propsymbols' }}
         >
-          PropSymbols
+          { LL().PortrayalSection.PortrayalTypes.ProportionalSymbols() }
         </li>
         <li
-          onClick={ (ev) => { onClickPortrayal(ev); setSelectedPortrayal('foo'); } }
-          classList={{ 'is-hidden': !availableVariables()?.hasIdentifier }}
+          onClick={ (ev) => { setSelectedPortrayal('foo'); } }
+          classList={{ 'is-hidden': !availableVariables()?.hasIdentifier, selected: selectedPortrayal() === 'foo' }}
         >
           Fooo
         </li>
         <li
-          onClick={ (ev) => { onClickPortrayal(ev); setSelectedPortrayal('bar'); } }
-          classList={{ 'is-hidden': !availableVariables()?.hasCategorical }}
+          onClick={ (ev) => { setSelectedPortrayal('bar'); } }
+          classList={{ 'is-hidden': !availableVariables()?.hasCategorical, selected: selectedPortrayal() === 'bar' }}
         >
           Baar
         </li>
@@ -120,17 +112,7 @@ export default function PortrayalSection(): JSX.Element {
       </Show>
 
       <Show when={ selectedPortrayal() === 'propsymbols' }>
-        <div class="portrayal-section__portrayal-options-choropleth">
-          <div>
-            Field
-          </div>
-          <div>
-            Radius
-          </div>
-          <div>
-            Valeur max
-          </div>
-        </div>
+        <ProportionalSymbolsSettings layerId={ targetLayer() } />
       </Show>
 
       <Show when={ selectedPortrayal() === 'foo' }>
@@ -142,7 +124,7 @@ export default function PortrayalSection(): JSX.Element {
             Fooo
           </div>
           <div>
-            Foo
+            { targetLayer() }
           </div>
         </div>
       </Show>

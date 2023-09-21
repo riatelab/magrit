@@ -47,6 +47,10 @@ const fr = {
     Settings: 'Paramètres',
   },
   PortrayalSection: {
+    PortrayalTypes: {
+      Choropleth: 'Choropleth',
+      ProportionalSymbols: 'Symboles proportionnels',
+    },
     RepresentationChoice: 'Choix de la représentation',
     TargetLayer: 'Couche cible',
     CreateLayer: 'Créer la couche',

@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store';
-import { ClassificationMethod } from '../global';
+import { ClassificationMethod, ClassificationParameters } from '../global';
 
 type ClassificationPanelStoreType = {
   show: boolean,
@@ -10,6 +10,8 @@ type ClassificationPanelStoreType = {
   nClasses?: number,
   colorScheme?: string,
   invertColorScheme?: boolean,
+  onConfirm?: (classification: ClassificationParameters) => void,
+  onCancel?: () => void,
 };
 
 const [
@@ -24,6 +26,8 @@ const [
   nClasses: undefined,
   colorScheme: undefined,
   invertColorScheme: undefined,
+  onConfirm: undefined,
+  onCancel: undefined,
 } as ClassificationPanelStoreType);
 
 export {

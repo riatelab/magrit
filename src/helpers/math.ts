@@ -59,6 +59,25 @@ export function max(arr: number[]): number {
 }
 
 /**
+ * Returns the minimum and maximum values of an array of numbers.
+ *
+ * @param {number[]} arr - An array of numbers.
+ * @returns {[number, number]} - The minimum and maximum values of the array.
+ */
+export function extent(arr: number[]): [number, number] {
+  let minVal = arr[0];
+  let maxVal = arr[0];
+  for (let i = 1, l = arr.length; i < l; i += 1) {
+    if (arr[i] < minVal) {
+      minVal = arr[i];
+    } else if (arr[i] > maxVal) {
+      maxVal = arr[i];
+    }
+  }
+  return [minVal, maxVal];
+}
+
+/**
  * Test an array of numbers for negative values.
  *
  * @param {number[]} arr - An array of numbers.

@@ -166,6 +166,16 @@ type RootTranslation = {
 		Settings: string
 	}
 	PortrayalSection: {
+		PortrayalTypes: {
+			/**
+			 * C​h​o​r​o​p​l​e​t​h
+			 */
+			Choropleth: string
+			/**
+			 * P​r​o​p​o​r​t​i​o​n​a​l​ ​s​y​m​b​o​l​s
+			 */
+			ProportionalSymbols: string
+		}
 		/**
 		 * R​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​c​h​o​i​c​e
 		 */
@@ -645,6 +655,16 @@ export type TranslationFunctions = {
 		Settings: () => LocalizedString
 	}
 	PortrayalSection: {
+		PortrayalTypes: {
+			/**
+			 * Choropleth
+			 */
+			Choropleth: () => LocalizedString
+			/**
+			 * Proportional symbols
+			 */
+			ProportionalSymbols: () => LocalizedString
+		}
 		/**
 		 * Representation choice
 		 */
