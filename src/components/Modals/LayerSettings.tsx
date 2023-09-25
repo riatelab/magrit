@@ -276,7 +276,6 @@ export default function LayerSettings(
 ): JSX.Element {
   const { id, LL } = props;
   const layerDescription = layersDescriptionStore.layers.find((l) => l.id === id);
-  console.log(layerDescription, LL);
   const innerElement = {
     point: makeSettingsDefaultPoint,
     linestring: makeSettingsDefaultLine,

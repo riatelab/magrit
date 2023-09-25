@@ -80,25 +80,25 @@ export default function PortrayalSection(): JSX.Element {
     <div class="portrayal-section__portrayal-selection">
       <ul>
         <li
-          onClick={ (ev) => { setSelectedPortrayal('choropleth'); } }
+          onClick={ () => { setSelectedPortrayal('choropleth'); } }
           classList={{ 'is-hidden': !availableVariables()?.hasRatio, selected: selectedPortrayal() === 'choropleth' }}
         >
           { LL().PortrayalSection.PortrayalTypes.Choropleth() }
         </li>
         <li
-          onClick={ (ev) => { setSelectedPortrayal('propsymbols'); } }
+          onClick={ () => { setSelectedPortrayal('propsymbols'); } }
           classList={{ 'is-hidden': !availableVariables()?.hasStock, selected: selectedPortrayal() === 'propsymbols' }}
         >
           { LL().PortrayalSection.PortrayalTypes.ProportionalSymbols() }
         </li>
         <li
-          onClick={ (ev) => { setSelectedPortrayal('foo'); } }
+          onClick={ () => { setSelectedPortrayal('foo'); } }
           classList={{ 'is-hidden': !availableVariables()?.hasIdentifier, selected: selectedPortrayal() === 'foo' }}
         >
           Fooo
         </li>
         <li
-          onClick={ (ev) => { setSelectedPortrayal('bar'); } }
+          onClick={ () => { setSelectedPortrayal('bar'); } }
           classList={{ 'is-hidden': !availableVariables()?.hasCategorical, selected: selectedPortrayal() === 'bar' }}
         >
           Baar

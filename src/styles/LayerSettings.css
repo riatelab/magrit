@@ -1,3 +1,10 @@
+/*
+
+We have two types of "field":
+- 'field' class is a field with display: flex, justify-content: space-between
+- 'field-block' class is a field with display: block
+
+*/
 .field {
     display: flex;
     justify-content: space-between;
@@ -5,18 +12,27 @@
     margin-bottom: 1.5em !important;
 }
 
-.field label.label {
-    margin-bottom: unset;
+.field-block {
+    display: block;
+    margin-bottom: 1.5em !important;
 }
 
-.field .control .number {
+.field .control .number,
+.field-block .control .number {
     margin-right: 0;
     height: 1.3em;
     width: 133px;
 }
 
-.field .control .color {
+.field .control .color,
+.field-block .control .color {
     width: 133px;
     border-radius: 1em;
     height: 1.9em;
 }
+
+.field label.label {
+    margin-bottom: unset;
+}
+
+

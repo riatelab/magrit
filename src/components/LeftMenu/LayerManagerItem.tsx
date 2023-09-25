@@ -117,6 +117,7 @@ const onClickSettings = (id: number, LL: Accessor<TranslationFunctions>) => {
         initialLayerDescription,
       );
     },
+    escapeKey: 'cancel',
   });
   render(() => <LayerSettings id={ id } LL={ LL } />, document.querySelector('.modal-card-body')!);
 };

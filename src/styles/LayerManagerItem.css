@@ -9,8 +9,9 @@
 .layer-manager-item__name {
     font-size: 0.9rem;
     font-weight: 800;
+    white-space: nowrap; /* Layer name are only displayed on one line ... */
+    text-overflow: ellipsis; /* ... and if they are too long, they are truncated with an ellipsis */
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .layer-manager-item__icons {
@@ -28,6 +29,7 @@
     cursor: pointer;
 }
 
-.layer-manager-item.target {
-    background-color: yellow;
+/* Style for the item that is currently being dragged */
+.sortable-chosen .layer-manager-item {
+    background-color: #d2d2d2;
 }

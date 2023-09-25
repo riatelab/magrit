@@ -193,6 +193,10 @@ type RootTranslation = {
 		 */
 		ResultName: string
 		/**
+		 * T​y​p​e​ ​t​h​e​ ​n​a​m​e​ ​o​f​ ​t​h​e​ ​l​a​y​e​r​ ​t​o​ ​c​r​e​a​t​e
+		 */
+		ResultNamePlaceholder: string
+		/**
 		 * N​e​w​_​l​a​y​e​r
 		 */
 		NewLayer: string
@@ -217,6 +221,10 @@ type RootTranslation = {
 			 * I​n​v​e​r​t​ ​c​o​l​o​r​ ​s​c​h​e​m​e
 			 */
 			ColorSchemeInvert: string
+			/**
+			 * {​{​O​n​e​ ​c​l​a​s​s​|​?​?​ ​c​l​a​s​s​e​s​}​}
+			 */
+			CurrentNumberOfClasses: string
 		}
 	}
 	ExportSection: {
@@ -682,6 +690,10 @@ export type TranslationFunctions = {
 		 */
 		ResultName: () => LocalizedString
 		/**
+		 * Type the name of the layer to create
+		 */
+		ResultNamePlaceholder: () => LocalizedString
+		/**
 		 * New_layer
 		 */
 		NewLayer: () => LocalizedString
@@ -706,6 +718,10 @@ export type TranslationFunctions = {
 			 * Invert color scheme
 			 */
 			ColorSchemeInvert: () => LocalizedString
+			/**
+			 * {{One class|?? classes}}
+			 */
+			CurrentNumberOfClasses: (arg0: number | string | boolean) => LocalizedString
 		}
 	}
 	ExportSection: {

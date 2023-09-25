@@ -55,6 +55,7 @@ const fr = {
     TargetLayer: 'Couche cible',
     CreateLayer: 'Créer la couche',
     ResultName: 'Nom du résultat',
+    ResultNamePlaceholder: 'Saisir le nom de la couche à créer',
     NewLayer: 'Nouvelle_couche',
     ChoroplethOptions: {
       Choropleth: 'Choroplèthe',
@@ -62,6 +63,7 @@ const fr = {
       Classification: 'Classification',
       ColorScheme: 'Palette de couleurs',
       ColorSchemeInvert: 'Inverser la palette',
+      CurrentNumberOfClasses: '{{ Une classe | ?? classes }}',
     },
   },
   ExportSection: {
@@ -123,7 +125,7 @@ const fr = {
     skewness: 'Skewness',
     classification: 'Discrétisation',
     classificationMethod: 'Méthode de discrétisation',
-    ClassificationMethods: {
+    classificationMethods: {
       equalInterval: 'Intervalle égal',
       quantile: 'Quantile',
       jenks: 'Jenks',

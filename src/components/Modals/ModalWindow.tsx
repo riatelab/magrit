@@ -1,5 +1,5 @@
 import { LocalizedString } from 'typesafe-i18n';
-import { JSX, onMount } from 'solid-js';
+import { JSX, onCleanup, onMount } from 'solid-js';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { modalStore, setModalStore } from '../../store/ModalStore';
 import '../../styles/ModalWindow.css';
@@ -13,12 +13,33 @@ export default function DefaultModal(): JSX.Element {
 
   let refParentNode: HTMLDivElement;
 
+  const makeListenerEscKey = (behavior: 'confirm' | 'cancel' | null) => {
+    if (behavior === null) return () => {};
+    return (event: KeyboardEvent) => {
+      const isEscape = event.key
+        ? (event.key === 'Escape' || event.key === 'Esc')
+        : (event.keyCode === 27);
+      if (isEscape) {
+        (refParentNode.querySelector(`.${behavior}-button`) as HTMLElement).click();
+      }
+    };
+  };
+
+  const listenerEscKey = makeListenerEscKey(modalStore.escapeKey);
+
   onMount(() => {
     // Set focus on the confirm button when the modal is shown
     const confirmButton = (refParentNode as HTMLDivElement).querySelector('.button.is-success') as HTMLElement;
     if (confirmButton) {
       confirmButton.focus();
     }
+    // Bind the escape key to the chosen behavior
+    document.addEventListener('keydown', listenerEscKey);
+  });
+
+  onCleanup(() => {
+    // Unbind the escape key
+    document.removeEventListener('keydown', listenerEscKey);
   });
 
   return <div class="modal-window modal" style={{ display: 'flex' }} ref={refParentNode}>
@@ -33,11 +54,11 @@ export default function DefaultModal(): JSX.Element {
       </section>
       <footer class="modal-card-foot">
         <button
-          class="button is-success"
+          class="button is-success confirm-button"
           onClick={ () => { confirmCallback(); setModalStore({ show: false, content: null }); } }
         >{ successButton }</button>
         <button
-          class="button"
+          class="button cancel-button"
           onClick={ () => { cancelCallback(); setModalStore({ show: false, content: null }); } }
         >{ cancelButton }</button>
       </footer>

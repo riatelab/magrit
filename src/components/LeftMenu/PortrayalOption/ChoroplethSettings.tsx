@@ -1,4 +1,5 @@
 import { createEffect, createSignal, For } from 'solid-js';
+import { FaSolidCircleCheck } from 'solid-icons/fa';
 
 import { v4 as uuidv4 } from 'uuid';
 import { getPalette, Palette } from 'dicopal';
@@ -31,6 +32,7 @@ import {
   RepresentationType,
   VariableType,
 } from '../../../global.d';
+import ResultNameInput from './ResultNameInput.tsx';
 
 interface ChoroplethSettingsProps {
   layerId: string;
@@ -133,8 +135,9 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
   // Signals for the current component:
   // the target variable, the target layer name and the classification parameters
   const [targetVariable, setTargetVariable] = createSignal<string>(targetFields![0].name);
-  const [targetLayerName, setTargetLayerName] = createSignal<string>(layerDescription.name);
+  const [newLayerName, setNewLayerName] = createSignal<string>(`Choropleth_${layerDescription.name}`);
 
+  // Collect the values of the target variable (only those that are numbers)
   let values = layerDescription.data.features
     .map((f) => f.properties[targetVariable()])
     .filter((d) => isNumber(d))
@@ -161,10 +164,19 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
     entitiesByClass: [],
   } as ClassificationParameters);
 
+  const makePortrayal = () => {
+    onClickValidate(
+      props.layerId,
+      targetVariable(),
+      targetClassification(),
+      newLayerName() || LL().PortrayalSection.NewLayer(),
+    );
+  };
+
   return <div class="portrayal-section__portrayal-options-choropleth">
     <div class="field">
       <label class="label">{ LL().PortrayalSection.ChoroplethOptions.Variable() }</label>
-      <div class="select">
+      <div class="select" style={{ 'max-width': '60%' }}>
         <select onChange={ (ev) => {
           setTargetVariable(ev.target.value);
           setTargetClassification({
@@ -183,9 +195,11 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
         </select>
       </div>
     </div>
-    <div class="field">
+    <div class="field-block">
       <label class="label">{ LL().PortrayalSection.ChoroplethOptions.Classification() }</label>
-      <div style={{ width: '50%', display: 'flex', 'justify-content': 'space-between' }}>
+      <div style={{
+        width: '50%', display: 'flex', 'justify-content': 'space-between', margin: 'auto',
+      }}>
         <img
           class={`mini-button${targetClassification().method === ClassificationMethod.quantile ? ' selected' : ''}`}
           src={imgQuantiles}
@@ -256,7 +270,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
           onClick={ () => {
             setClassificationPanelStore({
               show: true,
-              layerName: targetLayerName(),
+              layerName: newLayerName(),
               variableName: targetVariable(),
               series: layerDescription.data.features.map((f) => f.properties[targetVariable()]),
               nClasses: 6,
@@ -270,26 +284,24 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
           }}
         />
       </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().PortrayalSection.ResultName() }</label>
-      <div class="control">
-        <input class="input" type="text" placeholder="Nom de la couche" onKeyUp={ (ev) => { setTargetLayerName(ev.currentTarget.value); }}/>
+      <div style={{
+        display: 'flex', 'align-items': 'center', margin: '10px auto auto auto', 'justify-content': 'center',
+      }}>
+        <FaSolidCircleCheck fill={'green'} style={{ 'margin-right': '10px' }} />
+        { LL().ClassificationPanel.classificationMethods[targetClassification().method]() }
+        , {
+          // eslint-disable-next-line max-len
+          LL().PortrayalSection.ChoroplethOptions.CurrentNumberOfClasses(targetClassification().classes) }
       </div>
     </div>
+    <ResultNameInput
+      onKeyUp={ (value) => { setNewLayerName(value); }}
+      onEnter={makePortrayal}
+    />
     <div class="has-text-centered">
       <button
         class="button is-success portrayal-section__button-validation"
-        onClick={
-          () => {
-            onClickValidate(
-              props.layerId,
-              targetVariable(),
-              targetClassification(),
-              targetLayerName() || LL().PortrayalSection.NewLayer(),
-            );
-          }
-        }
+        onClick={makePortrayal}
       >
         { LL().PortrayalSection.CreateLayer() }
       </button>

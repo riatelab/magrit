@@ -55,6 +55,7 @@ const en = {
     TargetLayer: 'Target layer',
     CreateLayer: 'Create layer',
     ResultName: 'Result name',
+    ResultNamePlaceholder: 'Type the name of the layer to create',
     NewLayer: 'New_layer',
     ChoroplethOptions: {
       Choropleth: 'Choropleth',
@@ -62,6 +63,7 @@ const en = {
       Classification: 'Classification',
       ColorScheme: 'Color scheme',
       ColorSchemeInvert: 'Invert color scheme',
+      CurrentNumberOfClasses: '{{ One class | ?? classes }}',
     },
   },
   ExportSection: {

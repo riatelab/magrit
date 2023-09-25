@@ -9,6 +9,7 @@ type ModalStoreType = {
   cancelCallback: (() => void) | null,
   successButton: string | null,
   cancelButton: string | null,
+  escapeKey: 'confirm' | 'cancel' | null,
 };
 
 const [
@@ -22,6 +23,7 @@ const [
   cancelCallback: null,
   successButton: null,
   cancelButton: null,
+  escapeKey: null,
 } as ModalStoreType);
 
 export {

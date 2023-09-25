@@ -17,10 +17,12 @@
 .mini-button {
     margin: 0.2em;
     border: solid 1px transparent;
+    width: 18px;
+    height: 100%;
+    cursor: pointer;
 }
 
 .mini-button.selected {
     border: solid 1px grey;
-    border-radius: 0.5em;
     cursor: pointer;
 }

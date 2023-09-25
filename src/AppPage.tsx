@@ -248,6 +248,7 @@ const AppPage: () => JSX.Element = () => {
         setModalStore({
           show: true,
           title: 'About Magrit',
+          escapeKey: 'confirm',
           content: <p>
             Magrit is a web application for the visualization and analysis of geospatial data.
           </p>,
