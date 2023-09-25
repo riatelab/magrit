@@ -1,5 +1,10 @@
-import { FaSolidAngleDown } from 'solid-icons/fa';
+// Imports from solid-js
 import { onMount } from 'solid-js';
+
+// Imports from other packages
+import { FaSolidAngleDown } from 'solid-icons/fa';
+
+// Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
 import { loadLocale } from '../i18n/i18n-util.sync';
 import { Locales } from '../i18n/i18n-types';
@@ -16,10 +21,10 @@ function loadAndSetLocal(locale: Locales, setter: (locale: Locales) => void): vo
   loadLocale(locale);
   setter(locale);
 }
-export default function DropdownLanguage() {
-  const { locale, setLocale } = useI18nContext();
+export default function DropdownLanguage(): JSX.Element {
+  const { locale, setLocale, LL } = useI18nContext();
   onMount(handleDropdownMenu);
-  return <div class="dropdown is-right">
+  return <div class="dropdown is-right" title={ LL().HeaderApp.Language() }>
     <div class="dropdown-trigger">
       <button class="button is-primary" aria-haspopup="true" aria-controls="dropdown-menu">
         <span>{ locale() }</span>

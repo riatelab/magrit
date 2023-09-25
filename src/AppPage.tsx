@@ -1,17 +1,25 @@
+// Imports from solid-js
+import {
+  JSX, onCleanup, onMount, Show,
+} from 'solid-js';
+
+// Imports from other packages
 import initGdalJs from 'gdal3.js';
 import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'; // eslint-disable-line import/extensions
 import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url';
 import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url';
-import {
-  JSX, onCleanup, onMount, Show,
-} from 'solid-js';
 import { Transition } from 'solid-transition-group';
 import { Toaster } from 'solid-toast';
 import { Dexie } from 'dexie';
 
+// Helpers
 import { useI18nContext } from './i18n/i18n-solid';
 import d3 from './helpers/d3-custom';
+import { clickLinkFromDataUrl } from './helpers/exports';
+import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
+import { round } from './helpers/math';
 
+// Sub-components
 import FieldTypingModal from './components/Modals/FieldTypingModal.tsx';
 import DefaultModal from './components/Modals/ModalWindow.tsx';
 import LeftMenu from './components/LeftMenu/LeftMenu.tsx';
@@ -24,6 +32,7 @@ import ClassificationPanel from './components/Modals/ClassificationPanel.tsx';
 import { HeaderBarApp } from './components/Headers.tsx';
 // import ReloadPrompt from './components/ReloadPrompt.tsx';
 
+// Stores
 import { classificationPanelStore } from './store/ClassificationPanelStore';
 import { fieldTypingModalStore } from './store/FieldTypingModalStore';
 import { globalStore, setGlobalStore } from './store/GlobalStore';
@@ -34,10 +43,10 @@ import { niceAlertStore, setNiceAlertStore } from './store/NiceAlertStore';
 import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
 import { tableWindowStore } from './store/TableWindowStore';
 
-import { clickLinkFromDataUrl } from './helpers/exports';
-import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
-import { round } from './helpers/math';
+// Other stuff
+import { version } from '../package.json';
 
+// Styles
 import './styles/Transitions.css';
 
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
@@ -247,11 +256,64 @@ const AppPage: () => JSX.Element = () => {
       ?.addEventListener('click', () => {
         setModalStore({
           show: true,
-          title: 'About Magrit',
+          title: LL().AboutPanel.title(),
           escapeKey: 'confirm',
-          content: <p>
-            Magrit is a web application for the visualization and analysis of geospatial data.
-          </p>,
+          content: <>
+            <div>
+              <p>
+                <b>Version { version }</b>
+              </p>
+            </div>
+            <br />
+            <div>
+              <p><b>{ LL().AboutPanel.description() }</b></p>
+            </div>
+            <hr />
+            <div style={{ 'text-align': 'center' }}>
+              <b>{ LL().AboutPanel.usefulLinks() }</b>
+              <br />
+              <p>
+                <a
+                  class={'button is-link'}
+                  style={{ width: '280px' }}
+                  href="https://riate.cnrs.fr"
+                  target="_blank"
+                >
+                  <b>{ LL().AboutPanel.UarRiate() }</b>
+                </a>
+              </p>
+              <p>
+                <a
+                  class={'button is-link'}
+                  style={{ width: '280px' }}
+                  href="https://magrit.cnrs.fr/docs/"
+                  target="_blank"
+                >
+                  <b>{ LL().AboutPanel.documentation() }</b>
+                </a>
+              </p>
+              <p>
+                <a
+                  class={'button is-link'}
+                  style={{ width: '280px' }}
+                  href="https://github.com/riatelab/magrit"
+                  target="_blank"
+                >
+                  <b>{ LL().AboutPanel.linkGithub() }</b>
+                </a>
+              </p>
+              <p>
+                <a
+                  class={'button is-link'}
+                  style={{ width: '280px' }}
+                  href="https://github.com/riatelab/magrit/issues"
+                  target="_blank"
+                >
+                  <b>{ LL().AboutPanel.linkGithubIssues() }</b>
+                </a>
+              </p>
+            </div>
+          </>,
         });
       });
 
@@ -289,7 +351,7 @@ const AppPage: () => JSX.Element = () => {
           <TableWindow />
         </Show>
         <Show when={fieldTypingModalStore.show}>
-            <FieldTypingModal />
+          <FieldTypingModal />
         </Show>
         <Show when={classificationPanelStore.show}>
           <ClassificationPanel />

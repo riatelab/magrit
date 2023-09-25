@@ -1,11 +1,18 @@
+// Imports from solid-js
 import {
   createSignal, JSX, Show,
 } from 'solid-js';
-import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+
+// Helpers
 import { exportMapToPng, exportMapToSvg, exportToGeo } from '../../helpers/exports';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { isExportableLayer } from '../../helpers/layerDescription';
 import { SupportedGeoFileTypes } from '../../helpers/supportedFormats';
+
+// Stores
+import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+
+// Sub-components
 import DropdownMenu from '../DropdownMenu.tsx';
 
 const noCrsFormats = ['GeoJSON', 'CSV', 'KML', 'TopoJSON'];
@@ -24,7 +31,7 @@ function onClickTabButton(event: Event, tab: string) {
     tabContent[i].classList.add('is-hidden');
   }
   // Remove the class 'is-hidden' on the tab that should be opened by the button
-  document.getElementById(`export-section__content__${tab}`).classList.remove('is-hidden');
+  (document.getElementById(`export-section__content__${tab}`) as HTMLElement).classList.remove('is-hidden');
 }
 
 function isButtonDisabled(
@@ -48,6 +55,12 @@ async function exportToGeoWrapper(
 ) {
   const layer = layersDescriptionStore.layers
     .find((l) => l.name === selectedLayer);
+
+  // This should never happen
+  // (as the dropdown menu should not allow to select a layer that does not exist).
+  // Here we just add a check to avoid a crash if it happens and to
+  // make the compiler happy about latter use of 'layer' variable.
+  if (!layer) throw new Error(`Layer ${selectedLayer} not found !`);
 
   // eslint-disable-next-line no-nested-ternary
   const crs = noCrsFormats.includes(selectedFormat)

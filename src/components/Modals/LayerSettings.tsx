@@ -3,6 +3,7 @@ import { TranslationFunctions } from '../../i18n/i18n-types';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 import '../../styles/LayerSettings.css';
 import { LayerDescription } from '../../global';
+import { createDropShadow } from '../MapRenderer/FilterDropShadow';
 
 function makeOnChangeFillColor(props: LayerDescription): () => void {
   return function onChangeFillColor() {
@@ -83,6 +84,31 @@ function makeOnchangePointRadius(props: LayerDescription): () => void {
         'layers',
         (l) => l.id === props.id,
         { pointRadius: +this.value },
+      );
+    }
+  };
+}
+
+function makeOnChangeDropShadow(props: LayerDescription): () => void {
+  return function onChangeDropShadow() {
+    // Mutate the store for the layer
+    const layer = layersDescriptionStore.layers.find((l) => l.id === props.id);
+    if (layer) {
+      const { checked } = this;
+      if (checked) {
+        // Need to investigate why this is not working as expected
+        // (i.e. the filter should be added automatically to the def section)
+        const filter = createDropShadow(props.id);
+        (document.querySelector('.map-zone svg defs') as SVGDefsElement).appendChild(filter);
+      } else {
+        // Same here, it should be removed automatically
+        const filter = document.querySelector(`#filter-drop-shadow-${props.id}`);
+        if (filter) filter.remove();
+      }
+      setLayersDescriptionStore(
+        'layers',
+        (l) => l.id === props.id,
+        { dropShadow: checked },
       );
     }
   };
@@ -207,6 +233,23 @@ function makeSettingsDefaultLine(
   </div>;
 }
 
+function makeSettingsChoroplethPolygon(
+  props: LayerDescription,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  console.log(props);
+  return <div>
+    <div>
+
+    </div>
+    <div>
+
+    </div>
+    <div>
+
+    </div>
+  </div>;
+}
 function makeSettingsDefaultPolygon(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
@@ -268,6 +311,17 @@ function makeSettingsDefaultPolygon(
         />
       </div>
     </div>
+    <div class="field">
+      <label class="label">{ LL().LayerSettings.DropShadow() }</label>
+      <div class="control">
+        <input
+          class="checkbox"
+          type="checkbox"
+          onChange={makeOnChangeDropShadow(props)}
+          checked={props.dropShadow}
+        />
+      </div>
+    </div>
   </div>;
 }
 
@@ -285,7 +339,7 @@ export default function LayerSettings(
     <div class="layer-settings__title">
       { LL().LayerSettings.Name } : { layerDescription.name }
     </div>
-    <br></br>
+    <br />
     <div class="layer-settings__content">
       { innerElement }
     </div>

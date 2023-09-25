@@ -1,5 +1,8 @@
+// Imports from solid-js
 import { Accessor, JSX, Show } from 'solid-js';
 import { render } from 'solid-js/web';
+
+// Imports from other packages
 import {
   FaSolidTable,
   FaSolidEye,
@@ -9,21 +12,28 @@ import {
   FaSolidTrash,
   FaSolidTableCells,
 } from 'solid-icons/fa';
-import d3 from '../../helpers/d3-custom';
 
+// Helpers
+import d3 from '../../helpers/d3-custom';
+import { useI18nContext } from '../../i18n/i18n-solid';
+import { TranslationFunctions } from '../../i18n/i18n-types';
+import { LayerDescription } from '../../global';
+// import { unproxify } from '../../helpers/common';
+
+// Stores
 import { globalStore } from '../../store/GlobalStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 import { setModalStore } from '../../store/ModalStore';
 import { setNiceAlertStore } from '../../store/NiceAlertStore';
 import { setTableWindowStore } from '../../store/TableWindowStore';
+import { mapStore, setMapStore } from '../../store/MapStore';
 
+// Other components / sub-components
 import LayerSettings from '../Modals/LayerSettings.tsx';
-import { useI18nContext } from '../../i18n/i18n-solid';
+
+// Styles
 import 'font-gis/css/font-gis.css';
 import '../../styles/LayerManagerItem.css';
-import { TranslationFunctions } from '../../i18n/i18n-types';
-import { unproxify } from '../../helpers/common';
-import { LayerDescription } from '../../global';
 
 const typeIcons: { polygon: string; linestring: string; raster: string; point: string } = {
   point: 'fg-point',
@@ -32,7 +42,7 @@ const typeIcons: { polygon: string; linestring: string; raster: string; point: s
   raster: 'fg-finish',
 };
 
-const onClickEye = (id: number) => {
+const onClickEye = (id: string) => {
   console.log('click eye on item ', id);
   const visibilityState = layersDescriptionStore.layers.find((l) => l.id === id)?.visible;
   setLayersDescriptionStore(
@@ -42,39 +52,58 @@ const onClickEye = (id: number) => {
   );
 };
 
-const onCLickMagnifyingGlass = (id: number) => {
+const onCLickMagnifyingGlass = (id: string) => {
   console.log('click magnifying glass on item ', id);
-  const { projection, pathGenerator } = globalStore;
-  console.log(projection.scale(), projection.translate(), d3);
-  console.log(unproxify(layersDescriptionStore.layers.find((l) => l.id === id)?.data));
-  const a = globalStore.projection.fitExtent(
-    [[0, 0], [globalStore.width, globalStore.height]],
-    unproxify(layersDescriptionStore.layers.find((l) => l.id === id)?.data),
+  // Get a reference to the SVG element
+  const svgElem = document.querySelector('.map-zone__inner svg') as SVGSVGElement;
+
+  // Margin so that the extent of the layer is not on the border of the map
+  const marginX = mapStore.mapDimensions.width * 0.03;
+  const marginY = mapStore.mapDimensions.height * 0.03;
+
+  // Fit the extent of the projection to the extent of the layer, with margins
+  globalStore.projection.fitExtent(
+    [
+      [marginX, marginY],
+      [mapStore.mapDimensions.width - marginX, mapStore.mapDimensions.height - marginY],
+    ],
+    layersDescriptionStore.layers.find((l) => l.id === id)?.data,
   );
-  console.log('a', a);
-  // console.log(projection.scale(), projection.translate());
-  // d3.select('.map-zone__inner svg')
-  //   .selectAll('g').attr('transform', null);
-  // d3.select('.map-zone__inner svg')
-  //   .selectAll('path').attr('d', pathGenerator);
-  document.querySelectorAll('.map-zone__inner svg g').forEach((g) => {
-    g.setAttribute('transform', null); // eslint-disable-line no-underscore-dangle
+
+  // Update the global store with the new scale and translate
+  setMapStore({
+    scale: globalStore.projection.scale(),
+    translate: globalStore.projection.translate(),
   });
-  document.querySelectorAll('.map-zone__inner svg path').forEach((p) => {
-    p.setAttribute('d', pathGenerator); // eslint-disable-line no-underscore-dangle
-  });
+
+  // Reset the __zoom property of the svg element by using the zoomIdentity
+  svgElem.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
+
+  // Remove existing transform attribute if any
+  document.querySelectorAll('.map-zone__inner svg g')
+    .forEach((g) => {
+      g.removeAttribute('transform');
+    });
+
+  // Redraw paths
+  document.querySelectorAll('.map-zone__inner svg path')
+    .forEach((p) => {
+      p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
+    });
 };
 
-const onClickTable = (id: number) => {
+const onClickTable = (id: string) => {
   console.log('click table on item ', id);
   setTableWindowStore({
-    editable: true, // TODO: only allow edition on some layers
+    // TODO: only allow edition on some layers
+    //  (not layer that have renderer != 'default' for example)
+    editable: true,
     layerId: id,
     show: true,
   });
 };
 
-const onClickTrash = (id: number, LL: Accessor<TranslationFunctions>) => {
+const onClickTrash = (id: string, LL: Accessor<TranslationFunctions>) => {
   console.log('click trash on item ', id);
   const innerElement = () => <>
     <p>{ LL().Alerts.DeleteLayer() } { id } ?</p>
@@ -91,11 +120,11 @@ const onClickTrash = (id: number, LL: Accessor<TranslationFunctions>) => {
     type: 'warning',
     content: innerElement,
     confirmCallback: onDeleteConfirmed,
-    cancelCallback: (): void => null,
+    cancelCallback: (): void => undefined,
   });
 };
 
-const onClickSettings = (id: number, LL: Accessor<TranslationFunctions>) => {
+const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
   console.log('click settings on item ', id);
   // Create a new modal window with the settings of the layer
   const layerDescription = layersDescriptionStore.layers.find((l) => l.id === id);

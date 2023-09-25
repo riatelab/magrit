@@ -15,6 +15,13 @@ const fr = {
     SaveEditedData: 'Sauvegarder les modifications effectuées ?',
     ReloadLastProject: 'Un projet a été sauvegardé automatiquement lors de la fermetture de la page le {}. Recharger le ce projet ?',
   },
+  HeaderApp: {
+    NightDayMode: 'Night / Day mode',
+    ImportProjet: 'Importer un projet Magrit',
+    SaveProject: 'Sauvegarder le projet',
+    About: 'À propos de Magrit',
+    Language: 'Sélection de la langue',
+  },
   LeftMenu: {
     Import: 'Import des données',
     MapConfiguration: 'Configuration de la carte',
@@ -33,6 +40,15 @@ const fr = {
     Projection: 'Projection',
     MoreProjection: 'Plus de projections',
     CustomProjection: 'Projection personnalisée',
+  },
+  AboutPanel: {
+    title: 'À propos de Magrit',
+    description: 'Magrit est une application Web pour la visualisation et l\'analyse de données géospatiales. Cette application est développée par les membres de l\'UAR RIATE (CNRS, Université Paris Cité).',
+    usefulLinks: 'Liens utiles :',
+    UarRiate: 'UAR RIATE',
+    linkGithub: 'Page du projet sur GitHub',
+    linkGithubIssues: 'Rapport de bug',
+    documentation: 'Documentation',
   },
   LayerManager: {
     point: 'Couche de points',
@@ -85,6 +101,7 @@ const fr = {
     StrokeOpacity: 'Opacité de la ligne',
     StrokeWidth: 'Épaisseur de la ligne',
     PointRadius: 'Rayon du point',
+    DropShadow: 'Ajouter une ombre',
   },
   DataTable: {
     titleGeo: 'Table attributaire',

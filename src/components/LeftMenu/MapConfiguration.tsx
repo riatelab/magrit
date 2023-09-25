@@ -1,9 +1,16 @@
+// Imports from solid-js
 import { JSX } from 'solid-js';
-import { mapStore, setMapStore } from '../../store/MapStore';
-import { useI18nContext } from '../../i18n/i18n-solid';
-import { globalStore, setGlobalStore } from '../../store/GlobalStore';
-import DropdownMenu from '../DropdownMenu.tsx';
+
+// Helpers
 import d3 from '../../helpers/d3-custom';
+import { useI18nContext } from '../../i18n/i18n-solid';
+
+// Stores
+import { mapStore, setMapStore } from '../../store/MapStore';
+import { globalStore, setGlobalStore } from '../../store/GlobalStore';
+
+// Sub-components
+import DropdownMenu from '../DropdownMenu.tsx';
 
 const availableProjections = [
   'Airy',

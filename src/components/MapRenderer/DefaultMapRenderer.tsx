@@ -17,6 +17,7 @@ export function defaultPolygonRenderer(
     stroke-linecap="round"
     stroke-linejoin="round"
     clip-path="url(#clip-sphere)"
+    filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
   >
     <For each={layerDescription.data.features}>
       {
@@ -49,6 +50,7 @@ export function defaultPointRenderer(
     stroke-linecap="round"
     stroke-linejoin="round"
     // clip-path="url(#clip-sphere)"
+    filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
   >
     <For each={layerDescription.data.features}>
       {
@@ -80,6 +82,7 @@ export function defaultLineRenderer(
     stroke-linecap="round"
     stroke-linejoin="round"
     clip-path="url(#clip-sphere)"
+    filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
   >
     <For each={layerDescription.data.features}>
       {

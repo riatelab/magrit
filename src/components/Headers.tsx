@@ -1,14 +1,25 @@
+// Imports from solid-js
 import { JSX, onMount } from 'solid-js';
 import { NavLink } from '@solidjs/router';
+
+// Imports from other packages
 import { CgDarkMode } from 'solid-icons/cg';
 import {
   FaSolidCircleQuestion,
   FaSolidFloppyDisk,
   FaSolidFolderOpen,
 } from 'solid-icons/fa';
+
+// Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
+
+// Sub-components
 import DropdownLanguage from './DropdownLanguage.tsx';
+
+// Assets
 import img from '../assets/magrit.svg';
+
+// Styles
 import '../styles/Headers.css';
 
 const handleBurgerClick = () => {
@@ -64,7 +75,7 @@ export function HeaderBarWelcome(): JSX.Element {
 }
 
 export function HeaderBarApp(): JSX.Element {
-  // const { LL } = useI18nContext();
+  const { LL } = useI18nContext();
   onMount(handleBurgerClick);
   return <nav class="navbar is-black" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
@@ -84,19 +95,35 @@ export function HeaderBarApp(): JSX.Element {
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
-          <button class="button button-header-bar" id="button-new-project">
+          <button
+            class="button button-header-bar"
+            id="button-new-project"
+            title={ LL().HeaderApp.NightDayMode() }
+          >
             <CgDarkMode />
           </button>
-          <button class="button button-header-bar" id="button-import-project">
+          <button
+            class="button button-header-bar"
+            id="button-import-project"
+            title={ LL().HeaderApp.ImportProjet() }
+          >
             <FaSolidFolderOpen />
           </button>
-          <button class="button button-header-bar" id="button-export-project">
+          <button
+            class="button button-header-bar"
+            id="button-export-project"
+            title={ LL().HeaderApp.SaveProject() }
+          >
             <FaSolidFloppyDisk />
           </button>
-          <button class="button button-header-bar" id="button-about-magrit">
+          <button
+            class="button button-header-bar"
+            id="button-about-magrit"
+            title={ LL().HeaderApp.About() }
+          >
             <FaSolidCircleQuestion />
           </button>
-          <DropdownLanguage/>
+          <DropdownLanguage title={ LL().HeaderApp.Language() }/>
           <div class="buttons" />
         </div>
       </div>

@@ -51,6 +51,9 @@ interface LayerDescription {
   fillColor?: string,
   // The opacity of the fill (not used for linestring layers)
   fillOpacity?: number,
+  // Whether there is a drop shadow or not (we may want to replace the boolean value
+  // by an object describing the drop shadow parameters in the future)
+  dropShadow: boolean,
   // The radius of the point (not used for linestring / polygon layers)
   pointRadius?: number,
   // Specific parameters for the Choropleth representation
@@ -59,12 +62,67 @@ interface LayerDescription {
   legend?: ChoroplethLegendParameters,
 }
 
+type GeoJSONRecord = { [key in string | number]: unknown };
+
+type GeoJSONPosition = [longitude: number, latitude: number, elevation?: number];
+
+interface GeoJSONGeometryBase extends GeoJSONRecord {
+  bbox?: number[];
+}
+
+interface Point extends GeoJSONGeometryBase {
+  type: 'Point',
+  coordinates: GeoJSONPosition,
+}
+
+interface MultiPoint extends GeoJSONGeometryBase {
+  type: 'MultiPoint',
+  coordinates: GeoJSONPosition[],
+}
+
+interface LineString extends GeoJSONGeometryBase {
+  type: 'LineString',
+  coordinates: GeoJSONPosition[],
+}
+
+interface MultiLineString extends GeoJSONGeometryBase {
+  type: 'MultiLineString',
+  coordinates: GeoJSONPosition[][],
+}
+
+interface Polygon extends GeoJSONGeometryBase {
+  type: 'Polygon',
+  coordinates: GeoJSONPosition[][],
+}
+
+interface MultiPolygon extends GeoJSONGeometryBase {
+  type: 'MultiPolygon',
+  coordinates: GeoJSONPosition[][][],
+}
+
+interface GeometryCollection extends GeoJSONGeometryBase {
+  type: 'GeometryCollection',
+  geometries: GeoJSONGeometry[],
+}
+
 // A GeoJSON Feature
 interface GeoJSONFeature {
   type: string,
-  geometry: GeoJSONGeometry,
-  properties: object,
+  id?: string | number,
+  geometry: GeoJSONGeometryType,
+  properties: GeoJSONRecord,
 }
+
+// GeoJSON Geometry types
+type GeoJSONGeometryType = (
+  Point
+  | MultiPoint
+  | LineString
+  | MultiLineString
+  | Polygon
+  | MultiPolygon
+  | GeometryCollection
+);
 
 // A GeoJSON Geometry
 interface GeoJSONGeometry {
@@ -225,5 +283,10 @@ export enum LegendType {
 export enum Orientation {
   horizontal = 'horizontal',
   vertical = 'vertical',
+}
+
+export enum ZoomBehavior {
+  Redraw,
+  Transform,
 }
 // }

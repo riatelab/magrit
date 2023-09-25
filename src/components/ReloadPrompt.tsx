@@ -29,7 +29,7 @@ const ReloadPrompt: Component = () => {
         <div class={styles.Toast}>
           <div class={styles.Message}>
             <Show
-              fallback={<span>New content avsqsqdailable, click on reload button to update.</span>}
+              fallback={<span>New content available, click on reload button to update.</span>}
               when={offlineReady()}
             >
               <span>App ready to work offline</span>

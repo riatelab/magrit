@@ -65,6 +65,28 @@ type RootTranslation = {
 		 */
 		ReloadLastProject: RequiredParams<'0'>
 	}
+	HeaderApp: {
+		/**
+		 * N​i​g​h​t​ ​/​ ​D​a​y​ ​m​o​d​e
+		 */
+		NightDayMode: string
+		/**
+		 * I​m​p​o​r​t​ ​a​ ​M​a​g​r​i​t​ ​p​r​o​j​e​c​t
+		 */
+		ImportProjet: string
+		/**
+		 * S​a​v​e​ ​p​r​o​j​e​c​t
+		 */
+		SaveProject: string
+		/**
+		 * A​b​o​u​t​ ​M​a​g​r​i​t
+		 */
+		About: string
+		/**
+		 * L​a​n​g​u​a​g​e​ ​s​e​l​e​c​t​i​o​n
+		 */
+		Language: string
+	}
 	LeftMenu: {
 		/**
 		 * D​a​t​a​ ​i​m​p​o​r​t
@@ -122,6 +144,36 @@ type RootTranslation = {
 		 * C​u​s​t​o​m​ ​p​r​o​j​e​c​t​i​o​n
 		 */
 		CustomProjection: string
+	}
+	AboutPanel: {
+		/**
+		 * A​b​o​u​t​ ​M​a​g​r​i​t
+		 */
+		title: string
+		/**
+		 * M​a​g​r​i​t​ ​i​s​ ​a​ ​w​e​b​ ​a​p​p​l​i​c​a​t​i​o​n​ ​f​o​r​ ​t​h​e​ ​v​i​s​u​a​l​i​z​a​t​i​o​n​ ​a​n​d​ ​t​h​e​ ​a​n​a​l​y​s​i​s​ ​o​f​ ​g​e​o​s​p​a​t​i​a​l​ ​d​a​t​a​.​ ​I​t​ ​i​s​ ​d​e​v​e​l​o​p​e​d​ ​b​y​ ​t​h​e​ ​U​A​R​ ​R​I​A​T​E​ ​(​C​N​R​S​,​ ​U​n​i​v​e​r​s​i​t​é​ ​P​a​r​i​s​ ​C​i​t​é​)​.
+		 */
+		description: string
+		/**
+		 * U​s​e​f​u​l​ ​l​i​n​k​s​:
+		 */
+		usefulLinks: string
+		/**
+		 * U​A​R​ ​R​I​A​T​E
+		 */
+		UarRiate: string
+		/**
+		 * G​i​t​H​u​b​ ​p​r​o​j​e​c​t​ ​p​a​g​e
+		 */
+		linkGithub: string
+		/**
+		 * G​i​t​H​u​b​ ​i​s​s​u​e​s
+		 */
+		linkGithubIssues: string
+		/**
+		 * D​o​c​u​m​e​n​t​a​t​i​o​n
+		 */
+		documentation: string
 	}
 	LayerManager: {
 		/**
@@ -294,6 +346,10 @@ type RootTranslation = {
 		 * P​o​i​n​t​ ​r​a​d​i​u​s
 		 */
 		PointRadius: string
+		/**
+		 * A​d​d​ ​a​ ​s​h​a​d​o​w
+		 */
+		DropShadow: string
 	}
 	DataTable: {
 		/**
@@ -562,6 +618,28 @@ export type TranslationFunctions = {
 		 */
 		ReloadLastProject: (arg0: unknown) => LocalizedString
 	}
+	HeaderApp: {
+		/**
+		 * Night / Day mode
+		 */
+		NightDayMode: () => LocalizedString
+		/**
+		 * Import a Magrit project
+		 */
+		ImportProjet: () => LocalizedString
+		/**
+		 * Save project
+		 */
+		SaveProject: () => LocalizedString
+		/**
+		 * About Magrit
+		 */
+		About: () => LocalizedString
+		/**
+		 * Language selection
+		 */
+		Language: () => LocalizedString
+	}
 	LeftMenu: {
 		/**
 		 * Data import
@@ -619,6 +697,36 @@ export type TranslationFunctions = {
 		 * Custom projection
 		 */
 		CustomProjection: () => LocalizedString
+	}
+	AboutPanel: {
+		/**
+		 * About Magrit
+		 */
+		title: () => LocalizedString
+		/**
+		 * Magrit is a web application for the visualization and the analysis of geospatial data. It is developed by the UAR RIATE (CNRS, Université Paris Cité).
+		 */
+		description: () => LocalizedString
+		/**
+		 * Useful links:
+		 */
+		usefulLinks: () => LocalizedString
+		/**
+		 * UAR RIATE
+		 */
+		UarRiate: () => LocalizedString
+		/**
+		 * GitHub project page
+		 */
+		linkGithub: () => LocalizedString
+		/**
+		 * GitHub issues
+		 */
+		linkGithubIssues: () => LocalizedString
+		/**
+		 * Documentation
+		 */
+		documentation: () => LocalizedString
 	}
 	LayerManager: {
 		/**
@@ -791,6 +899,10 @@ export type TranslationFunctions = {
 		 * Point radius
 		 */
 		PointRadius: () => LocalizedString
+		/**
+		 * Add a shadow
+		 */
+		DropShadow: () => LocalizedString
 	}
 	DataTable: {
 		/**

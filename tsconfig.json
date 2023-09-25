@@ -9,6 +9,7 @@
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
     "types": [
       "vite/client",
       "@testing-library/jest-dom"

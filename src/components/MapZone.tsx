@@ -1,22 +1,37 @@
+// Imports from solid-js
 import { For, JSX, onMount } from 'solid-js';
+
+// Imports from other packages
 import d3 from '../helpers/d3-custom';
+
+// Helpers
+import { debounce } from '../helpers/common';
+
+// Stores
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
-import '../styles/MapZone.css';
+import { applicationSettingsStore } from '../store/ApplicationSettingsStore';
+import { mapStore, setMapStore } from '../store/MapStore';
+
+// Sub-components
 import {
   defaultLineRenderer,
   defaultPointRenderer,
   defaultPolygonRenderer,
   sphereRenderer,
 } from './MapRenderer/DefaultMapRenderer.tsx';
-import { mapStore, setMapStore } from '../store/MapStore';
 import {
   choroplethLineRenderer,
   choroplethPointRenderer,
   choroplethPolygonRenderer,
 } from './MapRenderer/ChoroplethMapRenderer.tsx';
 import legendChoropleth from './LegendRenderer/ChoroplethLegend.tsx';
-import { debounce } from '../helpers/common';
+
+// Types and enums
+import { ZoomBehavior } from '../global.d';
+
+// Styles
+import '../styles/MapZone.css';
 
 export default function MapZone(): JSX.Element {
   let svgElem;
@@ -117,14 +132,14 @@ export default function MapZone(): JSX.Element {
       applyZoomPan(e, false);
     })
     .on('zoom.end', (e) => {
-      redrawDebounced(e);
+      if (applicationSettingsStore.zoomBehavior === ZoomBehavior.Redraw) redrawDebounced(e);
     });
 
   const getClipSphere = () => {
     const el = <path d={globalStore.pathGenerator({ type: 'Sphere' })} />;
     // eslint-disable-next-line no-underscore-dangle
     el.__data__ = { type: 'Sphere' };
-    return <defs><clipPath id="clip-sphere">{ el }</clipPath></defs>;
+    return <clipPath id="clip-sphere">{ el }</clipPath>;
   };
 
   onMount(() => {
@@ -142,6 +157,18 @@ export default function MapZone(): JSX.Element {
         class="map-zone__map"
       >
         <defs>
+          <For each={ layersDescriptionStore.layers.toReversed() }>
+            {(layer) => {
+              if (layer.dropShadow) {
+                return <filter id={`filter-drop-shadow-${layer.id}`} width="200%" height="200%">
+                  <feOffset result="offOut" in="SourceAlpha" dx="5" dy="5" />
+                  <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" />
+                  <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+                </filter>;
+              }
+              return null;
+            }}
+          </For>
           { getClipSphere() }
         </defs>
 

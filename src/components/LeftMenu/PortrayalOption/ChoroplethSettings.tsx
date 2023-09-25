@@ -1,26 +1,35 @@
+// Import from solid-js
 import { createEffect, createSignal, For } from 'solid-js';
 import { FaSolidCircleCheck } from 'solid-icons/fa';
 
+// Imports from other packages
 import { v4 as uuidv4 } from 'uuid';
 import { getPalette, Palette } from 'dicopal';
 import {
   quantile, equal, jenks, q6,
 } from 'statsbreaks';
 
+// Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 import { setClassificationPanelStore } from '../../../store/ClassificationPanelStore';
+import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
 
+// Helper functions
+import { useI18nContext } from '../../../i18n/i18n-solid';
 import { noop } from '../../../helpers/classification';
 import { isNumber } from '../../../helpers/common';
 
-import { useI18nContext } from '../../../i18n/i18n-solid';
+// Subcomponents
+import ResultNameInput from './ResultNameInput.tsx';
 
+// Assets
 import imgQuantiles from '../../../assets/quantiles.png';
 import imgEqualIntervals from '../../../assets/equal_intervals.png';
 import imgQ6 from '../../../assets/q6.png';
 import imgJenks from '../../../assets/jenks.png';
 import imgMoreOption from '../../../assets/buttons2.svg';
 
+// Types
 import {
   ChoroplethLegendParameters,
   ClassificationMethod,
@@ -32,15 +41,16 @@ import {
   RepresentationType,
   VariableType,
 } from '../../../global.d';
-import ResultNameInput from './ResultNameInput.tsx';
 
 interface ChoroplethSettingsProps {
   layerId: string;
 }
 
+// eslint-disable-next-line prefer-destructuring
+const defaultColorScheme = applicationSettingsStore.defaultColorScheme;
 const defaultNoDataColor = '#ffffff';
 const defaultNumberOfClasses = 6;
-const defaultPal = getPalette('OrRd', defaultNumberOfClasses) as Palette;
+const defaultPal = getPalette(defaultColorScheme, defaultNumberOfClasses) as Palette;
 
 function onClickValidate(
   referenceLayerId: string,
@@ -74,6 +84,7 @@ function onClickValidate(
     strokeOpacity: 1,
     // fillColor: '#ffffff',
     fillOpacity: 1,
+    dropShadow: true,
     classification,
     legend: {
       title: {
@@ -118,16 +129,21 @@ function onClickValidate(
 export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.Element {
   const { LL } = useI18nContext();
 
+  // The description of the layer for which we are creating the settings menu
   const layerDescription = layersDescriptionStore.layers
     .find((l) => l.id === props.layerId);
 
+  // This should never happen...
   if (!layerDescription) {
     throw Error('Unexpected Error: Layer not found');
   }
 
+  // The fields of the layer that are of type 'ratio'
+  // (i.e. the fields that can be used for the choropleth)
   const targetFields = layerDescription
     .fields?.filter((variable) => variable.type === VariableType.ratio);
 
+  // This should never happen either...
   if (!targetFields || targetFields.length === 0) {
     throw Error('Unexpected Error: No ratio field found');
   }
@@ -274,7 +290,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
               variableName: targetVariable(),
               series: layerDescription.data.features.map((f) => f.properties[targetVariable()]),
               nClasses: 6,
-              colorScheme: 'OrRd',
+              colorScheme: defaultColorScheme,
               invertColorScheme: false,
               onCancel: noop,
               onConfirm: (classification: ClassificationParameters) => {

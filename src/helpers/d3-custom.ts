@@ -1,7 +1,11 @@
 import { selection, select, selectAll } from 'd3-selection';
 import { csvFormat } from 'd3-dsv';
 import { transition } from 'd3-transition';
-import { zoom, zoomIdentity, zoomTransform } from 'd3-zoom';
+import {
+  zoom,
+  zoomIdentity,
+  zoomTransform,
+} from 'd3-zoom';
 import {
   nice,
   extent,
@@ -75,6 +79,8 @@ import {
   geoHyperelliptical,
   geoNaturalEarth2,
 } from 'd3-geo-projection';
+
+import type { D3ZoomEvent } from 'd3-zoom';
 
 // We want the features that were offered by 'd3-selection-multi'
 // (deprecated and incompatible with new 'd3-selection' versions)
@@ -276,4 +282,8 @@ export default {
   thresholdFreedmanDiaconis,
   thresholdScott,
   thresholdSturges,
+};
+
+export type {
+  D3ZoomEvent,
 };

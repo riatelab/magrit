@@ -27,6 +27,7 @@ export function choroplethPolygonRenderer(
     stroke-linecap="round"
     stroke-linejoin="round"
     clip-path="url(#clip-sphere)"
+    filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
   >
     <For each={layerDescription.data.features}>
       {
@@ -70,6 +71,7 @@ export function choroplethPointRenderer(
     stroke-linecap="round"
     stroke-linejoin="round"
     // clip-path="url(#clip-sphere)"
+    filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
   >
     <For each={layerDescription.data.features}>
       {
@@ -112,6 +114,7 @@ export function choroplethLineRenderer(
     stroke-linecap="round"
     stroke-linejoin="round"
     clip-path="url(#clip-sphere)"
+    filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
   >
     <For each={layerDescription.data.features}>
       {
