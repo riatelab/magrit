@@ -1,12 +1,11 @@
 import { DataType, VariableType } from '../global.d';
 import { isNumber } from './common';
 
-export function noOp() { }
-
 // Detect the types of a field:
 // - its DataType
 // - its VariableType
-export function detectTypeField(
+// - whether it has missing values
+export default function detectTypeField(
   values: never[],
 ): { dataType: DataType, variableType: VariableType, hasMissingValues: boolean } {
   // We will loop through the values of the field and try to detect the type of the field
@@ -20,11 +19,13 @@ export function detectTypeField(
   //   - if all values are different, the field has variable type 'identifier'
   //   - if all values are not different, the field has variable type 'categorical'
 
-  // We will use the following variables to store the results of the detection
-  let dataType: DataType = DataType.string;
-  let variableType: VariableType = VariableType.unknown;
-  const tf = ['true', 'false'];
+  // An array with all the data types found for the given variable
   const dt = [];
+  // Boolean type, as strings
+  const tf = ['true', 'false'];
+  // Result of the type detection
+  let dataType: DataType;
+  let variableType: VariableType;
 
   // eslint-disable-next-line no-plusplus
   for (let i = 0, l = values.length; i < l; i++) {
@@ -43,24 +44,36 @@ export function detectTypeField(
   const hasMissingValues = filteredValues.length !== dt.length;
 
   if (filteredValues.every((d) => d === DataType.number)) {
+    // All the (non-missing) values are of type 'number'
     dataType = DataType.number;
+    // We check if all the values are integers
     if (values.every((v) => Number.isInteger(v))) {
+      // We check if all the values are strictly different
       if (values.every((v) => values.indexOf(v) === values.lastIndexOf(v))) {
-        variableType = VariableType.identifier;
+        // If all the values are strictly different (and if there is no missing value in the field),
+        // we probably have an identifier... but this could be a stock or ratio too.
+        variableType = hasMissingValues ? VariableType.stock : VariableType.identifier;
       } else {
+        // If all the (non-missing) values are not strictly different, we may have a stock
         variableType = VariableType.stock;
       }
     } else {
+      // All the values are numbers but not all of them are integers.. so might be a ratio
       variableType = VariableType.ratio;
     }
   } else if (filteredValues.every((d) => d === DataType.boolean)) {
+    // All the (non-missing) values are of type 'boolean'...
     dataType = DataType.boolean;
+    // ... so we consider this field as categorical
     variableType = VariableType.categorical;
   } else if (filteredValues.every((d) => d === DataType.string)) {
+    // All the (non-missing) values are of type 'string'
     dataType = DataType.string;
     if (values.every((v) => values.indexOf(v) === values.lastIndexOf(v))) {
+      // If all the values are strictly different, we probably have an identifier...
       variableType = VariableType.identifier;
     } else {
+      // ...otherwise this is probably a categorical variable
       variableType = VariableType.categorical;
     }
   } else {

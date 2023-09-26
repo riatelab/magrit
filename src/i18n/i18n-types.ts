@@ -216,6 +216,10 @@ type RootTranslation = {
 		 * S​e​t​t​i​n​g​s
 		 */
 		Settings: string
+		/**
+		 * F​i​e​l​d​s​ ​t​y​p​i​n​g
+		 */
+		Typing: string
 	}
 	PortrayalSection: {
 		PortrayalTypes: {
@@ -252,15 +256,21 @@ type RootTranslation = {
 		 * N​e​w​_​l​a​y​e​r
 		 */
 		NewLayer: string
+		CommonOptions: {
+			/**
+			 * V​a​r​i​a​b​l​e
+			 */
+			Variable: string
+			/**
+			 * C​o​l​o​r
+			 */
+			Color: string
+		}
 		ChoroplethOptions: {
 			/**
 			 * C​h​o​r​o​p​l​e​t​h
 			 */
 			Choropleth: string
-			/**
-			 * V​a​r​i​a​b​l​e
-			 */
-			Variable: string
 			/**
 			 * C​l​a​s​s​i​f​i​c​a​t​i​o​n
 			 */
@@ -277,6 +287,46 @@ type RootTranslation = {
 			 * {​{​O​n​e​ ​c​l​a​s​s​|​?​?​ ​c​l​a​s​s​e​s​}​}
 			 */
 			CurrentNumberOfClasses: string
+		}
+		ProportionalSymbolsOptions: {
+			/**
+			 * R​e​f​e​r​e​n​c​e​ ​s​i​z​e​ ​(​p​x​)
+			 */
+			ReferenceSize: string
+			/**
+			 * O​n​ ​v​a​l​u​e
+			 */
+			OnValue: string
+			/**
+			 * S​y​m​b​o​l​ ​t​y​p​e
+			 */
+			SymbolType: string
+			SymbolTypes: {
+				/**
+				 * C​i​r​c​l​e
+				 */
+				Circle: string
+				/**
+				 * S​q​u​a​r​e
+				 */
+				Square: string
+			}
+			/**
+			 * A​v​o​i​d​ ​o​v​e​r​l​a​p​p​i​n​g​ ​s​y​m​b​o​l​s
+			 */
+			AvoidOverlapping: string
+			/**
+			 * O​n​e​ ​c​o​l​o​r
+			 */
+			SingleColor: string
+			/**
+			 * T​w​o​ ​c​o​l​o​r​s
+			 */
+			TwoColor: string
+			/**
+			 * L​i​m​i​t​ ​v​a​l​u​e
+			 */
+			LimitValue: string
 		}
 	}
 	ExportSection: {
@@ -769,6 +819,10 @@ export type TranslationFunctions = {
 		 * Settings
 		 */
 		Settings: () => LocalizedString
+		/**
+		 * Fields typing
+		 */
+		Typing: () => LocalizedString
 	}
 	PortrayalSection: {
 		PortrayalTypes: {
@@ -805,15 +859,21 @@ export type TranslationFunctions = {
 		 * New_layer
 		 */
 		NewLayer: () => LocalizedString
+		CommonOptions: {
+			/**
+			 * Variable
+			 */
+			Variable: () => LocalizedString
+			/**
+			 * Color
+			 */
+			Color: () => LocalizedString
+		}
 		ChoroplethOptions: {
 			/**
 			 * Choropleth
 			 */
 			Choropleth: () => LocalizedString
-			/**
-			 * Variable
-			 */
-			Variable: () => LocalizedString
 			/**
 			 * Classification
 			 */
@@ -830,6 +890,46 @@ export type TranslationFunctions = {
 			 * {{One class|?? classes}}
 			 */
 			CurrentNumberOfClasses: (arg0: number | string | boolean) => LocalizedString
+		}
+		ProportionalSymbolsOptions: {
+			/**
+			 * Reference size (px)
+			 */
+			ReferenceSize: () => LocalizedString
+			/**
+			 * On value
+			 */
+			OnValue: () => LocalizedString
+			/**
+			 * Symbol type
+			 */
+			SymbolType: () => LocalizedString
+			SymbolTypes: {
+				/**
+				 * Circle
+				 */
+				Circle: () => LocalizedString
+				/**
+				 * Square
+				 */
+				Square: () => LocalizedString
+			}
+			/**
+			 * Avoid overlapping symbols
+			 */
+			AvoidOverlapping: () => LocalizedString
+			/**
+			 * One color
+			 */
+			SingleColor: () => LocalizedString
+			/**
+			 * Two colors
+			 */
+			TwoColor: () => LocalizedString
+			/**
+			 * Limit value
+			 */
+			LimitValue: () => LocalizedString
 		}
 	}
 	ExportSection: {

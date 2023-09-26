@@ -150,7 +150,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
 
   // Signals for the current component:
   // the target variable, the target layer name and the classification parameters
-  const [targetVariable, setTargetVariable] = createSignal<string>(targetFields![0].name);
+  const [targetVariable, setTargetVariable] = createSignal<string>(targetFields[0].name);
   const [newLayerName, setNewLayerName] = createSignal<string>(`Choropleth_${layerDescription.name}`);
 
   // Collect the values of the target variable (only those that are numbers)
@@ -191,7 +191,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
 
   return <div class="portrayal-section__portrayal-options-choropleth">
     <div class="field">
-      <label class="label">{ LL().PortrayalSection.ChoroplethOptions.Variable() }</label>
+      <label class="label">{ LL().PortrayalSection.CommonOptions.Variable() }</label>
       <div class="select" style={{ 'max-width': '60%' }}>
         <select onChange={ (ev) => {
           setTargetVariable(ev.target.value);

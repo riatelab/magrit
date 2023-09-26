@@ -61,6 +61,7 @@ const fr = {
     FitZoom: 'Zoom sur la couche',
     ToggleVisibility: 'Afficher / Masquer',
     Settings: 'Paramètres',
+    Typing: 'Typage des champs',
   },
   PortrayalSection: {
     PortrayalTypes: {
@@ -73,13 +74,29 @@ const fr = {
     ResultName: 'Nom du résultat',
     ResultNamePlaceholder: 'Saisir le nom de la couche à créer',
     NewLayer: 'Nouvelle_couche',
+    CommonOptions: {
+      Variable: 'Variable',
+      Color: 'Couleur',
+    },
     ChoroplethOptions: {
       Choropleth: 'Choroplèthe',
-      Variable: 'Variable',
       Classification: 'Classification',
       ColorScheme: 'Palette de couleurs',
       ColorSchemeInvert: 'Inverser la palette',
       CurrentNumberOfClasses: '{{ Une classe | ?? classes }}',
+    },
+    ProportionalSymbolsOptions: {
+      ReferenceSize: 'Taille de référence (px)',
+      OnValue: 'Sur la valeur',
+      SymbolType: 'Type de symbole',
+      SymbolTypes: {
+        Circle: 'Cercle',
+        Square: 'Carré',
+      },
+      AvoidOverlapping: 'Éviter le chevauchement des symboles',
+      SingleColor: 'Une couleur',
+      TwoColor: 'Deux couleurs',
+      LimitValue: 'Valeur limite',
     },
   },
   ExportSection: {

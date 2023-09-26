@@ -62,6 +62,19 @@ interface LayerDescription {
   legend?: ChoroplethLegendParameters,
 }
 
+export enum ProportionalSymbolsColorMode {
+  singleColor = 'singleColor',
+  twoColors = 'twoColors',
+  ratioVariable = 'ratioVariable',
+  categoricalVariable = 'categoricalVariable',
+}
+
+export enum ProportionalSymbolsSymbolType {
+  circle = 'circle',
+  square = 'square',
+  line = 'line',
+}
+
 type GeoJSONRecord = { [key in string | number]: unknown };
 
 type GeoJSONPosition = [longitude: number, latitude: number, elevation?: number];
@@ -220,8 +233,33 @@ interface ClassificationParameters {
   entitiesByClass: number[],
 }
 
+export interface ProportionalSymbolsParameters {
+  // The name of the variable used to compute the radius of the symbols
+  variable: string,
+  // The color mode of the proportional symbols
+  colorMode: ProportionalSymbolsColorMode,
+  // The color to use for the symbols
+  color: string | [string, string],
+  // The type of symbol to use
+  symbolType: ProportionalSymbolsSymbolType,
+  // The reference radius size (in pixels)
+  referenceRadius: number,
+  // The value on which to base the radius of the symbols
+  referenceValue: number,
+  // The minimum radius size (in pixels)
+  // minRadius: number,
+  // Whether to avoid overlapping symbols or not
+  // (i.e. whether to use a force simulation or not to create
+  // a Dorling / Demers like representation)
+  avoidOverlapping: boolean,
+}
+
 export enum RepresentationType {
   choropleth = 'choropleth',
+  proportionalSymbols = 'proportionalSymbols',
+  categorical = 'categorical',
+  proportionalSymbolsAndCategories = 'proportionalSymbolsAndCategories',
+  proportionalSymbolsAndRatio = 'proportionalSymbolsAndRatio',
   default = 'default',
 }
 
@@ -274,10 +312,13 @@ interface ChoroplethLegendParameters extends LegendParameters {
   labels: LegendTextElement,
 }
 
+// We have multiple king of legends
+// (choropleth, proportional, categorical, ...)
 export enum LegendType {
   choropleth = 'choropleth',
   proportional = 'proportional',
   categorical = 'categorical',
+  waffle = 'waffle',
 }
 
 export enum Orientation {
@@ -288,5 +329,10 @@ export enum Orientation {
 export enum ZoomBehavior {
   Redraw,
   Transform,
+}
+
+export enum ResizeBehavior {
+  ShrinkGrow,
+  KeepMapSize,
 }
 // }

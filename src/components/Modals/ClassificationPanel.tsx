@@ -406,8 +406,6 @@ export default function ClassificationPanel(): JSX.Element {
     },
   ];
 
-  console.log(filteredSeries, statSummary);
-
   const listenerEscKey = (event: KeyboardEvent) => {
     const isEscape = event.key
       ? (event.key === 'Escape' || event.key === 'Esc')

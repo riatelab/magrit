@@ -34,7 +34,7 @@ import { ZoomBehavior } from '../global.d';
 import '../styles/MapZone.css';
 
 export default function MapZone(): JSX.Element {
-  let svgElem;
+  let svgElem: SVGSVGElement;
 
   // Set up the map when the component is created
   const initialScale = 160;
@@ -74,7 +74,7 @@ export default function MapZone(): JSX.Element {
   const applyZoomPan = (e, redraw: boolean) => {
     if (!redraw) {
       // We just change the transform attribute of the layers
-      svgElem.querySelectorAll('g.layer').forEach((g) => {
+      svgElem.querySelectorAll('g.layer').forEach((g: SVGGElement) => {
         g.setAttribute('transform', e.transform);
       });
     } else {
@@ -148,6 +148,7 @@ export default function MapZone(): JSX.Element {
     zoom.apply(null, [d3.select(svgElem)]);
   });
 
+  console.log(globalStore.projection.scale(), globalStore.projection.translate());
   return <div class="map-zone">
     <div class="map-zone__inner">
       <svg

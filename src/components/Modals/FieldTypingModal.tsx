@@ -1,54 +1,38 @@
-import {
-  Accessor,
-  For,
-  JSX,
-  onMount,
-} from 'solid-js';
+// Imports from solid-js
+import { For, JSX, onMount } from 'solid-js';
+
+// Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 import { fieldTypingModalStore, setFieldTypingModalStore } from '../../store/FieldTypingModalStore';
-import { useI18nContext } from '../../i18n/i18n-solid';
-import { TranslationFunctions } from '../../i18n/i18n-types';
-import { VariableType, Variable } from '../../global.d';
-import { detectTypeField } from '../../helpers/typeDetection';
 
-const makeDropDownVariableType = (
-  type: VariableType,
-  LL: Accessor<TranslationFunctions>,
-): JSX.Element => <div class="control">
-    <div class="select">
-      <select>
-        <option value="identifier" selected={type === VariableType.identifier}>
-          { LL().FieldsTyping.VariableTypes.identifier() }
-        </option>
-        <option value="stock" selected={type === VariableType.stock}>
-          { LL().FieldsTyping.VariableTypes.stock() }
-        </option>
-        <option value="ratio" selected={type === VariableType.ratio}>
-          { LL().FieldsTyping.VariableTypes.ratio() }
-        </option>
-        <option value="categorical" selected={type === VariableType.categorical}>
-          { LL().FieldsTyping.VariableTypes.categorical() }
-        </option>
-        <option value="unknown" selected={type === VariableType.unknown}>
-          { LL().FieldsTyping.VariableTypes.unknown() }
-        </option>
-      </select>
-    </div>
-  </div>;
+// Helpers
+import { useI18nContext } from '../../i18n/i18n-solid';
+import { unproxify } from '../../helpers/common';
+import detectTypeField from '../../helpers/typeDetection';
+
+// Types / interfaces / enums
+import { VariableType, Variable } from '../../global.d';
 
 export default function FieldTypingModal(): JSX.Element {
   const { LL } = useI18nContext();
-  let bodyContent;
-
   const { layerId } = fieldTypingModalStore;
   const layer = layersDescriptionStore.layers.find((l) => l.id === layerId);
+
+  let refParentNode: HTMLDivElement;
+
+  // This should never happen (due to the way the modal is called)
+  if (!layer) {
+    throw new Error('Layer not found');
+  }
 
   const fields: string[] = Object.keys(layer.data.features[0].properties);
   let descriptions: Variable[];
 
   if (layer.fields) {
-    descriptions = layer.fields;
+    // If the layers fields are already typed, use them..
+    descriptions = unproxify(layer.fields) as Variable[];
   } else {
+    // ...otherwise, try to guess the type of each field
     descriptions = fields.map((field) => {
       const o = detectTypeField(layer.data.features.map((ft) => ft.properties[field]));
       return {
@@ -61,19 +45,22 @@ export default function FieldTypingModal(): JSX.Element {
   }
 
   const getNewDescriptions = () => {
+    // Get all the select elements
+    // (they are in the same order as the fields in the 'description' array)
+    const selects = (refParentNode as HTMLDivElement).querySelectorAll('select');
     // Fetch the selected option for each select element
-    const selects = bodyContent.querySelectorAll('select');
-    descriptions.forEach((field, i) => {
-      selects[i].querySelectorAll('option').forEach((option) => {
-        if (option.selected) {
-          field.type = option.value as VariableType; // eslint-disable-line no-param-reassign
-        }
+    return descriptions
+      .map((field, i) => {
+        const nf = { ...field };
+        selects[i].querySelectorAll('option')
+          .forEach((option) => {
+            if (option.selected) {
+              nf.type = option.value as VariableType; // eslint-disable-line no-param-reassign
+            }
+          });
+        return nf;
       });
-    });
-    return descriptions;
   };
-
-  let refParentNode: HTMLDivElement;
 
   onMount(() => {
     // Set focus on the confirm button when the modal is shown
@@ -90,13 +77,35 @@ export default function FieldTypingModal(): JSX.Element {
         <p class="modal-card-title">{ LL().FieldsTyping.ModalTitle() }</p>
         {/* <button class="delete" aria-label="close"></button> */}
       </header>
-      <section class="modal-card-body" ref={bodyContent}>
+      <section class="modal-card-body">
         <For each={descriptions}>
           {
-            (field) => <div class="field">
-              <label class="label">{ field.name }</label>
-              { makeDropDownVariableType(field.type, LL) }
-            </div>
+            (field) => (
+              <div class="field">
+                <label class="label">{ field.name }</label>
+                <div class="control">
+                  <div class="select">
+                    <select>
+                      <option value="identifier" selected={field.type === VariableType.identifier}>
+                        { LL().FieldsTyping.VariableTypes.identifier() }
+                      </option>
+                      <option value="stock" selected={field.type === VariableType.stock}>
+                        { LL().FieldsTyping.VariableTypes.stock() }
+                      </option>
+                      <option value="ratio" selected={field.type === VariableType.ratio}>
+                        { LL().FieldsTyping.VariableTypes.ratio() }
+                      </option>
+                      <option value="categorical" selected={field.type === VariableType.categorical}>
+                        { LL().FieldsTyping.VariableTypes.categorical() }
+                      </option>
+                      <option value="unknown" selected={field.type === VariableType.unknown}>
+                        { LL().FieldsTyping.VariableTypes.unknown() }
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            )
           }
         </For>
       </section>

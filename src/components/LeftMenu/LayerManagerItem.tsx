@@ -13,6 +13,8 @@ import {
   FaSolidTableCells,
 } from 'solid-icons/fa';
 
+import { FiType } from 'solid-icons/fi';
+
 // Helpers
 import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -27,6 +29,7 @@ import { setModalStore } from '../../store/ModalStore';
 import { setNiceAlertStore } from '../../store/NiceAlertStore';
 import { setTableWindowStore } from '../../store/TableWindowStore';
 import { mapStore, setMapStore } from '../../store/MapStore';
+import { setFieldTypingModalStore } from '../../store/FieldTypingModalStore';
 
 // Other components / sub-components
 import LayerSettings from '../Modals/LayerSettings.tsx';
@@ -151,6 +154,13 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
   render(() => <LayerSettings id={ id } LL={ LL } />, document.querySelector('.modal-card-body')!);
 };
 
+const onClickTyping = (id: string) => {
+  setFieldTypingModalStore({
+    show: true,
+    layerId: id,
+  });
+};
+
 export default function LayerManagerItem(props: { 'props': LayerDescription }): JSX.Element {
   const { LL } = useI18nContext();
 
@@ -198,6 +208,9 @@ export default function LayerManagerItem(props: { 'props': LayerDescription }): 
       <Show when={props.props.fields}>
         <div title={ LL().LayerManager.AttributeTable() }>
           <FaSolidTable onClick={() => { onClickTable(props.props.id); }} />
+        </div>
+        <div title={ LL().LayerManager.Typing() }>
+          <FiType onClick={() => { onClickTyping(props.props.id); }}/>
         </div>
       </Show>
       <div title={ LL().LayerManager.Delete() }>

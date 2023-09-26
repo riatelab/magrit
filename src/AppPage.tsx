@@ -42,6 +42,10 @@ import { modalStore, setModalStore } from './store/ModalStore';
 import { niceAlertStore, setNiceAlertStore } from './store/NiceAlertStore';
 import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
 import { tableWindowStore } from './store/TableWindowStore';
+import { applicationSettingsStore } from './store/ApplicationSettingsStore';
+
+// Types and enums
+import { ResizeBehavior } from './global.d';
 
 // Other stuff
 import { version } from '../package.json';
@@ -158,23 +162,46 @@ const AppPage: () => JSX.Element = () => {
   const { setLocale, LL } = useI18nContext();
   setLocale('en');
 
-  const onResize = (event: Event): void => {
-    console.log(event);
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    setGlobalStore({
-      windowDimensions: {
-        width,
-        height,
-      },
-    });
+  // Set the maximum dimensions of the map for the current window size
+  // (we need it before mounting the component because the map is
+  // created when the component is mounted and the map uses mapStore.mapDimensions)
+  const maxMapDimensions = {
+    width: round((window.innerWidth - applicationSettingsStore.leftMenuWidth) * 0.9, 0),
+    height: round((window.innerHeight - applicationSettingsStore.headerHeight) * 0.9, 0),
+  };
 
-    setMapStore({
-      mapDimensions: {
-        width: (width - 310) * 0.9,
-        height: (height - 66) * 0.9,
-      },
-    });
+  setMapStore({
+    mapDimensions: maxMapDimensions,
+  });
+
+  // Store some useful values in the global store
+  setGlobalStore({
+    windowDimensions: {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    },
+  });
+
+  const onResize = (/* event: Event */): void => {
+    if (applicationSettingsStore.resizeBehavior === ResizeBehavior.ShrinkGrow) {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      setGlobalStore({
+        windowDimensions: {
+          width,
+          height,
+        },
+      });
+
+      setMapStore({
+        mapDimensions: {
+          width: (width - applicationSettingsStore.leftMenuWidth) * 0.9,
+          height: (height - applicationSettingsStore.headerHeight) * 0.9,
+        },
+      });
+    } else if (applicationSettingsStore.resizeBehavior === ResizeBehavior.KeepMapSize) {
+      // Do nothing (at least for now)
+    }
   };
 
   onCleanup(() => {
@@ -198,26 +225,6 @@ const AppPage: () => JSX.Element = () => {
 
     // Add event listener to the window to handle beforeunload events
     window.addEventListener('beforeunload', onBeforeUnloadWindow);
-
-    // Load GDAL
-    globalThis.Gdal = await loadGdal();
-
-    const maxMapDimensions = {
-      width: round((window.innerWidth - 310) * 0.9, 0),
-      height: round((window.innerHeight - 66) * 0.9, 0),
-    };
-
-    setGlobalStore({
-      nDrivers: Object.keys(Gdal.drivers.raster).length + Object.keys(Gdal.drivers.vector).length,
-      windowDimensions: {
-        width: window.innerWidth,
-        height: window.innerHeight,
-      },
-    });
-
-    setMapStore({
-      mapDimensions: maxMapDimensions,
-    });
 
     // Event listeners for the buttons of the header bar
     document.getElementById('button-export-project')
@@ -252,6 +259,8 @@ const AppPage: () => JSX.Element = () => {
         elem.click();
       });
 
+    // Todo: the content of the about panel
+    //  could be moved to a separate component
     document.getElementById('button-about-magrit')
       ?.addEventListener('click', () => {
         setModalStore({
@@ -316,6 +325,14 @@ const AppPage: () => JSX.Element = () => {
           </>,
         });
       });
+
+    // Load GDAL
+    globalThis.Gdal = await loadGdal();
+
+    // ... and store the number of drivers in the global store (we may change this)
+    setGlobalStore({
+      nDrivers: Object.keys(Gdal.drivers.raster).length + Object.keys(Gdal.drivers.vector).length,
+    });
 
     // Is there a project in the DB ?
     const project = await globalThis.db.projects.toArray();

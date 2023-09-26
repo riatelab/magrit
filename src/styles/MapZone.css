@@ -1,7 +1,7 @@
 .map-zone {
-  width: calc(100vw - var(--left-menu-size));
+  width: calc(100vw - var(--left-menu-width));
   position: fixed;
-  left: var(--left-menu-size);
+  left: var(--left-menu-width);
   height: calc(100vh - var(--header-height));
 }
 

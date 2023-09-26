@@ -61,6 +61,7 @@ const en = {
     FitZoom: 'Zoom on layer',
     ToggleVisibility: 'Toggle visibility',
     Settings: 'Settings',
+    Typing: 'Fields typing',
   },
   PortrayalSection: {
     PortrayalTypes: {
@@ -73,13 +74,29 @@ const en = {
     ResultName: 'Result name',
     ResultNamePlaceholder: 'Type the name of the layer to create',
     NewLayer: 'New_layer',
+    CommonOptions: {
+      Variable: 'Variable',
+      Color: 'Color',
+    },
     ChoroplethOptions: {
       Choropleth: 'Choropleth',
-      Variable: 'Variable',
       Classification: 'Classification',
       ColorScheme: 'Color scheme',
       ColorSchemeInvert: 'Invert color scheme',
       CurrentNumberOfClasses: '{{ One class | ?? classes }}',
+    },
+    ProportionalSymbolsOptions: {
+      ReferenceSize: 'Reference size (px)',
+      OnValue: 'On value',
+      SymbolType: 'Symbol type',
+      SymbolTypes: {
+        Circle: 'Circle',
+        Square: 'Square',
+      },
+      AvoidOverlapping: 'Avoid overlapping symbols',
+      SingleColor: 'One color',
+      TwoColor: 'Two colors',
+      LimitValue: 'Limit value',
     },
   },
   ExportSection: {
