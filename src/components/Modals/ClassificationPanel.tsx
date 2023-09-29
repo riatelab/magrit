@@ -318,7 +318,7 @@ export default function ClassificationPanel(): JSX.Element {
   const [
     classificationMethod,
     setClassificationMethod,
-  ] = createSignal<ClassificationMethod>(ClassificationMethod.quantile);
+  ] = createSignal<ClassificationMethod>(ClassificationMethod.quantiles);
   // - the number of classes chosen by the user for the current classification method
   const [
     numberOfClasses,
@@ -370,8 +370,8 @@ export default function ClassificationPanel(): JSX.Element {
 
   const entriesClassificationMethod = [
     {
-      name: LL().ClassificationPanel.classificationMethods.quantile(),
-      value: ClassificationMethod.quantile,
+      name: LL().ClassificationPanel.classificationMethods.quantiles(),
+      value: ClassificationMethod.quantiles,
       options: [OptionsClassification.numberOfClasses],
     },
     {

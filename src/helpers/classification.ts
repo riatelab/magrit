@@ -30,7 +30,7 @@ export const getClassifier = (method: ClassificationMethod) => {
       return MsdClassifier;
     case ClassificationMethod.pretty:
       return PrettyBreaksClassifier;
-    case ClassificationMethod.quantile:
+    case ClassificationMethod.quantiles:
       return QuantileClassifier;
     case ClassificationMethod.q6:
       return Q6Classifier;

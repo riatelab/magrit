@@ -130,18 +130,22 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
   const { LL } = useI18nContext();
 
   // The description of the layer for which we are creating the settings menu
-  const layerDescription = layersDescriptionStore.layers
+  const collectLayerDescription = () => layersDescriptionStore.layers
     .find((l) => l.id === props.layerId);
+
+  let layerDescription = collectLayerDescription();
 
   // This should never happen...
   if (!layerDescription) {
     throw Error('Unexpected Error: Layer not found');
   }
 
+  const collectTargetFields = () => layerDescription
+    .fields?.filter((variable) => variable.type === VariableType.ratio);
+
   // The fields of the layer that are of type 'ratio'
   // (i.e. the fields that can be used for the choropleth)
-  const targetFields = layerDescription
-    .fields?.filter((variable) => variable.type === VariableType.ratio);
+  let targetFields = collectTargetFields();
 
   // This should never happen either...
   if (!targetFields || targetFields.length === 0) {
@@ -153,18 +157,31 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
   const [targetVariable, setTargetVariable] = createSignal<string>(targetFields[0].name);
   const [newLayerName, setNewLayerName] = createSignal<string>(`Choropleth_${layerDescription.name}`);
 
-  // Collect the values of the target variable (only those that are numbers)
-  let values = layerDescription.data.features
+  const collectValues = () => layerDescription.data.features
     .map((f) => f.properties[targetVariable()])
     .filter((d) => isNumber(d))
     .map((d) => +d) as number[];
 
-  // We want to change 'values' only if the target variable changes
+  // Collect the values of the target variable (only those that are numbers)
+  let values = collectValues();
+
+  // We need to track changes to the current layerDescription
+  // (and so the target fields and values)
+  // if the user changes the target variable or changes the types
+  // of the fields of the layer while this menu is open.
+  // Todo: maybe we should just unmount the component when this pane is collapsed?
+  //  (so changing the type of the field, on another pane, wont mess with portrayal settings)
   createEffect(() => {
-    values = layerDescription.data.features
-      .map((f) => f.properties[targetVariable()])
-      .filter((d) => isNumber(d))
-      .map((d) => +d) as number[];
+    console.log('inside choroplethSettings createEffect');
+    layerDescription = collectLayerDescription();
+    if (!layerDescription) {
+      throw Error('Unexpected Error: Layer not found');
+    }
+    targetFields = collectTargetFields();
+    if (!targetFields || targetFields.length === 0) {
+      throw Error('Unexpected Error: No ratio field found');
+    }
+    values = collectValues();
   });
 
   const [
@@ -172,7 +189,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
     setTargetClassification,
   ] = createSignal<ClassificationParameters>({
     variable: targetVariable(), // eslint-disable-line solid/reactivity
-    method: ClassificationMethod.quantile,
+    method: ClassificationMethod.quantiles,
     classes: defaultNumberOfClasses,
     breaks: quantile(values, { nb: defaultNumberOfClasses, precision: null }),
     palette: defaultPal,
@@ -197,7 +214,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
           setTargetVariable(ev.target.value);
           setTargetClassification({
             variable: targetVariable(), // eslint-disable-line solid/reactivity
-            method: ClassificationMethod.quantile,
+            method: ClassificationMethod.quantiles,
             classes: defaultNumberOfClasses,
             breaks: quantile(values, { nb: defaultNumberOfClasses, precision: null }),
             palette: defaultPal,
@@ -205,7 +222,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
             entitiesByClass: [],
           } as ClassificationParameters);
         }}>
-          <For each={targetFields}>
+          <For each={collectTargetFields()}>
             { (variable) => <option value={ variable.name }>{ variable.name }</option> }
           </For>
         </select>
@@ -217,13 +234,14 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
         width: '50%', display: 'flex', 'justify-content': 'space-between', margin: 'auto',
       }}>
         <img
-          class={`mini-button${targetClassification().method === ClassificationMethod.quantile ? ' selected' : ''}`}
+          class={`mini-button${targetClassification().method === ClassificationMethod.quantiles ? ' selected' : ''}`}
           src={imgQuantiles}
-          alt="Quantiles"
+          alt={ LL().ClassificationPanel.classificationMethods.quantiles() }
+          title={ LL().ClassificationPanel.classificationMethods.quantiles() }
           onClick={ () => {
             setTargetClassification({
               variable: targetVariable(), // eslint-disable-line solid/reactivity
-              method: ClassificationMethod.quantile,
+              method: ClassificationMethod.quantiles,
               classes: defaultNumberOfClasses,
               breaks: quantile(values, { nb: defaultNumberOfClasses, precision: null }),
               palette: defaultPal,
@@ -235,7 +253,8 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
         <img
           class={`mini-button${targetClassification().method === ClassificationMethod.equalInterval ? ' selected' : ''}`}
           src={imgEqualIntervals}
-          alt="Equal intervals"
+          alt={ LL().ClassificationPanel.classificationMethods.equalInterval() }
+          title={ LL().ClassificationPanel.classificationMethods.equalInterval() }
           onClick={ () => {
             setTargetClassification({
               variable: targetVariable(), // eslint-disable-line solid/reactivity
@@ -251,7 +270,8 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
         <img
           class={`mini-button${targetClassification().method === ClassificationMethod.q6 ? ' selected' : ''}`}
           src={imgQ6}
-          alt="Q6"
+          alt={ LL().ClassificationPanel.classificationMethods.q6() }
+          title={ LL().ClassificationPanel.classificationMethods.q6() }
           onClick={ () => {
             setTargetClassification({
               variable: targetVariable(), // eslint-disable-line solid/reactivity
@@ -267,7 +287,8 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
         <img
           class={`mini-button${targetClassification().method === ClassificationMethod.jenks ? ' selected' : ''}`}
           src={imgJenks}
-          alt="Jenks"
+          alt={ LL().ClassificationPanel.classificationMethods.jenks() }
+          title={ LL().ClassificationPanel.classificationMethods.jenks() }
           onClick={ () => {
             setTargetClassification({
               variable: targetVariable(), // eslint-disable-line solid/reactivity
@@ -283,6 +304,8 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
         <img
           class={`mini-button${targetClassification().method === ClassificationMethod.manual ? ' selected' : ''}`}
           src={imgMoreOption}
+          alt={ LL().ClassificationPanel.classificationMethods.manual() }
+          title={ LL().ClassificationPanel.classificationMethods.manual() }
           onClick={ () => {
             setClassificationPanelStore({
               show: true,

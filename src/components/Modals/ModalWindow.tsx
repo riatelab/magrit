@@ -1,7 +1,16 @@
-import { LocalizedString } from 'typesafe-i18n';
+// Imports from solid-js
 import { JSX, onCleanup, onMount } from 'solid-js';
+
+// Imports from other packages
+import { LocalizedString } from 'typesafe-i18n';
+
+// Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+
+// Stores
 import { modalStore, setModalStore } from '../../store/ModalStore';
+
+// Styles
 import '../../styles/ModalWindow.css';
 
 export default function DefaultModal(): JSX.Element {

@@ -108,6 +108,10 @@ type RootTranslation = {
 		 * M​a​p​ ​a​n​d​ ​d​a​t​a​ ​e​x​p​o​r​t
 		 */
 		ExportSection: string
+		/**
+		 * P​a​g​e​ ​l​a​y​o​u​t​ ​a​n​d​ ​s​k​i​n​ ​e​l​e​m​e​n​t​s
+		 */
+		LayoutFeatures: string
 	}
 	ImportSection: {
 		/**
@@ -118,6 +122,10 @@ type RootTranslation = {
 		 * O​p​e​n​ ​t​a​b​u​l​a​r​ ​f​i​l​e​.​.​.
 		 */
 		OpenTabularFile: string
+		/**
+		 * E​x​a​m​p​l​e​ ​d​a​t​a​s​e​t​s
+		 */
+		ExampleDatasets: string
 	}
 	MapConfiguration: {
 		/**
@@ -144,6 +152,8 @@ type RootTranslation = {
 		 * C​u​s​t​o​m​ ​p​r​o​j​e​c​t​i​o​n
 		 */
 		CustomProjection: string
+	}
+	LayoutFeaturesSection: {
 	}
 	AboutPanel: {
 		/**
@@ -538,13 +548,13 @@ type RootTranslation = {
 		classificationMethod: string
 		classificationMethods: {
 			/**
-			 * E​q​u​a​l​ ​i​n​t​e​r​v​a​l
+			 * E​q​u​a​l​ ​i​n​t​e​r​v​a​l​s
 			 */
 			equalInterval: string
 			/**
-			 * Q​u​a​n​t​i​l​e
+			 * Q​u​a​n​t​i​l​e​s
 			 */
-			quantile: string
+			quantiles: string
 			/**
 			 * J​e​n​k​s
 			 */
@@ -711,6 +721,10 @@ export type TranslationFunctions = {
 		 * Map and data export
 		 */
 		ExportSection: () => LocalizedString
+		/**
+		 * Page layout and skin elements
+		 */
+		LayoutFeatures: () => LocalizedString
 	}
 	ImportSection: {
 		/**
@@ -721,6 +735,10 @@ export type TranslationFunctions = {
 		 * Open tabular file...
 		 */
 		OpenTabularFile: () => LocalizedString
+		/**
+		 * Example datasets
+		 */
+		ExampleDatasets: () => LocalizedString
 	}
 	MapConfiguration: {
 		/**
@@ -747,6 +765,8 @@ export type TranslationFunctions = {
 		 * Custom projection
 		 */
 		CustomProjection: () => LocalizedString
+	}
+	LayoutFeaturesSection: {
 	}
 	AboutPanel: {
 		/**
@@ -1141,13 +1161,13 @@ export type TranslationFunctions = {
 		classificationMethod: () => LocalizedString
 		classificationMethods: {
 			/**
-			 * Equal interval
+			 * Equal intervals
 			 */
 			equalInterval: () => LocalizedString
 			/**
-			 * Quantile
+			 * Quantiles
 			 */
-			quantile: () => LocalizedString
+			quantiles: () => LocalizedString
 			/**
 			 * Jenks
 			 */

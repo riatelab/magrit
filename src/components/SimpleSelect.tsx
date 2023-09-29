@@ -12,8 +12,17 @@ export default function SimpleSelect(props: ParentProps<SimpleSelectProps>): JSX
 
   return <div class={'control'}>
     <div class={'select'} style={props.style}>
-      <select onChange={props.onChange} id={props.id}>
-        {c()}
+      <select
+        onChange={
+           (event: Event) => {
+             if (props.onChange) {
+               props.onChange(event);
+             }
+           }
+        }
+        id={props.id}
+      >
+        { c() }
       </select>
     </div>
   </div>;

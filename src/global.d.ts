@@ -188,7 +188,7 @@ interface ProjectionDefinition {
 
 export enum ClassificationMethod {
   equalInterval = 'equalInterval',
-  quantile = 'quantile',
+  quantiles = 'quantiles',
   jenks = 'jenks',
   standardDeviation = 'standardDeviation',
   q6 = 'q6',

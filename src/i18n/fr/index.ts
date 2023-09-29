@@ -28,10 +28,12 @@ const fr = {
     LayerManager: 'Gestion des couches',
     RepresentationChoice: 'Choix de la représentation',
     ExportSection: 'Export des données',
+    LayoutFeatures: 'Mise en page et éléments d\'habillage',
   },
   ImportSection: {
     OpenGeospatialFile: 'Ouvrir un fichier géospatial...',
     OpenTabularFile: 'Ouvrir un fichier tabulaire...',
+    ExampleDatasets: 'Jeu de données d\'exemples',
   },
   MapConfiguration: {
     Dimensions: 'Dimensions',
@@ -40,6 +42,9 @@ const fr = {
     Projection: 'Projection',
     MoreProjection: 'Plus de projections',
     CustomProjection: 'Projection personnalisée',
+  },
+  LayoutFeaturesSection: {
+
   },
   AboutPanel: {
     title: 'À propos de Magrit',
@@ -160,12 +165,12 @@ const fr = {
     classification: 'Discrétisation',
     classificationMethod: 'Méthode de discrétisation',
     classificationMethods: {
-      equalInterval: 'Intervalle égal',
-      quantile: 'Quantile',
+      equalInterval: 'Intervals égaux',
+      quantiles: 'Quantiles',
       jenks: 'Jenks',
       standardDeviation: 'Écart-type',
       q6: 'Q6',
-      pretty: 'Pretty',
+      pretty: 'Pretty breaks',
       geometricProgression: 'Progression géométrique',
       arithmeticProgression: 'Progression arithmétique',
       headTail: 'Head/tail',

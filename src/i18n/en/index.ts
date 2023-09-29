@@ -28,10 +28,12 @@ const en = {
     LayerManager: 'Layer manager',
     RepresentationChoice: 'Representation choice',
     ExportSection: 'Map and data export',
+    LayoutFeatures: 'Page layout and skin elements',
   },
   ImportSection: {
     OpenGeospatialFile: 'Open geospatial file...',
     OpenTabularFile: 'Open tabular file...',
+    ExampleDatasets: 'Example datasets',
   },
   MapConfiguration: {
     Dimensions: 'Dimensions',
@@ -40,6 +42,9 @@ const en = {
     Projection: 'Projection',
     MoreProjection: 'More projections',
     CustomProjection: 'Custom projection',
+  },
+  LayoutFeaturesSection: {
+
   },
   AboutPanel: {
     title: 'About Magrit',
@@ -160,8 +165,8 @@ const en = {
     classification: 'Classification',
     classificationMethod: 'Classification method',
     classificationMethods: {
-      equalInterval: 'Equal interval',
-      quantile: 'Quantile',
+      equalInterval: 'Equal intervals',
+      quantiles: 'Quantiles',
       jenks: 'Jenks',
       standardDeviation: 'Standard deviation',
       q6: 'Q6',
