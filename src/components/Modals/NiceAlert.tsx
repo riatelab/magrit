@@ -1,7 +1,17 @@
-import { LocalizedString } from 'typesafe-i18n';
+// Imports from solid-js
 import { JSX, onMount } from 'solid-js';
+import { autofocus } from '@solid-primitives/autofocus';
+
+// Imports from other packages
+import { LocalizedString } from 'typesafe-i18n';
+
+// Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { niceAlertStore, setNiceAlertStore } from '../../store/NiceAlertStore';
+
+// Stores
+import { niceAlertStore, resetNiceAlertStore } from '../../store/NiceAlertStore';
+
+// Styles
 import '../../styles/NiceAlert.css';
 import '../../styles/AlertAnimations.css';
 
@@ -41,13 +51,10 @@ export default function NiceAlert(): JSX.Element {
 
   let refParentNode: HTMLDivElement;
 
-  onMount(() => {
-    // Set focus on the confirm button when the modal is shown
-    const confirmButton = (refParentNode as HTMLDivElement).querySelector('.button.is-success') as HTMLElement;
-    if (confirmButton) {
-      confirmButton.focus();
-    }
-  });
+  const o = {
+    ref: autofocus,
+    autofocus: true,
+  };
 
   return <div class="modal nice-alert" style={{ display: 'flex' }} ref={refParentNode}>
     <div class="modal-background"></div>
@@ -56,17 +63,25 @@ export default function NiceAlert(): JSX.Element {
         {/* <button class="delete" aria-label="close"></button> */}
       </header>
       <section class="modal-card-body f-modal-alert">
-        { makeAnimation(niceAlertStore.type) }
+        { makeAnimation(niceAlertStore.type as string) }
         { niceAlertStore.content }
       </section>
       <footer class="modal-card-foot">
         <button
           class="button is-success"
-          onClick={ () => { confirmCallback(); setNiceAlertStore({ show: false }); } }
+          { ...(niceAlertStore.focusOn === 'confirm' ? o : {}) }
+          onClick={() => {
+            confirmCallback();
+            resetNiceAlertStore();
+          }}
         >{ successButton }</button>
         <button
           class="button"
-          onClick={ () => { cancelCallback(); setNiceAlertStore({ show: false }); } }
+          { ...(niceAlertStore.focusOn === 'cancel' ? o : {}) }
+          onClick={() => {
+            cancelCallback();
+            resetNiceAlertStore();
+          }}
         >{ cancelButton }</button>
       </footer>
     </div>

@@ -1,5 +1,6 @@
 // Imports from solid-js
 import { For, JSX, onMount } from 'solid-js';
+import { autofocus } from '@solid-primitives/autofocus';
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
@@ -62,14 +63,6 @@ export default function FieldTypingModal(): JSX.Element {
       });
   };
 
-  onMount(() => {
-    // Set focus on the confirm button when the modal is shown
-    const confirmButton = (refParentNode as HTMLDivElement).querySelector('.button.is-success') as HTMLElement;
-    if (confirmButton) {
-      confirmButton.focus();
-    }
-  });
-
   return <div class="modal-window modal" style={{ display: 'flex' }} ref={refParentNode}>
     <div class="modal-background"></div>
     <div class="modal-card">
@@ -112,6 +105,8 @@ export default function FieldTypingModal(): JSX.Element {
       <footer class="modal-card-foot">
         <button
           class="button is-success"
+          ref={autofocus}
+          autofocus
           onClick={ () => {
             const newDescriptions = getNewDescriptions();
             setLayersDescriptionStore(

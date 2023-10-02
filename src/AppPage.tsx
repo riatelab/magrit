@@ -139,7 +139,7 @@ const dropHandler = (e: Event): void => {
   }
 };
 
-const reloadFromProjectObject = (obj): void => {
+const reloadFromProjectObject = (obj: { layers: object, map: object }): void => {
   const { layers, map } = obj;
   setMapStore(map);
   const projection = d3[map.projection.value]()
@@ -344,6 +344,7 @@ const AppPage: () => JSX.Element = () => {
         show: true,
         content: () => <p>{ LL().Alerts.ReloadLastProject(date.toLocaleDateString())}</p>,
         confirmCallback: () => { reloadFromProjectObject(data); },
+        focusOn: 'confirm',
       });
       globalThis.db.projects.clear();
     }

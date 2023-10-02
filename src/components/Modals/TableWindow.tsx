@@ -68,6 +68,7 @@ export default function TableWindow(): JSX.Element {
         type: 'warning',
         content: (): JSX.Element => <p>{ LL().Alerts.SaveEditedData() }</p>,
         confirmCallback: onConfirm,
+        focusOn: 'confirm',
       });
     }
   };

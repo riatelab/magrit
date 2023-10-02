@@ -15,7 +15,7 @@ html {
   box-sizing: border-box;
 }
 
-.button {
+.button .has-shadow {
   box-shadow: 0 0.5rem 0.8rem hsla(208,7%,46%,.3);
 }
 

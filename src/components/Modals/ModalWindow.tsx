@@ -1,5 +1,6 @@
 // Imports from solid-js
 import { JSX, onCleanup, onMount } from 'solid-js';
+import { autofocus } from '@solid-primitives/autofocus';
 
 // Imports from other packages
 import { LocalizedString } from 'typesafe-i18n';
@@ -37,11 +38,6 @@ export default function DefaultModal(): JSX.Element {
   const listenerEscKey = makeListenerEscKey(modalStore.escapeKey);
 
   onMount(() => {
-    // Set focus on the confirm button when the modal is shown
-    const confirmButton = (refParentNode as HTMLDivElement).querySelector('.button.is-success') as HTMLElement;
-    if (confirmButton) {
-      confirmButton.focus();
-    }
     // Bind the escape key to the chosen behavior
     document.addEventListener('keydown', listenerEscKey);
   });
@@ -64,6 +60,8 @@ export default function DefaultModal(): JSX.Element {
       <footer class="modal-card-foot">
         <button
           class="button is-success confirm-button"
+          ref={autofocus}
+          autofocus
           onClick={ () => { confirmCallback(); setModalStore({ show: false, content: null }); } }
         >{ successButton }</button>
         <button

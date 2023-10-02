@@ -124,6 +124,7 @@ const onClickTrash = (id: string, LL: Accessor<TranslationFunctions>) => {
     content: innerElement,
     confirmCallback: onDeleteConfirmed,
     cancelCallback: (): void => undefined,
+    focusOn: 'cancel',
   });
 };
 

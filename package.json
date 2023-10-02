@@ -35,6 +35,7 @@
     "@creativebulma/bulma-tooltip": "^1.2.0",
     "@observablehq/plot": "^0.6.10",
     "@r-wasm/webr": "^0.1.1",
+    "@solid-primitives/autofocus": "^0.0.108",
     "@solidjs/router": "^0.8.3",
     "@turf/turf": "^6.5.0",
     "ag-grid-community": "^30.1.0",
