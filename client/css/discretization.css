@@ -183,6 +183,11 @@ li.typo_class > p.symbol_section {
   cursor: pointer;
 }
 
+li.typo_class .typo_count_ft {
+  flex-basis: 100px;
+  text-align: right;
+}
+
 li.label-item {
   justify-content: space-around;
 }
