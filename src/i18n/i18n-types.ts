@@ -87,6 +87,86 @@ type RootTranslation = {
 		 */
 		Language: string
 	}
+	Pagination: {
+		/**
+		 * N​e​x​t
+		 */
+		Next: string
+		/**
+		 * P​r​e​v​i​o​u​s
+		 */
+		Previous: string
+	}
+	DatasetCatalog: {
+		/**
+		 * D​a​t​a​s​e​t​ ​c​a​t​a​l​o​g
+		 */
+		title: string
+		/**
+		 * S​e​a​r​c​h​ ​a​ ​d​a​t​a​s​e​t​.​.​.
+		 */
+		placeholderSearchBar: string
+		/**
+		 * S​e​a​r​c​h
+		 */
+		searchButton: string
+		/**
+		 * A​b​o​u​t
+		 */
+		about: string
+		/**
+		 * D​e​s​c​r​i​p​t​i​o​n
+		 */
+		description: string
+		/**
+		 * P​r​e​v​i​e​w
+		 */
+		preview: string
+		/**
+		 * L​i​c​e​n​s​e
+		 */
+		license: string
+		/**
+		 * T​y​p​e
+		 */
+		type: string
+		/**
+		 * P​r​o​v​i​d​e​r
+		 */
+		provider: string
+		/**
+		 * A​t​t​r​i​b​u​t​i​o​n​s
+		 */
+		attributions: string
+		/**
+		 * D​a​t​e
+		 */
+		date: string
+		/**
+		 * S​o​u​r​c​e
+		 */
+		source: string
+		/**
+		 * S​e​l​e​c​t​ ​a​ ​d​a​t​a​s​e​t​ ​t​o​ ​s​e​e​ ​i​t​s​ ​d​e​t​a​i​l​s​.
+		 */
+		placeholderDatasetDetail: string
+		/**
+		 * N​o​ ​d​a​t​a​s​e​t​ ​m​a​t​c​h​e​s​ ​y​o​u​r​ ​s​e​a​r​c​h​.
+		 */
+		noSearchResult: string
+		/**
+		 * D​a​t​a​s​e​t​ ​p​r​e​v​i​e​w
+		 */
+		altDatasetPreview: string
+		/**
+		 * A​d​d​ ​t​o​ ​m​a​p
+		 */
+		confirmButton: string
+		/**
+		 * C​a​n​c​e​l
+		 */
+		cancelButton: string
+	}
 	LeftMenu: {
 		/**
 		 * D​a​t​a​ ​i​m​p​o​r​t
@@ -152,6 +232,10 @@ type RootTranslation = {
 		 * C​u​s​t​o​m​ ​p​r​o​j​e​c​t​i​o​n
 		 */
 		CustomProjection: string
+		/**
+		 * L​o​c​k​ ​z​o​o​m​ ​/​ ​p​o​s​i​t​i​o​n
+		 */
+		LockZoom: string
 	}
 	LayoutFeaturesSection: {
 	}
@@ -241,6 +325,10 @@ type RootTranslation = {
 			 * P​r​o​p​o​r​t​i​o​n​a​l​ ​s​y​m​b​o​l​s
 			 */
 			ProportionalSymbols: string
+			/**
+			 * N​o​ ​p​o​r​t​r​a​y​a​l​ ​f​o​r​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​l​a​y​e​r​ ​-​ ​P​l​e​a​s​e​ ​v​e​r​i​f​y​ ​t​h​e​ ​t​y​p​i​n​g​ ​o​f​ ​t​h​e​ ​f​i​e​l​d​s​ ​o​r​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​l​a​y​e​r
+			 */
+			NoPortrayal: string
 		}
 		/**
 		 * R​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​c​h​o​i​c​e
@@ -432,6 +520,16 @@ type RootTranslation = {
 		 * E​x​p​o​r​t​ ​a​s​ ​C​S​V​.​.​.
 		 */
 		ExportCsv: string
+		/**
+		 * N​e​w​ ​c​o​l​u​m​n​.​.​.
+		 */
+		NewColumn: string
+		NewColumnModal: {
+			/**
+			 * N​e​w​ ​c​o​l​u​m​n
+			 */
+			title: string
+		}
 	}
 	FieldsTyping: {
 		/**
@@ -700,6 +798,86 @@ export type TranslationFunctions = {
 		 */
 		Language: () => LocalizedString
 	}
+	Pagination: {
+		/**
+		 * Next
+		 */
+		Next: () => LocalizedString
+		/**
+		 * Previous
+		 */
+		Previous: () => LocalizedString
+	}
+	DatasetCatalog: {
+		/**
+		 * Dataset catalog
+		 */
+		title: () => LocalizedString
+		/**
+		 * Search a dataset...
+		 */
+		placeholderSearchBar: () => LocalizedString
+		/**
+		 * Search
+		 */
+		searchButton: () => LocalizedString
+		/**
+		 * About
+		 */
+		about: () => LocalizedString
+		/**
+		 * Description
+		 */
+		description: () => LocalizedString
+		/**
+		 * Preview
+		 */
+		preview: () => LocalizedString
+		/**
+		 * License
+		 */
+		license: () => LocalizedString
+		/**
+		 * Type
+		 */
+		type: () => LocalizedString
+		/**
+		 * Provider
+		 */
+		provider: () => LocalizedString
+		/**
+		 * Attributions
+		 */
+		attributions: () => LocalizedString
+		/**
+		 * Date
+		 */
+		date: () => LocalizedString
+		/**
+		 * Source
+		 */
+		source: () => LocalizedString
+		/**
+		 * Select a dataset to see its details.
+		 */
+		placeholderDatasetDetail: () => LocalizedString
+		/**
+		 * No dataset matches your search.
+		 */
+		noSearchResult: () => LocalizedString
+		/**
+		 * Dataset preview
+		 */
+		altDatasetPreview: () => LocalizedString
+		/**
+		 * Add to map
+		 */
+		confirmButton: () => LocalizedString
+		/**
+		 * Cancel
+		 */
+		cancelButton: () => LocalizedString
+	}
 	LeftMenu: {
 		/**
 		 * Data import
@@ -765,6 +943,10 @@ export type TranslationFunctions = {
 		 * Custom projection
 		 */
 		CustomProjection: () => LocalizedString
+		/**
+		 * Lock zoom / position
+		 */
+		LockZoom: () => LocalizedString
 	}
 	LayoutFeaturesSection: {
 	}
@@ -854,6 +1036,10 @@ export type TranslationFunctions = {
 			 * Proportional symbols
 			 */
 			ProportionalSymbols: () => LocalizedString
+			/**
+			 * No portrayal for the selected layer - Please verify the typing of the fields or select another layer
+			 */
+			NoPortrayal: () => LocalizedString
 		}
 		/**
 		 * Representation choice
@@ -1045,6 +1231,16 @@ export type TranslationFunctions = {
 		 * Export as CSV...
 		 */
 		ExportCsv: () => LocalizedString
+		/**
+		 * New column...
+		 */
+		NewColumn: () => LocalizedString
+		NewColumnModal: {
+			/**
+			 * New column
+			 */
+			title: () => LocalizedString
+		}
 	}
 	FieldsTyping: {
 		/**

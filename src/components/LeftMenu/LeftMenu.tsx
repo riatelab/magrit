@@ -1,5 +1,5 @@
 // Imports from solid-js
-import { JSX, createSignal } from 'solid-js';
+import { JSX, createSignal, Show } from 'solid-js';
 
 // Imports from other packages
 import { AiOutlineLayout, AiOutlineBarChart } from 'solid-icons/ai';
@@ -85,7 +85,10 @@ export default function LeftMenu(): JSX.Element {
     </div>
     <Collapse value={expandedSection() === 4} >
       <div class="left-menu__section-container">
-        <PortrayalSection />
+        <Show when={ expandedSection() === 4}>
+          {/* For now we unmount this componenent when the menu is collapsed */}
+          <PortrayalSection />
+        </Show>
       </div>
     </Collapse>
 

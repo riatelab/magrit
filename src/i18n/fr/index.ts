@@ -22,6 +22,29 @@ const fr = {
     About: 'À propos de Magrit',
     Language: 'Sélection de la langue',
   },
+  Pagination: {
+    Next: 'Suivant',
+    Previous: 'Précédent',
+  },
+  DatasetCatalog: {
+    title: 'Catalogue de données',
+    placeholderSearchBar: 'Rechercher un jeu de données...',
+    searchButton: 'Rechercher',
+    about: 'À propos',
+    description: 'Description',
+    preview: 'Aperçu',
+    license: 'Licence',
+    type: 'Type',
+    provider: 'Fournisseur',
+    attributions: 'Attributions',
+    date: 'Date',
+    source: 'Source',
+    placeholderDatasetDetail: 'Sélectionner un jeu de données pour afficher ses détails.',
+    noSearchResult: 'Aucun jeu de données ne correspond à votre recherche.',
+    altDatasetPreview: 'Aperçu du jeu de données',
+    confirmButton: 'Ajouter à la carte',
+    cancelButton: 'Annuler',
+  },
   LeftMenu: {
     Import: 'Import des données',
     MapConfiguration: 'Configuration de la carte',
@@ -42,6 +65,7 @@ const fr = {
     Projection: 'Projection',
     MoreProjection: 'Plus de projections',
     CustomProjection: 'Projection personnalisée',
+    LockZoom: 'Verrouiller le zoom / la position',
   },
   LayoutFeaturesSection: {
 
@@ -72,6 +96,7 @@ const fr = {
     PortrayalTypes: {
       Choropleth: 'Choropleth',
       ProportionalSymbols: 'Symboles proportionnels',
+      NoPortrayal: 'Aucune représentation pour la couche choisie - Veuillez vérifier le types des champs de la couche ou sélectionner une autre couche',
     },
     RepresentationChoice: 'Choix de la représentation',
     TargetLayer: 'Couche cible',
@@ -131,6 +156,10 @@ const fr = {
     Features: '{{Une entité | ?? entités}}',
     Columns: '{{Une colonne | ?? colonnes}}',
     ExportCsv: 'Exporter en CSV...',
+    NewColumn: 'Nouveau champ...',
+    NewColumnModal: {
+      title: 'Nouveau champ',
+    },
   },
   FieldsTyping: {
     ModalTitle: 'Typage des champs',

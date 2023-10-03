@@ -86,8 +86,12 @@ export default function MapZone(): JSX.Element {
 
       // Parse last transform from svg element
       const lastTransform = svgElem.querySelector('g.layer').getAttribute('transform');
-      const lastTranslate = lastTransform.match(/translate\(([^)]+)\)/)[1].split(',').map((d) => +d);
-      const lastScale = +lastTransform.match(/scale\(([^)]+)\)/)[1];
+      const lastTranslate = lastTransform !== null
+        ? lastTransform.match(/translate\(([^)]+)\)/)[1].split(',').map((d) => +d)
+        : [0, 0];
+      const lastScale = lastTransform !== null
+        ? +lastTransform.match(/scale\(([^)]+)\)/)[1]
+        : 1;
 
       // Compute new values for scale and translate
       const scaleValue = lastScale * previousProjectionScale;
@@ -104,15 +108,24 @@ export default function MapZone(): JSX.Element {
         .rotate(rotateValue);
 
       // We also need to reset the __zoom property of the svg element
-      // to the new values, otherwise the zoom will not work anymore.
+      // to the zoomIdentity, otherwise the zoom will not work anymore.
       svgElem.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
 
+      // Remove the transform attribute from the elements on which it was defined
       svgElem?.querySelectorAll('g.layer').forEach((g) => {
         g.removeAttribute('transform');
+        g.querySelectorAll('path').forEach((p) => {
+          p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
+        });
       });
-      svgElem?.querySelectorAll('path').forEach((p) => {
-        p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
+      svgElem?.querySelectorAll('defs path').forEach((p) => {
+        // eslint-disable-next-line no-underscore-dangle
+        p.setAttribute('d', globalStore.pathGenerator(p.__data__));
       });
+      // svgElem?.querySelectorAll('path').forEach((p) => {
+      //   // eslint-disable-next-line no-underscore-dangle
+      //   p.setAttribute('d', globalStore.pathGenerator(p.__data__));
+      // });
       setMapStore({
         scale: scaleValue,
         translate: translateValue,
@@ -124,15 +137,28 @@ export default function MapZone(): JSX.Element {
   // too often when zooming
   const redrawDebounced = debounce((e) => {
     applyZoomPan(e, true);
-  }, 350);
+  }, 100);
 
   // Set up the zoom behavior
   const zoom = d3.zoom()
     .on('zoom', (e) => {
-      applyZoomPan(e, false);
+      if (mapStore.lockZoomPan) {
+        // If zoom/pan is locked,
+        // we just ensure that the __zoom property of the svg element
+        // is set to the identity transform, so that the zoom/pan
+        // does not change the map.
+        svgElem.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
+      } else {
+        // Otherwise we apply the zoom/pan
+        applyZoomPan(e, false);
+      }
     })
-    .on('zoom.end', (e) => {
-      if (applicationSettingsStore.zoomBehavior === ZoomBehavior.Redraw) redrawDebounced(e);
+    .on('end', (e) => {
+      if (mapStore.lockZoomPan) {
+        svgElem.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
+      } else if (applicationSettingsStore.zoomBehavior === ZoomBehavior.Redraw) {
+        redrawDebounced(e);
+      }
     });
 
   const getClipSphere = () => {
@@ -148,7 +174,6 @@ export default function MapZone(): JSX.Element {
     zoom.apply(null, [d3.select(svgElem)]);
   });
 
-  console.log(globalStore.projection.scale(), globalStore.projection.translate());
   return <div class="map-zone">
     <div class="map-zone__inner">
       <svg

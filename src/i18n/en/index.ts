@@ -22,6 +22,29 @@ const en = {
     About: 'About Magrit',
     Language: 'Language selection',
   },
+  Pagination: {
+    Next: 'Next',
+    Previous: 'Previous',
+  },
+  DatasetCatalog: {
+    title: 'Dataset catalog',
+    placeholderSearchBar: 'Search a dataset...',
+    searchButton: 'Search',
+    about: 'About',
+    description: 'Description',
+    preview: 'Preview',
+    license: 'License',
+    type: 'Type',
+    provider: 'Provider',
+    attributions: 'Attributions',
+    date: 'Date',
+    source: 'Source',
+    placeholderDatasetDetail: 'Select a dataset to see its details.',
+    noSearchResult: 'No dataset matches your search.',
+    altDatasetPreview: 'Dataset preview',
+    confirmButton: 'Add to map',
+    cancelButton: 'Cancel',
+  },
   LeftMenu: {
     Import: 'Data import',
     MapConfiguration: 'Map configuration',
@@ -42,6 +65,7 @@ const en = {
     Projection: 'Projection',
     MoreProjection: 'More projections',
     CustomProjection: 'Custom projection',
+    LockZoom: 'Lock zoom / position',
   },
   LayoutFeaturesSection: {
 
@@ -72,6 +96,7 @@ const en = {
     PortrayalTypes: {
       Choropleth: 'Choropleth',
       ProportionalSymbols: 'Proportional symbols',
+      NoPortrayal: 'No portrayal for the selected layer - Please verify the typing of the fields or select another layer',
     },
     RepresentationChoice: 'Representation choice',
     TargetLayer: 'Target layer',
@@ -131,6 +156,10 @@ const en = {
     Features: '{{One feature | ?? features}}',
     Columns: '{{One column | ?? columns}}',
     ExportCsv: 'Export as CSV...',
+    NewColumn: 'New column...',
+    NewColumnModal: {
+      title: 'New column',
+    },
   },
   FieldsTyping: {
     ModalTitle: 'Fields typing',

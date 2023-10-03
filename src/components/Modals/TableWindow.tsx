@@ -1,4 +1,4 @@
-import { createSignal, JSX } from 'solid-js';
+import { createSignal, JSX, Show } from 'solid-js';
 
 import AgGridSolid from 'ag-grid-solid';
 import 'ag-grid-community/styles/ag-grid.css'; // grid core CSS
@@ -14,6 +14,7 @@ import { tableWindowStore, setTableWindowStore } from '../../store/TableWindowSt
 import '../../styles/TableWindow.css';
 import d3 from '../../helpers/d3-custom';
 import { clickLinkFromDataUrl } from '../../helpers/exports';
+import { setModalStore } from '../../store/ModalStore';
 
 export default function TableWindow(): JSX.Element {
   const { LL } = useI18nContext();
@@ -34,7 +35,17 @@ export default function TableWindow(): JSX.Element {
     sortable: true,
   };
 
-  const [cellEdited, setCellEdited] = createSignal(false);
+  // Whether the data has been edited
+  const [
+    cellEdited,
+    setCellEdited,
+  ] = createSignal<boolean>(false);
+
+  // Wheter we are displaying the table or the form to add a new column
+  const [
+    currentPanel,
+    setCurrentPanel,
+  ] = createSignal<'table' | 'newColumn'>('table');
 
   const confirmCallback = () => {
     // Remove the table window
@@ -96,26 +107,49 @@ export default function TableWindow(): JSX.Element {
         {/* <button class="delete" aria-label="close"></button> */}
       </header>
       <section class="modal-card-body">
-        <h3>
-          { layerName }
-          &nbsp;- { LL().DataTable.Features(rowData.length) }
-          &nbsp;- { LL().DataTable.Columns(columnDefs.length) }
-        </h3>
-        <div class="ag-theme-alpine" style="height: 70vh;">
-          <AgGridSolid
-            rowData={ rowData }
-            columnDefs={ columnDefs }
-            defaultColDef={ defaultColDef }
-            onCellValueChanged={ () => { setCellEdited(true); } }
-          />
-        </div>
+        <Show when={ currentPanel() === 'table' }>
+          <h3>
+            { layerName }
+            &nbsp;- { LL().DataTable.Features(rowData.length) }
+            &nbsp;- { LL().DataTable.Columns(columnDefs.length) }
+          </h3>
+          <div class="ag-theme-alpine" style="height: 70vh;">
+            <AgGridSolid
+              rowData={ rowData }
+              columnDefs={ columnDefs }
+              defaultColDef={ defaultColDef }
+              onCellValueChanged={ () => { setCellEdited(true); } }
+            />
+          </div>
+        </Show>
+        <Show when={ currentPanel() === 'newColumn' }>
+
+        </Show>
       </section>
       <footer class="modal-card-foot">
         <div>
           <button
             class="button is-primary"
             onClick={ csvExport }
-          >{ LL().DataTable.ExportCsv() }</button>
+          >
+            { LL().DataTable.ExportCsv() }
+          </button>
+          <Show when={ currentPanel() === 'table' }>
+            <button
+              class="button is-primary"
+              onClick={ () => setCurrentPanel('newColumn') }
+            >
+              { LL().DataTable.NewColumn() }
+            </button>
+          </Show>
+          <Show when={ currentPanel() === 'newColumn' }>
+            <button
+              class="button is-primary"
+              onClick={ () => setCurrentPanel('table') }
+            >
+              { 'Back to data table' }
+            </button>
+          </Show>
         </div>
         <div>
           <button

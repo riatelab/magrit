@@ -1,9 +1,7 @@
 import {
   JSX,
   Show,
-  createSignal,
-  Accessor,
-  Setter,
+  createSignal, onMount,
 } from 'solid-js';
 import { useI18nContext } from '../../i18n/i18n-solid';
 
@@ -18,7 +16,8 @@ import '../../styles/PortrayalSection.css';
 import ProportionalSymbolsSettings from './PortrayalOption/ProportionalSymbolsSettings.tsx';
 
 function layerAvailableVariables(layerId: string) {
-  const layer = layersDescriptionStore.layers.find((l) => l.id === layerId);
+  const layer = layersDescriptionStore.layers
+    .find((l) => l.id === layerId);
 
   if (!layer || !layer.fields) {
     return {
@@ -50,15 +49,17 @@ export default function PortrayalSection(): JSX.Element {
   const [
     targetLayer,
     setTargetLayer,
-  ]: [Accessor<null | string>, Setter<null | string>] = createSignal(null);
+  ] = createSignal<string | null>(null);
   const [
     availableVariables,
     setAvailableVariables,
-  ]: [Accessor<null | any>, Setter<null | any>] = createSignal(null);
+  ] = createSignal<string | null>(null);
   const [
     selectedPortrayal,
     setSelectedPortrayal,
-  ]: [Accessor<null | string>, Setter<null | string>] = createSignal(null);
+  ] = createSignal<string | null>(null);
+
+  onMount(() => { console.log('PortrayalSection mounted'); });
 
   return <div class="portrayal-section">
     <DropdownMenu
@@ -104,6 +105,14 @@ export default function PortrayalSection(): JSX.Element {
           Baar
         </li>
       </ul>
+      <Show when={
+        availableVariables()
+        && !availableVariables()?.hasRatio
+        && !availableVariables()?.hasStock
+        && !availableVariables()?.hasCategorical
+      }>
+        <p><i>{ LL().PortrayalSection.PortrayalTypes.NoPortrayal() }</i></p>
+      </Show>
     </div>
     <div class="portrayal-section__portrayal-options">
 

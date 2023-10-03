@@ -1,7 +1,13 @@
+// Imports from solid-js
 import {
   createSignal, JSX, Show,
 } from 'solid-js';
+
+// Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+
+// Stores
+import { setDatasetCatalogStore } from '../../store/DatasetCatalogStore';
 
 enum FileType {
   Geospatial = 0,
@@ -69,7 +75,7 @@ export default function ImportSection(): JSX.Element {
       <a
         class="button is-primary is-outlined"
         style={{ width: '200px' }}
-        onClick={() => {}}
+        onClick={() => { setDatasetCatalogStore({ show: true }); }}
       >
         { LL().ImportSection.ExampleDatasets() }
       </a>

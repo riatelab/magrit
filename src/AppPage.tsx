@@ -30,6 +30,7 @@ import OverlayDrop from './components/OverlayDrop.tsx';
 import TableWindow from './components/Modals/TableWindow.tsx';
 import ClassificationPanel from './components/Modals/ClassificationPanel.tsx';
 import { HeaderBarApp } from './components/Headers.tsx';
+import ExampleDataModal from './components/Modals/ExampleDatasetModal.tsx';
 // import ReloadPrompt from './components/ReloadPrompt.tsx';
 
 // Stores
@@ -43,6 +44,7 @@ import { niceAlertStore, setNiceAlertStore } from './store/NiceAlertStore';
 import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
 import { tableWindowStore } from './store/TableWindowStore';
 import { applicationSettingsStore } from './store/ApplicationSettingsStore';
+import { datasetCatalogStore } from './store/DatasetCatalogStore';
 
 // Types and enums
 import { ResizeBehavior } from './global.d';
@@ -373,6 +375,9 @@ const AppPage: () => JSX.Element = () => {
         </Show>
         <Show when={classificationPanelStore.show}>
           <ClassificationPanel />
+        </Show>
+        <Show when={datasetCatalogStore.show}>
+          <ExampleDataModal />
         </Show>
       </Transition>
     </main>

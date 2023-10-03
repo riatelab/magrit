@@ -135,6 +135,20 @@ export default function MapConfiguration(): JSX.Element {
       entries={projectionEntries}
       defaultEntry={mapStore.projection}
       onChange={ onChangeProjectionEntry }
+      style={{ 'margin-bottom': '1.5em' }}
     />
+    <div class="field">
+      <label class="label" for="map-configuration__lock-zoom-checkbox">{ LL().MapConfiguration.LockZoom() }</label>
+      <div class="control">
+        <input
+          id="map-configuration__lock-zoom-checkbox"
+          type="checkbox"
+          checked={ mapStore.lockZoomPan }
+          onChange={(e) => {
+            setMapStore({ lockZoomPan: e.target.checked });
+          }}
+        />
+      </div>
+    </div>
   </div>;
 }
