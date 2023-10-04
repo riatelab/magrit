@@ -9,6 +9,8 @@ import {
 
 // Imports from other packages
 import { FaSolidDatabase } from 'solid-icons/fa';
+import { FiExternalLink } from 'solid-icons/fi';
+import { ImFilter } from 'solid-icons/im';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -28,13 +30,15 @@ interface DatasetEntry {
   name: { [key in string]: string };
   // Description of the dataset, in the various languages of the application
   description: { [key in string]: string };
-  type: string; // Type of dataset
+  type: 'vector' | 'raster'; // Type of dataset
   keywords: string[]; // Keywords for searching
   source: string; // Source (url)
+  directLink?: string; // Direct link to the dataset
   license: string; // Licence (SPDX identifier)
   attribution: string; // The attribution that should appear in the map when using this data
   imageUrl: string; // The url of the image that should be shown in the modal
   date: string; // The date of the dataset
+  totalFeatures?: number; // The total number of features in the dataset
 }
 
 const dds1 = {
@@ -46,13 +50,15 @@ const dds1 = {
     en: 'The 80 districts of Paris.',
     fr: 'Les 80 quartiers administratifs de Paris.',
   },
-  type: 'geojson',
+  type: 'vector',
   keywords: ['paris', 'quartiers', 'districts'],
-  source: 'https://opendata.paris.fr/explore/dataset/quartier_paris/download/?format=geojson&timezone=Europe/Berlin&lang=fr&use_labels_for_header=true&csv_separator=%3B',
+  source: 'https://opendata.paris.fr/explore/dataset/quartier_paris/',
+  directLink: 'https://opendata.paris.fr/explore/dataset/quartier_paris/download/?format=geojson&timezone=Europe/Berlin&lang=fr&use_labels_for_header=true&csv_separator=%3B',
   license: 'ODbL-1.0',
-  attribution: 'Ville de Paris',
+  attribution: 'Direction de l\'Urbanisme - Ville de Paris',
   imageUrl: imgParis,
-  date: '2014',
+  date: '2013',
+  totalFeatures: 80,
 } as DatasetEntry;
 
 const dds2 = {
@@ -64,9 +70,10 @@ const dds2 = {
     en: 'All the countries of the world.',
     fr: 'Tous les pays du monde.',
   },
-  type: 'geojson',
+  type: 'vector',
   keywords: ['world', 'monde', 'countries', 'country', 'pays'],
-  source: '',
+  source: 'https://www.naturalearthdata.com/',
+  directLink: 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_countries.zip',
   license: 'Public Domain',
   attribution: 'Natural Earth',
   imageUrl: imgWorld,
@@ -127,10 +134,6 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
       <table>
         <tbody>
           <tr>
-            <td>{ LL().DatasetCatalog.type() }</td>
-            <td>{ ds.type }</td>
-          </tr>
-          <tr>
             <td>{ LL().DatasetCatalog.license() }</td>
             <td>{ ds.license }</td>
           </tr>
@@ -142,6 +145,27 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
             <td>{ LL().DatasetCatalog.attributions() }</td>
             <td>{ ds.attribution }</td>
           </tr>
+          <tr>
+            <td>{ LL().DatasetCatalog.type() }</td>
+            <td>{ LL().DatasetCatalog.types[ds.type]() }</td>
+          </tr>
+          <Show when={ds.totalFeatures}>
+            <tr>
+              <td></td>
+              <td>{ LL().DatasetCatalog.features(ds.totalFeatures as number) }</td>
+            </tr>
+          </Show>
+          <Show when={ds.directLink}>
+            <tr>
+              <td></td>
+              <td>
+                <a href={ds.directLink} target="_blank" rel="noreferrer">
+                  <FiExternalLink style={{ height: '1em', width: '1em', 'vertical-align': 'text-top' }}/>
+                  { LL().DatasetCatalog.directLink() }
+                </a>
+              </td>
+            </tr>
+          </Show>
         </tbody>
       </table>
     </div>
@@ -242,12 +266,14 @@ export default function ExampleDataModal(): JSX.Element {
           margin: '1em',
           border: 'solid 1px silver',
           'border-radius': '1em',
+          overflow: 'auto',
         }}>
           <div class="field has-addons" style={{ margin: '1em' }}>
             <div class="control">
               <input
                 class="input"
                 type="text"
+                value={selectedSearchTerms()}
                 style={{ width: '300px' }}
                 onChange={(e) => setSelectedSearchTerms(e.currentTarget.value)}
                 placeholder={ LL().DatasetCatalog.placeholderSearchBar() }
@@ -264,6 +290,26 @@ export default function ExampleDataModal(): JSX.Element {
                 { LL().DatasetCatalog.searchButton() }
               </button>
             </div>
+            <div class="control">
+              <button
+                class="button"
+                onClick={() => {
+                  setSelectedSearchTerms('');
+                  setCurrentPage(1);
+                  setFilteredDatasets(filterDs());
+                }}
+              >
+                X
+              </button>
+            </div>
+          </div>
+          <div>
+            <ImFilter
+              style={{
+                height: '1.5em', width: '1.5em', margin: '0.5em', opacity: filteredDatasets().length === datasets.length ? 0 : 1,
+              }}
+            />
+            <span>{ LL().DatasetCatalog.datasets(filteredDatasets().length) }</span>
           </div>
           <Show
             when={filteredDatasets().length > 0}
@@ -288,6 +334,7 @@ export default function ExampleDataModal(): JSX.Element {
           margin: '1em',
           border: 'solid 1px silver',
           'border-radius': '1em',
+          overflow: 'auto',
         }}>
           <div>
             <Show

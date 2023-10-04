@@ -111,6 +111,10 @@ type RootTranslation = {
 		 */
 		searchButton: string
 		/**
+		 * {​{​O​n​e​ ​d​a​t​a​s​e​t​|​?​?​ ​d​a​t​a​s​e​t​s​}​}
+		 */
+		datasets: string
+		/**
 		 * A​b​o​u​t
 		 */
 		about: string
@@ -130,6 +134,16 @@ type RootTranslation = {
 		 * T​y​p​e
 		 */
 		type: string
+		types: {
+			/**
+			 * V​e​c​t​o​r​ ​d​a​t​a​s​e​t
+			 */
+			vector: string
+			/**
+			 * R​a​s​t​e​r​ ​d​a​t​a​s​e​t
+			 */
+			raster: string
+		}
 		/**
 		 * P​r​o​v​i​d​e​r
 		 */
@@ -146,6 +160,14 @@ type RootTranslation = {
 		 * S​o​u​r​c​e
 		 */
 		source: string
+		/**
+		 * {​{​O​n​e​ ​f​e​a​t​u​r​e​|​?​?​ ​f​e​a​t​u​r​e​s​}​}
+		 */
+		features: string
+		/**
+		 * D​i​r​e​c​t​ ​l​i​n​k​ ​t​o​ ​t​h​e​ ​d​a​t​a​s​e​t
+		 */
+		directLink: string
 		/**
 		 * S​e​l​e​c​t​ ​a​ ​d​a​t​a​s​e​t​ ​t​o​ ​s​e​e​ ​i​t​s​ ​d​e​t​a​i​l​s​.
 		 */
@@ -529,6 +551,38 @@ type RootTranslation = {
 			 * N​e​w​ ​c​o​l​u​m​n
 			 */
 			title: string
+			/**
+			 * N​a​m​e
+			 */
+			name: string
+			/**
+			 * T​y​p​e​ ​t​h​e​ ​n​a​m​e​ ​o​f​ ​t​h​e​ ​c​o​l​u​m​n
+			 */
+			namePlaceholder: string
+			/**
+			 * N​e​w​ ​c​o​l​u​m​n​ ​c​o​n​t​e​n​t
+			 */
+			newColumnContent: string
+			/**
+			 * C​o​m​p​u​t​a​t​i​o​n​ ​b​a​s​e​d​ ​o​n​ ​t​w​o​ ​n​u​m​e​r​i​c​a​l​ ​c​o​l​u​m​n​s
+			 */
+			numericalValues: string
+			/**
+			 * C​o​m​p​u​t​a​t​i​o​n​ ​b​a​s​e​d​ ​o​n​ ​o​n​e​ ​(​o​r​ ​t​w​o​)​ ​n​o​n​-​n​u​m​e​r​i​c​a​l​ ​c​o​l​u​m​n​(​s​)
+			 */
+			nonNumericalValues: string
+			/**
+			 * F​o​r​m​u​l​a
+			 */
+			formula: string
+			/**
+			 * C​o​n​s​t​a​n​t​ ​v​a​l​u​e
+			 */
+			constantValue: string
+			/**
+			 * O​p​e​r​a​t​i​o​n​ ​t​o​ ​b​e​ ​p​e​r​f​o​r​m​e​d
+			 */
+			operation: string
 		}
 	}
 	FieldsTyping: {
@@ -826,6 +880,10 @@ export type TranslationFunctions = {
 		 */
 		searchButton: () => LocalizedString
 		/**
+		 * {{One dataset|?? datasets}}
+		 */
+		datasets: (arg0: number | string | boolean) => LocalizedString
+		/**
 		 * About
 		 */
 		about: () => LocalizedString
@@ -845,6 +903,16 @@ export type TranslationFunctions = {
 		 * Type
 		 */
 		type: () => LocalizedString
+		types: {
+			/**
+			 * Vector dataset
+			 */
+			vector: () => LocalizedString
+			/**
+			 * Raster dataset
+			 */
+			raster: () => LocalizedString
+		}
 		/**
 		 * Provider
 		 */
@@ -861,6 +929,14 @@ export type TranslationFunctions = {
 		 * Source
 		 */
 		source: () => LocalizedString
+		/**
+		 * {{One feature|?? features}}
+		 */
+		features: (arg0: number | string | boolean) => LocalizedString
+		/**
+		 * Direct link to the dataset
+		 */
+		directLink: () => LocalizedString
 		/**
 		 * Select a dataset to see its details.
 		 */
@@ -1244,6 +1320,38 @@ export type TranslationFunctions = {
 			 * New column
 			 */
 			title: () => LocalizedString
+			/**
+			 * Name
+			 */
+			name: () => LocalizedString
+			/**
+			 * Type the name of the column
+			 */
+			namePlaceholder: () => LocalizedString
+			/**
+			 * New column content
+			 */
+			newColumnContent: () => LocalizedString
+			/**
+			 * Computation based on two numerical columns
+			 */
+			numericalValues: () => LocalizedString
+			/**
+			 * Computation based on one (or two) non-numerical column(s)
+			 */
+			nonNumericalValues: () => LocalizedString
+			/**
+			 * Formula
+			 */
+			formula: () => LocalizedString
+			/**
+			 * Constant value
+			 */
+			constantValue: () => LocalizedString
+			/**
+			 * Operation to be performed
+			 */
+			operation: () => LocalizedString
 		}
 	}
 	FieldsTyping: {

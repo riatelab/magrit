@@ -41,11 +41,21 @@ export default function TableWindow(): JSX.Element {
     setCellEdited,
   ] = createSignal<boolean>(false);
 
-  // Wheter we are displaying the table or the form to add a new column
+  // Whether we are displaying the table or the form to add a new column
   const [
     currentPanel,
     setCurrentPanel,
   ] = createSignal<'table' | 'newColumn'>('table');
+
+  // Signals for the new column form
+  const [
+    newColumnContentType,
+    setNewColumnContentType,
+  ] = createSignal<'numerical' | 'non-numerical'>('numerical');
+  const [
+    newColumnName,
+    setNewColumnName,
+  ] = createSignal<string>('');
 
   const confirmCallback = () => {
     // Remove the table window
@@ -106,7 +116,7 @@ export default function TableWindow(): JSX.Element {
         <p class="modal-card-title">{ LL().DataTable.titleGeo() }</p>
         {/* <button class="delete" aria-label="close"></button> */}
       </header>
-      <section class="modal-card-body">
+      <section class="modal-card-body" style="height: 80vh;">
         <Show when={ currentPanel() === 'table' }>
           <h3>
             { layerName }
@@ -123,7 +133,81 @@ export default function TableWindow(): JSX.Element {
           </div>
         </Show>
         <Show when={ currentPanel() === 'newColumn' }>
-
+          <div>
+            <h3>{ LL().DataTable.NewColumnModal.title() }</h3>
+            <div class="field-block">
+              <label class="label">{ LL().DataTable.NewColumnModal.name() }</label>
+              <div class="control">
+                <input
+                  class="input"
+                  type="text"
+                  placeholder={ LL().DataTable.NewColumnModal.namePlaceholder() }
+                  value={ newColumnName() }
+                  onChange={ (e) => { setNewColumnName(e.target.value); } }
+                />
+              </div>
+            </div>
+            <div class="field-block">
+              <label class="label">{ LL().DataTable.NewColumnModal.newColumnContent() }</label>
+              <div class="select" style={{ width: '100%' }}>
+                <select
+                  style={{ width: '100%' }}
+                  onChange={ (e) => {
+                    setNewColumnContentType(e.target.value as 'numerical' | 'non-numerical');
+                  } }
+                  value={ newColumnContentType() }
+                >
+                  <option value="numerical">{ LL().DataTable.NewColumnModal.numericalValues() }</option>
+                  <option value="non-numerical">{ LL().DataTable.NewColumnModal.nonNumericalValues() }</option>
+                </select>
+              </div>
+            </div>
+            <Show when={ newColumnContentType() === 'numerical' }>
+              <div class="field-block">
+                <label class="label">{ LL().DataTable.NewColumnModal.formula() }</label>
+                <div class="select" style={{ width: '40%' }}>
+                  <select style={{ width: '100%' }}></select>
+                </div>
+                <div class="select" style={{ width: '20%' }}>
+                  <select style={{ width: '100%' }}>
+                    <option value="add">+</option>
+                    <option value="sub">-</option>
+                    <option value="mul">*</option>
+                    <option value="div">/</option>
+                    <option value="pow">^</option>
+                  </select>
+                </div>
+                <div class="select" style={{ width: '40%' }}>
+                  <select style={{ width: '100%' }}>
+                    <option value="constant">{ LL().DataTable.NewColumnModal.constantValue() }</option>
+                  </select>
+                </div>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="number"
+                    style={{ float: 'right', width: '40%' }}
+                    value={1}
+                  />
+                </div>
+              </div>
+            </Show>
+            <Show when={ newColumnContentType() === 'non-numerical' }>
+              <div class="field-block">
+                <label class="label">{ LL().DataTable.NewColumnModal.operation() }</label>
+                <label class="label"> </label>
+                <div class="select" style={{ width: '40%' }}>
+                  <select style={{ width: '100%' }}></select>
+                </div>
+                <div class="select" style={{ width: '20%' }}>
+                  <select style={{ width: '100%' }}></select>
+                </div>
+                <div class="select" style={{ width: '40%' }}>
+                  <select style={{ width: '100%' }}></select>
+                </div>
+              </div>
+            </Show>
+          </div>
         </Show>
       </section>
       <footer class="modal-card-foot">
