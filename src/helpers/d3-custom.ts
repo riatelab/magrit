@@ -7,6 +7,7 @@ import {
   zoomTransform,
 } from 'd3-zoom';
 import {
+  bin,
   nice,
   extent,
   ticks,
@@ -268,6 +269,7 @@ export default {
   zoomIdentity,
   zoomTransform,
   csvFormat,
+  bin,
   nice,
   extent,
   ticks,

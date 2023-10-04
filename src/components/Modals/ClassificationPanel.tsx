@@ -1,15 +1,15 @@
+// Imports from solid-js
 import {
   createSignal, JSX, onCleanup, onMount, Show,
 } from 'solid-js';
+
+// Imports from other packages
 import * as Plot from '@observablehq/plot';
 import { getPalette } from 'dicopal';
 
+// Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import d3 from '../../helpers/d3-custom';
-import { classificationPanelStore, setClassificationPanelStore } from '../../store/ClassificationPanelStore';
-
-import '../../styles/ClassificationPanel.css';
-import DropdownMenu from '../DropdownMenu.tsx';
 import { getClassifier } from '../../helpers/classification';
 import { isNumber } from '../../helpers/common';
 import {
@@ -20,173 +20,25 @@ import {
   kde,
   round,
 } from '../../helpers/math';
-import { ClassificationMethod, ClassificationParameters, CustomPalette } from '../../global.d';
+import makeDistributionPlot from '../DistributionPlot.tsx';
 
-enum DistributionPlotType {
-  box,
-  histogram,
-  dotHistogram,
-  beeswarm,
-  histogramAndDensity,
-}
+// Sub-components
+import DropdownMenu from '../DropdownMenu.tsx';
+
+// Store
+import { classificationPanelStore, setClassificationPanelStore } from '../../store/ClassificationPanelStore';
+
+// Styles
+import '../../styles/ClassificationPanel.css';
+
+// Types, interfaces and enums
+import { ClassificationMethod, ClassificationParameters, CustomPalette } from '../../global.d';
 
 enum OptionsClassification {
   numberOfClasses,
   amplitude,
   meanPosition,
   breaks,
-}
-
-function makeBeeswarmPlot(series: number[], logTransform: boolean, sizeRatio = 1) {
-  const r = sizeRatio === 1 ? 2.5 : 2.75 * sizeRatio;
-  const padding = sizeRatio === 1 ? 1.25 : 0.8 * sizeRatio;
-  return Plot.plot({
-    height: 300,
-    // width: 400,
-    marginLeft: 50,
-    x: { nice: true, type: logTransform ? 'log' : 'linear' },
-    marks: [
-      Plot.dot(
-        series,
-        Plot.dodgeY('middle', {
-          x: (d) => d,
-          r,
-          padding,
-          fill: 'black',
-        }),
-      ),
-    ],
-  });
-}
-
-function makeDistributionPlot(
-  series: number[],
-  type: DistributionPlotType = DistributionPlotType.beeswarm,
-  logTransform = false,
-) {
-  if (type === DistributionPlotType.box) {
-    return Plot.plot({
-      height: 300,
-      // width: 400,
-      marginLeft: 50,
-      marginTop: 100,
-      marginBottom: 100,
-      x: { nice: true, type: logTransform ? 'log' : 'linear' },
-      marks: [
-        Plot.boxX(series),
-      ],
-    });
-  }
-  if (type === DistributionPlotType.dotHistogram) {
-    return Plot.plot({
-      height: 300,
-      // width: 400,
-      marginLeft: 50,
-      marginTop: 100,
-      marginBottom: 100,
-      r: { range: [0, 15] },
-      x: { nice: true, type: logTransform ? 'log' : 'linear' },
-      marks: [
-        Plot.dot(
-          series,
-          Plot.binX({ r: 'count' }, { x: (d) => d }),
-        ),
-      ],
-    });
-  }
-  if (type === DistributionPlotType.histogram) {
-    return Plot.plot({
-      height: 300,
-      // width: 400,
-      marginLeft: 50,
-      x: { nice: true, type: logTransform ? 'log' : 'linear' },
-      y: { nice: true, label: 'Count' },
-      marks: [
-        Plot.rectY(
-          series,
-          Plot.binX(
-            { y: 'count' },
-            {
-              x: (d) => d,
-              thresholds: 'scott',
-              tip: true,
-            },
-          ),
-        ),
-        Plot.ruleY([0]),
-      ],
-    });
-  }
-  if (type === DistributionPlotType.histogramAndDensity) {
-    const [min, max] = d3.nice(...extent(series), 1);
-    // How many bin ?
-    const n = d3.thresholdScott(series, min, max);
-    // Threshold values for the bins
-    const thresholds = d3.ticks(min, max, n);
-    // Density values for the bins, using the epanechnikov kernel
-    // and the bandwidth computed with bw.nrd0 of R stats package.
-    const dens = kde(
-      epanechnikov(getBandwidth(series)),
-      thresholds,
-      series,
-    );
-    // Sum of the density values
-    const sum = d3.sum(dens, (d) => d[1]);
-    // Normalize so that integral = 1
-    const density = dens.map((d) => [d[0], d[1] / sum]);
-    // Todo: we should rename Y axis and add tooltip for the number of individuals
-    //       in each rectangle of the histogram.
-    return Plot.plot({
-      height: 300,
-      // width: 400,
-      marginLeft: 50,
-      x: { nice: true, type: logTransform ? 'log' : 'linear' },
-      y: { nice: true },
-      marks: [
-        Plot.rectY(
-          series,
-          Plot.binX(
-            { y: 'proportion' },
-            {
-              x: (d) => d,
-              thresholds: 'scott',
-              tip: true,
-            },
-          ),
-        ),
-        Plot.line(density, {
-          y: (d) => d[1],
-          x: (d) => d[0],
-          stroke: 'red',
-          curve: 'natural',
-        }),
-        Plot.ruleY([0]),
-      ],
-    });
-  }
-  if (type === DistributionPlotType.beeswarm) {
-    // Currently, beeswarm using the dogdeY transform may plot points outside the plot area
-    // (i think this is tracked in https://github.com/observablehq/plot/issues/905).
-    // So the trick is :
-    // - me make a first plot,
-    // - we add it to the DOM so we can compute the height of <g> element that contains the dots,
-    // - we remove the plot from the DOM,
-    // - if the height of the <g> element is greater than 300px, we make a second plot
-    //   with a lower radius and padding (so that the dots are smaller),
-    //   to do so, we compute a ratio between the height of the <g> element and 300px,
-    //   make a second plot and return it,
-    // - otherwise we return the first plot.
-    let ppp = makeBeeswarmPlot(series, logTransform);
-    document.body.append(ppp);
-    const th = ppp.querySelector('g[aria-label="dot"]').getBoundingClientRect().height;
-    ppp.remove();
-    if (th > 300) {
-      const ratio = 300 / th;
-      ppp = makeBeeswarmPlot(series, logTransform, ratio);
-    }
-    return ppp;
-  }
-  return <div />;
 }
 
 const classificationMethodHasOption = (
@@ -216,9 +68,9 @@ function prepareStatisticalSummary(series: number[]) {
     population: series.length,
     minimum: min,
     maximum: max,
-    mean: d3.mean(series),
-    median: d3.median(series),
-    standardDeviation: d3.deviation(series),
+    mean: d3.mean(series) as number,
+    median: d3.median(series) as number,
+    standardDeviation: d3.deviation(series) as number,
     // variance: d3.variance(series),
     // varianceCoefficient: d3.deviation(series) / d3.mean(series),
   };
@@ -304,16 +156,6 @@ export default function ClassificationPanel(): JSX.Element {
   const statSummary = prepareStatisticalSummary(filteredSeries);
 
   // Signals for the current component:
-  // - the kind of distribution plot that the user wants to see
-  const [
-    distributionPlot,
-    setDistributionPlot,
-  ] = createSignal<DistributionPlotType>(DistributionPlotType.histogram);
-  // - whether to display the distribution using a logarithmic scale on the X axis
-  const [
-    logScale,
-    setLogScale,
-  ] = createSignal<boolean>(false);
   // - the classification method chosen by the user
   const [
     classificationMethod,
@@ -359,14 +201,6 @@ export default function ClassificationPanel(): JSX.Element {
   ] = createSignal<number[]>(currentBreaksInfo().breaks);
 
   let refParentNode: HTMLDivElement;
-
-  const entriesDistributionPlot = [
-    { name: LL().ClassificationPanel.histogram(), value: DistributionPlotType.histogram },
-    { name: LL().ClassificationPanel.box(), value: DistributionPlotType.box },
-    { name: LL().ClassificationPanel.dotHistogram(), value: DistributionPlotType.dotHistogram },
-    { name: LL().ClassificationPanel.beeswarm(), value: DistributionPlotType.beeswarm },
-    { name: 'Histogram and density', value: DistributionPlotType.histogramAndDensity },
-  ];
 
   const entriesClassificationMethod = [
     {
@@ -472,41 +306,15 @@ export default function ClassificationPanel(): JSX.Element {
           </div>
           <div style={{ width: '60%', 'text-align': 'center' }}>
             <h3> { LL().ClassificationPanel.distribution() } </h3>
-            <div> { makeDistributionPlot(filteredSeries, distributionPlot(), logScale()) } </div>
-            <div
-              style={{
-                display: 'flex',
-                padding: '1em',
-                'justify-content': 'space-evenly',
-                'flex-direction': 'row',
-                'align-items': 'center',
-              }}>
-              <DropdownMenu
-                id={'distribution-plot-type'}
-                entries={entriesDistributionPlot}
-                defaultEntry={entriesDistributionPlot[0]}
-                onChange={(value) => setDistributionPlot(value)}
-                style={{ width: '200px' }}
-              />
-              <div class={'control'}>
-                <label>
-                  <input
-                    class={'checkbox'}
-                    type={'checkbox'}
-                    checked={false}
-                    onChange={
-                    (event) => setLogScale(event.target.checked) }/>
-                  { LL().ClassificationPanel.logarithmicScale() }
-                </label>
-              </div>
-            </div>
+            <div> { makeDistributionPlot(filteredSeries) } </div>
           </div>
         </div>
         <hr />
         <div style={{ 'text-align': 'center' }}>
           <h3> { LL().ClassificationPanel.classification() } </h3>
-          <div class={'is-flex is-flex-direction-column'}>
-            <div style={{ width: '50%' }}>
+          <div class={'is-flex is-flex-direction-row is-justify-content-space-evenly mb-5'}>
+            <div style={{ 'flex-grow': 1 }}>
+              <p class="label is-marginless">{ LL().ClassificationPanel.classificationMethod() }</p>
               <DropdownMenu
                 id={'classification-method'}
                 style={{ width: '220px' }}
@@ -517,14 +325,16 @@ export default function ClassificationPanel(): JSX.Element {
                   updateClassificationParameters();
                 }}
               />
-              <Show when={
-                classificationMethodHasOption(
-                  OptionsClassification.numberOfClasses,
-                  classificationMethod(),
-                  entriesClassificationMethod,
-                )
-              }>
-                <p class="label">{ LL().ClassificationPanel.numberOfClasses() }</p>
+            </div>
+            <Show when={
+              classificationMethodHasOption(
+                OptionsClassification.numberOfClasses,
+                classificationMethod(),
+                entriesClassificationMethod,
+              )
+            }>
+              <div style={{ 'flex-grow': 2 }}>
+                <p class="label is-marginless">{ LL().ClassificationPanel.numberOfClasses() }</p>
                 <input
                   class={'input'}
                   type={'number'}
@@ -534,15 +344,17 @@ export default function ClassificationPanel(): JSX.Element {
                     updateClassificationParameters();
                   }}
                 />
-              </Show>
-              <Show when={
-                classificationMethodHasOption(
-                  OptionsClassification.amplitude,
-                  classificationMethod(),
-                  entriesClassificationMethod,
-                )
-              }>
-                <p class="label">{ LL().ClassificationPanel.amplitude() }</p>
+              </div>
+            </Show>
+            <Show when={
+              classificationMethodHasOption(
+                OptionsClassification.amplitude,
+                classificationMethod(),
+                entriesClassificationMethod,
+              )
+            }>
+              <div style={{ 'flex-grow': 2 }}>
+                <p class="label is-marginless">{ LL().ClassificationPanel.amplitude() }</p>
                 <input
                   class={'input'}
                   type={'number'}
@@ -556,15 +368,17 @@ export default function ClassificationPanel(): JSX.Element {
                   }}
                 />
                 <span>{ LL().ClassificationPanel.howManyStdDev() }</span>
-              </Show>
-              <Show when={
-                classificationMethodHasOption(
-                  OptionsClassification.meanPosition,
-                  classificationMethod(),
-                  entriesClassificationMethod,
-                )
-              }>
-                <p class="label">{ LL().ClassificationPanel.meanPosition() }</p>
+              </div>
+            </Show>
+            <Show when={
+              classificationMethodHasOption(
+                OptionsClassification.meanPosition,
+                classificationMethod(),
+                entriesClassificationMethod,
+              )
+            }>
+              <div style={{ 'flex-grow': 2 }}>
+                <p class="label is-marginless">{ LL().ClassificationPanel.meanPosition() }</p>
                 <div class="control">
                   <label class="radio" for="mean-position-center">
                     <input
@@ -592,20 +406,28 @@ export default function ClassificationPanel(): JSX.Element {
                     { LL().ClassificationPanel.meanPositionBoundary() }
                   </label>
                 </div>
-              </Show>
-              <Show when={
-                classificationMethodHasOption(
-                  OptionsClassification.breaks,
-                  classificationMethod(),
-                  entriesClassificationMethod,
-                )
-              }>
-                { /* <p class="label">{ LL().ClassificationPanel.breaks() }</p> */ }
-                <textarea class={'textarea'} value={'yo'}>
+              </div>
+            </Show>
+            <Show when={
+              classificationMethodHasOption(
+                OptionsClassification.breaks,
+                classificationMethod(),
+                entriesClassificationMethod,
+              )
+            }>
+              <div style={{ 'flex-grow': 5 }}>
+                <p class="label is-marginless">{ LL().ClassificationPanel.breaksInput() }</p>
+                <textarea
+                  class={'textarea'}
+                  style={{ 'min-height': '3em', 'max-height': '6em' }}
+                >
                   { currentBreaksInfo().breaks.join(' - ') }
                 </textarea>
-              </Show>
-            </div>
+                <button class="button" style={{ width: '100%', height: '2em' }}>
+                  { LL().ClassificationPanel.validate() }
+                </button>
+              </div>
+            </Show>
           </div>
           <div>
             <p>{ currentBreaksInfo().breaks.join(' - ')}</p>

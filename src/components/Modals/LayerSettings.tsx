@@ -328,13 +328,16 @@ function makeSettingsDefaultPolygon(
 export default function LayerSettings(
   props,
 ): JSX.Element {
-  const { id, LL } = props;
-  const layerDescription = layersDescriptionStore.layers.find((l) => l.id === id);
+  // We can use destructuring here because we know that the props
+  // won't change during the lifetime of the component
+  const { id, LL } = props; // eslint-disable-line solid/reactivity
+  const layerDescription = layersDescriptionStore.layers
+    .find((l) => l.id === id) as LayerDescription;
   const innerElement = {
     point: makeSettingsDefaultPoint,
     linestring: makeSettingsDefaultLine,
     polygon: makeSettingsDefaultPolygon,
-  }[layerDescription.type](layerDescription, LL);
+  }[layerDescription.type as ('point' | 'linestring' | 'polygon')](layerDescription, LL);
   return <div class="layer-settings">
     <div class="layer-settings__title">
       { LL().LayerSettings.Name } : { layerDescription.name }

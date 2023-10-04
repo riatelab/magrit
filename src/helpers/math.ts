@@ -33,7 +33,7 @@ export function round(num: number, decimalPlaces = 2): number {
  * @param {number[]} arr
  * @returns {number}
  */
-export function min(arr: number[]): number {
+export function min(arr: number[]): number { // TODO: rename as minUnchecked ?
   let minVal = Infinity;
   for (let i = 0, l = arr.length; i < l; i += 1) {
     if (arr[i] < minVal) {
@@ -48,7 +48,7 @@ export function min(arr: number[]): number {
  * @param {number[]} arr
  * @returns {number}
  */
-export function max(arr: number[]): number {
+export function max(arr: number[]): number { // TODO: rename as maxUnchecked ?
   let maxVal = -Infinity;
   for (let i = 0, l = arr.length; i < l; i += 1) {
     if (arr[i] > maxVal) {
@@ -64,7 +64,7 @@ export function max(arr: number[]): number {
  * @param {number[]} arr - An array of numbers.
  * @returns {[number, number]} - The minimum and maximum values of the array.
  */
-export function extent(arr: number[]): [number, number] {
+export function extent(arr: number[]): [number, number] { // TODO: rename as extentUnchecked ?
   let minVal = arr[0];
   let maxVal = arr[0];
   for (let i = 1, l = arr.length; i < l; i += 1) {
@@ -133,8 +133,22 @@ export function haversineDistance(A: [number, number], B: [number, number]) {
  * @returns {number} - The IQR
  */
 export function IQR(values: number[]): number {
-  return d3.quantile(values, 0.75) - d3.quantile(values, 0.25);
+  return d3.quantile(values, 0.75) as number - (d3.quantile(values, 0.25) as number);
 }
+
+export const lowerQuartile = (values: number[]): number => d3.quantile(values, 0.25) as number;
+
+export const upperQuartile = (values: number[]): number => d3.quantile(values, 0.75) as number;
+
+export const lowerWhisker = (values: number[]): number => Math.max(
+  min(values),
+  lowerQuartile(values) - 1.5 * IQR(values),
+);
+
+export const upperWhisker = (values: number[]): number => Math.min(
+  max(values),
+  upperQuartile(values) + 1.5 * IQR(values),
+);
 
 /**
  * Compute the bandwidth that will be used to plot kernel density estimation

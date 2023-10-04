@@ -41,3 +41,7 @@ input[type=checkbox], input[type=radio] {
   vertical-align: baseline;
   margin-right: 0.4em;
 }
+
+.modal-card-foot, .modal-card-head {
+  padding: 1em !important;
+}

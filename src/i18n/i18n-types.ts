@@ -719,6 +719,10 @@ type RootTranslation = {
 		 */
 		breaksInput: string
 		/**
+		 * V​a​l​i​d​a​t​e
+		 */
+		validate: string
+		/**
 		 * {​{​O​n​e​ ​f​e​a​t​u​r​e​ ​w​i​t​h​o​u​t​ ​d​a​t​a​|​?​?​ ​f​e​a​t​u​r​e​ ​w​i​t​h​o​u​t​ ​d​a​t​a​}​}
 		 */
 		missingValues: string
@@ -1429,6 +1433,10 @@ export type TranslationFunctions = {
 		 * Enter class limits
 		 */
 		breaksInput: () => LocalizedString
+		/**
+		 * Validate
+		 */
+		validate: () => LocalizedString
 		/**
 		 * {{One feature without data|?? feature without data}}
 		 */

@@ -20,8 +20,13 @@
     margin-bottom: 0 !important;
 }
 
+.modal-window.classification-panel p.label.is-marginless {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
 .modal-window.classification-panel input[type="number"] {
-    width: 120px;
+    width: 90px;
 }
 
 .modal-window.classification-panel input[type="number"] + span {
