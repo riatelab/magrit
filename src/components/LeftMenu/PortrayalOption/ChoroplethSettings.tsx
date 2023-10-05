@@ -85,7 +85,7 @@ function onClickValidate(
     // fillColor: '#ffffff',
     fillOpacity: 1,
     dropShadow: true,
-    classification,
+    rendererParameters: classification,
     legend: {
       title: {
         text: targetVariable,

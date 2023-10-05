@@ -12,7 +12,6 @@ import {
   FaSolidTrash,
   FaSolidTableCells,
 } from 'solid-icons/fa';
-
 import { FiType } from 'solid-icons/fi';
 
 // Helpers
@@ -21,6 +20,7 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { LayerDescription } from '../../global';
 // import { unproxify } from '../../helpers/common';
+import { redrawPaths } from '../../helpers/geo';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -82,17 +82,8 @@ const onCLickMagnifyingGlass = (id: string) => {
   // Reset the __zoom property of the svg element by using the zoomIdentity
   svgElem.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
 
-  // Remove existing transform attribute if any
-  document.querySelectorAll('.map-zone__inner svg g')
-    .forEach((g) => {
-      g.removeAttribute('transform');
-    });
-
-  // Redraw paths
-  document.querySelectorAll('.map-zone__inner svg path')
-    .forEach((p) => {
-      p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
-    });
+  // Redraw the paths
+  redrawPaths(svgElem);
 };
 
 const onClickTable = (id: string) => {

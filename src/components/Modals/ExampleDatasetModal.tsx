@@ -268,48 +268,50 @@ export default function ExampleDataModal(): JSX.Element {
           'border-radius': '1em',
           overflow: 'auto',
         }}>
-          <div class="field has-addons" style={{ margin: '1em' }}>
-            <div class="control">
-              <input
-                class="input"
-                type="text"
-                value={selectedSearchTerms()}
-                style={{ width: '300px' }}
-                onChange={(e) => setSelectedSearchTerms(e.currentTarget.value)}
-                placeholder={ LL().DatasetCatalog.placeholderSearchBar() }
+          <div class="is-flex">
+            <div class="field has-addons" style={{ margin: '1em' }}>
+              <div class="control">
+                <input
+                  class="input"
+                  type="text"
+                  value={selectedSearchTerms()}
+                  style={{ width: '300px' }}
+                  onChange={(e) => setSelectedSearchTerms(e.currentTarget.value)}
+                  placeholder={ LL().DatasetCatalog.placeholderSearchBar() }
+                />
+              </div>
+              <div class="control">
+                <button
+                  class="button is-info"
+                  onClick={() => {
+                    setCurrentPage(1);
+                    setFilteredDatasets(filterDs());
+                  }}
+                >
+                  { LL().DatasetCatalog.searchButton() }
+                </button>
+              </div>
+              <div class="control">
+                <button
+                  class="button"
+                  onClick={() => {
+                    setSelectedSearchTerms('');
+                    setCurrentPage(1);
+                    setFilteredDatasets(filterDs());
+                  }}
+                >
+                  X
+                </button>
+              </div>
+            </div>
+            <div class="field" style={{ margin: '1em', 'justify-content': 'start' }}>
+              <ImFilter
+                style={{
+                  height: '1.5em', width: '1.5em', 'margin-right': '1em', opacity: filteredDatasets().length === datasets.length ? 0 : 1,
+                }}
               />
+              <span>{ LL().DatasetCatalog.datasets(filteredDatasets().length) }</span>
             </div>
-            <div class="control">
-              <button
-                class="button is-info"
-                onClick={() => {
-                  setCurrentPage(1);
-                  setFilteredDatasets(filterDs());
-                }}
-              >
-                { LL().DatasetCatalog.searchButton() }
-              </button>
-            </div>
-            <div class="control">
-              <button
-                class="button"
-                onClick={() => {
-                  setSelectedSearchTerms('');
-                  setCurrentPage(1);
-                  setFilteredDatasets(filterDs());
-                }}
-              >
-                X
-              </button>
-            </div>
-          </div>
-          <div>
-            <ImFilter
-              style={{
-                height: '1.5em', width: '1.5em', margin: '0.5em', opacity: filteredDatasets().length === datasets.length ? 0 : 1,
-              }}
-            />
-            <span>{ LL().DatasetCatalog.datasets(filteredDatasets().length) }</span>
           </div>
           <Show
             when={filteredDatasets().length > 0}

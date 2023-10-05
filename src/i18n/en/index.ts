@@ -127,8 +127,8 @@ const en = {
       OnValue: 'On value',
       SymbolType: 'Symbol type',
       SymbolTypes: {
-        Circle: 'Circle',
-        Square: 'Square',
+        circle: 'Circle',
+        square: 'Square',
       },
       AvoidOverlapping: 'Avoid overlapping symbols',
       SingleColor: 'One color',

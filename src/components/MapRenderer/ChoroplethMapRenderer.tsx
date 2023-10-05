@@ -1,19 +1,20 @@
 import { For, JSX } from 'solid-js';
 import { globalStore } from '../../store/GlobalStore';
-import { ClassificationMethod, LayerDescription } from '../../global.d';
+import { ClassificationMethod, ClassificationParameters, LayerDescription } from '../../global.d';
 import { getClassifier } from '../../helpers/classification';
 import { isNumber } from '../../helpers/common';
 
 export function choroplethPolygonRenderer(
   layerDescription: LayerDescription,
 ): JSX.Element {
+  const rendererParameters = layerDescription.rendererParameters as ClassificationParameters;
   const Cls = getClassifier(ClassificationMethod.manual);
-  const classifier = new Cls(null, null, layerDescription.classification?.breaks);
-  const colors = layerDescription.classification?.palette.colors as string[];
-  const fieldName = layerDescription.classification?.variable as string;
-  const noDataColor = layerDescription.classification?.nodataColor as string;
+  const classifier = new Cls(null, null, rendererParameters.breaks);
+  const colors = rendererParameters.palette.colors as string[];
+  const fieldName = rendererParameters.variable as string;
+  const noDataColor = rendererParameters.nodataColor as string;
 
-  console.log(layerDescription.classification?.breaks, colors, fieldName, noDataColor);
+  console.log(rendererParameters.breaks, colors, fieldName, noDataColor);
 
   return <g
     id={layerDescription.name}
@@ -53,11 +54,12 @@ export function choroplethPolygonRenderer(
 export function choroplethPointRenderer(
   layerDescription: LayerDescription,
 ): JSX.Element {
+  const rendererParameters = layerDescription.rendererParameters as ClassificationParameters;
   const Cls = getClassifier(ClassificationMethod.manual);
-  const classifier = new Cls(null, null, layerDescription.classification?.breaks);
-  const colors = layerDescription.classification?.palette.colors as string[];
-  const fieldName = layerDescription.classification?.variable as string;
-  const noDataColor = layerDescription.classification?.nodataColor as string;
+  const classifier = new Cls(null, null, rendererParameters.breaks);
+  const colors = rendererParameters.palette.colors as string[];
+  const fieldName = rendererParameters.variable as string;
+  const noDataColor = rendererParameters.nodataColor as string;
 
   return <g
     id={layerDescription.name}
@@ -97,11 +99,12 @@ export function choroplethPointRenderer(
 export function choroplethLineRenderer(
   layerDescription: LayerDescription,
 ): JSX.Element {
+  const rendererParameters = layerDescription.rendererParameters as ClassificationParameters;
   const Cls = getClassifier(ClassificationMethod.manual);
-  const classifier = new Cls(null, null, layerDescription.classification?.breaks);
-  const colors = layerDescription.classification?.palette.colors as string[];
-  const fieldName = layerDescription.classification?.variable as string;
-  const noDataColor = layerDescription.classification?.nodataColor as string;
+  const classifier = new Cls(null, null, rendererParameters.breaks);
+  const colors = rendererParameters.palette.colors as string[];
+  const fieldName = rendererParameters.variable as string;
+  const noDataColor = rendererParameters.nodataColor as string;
 
   return <g
     id={layerDescription.name}

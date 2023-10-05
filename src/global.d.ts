@@ -56,8 +56,13 @@ interface LayerDescription {
   dropShadow: boolean,
   // The radius of the point (not used for linestring / polygon layers)
   pointRadius?: number,
-  // Specific parameters for the Choropleth representation
-  classification?: ClassificationParameters,
+  // Specific parameters for the current renderer (e.g. proportional symbols)
+  // Note: we may move away the 'classification' field to use this "rendererParameters" field
+  rendererParameters?: (
+    ProportionalSymbolsParameters
+    | ClassificationParameters
+    | ProportionalSymbolsParameters & ClassificationParameters
+  ),
   // Parameters of the legend associated to the layer
   legend?: ChoroplethLegendParameters,
 }
@@ -260,6 +265,7 @@ export enum RepresentationType {
   categorical = 'categorical',
   proportionalSymbolsAndCategories = 'proportionalSymbolsAndCategories',
   proportionalSymbolsAndRatio = 'proportionalSymbolsAndRatio',
+  sphere = 'sphere',
   default = 'default',
 }
 
@@ -310,6 +316,14 @@ interface ChoroplethLegendParameters extends LegendParameters {
   boxCornerRadius: number,
   // The text properties of the labels
   labels: LegendTextElement,
+}
+
+export interface ID3Element {
+  __data__: GeoJSONFeature,
+}
+
+export interface IZoomable {
+  __zoom: d3.ZoomTransform,
 }
 
 // We have multiple king of legends

@@ -3,6 +3,9 @@ import {
   createEffect, createSignal, For, JSX,
 } from 'solid-js';
 
+// Imports from other packages
+import { v4 as uuidv4 } from 'uuid';
+
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { isNumber } from '../../../helpers/common';
@@ -12,13 +15,14 @@ import { max } from '../../../helpers/math';
 import ResultNameInput from './ResultNameInput.tsx';
 
 // Stores
-import { layersDescriptionStore } from '../../../store/LayersDescriptionStore';
+import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 
 // Types / Interfaces / Enums
 import {
+  LayerDescription,
   ProportionalSymbolsColorMode,
   ProportionalSymbolsParameters,
-  ProportionalSymbolsSymbolType,
+  ProportionalSymbolsSymbolType, RepresentationType,
 } from '../../../global.d';
 
 function onClickValidate(
@@ -30,17 +34,47 @@ function onClickValidate(
   modeColor: ProportionalSymbolsColorMode,
   symbolType: ProportionalSymbolsSymbolType,
 ) {
+  // The layer description of the reference layer
+  const referenceLayerDescription = layersDescriptionStore.layers
+    .find((l) => l.id === referenceLayerId);
+
+  if (referenceLayerDescription === undefined) {
+    throw Error('Unexpected Error: Reference layer not found');
+  }
+
   const propSymbolsParameters = {
     variable: targetVariable,
     colorMode: modeColor,
-    color: '#fefefe',
+    color: '#9b0e0e',
     symbolType,
     referenceRadius: refSymbolSize,
     referenceValue: refValueForSymbolSize,
     avoidOverlapping: false,
   } as ProportionalSymbolsParameters;
 
-  console.log(propSymbolsParameters);
+  const newLayerDescription = {
+    id: uuidv4(),
+    name: newLayerName,
+    data: referenceLayerDescription.data,
+    type: referenceLayerDescription.type,
+    fields: referenceLayerDescription.fields,
+    renderer: 'proportionalSymbols' as RepresentationType,
+    visible: true,
+    strokeColor: '#000000',
+    strokeWidth: '1px',
+    strokeOpacity: 1,
+    fillColor: propSymbolsParameters.color,
+    fillOpacity: 1,
+    dropShadow: false,
+    rendererParameters: propSymbolsParameters,
+  } as LayerDescription;
+
+  setLayersDescriptionStore({
+    layers: [
+      newLayerDescription,
+      ...layersDescriptionStore.layers,
+    ],
+  });
 }
 
 interface ProportionalSymbolsSettingsProps {
@@ -94,7 +128,7 @@ export default function ProportionalSymbolsSettings(
   const [
     refSymbolSize,
     setRefSymbolSize,
-  ] = createSignal<number>(40);
+  ] = createSignal<number>(50);
   const [
     refValueForSymbolSize,
     setRefValueForSymbolSize,
@@ -114,6 +148,8 @@ export default function ProportionalSymbolsSettings(
     maxValues = max(values);
 
     setRefValueForSymbolSize(maxValues);
+
+    console.log('in create effect', targetVariable(), refValueForSymbolSize());
   });
 
   const makePortrayal = () => {
@@ -134,10 +170,26 @@ export default function ProportionalSymbolsSettings(
       <label class="label">{ LL().PortrayalSection.CommonOptions.Variable() }</label>
       <div class="select" style={{ 'max-width': '60%' }}>
         <select onChange={ (ev) => {
-
+          setTargetVariable(ev.target.value);
         }}>
           <For each={targetFields}>
             { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+          </For>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">{ LL().PortrayalSection.ProportionalSymbolsOptions.SymbolType() }</label>
+      <div class="select">
+        <select onChange={ (ev) => {
+          setSymbolType(ev.target.value as ProportionalSymbolsSymbolType);
+        } }>
+          <For each={Object.values(ProportionalSymbolsSymbolType)}>
+            {
+              (st) => <option
+                value={ st }
+              >{ LL().PortrayalSection.ProportionalSymbolsOptions.SymbolTypes[st]() }</option>
+            }
           </For>
         </select>
       </div>

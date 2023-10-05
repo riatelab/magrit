@@ -1,15 +1,12 @@
 import { createStore } from 'solid-js/store';
 import { v4 as uuidv4 } from 'uuid';
-import { LayerDescription } from '../global';
+import { LayerDescription, RepresentationType } from '../global';
 
 type LayersDescriptionStoreType = {
   layers: Array<LayerDescription>,
 };
 
-const [
-  layersDescriptionStore,
-  setLayersDescriptionStore,
-] = createStore({
+const defaultLayersDescription = (): LayersDescriptionStoreType => ({
   layers: [
     {
       type: 'polygon',
@@ -21,13 +18,19 @@ const [
       strokeOpacity: 1,
       fillColor: '#f2f2f7',
       fillOpacity: 1,
-      renderer: 'sphere',
+      renderer: 'sphere' as RepresentationType,
       data: { type: 'Sphere' },
     },
   ],
-} as LayersDescriptionStoreType);
+});
+
+const [
+  layersDescriptionStore,
+  setLayersDescriptionStore,
+] = createStore(defaultLayersDescription());
 
 export {
   layersDescriptionStore,
   setLayersDescriptionStore,
+  defaultLayersDescription,
 };

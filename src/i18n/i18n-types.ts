@@ -425,11 +425,11 @@ type RootTranslation = {
 				/**
 				 * C​i​r​c​l​e
 				 */
-				Circle: string
+				circle: string
 				/**
 				 * S​q​u​a​r​e
 				 */
-				Square: string
+				square: string
 			}
 			/**
 			 * A​v​o​i​d​ ​o​v​e​r​l​a​p​p​i​n​g​ ​s​y​m​b​o​l​s
@@ -1194,11 +1194,11 @@ export type TranslationFunctions = {
 				/**
 				 * Circle
 				 */
-				Circle: () => LocalizedString
+				circle: () => LocalizedString
 				/**
 				 * Square
 				 */
-				Square: () => LocalizedString
+				square: () => LocalizedString
 			}
 			/**
 			 * Avoid overlapping symbols

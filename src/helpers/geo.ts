@@ -8,7 +8,8 @@ import * as polylabel from 'polylabel';
 
 import d3 from './d3-custom';
 import { max } from './math';
-import { GeoJSONGeometry } from '../global';
+import { GeoJSONGeometry, IZoomable } from '../global';
+import { globalStore } from '../store/GlobalStore';
 
 export const getLargestPolygon = (geom: GeoJSONGeometry) => {
   const areas = [];
@@ -78,4 +79,51 @@ export const coordsPointOnFeature = (geom) => {
     };
     return nearestPoint(centroid, vertices).geometry.coordinates;
   }
+
+  return null;
+};
+
+/**
+ * Redraw the paths of the SVG element
+ * as well as the various symbols (circles, ...), using the updated projection.
+ *
+ * @param {SVGSVGElement} svgElement
+ */
+export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
+  // We need to reset the __zoom property of the svg element
+  // to the zoomIdentity, otherwise the zoom will not work anymore.
+  // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+  svgElement.__zoom = d3.zoomIdentity;
+
+  // For each layer...
+  svgElement?.querySelectorAll('g.layer').forEach((g) => {
+    // Remove the transform attribute from the elements on which it was defined
+    g.removeAttribute('transform');
+    // Redraw the paths
+    g.querySelectorAll('path').forEach((p) => {
+      p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
+    });
+    // Redraw the symbols (circles)
+    g.querySelectorAll('circle').forEach((c) => {
+      const feature = c.__data__; // eslint-disable-line no-underscore-dangle
+      const coords = coordsPointOnFeature(feature.geometry);
+      const projectedCoords = globalStore.projection(coords);
+      c.setAttribute('cx', `${projectedCoords[0]}`);
+      c.setAttribute('cy', `${projectedCoords[1]}`);
+    });
+    // Redraw the symbols (squares)
+    g.querySelectorAll('rect').forEach((r) => {
+      const feature = r.__data__; // eslint-disable-line no-underscore-dangle
+      const coords = coordsPointOnFeature(feature.geometry);
+      const projectedCoords = globalStore.projection(coords);
+      const size = +r.getAttribute('width')!;
+      r.setAttribute('x', `${projectedCoords[0] - size / 2}`);
+      r.setAttribute('y', `${projectedCoords[1] - size / 2}`);
+    });
+  });
+  // Also redraw the path elements in the defs
+  svgElement?.querySelectorAll('defs path').forEach((p) => {
+    // eslint-disable-next-line no-underscore-dangle
+    p.setAttribute('d', globalStore.pathGenerator(p.__data__));
+  });
 };

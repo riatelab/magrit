@@ -38,7 +38,11 @@ import { classificationPanelStore } from './store/ClassificationPanelStore';
 import { fieldTypingModalStore } from './store/FieldTypingModalStore';
 import { globalStore, setGlobalStore } from './store/GlobalStore';
 import { mapStore, setMapStore } from './store/MapStore';
-import { layersDescriptionStore, setLayersDescriptionStore } from './store/LayersDescriptionStore';
+import {
+  defaultLayersDescription,
+  layersDescriptionStore,
+  setLayersDescriptionStore,
+} from './store/LayersDescriptionStore';
 import { modalStore, setModalStore } from './store/ModalStore';
 import { niceAlertStore, setNiceAlertStore } from './store/NiceAlertStore';
 import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
@@ -212,6 +216,8 @@ const AppPage: () => JSX.Element = () => {
     window.removeEventListener('beforeunload', onBeforeUnloadWindow);
   });
 
+  // Todo: there is a lot of code executed in onMount,
+  //  it should be refactored / split into smaller functions
   onMount(async () => {
     // Add event listener to the window to handle resize events
     window.addEventListener('resize', onResize);
@@ -229,6 +235,47 @@ const AppPage: () => JSX.Element = () => {
     window.addEventListener('beforeunload', onBeforeUnloadWindow);
 
     // Event listeners for the buttons of the header bar
+    document.getElementById('button-new-project')
+      ?.addEventListener('click', () => {
+        // Compute the default dimension of the map
+        const mapWidth = round(
+          (window.innerWidth - applicationSettingsStore.leftMenuWidth) * 0.9,
+          0,
+        );
+        const mapHeight = round(
+          (window.innerHeight - applicationSettingsStore.headerHeight) * 0.9,
+          0,
+        );
+
+        // Remove all layers
+        setLayersDescriptionStore(defaultLayersDescription());
+
+        // Reset the map store
+        setMapStore({
+          mapDimensions: {
+            width: mapWidth,
+            height: mapHeight,
+          },
+          scale: 160,
+          translate: [mapWidth / 2, mapHeight / 2],
+          projection: {
+            type: 'd3',
+            value: 'geoNaturalEarth2',
+            name: 'NaturalEarth2',
+          },
+        });
+
+        // Reset projection and pathGenerator in the global store
+        const projection = d3[mapStore.projection.value]()
+          .translate(mapStore.translate)
+          .scale(mapStore.scale);
+
+        setGlobalStore({
+          projection,
+          pathGenerator: d3.geoPath(projection)
+        });
+      });
+
     document.getElementById('button-export-project')
       ?.addEventListener('click', () => {
         const { layers } = layersDescriptionStore;

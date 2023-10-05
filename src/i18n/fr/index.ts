@@ -127,8 +127,8 @@ const fr = {
       OnValue: 'Sur la valeur',
       SymbolType: 'Type de symbole',
       SymbolTypes: {
-        Circle: 'Cercle',
-        Square: 'Carré',
+        circle: 'Cercle',
+        square: 'Carré',
       },
       AvoidOverlapping: 'Éviter le chevauchement des symboles',
       SingleColor: 'Une couleur',

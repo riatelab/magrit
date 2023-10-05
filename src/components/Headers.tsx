@@ -8,6 +8,7 @@ import {
   FaSolidCircleQuestion,
   FaSolidFloppyDisk,
   FaSolidFolderOpen,
+  FaSolidFile,
 } from 'solid-icons/fa';
 
 // Helpers
@@ -97,10 +98,17 @@ export function HeaderBarApp(): JSX.Element {
         <div class="navbar-item">
           <button
             class="button button-header-bar"
-            id="button-new-project"
+            id="button-night-day"
             title={ LL().HeaderApp.NightDayMode() }
           >
             <CgDarkMode />
+          </button>
+          <button
+            class="button button-header-bar"
+            id="button-new-project"
+            title={ LL().HeaderApp.NewProject() }
+          >
+            <FaSolidFile />
           </button>
           <button
             class="button button-header-bar"

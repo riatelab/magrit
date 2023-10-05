@@ -6,6 +6,7 @@ import d3 from '../helpers/d3-custom';
 
 // Helpers
 import { debounce } from '../helpers/common';
+import { coordsPointOnFeature, redrawPaths } from '../helpers/geo';
 
 // Stores
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
@@ -26,9 +27,10 @@ import {
   choroplethPolygonRenderer,
 } from './MapRenderer/ChoroplethMapRenderer.tsx';
 import legendChoropleth from './LegendRenderer/ChoroplethLegend.tsx';
+import proportionalSymbolsRenderer from './MapRenderer/ProportionalSymbolsMapRenderer.tsx';
 
 // Types and enums
-import { ZoomBehavior } from '../global.d';
+import { IZoomable, ZoomBehavior } from '../global.d';
 
 // Styles
 import '../styles/MapZone.css';
@@ -37,29 +39,19 @@ export default function MapZone(): JSX.Element {
   let svgElem: SVGSVGElement;
 
   // Set up the map when the component is created
-  const initialScale = 160;
-  const initialTranslate = [mapStore.mapDimensions.width / 2, mapStore.mapDimensions.height / 2];
-
   setMapStore({
-    scale: initialScale,
-    translate: initialTranslate,
+    scale: 160,
+    translate: [mapStore.mapDimensions.width / 2, mapStore.mapDimensions.height / 2],
   });
 
   const projection = d3[mapStore.projection.value]()
     .translate(mapStore.translate)
     .scale(mapStore.scale);
 
-  const pathGenerator = d3.geoPath(projection);
-
-  setGlobalStore(
-    'projection',
-    () => projection,
-  );
-
-  setGlobalStore(
-    'pathGenerator',
-    () => pathGenerator,
-  );
+  setGlobalStore({
+    projection,
+    pathGenerator: d3.geoPath(projection)
+  });
 
   // When applyZoomPan is called with redraw = false,
   // the map is not redrawn, but we set the 'transform' attribute
@@ -78,11 +70,11 @@ export default function MapZone(): JSX.Element {
         g.setAttribute('transform', e.transform);
       });
     } else {
-      // We change the projection scale and translate values
-      const proj = globalStore.projection;
+      // We need the previous projection scale, rotate and translate values
+      // to compute the new ones
       const previousProjectionScale = mapStore.scale;
       const previousProjectionTranslate = mapStore.translate;
-      // const initialRotate = mapStore.rotate;
+      const initialRotate = mapStore.rotate;
 
       // Parse last transform from svg element
       const lastTransform = svgElem.querySelector('g.layer').getAttribute('transform');
@@ -99,37 +91,22 @@ export default function MapZone(): JSX.Element {
         lastTranslate[0] + previousProjectionTranslate[0] * lastScale,
         lastTranslate[1] + previousProjectionTranslate[1] * lastScale,
       ];
-      // Keep rotation value
-      const rotateValue = proj.rotate();
+      // Keep rotation value for now
+      const rotateValue = initialRotate;
 
       // Update projection
-      proj.scale(scaleValue)
+      globalStore.projection
+        .scale(scaleValue)
         .translate(translateValue)
         .rotate(rotateValue);
 
-      // We also need to reset the __zoom property of the svg element
-      // to the zoomIdentity, otherwise the zoom will not work anymore.
-      svgElem.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
-
-      // Remove the transform attribute from the elements on which it was defined
-      svgElem?.querySelectorAll('g.layer').forEach((g) => {
-        g.removeAttribute('transform');
-        g.querySelectorAll('path').forEach((p) => {
-          p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
-        });
-      });
-      svgElem?.querySelectorAll('defs path').forEach((p) => {
-        // eslint-disable-next-line no-underscore-dangle
-        p.setAttribute('d', globalStore.pathGenerator(p.__data__));
-      });
-      // svgElem?.querySelectorAll('path').forEach((p) => {
-      //   // eslint-disable-next-line no-underscore-dangle
-      //   p.setAttribute('d', globalStore.pathGenerator(p.__data__));
-      // });
       setMapStore({
         scale: scaleValue,
         translate: translateValue,
       });
+
+      // Actually redraw the paths and symbols
+      redrawPaths(svgElem as SVGSVGElement & IZoomable);
     }
   };
 
@@ -212,6 +189,8 @@ export default function MapZone(): JSX.Element {
               if (layer.type === 'polygon') return choroplethPolygonRenderer(layer);
               if (layer.type === 'point') return choroplethPointRenderer(layer);
               if (layer.type === 'linestring') return choroplethLineRenderer(layer);
+            } else if (layer.renderer === 'proportionalSymbols') {
+              return proportionalSymbolsRenderer(layer);
             }
             return null;
           }}
