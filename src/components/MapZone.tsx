@@ -36,7 +36,7 @@ import { IZoomable, ZoomBehavior } from '../global.d';
 import '../styles/MapZone.css';
 
 export default function MapZone(): JSX.Element {
-  let svgElem: SVGSVGElement;
+  let svgElem: SVGSVGElement & IZoomable;
 
   // Set up the map when the component is created
   setMapStore({
@@ -50,7 +50,7 @@ export default function MapZone(): JSX.Element {
 
   setGlobalStore({
     projection,
-    pathGenerator: d3.geoPath(projection)
+    pathGenerator: d3.geoPath(projection),
   });
 
   // When applyZoomPan is called with redraw = false,
@@ -76,20 +76,13 @@ export default function MapZone(): JSX.Element {
       const previousProjectionTranslate = mapStore.translate;
       const initialRotate = mapStore.rotate;
 
-      // Parse last transform from svg element
-      const lastTransform = svgElem.querySelector('g.layer').getAttribute('transform');
-      const lastTranslate = lastTransform !== null
-        ? lastTransform.match(/translate\(([^)]+)\)/)[1].split(',').map((d) => +d)
-        : [0, 0];
-      const lastScale = lastTransform !== null
-        ? +lastTransform.match(/scale\(([^)]+)\)/)[1]
-        : 1;
-
-      // Compute new values for scale and translate
+      // Compute new values for scale and translate from
+      // the last zoom event
+      const lastScale = e.transform.k;
       const scaleValue = lastScale * previousProjectionScale;
       const translateValue = [
-        lastTranslate[0] + previousProjectionTranslate[0] * lastScale,
-        lastTranslate[1] + previousProjectionTranslate[1] * lastScale,
+        e.transform.x + previousProjectionTranslate[0] * lastScale,
+        e.transform.y + previousProjectionTranslate[1] * lastScale,
       ];
       // Keep rotation value for now
       const rotateValue = initialRotate;
@@ -106,7 +99,7 @@ export default function MapZone(): JSX.Element {
       });
 
       // Actually redraw the paths and symbols
-      redrawPaths(svgElem as SVGSVGElement & IZoomable);
+      redrawPaths(svgElem);
     }
   };
 

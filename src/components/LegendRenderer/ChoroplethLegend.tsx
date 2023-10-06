@@ -25,10 +25,10 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
   // - to make Typescript happy
   // - to make sure the layer is correctly defined.
   // In the future, we might want to remove these checks.
-  if (!layer.classification) {
+  if (!layer.rendererParameters) {
     throw new Error('Classification attribute is not defined - this should not happen');
   }
-  if (!layer.classification.palette) {
+  if (!layer.rendererParameters.palette) {
     throw new Error('Classification.palette attribute is not defined - this should not happen');
   }
   if (!layer.legend) {
@@ -36,13 +36,13 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
   }
 
   const colors = getColors(
-    layer.classification.palette.name,
-    layer.classification.classes,
-    layer.classification.palette.reversed,
+    layer.rendererParameters.palette.name,
+    layer.rendererParameters.classes,
+    layer.rendererParameters.palette.reversed,
   ) as string[]; // this can't be undefined because we checked it above
 
   if (!colors) {
-    throw new Error(`Could not get colors for scheme ${layer.classification.palette.name}`);
+    throw new Error(`Could not get colors for scheme ${layer.rendererParameters.palette.name}`);
   }
 
   let distanceToTop = 0;
@@ -96,7 +96,7 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
           />
         }
       </For>
-      <For each={layer.classification.breaks}>
+      <For each={layer.rendererParameters.breaks}>
         {
           (value, i) => <text
             x={layer.legend.boxWidth + layer.legend.boxSpacing}
@@ -123,10 +123,10 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
   // - to make Typescript happy
   // - to make sure that the layer is correctly defined.
   // In the future, we might want to remove these checks.
-  if (!layer.classification) {
+  if (!layer.rendererParameters) {
     throw new Error('Classification attribute is not defined - this should not happen');
   }
-  if (!layer.classification.palette) {
+  if (!layer.rendererParameters.palette) {
     throw new Error('Classification.palette attribute is not defined - this should not happen');
   }
   if (!layer.legend) {
@@ -134,13 +134,13 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
   }
 
   const colors = getColors(
-    layer.classification.palette.name,
-    layer.classification.classes,
-    layer.classification.palette.reversed,
+    layer.rendererParameters.palette.name,
+    layer.rendererParameters.classes,
+    layer.rendererParameters.palette.reversed,
   ) as string[]; // this can't be undefined because we checked it above
 
   if (!colors) {
-    throw new Error(`Could not get colors for scheme ${layer.classification.palette.name}`);
+    throw new Error(`Could not get colors for scheme ${layer.rendererParameters.palette.name}`);
   }
 
   // We need to compute the position of:
@@ -215,7 +215,7 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
           />
         }
       </For>
-      <For each={layer.classification.breaks}>
+      <For each={layer.rendererParameters.breaks}>
         {
           (value, i) => <text
             x={(i() * (layer.legend.boxWidth + layer.legend.boxSpacing)) - 10}

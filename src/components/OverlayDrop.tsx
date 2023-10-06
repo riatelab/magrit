@@ -1,5 +1,6 @@
 import { For, JSX, Show } from 'solid-js';
 import { v4 as uuidv4 } from 'uuid';
+import { getPalette } from 'dicopal';
 import { overlayDropStore, setOverlayDropStore } from '../store/OverlayDropStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
 import { setGlobalStore } from '../store/GlobalStore';
@@ -11,33 +12,39 @@ import { setFieldTypingModalStore } from '../store/FieldTypingModalStore';
 import { CustomFileList } from '../global';
 
 const getDefaultRenderingParams = (geomType: string) => {
+  const pal = getPalette('Vivid', 10)!.colors;
+  const color = pal[Math.floor(Math.random() * pal.length)];
+
   if (geomType === 'point') {
     return {
       renderer: 'default',
-      strokeColor: '#000000',
+      strokeColor: '#9d9d9d',
       strokeWidth: '1px',
       strokeOpacity: 1,
-      fillColor: '#fedeab',
+      fillColor: color,
       fillOpacity: 1,
       pointRadius: 5,
+      dropShadow: false,
     };
   }
   if (geomType === 'linestring') {
     return {
       renderer: 'default',
-      strokeColor: '#000000',
+      strokeColor: color,
       strokeWidth: '1.5px',
       strokeOpacity: 1,
+      dropShadow: false,
     };
   }
   if (geomType === 'polygon') {
     return {
       renderer: 'default',
-      strokeColor: '#000000',
+      strokeColor: '#9d9d9d',
       strokeWidth: '0.5px',
       strokeOpacity: 1,
-      fillColor: '#000000',
-      fillOpacity: 0.5,
+      fillColor: color,
+      fillOpacity: 0.85,
+      dropShadow: false,
     };
   }
   return {};

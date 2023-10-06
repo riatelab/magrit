@@ -8,7 +8,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
-import { isNumber } from '../../../helpers/common';
+import { descendingKeyAccessor, isNumber } from '../../../helpers/common';
+import { coordsPointOnFeature } from '../../../helpers/geo';
 import { max } from '../../../helpers/math';
 
 // Sub-components
@@ -19,6 +20,7 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../../stor
 
 // Types / Interfaces / Enums
 import {
+  GeoJSONFeatureCollection,
   LayerDescription,
   ProportionalSymbolsColorMode,
   ProportionalSymbolsParameters,
@@ -52,10 +54,32 @@ function onClickValidate(
     avoidOverlapping: false,
   } as ProportionalSymbolsParameters;
 
+  // Copy dataset
+  const newData = JSON.parse(
+    JSON.stringify(
+      referenceLayerDescription.data,
+    ),
+  ) as GeoJSONFeatureCollection;
+
+  if (referenceLayerDescription.type === 'polygon') {
+    newData.features.forEach((feature) => {
+      // eslint-disable-next-line no-param-reassign
+      feature.geometry = {
+        type: 'Point',
+        coordinates: coordsPointOnFeature(feature.geometry),
+      };
+    });
+  }
+
+  // Sort the features by descending value of the target variable
+  // (so that the biggest symbols are drawn first)
+  newData.features
+    .sort(descendingKeyAccessor((d) => d.properties[targetVariable]));
+
   const newLayerDescription = {
     id: uuidv4(),
     name: newLayerName,
-    data: referenceLayerDescription.data,
+    data: newData,
     type: referenceLayerDescription.type,
     fields: referenceLayerDescription.fields,
     renderer: 'proportionalSymbols' as RepresentationType,
@@ -148,8 +172,6 @@ export default function ProportionalSymbolsSettings(
     maxValues = max(values);
 
     setRefValueForSymbolSize(maxValues);
-
-    console.log('in create effect', targetVariable(), refValueForSymbolSize());
   });
 
   const makePortrayal = () => {

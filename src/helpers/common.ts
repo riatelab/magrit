@@ -16,6 +16,18 @@ export function isNumber(value: any): boolean {
   return value !== null && value !== '' && isFinite(value);
 }
 
+export const ascending = (a: number, b: number) => a - b;
+
+export const ascendingKeyAccessor = (
+  keyAccessor: (d: any) => any,
+) => (a: any, b: any) => ascending(keyAccessor(a), keyAccessor(b));
+
+export const descending = (a: number, b: number) => b - a;
+
+export const descendingKeyAccessor = (
+  keyAccessor: (d: any) => any,
+) => (a: any, b: any) => descending(keyAccessor(a), keyAccessor(b));
+
 /**
  * Debounce a function. Returns a function, that, as long as it continues to be invoked,
  * will not be triggered.

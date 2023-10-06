@@ -84,7 +84,7 @@ function onClickValidate(
     strokeOpacity: 1,
     // fillColor: '#ffffff',
     fillOpacity: 1,
-    dropShadow: true,
+    dropShadow: false,
     rendererParameters: classification,
     legend: {
       title: {

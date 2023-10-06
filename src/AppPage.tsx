@@ -77,14 +77,30 @@ globalThis.db.version(1).stores({
 });
 
 const onBeforeUnloadWindow = async (ev) => {
-  console.log('onBeforeUnloadWindow', ev);
+  // If there is no layer or if
+  // there is only the sphere layer, do nothing
+  if (
+    layersDescriptionStore.layers.length < 1
+    || (
+      layersDescriptionStore.layers.length === 1
+      && layersDescriptionStore.layers[0].renderer === 'sphere'
+    )
+  ) {
+    return;
+  }
+  // Otherwise we store the state of the current projet
+  // in the local DB (indexedDB via Dexie)
   const { layers } = layersDescriptionStore;
   const map = { ...mapStore };
   const obj = {
     layers,
     map,
   };
-  globalThis.db.projects.add({ date: new Date(), data: JSON.parse(JSON.stringify(obj)) });
+  globalThis.db.projects.add({
+    date: new Date(),
+    data: JSON.parse(JSON.stringify(obj)),
+  });
+  // The message is usually ignored in modern browsers
   ev.returnValue = 'Confirm exit ?'; // eslint-disable-line no-param-reassign
 };
 
@@ -237,42 +253,53 @@ const AppPage: () => JSX.Element = () => {
     // Event listeners for the buttons of the header bar
     document.getElementById('button-new-project')
       ?.addEventListener('click', () => {
-        // Compute the default dimension of the map
-        const mapWidth = round(
-          (window.innerWidth - applicationSettingsStore.leftMenuWidth) * 0.9,
-          0,
-        );
-        const mapHeight = round(
-          (window.innerHeight - applicationSettingsStore.headerHeight) * 0.9,
-          0,
-        );
+        const createNewProject = (): void => {
+          // Compute the default dimension of the map
+          const mapWidth = round(
+            (window.innerWidth - applicationSettingsStore.leftMenuWidth) * 0.9,
+            0,
+          );
+          const mapHeight = round(
+            (window.innerHeight - applicationSettingsStore.headerHeight) * 0.9,
+            0,
+          );
 
-        // Remove all layers
-        setLayersDescriptionStore(defaultLayersDescription());
+          // Remove all layers
+          setLayersDescriptionStore(defaultLayersDescription());
 
-        // Reset the map store
-        setMapStore({
-          mapDimensions: {
-            width: mapWidth,
-            height: mapHeight,
+          // Reset the map store
+          setMapStore({
+            mapDimensions: {
+              width: mapWidth,
+              height: mapHeight,
+            },
+            scale: 160,
+            translate: [mapWidth / 2, mapHeight / 2],
+            projection: {
+              type: 'd3',
+              value: 'geoNaturalEarth2',
+              name: 'NaturalEarth2',
+            },
+          });
+
+          // Reset projection and pathGenerator in the global store
+          const projection = d3[mapStore.projection.value]()
+            .translate(mapStore.translate)
+            .scale(mapStore.scale);
+
+          setGlobalStore({
+            projection,
+            pathGenerator: d3.geoPath(projection),
+          });
+        };
+
+        setNiceAlertStore({
+          show: true,
+          content: () => <p>Create new empty project ?</p>,
+          confirmCallback: () => {
+            createNewProject();
           },
-          scale: 160,
-          translate: [mapWidth / 2, mapHeight / 2],
-          projection: {
-            type: 'd3',
-            value: 'geoNaturalEarth2',
-            name: 'NaturalEarth2',
-          },
-        });
-
-        // Reset projection and pathGenerator in the global store
-        const projection = d3[mapStore.projection.value]()
-          .translate(mapStore.translate)
-          .scale(mapStore.scale);
-
-        setGlobalStore({
-          projection,
-          pathGenerator: d3.geoPath(projection)
+          focusOn: 'confirm',
         });
       });
 
@@ -395,8 +422,10 @@ const AppPage: () => JSX.Element = () => {
         confirmCallback: () => { reloadFromProjectObject(data); },
         focusOn: 'confirm',
       });
-      globalThis.db.projects.clear();
     }
+    // We only keep the last project in the DB
+    // so at this point we can delete all projects
+    globalThis.db.projects.clear();
   });
 
   return <>

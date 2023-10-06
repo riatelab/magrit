@@ -1,4 +1,4 @@
-import { For, JSX } from 'solid-js';
+import { For, JSX, Show } from 'solid-js';
 import { globalStore } from '../../store/GlobalStore';
 import { ClassificationMethod, ClassificationParameters, LayerDescription } from '../../global.d';
 import { getClassifier } from '../../helpers/classification';
@@ -16,39 +16,41 @@ export function choroplethPolygonRenderer(
 
   console.log(rendererParameters.breaks, colors, fieldName, noDataColor);
 
-  return <g
-    id={layerDescription.name}
-    class="layer choropleth"
-    visibility={layerDescription.visible ? undefined : 'hidden'}
-    // fill={layerDescription.fillColor}
-    fill-opacity={layerDescription.fillOpacity}
-    stroke={layerDescription.strokeColor}
-    stroke-width={layerDescription.strokeWidth}
-    stroke-opacity={layerDescription.strokeOpacity}
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    clip-path="url(#clip-sphere)"
-    filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
-  >
-    <For each={layerDescription.data.features}>
-      {
-        (feature) => {
-          const el: JSX.Element = <path
-            fill={
-              isNumber(feature.properties[fieldName])
-                ? colors[classifier.getClass(feature.properties[fieldName])]
-                : noDataColor
-            }
-            d={globalStore.pathGenerator(feature)}
-            vector-effect="non-scaling-stroke"
-          />;
-          // el.__data__ = unproxify(feature); // eslint-disable-line no-underscore-dangle
-          el.__data__ = feature; // eslint-disable-line no-underscore-dangle
-          return el;
+  return <Show when={layerDescription.visible}>
+      <g
+      id={layerDescription.name}
+      class="layer choropleth"
+      visibility={layerDescription.visible ? undefined : 'hidden'}
+      // fill={layerDescription.fillColor}
+      fill-opacity={layerDescription.fillOpacity}
+      stroke={layerDescription.strokeColor}
+      stroke-width={layerDescription.strokeWidth}
+      stroke-opacity={layerDescription.strokeOpacity}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      clip-path="url(#clip-sphere)"
+      filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
+    >
+      <For each={layerDescription.data.features}>
+        {
+          (feature) => {
+            const el: JSX.Element = <path
+              fill={
+                isNumber(feature.properties[fieldName])
+                  ? colors[classifier.getClass(feature.properties[fieldName])]
+                  : noDataColor
+              }
+              d={globalStore.pathGenerator(feature)}
+              vector-effect="non-scaling-stroke"
+            />;
+            // el.__data__ = unproxify(feature); // eslint-disable-line no-underscore-dangle
+            el.__data__ = feature; // eslint-disable-line no-underscore-dangle
+            return el;
+          }
         }
-      }
-    </For>
-  </g>;
+      </For>
+    </g>
+  </Show>;
 }
 
 export function choroplethPointRenderer(

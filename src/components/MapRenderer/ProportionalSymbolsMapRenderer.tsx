@@ -1,11 +1,12 @@
 // Imports from solid-js
-import { For, JSX } from 'solid-js';
+import { For, JSX, Show } from 'solid-js';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
 
 // Helpers
 import { coordsPointOnFeature } from '../../helpers/geo';
+import { descending } from '../../helpers/common';
 
 // Types / Interfaces / Enums
 import { LayerDescription, ProportionalSymbolsParameters, ProportionalSymbolsSymbolType } from '../../global.d';
@@ -43,63 +44,65 @@ export default function proportionalSymbolsRenderer(
   if (layerDescription.rendererParameters == null) {
     throw Error('Unexpected Error: Renderer parameters not found');
   }
-  // Will scale the symbols according to the value of the variable
-  const propSize = new (PropSizer as any)(
-    layerDescription.rendererParameters.referenceValue,
-    layerDescription.rendererParameters.referenceRadius,
-    layerDescription.rendererParameters.symbolType,
-  );
 
   // The parameters for this renderer
   const rendererParameters = layerDescription.rendererParameters as ProportionalSymbolsParameters;
 
-  return <g
-    id={layerDescription.name}
-    class="layer proportional-symbols"
-    visibility={layerDescription.visible ? undefined : 'hidden'}
-    fill-opacity={layerDescription.fillOpacity}
-    stroke={layerDescription.strokeColor}
-    stroke-width={layerDescription.strokeWidth}
-    stroke-opacity={layerDescription.strokeOpacity}
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
-  >
-    <For each={layerDescription.data.features}>
-      {
-        (feature) => {
-          const coords = coordsPointOnFeature(feature.geometry);
-          const projectedCoords = globalStore.projection(coords);
-          if (rendererParameters.symbolType === ProportionalSymbolsSymbolType.circle) {
-            const symbolSize = propSize.scale(
-              feature.properties[layerDescription.rendererParameters!.variable],
-            );
-            const el = <circle
-              r={symbolSize}
-              cx={projectedCoords[0]}
-              cy={projectedCoords[1]}
-              fill={layerDescription.rendererParameters!.color}
-            ></circle>;
-            el.__data__ = feature; // eslint-disable-line no-underscore-dangle
-            return el;
+  // Will scale the symbols according to the value of the variable
+  const propSize = new (PropSizer as any)(
+    rendererParameters.referenceValue,
+    rendererParameters.referenceRadius,
+    rendererParameters.symbolType,
+  );
+
+  return <Show when={layerDescription.visible}>
+    <g
+      id={layerDescription.name}
+      class="layer proportional-symbols"
+      visibility={layerDescription.visible ? undefined : 'hidden'}
+      fill-opacity={layerDescription.fillOpacity}
+      stroke={layerDescription.strokeColor}
+      stroke-width={layerDescription.strokeWidth}
+      stroke-opacity={layerDescription.strokeOpacity}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
+    >
+      <For each={layerDescription.data.features}>
+        {
+          (feature) => {
+            const projectedCoords = globalStore.projection(feature.geometry.coordinates);
+            if (rendererParameters.symbolType === ProportionalSymbolsSymbolType.circle) {
+              const symbolSize = propSize.scale(
+                feature.properties[rendererParameters.variable],
+              );
+              const el = <circle
+                r={symbolSize}
+                cx={projectedCoords[0]}
+                cy={projectedCoords[1]}
+                fill={rendererParameters.color}
+              ></circle>;
+              el.__data__ = feature; // eslint-disable-line no-underscore-dangle
+              return el;
+            }
+            if (rendererParameters.symbolType === ProportionalSymbolsSymbolType.square) {
+              const symbolSize = propSize.scale(
+                feature.properties[rendererParameters.variable],
+              );
+              const el = <rect
+                width={symbolSize}
+                height={symbolSize}
+                x={projectedCoords[0] - symbolSize / 2}
+                y={projectedCoords[1] - symbolSize / 2}
+                fill={rendererParameters.color}
+              ></rect>;
+              el.__data__ = feature; // eslint-disable-line no-underscore-dangle
+              return el;
+            }
+            return null;
           }
-          if (rendererParameters.symbolType === ProportionalSymbolsSymbolType.square) {
-            const symbolSize = propSize.scale(
-              feature.properties[layerDescription.rendererParameters!.variable],
-            );
-            const el = <rect
-              width={symbolSize}
-              height={symbolSize}
-              x={projectedCoords[0] - symbolSize / 2}
-              y={projectedCoords[1] - symbolSize / 2}
-              fill={layerDescription.rendererParameters!.color}
-            ></rect>;
-            el.__data__ = feature; // eslint-disable-line no-underscore-dangle
-            return el;
-          }
-          return null;
         }
-      }
-    </For>
-  </g>;
+      </For>
+    </g>
+  </Show>;
 }
