@@ -318,6 +318,12 @@ interface ChoroplethLegendParameters extends LegendParameters {
   labels: LegendTextElement,
 }
 
+export enum RenderVisibility {
+  RenderAsHidden,
+  // RenderAsDisplayNone,
+  DoNotRender,
+}
+
 export interface ID3Element {
   __data__: GeoJSONFeature,
 }

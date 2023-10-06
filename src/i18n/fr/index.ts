@@ -12,6 +12,7 @@ const fr = {
   ImportFiles: 'Importer le(s) fichier(s)',
   Alerts: {
     DeleteLayer: 'Supprimer la couche',
+    EmptyProject: 'Créer un nouveau projet vide ?',
     SaveEditedData: 'Sauvegarder les modifications effectuées ?',
     ReloadLastProject: 'Un projet a été sauvegardé automatiquement lors de la fermetture de la page le {}. Recharger le ce projet ?',
   },
@@ -75,7 +76,9 @@ const fr = {
     LockZoom: 'Verrouiller le zoom / la position',
   },
   LayoutFeaturesSection: {
-
+    BackgroundColor: 'Couleur de fond',
+    Opacity: 'Opacité',
+    MapSkinElements: 'Éléments d\'habillage de la carte',
   },
   AboutPanel: {
     title: 'À propos de Magrit',
@@ -129,6 +132,7 @@ const fr = {
       SymbolTypes: {
         circle: 'Cercle',
         square: 'Carré',
+        line: 'Ligne',
       },
       AvoidOverlapping: 'Éviter le chevauchement des symboles',
       SingleColor: 'Une couleur',

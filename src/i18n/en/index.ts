@@ -12,6 +12,7 @@ const en = {
   ImportFiles: 'Import file(s)',
   Alerts: {
     DeleteLayer: 'Delete layer',
+    EmptyProject: 'Create a new empty project ?',
     SaveEditedData: 'Save changes ?',
     ReloadLastProject: 'A project was automatically saved when the page was closed on {}. Reload this project ?',
   },
@@ -75,7 +76,9 @@ const en = {
     LockZoom: 'Lock zoom / position',
   },
   LayoutFeaturesSection: {
-
+    BackgroundColor: 'Background color',
+    Opacity: 'Opacity',
+    MapSkinElements: 'Map skin elements',
   },
   AboutPanel: {
     title: 'About Magrit',
@@ -129,6 +132,7 @@ const en = {
       SymbolTypes: {
         circle: 'Circle',
         square: 'Square',
+        line: 'Line',
       },
       AvoidOverlapping: 'Avoid overlapping symbols',
       SingleColor: 'One color',

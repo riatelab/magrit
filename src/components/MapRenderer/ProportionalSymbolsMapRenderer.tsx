@@ -3,13 +3,15 @@ import { For, JSX, Show } from 'solid-js';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
-
-// Helpers
-import { coordsPointOnFeature } from '../../helpers/geo';
-import { descending } from '../../helpers/common';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Types / Interfaces / Enums
-import { LayerDescription, ProportionalSymbolsParameters, ProportionalSymbolsSymbolType } from '../../global.d';
+import {
+  LayerDescription,
+  ProportionalSymbolsParameters,
+  ProportionalSymbolsSymbolType,
+  RenderVisibility,
+} from '../../global.d';
 
 /* eslint-disable no-mixed-operators */
 const PropSizer = function PropSizer(
@@ -55,7 +57,10 @@ export default function proportionalSymbolsRenderer(
     rendererParameters.symbolType,
   );
 
-  return <Show when={layerDescription.visible}>
+  return <Show when={
+    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
+    || layerDescription.visible
+  }>
     <g
       id={layerDescription.name}
       class="layer proportional-symbols"
@@ -80,7 +85,7 @@ export default function proportionalSymbolsRenderer(
                 r={symbolSize}
                 cx={projectedCoords[0]}
                 cy={projectedCoords[1]}
-                fill={rendererParameters.color}
+                fill={rendererParameters.color as string}
               ></circle>;
               el.__data__ = feature; // eslint-disable-line no-underscore-dangle
               return el;

@@ -56,6 +56,10 @@ type RootTranslation = {
 		 */
 		DeleteLayer: string
 		/**
+		 * C​r​e​a​t​e​ ​a​ ​n​e​w​ ​e​m​p​t​y​ ​p​r​o​j​e​c​t​ ​?
+		 */
+		EmptyProject: string
+		/**
 		 * S​a​v​e​ ​c​h​a​n​g​e​s​ ​?
 		 */
 		SaveEditedData: string
@@ -260,6 +264,18 @@ type RootTranslation = {
 		LockZoom: string
 	}
 	LayoutFeaturesSection: {
+		/**
+		 * B​a​c​k​g​r​o​u​n​d​ ​c​o​l​o​r
+		 */
+		BackgroundColor: string
+		/**
+		 * O​p​a​c​i​t​y
+		 */
+		Opacity: string
+		/**
+		 * M​a​p​ ​s​k​i​n​ ​e​l​e​m​e​n​t​s
+		 */
+		MapSkinElements: string
 	}
 	AboutPanel: {
 		/**
@@ -430,6 +446,10 @@ type RootTranslation = {
 				 * S​q​u​a​r​e
 				 */
 				square: string
+				/**
+				 * L​i​n​e
+				 */
+				line: string
 			}
 			/**
 			 * A​v​o​i​d​ ​o​v​e​r​l​a​p​p​i​n​g​ ​s​y​m​b​o​l​s
@@ -826,6 +846,10 @@ export type TranslationFunctions = {
 		 */
 		DeleteLayer: () => LocalizedString
 		/**
+		 * Create a new empty project ?
+		 */
+		EmptyProject: () => LocalizedString
+		/**
 		 * Save changes ?
 		 */
 		SaveEditedData: () => LocalizedString
@@ -1029,6 +1053,18 @@ export type TranslationFunctions = {
 		LockZoom: () => LocalizedString
 	}
 	LayoutFeaturesSection: {
+		/**
+		 * Background color
+		 */
+		BackgroundColor: () => LocalizedString
+		/**
+		 * Opacity
+		 */
+		Opacity: () => LocalizedString
+		/**
+		 * Map skin elements
+		 */
+		MapSkinElements: () => LocalizedString
 	}
 	AboutPanel: {
 		/**
@@ -1199,6 +1235,10 @@ export type TranslationFunctions = {
 				 * Square
 				 */
 				square: () => LocalizedString
+				/**
+				 * Line
+				 */
+				line: () => LocalizedString
 			}
 			/**
 			 * Avoid overlapping symbols

@@ -295,7 +295,12 @@ const AppPage: () => JSX.Element = () => {
 
         setNiceAlertStore({
           show: true,
-          content: () => <p>Create new empty project ?</p>,
+          content: () => <div
+            class="is-flex is-justify-content-center is-align-items-center"
+            style={{ height: '100%' }}
+          >
+            <h4>{ LL().Alerts.EmptyProject() }</h4>
+          </div>,
           confirmCallback: () => {
             createNewProject();
           },

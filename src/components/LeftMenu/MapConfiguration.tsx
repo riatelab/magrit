@@ -130,13 +130,15 @@ export default function MapConfiguration(): JSX.Element {
         />
       </div>
     </div>
-    <DropdownMenu
-      id={ 'map-configuration__projection-dropdown' }
-      entries={projectionEntries}
-      defaultEntry={mapStore.projection}
-      onChange={ onChangeProjectionEntry }
-      style={{ 'margin-bottom': '1.5em' }}
-    />
+    <div class="field-block">
+      <label class="label">{ LL().MapConfiguration.Projection() }</label>
+      <DropdownMenu
+        id={ 'map-configuration__projection-dropdown' }
+        entries={projectionEntries}
+        defaultEntry={mapStore.projection}
+        onChange={ onChangeProjectionEntry }
+      />
+    </div>
     <div class="field">
       <label class="label" for="map-configuration__lock-zoom-checkbox">{ LL().MapConfiguration.LockZoom() }</label>
       <div class="control">

@@ -8,6 +8,8 @@ type MapStoreType = {
   center: number[],
   rotate: number[],
   mapDimensions: { width: number, height: number },
+  backgroundColor: string,
+  backgroundColorOpacity: number,
   lockZoomPan: boolean,
 };
 
@@ -25,6 +27,8 @@ const [
   center: [0, 0],
   rotate: [0, 0, 0],
   mapDimensions: { width: 0, height: 0 },
+  backgroundColor: '#ffffff',
+  backgroundColorOpacity: 1,
   lockZoomPan: false,
 } as MapStoreType);
 

@@ -6,7 +6,7 @@ import d3 from '../helpers/d3-custom';
 
 // Helpers
 import { debounce } from '../helpers/common';
-import { coordsPointOnFeature, redrawPaths } from '../helpers/geo';
+import { redrawPaths } from '../helpers/geo';
 
 // Stores
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
@@ -34,6 +34,7 @@ import { IZoomable, ZoomBehavior } from '../global.d';
 
 // Styles
 import '../styles/MapZone.css';
+import { makeHexColorWithAlpha } from '../helpers/color';
 
 export default function MapZone(): JSX.Element {
   let svgElem: SVGSVGElement & IZoomable;
@@ -107,7 +108,7 @@ export default function MapZone(): JSX.Element {
   // too often when zooming
   const redrawDebounced = debounce((e) => {
     applyZoomPan(e, true);
-  }, 100);
+  }, 25);
 
   // Set up the zoom behavior
   const zoom = d3.zoom()
@@ -150,6 +151,9 @@ export default function MapZone(): JSX.Element {
         ref={svgElem}
         width={mapStore.mapDimensions.width}
         height={mapStore.mapDimensions.height}
+        style={{
+          'background-color': makeHexColorWithAlpha(mapStore.backgroundColor, mapStore.backgroundColorOpacity),
+        }}
         class="map-zone__map"
       >
         <defs>

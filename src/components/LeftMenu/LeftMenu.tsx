@@ -22,12 +22,13 @@ import PortrayalSection from './PortrayalSection.tsx';
 // Styles
 import '../../styles/LeftMenu.css';
 import ImportSection from './ImportSection.tsx';
+import LayoutFeatures from './LayoutFeatures.tsx';
 
 export default function LeftMenu(): JSX.Element {
   const { LL } = useI18nContext();
 
   const [expandedSection, setExpandedSection] = createSignal(1);
-  return <div class="left-menu">
+  return <div class="left-menu" style={{ 'overflow-y': 'auto' }}>
 
     <div class="left-menu__title" onClick={() => setExpandedSection(1)}>
       <div class="left-menu__title-inner">
@@ -86,7 +87,7 @@ export default function LeftMenu(): JSX.Element {
     <Collapse value={expandedSection() === 4} >
       <div class="left-menu__section-container">
         <Show when={ expandedSection() === 4}>
-          {/* For now we unmount this componenent when the menu is collapsed */}
+          {/* For now, we unmount this component when the menu is collapsed */}
           <PortrayalSection />
         </Show>
       </div>
@@ -103,7 +104,7 @@ export default function LeftMenu(): JSX.Element {
     </div>
     <Collapse value={expandedSection() === 5} >
       <div class="left-menu__section-container">
-        <ExportSection />
+        <LayoutFeatures />
       </div>
     </Collapse>
 
