@@ -161,7 +161,7 @@ export default function ExportSection(): JSX.Element {
           <br/>
         </Show>
         <Show
-          when={selectedLayer() && selectedFormat() && !noCrsFormats.includes(selectedFormat())}
+          when={selectedLayer() && selectedFormat() && !noCrsFormats.includes(selectedFormat()!)}
         >
           <DropdownMenu
             id={'export-section__content__geo__crs'}
@@ -176,7 +176,7 @@ export default function ExportSection(): JSX.Element {
           when={
             selectedLayer()
             && selectedFormat()
-            && !noCrsFormats.includes(selectedFormat())
+            && !noCrsFormats.includes(selectedFormat()!)
             && selectedCrs() === LL().ExportSection.CustomCRS()
           }
         >
@@ -202,9 +202,9 @@ export default function ExportSection(): JSX.Element {
             )}
             onClick={ async () => {
               await exportToGeoWrapper(
-                selectedLayer(),
-                selectedFormat(),
-                selectedCrs(),
+                selectedLayer()!,
+                selectedFormat()!,
+                selectedCrs()!,
                 customCrs(),
               );
             } }

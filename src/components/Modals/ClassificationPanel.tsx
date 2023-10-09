@@ -4,23 +4,15 @@ import {
 } from 'solid-js';
 
 // Imports from other packages
-import * as Plot from '@observablehq/plot';
-import { getPalette } from 'dicopal';
+import { getPalette, getPalettes } from 'dicopal';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import d3 from '../../helpers/d3-custom';
 import { getClassifier } from '../../helpers/classification';
 import { isNumber } from '../../helpers/common';
-import {
-  epanechnikov,
-  extent,
-  getBandwidth,
-  hasNegative,
-  kde,
-  round,
-} from '../../helpers/math';
-import makeDistributionPlot from '../DistributionPlot.tsx';
+import { extent, hasNegative, round } from '../../helpers/math';
+import { makeClassificationPlot, makeColoredBucketPlot, makeDistributionPlot } from '../DistributionPlots.tsx';
 
 // Sub-components
 import DropdownMenu from '../DropdownMenu.tsx';
@@ -32,7 +24,7 @@ import { classificationPanelStore, setClassificationPanelStore } from '../../sto
 import '../../styles/ClassificationPanel.css';
 
 // Types, interfaces and enums
-import { ClassificationMethod, ClassificationParameters, CustomPalette } from '../../global.d';
+import { ClassificationMethod, type ClassificationParameters } from '../../global.d';
 
 enum OptionsClassification {
   numberOfClasses,
@@ -52,14 +44,6 @@ const classificationMethodHasOption = (
   }
   return t.options.includes(option);
 };
-
-const makeColorNbIndiv = (
-  classifParam: ClassificationParameters,
-): { color: string, indiv: number }[] => classifParam.entitiesByClass
-  .map((n, i) => ({
-    color: classifParam.palette.colors[i],
-    indiv: n,
-  }));
 
 function prepareStatisticalSummary(series: number[]) {
   const [min, max] = extent(series);
@@ -125,7 +109,7 @@ export default function ClassificationPanel(): JSX.Element {
     const entitiesByClass = classifier.countByClass();
     const palName = paletteName();
     const palette = getPalette(palName, classes);
-
+    const reversePalette = isPaletteReversed();
     if (!palette) {
       throw new Error('Palette not found !');
     }
@@ -138,6 +122,7 @@ export default function ClassificationPanel(): JSX.Element {
       palette,
       nodataColor: noDataColor(),
       entitiesByClass,
+      reversePalette,
     } as ClassificationParameters;
 
     return classificationParameters;
@@ -155,6 +140,12 @@ export default function ClassificationPanel(): JSX.Element {
   // Basic statistical summary displayed to the user
   const statSummary = prepareStatisticalSummary(filteredSeries);
 
+  const availablePalettes = getPalettes({ type: 'sequential', number: 9 })
+    .map((d) => ({
+      name: `${d.name} (${d.provider})`,
+      value: d.name,
+    }));
+
   // Signals for the current component:
   // - the classification method chosen by the user
   const [
@@ -165,7 +156,7 @@ export default function ClassificationPanel(): JSX.Element {
   const [
     numberOfClasses,
     setNumberOfClasses,
-  ] = createSignal<number>(6);
+  ] = createSignal<number>(d3.thresholdSturges(filteredSeries));
   // - the amplitude chosen by the user for the
   //   current classification method (only if 'standard deviation' is chosen)
   const [
@@ -182,12 +173,17 @@ export default function ClassificationPanel(): JSX.Element {
   const [
     paletteName,
     setPaletteName,
-  ] = createSignal<string>('OrRd');
+  ] = createSignal<string>('Algae');
   // - the color chosen by the user for the no data values
   const [
     noDataColor,
     setNoDataColor,
   ] = createSignal<string>('#bebebe');
+  // - whether to reverse the color palette
+  const [
+    isPaletteReversed,
+    setIsPaletteReversed,
+  ] = createSignal<boolean>(false);
   // - the current breaks (given the last option that changed, or the default breaks)
   const [
     currentBreaksInfo,
@@ -199,6 +195,15 @@ export default function ClassificationPanel(): JSX.Element {
     customBreaks,
     setCustomBreaks,
   ] = createSignal<number[]>(currentBreaksInfo().breaks);
+  // - display option for the classification plot
+  const [
+    classificationPlotOption,
+    setClassificationPlotOption,
+  ] = createSignal<{ median: boolean, mean: boolean, sd: boolean }>({
+    median: false,
+    mean: false,
+    sd: false,
+  });
 
   let refParentNode: HTMLDivElement;
 
@@ -316,7 +321,7 @@ export default function ClassificationPanel(): JSX.Element {
             <div style={{ 'flex-grow': 1 }}>
               <p class="label is-marginless">{ LL().ClassificationPanel.classificationMethod() }</p>
               <DropdownMenu
-                id={'classification-method'}
+                id={'dropdown-classification-method'}
                 style={{ width: '220px' }}
                 entries={entriesClassificationMethod}
                 defaultEntry={entriesClassificationMethod[0]}
@@ -339,6 +344,8 @@ export default function ClassificationPanel(): JSX.Element {
                   class={'input'}
                   type={'number'}
                   value={6}
+                  min={3}
+                  max={9}
                   onchange={(event) => {
                     setNumberOfClasses(+event.target.value);
                     updateClassificationParameters();
@@ -431,46 +438,96 @@ export default function ClassificationPanel(): JSX.Element {
           </div>
           <div>
             <p>{ currentBreaksInfo().breaks.join(' - ')}</p>
-            <div>
-              {
-                Plot.plot({
-                  x: { ticks: false },
-                  y: { axis: false },
-                  height: 75,
-                  marks: [
-                    Plot.rect(
-                      makeColorNbIndiv(currentBreaksInfo()),
-                      {
-                        fill: 'color',
-                        x1: (d, i) => i * 10,
-                        x2: (d, i) => i * 10 + 10,
-                        y1: 0,
-                        y2: 10,
-                      },
-                    ),
-                    Plot.rect(
-                      makeColorNbIndiv(currentBreaksInfo()),
-                      {
-                        fill: 'white',
-                        x1: (d, i) => i * 10 + 3,
-                        x2: (d, i) => i * 10 + 7,
-                        y1: 2.5,
-                        y2: 7.5,
-                      },
-                    ),
-                    Plot.text(
-                      makeColorNbIndiv(currentBreaksInfo()),
-                      {
-                        text: 'indiv',
-                        x: (d, i) => i * 10 + 5,
-                        textAnchor: 'middle',
-                        frameAnchor: 'middle',
-                        fontSize: 16,
-                      },
-                    ),
-                  ],
-                })
-              }
+            <div class="is-flex">
+              <div style={{ width: '60%' }}>
+                <div>
+                  {
+                    makeClassificationPlot(
+                      currentBreaksInfo(),
+                      statSummary,
+                      classificationPlotOption(),
+                    )
+                  }
+                </div>
+                <div>
+                  { makeColoredBucketPlot(currentBreaksInfo()) }
+                </div>
+              </div>
+              <div style={{ width: '40%', 'text-align': 'left', padding: '2em' }}>
+                <div style={{ 'flex-grow': 1 }}>
+                  <p class="label is-marginless">{ LL().ClassificationPanel.palette() }</p>
+                  <DropdownMenu
+                    id={'dropdown-palette-name'}
+                    style={{ width: '220px' }}
+                    entries={availablePalettes}
+                    defaultEntry={availablePalettes[0]}
+                    onChange={(value) => {
+                      setPaletteName(value);
+                      updateClassificationParameters();
+                    }}
+                  />
+                </div>
+                <br />
+                <div class="control">
+                  <label class="label">
+                    <input
+                      type="checkbox"
+                      checked={ isPaletteReversed() }
+                      onChange={(e) => {
+                        setIsPaletteReversed(e.target.checked);
+                        updateClassificationParameters();
+                      }}
+                    />
+                    { LL().ClassificationPanel.reversePalette() }
+                  </label>
+                </div>
+                <br />
+                <div class="control">
+                  <label class="label">
+                    <input
+                      type="checkbox"
+                      checked={ classificationPlotOption().mean }
+                      onChange={(e) => {
+                        setClassificationPlotOption({
+                          ...classificationPlotOption(),
+                          mean: e.target.checked,
+                        });
+                      }}
+                    />
+                    { LL().ClassificationPanel.displayMean() }
+                  </label>
+                </div>
+                <div class="control">
+                  <label class="label">
+                    <input
+                      type="checkbox"
+                      checked={ classificationPlotOption().median }
+                      onChange={(e) => {
+                        setClassificationPlotOption({
+                          ...classificationPlotOption(),
+                          median: e.target.checked,
+                        });
+                      }}
+                    />
+                    { LL().ClassificationPanel.displayMedian() }
+                  </label>
+                </div>
+                <div class="control">
+                  <label class="label">
+                    <input
+                      type="checkbox"
+                      checked={ classificationPlotOption().sd }
+                      onChange={(e) => {
+                        setClassificationPlotOption({
+                          ...classificationPlotOption(),
+                          sd: e.target.checked,
+                        });
+                      }}
+                    />
+                    { LL().ClassificationPanel.displayStdDev() }
+                  </label>
+                </div>
+              </div>
             </div>
             <Show when={missingValues > 0}>
               <p class="label">{ LL().ClassificationPanel.missingValues(missingValues) }</p>

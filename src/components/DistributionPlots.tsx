@@ -2,10 +2,12 @@
 import * as Plot from '@observablehq/plot';
 import type { Plot as PlotType } from '@observablehq/plot';
 
+// Helpers
+import { useI18nContext } from '../i18n/i18n-solid';
+
 // D3 and math helpers
 import d3 from '../helpers/d3-custom';
 import {
-  getBandwidth,
   extent,
   lowerQuartile,
   lowerWhisker,
@@ -14,7 +16,141 @@ import {
   upperWhisker,
 } from '../helpers/math';
 
-export default function makeDistributionPlot(values: number[]): (SVGSVGElement & PlotType) {
+// Types / Interfaces / Enums
+import { type ClassificationParameters } from '../global';
+
+export function makeColoredBucketPlot(
+  classifParam: ClassificationParameters,
+): ((SVGSVGElement | HTMLElement) & PlotType) {
+  const colors = classifParam.reversePalette
+    ? classifParam.palette.colors.slice().reverse()
+    : classifParam.palette.colors;
+  const colorNbIndiv = classifParam.entitiesByClass
+    .map((n, i) => ({
+      color: colors[i],
+      nb: n,
+    }));
+
+  return Plot.plot({
+    x: { ticks: false },
+    y: { axis: false },
+    margin: 10,
+    height: 60,
+    marks: [
+      Plot.rect(
+        colorNbIndiv,
+        {
+          fill: 'color',
+          x1: (d, i) => i * 10,
+          x2: (d, i) => i * 10 + 10,
+          y1: 0,
+          y2: 10,
+        },
+      ),
+      Plot.rect(
+        colorNbIndiv,
+        {
+          fill: 'white',
+          x1: (d, i) => i * 10 + 3,
+          x2: (d, i) => i * 10 + 7,
+          y1: 2.5,
+          y2: 7.5,
+        },
+      ),
+      Plot.text(
+        colorNbIndiv,
+        {
+          text: 'nb',
+          x: (d, i) => i * 10 + 5,
+          textAnchor: 'middle',
+          frameAnchor: 'middle',
+          fontSize: 16,
+        },
+      ),
+    ],
+  });
+}
+
+export function makeClassificationPlot(
+  classifParam: ClassificationParameters,
+  statSummary: {
+    median: number;
+    mean: number;
+    maximum: number;
+    minimum: number;
+    standardDeviation: number;
+    population: number
+  },
+  show: {
+    mean: boolean,
+    median: boolean,
+    sd: boolean,
+  },
+): ((SVGSVGElement | HTMLElement) & PlotType) {
+  const { LL } = useI18nContext();
+  const minmax = [
+    classifParam.breaks[0],
+    classifParam.breaks[classifParam.breaks.length - 1],
+  ];
+  const colors = classifParam.reversePalette
+    ? classifParam.palette.colors.slice().reverse()
+    : classifParam.palette.colors;
+  const breaksData = [];
+  for (let i = 0; i < classifParam.breaks.length - 1; i++) { // eslint-disable-line no-plusplus
+    breaksData.push({
+      x1: classifParam.breaks[i],
+      x2: classifParam.breaks[i + 1],
+      y: classifParam.entitiesByClass[i] / (classifParam.breaks[i + 1] - classifParam.breaks[i]),
+      count: classifParam.entitiesByClass[i],
+      color: colors[i],
+    });
+  }
+
+  return Plot.plot({
+    height: 200,
+    marginBottom: 20,
+    x: {
+      domain: minmax,
+    },
+    y: {
+      nice: false,
+      grid: true,
+      ticks: false,
+    },
+    marks: [
+      Plot.rectY(breaksData, {
+        x1: (d) => d.x1,
+        x2: (d) => d.x2,
+        y: (d) => d.y,
+        fill: (d) => d.color,
+        channels: {
+          [LL().ClassificationPanel.count()]: (d) => d.count,
+        },
+        tip: {
+          format: {
+            [LL().ClassificationPanel.count()]: true,
+            fill: false,
+            y: false,
+            x: false,
+          },
+        },
+      }),
+      show.mean
+        ? Plot.ruleX([statSummary.mean], { stroke: 'red' })
+        : null,
+      show.median
+        ? Plot.ruleX([statSummary.median], { stroke: 'green' })
+        : null,
+      show.sd
+        ? Plot.ruleX([statSummary.mean - statSummary.standardDeviation, statSummary.mean + statSummary.standardDeviation], { stroke: 'grey' })
+        : null,
+      Plot.ruleY([0]),
+      Plot.ruleX([minmax[0]]),
+    ],
+  });
+}
+
+export function makeDistributionPlot(values: number[]): ((SVGSVGElement | HTMLElement) & PlotType) {
   const boxPlotSize = 20; // 20 %
   const rawDataSize = 14; // 15 %
   const rawDataOffset = 5; // 5 %
@@ -146,7 +282,12 @@ export default function makeDistributionPlot(values: number[]): (SVGSVGElement &
 
   // The actual plot
   return Plot.plot({
+    height: 260,
     insetLeft: 10,
+    marginBottom: 20,
+    marginRight: 15,
+    marginTop: 10,
+    marginLeft: 25,
     marks: [
       Plot.ruleY([0]),
       histFreqX,
@@ -163,10 +304,5 @@ export default function makeDistributionPlot(values: number[]): (SVGSVGElement &
       domain: d3.nice(...valuesExtent, 10),
       label: null,
     },
-    marginBottom: 20,
-    marginRight: 15,
-    marginTop: 10,
-    marginLeft: 25,
-    height: 320,
   });
 }

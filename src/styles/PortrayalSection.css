@@ -1,17 +1,16 @@
 .portrayal-section__portrayal-selection > ul {
     list-style: none;
-    padding: 0;
     margin: 2em 0.5em;
 }
 
 .portrayal-section__portrayal-selection > ul > li {
     border: solid 1px grey;
-    padding: 0.6em;
+    padding: 0.25em;
 }
 
 .portrayal-section__portrayal-selection > ul > li.selected {
-    border: solid 2px grey;
-    box-shadow: inset 4px 4px 25px rgba(0, 128, 0, 0.54), inset -4px -4px 25px rgba(0, 128, 0, 0.54);
+    border: solid 1px #505050;
+    box-shadow: inset 4px 4px 25px rgba(69, 255, 69, 0.54), inset -4px -4px 25px rgba(0, 128, 0, 0.54);
 }
 
 .mini-button {

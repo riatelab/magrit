@@ -38,7 +38,7 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
   const colors = getColors(
     layer.rendererParameters.palette.name,
     layer.rendererParameters.classes,
-    layer.rendererParameters.palette.reversed,
+    layer.rendererParameters.reversePalette,
   ) as string[]; // this can't be undefined because we checked it above
 
   if (!colors) {
@@ -136,7 +136,7 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
   const colors = getColors(
     layer.rendererParameters.palette.name,
     layer.rendererParameters.classes,
-    layer.rendererParameters.palette.reversed,
+    layer.rendererParameters.reversePalette,
   ) as string[]; // this can't be undefined because we checked it above
 
   if (!colors) {

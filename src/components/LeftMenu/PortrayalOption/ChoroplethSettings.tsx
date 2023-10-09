@@ -195,6 +195,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
     palette: defaultPal,
     nodataColor: defaultNoDataColor,
     entitiesByClass: [],
+    reversePalette: false,
   } as ClassificationParameters);
 
   const makePortrayal = () => {
@@ -220,6 +221,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
             palette: defaultPal,
             nodataColor: defaultNoDataColor,
             entitiesByClass: [],
+            reversePalette: false,
           } as ClassificationParameters);
         }}>
           <For each={collectTargetFields()}>
@@ -247,6 +249,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
               palette: defaultPal,
               nodataColor: defaultNoDataColor,
               entitiesByClass: [],
+              reversePalette: false,
             } as ClassificationParameters);
           }}
         />
@@ -264,6 +267,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
               palette: defaultPal,
               nodataColor: defaultNoDataColor,
               entitiesByClass: [],
+              reversePalette: false,
             } as ClassificationParameters);
           }}
         />
@@ -281,6 +285,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
               palette: defaultPal,
               nodataColor: defaultNoDataColor,
               entitiesByClass: [],
+              reversePalette: false,
             } as ClassificationParameters);
           }}
         />
@@ -298,6 +303,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
               palette: defaultPal,
               nodataColor: defaultNoDataColor,
               entitiesByClass: [],
+              reversePalette: false,
             } as ClassificationParameters);
           }}
         />

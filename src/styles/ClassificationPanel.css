@@ -38,3 +38,8 @@
 .modal-window.classification-panel svg[class*='plot'] {
     border: solid 0.5px silver;
 }
+
+#dropdown-palette-name .dropdown-content {
+    height: 30vh;
+    overflow-y: auto;
+}

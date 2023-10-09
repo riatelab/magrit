@@ -785,6 +785,26 @@ type RootTranslation = {
 		 */
 		howManyStdDev: string
 		/**
+		 * P​a​l​e​t​t​e
+		 */
+		palette: string
+		/**
+		 * R​e​v​e​r​s​e​ ​p​a​l​e​t​t​e
+		 */
+		reversePalette: string
+		/**
+		 * D​i​s​p​l​a​y​ ​m​e​a​n
+		 */
+		displayMean: string
+		/**
+		 * D​i​s​p​l​a​y​ ​m​e​d​i​a​n
+		 */
+		displayMedian: string
+		/**
+		 * D​i​s​p​l​a​y​ ​s​t​a​n​d​a​r​d​ ​d​e​v​i​a​t​i​o​n
+		 */
+		displayStdDev: string
+		/**
 		 * L​o​g​a​r​i​t​h​m​i​c​ ​s​c​a​l​e
 		 */
 		logarithmicScale: string
@@ -800,6 +820,10 @@ type RootTranslation = {
 		 * {​{​O​n​e​ ​f​e​a​t​u​r​e​ ​w​i​t​h​o​u​t​ ​d​a​t​a​|​?​?​ ​f​e​a​t​u​r​e​ ​w​i​t​h​o​u​t​ ​d​a​t​a​}​}
 		 */
 		missingValues: string
+		/**
+		 * F​e​a​t​u​r​e​s​ ​p​e​r​ ​c​l​a​s​s
+		 */
+		count: string
 	}
 }
 
@@ -1574,6 +1598,26 @@ export type TranslationFunctions = {
 		 */
 		howManyStdDev: () => LocalizedString
 		/**
+		 * Palette
+		 */
+		palette: () => LocalizedString
+		/**
+		 * Reverse palette
+		 */
+		reversePalette: () => LocalizedString
+		/**
+		 * Display mean
+		 */
+		displayMean: () => LocalizedString
+		/**
+		 * Display median
+		 */
+		displayMedian: () => LocalizedString
+		/**
+		 * Display standard deviation
+		 */
+		displayStdDev: () => LocalizedString
+		/**
 		 * Logarithmic scale
 		 */
 		logarithmicScale: () => LocalizedString
@@ -1589,6 +1633,10 @@ export type TranslationFunctions = {
 		 * {{One feature without data|?? feature without data}}
 		 */
 		missingValues: (arg0: number | string | boolean) => LocalizedString
+		/**
+		 * Features per class
+		 */
+		count: () => LocalizedString
 	}
 }
 

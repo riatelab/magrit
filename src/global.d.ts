@@ -236,6 +236,8 @@ interface ClassificationParameters {
   nodataColor: string,
   // Entities by class
   entitiesByClass: number[],
+  // Whether to reverse the palette or not
+  reversePalette: boolean,
 }
 
 export interface ProportionalSymbolsParameters {

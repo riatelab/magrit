@@ -80,7 +80,7 @@ The left menu is:
 }
 
 /* MapConfiguration section of the left menu */
-#map-configuration__projection-dropdown {
+#map-configuration__projection-dropdown .dropdown-content {
     max-height: 50vh;
     overflow-y: scroll;
 }

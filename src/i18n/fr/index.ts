@@ -230,10 +230,16 @@ const fr = {
     meanPositionBoundary: 'Limite de la classe',
     amplitude: 'Amplitude',
     howManyStdDev: 'écart-types',
+    palette: 'Palette de couleurs',
+    reversePalette: 'Inverser la palette',
+    displayMean: 'Afficher la moyenne',
+    displayMedian: 'Afficher la médiane',
+    displayStdDev: 'Afficher l\'écart-type',
     logarithmicScale: 'Échelle logarithmique',
     breaksInput: 'Saisir les limites de classes',
     validate: 'Valider',
     missingValues: '{{ Une entité sans données | ?? entités sans données }}',
+    count: 'Entités par classe',
   },
 } satisfies BaseTranslation;
 

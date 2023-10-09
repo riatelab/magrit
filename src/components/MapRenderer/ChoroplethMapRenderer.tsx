@@ -23,11 +23,14 @@ export function choroplethPolygonRenderer(
   const rendererParameters = layerDescription.rendererParameters as ClassificationParameters;
   const Cls = getClassifier(ClassificationMethod.manual);
   const classifier = new Cls(null, null, rendererParameters.breaks);
-  const colors = rendererParameters.palette.colors as string[];
+  const colors = rendererParameters.palette.colors.slice() as string[];
   const fieldName = rendererParameters.variable as string;
   const noDataColor = rendererParameters.nodataColor as string;
 
-  console.log(rendererParameters.breaks, colors, fieldName, noDataColor);
+  console.log('rendererParameters', rendererParameters);
+  if (rendererParameters.reversePalette) {
+    colors.reverse();
+  }
 
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
@@ -75,9 +78,13 @@ export function choroplethPointRenderer(
   const rendererParameters = layerDescription.rendererParameters as ClassificationParameters;
   const Cls = getClassifier(ClassificationMethod.manual);
   const classifier = new Cls(null, null, rendererParameters.breaks);
-  const colors = rendererParameters.palette.colors as string[];
+  const colors = rendererParameters.palette.colors.slice() as string[];
   const fieldName = rendererParameters.variable as string;
   const noDataColor = rendererParameters.nodataColor as string;
+
+  if (rendererParameters.reversePalette) {
+    colors.reverse();
+  }
 
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
@@ -125,9 +132,13 @@ export function choroplethLineRenderer(
   const rendererParameters = layerDescription.rendererParameters as ClassificationParameters;
   const Cls = getClassifier(ClassificationMethod.manual);
   const classifier = new Cls(null, null, rendererParameters.breaks);
-  const colors = rendererParameters.palette.colors as string[];
+  const colors = rendererParameters.palette.colors.slice() as string[];
   const fieldName = rendererParameters.variable as string;
   const noDataColor = rendererParameters.nodataColor as string;
+
+  if (rendererParameters.reversePalette) {
+    colors.reverse();
+  }
 
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden

@@ -230,10 +230,16 @@ const en = {
     meanPositionBoundary: 'Class boundary',
     amplitude: 'Amplitude',
     howManyStdDev: 'standard deviations',
+    palette: 'Palette',
+    reversePalette: 'Reverse palette',
+    displayMean: 'Display mean',
+    displayMedian: 'Display median',
+    displayStdDev: 'Display standard deviation',
     logarithmicScale: 'Logarithmic scale',
     breaksInput: 'Enter class limits',
     validate: 'Validate',
     missingValues: '{{ One feature without data | ?? feature without data }}',
+    count: 'Features per class',
   },
 } satisfies BaseTranslation;
 
