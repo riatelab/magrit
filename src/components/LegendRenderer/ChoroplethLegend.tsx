@@ -1,20 +1,38 @@
+// Import from solid-js
 import {
-  For, JSX, onMount,
+  createEffect,
+  For, JSX, onMount, Show,
 } from 'solid-js';
+
+// Import from other packages
 import { getColors } from 'dicopal';
 
+// Helpers
+import { useI18nContext } from '../../i18n/i18n-solid';
+
+// Stores
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+
+// Sub-components and helpers for legend rendering
 import {
+  contextMenuLegend,
   makeLegendSubtitle,
   makeLegendTitle,
   makeLegendNote,
   makeRectangleBox,
   computeRectangleBox,
   bindMouseEnterLeave,
-  bindDragBehavior, getTextSize,
+  bindDragBehavior,
+  getTextSize,
 } from './common.tsx';
 
 // Import some type descriptions
-import { LayerDescription, Orientation } from '../../global.d';
+import {
+  type ClassificationParameters,
+  type LayerDescription,
+  Orientation,
+  RenderVisibility,
+} from '../../global.d';
 
 const defaultSpacing = 5;
 
@@ -28,17 +46,21 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
   if (!layer.rendererParameters) {
     throw new Error('Classification attribute is not defined - this should not happen');
   }
-  if (!layer.rendererParameters.palette) {
+  const rendererParameters = layer.rendererParameters as ClassificationParameters;
+
+  if (!rendererParameters.palette) {
     throw new Error('Classification.palette attribute is not defined - this should not happen');
   }
   if (!layer.legend) {
     throw new Error('Legend attribute is not defined - this should not happen');
   }
 
+  const { LL } = useI18nContext();
+
   const colors = getColors(
-    layer.rendererParameters.palette.name,
-    layer.rendererParameters.classes,
-    layer.rendererParameters.reversePalette,
+    rendererParameters.palette.name,
+    rendererParameters.classes,
+    rendererParameters.reversePalette,
   ) as string[]; // this can't be undefined because we checked it above
 
   if (!colors) {
@@ -57,63 +79,84 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
   // const totalLegendWidth = layer.legend.boxWidth + layer.legend.boxSpacing + 30;
 
   let refElement: SVGElement;
-  onMount(() => {
+
+  const bindElementsLegend = () => {
     computeRectangleBox(refElement);
     bindMouseEnterLeave(refElement);
     bindDragBehavior(refElement, layer);
     refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
+  };
+
+  // onMount(() => {
+  //   bindElementsLegend();
+  // });
+
+  createEffect(() => {
+    if (refElement && layer.visible && layer.legend.visible) {
+      bindElementsLegend();
+    }
   });
 
-  console.log(
-    getTextSize(
-      layer.legend.title.text,
-      layer.legend.title.fontSize,
-      layer.legend.title.fontFamily,
-    ),
-  );
+  // console.log(
+  //   getTextSize(
+  //     layer.legend.title.text,
+  //     layer.legend.title.fontSize,
+  //     layer.legend.title.fontFamily,
+  //   ),
+  // );
 
-  return <g
-    ref={refElement}
-    class="legend choropleth"
-    transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
-    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
-  >
-    { makeRectangleBox() }
-    { makeLegendTitle(layer.legend.title) }
-    { makeLegendSubtitle(layer.legend.subtitle) }
-    { makeLegendNote(layer.legend.note) }
-    <g class="legend-content">
-      <For each={colors.toReversed()}>
-        {
-          (color, i) => <rect
-            fill={color}
-            x={0}
-            y={distanceToTop + i() * boxHeightAndSpacing}
-            rx={layer.legend.boxCornerRadius}
-            ry={layer.legend.boxCornerRadius}
-            width={layer.legend.boxWidth}
-            height={layer.legend.boxHeight}
-          />
-        }
-      </For>
-      <For each={layer.rendererParameters.breaks}>
-        {
-          (value, i) => <text
-            x={layer.legend.boxWidth + layer.legend.boxSpacing}
-            y={distanceToTop + i() * (layer.legend.boxHeight + layer.legend.boxSpacing)}
-            font-size={layer.legend.labels.fontSize}
-            font-family={layer.legend.labels.fontFamily}
-            font-color={layer.legend.labels.fontColor}
-            font-style={layer.legend.labels.fontStyle}
-            font-weight={layer.legend.labels.fontWeight}
-            style={{ 'user-select': 'none' }}
-            text-anchor="start"
-            alignment-baseline="middle"
-          >{ value }</text>
-        }
-      </For>
+  return <Show when={
+    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
+    || (layer.visible && layer.legend.visible)
+  }>
+    <g
+      ref={refElement}
+      class="legend choropleth"
+      transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
+      visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        contextMenuLegend(e, layer.id, LL);
+      } }
+    >
+      { makeRectangleBox() }
+      { makeLegendTitle(layer.legend.title) }
+      { makeLegendSubtitle(layer.legend.subtitle) }
+      { makeLegendNote(layer.legend.note) }
+      <g class="legend-content">
+        <For each={colors.toReversed()}>
+          {
+            (color, i) => <rect
+              fill={color}
+              x={0}
+              y={distanceToTop + i() * boxHeightAndSpacing}
+              rx={layer.legend.boxCornerRadius}
+              ry={layer.legend.boxCornerRadius}
+              width={layer.legend.boxWidth}
+              height={layer.legend.boxHeight}
+            />
+          }
+        </For>
+        <For each={layer.rendererParameters.breaks}>
+          {
+            (value, i) => <text
+              x={layer.legend.boxWidth + layer.legend.boxSpacing}
+              y={distanceToTop + i() * (layer.legend.boxHeight + layer.legend.boxSpacing)}
+              font-size={layer.legend.labels.fontSize}
+              font-family={layer.legend.labels.fontFamily}
+              font-color={layer.legend.labels.fontColor}
+              font-style={layer.legend.labels.fontStyle}
+              font-weight={layer.legend.labels.fontWeight}
+              style={{ 'user-select': 'none' }}
+              text-anchor="start"
+              alignment-baseline="middle"
+            >{ value }</text>
+          }
+        </For>
+      </g>
     </g>
-  </g>;
+  </Show>;
 }
 
 function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
@@ -126,21 +169,24 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
   if (!layer.rendererParameters) {
     throw new Error('Classification attribute is not defined - this should not happen');
   }
-  if (!layer.rendererParameters.palette) {
+  const rendererParameters = layer.rendererParameters as ClassificationParameters;
+
+  if (!rendererParameters.palette) {
     throw new Error('Classification.palette attribute is not defined - this should not happen');
   }
   if (!layer.legend) {
     throw new Error('Legend attribute is not defined - this should not happen');
   }
 
+  const { LL } = useI18nContext();
   const colors = getColors(
-    layer.rendererParameters.palette.name,
-    layer.rendererParameters.classes,
-    layer.rendererParameters.reversePalette,
+    rendererParameters.palette.name,
+    rendererParameters.classes,
+    rendererParameters.reversePalette,
   ) as string[]; // this can't be undefined because we checked it above
 
   if (!colors) {
-    throw new Error(`Could not get colors for scheme ${layer.rendererParameters.palette.name}`);
+    throw new Error(`Could not get colors for scheme ${rendererParameters.palette.name}`);
   }
 
   // We need to compute the position of:
@@ -184,55 +230,76 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
     + heightLegendLabels;
 
   let refElement: SVGElement;
-  onMount(() => {
+
+  const bindElementsLegend = () => {
     computeRectangleBox(refElement);
     bindMouseEnterLeave(refElement);
     bindDragBehavior(refElement, layer);
     refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
+  };
+
+  // onMount(() => {
+  //   bindElementsLegend();
+  // });
+
+  createEffect(() => {
+    if (refElement && layer.visible && layer.legend.visible) {
+      bindElementsLegend();
+    }
   });
 
-  return <g
-    ref={refElement}
-    class="legend choropleth"
-    transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
-    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
-  >
-    { makeRectangleBox() }
-    { makeLegendTitle(layer.legend.title, [0, 0]) }
-    { makeLegendSubtitle(layer.legend.subtitle, [0, 0]) }
-    { makeLegendNote(layer.legend.note, [0, distanceNoteToTop]) }
-    <g class="legend-content" pointer-events={'none'}>
-      <For each={colors}>
-        {
-          (color, i) => <rect
-            fill={color}
-            x={i() * (layer.legend.boxWidth + layer.legend.boxSpacing)}
-            y={distanceBoxesToTop}
-            rx={layer.legend.boxCornerRadius}
-            ry={layer.legend.boxCornerRadius}
-            width={layer.legend.boxWidth}
-            height={layer.legend.boxHeight}
-          />
-        }
-      </For>
-      <For each={layer.rendererParameters.breaks}>
-        {
-          (value, i) => <text
-            x={(i() * (layer.legend.boxWidth + layer.legend.boxSpacing)) - 10}
-            y={distanceLabelsToTop}
-            font-size={layer.legend.labels.fontSize}
-            font-family={layer.legend.labels.fontFamily}
-            font-color={layer.legend.labels.fontColor}
-            font-style={layer.legend.labels.fontStyle}
-            font-weight={layer.legend.labels.fontWeight}
-            style={{ 'user-select': 'none' }}
-            text-anchor="start"
-            alignment-baseline="middle"
-          >{ value }</text>
-        }
-      </For>
+  return <Show when={
+    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
+    || (layer.visible && layer.legend.visible)
+  }>
+    <g
+      ref={refElement}
+      class="legend choropleth"
+      transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
+      visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        contextMenuLegend(e, layer.id, LL);
+      } }
+    >
+      { makeRectangleBox() }
+      { makeLegendTitle(layer.legend.title, [0, 0]) }
+      { makeLegendSubtitle(layer.legend.subtitle, [0, 0]) }
+      { makeLegendNote(layer.legend.note, [0, distanceNoteToTop]) }
+      <g class="legend-content" pointer-events={'none'}>
+        <For each={colors}>
+          {
+            (color, i) => <rect
+              fill={color}
+              x={i() * (layer.legend.boxWidth + layer.legend.boxSpacing)}
+              y={distanceBoxesToTop}
+              rx={layer.legend.boxCornerRadius}
+              ry={layer.legend.boxCornerRadius}
+              width={layer.legend.boxWidth}
+              height={layer.legend.boxHeight}
+            />
+          }
+        </For>
+        <For each={layer.rendererParameters.breaks}>
+          {
+            (value, i) => <text
+              x={(i() * (layer.legend.boxWidth + layer.legend.boxSpacing)) - 10}
+              y={distanceLabelsToTop}
+              font-size={layer.legend.labels.fontSize}
+              font-family={layer.legend.labels.fontFamily}
+              font-color={layer.legend.labels.fontColor}
+              font-style={layer.legend.labels.fontStyle}
+              font-weight={layer.legend.labels.fontWeight}
+              style={{ 'user-select': 'none' }}
+              text-anchor="start"
+              alignment-baseline="middle"
+            >{ value }</text>
+          }
+        </For>
+      </g>
     </g>
-  </g>;
+  </Show>;
 }
 
 export default function legendChoropleth(layer: LayerDescription): JSX.Element {

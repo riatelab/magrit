@@ -32,6 +32,8 @@ import ClassificationPanel from './components/Modals/ClassificationPanel.tsx';
 import { HeaderBarApp } from './components/Headers.tsx';
 import ExampleDataModal from './components/Modals/ExampleDatasetModal.tsx';
 // import ReloadPrompt from './components/ReloadPrompt.tsx';
+import ContextMenu from './components/ContextMenu.tsx';
+import ModalWithChildren from './components/Modals/ModalWithChildren.tsx';
 
 // Stores
 import { classificationPanelStore } from './store/ClassificationPanelStore';
@@ -49,6 +51,8 @@ import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore'
 import { tableWindowStore } from './store/TableWindowStore';
 import { applicationSettingsStore } from './store/ApplicationSettingsStore';
 import { datasetCatalogStore } from './store/DatasetCatalogStore';
+import { modalWithChildrenStore } from './store/ModalWithChildrenStore';
+import { contextMenuStore, resetContextMenuStore } from './store/ContextMenuStore';
 
 // Types and enums
 import { ResizeBehavior } from './global.d';
@@ -433,7 +437,7 @@ const AppPage: () => JSX.Element = () => {
     globalThis.db.projects.clear();
   });
 
-  return <>
+  return <div onClick={ () => { resetContextMenuStore(); } }>
     <HeaderBarApp />
     <main class="is-fullhd">
       <LeftMenu />
@@ -444,6 +448,11 @@ const AppPage: () => JSX.Element = () => {
       <Transition name="slide-fade">
         <Show when={modalStore.show}>
           <DefaultModal />
+        </Show>
+        <Show when={modalWithChildrenStore.show}>
+          <ModalWithChildren>
+            { modalWithChildrenStore.content }
+          </ModalWithChildren>
         </Show>
         <Show when={niceAlertStore.show}>
           <NiceAlert />
@@ -461,11 +470,14 @@ const AppPage: () => JSX.Element = () => {
           <ExampleDataModal />
         </Show>
       </Transition>
+      <Show when={contextMenuStore.show}>
+        <ContextMenu />
+      </Show>
     </main>
     <Toaster />
     <OverlayDrop />
     {/* <ReloadPrompt /> */}
-  </>;
+  </div>;
 };
 
 export default AppPage;

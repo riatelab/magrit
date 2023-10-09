@@ -19,7 +19,6 @@ import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { LayerDescription } from '../../global';
-// import { unproxify } from '../../helpers/common';
 import { redrawPaths } from '../../helpers/geo';
 
 // Stores
@@ -31,7 +30,7 @@ import { setTableWindowStore } from '../../store/TableWindowStore';
 import { mapStore, setMapStore } from '../../store/MapStore';
 import { setFieldTypingModalStore } from '../../store/FieldTypingModalStore';
 
-// Other components / sub-components
+// Other components / subcomponents
 import LayerSettings from '../Modals/LayerSettings.tsx';
 
 // Styles
@@ -143,7 +142,10 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
     },
     escapeKey: 'cancel',
   });
-  render(() => <LayerSettings id={ id } LL={ LL } />, document.querySelector('.modal-card-body')!);
+  render(
+    () => <LayerSettings id={ id } LL={ LL } />,
+    document.querySelector('.modal-card-body')!,
+  );
 };
 
 const onClickTyping = (id: string) => {

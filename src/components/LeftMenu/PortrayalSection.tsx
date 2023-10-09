@@ -61,6 +61,8 @@ export default function PortrayalSection(): JSX.Element {
 
   onMount(() => { console.log('PortrayalSection mounted'); });
 
+  // Todo: this should be reactive instead of unmounting
+  //   in "LeftMenu"
   return <div class="portrayal-section">
     <DropdownMenu
       id={'portrayal-section__portrayal-dropdown'}

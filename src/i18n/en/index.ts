@@ -241,6 +241,17 @@ const en = {
     missingValues: '{{ One feature without data | ?? feature without data }}',
     count: 'Features per class',
   },
+  Legend: {
+    ContextMenu: {
+      Edit: 'Edit',
+      Hide: 'Hide',
+      Up: 'Up',
+      Down: 'Down',
+    },
+    Modal: {
+      Title: 'Legend settings',
+    },
+  },
 } satisfies BaseTranslation;
 
 export default en;

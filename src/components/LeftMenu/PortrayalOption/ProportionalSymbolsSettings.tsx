@@ -1,6 +1,6 @@
 // Imports from solid-js
 import {
-  createEffect, createSignal, For, JSX,
+  createEffect, createMemo, createSignal, For, JSX,
 } from 'solid-js';
 
 // Imports from other packages
@@ -19,13 +19,13 @@ import ResultNameInput from './ResultNameInput.tsx';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 
 // Types / Interfaces / Enums
-import {
+import type {
   GeoJSONFeatureCollection,
   LayerDescription,
-  ProportionalSymbolsColorMode,
   ProportionalSymbolsParameters,
-  ProportionalSymbolsSymbolType, RepresentationType,
+  RepresentationType,
 } from '../../../global.d';
+import { ProportionalSymbolsColorMode, ProportionalSymbolsSymbolType } from '../../../global.d';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -110,37 +110,38 @@ export default function ProportionalSymbolsSettings(
 ): JSX.Element {
   const { LL } = useI18nContext();
 
-  const layerDescription = layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId);
+  const layerDescription = createMemo(() => layersDescriptionStore.layers
+    .find((l) => l.id === props.layerId)!);
 
-  if (!layerDescription) {
-    throw Error('Unexpected Error: Layer not found');
-  }
+  // if (!layerDescription) {
+  //   throw Error('Unexpected Error: Layer not found');
+  // }
 
-  const targetFields = layerDescription
-    .fields?.filter((variable) => variable.type === 'stock');
+  const targetFields = createMemo(() => layerDescription()
+    .fields?.filter((variable) => variable.type === 'stock'));
 
-  if (!targetFields || targetFields.length === 0) {
-    throw Error('Unexpected Error: No stock field found');
-  }
+  // if (!targetFields || targetFields.length === 0) {
+  //   throw Error('Unexpected Error: No stock field found');
+  // }
 
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal<string>(targetFields[0].name);
+  ] = createSignal<string>(targetFields()[0].name);
 
-  // Collect the values of the target variable (only those that are numbers)
-  let values = layerDescription.data.features
+  // Reactive variable that contains the values of the target variable
+  const values = createMemo(() => layerDescription().data.features
     .map((feature) => feature.properties[targetVariable()])
     .filter((value) => isNumber(value))
-    .map((value) => +value) as number[];
+    .map((value) => +value) as number[]);
 
-  let maxValues = max(values);
+  // Reactive variable that contains the max value of the target variable
+  const maxValues = createMemo(() => max(values()));
 
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>(`ProportionalSymbols_${layerDescription.name}`);
+  ] = createSignal<string>(`ProportionalSymbols_${layerDescription().name}`);
   const [
     modeColor,
     setModeColor,
@@ -156,28 +157,22 @@ export default function ProportionalSymbolsSettings(
   const [
     refValueForSymbolSize,
     setRefValueForSymbolSize,
-  ] = createSignal<number>(maxValues);
+  ] = createSignal<number>(maxValues());
   const [
     colorOrColors,
     setColorOrColors,
   ] = createSignal<string | [string, string]>('#fefefe');
 
-  // We want to change 'values' only if the target variable changes
+  // We need to update the value of refValueForSymbolSize when
+  // the targetVariable changes (which changes the max value)
   createEffect(() => {
-    values = layerDescription.data.features
-      .map((f) => f.properties[targetVariable()])
-      .filter((d) => isNumber(d))
-      .map((d) => +d) as number[];
-
-    maxValues = max(values);
-
     setRefValueForSymbolSize(maxValues);
   });
 
   const makePortrayal = () => {
     console.log('makePortrayal');
     onClickValidate(
-      layerDescription.id,
+      layerDescription().id,
       targetVariable(),
       refSymbolSize(),
       refValueForSymbolSize(),
@@ -194,7 +189,7 @@ export default function ProportionalSymbolsSettings(
         <select onChange={ (ev) => {
           setTargetVariable(ev.target.value);
         }}>
-          <For each={targetFields}>
+          <For each={targetFields()}>
             { (variable) => <option value={ variable.name }>{ variable.name }</option> }
           </For>
         </select>

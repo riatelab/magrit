@@ -825,6 +825,32 @@ type RootTranslation = {
 		 */
 		count: string
 	}
+	Legend: {
+		ContextMenu: {
+			/**
+			 * E​d​i​t
+			 */
+			Edit: string
+			/**
+			 * H​i​d​e
+			 */
+			Hide: string
+			/**
+			 * U​p
+			 */
+			Up: string
+			/**
+			 * D​o​w​n
+			 */
+			Down: string
+		}
+		Modal: {
+			/**
+			 * L​e​g​e​n​d​ ​s​e​t​t​i​n​g​s
+			 */
+			Title: string
+		}
+	}
 }
 
 export type TranslationFunctions = {
@@ -1637,6 +1663,32 @@ export type TranslationFunctions = {
 		 * Features per class
 		 */
 		count: () => LocalizedString
+	}
+	Legend: {
+		ContextMenu: {
+			/**
+			 * Edit
+			 */
+			Edit: () => LocalizedString
+			/**
+			 * Hide
+			 */
+			Hide: () => LocalizedString
+			/**
+			 * Up
+			 */
+			Up: () => LocalizedString
+			/**
+			 * Down
+			 */
+			Down: () => LocalizedString
+		}
+		Modal: {
+			/**
+			 * Legend settings
+			 */
+			Title: () => LocalizedString
+		}
 	}
 }
 

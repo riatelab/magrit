@@ -14,7 +14,6 @@ import { tableWindowStore, setTableWindowStore } from '../../store/TableWindowSt
 import '../../styles/TableWindow.css';
 import d3 from '../../helpers/d3-custom';
 import { clickLinkFromDataUrl } from '../../helpers/exports';
-import { setModalStore } from '../../store/ModalStore';
 
 export default function TableWindow(): JSX.Element {
   const { LL } = useI18nContext();

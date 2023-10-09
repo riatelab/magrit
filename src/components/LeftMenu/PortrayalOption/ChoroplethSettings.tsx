@@ -1,5 +1,7 @@
 // Import from solid-js
-import { createEffect, createSignal, For } from 'solid-js';
+import {
+  createEffect, createMemo, createSignal, For,
+} from 'solid-js';
 import { FaSolidCircleCheck } from 'solid-icons/fa';
 
 // Imports from other packages
@@ -130,59 +132,24 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
   const { LL } = useI18nContext();
 
   // The description of the layer for which we are creating the settings menu
-  const collectLayerDescription = () => layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId);
-
-  let layerDescription = collectLayerDescription();
-
-  // This should never happen...
-  if (!layerDescription) {
-    throw Error('Unexpected Error: Layer not found');
-  }
-
-  const collectTargetFields = () => layerDescription
-    .fields?.filter((variable) => variable.type === VariableType.ratio);
+  const layerDescription = createMemo(() => layersDescriptionStore.layers
+    .find((l) => l.id === props.layerId)!);
 
   // The fields of the layer that are of type 'ratio'
   // (i.e. the fields that can be used for the choropleth)
-  let targetFields = collectTargetFields();
-
-  // This should never happen either...
-  if (!targetFields || targetFields.length === 0) {
-    throw Error('Unexpected Error: No ratio field found');
-  }
+  const targetFields = createMemo(() => layerDescription()
+    .fields?.filter((variable) => variable.type === VariableType.ratio));
 
   // Signals for the current component:
   // the target variable, the target layer name and the classification parameters
-  const [targetVariable, setTargetVariable] = createSignal<string>(targetFields[0].name);
-  const [newLayerName, setNewLayerName] = createSignal<string>(`Choropleth_${layerDescription.name}`);
-
-  const collectValues = () => layerDescription.data.features
-    .map((f) => f.properties[targetVariable()])
-    .filter((d) => isNumber(d))
-    .map((d) => +d) as number[];
+  const [targetVariable, setTargetVariable] = createSignal<string>(targetFields()[0].name);
+  const [newLayerName, setNewLayerName] = createSignal<string>(`Choropleth_${layerDescription().name}`);
 
   // Collect the values of the target variable (only those that are numbers)
-  let values = collectValues();
-
-  // We need to track changes to the current layerDescription
-  // (and so the target fields and values)
-  // if the user changes the target variable or changes the types
-  // of the fields of the layer while this menu is open.
-  // Todo: maybe we should just unmount the component when this pane is collapsed?
-  //  (so changing the type of the field, on another pane, wont mess with portrayal settings)
-  createEffect(() => {
-    console.log('inside choroplethSettings createEffect');
-    layerDescription = collectLayerDescription();
-    if (!layerDescription) {
-      throw Error('Unexpected Error: Layer not found');
-    }
-    targetFields = collectTargetFields();
-    if (!targetFields || targetFields.length === 0) {
-      throw Error('Unexpected Error: No ratio field found');
-    }
-    values = collectValues();
-  });
+  const values = createMemo(() => layerDescription().data.features
+    .map((f) => f.properties[targetVariable()])
+    .filter((d) => isNumber(d))
+    .map((d) => +d) as number[]);
 
   const [
     targetClassification,
@@ -191,7 +158,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
     variable: targetVariable(), // eslint-disable-line solid/reactivity
     method: ClassificationMethod.quantiles,
     classes: defaultNumberOfClasses,
-    breaks: quantile(values, { nb: defaultNumberOfClasses, precision: null }),
+    breaks: quantile(values(), { nb: defaultNumberOfClasses, precision: null }),
     palette: defaultPal,
     nodataColor: defaultNoDataColor,
     entitiesByClass: [],
@@ -217,14 +184,14 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
             variable: targetVariable(), // eslint-disable-line solid/reactivity
             method: ClassificationMethod.quantiles,
             classes: defaultNumberOfClasses,
-            breaks: quantile(values, { nb: defaultNumberOfClasses, precision: null }),
+            breaks: quantile(values(), { nb: defaultNumberOfClasses, precision: null }),
             palette: defaultPal,
             nodataColor: defaultNoDataColor,
             entitiesByClass: [],
             reversePalette: false,
           } as ClassificationParameters);
         }}>
-          <For each={collectTargetFields()}>
+          <For each={targetFields()}>
             { (variable) => <option value={ variable.name }>{ variable.name }</option> }
           </For>
         </select>
@@ -245,7 +212,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
               variable: targetVariable(), // eslint-disable-line solid/reactivity
               method: ClassificationMethod.quantiles,
               classes: defaultNumberOfClasses,
-              breaks: quantile(values, { nb: defaultNumberOfClasses, precision: null }),
+              breaks: quantile(values(), { nb: defaultNumberOfClasses, precision: null }),
               palette: defaultPal,
               nodataColor: defaultNoDataColor,
               entitiesByClass: [],
@@ -263,7 +230,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
               variable: targetVariable(), // eslint-disable-line solid/reactivity
               method: ClassificationMethod.equalInterval,
               classes: defaultNumberOfClasses,
-              breaks: equal(values, { nb: defaultNumberOfClasses, precision: null }),
+              breaks: equal(values(), { nb: defaultNumberOfClasses, precision: null }),
               palette: defaultPal,
               nodataColor: defaultNoDataColor,
               entitiesByClass: [],
@@ -281,7 +248,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
               variable: targetVariable(), // eslint-disable-line solid/reactivity
               method: ClassificationMethod.q6,
               classes: defaultNumberOfClasses,
-              breaks: q6(values, { nb: defaultNumberOfClasses, precision: null }),
+              breaks: q6(values(), { nb: defaultNumberOfClasses, precision: null }),
               palette: defaultPal,
               nodataColor: defaultNoDataColor,
               entitiesByClass: [],
@@ -299,7 +266,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
               variable: targetVariable(), // eslint-disable-line solid/reactivity
               method: ClassificationMethod.jenks,
               classes: defaultNumberOfClasses,
-              breaks: jenks(values, { nb: defaultNumberOfClasses, precision: null }),
+              breaks: jenks(values(), { nb: defaultNumberOfClasses, precision: null }),
               palette: defaultPal,
               nodataColor: defaultNoDataColor,
               entitiesByClass: [],
@@ -317,7 +284,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
               show: true,
               layerName: newLayerName(),
               variableName: targetVariable(),
-              series: layerDescription.data.features.map((f) => f.properties[targetVariable()]),
+              series: layerDescription().data.features.map((f) => f.properties[targetVariable()]),
               nClasses: 6,
               colorScheme: defaultColorScheme,
               invertColorScheme: false,

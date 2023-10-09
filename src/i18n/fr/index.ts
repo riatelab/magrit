@@ -241,6 +241,17 @@ const fr = {
     missingValues: '{{ Une entité sans données | ?? entités sans données }}',
     count: 'Entités par classe',
   },
+  Legend: {
+    ContextMenu: {
+      Edit: 'Éditer',
+      Hide: 'Masquer',
+      Up: 'Monter',
+      Down: 'Descendre',
+    },
+    Modal: {
+      Title: 'Paramètres de la légende',
+    },
+  },
 } satisfies BaseTranslation;
 
 export default fr;

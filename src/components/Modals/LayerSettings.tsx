@@ -1,9 +1,15 @@
-import { Accessor, JSX } from 'solid-js';
+import { Accessor, JSX, useContext } from 'solid-js';
 import { TranslationFunctions } from '../../i18n/i18n-types';
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
-import '../../styles/LayerSettings.css';
-import { LayerDescription } from '../../global';
 import { createDropShadow } from '../MapRenderer/FilterDropShadow';
+
+// Stores
+import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+
+// Types / Interfaces
+import type { LayerDescription } from '../../global';
+
+// Styles
+import '../../styles/LayerSettings.css';
 
 function makeOnChangeFillColor(props: LayerDescription): () => void {
   return function onChangeFillColor() {

@@ -155,6 +155,7 @@ export default function MapZone(): JSX.Element {
           'background-color': makeHexColorWithAlpha(mapStore.backgroundColor, mapStore.backgroundColorOpacity),
         }}
         class="map-zone__map"
+        onContextMenu={(e) => e.preventDefault()}
       >
         <defs>
           <For each={ layersDescriptionStore.layers.toReversed() }>

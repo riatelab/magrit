@@ -1,6 +1,16 @@
-import { JSX } from 'solid-js';
+import { type Accessor, type JSX } from 'solid-js';
+import { render } from 'solid-js/web';
+
+// Stores
+import { setContextMenuStore } from '../../store/ContextMenuStore';
 import { setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
-import { LayerDescription, LegendTextElement } from '../../global';
+import { setModalStore } from '../../store/ModalStore';
+
+import LegendSettings from '../Modals/LegendSettings.tsx';
+
+// Types / interfaces / enums
+import type { LayerDescription, LegendTextElement } from '../../global';
+import type { TranslationFunctions } from '../../i18n/i18n-types';
 
 export function makeLegendTitle(
   props: LegendTextElement,
@@ -138,6 +148,10 @@ export function bindDragBehavior(refElement: SVGElement, layer: LayerDescription
   };
 
   refElement.addEventListener('mousedown', (e) => {
+    // Dragging only occurs when the user
+    // clicks with the main mouse button (usually the left one).
+    // If the mousedown is triggered by another button, we return immediately.
+    if (e.button > 1) return;
     e.stopPropagation();
     // isDragging = true;
     x = e.clientX;
@@ -160,7 +174,11 @@ export function bindDragBehavior(refElement: SVGElement, layer: LayerDescription
     outerSvg.addEventListener('mousemove', moveElement);
     outerSvg.addEventListener('mouseup', deselectElement);
     // Cursor style
+    // First change the cursor of the refElement group to default value
+    refElement.style.cursor = null; // eslint-disable-line no-param-reassign
+    // Then change the cursor of the parent SVG element to grabbing
     outerSvg.style.cursor = 'grabbing'; // eslint-disable-line no-param-reassign
+
     // Maybe we should disable pointer events on the refElement group ?
     // For now we will keep them enabled (so that we can keep
     // the green color of the legend box when the mouse is over it when dragging)
@@ -219,4 +237,54 @@ export function getTextSize(
   // Remove the element from the DOM
   elem.remove();
   return { width: bb.width, height: bb.height };
+}
+
+export function contextMenuLegend(
+  event: MouseEvent,
+  layerId: string,
+  LL: Accessor<TranslationFunctions>,
+): void {
+  console.log('context menu legend');
+  setContextMenuStore({
+    show: true,
+    position: [event.clientX, event.clientY],
+    entries: [
+      {
+        label: LL().Legend.ContextMenu.Edit(),
+        callback: () => {
+          setModalStore({
+            show: true,
+            content: null,
+            title: LL().Legend.Modal.Title(),
+            confirmCallback: () => {},
+            cancelCallback: () => {},
+            escapeKey: 'cancel',
+          });
+          render(() => <LegendSettings layerId={layerId} LL={LL} />, document.querySelector('.modal-card-body')!);
+        },
+      },
+      {
+        label: LL().Legend.ContextMenu.Hide(),
+        callback: () => {
+          setLayersDescriptionStore(
+            'layers',
+            (l) => l.id === layerId,
+            'legend',
+            { visible: false },
+          );
+        },
+      },
+      {
+        type: 'divider',
+      },
+      {
+        label: LL().Legend.ContextMenu.Up(),
+        callback: () => { console.log('Up'); },
+      },
+      {
+        label: LL().Legend.ContextMenu.Down(),
+        callback: () => { console.log('Down'); },
+      },
+    ],
+  });
 }
