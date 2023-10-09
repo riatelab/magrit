@@ -22,7 +22,7 @@ The left menu is:
 .left-menu__title {
     font-size: 1.1rem;
     font-weight: 800;
-    padding: 10px;
+    padding: 0.5rem;
     display: flex;
     justify-content: space-between;
     border: solid 1px black;
@@ -36,7 +36,7 @@ The left menu is:
 
 .left-menu__title-inner svg {
     margin-right: 0.8rem;
-    transform: scale(1.5);
+    transform: scale(1.2);
 }
 
 .expanded-collapse-menu {

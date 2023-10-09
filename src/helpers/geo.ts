@@ -100,6 +100,7 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
     // Remove the transform attribute from the elements on which it was defined
     g.removeAttribute('transform');
     // Redraw the paths
+    // TODO: use pointRadius for layers of points
     g.querySelectorAll('path').forEach((p) => {
       p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
     });

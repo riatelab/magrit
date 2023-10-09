@@ -9,6 +9,7 @@ import { getColors } from 'dicopal';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { round } from '../../helpers/math';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -121,9 +122,14 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
       } }
     >
       { makeRectangleBox() }
-      { makeLegendTitle(layer.legend.title) }
-      { makeLegendSubtitle(layer.legend.subtitle) }
-      { makeLegendNote(layer.legend.note) }
+      { makeLegendTitle(layer.legend.title, [0, 0]) }
+      { makeLegendSubtitle(layer.legend.subtitle, [0, 0]) }
+      {
+        makeLegendNote(
+          layer.legend.note,
+          [0, distanceToTop + (colors.length + 1) * boxHeightAndSpacing],
+        )
+      }
       <g class="legend-content">
         <For each={colors.toReversed()}>
           {
@@ -138,10 +144,10 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
             />
           }
         </For>
-        <For each={layer.rendererParameters.breaks}>
+        <For each={layer.rendererParameters.breaks.toReversed()}>
           {
             (value, i) => <text
-              x={layer.legend.boxWidth + layer.legend.boxSpacing}
+              x={layer.legend.boxWidth + 5} // layer.legend.boxWidth + layer.legend.boxSpacing
               y={distanceToTop + i() * (layer.legend.boxHeight + layer.legend.boxSpacing)}
               font-size={layer.legend.labels.fontSize}
               font-family={layer.legend.labels.fontFamily}
@@ -151,7 +157,7 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
               style={{ 'user-select': 'none' }}
               text-anchor="start"
               alignment-baseline="middle"
-            >{ value }</text>
+            >{ round(value, layer.legend!.roundDecimals) }</text>
           }
         </For>
       </g>
@@ -294,7 +300,7 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
               style={{ 'user-select': 'none' }}
               text-anchor="start"
               alignment-baseline="middle"
-            >{ value }</text>
+            >{ round(value, layer.legend!.roundDecimals) }</text>
           }
         </For>
       </g>

@@ -32,7 +32,7 @@ export default function LeftMenu(): JSX.Element {
 
     <div class="left-menu__title" onClick={() => setExpandedSection(1)}>
       <div class="left-menu__title-inner">
-        <TbFileImport />
+        <TbFileImport style={{ height: '1.1em' }} />
         { LL().LeftMenu.Import() }
       </div>
       <span class={`chevron-button ${expandedSection() === 1 ? 'is-active' : ''}`}>

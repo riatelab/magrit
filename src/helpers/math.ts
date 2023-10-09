@@ -22,7 +22,8 @@ export const Mtan = Math.tan;
  * @param {number} [decimalPlaces=2]
  * @returns {number}
  */
-export function round(num: number, decimalPlaces = 2): number {
+export function round(num: number, decimalPlaces: number | null): number {
+  if (decimalPlaces === null) return num;
   const exponent = decimalPlaces || 0;
   const p = 10 ** exponent;
   return Math.round((num * p) * (1 + Number.EPSILON)) / p;

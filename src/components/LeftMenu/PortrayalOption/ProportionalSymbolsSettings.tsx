@@ -80,7 +80,7 @@ function onClickValidate(
     id: uuidv4(),
     name: newLayerName,
     data: newData,
-    type: referenceLayerDescription.type,
+    type: 'point',
     fields: referenceLayerDescription.fields,
     renderer: 'proportionalSymbols' as RepresentationType,
     visible: true,
