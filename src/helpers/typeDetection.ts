@@ -40,33 +40,47 @@ export default function detectTypeField(
     }
   }
 
-  const filteredValues = dt.filter((v) => v !== null);
-  const hasMissingValues = filteredValues.length !== dt.length;
+  const filteredValues = values.filter((v) => v !== null);
+  const filteredDatatypes = dt.filter((v) => v !== null);
+  const hasMissingValues = filteredDatatypes.length !== dt.length;
 
-  if (filteredValues.every((d) => d === DataType.number)) {
+  if (filteredDatatypes.every((d) => d === DataType.number)) {
     // All the (non-missing) values are of type 'number'
     dataType = DataType.number;
+
+    if (filteredValues.every((v) => v === filteredValues[0])) {
+      // If all the values are the exact same value, lets say for now
+      // that this is an unknown variable
+      variableType = VariableType.unknown;
     // We check if all the values are integers
-    if (values.every((v) => Number.isInteger(v))) {
+    } else if (filteredValues.every((v) => Number.isInteger(v))) {
       // We check if all the values are strictly different
-      if (values.every((v) => values.indexOf(v) === values.lastIndexOf(v))) {
+      if (
+        filteredValues.every((v) => filteredValues.indexOf(v) === filteredValues.lastIndexOf(v))
+      ) {
         // If all the values are strictly different (and if there is no missing value in the field),
         // we probably have an identifier... but this could be a stock or ratio too.
         variableType = hasMissingValues ? VariableType.stock : VariableType.identifier;
+      } else if (filteredValues.length > 15 && (new Set(filteredValues)).size < 10) {
+        // If there are less than 10 different values
+        // (and more than 15 values in total),
+        // we consider this variable as categorical
+        variableType = VariableType.categorical;
       } else {
         // If all the (non-missing) values are not strictly different, we may have a stock
         variableType = VariableType.stock;
       }
-    } else {
-      // All the values are numbers but not all of them are integers.. so might be a ratio
+    } else { // All the values are not integers
+      // All the values are numbers, all the numbers are not the same,
+      // they are not all integers.. so might be a ratio
       variableType = VariableType.ratio;
     }
-  } else if (filteredValues.every((d) => d === DataType.boolean)) {
+  } else if (filteredDatatypes.every((d) => d === DataType.boolean)) {
     // All the (non-missing) values are of type 'boolean'...
     dataType = DataType.boolean;
     // ... so we consider this field as categorical
     variableType = VariableType.categorical;
-  } else if (filteredValues.every((d) => d === DataType.string)) {
+  } else if (filteredDatatypes.every((d) => d === DataType.string)) {
     // All the (non-missing) values are of type 'string'
     dataType = DataType.string;
     if (values.every((v) => values.indexOf(v) === values.lastIndexOf(v))) {
