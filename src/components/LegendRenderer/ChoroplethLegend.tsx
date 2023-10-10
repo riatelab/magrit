@@ -1,6 +1,6 @@
 // Import from solid-js
 import {
-  createEffect,
+  createEffect, createMemo,
   For, JSX, onMount, Show,
 } from 'solid-js';
 
@@ -16,7 +16,7 @@ import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Sub-components and helpers for legend rendering
 import {
-  contextMenuLegend,
+  triggerContextMenuLegend,
   makeLegendSubtitle,
   makeLegendTitle,
   makeLegendNote,
@@ -24,7 +24,7 @@ import {
   computeRectangleBox,
   bindMouseEnterLeave,
   bindDragBehavior,
-  getTextSize,
+  getTextSize, makeLegendSettings,
 } from './common.tsx';
 
 // Import some type descriptions
@@ -68,16 +68,20 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
     throw new Error(`Could not get colors for scheme ${layer.rendererParameters.palette.name}`);
   }
 
-  let distanceToTop = 0;
-  if (layer.legend.title) {
-    distanceToTop += +(layer.legend.title.fontSize.replace('px', '')) + 10;
-  }
-  if (layer.legend.subtitle) {
-    distanceToTop += +(layer.legend.subtitle.fontSize.replace('px', '')) + 10;
-  }
-  const boxHeightAndSpacing = layer.legend.boxHeight + layer.legend.boxSpacing;
-  // const totalLegendHeight = distanceToTop + colors.length * boxHeightAndSpacing + 20;
-  // const totalLegendWidth = layer.legend.boxWidth + layer.legend.boxSpacing + 30;
+  const heightTitle = createMemo(() => +(layer.legend.title.fontSize.replace('px', '')) + 10);
+
+  const distanceToTop = createMemo(() => {
+    let vDistanceToTop = 0;
+    if (layer.legend.title) {
+      vDistanceToTop += heightTitle();
+    }
+    if (layer.legend.subtitle && layer.legend.subtitle.text) {
+      vDistanceToTop += +(layer.legend.subtitle.fontSize.replace('px', '')) + 10;
+    }
+    return vDistanceToTop;
+  });
+
+  const boxHeightAndSpacing = createMemo(() => layer.legend.boxHeight + layer.legend.boxSpacing);
 
   let refElement: SVGElement;
 
@@ -88,13 +92,21 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
     refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
   };
 
-  // onMount(() => {
-  //   bindElementsLegend();
-  // });
+  onMount(() => {
+    bindElementsLegend();
+  });
 
   createEffect(() => {
+    console.log('createEffect');
     if (refElement && layer.visible && layer.legend.visible) {
-      bindElementsLegend();
+      computeRectangleBox(
+        refElement,
+        distanceToTop(),
+        boxHeightAndSpacing(),
+        heightTitle(),
+        layer.legend.roundDecimals,
+        layer.legend?.boxWidth,
+      );
     }
   });
 
@@ -115,19 +127,20 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
       class="legend choropleth"
       transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
       visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+      ondblclick={(e) => { console.log(e); makeLegendSettings(layer.id, LL); }}
       onContextMenu={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        contextMenuLegend(e, layer.id, LL);
+        triggerContextMenuLegend(e, layer.id, LL);
       } }
     >
       { makeRectangleBox() }
       { makeLegendTitle(layer.legend.title, [0, 0]) }
-      { makeLegendSubtitle(layer.legend.subtitle, [0, 0]) }
+      { makeLegendSubtitle(layer.legend.subtitle, [0, heightTitle()]) }
       {
         makeLegendNote(
           layer.legend.note,
-          [0, distanceToTop + (colors.length + 1) * boxHeightAndSpacing],
+          [0, distanceToTop() + (colors.length + 1) * boxHeightAndSpacing()],
         )
       }
       <g class="legend-content">
@@ -136,7 +149,7 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
             (color, i) => <rect
               fill={color}
               x={0}
-              y={distanceToTop + i() * boxHeightAndSpacing}
+              y={distanceToTop() + i() * boxHeightAndSpacing()}
               rx={layer.legend.boxCornerRadius}
               ry={layer.legend.boxCornerRadius}
               width={layer.legend.boxWidth}
@@ -147,13 +160,18 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
         <For each={layer.rendererParameters.breaks.toReversed()}>
           {
             (value, i) => <text
-              x={layer.legend.boxWidth + 5} // layer.legend.boxWidth + layer.legend.boxSpacing
-              y={distanceToTop + i() * (layer.legend.boxHeight + layer.legend.boxSpacing)}
+              x={layer.legend.boxWidth + defaultSpacing}
+              y={
+                distanceToTop()
+                + i() * (layer.legend!.boxHeight + layer.legend!.boxSpacing)
+                - layer.legend!.boxSpacing / 2
+              }
               font-size={layer.legend.labels.fontSize}
               font-family={layer.legend.labels.fontFamily}
               font-color={layer.legend.labels.fontColor}
               font-style={layer.legend.labels.fontStyle}
               font-weight={layer.legend.labels.fontWeight}
+              fill={layer.legend.labels.fontColor}
               style={{ 'user-select': 'none' }}
               text-anchor="start"
               alignment-baseline="middle"
@@ -205,35 +223,43 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
     layer.legend.title.text,
     layer.legend.title.fontSize,
     layer.legend.title.fontFamily,
-  ).height + defaultSpacing;
+  ).height;
 
-  const heightSubtitle = layer.legend.subtitle
-    ? getTextSize(
-      layer.legend.subtitle.text,
-      layer.legend.subtitle.fontSize,
-      layer.legend.subtitle.fontFamily,
-    ).height + defaultSpacing
-    : 0;
+  const heightSubtitle = createMemo(() => (
+    layer.legend.subtitle && layer.legend.subtitle.text
+      ? getTextSize(
+        layer.legend.subtitle.text,
+        layer.legend.subtitle.fontSize,
+        layer.legend.subtitle.fontFamily,
+      ).height + defaultSpacing
+      : 0
+  ));
 
-  const heightBox = layer.legend.boxHeight + defaultSpacing;
+  const heightBox = createMemo(() => layer.legend.boxHeight + defaultSpacing);
 
-  const heightLegendLabels = getTextSize(
+  const heightLegendLabels = createMemo(() => getTextSize(
     '12.75',
     layer.legend.labels.fontSize,
     layer.legend.labels.fontFamily,
-  ).height + defaultSpacing;
+  ).height + defaultSpacing);
 
   // The y-position at which the boxes should be placed
-  const distanceBoxesToTop = heightTitle + heightSubtitle;
+  const distanceBoxesToTop = createMemo(() => heightTitle + heightSubtitle());
 
   // The y-position at which the legend labels should be placed
-  const distanceLabelsToTop = heightTitle + heightSubtitle + heightBox;
+  const distanceLabelsToTop = createMemo(() => heightTitle
+    + heightSubtitle()
+    + heightBox()
+    + defaultSpacing);
 
   // The y-position at which the legend note should be placed
-  const distanceNoteToTop = heightTitle
-    + heightSubtitle
-    + heightBox
-    + heightLegendLabels;
+  const distanceNoteToTop = createMemo(() => distanceLabelsToTop()
+    + heightLegendLabels()
+    + defaultSpacing);
+
+  const distanceToEnd = createMemo(() => (
+    layer.legend!.boxWidth
+    + layer.legend!.boxSpacing) * colors.length);
 
   let refElement: SVGElement;
 
@@ -244,13 +270,21 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
     refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
   };
 
-  // onMount(() => {
-  //   bindElementsLegend();
-  // });
+  onMount(() => {
+    bindElementsLegend();
+  });
 
   createEffect(() => {
     if (refElement && layer.visible && layer.legend.visible) {
-      bindElementsLegend();
+      computeRectangleBox(
+        refElement,
+        heightBox(),
+        heightSubtitle(),
+        distanceBoxesToTop(),
+        distanceLabelsToTop(),
+        distanceNoteToTop(),
+        distanceToEnd(),
+      );
     }
   });
 
@@ -266,20 +300,21 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
       onContextMenu={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        contextMenuLegend(e, layer.id, LL);
+        triggerContextMenuLegend(e, layer.id, LL);
       } }
+      ondblclick={(e) => { console.log(e); makeLegendSettings(layer.id, LL); }}
     >
       { makeRectangleBox() }
       { makeLegendTitle(layer.legend.title, [0, 0]) }
-      { makeLegendSubtitle(layer.legend.subtitle, [0, 0]) }
-      { makeLegendNote(layer.legend.note, [0, distanceNoteToTop]) }
-      <g class="legend-content" pointer-events={'none'}>
+      { makeLegendSubtitle(layer.legend.subtitle, [0, heightTitle + defaultSpacing]) }
+      { makeLegendNote(layer.legend.note, [0, distanceNoteToTop()]) }
+      <g class="legend-content">
         <For each={colors}>
           {
             (color, i) => <rect
               fill={color}
               x={i() * (layer.legend.boxWidth + layer.legend.boxSpacing)}
-              y={distanceBoxesToTop}
+              y={distanceBoxesToTop()}
               rx={layer.legend.boxCornerRadius}
               ry={layer.legend.boxCornerRadius}
               width={layer.legend.boxWidth}
@@ -290,14 +325,18 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
         <For each={layer.rendererParameters.breaks}>
           {
             (value, i) => <text
-              x={(i() * (layer.legend.boxWidth + layer.legend.boxSpacing)) - 10}
-              y={distanceLabelsToTop}
+              x={
+                (i() * (layer.legend.boxWidth + layer.legend.boxSpacing))
+                - layer.legend.boxSpacing / 2
+              }
+              y={distanceLabelsToTop()}
               font-size={layer.legend.labels.fontSize}
               font-family={layer.legend.labels.fontFamily}
               font-color={layer.legend.labels.fontColor}
               font-style={layer.legend.labels.fontStyle}
               font-weight={layer.legend.labels.fontWeight}
-              style={{ 'user-select': 'none' }}
+              fill={layer.legend.labels.fontColor}
+              style={{ 'user-select': 'none', 'text-anchor': 'middle' }}
               text-anchor="start"
               alignment-baseline="middle"
             >{ round(value, layer.legend!.roundDecimals) }</text>
@@ -309,7 +348,11 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
 }
 
 export default function legendChoropleth(layer: LayerDescription): JSX.Element {
-  return layer.legend.orientation === Orientation.vertical
-    ? choroplethVerticalLegend(layer)
-    : choroplethHorizontalLegend(layer);
+  return <>
+    {
+      layer.legend.orientation === Orientation.vertical
+        ? choroplethVerticalLegend(layer)
+        : choroplethHorizontalLegend(layer)
+    }
+  </>;
 }

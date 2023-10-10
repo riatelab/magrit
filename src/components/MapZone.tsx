@@ -142,11 +142,18 @@ export default function MapZone(): JSX.Element {
   onMount(() => {
     // svg = d3.select(svgElem);
     // svg.call(zoom);
-    zoom.apply(null, [d3.select(svgElem)]);
+    // The SVG element as a d3 selection
+    const sel = d3.select(svgElem);
+    // Apply the zoom behavior to the SVG element
+    zoom.apply(null, [sel]);
+    // Remove
+    sel.on('dblclick.zoom', (e: MouseEvent) => {
+      console.log(e);
+    });
   });
 
   return <div class="map-zone">
-    <div class="map-zone__inner">
+    <div class="map-zone__inner" onDblClick={(e) => { console.log(e); }}>
       <svg
         ref={svgElem}
         width={mapStore.mapDimensions.width}

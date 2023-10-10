@@ -40,7 +40,7 @@ const getDefaultRenderingParams = (geomType: string) => {
     return {
       renderer: 'default',
       strokeColor: '#9d9d9d',
-      strokeWidth: '0.5px',
+      strokeWidth: '0.4px',
       strokeOpacity: 1,
       fillColor: color,
       fillOpacity: 0.85,

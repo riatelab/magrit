@@ -218,8 +218,8 @@ export default function ProportionalSymbolsSettings(
           type="number"
           class="number"
           min="1"
-          max="999"
-          step="0.1"
+          max="200"
+          step="1"
           value={ refSymbolSize() }
           onChange={(ev) => { setRefSymbolSize(+ev.target.value); }}
         />

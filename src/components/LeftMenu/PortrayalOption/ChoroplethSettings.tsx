@@ -20,6 +20,8 @@ import { applicationSettingsStore } from '../../../store/ApplicationSettingsStor
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { noop } from '../../../helpers/classification';
 import { isNumber } from '../../../helpers/common';
+import { Mmin } from '../../../helpers/math';
+import d3 from '../../../helpers/d3-custom';
 
 // Subcomponents
 import ResultNameInput from './ResultNameInput.tsx';
@@ -51,8 +53,6 @@ interface ChoroplethSettingsProps {
 // eslint-disable-next-line prefer-destructuring
 const defaultColorScheme = applicationSettingsStore.defaultColorScheme;
 const defaultNoDataColor = '#ffffff';
-const defaultNumberOfClasses = 6;
-const defaultPal = getPalette(defaultColorScheme, defaultNumberOfClasses) as Palette;
 
 function onClickValidate(
   referenceLayerId: string,
@@ -68,10 +68,6 @@ function onClickValidate(
     throw Error('Unexpected Error: Reference layer not found');
   }
 
-  // if (!pal) {
-  //   throw Error('Unexpected Error: Palette not found');
-  // }
-
   // Prepare the layer description for the new layer
   const newLayerDescription = {
     id: uuidv4(),
@@ -82,7 +78,7 @@ function onClickValidate(
     renderer: 'choropleth' as RepresentationType,
     visible: true,
     strokeColor: '#000000',
-    strokeWidth: '1px',
+    strokeWidth: '0.4px',
     strokeOpacity: 1,
     // fillColor: '#ffffff',
     fillOpacity: 1,
@@ -97,21 +93,33 @@ function onClickValidate(
         fontStyle: 'normal',
         fontWeight: 'bold',
       } as LegendTextElement,
+      subtitle: {
+        fontSize: '12px',
+        fontFamily: 'Sans-serif',
+        fontColor: '#000000',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+      },
       type: LegendType.choropleth,
       position: [100, 100],
       visible: true,
-      roundDecimals: 2,
+      roundDecimals: 1,
       orientation: Orientation.vertical,
-      boxWidth: 20,
-      boxHeight: 20,
-      boxSpacing: 10,
-      boxCornerRadius: 2,
+      boxWidth: 30,
+      boxHeight: 30,
+      boxSpacing: 5,
+      boxCornerRadius: 20,
       note: {
         text: 'This is a bottom note',
+        fontSize: '11px',
+        fontFamily: 'Sans-serif',
+        fontColor: '#000000',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
       },
       labels: {
-        fontSize: '12px',
-        fontFamily: 'Arial',
+        fontSize: '11px',
+        fontFamily: 'Sans-serif',
         fontColor: '#000000',
         fontStyle: 'normal',
         fontWeight: 'normal',
@@ -151,15 +159,19 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
     .filter((d) => isNumber(d))
     .map((d) => +d) as number[]);
 
+  const numberOfClasses = createMemo(() => Mmin(d3.thresholdSturges(values()), 9));
+
+  const pal = createMemo(() => getPalette(defaultColorScheme, numberOfClasses()) as Palette);
+
   const [
     targetClassification,
     setTargetClassification,
   ] = createSignal<ClassificationParameters>({
     variable: targetVariable(), // eslint-disable-line solid/reactivity
     method: ClassificationMethod.quantiles,
-    classes: defaultNumberOfClasses,
-    breaks: quantile(values(), { nb: defaultNumberOfClasses, precision: null }),
-    palette: defaultPal,
+    classes: numberOfClasses(),
+    breaks: quantile(values(), { nb: numberOfClasses(), precision: null }),
+    palette: pal(),
     nodataColor: defaultNoDataColor,
     entitiesByClass: [],
     reversePalette: false,
@@ -183,9 +195,9 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
           setTargetClassification({
             variable: targetVariable(), // eslint-disable-line solid/reactivity
             method: ClassificationMethod.quantiles,
-            classes: defaultNumberOfClasses,
-            breaks: quantile(values(), { nb: defaultNumberOfClasses, precision: null }),
-            palette: defaultPal,
+            classes: numberOfClasses(),
+            breaks: quantile(values(), { nb: numberOfClasses(), precision: null }),
+            palette: pal(),
             nodataColor: defaultNoDataColor,
             entitiesByClass: [],
             reversePalette: false,
@@ -211,9 +223,9 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
             setTargetClassification({
               variable: targetVariable(), // eslint-disable-line solid/reactivity
               method: ClassificationMethod.quantiles,
-              classes: defaultNumberOfClasses,
-              breaks: quantile(values(), { nb: defaultNumberOfClasses, precision: null }),
-              palette: defaultPal,
+              classes: numberOfClasses(),
+              breaks: quantile(values(), { nb: numberOfClasses(), precision: null }),
+              palette: pal(),
               nodataColor: defaultNoDataColor,
               entitiesByClass: [],
               reversePalette: false,
@@ -229,9 +241,9 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
             setTargetClassification({
               variable: targetVariable(), // eslint-disable-line solid/reactivity
               method: ClassificationMethod.equalInterval,
-              classes: defaultNumberOfClasses,
-              breaks: equal(values(), { nb: defaultNumberOfClasses, precision: null }),
-              palette: defaultPal,
+              classes: numberOfClasses(),
+              breaks: equal(values(), { nb: numberOfClasses(), precision: null }),
+              palette: pal(),
               nodataColor: defaultNoDataColor,
               entitiesByClass: [],
               reversePalette: false,
@@ -247,9 +259,9 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
             setTargetClassification({
               variable: targetVariable(), // eslint-disable-line solid/reactivity
               method: ClassificationMethod.q6,
-              classes: defaultNumberOfClasses,
-              breaks: q6(values(), { nb: defaultNumberOfClasses, precision: null }),
-              palette: defaultPal,
+              classes: 6,
+              breaks: q6(values(), { precision: null }),
+              palette: getPalette(defaultColorScheme, 6) as Palette,
               nodataColor: defaultNoDataColor,
               entitiesByClass: [],
               reversePalette: false,
@@ -265,9 +277,9 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
             setTargetClassification({
               variable: targetVariable(), // eslint-disable-line solid/reactivity
               method: ClassificationMethod.jenks,
-              classes: defaultNumberOfClasses,
-              breaks: jenks(values(), { nb: defaultNumberOfClasses, precision: null }),
-              palette: defaultPal,
+              classes: numberOfClasses(),
+              breaks: jenks(values(), { nb: numberOfClasses(), precision: null }),
+              palette: pal(),
               nodataColor: defaultNoDataColor,
               entitiesByClass: [],
               reversePalette: false,
@@ -285,7 +297,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
               layerName: newLayerName(),
               variableName: targetVariable(),
               series: layerDescription().data.features.map((f) => f.properties[targetVariable()]),
-              nClasses: 6,
+              nClasses: numberOfClasses(),
               colorScheme: defaultColorScheme,
               invertColorScheme: false,
               onCancel: noop,

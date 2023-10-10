@@ -11,7 +11,9 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 import d3 from '../../helpers/d3-custom';
 import { getClassifier } from '../../helpers/classification';
 import { isNumber } from '../../helpers/common';
-import { extent, hasNegative, round } from '../../helpers/math';
+import {
+  extent, hasNegative, Mmin, round,
+} from '../../helpers/math';
 import { makeClassificationPlot, makeColoredBucketPlot, makeDistributionPlot } from '../DistributionPlots.tsx';
 
 // Sub-components
@@ -156,7 +158,7 @@ export default function ClassificationPanel(): JSX.Element {
   const [
     numberOfClasses,
     setNumberOfClasses,
-  ] = createSignal<number>(d3.thresholdSturges(filteredSeries));
+  ] = createSignal<number>(Mmin(d3.thresholdSturges(filteredSeries), 9));
   // - the amplitude chosen by the user for the
   //   current classification method (only if 'standard deviation' is chosen)
   const [
@@ -343,7 +345,7 @@ export default function ClassificationPanel(): JSX.Element {
                 <input
                   class={'input'}
                   type={'number'}
-                  value={6}
+                  value={numberOfClasses()}
                   min={3}
                   max={9}
                   onchange={(event) => {

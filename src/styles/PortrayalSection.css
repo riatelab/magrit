@@ -13,13 +13,28 @@
     box-shadow: inset 4px 4px 25px rgba(69, 255, 69, 0.54), inset -4px -4px 25px rgba(0, 128, 0, 0.54);
 }
 
-.mini-button {
+.portrayal-section .mini-button {
     border: solid 1px transparent;
     width: 19px;
     height: 100%;
     cursor: pointer;
 }
 
-.mini-button.selected {
+.portrayal-section .field {
+    height: 2em;
+}
+
+.portrayal-section .mini-button.selected {
     border: solid 1px grey;
+}
+
+.portrayal-section .field .select {
+    height: 2em;
+    min-width: 133px;
+}
+
+.portrayal-section .field .select select {
+    height: 2em;
+    line-height: 1;
+    width: 100%;
 }

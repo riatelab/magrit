@@ -9,7 +9,7 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/L
 import type { LayerDescription } from '../../global';
 
 // Styles
-import '../../styles/LayerSettings.css';
+import '../../styles/LayerAndLegendSettings.css';
 
 function makeOnChangeFillColor(props: LayerDescription): () => void {
   return function onChangeFillColor() {

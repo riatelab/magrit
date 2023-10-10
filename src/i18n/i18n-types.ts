@@ -849,7 +849,97 @@ type RootTranslation = {
 			 * L​e​g​e​n​d​ ​s​e​t​t​i​n​g​s
 			 */
 			Title: string
+			/**
+			 * L​e​g​e​n​d​ ​t​i​t​l​e
+			 */
+			LegendTitle: string
+			/**
+			 * L​e​g​e​n​d​ ​s​u​b​t​i​t​l​e
+			 */
+			LegendSubtitle: string
+			/**
+			 * L​e​g​e​n​d​ ​n​o​t​e
+			 */
+			LegendNote: string
+			/**
+			 * L​e​g​e​n​d​ ​o​r​i​e​n​t​a​t​i​o​n
+			 */
+			LegendChoroplethOrientation: string
+			/**
+			 * H​o​r​i​z​o​n​t​a​l
+			 */
+			LegendChoroplethOrientationHorizontal: string
+			/**
+			 * V​e​r​t​i​c​a​l
+			 */
+			LegendChoroplethOrientationVertical: string
+			/**
+			 * B​o​x​ ​w​i​d​t​h
+			 */
+			BoxWidth: string
+			/**
+			 * B​o​x​ ​h​e​i​g​h​t
+			 */
+			BoxHeight: string
+			/**
+			 * S​p​a​c​i​n​g​ ​b​e​t​w​e​e​n​ ​b​o​x​e​s
+			 */
+			BoxSpacing: string
+			/**
+			 * B​o​x​ ​c​o​r​n​e​r​ ​r​a​d​i​u​s
+			 */
+			BoxCornerRadius: string
+			/**
+			 * B​o​x​ ​s​t​r​o​k​e​ ​w​i​d​t​h
+			 */
+			BoxStrokeWidth: string
+			/**
+			 * R​o​u​n​d​ ​v​a​l​u​e​s
+			 */
+			RoundDecimals: string
+			/**
+			 * M​o​r​e​ ​o​p​t​i​o​n​s​.​.​.
+			 */
+			MoreOptions: string
 		}
+	}
+	CommonTextElement: {
+		/**
+		 * F​o​n​t​ ​s​i​z​e
+		 */
+		FontSize: string
+		/**
+		 * F​o​n​t​ ​c​o​l​o​r
+		 */
+		FontColor: string
+		/**
+		 * F​o​n​t​ ​f​a​m​i​l​y
+		 */
+		FontFamily: string
+		/**
+		 * F​o​n​t​ ​w​e​i​g​h​t
+		 */
+		FontWeight: string
+		/**
+		 * F​o​n​t​ ​s​t​y​l​e
+		 */
+		FontStyle: string
+		/**
+		 * N​o​r​m​a​l
+		 */
+		Normal: string
+		/**
+		 * B​o​l​d
+		 */
+		Bold: string
+		/**
+		 * I​t​a​l​i​c
+		 */
+		Italic: string
+		/**
+		 * U​n​d​e​r​l​i​n​e
+		 */
+		Underline: string
 	}
 }
 
@@ -1688,7 +1778,97 @@ export type TranslationFunctions = {
 			 * Legend settings
 			 */
 			Title: () => LocalizedString
+			/**
+			 * Legend title
+			 */
+			LegendTitle: () => LocalizedString
+			/**
+			 * Legend subtitle
+			 */
+			LegendSubtitle: () => LocalizedString
+			/**
+			 * Legend note
+			 */
+			LegendNote: () => LocalizedString
+			/**
+			 * Legend orientation
+			 */
+			LegendChoroplethOrientation: () => LocalizedString
+			/**
+			 * Horizontal
+			 */
+			LegendChoroplethOrientationHorizontal: () => LocalizedString
+			/**
+			 * Vertical
+			 */
+			LegendChoroplethOrientationVertical: () => LocalizedString
+			/**
+			 * Box width
+			 */
+			BoxWidth: () => LocalizedString
+			/**
+			 * Box height
+			 */
+			BoxHeight: () => LocalizedString
+			/**
+			 * Spacing between boxes
+			 */
+			BoxSpacing: () => LocalizedString
+			/**
+			 * Box corner radius
+			 */
+			BoxCornerRadius: () => LocalizedString
+			/**
+			 * Box stroke width
+			 */
+			BoxStrokeWidth: () => LocalizedString
+			/**
+			 * Round values
+			 */
+			RoundDecimals: () => LocalizedString
+			/**
+			 * More options...
+			 */
+			MoreOptions: () => LocalizedString
 		}
+	}
+	CommonTextElement: {
+		/**
+		 * Font size
+		 */
+		FontSize: () => LocalizedString
+		/**
+		 * Font color
+		 */
+		FontColor: () => LocalizedString
+		/**
+		 * Font family
+		 */
+		FontFamily: () => LocalizedString
+		/**
+		 * Font weight
+		 */
+		FontWeight: () => LocalizedString
+		/**
+		 * Font style
+		 */
+		FontStyle: () => LocalizedString
+		/**
+		 * Normal
+		 */
+		Normal: () => LocalizedString
+		/**
+		 * Bold
+		 */
+		Bold: () => LocalizedString
+		/**
+		 * Italic
+		 */
+		Italic: () => LocalizedString
+		/**
+		 * Underline
+		 */
+		Underline: () => LocalizedString
 	}
 }
 

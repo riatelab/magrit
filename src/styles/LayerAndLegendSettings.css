@@ -35,4 +35,16 @@ We have two types of "field":
     margin-bottom: unset;
 }
 
+/* Styles for the LegendSettings component */
+.legend-settings__content .field input[type=number] {
+    width: 8em !important;
+}
 
+.legend-settings__content table input[type=number] {
+    width: 5em !important;
+    height: 2em;
+}
+
+.legend-settings__content table tr {
+    height: 3em;
+}

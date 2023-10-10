@@ -25,6 +25,8 @@ export function makeLegendTitle(
         font-size={props.fontSize}
         font-weight={props.fontWeight}
         font-style={props.fontStyle}
+        font-family={props.fontFamily}
+        fill={props.fontColor}
         pointer-events={'none'}
       >
         { props.text }
@@ -46,6 +48,8 @@ export function makeLegendSubtitle(
         font-size={props.fontSize}
         font-weight={props.fontWeight}
         font-style={props.fontStyle}
+        font-family={props.fontFamily}
+        fill={props.fontColor}
         pointer-events={'none'}
       >
         { props.text }
@@ -67,6 +71,8 @@ export function makeLegendNote(
         font-size={props.fontSize}
         font-weight={props.fontWeight}
         font-style={props.fontStyle}
+        font-family={props.fontFamily}
+        fill={props.fontColor}
         pointer-events={'none'}
       >
         { props.text }
@@ -77,9 +83,17 @@ export function makeLegendNote(
 
 export const distanceBoxContent = 10;
 
-export function computeRectangleBox(refElement: SVGElement) {
-  const bbox = refElement.getBBox();
+export function computeRectangleBox(refElement: SVGElement, ...args: any[]) {
+  // First we reset the box to its 0-size so it doesn't interfere with the
+  // computation of the bbox of the refElement group
   const rectangleBoxLegend = refElement.querySelector('.legend-box') as SVGElement;
+  rectangleBoxLegend.setAttribute('width', '0px');
+  rectangleBoxLegend.setAttribute('height', '0px');
+  rectangleBoxLegend.setAttribute('x', '0px');
+  rectangleBoxLegend.setAttribute('y', '0px');
+  // We compute the bbox of the refElement group
+  const bbox = refElement.getBBox();
+  // We set the size of the box to the size of the bbox of the refElement group + a margin
   rectangleBoxLegend.setAttribute('width', `${bbox.width + distanceBoxContent * 2}px`);
   rectangleBoxLegend.setAttribute('height', `${bbox.height + distanceBoxContent * 2}px`);
   rectangleBoxLegend.setAttribute('x', `${bbox.x - distanceBoxContent}px`);
@@ -117,8 +131,8 @@ export function bindDragBehavior(refElement: SVGElement, layer: LayerDescription
   let x = 0;
   let y = 0;
   // let isDragging = false;
-  let outerSvg;
-  let elem;
+  let outerSvg: SVGSVGElement;
+  let elem: HTMLElement;
 
   const moveElement = (e) => {
     const dx = e.clientX - x;
@@ -164,7 +178,7 @@ export function bindDragBehavior(refElement: SVGElement, layer: LayerDescription
     // refElement group even if the mouse is not over it.
     while (true) {
       if (elem.tagName.toLowerCase() === 'svg') {
-        outerSvg = elem;
+        outerSvg = elem as SVGSVGElement;
         break;
       } else {
         elem = elem.parentElement;
@@ -239,7 +253,19 @@ export function getTextSize(
   return { width: bb.width, height: bb.height };
 }
 
-export function contextMenuLegend(
+export function makeLegendSettings(layerId: string, LL: Accessor<TranslationFunctions>) {
+  setModalStore({
+    show: true,
+    content: null,
+    title: LL().Legend.Modal.Title(),
+    confirmCallback: () => {},
+    cancelCallback: () => {},
+    escapeKey: 'cancel',
+  });
+  render(() => <LegendSettings layerId={layerId} LL={LL} />, document.querySelector('.modal-card-body')!);
+}
+
+export function triggerContextMenuLegend(
   event: MouseEvent,
   layerId: string,
   LL: Accessor<TranslationFunctions>,
@@ -252,15 +278,7 @@ export function contextMenuLegend(
       {
         label: LL().Legend.ContextMenu.Edit(),
         callback: () => {
-          setModalStore({
-            show: true,
-            content: null,
-            title: LL().Legend.Modal.Title(),
-            confirmCallback: () => {},
-            cancelCallback: () => {},
-            escapeKey: 'cancel',
-          });
-          render(() => <LegendSettings layerId={layerId} LL={LL} />, document.querySelector('.modal-card-body')!);
+          makeLegendSettings(layerId, LL);
         },
       },
       {
