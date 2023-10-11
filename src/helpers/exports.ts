@@ -1,7 +1,17 @@
+// Import from other packages
 import { topology } from 'topojson-server';
+
+// Stores
+import { mapStore } from '../store/MapStore';
+import { globalStore } from '../store/GlobalStore';
+
+// Helpers
 import { SupportedGeoFileTypes } from './supportedFormats';
 import { convertFromGeoJSON } from './formatConversion';
-import { GeoJSONFeatureCollection } from '../global';
+
+// Types / Interfaces
+import type { GeoJSONFeatureCollection } from '../global';
+import { getTargetSvg, redrawPaths } from './svg';
 
 /**
  * Get the dimensions of the SVG map element.
@@ -95,20 +105,6 @@ function setImageSrc<T extends LoadableImage>(obj: T, src: string): Promise<T> {
 }
 
 /**
- * Get the SVG map element.
- *
- * @returns {SVGElement}
- * @throws {Error} - If the SVG element could not be found.
- */
-const getTargetSvg = () : SVGElement => {
-  const targetSvg = document.querySelector('svg.map-zone__map');
-  if (!targetSvg) {
-    throw new Error('Could not find SVG element');
-  }
-  return targetSvg as SVGElement;
-};
-
-/**
  * Export the current map to an SVG file.
  *
  * @param {string} outputName - The name of the output file.
@@ -122,8 +118,29 @@ export async function exportMapToSvg(
   options: object = {},
 ) {
   const targetSvg = getTargetSvg();
+  // Function to be executed after the map is exported to SVG
+  // (whether it failed or succeeded)
+  // in order to restore various settings
+  const finallyFn = () => {
+    // Restore the projection clip extent and redraw the paths
+    if (clipToViewPort) {
+      globalStore.projection.clipExtent(null);
+      redrawPaths(targetSvg);
+    }
+  };
+  // Set the projection clip extent if needed
+  if (clipToViewPort) {
+    const mapDimensions = getMapDimension(targetSvg);
+    // Apply the clip extent to the projection
+    globalStore.projection.clipExtent([
+      [0, 0],
+      [mapDimensions.width, mapDimensions.height],
+    ]);
+    // Redraw the paths
+    redrawPaths(targetSvg);
+  }
   // eslint-disable-next-line no-param-reassign
-  outputName = cleanOutputName(outputName, 'svg');
+  const outputNameClean = cleanOutputName(outputName, 'svg');
 
   const serializer = new XMLSerializer();
   let source = serializer.serializeToString(targetSvg);
@@ -135,20 +152,19 @@ export async function exportMapToSvg(
     source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
   }
 
-  source = ['<?xml version="1.0" standalone="no"?>\r\n', source].join('');
+  source = `<?xml version="1.0" standalone="no"?>\r\n${source}`;
 
   const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(source)}`;
 
-  console.log(outputName, clipToViewPort, options, targetSvg);
-
-  return clickLinkFromDataUrl(url, outputName)
+  return clickLinkFromDataUrl(url, outputNameClean)
     .then(() => {
       Promise.resolve(true);
     })
     .catch((err) => {
       console.warn('Error while downloading SVG file', err);
       Promise.reject(err);
-    });
+    })
+    .finally(finallyFn);
 }
 
 /**
@@ -167,7 +183,7 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
   document.body.appendChild(targetCanvas);
 
   // eslint-disable-next-line no-param-reassign
-  outputName = cleanOutputName(outputName, 'png');
+  const outputNameClean = cleanOutputName(outputName, 'png');
 
   const mimeType = 'image/png';
 
@@ -214,7 +230,7 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
     return Promise.reject(err);
   }
 
-  return clickLinkFromDataUrl(imgUrl, outputName).then(() => {
+  return clickLinkFromDataUrl(imgUrl, outputNameClean).then(() => {
     targetCanvas.remove();
     return Promise.resolve(true);
   }).catch((err) => {

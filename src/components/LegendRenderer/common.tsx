@@ -28,6 +28,7 @@ export function makeLegendTitle(
         font-family={props.fontFamily}
         fill={props.fontColor}
         pointer-events={'none'}
+        alignment-baseline="hanging"
       >
         { props.text }
       </tspan>
@@ -51,6 +52,7 @@ export function makeLegendSubtitle(
         font-family={props.fontFamily}
         fill={props.fontColor}
         pointer-events={'none'}
+        alignment-baseline="hanging"
       >
         { props.text }
       </tspan>

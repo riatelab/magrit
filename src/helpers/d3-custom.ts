@@ -33,6 +33,7 @@ import {
   geoLength,
   geoGraticule,
   geoPath,
+  geoIdentity,
   // Projections that will be available in the application
   geoNaturalEarth1,
   geoEqualEarth,
@@ -261,6 +262,7 @@ export default {
   geoDistance,
   geoLength,
   geoGraticule,
+  geoIdentity,
   selection,
   select,
   selectAll,

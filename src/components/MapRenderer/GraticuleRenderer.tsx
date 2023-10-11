@@ -1,0 +1,39 @@
+import { For, JSX, Show } from 'solid-js';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { globalStore } from '../../store/GlobalStore';
+import { type LayerDescription, RenderVisibility } from '../../global.d';
+
+export default function graticuleRenderer(layerDescription: LayerDescription): JSX.Element {
+  return <Show when={
+    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
+    || layerDescription.visible
+  }>
+    <g
+      id={layerDescription.name}
+      class="layer graticule"
+      visibility={layerDescription.visible ? undefined : 'hidden'}
+      fill="none"
+      stroke={layerDescription.strokeColor}
+      stroke-width={layerDescription.strokeWidth}
+      stroke-opacity={layerDescription.strokeOpacity}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-dasharray={layerDescription.strokeDasharray}
+      clip-path="url(#clip-sphere)"
+      filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
+    >
+      <For each={layerDescription.data.features}>
+        {
+          (feature) => {
+            const el = <path
+              d={globalStore.pathGenerator(feature)}
+              vector-effect="non-scaling-stroke"
+            />;
+            el.__data__ = feature; // eslint-disable-line no-underscore-dangle
+            return el;
+          }
+        }
+      </For>
+    </g>
+  </Show>;
+}

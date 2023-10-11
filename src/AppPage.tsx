@@ -10,7 +10,6 @@ import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url';
 import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url';
 import { Transition } from 'solid-transition-group';
 import { Toaster } from 'solid-toast';
-import { Dexie } from 'dexie';
 
 // Helpers
 import { useI18nContext } from './i18n/i18n-solid';
@@ -18,6 +17,7 @@ import d3 from './helpers/d3-custom';
 import { clickLinkFromDataUrl } from './helpers/exports';
 import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
 import { round } from './helpers/math';
+import { initDb, storeProject } from './helpers/storage';
 
 // Sub-components
 import FieldTypingModal from './components/Modals/FieldTypingModal.tsx';
@@ -74,21 +74,15 @@ const loadGdal = async (): Promise<Gdal> => initGdalJs({
 
 let timeout: NodeJS.Timeout | null | undefined = null;
 
-globalThis.Dexie = Dexie;
-globalThis.db = new globalThis.Dexie('MagritProjectDb');
-globalThis.db.version(1).stores({
-  projects: '++id, date',
-});
+const db = initDb();
 
 const onBeforeUnloadWindow = async (ev) => {
   // If there is no layer or if
-  // there is only the sphere layer, do nothing
+  // there is only the sphere layer and or the graticule layer,
+  // do nothing
   if (
-    layersDescriptionStore.layers.length < 1
-    || (
-      layersDescriptionStore.layers.length === 1
-      && layersDescriptionStore.layers[0].renderer === 'sphere'
-    )
+    layersDescriptionStore.layers.length <= 2
+    && layersDescriptionStore.layers.every((l) => l.renderer === 'sphere' || l.renderer === 'graticule')
   ) {
     return;
   }
@@ -100,10 +94,9 @@ const onBeforeUnloadWindow = async (ev) => {
     layers,
     map,
   };
-  globalThis.db.projects.add({
-    date: new Date(),
-    data: JSON.parse(JSON.stringify(obj)),
-  });
+
+  await storeProject(db, obj);
+
   // The message is usually ignored in modern browsers
   ev.returnValue = 'Confirm exit ?'; // eslint-disable-line no-param-reassign
 };
@@ -221,8 +214,8 @@ const AppPage: () => JSX.Element = () => {
 
       setMapStore({
         mapDimensions: {
-          width: (width - applicationSettingsStore.leftMenuWidth) * 0.9,
-          height: (height - applicationSettingsStore.headerHeight) * 0.9,
+          width: Math.round((width - applicationSettingsStore.leftMenuWidth) * 0.9),
+          height: Math.round((height - applicationSettingsStore.headerHeight) * 0.9),
         },
       });
     } else if (applicationSettingsStore.resizeBehavior === ResizeBehavior.KeepMapSize) {
@@ -305,9 +298,7 @@ const AppPage: () => JSX.Element = () => {
           >
             <h4>{ LL().Alerts.EmptyProject() }</h4>
           </div>,
-          confirmCallback: () => {
-            createNewProject();
-          },
+          confirmCallback: createNewProject,
           focusOn: 'confirm',
         });
       });
@@ -352,7 +343,7 @@ const AppPage: () => JSX.Element = () => {
           show: true,
           title: LL().AboutPanel.title(),
           escapeKey: 'confirm',
-          content: <>
+          content: () => <>
             <div>
               <p>
                 <b>Version { version }</b>
@@ -415,14 +406,16 @@ const AppPage: () => JSX.Element = () => {
     globalThis.Gdal = await loadGdal();
 
     // ... and store the number of drivers in the global store (we may change this)
-    setGlobalStore({
-      nDrivers: Object.keys(Gdal.drivers.raster).length + Object.keys(Gdal.drivers.vector).length,
-    });
+    // setGlobalStore({
+    //   nDrivers: (
+    //     Object.keys(Gdal.drivers.raster).length
+    //     + Object.keys(Gdal.drivers.vector).length
+    //   ),
+    // });
 
     // Is there a project in the DB ?
-    const project = await globalThis.db.projects.toArray();
+    const project = await db.projects.toArray();
     // If there is a project, propose to reload it
-    // and delete it from the DB
     if (project.length > 0) {
       const { date, data } = project[0];
       setNiceAlertStore({
@@ -434,7 +427,7 @@ const AppPage: () => JSX.Element = () => {
     }
     // We only keep the last project in the DB
     // so at this point we can delete all projects
-    globalThis.db.projects.clear();
+    db.projects.clear();
   });
 
   return <div onClick={ () => { resetContextMenuStore(); } }>

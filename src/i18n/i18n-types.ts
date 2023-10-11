@@ -276,6 +276,46 @@ type RootTranslation = {
 		 * M​a​p​ ​s​k​i​n​ ​e​l​e​m​e​n​t​s
 		 */
 		MapSkinElements: string
+		/**
+		 * S​p​h​e​r​e
+		 */
+		Sphere: string
+		/**
+		 * G​r​a​t​i​c​u​l​e
+		 */
+		Graticule: string
+		/**
+		 * R​e​c​t​a​n​g​l​e
+		 */
+		Rectangle: string
+		/**
+		 * E​l​l​i​p​s​e
+		 */
+		Ellipse: string
+		/**
+		 * L​i​n​e​ ​/​ ​A​r​r​o​w
+		 */
+		Line: string
+		/**
+		 * T​e​x​t
+		 */
+		Text: string
+		/**
+		 * I​m​a​g​e
+		 */
+		Image: string
+		/**
+		 * S​c​a​l​e​ ​b​a​r
+		 */
+		ScaleBar: string
+		/**
+		 * N​o​r​t​h​ ​a​r​r​o​w
+		 */
+		NorthArrow: string
+		/**
+		 * F​r​e​e​ ​d​r​a​w​i​n​g
+		 */
+		FreeDrawing: string
 	}
 	AboutPanel: {
 		/**
@@ -283,7 +323,7 @@ type RootTranslation = {
 		 */
 		title: string
 		/**
-		 * M​a​g​r​i​t​ ​i​s​ ​a​ ​w​e​b​ ​a​p​p​l​i​c​a​t​i​o​n​ ​f​o​r​ ​t​h​e​ ​v​i​s​u​a​l​i​z​a​t​i​o​n​ ​a​n​d​ ​t​h​e​ ​a​n​a​l​y​s​i​s​ ​o​f​ ​g​e​o​s​p​a​t​i​a​l​ ​d​a​t​a​.​ ​I​t​ ​i​s​ ​d​e​v​e​l​o​p​e​d​ ​b​y​ ​t​h​e​ ​U​A​R​ ​R​I​A​T​E​ ​(​C​N​R​S​,​ ​U​n​i​v​e​r​s​i​t​é​ ​P​a​r​i​s​ ​C​i​t​é​)​.
+		 * M​a​g​r​i​t​ ​i​s​ ​a​n​ ​o​p​e​n​ ​s​o​u​r​c​e​ ​W​e​b​ ​a​p​p​l​i​c​a​t​i​o​n​ ​f​o​r​ ​t​h​e​ ​v​i​s​u​a​l​i​z​a​t​i​o​n​ ​a​n​d​ ​t​h​e​ ​a​n​a​l​y​s​i​s​ ​o​f​ ​g​e​o​s​p​a​t​i​a​l​ ​d​a​t​a​.​ ​I​t​ ​i​s​ ​d​e​v​e​l​o​p​e​d​ ​b​y​ ​t​h​e​ ​U​A​R​ ​R​I​A​T​E​ ​(​C​N​R​S​,​ ​U​n​i​v​e​r​s​i​t​é​ ​P​a​r​i​s​ ​C​i​t​é​)​.
 		 */
 		description: string
 		/**
@@ -363,6 +403,10 @@ type RootTranslation = {
 			 * P​r​o​p​o​r​t​i​o​n​a​l​ ​s​y​m​b​o​l​s
 			 */
 			ProportionalSymbols: string
+			/**
+			 * L​a​b​e​l​s
+			 */
+			Labels: string
 			/**
 			 * N​o​ ​p​o​r​t​r​a​y​a​l​ ​f​o​r​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​l​a​y​e​r​ ​-​ ​P​l​e​a​s​e​ ​v​e​r​i​f​y​ ​t​h​e​ ​t​y​p​i​n​g​ ​o​f​ ​t​h​e​ ​f​i​e​l​d​s​ ​o​r​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​l​a​y​e​r
 			 */
@@ -502,6 +546,10 @@ type RootTranslation = {
 		 * C​u​s​t​o​m​ ​C​R​S
 		 */
 		CustomCRS: string
+		/**
+		 * C​l​i​p​ ​S​V​G​ ​t​o​ ​c​u​r​r​e​n​t​ ​e​x​t​e​n​t
+		 */
+		ClipSvgCurrentExtent: string
 	}
 	LayerSettings: {
 		/**
@@ -1205,6 +1253,46 @@ export type TranslationFunctions = {
 		 * Map skin elements
 		 */
 		MapSkinElements: () => LocalizedString
+		/**
+		 * Sphere
+		 */
+		Sphere: () => LocalizedString
+		/**
+		 * Graticule
+		 */
+		Graticule: () => LocalizedString
+		/**
+		 * Rectangle
+		 */
+		Rectangle: () => LocalizedString
+		/**
+		 * Ellipse
+		 */
+		Ellipse: () => LocalizedString
+		/**
+		 * Line / Arrow
+		 */
+		Line: () => LocalizedString
+		/**
+		 * Text
+		 */
+		Text: () => LocalizedString
+		/**
+		 * Image
+		 */
+		Image: () => LocalizedString
+		/**
+		 * Scale bar
+		 */
+		ScaleBar: () => LocalizedString
+		/**
+		 * North arrow
+		 */
+		NorthArrow: () => LocalizedString
+		/**
+		 * Free drawing
+		 */
+		FreeDrawing: () => LocalizedString
 	}
 	AboutPanel: {
 		/**
@@ -1212,7 +1300,7 @@ export type TranslationFunctions = {
 		 */
 		title: () => LocalizedString
 		/**
-		 * Magrit is a web application for the visualization and the analysis of geospatial data. It is developed by the UAR RIATE (CNRS, Université Paris Cité).
+		 * Magrit is an open source Web application for the visualization and the analysis of geospatial data. It is developed by the UAR RIATE (CNRS, Université Paris Cité).
 		 */
 		description: () => LocalizedString
 		/**
@@ -1292,6 +1380,10 @@ export type TranslationFunctions = {
 			 * Proportional symbols
 			 */
 			ProportionalSymbols: () => LocalizedString
+			/**
+			 * Labels
+			 */
+			Labels: () => LocalizedString
 			/**
 			 * No portrayal for the selected layer - Please verify the typing of the fields or select another layer
 			 */
@@ -1431,6 +1523,10 @@ export type TranslationFunctions = {
 		 * Custom CRS
 		 */
 		CustomCRS: () => LocalizedString
+		/**
+		 * Clip SVG to current extent
+		 */
+		ClipSvgCurrentExtent: () => LocalizedString
 	}
 	LayerSettings: {
 		/**

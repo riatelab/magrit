@@ -4,7 +4,7 @@ import { JSX } from 'solid-js';
 type ModalStoreType = {
   show: boolean,
   title: string | null,
-  content: JSX.Element | string | null,
+  content: JSX.Element | (() => JSX.Element) | string | null,
   confirmCallback: (() => void) | null,
   cancelCallback: (() => void) | null,
   successButton: string | null,

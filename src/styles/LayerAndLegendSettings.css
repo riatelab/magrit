@@ -48,3 +48,7 @@ We have two types of "field":
 .legend-settings__content table tr {
     height: 3em;
 }
+
+.legend-settings__content table select {
+    width: 100%;
+}

@@ -1,19 +1,28 @@
 import {
+  createSignal,
   JSX,
+  onMount,
   Show,
-  createSignal, onMount,
 } from 'solid-js';
+
+// Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-
-import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
-
 import { isCandidateForRepresentation } from '../../helpers/layerDescription';
 
+// Stores
+import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+
+// Subcomponents
 import DropdownMenu from '../DropdownMenu.tsx';
 import ChoroplethSettings from './PortrayalOption/ChoroplethSettings.tsx';
-
-import '../../styles/PortrayalSection.css';
+import LabelsSettings from './PortrayalOption/LabelsSettings.tsx';
 import ProportionalSymbolsSettings from './PortrayalOption/ProportionalSymbolsSettings.tsx';
+
+// Types / Interfaces / Enums
+import { RepresentationType } from '../../global.d';
+
+// Styles
+import '../../styles/PortrayalSection.css';
 
 function layerAvailableVariables(layerId: string) {
   const layer = layersDescriptionStore.layers
@@ -43,6 +52,17 @@ function layerAvailableVariables(layerId: string) {
   };
 }
 
+function layerAnyAvailableVariable(layerId: string) {
+  const layer = layersDescriptionStore.layers
+    .find((l) => l.id === layerId);
+
+  if (!layer || !layer.fields) {
+    return false;
+  }
+
+  return layer.fields.length > 0;
+}
+
 export default function PortrayalSection(): JSX.Element {
   const { LL } = useI18nContext();
 
@@ -57,7 +77,7 @@ export default function PortrayalSection(): JSX.Element {
   const [
     selectedPortrayal,
     setSelectedPortrayal,
-  ] = createSignal<string | null>(null);
+  ] = createSignal<RepresentationType | null>(null);
 
   onMount(() => { console.log('PortrayalSection mounted'); });
 
@@ -83,16 +103,25 @@ export default function PortrayalSection(): JSX.Element {
     <div class="portrayal-section__portrayal-selection">
       <ul>
         <li
-          onClick={ () => { setSelectedPortrayal('choropleth'); } }
-          classList={{ 'is-hidden': !availableVariables()?.hasRatio, selected: selectedPortrayal() === 'choropleth' }}
+          onClick={ () => { setSelectedPortrayal(RepresentationType.choropleth); } }
+          classList={{ 'is-hidden': !availableVariables()?.hasRatio, selected: selectedPortrayal() === RepresentationType.choropleth }}
         >
           { LL().PortrayalSection.PortrayalTypes.Choropleth() }
         </li>
         <li
-          onClick={ () => { setSelectedPortrayal('propsymbols'); } }
-          classList={{ 'is-hidden': !availableVariables()?.hasStock, selected: selectedPortrayal() === 'propsymbols' }}
+          onClick={ () => { setSelectedPortrayal(RepresentationType.proportionalSymbols); } }
+          classList={{ 'is-hidden': !availableVariables()?.hasStock, selected: selectedPortrayal() === RepresentationType.proportionalSymbols }}
         >
           { LL().PortrayalSection.PortrayalTypes.ProportionalSymbols() }
+        </li>
+        <li
+          onClick={ () => { setSelectedPortrayal(RepresentationType.labels); } }
+          classList={{
+            'is-hidden': !layerAnyAvailableVariable(targetLayer()),
+            selected: selectedPortrayal() === RepresentationType.labels,
+          }}
+        >
+          { LL().PortrayalSection.PortrayalTypes.Labels() }
         </li>
         <li
           onClick={ () => { setSelectedPortrayal('foo'); } }
@@ -109,6 +138,7 @@ export default function PortrayalSection(): JSX.Element {
       </ul>
       <Show when={
         availableVariables()
+        && !layerAnyAvailableVariable(targetLayer())
         && !availableVariables()?.hasRatio
         && !availableVariables()?.hasStock
         && !availableVariables()?.hasCategorical
@@ -118,12 +148,16 @@ export default function PortrayalSection(): JSX.Element {
     </div>
     <div class="portrayal-section__portrayal-options">
 
-      <Show when={ selectedPortrayal() === 'choropleth' }>
+      <Show when={ selectedPortrayal() === RepresentationType.choropleth }>
         <ChoroplethSettings layerId={ targetLayer() } />
       </Show>
 
-      <Show when={ selectedPortrayal() === 'propsymbols' }>
+      <Show when={ selectedPortrayal() === RepresentationType.proportionalSymbols }>
         <ProportionalSymbolsSettings layerId={ targetLayer() } />
+      </Show>
+
+      <Show when={ selectedPortrayal() === RepresentationType.labels }>
+        <LabelsSettings layerId={ targetLayer() } />
       </Show>
 
       <Show when={ selectedPortrayal() === 'foo' }>

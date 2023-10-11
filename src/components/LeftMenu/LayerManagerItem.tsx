@@ -18,8 +18,7 @@ import { FiType } from 'solid-icons/fi';
 import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
-import { LayerDescription } from '../../global';
-import { redrawPaths } from '../../helpers/geo';
+import { getTargetSvg, redrawPaths } from '../../helpers/svg';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -32,6 +31,9 @@ import { setFieldTypingModalStore } from '../../store/FieldTypingModalStore';
 
 // Other components / subcomponents
 import LayerSettings from '../Modals/LayerSettings.tsx';
+
+// Types / Interfaces / Enums
+import type { LayerDescription } from '../../global';
 
 // Styles
 import 'font-gis/css/font-gis.css';
@@ -57,7 +59,7 @@ const onClickEye = (id: string) => {
 const onCLickMagnifyingGlass = (id: string) => {
   console.log('click magnifying glass on item ', id);
   // Get a reference to the SVG element
-  const svgElem = document.querySelector('.map-zone__inner svg') as SVGSVGElement;
+  const svgElem = getTargetSvg();
 
   // Margin so that the extent of the layer is not on the border of the map
   const marginX = mapStore.mapDimensions.width * 0.03;
@@ -199,7 +201,7 @@ export default function LayerManagerItem(props: { 'props': LayerDescription }): 
           <FaSolidMagnifyingGlass onClick={() => { onCLickMagnifyingGlass(props.props.id); }} />
         </div>
       </Show>
-      <Show when={props.props.fields}>
+      <Show when={props.props.fields && props.props.fields.length > 0}>
         <div title={ LL().LayerManager.AttributeTable() }>
           <FaSolidTable onClick={() => { onClickTable(props.props.id); }} />
         </div>

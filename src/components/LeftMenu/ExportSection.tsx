@@ -88,6 +88,7 @@ export default function ExportSection(): JSX.Element {
     LL().ExportSection.CustomCRS(),
   ];
 
+  const [clipCurrentExtentChecked, setClipCurrentExtentChecked] = createSignal(true);
   const [selectedLayer, setSelectedLayer] = createSignal(null);
   const [selectedFormat, setSelectedFormat] = createSignal(null);
   const [selectedCrs, setSelectedCrs] = createSignal(null);
@@ -114,9 +115,20 @@ export default function ExportSection(): JSX.Element {
     </div>
     <div class="export-section__content">
       <div id="export-section__content__svg">
+        <div class="field">
+          <label class="label" for="export-section__content__svg__clip-current-extent">
+            { LL().ExportSection.ClipSvgCurrentExtent() }
+          </label>
+          <input
+            type="checkbox"
+            id="export-section__content__svg__clip-current-extent"
+            checked={clipCurrentExtentChecked()}
+            onChange={(ev: Event) => setClipCurrentExtentChecked(!clipCurrentExtentChecked())}
+          />
+        </div>
         <div class="has-text-centered">
           <button
-            onClick={ async () => { await exportMapToSvg('export.svg', false); } }
+            onClick={ async () => { await exportMapToSvg('export.svg', clipCurrentExtentChecked()); } }
             class="button is-success"
           >
             { LL().ExportSection.ExportSvg() }

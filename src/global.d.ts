@@ -1,10 +1,11 @@
 // declare global {
 // import { WebR } from '@r-wasm/webr/webr-main';
 import type { Palette } from 'dicopal/dist/index.d';
+import type { Dexie } from 'dexie';
 
 declare namespace globalThis {
   let Gdal: typeof Gdal;
-  let Dexie: DexieConstructor;
+  // let Dexie: DexieConstructor;
   // db is an instance of Dexie
   let db: typeof Dexie;
   // WebR instance
@@ -47,6 +48,8 @@ interface LayerDescription {
   strokeWidth: string,
   // The opacity of the stroke
   strokeOpacity: number,
+  // ...
+  strokeDasharray?: string,
   // The fill color (not used for Choropleth on point / polygon layers nor for linestring layers)
   fillColor?: string,
   // The opacity of the fill (not used for linestring layers)
@@ -62,6 +65,7 @@ interface LayerDescription {
     ProportionalSymbolsParameters
     | ClassificationParameters
     | ProportionalSymbolsParameters & ClassificationParameters
+    | GraticuleParameters
   ),
   // Parameters of the legend associated to the layer
   legend?: ChoroplethLegendParameters,
@@ -261,6 +265,38 @@ export interface ProportionalSymbolsParameters {
   avoidOverlapping: boolean,
 }
 
+export interface GraticuleParameters {
+  step: number,
+  extent?: [number, number, number, number],
+}
+
+export interface LabelsParameters {
+  // The name of the variable used for creating the labels
+  variable: string,
+  // The font size of the labels
+  fontSize: number,
+  // The font family of the labels
+  fontFamily: string,
+  // The font color of the labels
+  fontColor: string,
+  // The font style of the labels
+  fontStyle: string,
+  // The font weight of the labels
+  fontWeight: string,
+  // The text anchor of the labels
+  textAnchor: string,
+  // The text alignment of the labels
+  textAlignment: string,
+  // The text offset of the labels
+  textOffset: number,
+  // The text buffer of the labels
+  textBuffer: {
+    active: boolean,
+    size?: number,
+    color?: string,
+  }
+}
+
 export enum RepresentationType {
   choropleth = 'choropleth',
   proportionalSymbols = 'proportionalSymbols',
@@ -268,6 +304,8 @@ export enum RepresentationType {
   proportionalSymbolsAndCategories = 'proportionalSymbolsAndCategories',
   proportionalSymbolsAndRatio = 'proportionalSymbolsAndRatio',
   sphere = 'sphere',
+  graticule = 'graticule',
+  labels = 'labels',
   default = 'default',
 }
 
@@ -286,6 +324,17 @@ interface LegendParameters {
   visible: boolean,
   // Whether to round the values displayed in the legend
   roundDecimals: number | null,
+  // Rectangle behind the legend
+  backgroundRect: {
+    // Whether to display the rectangle behind the legend
+    visible: boolean,
+    // The fill color of the rectangle
+    fill?: string,
+    // The fill opacity of the rectangle
+    fillOpacity?: number,
+    // The stroke color of the rectangle
+    stroke?: string,
+  },
 }
 
 interface LegendTextElement {

@@ -6,7 +6,8 @@ import d3 from '../helpers/d3-custom';
 
 // Helpers
 import { debounce } from '../helpers/common';
-import { redrawPaths } from '../helpers/geo';
+import { makeHexColorWithAlpha } from '../helpers/color';
+import { redrawPaths } from '../helpers/svg';
 
 // Stores
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
@@ -28,13 +29,13 @@ import {
 } from './MapRenderer/ChoroplethMapRenderer.tsx';
 import legendChoropleth from './LegendRenderer/ChoroplethLegend.tsx';
 import proportionalSymbolsRenderer from './MapRenderer/ProportionalSymbolsMapRenderer.tsx';
+import graticuleRenderer from './MapRenderer/GraticuleRenderer.tsx';
 
 // Types and enums
 import { IZoomable, ZoomBehavior } from '../global.d';
 
 // Styles
 import '../styles/MapZone.css';
-import { makeHexColorWithAlpha } from '../helpers/color';
 
 export default function MapZone(): JSX.Element {
   let svgElem: SVGSVGElement & IZoomable;
@@ -185,6 +186,9 @@ export default function MapZone(): JSX.Element {
           {(layer) => {
             if (layer.renderer === 'sphere') {
               return sphereRenderer(layer);
+            }
+            if (layer.renderer === 'graticule') {
+              return graticuleRenderer(layer);
             }
             if (layer.renderer === 'default') {
               if (layer.type === 'polygon') return defaultPolygonRenderer(layer);

@@ -96,7 +96,8 @@ export default function MapConfiguration(): JSX.Element {
         <input
           class="number"
           type="number"
-          min="10"
+          min={10}
+          step={1}
           max={ globalStore.windowDimensions.width }
           value={ mapStore.mapDimensions.width }
           onChange={(e) => {
@@ -116,7 +117,8 @@ export default function MapConfiguration(): JSX.Element {
         <input
           class="number"
           type="number"
-          min="10"
+          min={10}
+          step={1}
           max={ globalStore.windowDimensions.height }
           value={ mapStore.mapDimensions.height }
           onChange={(e) => {

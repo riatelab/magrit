@@ -148,7 +148,7 @@ function makeSettingsChoroplethLegend(
       </div>
     </div>
     <div class="field">
-      <label class="label">{ LL().Legend.Modal.LegendChoroplethOrientation}</label>
+      <label class="label">{ LL().Legend.Modal.LegendChoroplethOrientation() }</label>
       <div class="control">
         <label class="radio" style={{ 'margin-right': '2em' }}>
           <input
@@ -201,220 +201,99 @@ function makeSettingsChoroplethLegend(
         <tbody>
         <tr>
           <td>{ LL().CommonTextElement.FontSize() }</td>
-          <td>
-            <div class="control">
-              <input
-                class="input"
-                type="number"
-                value={ layer.legend!.title.fontSize.replace('px', '') }
-                min={0}
-                max={100}
-                step={1}
-                onChange={
-                  (ev) => updateProps(layer.id, ['legend', 'title', 'fontSize'], `${ev.target.value}px`)
-                }
-              />
-            </div>
-          </td>
-          <td>
-            <div class="control">
-              <input
-                class="input"
-                type="number"
-                value={ layer.legend!.subtitle.fontSize.replace('px', '') }
-                min={0}
-                max={100}
-                step={1}
-                onChange={
-                  (ev) => updateProps(layer.id, ['legend', 'subtitle', 'fontSize'], `${ev.target.value}px`)
-                }
-              />
-            </div>
-          </td>
-          <td>
-            <div class="control">
-              <input
-                class="input"
-                type="number"
-                value={ layer.legend!.labels.fontSize.replace('px', '') }
-                min={0}
-                max={100}
-                step={1}
-                onChange={
-                  (ev) => updateProps(layer.id, ['legend', 'labels', 'fontSize'], `${ev.target.value}px`)
-                }
-              />
-            </div>
-          </td>
-          <td>
-            <div class="control">
-              <input
-                class="input"
-                type="number"
-                value={ layer.legend!.note.fontSize.replace('px', '') }
-                min={0}
-                max={100}
-                step={1}
-                onChange={(ev) => updateProps(layer.id, ['legend', 'boxHeight'], +ev.target.value)}
-              />
-            </div>
-          </td>
+          <For each={['title', 'subtitle', 'labels', 'note']}>
+            {(textElement) => <td>
+              <div class="control">
+                <input
+                  class="input"
+                  type="number"
+                  value={ layer.legend![textElement].fontSize.replace('px', '') }
+                  min={0}
+                  max={100}
+                  step={1}
+                  onChange={
+                    (ev) => updateProps(
+                      layer.id,
+                      ['legend', textElement, 'fontSize'],
+                      `${ev.target.value}px`,
+                    )
+                  }
+                />
+              </div>
+            </td>}
+          </For>
         </tr>
         <tr>
           <td>{ LL().CommonTextElement.FontColor() }</td>
-          <td>
-            <input
-              class="color"
-              type="color"
-              value={ layer.legend!.title.fontColor }
-              onChange={(e) => updateProps(layer.id, ['legend', 'title', 'fontColor'], e.target.value)}
-            />
-          </td>
-          <td>
-            <input
-              class="color"
-              type="color"
-              value={ layer.legend!.subtitle.fontColor }
-              onChange={(e) => updateProps(layer.id, ['legend', 'subtitle', 'fontColor'], e.target.value)}
-            />
-          </td>
-          <td>
-            <input
-              class="color"
-              type="color"
-              value={ layer.legend!.labels.fontColor }
-              onChange={(e) => updateProps(layer.id, ['legend', 'labels', 'fontColor'], e.target.value)}
-            />
-          </td>
-          <td>
-            <input
-              class="color"
-              type="color"
-              value={ layer.legend!.note.fontColor }
-              onChange={(e) => updateProps(layer.id, ['legend', 'note', 'fontColor'], e.target.value)}
-            />
-          </td>
+          <For each={['title', 'subtitle', 'labels', 'note']}>
+            {(textElement) => <td>
+              <input
+                class="color"
+                type="color"
+                value={ layer.legend![textElement].fontColor }
+                onChange={(e) => updateProps(
+                  layer.id,
+                  ['legend', textElement, 'fontColor'],
+                  e.target.value,
+                )}
+              />
+            </td>}
+          </For>
         </tr>
         <tr>
           <td>{ LL().CommonTextElement.FontStyle() }</td>
-          <td>
-            <select
-              value={ layer.legend!.title.fontStyle }
-              onChange={(ev) => updateProps(layer.id, ['legend', 'title', 'fontStyle'], ev.target.value)}
-            >
-              <option value="normal">{ LL().CommonTextElement.Normal() }</option>
-              <option value="italic">{ LL().CommonTextElement.Italic() }</option>
-            </select>
-          </td>
-          <td>
-            <select
-              value={ layer.legend!.subtitle.fontStyle }
-              onChange={(ev) => updateProps(layer.id, ['legend', 'subtitle', 'fontStyle'], ev.target.value)}
-            >
-              <option value="normal">{ LL().CommonTextElement.Normal() }</option>
-              <option value="italic">{ LL().CommonTextElement.Italic() }</option>
-            </select>
-          </td>
-          <td>
-            <select
-              value={ layer.legend!.labels.fontStyle }
-              onChange={(ev) => updateProps(layer.id, ['legend', 'labels', 'fontStyle'], ev.target.value)}
-            >
-              <option value="normal">{ LL().CommonTextElement.Normal() }</option>
-              <option value="italic">{ LL().CommonTextElement.Italic() }</option>
-            </select>
-          </td>
-          <td>
-            <select
-              value={ layer.legend!.note.fontStyle }
-              onChange={(ev) => updateProps(layer.id, ['legend', 'note', 'fontStyle'], ev.target.value)}
-            >
-              <option value="normal">{ LL().CommonTextElement.Normal() }</option>
-              <option value="italic">{ LL().CommonTextElement.Italic() }</option>
-            </select>
-          </td>
+          <For each={['title', 'subtitle', 'labels', 'note']}>
+            {(textElement) => <td>
+              <select
+                value={ layer.legend![textElement].fontStyle }
+                onChange={(ev) => updateProps(
+                  layer.id,
+                  ['legend', textElement, 'fontStyle'],
+                  ev.target.value,
+                )}
+              >
+                <option value="normal">{ LL().CommonTextElement.Normal() }</option>
+                <option value="italic">{ LL().CommonTextElement.Italic() }</option>
+              </select>
+            </td>}
+          </For>
         </tr>
         <tr>
           <td>{ LL().CommonTextElement.FontWeight() }</td>
-          <td>
-            <select
-              value={ layer.legend!.title.fontWeight }
-              onChange={(ev) => updateProps(layer.id, ['legend', 'title', 'fontWeight'], ev.target.value)}
-            >
-              <option value="normal">{ LL().CommonTextElement.Normal() }</option>
-              <option value="bold">{ LL().CommonTextElement.Bold() }</option>
-            </select>
-          </td>
-          <td>
-            <select
-              value={ layer.legend!.subtitle.fontWeight }
-              onChange={(ev) => updateProps(layer.id, ['legend', 'subtitle', 'fontWeight'], ev.target.value)}
-            >
-              <option value="normal">{ LL().CommonTextElement.Normal() }</option>
-              <option value="bold">{ LL().CommonTextElement.Bold() }</option>
-            </select>
-          </td>
-          <td>
-            <select
-              value={ layer.legend!.labels.fontWeight }
-              onChange={(ev) => updateProps(layer.id, ['legend', 'labels', 'fontWeight'], ev.target.value)}
-            >
-              <option value="normal">{ LL().CommonTextElement.Normal() }</option>
-              <option value="bold">{ LL().CommonTextElement.Bold() }</option>
-            </select>
-          </td>
-          <td>
-            <select
-              value={ layer.legend!.note.fontWeight }
-              onChange={(ev) => updateProps(layer.id, ['legend', 'note', 'fontWeight'], ev.target.value)}
-            >
-              <option value="normal">{ LL().CommonTextElement.Normal() }</option>
-              <option value="bold">{ LL().CommonTextElement.Bold() }</option>
-            </select>
-          </td>
+          <For each={['title', 'subtitle', 'labels', 'note']}>
+            {(textElement) => <td>
+              <select
+                value={ layer.legend![textElement].fontWeight }
+                onChange={(ev) => updateProps(
+                  layer.id,
+                  ['legend', textElement, 'fontWeight'],
+                  ev.target.value,
+                )}
+              >
+                <option value="normal">{ LL().CommonTextElement.Normal() }</option>
+                <option value="bold">{ LL().CommonTextElement.Bold() }</option>
+              </select>
+            </td>}
+          </For>
         </tr>
         <tr>
           <td>{ LL().CommonTextElement.FontFamily() }</td>
-          <td>
-            <select
-              value={ layer.legend!.title.fontFamily }
-              onChange={(ev) => updateProps(layer.id, ['legend', 'title', 'fontFamily'], ev.target.value)}
-            >
-              <For each={webSafeFonts}>
-                {(font) => <option value={font}>{font}</option>}
-              </For>
-            </select>
-          </td>
-          <td>
-            <select
-              value={ layer.legend!.subtitle.fontFamily }
-              onChange={(ev) => updateProps(layer.id, ['legend', 'subtitle', 'fontFamily'], ev.target.value)}
-            >
-              <For each={webSafeFonts}>
-                {(font) => <option value={font}>{font}</option>}
-              </For>
-            </select>
-          </td>
-          <td>
-            <select
-              value={ layer.legend!.labels.fontFamily }
-              onChange={(ev) => updateProps(layer.id, ['legend', 'labels', 'fontFamily'], ev.target.value)}
-            >
-              <For each={webSafeFonts}>
-                {(font) => <option value={font}>{font}</option>}
-              </For>
-            </select>
-          </td>
-          <td>
-            <select
-              value={ layer.legend!.note.fontFamily }
-              onChange={(ev) => updateProps(layer.id, ['legend', 'note', 'fontFamily'], ev.target.value)}
-            >
-              <For each={webSafeFonts}>
-                {(font) => <option value={font}>{font}</option>}
-              </For>
-            </select>
-          </td>
+          <For each={['title', 'subtitle', 'labels', 'note']}>
+            {(textElement) => <td>
+              <select
+                value={ layer.legend![textElement].fontFamily }
+                onChange={(ev) => updateProps(
+                  layer.id,
+                  ['legend', textElement, 'fontFamily'],
+                  ev.target.value,
+                )}
+              >
+                <For each={webSafeFonts}>
+                  {(font) => <option value={font}>{font}</option>}
+                </For>
+              </select>
+            </td>}
+          </For>
         </tr>
         </tbody>
       </table>

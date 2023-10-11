@@ -35,11 +35,11 @@ import imgMoreOption from '../../../assets/buttons2.svg';
 
 // Types
 import {
-  ChoroplethLegendParameters,
+  type ChoroplethLegendParameters,
+  type ClassificationParameters,
+  type LayerDescription,
+  type LegendTextElement,
   ClassificationMethod,
-  ClassificationParameters,
-  LayerDescription,
-  LegendTextElement,
   LegendType,
   Orientation,
   RepresentationType,
@@ -124,6 +124,12 @@ function onClickValidate(
         fontStyle: 'normal',
         fontWeight: 'normal',
       } as LegendTextElement,
+      backgroundRect: {
+        visible: false,
+        fill: '#ffffff',
+        fillOpacity: 1,
+        stroke: '#000000',
+      },
     } as ChoroplethLegendParameters,
   } as LayerDescription;
 

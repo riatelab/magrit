@@ -68,16 +68,17 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
     throw new Error(`Could not get colors for scheme ${layer.rendererParameters.palette.name}`);
   }
 
-  const heightTitle = createMemo(() => +(layer.legend.title.fontSize.replace('px', '')) + 10);
+  const heightTitle = createMemo(() => +(layer.legend.title.fontSize.replace('px', '')) + defaultSpacing);
 
   const distanceToTop = createMemo(() => {
     let vDistanceToTop = 0;
     if (layer.legend.title) {
-      vDistanceToTop += heightTitle();
+      vDistanceToTop += heightTitle() + defaultSpacing;
     }
     if (layer.legend.subtitle && layer.legend.subtitle.text) {
-      vDistanceToTop += +(layer.legend.subtitle.fontSize.replace('px', '')) + 10;
+      vDistanceToTop += +(layer.legend.subtitle.fontSize.replace('px', '')) + defaultSpacing * 2;
     }
+    vDistanceToTop += layer.legend!.boxSpacing / 2;
     return vDistanceToTop;
   });
 
@@ -106,6 +107,9 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
         heightTitle(),
         layer.legend.roundDecimals,
         layer.legend?.boxWidth,
+        layer.legend?.title.text,
+        layer.legend?.subtitle.text,
+        layer.legend?.note.text,
       );
     }
   });
@@ -223,7 +227,7 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
     layer.legend.title.text,
     layer.legend.title.fontSize,
     layer.legend.title.fontFamily,
-  ).height;
+  ).height + defaultSpacing;
 
   const heightSubtitle = createMemo(() => (
     layer.legend.subtitle && layer.legend.subtitle.text
@@ -306,7 +310,7 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
     >
       { makeRectangleBox() }
       { makeLegendTitle(layer.legend.title, [0, 0]) }
-      { makeLegendSubtitle(layer.legend.subtitle, [0, heightTitle + defaultSpacing]) }
+      { makeLegendSubtitle(layer.legend.subtitle, [0, heightTitle]) }
       { makeLegendNote(layer.legend.note, [0, distanceNoteToTop()]) }
       <g class="legend-content">
         <For each={colors}>
@@ -350,9 +354,10 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
 export default function legendChoropleth(layer: LayerDescription): JSX.Element {
   return <>
     {
-      layer.legend.orientation === Orientation.vertical
-        ? choroplethVerticalLegend(layer)
-        : choroplethHorizontalLegend(layer)
+      ({
+        [Orientation.vertical]: choroplethVerticalLegend,
+        [Orientation.horizontal]: choroplethHorizontalLegend,
+      })[layer.legend!.orientation](layer)
     }
   </>;
 }
