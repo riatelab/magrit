@@ -426,7 +426,7 @@ export enum DistanceUnit {
   yd = 'yd',
 }
 
-export interface LayoutFeature {
+interface LayoutFeatureBase {
   // The unique identifier of the layout feature
   id: string,
   // The type of the layout feature
@@ -435,7 +435,7 @@ export interface LayoutFeature {
   position: [number, number],
 }
 
-export interface Rectangle extends LayoutFeature {
+export interface Rectangle extends LayoutFeatureBase {
   type: LayoutFeatureType.Rectangle,
   // The width of the rectangle
   width: number,
@@ -457,7 +457,7 @@ export interface Rectangle extends LayoutFeature {
   cornerRadius: number,
 }
 
-export interface Ellipse extends LayoutFeature {
+export interface Ellipse extends LayoutFeatureBase {
   type: LayoutFeatureType.Ellipse,
   // The x radius of the ellipse
   rx: number,
@@ -477,7 +477,7 @@ export interface Ellipse extends LayoutFeature {
   strokeOpacity: number,
 }
 
-export interface NorthArrow extends LayoutFeature {
+export interface NorthArrow extends LayoutFeatureBase {
   type: LayoutFeatureType.NorthArrow,
   // The width of the north arrow
   width: number,
@@ -494,7 +494,7 @@ export enum ScaleBarStyle {
   blackAndWhiteBar = 'blackAndWhiteBar',
 }
 
-export interface ScaleBar extends LayoutFeature {
+export interface ScaleBar extends LayoutFeatureBase {
   type: LayoutFeatureType.ScaleBar,
   // The width of the scale bar
   width: number,
@@ -507,7 +507,7 @@ export interface ScaleBar extends LayoutFeature {
   // The length of the scale bar (in the given unit)
   distance: number,
   // The label of the scale bar (displayed on top of it)
-  label: string,
+  label?: string,
   // The tick values
   tickValues: number[],
   // The distance between the ticks and the scale bar
@@ -516,7 +516,7 @@ export interface ScaleBar extends LayoutFeature {
   style: ScaleBarStyle,
 }
 
-export interface Line extends LayoutFeature {
+export interface Line extends LayoutFeatureBase {
   type: LayoutFeatureType.Line,
   // The stroke color of the line
   strokeColor: string,
@@ -530,7 +530,7 @@ export interface Line extends LayoutFeature {
   arrow: boolean,
 }
 
-export interface FreeDrawing extends LayoutFeature {
+export interface FreeDrawing extends LayoutFeatureBase {
   type: LayoutFeatureType.FreeDrawing,
   // The stroke color of the free drawing
   strokeColor: string,
@@ -541,3 +541,13 @@ export interface FreeDrawing extends LayoutFeature {
   // The svg path of the free drawing
   path: string,
 }
+
+export type LayoutFeature = (
+  Rectangle
+  | Ellipse
+  | NorthArrow
+  | ScaleBar
+  | Line
+  | FreeDrawing
+  | Text
+);

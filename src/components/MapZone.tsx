@@ -33,6 +33,7 @@ import graticuleRenderer from './MapRenderer/GraticuleRenderer.tsx';
 import RectangleRenderer from './LayoutFeatureRenderer/RectangleRenderer.tsx';
 import EllipseRenderer from './LayoutFeatureRenderer/EllipseRenderer.tsx';
 import FreeDrawingRenderer from './LayoutFeatureRenderer/FreeDrawingRenderer.tsx';
+import ScaleBarRenderer from './LayoutFeatureRenderer/ScaleBarRenderer.tsx';
 
 // Types and enums
 import { type IZoomable, LayoutFeatureType, ZoomBehavior } from '../global.d';
@@ -44,6 +45,7 @@ const layoutFeaturesFns = {
   [LayoutFeatureType.Rectangle]: RectangleRenderer,
   [LayoutFeatureType.Ellipse]: EllipseRenderer,
   [LayoutFeatureType.FreeDrawing]: FreeDrawingRenderer,
+  [LayoutFeatureType.ScaleBar]: ScaleBarRenderer,
 };
 
 export default function MapZone(): JSX.Element {

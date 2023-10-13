@@ -21,7 +21,7 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
   let y = 0;
   // let isDragging = false;
   let outerSvg: SVGSVGElement;
-  let elem: HTMLElement;
+  let elem: Element;
 
   const moveElement = (e: MouseEvent) => {
     const dx = e.clientX - x;
@@ -44,7 +44,7 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
 
   const deselectElement = () => {
     refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
-    outerSvg.style.cursor = null; // eslint-disable-line no-param-reassign
+    outerSvg.style.cursor = 'default'; // eslint-disable-line no-param-reassign
     outerSvg.removeEventListener('mousemove', moveElement);
     outerSvg.removeEventListener('mouseup', deselectElement);
   };
@@ -54,7 +54,7 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
   });
 
   refElement.addEventListener('mouseout', () => {
-    refElement.style.cursor = null; // eslint-disable-line no-param-reassign
+    refElement.style.cursor = 'default'; // eslint-disable-line no-param-reassign
   });
 
   refElement.addEventListener('mousedown', (e) => {
@@ -74,10 +74,10 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
     // refElement group even if the mouse is not over it.
     while (true) {
       if (elem.tagName.toLowerCase() === 'svg') {
-        outerSvg = elem as SVGSVGElement;
+        outerSvg = elem as unknown as SVGSVGElement;
         break;
       } else {
-        elem = elem.parentElement;
+        elem = elem.parentElement as Element;
       }
     }
     // Listen on events on the parent SVG element
@@ -85,7 +85,7 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
     outerSvg.addEventListener('mouseup', deselectElement);
     // Cursor style
     // First change the cursor of the refElement group to default value
-    refElement.style.cursor = null; // eslint-disable-line no-param-reassign
+    refElement.style.cursor = 'default'; // eslint-disable-line no-param-reassign
     // Then change the cursor of the parent SVG element to grabbing
     outerSvg.style.cursor = 'grabbing'; // eslint-disable-line no-param-reassign
 
@@ -97,7 +97,7 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
   });
 }
 
-function makeLayoutFeaturesSettingsModal(
+export function makeLayoutFeaturesSettingsModal(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
 ): void {
@@ -141,13 +141,33 @@ export function triggerContextMenuLayoutFeature(
       {
         label: LL().LayoutFeatures.ContextMenu.Up(),
         callback: () => {
-          // TODO: change the place of the layout feature in the layoutFeatures array
+          // We change the place of the layout feature in the layoutFeatures array
+          // so that it changes 1 place down on the svg element
+          // (and so that it is rendered after the previous layout feature)
+          const layoutFeatures = layersDescriptionStore.layoutFeatures.slice();
+          const index = layoutFeatures.findIndex((l) => l.id === layoutFeatureId);
+          if (index > 0) {
+            const tmp = layoutFeatures[index - 1];
+            layoutFeatures[index - 1] = layoutFeatures[index];
+            layoutFeatures[index] = tmp;
+            setLayersDescriptionStore({ layoutFeatures });
+          }
         },
       },
       {
         label: LL().LayoutFeatures.ContextMenu.Down(),
         callback: () => {
-          // TODO: change the place of the layout feature in the layoutFeatures array
+          // We change the place of the layout feature in the layoutFeatures array
+          // so that it changes 1 place up on the svg element
+          // (and so that it is rendered before the previous layout feature)
+          const layoutFeatures = layersDescriptionStore.layoutFeatures.slice();
+          const index = layoutFeatures.findIndex((l) => l.id === layoutFeatureId);
+          if (index < layoutFeatures.length - 1) {
+            const tmp = layoutFeatures[index + 1];
+            layoutFeatures[index + 1] = layoutFeatures[index];
+            layoutFeatures[index] = tmp;
+            setLayersDescriptionStore({ layoutFeatures });
+          }
         },
       },
     ],
