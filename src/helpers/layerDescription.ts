@@ -7,7 +7,7 @@ const isExportableLayer = (layerDescription: LayerDescription) => (
 const isCandidateForRepresentation = (layerDescription: LayerDescription) => (
   layerDescription.data.type === 'FeatureCollection'
   && supportedLayerTypes.includes(layerDescription.type)
-  && !!layerDescription.fields
+  && layerDescription.fields && layerDescription.fields.length > 0
 );
 
 export {

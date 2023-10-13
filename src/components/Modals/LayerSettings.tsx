@@ -1,4 +1,4 @@
-import { Accessor, JSX, useContext } from 'solid-js';
+import { Accessor, JSX } from 'solid-js';
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { createDropShadow } from '../MapRenderer/FilterDropShadow';
 
@@ -11,85 +11,20 @@ import type { LayerDescription } from '../../global';
 // Styles
 import '../../styles/LayerAndLegendSettings.css';
 
-function makeOnChangeFillColor(props: LayerDescription): () => void {
-  return function onChangeFillColor() {
+function makeOnChangeProp(
+  props: LayerDescription,
+  prop: string,
+  modifier: (arg0: string) => unknown = (x) => x,
+): () => void {
+  return function onChangeProp() {
     // Mutate the store for the layer
-    const layer = layersDescriptionStore.layers.find((l) => l.id === props.id);
+    const layer = layersDescriptionStore.layers
+      .find((l) => l.id === props.id);
     if (layer) {
       setLayersDescriptionStore(
         'layers',
         (l) => l.id === props.id,
-        { fillColor: this.value },
-      );
-    }
-  };
-}
-
-function makeOnChangeStrokeColor(props: LayerDescription): () => void {
-  return function onChangeStrokeColor() {
-    // Mutate the store for the layer
-    const layer = layersDescriptionStore.layers.find((l) => l.id === props.id);
-    if (layer) {
-      setLayersDescriptionStore(
-        'layers',
-        (l) => l.id === props.id,
-        { strokeColor: this.value },
-      );
-    }
-  };
-}
-
-function makeOnChangeFillOpacity(props: LayerDescription): () => void {
-  return function onChangeFillOpacity() {
-    // Mutate the store for the layer
-    const layer = layersDescriptionStore.layers.find((l) => l.id === props.id);
-    if (layer) {
-      setLayersDescriptionStore(
-        'layers',
-        (l) => l.id === props.id,
-        { fillOpacity: this.value },
-      );
-    }
-  };
-}
-
-function makeOnChangeStrokeOpacity(props: LayerDescription): () => void {
-  return function onChangeStrokeOpacity() {
-    // Mutate the store for the layer
-    const layer = layersDescriptionStore.layers.find((l) => l.id === props.id);
-    if (layer) {
-      setLayersDescriptionStore(
-        'layers',
-        (l) => l.id === props.id,
-        { strokeOpacity: this.value },
-      );
-    }
-  };
-}
-
-function makeOnchangeStrokeWidth(props: LayerDescription): () => void {
-  return function onChangeStrokeWidth() {
-    // Mutate the store for the layer
-    const layer = layersDescriptionStore.layers.find((l) => l.id === props.id);
-    if (layer) {
-      setLayersDescriptionStore(
-        'layers',
-        (l) => l.id === props.id,
-        { strokeWidth: `${this.value}px` },
-      );
-    }
-  };
-}
-
-function makeOnchangePointRadius(props: LayerDescription): () => void {
-  return function onChangePointRadius() {
-    // Mutate the store for the layer
-    const layer = layersDescriptionStore.layers.find((l) => l.id === props.id);
-    if (layer) {
-      setLayersDescriptionStore(
-        'layers',
-        (l) => l.id === props.id,
-        { pointRadius: +this.value },
+        { [prop]: modifier(this.value) },
       );
     }
   };
@@ -119,23 +54,22 @@ function makeOnChangeDropShadow(props: LayerDescription): () => void {
     }
   };
 }
+
 function makeSettingsDefaultPoint(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  console.log(props);
-  console.log(props.strokeColor, props.fillColor);
   return <div>
     <div class="field">
       <label class="label">{ LL().LayerSettings.FillColor() }</label>
       <div class="control">
-        <input class="color" type="color" onChange={makeOnChangeFillColor(props)} value={props.fillColor} />
+        <input class="color" type="color" onChange={makeOnChangeProp(props, 'fillColor')} value={props.fillColor} />
       </div>
     </div>
     <div class="field">
       <label class="label">{ LL().LayerSettings.StrokeColor() }</label>
       <div class="control">
-        <input class="color" type="color" onChange={makeOnChangeStrokeColor(props)} value={props.strokeColor} />
+        <input class="color" type="color" onChange={makeOnChangeProp(props, 'strokeColor')} value={props.strokeColor} />
       </div>
     </div>
     <div class="field">
@@ -144,7 +78,7 @@ function makeSettingsDefaultPoint(
         <input
           class="number"
           type="number"
-          onChange={makeOnChangeFillOpacity(props)}
+          onChange={makeOnChangeProp(props, 'fillOpacity')}
           value={props.fillOpacity}
           min="0"
           max="1"
@@ -158,7 +92,7 @@ function makeSettingsDefaultPoint(
         <input
           class="number"
           type="number"
-          onChange={makeOnChangeStrokeOpacity(props)}
+          onChange={makeOnChangeProp(props, 'strokeOpacity')}
           value={props.strokeOpacity}
           min="0"
           max="1"
@@ -172,7 +106,7 @@ function makeSettingsDefaultPoint(
         <input
           class="number"
           type="number"
-          onChange={makeOnchangeStrokeWidth(props)}
+          onChange={makeOnChangeProp(props, 'strokeWidth', (v) => `${v}px`)}
           value={+props.strokeWidth.replace('px', '')}
           min="0"
           max="10"
@@ -186,7 +120,7 @@ function makeSettingsDefaultPoint(
         <input
           class="number"
           type="number"
-          onChange={makeOnchangePointRadius(props)}
+          onChange={makeOnChangeProp(props, 'pointRadius', (v) => +v)}
           value={props.pointRadius}
           min="1"
           max="20"
@@ -205,7 +139,7 @@ function makeSettingsDefaultLine(
     <div class="field">
       <label class="label">{ LL().LayerSettings.StrokeColor() }</label>
       <div class="control">
-        <input class="color" type="color" onChange={makeOnChangeStrokeColor(props)} value={props.strokeColor} />
+        <input class="color" type="color" onChange={makeOnChangeProp(props, 'strokeColor')} value={props.strokeColor} />
       </div>
     </div>
     <div class="field">
@@ -214,7 +148,7 @@ function makeSettingsDefaultLine(
         <input
           class="number"
           type="number"
-          onChange={makeOnChangeStrokeOpacity(props)}
+          onChange={makeOnChangeProp(props, 'strokeOpacity')}
           value={props.strokeOpacity}
           min="0"
           max="1"
@@ -228,7 +162,7 @@ function makeSettingsDefaultLine(
         <input
           class="number"
           type="number"
-          onChange={makeOnchangeStrokeWidth(props)}
+          onChange={makeOnChangeProp(props, 'strokeWidth', (v) => `${v}px`)}
           value={+props.strokeWidth.replace('px', '')}
           min="0"
           max="10"
@@ -260,19 +194,17 @@ function makeSettingsDefaultPolygon(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  console.log(props);
-  console.log(props.strokeColor, props.fillColor);
   return <div>
     <div class="field">
       <label class="label">{ LL().LayerSettings.FillColor() }</label>
       <div class="control">
-        <input class="color" type="color" onChange={makeOnChangeFillColor(props)} value={props.fillColor} />
+        <input class="color" type="color" onChange={makeOnChangeProp(props, 'fillColor')} value={props.fillColor} />
       </div>
     </div>
     <div class="field">
       <label class="label">{ LL().LayerSettings.StrokeColor() }</label>
       <div class="control">
-        <input class="color" type="color" onChange={makeOnChangeStrokeColor(props)} value={props.strokeColor} />
+        <input class="color" type="color" onChange={makeOnChangeProp(props, 'strokeColor')} value={props.strokeColor} />
       </div>
     </div>
     <div class="field">
@@ -281,7 +213,7 @@ function makeSettingsDefaultPolygon(
         <input
           class="number"
           type="number"
-          onChange={makeOnChangeFillOpacity(props)}
+          onChange={makeOnChangeProp(props, 'fillOpacity')}
           value={props.fillOpacity}
           min="0"
           max="1"
@@ -295,7 +227,7 @@ function makeSettingsDefaultPolygon(
         <input
           class="number"
           type="number"
-          onChange={makeOnChangeStrokeOpacity(props)}
+          onChange={makeOnChangeProp(props, 'strokeOpacity')}
           value={props.strokeOpacity}
           min="0"
           max="1"
@@ -309,7 +241,7 @@ function makeSettingsDefaultPolygon(
         <input
           class="number"
           type="number"
-          onChange={makeOnchangeStrokeWidth(props)}
+          onChange={makeOnChangeProp(props, 'strokeWidth', (v) => `${v}px`)}
           value={+props.strokeWidth.replace('px', '')}
           min="0"
           max="10"
@@ -332,7 +264,10 @@ function makeSettingsDefaultPolygon(
 }
 
 export default function LayerSettings(
-  props,
+  props: {
+    id: string,
+    LL: Accessor<TranslationFunctions>,
+  },
 ): JSX.Element {
   // We can use destructuring here because we know that the props
   // won't change during the lifetime of the component
@@ -346,7 +281,7 @@ export default function LayerSettings(
   }[layerDescription.type as ('point' | 'linestring' | 'polygon')](layerDescription, LL);
   return <div class="layer-settings">
     <div class="layer-settings__title">
-      { LL().LayerSettings.Name } : { layerDescription.name }
+      { LL().LayerSettings.Name() } : { layerDescription.name }
     </div>
     <br />
     <div class="layer-settings__content">

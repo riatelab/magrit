@@ -75,7 +75,7 @@ const fr = {
     CustomProjection: 'Projection personnalisée',
     LockZoom: 'Verrouiller le zoom / la position',
   },
-  LayoutFeaturesSection: {
+  LayoutFeatures: {
     BackgroundColor: 'Couleur de fond',
     Opacity: 'Opacité',
     MapSkinElements: 'Éléments d\'habillage de la carte',
@@ -89,6 +89,12 @@ const fr = {
     ScaleBar: 'Échelle',
     NorthArrow: 'Flèche Nord',
     FreeDrawing: 'Dessin libre',
+    ContextMenu: {
+      Edit: 'Éditer',
+      Delete: 'Supprimer',
+      Up: 'Monter',
+      Down: 'Descendre',
+    },
   },
   AboutPanel: {
     title: 'À propos de Magrit',

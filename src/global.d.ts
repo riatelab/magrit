@@ -407,3 +407,137 @@ export enum ResizeBehavior {
   KeepMapSize,
 }
 // }
+
+export enum LayoutFeatureType {
+  Rectangle,
+  Ellipse,
+  NorthArrow,
+  ScaleBar,
+  Line,
+  FreeDrawing,
+  Text,
+}
+
+export enum DistanceUnit {
+  m = 'm',
+  km = 'km',
+  mi = 'mi',
+  ft = 'ft',
+  yd = 'yd',
+}
+
+export interface LayoutFeature {
+  // The unique identifier of the layout feature
+  id: string,
+  // The type of the layout feature
+  type: LayoutFeatureType,
+  // The position of the layout feature
+  position: [number, number],
+}
+
+export interface Rectangle extends LayoutFeature {
+  type: LayoutFeatureType.Rectangle,
+  // The width of the rectangle
+  width: number,
+  // The height of the rectangle
+  height: number,
+  // The rotation of the rectangle
+  rotation: number,
+  // The fill color of the rectangle
+  fillColor: string,
+  // The fill opacity of the rectangle
+  fillOpacity: number,
+  // The stroke color of the rectangle
+  strokeColor: string,
+  // The stroke width of the rectangle
+  strokeWidth: number,
+  // The stroke opacity of the rectangle
+  strokeOpacity: number,
+  // The corner radius of the rectangle
+  cornerRadius: number,
+}
+
+export interface Ellipse extends LayoutFeature {
+  type: LayoutFeatureType.Ellipse,
+  // The x radius of the ellipse
+  rx: number,
+  // The y radius of the ellipse
+  ry: number,
+  // The rotation of the ellipse
+  rotation: number,
+  // The fill color of the rectangle
+  fillColor: string,
+  // The fill opacity of the rectangle
+  fillOpacity: number,
+  // The stroke color of the rectangle
+  strokeColor: string,
+  // The stroke width of the rectangle
+  strokeWidth: number,
+  // The stroke opacity of the rectangle
+  strokeOpacity: number,
+}
+
+export interface NorthArrow extends LayoutFeature {
+  type: LayoutFeatureType.NorthArrow,
+  // The width of the north arrow
+  width: number,
+  // The height of the north arrow
+  height: number,
+  // The rotation of the north arrow
+  rotation: number,
+}
+
+export enum ScaleBarStyle {
+  simpleLine = 'simpleLine',
+  lineWithTicksOnTop = 'lineWithTicksOnTop',
+  lineWithTicksOnBottom = 'lineWithTicksOnBottom',
+  blackAndWhiteBar = 'blackAndWhiteBar',
+}
+
+export interface ScaleBar extends LayoutFeature {
+  type: LayoutFeatureType.ScaleBar,
+  // The width of the scale bar
+  width: number,
+  // The height of the scale bar
+  height: number,
+  // The rotation of the scale bar
+  rotation: number,
+  // The unit of the scale bar
+  unit: DistanceUnit,
+  // The length of the scale bar (in the given unit)
+  distance: number,
+  // The label of the scale bar (displayed on top of it)
+  label: string,
+  // The tick values
+  tickValues: number[],
+  // The distance between the ticks and the scale bar
+  tickPadding: number,
+  // The style of the scaleBar
+  style: ScaleBarStyle,
+}
+
+export interface Line extends LayoutFeature {
+  type: LayoutFeatureType.Line,
+  // The stroke color of the line
+  strokeColor: string,
+  // The stroke width of the line
+  strokeWidth: number,
+  // The stroke opacity of the line
+  strokeOpacity: number,
+  // The dash array of the line
+  strokeDasharray: string,
+  // Whether to display an arrow at the end of the line
+  arrow: boolean,
+}
+
+export interface FreeDrawing extends LayoutFeature {
+  type: LayoutFeatureType.FreeDrawing,
+  // The stroke color of the free drawing
+  strokeColor: string,
+  // The stroke opacity of the free drawing
+  strokeOpacity: number,
+  // The stroke width of the free drawing
+  strokeWidth: number,
+  // The svg path of the free drawing
+  path: string,
+}

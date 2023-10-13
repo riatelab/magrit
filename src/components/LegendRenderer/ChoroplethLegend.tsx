@@ -24,7 +24,7 @@ import {
   computeRectangleBox,
   bindMouseEnterLeave,
   bindDragBehavior,
-  getTextSize, makeLegendSettings,
+  getTextSize, makeLegendSettingsModal,
 } from './common.tsx';
 
 // Import some type descriptions
@@ -131,7 +131,7 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
       class="legend choropleth"
       transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
       visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
-      ondblclick={(e) => { console.log(e); makeLegendSettings(layer.id, LL); }}
+      ondblclick={(e) => { console.log(e); makeLegendSettingsModal(layer.id, LL); }}
       onContextMenu={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -306,7 +306,7 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
         e.stopPropagation();
         triggerContextMenuLegend(e, layer.id, LL);
       } }
-      ondblclick={(e) => { console.log(e); makeLegendSettings(layer.id, LL); }}
+      ondblclick={(e) => { console.log(e); makeLegendSettingsModal(layer.id, LL); }}
     >
       { makeRectangleBox() }
       { makeLegendTitle(layer.legend.title, [0, 0]) }

@@ -263,7 +263,7 @@ type RootTranslation = {
 		 */
 		LockZoom: string
 	}
-	LayoutFeaturesSection: {
+	LayoutFeatures: {
 		/**
 		 * B​a​c​k​g​r​o​u​n​d​ ​c​o​l​o​r
 		 */
@@ -316,6 +316,24 @@ type RootTranslation = {
 		 * F​r​e​e​ ​d​r​a​w​i​n​g
 		 */
 		FreeDrawing: string
+		ContextMenu: {
+			/**
+			 * E​d​i​t
+			 */
+			Edit: string
+			/**
+			 * D​e​l​e​t​e
+			 */
+			Delete: string
+			/**
+			 * U​p
+			 */
+			Up: string
+			/**
+			 * D​o​w​n
+			 */
+			Down: string
+		}
 	}
 	AboutPanel: {
 		/**
@@ -1240,7 +1258,7 @@ export type TranslationFunctions = {
 		 */
 		LockZoom: () => LocalizedString
 	}
-	LayoutFeaturesSection: {
+	LayoutFeatures: {
 		/**
 		 * Background color
 		 */
@@ -1293,6 +1311,24 @@ export type TranslationFunctions = {
 		 * Free drawing
 		 */
 		FreeDrawing: () => LocalizedString
+		ContextMenu: {
+			/**
+			 * Edit
+			 */
+			Edit: () => LocalizedString
+			/**
+			 * Delete
+			 */
+			Delete: () => LocalizedString
+			/**
+			 * Up
+			 */
+			Up: () => LocalizedString
+			/**
+			 * Down
+			 */
+			Down: () => LocalizedString
+		}
 	}
 	AboutPanel: {
 		/**

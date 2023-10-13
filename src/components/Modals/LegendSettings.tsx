@@ -86,7 +86,7 @@ function makeSettingsChoroplethLegend(
             const value = ev.target.value.length > 0
               ? +ev.target.value
               : 0;
-            updateProps(layer.id, ['legend', 'roundDecimals'], +ev.target.value);
+            updateProps(layer.id, ['legend', 'roundDecimals'], value);
           }}
         />
       </div>

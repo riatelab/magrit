@@ -75,7 +75,7 @@ const en = {
     CustomProjection: 'Custom projection',
     LockZoom: 'Lock zoom / position',
   },
-  LayoutFeaturesSection: {
+  LayoutFeatures: {
     BackgroundColor: 'Background color',
     Opacity: 'Opacity',
     MapSkinElements: 'Map skin elements',
@@ -89,6 +89,12 @@ const en = {
     ScaleBar: 'Scale bar',
     NorthArrow: 'North arrow',
     FreeDrawing: 'Free drawing',
+    ContextMenu: {
+      Edit: 'Edit',
+      Delete: 'Delete',
+      Up: 'Up',
+      Down: 'Down',
+    },
   },
   AboutPanel: {
     title: 'About Magrit',

@@ -32,7 +32,7 @@ export default function LayoutFeatures(): JSX.Element {
 
   return <div class="layout-features-section">
     <div class="field">
-      <label class="label">{ LL().LayoutFeaturesSection.BackgroundColor() }</label>
+      <label class="label">{ LL().LayoutFeatures.BackgroundColor() }</label>
       <div class="control">
         <input
           class="color"
@@ -49,7 +49,7 @@ export default function LayoutFeatures(): JSX.Element {
       </div>
     </div>
     <div class="field">
-      <label class="label">{ LL().LayoutFeaturesSection.Opacity() }</label>
+      <label class="label">{ LL().LayoutFeatures.Opacity() }</label>
       <div class="control">
         <input
           class="number"
@@ -69,27 +69,30 @@ export default function LayoutFeatures(): JSX.Element {
       </div>
     </div>
     <div class="field-block">
-      <label class="label">{ LL().LayoutFeaturesSection.MapSkinElements() }</label>
+      <label class="label">{ LL().LayoutFeatures.MapSkinElements() }</label>
       <div class="is-flex is-justify-content-space-evenly">
         <img
           class="layout-features-section__icon-element"
           src={layoutFeatureRectangle}
-          alt={ LL().LayoutFeaturesSection.Rectangle() }
-          title={ LL().LayoutFeaturesSection.Rectangle() }
+          alt={ LL().LayoutFeatures.Rectangle() }
+          title={ LL().LayoutFeatures.Rectangle() }
           onClick={(e) => {}}
         />
         <img
           class="layout-features-section__icon-element"
           src={layoutFeatureEllipse}
-          alt={ LL().LayoutFeaturesSection.Ellipse() }
-          title={ LL().LayoutFeaturesSection.Ellipse() }
+          alt={ LL().LayoutFeatures.Ellipse() }
+          title={ LL().LayoutFeatures.Ellipse() }
           onClick={(e) => {}}
         />
         <img
-          class="layout-features-section__icon-element"
+          classList={{
+            'layout-features-section__icon-element': true,
+            disabled: alreadyHasGraticule(layersDescriptionStore.layers),
+          }}
           src={layoutFeatureGraticule}
-          alt={ LL().LayoutFeaturesSection.Graticule() }
-          title={ LL().LayoutFeaturesSection.Graticule() }
+          alt={ LL().LayoutFeatures.Graticule() }
+          title={ LL().LayoutFeatures.Graticule() }
           onClick={(e) => {
             if (!alreadyHasGraticule(layersDescriptionStore.layers)) {
               setLayersDescriptionStore({
@@ -102,10 +105,13 @@ export default function LayoutFeatures(): JSX.Element {
           }}
         />
         <img
-          class="layout-features-section__icon-element"
+          classList={{
+            'layout-features-section__icon-element': true,
+            disabled: alreadyHasSphere(layersDescriptionStore.layers),
+          }}
           src={layoutFeatureSphere}
-          alt={ LL().LayoutFeaturesSection.Sphere() }
-          title={ LL().LayoutFeaturesSection.Sphere() }
+          alt={ LL().LayoutFeatures.Sphere() }
+          title={ LL().LayoutFeatures.Sphere() }
           onClick={(e) => {
             if (!alreadyHasSphere(layersDescriptionStore.layers)) {
               setLayersDescriptionStore({
@@ -120,36 +126,36 @@ export default function LayoutFeatures(): JSX.Element {
         <img
           class="layout-features-section__icon-element"
           src={layoutFeatureNorthArrow}
-          alt={ LL().LayoutFeaturesSection.NorthArrow() }
-          title={ LL().LayoutFeaturesSection.NorthArrow() }
+          alt={ LL().LayoutFeatures.NorthArrow() }
+          title={ LL().LayoutFeatures.NorthArrow() }
           onClick={(e) => {}}
         />
         <img
           class="layout-features-section__icon-element"
           src={layoutFeatureScaleBar}
-          alt={ LL().LayoutFeaturesSection.ScaleBar() }
-          title={ LL().LayoutFeaturesSection.ScaleBar() }
+          alt={ LL().LayoutFeatures.ScaleBar() }
+          title={ LL().LayoutFeatures.ScaleBar() }
           onClick={(e) => {}}
         />
         <img
           class="layout-features-section__icon-element"
           src={layoutFeatureArrow}
-          alt={ LL().LayoutFeaturesSection.Line() }
-          title={ LL().LayoutFeaturesSection.Line() }
+          alt={ LL().LayoutFeatures.Line() }
+          title={ LL().LayoutFeatures.Line() }
           onClick={(e) => {}}
         />
         <img
           class="layout-features-section__icon-element"
           src={layoutFeatureText}
-          alt={ LL().LayoutFeaturesSection.Text() }
-          title={ LL().LayoutFeaturesSection.Text() }
+          alt={ LL().LayoutFeatures.Text() }
+          title={ LL().LayoutFeatures.Text() }
           onClick={(e) => {}}
         />
         <img
-          class="layout-features-section__icon-element"
+          class="layout-features-section__icon-element disabled"
           src={layoutFeatureDraw}
-          alt={ LL().LayoutFeaturesSection.FreeDrawing() }
-          title={ LL().LayoutFeaturesSection.FreeDrawing() }
+          alt={ LL().LayoutFeatures.FreeDrawing() }
+          title={ LL().LayoutFeatures.FreeDrawing() }
           onClick={(e) => {}}
         />
       </div>

@@ -128,15 +128,15 @@ export function bindMouseEnterLeave(refElement: SVGElement): void {
 export function bindDragBehavior(refElement: SVGElement, layer: LayerDescription): void {
   // Allow the user to move the refElement group
   // by dragging it on the screen.
-  // To do we will change the transform attribute of the refElement group.
-  // We will also change the cursor to indicate that the group is draggable.
+  // To do this we change the transform attribute of the refElement group.
+  // We also change the cursor to indicate that the group is draggable.
   let x = 0;
   let y = 0;
   // let isDragging = false;
   let outerSvg: SVGSVGElement;
   let elem: HTMLElement;
 
-  const moveElement = (e) => {
+  const moveElement = (e: MouseEvent) => {
     const dx = e.clientX - x;
     const dy = e.clientY - y;
 
@@ -146,8 +146,8 @@ export function bindDragBehavior(refElement: SVGElement, layer: LayerDescription
       'legend',
       {
         position: [
-          layer.legend.position[0] + dx,
-          layer.legend.position[1] + dy,
+          layer.legend!.position[0] + dx,
+          layer.legend!.position[1] + dy,
         ],
       },
     );
@@ -255,7 +255,7 @@ export function getTextSize(
   return { width: bb.width, height: bb.height };
 }
 
-export function makeLegendSettings(layerId: string, LL: Accessor<TranslationFunctions>) {
+export function makeLegendSettingsModal(layerId: string, LL: Accessor<TranslationFunctions>) {
   setModalStore({
     show: true,
     content: null,
@@ -280,7 +280,7 @@ export function triggerContextMenuLegend(
       {
         label: LL().Legend.ContextMenu.Edit(),
         callback: () => {
-          makeLegendSettings(layerId, LL);
+          makeLegendSettingsModal(layerId, LL);
         },
       },
       {

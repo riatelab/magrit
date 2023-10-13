@@ -30,12 +30,21 @@ import {
 import legendChoropleth from './LegendRenderer/ChoroplethLegend.tsx';
 import proportionalSymbolsRenderer from './MapRenderer/ProportionalSymbolsMapRenderer.tsx';
 import graticuleRenderer from './MapRenderer/GraticuleRenderer.tsx';
+import RectangleRenderer from './LayoutFeatureRenderer/RectangleRenderer.tsx';
+import EllipseRenderer from './LayoutFeatureRenderer/EllipseRenderer.tsx';
+import FreeDrawingRenderer from './LayoutFeatureRenderer/FreeDrawingRenderer.tsx';
 
 // Types and enums
-import { IZoomable, ZoomBehavior } from '../global.d';
+import { type IZoomable, LayoutFeatureType, ZoomBehavior } from '../global.d';
 
 // Styles
 import '../styles/MapZone.css';
+
+const layoutFeaturesFns = {
+  [LayoutFeatureType.Rectangle]: RectangleRenderer,
+  [LayoutFeatureType.Ellipse]: EllipseRenderer,
+  [LayoutFeatureType.FreeDrawing]: FreeDrawingRenderer,
+};
 
 export default function MapZone(): JSX.Element {
   let svgElem: SVGSVGElement & IZoomable;
@@ -212,6 +221,9 @@ export default function MapZone(): JSX.Element {
             }
             return null;
           }}
+        </For>
+        <For each={ layersDescriptionStore.layoutFeatures.toReversed() }>
+          {(feature) => layoutFeaturesFns[feature.type](feature)}
         </For>
       </svg>
     </div>

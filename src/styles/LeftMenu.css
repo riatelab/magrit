@@ -87,14 +87,20 @@ The left menu is:
 
 .layout-features-section__icon-element {
     width: 27px;
-    filter: grayscale(1);
+    filter: grayscale(0.7);
     transform: scale(0.9);
-    -webkit-filter: grayscale(1);
+    -webkit-filter: grayscale(0.7);
     -webkit-transform: scale(0.9);
     cursor: pointer;
 }
 
-.layout-features-section__icon-element:hover {
+.layout-features-section__icon-element.disabled {
+    filter: grayscale(1);
+    -webkit-filter: grayscale(1);
+    cursor: not-allowed;
+}
+
+.layout-features-section__icon-element:not(.disabled):hover {
     background-color: #c7c7c7;
     filter: grayscale(0);
     transform: scale(1);
