@@ -68,6 +68,7 @@ import { version } from '../package.json';
 
 // Styles
 import './styles/Transitions.css';
+import AboutModal from './components/Modals/AboutModal.tsx';
 
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
   paths: {
@@ -348,62 +349,7 @@ const AppPage: () => JSX.Element = () => {
           show: true,
           title: LL().AboutPanel.title(),
           escapeKey: 'confirm',
-          content: () => <>
-            <div>
-              <p>
-                <b>Version { version }</b>
-              </p>
-            </div>
-            <br />
-            <div>
-              <p><b>{ LL().AboutPanel.description() }</b></p>
-            </div>
-            <hr />
-            <div style={{ 'text-align': 'center' }}>
-              <b>{ LL().AboutPanel.usefulLinks() }</b>
-              <br />
-              <p>
-                <a
-                  class={'button is-link'}
-                  style={{ width: '280px' }}
-                  href="https://riate.cnrs.fr"
-                  target="_blank"
-                >
-                  <b>{ LL().AboutPanel.UarRiate() }</b>
-                </a>
-              </p>
-              <p>
-                <a
-                  class={'button is-link'}
-                  style={{ width: '280px' }}
-                  href="https://magrit.cnrs.fr/docs/"
-                  target="_blank"
-                >
-                  <b>{ LL().AboutPanel.documentation() }</b>
-                </a>
-              </p>
-              <p>
-                <a
-                  class={'button is-link'}
-                  style={{ width: '280px' }}
-                  href="https://github.com/riatelab/magrit"
-                  target="_blank"
-                >
-                  <b>{ LL().AboutPanel.linkGithub() }</b>
-                </a>
-              </p>
-              <p>
-                <a
-                  class={'button is-link'}
-                  style={{ width: '280px' }}
-                  href="https://github.com/riatelab/magrit/issues"
-                  target="_blank"
-                >
-                  <b>{ LL().AboutPanel.linkGithubIssues() }</b>
-                </a>
-              </p>
-            </div>
-          </>,
+          content: () => AboutModal({ version, LL }),
         });
       });
 
