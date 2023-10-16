@@ -68,7 +68,7 @@ interface LayerDescription {
     | GraticuleParameters
   ),
   // Parameters of the legend associated to the layer
-  legend?: ChoroplethLegendParameters,
+  legend?: ChoroplethLegendParameters | ProportionalSymbolsLegendParameters,
 }
 
 export enum ProportionalSymbolsColorMode {
@@ -280,9 +280,9 @@ export interface LabelsParameters {
   // The font color of the labels
   fontColor: string,
   // The font style of the labels
-  fontStyle: string,
+  fontStyle: 'normal' | 'italic',
   // The font weight of the labels
-  fontWeight: string,
+  fontWeight: 'normal' | 'bold',
   // The text anchor of the labels
   textAnchor: string,
   // The text alignment of the labels
@@ -349,12 +349,16 @@ interface LegendTextElement {
   // The font color of the text (stored as a string, e.g. '#000000')
   fontColor: string,
   // The font style of the text (e.g. 'italic', or 'normal')
-  fontStyle: string,
+  fontStyle: 'normal' | 'italic',
   // The font weight of the text (e.g. 'bold', or 'normal')
-  fontWeight: string,
+  fontWeight: 'normal' | 'bold',
 }
 
+/**
+ * The parameters of the legend for choropleth map
+ */
 interface ChoroplethLegendParameters extends LegendParameters {
+  type: LegendType.choropleth,
   // Whether the legend is horizontal or vertical
   orientation: Orientation,
   // The width of each box
@@ -367,6 +371,25 @@ interface ChoroplethLegendParameters extends LegendParameters {
   boxCornerRadius: number,
   // The text properties of the labels
   labels: LegendTextElement,
+}
+
+/**
+ * The parameters of the legend for proportional symbols
+ */
+interface ProportionalSymbolsLegendParameters extends LegendParameters {
+  type: LegendType.proportional,
+  // Whether the legend is stacked or not
+  layout: 'horizontal' | 'vertical' | 'stacked',
+  // The values of the symbols in the legend
+  // (by default it is the min, the max and two other values,
+  // but the user can change it to any value, in order to have only two or three values)
+  values: number[],
+  // The text properties of the labels
+  labels: LegendTextElement,
+}
+
+interface LabelsLegendParameters extends LegendParameters {
+  // TODO
 }
 
 export enum RenderVisibility {
@@ -542,6 +565,22 @@ export interface FreeDrawing extends LayoutFeatureBase {
   path: string,
 }
 
+export interface Text extends LayoutFeatureBase {
+  type: LayoutFeatureType.Text,
+  // The text to display
+  text: string,
+  // The font size of the text
+  fontSize: number,
+  // The font family of the text
+  fontFamily: string,
+  // The font color of the text
+  fontColor: string,
+  // The font style of the text
+  fontStyle: 'normal' | 'italic',
+  // The font weight of the text
+  fontWeight: 'normal' | 'bold',
+}
+
 export type LayoutFeature = (
   Rectangle
   | Ellipse
@@ -551,3 +590,17 @@ export type LayoutFeature = (
   | FreeDrawing
   | Text
 );
+
+declare module uuid {
+  interface V4Options {
+    random?: ArrayLike<number>
+    rng?: () => ArrayLike<number>
+  }
+
+  function v4(options?: V4Options | null): string;
+  function v4<T extends ArrayLike<number>>(
+    options: V4Options | null | undefined,
+    buffer: T,
+    offset?: number,
+  ): T;
+}

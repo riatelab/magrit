@@ -29,7 +29,7 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
 
     setLayersDescriptionStore(
       'layoutFeatures',
-      (l) => l.id === props.id,
+      (l: LayoutFeature) => l.id === props.id,
       {
         position: [
           props.position[0] + dx,

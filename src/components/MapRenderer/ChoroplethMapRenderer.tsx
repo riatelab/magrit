@@ -92,7 +92,7 @@ export function choroplethPointRenderer(
   }>
     <g
       id={layerDescription.name}
-      class="layer default"
+      class="layer choropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       // fill={layerDescription.fillColor}
       fill-opacity={layerDescription.fillOpacity}
@@ -146,7 +146,7 @@ export function choroplethLineRenderer(
   }>
     <g
       id={layerDescription.name}
-      class="layer default"
+      class="layer choropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       fill="none"
       // stroke={layerDescription.strokeColor}

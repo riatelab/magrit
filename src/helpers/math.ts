@@ -9,6 +9,7 @@ export const Mround = Math.round;
 export const Mceil = Math.ceil;
 export const Mfloor = Math.floor;
 export const Mlog = Math.log;
+export const Mlog10 = Math.log10;
 export const Mexp = Math.exp;
 export const Msin = Math.sin;
 export const Mcos = Math.cos;
@@ -76,6 +77,20 @@ export function extent(arr: number[]): [number, number] { // TODO: rename as ext
     }
   }
   return [minVal, maxVal];
+}
+
+/**
+ * Returns the sum of an array of numbers.
+ *
+ * @param {number[]} arr - An array of numbers.
+ * @return - The sum of the array.
+ */
+export function sum(arr: number[]): number {
+  let sumVal = arr[0];
+  for (let i = 1, l = arr.length; i < l; i += 1) {
+    sumVal += arr[i];
+  }
+  return sumVal;
 }
 
 /**

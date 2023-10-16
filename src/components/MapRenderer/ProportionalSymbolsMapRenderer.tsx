@@ -1,6 +1,9 @@
 // Imports from solid-js
 import { For, JSX, Show } from 'solid-js';
 
+// Helpers
+import { PropSizer } from '../../helpers/geo';
+
 // Stores
 import { globalStore } from '../../store/GlobalStore';
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -12,30 +15,6 @@ import {
   ProportionalSymbolsSymbolType,
   RenderVisibility,
 } from '../../global.d';
-
-/* eslint-disable no-mixed-operators */
-const PropSizer = function PropSizer(
-  fixedValue: number,
-  fixedSize: number,
-  symbolType: ProportionalSymbolsSymbolType,
-) {
-  this.fixedValue = fixedValue;
-  const { sqrt, abs } = Math;
-  if (symbolType === ProportionalSymbolsSymbolType.circle) {
-    const { PI } = Math;
-    this.smax = fixedSize * fixedSize * PI;
-    this.scale = (val) => sqrt(abs(val) * this.smax / this.fixedValue) / PI;
-    this.get_value = (size) => ((size * PI) ** 2) / this.smax * this.fixedValue;
-  } else if (symbolType === ProportionalSymbolsSymbolType.line) {
-    this.smax = fixedSize;
-    this.scale = (val) => abs(val) * this.smax / this.fixedValue;
-    this.get_value = (size) => size / this.smax * this.fixedValue;
-  } else { // symbolType === ProportionalSymbolsSymbolType.square
-    this.smax = fixedSize * fixedSize;
-    this.scale = (val) => sqrt(abs(val) * this.smax / this.fixedValue);
-    this.get_value = (size) => (size ** 2) / this.smax * this.fixedValue;
-  }
-}; /* eslint-enable no-mixed-operators */
 
 export default function proportionalSymbolsRenderer(
   layerDescription: LayerDescription,

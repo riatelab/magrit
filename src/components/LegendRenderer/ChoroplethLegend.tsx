@@ -90,7 +90,6 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
     computeRectangleBox(refElement);
     bindMouseEnterLeave(refElement);
     bindDragBehavior(refElement, layer);
-    refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
   };
 
   onMount(() => {
@@ -98,7 +97,6 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
   });
 
   createEffect(() => {
-    console.log('createEffect');
     if (refElement && layer.visible && layer.legend.visible) {
       computeRectangleBox(
         refElement,
@@ -114,14 +112,6 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
     }
   });
 
-  // console.log(
-  //   getTextSize(
-  //     layer.legend.title.text,
-  //     layer.legend.title.fontSize,
-  //     layer.legend.title.fontFamily,
-  //   ),
-  // );
-
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
     || (layer.visible && layer.legend.visible)
@@ -131,12 +121,13 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
       class="legend choropleth"
       transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
       visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
-      ondblclick={(e) => { console.log(e); makeLegendSettingsModal(layer.id, LL); }}
+      ondblclick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
       onContextMenu={(e) => {
         e.preventDefault();
         e.stopPropagation();
         triggerContextMenuLegend(e, layer.id, LL);
       } }
+      style={{ cursor: 'grab' }}
     >
       { makeRectangleBox() }
       { makeLegendTitle(layer.legend.title, [0, 0]) }
@@ -271,7 +262,6 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
     computeRectangleBox(refElement);
     bindMouseEnterLeave(refElement);
     bindDragBehavior(refElement, layer);
-    refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
   };
 
   onMount(() => {
@@ -306,7 +296,8 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
         e.stopPropagation();
         triggerContextMenuLegend(e, layer.id, LL);
       } }
-      ondblclick={(e) => { console.log(e); makeLegendSettingsModal(layer.id, LL); }}
+      ondblclick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+      style={{ cursor: 'grab' }}
     >
       { makeRectangleBox() }
       { makeLegendTitle(layer.legend.title, [0, 0]) }
@@ -340,8 +331,8 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
               font-style={layer.legend.labels.fontStyle}
               font-weight={layer.legend.labels.fontWeight}
               fill={layer.legend.labels.fontColor}
-              style={{ 'user-select': 'none', 'text-anchor': 'middle' }}
-              text-anchor="start"
+              style={{ 'user-select': 'none' }}
+              text-anchor="middle"
               alignment-baseline="middle"
             >{ round(value, layer.legend!.roundDecimals) }</text>
           }

@@ -4,6 +4,12 @@ declare module uuid {
     rng?: () => ArrayLike<number>
   }
 
-  function v4(options?: V4Options | null): string
-  function v4<T extends ArrayLike<number>>(options: V4Options | null | undefined, buffer: T, offset?: number): T
+  function v4(options?: V4Options | null): string;
+  function v4<T extends ArrayLike<number>>(
+    options: V4Options | null | undefined,
+    buffer: T,
+    offset?: number,
+  ): T;
 }
+
+export = uuid;

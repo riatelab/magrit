@@ -1,17 +1,22 @@
 // Imports from solid-js
 import {
-  createEffect, createMemo, createSignal, For, JSX,
+  createEffect,
+  createMemo,
+  createSignal,
+  For,
+  JSX,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
+import { getPalette } from 'dicopal';
 import { v4 as uuidv4 } from 'uuid';
 
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { descendingKeyAccessor, isNumber } from '../../../helpers/common';
 import { coordsPointOnFeature } from '../../../helpers/geo';
-import { max } from '../../../helpers/math';
+import { max, min } from '../../../helpers/math';
 
 // Sub-components
 import ResultNameInput from './ResultNameInput.tsx';
@@ -23,10 +28,13 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../../stor
 import type {
   GeoJSONFeatureCollection,
   LayerDescription,
+  ProportionalSymbolsLegendParameters,
   ProportionalSymbolsParameters,
   RepresentationType,
 } from '../../../global.d';
 import {
+  LegendTextElement,
+  LegendType,
   ProportionalSymbolsColorMode,
   ProportionalSymbolsSymbolType,
 } from '../../../global.d';
@@ -39,6 +47,7 @@ function onClickValidate(
   newLayerName: string,
   modeColor: ProportionalSymbolsColorMode,
   symbolType: ProportionalSymbolsSymbolType,
+  extent: [number, number],
 ) {
   // The layer description of the reference layer
   const referenceLayerDescription = layersDescriptionStore.layers
@@ -80,6 +89,11 @@ function onClickValidate(
   newData.features
     .sort(descendingKeyAccessor((d) => d.properties[targetVariable]));
 
+  const pal = getPalette('Vivid', 10)!.colors;
+  const color = pal[Math.floor(Math.random() * pal.length)];
+
+  propSymbolsParameters.color = color;
+
   const newLayerDescription = {
     id: uuidv4(),
     name: newLayerName,
@@ -95,6 +109,53 @@ function onClickValidate(
     fillOpacity: 1,
     dropShadow: false,
     rendererParameters: propSymbolsParameters,
+    legend: {
+      // Legend common part
+      title: {
+        text: targetVariable,
+        fontSize: '13px',
+        fontFamily: 'Sans-serif',
+        fontColor: '#000000',
+        fontStyle: 'normal',
+        fontWeight: 'bold',
+      } as LegendTextElement,
+      subtitle: {
+        text: 'This is a subtitle',
+        fontSize: '12px',
+        fontFamily: 'Sans-serif',
+        fontColor: '#000000',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+      } as LegendTextElement,
+      note: {
+        text: 'This is a bottom note',
+        fontSize: '11px',
+        fontFamily: 'Sans-serif',
+        fontColor: '#000000',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+      } as LegendTextElement,
+      position: [100, 100],
+      visible: true,
+      roundDecimals: 2,
+      backgroundRect: {
+        visible: false,
+        fill: '#ffffff',
+        fillOpacity: 1,
+        stroke: '#000000',
+      },
+      // Part specific to proportional symbols
+      type: LegendType.proportional,
+      layout: 'stacked',
+      values: [extent[0], extent[1] / 5, extent[1] / 2, extent[1]],
+      labels: {
+        fontSize: '11px',
+        fontFamily: 'Sans-serif',
+        fontColor: '#000000',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+      } as LegendTextElement,
+    } as ProportionalSymbolsLegendParameters,
   } as LayerDescription;
 
   setLayersDescriptionStore(
@@ -140,7 +201,9 @@ export default function ProportionalSymbolsSettings(
     .filter((value) => isNumber(value))
     .map((value) => +value) as number[]);
 
-  // Reactive variable that contains the max value of the target variable
+  // Reactive variables that contains the min and the max values
+  // of the target variable
+  const minValues = createMemo(() => min(values()));
   const maxValues = createMemo(() => max(values()));
 
   const [
@@ -184,6 +247,7 @@ export default function ProportionalSymbolsSettings(
       newLayerName(),
       modeColor(),
       symbolType(),
+      [minValues(), maxValues()],
     );
   };
 

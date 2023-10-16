@@ -39,6 +39,7 @@ import { type IZoomable, LayoutFeatureType, ZoomBehavior } from '../global.d';
 
 // Styles
 import '../styles/MapZone.css';
+import legendProportionalSymbols from './LegendRenderer/ProportionnalSymbolsLegend.tsx';
 
 const layoutFeaturesFns = {
   [LayoutFeatureType.Rectangle]: RectangleRenderer,
@@ -214,6 +215,9 @@ export default function MapZone(): JSX.Element {
           {(layer) => {
             if (layer.renderer === 'choropleth') {
               return legendChoropleth(layer);
+            }
+            if (layer.renderer === 'proportionalSymbols') {
+              return legendProportionalSymbols(layer);
             }
             return null;
           }}

@@ -81,15 +81,15 @@ function onClickValidate(
     strokeColor: '#000000',
     strokeWidth: '0.4px',
     strokeOpacity: 1,
-    // fillColor: '#ffffff',
     fillOpacity: 1,
     dropShadow: false,
     rendererParameters: classification,
     legend: {
+      // Part common to all legends
       title: {
         text: targetVariable,
         fontSize: '13px',
-        fontFamily: 'Arial',
+        fontFamily: 'Sans-serif',
         fontColor: '#000000',
         fontStyle: 'normal',
         fontWeight: 'bold',
@@ -101,15 +101,6 @@ function onClickValidate(
         fontStyle: 'normal',
         fontWeight: 'normal',
       },
-      type: LegendType.choropleth,
-      position: [100, 100],
-      visible: true,
-      roundDecimals: 1,
-      orientation: Orientation.vertical,
-      boxWidth: 30,
-      boxHeight: 30,
-      boxSpacing: 5,
-      boxCornerRadius: 20,
       note: {
         text: 'This is a bottom note',
         fontSize: '11px',
@@ -118,6 +109,22 @@ function onClickValidate(
         fontStyle: 'normal',
         fontWeight: 'normal',
       },
+      position: [100, 100],
+      visible: true,
+      roundDecimals: 1,
+      backgroundRect: {
+        visible: false,
+        fill: '#ffffff',
+        fillOpacity: 1,
+        stroke: '#000000',
+      },
+      // Part specific to choropleth
+      type: LegendType.choropleth,
+      orientation: Orientation.vertical,
+      boxWidth: 30,
+      boxHeight: 30,
+      boxSpacing: 5,
+      boxCornerRadius: 20,
       labels: {
         fontSize: '11px',
         fontFamily: 'Sans-serif',
@@ -125,16 +132,13 @@ function onClickValidate(
         fontStyle: 'normal',
         fontWeight: 'normal',
       } as LegendTextElement,
-      backgroundRect: {
-        visible: false,
-        fill: '#ffffff',
-        fillOpacity: 1,
-        stroke: '#000000',
-      },
     } as ChoroplethLegendParameters,
   } as LayerDescription;
 
-  console.log(newLayerDescription);
+  if (newLayerDescription.type === 'point') {
+    // We also need to transfert the pointRadius parameter
+    newLayerDescription.pointRadius = referenceLayerDescription.pointRadius || 5;
+  }
 
   setLayersDescriptionStore(
     produce(
