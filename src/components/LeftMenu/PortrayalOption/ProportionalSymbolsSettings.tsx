@@ -2,6 +2,7 @@
 import {
   createEffect, createMemo, createSignal, For, JSX,
 } from 'solid-js';
+import { produce } from 'solid-js/store';
 
 // Imports from other packages
 import { v4 as uuidv4 } from 'uuid';
@@ -25,7 +26,10 @@ import type {
   ProportionalSymbolsParameters,
   RepresentationType,
 } from '../../../global.d';
-import { ProportionalSymbolsColorMode, ProportionalSymbolsSymbolType } from '../../../global.d';
+import {
+  ProportionalSymbolsColorMode,
+  ProportionalSymbolsSymbolType,
+} from '../../../global.d';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -93,12 +97,13 @@ function onClickValidate(
     rendererParameters: propSymbolsParameters,
   } as LayerDescription;
 
-  setLayersDescriptionStore({
-    layers: [
-      newLayerDescription,
-      ...layersDescriptionStore.layers,
-    ],
-  });
+  setLayersDescriptionStore(
+    produce(
+      (draft) => {
+        draft.layers.push(newLayerDescription);
+      },
+    ),
+  );
 }
 
 interface ProportionalSymbolsSettingsProps {

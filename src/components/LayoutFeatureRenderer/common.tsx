@@ -146,9 +146,9 @@ export function triggerContextMenuLayoutFeature(
           // (and so that it is rendered after the previous layout feature)
           const layoutFeatures = layersDescriptionStore.layoutFeatures.slice();
           const index = layoutFeatures.findIndex((l) => l.id === layoutFeatureId);
-          if (index > 0) {
-            const tmp = layoutFeatures[index - 1];
-            layoutFeatures[index - 1] = layoutFeatures[index];
+          if (index < layoutFeatures.length - 1) {
+            const tmp = layoutFeatures[index + 1];
+            layoutFeatures[index + 1] = layoutFeatures[index];
             layoutFeatures[index] = tmp;
             setLayersDescriptionStore({ layoutFeatures });
           }
@@ -162,9 +162,9 @@ export function triggerContextMenuLayoutFeature(
           // (and so that it is rendered before the previous layout feature)
           const layoutFeatures = layersDescriptionStore.layoutFeatures.slice();
           const index = layoutFeatures.findIndex((l) => l.id === layoutFeatureId);
-          if (index < layoutFeatures.length - 1) {
-            const tmp = layoutFeatures[index + 1];
-            layoutFeatures[index + 1] = layoutFeatures[index];
+          if (index > 0) {
+            const tmp = layoutFeatures[index - 1];
+            layoutFeatures[index - 1] = layoutFeatures[index];
             layoutFeatures[index] = tmp;
             setLayersDescriptionStore({ layoutFeatures });
           }

@@ -6,14 +6,14 @@ import '../../styles/LayerManager.css';
 
 const setLayersDescriptionStoreWrapper = (newLayersDescriptionStore: []) => {
   setLayersDescriptionStore({
-    layers: newLayersDescriptionStore,
+    layers: newLayersDescriptionStore.toReversed(),
   });
 };
 
 const LayerManager = (): JSX.Element => <div class="layer-manager">
   <Sortable
     idField="id"
-    items={layersDescriptionStore.layers}
+    items={layersDescriptionStore.layers.toReversed()}
     setItems={setLayersDescriptionStoreWrapper}
   >
     {

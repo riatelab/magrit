@@ -171,7 +171,7 @@ export default function MapZone(): JSX.Element {
         onContextMenu={(e) => e.preventDefault()}
       >
         <defs>
-          <For each={ layersDescriptionStore.layers.toReversed() }>
+          <For each={ layersDescriptionStore.layers }>
             {(layer) => {
               if (layer.dropShadow) {
                 return <filter id={`filter-drop-shadow-${layer.id}`} width="200%" height="200%">
@@ -187,7 +187,7 @@ export default function MapZone(): JSX.Element {
         </defs>
 
         {/* Generate SVG group for each layer */}
-        <For each={ layersDescriptionStore.layers.toReversed() }>
+        <For each={ layersDescriptionStore.layers }>
           {(layer) => {
             if (layer.renderer === 'sphere') {
               return sphereRenderer(layer);
@@ -210,7 +210,7 @@ export default function MapZone(): JSX.Element {
           }}
         </For>
         {/* Generate legend group for each layer */}
-        <For each={ layersDescriptionStore.layers.toReversed() }>
+        <For each={ layersDescriptionStore.layers }>
           {(layer) => {
             if (layer.renderer === 'choropleth') {
               return legendChoropleth(layer);
@@ -218,7 +218,7 @@ export default function MapZone(): JSX.Element {
             return null;
           }}
         </For>
-        <For each={ layersDescriptionStore.layoutFeatures.toReversed() }>
+        <For each={ layersDescriptionStore.layoutFeatures }>
           {(feature) => layoutFeaturesFns[feature.type](feature)}
         </For>
       </svg>

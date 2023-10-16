@@ -138,7 +138,7 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
       // Reset the layerDescription for this layer
       setLayersDescriptionStore(
         'layers',
-        (l) => l.id === id,
+        (l: LayerDescription) => l.id === id,
         initialLayerDescription,
       );
     },

@@ -1,15 +1,27 @@
+// Import from solid-js
 import { For, JSX, Show } from 'solid-js';
+import { produce } from 'solid-js/store';
+
+// Import from other packages
 import { v4 as uuidv4 } from 'uuid';
 import { getPalette } from 'dicopal';
+
+// Stores
 import { overlayDropStore, setOverlayDropStore } from '../store/OverlayDropStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
+import { setFieldTypingModalStore } from '../store/FieldTypingModalStore';
 import { setGlobalStore } from '../store/GlobalStore';
-import '../styles/OverlayDrop.css';
+
+// Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
 import { isAuthorizedFile } from '../helpers/fileUpload';
 import { convertToGeoJSON, getGeometryType } from '../helpers/formatConversion';
-import { setFieldTypingModalStore } from '../store/FieldTypingModalStore';
-import { CustomFileList } from '../global';
+
+// Types / Interfaces / Enums
+import { type CustomFileList } from '../global';
+
+// Styles
+import '../styles/OverlayDrop.css';
 
 const getDefaultRenderingParams = (geomType: string) => {
   const pal = getPalette('Vivid', 10)!.colors;
@@ -56,24 +68,25 @@ function addLayer(geojson: GeoJSON.FeatureCollection | object, name: string) {
 
   // Add the new layer to the LayerManager by adding it
   // to the layersDescriptionStore
-  const newLayersDescriptionStore = [
-    {
-      id: layerId,
-      name,
-      type: geomType,
-      data: geojson,
-      visible: true,
-      ...getDefaultRenderingParams(geomType),
-    },
-    ...layersDescriptionStore.layers,
-  ];
+  const newLayerDescription = {
+    id: layerId,
+    name,
+    type: geomType,
+    data: geojson,
+    visible: true,
+    ...getDefaultRenderingParams(geomType),
+  };
 
   // TODO: ideally, we should push the state *after* having
   //   asking field types to the user so that it is only
   //   one entry in the undo/redo stack
-  setLayersDescriptionStore({
-    layers: newLayersDescriptionStore,
-  });
+  setLayersDescriptionStore(
+    produce(
+      (draft) => {
+        draft.layers.push(newLayerDescription);
+      },
+    ),
+  );
 
   setFieldTypingModalStore({
     show: true,

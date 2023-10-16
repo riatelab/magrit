@@ -2,7 +2,7 @@
 import {
   createEffect, createMemo, createSignal, For,
 } from 'solid-js';
-import { FaSolidCircleCheck } from 'solid-icons/fa';
+import { produce } from 'solid-js/store';
 
 // Imports from other packages
 import { v4 as uuidv4 } from 'uuid';
@@ -10,6 +10,7 @@ import { getPalette, Palette } from 'dicopal';
 import {
   quantile, equal, jenks, q6,
 } from 'statsbreaks';
+import { FaSolidCircleCheck } from 'solid-icons/fa';
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
@@ -135,12 +136,13 @@ function onClickValidate(
 
   console.log(newLayerDescription);
 
-  setLayersDescriptionStore({
-    layers: [
-      newLayerDescription,
-      ...layersDescriptionStore.layers,
-    ],
-  });
+  setLayersDescriptionStore(
+    produce(
+      (draft) => {
+        draft.layers.push(newLayerDescription);
+      },
+    ),
+  );
 }
 export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.Element {
   const { LL } = useI18nContext();

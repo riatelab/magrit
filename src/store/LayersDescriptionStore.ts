@@ -21,8 +21,8 @@ type LayersDescriptionStoreType = {
 
 const defaultLayersDescription = (): LayersDescriptionStoreType => ({
   layers: [
-    makeDefaultGraticule(),
     makeDefaultSphere(),
+    makeDefaultGraticule(),
   ],
   layoutFeatures: [
     {

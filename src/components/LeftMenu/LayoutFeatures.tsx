@@ -2,6 +2,7 @@
 import {
   createSignal, JSX, Show,
 } from 'solid-js';
+import { produce } from 'solid-js/store';
 
 // Assets
 import layoutFeatureRectangle from '../../assets/layout-features/rect-01.png';
@@ -95,12 +96,13 @@ export default function LayoutFeatures(): JSX.Element {
           title={ LL().LayoutFeatures.Graticule() }
           onClick={(e) => {
             if (!alreadyHasGraticule(layersDescriptionStore.layers)) {
-              setLayersDescriptionStore({
-                layers: [
-                  makeDefaultGraticule(),
-                  ...layersDescriptionStore.layers,
-                ],
-              });
+              setLayersDescriptionStore(
+                produce(
+                  (draft) => {
+                    draft.layers.push(makeDefaultGraticule());
+                  },
+                ),
+              );
             }
           }}
         />
@@ -114,12 +116,13 @@ export default function LayoutFeatures(): JSX.Element {
           title={ LL().LayoutFeatures.Sphere() }
           onClick={(e) => {
             if (!alreadyHasSphere(layersDescriptionStore.layers)) {
-              setLayersDescriptionStore({
-                layers: [
-                  makeDefaultSphere(),
-                  ...layersDescriptionStore.layers,
-                ],
-              });
+              setLayersDescriptionStore(
+                produce(
+                  (draft) => {
+                    draft.layers.push(makeDefaultSphere());
+                  },
+                ),
+              );
             }
           }}
         />
