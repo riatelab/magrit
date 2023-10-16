@@ -31,15 +31,20 @@ import TableWindow from './components/Modals/TableWindow.tsx';
 import ClassificationPanel from './components/Modals/ClassificationPanel.tsx';
 import { HeaderBarApp } from './components/Headers.tsx';
 import ExampleDataModal from './components/Modals/ExampleDatasetModal.tsx';
-// import ReloadPrompt from './components/ReloadPrompt.tsx';
 import ContextMenu from './components/ContextMenu.tsx';
 import ModalWithChildren from './components/Modals/ModalWithChildren.tsx';
+// import ReloadPrompt from './components/ReloadPrompt.tsx';
 
 // Stores
 import { classificationPanelStore } from './store/ClassificationPanelStore';
 import { fieldTypingModalStore } from './store/FieldTypingModalStore';
 import { globalStore, setGlobalStore } from './store/GlobalStore';
-import { mapStore, setMapStore } from './store/MapStore';
+import {
+  type MapStoreType,
+  mapStore,
+  setMapStore,
+  setMapStoreBase,
+} from './store/MapStore';
 import {
   defaultLayersDescription,
   layersDescriptionStore,
@@ -53,9 +58,10 @@ import { applicationSettingsStore } from './store/ApplicationSettingsStore';
 import { datasetCatalogStore } from './store/DatasetCatalogStore';
 import { modalWithChildrenStore } from './store/ModalWithChildrenStore';
 import { contextMenuStore, resetContextMenuStore } from './store/ContextMenuStore';
+import { undo, redo } from './store/undo-redo';
 
 // Types and enums
-import { ResizeBehavior } from './global.d';
+import { LayerDescription, LayoutFeature, ResizeBehavior } from './global.d';
 
 // Other stuff
 import { version } from '../package.json';
@@ -76,7 +82,7 @@ let timeout: NodeJS.Timeout | null | undefined = null;
 
 const db = initDb();
 
-const onBeforeUnloadWindow = async (ev) => {
+const onBeforeUnloadWindow = (ev) => {
   // If there is no layer or if
   // there is only the sphere layer and or the graticule layer,
   // do nothing
@@ -88,14 +94,15 @@ const onBeforeUnloadWindow = async (ev) => {
   }
   // Otherwise we store the state of the current projet
   // in the local DB (indexedDB via Dexie)
-  const { layers } = layersDescriptionStore;
+  const { layers, layoutFeatures } = layersDescriptionStore;
   const map = { ...mapStore };
   const obj = {
     layers,
+    layoutFeatures,
     map,
   };
 
-  await storeProject(db, obj);
+  storeProject(db, obj);
 
   // The message is usually ignored in modern browsers
   ev.returnValue = 'Confirm exit ?'; // eslint-disable-line no-param-reassign
@@ -158,23 +165,23 @@ const dropHandler = (e: Event): void => {
   }
 };
 
-const reloadFromProjectObject = (obj: { layers: object, map: object }): void => {
-  const { layers, map } = obj;
+const reloadFromProjectObject = (
+  obj: {
+    layers: LayerDescription[],
+    layoutFeatures: LayoutFeature[],
+    map: MapStoreType,
+  },
+): void => {
+  // The state we want to use
+  const { layers, layoutFeatures, map } = obj;
+  // Reset the layers description store before changing the map store
+  // (this avoid redrawing the map for the potential current layers)
+  setLayersDescriptionStore({ layers: [], layoutFeatures: [] });
+  // Update the map store
+  // (this updates the projection and pathGenerator in the global store)
   setMapStore(map);
-  const projection = d3[map.projection.value]()
-    // .center(map.center)
-    .scale(map.scale)
-    .translate(map.translate);
-  const pathGenerator = d3.geoPath(projection);
-  setGlobalStore(
-    'projection',
-    () => projection,
-  );
-  setGlobalStore(
-    'pathGenerator',
-    () => pathGenerator,
-  );
-  setLayersDescriptionStore({ layers });
+  // Update the layer description store with the layers and layout features
+  setLayersDescriptionStore({ layers, layoutFeatures });
 };
 
 const AppPage: () => JSX.Element = () => {
@@ -189,7 +196,7 @@ const AppPage: () => JSX.Element = () => {
     height: round((window.innerHeight - applicationSettingsStore.headerHeight) * 0.9, 0),
   };
 
-  setMapStore({
+  setMapStoreBase({
     mapDimensions: maxMapDimensions,
   });
 
@@ -247,6 +254,12 @@ const AppPage: () => JSX.Element = () => {
     // Add event listener to the window to handle beforeunload events
     window.addEventListener('beforeunload', onBeforeUnloadWindow);
 
+    // Add event listener to the window to handle undo/redo events
+    document.getElementById('button-undo')
+      ?.addEventListener('click', undo);
+    document.getElementById('button-redo')
+      ?.addEventListener('click', redo);
+
     // Event listeners for the buttons of the header bar
     document.getElementById('button-new-project')
       ?.addEventListener('click', () => {
@@ -265,6 +278,7 @@ const AppPage: () => JSX.Element = () => {
           setLayersDescriptionStore(defaultLayersDescription());
 
           // Reset the map store
+          // (this will also reset the projection and pathGenerator in the global store)
           setMapStore({
             mapDimensions: {
               width: mapWidth,
@@ -277,16 +291,6 @@ const AppPage: () => JSX.Element = () => {
               value: 'geoNaturalEarth2',
               name: 'NaturalEarth2',
             },
-          });
-
-          // Reset projection and pathGenerator in the global store
-          const projection = d3[mapStore.projection.value]()
-            .translate(mapStore.translate)
-            .scale(mapStore.scale);
-
-          setGlobalStore({
-            projection,
-            pathGenerator: d3.geoPath(projection),
           });
         };
 
@@ -305,10 +309,11 @@ const AppPage: () => JSX.Element = () => {
 
     document.getElementById('button-export-project')
       ?.addEventListener('click', () => {
-        const { layers } = layersDescriptionStore;
+        const { layers, layoutFeatures } = layersDescriptionStore;
         const map = { ...mapStore };
         const obj = {
           layers,
+          layoutFeatures,
           map,
         };
         const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(obj))}`;

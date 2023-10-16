@@ -14,14 +14,17 @@ const fr = {
     DeleteLayer: 'Supprimer la couche',
     EmptyProject: 'Créer un nouveau projet vide ?',
     SaveEditedData: 'Sauvegarder les modifications effectuées ?',
-    ReloadLastProject: 'Un projet a été sauvegardé automatiquement lors de la fermetture de la page le {}. Recharger le ce projet ?',
+    ReloadLastProject: 'Un projet a été sauvegardé automatiquement lors de la fermeture de la page le {}. Recharger le ce projet ?',
   },
   HeaderApp: {
     NightDayMode: 'Night / Day mode',
     ImportProjet: 'Importer un projet Magrit',
     SaveProject: 'Sauvegarder le projet',
+    NewProject: 'Nouveau projet',
     About: 'À propos de Magrit',
     Language: 'Sélection de la langue',
+    Undo: 'Annuler',
+    Redo: 'Rétablir',
   },
   Pagination: {
     Next: 'Suivant',

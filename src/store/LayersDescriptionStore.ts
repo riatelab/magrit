@@ -1,5 +1,6 @@
 import { createStore } from 'solid-js/store';
 import { makeDefaultGraticule, makeDefaultSphere } from '../helpers/layers';
+import { debounce, unproxify } from '../helpers/common';
 import {
   type Ellipse,
   type FreeDrawing,
@@ -11,6 +12,7 @@ import {
   DistanceUnit,
   ScaleBarStyle,
 } from '../global.d';
+import { debouncedPushUndoStack, resetRedoStackStore } from './stateStackStore';
 
 type LayersDescriptionStoreType = {
   layers: LayerDescription[],
@@ -80,11 +82,26 @@ const defaultLayersDescription = (): LayersDescriptionStoreType => ({
 
 const [
   layersDescriptionStore,
-  setLayersDescriptionStore,
+  setLayersDescriptionStoreBase,
 ] = createStore(defaultLayersDescription());
+
+/**
+ * This is a wrapper around the setLayersDescriptionStoreBase function.
+ * The wrapper is used to push the current state to the undo stack
+ * before actually updating the store.
+ */
+const setLayersDescriptionStore = (...args: any[]) => {
+  // Push the current state to the (undo) state stack
+  debouncedPushUndoStack('layersDescription', unproxify(layersDescriptionStore));
+  // Reset the redo stack
+  resetRedoStackStore();
+  // Apply the changes to the store
+  setLayersDescriptionStoreBase(...args);
+};
 
 export {
   layersDescriptionStore,
   setLayersDescriptionStore,
   defaultLayersDescription,
+  setLayersDescriptionStoreBase,
 };

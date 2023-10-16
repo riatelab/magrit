@@ -10,6 +10,10 @@ import {
   FaSolidFolderOpen,
   FaSolidFile,
 } from 'solid-icons/fa';
+import { ImUndo, ImRedo } from 'solid-icons/im';
+
+// Stores
+import { stateStackStore } from '../store/stateStackStore';
 
 // Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
@@ -96,6 +100,23 @@ export function HeaderBarApp(): JSX.Element {
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
+          <button
+            class="button button-header-bar"
+            id="button-undo"
+            title={ LL().HeaderApp.Undo() }
+            disabled={ stateStackStore.undoStack.length === 0}
+          >
+            <ImUndo />
+          </button>
+          <button
+            class="button button-header-bar"
+            id="button-redo"
+            title={ LL().HeaderApp.Redo() }
+            disabled={ stateStackStore.redoStack.length === 0 }
+          >
+            <ImRedo />
+          </button>
+          <p style={{ margin: '2em' }}></p>
           <button
             class="button button-header-bar"
             id="button-night-day"

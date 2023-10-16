@@ -20,8 +20,11 @@ const en = {
     NightDayMode: 'Night / Day mode',
     ImportProjet: 'Import a Magrit project',
     SaveProject: 'Save project',
+    NewProject: 'New project',
     About: 'About Magrit',
     Language: 'Language selection',
+    Undo: 'Undo',
+    Redo: 'Redo',
   },
   Pagination: {
     Next: 'Next',

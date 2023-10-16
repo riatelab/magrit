@@ -7,13 +7,12 @@ import d3 from '../helpers/d3-custom';
 // Helpers
 import { debounce } from '../helpers/common';
 import { makeHexColorWithAlpha } from '../helpers/color';
-import { redrawPaths } from '../helpers/svg';
 
 // Stores
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import { applicationSettingsStore } from '../store/ApplicationSettingsStore';
-import { mapStore, setMapStore } from '../store/MapStore';
+import { mapStore, setMapStore, setMapStoreBase } from '../store/MapStore';
 
 // Sub-components
 import {
@@ -52,7 +51,7 @@ export default function MapZone(): JSX.Element {
   let svgElem: SVGSVGElement & IZoomable;
 
   // Set up the map when the component is created
-  setMapStore({
+  setMapStoreBase({
     scale: 160,
     translate: [mapStore.mapDimensions.width / 2, mapStore.mapDimensions.height / 2],
   });
@@ -97,22 +96,17 @@ export default function MapZone(): JSX.Element {
         e.transform.x + previousProjectionTranslate[0] * lastScale,
         e.transform.y + previousProjectionTranslate[1] * lastScale,
       ];
-      // Keep rotation value for now
+      // Keep rotation value unchanged for now
       const rotateValue = initialRotate;
 
-      // Update projection
-      globalStore.projection
-        .scale(scaleValue)
-        .translate(translateValue)
-        .rotate(rotateValue);
-
+      // Update the projection properties in the mapStore - this
+      // will update the 'projection' entry in the global store
+      // and redraw the map
       setMapStore({
         scale: scaleValue,
         translate: translateValue,
+        rotate: rotateValue,
       });
-
-      // Actually redraw the paths and symbols
-      redrawPaths(svgElem);
     }
   };
 

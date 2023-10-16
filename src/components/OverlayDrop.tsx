@@ -56,7 +56,6 @@ function addLayer(geojson: GeoJSON.FeatureCollection | object, name: string) {
 
   // Add the new layer to the LayerManager by adding it
   // to the layersDescriptionStore
-  console.log(getDefaultRenderingParams(geomType));
   const newLayersDescriptionStore = [
     {
       id: layerId,
@@ -68,6 +67,10 @@ function addLayer(geojson: GeoJSON.FeatureCollection | object, name: string) {
     },
     ...layersDescriptionStore.layers,
   ];
+
+  // TODO: ideally, we should push the state *after* having
+  //   asking field types to the user so that it is only
+  //   one entry in the undo/redo stack
   setLayersDescriptionStore({
     layers: newLayersDescriptionStore,
   });

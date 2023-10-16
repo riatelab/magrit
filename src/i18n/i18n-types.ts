@@ -83,6 +83,10 @@ type RootTranslation = {
 		 */
 		SaveProject: string
 		/**
+		 * N​e​w​ ​p​r​o​j​e​c​t
+		 */
+		NewProject: string
+		/**
 		 * A​b​o​u​t​ ​M​a​g​r​i​t
 		 */
 		About: string
@@ -90,6 +94,14 @@ type RootTranslation = {
 		 * L​a​n​g​u​a​g​e​ ​s​e​l​e​c​t​i​o​n
 		 */
 		Language: string
+		/**
+		 * U​n​d​o
+		 */
+		Undo: string
+		/**
+		 * R​e​d​o
+		 */
+		Redo: string
 	}
 	Pagination: {
 		/**
@@ -1078,6 +1090,10 @@ export type TranslationFunctions = {
 		 */
 		SaveProject: () => LocalizedString
 		/**
+		 * New project
+		 */
+		NewProject: () => LocalizedString
+		/**
 		 * About Magrit
 		 */
 		About: () => LocalizedString
@@ -1085,6 +1101,14 @@ export type TranslationFunctions = {
 		 * Language selection
 		 */
 		Language: () => LocalizedString
+		/**
+		 * Undo
+		 */
+		Undo: () => LocalizedString
+		/**
+		 * Redo
+		 */
+		Redo: () => LocalizedString
 	}
 	Pagination: {
 		/**

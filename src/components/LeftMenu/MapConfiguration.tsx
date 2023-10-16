@@ -61,13 +61,11 @@ const projectionEntries = availableProjections.map((projection) => ({
 }));
 
 function onChangeProjectionEntry(value: string) {
+  // The projection function name in d3 is 'geo' + the value
   const functionName = `geo${value}`;
-  const projection = d3[functionName]()
-    .center(mapStore.center)
-    .translate(mapStore.translate)
-    .scale(mapStore.scale);
-  const pathGenerator = d3.geoPath(projection);
-
+  // Changing this in the mapStore will
+  // actually change the projection and the path generator
+  // in the global store and redraw the map
   setMapStore(
     'projection',
     {
@@ -75,15 +73,6 @@ function onChangeProjectionEntry(value: string) {
       value: functionName,
       type: 'd3',
     },
-  );
-
-  setGlobalStore(
-    'projection',
-    () => projection,
-  );
-  setGlobalStore(
-    'pathGenerator',
-    () => pathGenerator,
   );
 }
 
