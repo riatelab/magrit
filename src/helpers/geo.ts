@@ -159,10 +159,8 @@ function filterValues(
   // Loop over all values that are large enough
   for (let limitId = 1; limitId <= lastValueId; limitId++) { // eslint-disable-line no-plusplus
     const v = candidates[limitId];
-    console.log(v);
     // Compute the height of the symbol
     const h = scaleFn(v);
-    console.log(h);
     // Do not draw the symbol if it is too close to the smallest symbol
     // (but it is not the smallest limit itself)
     if (((h - lastHeight) < dmin) && (limitId !== lastValueId)) {
@@ -177,7 +175,7 @@ function filterValues(
     previousHeight = h;
   }
 
-  return filteredValues;
+  return filteredValues.sort(ascending);
 }
 
 /**
@@ -227,7 +225,11 @@ export function computeCandidateValues(
     }
   }
 
-  console.log(candidates);
   candidates.sort(descending);
-  return filterValues(candidates, scaleFn, 0);
+  candidates[0] = maxValue;
+
+  return [
+    minValue,
+    ...filterValues(candidates, scaleFn, 6),
+  ];
 }

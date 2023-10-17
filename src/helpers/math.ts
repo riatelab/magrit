@@ -95,10 +95,19 @@ export function sum(arr: number[]): number {
 }
 
 /**
+ * Returns the mean of an array of numbers.
+ * @param {number[]} arr - An array of numbers.
+ * @return {number} - The mean of the array.
+ */
+export function mean(arr: number[]): number {
+  return sum(arr) / arr.length;
+}
+
+/**
  * Test an array of numbers for negative values.
  *
  * @param {number[]} arr - An array of numbers.
- * @return {boolean} - True or False, whether it contains negatives values or not
+ * @return {boolean} - True or False, whether it contains negatives values or not.
  */
 export function hasNegative(arr: number[]) {
   for (let i = 0, l = arr.length; i < l; i += 1) {
@@ -118,11 +127,11 @@ export function hasDuplicates(arr: []) {
 }
 
 /**
- * Return the haversine distance in kilometers between two points (lat/long coordinates)
+ * Return the haversine distance in kilometers between two points (lat/long coordinates).
  *
- * @param {[number, number]} A - Coordinates of the 1st point as [latitude, longitude]
- * @param {[number, number]} B - Coordinates of the 2nd point as [latitude, longitude]
- * @return {Number} distance - The distance in km between A and B
+ * @param {[number, number]} A - Coordinates of the 1st point as [latitude, longitude].
+ * @param {[number, number]} B - Coordinates of the 2nd point as [latitude, longitude].
+ * @return {Number} distance - The distance in km between A and B.
  */
 export function haversineDistance(A: [number, number], B: [number, number]) {
   const piDr = Math.PI / 180;
@@ -146,8 +155,8 @@ export function haversineDistance(A: [number, number], B: [number, number]) {
 /**
  * Compute the Interquartile Range (IQR) of a dataset.
  *
- * @param {number[]} values - The dataset
- * @returns {number} - The IQR
+ * @param {number[]} values - The dataset.
+ * @returns {number} - The IQR.
  */
 export function IQR(values: number[]): number {
   return d3.quantile(values, 0.75) as number - (d3.quantile(values, 0.25) as number);
@@ -157,12 +166,12 @@ export const lowerQuartile = (values: number[]): number => d3.quantile(values, 0
 
 export const upperQuartile = (values: number[]): number => d3.quantile(values, 0.75) as number;
 
-export const lowerWhisker = (values: number[]): number => Math.max(
+export const lowerWhisker = (values: number[]): number => Mmax(
   min(values),
   lowerQuartile(values) - 1.5 * IQR(values),
 );
 
-export const upperWhisker = (values: number[]): number => Math.min(
+export const upperWhisker = (values: number[]): number => Mmin(
   max(values),
   upperQuartile(values) + 1.5 * IQR(values),
 );
@@ -177,8 +186,8 @@ export const upperWhisker = (values: number[]): number => Math.min(
  */
 export function getBandwidth(values: number[]): number {
   const hi = d3.deviation(values) as number;
-  let lo = Math.min(hi, IQR(values) / 1.34);
-  if (lo === 0) lo = hi || Math.abs(values[0]) || 1;
+  let lo = Mmin(hi, IQR(values) / 1.34);
+  if (lo === 0) lo = hi || Mabs(values[0]) || 1;
   return 0.9 * lo * (values.length ** -0.2);
 }
 
@@ -207,7 +216,7 @@ export function kde(
 export function epanechnikov(bandwidth: number) {
   return (x: number): number => {
     const xb = x / bandwidth;
-    return Math.abs(xb) <= 1
+    return Mabs(xb) <= 1
       ? (0.75 * (1 - x * x)) / bandwidth
       : 0;
   };
@@ -215,18 +224,16 @@ export function epanechnikov(bandwidth: number) {
 
 /**
  * Group a dataset by class, according to a set of breakpoints.
- * @param {number[]} values - The dataset to be grouped in classes
+ *
+ * @param {number[]} values - The dataset to be grouped in classes.
  * @param {number[]} breaks - The breakpoints to be used (they must be sorted,
- *                            unique and contain the min and max values of the dataset)
+ *                            unique and contain the min and max values of the dataset).
  */
 export const groupByClass = (
   values: number[],
   breaks: number[],
 ): number[][] => {
   const sortedValues = values.slice().sort(ascending);
-  if (breaks.length === 2) {
-    return [sortedValues];
-  }
   // const groups: number[][] = [];
   // for (let i = 1; i < breaks.length; i += 1) {
   //   const hi = breaks[i];
@@ -241,37 +248,41 @@ export const groupByClass = (
 /**
  * Compute the TAI (tabular accuracy index) of a dataset for a given set of
  * breakpoints.
+ * We use the same method as the one used in the R package `classInt`.
  *
- * @param {number[]} values - The values of the dataset to be classified
- * @param {number[]} breakpoints - The breakpoints to be used for classification
- * @return {number} - The TAI
+ * @param {number[]} values - The values of the dataset to be classified.
+ * @param {number[]} breakpoints - The breakpoints to be used for classification.
+ * @return {number} - The TAI, as a number between 0 and 1.
  */
-export const TabularAccuracyIndex = (
-  values: number[],
-  breakpoints: number[],
-): number => {
-  const res = 1;
-  return res;
+export const tabularAccuracyIndex = (values: number[], breakpoints: number[]): number => {
+  const sumAbs = (x: number[]) => x.reduce((acc, val) => acc + Mabs(val - mean(x)), 0);
+  const groups = groupByClass(values, breakpoints);
+  const x = sumAbs(values);
+  const y = groups.reduce((acc, col) => acc + sumAbs(col), 0);
+
+  return 1 - (y / x);
 };
 
 /**
  * Compute the Goodness of variance fit (GVF) of a dataset for a given set of
  * breakpoints.
+ * We use the same method as the one used in the R package `classInt` and
+ * Python package `jenkspy` for example.
  *
- * @param {number[]} values - The values of the dataset to be classified
- * @param {number[]} breaks - The breakpoints to be used for classification
- * @return {number} - The goodness of variance fit
+ * @param {number[]} values - The values of the dataset to be classified.
+ * @param {number[]} breaks - The breakpoints to be used for classification.
+ * @return {number} - The goodness of variance fit.
  */
 export const goodnessOfVarianceFit = (
   values: number[],
   breaks: number[],
 ): number => {
-  const mean = d3.mean(values) as number;
-  const sdam = sum(values.map((d) => (d - mean) ** 2));
+  const meanValue = mean(values);
+  const sdam = sum(values.map((d) => (d - meanValue) ** 2));
   const groups = groupByClass(values, breaks);
   let sdcm = 0;
   for (let i = 0; i < groups.length; i += 1) {
-    const groupMean = d3.mean(groups[i]) as number;
+    const groupMean = mean(groups[i]);
     sdcm += sum(groups[i].map((d) => (d - groupMean) ** 2));
   }
   return (sdam - sdcm) / sdam;

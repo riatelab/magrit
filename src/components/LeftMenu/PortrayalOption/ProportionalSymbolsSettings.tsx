@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { descendingKeyAccessor, isNumber } from '../../../helpers/common';
 import {
+  computeCandidateValues,
   computeCandidateValuesForSymbolsLegend,
   coordsPointOnFeature,
   PropSizer,
@@ -110,7 +111,13 @@ function onClickValidate(
     propSize.getValue,
   );
 
-  console.log(legendValues);
+  const legendValues2 = computeCandidateValues(
+    extent[0],
+    extent[1],
+    propSize.scale,
+  );
+
+  console.log(legendValues, legendValues2);
 
   const newLayerDescription = {
     id: uuidv4(),
@@ -165,7 +172,7 @@ function onClickValidate(
       // Part specific to proportional symbols
       type: LegendType.proportional,
       layout: 'stacked',
-      values: legendValues,
+      values: legendValues2,
       labels: {
         fontSize: '11px',
         fontFamily: 'Sans-serif',
