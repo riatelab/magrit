@@ -2,15 +2,15 @@ import { createStore } from 'solid-js/store';
 import { makeDefaultGraticule, makeDefaultSphere } from '../helpers/layers';
 import { debounce, unproxify } from '../helpers/common';
 import {
-  // type Ellipse,
-  // type FreeDrawing,
+  type Ellipse,
+  type FreeDrawing,
   type LayerDescription,
-  // type Rectangle,
-  // type ScaleBar,
+  type Rectangle,
+  type ScaleBar,
   LayoutFeature,
-  // LayoutFeatureType,
-  // DistanceUnit,
-  // ScaleBarStyle,
+  LayoutFeatureType,
+  DistanceUnit,
+  ScaleBarStyle,
 } from '../global.d';
 import { debouncedPushUndoStack, resetRedoStackStore } from './stateStackStore';
 

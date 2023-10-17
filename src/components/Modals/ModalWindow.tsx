@@ -49,7 +49,7 @@ export default function DefaultModal(): JSX.Element {
 
   return <div class="modal-window modal" style={{ display: 'flex' }} ref={refParentNode}>
     <div class="modal-background"></div>
-    <div class="modal-card">
+    <div class="modal-card" style={ modalStore.width ? { width: `${modalStore.width}px` } : {} }>
       <header class="modal-card-head">
         <p class="modal-card-title">{ modalStore.title }</p>
         {/* <button class="delete" aria-label="close"></button> */}

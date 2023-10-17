@@ -160,7 +160,7 @@ export default function MapZone(): JSX.Element {
   });
 
   return <div class="map-zone">
-    <div class="map-zone__inner" onDblClick={(e) => { console.log(e); }}>
+    <div class="map-zone__inner">
       <svg
         ref={svgElem}
         width={mapStore.mapDimensions.width}

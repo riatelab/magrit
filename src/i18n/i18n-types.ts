@@ -800,7 +800,7 @@ type RootTranslation = {
 			/**
 			 * E​q​u​a​l​ ​i​n​t​e​r​v​a​l​s
 			 */
-			equalInterval: string
+			equalIntervals: string
 			/**
 			 * Q​u​a​n​t​i​l​e​s
 			 */
@@ -835,6 +835,48 @@ type RootTranslation = {
 			headTail: string
 			/**
 			 * M​a​n​u​a​l
+			 */
+			manual: string
+		}
+		classificationMethodLegendDescriptions: {
+			/**
+			 * C​l​a​s​s​i​f​i​e​d​ ​u​s​i​n​g​ ​e​q​u​a​l​ ​i​n​t​e​r​v​a​l​s
+			 */
+			equalIntervals: string
+			/**
+			 * C​l​a​s​s​i​f​i​e​d​ ​u​s​i​n​g​ ​q​u​a​n​t​i​l​e​s
+			 */
+			quantiles: string
+			/**
+			 * C​l​a​s​s​i​f​i​e​d​ ​u​s​i​n​g​ ​n​a​t​u​r​a​l​ ​b​r​e​a​k​s​ ​(​J​e​n​k​s​)
+			 */
+			jenks: string
+			/**
+			 * C​l​a​s​s​i​f​i​e​d​ ​u​s​i​n​g​ ​m​e​a​n​ ​a​n​d​ ​s​t​a​n​d​a​r​d​ ​d​e​v​i​a​t​i​o​n
+			 */
+			standardDeviation: string
+			/**
+			 * C​l​a​s​s​i​f​i​e​d​ ​u​s​i​n​g​ ​t​h​e​ ​Q​6​ ​m​e​t​h​o​d
+			 */
+			q6: string
+			/**
+			 * C​l​a​s​s​i​f​i​e​d​ ​u​s​i​n​g​ ​t​h​e​ ​"​p​r​e​t​t​y​ ​b​r​e​a​k​s​"​ ​m​e​t​h​o​d
+			 */
+			pretty: string
+			/**
+			 * C​l​a​s​s​i​f​i​e​d​ ​u​s​i​n​g​ ​a​ ​g​e​o​m​e​t​r​i​c​ ​p​r​o​g​r​e​s​s​i​o​n
+			 */
+			geometricProgression: string
+			/**
+			 * C​l​a​s​s​i​f​i​e​d​ ​u​s​i​n​g​ ​a​n​ ​a​r​i​t​h​m​e​t​i​c​ ​p​r​o​g​r​e​s​s​i​o​n
+			 */
+			arithmeticProgression: string
+			/**
+			 * C​l​a​s​s​i​f​i​e​d​ ​u​s​i​n​g​ ​t​h​e​ ​h​e​a​d​/​t​a​i​l​ ​b​r​e​a​k​ ​m​e​t​h​o​d
+			 */
+			headTail: string
+			/**
+			 * C​l​a​s​s​i​f​i​e​d​ ​m​a​n​u​a​l​l​y
 			 */
 			manual: string
 		}
@@ -951,6 +993,22 @@ type RootTranslation = {
 			 * V​e​r​t​i​c​a​l
 			 */
 			LegendChoroplethOrientationVertical: string
+			/**
+			 * L​e​g​e​n​d​ ​l​a​y​o​u​t
+			 */
+			LegendSymbolLayout: string
+			/**
+			 * V​e​r​t​i​c​a​l
+			 */
+			LegendSymbolLayoutVertical: string
+			/**
+			 * H​o​r​i​z​o​n​t​a​l
+			 */
+			LegendSymbolLayoutHorizontal: string
+			/**
+			 * S​t​a​c​k​e​d
+			 */
+			LegendSymbolLayoutStacked: string
 			/**
 			 * B​o​x​ ​w​i​d​t​h
 			 */
@@ -1807,7 +1865,7 @@ export type TranslationFunctions = {
 			/**
 			 * Equal intervals
 			 */
-			equalInterval: () => LocalizedString
+			equalIntervals: () => LocalizedString
 			/**
 			 * Quantiles
 			 */
@@ -1842,6 +1900,48 @@ export type TranslationFunctions = {
 			headTail: () => LocalizedString
 			/**
 			 * Manual
+			 */
+			manual: () => LocalizedString
+		}
+		classificationMethodLegendDescriptions: {
+			/**
+			 * Classified using equal intervals
+			 */
+			equalIntervals: () => LocalizedString
+			/**
+			 * Classified using quantiles
+			 */
+			quantiles: () => LocalizedString
+			/**
+			 * Classified using natural breaks (Jenks)
+			 */
+			jenks: () => LocalizedString
+			/**
+			 * Classified using mean and standard deviation
+			 */
+			standardDeviation: () => LocalizedString
+			/**
+			 * Classified using the Q6 method
+			 */
+			q6: () => LocalizedString
+			/**
+			 * Classified using the "pretty breaks" method
+			 */
+			pretty: () => LocalizedString
+			/**
+			 * Classified using a geometric progression
+			 */
+			geometricProgression: () => LocalizedString
+			/**
+			 * Classified using an arithmetic progression
+			 */
+			arithmeticProgression: () => LocalizedString
+			/**
+			 * Classified using the head/tail break method
+			 */
+			headTail: () => LocalizedString
+			/**
+			 * Classified manually
 			 */
 			manual: () => LocalizedString
 		}
@@ -1958,6 +2058,22 @@ export type TranslationFunctions = {
 			 * Vertical
 			 */
 			LegendChoroplethOrientationVertical: () => LocalizedString
+			/**
+			 * Legend layout
+			 */
+			LegendSymbolLayout: () => LocalizedString
+			/**
+			 * Vertical
+			 */
+			LegendSymbolLayoutVertical: () => LocalizedString
+			/**
+			 * Horizontal
+			 */
+			LegendSymbolLayoutHorizontal: () => LocalizedString
+			/**
+			 * Stacked
+			 */
+			LegendSymbolLayoutStacked: () => LocalizedString
 			/**
 			 * Box width
 			 */

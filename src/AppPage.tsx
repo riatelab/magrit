@@ -13,13 +13,13 @@ import { Toaster } from 'solid-toast';
 
 // Helpers
 import { useI18nContext } from './i18n/i18n-solid';
-import d3 from './helpers/d3-custom';
 import { clickLinkFromDataUrl } from './helpers/exports';
 import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
 import { round } from './helpers/math';
 import { initDb, storeProject } from './helpers/storage';
 
 // Sub-components
+import AboutModal from './components/Modals/AboutModal.tsx';
 import FieldTypingModal from './components/Modals/FieldTypingModal.tsx';
 import DefaultModal from './components/Modals/ModalWindow.tsx';
 import LeftMenu from './components/LeftMenu/LeftMenu.tsx';
@@ -68,7 +68,6 @@ import { version } from '../package.json';
 
 // Styles
 import './styles/Transitions.css';
-import AboutModal from './components/Modals/AboutModal.tsx';
 
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
   paths: {

@@ -1,4 +1,9 @@
-import { type Accessor, type JSX } from 'solid-js';
+import {
+  type Accessor,
+  createMemo,
+  For,
+  type JSX,
+} from 'solid-js';
 import { render } from 'solid-js/web';
 
 // Stores
@@ -12,73 +17,32 @@ import LegendSettings from '../Modals/LegendSettings.tsx';
 import type { LayerDescription, LegendTextElement } from '../../global';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
 
-export function makeLegendTitle(
+export function makeLegendText(
   props: LegendTextElement,
   position: [number, number],
+  role: 'title' | 'subtitle' | 'note',
 ): JSX.Element {
-  if (!props) return <></>;
-  return <g class="legend-title">
-    <text style={{ 'user-select': 'none' }}>
-      <tspan
-        x={position[0]}
-        y={position[1]}
-        font-size={props.fontSize}
-        font-weight={props.fontWeight}
-        font-style={props.fontStyle}
-        font-family={props.fontFamily}
-        fill={props.fontColor}
-        pointer-events={'none'}
-        alignment-baseline="hanging"
-      >
-        { props.text }
-      </tspan>
-    </text>
-  </g>;
-}
-
-export function makeLegendSubtitle(
-  props: LegendTextElement,
-  position: [number, number],
-): JSX.Element {
-  if (!props) return <></>;
-  return <g class="legend-subtitle">
-    <text style={{ 'user-select': 'none' }}>
-      <tspan
-        x={position[0]}
-        y={position[1]}
-        font-size={props.fontSize}
-        font-weight={props.fontWeight}
-        font-style={props.fontStyle}
-        font-family={props.fontFamily}
-        fill={props.fontColor}
-        pointer-events={'none'}
-        alignment-baseline="hanging"
-      >
-        { props.text }
-      </tspan>
-    </text>
-  </g>;
-}
-
-export function makeLegendNote(
-  props: LegendTextElement,
-  position: [number, number],
-): JSX.Element {
-  if (!props) return <></>;
-  return <g class="legend-note">
-    <text style={{ 'user-select': 'none' }}>
-      <tspan
-        x={position[0]}
-        y={position[1]}
-        font-size={props.fontSize}
-        font-weight={props.fontWeight}
-        font-style={props.fontStyle}
-        font-family={props.fontFamily}
-        fill={props.fontColor}
-        pointer-events={'none'}
-      >
-        { props.text }
-      </tspan>
+  if (!props || !props.text) return <></>;
+  const fontSize = createMemo(() => +(props.fontSize.replace('px', '')));
+  return <g class={`legend-${role}`}>
+    <text
+      style={{ 'user-select': 'none' }}
+      font-size={props.fontSize}
+      font-weight={props.fontWeight}
+      font-style={props.fontStyle}
+      font-family={props.fontFamily}
+      fill={props.fontColor}
+      pointer-events={'none'}
+    >
+      <For each={props.text!.split('\\n')}>
+        {(line, i) => <tspan
+          x={position[0]}
+          y={position[1] + i() * fontSize() * 1.1}
+          alignment-baseline="hanging"
+        >
+          { line }
+        </tspan>}
+      </For>
     </text>
   </g>;
 }
@@ -125,7 +89,7 @@ export function bindMouseEnterLeave(refElement: SVGElement): void {
   });
 }
 
-export function bindDragBehavior(refElement: SVGElement, layer: LayerDescription): void {
+export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescription): void {
   // Allow the user to move the refElement group
   // by dragging it on the screen.
   // To do this we change the transform attribute of the refElement group.
@@ -136,29 +100,52 @@ export function bindDragBehavior(refElement: SVGElement, layer: LayerDescription
   let outerSvg: SVGSVGElement;
   let elem: HTMLElement;
 
+  // Get the initial position of the legend
+  let [positionX, positionY] = layer.legend!.position;
+  let i = 0;
   const moveElement = (e: MouseEvent) => {
+    i += 1;
+    if (i % 3 !== 0) return;
     const dx = e.clientX - x;
     const dy = e.clientY - y;
 
-    setLayersDescriptionStore(
-      'layers',
-      (l) => l.id === layer.id,
-      'legend',
-      {
-        position: [
-          layer.legend!.position[0] + dx,
-          layer.legend!.position[1] + dy,
-        ],
-      },
-    );
+    // setLayersDescriptionStore(
+    //   'layers',
+    //   (l: LayerDescription) => l.id === layer.id,
+    //   'legend',
+    //   {
+    //     position: [
+    //       layer.legend!.position[0] + dx,
+    //       layer.legend!.position[1] + dy,
+    //     ],
+    //   },
+    // );
+    // Compute transform attribute of the refElement group
+    // without updating the position in the layersDescriptionStore (for performance reasons)
+    positionX += dx;
+    positionY += dy;
+    refElement.setAttribute('transform', `translate(${positionX}, ${positionY})`);
 
     x = e.clientX;
     y = e.clientY;
   };
 
   const deselectElement = () => {
+    // Update the position in the layersDescriptionStore
+    // once the user has released the mouse button
+    setLayersDescriptionStore(
+      'layers',
+      (l: LayerDescription) => l.id === layer.id,
+      'legend',
+      {
+        position: [
+          positionX,
+          positionY,
+        ],
+      },
+    );
     refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
-    outerSvg.style.cursor = null; // eslint-disable-line no-param-reassign
+    outerSvg.style.cursor = 'default'; // eslint-disable-line no-param-reassign
     outerSvg.removeEventListener('mousemove', moveElement);
     outerSvg.removeEventListener('mouseup', deselectElement);
   };
@@ -191,7 +178,7 @@ export function bindDragBehavior(refElement: SVGElement, layer: LayerDescription
     outerSvg.addEventListener('mouseup', deselectElement);
     // Cursor style
     // First change the cursor of the refElement group to default value
-    refElement.style.cursor = null; // eslint-disable-line no-param-reassign
+    refElement.style.cursor = 'default'; // eslint-disable-line no-param-reassign
     // Then change the cursor of the parent SVG element to grabbing
     outerSvg.style.cursor = 'grabbing'; // eslint-disable-line no-param-reassign
 
@@ -240,12 +227,15 @@ export function getTextSize(
   fontSize: string,
   fontFamily: string,
 ): { width: number, height: number } {
+  // Font size as a number
+  const fontSizePx = +(fontSize.replace('px', ''));
   // Create an element to measure the text
   const elem = document.createElementNS('http://www.w3.org/2000/svg', 'text');
   elem.style.visibility = 'hidden';
   elem.setAttribute('font-size', fontSize);
   elem.setAttribute('font-family', fontFamily);
-  elem.innerHTML = text;
+  // Add all the lines of the text
+  elem.innerHTML = `${text.split('\\n').map((line, i) => `<tspan y="${fontSizePx * i * 1.1}">${line}</tspan>`).join('')}`;
   // Add the element to the DOM (but it is invisible)
   (document.querySelector('svg.map-zone__map') as SVGElement).appendChild(elem);
   // Compute the size of the text
@@ -263,6 +253,7 @@ export function makeLegendSettingsModal(layerId: string, LL: Accessor<Translatio
     confirmCallback: () => {},
     cancelCallback: () => {},
     escapeKey: 'cancel',
+    width: 700,
   });
   render(() => <LegendSettings layerId={layerId} LL={LL} />, document.querySelector('.modal-card-body')!);
 }

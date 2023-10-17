@@ -60,6 +60,7 @@ function onClickValidate(
   targetVariable: string,
   classification: ClassificationParameters,
   newName: string,
+  noteContent: string,
 ) {
   // The layer description of the reference layer
   const referenceLayerDescription = layersDescriptionStore.layers
@@ -102,7 +103,7 @@ function onClickValidate(
         fontWeight: 'normal',
       },
       note: {
-        text: 'This is a bottom note',
+        text: noteContent,
         fontSize: '11px',
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
@@ -195,6 +196,8 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
       targetVariable(),
       targetClassification(),
       newLayerName() || LL().PortrayalSection.NewLayer(),
+      LL().ClassificationPanel
+        .classificationMethodLegendDescriptions[targetClassification().method](),
     );
   };
 
@@ -245,14 +248,14 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
           }}
         />
         <img
-          class={`mini-button${targetClassification().method === ClassificationMethod.equalInterval ? ' selected' : ''}`}
+          class={`mini-button${targetClassification().method === ClassificationMethod.equalIntervals ? ' selected' : ''}`}
           src={imgEqualIntervals}
-          alt={ LL().ClassificationPanel.classificationMethods.equalInterval() }
-          title={ LL().ClassificationPanel.classificationMethods.equalInterval() }
+          alt={ LL().ClassificationPanel.classificationMethods.equalIntervals() }
+          title={ LL().ClassificationPanel.classificationMethods.equalIntervals() }
           onClick={ () => {
             setTargetClassification({
               variable: targetVariable(), // eslint-disable-line solid/reactivity
-              method: ClassificationMethod.equalInterval,
+              method: ClassificationMethod.equalIntervals,
               classes: numberOfClasses(),
               breaks: equal(values(), { nb: numberOfClasses(), precision: null }),
               palette: pal(),

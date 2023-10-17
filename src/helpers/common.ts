@@ -50,3 +50,12 @@ export const debounce = (func: (...args: any[]) => any, delay: number, immediate
     timerId = setTimeout(calleeFunc, delay);
   };
 };
+
+export const getNumberOfDecimals = (value: number) => {
+  if (Math.floor(value) !== value) {
+    return value.toString().split('.')[1].length || 0;
+  }
+  return 0;
+};
+
+export const capitalizeFirstLetter = (str: string): string => str[0].toUpperCase() + str.slice(1);

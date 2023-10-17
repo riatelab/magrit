@@ -16,15 +16,14 @@ import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Sub-components and helpers for legend rendering
 import {
-  triggerContextMenuLegend,
-  makeLegendSubtitle,
-  makeLegendTitle,
-  makeLegendNote,
-  makeRectangleBox,
   computeRectangleBox,
-  bindMouseEnterLeave,
   bindDragBehavior,
-  getTextSize, makeLegendSettingsModal,
+  bindMouseEnterLeave,
+  getTextSize,
+  makeLegendSettingsModal,
+  makeLegendText,
+  makeRectangleBox,
+  triggerContextMenuLegend,
 } from './common.tsx';
 
 // Import some type descriptions
@@ -68,7 +67,13 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
     throw new Error(`Could not get colors for scheme ${layer.rendererParameters.palette.name}`);
   }
 
-  const heightTitle = createMemo(() => +(layer.legend.title.fontSize.replace('px', '')) + defaultSpacing);
+  const heightTitle = createMemo(() => (
+    getTextSize(
+      layer.legend.title.text,
+      layer.legend.title.fontSize,
+      layer.legend.title.fontFamily,
+    ).height
+  ));
 
   const distanceToTop = createMemo(() => {
     let vDistanceToTop = 0;
@@ -76,7 +81,11 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
       vDistanceToTop += heightTitle() + defaultSpacing;
     }
     if (layer.legend.subtitle && layer.legend.subtitle.text) {
-      vDistanceToTop += +(layer.legend.subtitle.fontSize.replace('px', '')) + defaultSpacing * 2;
+      vDistanceToTop += getTextSize(
+        layer.legend?.subtitle.text,
+        layer.legend.subtitle.fontSize,
+        layer.legend.subtitle.fontFamily,
+      ).height + defaultSpacing;
     }
     vDistanceToTop += layer.legend!.boxSpacing / 2;
     return vDistanceToTop;
@@ -108,6 +117,7 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
         layer.legend?.title.text,
         layer.legend?.subtitle.text,
         layer.legend?.note.text,
+        layer.legend?.roundDecimals,
       );
     }
   });
@@ -130,12 +140,13 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
       style={{ cursor: 'grab' }}
     >
       { makeRectangleBox() }
-      { makeLegendTitle(layer.legend.title, [0, 0]) }
-      { makeLegendSubtitle(layer.legend.subtitle, [0, heightTitle()]) }
+      { makeLegendText(layer.legend.title, [0, 0], 'title') }
+      { makeLegendText(layer.legend.subtitle, [0, heightTitle()], 'subtitle') }
       {
-        makeLegendNote(
+        makeLegendText(
           layer.legend.note,
-          [0, distanceToTop() + (colors.length + 1) * boxHeightAndSpacing()],
+          [0, distanceToTop() + (colors.length) * boxHeightAndSpacing() + defaultSpacing * 3],
+          'note',
         )
       }
       <g class="legend-content">
@@ -169,7 +180,7 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
               fill={layer.legend.labels.fontColor}
               style={{ 'user-select': 'none' }}
               text-anchor="start"
-              alignment-baseline="middle"
+              dominant-baseline="middle"
             >{ round(value, layer.legend!.roundDecimals) }</text>
           }
         </For>
@@ -214,11 +225,11 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
   // - the legend note
   // To do so, we need to know the size of each of these elements (and the presence / absence of
   // each of them).
-  const heightTitle = getTextSize(
+  const heightTitle = createMemo(() => (getTextSize(
     layer.legend.title.text,
     layer.legend.title.fontSize,
     layer.legend.title.fontFamily,
-  ).height + defaultSpacing;
+  ).height + defaultSpacing));
 
   const heightSubtitle = createMemo(() => (
     layer.legend.subtitle && layer.legend.subtitle.text
@@ -239,10 +250,10 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
   ).height + defaultSpacing);
 
   // The y-position at which the boxes should be placed
-  const distanceBoxesToTop = createMemo(() => heightTitle + heightSubtitle());
+  const distanceBoxesToTop = createMemo(() => heightTitle() + heightSubtitle());
 
   // The y-position at which the legend labels should be placed
-  const distanceLabelsToTop = createMemo(() => heightTitle
+  const distanceLabelsToTop = createMemo(() => heightTitle()
     + heightSubtitle()
     + heightBox()
     + defaultSpacing);
@@ -269,7 +280,7 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
   });
 
   createEffect(() => {
-    if (refElement && layer.visible && layer.legend.visible) {
+    if (refElement && layer.visible && layer.legend?.visible) {
       computeRectangleBox(
         refElement,
         heightBox(),
@@ -278,6 +289,10 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
         distanceLabelsToTop(),
         distanceNoteToTop(),
         distanceToEnd(),
+        layer.legend?.title.text,
+        layer.legend?.subtitle?.text,
+        layer.legend?.note?.text,
+        layer.legend?.roundDecimals,
       );
     }
   });
@@ -300,9 +315,9 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
       style={{ cursor: 'grab' }}
     >
       { makeRectangleBox() }
-      { makeLegendTitle(layer.legend.title, [0, 0]) }
-      { makeLegendSubtitle(layer.legend.subtitle, [0, heightTitle]) }
-      { makeLegendNote(layer.legend.note, [0, distanceNoteToTop()]) }
+      { makeLegendText(layer.legend.title, [0, 0], 'title') }
+      { makeLegendText(layer.legend.subtitle, [0, heightTitle()], 'subtitle') }
+      { makeLegendText(layer.legend.note, [0, distanceNoteToTop()], 'note') }
       <g class="legend-content">
         <For each={colors}>
           {
@@ -333,7 +348,7 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
               fill={layer.legend.labels.fontColor}
               style={{ 'user-select': 'none' }}
               text-anchor="middle"
-              alignment-baseline="middle"
+              dominant-baseline="middle"
             >{ round(value, layer.legend!.roundDecimals) }</text>
           }
         </For>

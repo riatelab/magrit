@@ -6,7 +6,12 @@ import * as polylabel from 'polylabel';
 
 // Helpers
 import d3 from './d3-custom';
-import { max, Mfloor, Mlog, Mlog10 } from './math';
+import {
+  max,
+  Mfloor,
+  Mlog10, Mmax, Mpow, Msqrt, round,
+} from './math';
+import { ascending, descending, getNumberOfDecimals } from './common';
 
 // Types / Interfaces / Enums
 import { type GeoJSONGeometry, ProportionalSymbolsSymbolType } from '../global.d';
@@ -95,69 +100,50 @@ export const PropSizer = function PropSizer(
     const { PI } = Math;
     this.smax = fixedSize * fixedSize * PI;
     this.scale = (val: number) => sqrt(abs(val) * this.smax / this.fixedValue) / PI;
-    this.get_value = (size: number) => ((size * PI) ** 2) / this.smax * this.fixedValue;
+    this.getValue = (size: number) => ((size * PI) ** 2) / this.smax * this.fixedValue;
   } else if (symbolType === ProportionalSymbolsSymbolType.line) {
     this.smax = fixedSize;
     this.scale = (val: number) => abs(val) * this.smax / this.fixedValue;
-    this.get_value = (size: number) => size / this.smax * this.fixedValue;
+    this.getValue = (size: number) => size / this.smax * this.fixedValue;
   } else { // symbolType === ProportionalSymbolsSymbolType.square
     this.smax = fixedSize * fixedSize;
     this.scale = (val: number) => sqrt(abs(val) * this.smax / this.fixedValue);
-    this.get_value = (size: number) => (size ** 2) / this.smax * this.fixedValue;
+    this.getValue = (size: number) => (size ** 2) / this.smax * this.fixedValue;
   }
 }; /* eslint-enable no-mixed-operators */
 
-/**
- * Reference: Self-Adjusting Legends for Proportional Symbol Maps,
- * by Bernhard Jenny, Ernst Hutzler, and Lorenz Hurni (2
- * @param min
- * @param max
- * @param shape
- */
-function computeCandidateValues(min: number, max: number, scaleFn: (arg0: number) => number) {
-  const bases = [5, 2.5, 1];
-  const candidates = [];
-  let baseId = 0;
-  let scale = 1;
-  let minS = min;
-  let maxS = max;
+export const computeCandidateValuesForSymbolsLegend = (
+  minValue: number,
+  maxValue: number,
+  scaleFn: (arg0: number) => number,
+  unScaleFn: (arg0: number) => number,
+): number[] => {
+  const minSize = scaleFn(minValue);
+  const maxSize = scaleFn(maxValue);
+  const r = Mmax(getNumberOfDecimals(minSize), getNumberOfDecimals(maxSize));
+  const diffSize = Msqrt(maxSize) - Msqrt(minSize);
+  const sizeInterm1 = Mpow(Msqrt(minSize) + diffSize * (2.5 / 5), 2);
+  const sizeInterm2 = Mpow(Msqrt(minSize) + diffSize * (4 / 5), 2);
+  return [
+    minValue,
+    round(unScaleFn(sizeInterm1), r),
+    round(unScaleFn(sizeInterm2), r),
+    maxValue,
+  ];
+};
 
-  while (minS < 1) {
-    minS *= 10;
-    maxS *= 10;
-    scale /= 10;
-  }
-
-  const nDigits = Mfloor(Mlog10(maxS));
-  for (let i = 0; i < bases.length; i++) { // eslint-disable-line no-plusplus
-    if ((maxS / 10 ** nDigits) >= bases[i]) {
-      baseId = i;
-    }
-  }
-
-  while (true) {
-    let v = bases[baseId] * 10 ** nDigits;
-    if (v <= minS) {
-      break;
-    }
-    candidates.push(v / scale);
-    baseId += 1;
-    if (baseId === bases.length) {
-      baseId = 0;
-      nDigits -= 1;
-    }
-  }
-  return filterValues(candidates, () => 0, 0);
-}
-
-function filterValues(candidates: number[], scaleFn: (arg0: number) => number, dmin: number = 1) {
+function filterValues(
+  candidates: number[],
+  scaleFn: (arg0: number) => number,
+  dmin: number = 0,
+) {
   // Array that will hold the filtered values
   const filteredValues = [];
   // Add the minimum value
   filteredValues.push(candidates[0]);
   // Remember the height of the previously added value
-  const previousHeight = scaleFn(candidates[0]);
-
+  let previousHeight = scaleFn(candidates[0]);
+  // Find the height and value of the smallest acceptable symbol
   let lastHeight = 0;
 
   let lastValueId = candidates.length - 1;
@@ -170,8 +156,78 @@ function filterValues(candidates: number[], scaleFn: (arg0: number) => number, d
     lastValueId -= 1;
   }
 
-  // for (let limitId = 1; limitId <= lastValueId; limitId++) {
-  // }
+  // Loop over all values that are large enough
+  for (let limitId = 1; limitId <= lastValueId; limitId++) { // eslint-disable-line no-plusplus
+    const v = candidates[limitId];
+    console.log(v);
+    // Compute the height of the symbol
+    const h = scaleFn(v);
+    console.log(h);
+    // Do not draw the symbol if it is too close to the smallest symbol
+    // (but it is not the smallest limit itself)
+    if (((h - lastHeight) < dmin) && (limitId !== lastValueId)) {
+      continue; // eslint-disable-line no-continue
+    }
+    // Do not draw the symbol if it is too close to the previously drawn symbol
+    if ((previousHeight - h) < dmin) {
+      continue; // eslint-disable-line no-continue
+    }
+    filteredValues.push(v);
+    // Remember the height of the last drawn symbol
+    previousHeight = h;
+  }
 
-  return [];
+  return filteredValues;
+}
+
+/**
+ * Reference: Self-Adjusting Legends for Proportional Symbol Maps,
+ * by Bernhard Jenny, Ernst Hutzler, and Lorenz Hurni (2009).
+ *
+ * @param {number} minValue
+ * @param {number} maxValue
+ * @param {(arg0: number) => number} scaleFn
+ */
+export function computeCandidateValues(
+  minValue: number,
+  maxValue: number,
+  scaleFn: (arg0: number) => number,
+) {
+  const bases = [5, 2.5, 1];
+  const candidates = [];
+  let baseId = 0;
+  let scale = 1;
+  let minS = minValue;
+  let maxS = maxValue;
+
+  while (minS < 1) {
+    minS *= 10;
+    maxS *= 10;
+    scale /= 10;
+  }
+
+  let nDigits = Mfloor(Mlog10(maxS));
+  for (let i = 0; i < bases.length; i++) { // eslint-disable-line no-plusplus
+    if ((maxS / 10 ** nDigits) >= bases[i]) {
+      baseId = i;
+      break;
+    }
+  }
+
+  while (true) {
+    const v = bases[baseId] * 10 ** nDigits;
+    if (v <= minS) {
+      break;
+    }
+    candidates.push(v / scale);
+    baseId += 1;
+    if (baseId === bases.length) {
+      baseId = 0;
+      nDigits -= 1;
+    }
+  }
+
+  console.log(candidates);
+  candidates.sort(descending);
+  return filterValues(candidates, scaleFn, 0);
 }

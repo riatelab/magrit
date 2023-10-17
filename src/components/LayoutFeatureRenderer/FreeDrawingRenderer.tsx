@@ -24,6 +24,7 @@ export default function FreeDrawingRenderer(props: FreeDrawing): JSX.Element {
       e.stopPropagation();
       triggerContextMenuLayoutFeature(e, props.id, LL);
     }}
+    transform={`translate(${props.position[0]}, ${props.position[1]})`}
   >
     <path
       stroke={props.strokeColor}
@@ -31,7 +32,6 @@ export default function FreeDrawingRenderer(props: FreeDrawing): JSX.Element {
       stroke-width={props.strokeWidth}
       fill="none"
       d={props.path}
-      transform={`translate(${props.position[0]}, ${props.position[1]})`}
     ></path>
   </g>;
 }

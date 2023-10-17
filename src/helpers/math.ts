@@ -1,4 +1,5 @@
 import d3 from './d3-custom';
+import { ascending } from './common';
 
 export const Mmax = Math.max;
 export const Mmin = Math.min;
@@ -211,3 +212,67 @@ export function epanechnikov(bandwidth: number) {
       : 0;
   };
 }
+
+/**
+ * Group a dataset by class, according to a set of breakpoints.
+ * @param {number[]} values - The dataset to be grouped in classes
+ * @param {number[]} breaks - The breakpoints to be used (they must be sorted,
+ *                            unique and contain the min and max values of the dataset)
+ */
+export const groupByClass = (
+  values: number[],
+  breaks: number[],
+): number[][] => {
+  const sortedValues = values.slice().sort(ascending);
+  if (breaks.length === 2) {
+    return [sortedValues];
+  }
+  // const groups: number[][] = [];
+  // for (let i = 1; i < breaks.length; i += 1) {
+  //   const hi = breaks[i];
+  //   const lo = i === 1 ? -Infinity : breaks[i - 1];
+  //   groups.push(values.filter((d) => d <= hi && d > lo));
+  // }
+  // return groups;
+  return breaks.slice(1)
+    .map((d, i) => sortedValues.filter((v) => v <= d && v > (i === 0 ? -Infinity : breaks[i])));
+};
+
+/**
+ * Compute the TAI (tabular accuracy index) of a dataset for a given set of
+ * breakpoints.
+ *
+ * @param {number[]} values - The values of the dataset to be classified
+ * @param {number[]} breakpoints - The breakpoints to be used for classification
+ * @return {number} - The TAI
+ */
+export const TabularAccuracyIndex = (
+  values: number[],
+  breakpoints: number[],
+): number => {
+  const res = 1;
+  return res;
+};
+
+/**
+ * Compute the Goodness of variance fit (GVF) of a dataset for a given set of
+ * breakpoints.
+ *
+ * @param {number[]} values - The values of the dataset to be classified
+ * @param {number[]} breaks - The breakpoints to be used for classification
+ * @return {number} - The goodness of variance fit
+ */
+export const goodnessOfVarianceFit = (
+  values: number[],
+  breaks: number[],
+): number => {
+  const mean = d3.mean(values) as number;
+  const sdam = sum(values.map((d) => (d - mean) ** 2));
+  const groups = groupByClass(values, breaks);
+  let sdcm = 0;
+  for (let i = 0; i < groups.length; i += 1) {
+    const groupMean = d3.mean(groups[i]) as number;
+    sdcm += sum(groups[i].map((d) => (d - groupMean) ** 2));
+  }
+  return (sdam - sdcm) / sdam;
+};

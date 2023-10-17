@@ -23,7 +23,9 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
   let outerSvg: SVGSVGElement;
   let elem: Element;
 
+  let i = 0;
   const moveElement = (e: MouseEvent) => {
+    if (i++ % 2 === 0) return; // eslint-disable-line no-plusplus
     const dx = e.clientX - x;
     const dy = e.clientY - y;
 

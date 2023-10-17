@@ -15,7 +15,11 @@ import { v4 as uuidv4 } from 'uuid';
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { descendingKeyAccessor, isNumber } from '../../../helpers/common';
-import { coordsPointOnFeature } from '../../../helpers/geo';
+import {
+  computeCandidateValuesForSymbolsLegend,
+  coordsPointOnFeature,
+  PropSizer,
+} from '../../../helpers/geo';
 import { max, min } from '../../../helpers/math';
 
 // Sub-components
@@ -94,6 +98,20 @@ function onClickValidate(
 
   propSymbolsParameters.color = color;
 
+  const propSize = new (PropSizer as any)(
+    propSymbolsParameters.referenceValue,
+    propSymbolsParameters.referenceRadius,
+    propSymbolsParameters.symbolType,
+  );
+  const legendValues = computeCandidateValuesForSymbolsLegend(
+    extent[0],
+    extent[1],
+    propSize.scale,
+    propSize.getValue,
+  );
+
+  console.log(legendValues);
+
   const newLayerDescription = {
     id: uuidv4(),
     name: newLayerName,
@@ -137,7 +155,7 @@ function onClickValidate(
       } as LegendTextElement,
       position: [100, 100],
       visible: true,
-      roundDecimals: 2,
+      roundDecimals: 0,
       backgroundRect: {
         visible: false,
         fill: '#ffffff',
@@ -147,7 +165,7 @@ function onClickValidate(
       // Part specific to proportional symbols
       type: LegendType.proportional,
       layout: 'stacked',
-      values: [extent[0], extent[1] / 5, extent[1] / 2, extent[1]],
+      values: legendValues,
       labels: {
         fontSize: '11px',
         fontFamily: 'Sans-serif',

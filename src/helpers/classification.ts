@@ -18,7 +18,7 @@ export const getClassifier = (method: ClassificationMethod) => {
       return ArithmeticProgressionClassifier();
     case ClassificationMethod.manual:
       return CustomBreaksClassifier;
-    case ClassificationMethod.equalInterval:
+    case ClassificationMethod.equalIntervals:
       return EqualClassifier;
     case ClassificationMethod.geometricProgression:
       return GeometricProgressionClassifier;

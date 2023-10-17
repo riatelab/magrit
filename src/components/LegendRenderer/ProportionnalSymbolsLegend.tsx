@@ -18,12 +18,10 @@ import { round, sum } from '../../helpers/math';
 
 // Sub-components
 import {
-  makeLegendNote,
-  makeLegendTitle,
-  makeLegendSubtitle,
+  makeLegendText,
   makeRectangleBox,
   makeLegendSettingsModal,
-  triggerContextMenuLegend, computeRectangleBox, bindMouseEnterLeave, bindDragBehavior,
+  triggerContextMenuLegend, computeRectangleBox, bindMouseEnterLeave, bindDragBehavior, getTextSize,
 } from './common.tsx';
 
 // Stores
@@ -48,15 +46,22 @@ function proportionalSymbolsStackedLegend(layer: LayerDescription): JSX.Element 
   );
 
   const heightTitle = createMemo(
-    () => +(layer.legend.title.fontSize.replace('px', '')) + defaultSpacing,
+    () => getTextSize(
+      layer.legend.title.text,
+      layer.legend.title.fontSize,
+      layer.legend.title.fontFamily,
+    ).height + defaultSpacing,
   );
 
   const heightTitleSubtitle = createMemo(() => {
     if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
       return heightTitle() + defaultSpacing;
     }
-    return heightTitle() + +(
-      layer.legend.subtitle.fontSize.replace('px', '')) + defaultSpacing;
+    return heightTitle() + defaultSpacing + getTextSize(
+      layer.legend.subtitle.text,
+      layer.legend.subtitle.fontSize,
+      layer.legend.subtitle.fontFamily,
+    ).height + defaultSpacing;
   });
 
   const positionNote = createMemo(() => (
@@ -75,7 +80,20 @@ function proportionalSymbolsStackedLegend(layer: LayerDescription): JSX.Element 
     bindElementsLegend();
   });
 
-  createEffect(() => {});
+  createEffect(() => {
+    if (refElement && layer.visible && layer.legend?.visible) {
+      computeRectangleBox(
+        refElement,
+        heightTitle(),
+        heightTitleSubtitle(),
+        positionNote(),
+        layer.legend.title.text,
+        layer.legend?.subtitle?.text,
+        layer.legend?.note?.text,
+        layer.legend.roundDecimals,
+      );
+    }
+  });
 
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
@@ -95,9 +113,9 @@ function proportionalSymbolsStackedLegend(layer: LayerDescription): JSX.Element 
       style={{ cursor: 'grab' }}
     >
       { makeRectangleBox() }
-      { makeLegendTitle(layer.legend.title, [0, 0]) }
-      { makeLegendSubtitle(layer.legend?.subtitle, [0, heightTitle()]) }
-      { makeLegendNote(layer.legend.note, [0, positionNote()]) }
+      { makeLegendText(layer.legend.title, [0, 0], 'title') }
+      { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
+      { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
       <g class="legend-content">
         <For each={layer.legend.values}>
           {
@@ -120,7 +138,7 @@ function proportionalSymbolsStackedLegend(layer: LayerDescription): JSX.Element 
                   font-weight={layer.legend.labels.fontWeight}
                   fill={layer.legend.labels.fontColor}
                   text-anchor="start"
-                  alignment-baseline="middle"
+                  dominant-baseline="middle"
                   style={{ 'user-select': 'none' }}
                   x={maxRadius() * 2 + defaultSpacing}
                   y={ heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2 }
@@ -207,8 +225,8 @@ function proportionalSymbolsVerticalLegend(layer: LayerDescription): JSX.Element
       onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
     >
       { makeRectangleBox() }
-      { makeLegendTitle(layer.legend.title, [0, 0]) }
-      { makeLegendSubtitle(layer.legend?.subtitle, [0, heightTitle()]) }
+      { makeLegendText(layer.legend.title, [0, 0], 'title') }
+      { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
       <g class="legend-content">
         <For each={layer.legend.values.toReversed()}>
           {
@@ -235,7 +253,7 @@ function proportionalSymbolsVerticalLegend(layer: LayerDescription): JSX.Element
                   font-weight={layer.legend.labels.fontWeight}
                   fill={layer.legend.labels.fontColor}
                   text-anchor="start"
-                  alignment-baseline="middle"
+                  dominant-baseline="middle"
                   style={{ 'user-select': 'none' }}
                   x={maxRadius() * 2 + defaultSpacing}
                   y={ cy }
@@ -245,7 +263,7 @@ function proportionalSymbolsVerticalLegend(layer: LayerDescription): JSX.Element
           }
         </For>
       </g>
-      { makeLegendNote(layer.legend.note, [0, lastPosition + defaultSpacing + sizeNote()]) }
+      { makeLegendText(layer.legend.note, [0, lastPosition + defaultSpacing + sizeNote()], 'note') }
     </g>
   </Show>;
 }
@@ -295,6 +313,10 @@ function proportionalSymbolsHorizontalLegend(layer: LayerDescription): JSX.Eleme
     bindElementsLegend();
   });
 
+  createEffect(() => {
+
+  });
+
   let lastSize = 0;
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
@@ -313,8 +335,8 @@ function proportionalSymbolsHorizontalLegend(layer: LayerDescription): JSX.Eleme
       onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
     >
       { makeRectangleBox() }
-      { makeLegendTitle(layer.legend.title, [0, 0]) }
-      { makeLegendSubtitle(layer.legend?.subtitle, [0, heightTitle()]) }
+      { makeLegendText(layer.legend.title, [0, 0], 'title') }
+      { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
       <g class="legend-content">
         <For each={layer.legend.values.toReversed()}>
           {
@@ -351,9 +373,10 @@ function proportionalSymbolsHorizontalLegend(layer: LayerDescription): JSX.Eleme
         </For>
       </g>
       {
-        makeLegendNote(
+        makeLegendText(
           layer.legend.note,
           [0, maxRadius() * 2 + heightTitleSubtitle() + defaultSpacing * 2 + sizeNote()],
+          'note',
         )
       }
     </g>

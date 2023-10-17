@@ -216,8 +216,8 @@ export default function ClassificationPanel(): JSX.Element {
       options: [OptionsClassification.numberOfClasses],
     },
     {
-      name: LL().ClassificationPanel.classificationMethods.equalInterval(),
-      value: ClassificationMethod.equalInterval,
+      name: LL().ClassificationPanel.classificationMethods.equalIntervals(),
+      value: ClassificationMethod.equalIntervals,
       options: [OptionsClassification.numberOfClasses],
     },
     {

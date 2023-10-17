@@ -196,7 +196,7 @@ interface ProjectionDefinition {
 }
 
 export enum ClassificationMethod {
-  equalInterval = 'equalInterval',
+  equalIntervals = 'equalIntervals',
   quantiles = 'quantiles',
   jenks = 'jenks',
   standardDeviation = 'standardDeviation',
@@ -309,7 +309,7 @@ export enum RepresentationType {
   default = 'default',
 }
 
-interface LegendParameters {
+interface LegendParametersBase {
   // The title of the legend
   title: LegendTextElement,
   // The subtitle of the legend
@@ -357,7 +357,7 @@ interface LegendTextElement {
 /**
  * The parameters of the legend for choropleth map
  */
-interface ChoroplethLegendParameters extends LegendParameters {
+interface ChoroplethLegendParameters extends LegendParametersBase {
   type: LegendType.choropleth,
   // Whether the legend is horizontal or vertical
   orientation: Orientation,
@@ -376,7 +376,7 @@ interface ChoroplethLegendParameters extends LegendParameters {
 /**
  * The parameters of the legend for proportional symbols
  */
-interface ProportionalSymbolsLegendParameters extends LegendParameters {
+interface ProportionalSymbolsLegendParameters extends LegendParametersBase {
   type: LegendType.proportional,
   // Whether the legend is stacked or not
   layout: 'horizontal' | 'vertical' | 'stacked',
@@ -388,9 +388,15 @@ interface ProportionalSymbolsLegendParameters extends LegendParameters {
   labels: LegendTextElement,
 }
 
-interface LabelsLegendParameters extends LegendParameters {
+interface LabelsLegendParameters extends LegendParametersBase {
   // TODO
 }
+
+export type LegendParameters = (
+  ChoroplethLegendParameters
+  | ProportionalSymbolsLegendParameters
+  | LabelsLegendParameters
+);
 
 export enum RenderVisibility {
   RenderAsHidden,
