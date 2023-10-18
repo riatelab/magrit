@@ -4,6 +4,7 @@ import { render } from 'solid-js/web';
 
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
+import { unproxify } from '../../helpers/common';
 
 // Subcomponents
 import LayoutFeatureSettings from '../Modals/LayoutFeatureSetting.tsx';
@@ -106,14 +107,28 @@ export function makeLayoutFeaturesSettingsModal(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
 ): void {
+  // State before opening the modal, in case cancel is clicked
+  const layoutFeatureState = unproxify(
+    layersDescriptionStore.layoutFeatures
+      .find((l) => l.id === layoutFeatureId) as LayoutFeature,
+  );
   setModalStore({
     show: true,
     content: null,
     title: LL().LayoutFeatures.Modal.Title(),
+    // Nothing special to do when confirm is clicked
     confirmCallback: () => {},
-    cancelCallback: () => {},
+    // Reset the layout feature to its previous state if cancel is clicked
+    cancelCallback: () => {
+      setLayersDescriptionStore(
+        'layoutFeatures',
+        (l: LayoutFeature) => l.id === layoutFeatureId,
+        layoutFeatureState,
+      );
+    },
     escapeKey: 'cancel',
-    width: 600,
+    // We can use a slightly smaller width for this modal
+    width: 500,
   });
   render(
     () => <LayoutFeatureSettings layoutFeatureId={layoutFeatureId} LL={LL} />,

@@ -18,6 +18,8 @@ import type { TranslationFunctions } from '../../i18n/i18n-types';
 
 // Types / Interfaces / Enums
 import { type LayoutFeature, LayoutFeatureType, Rectangle } from '../../global.d';
+import InputFieldColor from '../Inputs/InputColor.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
 
 /**
  * Update a single property of a layout feature in the layersDescriptionStore,
@@ -53,108 +55,72 @@ function makeSettingsRectangle(
   const ft = layersDescriptionStore.layoutFeatures
     .find((f) => f.id === layoutFeatureId) as Rectangle;
   return <>
-    <div class="field">
-      <label class="label">{ LL().LayoutFeatures.Modal.FillColor() }</label>
-      <div class="control">
-        <input
-          class="color"
-          type="color"
-          onChange={(e) => updateLayoutFeatureProperty(
-            layoutFeatureId,
-            ['fillColor'],
-            e.currentTarget.value,
-          )}
-          value={ft.fillColor}
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayoutFeatures.Modal.FillOpacity() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          onChange={(e) => updateLayoutFeatureProperty(
-            layoutFeatureId,
-            ['fillOpacity'],
-            +e.currentTarget.value,
-          )}
-          value={ft.fillOpacity}
-          min="0"
-          max="1"
-          step="0.1"
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayoutFeatures.Modal.StrokeColor() }</label>
-      <div class="control">
-        <input
-          class="color"
-          type="color"
-          onChange={(e) => updateLayoutFeatureProperty(
-            layoutFeatureId,
-            ['strokeColor'],
-            e.currentTarget.value,
-          )}
-          value={ft.strokeColor}
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayoutFeatures.Modal.StrokeOpacity() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          onChange={(e) => updateLayoutFeatureProperty(
-            layoutFeatureId,
-            ['strokeOpacity'],
-            +e.currentTarget.value,
-          )}
-          value={ft.strokeOpacity}
-          min="0"
-          max="1"
-          step="0.1"
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayoutFeatures.Modal.StrokeWidth() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          onChange={(e) => updateLayoutFeatureProperty(
-            layoutFeatureId,
-            ['strokeWidth'],
-            +e.currentTarget.value,
-          )}
-          value={ft.strokeWidth}
-          min="0"
-          max="100"
-          step="0.1"
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayoutFeatures.Modal.RoundCorners() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          onChange={(e) => updateLayoutFeatureProperty(
-            layoutFeatureId,
-            ['cornerRadius'],
-            +e.currentTarget.value,
-          )}
-          value={ft.cornerRadius}
-          min="0"
-          max="100"
-          step="1"
-        />
-      </div>
-    </div>
+    <InputFieldColor
+      label={ LL().LayoutFeatures.Modal.FillColor() }
+      value={ft.fillColor}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['fillColor'],
+        newValue,
+      )}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.FillOpacity() }
+      value={ft.fillOpacity}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['fillOpacity'],
+        newValue,
+      )}
+      min={0}
+      max={1}
+      step={0.1}
+    />
+    <InputFieldColor
+      label={ LL().LayoutFeatures.Modal.StrokeColor() }
+      value={ft.strokeColor}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeColor'],
+        newValue,
+      )}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.StrokeOpacity() }
+      value={ft.strokeOpacity}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeOpacity'],
+        newValue,
+      )}
+      min={0}
+      max={1}
+      step={0.1}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.StrokeWidth() }
+      value={ft.strokeWidth}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeWidth'],
+        newValue,
+      )}
+      min={0}
+      max={100}
+      step={1}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.RoundCorners() }
+      value={ft.cornerRadius}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['cornerRadius'],
+        newValue,
+      )}
+      min={0}
+      max={100}
+      step={1}
+    />
   </>;
 }
 
