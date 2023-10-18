@@ -98,6 +98,15 @@ const fr = {
       Up: 'Monter',
       Down: 'Descendre',
     },
+    Modal: {
+      Title: 'Propriétés', // 'Propriétés pour {{ type d'objet }}'
+      FillColor: 'Couleur de remplissage',
+      FillOpacity: 'Opacité du remplissage',
+      StrokeColor: 'Couleur de la bordure',
+      StrokeWidth: 'Épaisseur de la bordure',
+      StrokeOpacity: 'Opacité de la bordure',
+      RoundCorners: 'Coins arrondis',
+    },
   },
   AboutPanel: {
     title: 'À propos de Magrit',

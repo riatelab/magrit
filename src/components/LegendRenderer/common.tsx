@@ -245,7 +245,7 @@ export function getTextSize(
   return { width: bb.width, height: bb.height };
 }
 
-export function makeLegendSettingsModal(layerId: string, LL: Accessor<TranslationFunctions>) {
+export function makeLegendSettingsModal(layerId: string, LL: Accessor<TranslationFunctions>): void {
   setModalStore({
     show: true,
     content: null,
@@ -255,7 +255,10 @@ export function makeLegendSettingsModal(layerId: string, LL: Accessor<Translatio
     escapeKey: 'cancel',
     width: 700,
   });
-  render(() => <LegendSettings layerId={layerId} LL={LL} />, document.querySelector('.modal-card-body')!);
+  render(
+    () => <LegendSettings layerId={layerId} LL={LL} />,
+    document.querySelector('.modal-card-body')!,
+  );
 }
 
 export function triggerContextMenuLegend(

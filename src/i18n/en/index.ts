@@ -98,6 +98,15 @@ const en = {
       Up: 'Up',
       Down: 'Down',
     },
+    Modal: {
+      Title: 'Settings', // 'Settings for {{ type }}',
+      FillColor: 'Fill color',
+      FillOpacity: 'Fill opacity',
+      StrokeColor: 'Stroke color',
+      StrokeWidth: 'Stroke width',
+      StrokeOpacity: 'Stroke opacity',
+      RoundCorners: 'Round corners',
+    },
   },
   AboutPanel: {
     title: 'About Magrit',

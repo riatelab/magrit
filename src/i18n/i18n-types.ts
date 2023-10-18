@@ -346,6 +346,36 @@ type RootTranslation = {
 			 */
 			Down: string
 		}
+		Modal: {
+			/**
+			 * S​e​t​t​i​n​g​s
+			 */
+			Title: string
+			/**
+			 * F​i​l​l​ ​c​o​l​o​r
+			 */
+			FillColor: string
+			/**
+			 * F​i​l​l​ ​o​p​a​c​i​t​y
+			 */
+			FillOpacity: string
+			/**
+			 * S​t​r​o​k​e​ ​c​o​l​o​r
+			 */
+			StrokeColor: string
+			/**
+			 * S​t​r​o​k​e​ ​w​i​d​t​h
+			 */
+			StrokeWidth: string
+			/**
+			 * S​t​r​o​k​e​ ​o​p​a​c​i​t​y
+			 */
+			StrokeOpacity: string
+			/**
+			 * R​o​u​n​d​ ​c​o​r​n​e​r​s
+			 */
+			RoundCorners: string
+		}
 	}
 	AboutPanel: {
 		/**
@@ -1410,6 +1440,36 @@ export type TranslationFunctions = {
 			 * Down
 			 */
 			Down: () => LocalizedString
+		}
+		Modal: {
+			/**
+			 * Settings
+			 */
+			Title: () => LocalizedString
+			/**
+			 * Fill color
+			 */
+			FillColor: () => LocalizedString
+			/**
+			 * Fill opacity
+			 */
+			FillOpacity: () => LocalizedString
+			/**
+			 * Stroke color
+			 */
+			StrokeColor: () => LocalizedString
+			/**
+			 * Stroke width
+			 */
+			StrokeWidth: () => LocalizedString
+			/**
+			 * Stroke opacity
+			 */
+			StrokeOpacity: () => LocalizedString
+			/**
+			 * Round corners
+			 */
+			RoundCorners: () => LocalizedString
 		}
 	}
 	AboutPanel: {

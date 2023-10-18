@@ -5,6 +5,9 @@ import { render } from 'solid-js/web';
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
 
+// Subcomponents
+import LayoutFeatureSettings from '../Modals/LayoutFeatureSetting.tsx';
+
 // Stores
 import { setContextMenuStore } from '../../store/ContextMenuStore';
 import { setModalStore } from '../../store/ModalStore';
@@ -106,12 +109,16 @@ export function makeLayoutFeaturesSettingsModal(
   setModalStore({
     show: true,
     content: null,
-    title: LL().Legend.Modal.Title(),
+    title: LL().LayoutFeatures.Modal.Title(),
     confirmCallback: () => {},
     cancelCallback: () => {},
     escapeKey: 'cancel',
+    width: 600,
   });
-  render(() => <></>, document.getElementById('.modal-card-body') as HTMLElement);
+  render(
+    () => <LayoutFeatureSettings layoutFeatureId={layoutFeatureId} LL={LL} />,
+    document.querySelector('.modal-card-body')!,
+  );
 }
 
 export function triggerContextMenuLayoutFeature(
@@ -126,7 +133,7 @@ export function triggerContextMenuLayoutFeature(
       {
         label: LL().LayoutFeatures.ContextMenu.Edit(),
         callback: () => {
-
+          makeLayoutFeaturesSettingsModal(layoutFeatureId, LL);
         },
       },
       {

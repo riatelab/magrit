@@ -15,15 +15,26 @@ import { capitalizeFirstLetter } from '../../helpers/common';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
 
 // Types / Interfaces / Enums
-import type { LayerDescription } from '../../global.d';
-import { LegendType } from '../../global.d';
+import {
+  type LayerDescription,
+  LegendType,
+} from '../../global.d';
 
+/**
+ * Update a single property of a layer in the layersDescriptionStore,
+ * given its id and the path to the property.
+ *
+ * @param {string} layerId - The id of the layer to update.
+ * @param {string[]} props - The path to the property to update.
+ * @param {string | number} value - The new value of the property.
+ * @return {void}
+ */
 const updateProps = (layerId: string, props: string[], value: string | number) => {
   const allPropsExceptLast = props.slice(0, props.length - 1);
   const lastProp = props[props.length - 1];
   const args = [
     'layers',
-    (l) => l.id === layerId,
+    (l: LayerDescription) => l.id === layerId,
     ...allPropsExceptLast,
     {
       [lastProp]: value,
@@ -358,14 +369,21 @@ function makeSettingsChoroplethLegend(
 export default function LegendSettings(
   props: {
     layerId: string,
-    LL: unknown,
+    LL: Accessor<TranslationFunctions>,
   },
 ): JSX.Element {
   // We can use destructuring here because we know that the props
   // won't change during the lifetime of the component
   const { LL, layerId } = props; // eslint-disable-line solid/reactivity
   const layerDescription = layersDescriptionStore.layers
-    .find((layer) => layer.id === layerId);
+    .find((layer) => layer.id === layerId) as LayerDescription;
+
+  if (!layerDescription.legend) {
+    // Due to the way the legend settings modal is triggered,
+    // this should never happen...
+    throw new Error('LegendSettings: layerDescription.legend is undefined');
+  }
+
   return <div class="legend-settings">
     {/* <div class="legend-settings__title"> */}
     {/*   { LL().Legend.Modal.Title() } */}
@@ -376,7 +394,7 @@ export default function LegendSettings(
         ({
           [LegendType.choropleth]: makeSettingsChoroplethLegend,
           [LegendType.proportional]: makeSettingsProportionalSymbolsLegend,
-        })[layerDescription.legend.type](layerDescription, LL)
+        })[layerDescription.legend!.type](layerDescription, LL)
       }
     </div>
   </div>;
