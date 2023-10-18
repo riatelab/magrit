@@ -1,7 +1,23 @@
 import { For, JSX, Show } from 'solid-js';
+
+// Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
+
+// Helpers
+import { unproxify } from '../../helpers/common';
+
+// Directives
+import bindData from '../../directives/bind-data';
+
+// Types / Interfaces / Enums
 import { type LayerDescription, RenderVisibility } from '../../global.d';
+
+// For now we keep an array of directives
+// because otherwise the import is not detected by the compiler...
+const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
+  bindData,
+];
 
 export default function graticuleRenderer(layerDescription: LayerDescription): JSX.Element {
   return <Show when={
@@ -24,14 +40,11 @@ export default function graticuleRenderer(layerDescription: LayerDescription): J
     >
       <For each={layerDescription.data.features}>
         {
-          (feature) => {
-            const el = <path
-              d={globalStore.pathGenerator(feature)}
-              vector-effect="non-scaling-stroke"
-            />;
-            el.__data__ = feature; // eslint-disable-line no-underscore-dangle
-            return el;
-          }
+          (feature) => <path
+            d={globalStore.pathGenerator(feature)}
+            vector-effect="non-scaling-stroke"
+            use:bindData={unproxify(feature)}
+          />
         }
       </For>
     </g>

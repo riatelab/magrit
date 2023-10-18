@@ -62,7 +62,7 @@ const getDefaultRenderingParams = (geomType: string) => {
   return {};
 };
 
-function addLayer(geojson: GeoJSON.FeatureCollection | object, name: string) {
+function addLayer(geojson: GeoJSON.FeatureCollection, name: string) {
   const geomType = getGeometryType(geojson);
   const layerId = uuidv4();
 
@@ -75,6 +75,7 @@ function addLayer(geojson: GeoJSON.FeatureCollection | object, name: string) {
     data: geojson,
     visible: true,
     ...getDefaultRenderingParams(geomType),
+    shapeRendering: geomType === 'polygon' && geojson.features.length > 10000 ? 'optimizeSpeed' : 'auto',
   };
 
   // TODO: ideally, we should push the state *after* having

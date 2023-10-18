@@ -133,6 +133,7 @@ function onClickValidate(
     fillColor: propSymbolsParameters.color,
     fillOpacity: 1,
     dropShadow: false,
+    shapeRendering: 'auto',
     rendererParameters: propSymbolsParameters,
     legend: {
       // Legend common part

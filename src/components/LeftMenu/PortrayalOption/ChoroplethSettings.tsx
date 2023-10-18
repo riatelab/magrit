@@ -84,6 +84,7 @@ function onClickValidate(
     strokeOpacity: 1,
     fillOpacity: 1,
     dropShadow: false,
+    shapeRendering: referenceLayerDescription.shapeRendering,
     rendererParameters: classification,
     legend: {
       // Part common to all legends

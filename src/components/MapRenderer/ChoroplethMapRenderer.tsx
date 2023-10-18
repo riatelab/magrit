@@ -3,11 +3,14 @@ import { For, JSX, Show } from 'solid-js';
 
 // Helpers
 import { getClassifier } from '../../helpers/classification';
-import { isNumber } from '../../helpers/common';
+import { isNumber, unproxify } from '../../helpers/common';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
+
+// Directives
+import bindData from '../../directives/bind-data';
 
 // Types / Interfaces / Enums
 import {
@@ -16,6 +19,12 @@ import {
   LayerDescription,
   RenderVisibility,
 } from '../../global.d';
+
+// For now we keep an array of directives
+// because otherwise the import is not detected by the compiler...
+const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
+  bindData,
+];
 
 export function choroplethPolygonRenderer(
   layerDescription: LayerDescription,
@@ -49,23 +58,20 @@ export function choroplethPolygonRenderer(
       stroke-linejoin="round"
       clip-path="url(#clip-sphere)"
       filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
-    >
+      shape-rendering={layerDescription.shapeRendering}
+      >
       <For each={layerDescription.data.features}>
         {
-          (feature) => {
-            const el: JSX.Element = <path
-              fill={
-                isNumber(feature.properties[fieldName])
-                  ? colors[classifier.getClass(feature.properties[fieldName])]
-                  : noDataColor
-              }
-              d={globalStore.pathGenerator(feature)}
-              vector-effect="non-scaling-stroke"
-            />;
-            // el.__data__ = unproxify(feature); // eslint-disable-line no-underscore-dangle
-            el.__data__ = feature; // eslint-disable-line no-underscore-dangle
-            return el;
-          }
+          (feature) => <path
+            fill={
+              isNumber(feature.properties[fieldName])
+                ? colors[classifier.getClass(feature.properties[fieldName])]
+                : noDataColor
+            }
+            d={globalStore.pathGenerator(feature)}
+            vector-effect="non-scaling-stroke"
+            use:bindData={unproxify(feature)}
+          />
         }
       </For>
     </g>
@@ -106,20 +112,16 @@ export function choroplethPointRenderer(
     >
       <For each={layerDescription.data.features}>
         {
-          (feature) => {
-            const el: JSX.Element = <path
-              fill={
-                isNumber(feature.properties[fieldName])
-                  ? colors[classifier.getClass(feature.properties[fieldName])]
-                  : noDataColor
-              }
-              d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
-              vector-effect="non-scaling-stroke"
-            />;
-            // el.__data__ = unproxify(feature); // eslint-disable-line no-underscore-dangle
-            el.__data__ = feature; // eslint-disable-line no-underscore-dangle
-            return el;
-          }
+          (feature) => <path
+            fill={
+              isNumber(feature.properties[fieldName])
+                ? colors[classifier.getClass(feature.properties[fieldName])]
+                : noDataColor
+            }
+            d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
+            vector-effect="non-scaling-stroke"
+            use:bindData={unproxify(feature)}
+          />
         }
       </For>
     </g>
@@ -159,20 +161,16 @@ export function choroplethLineRenderer(
     >
       <For each={layerDescription.data.features}>
         {
-          (feature) => {
-            const el: JSX.Element = <path
-              stroke={
-                isNumber(feature.properties[fieldName])
-                  ? colors[classifier.getClass(feature.properties[fieldName])]
-                  : noDataColor
-              }
-              d={globalStore.pathGenerator(feature)}
-              vector-effect="non-scaling-stroke"
-            />;
-            // el.__data__ = unproxify(feature); // eslint-disable-line no-underscore-dangle
-            el.__data__ = feature; // eslint-disable-line no-underscore-dangle
-            return el;
-          }
+          (feature) => <path
+            stroke={
+              isNumber(feature.properties[fieldName])
+                ? colors[classifier.getClass(feature.properties[fieldName])]
+                : noDataColor
+            }
+            d={globalStore.pathGenerator(feature)}
+            vector-effect="non-scaling-stroke"
+            use:bindData={unproxify(feature)}
+          />
         }
       </For>
     </g>

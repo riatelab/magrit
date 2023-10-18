@@ -35,7 +35,10 @@ import FreeDrawingRenderer from './LayoutFeatureRenderer/FreeDrawingRenderer.tsx
 import ScaleBarRenderer from './LayoutFeatureRenderer/ScaleBarRenderer.tsx';
 
 // Types and enums
-import { type IZoomable, LayoutFeatureType, ZoomBehavior } from '../global.d';
+import {
+  Ellipse, FreeDrawing, type IZoomable, LayoutFeatureType,
+  Rectangle, ZoomBehavior, ScaleBar,
+} from '../global.d';
 
 // Styles
 import '../styles/MapZone.css';
@@ -153,10 +156,8 @@ export default function MapZone(): JSX.Element {
     const sel = d3.select(svgElem);
     // Apply the zoom behavior to the SVG element
     zoom.apply(null, [sel]);
-    // Remove
-    sel.on('dblclick.zoom', (e: MouseEvent) => {
-      console.log(e);
-    });
+    // Remove the default double-click zoom behavior
+    sel.on('dblclick.zoom', null);
   });
 
   return <div class="map-zone">
@@ -223,7 +224,9 @@ export default function MapZone(): JSX.Element {
           }}
         </For>
         <For each={ layersDescriptionStore.layoutFeatures }>
-          {(feature) => layoutFeaturesFns[feature.type](feature)}
+          {(feature) => layoutFeaturesFns[feature.type](
+            feature as Rectangle & Ellipse & FreeDrawing & ScaleBar,
+          )}
         </For>
       </svg>
     </div>

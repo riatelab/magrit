@@ -2,7 +2,11 @@
 import { For, JSX, Show } from 'solid-js';
 
 // Helpers
+import { unproxify } from '../../helpers/common';
 import { PropSizer } from '../../helpers/geo';
+
+// Directives
+import bindData from '../../directives/bind-data';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -15,6 +19,12 @@ import {
   ProportionalSymbolsSymbolType,
   RenderVisibility,
 } from '../../global.d';
+
+// For now we keep an array of directives
+// because otherwise the import is not detected by the compiler...
+const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
+  bindData,
+];
 
 export default function proportionalSymbolsRenderer(
   layerDescription: LayerDescription,
@@ -60,28 +70,26 @@ export default function proportionalSymbolsRenderer(
               const symbolSize = propSize.scale(
                 feature.properties[rendererParameters.variable],
               );
-              const el = <circle
+              return <circle
                 r={symbolSize}
                 cx={projectedCoords[0]}
                 cy={projectedCoords[1]}
                 fill={rendererParameters.color as string}
+                use:bindData={unproxify(feature)}
               ></circle>;
-              el.__data__ = feature; // eslint-disable-line no-underscore-dangle
-              return el;
             }
             if (rendererParameters.symbolType === ProportionalSymbolsSymbolType.square) {
               const symbolSize = propSize.scale(
                 feature.properties[rendererParameters.variable],
               );
-              const el = <rect
+              return <rect
                 width={symbolSize}
                 height={symbolSize}
                 x={projectedCoords[0] - symbolSize / 2}
                 y={projectedCoords[1] - symbolSize / 2}
                 fill={rendererParameters.color}
+                use:bindData={unproxify(feature)}
               ></rect>;
-              el.__data__ = feature; // eslint-disable-line no-underscore-dangle
-              return el;
             }
             return null;
           }

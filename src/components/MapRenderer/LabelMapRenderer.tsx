@@ -1,6 +1,12 @@
 // Import from solid-js
 import { For, JSX, Show } from 'solid-js';
 
+// Helpers
+import { unproxify } from '../../helpers/common';
+
+// Directives
+import bindData from '../../directives/bind-data';
+
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
@@ -9,6 +15,12 @@ import {
   type LayerDescription,
   RenderVisibility,
 } from '../../global';
+
+// For now we keep an array of directives
+// because otherwise the import is not detected by the compiler...
+const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
+  bindData,
+];
 
 export function defaultLabelRenderer(
   layerDescription: LayerDescription,
@@ -20,7 +32,9 @@ export function defaultLabelRenderer(
     <g>
       <For each={layerDescription.data.features}>
         {
-          (feature) => <></>
+          (feature) => <text
+            use:bindData={unproxify(feature)}
+          ></text>
         }
       </For>
     </g>
@@ -37,7 +51,9 @@ export function graticuleLabelRenderer(
     <g>
       <For each={layerDescription.data.features}>
         {
-          (feature) => <></>
+          (feature) => <text
+            use:bindData={unproxify(feature)}
+          ></text>
         }
       </For>
     </g>
