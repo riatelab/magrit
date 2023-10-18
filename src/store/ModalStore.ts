@@ -13,10 +13,7 @@ type ModalStoreType = {
   width?: number,
 };
 
-const [
-  modalStore,
-  setModalStore,
-] = createStore({
+const getEmptyModalStore = () => ({
   show: false,
   title: null,
   content: null,
@@ -28,7 +25,15 @@ const [
   width: undefined,
 } as ModalStoreType);
 
+const [
+  modalStore,
+  setModalStore,
+] = createStore(getEmptyModalStore());
+
+const resetModalStore = () => setModalStore(getEmptyModalStore());
+
 export {
   modalStore,
   setModalStore,
+  resetModalStore,
 };

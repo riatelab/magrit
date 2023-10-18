@@ -9,7 +9,7 @@ import { LocalizedString } from 'typesafe-i18n';
 import { useI18nContext } from '../../i18n/i18n-solid';
 
 // Stores
-import { modalStore, setModalStore } from '../../store/ModalStore';
+import { modalStore, resetModalStore } from '../../store/ModalStore';
 
 // Styles
 import '../../styles/ModalWindow.css';
@@ -62,11 +62,11 @@ export default function DefaultModal(): JSX.Element {
           class="button is-success confirm-button"
           ref={autofocus}
           autofocus
-          onClick={ () => { confirmCallback(); setModalStore({ show: false, content: null }); } }
+          onClick={ () => { confirmCallback(); resetModalStore(); } }
         >{ successButton }</button>
         <button
           class="button cancel-button"
-          onClick={ () => { cancelCallback(); setModalStore({ show: false, content: null }); } }
+          onClick={ () => { cancelCallback(); resetModalStore(); } }
         >{ cancelButton }</button>
       </footer>
     </div>
