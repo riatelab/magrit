@@ -38,8 +38,6 @@ export default function RectangleRenderer(props: Rectangle): JSX.Element {
       stroke-opacity={props.strokeOpacity}
       rx={props.cornerRadius}
       ry={props.cornerRadius}
-      // transform-box="fill-box"
-      // transform-origin="center"
       transform={props.rotation ? `rotate(${props.rotation} ${props.position[0] + props.width / 2} ${props.position[1] + props.height / 2})` : undefined}
     ></rect>
   </g>;

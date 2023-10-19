@@ -1,5 +1,10 @@
 // Imports from solid-js
-import { For, JSX, Show } from 'solid-js';
+import {
+  createMemo,
+  For,
+  JSX,
+  Show,
+} from 'solid-js';
 
 // Helpers
 import { getClassifier } from '../../helpers/classification';
@@ -29,17 +34,22 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
 export function choroplethPolygonRenderer(
   layerDescription: LayerDescription,
 ): JSX.Element {
-  const rendererParameters = layerDescription.rendererParameters as ClassificationParameters;
-  const Cls = getClassifier(ClassificationMethod.manual);
-  const classifier = new Cls(null, null, rendererParameters.breaks);
-  const colors = rendererParameters.palette.colors.slice() as string[];
-  const fieldName = rendererParameters.variable as string;
-  const noDataColor = rendererParameters.nodataColor as string;
+  const rendererParameters = createMemo(
+    () => layerDescription.rendererParameters as ClassificationParameters,
+  );
 
-  console.log('rendererParameters', rendererParameters);
-  if (rendererParameters.reversePalette) {
-    colors.reverse();
-  }
+  const classifier = createMemo(() => {
+    const Cls = getClassifier(ClassificationMethod.manual);
+    return new Cls(null, null, rendererParameters().breaks);
+  });
+
+  const colors = createMemo(() => {
+    let values = rendererParameters().palette.colors.slice() as string[];
+    if (rendererParameters().reversePalette) {
+      values = values.reverse();
+    }
+    return values;
+  });
 
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
@@ -64,9 +74,9 @@ export function choroplethPolygonRenderer(
         {
           (feature) => <path
             fill={
-              isNumber(feature.properties[fieldName])
-                ? colors[classifier.getClass(feature.properties[fieldName])]
-                : noDataColor
+              isNumber(feature.properties[rendererParameters().variable])
+                ? colors()[classifier().getClass(feature.properties[rendererParameters().variable])]
+                : rendererParameters().nodataColor
             }
             d={globalStore.pathGenerator(feature)}
             vector-effect="non-scaling-stroke"
@@ -81,16 +91,22 @@ export function choroplethPolygonRenderer(
 export function choroplethPointRenderer(
   layerDescription: LayerDescription,
 ): JSX.Element {
-  const rendererParameters = layerDescription.rendererParameters as ClassificationParameters;
-  const Cls = getClassifier(ClassificationMethod.manual);
-  const classifier = new Cls(null, null, rendererParameters.breaks);
-  const colors = rendererParameters.palette.colors.slice() as string[];
-  const fieldName = rendererParameters.variable as string;
-  const noDataColor = rendererParameters.nodataColor as string;
+  const rendererParameters = createMemo(
+    () => layerDescription.rendererParameters as ClassificationParameters,
+  );
 
-  if (rendererParameters.reversePalette) {
-    colors.reverse();
-  }
+  const classifier = createMemo(() => {
+    const Cls = getClassifier(ClassificationMethod.manual);
+    return new Cls(null, null, rendererParameters().breaks);
+  });
+
+  const colors = createMemo(() => {
+    let values = rendererParameters().palette.colors.slice() as string[];
+    if (rendererParameters().reversePalette) {
+      values = values.reverse();
+    }
+    return values;
+  });
 
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
@@ -114,9 +130,9 @@ export function choroplethPointRenderer(
         {
           (feature) => <path
             fill={
-              isNumber(feature.properties[fieldName])
-                ? colors[classifier.getClass(feature.properties[fieldName])]
-                : noDataColor
+              isNumber(feature.properties[rendererParameters().variable])
+                ? colors()[classifier().getClass(feature.properties[rendererParameters().variable])]
+                : rendererParameters().nodataColor
             }
             d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
             vector-effect="non-scaling-stroke"
@@ -131,16 +147,22 @@ export function choroplethPointRenderer(
 export function choroplethLineRenderer(
   layerDescription: LayerDescription,
 ): JSX.Element {
-  const rendererParameters = layerDescription.rendererParameters as ClassificationParameters;
-  const Cls = getClassifier(ClassificationMethod.manual);
-  const classifier = new Cls(null, null, rendererParameters.breaks);
-  const colors = rendererParameters.palette.colors.slice() as string[];
-  const fieldName = rendererParameters.variable as string;
-  const noDataColor = rendererParameters.nodataColor as string;
+  const rendererParameters = createMemo(
+    () => layerDescription.rendererParameters as ClassificationParameters,
+  );
 
-  if (rendererParameters.reversePalette) {
-    colors.reverse();
-  }
+  const classifier = createMemo(() => {
+    const Cls = getClassifier(ClassificationMethod.manual);
+    return new Cls(null, null, rendererParameters().breaks);
+  });
+
+  const colors = createMemo(() => {
+    let values = rendererParameters().palette.colors.slice() as string[];
+    if (rendererParameters().reversePalette) {
+      values = values.reverse();
+    }
+    return values;
+  });
 
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
@@ -163,9 +185,9 @@ export function choroplethLineRenderer(
         {
           (feature) => <path
             stroke={
-              isNumber(feature.properties[fieldName])
-                ? colors[classifier.getClass(feature.properties[fieldName])]
-                : noDataColor
+              isNumber(feature.properties[rendererParameters().variable])
+                ? colors()[classifier().getClass(feature.properties[rendererParameters().variable])]
+                : rendererParameters().nodataColor
             }
             d={globalStore.pathGenerator(feature)}
             vector-effect="non-scaling-stroke"

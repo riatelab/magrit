@@ -376,6 +376,10 @@ type RootTranslation = {
 			 */
 			RoundCorners: string
 			/**
+			 * R​o​t​a​t​i​o​n
+			 */
+			Rotation: string
+			/**
 			 * X​ ​r​a​d​i​u​s
 			 */
 			Rx: string
@@ -716,6 +720,10 @@ type RootTranslation = {
 		 * A​d​d​ ​a​ ​s​h​a​d​o​w
 		 */
 		DropShadow: string
+		/**
+		 * C​h​a​n​g​e​ ​c​l​a​s​s​i​f​i​c​a​t​i​o​n​ ​o​p​t​i​o​n​s
+		 */
+		ChangeClassification: string
 	}
 	DataTable: {
 		/**
@@ -1539,6 +1547,10 @@ export type TranslationFunctions = {
 			 */
 			RoundCorners: () => LocalizedString
 			/**
+			 * Rotation
+			 */
+			Rotation: () => LocalizedString
+			/**
 			 * X radius
 			 */
 			Rx: () => LocalizedString
@@ -1879,6 +1891,10 @@ export type TranslationFunctions = {
 		 * Add a shadow
 		 */
 		DropShadow: () => LocalizedString
+		/**
+		 * Change classification options
+		 */
+		ChangeClassification: () => LocalizedString
 	}
 	DataTable: {
 		/**

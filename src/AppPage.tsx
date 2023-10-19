@@ -389,13 +389,8 @@ const AppPage: () => JSX.Element = () => {
         <LoadingOverlay />
       </Show>
       <Transition name="slide-fade">
-        <Show when={modalStore.show}>
-          <DefaultModal />
-        </Show>
-        <Show when={modalWithChildrenStore.show}>
-          <ModalWithChildren>
-            { modalWithChildrenStore.content }
-          </ModalWithChildren>
+        <Show when={classificationPanelStore.show}>
+          <ClassificationPanel />
         </Show>
         <Show when={niceAlertStore.show}>
           <NiceAlert />
@@ -406,11 +401,16 @@ const AppPage: () => JSX.Element = () => {
         <Show when={fieldTypingModalStore.show}>
           <FieldTypingModal />
         </Show>
-        <Show when={classificationPanelStore.show}>
-          <ClassificationPanel />
-        </Show>
         <Show when={datasetCatalogStore.show}>
           <ExampleDataModal />
+        </Show>
+        <Show when={modalStore.show}>
+          <DefaultModal />
+        </Show>
+        <Show when={modalWithChildrenStore.show}>
+          <ModalWithChildren>
+            { modalWithChildrenStore.content }
+          </ModalWithChildren>
         </Show>
       </Transition>
       <Show when={contextMenuStore.show}>

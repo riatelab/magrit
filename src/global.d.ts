@@ -408,6 +408,12 @@ export enum RenderVisibility {
   DoNotRender,
 }
 
+export enum NumberFormatting {
+  useSameLocaleAsBrowser = 'useSameLocaleAsBrowser',
+  useSameLocaleAsCurrentLanguage = 'useSameLocaleAsCurrentLanguage',
+  useCustomLocale = 'useCustomLocale',
+}
+
 export interface ID3Element {
   __data__: GeoJSONFeature,
 }

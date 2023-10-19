@@ -106,6 +106,7 @@ const fr = {
       StrokeWidth: 'Épaisseur de la bordure',
       StrokeOpacity: 'Opacité de la bordure',
       RoundCorners: 'Coins arrondis',
+      Rotation: 'Rotation',
       Rx: 'Rayon X',
       Ry: 'Rayon Y',
       Width: 'Largeur',
@@ -207,6 +208,7 @@ const fr = {
     StrokeWidth: 'Épaisseur de la ligne',
     PointRadius: 'Rayon du point',
     DropShadow: 'Ajouter une ombre',
+    ChangeClassification: 'Changer les options de discrétisation',
   },
   DataTable: {
     titleGeo: 'Table attributaire',

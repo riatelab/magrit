@@ -20,21 +20,6 @@
     cursor: pointer;
 }
 
-.portrayal-section .field {
-    height: 2em;
-}
-
 .portrayal-section .mini-button.selected {
     border: solid 1px grey;
-}
-
-.portrayal-section .field .select {
-    height: 2em;
-    min-width: 133px;
-}
-
-.portrayal-section .field .select select {
-    height: 2em;
-    line-height: 1;
-    width: 100%;
 }

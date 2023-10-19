@@ -106,6 +106,7 @@ const en = {
       StrokeWidth: 'Stroke width',
       StrokeOpacity: 'Stroke opacity',
       RoundCorners: 'Round corners',
+      Rotation: 'Rotation',
       Rx: 'X radius',
       Ry: 'Y radius',
       Width: 'Width',
@@ -207,6 +208,7 @@ const en = {
     StrokeWidth: 'Stroke width',
     PointRadius: 'Point radius',
     DropShadow: 'Add a shadow',
+    ChangeClassification: 'Change classification options',
   },
   DataTable: {
     titleGeo: 'Attribute table',

@@ -36,9 +36,7 @@ export default function EllipseRenderer(props: Ellipse): JSX.Element {
       stroke={props.strokeColor}
       stroke-width={props.strokeWidth}
       stroke-opacity={props.strokeOpacity}
-      transform-box="fill-box"
-      transform-origin="center"
-      transform={props.rotation ? `rotate(${props.rotation})` : undefined}
+      transform={props.rotation ? `rotate(${props.rotation} ${props.position[0]} ${props.position[1]})` : undefined}
     ></ellipse>
   </g>;
 }

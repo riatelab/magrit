@@ -45,6 +45,7 @@ export function makeColoredBucketPlot(
           x2: (d, i) => i * 10 + 10,
           y1: 0,
           y2: 10,
+          stroke: 'silver',
         },
       ),
       Plot.rect(

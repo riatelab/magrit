@@ -128,13 +128,12 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
   console.log('layerDescription', layerDescription);
   setModalStore({
     show: true,
-    content: null,
+    content: () => <LayerSettings id={ id } LL={ LL } />,
     title: LL().LayerSettings.LayerSettings(),
     confirmCallback: (): void => {
-      console.log('Changes confirmed for layer ', id);
+      // Do nothing for now (because the layerDescription is updated directly in the modal)
     },
     cancelCallback: (): void => {
-      console.log('Changes cancelled for layer ', id);
       // Reset the layerDescription for this layer
       setLayersDescriptionStore(
         'layers',
@@ -144,10 +143,6 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
     },
     escapeKey: 'cancel',
   });
-  render(
-    () => <LayerSettings id={ id } LL={ LL } />,
-    document.querySelector('.modal-card-body')!,
-  );
 };
 
 const onClickTyping = (id: string) => {

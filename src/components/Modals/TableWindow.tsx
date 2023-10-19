@@ -1,19 +1,27 @@
+// Import from solid-js
 import { createSignal, JSX, Show } from 'solid-js';
 
+// Ag-grid stuffs
 import AgGridSolid from 'ag-grid-solid';
 import 'ag-grid-community/styles/ag-grid.css'; // grid core CSS
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // optional theme
 
+// Helpers
 import { unproxify } from '../../helpers/common';
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { clickLinkFromDataUrl } from '../../helpers/exports';
+import d3 from '../../helpers/d3-custom';
 
+// Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 import { setNiceAlertStore } from '../../store/NiceAlertStore';
 import { tableWindowStore, setTableWindowStore } from '../../store/TableWindowStore';
 
+// Types / Interfaces / Enums
+import { GeoJSONFeature, GeoJSONFeatureCollection } from '../../global.d';
+
+// Styles
 import '../../styles/TableWindow.css';
-import d3 from '../../helpers/d3-custom';
-import { clickLinkFromDataUrl } from '../../helpers/exports';
 
 export default function TableWindow(): JSX.Element {
   const { LL } = useI18nContext();
@@ -23,8 +31,16 @@ export default function TableWindow(): JSX.Element {
   const { layerId, editable } = tableWindowStore;
   const layer = layersDescriptionStore.layers
     .find((l) => l.id === layerId);
+
+  if (!layer) {
+    // This should never happen due to how the table window is opened
+    throw new Error(`Layer with id ${layerId} not found`);
+  }
+
   const { name: layerName } = layer;
-  const rowData = unproxify(layer.data).features.map((feature) => feature.properties);
+  const rowData = (unproxify(layer.data) as GeoJSONFeatureCollection)
+    .features
+    .map((feature: GeoJSONFeature) => feature.properties);
   // The row we want to display
   const columnDefs = Object.keys(layer.data.features[0].properties)
     .map((key) => ({ field: key, headerName: key }));

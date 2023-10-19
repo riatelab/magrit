@@ -4,13 +4,16 @@ import {
   For,
   type JSX,
 } from 'solid-js';
-import { render } from 'solid-js/web';
 
 // Stores
 import { setContextMenuStore } from '../../store/ContextMenuStore';
-import { setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 import { setModalStore } from '../../store/ModalStore';
 
+// Helpers
+import { unproxify } from '../../helpers/common';
+
+// Subcomponents
 import LegendSettings from '../Modals/LegendSettings.tsx';
 
 // Types / interfaces / enums
@@ -246,19 +249,29 @@ export function getTextSize(
 }
 
 export function makeLegendSettingsModal(layerId: string, LL: Accessor<TranslationFunctions>): void {
+  // Store the state of the legend before the user opens the modal
+  // (in case he/she wants to cancel the changes)
+  const legendProperties = unproxify(
+    layersDescriptionStore.layers
+      .find((l) => l.id === layerId)?.legend,
+  );
+  // Open the modal
   setModalStore({
     show: true,
-    content: null,
+    content: () => <LegendSettings layerId={layerId} LL={LL} />,
     title: LL().Legend.Modal.Title(),
-    confirmCallback: () => {},
-    cancelCallback: () => {},
+    confirmCallback: () => {}, // Do nothing on confirm
+    cancelCallback: () => {
+      // Reset the legend of the layer on cancel
+      setLayersDescriptionStore(
+        'layers',
+        (l: LayerDescription) => l.id === layerId,
+        { legend: legendProperties },
+      );
+    },
     escapeKey: 'cancel',
     width: 700,
   });
-  render(
-    () => <LegendSettings layerId={layerId} LL={LL} />,
-    document.querySelector('.modal-card-body')!,
-  );
 }
 
 export function triggerContextMenuLegend(

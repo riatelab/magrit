@@ -64,6 +64,30 @@ function makeSettingsRectangle(
   const ft = layersDescriptionStore.layoutFeatures
     .find((f) => f.id === layoutFeatureId) as Rectangle;
   return <>
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.Width() }
+      value={ ft.width }
+      onChange={(value) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['width'],
+        value,
+      )}
+      min={10}
+      max={1000}
+      step={1}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.Height() }
+      value={ ft.height }
+      onChange={(value) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['height'],
+        value,
+      )}
+      min={1}
+      max={1000}
+      step={1}
+    />
     <InputFieldColor
       label={ LL().LayoutFeatures.Modal.FillColor() }
       value={ft.fillColor}
@@ -128,6 +152,18 @@ function makeSettingsRectangle(
       )}
       min={0}
       max={100}
+      step={1}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.Rotation() }
+      value={ft.rotation}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['rotation'],
+        newValue,
+      )}
+      min={-360}
+      max={360}
       step={1}
     />
   </>;
@@ -216,6 +252,18 @@ function makeSettingsEllipse(
       )}
       min={0}
       max={1000}
+      step={1}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.Rotation() }
+      value={ft.rotation}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['rotation'],
+        newValue,
+      )}
+      min={-360}
+      max={360}
       step={1}
     />
   </>;

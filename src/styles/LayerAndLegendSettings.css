@@ -2,7 +2,9 @@
 
 We have two types of "field":
 - 'field' class is a field with display: flex, justify-content: space-between
+  (so the label is on the left and the input on the right, on the same line)
 - 'field-block' class is a field with display: block
+  (so the label is above the input)
 
 */
 .field {
@@ -10,11 +12,25 @@ We have two types of "field":
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5em !important;
+    height: 2em;
 }
 
 .field-block {
     display: block;
     margin-bottom: 1.5em !important;
+}
+
+.field .select,
+.field-block .select {
+    height: 2em;
+    min-width: 133px;
+}
+
+.field .select select,
+.field-block .select select {
+    height: 2em;
+    line-height: 1;
+    width: 100%;
 }
 
 .field .control .number,

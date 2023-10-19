@@ -1,266 +1,352 @@
-import { Accessor, JSX } from 'solid-js';
+// Imports from solid-js
+import { Accessor, JSX, Show } from 'solid-js';
+
+// Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { createDropShadow } from '../MapRenderer/FilterDropShadow';
+import { unproxify } from '../../helpers/common';
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 
 // Types / Interfaces
-import type { LayerDescription } from '../../global';
+import type { LayerDescription, ProportionalSymbolsParameters } from '../../global.d';
 
 // Styles
 import '../../styles/LayerAndLegendSettings.css';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
+import InputFieldColor from '../Inputs/InputColor.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
 
-function makeOnChangeProp(
-  props: LayerDescription,
-  prop: string,
-  modifier: (arg0: string) => unknown = (x) => x,
-): () => void {
-  return function onChangeProp() {
-    // Mutate the store for the layer
-    const layer = layersDescriptionStore.layers
-      .find((l) => l.id === props.id);
-    if (layer) {
-      setLayersDescriptionStore(
-        'layers',
-        (l) => l.id === props.id,
-        { [prop]: modifier(this.value) },
-      );
-    }
-  };
-}
+const updateProp = (
+  layerId: string,
+  propOrProps: string | string[],
+  value: string | number | boolean,
+) => {
+  if (Array.isArray(propOrProps)) {
+    const allPropsExceptLast = propOrProps.slice(0, propOrProps.length - 1);
+    const lastProp = propOrProps[propOrProps.length - 1];
+    const args = [
+      'layers',
+      (l: LayerDescription) => l.id === layerId,
+      ...allPropsExceptLast,
+      {
+        [lastProp]: value,
+      },
+    ];
+    setLayersDescriptionStore(...args);
+  } else {
+    setLayersDescriptionStore(
+      'layers',
+      (l: LayerDescription) => l.id === layerId,
+      { [propOrProps]: value },
+    );
+  }
+};
 
-function makeOnChangeDropShadow(props: LayerDescription): () => void {
-  return function onChangeDropShadow() {
-    // Mutate the store for the layer
-    const layer = layersDescriptionStore.layers.find((l) => l.id === props.id);
-    if (layer) {
-      const { checked } = this;
-      if (checked) {
-        // Need to investigate why this is not working as expected
-        // (i.e. the filter should be added automatically to the def section)
-        const filter = createDropShadow(props.id);
-        (document.querySelector('.map-zone svg defs') as SVGDefsElement).appendChild(filter);
-      } else {
-        // Same here, it should be removed automatically
-        const filter = document.querySelector(`#filter-drop-shadow-${props.id}`);
-        if (filter) filter.remove();
-      }
-      setLayersDescriptionStore(
-        'layers',
-        (l) => l.id === props.id,
-        { dropShadow: checked },
-      );
+function updateDropShadow(layerId: string, checked: boolean) {
+  // Mutate the store for the layer
+  const layer = layersDescriptionStore.layers.find((l) => l.id === layerId);
+  if (layer) {
+    if (checked) {
+      // Need to investigate why this is not working as expected
+      // (i.e. the filter should be added automatically to the def section)
+      const filter = createDropShadow(layerId);
+      (document.querySelector('.map-zone svg defs') as SVGDefsElement).appendChild(filter);
+    } else {
+      // Same here, it should be removed automatically
+      const filter = document.querySelector(`#filter-drop-shadow-${layerId}`);
+      if (filter) filter.remove();
     }
-  };
+    setLayersDescriptionStore(
+      'layers',
+      (l: LayerDescription) => l.id === layerId,
+      { dropShadow: checked },
+    );
+  }
 }
 
 function makeSettingsDefaultPoint(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  return <div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.FillColor() }</label>
-      <div class="control">
-        <input class="color" type="color" onChange={makeOnChangeProp(props, 'fillColor')} value={props.fillColor} />
+  return <>
+    {/*
+      The way the entities are colored depends on the renderer...
+        - For 'default' renderer (i.e. no classification), we can choose the color manually
+        - For 'choropleth' renderer, we propose to reopen the classification modal
+        - For 'proportional' renderer, ... (TODO)
+    */}
+    <Show when={props.renderer === 'default'}>
+      <InputFieldColor
+        label={ LL().LayerSettings.FillColor() }
+        value={props.fillColor!}
+        onChange={(v) => updateProp(props.id, 'fillColor', v)}
+      />
+    </Show>
+    <Show when={props.renderer === 'choropleth'}>
+      <div class="field" style={{ 'text-align': 'center' }}>
+        <button
+          class="button"
+          style={{ margin: 'auto' }}
+          onClick={() => {
+            // Save current state of classification parameters
+            const params = unproxify(props.rendererParameters);
+            setClassificationPanelStore({
+              show: true,
+              layerName: props.name,
+              variableName: props.rendererParameters.variable,
+              series: props.data.features
+                .map((f) => f.properties[props.rendererParameters.variable]),
+              nClasses: props.rendererParameters.classes,
+              colorScheme: props.rendererParameters.palette.name,
+              invertColorScheme: props.rendererParameters.reversePalette,
+              onCancel: () => {
+                setLayersDescriptionStore(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: params },
+                );
+              },
+              onConfirm: (newParams) => {
+                console.log(newParams);
+                setLayersDescriptionStore(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: newParams },
+                );
+              },
+            });
+          }}
+        >{ LL().LayerSettings.ChangeClassification() }</button>
       </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeColor() }</label>
-      <div class="control">
-        <input class="color" type="color" onChange={makeOnChangeProp(props, 'strokeColor')} value={props.strokeColor} />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.FillOpacity() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          onChange={makeOnChangeProp(props, 'fillOpacity')}
-          value={props.fillOpacity}
-          min="0"
-          max="1"
-          step="0.1"
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeOpacity() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          onChange={makeOnChangeProp(props, 'strokeOpacity')}
-          value={props.strokeOpacity}
-          min="0"
-          max="1"
-          step="0.1"
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeWidth() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          onChange={makeOnChangeProp(props, 'strokeWidth', (v) => `${v}px`)}
-          value={+props.strokeWidth.replace('px', '')}
-          min="0"
-          max="10"
-          step="0.1"
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.PointRadius() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          onChange={makeOnChangeProp(props, 'pointRadius', (v) => +v)}
-          value={props.pointRadius}
-          min="1"
-          max="20"
-          step="1"
-        />
-      </div>
-    </div>
-  </div>;
+    </Show>
+    <Show when={props.renderer === 'proportionalSymbols'}>
+      <InputFieldColor
+        label={ LL().LayerSettings.FillColor() }
+        value={ (props.rendererParameters as ProportionalSymbolsParameters).color as string }
+        onChange={(v) => updateProp(props.id, ['rendererParameters', 'color'], v)}
+      />
+    </Show>
+    <InputFieldColor
+      label={ LL().LayerSettings.StrokeColor() }
+      value={ props.strokeColor! }
+      onChange={(v) => updateProp(props.id, 'strokeColor', v)}
+    />
+    <InputFieldNumber
+      label={ LL().LayerSettings.FillOpacity() }
+      value={ props.fillOpacity! }
+      onChange={(v) => updateProp(props.id, 'fillOpacity', v)}
+      min={0}
+      max={1}
+      step={0.1}
+    />
+    <InputFieldNumber
+      label={ LL().LayerSettings.StrokeOpacity() }
+      value={ props.strokeOpacity! }
+      onChange={(v) => updateProp(props.id, 'strokeOpacity', v)}
+      min={0}
+      max={1}
+      step={0.1}
+    />
+    <InputFieldNumber
+      label={ LL().LayerSettings.StrokeWidth() }
+      value={+props.strokeWidth.replace('px', '')}
+      onChange={(v) => updateProp(props.id, 'strokeWidth', `${v}px`)}
+      min={0}
+      max={10}
+      step={0.1}
+    />
+    <Show when={ props.renderer !== 'proportionalSymbols' }>
+      <InputFieldNumber
+        label={ LL().LayerSettings.PointRadius() }
+        value={ props.pointRadius! }
+        onChange={(v) => updateProp(props.id, 'pointRadius', v)}
+        min={1}
+        max={20}
+        step={1}
+      />
+    </Show>
+    <Show when={ props.renderer === 'proportionalSymbols' }>
+      <InputFieldCheckbox
+        label={ LL().PortrayalSection.ProportionalSymbolsOptions.AvoidOverlapping() }
+        checked={ (props.rendererParameters as ProportionalSymbolsParameters).avoidOverlapping }
+        onChange={(checked) => {
+          setLayersDescriptionStore(
+            'layers',
+            (l: LayerDescription) => l.id === props.id,
+            'rendererParameters',
+            { avoidOverlapping: checked },
+          );
+        }}
+      />
+    </Show>
+    <InputFieldCheckbox
+      label={ LL().LayerSettings.DropShadow() }
+      checked={ props.dropShadow }
+      onChange={(checked) => updateDropShadow(props.id, checked)}
+    />
+  </>;
 }
 
 function makeSettingsDefaultLine(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  return <div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeColor() }</label>
-      <div class="control">
-        <input class="color" type="color" onChange={makeOnChangeProp(props, 'strokeColor')} value={props.strokeColor} />
+  return <>
+    <Show when={ props.renderer === 'default' }>
+      <InputFieldColor
+        label={ LL().LayerSettings.StrokeColor() }
+        value={ props.strokeColor! }
+        onChange={(v) => updateProp(props.id, 'strokeColor', v)}
+      />
+    </Show>
+    <Show when={props.renderer === 'choropleth'}>
+      <div class="field" style={{ 'text-align': 'center' }}>
+        <button
+          class="button"
+          style={{ margin: 'auto' }}
+          onClick={() => {
+            // Save current state of classification parameters
+            const params = unproxify(props.rendererParameters);
+            setClassificationPanelStore({
+              show: true,
+              layerName: props.name,
+              variableName: props.rendererParameters.variable,
+              series: props.data.features
+                .map((f) => f.properties[props.rendererParameters.variable]),
+              nClasses: props.rendererParameters.classes,
+              colorScheme: props.rendererParameters.palette.name,
+              invertColorScheme: props.rendererParameters.reversePalette,
+              onCancel: () => {
+                setLayersDescriptionStore(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: params },
+                );
+              },
+              onConfirm: (newParams) => {
+                console.log(newParams);
+                setLayersDescriptionStore(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: newParams },
+                );
+              },
+            });
+          }}
+        >{ LL().LayerSettings.ChangeClassification() }</button>
       </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeOpacity() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          onChange={makeOnChangeProp(props, 'strokeOpacity')}
-          value={props.strokeOpacity}
-          min="0"
-          max="1"
-          step="0.1"
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeWidth() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          onChange={makeOnChangeProp(props, 'strokeWidth', (v) => `${v}px`)}
-          value={+props.strokeWidth.replace('px', '')}
-          min="0"
-          max="10"
-          step="0.1"
-        />
-      </div>
-    </div>
-  </div>;
+    </Show>
+    <InputFieldNumber
+      label={ LL().LayerSettings.StrokeOpacity() }
+      value={ props.strokeOpacity }
+      onChange={(v) => updateProp(props.id, 'strokeOpacity', v)}
+      min={0}
+      max={1}
+      step={0.1}
+    />
+    <InputFieldNumber
+      label={ LL().LayerSettings.StrokeWidth() }
+      value={+props.strokeWidth.replace('px', '')}
+      onChange={(v) => updateProp(props.id, 'strokeWidth', `${v}px`)}
+      min={0}
+      max={10}
+      step={0.1}
+    />
+  </>;
 }
 
-function makeSettingsChoroplethPolygon(
-  props: LayerDescription,
-  LL: Accessor<TranslationFunctions>,
-): JSX.Element {
-  console.log(props);
-  return <div>
-    <div>
-
-    </div>
-    <div>
-
-    </div>
-    <div>
-
-    </div>
-  </div>;
-}
 function makeSettingsDefaultPolygon(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  return <div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.FillColor() }</label>
-      <div class="control">
-        <input class="color" type="color" onChange={makeOnChangeProp(props, 'fillColor')} value={props.fillColor} />
+  return <>
+    {/*
+      The way the entities are colored depends on the renderer...
+        - For 'default' renderer (i.e. no classification), we can choose the color manually
+        - For 'choropleth' renderer, we propose to reopen the classification modal
+        - For 'proportional' renderer, ... (TODO)
+    */}
+    <Show when={props.renderer === 'default'}>
+      <InputFieldColor
+        label={ LL().LayerSettings.FillColor() }
+        value={props.fillColor!}
+        onChange={(v) => updateProp(props.id, 'fillColor', v)}
+      />
+    </Show>
+    <Show when={props.renderer === 'choropleth'}>
+      <div class="field" style={{ 'text-align': 'center' }}>
+        <button
+          class="button"
+          style={{ margin: 'auto' }}
+          onClick={() => {
+            // Save current state of classification parameters
+            const params = unproxify(props.rendererParameters);
+            setClassificationPanelStore({
+              show: true,
+              layerName: props.name,
+              variableName: props.rendererParameters.variable,
+              series: props.data.features
+                .map((f) => f.properties[props.rendererParameters.variable]),
+              nClasses: props.rendererParameters.classes,
+              colorScheme: props.rendererParameters.palette.name,
+              invertColorScheme: props.rendererParameters.reversePalette,
+              onCancel: () => {
+                setLayersDescriptionStore(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: params },
+                );
+              },
+              onConfirm: (newParams) => {
+                setLayersDescriptionStore(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: newParams },
+                );
+              },
+            });
+          }}
+        >{ LL().LayerSettings.ChangeClassification() }</button>
       </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeColor() }</label>
-      <div class="control">
-        <input class="color" type="color" onChange={makeOnChangeProp(props, 'strokeColor')} value={props.strokeColor} />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.FillOpacity() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          onChange={makeOnChangeProp(props, 'fillOpacity')}
-          value={props.fillOpacity}
-          min="0"
-          max="1"
-          step="0.1"
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeOpacity() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          onChange={makeOnChangeProp(props, 'strokeOpacity')}
-          value={props.strokeOpacity}
-          min="0"
-          max="1"
-          step="0.1"
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.StrokeWidth() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          onChange={makeOnChangeProp(props, 'strokeWidth', (v) => `${v}px`)}
-          value={+props.strokeWidth.replace('px', '')}
-          min="0"
-          max="10"
-          step="0.1"
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayerSettings.DropShadow() }</label>
-      <div class="control">
-        <input
-          class="checkbox"
-          type="checkbox"
-          onChange={makeOnChangeDropShadow(props)}
-          checked={props.dropShadow}
-        />
-      </div>
-    </div>
-  </div>;
+    </Show>
+    <InputFieldColor
+      label={ LL().LayerSettings.StrokeColor() }
+      value={ props.strokeColor! }
+      onChange={(v) => updateProp(props.id, 'strokeColor', v)}
+    />
+    <InputFieldNumber
+      label={ LL().LayerSettings.FillOpacity() }
+      value={ props.fillOpacity! }
+      onChange={(v) => updateProp(props.id, 'fillOpacity', v)}
+      min={0}
+      max={1}
+      step={0.1}
+    />
+    <InputFieldNumber
+      label={ LL().LayerSettings.StrokeOpacity() }
+      value={ props.strokeOpacity! }
+      onChange={(v) => updateProp(props.id, 'strokeOpacity', v)}
+      min={0}
+      max={1}
+      step={0.1}
+    />
+    <InputFieldNumber
+      label={ LL().LayerSettings.StrokeWidth() }
+      value={+props.strokeWidth.replace('px', '')}
+      onChange={(v) => updateProp(props.id, 'strokeWidth', `${v}px`)}
+      min={0}
+      max={10}
+      step={0.1}
+    />
+    <InputFieldCheckbox
+      label={ LL().LayerSettings.DropShadow() }
+      checked={ props.dropShadow }
+      onChange={(checked) => updateDropShadow(props.id, checked)}
+    />
+  </>;
 }
 
 export default function LayerSettings(

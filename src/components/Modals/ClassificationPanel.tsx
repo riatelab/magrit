@@ -175,7 +175,7 @@ export default function ClassificationPanel(): JSX.Element {
   const [
     paletteName,
     setPaletteName,
-  ] = createSignal<string>('Algae');
+  ] = createSignal<string>(classificationPanelStore.colorScheme || 'Algae');
   // - the color chosen by the user for the no data values
   const [
     noDataColor,
@@ -185,7 +185,11 @@ export default function ClassificationPanel(): JSX.Element {
   const [
     isPaletteReversed,
     setIsPaletteReversed,
-  ] = createSignal<boolean>(false);
+  ] = createSignal<boolean>(
+    classificationPanelStore.invertColorScheme !== undefined
+      ? classificationPanelStore.invertColorScheme
+      : false,
+  );
   // - the current breaks (given the last option that changed, or the default breaks)
   const [
     currentBreaksInfo,
@@ -462,7 +466,9 @@ export default function ClassificationPanel(): JSX.Element {
                     id={'dropdown-palette-name'}
                     style={{ width: '220px' }}
                     entries={availablePalettes}
-                    defaultEntry={availablePalettes[0]}
+                    defaultEntry={
+                      availablePalettes.find((d) => d.value === paletteName())!
+                    }
                     onChange={(value) => {
                       setPaletteName(value);
                       updateClassificationParameters();

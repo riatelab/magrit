@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 interface InputFieldCheckboxProps {
   label: LocalizedString | string;
   checked: boolean;
+  onChange: (checked: boolean) => void;
 }
 
 export default function InputFieldCheckbox(props: InputFieldCheckboxProps): JSX.Element {
@@ -17,6 +18,7 @@ export default function InputFieldCheckbox(props: InputFieldCheckboxProps): JSX.
       class="checkbox"
       type="checkbox"
       checked={ props.checked }
+      onChange={(e) => { props.onChange(e.currentTarget.checked); }}
     />
   </div>;
 }
