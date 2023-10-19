@@ -257,7 +257,7 @@ function proportionalSymbolsVerticalLegend(layer: LayerDescription): JSX.Element
                   style={{ 'user-select': 'none' }}
                   x={maxRadius() * 2 + defaultSpacing}
                   y={ cy }
-                >{ round(value, layer.legend!.roundDecimals) }</text>
+                >{ round(value, layer.legend!.roundDecimals).toLocaleString() }</text>
               </>;
             }
           }

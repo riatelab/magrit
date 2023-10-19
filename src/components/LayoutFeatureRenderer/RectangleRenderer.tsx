@@ -2,7 +2,7 @@
 import { type JSX, onMount } from 'solid-js';
 
 // Helpers
-import { bindDragBehavior, triggerContextMenuLayoutFeature } from './common.tsx';
+import { bindDragBehavior, makeLayoutFeaturesSettingsModal, triggerContextMenuLayoutFeature } from './common.tsx';
 import { useI18nContext } from '../../i18n/i18n-solid';
 
 // Types / Interfaces / Enums
@@ -24,6 +24,7 @@ export default function RectangleRenderer(props: Rectangle): JSX.Element {
       e.stopPropagation();
       triggerContextMenuLayoutFeature(e, props.id, LL);
     }}
+    onDblClick={() => { makeLayoutFeaturesSettingsModal(props.id, LL); }}
   >
     <rect
       x={props.position[0]}

@@ -375,6 +375,74 @@ type RootTranslation = {
 			 * R​o​u​n​d​ ​c​o​r​n​e​r​s
 			 */
 			RoundCorners: string
+			/**
+			 * X​ ​r​a​d​i​u​s
+			 */
+			Rx: string
+			/**
+			 * Y​ ​r​a​d​i​u​s
+			 */
+			Ry: string
+			/**
+			 * W​i​d​t​h
+			 */
+			Width: string
+			/**
+			 * H​e​i​g​h​t
+			 */
+			Height: string
+			/**
+			 * D​i​s​t​a​n​c​e​ ​u​n​i​t
+			 */
+			Units: string
+			/**
+			 * M​e​t​e​r​s
+			 */
+			m: string
+			/**
+			 * K​i​l​o​m​e​t​e​r​s
+			 */
+			km: string
+			/**
+			 * M​i​l​e​s
+			 */
+			mi: string
+			/**
+			 * F​e​e​t
+			 */
+			ft: string
+			/**
+			 * Y​a​r​d​s
+			 */
+			yd: string
+			/**
+			 * N​a​u​t​i​c​a​l​ ​m​i​l​e​s
+			 */
+			nmi: string
+			/**
+			 * S​c​a​l​e​ ​b​a​r​ ​t​y​p​e
+			 */
+			ScaleBarType: string
+			/**
+			 * S​i​m​p​l​e​ ​l​i​n​e
+			 */
+			simpleLine: string
+			/**
+			 * L​i​n​e​ ​w​i​t​h​ ​t​i​c​k​s​ ​o​n​ ​t​o​p
+			 */
+			lineWithTicksOnTop: string
+			/**
+			 * L​i​n​e​ ​w​i​t​h​ ​t​i​c​k​s​ ​o​n​ ​b​o​t​t​o​m
+			 */
+			lineWithTicksOnBottom: string
+			/**
+			 * B​l​a​c​k​ ​a​n​d​ ​w​h​i​t​e​ ​b​a​r
+			 */
+			blackAndWhiteBar: string
+			/**
+			 * T​i​c​k​ ​v​a​l​u​e​s​ ​(​c​o​m​m​a​ ​s​e​p​a​r​a​t​e​d​,​ ​s​t​a​r​t​i​n​g​ ​f​r​o​m​ ​0​)
+			 */
+			TickValues: string
 		}
 	}
 	AboutPanel: {
@@ -1470,6 +1538,74 @@ export type TranslationFunctions = {
 			 * Round corners
 			 */
 			RoundCorners: () => LocalizedString
+			/**
+			 * X radius
+			 */
+			Rx: () => LocalizedString
+			/**
+			 * Y radius
+			 */
+			Ry: () => LocalizedString
+			/**
+			 * Width
+			 */
+			Width: () => LocalizedString
+			/**
+			 * Height
+			 */
+			Height: () => LocalizedString
+			/**
+			 * Distance unit
+			 */
+			Units: () => LocalizedString
+			/**
+			 * Meters
+			 */
+			m: () => LocalizedString
+			/**
+			 * Kilometers
+			 */
+			km: () => LocalizedString
+			/**
+			 * Miles
+			 */
+			mi: () => LocalizedString
+			/**
+			 * Feet
+			 */
+			ft: () => LocalizedString
+			/**
+			 * Yards
+			 */
+			yd: () => LocalizedString
+			/**
+			 * Nautical miles
+			 */
+			nmi: () => LocalizedString
+			/**
+			 * Scale bar type
+			 */
+			ScaleBarType: () => LocalizedString
+			/**
+			 * Simple line
+			 */
+			simpleLine: () => LocalizedString
+			/**
+			 * Line with ticks on top
+			 */
+			lineWithTicksOnTop: () => LocalizedString
+			/**
+			 * Line with ticks on bottom
+			 */
+			lineWithTicksOnBottom: () => LocalizedString
+			/**
+			 * Black and white bar
+			 */
+			blackAndWhiteBar: () => LocalizedString
+			/**
+			 * Tick values (comma separated, starting from 0)
+			 */
+			TickValues: () => LocalizedString
 		}
 	}
 	AboutPanel: {

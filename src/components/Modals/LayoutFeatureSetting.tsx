@@ -1,25 +1,34 @@
 // Imports from solid-js
 import {
-  Accessor,
-  createSignal,
+  type Accessor,
   For,
   type JSX,
   Show,
 } from 'solid-js';
 
 // Stores
-import {
-  layersDescriptionStore,
-  setLayersDescriptionStore,
-} from '../../store/LayersDescriptionStore';
+import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+
+// Subcomponents
+import InputFieldColor from '../Inputs/InputColor.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
 
 // Helpers
 import type { TranslationFunctions } from '../../i18n/i18n-types';
 
 // Types / Interfaces / Enums
-import { type LayoutFeature, LayoutFeatureType, Rectangle } from '../../global.d';
-import InputFieldColor from '../Inputs/InputColor.tsx';
-import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import {
+  DistanceUnit,
+  type Ellipse,
+  type FreeDrawing,
+  type LayoutFeature,
+  LayoutFeatureType,
+  type Rectangle,
+  type ScaleBar,
+  ScaleBarStyle,
+} from '../../global.d';
+import InputFieldText from '../Inputs/InputText.tsx';
 
 /**
  * Update a single property of a layout feature in the layersDescriptionStore,
@@ -33,7 +42,7 @@ import InputFieldNumber from '../Inputs/InputNumber.tsx';
 const updateLayoutFeatureProperty = (
   layoutFeatureId: string,
   props: string[],
-  value: string | number,
+  value: string | number | number[],
 ) => {
   const allPropsExceptLast = props.slice(0, props.length - 1);
   const lastProp = props[props.length - 1];
@@ -128,14 +137,209 @@ function makeSettingsEllipse(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  return <></>;
+  const ft = layersDescriptionStore.layoutFeatures
+    .find((f) => f.id === layoutFeatureId) as Ellipse;
+  return <>
+    <InputFieldColor
+      label={ LL().LayoutFeatures.Modal.FillColor() }
+      value={ ft.fillColor }
+      onChange={ (newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['fillColor'],
+        newValue,
+      )}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.FillOpacity() }
+      value={ft.fillOpacity}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['fillOpacity'],
+        newValue,
+      )}
+      min={0}
+      max={1}
+      step={0.1}
+    />
+    <InputFieldColor
+      label={ LL().LayoutFeatures.Modal.StrokeColor() }
+      value={ft.strokeColor}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeColor'],
+        newValue,
+      )}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.StrokeOpacity() }
+      value={ft.strokeOpacity}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeOpacity'],
+        newValue,
+      )}
+      min={0}
+      max={1}
+      step={0.1}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.StrokeWidth() }
+      value={ft.strokeWidth}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeWidth'],
+        newValue,
+      )}
+      min={0}
+      max={100}
+      step={1}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.Rx() }
+      value={ft.rx}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['rx'],
+        newValue,
+      )}
+      min={0}
+      max={1000}
+      step={1}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.Ry() }
+      value={ft.ry}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['ry'],
+        newValue,
+      )}
+      min={0}
+      max={1000}
+      step={1}
+    />
+  </>;
 }
 
 function makeSettingsScaleBar(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  return <></>;
+  const ft = layersDescriptionStore.layoutFeatures
+    .find((f) => f.id === layoutFeatureId) as ScaleBar;
+  return <>
+    <InputFieldSelect
+      label={ LL().LayoutFeatures.Modal.ScaleBarType() }
+      onChange={(value) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['style'],
+        value,
+      )}
+      value={ ft.style }
+      width={ 200 }
+    >
+      <For each={Object.keys(ScaleBarStyle)}>
+        {(style) => <option value={style}>{ LL().LayoutFeatures.Modal[style]() }</option>}
+      </For>
+    </InputFieldSelect>
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.Width() }
+      value={ ft.width }
+      onChange={(value) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['width'],
+        value,
+      )}
+      min={10}
+      max={1000}
+      step={1}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.Height() }
+      value={ ft.height }
+      onChange={(value) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['height'],
+        value,
+      )}
+      min={1}
+      max={400}
+      step={1}
+    />
+    <InputFieldSelect
+      label={ LL().LayoutFeatures.Modal.Units() }
+      onChange={(value) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['unit'],
+        value,
+      )}
+      value={ft.unit}
+    >
+      <For each={Object.keys(DistanceUnit)}>
+        {(unit) => <option value={unit}>{ LL().LayoutFeatures.Modal[unit]() }</option>}
+      </For>
+    </InputFieldSelect>
+    <Show when={ft.style === ScaleBarStyle.blackAndWhiteBar}>
+      <InputFieldText
+        label={ LL().LayoutFeatures.Modal.TickValues() }
+        onChange={(value) => {
+          const ticks = value.split(',').map((v) => +v);
+          if (ticks.some((t) => Number.isNaN(t))) {
+            return;
+          }
+          updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['tickValues'],
+            ticks,
+          );
+        }}
+        value={ft.tickValues.join(', ')}
+      />
+    </Show>
+  </>;
+}
+
+function makeSettingsFreeDrawing(
+  layoutFeatureId: string,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const ft = layersDescriptionStore.layoutFeatures
+    .find((f) => f.id === layoutFeatureId) as FreeDrawing;
+  return <>
+    <InputFieldColor
+      label={ LL().LayoutFeatures.Modal.StrokeColor() }
+      value={ft.strokeColor}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeColor'],
+        newValue,
+      )}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.StrokeOpacity() }
+      value={ft.strokeOpacity}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeOpacity'],
+        newValue,
+      )}
+      min={0}
+      max={1}
+      step={0.1}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.StrokeWidth() }
+      value={ft.strokeWidth}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeWidth'],
+        newValue,
+      )}
+      min={0}
+      max={100}
+      step={1}
+    />
+  </>;
 }
 
 export default function LayoutFeatureSettings(
@@ -167,6 +371,7 @@ export default function LayoutFeatureSettings(
           [LayoutFeatureType.Rectangle]: makeSettingsRectangle,
           [LayoutFeatureType.Ellipse]: makeSettingsEllipse,
           [LayoutFeatureType.ScaleBar]: makeSettingsScaleBar,
+          [LayoutFeatureType.FreeDrawing]: makeSettingsFreeDrawing,
         })[layoutFeature.type](layoutFeatureId, LL)
       }
     </div>

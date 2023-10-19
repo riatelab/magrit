@@ -181,7 +181,7 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
               style={{ 'user-select': 'none' }}
               text-anchor="start"
               dominant-baseline="middle"
-            >{ round(value, layer.legend!.roundDecimals) }</text>
+            >{ round(value, layer.legend!.roundDecimals).toLocaleString() }</text>
           }
         </For>
       </g>

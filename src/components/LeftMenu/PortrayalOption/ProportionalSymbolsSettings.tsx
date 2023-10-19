@@ -338,12 +338,14 @@ export default function ProportionalSymbolsSettings(
       <label class="label" for={'portrayal-section__checkbox1'}>
         { LL().PortrayalSection.ProportionalSymbolsOptions.AvoidOverlapping() }
       </label>
-      <input
-        id={'portrayal-section__checkbox1'}
-        type="checkbox"
-        class="checkbox"
-        checked={ false }
-      />
+      <div class="control">
+        <input
+          id={'portrayal-section__checkbox1'}
+          type="checkbox"
+          class="checkbox"
+          checked={ false }
+        />
+      </div>
     </div>
     <ResultNameInput
       onKeyUp={ (value) => { setNewLayerName(value); }}

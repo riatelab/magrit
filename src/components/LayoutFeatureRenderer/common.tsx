@@ -114,7 +114,7 @@ export function makeLayoutFeaturesSettingsModal(
   );
   setModalStore({
     show: true,
-    content: null,
+    content: () => <LayoutFeatureSettings layoutFeatureId={layoutFeatureId} LL={LL} />,
     title: LL().LayoutFeatures.Modal.Title(),
     // Nothing special to do when confirm is clicked
     confirmCallback: () => {},
@@ -130,10 +130,6 @@ export function makeLayoutFeaturesSettingsModal(
     // We can use a slightly smaller width for this modal
     width: 500,
   });
-  render(
-    () => <LayoutFeatureSettings layoutFeatureId={layoutFeatureId} LL={LL} />,
-    document.querySelector('.modal-card-body')!,
-  );
 }
 
 export function triggerContextMenuLayoutFeature(
