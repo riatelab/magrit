@@ -13,7 +13,7 @@ interface ResultNameInputProps {
   onKeyUp?: (value: string) => void;
 }
 
-export default function ResultNameInput(props: ResultNameInputProps): JSX.Element {
+export default function InputResultName(props: ResultNameInputProps): JSX.Element {
   const { LL } = useI18nContext();
   return <div class="field-block">
     <label class="label">{ LL().PortrayalSection.ResultName() }</label>

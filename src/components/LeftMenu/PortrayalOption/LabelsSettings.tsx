@@ -14,7 +14,7 @@ import { layersDescriptionStore } from '../../../store/LayersDescriptionStore';
 import { useI18nContext } from '../../../i18n/i18n-solid';
 
 // Subcomponents
-import ResultNameInput from './ResultNameInput.tsx';
+import InputResultName from './InputResultName.tsx';
 
 // Types / Interfaces / Enums
 import { VariableType } from '../../../global';
@@ -48,7 +48,7 @@ export default function LabelsSettings(props: { layerId: string }): JSX.Element 
         </select>
       </div>
     </div>
-    <ResultNameInput
+    <InputResultName
       onKeyUp={(value) => setNewLayerName(value)}
       onEnter={makePortrayal}
     />

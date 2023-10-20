@@ -24,7 +24,11 @@ import {
 import { max, min } from '../../../helpers/math';
 
 // Sub-components
-import ResultNameInput from './ResultNameInput.tsx';
+import InputResultName from './InputResultName.tsx';
+import InputFieldSelect from '../../Inputs/InputSelect.tsx';
+import InputFieldNumber from '../../Inputs/InputNumber.tsx';
+import InputFieldCheckbox from '../../Inputs/InputCheckbox.tsx';
+import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
@@ -278,86 +282,53 @@ export default function ProportionalSymbolsSettings(
   };
 
   return <div class="portrayal-section__portrayal-options-proportional-symbols">
-    <div class="field">
-      <label class="label">{ LL().PortrayalSection.CommonOptions.Variable() }</label>
-      <div class="select" style={{ 'max-width': '60%' }}>
-        <select onChange={ (ev) => {
-          setTargetVariable(ev.target.value);
-        }}>
-          <For each={targetFields()}>
-            { (variable) => <option value={ variable.name }>{ variable.name }</option> }
-          </For>
-        </select>
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().PortrayalSection.ProportionalSymbolsOptions.SymbolType() }</label>
-      <div class="select">
-        <select onChange={ (ev) => {
-          setSymbolType(ev.target.value as ProportionalSymbolsSymbolType);
-        } }>
-          <For each={Object.values(ProportionalSymbolsSymbolType)}>
-            {
-              (st) => <option
-                value={ st }
-              >{ LL().PortrayalSection.ProportionalSymbolsOptions.SymbolTypes[st]() }</option>
-            }
-          </For>
-        </select>
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().PortrayalSection.ProportionalSymbolsOptions.ReferenceSize() }</label>
-      <div class="control">
-        <input
-          type="number"
-          class="number"
-          min="1"
-          max="200"
-          step="1"
-          value={ refSymbolSize() }
-          onChange={(ev) => { setRefSymbolSize(+ev.target.value); }}
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().PortrayalSection.ProportionalSymbolsOptions.OnValue() }</label>
-      <div class="control">
-        <input
-          type="number"
-          class="number"
-          min="1"
-          max="999"
-          step="0.1"
-          value={ refValueForSymbolSize() }
-          onChange={(ev) => { setRefValueForSymbolSize(+ev.target.value); }}
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label" for={'portrayal-section__checkbox1'}>
-        { LL().PortrayalSection.ProportionalSymbolsOptions.AvoidOverlapping() }
-      </label>
-      <div class="control">
-        <input
-          id={'portrayal-section__checkbox1'}
-          type="checkbox"
-          class="checkbox"
-          checked={ false }
-        />
-      </div>
-    </div>
-    <ResultNameInput
+    <InputFieldSelect
+      label={ LL().PortrayalSection.CommonOptions.Variable() }
+      onChange={(value) => { setTargetVariable(value); }}
+      value={ targetVariable() }
+    >
+      <For each={targetFields()}>
+        { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+      </For>
+    </InputFieldSelect>
+    <InputFieldSelect
+      label={ LL().PortrayalSection.ProportionalSymbolsOptions.SymbolType() }
+      onChange={(value) => { setSymbolType(value as ProportionalSymbolsSymbolType); }}
+      value={ symbolType() }
+    >
+      <For each={Object.values(ProportionalSymbolsSymbolType)}>
+        {
+          (st) => <option
+            value={ st }
+          >{ LL().PortrayalSection.ProportionalSymbolsOptions.SymbolTypes[st]() }</option>
+        }
+      </For>
+    </InputFieldSelect>
+    <InputFieldNumber
+      label={ LL().PortrayalSection.ProportionalSymbolsOptions.ReferenceSize() }
+      value={ refSymbolSize() }
+      onChange={(value) => { setRefSymbolSize(value); }}
+      min={ 1 }
+      max={ 200 }
+      step={ 1 }
+    />
+    <InputFieldNumber
+      label={ LL().PortrayalSection.ProportionalSymbolsOptions.OnValue() }
+      value={ refValueForSymbolSize() }
+      onChange={(value) => { setRefValueForSymbolSize(value); }}
+      min={ 1 }
+      max={ 999 }
+      step={ 0.1 }
+    />
+    <InputFieldCheckbox
+      label={ LL().PortrayalSection.ProportionalSymbolsOptions.AvoidOverlapping() }
+      checked={ false }
+      onChange={() => {}} // TODO
+    />
+    <InputResultName
       onKeyUp={ (value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />
-    <div class="has-text-centered">
-      <button
-        class="button is-success portrayal-section__button-validation"
-        onClick={makePortrayal}
-      >
-        { LL().PortrayalSection.CreateLayer() }
-      </button>
-    </div>
+    <ButtonValidation label={ LL().PortrayalSection.CreateLayer() } onClick={makePortrayal} />
   </div>;
 }

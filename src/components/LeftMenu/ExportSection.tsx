@@ -14,6 +14,7 @@ import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Sub-components
 import DropdownMenu from '../DropdownMenu.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 const noCrsFormats = ['GeoJSON', 'CSV', 'KML', 'TopoJSON'];
 
@@ -115,17 +116,11 @@ export default function ExportSection(): JSX.Element {
     </div>
     <div class="export-section__content">
       <div id="export-section__content__svg">
-        <div class="field">
-          <label class="label" for="export-section__content__svg__clip-current-extent">
-            { LL().ExportSection.ClipSvgCurrentExtent() }
-          </label>
-          <input
-            type="checkbox"
-            id="export-section__content__svg__clip-current-extent"
-            checked={clipCurrentExtentChecked()}
-            onChange={(ev: Event) => setClipCurrentExtentChecked(!clipCurrentExtentChecked())}
-          />
-        </div>
+        <InputFieldCheckbox
+          label={ LL().ExportSection.ClipSvgCurrentExtent() }
+          checked={ clipCurrentExtentChecked() }
+          onChange={(checked) => setClipCurrentExtentChecked(checked)}
+        />
         <div class="has-text-centered">
           <button
             onClick={ async () => { await exportMapToSvg('export.svg', clipCurrentExtentChecked()); } }

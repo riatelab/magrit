@@ -25,7 +25,8 @@ import { Mmin } from '../../../helpers/math';
 import d3 from '../../../helpers/d3-custom';
 
 // Subcomponents
-import ResultNameInput from './ResultNameInput.tsx';
+import InputResultName from './InputResultName.tsx';
+import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
 
 // Assets
 import imgQuantiles from '../../../assets/quantiles.png';
@@ -334,17 +335,10 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
           LL().PortrayalSection.ChoroplethOptions.CurrentNumberOfClasses(targetClassification().classes) }
       </div>
     </div>
-    <ResultNameInput
+    <InputResultName
       onKeyUp={ (value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />
-    <div class="has-text-centered">
-      <button
-        class="button is-success portrayal-section__button-validation"
-        onClick={makePortrayal}
-      >
-        { LL().PortrayalSection.CreateLayer() }
-      </button>
-    </div>
+    <ButtonValidation label={ LL().PortrayalSection.CreateLayer() } onClick={ makePortrayal } />
   </div>;
 }
