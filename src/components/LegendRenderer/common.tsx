@@ -99,16 +99,30 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
   // We also change the cursor to indicate that the group is draggable.
   let x = 0;
   let y = 0;
-  // let isDragging = false;
+
+  // Find the parent SVG element and listen to mousemove and mouseup events on it
+  // instead of the refElement group, because the mouse can move faster than
+  // the mousemove event is triggered, and we want to be able to move the
+  // refElement group even if the mouse is not over it.
   let outerSvg: SVGSVGElement;
-  let elem: HTMLElement;
+  let elem: Element = refElement;
+  while (true) {
+    if (elem.tagName.toLowerCase() === 'svg') {
+      outerSvg = elem as SVGSVGElement;
+      break;
+    } else {
+      elem = elem.parentElement as Element;
+    }
+  }
 
   // Get the initial position of the legend
   let [positionX, positionY] = layer.legend!.position;
   let i = 0;
   const moveElement = (e: MouseEvent) => {
-    i += 1;
-    if (i % 3 !== 0) return;
+    if (((i++) % 3) === 0) { // eslint-disable-line no-plusplus
+      // We skip some mousemove events to improve performance
+      return;
+    }
     const dx = e.clientX - x;
     const dy = e.clientY - y;
 
@@ -163,19 +177,6 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
     x = e.clientX;
     y = e.clientY;
 
-    elem = refElement;
-    // Find the parent SVG element and listen to mousemove and mouseup events on it
-    // instead of the refElement group, because the mouse can move faster than
-    // the mousemove event is triggered, and we want to be able to move the
-    // refElement group even if the mouse is not over it.
-    while (true) {
-      if (elem.tagName.toLowerCase() === 'svg') {
-        outerSvg = elem as SVGSVGElement;
-        break;
-      } else {
-        elem = elem.parentElement;
-      }
-    }
     // Listen on events on the parent SVG element
     outerSvg.addEventListener('mousemove', moveElement);
     outerSvg.addEventListener('mouseup', deselectElement);
@@ -191,37 +192,6 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
     // In case we remove pointer events here, we should
     // put them back when the mouse is released (in deselectElement)
   });
-
-  // refElement.addEventListener('mousemove', (e) => {
-  //   e.stopPropagation();
-  //   if (isDragging) {
-  //     const dx = e.clientX - x;
-  //     const dy = e.clientY - y;
-  //
-  //     // Store the new position of the legend,
-  //     // it will update the transform attribute of the refElement group.
-  //     setLayersDescriptionStore(
-  //       'layers',
-  //       (l) => l.id === layer.id,
-  //       'legend',
-  //       {
-  //         position: [
-  //           layer.legend.position[0] + dx,
-  //           layer.legend.position[1] + dy,
-  //         ],
-  //       },
-  //     );
-  //     x = e.clientX;
-  //     y = e.clientY;
-  //   }
-  // });
-  //
-  // refElement.addEventListener('mouseup', (e) => {
-  //   console.log('mouseup triggered');
-  //   e.stopPropagation();
-  //   isDragging = false;
-  //   refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
-  // });
 }
 
 // Determine the size of an SVG text element before displaying it

@@ -23,13 +23,28 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
   // layout feature (which is reactive and so will trigger a re-render at the new position).
   let x = 0;
   let y = 0;
-  // let isDragging = false;
+
+  // Find the parent SVG element and listen to mousemove and mouseup events on it
+  // instead of the refElement group, because the mouse can move faster than
+  // the mousemove event is triggered, and we want to be able to move the
+  // refElement group even if the mouse is not over it.
   let outerSvg: SVGSVGElement;
-  let elem: Element;
+  let elem: Element = refElement as Element;
+  while (true) {
+    if (elem.tagName.toLowerCase() === 'svg') {
+      outerSvg = elem as unknown as SVGSVGElement;
+      break;
+    } else {
+      elem = elem.parentElement as Element;
+    }
+  }
 
   let i = 0;
   const moveElement = (e: MouseEvent) => {
-    if (i++ % 2 === 0) return; // eslint-disable-line no-plusplus
+    if (((i++) % 2) === 0) { // eslint-disable-line no-plusplus
+      // We skip some mousemove events to improve performance
+      return;
+    }
     const dx = e.clientX - x;
     const dy = e.clientY - y;
 
@@ -73,19 +88,6 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
     x = e.clientX;
     y = e.clientY;
 
-    elem = refElement;
-    // Find the parent SVG element and listen to mousemove and mouseup events on it
-    // instead of the refElement group, because the mouse can move faster than
-    // the mousemove event is triggered, and we want to be able to move the
-    // refElement group even if the mouse is not over it.
-    while (true) {
-      if (elem.tagName.toLowerCase() === 'svg') {
-        outerSvg = elem as unknown as SVGSVGElement;
-        break;
-      } else {
-        elem = elem.parentElement as Element;
-      }
-    }
     // Listen on events on the parent SVG element
     outerSvg.addEventListener('mousemove', moveElement);
     outerSvg.addEventListener('mouseup', deselectElement);
