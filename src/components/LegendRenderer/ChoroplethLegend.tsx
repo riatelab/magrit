@@ -349,7 +349,7 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
               style={{ 'user-select': 'none' }}
               text-anchor="middle"
               dominant-baseline="middle"
-            >{ round(value, layer.legend!.roundDecimals) }</text>
+            >{ round(value, layer.legend!.roundDecimals).toLocaleString() }</text>
           }
         </For>
       </g>
