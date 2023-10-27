@@ -33,6 +33,7 @@ import {
   geoLength,
   geoGraticule,
   geoPath,
+  geoProjection,
   geoIdentity,
   // Projections that will be available in the application
   geoNaturalEarth1,
@@ -79,10 +80,56 @@ import {
   geoHomolosine,
   geoHufnagel,
   geoHyperelliptical,
+  geoInterruptedBoggs,
+  geoInterruptedHomolosine,
+  geoInterruptedMollweide,
+  geoInterruptedMollweideHemispheres,
+  geoInterruptedSinuMollweide,
+  geoInterruptedSinusoidal,
+  geoKavrayskiy7,
+  geoLagrange,
+  geoLarrivee,
+  geoLaskowski,
+  geoLittrow,
+  geoLoximuthal,
+  geoMiller,
+  geoModifiedStereographic,
+  geoMollweide,
   geoNaturalEarth2,
+  geoNellHammer,
+  geoInterruptedQuarticAuthalic,
+  geoNicolosi,
+  geoPatterson,
+  geoPolyconic,
+  geoPolyhedral,
+  geoPolyhedralButterfly,
+  geoPolyhedralCollignon,
+  geoPolyhedralWaterman,
+  geoGringortenQuincuncial,
+  geoPeirceQuincuncial,
+  geoRectangularPolyconic,
+  geoRobinson,
+  geoSatellite,
+  geoSinuMollweide,
+  geoSinusoidal,
+  geoStitch,
+  geoTimes,
+  geoVanDerGrinten,
+  geoVanDerGrinten2,
+  geoVanDerGrinten3,
+  geoVanDerGrinten4,
+  geoWagner,
+  geoWagner4,
+  geoWagner6,
+  geoWiechel,
+  geoWinkel3,
 } from 'd3-geo-projection';
 
 import type { D3ZoomEvent } from 'd3-zoom';
+import type { GeoProjection, GeoRawProjection } from 'd3-geo';
+
+import hatanoRaw from './projection-hatano';
+import winkel1Raw from './projection-winkel1';
 
 // We want the features that were offered by 'd3-selection-multi'
 // (deprecated and incompatible with new 'd3-selection' versions)
@@ -211,8 +258,14 @@ function stylesTransition(map, priority) {
 transition.prototype.attrs = attrsTransition;
 transition.prototype.styles = stylesTransition;
 
+const geoWinkel1 = () => geoProjection(winkel1Raw(45)).scale(160);
+const geoHatano = (() => geoProjection(hatanoRaw).scale(160));
+
 export default {
   geoPath,
+  geoProjection,
+  geoWinkel1, // Custom projection, from projection-winkel1 file
+  geoHatano, // Custom projection, from projection-hatano file
   geoNaturalEarth1,
   geoEqualEarth,
   geoAiry,
@@ -254,7 +307,49 @@ export default {
   geoHomolosine,
   geoHufnagel,
   geoHyperelliptical,
+  geoInterruptedBoggs,
+  geoInterruptedHomolosine,
+  geoInterruptedMollweide,
+  geoInterruptedMollweideHemispheres,
+  geoInterruptedSinuMollweide,
+  geoInterruptedSinusoidal,
+  geoKavrayskiy7,
+  geoLagrange,
+  geoLarrivee,
+  geoLaskowski,
+  geoLittrow,
+  geoLoximuthal,
+  geoMiller,
+  geoModifiedStereographic,
+  geoMollweide,
   geoNaturalEarth2,
+  geoNellHammer,
+  geoInterruptedQuarticAuthalic,
+  geoNicolosi,
+  geoPatterson,
+  geoPolyconic,
+  geoPolyhedral,
+  geoPolyhedralButterfly,
+  geoPolyhedralCollignon,
+  geoPolyhedralWaterman,
+  geoGringortenQuincuncial,
+  geoPeirceQuincuncial,
+  geoRectangularPolyconic,
+  geoRobinson,
+  geoSatellite,
+  geoSinuMollweide,
+  geoSinusoidal,
+  geoStitch,
+  geoTimes,
+  geoVanDerGrinten,
+  geoVanDerGrinten2,
+  geoVanDerGrinten3,
+  geoVanDerGrinten4,
+  geoWagner,
+  geoWagner4,
+  geoWagner6,
+  geoWiechel,
+  geoWinkel3,
   geoArea,
   geoBounds,
   geoCentroid,
@@ -290,4 +385,6 @@ export default {
 
 export type {
   D3ZoomEvent,
+  GeoProjection,
+  GeoRawProjection,
 };
