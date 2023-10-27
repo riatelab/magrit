@@ -115,14 +115,6 @@ function onClickValidate(
     propSize.getValue,
   );
 
-  const legendValues2 = computeCandidateValues(
-    extent[0],
-    extent[1],
-    propSize.scale,
-  );
-
-  console.log(legendValues, legendValues2);
-
   const newLayerDescription = {
     id: uuidv4(),
     name: newLayerName,
@@ -177,7 +169,7 @@ function onClickValidate(
       // Part specific to proportional symbols
       type: LegendType.proportional,
       layout: 'stacked',
-      values: legendValues2,
+      values: legendValues,
       labels: {
         fontSize: '11px',
         fontFamily: 'Sans-serif',
