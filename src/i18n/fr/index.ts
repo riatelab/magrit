@@ -75,7 +75,7 @@ const fr = {
     Height: 'Hauteur',
     Projection: 'Projection',
     MoreProjection: 'Plus de projections',
-    CustomProjection: 'Projection personnalisée',
+    CustomProjection: 'Projection personnalisée...',
     LockZoom: 'Verrouiller le zoom / la position',
   },
   LayoutFeatures: {
@@ -209,6 +209,12 @@ const fr = {
     PointRadius: 'Rayon du point',
     DropShadow: 'Ajouter une ombre',
     ChangeClassification: 'Changer les options de discrétisation',
+  },
+  ProjectionSelection: {
+    title: 'Sélection de la projection',
+    SearchProjection: 'Entrer un code EPSG ou un nom de projection',
+    NMatchingProjections: '{{ Une projection | ?? projections }} correspondante(s)',
+    TooManyResults: 'Trop de résultats, veuillez affiner votre recherche.',
   },
   DataTable: {
     titleGeo: 'Table attributaire',

@@ -75,7 +75,7 @@ const en = {
     Height: 'Height',
     Projection: 'Projection',
     MoreProjection: 'More projections',
-    CustomProjection: 'Custom projection',
+    CustomProjection: 'Custom projection...',
     LockZoom: 'Lock zoom / position',
   },
   LayoutFeatures: {
@@ -209,6 +209,12 @@ const en = {
     PointRadius: 'Point radius',
     DropShadow: 'Add a shadow',
     ChangeClassification: 'Change classification options',
+  },
+  ProjectionSelection: {
+    title: 'Projection selection',
+    SearchProjection: 'Enter an EPSG code or a projection name',
+    NMatchingProjections: '{{One projection found | ?? projections found}}',
+    TooManyResults: 'Too many results, please refine your search.',
   },
   DataTable: {
     titleGeo: 'Attribute table',

@@ -2,15 +2,16 @@
 import { JSX } from 'solid-js';
 
 // Helpers
-import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
 
 // Stores
-import { mapStore, setMapStore } from '../../store/MapStore';
 import { globalStore, setGlobalStore } from '../../store/GlobalStore';
+import { mapStore, setMapStore } from '../../store/MapStore';
+import { setModalStore } from '../../store/ModalStore';
 
 // Sub-components
 import DropdownMenu from '../DropdownMenu.tsx';
+import ProjectionSelection from '../Modals/ProjectionSelection.tsx';
 
 const availableProjections = [
   'Airy',
@@ -53,6 +54,48 @@ const availableProjections = [
   'Homolosine',
   'Hufnagel',
   'Hyperelliptical',
+  'InterruptedBoggs',
+  'InterruptedHomolosine',
+  'InterruptedMollweide',
+  'InterruptedMollweideHemispheres',
+  'InterruptedSinuMollweide',
+  'InterruptedSinusoidal',
+  'Kavrayskiy7',
+  'Lagrange',
+  'Larrivee',
+  'Laskowski',
+  'Littrow',
+  'Loximuthal',
+  'Miller',
+  'ModifiedSereographic',
+  'Mollweide',
+  'NellHammr',
+  'InterrupteduarticAuthalic',
+  'Nicolosi',
+  'Patterson',
+  'Polyconic',
+  'Polyhedral',
+  'PolyhedralButterfly',
+  'PolyhedralCollignon',
+  'PolyhedralWaterman',
+  'GringortenQuincuncial',
+  'PeirceQuincuncial',
+  'RectangularPolyconic',
+  'Robinson',
+  'Satellite',
+  'SinuMollweide',
+  'Sinusoidal',
+  'Stitch',
+  'Times',
+  'VanDerGrinten',
+  'VanDerGrinten2',
+  'VanDerGrinten3',
+  'VanDerGrinten4',
+  'Wagner',
+  'Wagner4',
+  'Wagner6',
+  'Wiechel',
+  'Winkel3',
 ];
 
 const projectionEntries = availableProjections.map((projection) => ({
@@ -61,23 +104,42 @@ const projectionEntries = availableProjections.map((projection) => ({
 }));
 
 function onChangeProjectionEntry(value: string) {
-  // The projection function name in d3 is 'geo' + the value
-  const functionName = `geo${value}`;
-  // Changing this in the mapStore will
-  // actually change the projection and the path generator
-  // in the global store and redraw the map
-  setMapStore(
-    'projection',
-    {
-      name: value,
-      value: functionName,
-      type: 'd3',
-    },
-  );
+  // Value is either the name of the projection (to be used in the projection function for d3)
+  // or "other"
+  if (value === 'other') {
+    setModalStore({
+      show: true,
+      content: () => <ProjectionSelection LL={useI18nContext().LL} />,
+      title: 'Select a projection',
+      confirmCallback: () => {},
+      cancelCallback: () => {},
+      width: 800,
+    });
+  } else {
+    // The projection function name in d3 is 'geo' + the value
+    const functionName = `geo${value}`;
+    // Changing this in the mapStore will
+    // actually change the projection and the path generator
+    // in the global store and redraw the map
+    setMapStore(
+      'projection',
+      {
+        name: value,
+        value: functionName,
+        type: 'd3',
+      },
+    );
+  }
 }
 
 export default function MapConfiguration(): JSX.Element {
   const { LL } = useI18nContext();
+
+  projectionEntries.push({
+    name: LL().MapConfiguration.CustomProjection(),
+    value: 'other',
+  });
+
   return <div class="map-configuration">
     <div class="field">
       <label class="label">{ LL().MapConfiguration.Width() }</label>

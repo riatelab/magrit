@@ -5,7 +5,9 @@ interface InputFieldTextProps {
   label: LocalizedString | string;
   value?: string;
   placeholder?: string;
-  onChange: (text: string) => void;
+  onChange?: (text: string) => void;
+  onKeyUp?: (text: string) => void;
+  width?: number;
 }
 
 export default function InputFieldText(props: InputFieldTextProps): JSX.Element {
@@ -15,9 +17,11 @@ export default function InputFieldText(props: InputFieldTextProps): JSX.Element 
       <input
         class="text"
         type="text"
-        onChange={(e) => { props.onChange(e.currentTarget.value); }}
-        value={ props.value }
+        onChange={(e) => { if (props.onChange) props.onChange(e.currentTarget.value); }}
+        onKeyUp={(e) => { if (props.onKeyUp) props.onKeyUp(e.currentTarget.value); }}
+        value={ props.value || '' }
         placeholder={ props.placeholder }
+        style={{ width: props.width ? `${props.width}px` : 'unset' }}
       />
     </div>
   </div>;

@@ -124,7 +124,7 @@ import {
   geoWiechel,
   geoWinkel3,
 } from 'd3-geo-projection';
-
+import { geoClipPolygon } from 'd3-geo-polygon';
 import type { D3ZoomEvent } from 'd3-zoom';
 import type { GeoProjection, GeoRawProjection } from 'd3-geo';
 
@@ -264,6 +264,7 @@ const geoHatano = (() => geoProjection(hatanoRaw).scale(160));
 export default {
   geoPath,
   geoProjection,
+  geoClipPolygon,
   geoWinkel1, // Custom projection, from projection-winkel1 file
   geoHatano, // Custom projection, from projection-hatano file
   geoNaturalEarth1,

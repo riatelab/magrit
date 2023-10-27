@@ -267,7 +267,7 @@ type RootTranslation = {
 		 */
 		MoreProjection: string
 		/**
-		 * C​u​s​t​o​m​ ​p​r​o​j​e​c​t​i​o​n
+		 * C​u​s​t​o​m​ ​p​r​o​j​e​c​t​i​o​n​.​.​.
 		 */
 		CustomProjection: string
 		/**
@@ -724,6 +724,24 @@ type RootTranslation = {
 		 * C​h​a​n​g​e​ ​c​l​a​s​s​i​f​i​c​a​t​i​o​n​ ​o​p​t​i​o​n​s
 		 */
 		ChangeClassification: string
+	}
+	ProjectionSelection: {
+		/**
+		 * P​r​o​j​e​c​t​i​o​n​ ​s​e​l​e​c​t​i​o​n
+		 */
+		title: string
+		/**
+		 * E​n​t​e​r​ ​a​n​ ​E​P​S​G​ ​c​o​d​e​ ​o​r​ ​a​ ​p​r​o​j​e​c​t​i​o​n​ ​n​a​m​e
+		 */
+		SearchProjection: string
+		/**
+		 * {​{​O​n​e​ ​p​r​o​j​e​c​t​i​o​n​ ​f​o​u​n​d​|​?​?​ ​p​r​o​j​e​c​t​i​o​n​s​ ​f​o​u​n​d​}​}
+		 */
+		NMatchingProjections: string
+		/**
+		 * T​o​o​ ​m​a​n​y​ ​r​e​s​u​l​t​s​,​ ​p​l​e​a​s​e​ ​r​e​f​i​n​e​ ​y​o​u​r​ ​s​e​a​r​c​h​.
+		 */
+		TooManyResults: string
 	}
 	DataTable: {
 		/**
@@ -1438,7 +1456,7 @@ export type TranslationFunctions = {
 		 */
 		MoreProjection: () => LocalizedString
 		/**
-		 * Custom projection
+		 * Custom projection...
 		 */
 		CustomProjection: () => LocalizedString
 		/**
@@ -1895,6 +1913,24 @@ export type TranslationFunctions = {
 		 * Change classification options
 		 */
 		ChangeClassification: () => LocalizedString
+	}
+	ProjectionSelection: {
+		/**
+		 * Projection selection
+		 */
+		title: () => LocalizedString
+		/**
+		 * Enter an EPSG code or a projection name
+		 */
+		SearchProjection: () => LocalizedString
+		/**
+		 * {{One projection found|?? projections found}}
+		 */
+		NMatchingProjections: (arg0: number | string | boolean) => LocalizedString
+		/**
+		 * Too many results, please refine your search.
+		 */
+		TooManyResults: () => LocalizedString
 	}
 	DataTable: {
 		/**

@@ -1,5 +1,29 @@
 import proj4, { InterfaceProjection } from 'proj4';
 import d3, { type GeoProjection, type GeoRawProjection } from './d3-custom';
+import epsg from '../assets/epsg.json';
+
+export interface EpsgDbEntryType {
+  code: string,
+  kind: string,
+  name: string,
+  bbox: number[],
+  wkt: string | null,
+  proj4: string | null,
+  unit: string | null,
+  area: string | null,
+  accuracy: number | null,
+}
+
+export interface EpsgDbType {
+  [key: string]: EpsgDbEntryType
+}
+
+// TODO: we will filter out entries with null proj4 string or null wkt
+//   directly in the source file to avoid loading a lot of useless data
+export const epsgDb: EpsgDbType = Object.fromEntries(
+  Object.entries(epsg)
+    .filter(([k, v]) => ['CRS-GEOGCRS', 'CRS-PROJCRS'].includes(v.kind) && (v.proj4 || v.wkt)),
+) as EpsgDbType;
 
 /**
  * Convert a proj4 string to an object.
@@ -47,7 +71,7 @@ export const projEquals = (proj1: string, proj2: string): boolean => {
  * Get a d3 projection from a proj4 projection object.
  *
  * @param {InterfaceProjection} proj - The proj4js projection object.
- * @returns {object} - The d3 projection.
+ * @returns {GeoProjection} - The d3 projection.
  */
 export const getD3ProjectionFromProj4 = (proj: InterfaceProjection): GeoProjection => {
   // Create the custom d3 projection using proj 4 forward and inverse functions.

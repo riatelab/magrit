@@ -66,6 +66,12 @@ createEffect(() => {
     .scale(mapStore.scale)
     .translate(mapStore.translate)
     .rotate(mapStore.rotate)
+    // .preclip(d3.geoClipPolygon({
+    //   type: 'Polygon',
+    //   coordinates: [[
+    //     [10.38, 41.15], [-9.86, 41.15], [-9.86, 51.56], [10.38, 51.56], [10.38, 41.15],
+    //   ]],
+    // }))
     .clipExtent([
       [-100, -100],
       [mapStore.mapDimensions.width + 100, mapStore.mapDimensions.height + 100],
@@ -89,6 +95,12 @@ createEffect(
         .center(mapStore.center)
         .translate(mapStore.translate)
         .scale(mapStore.scale)
+        // .preclip(d3.geoClipPolygon({
+        //   type: 'Polygon',
+        //   coordinates: [[
+        //     [10.38, 41.15], [-9.86, 41.15], [-9.86, 51.56], [10.38, 51.56], [10.38, 41.15],
+        //   ]],
+        // }))
         .clipExtent([
           [-100, -100],
           [mapStore.mapDimensions.width + 100, mapStore.mapDimensions.height + 100],
