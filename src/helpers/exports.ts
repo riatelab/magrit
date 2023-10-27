@@ -2,7 +2,7 @@
 import { topology } from 'topojson-server';
 
 // Stores
-import { mapStore } from '../store/MapStore';
+import { getDefaultClipExtent, mapStore } from '../store/MapStore';
 import { globalStore } from '../store/GlobalStore';
 
 // Helpers
@@ -123,10 +123,8 @@ export async function exportMapToSvg(
   // in order to restore various settings
   const finallyFn = () => {
     // Restore the projection clip extent and redraw the paths
-    if (clipToViewPort) {
-      globalStore.projection.clipExtent(null);
-      redrawPaths(targetSvg);
-    }
+    globalStore.projection.clipExtent(getDefaultClipExtent());
+    redrawPaths(targetSvg);
   };
   // Set the projection clip extent if needed
   if (clipToViewPort) {
@@ -136,6 +134,11 @@ export async function exportMapToSvg(
       [0, 0],
       [mapDimensions.width, mapDimensions.height],
     ]);
+    // Redraw the paths
+    redrawPaths(targetSvg);
+  } else {
+    // Remove the clip extent from the projection
+    globalStore.projection.clipExtent(null);
     // Redraw the paths
     redrawPaths(targetSvg);
   }

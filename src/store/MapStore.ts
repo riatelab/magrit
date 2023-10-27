@@ -1,11 +1,19 @@
+// Imports from solid-js
 import { createEffect, on } from 'solid-js';
 import { createStore } from 'solid-js/store';
+
+// Helpers
 import { unproxify } from '../helpers/common';
-import { debouncedPushUndoStack, resetRedoStackStore } from './stateStackStore';
-import { IZoomable, ProjectionDefinition } from '../global';
-import { redrawPaths } from '../helpers/svg';
-import { globalStore, setGlobalStore } from './GlobalStore';
 import d3 from '../helpers/d3-custom';
+import { redrawPaths } from '../helpers/svg';
+
+// Stores
+import { debouncedPushUndoStack, resetRedoStackStore } from './stateStackStore';
+import { globalStore, setGlobalStore } from './GlobalStore';
+import { applicationSettingsStore } from './ApplicationSettingsStore';
+
+// Types
+import type { IZoomable, ProjectionDefinition } from '../global';
 
 export type MapStoreType = {
   projection: ProjectionDefinition,
@@ -38,6 +46,13 @@ const [
   lockZoomPan: false,
 } as MapStoreType);
 
+const getDefaultClipExtent = () => (
+  applicationSettingsStore.useClipExtent
+    ? [
+      [-100, -100],
+      [mapStore.mapDimensions.width + 100, mapStore.mapDimensions.height + 100],
+    ] : null
+);
 /**
  * This is a wrapper around the setMapStoreBase function.
  * The wrapper is used to push the current state to the undo stack
@@ -72,10 +87,7 @@ createEffect(() => {
     //     [10.38, 41.15], [-9.86, 41.15], [-9.86, 51.56], [10.38, 51.56], [10.38, 41.15],
     //   ]],
     // }))
-    .clipExtent([
-      [-100, -100],
-      [mapStore.mapDimensions.width + 100, mapStore.mapDimensions.height + 100],
-    ]);
+    .clipExtent(getDefaultClipExtent());
 
   const targetSvg = document.querySelector('svg.map-zone__map');
   if (!targetSvg) {
@@ -101,10 +113,7 @@ createEffect(
         //     [10.38, 41.15], [-9.86, 41.15], [-9.86, 51.56], [10.38, 51.56], [10.38, 41.15],
         //   ]],
         // }))
-        .clipExtent([
-          [-100, -100],
-          [mapStore.mapDimensions.width + 100, mapStore.mapDimensions.height + 100],
-        ]);
+        .clipExtent(getDefaultClipExtent());
       const pathGenerator = d3.geoPath(projection);
 
       setGlobalStore(
@@ -123,4 +132,5 @@ export {
   mapStore,
   setMapStoreBase,
   setMapStore,
+  getDefaultClipExtent,
 };

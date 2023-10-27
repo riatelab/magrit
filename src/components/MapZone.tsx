@@ -12,7 +12,12 @@ import { makeHexColorWithAlpha } from '../helpers/color';
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import { applicationSettingsStore } from '../store/ApplicationSettingsStore';
-import { mapStore, setMapStore, setMapStoreBase } from '../store/MapStore';
+import {
+  getDefaultClipExtent,
+  mapStore,
+  setMapStore,
+  setMapStoreBase,
+} from '../store/MapStore';
 
 // Sub-components
 import {
@@ -69,10 +74,7 @@ export default function MapZone(): JSX.Element {
     //     [10.38, 41.15], [-9.86, 41.15], [-9.86, 51.56], [10.38, 51.56], [10.38, 41.15],
     //   ]],
     // }))
-    .clipExtent([
-      [-100, -100],
-      [mapStore.mapDimensions.width + 100, mapStore.mapDimensions.height + 100],
-    ]);
+    .clipExtent(getDefaultClipExtent());
 
   setGlobalStore({
     projection,

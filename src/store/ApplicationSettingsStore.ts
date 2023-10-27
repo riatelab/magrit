@@ -26,6 +26,11 @@ type ApplicationSettingsStoreType = {
   // (in the future we may never render the layers that are not visible
   // but add them with visibility:hidden only in the SVG export).
   renderVisibility: RenderVisibility,
+  // Whether to use a clip extent when rendering the map.
+  // This is useful when the user zooms a lot, and some of the map
+  // is rendered outside the SVG viewport (which is not visible
+  // but can be computationally expensive to render).
+  useClipExtent: boolean,
 };
 
 const computedStyle = getComputedStyle(document.documentElement);
@@ -40,6 +45,7 @@ const [
   headerHeight: +computedStyle.getPropertyValue('--header-height').replace('px', ''),
   leftMenuWidth: +computedStyle.getPropertyValue('--left-menu-width').replace('px', ''),
   renderVisibility: RenderVisibility.DoNotRender,
+  useClipExtent: true,
 } as ApplicationSettingsStoreType);
 
 export {
