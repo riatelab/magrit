@@ -164,7 +164,7 @@ function FieldText(
       <input
         class="input"
         type="text"
-        value={ props.layer.legend![props.role].text }
+        value={ props.layer.legend![props.role].text || '' }
         onChange={(ev) => updateProps(props.layer.id, ['legend', props.role, 'text'], ev.target.value)}
       />
     </div>
