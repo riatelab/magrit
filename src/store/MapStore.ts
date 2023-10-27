@@ -65,7 +65,11 @@ createEffect(() => {
   globalStore.projection
     .scale(mapStore.scale)
     .translate(mapStore.translate)
-    .rotate(mapStore.rotate);
+    .rotate(mapStore.rotate)
+    .clipExtent([
+      [-100, -100],
+      [mapStore.mapDimensions.width + 100, mapStore.mapDimensions.height + 100],
+    ]);
 
   const targetSvg = document.querySelector('svg.map-zone__map');
   if (!targetSvg) {
@@ -84,7 +88,11 @@ createEffect(
       const projection = d3[mapStore.projection.value]()
         .center(mapStore.center)
         .translate(mapStore.translate)
-        .scale(mapStore.scale);
+        .scale(mapStore.scale)
+        .clipExtent([
+          [-100, -100],
+          [mapStore.mapDimensions.width + 100, mapStore.mapDimensions.height + 100],
+        ]);
       const pathGenerator = d3.geoPath(projection);
 
       setGlobalStore(

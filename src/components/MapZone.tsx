@@ -62,7 +62,11 @@ export default function MapZone(): JSX.Element {
 
   const projection = d3[mapStore.projection.value]()
     .translate(mapStore.translate)
-    .scale(mapStore.scale);
+    .scale(mapStore.scale)
+    .clipExtent([
+      [-100, -100],
+      [mapStore.mapDimensions.width + 100, mapStore.mapDimensions.height + 100],
+    ]);
 
   setGlobalStore({
     projection,
