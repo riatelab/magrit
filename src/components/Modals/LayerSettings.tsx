@@ -4,7 +4,7 @@ import { Accessor, JSX, Show } from 'solid-js';
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { createDropShadow } from '../MapRenderer/FilterDropShadow';
-import { unproxify } from '../../helpers/common';
+import { debounce, unproxify } from '../../helpers/common';
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
@@ -45,6 +45,8 @@ const updateProp = (
   }
 };
 
+const debouncedUpdateProp = debounce(updateProp, 250);
+
 function updateDropShadow(layerId: string, checked: boolean) {
   // Mutate the store for the layer
   const layer = layersDescriptionStore.layers.find((l) => l.id === layerId);
@@ -82,7 +84,7 @@ function makeSettingsDefaultPoint(
       <InputFieldColor
         label={ LL().LayerSettings.FillColor() }
         value={props.fillColor!}
-        onChange={(v) => updateProp(props.id, 'fillColor', v)}
+        onChange={(v) => debouncedUpdateProp(props.id, 'fillColor', v)}
       />
     </Show>
     <Show when={props.renderer === 'choropleth'}>
@@ -127,18 +129,18 @@ function makeSettingsDefaultPoint(
       <InputFieldColor
         label={ LL().LayerSettings.FillColor() }
         value={ (props.rendererParameters as ProportionalSymbolsParameters).color as string }
-        onChange={(v) => updateProp(props.id, ['rendererParameters', 'color'], v)}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'color'], v)}
       />
     </Show>
     <InputFieldColor
       label={ LL().LayerSettings.StrokeColor() }
       value={ props.strokeColor! }
-      onChange={(v) => updateProp(props.id, 'strokeColor', v)}
+      onChange={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
     />
     <InputFieldNumber
       label={ LL().LayerSettings.FillOpacity() }
       value={ props.fillOpacity! }
-      onChange={(v) => updateProp(props.id, 'fillOpacity', v)}
+      onChange={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
       min={0}
       max={1}
       step={0.1}
@@ -146,7 +148,7 @@ function makeSettingsDefaultPoint(
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeOpacity() }
       value={ props.strokeOpacity! }
-      onChange={(v) => updateProp(props.id, 'strokeOpacity', v)}
+      onChange={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
       min={0}
       max={1}
       step={0.1}
@@ -154,7 +156,7 @@ function makeSettingsDefaultPoint(
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeWidth() }
       value={+props.strokeWidth.replace('px', '')}
-      onChange={(v) => updateProp(props.id, 'strokeWidth', `${v}px`)}
+      onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', `${v}px`)}
       min={0}
       max={10}
       step={0.1}
@@ -163,7 +165,7 @@ function makeSettingsDefaultPoint(
       <InputFieldNumber
         label={ LL().LayerSettings.PointRadius() }
         value={ props.pointRadius! }
-        onChange={(v) => updateProp(props.id, 'pointRadius', v)}
+        onChange={(v) => debouncedUpdateProp(props.id, 'pointRadius', v)}
         min={1}
         max={20}
         step={1}
@@ -200,7 +202,7 @@ function makeSettingsDefaultLine(
       <InputFieldColor
         label={ LL().LayerSettings.StrokeColor() }
         value={ props.strokeColor! }
-        onChange={(v) => updateProp(props.id, 'strokeColor', v)}
+        onChange={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
       />
     </Show>
     <Show when={props.renderer === 'choropleth'}>
@@ -244,7 +246,7 @@ function makeSettingsDefaultLine(
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeOpacity() }
       value={ props.strokeOpacity }
-      onChange={(v) => updateProp(props.id, 'strokeOpacity', v)}
+      onChange={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
       min={0}
       max={1}
       step={0.1}
@@ -252,7 +254,7 @@ function makeSettingsDefaultLine(
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeWidth() }
       value={+props.strokeWidth.replace('px', '')}
-      onChange={(v) => updateProp(props.id, 'strokeWidth', `${v}px`)}
+      onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', `${v}px`)}
       min={0}
       max={10}
       step={0.1}
@@ -275,7 +277,7 @@ function makeSettingsDefaultPolygon(
       <InputFieldColor
         label={ LL().LayerSettings.FillColor() }
         value={props.fillColor!}
-        onChange={(v) => updateProp(props.id, 'fillColor', v)}
+        onChange={(v) => debouncedUpdateProp(props.id, 'fillColor', v)}
       />
     </Show>
     <Show when={props.renderer === 'choropleth'}>
@@ -318,12 +320,12 @@ function makeSettingsDefaultPolygon(
     <InputFieldColor
       label={ LL().LayerSettings.StrokeColor() }
       value={ props.strokeColor! }
-      onChange={(v) => updateProp(props.id, 'strokeColor', v)}
+      onChange={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
     />
     <InputFieldNumber
       label={ LL().LayerSettings.FillOpacity() }
       value={ props.fillOpacity! }
-      onChange={(v) => updateProp(props.id, 'fillOpacity', v)}
+      onChange={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
       min={0}
       max={1}
       step={0.1}
@@ -331,7 +333,7 @@ function makeSettingsDefaultPolygon(
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeOpacity() }
       value={ props.strokeOpacity! }
-      onChange={(v) => updateProp(props.id, 'strokeOpacity', v)}
+      onChange={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
       min={0}
       max={1}
       step={0.1}
@@ -339,7 +341,7 @@ function makeSettingsDefaultPolygon(
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeWidth() }
       value={+props.strokeWidth.replace('px', '')}
-      onChange={(v) => updateProp(props.id, 'strokeWidth', `${v}px`)}
+      onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', `${v}px`)}
       min={0}
       max={10}
       step={0.1}
