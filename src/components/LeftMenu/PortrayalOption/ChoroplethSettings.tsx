@@ -127,6 +127,7 @@ function onClickValidate(
       boxWidth: 30,
       boxHeight: 30,
       boxSpacing: 5,
+      boxSpacingNoData: 10,
       boxCornerRadius: 20,
       labels: {
         fontSize: '11px',
@@ -135,6 +136,7 @@ function onClickValidate(
         fontStyle: 'normal',
         fontWeight: 'normal',
       } as LegendTextElement,
+      noDataLabel: 'No data',
     } as ChoroplethLegendParameters,
   } as LayerDescription;
 
@@ -174,6 +176,10 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
     .filter((d) => isNumber(d))
     .map((d) => +d) as number[]);
 
+  const [
+    noDataColor,
+    setNoDataColor,
+  ] = createSignal<string>(defaultNoDataColor);
   const numberOfClasses = createMemo(() => Mmin(d3.thresholdSturges(values()), 9));
 
   const pal = createMemo(() => getPalette(defaultColorScheme, numberOfClasses()) as Palette);
@@ -187,7 +193,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
     classes: numberOfClasses(),
     breaks: quantile(values(), { nb: numberOfClasses(), precision: null }),
     palette: pal(),
-    nodataColor: defaultNoDataColor,
+    nodataColor: noDataColor(),
     entitiesByClass: [],
     reversePalette: false,
   } as ClassificationParameters);
@@ -317,6 +323,7 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
               nClasses: numberOfClasses(),
               colorScheme: defaultColorScheme,
               invertColorScheme: false,
+              noDataColor: targetClassification().nodataColor,
               onCancel: noop,
               onConfirm: (classification: ClassificationParameters) => {
                 setTargetClassification(classification);

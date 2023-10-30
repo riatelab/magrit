@@ -12,6 +12,7 @@ type ClassificationPanelStoreType = {
   invertColorScheme?: boolean,
   onConfirm?: (classification: ClassificationParameters) => void,
   onCancel?: () => void,
+  noDataColor?: string,
 };
 
 const [
@@ -28,6 +29,7 @@ const [
   invertColorScheme: undefined,
   onConfirm: undefined,
   onCancel: undefined,
+  noDataColor: undefined,
 } as ClassificationPanelStoreType);
 
 export {

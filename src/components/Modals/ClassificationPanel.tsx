@@ -540,7 +540,15 @@ export default function ClassificationPanel(): JSX.Element {
             <Show when={missingValues > 0}>
               <p class="label">{ LL().ClassificationPanel.missingValues(missingValues) }</p>
               <div class="control">
-                <input class="color" type="color" />
+                <input
+                  class="color"
+                  type="color"
+                  value={ noDataColor() }
+                  onChange={(e) => {
+                    setNoDataColor(e.target.value);
+                    updateClassificationParameters();
+                  }}
+                />
               </div>
             </Show>
           </div>

@@ -102,6 +102,7 @@ function makeSettingsDefaultPoint(
               nClasses: props.rendererParameters.classes,
               colorScheme: props.rendererParameters.palette.name,
               invertColorScheme: props.rendererParameters.reversePalette,
+              noDataColor: props.rendererParameters.nodataColor,
               onCancel: () => {
                 setLayersDescriptionStore(
                   'layers',
@@ -219,6 +220,7 @@ function makeSettingsDefaultLine(
               nClasses: props.rendererParameters.classes,
               colorScheme: props.rendererParameters.palette.name,
               invertColorScheme: props.rendererParameters.reversePalette,
+              noDataColor: props.rendererParameters.nodataColor,
               onCancel: () => {
                 setLayersDescriptionStore(
                   'layers',
@@ -293,6 +295,7 @@ function makeSettingsDefaultPolygon(
               nClasses: props.rendererParameters.classes,
               colorScheme: props.rendererParameters.palette.name,
               invertColorScheme: props.rendererParameters.reversePalette,
+              noDataColor: props.rendererParameters.nodataColor,
               onCancel: () => {
                 setLayersDescriptionStore(
                   'layers',

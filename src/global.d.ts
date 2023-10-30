@@ -371,10 +371,15 @@ interface ChoroplethLegendParameters extends LegendParametersBase {
   boxHeight: number,
   // The (horizontal or vertical,  wrt. 'orientation') spacing between boxes
   boxSpacing: number,
+  // The (horizontal or vertical, wrt. 'orientation') spacing between the last box
+  // and the no-data box if any
+  boxSpacingNoData: number,
   // The corner radius of each box (rx and ry of each rect)
   boxCornerRadius: number,
   // The text properties of the labels
   labels: LegendTextElement,
+  // The label of the no-data box
+  noDataLabel: string,
 }
 
 /**

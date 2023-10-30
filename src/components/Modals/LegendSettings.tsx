@@ -11,7 +11,7 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/L
 
 // Helpers
 import { webSafeFonts } from '../../helpers/font';
-import { capitalizeFirstLetter } from '../../helpers/common';
+import { capitalizeFirstLetter, isNumber } from '../../helpers/common';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
 
 // Types / Interfaces / Enums
@@ -264,6 +264,11 @@ function makeSettingsChoroplethLegend(
     displayMoreOptions,
     setDisplayMoreOptions,
   ] = createSignal<boolean>(false);
+
+  const hasNoData = layer.data.features.filter(
+    (feature) => !isNumber(feature.properties[layer.rendererParameters!.variable]),
+  ).length > 0;
+
   return <>
     <FieldText layer={layer} LL={LL} role={'title'} />
     <FieldText layer={layer} LL={LL} role={'subtitle'} />
@@ -298,20 +303,6 @@ function makeSettingsChoroplethLegend(
       </div>
     </div>
     <div class="field">
-      <label class="label">{ LL().Legend.Modal.BoxSpacing() }</label>
-      <div class="control">
-        <input
-          class="input"
-          type="number"
-          min={0}
-          max={100}
-          step={1}
-          value={ layer.legend?.boxSpacing }
-          onChange={(ev) => updateProps(layer.id, ['legend', 'boxSpacing'], +ev.target.value)}
-        />
-      </div>
-    </div>
-    <div class="field">
       <label class="label">{ LL().Legend.Modal.BoxCornerRadius() }</label>
       <div class="control">
         <input
@@ -325,6 +316,47 @@ function makeSettingsChoroplethLegend(
         />
       </div>
     </div>
+    <div class="field">
+      <label class="label">{ LL().Legend.Modal.BoxSpacing() }</label>
+      <div class="control">
+        <input
+          class="input"
+          type="number"
+          min={0}
+          max={100}
+          step={1}
+          value={ layer.legend?.boxSpacing }
+          onChange={(ev) => updateProps(layer.id, ['legend', 'boxSpacing'], +ev.target.value)}
+        />
+      </div>
+    </div>
+    <Show when={hasNoData}>
+      <div class="field">
+        <label class="label">{ LL().Legend.Modal.BoxSpacingNoData() }</label>
+        <div class="control">
+          <input
+            class="input"
+            type="number"
+            min={0}
+            max={100}
+            step={1}
+            value={ layer.legend?.boxSpacingNoData }
+            onChange={(ev) => updateProps(layer.id, ['legend', 'boxSpacingNoData'], +ev.target.value)}
+          />
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">{ LL().Legend.Modal.NoDataLabel() }</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            value={ layer.legend?.noDataLabel }
+            onChange={(ev) => updateProps(layer.id, ['legend', 'noDataLabel'], ev.target.value)}
+          />
+        </div>
+      </div>
+    </Show>
     <div class="field">
       <label class="label">{ LL().Legend.Modal.LegendChoroplethOrientation() }</label>
       <div class="control">

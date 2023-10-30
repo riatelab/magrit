@@ -9,6 +9,7 @@ import { getColors } from 'dicopal';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { isNumber } from '../../helpers/common';
 import { round } from '../../helpers/math';
 
 // Stores
@@ -28,6 +29,7 @@ import {
 
 // Import some type descriptions
 import {
+  ChoroplethLegendParameters,
   type ClassificationParameters,
   type LayerDescription,
   Orientation,
@@ -55,6 +57,9 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
     throw new Error('Legend attribute is not defined - this should not happen');
   }
 
+  // const legendParameters = createMemo(() => layer.legend as ChoroplethLegendParameters);
+  const legendParameters = layer.legend as ChoroplethLegendParameters;
+
   const { LL } = useI18nContext();
 
   const colors = getColors(
@@ -69,29 +74,51 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
 
   const heightTitle = createMemo(() => (
     getTextSize(
-      layer.legend.title.text,
-      layer.legend.title.fontSize,
-      layer.legend.title.fontFamily,
+      legendParameters.title.text,
+      legendParameters.title.fontSize,
+      legendParameters.title.fontFamily,
     ).height
   ));
 
   const distanceToTop = createMemo(() => {
     let vDistanceToTop = 0;
-    if (layer.legend.title) {
+    if (legendParameters.title) {
       vDistanceToTop += heightTitle() + defaultSpacing;
     }
-    if (layer.legend.subtitle && layer.legend.subtitle.text) {
+    if (legendParameters.subtitle && legendParameters.subtitle.text) {
       vDistanceToTop += getTextSize(
-        layer.legend?.subtitle.text,
-        layer.legend.subtitle.fontSize,
-        layer.legend.subtitle.fontFamily,
+        legendParameters.subtitle.text,
+        legendParameters.subtitle.fontSize,
+        legendParameters.subtitle.fontFamily,
       ).height + defaultSpacing;
     }
-    vDistanceToTop += layer.legend!.boxSpacing / 2;
+    vDistanceToTop += legendParameters.boxSpacing / 2;
     return vDistanceToTop;
   });
 
-  const boxHeightAndSpacing = createMemo(() => layer.legend.boxHeight + layer.legend.boxSpacing);
+  const boxHeightAndSpacing = createMemo(
+    () => legendParameters.boxHeight + legendParameters.boxSpacing,
+  );
+
+  const hasNoData = createMemo(() => layer.data.features.filter(
+    (feature) => !isNumber(feature.properties[rendererParameters.variable]),
+  ).length > 0);
+
+  const positionNote = createMemo(() => {
+    if (hasNoData()) {
+      return distanceToTop()
+        + (colors.length - 1) * boxHeightAndSpacing()
+        + legendParameters.boxSpacingNoData
+        + legendParameters.boxHeight * 1.5
+        + defaultSpacing * 3
+        + getTextSize(
+          legendParameters.noDataLabel,
+          legendParameters.labels.fontSize,
+          legendParameters.labels.fontFamily,
+        ).height;
+    }
+    return distanceToTop() + (colors.length) * boxHeightAndSpacing() + defaultSpacing * 3;
+  });
 
   let refElement: SVGElement;
 
@@ -106,18 +133,18 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
   });
 
   createEffect(() => {
-    if (refElement && layer.visible && layer.legend.visible) {
+    if (refElement && layer.visible && legendParameters.visible) {
       computeRectangleBox(
         refElement,
         distanceToTop(),
         boxHeightAndSpacing(),
         heightTitle(),
-        layer.legend.roundDecimals,
-        layer.legend?.boxWidth,
-        layer.legend?.title.text,
-        layer.legend?.subtitle.text,
-        layer.legend?.note.text,
-        layer.legend?.roundDecimals,
+        legendParameters.roundDecimals,
+        legendParameters.boxWidth,
+        legendParameters.title.text,
+        legendParameters.subtitle?.text,
+        legendParameters.note?.text,
+        legendParameters.roundDecimals,
       );
     }
   });
@@ -140,12 +167,12 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
       style={{ cursor: 'grab' }}
     >
       { makeRectangleBox() }
-      { makeLegendText(layer.legend.title, [0, 0], 'title') }
-      { makeLegendText(layer.legend.subtitle, [0, heightTitle()], 'subtitle') }
+      { makeLegendText(legendParameters.title, [0, 0], 'title') }
+      { makeLegendText(legendParameters.subtitle, [0, heightTitle()], 'subtitle') }
       {
         makeLegendText(
-          layer.legend.note,
-          [0, distanceToTop() + (colors.length) * boxHeightAndSpacing() + defaultSpacing * 3],
+          legendParameters.note,
+          [0, positionNote()],
           'note',
         )
       }
@@ -156,34 +183,70 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
               fill={color}
               x={0}
               y={distanceToTop() + i() * boxHeightAndSpacing()}
-              rx={layer.legend.boxCornerRadius}
-              ry={layer.legend.boxCornerRadius}
-              width={layer.legend.boxWidth}
-              height={layer.legend.boxHeight}
+              rx={legendParameters.boxCornerRadius}
+              ry={legendParameters.boxCornerRadius}
+              width={legendParameters.boxWidth}
+              height={legendParameters.boxHeight}
             />
           }
         </For>
-        <For each={layer.rendererParameters.breaks.toReversed()}>
+        <Show when={hasNoData()}>
+          <rect
+            fill={rendererParameters.nodataColor}
+            x={0}
+            y={
+              distanceToTop()
+              + (colors.length - 1) * boxHeightAndSpacing()
+              + legendParameters.boxHeight
+              + legendParameters.boxSpacingNoData
+            }
+            rx={legendParameters.boxCornerRadius}
+            ry={legendParameters.boxCornerRadius}
+            width={legendParameters.boxWidth}
+            height={legendParameters.boxHeight}
+          />
+        </Show>
+        <For each={rendererParameters.breaks.toReversed()}>
           {
             (value, i) => <text
-              x={layer.legend.boxWidth + defaultSpacing}
+              x={legendParameters.boxWidth + defaultSpacing}
               y={
                 distanceToTop()
-                + i() * (layer.legend!.boxHeight + layer.legend!.boxSpacing)
-                - layer.legend!.boxSpacing / 2
+                + i() * (legendParameters.boxHeight + legendParameters.boxSpacing)
+                - legendParameters.boxSpacing / 2
               }
-              font-size={layer.legend.labels.fontSize}
-              font-family={layer.legend.labels.fontFamily}
-              font-color={layer.legend.labels.fontColor}
-              font-style={layer.legend.labels.fontStyle}
-              font-weight={layer.legend.labels.fontWeight}
-              fill={layer.legend.labels.fontColor}
+              font-size={legendParameters.labels.fontSize}
+              font-family={legendParameters.labels.fontFamily}
+              font-color={legendParameters.labels.fontColor}
+              font-style={legendParameters.labels.fontStyle}
+              font-weight={legendParameters.labels.fontWeight}
+              fill={legendParameters.labels.fontColor}
               style={{ 'user-select': 'none' }}
               text-anchor="start"
               dominant-baseline="middle"
-            >{ round(value, layer.legend!.roundDecimals).toLocaleString() }</text>
+            >{ round(value, legendParameters.roundDecimals).toLocaleString() }</text>
           }
         </For>
+        <Show when={hasNoData()}>
+          <text
+            x={legendParameters.boxWidth + defaultSpacing}
+            y={
+              distanceToTop()
+              + (colors.length - 1) * boxHeightAndSpacing()
+              + legendParameters.boxSpacingNoData
+              + legendParameters.boxHeight * 1.5
+            }
+            font-size={legendParameters.labels.fontSize}
+            font-family={legendParameters.labels.fontFamily}
+            font-color={legendParameters.labels.fontColor}
+            font-style={legendParameters.labels.fontStyle}
+            font-weight={legendParameters.labels.fontWeight}
+            fill={legendParameters.labels.fontColor}
+            style={{ 'user-select': 'none' }}
+            text-anchor="start"
+            dominant-baseline="middle"
+          >{ legendParameters.noDataLabel }</text>
+        </Show>
       </g>
     </g>
   </Show>;
@@ -208,6 +271,8 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
     throw new Error('Legend attribute is not defined - this should not happen');
   }
 
+  const legendParameters = layer.legend as ChoroplethLegendParameters;
+
   const { LL } = useI18nContext();
   const colors = getColors(
     rendererParameters.palette.name,
@@ -226,27 +291,27 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
   // To do so, we need to know the size of each of these elements (and the presence / absence of
   // each of them).
   const heightTitle = createMemo(() => (getTextSize(
-    layer.legend.title.text,
-    layer.legend.title.fontSize,
-    layer.legend.title.fontFamily,
+    legendParameters.title.text,
+    legendParameters.title.fontSize,
+    legendParameters.title.fontFamily,
   ).height + defaultSpacing));
 
   const heightSubtitle = createMemo(() => (
-    layer.legend.subtitle && layer.legend.subtitle.text
+    legendParameters.subtitle && legendParameters.subtitle.text
       ? getTextSize(
-        layer.legend.subtitle.text,
-        layer.legend.subtitle.fontSize,
-        layer.legend.subtitle.fontFamily,
+        legendParameters.subtitle.text,
+        legendParameters.subtitle.fontSize,
+        legendParameters.subtitle.fontFamily,
       ).height + defaultSpacing
       : 0
   ));
 
-  const heightBox = createMemo(() => layer.legend.boxHeight + defaultSpacing);
+  const heightBox = createMemo(() => legendParameters.boxHeight + defaultSpacing);
 
   const heightLegendLabels = createMemo(() => getTextSize(
     '12.75',
-    layer.legend.labels.fontSize,
-    layer.legend.labels.fontFamily,
+    legendParameters.labels.fontSize,
+    legendParameters.labels.fontFamily,
   ).height + defaultSpacing);
 
   // The y-position at which the boxes should be placed
@@ -260,12 +325,11 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
 
   // The y-position at which the legend note should be placed
   const distanceNoteToTop = createMemo(() => distanceLabelsToTop()
-    + heightLegendLabels()
-    + defaultSpacing);
+    + heightLegendLabels());
 
-  const distanceToEnd = createMemo(() => (
-    layer.legend!.boxWidth
-    + layer.legend!.boxSpacing) * colors.length);
+  const hasNoData = createMemo(() => layer.data.features.filter(
+    (feature) => !isNumber(feature.properties[rendererParameters.variable]),
+  ).length > 0);
 
   let refElement: SVGElement;
 
@@ -288,24 +352,23 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
         distanceBoxesToTop(),
         distanceLabelsToTop(),
         distanceNoteToTop(),
-        distanceToEnd(),
-        layer.legend?.title.text,
-        layer.legend?.subtitle?.text,
-        layer.legend?.note?.text,
-        layer.legend?.roundDecimals,
+        legendParameters.title.text,
+        legendParameters.subtitle?.text,
+        legendParameters.note?.text,
+        legendParameters.roundDecimals,
       );
     }
   });
 
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || (layer.visible && layer.legend.visible)
+    || (layer.visible && legendParameters.visible)
   }>
     <g
       ref={refElement}
       class="legend choropleth"
-      transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
-      visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+      transform={`translate(${legendParameters.position[0]}, ${legendParameters.position[1]})`}
+      visibility={layer.visible && legendParameters.visible ? undefined : 'hidden'}
       onContextMenu={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -315,43 +378,77 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
       style={{ cursor: 'grab' }}
     >
       { makeRectangleBox() }
-      { makeLegendText(layer.legend.title, [0, 0], 'title') }
-      { makeLegendText(layer.legend.subtitle, [0, heightTitle()], 'subtitle') }
-      { makeLegendText(layer.legend.note, [0, distanceNoteToTop()], 'note') }
+      { makeLegendText(legendParameters.title, [0, 0], 'title') }
+      { makeLegendText(legendParameters.subtitle, [0, heightTitle()], 'subtitle') }
+      { makeLegendText(legendParameters.note, [0, distanceNoteToTop()], 'note') }
       <g class="legend-content">
         <For each={colors}>
           {
             (color, i) => <rect
               fill={color}
-              x={i() * (layer.legend.boxWidth + layer.legend.boxSpacing)}
+              x={i() * (legendParameters.boxWidth + legendParameters.boxSpacing)}
               y={distanceBoxesToTop()}
-              rx={layer.legend.boxCornerRadius}
-              ry={layer.legend.boxCornerRadius}
-              width={layer.legend.boxWidth}
-              height={layer.legend.boxHeight}
+              rx={legendParameters.boxCornerRadius}
+              ry={legendParameters.boxCornerRadius}
+              width={legendParameters.boxWidth}
+              height={legendParameters.boxHeight}
             />
           }
         </For>
-        <For each={layer.rendererParameters.breaks}>
+        <Show when={hasNoData()}>
+          <rect
+            fill={rendererParameters.nodataColor}
+            x={
+              colors.length * (legendParameters.boxWidth + legendParameters.boxSpacing)
+              - legendParameters.boxSpacing
+              + legendParameters.boxSpacingNoData
+            }
+            y={distanceBoxesToTop()}
+            rx={legendParameters.boxCornerRadius}
+            ry={legendParameters.boxCornerRadius}
+            width={legendParameters.boxWidth}
+            height={legendParameters.boxHeight}
+          />
+        </Show>
+        <For each={rendererParameters.breaks}>
           {
             (value, i) => <text
               x={
-                (i() * (layer.legend.boxWidth + layer.legend.boxSpacing))
-                - layer.legend.boxSpacing / 2
+                (i() * (legendParameters.boxWidth + legendParameters.boxSpacing))
+                - legendParameters.boxSpacing / 2
               }
               y={distanceLabelsToTop()}
-              font-size={layer.legend.labels.fontSize}
-              font-family={layer.legend.labels.fontFamily}
-              font-color={layer.legend.labels.fontColor}
-              font-style={layer.legend.labels.fontStyle}
-              font-weight={layer.legend.labels.fontWeight}
-              fill={layer.legend.labels.fontColor}
+              font-size={legendParameters.labels.fontSize}
+              font-family={legendParameters.labels.fontFamily}
+              font-color={legendParameters.labels.fontColor}
+              font-style={legendParameters.labels.fontStyle}
+              font-weight={legendParameters.labels.fontWeight}
+              fill={legendParameters.labels.fontColor}
               style={{ 'user-select': 'none' }}
               text-anchor="middle"
-              dominant-baseline="middle"
-            >{ round(value, layer.legend!.roundDecimals).toLocaleString() }</text>
+              dominant-baseline="hanging"
+            >{ round(value, legendParameters.roundDecimals).toLocaleString() }</text>
           }
         </For>
+        <Show when={hasNoData()}>
+          <text
+            x={
+              colors.length * (legendParameters.boxWidth + legendParameters.boxSpacing)
+              + legendParameters.boxSpacingNoData
+              + legendParameters.boxWidth / 3
+            }
+            y={distanceLabelsToTop()}
+            font-size={legendParameters.labels.fontSize}
+            font-family={legendParameters.labels.fontFamily}
+            font-color={legendParameters.labels.fontColor}
+            font-style={legendParameters.labels.fontStyle}
+            font-weight={legendParameters.labels.fontWeight}
+            fill={legendParameters.labels.fontColor}
+            style={{ 'user-select': 'none' }}
+            text-anchor="middle"
+            dominant-baseline="hanging"
+          >{ legendParameters.noDataLabel }</text>
+        </Show>
       </g>
     </g>
   </Show>;
@@ -363,7 +460,7 @@ export default function legendChoropleth(layer: LayerDescription): JSX.Element {
       ({
         [Orientation.vertical]: choroplethVerticalLegend,
         [Orientation.horizontal]: choroplethHorizontalLegend,
-      })[layer.legend!.orientation](layer)
+      })[(layer.legend as ChoroplethLegendParameters).orientation](layer)
     }
   </>;
 }

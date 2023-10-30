@@ -1146,6 +1146,14 @@ type RootTranslation = {
 			 */
 			BoxSpacing: string
 			/**
+			 * S​p​a​c​i​n​g​ ​b​e​t​w​e​e​n​ ​b​o​x​e​s​ ​a​n​d​ ​n​o​ ​d​a​t​a​ ​b​o​x
+			 */
+			BoxSpacingNoData: string
+			/**
+			 * L​a​b​e​l​ ​f​o​r​ ​t​h​e​ ​"​n​o​ ​d​a​t​a​"​ ​b​o​x
+			 */
+			NoDataLabel: string
+			/**
 			 * B​o​x​ ​c​o​r​n​e​r​ ​r​a​d​i​u​s
 			 */
 			BoxCornerRadius: string
@@ -2334,6 +2342,14 @@ export type TranslationFunctions = {
 			 * Spacing between boxes
 			 */
 			BoxSpacing: () => LocalizedString
+			/**
+			 * Spacing between boxes and no data box
+			 */
+			BoxSpacingNoData: () => LocalizedString
+			/**
+			 * Label for the "no data" box
+			 */
+			NoDataLabel: () => LocalizedString
 			/**
 			 * Box corner radius
 			 */

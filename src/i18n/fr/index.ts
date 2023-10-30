@@ -330,6 +330,8 @@ const fr = {
       BoxWidth: 'Largeur des boites',
       BoxHeight: 'Hauteur des boites',
       BoxSpacing: 'Espacement entre les boites',
+      BoxSpacingNoData: 'Espacement entre les boites et la boite "sans données"',
+      NoDataLabel: 'Étiquette de la boite "sans données"',
       BoxCornerRadius: 'Rayon des coins des boites',
       BoxStrokeWidth: 'Épaisseur des lignes des boites',
       RoundDecimals: 'Arrondir les valeurs',

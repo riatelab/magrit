@@ -330,6 +330,8 @@ const en = {
       BoxWidth: 'Box width',
       BoxHeight: 'Box height',
       BoxSpacing: 'Spacing between boxes',
+      BoxSpacingNoData: 'Spacing between boxes and no data box',
+      NoDataLabel: 'Label for the "no data" box',
       BoxCornerRadius: 'Box corner radius',
       BoxStrokeWidth: 'Box stroke width',
       RoundDecimals: 'Round values',
