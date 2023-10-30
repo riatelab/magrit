@@ -68,12 +68,6 @@ export default function MapZone(): JSX.Element {
   const projection = d3[mapStore.projection.value]()
     .translate(mapStore.translate)
     .scale(mapStore.scale)
-    // .preclip(d3.geoClipPolygon({
-    //   type: 'Polygon',
-    //   coordinates: [[
-    //     [10.38, 41.15], [-9.86, 41.15], [-9.86, 51.56], [10.38, 51.56], [10.38, 41.15],
-    //   ]],
-    // }))
     .clipExtent(getDefaultClipExtent());
 
   setGlobalStore({

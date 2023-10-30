@@ -113,7 +113,7 @@ function onChangeProjectionEntry(value: string) {
       title: 'Select a projection',
       confirmCallback: () => {},
       cancelCallback: () => {},
-      width: 800,
+      width: 900,
     });
   } else {
     // The projection function name in d3 is 'geo' + the value

@@ -5,7 +5,8 @@ import { createStore } from 'solid-js/store';
 // Helpers
 import { unproxify } from '../helpers/common';
 import d3 from '../helpers/d3-custom';
-import { redrawPaths } from '../helpers/svg';
+import { getD3ProjectionFromProj4, getProjection } from '../helpers/projection';
+import { getTargetSvg, redrawPaths } from '../helpers/svg';
 
 // Stores
 import { debouncedPushUndoStack, resetRedoStackStore } from './stateStackStore';
@@ -80,14 +81,7 @@ createEffect(() => {
   globalStore.projection
     .scale(mapStore.scale)
     .translate(mapStore.translate)
-    .rotate(mapStore.rotate)
-    // .preclip(d3.geoClipPolygon({
-    //   type: 'Polygon',
-    //   coordinates: [[
-    //     [10.38, 41.15], [-9.86, 41.15], [-9.86, 51.56], [10.38, 51.56], [10.38, 41.15],
-    //   ]],
-    // }))
-    .clipExtent(getDefaultClipExtent());
+    .rotate(mapStore.rotate);
 
   const targetSvg = document.querySelector('svg.map-zone__map');
   if (!targetSvg) {
@@ -103,27 +97,67 @@ createEffect(
   on(
     () => mapStore.projection.value,
     () => {
-      const projection = d3[mapStore.projection.value]()
-        .center(mapStore.center)
-        .translate(mapStore.translate)
-        .scale(mapStore.scale)
-        // .preclip(d3.geoClipPolygon({
-        //   type: 'Polygon',
-        //   coordinates: [[
-        //     [10.38, 41.15], [-9.86, 41.15], [-9.86, 51.56], [10.38, 51.56], [10.38, 41.15],
-        //   ]],
-        // }))
-        .clipExtent(getDefaultClipExtent());
+      // 1. Instantiate the projection (whether it is a d3 or proj4 projection)
+      let projection;
+      if (mapStore.projection.type === 'd3') {
+        projection = d3[mapStore.projection.value]()
+          .center(mapStore.center)
+          .translate(mapStore.translate)
+          .scale(mapStore.scale)
+          .clipExtent(getDefaultClipExtent());
+      } else { // mapStore.projection.type === 'proj4'
+        projection = getD3ProjectionFromProj4(getProjection(mapStore.projection.value));
+        projection.clipExtent(getDefaultClipExtent());
+        if (mapStore.projection.bounds && JSON.stringify(mapStore.projection.bounds) !== '[90,-180,-90,180]') {
+          // Apply a clipping polygon to the projection
+          // if the bounds are not worldwide (i.e. [90,-180,-90,180])
+          const [ymax, xmin, ymin, xmax] = mapStore.projection.bounds!;
+          const clippingPolygon = {
+            type: 'Polygon',
+            coordinates: [[
+              [xmin, ymax], [xmax, ymax], [xmax, ymin], [xmin, ymin], [xmin, ymax],
+            ]],
+          };
+          projection.preclip(d3.geoClipPolygon(clippingPolygon));
+          // Also zoom on the clipping polygon
+          // Margin so that the extent of the layer is not on the border of the map
+          const marginX = mapStore.mapDimensions.width * 0.03;
+          const marginY = mapStore.mapDimensions.height * 0.03;
+
+          // Fit the extent of the projection to the extent of the layer, with margins
+          globalStore.projection.fitExtent(
+            [
+              [marginX, marginY],
+              [mapStore.mapDimensions.width - marginX, mapStore.mapDimensions.height - marginY],
+            ],
+            {
+              type: 'FeatureCollection',
+              features: [
+                { type: 'Feature', geometry: clippingPolygon },
+              ],
+            },
+          );
+        }
+      }
+
+      // 2. Instantiate the corresponding path generator
       const pathGenerator = d3.geoPath(projection);
 
+      // 3. Update the global store with the new projection and pathGenerator
       setGlobalStore(
         'projection',
-        () => projection,
+        () => projection!,
       );
       setGlobalStore(
         'pathGenerator',
         () => pathGenerator,
       );
+
+      // Update the global store with the new scale and translate if they changed
+      setMapStore({
+        scale: projection.scale(),
+        translate: projection.translate(),
+      });
     },
   ),
 );

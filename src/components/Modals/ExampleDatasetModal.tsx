@@ -159,7 +159,7 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
             <tr>
               <td></td>
               <td>
-                <a href={ds.directLink} target="_blank" rel="noreferrer">
+                <a href={ds.directLink} target="_blank" rel="noopener noreferrer">
                   <FiExternalLink style={{ height: '1em', width: '1em', 'vertical-align': 'text-top' }}/>
                   { LL().DatasetCatalog.directLink() }
                 </a>

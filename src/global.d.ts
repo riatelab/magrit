@@ -197,6 +197,9 @@ interface ProjectionDefinition {
   name: string,
   // The definition of the projection (string compatible with proj4 or d3 projection name)
   value: string,
+  // The bounds of the projection (as ymax, xmin, ymin, xmax)
+  // (optional, only used for proj4 projections)
+  bounds?: [number, number, number, number],
 }
 
 export enum ClassificationMethod {
@@ -611,3 +614,8 @@ export type LayoutFeature = (
   | FreeDrawing
   | Text
 );
+
+export type ScoredResult<T> = {
+  score: number,
+  item: T,
+};

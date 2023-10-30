@@ -90,7 +90,7 @@ export const getD3ProjectionFromProj4 = (proj: InterfaceProjection): GeoProjecti
   return d3.geoProjection(projRaw);
 };
 
-export const getProjection = (projString: string) => {
+export const getProjection = (projString: string): InterfaceProjection => {
   // TODO: maybe we should resolve EPSG -> proj4 string here
   //  (and throw an error if the EPSG code isn't found)
   try {

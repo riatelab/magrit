@@ -1,17 +1,28 @@
+// Imports for solid-js
 import {
   type Accessor, createSignal, For,
   type JSX, Show,
 } from 'solid-js';
-import { type TranslationFunctions } from '../../i18n/i18n-types';
-import {
-  epsgDb,
-  type EpsgDbEntryType,
-} from '../../helpers/projection';
-import InputFieldText from '../Inputs/InputText.tsx';
-import { isNumber } from '../../helpers/common';
 
-// TODO: improve the search algorithm
-const findMatchingProjections = (search: string) => {
+// Imports from other external libraries
+import { FiExternalLink } from 'solid-icons/fi';
+
+// Helpers
+import { type TranslationFunctions } from '../../i18n/i18n-types';
+import { epsgDb, type EpsgDbEntryType } from '../../helpers/projection';
+import { isNumber } from '../../helpers/common';
+import { round } from '../../helpers/math';
+
+// Stores
+import { setMapStore } from '../../store/MapStore';
+
+// Sub-components
+import InputFieldText from '../Inputs/InputText.tsx';
+
+// Types / Interfaces / Enums
+import { ScoredResult } from '../../global.d';
+
+const findMatchingProjections = (search: string): ScoredResult<EpsgDbEntryType>[] => {
   // Explore the EPSG database to find projection
   // names or code matching the search string
   const searchString = search.trim()
@@ -25,21 +36,40 @@ const findMatchingProjections = (search: string) => {
   if (searchString.includes('epsg:') || isNumber(searchString)) {
     const code = searchString.replace('epsg:', '');
     const projection = epsgDb[code];
-    if (projection) return [projection];
+    if (projection) return [{ score: 1, item: projection }];
   }
 
   // Otherwise, search for matching projections
   // in the name field of the EPSG database
-  const matchingProjections: EpsgDbEntryType[] = [];
+  const matchingProjections: ScoredResult<EpsgDbEntryType>[] = [];
 
+  // First, we split the search string into words
+  // (so we split on space, comma, slash, and underscore)
+  const searchWords = searchString.split(/[/\s_-]/g);
+
+  // Then, we search for
   Object.entries(epsgDb)
     .forEach(([code, projection]) => {
-      if (projection.name.toLowerCase().includes(searchString)) {
-        matchingProjections.push(projection);
+      // We will see if each word of the search string is included in the projection name
+      // and give a score according to the number of words that match
+      // (so score will be 1 if all words match, 0.5 if half of the words match, etc.)
+      let score = 0;
+      searchWords.forEach((word) => {
+        if (projection.name.toLowerCase().includes(word)) {
+          score += 1 / searchWords.length;
+        }
+      });
+      if (score > 0) {
+        matchingProjections.push({
+          item: projection,
+          score: round(score, 2),
+        });
       }
     });
 
-  return matchingProjections;
+  return matchingProjections
+    .filter((elem) => elem.score > 0.5)
+    .sort((a, b) => b.score - a.score);
 };
 
 export default function ProjectionSelection(
@@ -50,7 +80,11 @@ export default function ProjectionSelection(
   const [
     matchingProjections,
     setMatchingProjections,
-  ] = createSignal<EpsgDbEntryType[] | null>(null);
+  ] = createSignal<ScoredResult<EpsgDbEntryType>[] | null>(null);
+  const [
+    selectedProjection,
+    setSelectedProjection,
+  ] = createSignal<EpsgDbEntryType | null>(null);
   return <div class="projection-selection">
     <InputFieldText
       width={ 400 }
@@ -61,24 +95,84 @@ export default function ProjectionSelection(
         console.log(matchingProjections());
       }}
     />
-    <div class="projection-selection-list">
-      <Show when={matchingProjections() !== null}>
-        { props.LL().ProjectionSelection.NMatchingProjections(matchingProjections()!.length) }
-        <Show when={matchingProjections()!.length > 30}>
-          <div class="projection-selection-list__warning">
-            { props.LL().ProjectionSelection.TooManyResults() }
+    <div class="is-flex">
+      <div class="projection-selection-list" style={{ width: '50%' }}>
+        <Show when={matchingProjections() !== null}>
+          { props.LL().ProjectionSelection.NMatchingProjections(matchingProjections()!.length) }
+          <Show when={matchingProjections()!.length > 30}>
+            <div class="projection-selection-list__warning">
+              { props.LL().ProjectionSelection.TooManyResults() }
+            </div>
+          </Show>
+          <Show when={matchingProjections()!.length <= 30}>
+            <For each={matchingProjections()!}>
+              {(elem) => (
+                <div
+                  class="projection-selection-list__item"
+                  onClick={() => {
+                    if (selectedProjection() && selectedProjection()!.code === elem.item.code) {
+                      setSelectedProjection(null);
+                    } else {
+                      setSelectedProjection(elem.item);
+                    }
+                  }}
+                >
+                  { elem.item.name } ({ elem.item.code }) - <small>Score : {elem.score}</small>
+                </div>
+              )}
+            </For>
+          </Show>
+        </Show>
+      </div>
+      <div class="projection-selection-details" style={{ width: '50%' }}>
+        <Show when={selectedProjection() !== null}>
+          <p>
+            <b>{ selectedProjection()!.name }</b>
+            ({ selectedProjection()!.code })
+          </p>
+          <p>
+            <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.Kind() }</span> {
+            {
+              'CRS-PROJCRS': props.LL().ProjectionSelection.ProjCRS(),
+              'CRS-GEOGCRS': props.LL().ProjectionSelection.GeogCRS(),
+            }[selectedProjection()!.kind]
+          }</p>
+          <p>
+            <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.BboxGeo() }</span>
+            \ { selectedProjection()!.bbox.join(', ') }</p>
+          <p>
+            <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.Area() }</span>
+            \ { selectedProjection()!.area }</p>
+          <p>
+            <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.Unit() }</span>
+            \ { selectedProjection()!.unit }</p>
+          <p>
+            <a
+              href={`https://epsg.io/${selectedProjection()!.code}`}
+              target="_blank"
+              ref="noopener noreferrer"
+            >
+              <FiExternalLink style={{ height: '1em', width: '1em', 'vertical-align': 'text-top' }}/>
+              { props.LL().ProjectionSelection.MoreInformation() }
+            </a>
+          </p>
+          <div style={{ 'text-align': 'center' }}>
+            <button
+              onClick={() => {
+                setMapStore(
+                  'projection',
+                  {
+                    type: 'proj4',
+                    name: selectedProjection()!.name,
+                    value: selectedProjection()!.proj4,
+                    bounds: selectedProjection()!.bbox,
+                  },
+                );
+              }}
+            >Apply</button>
           </div>
         </Show>
-        <Show when={matchingProjections()!.length <= 30}>
-          <For each={matchingProjections()!}>
-            {(projection) => (
-              <div class="projection-selection-list__item">
-              { projection.name } ({ projection.code })
-            </div>
-            )}
-          </For>
-        </Show>
-      </Show>
+      </div>
     </div>
   </div>;
 }

@@ -742,6 +742,38 @@ type RootTranslation = {
 		 * T​o​o​ ​m​a​n​y​ ​r​e​s​u​l​t​s​,​ ​p​l​e​a​s​e​ ​r​e​f​i​n​e​ ​y​o​u​r​ ​s​e​a​r​c​h​.
 		 */
 		TooManyResults: string
+		/**
+		 * K​i​n​d​:
+		 */
+		Kind: string
+		/**
+		 * P​r​o​j​e​c​t​e​d​ ​c​o​o​r​d​i​n​a​t​e​ ​r​e​f​e​r​e​n​c​e​ ​s​y​s​t​e​m
+		 */
+		ProjCRS: string
+		/**
+		 * G​e​o​g​r​a​p​h​i​c​ ​c​o​o​r​d​i​n​a​t​e​ ​r​e​f​e​r​e​n​c​e​ ​s​y​s​t​e​m
+		 */
+		GeogCRS: string
+		/**
+		 * B​o​u​n​d​i​n​g​ ​b​o​x​ ​(​g​e​o​g​r​a​p​h​i​c​ ​c​o​o​r​d​i​n​a​t​e​s​)​:
+		 */
+		BboxGeo: string
+		/**
+		 * B​o​u​n​d​i​n​g​ ​b​o​x​ ​(​p​r​o​j​e​c​t​e​d​ ​c​o​o​r​d​i​n​a​t​e​s​)​:
+		 */
+		BboxProjected: string
+		/**
+		 * A​r​e​a​:
+		 */
+		Area: string
+		/**
+		 * U​n​i​t​:
+		 */
+		Unit: string
+		/**
+		 * M​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n
+		 */
+		MoreInformation: string
 	}
 	DataTable: {
 		/**
@@ -1939,6 +1971,38 @@ export type TranslationFunctions = {
 		 * Too many results, please refine your search.
 		 */
 		TooManyResults: () => LocalizedString
+		/**
+		 * Kind:
+		 */
+		Kind: () => LocalizedString
+		/**
+		 * Projected coordinate reference system
+		 */
+		ProjCRS: () => LocalizedString
+		/**
+		 * Geographic coordinate reference system
+		 */
+		GeogCRS: () => LocalizedString
+		/**
+		 * Bounding box (geographic coordinates):
+		 */
+		BboxGeo: () => LocalizedString
+		/**
+		 * Bounding box (projected coordinates):
+		 */
+		BboxProjected: () => LocalizedString
+		/**
+		 * Area:
+		 */
+		Area: () => LocalizedString
+		/**
+		 * Unit:
+		 */
+		Unit: () => LocalizedString
+		/**
+		 * More information
+		 */
+		MoreInformation: () => LocalizedString
 	}
 	DataTable: {
 		/**
