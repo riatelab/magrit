@@ -72,6 +72,7 @@ const setMapStore = (...args: any[]) => {
 // So we listen here to the mapStore scale, translate and rotate properties
 // and update the projection accordingly, then redraw the paths
 createEffect(() => {
+  console.log('MapStore.ts: createEffect: mapStore.scale, mapStore.translate, mapStore.rotate');
   if (
     !globalStore.projection
   ) {
@@ -97,6 +98,7 @@ createEffect(
   on(
     () => mapStore.projection.value,
     () => {
+      console.log('MapStore.ts: createEffect: mapStore.projection.value');
       // 1. Instantiate the projection (whether it is a d3 or proj4 projection)
       let projection;
       if (mapStore.projection.type === 'd3') {
@@ -125,7 +127,7 @@ createEffect(
           const marginY = mapStore.mapDimensions.height * 0.03;
 
           // Fit the extent of the projection to the extent of the layer, with margins
-          globalStore.projection.fitExtent(
+          projection.fitExtent(
             [
               [marginX, marginY],
               [mapStore.mapDimensions.width - marginX, mapStore.mapDimensions.height - marginY],
@@ -135,7 +137,7 @@ createEffect(
               features: [
                 { type: 'Feature', geometry: clippingPolygon },
               ],
-            },
+            } as any,
           );
         }
       }
@@ -144,14 +146,10 @@ createEffect(
       const pathGenerator = d3.geoPath(projection);
 
       // 3. Update the global store with the new projection and pathGenerator
-      setGlobalStore(
-        'projection',
-        () => projection!,
-      );
-      setGlobalStore(
-        'pathGenerator',
-        () => pathGenerator,
-      );
+      setGlobalStore({
+        projection,
+        pathGenerator,
+      });
 
       // Update the global store with the new scale and translate if they changed
       setMapStore({

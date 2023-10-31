@@ -3,6 +3,7 @@ import { JSX } from 'solid-js';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { unproxify } from '../../helpers/common';
 
 // Stores
 import { globalStore, setGlobalStore } from '../../store/GlobalStore';
@@ -107,12 +108,21 @@ function onChangeProjectionEntry(value: string) {
   // Value is either the name of the projection (to be used in the projection function for d3)
   // or "other"
   if (value === 'other') {
+    // Save the current projection definition if the user clics on "cancel"
+    const currentProjection = unproxify(mapStore.projection);
+    // Open the modal that will allow the user to select a projection
     setModalStore({
       show: true,
       content: () => <ProjectionSelection LL={useI18nContext().LL} />,
       title: 'Select a projection',
-      confirmCallback: () => {},
-      cancelCallback: () => {},
+      confirmCallback: () => {
+        // Nothing to do on confirm
+        // because the projection is already changed
+        // from inside the modal...
+      },
+      cancelCallback: () => {
+        setMapStore('projection', currentProjection);
+      },
       width: 900,
     });
   } else {
