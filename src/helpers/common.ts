@@ -1,4 +1,4 @@
-export function unproxify(value: Proxy<(Array<any> | object)>): (Array<any> | object) {
+export function unproxify(value: typeof Proxy<(Array<any> | object)>): (Array<any> | object) {
   if (value instanceof Array) {
     return value.map(unproxify);
   }
@@ -59,3 +59,26 @@ export const getNumberOfDecimals = (value: number) => {
 };
 
 export const capitalizeFirstLetter = (str: string): string => str[0].toUpperCase() + str.slice(1);
+
+/**
+ * Find a suitable name for a new layer.
+ * It searches for the first available name in the form 'Layer (1)', 'Layer (2)', etc.
+ * (and knowing that there might be existing layers with names 'Layer', 'Layer (1)', etc.)
+ *
+ * @param {string} name - The name to start with.
+ * @param {Array<string>} existingNames - The list of existing layer names.
+ * @returns {string} - The first available name.
+ */
+export const findSuitableName = (name: string, existingNames: Array<string>): string => {
+  const exp = /\s\((\d+)\)$/;
+  const cleanNames = existingNames.map((n) => n.replace(exp, ''));
+  const cleanName = name.replace(exp, '');
+  if (!cleanNames.includes(cleanName) && !existingNames.includes(name)) {
+    return name;
+  }
+  let i = 1;
+  while (existingNames.includes(`${cleanName} (${i})`)) {
+    i += 1;
+  }
+  return `${name} (${i})`;
+};

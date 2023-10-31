@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
-import { descendingKeyAccessor, isNumber } from '../../../helpers/common';
+import { descendingKeyAccessor, findSuitableName, isNumber } from '../../../helpers/common';
 import {
   computeCandidateValues,
   computeCandidateValuesForSymbolsLegend,
@@ -261,12 +261,16 @@ export default function ProportionalSymbolsSettings(
 
   const makePortrayal = () => {
     console.log('makePortrayal');
+    const layerName = findSuitableName(
+      newLayerName() || LL().PortrayalSection.NewLayer(),
+      layersDescriptionStore.layers.map((d) => d.name),
+    );
     onClickValidate(
       layerDescription().id,
       targetVariable(),
       refSymbolSize(),
       refValueForSymbolSize(),
-      newLayerName(),
+      layerName,
       modeColor(),
       symbolType(),
       [minValues(), maxValues()],

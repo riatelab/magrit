@@ -20,7 +20,7 @@ import { applicationSettingsStore } from '../../../store/ApplicationSettingsStor
 // Helper functions
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { noop } from '../../../helpers/classification';
-import { isNumber } from '../../../helpers/common';
+import { findSuitableName, isNumber } from '../../../helpers/common';
 import { Mmin } from '../../../helpers/math';
 import d3 from '../../../helpers/d3-custom';
 
@@ -199,11 +199,15 @@ export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.
   } as ClassificationParameters);
 
   const makePortrayal = () => {
+    const layerName = findSuitableName(
+      newLayerName() || LL().PortrayalSection.NewLayer(),
+      layersDescriptionStore.layers.map((d) => d.name),
+    );
     onClickValidate(
       props.layerId,
       targetVariable(),
       targetClassification(),
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      layerName,
       LL().ClassificationPanel
         .classificationMethodLegendDescriptions[targetClassification().method](),
     );
