@@ -147,6 +147,8 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
         legendParameters.subtitle?.text,
         legendParameters.note?.text,
         legendParameters.roundDecimals,
+        legendParameters.boxSpacing,
+        legendParameters.boxSpacingNoData,
       );
     }
   });
@@ -233,6 +235,7 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
             + (colors.length - 1) * boxHeightAndSpacing()
             + legendParameters.boxSpacingNoData
             + legendParameters.boxHeight * 1.5
+            + defaultSpacing / 3
           }
           font-size={legendParameters.labels.fontSize}
           font-family={legendParameters.labels.fontFamily}
@@ -355,6 +358,8 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
         legendParameters.subtitle?.text,
         legendParameters.note?.text,
         legendParameters.roundDecimals,
+        legendParameters.boxSpacing,
+        legendParameters.boxSpacingNoData,
       );
     }
   });
