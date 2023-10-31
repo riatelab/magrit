@@ -25,7 +25,7 @@ export default function graticuleRenderer(layerDescription: LayerDescription): J
     || layerDescription.visible
   }>
     <g
-      id={layerDescription.name}
+      id={layerDescription.id}
       class="layer graticule"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       fill="none"

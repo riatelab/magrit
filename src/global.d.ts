@@ -619,3 +619,5 @@ export type ScoredResult<T> = {
   score: number,
   item: T,
 };
+
+export type SearchResults<T> = ScoredResult<T>[];

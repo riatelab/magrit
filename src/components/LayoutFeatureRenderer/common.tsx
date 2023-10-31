@@ -1,6 +1,5 @@
 // Import from solid-js
 import { type Accessor } from 'solid-js';
-import { render } from 'solid-js/web';
 
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';

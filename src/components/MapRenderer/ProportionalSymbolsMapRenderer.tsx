@@ -51,7 +51,7 @@ export default function proportionalSymbolsRenderer(
     || layerDescription.visible
   }>
     <g
-      id={layerDescription.name}
+      id={layerDescription.id}
       class="layer proportional-symbols"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       fill-opacity={layerDescription.fillOpacity}

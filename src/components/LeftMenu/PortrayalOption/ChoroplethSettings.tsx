@@ -5,7 +5,6 @@ import {
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
-import { v4 as uuidv4 } from 'uuid';
 import { getPalette, Palette } from 'dicopal';
 import {
   quantile, equal, jenks, q6,
@@ -21,8 +20,9 @@ import { applicationSettingsStore } from '../../../store/ApplicationSettingsStor
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { noop } from '../../../helpers/classification';
 import { findSuitableName, isNumber } from '../../../helpers/common';
-import { Mmin } from '../../../helpers/math';
 import d3 from '../../../helpers/d3-custom';
+import { generateIdLayer } from '../../../helpers/layers';
+import { Mmin } from '../../../helpers/math';
 
 // Subcomponents
 import InputResultName from './InputResultName.tsx';
@@ -73,7 +73,7 @@ function onClickValidate(
 
   // Prepare the layer description for the new layer
   const newLayerDescription = {
-    id: uuidv4(),
+    id: generateIdLayer(),
     name: newName,
     data: referenceLayerDescription.data,
     type: referenceLayerDescription.type,

@@ -6,16 +6,31 @@ import {
   RepresentationType,
 } from '../global';
 
+export const generateIdLayer = () => `Layer-${uuidv4()}`;
+
+/**
+ * Whether the map already has a sphere layer.
+ *
+ * @param {LayerDescription[]} layersDescription
+ * @returns {boolean}
+ */
 export const alreadyHasSphere = (
   layersDescription: LayerDescription[],
 ): boolean => layersDescription.some((layer: LayerDescription) => layer.renderer === 'sphere');
+
+/**
+ * Whether the map already has a graticule layer.
+ *
+ * @param {LayerDescription[]} layersDescription
+ * @returns {boolean}
+ */
 export const alreadyHasGraticule = (
   layersDescription: LayerDescription[],
 ): boolean => layersDescription.some((layer: LayerDescription) => layer.renderer === 'graticule');
 
 export const makeDefaultSphere = (): LayerDescription => ({
   type: 'polygon',
-  id: uuidv4(),
+  id: generateIdLayer(),
   name: 'Sphere',
   visible: true,
   strokeColor: '#808080',
@@ -24,6 +39,7 @@ export const makeDefaultSphere = (): LayerDescription => ({
   fillColor: '#e8e8f6',
   fillOpacity: 1,
   dropShadow: false,
+  shapeRendering: 'auto',
   fields: [],
   renderer: 'sphere' as RepresentationType,
   data: { type: 'Sphere' },
@@ -31,7 +47,7 @@ export const makeDefaultSphere = (): LayerDescription => ({
 
 export const makeDefaultGraticule = (): LayerDescription => ({
   type: 'linestring',
-  id: uuidv4(),
+  id: generateIdLayer(),
   name: 'Graticule',
   visible: true,
   strokeColor: '#808080',
@@ -39,6 +55,7 @@ export const makeDefaultGraticule = (): LayerDescription => ({
   strokeOpacity: 1,
   strokeDasharray: '5 5',
   dropShadow: false,
+  shapeRendering: 'auto',
   renderer: 'graticule' as RepresentationType,
   data: {
     type: 'FeatureCollection',

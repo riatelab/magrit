@@ -10,17 +10,16 @@ import { produce } from 'solid-js/store';
 
 // Imports from other packages
 import { getPalette } from 'dicopal';
-import { v4 as uuidv4 } from 'uuid';
 
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { descendingKeyAccessor, findSuitableName, isNumber } from '../../../helpers/common';
 import {
-  computeCandidateValues,
   computeCandidateValuesForSymbolsLegend,
   coordsPointOnFeature,
   PropSizer,
 } from '../../../helpers/geo';
+import { generateIdLayer } from '../../../helpers/layers';
 import { max, min } from '../../../helpers/math';
 
 // Sub-components
@@ -116,7 +115,7 @@ function onClickValidate(
   );
 
   const newLayerDescription = {
-    id: uuidv4(),
+    id: generateIdLayer(),
     name: newLayerName,
     data: newData,
     type: 'point',

@@ -31,7 +31,7 @@ export function defaultPolygonRendererOld(
     || layerDescription.visible
   }>
     <g
-      id={layerDescription.name}
+      id={layerDescription.id}
       class="layer default"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       fill={layerDescription.fillColor}
@@ -71,7 +71,7 @@ export function defaultPolygonRenderer(
     || layerDescription.visible
   }>
     <g
-      id={layerDescription.name}
+      id={layerDescription.id}
       class="layer default"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       fill={layerDescription.fillColor}
@@ -108,7 +108,7 @@ export function defaultPointRenderer(
     || layerDescription.visible
   }>
     <g
-      id={layerDescription.name}
+      id={layerDescription.id}
       class="layer default"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       fill={layerDescription.fillColor}
@@ -142,7 +142,7 @@ export function defaultLineRenderer(
     || layerDescription.visible
   }>
     <g
-      id={layerDescription.name}
+      id={layerDescription.id}
       class="layer default"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       fill="none"
@@ -174,7 +174,7 @@ export function sphereRenderer(layerDescription: LayerDescription): JSX.Element 
   }>
     <g
       class="layer sphere"
-      id={layerDescription.name}
+      id={layerDescription.id}
       visibility={layerDescription.visible ? undefined : 'hidden'}
       fill={layerDescription.fillColor}
       fill-opacity={layerDescription.fillOpacity}

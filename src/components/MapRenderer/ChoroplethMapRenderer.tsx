@@ -56,7 +56,7 @@ export function choroplethPolygonRenderer(
     || layerDescription.visible
   }>
       <g
-      id={layerDescription.name}
+      id={layerDescription.id}
       class="layer choropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       // fill={layerDescription.fillColor}
@@ -113,7 +113,7 @@ export function choroplethPointRenderer(
     || layerDescription.visible
   }>
     <g
-      id={layerDescription.name}
+      id={layerDescription.id}
       class="layer choropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       // fill={layerDescription.fillColor}
@@ -169,7 +169,7 @@ export function choroplethLineRenderer(
     || layerDescription.visible
   }>
     <g
-      id={layerDescription.name}
+      id={layerDescription.id}
       class="layer choropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       fill="none"

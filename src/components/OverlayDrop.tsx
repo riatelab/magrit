@@ -3,7 +3,6 @@ import { For, JSX, Show } from 'solid-js';
 import { produce } from 'solid-js/store';
 
 // Import from other packages
-import { v4 as uuidv4 } from 'uuid';
 import { getPalette } from 'dicopal';
 
 // Stores
@@ -16,6 +15,7 @@ import { setGlobalStore } from '../store/GlobalStore';
 import { useI18nContext } from '../i18n/i18n-solid';
 import { isAuthorizedFile } from '../helpers/fileUpload';
 import { convertToGeoJSON, getGeometryType } from '../helpers/formatConversion';
+import { generateIdLayer } from '../helpers/layers';
 
 // Types / Interfaces / Enums
 import { type CustomFileList } from '../global';
@@ -64,7 +64,7 @@ const getDefaultRenderingParams = (geomType: string) => {
 
 function addLayer(geojson: GeoJSON.FeatureCollection, name: string) {
   const geomType = getGeometryType(geojson);
-  const layerId = uuidv4();
+  const layerId = generateIdLayer();
 
   // Add the new layer to the LayerManager by adding it
   // to the layersDescriptionStore
