@@ -294,6 +294,7 @@ function makeSettingsDefaultPolygon(
               variableName: props.rendererParameters.variable,
               series: props.data.features
                 .map((f) => f.properties[props.rendererParameters.variable]),
+              classificationMethod: props.rendererParameters.method,
               nClasses: props.rendererParameters.classes,
               colorScheme: props.rendererParameters.palette.name,
               invertColorScheme: props.rendererParameters.reversePalette,

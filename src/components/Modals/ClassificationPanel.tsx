@@ -153,12 +153,16 @@ export default function ClassificationPanel(): JSX.Element {
   const [
     classificationMethod,
     setClassificationMethod,
-  ] = createSignal<ClassificationMethod>(ClassificationMethod.quantiles);
+  ] = createSignal<ClassificationMethod>(
+    classificationPanelStore.classificationMethod || ClassificationMethod.quantiles,
+  );
   // - the number of classes chosen by the user for the current classification method
   const [
     numberOfClasses,
     setNumberOfClasses,
-  ] = createSignal<number>(Mmin(d3.thresholdSturges(filteredSeries), 9));
+  ] = createSignal<number>(
+    classificationPanelStore.nClasses || Mmin(d3.thresholdSturges(filteredSeries), 9),
+  );
   // - the amplitude chosen by the user for the
   //   current classification method (only if 'standard deviation' is chosen)
   const [
@@ -330,7 +334,10 @@ export default function ClassificationPanel(): JSX.Element {
                 id={'dropdown-classification-method'}
                 style={{ width: '220px' }}
                 entries={entriesClassificationMethod}
-                defaultEntry={entriesClassificationMethod[0]}
+                defaultEntry={
+                  entriesClassificationMethod
+                    .find((d) => d.value === classificationMethod())!
+                }
                 onChange={(value) => {
                   setClassificationMethod(value);
                   updateClassificationParameters();
