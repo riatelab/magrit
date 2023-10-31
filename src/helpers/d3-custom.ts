@@ -125,6 +125,15 @@ import {
   geoWinkel3,
 } from 'd3-geo-projection';
 import { geoClipPolygon } from 'd3-geo-polygon';
+import {
+  forceCenter,
+  forceCollide,
+  forceLink,
+  forceSimulation,
+  forceX,
+  forceY,
+} from 'd3-force';
+import { quadtree } from 'd3-quadtree';
 import type { D3ZoomEvent } from 'd3-zoom';
 import type { GeoProjection, GeoRawProjection } from 'd3-geo';
 
@@ -382,6 +391,15 @@ export default {
   thresholdFreedmanDiaconis,
   thresholdScott,
   thresholdSturges,
+  // Stuff from d3-force
+  forceCenter,
+  forceCollide,
+  forceLink,
+  forceSimulation,
+  forceX,
+  forceY,
+  // Stuff from d3-quadtree
+  quadtree,
 };
 
 export type {

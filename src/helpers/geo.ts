@@ -13,8 +13,11 @@ import {
 } from './math';
 import { ascending, descending, getNumberOfDecimals } from './common';
 
+// Stores
+import { globalStore } from '../store/GlobalStore';
+
 // Types / Interfaces / Enums
-import { type GeoJSONGeometry, ProportionalSymbolsSymbolType } from '../global.d';
+import { GeoJSONFeature, type GeoJSONGeometry, ProportionalSymbolsSymbolType } from '../global.d';
 
 export const getLargestPolygon = (geom: GeoJSONGeometry) => {
   const areas = [];
@@ -232,4 +235,103 @@ export function computeCandidateValues(
     minValue,
     ...filterValues(candidates, scaleFn, 6),
   ];
+}
+
+/**
+ *
+ *
+ * @param {GeoJSONFeature[]} features - The features to be simulated
+ * @param {number[]} sizes - The sizes of the symbols
+ * @param {string} variableName - The name of the variable used for computing the size of symbols
+ * @param {number} iterations - The number of iterations for the simulation
+ * @param {number} strokeWidth - The stroke width of the symbols
+ * @returns {GeoJSONFeature[]} - The features with the computed coordinates
+ *                               (wrt the current projection)
+ */
+export const makeDorlingSimulation = (
+  features: GeoJSONFeature[],
+  sizes: number[],
+  variableName: string,
+  iterations: number,
+  strokeWidth: number,
+) => {
+  const positions = features
+    .map((d: GeoJSONFeature, i: number) => ({
+      x: globalStore.projection(d.geometry.coordinates)[0],
+      y: globalStore.projection(d.geometry.coordinates)[1],
+      size: sizes[i],
+      padding: strokeWidth,
+    }));
+  const simulation = d3
+    .forceSimulation(positions)
+    .force(
+      'x',
+      d3.forceX((d) => d.x),
+    )
+    .force(
+      'y',
+      d3.forceY((d) => d.y),
+    )
+    .force(
+      'collide',
+      d3.forceCollide((d) => d.size + d.padding),
+    );
+
+  for (let i = 0; i < iterations; i += 1) {
+    simulation.tick();
+  }
+  return positions;
+};
+
+function squareForceCollide() {
+  let nodes;
+
+  function force(alpha) {
+    const quad = d3.quadtree(
+      nodes,
+      (d) => d._x,
+      (d) => d._y,
+    );
+    for (const d of nodes) {
+      quad.visit((q, x1, y1, x2, y2) => {
+        let updated = false;
+        if (q.data && q.data !== d) {
+          let x = d._x - q.data._x,
+            y = d._y - q.data._y;
+          const xSpacing = d._padding + (q.data._size + d._size) / 2,
+            ySpacing = d._padding + (q.data._size + d._size) / 2,
+            absX = Math.abs(x),
+            absY = Math.abs(y);
+          let l,
+            lx,
+            ly;
+
+          if (absX < xSpacing && absY < ySpacing) {
+            l = Math.sqrt(x * x + y * y);
+
+            lx = (absX - xSpacing) / l;
+            ly = (absY - ySpacing) / l;
+
+            // the one that's barely within the bounds probably triggered the collision
+            if (Math.abs(lx) > Math.abs(ly)) {
+              lx = 0;
+            } else {
+              ly = 0;
+            }
+            d._x -= x *= lx;
+            d._y -= y *= ly;
+            q.data.x += x;
+            q.data.y += y;
+
+            updated = true;
+          }
+        }
+        return updated;
+      });
+    }
+  }
+
+  force.initialize = (_) => (nodes = _);
+
+  return force;
 }
