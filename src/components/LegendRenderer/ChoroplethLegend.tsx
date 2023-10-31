@@ -120,7 +120,7 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
     return distanceToTop() + (colors.length) * boxHeightAndSpacing() + defaultSpacing * 3;
   });
 
-  let refElement: SVGElement;
+  let refElement: SVGGElement;
 
   const bindElementsLegend = () => {
     computeRectangleBox(refElement);
@@ -129,6 +129,8 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
   };
 
   onMount(() => {
+    // We need to wait for the legend to be rendered before we can compute its size
+    // and bind the drag behavior and the mouse enter / leave behavior.
     bindElementsLegend();
   });
 
@@ -149,92 +151,67 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
     }
   });
 
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || (layer.visible && layer.legend.visible)
-  }>
-    <g
-      ref={refElement}
-      class="legend choropleth"
-      transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
-      visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
-      ondblclick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
-      onContextMenu={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        triggerContextMenuLegend(e, layer.id, LL);
-      } }
-      style={{ cursor: 'grab' }}
-    >
-      { makeRectangleBox() }
-      { makeLegendText(legendParameters.title, [0, 0], 'title') }
-      { makeLegendText(legendParameters.subtitle, [0, heightTitle()], 'subtitle') }
-      {
-        makeLegendText(
-          legendParameters.note,
-          [0, positionNote()],
-          'note',
-        )
-      }
-      <g class="legend-content">
-        <For each={colors.toReversed()}>
-          {
-            (color, i) => <rect
-              fill={color}
-              x={0}
-              y={distanceToTop() + i() * boxHeightAndSpacing()}
-              rx={legendParameters.boxCornerRadius}
-              ry={legendParameters.boxCornerRadius}
-              width={legendParameters.boxWidth}
-              height={legendParameters.boxHeight}
-            />
-          }
-        </For>
-        <Show when={hasNoData()}>
-          <rect
-            fill={rendererParameters.nodataColor}
+  return <g
+    ref={refElement}
+    class="legend choropleth"
+    transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
+    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+    ondblclick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerContextMenuLegend(e, layer.id, LL);
+    } }
+    style={{ cursor: 'grab' }}
+  >
+    { makeRectangleBox() }
+    { makeLegendText(legendParameters.title, [0, 0], 'title') }
+    { makeLegendText(legendParameters.subtitle, [0, heightTitle()], 'subtitle') }
+    {
+      makeLegendText(
+        legendParameters.note,
+        [0, positionNote()],
+        'note',
+      )
+    }
+    <g class="legend-content">
+      <For each={colors.toReversed()}>
+        {
+          (color, i) => <rect
+            fill={color}
             x={0}
-            y={
-              distanceToTop()
-              + (colors.length - 1) * boxHeightAndSpacing()
-              + legendParameters.boxHeight
-              + legendParameters.boxSpacingNoData
-            }
+            y={distanceToTop() + i() * boxHeightAndSpacing()}
             rx={legendParameters.boxCornerRadius}
             ry={legendParameters.boxCornerRadius}
             width={legendParameters.boxWidth}
             height={legendParameters.boxHeight}
           />
-        </Show>
-        <For each={rendererParameters.breaks.toReversed()}>
-          {
-            (value, i) => <text
-              x={legendParameters.boxWidth + defaultSpacing}
-              y={
-                distanceToTop()
-                + i() * (legendParameters.boxHeight + legendParameters.boxSpacing)
-                - legendParameters.boxSpacing / 2
-              }
-              font-size={legendParameters.labels.fontSize}
-              font-family={legendParameters.labels.fontFamily}
-              font-color={legendParameters.labels.fontColor}
-              font-style={legendParameters.labels.fontStyle}
-              font-weight={legendParameters.labels.fontWeight}
-              fill={legendParameters.labels.fontColor}
-              style={{ 'user-select': 'none' }}
-              text-anchor="start"
-              dominant-baseline="middle"
-            >{ round(value, legendParameters.roundDecimals).toLocaleString() }</text>
+        }
+      </For>
+      <Show when={hasNoData()}>
+        <rect
+          fill={rendererParameters.nodataColor}
+          x={0}
+          y={
+            distanceToTop()
+            + (colors.length - 1) * boxHeightAndSpacing()
+            + legendParameters.boxHeight
+            + legendParameters.boxSpacingNoData
           }
-        </For>
-        <Show when={hasNoData()}>
-          <text
+          rx={legendParameters.boxCornerRadius}
+          ry={legendParameters.boxCornerRadius}
+          width={legendParameters.boxWidth}
+          height={legendParameters.boxHeight}
+        />
+      </Show>
+      <For each={rendererParameters.breaks.toReversed()}>
+        {
+          (value, i) => <text
             x={legendParameters.boxWidth + defaultSpacing}
             y={
               distanceToTop()
-              + (colors.length - 1) * boxHeightAndSpacing()
-              + legendParameters.boxSpacingNoData
-              + legendParameters.boxHeight * 1.5
+              + i() * (legendParameters.boxHeight + legendParameters.boxSpacing)
+              - legendParameters.boxSpacing / 2
             }
             font-size={legendParameters.labels.fontSize}
             font-family={legendParameters.labels.fontFamily}
@@ -245,11 +222,31 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
             style={{ 'user-select': 'none' }}
             text-anchor="start"
             dominant-baseline="middle"
-          >{ legendParameters.noDataLabel }</text>
-        </Show>
-      </g>
+          >{ round(value, legendParameters.roundDecimals).toLocaleString() }</text>
+        }
+      </For>
+      <Show when={hasNoData()}>
+        <text
+          x={legendParameters.boxWidth + defaultSpacing}
+          y={
+            distanceToTop()
+            + (colors.length - 1) * boxHeightAndSpacing()
+            + legendParameters.boxSpacingNoData
+            + legendParameters.boxHeight * 1.5
+          }
+          font-size={legendParameters.labels.fontSize}
+          font-family={legendParameters.labels.fontFamily}
+          font-color={legendParameters.labels.fontColor}
+          font-style={legendParameters.labels.fontStyle}
+          font-weight={legendParameters.labels.fontWeight}
+          fill={legendParameters.labels.fontColor}
+          style={{ 'user-select': 'none' }}
+          text-anchor="start"
+          dominant-baseline="middle"
+        >{ legendParameters.noDataLabel }</text>
+      </Show>
     </g>
-  </Show>;
+  </g>;
 }
 
 function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
@@ -331,7 +328,7 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
     (feature) => !isNumber(feature.properties[rendererParameters.variable]),
   ).length > 0);
 
-  let refElement: SVGElement;
+  let refElement: SVGGElement;
 
   const bindElementsLegend = () => {
     computeRectangleBox(refElement);
@@ -340,6 +337,8 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
   };
 
   onMount(() => {
+    // We need to wait for the legend to be rendered before we can compute its size
+    // and bind the drag behavior and the mouse enter / leave behavior.
     bindElementsLegend();
   });
 
@@ -360,82 +359,58 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
     }
   });
 
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || (layer.visible && legendParameters.visible)
-  }>
-    <g
-      ref={refElement}
-      class="legend choropleth"
-      transform={`translate(${legendParameters.position[0]}, ${legendParameters.position[1]})`}
-      visibility={layer.visible && legendParameters.visible ? undefined : 'hidden'}
-      onContextMenu={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        triggerContextMenuLegend(e, layer.id, LL);
-      } }
-      ondblclick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
-      style={{ cursor: 'grab' }}
-    >
-      { makeRectangleBox() }
-      { makeLegendText(legendParameters.title, [0, 0], 'title') }
-      { makeLegendText(legendParameters.subtitle, [0, heightTitle()], 'subtitle') }
-      { makeLegendText(legendParameters.note, [0, distanceNoteToTop()], 'note') }
-      <g class="legend-content">
-        <For each={colors}>
-          {
-            (color, i) => <rect
-              fill={color}
-              x={i() * (legendParameters.boxWidth + legendParameters.boxSpacing)}
-              y={distanceBoxesToTop()}
-              rx={legendParameters.boxCornerRadius}
-              ry={legendParameters.boxCornerRadius}
-              width={legendParameters.boxWidth}
-              height={legendParameters.boxHeight}
-            />
-          }
-        </For>
-        <Show when={hasNoData()}>
-          <rect
-            fill={rendererParameters.nodataColor}
-            x={
-              colors.length * (legendParameters.boxWidth + legendParameters.boxSpacing)
-              - legendParameters.boxSpacing
-              + legendParameters.boxSpacingNoData
-            }
+  return <g
+    ref={refElement}
+    class="legend choropleth"
+    transform={`translate(${legendParameters.position[0]}, ${legendParameters.position[1]})`}
+    visibility={layer.visible && legendParameters.visible ? undefined : 'hidden'}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerContextMenuLegend(e, layer.id, LL);
+    } }
+    ondblclick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    style={{ cursor: 'grab' }}
+  >
+    { makeRectangleBox() }
+    { makeLegendText(legendParameters.title, [0, 0], 'title') }
+    { makeLegendText(legendParameters.subtitle, [0, heightTitle()], 'subtitle') }
+    { makeLegendText(legendParameters.note, [0, distanceNoteToTop()], 'note') }
+    <g class="legend-content">
+      <For each={colors}>
+        {
+          (color, i) => <rect
+            fill={color}
+            x={i() * (legendParameters.boxWidth + legendParameters.boxSpacing)}
             y={distanceBoxesToTop()}
             rx={legendParameters.boxCornerRadius}
             ry={legendParameters.boxCornerRadius}
             width={legendParameters.boxWidth}
             height={legendParameters.boxHeight}
           />
-        </Show>
-        <For each={rendererParameters.breaks}>
-          {
-            (value, i) => <text
-              x={
-                (i() * (legendParameters.boxWidth + legendParameters.boxSpacing))
-                - legendParameters.boxSpacing / 2
-              }
-              y={distanceLabelsToTop()}
-              font-size={legendParameters.labels.fontSize}
-              font-family={legendParameters.labels.fontFamily}
-              font-color={legendParameters.labels.fontColor}
-              font-style={legendParameters.labels.fontStyle}
-              font-weight={legendParameters.labels.fontWeight}
-              fill={legendParameters.labels.fontColor}
-              style={{ 'user-select': 'none' }}
-              text-anchor="middle"
-              dominant-baseline="hanging"
-            >{ round(value, legendParameters.roundDecimals).toLocaleString() }</text>
+        }
+      </For>
+      <Show when={hasNoData()}>
+        <rect
+          fill={rendererParameters.nodataColor}
+          x={
+            colors.length * (legendParameters.boxWidth + legendParameters.boxSpacing)
+            - legendParameters.boxSpacing
+            + legendParameters.boxSpacingNoData
           }
-        </For>
-        <Show when={hasNoData()}>
-          <text
+          y={distanceBoxesToTop()}
+          rx={legendParameters.boxCornerRadius}
+          ry={legendParameters.boxCornerRadius}
+          width={legendParameters.boxWidth}
+          height={legendParameters.boxHeight}
+        />
+      </Show>
+      <For each={rendererParameters.breaks}>
+        {
+          (value, i) => <text
             x={
-              colors.length * (legendParameters.boxWidth + legendParameters.boxSpacing)
-              + legendParameters.boxSpacingNoData
-              + legendParameters.boxWidth / 3
+              (i() * (legendParameters.boxWidth + legendParameters.boxSpacing))
+              - legendParameters.boxSpacing / 2
             }
             y={distanceLabelsToTop()}
             font-size={legendParameters.labels.fontSize}
@@ -447,20 +422,42 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
             style={{ 'user-select': 'none' }}
             text-anchor="middle"
             dominant-baseline="hanging"
-          >{ legendParameters.noDataLabel }</text>
-        </Show>
-      </g>
+          >{ round(value, legendParameters.roundDecimals).toLocaleString() }</text>
+        }
+      </For>
+      <Show when={hasNoData()}>
+        <text
+          x={
+            colors.length * (legendParameters.boxWidth + legendParameters.boxSpacing)
+            + legendParameters.boxSpacingNoData
+            + legendParameters.boxWidth / 3
+          }
+          y={distanceLabelsToTop()}
+          font-size={legendParameters.labels.fontSize}
+          font-family={legendParameters.labels.fontFamily}
+          font-color={legendParameters.labels.fontColor}
+          font-style={legendParameters.labels.fontStyle}
+          font-weight={legendParameters.labels.fontWeight}
+          fill={legendParameters.labels.fontColor}
+          style={{ 'user-select': 'none' }}
+          text-anchor="middle"
+          dominant-baseline="hanging"
+        >{ legendParameters.noDataLabel }</text>
+      </Show>
     </g>
-  </Show>;
+  </g>;
 }
 
 export default function legendChoropleth(layer: LayerDescription): JSX.Element {
-  return <>
+  return <Show when={
+    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
+    || (layer.visible && layer.legend!.visible)
+  }>
     {
       ({
         [Orientation.vertical]: choroplethVerticalLegend,
         [Orientation.horizontal]: choroplethHorizontalLegend,
       })[(layer.legend as ChoroplethLegendParameters).orientation](layer)
     }
-  </>;
+  </Show>;
 }

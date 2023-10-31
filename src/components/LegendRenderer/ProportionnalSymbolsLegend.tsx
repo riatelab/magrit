@@ -95,70 +95,65 @@ function proportionalSymbolsStackedLegend(layer: LayerDescription): JSX.Element 
     }
   });
 
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || (layer.visible && layer.legend.visible)
-  }>
-    <g
-      ref={refElement}
-      class="legend proportionalSymbols"
-      transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
-      visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
-      onContextMenu={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        triggerContextMenuLegend(e, layer.id, LL);
-      }}
-      onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
-      style={{ cursor: 'grab' }}
-    >
-      { makeRectangleBox() }
-      { makeLegendText(layer.legend.title, [0, 0], 'title') }
-      { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
-      { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
-      <g class="legend-content">
-        <For each={layer.legend.values}>
-          {
-            (value) => {
-              const symbolSize = propSize.scale(value);
-              return <>
-                <circle
-                  fill="transparent"
-                  stroke="black"
-                  stroke-width={1}
-                  r={symbolSize}
-                  cx={maxRadius()}
-                  cy={ heightTitleSubtitle() - symbolSize + maxRadius() * 2 }
-                ></circle>
-                <text
-                  font-size={layer.legend.labels.fontSize}
-                  font-family={layer.legend.labels.fontFamily}
-                  font-color={layer.legend.labels.fontColor}
-                  font-style={layer.legend.labels.fontStyle}
-                  font-weight={layer.legend.labels.fontWeight}
-                  fill={layer.legend.labels.fontColor}
-                  text-anchor="start"
-                  dominant-baseline="middle"
-                  style={{ 'user-select': 'none' }}
-                  x={maxRadius() * 2 + defaultSpacing}
-                  y={ heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2 }
-                >{ round(value, layer.legend!.roundDecimals) }</text>
-                <line
-                  stroke-width={0.8}
-                  stroke-dasharray="2"
-                  stroke="black"
-                  x1={maxRadius()}
-                  y1={ heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2 }
-                  x2={maxRadius() * 2 + defaultSpacing}
-                  y2={ heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2 }
-                ></line>
-              </>;
-            }
+  return <g
+    ref={refElement}
+    class="legend proportionalSymbols"
+    transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
+    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerContextMenuLegend(e, layer.id, LL);
+    }}
+    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    style={{ cursor: 'grab' }}
+  >
+    { makeRectangleBox() }
+    { makeLegendText(layer.legend.title, [0, 0], 'title') }
+    { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
+    { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
+    <g class="legend-content">
+      <For each={layer.legend.values}>
+        {
+          (value) => {
+            const symbolSize = propSize.scale(value);
+            return <>
+              <circle
+                fill="transparent"
+                stroke="black"
+                stroke-width={1}
+                r={symbolSize}
+                cx={maxRadius()}
+                cy={ heightTitleSubtitle() - symbolSize + maxRadius() * 2 }
+              ></circle>
+              <text
+                font-size={layer.legend.labels.fontSize}
+                font-family={layer.legend.labels.fontFamily}
+                font-color={layer.legend.labels.fontColor}
+                font-style={layer.legend.labels.fontStyle}
+                font-weight={layer.legend.labels.fontWeight}
+                fill={layer.legend.labels.fontColor}
+                text-anchor="start"
+                dominant-baseline="middle"
+                style={{ 'user-select': 'none' }}
+                x={maxRadius() * 2 + defaultSpacing}
+                y={ heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2 }
+              >{ round(value, layer.legend!.roundDecimals) }</text>
+              <line
+                stroke-width={0.8}
+                stroke-dasharray="2"
+                stroke="black"
+                x1={maxRadius()}
+                y1={ heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2 }
+                x2={maxRadius() * 2 + defaultSpacing}
+                y2={ heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2 }
+              ></line>
+            </>;
           }
-        </For>
-      </g>
+        }
+      </For>
     </g>
-  </Show>;
+  </g>;
 }
 
 function proportionalSymbolsVerticalLegend(layer: LayerDescription): JSX.Element {
@@ -208,64 +203,59 @@ function proportionalSymbolsVerticalLegend(layer: LayerDescription): JSX.Element
 
   let lastPosition = heightTitleSubtitle();
   let lastSize = 0;
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || (layer.visible && layer.legend.visible)
-  }>
-    <g
-      ref={refElement}
-      class="legend proportionalSymbols"
-      transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
-      visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
-      onContextMenu={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        triggerContextMenuLegend(e, layer.id, LL);
-      }}
-      onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
-    >
-      { makeRectangleBox() }
-      { makeLegendText(layer.legend.title, [0, 0], 'title') }
-      { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
-      <g class="legend-content">
-        <For each={layer.legend.values.toReversed()}>
-          {
-            (value) => {
-              const symbolSize = propSize.scale(value);
-              const cy = symbolSize + lastSize + lastPosition + defaultSpacing * 2;
-              lastPosition = cy;
-              lastSize = symbolSize;
+  return <g
+    ref={refElement}
+    class="legend proportionalSymbols"
+    transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
+    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerContextMenuLegend(e, layer.id, LL);
+    }}
+    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+  >
+    { makeRectangleBox() }
+    { makeLegendText(layer.legend.title, [0, 0], 'title') }
+    { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
+    <g class="legend-content">
+      <For each={layer.legend.values.toReversed()}>
+        {
+          (value) => {
+            const symbolSize = propSize.scale(value);
+            const cy = symbolSize + lastSize + lastPosition + defaultSpacing * 2;
+            lastPosition = cy;
+            lastSize = symbolSize;
 
-              return <>
-                <circle
-                  fill="transparent"
-                  stroke="black"
-                  stroke-width={1}
-                  r={symbolSize}
-                  cx={maxRadius()}
-                  cy={ cy }
-                ></circle>
-                <text
-                  font-size={layer.legend.labels.fontSize}
-                  font-family={layer.legend.labels.fontFamily}
-                  font-color={layer.legend.labels.fontColor}
-                  font-style={layer.legend.labels.fontStyle}
-                  font-weight={layer.legend.labels.fontWeight}
-                  fill={layer.legend.labels.fontColor}
-                  text-anchor="start"
-                  dominant-baseline="middle"
-                  style={{ 'user-select': 'none' }}
-                  x={maxRadius() * 2 + defaultSpacing}
-                  y={ cy }
-                >{ round(value, layer.legend!.roundDecimals).toLocaleString() }</text>
-              </>;
-            }
+            return <>
+              <circle
+                fill="transparent"
+                stroke="black"
+                stroke-width={1}
+                r={symbolSize}
+                cx={maxRadius()}
+                cy={ cy }
+              ></circle>
+              <text
+                font-size={layer.legend.labels.fontSize}
+                font-family={layer.legend.labels.fontFamily}
+                font-color={layer.legend.labels.fontColor}
+                font-style={layer.legend.labels.fontStyle}
+                font-weight={layer.legend.labels.fontWeight}
+                fill={layer.legend.labels.fontColor}
+                text-anchor="start"
+                dominant-baseline="middle"
+                style={{ 'user-select': 'none' }}
+                x={maxRadius() * 2 + defaultSpacing}
+                y={ cy }
+              >{ round(value, layer.legend!.roundDecimals).toLocaleString() }</text>
+            </>;
           }
-        </For>
-      </g>
-      { makeLegendText(layer.legend.note, [0, lastPosition + defaultSpacing + sizeNote()], 'note') }
+        }
+      </For>
     </g>
-  </Show>;
+    { makeLegendText(layer.legend.note, [0, lastPosition + defaultSpacing + sizeNote()], 'note') }
+  </g>;
 }
 
 function proportionalSymbolsHorizontalLegend(layer: LayerDescription): JSX.Element {
@@ -318,73 +308,71 @@ function proportionalSymbolsHorizontalLegend(layer: LayerDescription): JSX.Eleme
   });
 
   let lastSize = 0;
+  return <g
+    ref={refElement}
+    class="legend proportionalSymbols"
+    transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
+    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerContextMenuLegend(e, layer.id, LL);
+    }}
+    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+  >
+    { makeRectangleBox() }
+    { makeLegendText(layer.legend.title, [0, 0], 'title') }
+    { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
+    <g class="legend-content">
+      <For each={layer.legend.values.toReversed()}>
+        {
+          (value) => {
+            const symbolSize = propSize.scale(value);
+            const cx = maxRadius() + lastSize * 2;
+            lastSize += symbolSize;
+
+            return <>
+              <circle
+                fill="transparent"
+                stroke="black"
+                stroke-width={1}
+                r={symbolSize}
+                cx={ cx }
+                cy={ maxRadius() + heightTitleSubtitle() + (maxRadius() - symbolSize)}
+              ></circle>
+              <text
+                font-size={layer.legend.labels.fontSize}
+                font-family={layer.legend.labels.fontFamily}
+                font-color={layer.legend.labels.fontColor}
+                font-style={layer.legend.labels.fontStyle}
+                font-weight={layer.legend.labels.fontWeight}
+                fill={layer.legend.labels.fontColor}
+                text-anchor="middle"
+                dominant-baseline="middle"
+                style={{ 'user-select': 'none' }}
+                x={ cx }
+                y={ maxRadius() * 2 + heightTitleSubtitle() + defaultSpacing * 2}
+              >{ round(value, layer.legend!.roundDecimals) }</text>
+            </>;
+          }
+        }
+      </For>
+    </g>
+    {
+      makeLegendText(
+        layer.legend.note,
+        [0, maxRadius() * 2 + heightTitleSubtitle() + defaultSpacing * 2 + sizeNote()],
+        'note',
+      )
+    }
+  </g>;
+}
+
+export default function legendProportionalSymbols(layer: LayerDescription): JSX.Element {
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
     || (layer.visible && layer.legend.visible)
   }>
-    <g
-      ref={refElement}
-      class="legend proportionalSymbols"
-      transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
-      visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
-      onContextMenu={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        triggerContextMenuLegend(e, layer.id, LL);
-      }}
-      onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
-    >
-      { makeRectangleBox() }
-      { makeLegendText(layer.legend.title, [0, 0], 'title') }
-      { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
-      <g class="legend-content">
-        <For each={layer.legend.values.toReversed()}>
-          {
-            (value) => {
-              const symbolSize = propSize.scale(value);
-              const cx = maxRadius() + lastSize * 2;
-              lastSize += symbolSize;
-
-              return <>
-                <circle
-                  fill="transparent"
-                  stroke="black"
-                  stroke-width={1}
-                  r={symbolSize}
-                  cx={ cx }
-                  cy={ maxRadius() + heightTitleSubtitle() + (maxRadius() - symbolSize)}
-                ></circle>
-                <text
-                  font-size={layer.legend.labels.fontSize}
-                  font-family={layer.legend.labels.fontFamily}
-                  font-color={layer.legend.labels.fontColor}
-                  font-style={layer.legend.labels.fontStyle}
-                  font-weight={layer.legend.labels.fontWeight}
-                  fill={layer.legend.labels.fontColor}
-                  text-anchor="middle"
-                  alignment-baseline="middle"
-                  style={{ 'user-select': 'none' }}
-                  x={ cx }
-                  y={ maxRadius() * 2 + heightTitleSubtitle() + defaultSpacing * 2}
-                >{ round(value, layer.legend!.roundDecimals) }</text>
-              </>;
-            }
-          }
-        </For>
-      </g>
-      {
-        makeLegendText(
-          layer.legend.note,
-          [0, maxRadius() * 2 + heightTitleSubtitle() + defaultSpacing * 2 + sizeNote()],
-          'note',
-        )
-      }
-    </g>
-  </Show>;
-}
-
-export default function legendProportionalSymbols(layer: LayerDescription): JSX.Element {
-  return <>
     {
       ({
         stacked: proportionalSymbolsStackedLegend,
@@ -392,5 +380,5 @@ export default function legendProportionalSymbols(layer: LayerDescription): JSX.
         horizontal: proportionalSymbolsHorizontalLegend,
       })[layer.legend.layout](layer)
     }
-  </>;
+  </Show>;
 }
