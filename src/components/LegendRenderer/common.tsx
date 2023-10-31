@@ -36,12 +36,12 @@ export function makeLegendText(
       font-family={props.fontFamily}
       fill={props.fontColor}
       pointer-events={'none'}
+      dominant-baseline="hanging"
     >
       <For each={props.text!.split('\\n')}>
         {(line, i) => <tspan
           x={position[0]}
           y={position[1] + i() * fontSize() * 1.1}
-          alignment-baseline="hanging"
         >
           { line }
         </tspan>}
