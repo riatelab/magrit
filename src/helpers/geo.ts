@@ -7,11 +7,17 @@ import * as polylabel from 'polylabel';
 // Helpers
 import d3 from './d3-custom';
 import {
+  Mabs,
   max,
   Mfloor,
   Mlog10, Mmax, Mpow, Msqrt, round,
 } from './math';
-import { ascending, descending, getNumberOfDecimals } from './common';
+import {
+  ascending,
+  descending,
+  getNumberOfDecimals,
+  isNumber,
+} from './common';
 
 // Stores
 import { globalStore } from '../store/GlobalStore';
@@ -90,30 +96,38 @@ export const coordsPointOnFeature = (geom: GeoJSONGeometry) => {
   return null;
 };
 
-/* eslint-disable no-mixed-operators */
-export const PropSizer = function PropSizer(
-  this: any,
-  fixedValue: number,
-  fixedSize: number,
-  symbolType: ProportionalSymbolsSymbolType,
-) {
-  this.fixedValue = fixedValue;
-  const { sqrt, abs } = Math;
-  if (symbolType === ProportionalSymbolsSymbolType.circle) {
-    const { PI } = Math;
-    this.smax = fixedSize * fixedSize * PI;
-    this.scale = (val: number) => sqrt(abs(val) * this.smax / this.fixedValue) / PI;
-    this.getValue = (size: number) => ((size * PI) ** 2) / this.smax * this.fixedValue;
-  } else if (symbolType === ProportionalSymbolsSymbolType.line) {
-    this.smax = fixedSize;
-    this.scale = (val: number) => abs(val) * this.smax / this.fixedValue;
-    this.getValue = (size: number) => size / this.smax * this.fixedValue;
-  } else { // symbolType === ProportionalSymbolsSymbolType.square
-    this.smax = fixedSize * fixedSize;
-    this.scale = (val: number) => sqrt(abs(val) * this.smax / this.fixedValue);
-    this.getValue = (size: number) => (size ** 2) / this.smax * this.fixedValue;
+export class PropSizer {
+  private fixedValue: number;
+
+  private fixedSize: number;
+
+  private smax: number;
+
+  public scale: (val: number) => number;
+
+  public getValue: (size: number) => number;
+
+  constructor(fixedValue: number, fixedSize: number, symbolType: ProportionalSymbolsSymbolType) {
+    this.fixedValue = fixedValue;
+    this.fixedSize = fixedSize;
+    /* eslint-disable no-mixed-operators */
+    if (symbolType === ProportionalSymbolsSymbolType.circle) {
+      const { PI } = Math;
+      this.smax = fixedSize * fixedSize * PI;
+      this.scale = (val: number) => Msqrt(Mabs(val) * this.smax / this.fixedValue) / PI;
+      this.getValue = (size: number) => ((size * PI) ** 2) / this.smax * this.fixedValue;
+    } else if (symbolType === ProportionalSymbolsSymbolType.line) {
+      this.smax = fixedSize;
+      this.scale = (val: number) => Mabs(val) * this.smax / this.fixedValue;
+      this.getValue = (size: number) => size / this.smax * this.fixedValue;
+    } else { // symbolType === ProportionalSymbolsSymbolType.square
+      this.smax = fixedSize * fixedSize;
+      this.scale = (val: number) => Msqrt(Mabs(val) * this.smax / this.fixedValue);
+      this.getValue = (size: number) => (size ** 2) / this.smax * this.fixedValue;
+    }
+    /* eslint-enable no-mixed-operators */
   }
-}; /* eslint-enable no-mixed-operators */
+}
 
 export const computeCandidateValuesForSymbolsLegend = (
   minValue: number,
@@ -241,8 +255,9 @@ export function computeCandidateValues(
  *
  *
  * @param {GeoJSONFeature[]} features - The features to be simulated
- * @param {number[]} sizes - The sizes of the symbols
  * @param {string} variableName - The name of the variable used for computing the size of symbols
+ * @param {{ referenceValue: number, referenceSize: number }} proportionProperty - Which size
+ *                                                                                 on which value
  * @param {number} iterations - The number of iterations for the simulation
  * @param {number} strokeWidth - The stroke width of the symbols
  * @returns {GeoJSONFeature[]} - The features with the computed coordinates
@@ -250,18 +265,34 @@ export function computeCandidateValues(
  */
 export const makeDorlingSimulation = (
   features: GeoJSONFeature[],
-  sizes: number[],
   variableName: string,
+  proportionProperty: { referenceValue: number, referenceSize: number },
   iterations: number,
   strokeWidth: number,
 ) => {
+  // Util to compute the size of circles, given the
+  // reference value and size set by the user
+  const propSizer = new PropSizer(
+    proportionProperty.referenceValue,
+    proportionProperty.referenceSize,
+    ProportionalSymbolsSymbolType.circle,
+  );
+
+  // Extract positions (in projected coordinates) and sizes
+  // for the simulation
   const positions = features
     .map((d: GeoJSONFeature, i: number) => ({
-      x: globalStore.projection(d.geometry.coordinates)[0],
-      y: globalStore.projection(d.geometry.coordinates)[1],
-      size: sizes[i],
-      padding: strokeWidth,
-    }));
+      x: globalStore.projection(d.geometry.originalCoordinates)[0],
+      y: globalStore.projection(d.geometry.originalCoordinates)[1],
+      size: isNumber(d.properties[variableName])
+        ? propSizer.scale(d.properties[variableName])
+        : null,
+      padding: strokeWidth / 2,
+      index: i,
+    }))
+    .filter((d) => d.size !== null);
+
+  // The simulation parameters
   const simulation = d3
     .forceSimulation(positions)
     .force(
@@ -274,64 +305,74 @@ export const makeDorlingSimulation = (
     )
     .force(
       'collide',
-      d3.forceCollide((d) => d.size + d.padding),
+      d3.forceCollide((d) => d.size! + d.padding),
     );
 
+  // Run the simulation 'iterations' times
   for (let i = 0; i < iterations; i += 1) {
     simulation.tick();
   }
-  return positions;
+
+  // Modify the input features with the computed coordinates
+  positions.forEach((d) => {
+    // eslint-disable-next-line no-param-reassign
+    features[d.index].geometry.coordinates = globalStore.projection.invert([d.x, d.y]);
+    // eslint-disable-next-line no-param-reassign
+    features[d.index].properties.size = d.size;
+  });
+
+  return features;
 };
 
-function squareForceCollide() {
-  let nodes;
-
-  function force(alpha) {
-    const quad = d3.quadtree(
-      nodes,
-      (d) => d._x,
-      (d) => d._y,
-    );
-    for (const d of nodes) {
-      quad.visit((q, x1, y1, x2, y2) => {
-        let updated = false;
-        if (q.data && q.data !== d) {
-          let x = d._x - q.data._x,
-            y = d._y - q.data._y;
-          const xSpacing = d._padding + (q.data._size + d._size) / 2,
-            ySpacing = d._padding + (q.data._size + d._size) / 2,
-            absX = Math.abs(x),
-            absY = Math.abs(y);
-          let l,
-            lx,
-            ly;
-
-          if (absX < xSpacing && absY < ySpacing) {
-            l = Math.sqrt(x * x + y * y);
-
-            lx = (absX - xSpacing) / l;
-            ly = (absY - ySpacing) / l;
-
-            // the one that's barely within the bounds probably triggered the collision
-            if (Math.abs(lx) > Math.abs(ly)) {
-              lx = 0;
-            } else {
-              ly = 0;
-            }
-            d._x -= x *= lx;
-            d._y -= y *= ly;
-            q.data.x += x;
-            q.data.y += y;
-
-            updated = true;
-          }
-        }
-        return updated;
-      });
-    }
-  }
-
-  force.initialize = (_) => (nodes = _);
-
-  return force;
-}
+// function squareForceCollide() {
+//   let nodes;
+//
+//   function force(alpha) {
+//     const quad = d3.quadtree(
+//       nodes,
+//       (d) => d._x,
+//       (d) => d._y,
+//     );
+//     for (const d of nodes) {
+//       quad.visit((q, x1, y1, x2, y2) => {
+//         let updated = false;
+//         if (q.data && q.data !== d) {
+//           let x = d._x - q.data._x,
+//             y = d._y - q.data._y;
+//           const xSpacing = d._padding + (q.data._size + d._size) / 2,
+//             ySpacing = d._padding + (q.data._size + d._size) / 2,
+//             absX = Math.abs(x),
+//             absY = Math.abs(y);
+//           let l,
+//             lx,
+//             ly;
+//
+//           if (absX < xSpacing && absY < ySpacing) {
+//             l = Math.sqrt(x * x + y * y);
+//
+//             lx = (absX - xSpacing) / l;
+//             ly = (absY - ySpacing) / l;
+//
+//             // the one that's barely within the bounds probably triggered the collision
+//             if (Math.abs(lx) > Math.abs(ly)) {
+//               lx = 0;
+//             } else {
+//               ly = 0;
+//             }
+//             d._x -= x *= lx;
+//             d._y -= y *= ly;
+//             q.data.x += x;
+//             q.data.y += y;
+//
+//             updated = true;
+//           }
+//         }
+//         return updated;
+//       });
+//     }
+//   }
+//
+//   force.initialize = (_) => (nodes = _);
+//
+//   return force;
+// }

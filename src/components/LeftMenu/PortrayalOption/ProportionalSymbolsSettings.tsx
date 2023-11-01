@@ -17,6 +17,7 @@ import { descendingKeyAccessor, findSuitableName, isNumber } from '../../../help
 import {
   computeCandidateValuesForSymbolsLegend,
   coordsPointOnFeature,
+  makeDorlingSimulation,
   PropSizer,
 } from '../../../helpers/geo';
 import { generateIdLayer } from '../../../helpers/layers';
@@ -56,6 +57,7 @@ function onClickValidate(
   modeColor: ProportionalSymbolsColorMode,
   symbolType: ProportionalSymbolsSymbolType,
   extent: [number, number],
+  avoidOverlapping: boolean,
 ) {
   // The layer description of the reference layer
   const referenceLayerDescription = layersDescriptionStore.layers
@@ -72,7 +74,7 @@ function onClickValidate(
     symbolType,
     referenceRadius: refSymbolSize,
     referenceValue: refValueForSymbolSize,
-    avoidOverlapping: false,
+    avoidOverlapping,
   } as ProportionalSymbolsParameters;
 
   // Copy dataset
@@ -90,6 +92,27 @@ function onClickValidate(
         coordinates: coordsPointOnFeature(feature.geometry),
       };
     });
+  }
+
+  if (avoidOverlapping) {
+    // Store the original position of the features (we will need it
+    // later to recompute the new position if the user changes the
+    // settings of proportional symbols or zoom in/out)
+    newData.features.forEach((feature) => {
+      // eslint-disable-next-line no-param-reassign
+      feature.geometry.originalCoordinates = feature.geometry.coordinates;
+    });
+    // Compute the new position if we want to avoid overlapping
+    newData.features = makeDorlingSimulation(
+      newData.features,
+      propSymbolsParameters.variable,
+      {
+        referenceValue: propSymbolsParameters.referenceValue,
+        referenceSize: propSymbolsParameters.referenceRadius,
+      },
+      100,
+      1,
+    );
   }
 
   // Sort the features by descending value of the target variable
@@ -251,6 +274,10 @@ export default function ProportionalSymbolsSettings(
     colorOrColors,
     setColorOrColors,
   ] = createSignal<string | [string, string]>('#fefefe');
+  const [
+    avoidOverlapping,
+    setAvoidOverlapping,
+  ] = createSignal<boolean>(false);
 
   // We need to update the value of refValueForSymbolSize when
   // the targetVariable changes (which changes the max value)
@@ -273,6 +300,7 @@ export default function ProportionalSymbolsSettings(
       modeColor(),
       symbolType(),
       [minValues(), maxValues()],
+      avoidOverlapping(),
     );
   };
 
@@ -317,8 +345,8 @@ export default function ProportionalSymbolsSettings(
     />
     <InputFieldCheckbox
       label={ LL().PortrayalSection.ProportionalSymbolsOptions.AvoidOverlapping() }
-      checked={ false }
-      onChange={() => {}} // TODO
+      checked={ avoidOverlapping() }
+      onChange={() => { setAvoidOverlapping(!avoidOverlapping()); }}
     />
     <InputResultName
       onKeyUp={ (value) => { setNewLayerName(value); }}

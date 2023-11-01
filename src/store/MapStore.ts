@@ -1,20 +1,28 @@
 // Imports from solid-js
-import { createEffect, on } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { createEffect, createMemo, on } from 'solid-js';
+import { createStore, produce } from 'solid-js/store';
 
 // Helpers
 import { unproxify } from '../helpers/common';
 import d3 from '../helpers/d3-custom';
+import { makeDorlingSimulation } from '../helpers/geo';
 import { getD3ProjectionFromProj4, getProjection } from '../helpers/projection';
 import { getTargetSvg, redrawPaths } from '../helpers/svg';
 
 // Stores
 import { debouncedPushUndoStack, resetRedoStackStore } from './stateStackStore';
 import { globalStore, setGlobalStore } from './GlobalStore';
+import {
+  layersDescriptionStore,
+  LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from './LayersDescriptionStore';
 import { applicationSettingsStore } from './ApplicationSettingsStore';
 
 // Types
-import type { IZoomable, ProjectionDefinition } from '../global';
+import type {
+  IZoomable, LayerDescription, ProjectionDefinition, ProportionalSymbolsParameters,
+} from '../global';
 
 export type MapStoreType = {
   projection: ProjectionDefinition,
@@ -54,6 +62,7 @@ const getDefaultClipExtent = () => (
       [mapStore.mapDimensions.width + 100, mapStore.mapDimensions.height + 100],
     ] : null
 );
+
 /**
  * This is a wrapper around the setMapStoreBase function.
  * The wrapper is used to push the current state to the undo stack
@@ -71,26 +80,58 @@ const setMapStore = (...args: any[]) => {
 // We want to redraw path automatically when the mapStore is updated
 // So we listen here to the mapStore scale, translate and rotate properties
 // and update the projection accordingly, then redraw the paths
-createEffect(() => {
-  console.log('MapStore.ts: createEffect: mapStore.scale, mapStore.translate, mapStore.rotate');
-  if (
-    !globalStore.projection
-  ) {
-    return;
-  }
-  // Update projection
-  globalStore.projection
-    .scale(mapStore.scale)
-    .translate(mapStore.translate)
-    .rotate(mapStore.rotate);
+createEffect(
+  on(
+    () => [mapStore.scale, mapStore.translate, mapStore.rotate],
+    () => {
+      console.log('MapStore.ts: createEffect: mapStore.scale, mapStore.translate, mapStore.rotate');
+      if (
+        !globalStore.projection
+      ) {
+        return;
+      }
+      // Update projection
+      globalStore.projection
+        .scale(mapStore.scale)
+        .translate(mapStore.translate)
+        .rotate(mapStore.rotate);
 
-  const targetSvg = document.querySelector('svg.map-zone__map');
-  if (!targetSvg) {
-    return;
-  }
+      // Recompute position for proportional symbols layers with the avoidOverlapping option
+      setLayersDescriptionStore(
+        produce(
+          (draft: LayersDescriptionStoreType) => {
+            draft.layers
+              .filter((l) => l.rendererParameters && l.rendererParameters.avoidOverlapping === true)
+              .forEach((l) => {
+                const layerDescription = (
+                  l as LayerDescription & { rendererParameters: ProportionalSymbolsParameters });
+                if (layerDescription.rendererParameters.avoidOverlapping) {
+                  const newFeatures = makeDorlingSimulation(
+                    unproxify(layerDescription.data.features),
+                    layerDescription.rendererParameters.variable,
+                    {
+                      referenceSize: layerDescription.rendererParameters.referenceRadius,
+                      referenceValue: layerDescription.rendererParameters.referenceValue,
+                    },
+                    100,
+                    +layerDescription.strokeWidth.replace('px', ''),
+                  );
+                  layerDescription.data.features = newFeatures;
+                }
+              });
+          },
+        ),
+      );
 
-  redrawPaths(targetSvg as SVGSVGElement & IZoomable);
-});
+      const targetSvg = document.querySelector('svg.map-zone__map');
+      if (!targetSvg) {
+        return;
+      }
+
+      redrawPaths(targetSvg as SVGSVGElement & IZoomable);
+    },
+  ),
+);
 
 // We want to update the projection and pathGenerator when the mapStore is updated
 // So we listen here to the mapStore projection property and update the projection accordingly

@@ -14,7 +14,7 @@ import {
 } from '../global.d';
 import { debouncedPushUndoStack, resetRedoStackStore } from './stateStackStore';
 
-type LayersDescriptionStoreType = {
+export type LayersDescriptionStoreType = {
   layers: LayerDescription[],
   layoutFeatures: LayoutFeature[],
 };
