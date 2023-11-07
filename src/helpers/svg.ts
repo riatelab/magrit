@@ -1,10 +1,6 @@
-import { produce } from 'solid-js/store';
-import { unproxify } from './common';
 import d3 from './d3-custom';
-import { makeDorlingSimulation } from './geo';
 import { globalStore } from '../store/GlobalStore';
-import { layersDescriptionStore, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
-import { IZoomable, LayerDescription, ProportionalSymbolsParameters } from '../global';
+import { IZoomable } from '../global';
 
 /**
  * Get the SVG map element.
@@ -34,12 +30,11 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
 
   // For each layer...
   svgElement.querySelectorAll('g.layer').forEach((g) => {
-    const layerId = g.getAttribute('id')!;
     const type = Array.from(g.classList).filter((d) => d !== 'layer')[0];
     // Remove the transform attribute from the elements on which it was defined
     g.removeAttribute('transform');
     // Redraw the paths
-    if (['default', 'graticule', 'sphere'].includes(type)) {
+    if (['default', 'graticule', 'sphere', 'choropleth'].includes(type)) {
       g.querySelectorAll('path').forEach((p) => {
         p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
       });
