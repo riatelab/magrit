@@ -10,7 +10,11 @@ import {
   Mabs,
   max,
   Mfloor,
-  Mlog10, Mmax, Mpow, Msqrt, round,
+  Mlog10,
+  Mmax,
+  Mpow,
+  Msqrt,
+  round,
 } from './math';
 import {
   ascending,
@@ -251,22 +255,91 @@ export function computeCandidateValues(
   ];
 }
 
+interface SimulationNode {
+  x: number,
+  y: number,
+  size: number | null,
+  padding: number,
+  index: number,
+}
+
+/* eslint-disable */
+function squareForceCollide() {
+  let nodes: SimulationNode[];
+
+  function force(alpha) {
+    const quad = d3.quadtree(
+      nodes,
+      (d) => d.x,
+      (d) => d.y,
+    );
+    nodes.forEach((d) => {
+      quad.visit((q, x1, y1, x2, y2) => {
+        let updated = false;
+        if (q.data && q.data !== d) {
+          let x = d.x - q.data.x;
+          let y = d.y - q.data.y;
+          const xSpacing = d.padding + (q.data.size + d.size) / 2;
+          const ySpacing = d.padding + (q.data.size + d.size) / 2;
+          const absX = Math.abs(x);
+          const absY = Math.abs(y);
+          let l;
+          let lx;
+          let ly;
+
+          if (absX < xSpacing && absY < ySpacing) {
+            l = Math.sqrt(x * x + y * y);
+            lx = (absX - xSpacing) / l;
+            ly = (absY - ySpacing) / l;
+
+            // the one that's barely within the bounds probably triggered the collision
+            if (Math.abs(lx) > Math.abs(ly)) {
+              lx = 0;
+            } else {
+              ly = 0;
+            }
+            d.x -= x *= lx;
+            d.y -= y *= ly;
+            q.data.x += x;
+            q.data.y += y;
+
+            updated = true;
+          }
+        }
+        return updated;
+      });
+    });
+  }
+
+  force.initialize = (arg0) => (nodes = arg0);
+
+  return force;
+}
+/* eslint-enable */
+
 /**
  *
  *
  * @param {GeoJSONFeature[]} features - The features to be simulated
  * @param {string} variableName - The name of the variable used for computing the size of symbols
- * @param {{ referenceValue: number, referenceSize: number }} proportionProperty - Which size
- *                                                                                 on which value
+ * @param {{
+ *  referenceValue: number,
+ *  referenceSize: number,
+ *  symbolType: ProportionalSymbolsSymbolType
+ * }} proportionProperty - Which size, on which value, for which kind of symbol
  * @param {number} iterations - The number of iterations for the simulation
  * @param {number} strokeWidth - The stroke width of the symbols
  * @returns {GeoJSONFeature[]} - The features with the computed coordinates
  *                               (wrt the current projection)
  */
-export const makeDorlingSimulation = (
+export const makeDorlingDemersSimulation = (
   features: GeoJSONFeature[],
   variableName: string,
-  proportionProperty: { referenceValue: number, referenceSize: number },
+  proportionProperty: {
+    referenceValue: number,
+    referenceSize: number,
+    symbolType: ProportionalSymbolsSymbolType,
+  },
   iterations: number,
   strokeWidth: number,
 ) => {
@@ -275,12 +348,12 @@ export const makeDorlingSimulation = (
   const propSizer = new PropSizer(
     proportionProperty.referenceValue,
     proportionProperty.referenceSize,
-    ProportionalSymbolsSymbolType.circle,
+    proportionProperty.symbolType,
   );
 
   // Extract positions (in projected coordinates) and sizes
   // for the simulation
-  const positions = features
+  const positions: SimulationNode[] = features
     .map((d: GeoJSONFeature, i: number) => ({
       x: globalStore.projection(d.geometry.originalCoordinates)[0],
       y: globalStore.projection(d.geometry.originalCoordinates)[1],
@@ -305,7 +378,9 @@ export const makeDorlingSimulation = (
     )
     .force(
       'collide',
-      d3.forceCollide((d) => d.size! + d.padding),
+      proportionProperty.symbolType === ProportionalSymbolsSymbolType.circle
+        ? d3.forceCollide((d) => d.size! + d.padding)
+        : squareForceCollide(),
     );
 
   // Run the simulation 'iterations' times
@@ -323,56 +398,3 @@ export const makeDorlingSimulation = (
 
   return features;
 };
-
-// function squareForceCollide() {
-//   let nodes;
-//
-//   function force(alpha) {
-//     const quad = d3.quadtree(
-//       nodes,
-//       (d) => d._x,
-//       (d) => d._y,
-//     );
-//     for (const d of nodes) {
-//       quad.visit((q, x1, y1, x2, y2) => {
-//         let updated = false;
-//         if (q.data && q.data !== d) {
-//           let x = d._x - q.data._x,
-//             y = d._y - q.data._y;
-//           const xSpacing = d._padding + (q.data._size + d._size) / 2,
-//             ySpacing = d._padding + (q.data._size + d._size) / 2,
-//             absX = Math.abs(x),
-//             absY = Math.abs(y);
-//           let l,
-//             lx,
-//             ly;
-//
-//           if (absX < xSpacing && absY < ySpacing) {
-//             l = Math.sqrt(x * x + y * y);
-//
-//             lx = (absX - xSpacing) / l;
-//             ly = (absY - ySpacing) / l;
-//
-//             // the one that's barely within the bounds probably triggered the collision
-//             if (Math.abs(lx) > Math.abs(ly)) {
-//               lx = 0;
-//             } else {
-//               ly = 0;
-//             }
-//             d._x -= x *= lx;
-//             d._y -= y *= ly;
-//             q.data.x += x;
-//             q.data.y += y;
-//
-//             updated = true;
-//           }
-//         }
-//         return updated;
-//       });
-//     }
-//   }
-//
-//   force.initialize = (_) => (nodes = _);
-//
-//   return force;
-// }

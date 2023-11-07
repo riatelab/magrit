@@ -17,7 +17,7 @@ import { descendingKeyAccessor, findSuitableName, isNumber } from '../../../help
 import {
   computeCandidateValuesForSymbolsLegend,
   coordsPointOnFeature,
-  makeDorlingSimulation,
+  makeDorlingDemersSimulation,
   PropSizer,
 } from '../../../helpers/geo';
 import { generateIdLayer } from '../../../helpers/layers';
@@ -102,17 +102,25 @@ function onClickValidate(
       // eslint-disable-next-line no-param-reassign
       feature.geometry.originalCoordinates = feature.geometry.coordinates;
     });
-    // Compute the new position if we want to avoid overlapping
-    newData.features = makeDorlingSimulation(
-      newData.features,
-      propSymbolsParameters.variable,
-      {
-        referenceValue: propSymbolsParameters.referenceValue,
-        referenceSize: propSymbolsParameters.referenceRadius,
-      },
-      100,
-      1,
-    );
+    if (symbolType !== ProportionalSymbolsSymbolType.line) {
+      // Compute the new position if we want to avoid overlapping
+      newData.features = makeDorlingDemersSimulation(
+        newData.features,
+        propSymbolsParameters.variable,
+        {
+          referenceValue: propSymbolsParameters.referenceValue,
+          referenceSize: propSymbolsParameters.referenceRadius,
+          symbolType,
+        },
+        100,
+        1,
+      );
+    } else { // symbolType === ProportionalSymbolsSymbolType.line
+      // This should not happen because we don't allow the user to
+      // check the "avoid overlapping" checkbox if the symbol type
+      // is a line
+      throw new Error('No avoid overlapping algorithm for line symbols');
+    }
   }
 
   // Sort the features by descending value of the target variable

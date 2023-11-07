@@ -5,7 +5,7 @@ import { createStore, produce } from 'solid-js/store';
 // Helpers
 import { unproxify } from '../helpers/common';
 import d3 from '../helpers/d3-custom';
-import { makeDorlingSimulation } from '../helpers/geo';
+import { makeDorlingDemersSimulation } from '../helpers/geo';
 import { getD3ProjectionFromProj4, getProjection } from '../helpers/projection';
 import { getTargetSvg, redrawPaths } from '../helpers/svg';
 
@@ -106,7 +106,7 @@ createEffect(
                 const layerDescription = (
                   l as LayerDescription & { rendererParameters: ProportionalSymbolsParameters });
                 if (layerDescription.rendererParameters.avoidOverlapping) {
-                  const newFeatures = makeDorlingSimulation(
+                  const newFeatures = makeDorlingDemersSimulation(
                     unproxify(layerDescription.data.features),
                     layerDescription.rendererParameters.variable,
                     {
