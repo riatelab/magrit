@@ -68,7 +68,7 @@ function onClickValidate(
     .find((l) => l.id === referenceLayerId);
 
   if (referenceLayerDescription === undefined) {
-    throw Error('Unexpected Error: Reference layer not found');
+    throw new Error('Unexpected Error: Reference layer not found');
   }
 
   // Prepare the layer description for the new layer

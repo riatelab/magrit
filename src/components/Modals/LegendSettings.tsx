@@ -219,7 +219,7 @@ function makeSettingsProportionalSymbolsLegend(
             name="legend-layout"
             {...(layer.legend?.layout === 'stacked' ? { checked: true } : {}) }
             onChange={() => {
-              debouncedUpdateProps(layer.id, ['legend', 'orientation'], 'stacked');
+              debouncedUpdateProps(layer.id, ['legend', 'layout'], 'stacked');
             }}
           />
           { LL().Legend.Modal.LegendSymbolLayoutStacked() }
@@ -230,7 +230,7 @@ function makeSettingsProportionalSymbolsLegend(
             name="legend-layout"
             {...(layer.legend?.layout === 'horizontal' ? { checked: true } : {}) }
             onChange={() => {
-              debouncedUpdateProps(layer.id, ['legend', 'orientation'], 'horizontal');
+              debouncedUpdateProps(layer.id, ['legend', 'layout'], 'horizontal');
             }}
           />
           { LL().Legend.Modal.LegendSymbolLayoutHorizontal() }
@@ -241,7 +241,7 @@ function makeSettingsProportionalSymbolsLegend(
             name="legend-layout"
             {...(layer.legend?.layout === 'vertical' ? { checked: true } : {}) }
             onChange={() => {
-              debouncedUpdateProps(layer.id, ['legend', 'orientation'], 'vertical');
+              debouncedUpdateProps(layer.id, ['legend', 'layout'], 'vertical');
             }}
           />
           { LL().Legend.Modal.LegendSymbolLayoutVertical() }

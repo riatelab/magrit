@@ -8,9 +8,6 @@ import {
   Show,
 } from 'solid-js';
 
-// Imports from other packages
-import { getColors } from 'dicopal';
-
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { PropSizer } from '../../helpers/geo';
@@ -28,11 +25,388 @@ import {
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Types / Interfaces / Enums
-import { type LayerDescription, RenderVisibility } from '../../global.d';
+import {
+  type LayerDescription,
+  ProportionalSymbolsLegendParameters,
+  ProportionalSymbolsParameters,
+  RenderVisibility,
+} from '../../global.d';
 
 const defaultSpacing = 5;
 
-function proportionalSymbolsStackedLegend(layer: LayerDescription): JSX.Element {
+function proportionalSymbolsStackedSquareLegend(layer: LayerDescription): JSX.Element {
+  let refElement: SVGGElement;
+  const { LL } = useI18nContext();
+  const propSize = new (PropSizer as any)(
+    layer.rendererParameters.referenceValue,
+    layer.rendererParameters.referenceRadius,
+    layer.rendererParameters.symbolType,
+  );
+
+  const maxHeight = createMemo(
+    () => propSize.scale(layer.legend.values[layer.legend.values.length - 1]),
+  );
+
+  const heightTitle = createMemo(
+    () => getTextSize(
+      layer.legend.title.text,
+      layer.legend.title.fontSize,
+      layer.legend.title.fontFamily,
+    ).height + defaultSpacing,
+  );
+
+  const heightTitleSubtitle = createMemo(() => {
+    if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
+      return heightTitle() + defaultSpacing;
+    }
+    return heightTitle() + defaultSpacing + getTextSize(
+      layer.legend.subtitle.text,
+      layer.legend.subtitle.fontSize,
+      layer.legend.subtitle.fontFamily,
+    ).height + defaultSpacing;
+  });
+
+  const positionNote = createMemo(() => (
+    heightTitleSubtitle()
+    + maxHeight()
+    + +(layer.legend.note.fontSize.replace('px', ''))
+    + defaultSpacing
+  ));
+  const bindElementsLegend = () => {
+    computeRectangleBox(refElement);
+    bindMouseEnterLeave(refElement);
+    bindDragBehavior(refElement, layer);
+  };
+
+  onMount(() => {
+    bindElementsLegend();
+  });
+
+  createEffect(() => {
+    if (refElement && layer.visible && layer.legend?.visible) {
+      computeRectangleBox(
+        refElement,
+        heightTitle(),
+        heightTitleSubtitle(),
+        positionNote(),
+        layer.legend.title.text,
+        layer.legend?.subtitle?.text,
+        layer.legend?.note?.text,
+        layer.legend.roundDecimals,
+      );
+    }
+  });
+
+  return <g
+    ref={refElement}
+    class="legend proportionalSymbols"
+    transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
+    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerContextMenuLegend(e, layer.id, LL);
+    }}
+    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    style={{ cursor: 'grab' }}
+  >
+    { makeRectangleBox() }
+    { makeLegendText(layer.legend.title, [0, 0], 'title') }
+    { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
+    { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
+    <g class="legend-content">
+      <For each={layer.legend.values.toReversed()}>
+        {
+          (value) => {
+            const symbolSize = propSize.scale(value);
+            return <>
+              <rect
+                fill={layer.rendererParameters.color}
+                stroke="black"
+                stroke-width={1}
+                width={symbolSize}
+                height={symbolSize}
+                x={maxHeight() - symbolSize}
+                y={ heightTitleSubtitle() - symbolSize + maxHeight()}
+              ></rect>
+              <text
+                font-size={layer.legend.labels.fontSize}
+                font-family={layer.legend.labels.fontFamily}
+                font-color={layer.legend.labels.fontColor}
+                font-style={layer.legend.labels.fontStyle}
+                font-weight={layer.legend.labels.fontWeight}
+                fill={layer.legend.labels.fontColor}
+                text-anchor="start"
+                dominant-baseline="middle"
+                style={{ 'user-select': 'none' }}
+                x={maxHeight() + defaultSpacing * 2}
+                y={ heightTitleSubtitle() + maxHeight() - symbolSize}
+              >{ round(value, layer.legend!.roundDecimals) }</text>
+              <line
+                stroke-width={0.8}
+                stroke-dasharray="2"
+                stroke="black"
+                x1={maxHeight()}
+                y1={ heightTitleSubtitle() + maxHeight() - symbolSize}
+                x2={maxHeight() + defaultSpacing * 2}
+                y2={ heightTitleSubtitle() + maxHeight() - symbolSize}
+              ></line>
+            </>;
+          }
+        }
+      </For>
+    </g>
+  </g>;
+}
+
+function proportionalSymbolsHorizontalSquareLegend(layer: LayerDescription): JSX.Element {
+  let refElement: SVGGElement;
+  const { LL } = useI18nContext();
+  const propSize = new (PropSizer as any)(
+    layer.rendererParameters.referenceValue,
+    layer.rendererParameters.referenceRadius,
+    layer.rendererParameters.symbolType,
+  );
+
+  const maxHeight = createMemo(
+    () => propSize.scale(layer.legend.values[layer.legend.values.length - 1]),
+  );
+
+  const heightTitle = createMemo(
+    () => getTextSize(
+      layer.legend.title.text,
+      layer.legend.title.fontSize,
+      layer.legend.title.fontFamily,
+    ).height + defaultSpacing,
+  );
+
+  const heightTitleSubtitle = createMemo(() => {
+    if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
+      return heightTitle() + defaultSpacing;
+    }
+    return heightTitle() + defaultSpacing + getTextSize(
+      layer.legend.subtitle.text,
+      layer.legend.subtitle.fontSize,
+      layer.legend.subtitle.fontFamily,
+    ).height + defaultSpacing;
+  });
+
+  const positionNote = createMemo(() => (
+    heightTitleSubtitle()
+    + maxHeight()
+    + +(layer.legend.note.fontSize.replace('px', ''))
+    + defaultSpacing
+  ));
+  const bindElementsLegend = () => {
+    computeRectangleBox(refElement);
+    bindMouseEnterLeave(refElement);
+    bindDragBehavior(refElement, layer);
+  };
+
+  onMount(() => {
+    bindElementsLegend();
+  });
+
+  createEffect(() => {
+    if (refElement && layer.visible && layer.legend?.visible) {
+      computeRectangleBox(
+        refElement,
+        heightTitle(),
+        heightTitleSubtitle(),
+        positionNote(),
+        layer.legend.title.text,
+        layer.legend?.subtitle?.text,
+        layer.legend?.note?.text,
+        layer.legend.roundDecimals,
+      );
+    }
+  });
+  let lastSize = 0;
+
+  return <g
+    ref={refElement}
+    class="legend proportionalSymbols"
+    transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
+    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerContextMenuLegend(e, layer.id, LL);
+    }}
+    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    style={{ cursor: 'grab' }}
+  >
+    { makeRectangleBox() }
+    { makeLegendText(layer.legend.title, [0, 0], 'title') }
+    { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
+    { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
+    <g class="legend-content">
+      <For each={layer.legend.values.toReversed()}>
+        {
+          (value, i) => {
+            const symbolSize = propSize.scale(value);
+            const x = maxHeight() + lastSize + i() * defaultSpacing;
+            lastSize += symbolSize;
+
+            return <>
+              <rect
+                fill={layer.rendererParameters.color}
+                stroke="black"
+                stroke-width={1}
+                width={symbolSize}
+                height={symbolSize}
+                x={x - maxHeight()}
+                y={ heightTitleSubtitle() - symbolSize + maxHeight() }
+              ></rect>
+              <text
+                font-size={layer.legend.labels.fontSize}
+                font-family={layer.legend.labels.fontFamily}
+                font-color={layer.legend.labels.fontColor}
+                font-style={layer.legend.labels.fontStyle}
+                font-weight={layer.legend.labels.fontWeight}
+                fill={layer.legend.labels.fontColor}
+                text-anchor="start"
+                dominant-baseline="middle"
+                style={{ 'user-select': 'none' }}
+                x={ x - maxHeight() }
+                y={ heightTitleSubtitle() - symbolSize + maxHeight() - 5}
+              >{ round(value, layer.legend!.roundDecimals) }</text>
+            </>;
+          }
+        }
+      </For>
+    </g>
+  </g>;
+}
+
+function proportionalSymbolsVerticalSquareLegend(layer: LayerDescription): JSX.Element {
+  let refElement: SVGGElement;
+  const { LL } = useI18nContext();
+  const propSize = new (PropSizer as any)(
+    layer.rendererParameters.referenceValue,
+    layer.rendererParameters.referenceRadius,
+    layer.rendererParameters.symbolType,
+  );
+
+  const maxHeight = createMemo(
+    () => propSize.scale(layer.legend.values[layer.legend.values.length - 1]),
+  );
+
+  const heightTitle = createMemo(
+    () => getTextSize(
+      layer.legend.title.text,
+      layer.legend.title.fontSize,
+      layer.legend.title.fontFamily,
+    ).height + defaultSpacing,
+  );
+
+  const heightTitleSubtitle = createMemo(() => {
+    if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
+      return heightTitle() + defaultSpacing;
+    }
+    return heightTitle() + defaultSpacing + getTextSize(
+      layer.legend.subtitle.text,
+      layer.legend.subtitle.fontSize,
+      layer.legend.subtitle.fontFamily,
+    ).height + defaultSpacing;
+  });
+
+  const positionNote = createMemo(() => (
+    heightTitleSubtitle()
+    + sum(layer.legend.values.map((v) => propSize.scale(v) + defaultSpacing))
+    + +(layer.legend.note.fontSize.replace('px', ''))
+    + defaultSpacing * 2
+  ));
+
+  const bindElementsLegend = () => {
+    computeRectangleBox(refElement);
+    bindMouseEnterLeave(refElement);
+    bindDragBehavior(refElement, layer);
+  };
+
+  onMount(() => {
+    bindElementsLegend();
+  });
+
+  createEffect(() => {
+    if (refElement && layer.visible && layer.legend?.visible) {
+      computeRectangleBox(
+        refElement,
+        heightTitle(),
+        heightTitleSubtitle(),
+        positionNote(),
+        layer.legend.title.text,
+        layer.legend?.subtitle?.text,
+        layer.legend?.note?.text,
+        layer.legend.roundDecimals,
+      );
+    }
+  });
+  let lastSize = 0;
+
+  return <g
+    ref={refElement}
+    class="legend proportionalSymbols"
+    transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
+    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerContextMenuLegend(e, layer.id, LL);
+    }}
+    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    style={{ cursor: 'grab' }}
+  >
+    { makeRectangleBox() }
+    { makeLegendText(layer.legend.title, [0, 0], 'title') }
+    { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
+    { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
+    <g class="legend-content">
+      <For each={layer.legend.values.toReversed()}>
+        {
+          (value, i) => {
+            const symbolSize = propSize.scale(value);
+            const x = maxHeight() + lastSize + i() * defaultSpacing;
+            lastSize += symbolSize;
+
+            return <>
+              <rect
+                fill={layer.rendererParameters.color}
+                stroke="black"
+                stroke-width={1}
+                width={symbolSize}
+                height={symbolSize}
+                x={(maxHeight() - symbolSize) / 2}
+                y={ heightTitleSubtitle() - symbolSize + lastSize + (defaultSpacing * 2) * i() }
+              ></rect>
+              <text
+                font-size={layer.legend.labels.fontSize}
+                font-family={layer.legend.labels.fontFamily}
+                font-color={layer.legend.labels.fontColor}
+                font-style={layer.legend.labels.fontStyle}
+                font-weight={layer.legend.labels.fontWeight}
+                fill={layer.legend.labels.fontColor}
+                text-anchor="start"
+                dominant-baseline="middle"
+                style={{ 'user-select': 'none' }}
+                x={ maxHeight() + defaultSpacing * 2 }
+                y={
+                  heightTitleSubtitle()
+                  - symbolSize
+                  + lastSize
+                  + (defaultSpacing * 2) * i()
+                  + symbolSize / 2
+                }
+              >{ round(value, layer.legend!.roundDecimals) }</text>
+            </>;
+          }
+        }
+      </For>
+    </g>
+  </g>;
+}
+
+function proportionalSymbolsStackedCircleLegend(layer: LayerDescription): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
   const propSize = new (PropSizer as any)(
@@ -113,13 +487,13 @@ function proportionalSymbolsStackedLegend(layer: LayerDescription): JSX.Element 
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
     { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
     <g class="legend-content">
-      <For each={layer.legend.values}>
+      <For each={layer.legend.values.toReversed()}>
         {
           (value) => {
             const symbolSize = propSize.scale(value);
             return <>
               <circle
-                fill="transparent"
+                fill={layer.rendererParameters.color}
                 stroke="black"
                 stroke-width={1}
                 r={symbolSize}
@@ -136,7 +510,7 @@ function proportionalSymbolsStackedLegend(layer: LayerDescription): JSX.Element 
                 text-anchor="start"
                 dominant-baseline="middle"
                 style={{ 'user-select': 'none' }}
-                x={maxRadius() * 2 + defaultSpacing}
+                x={maxRadius() * 2 + defaultSpacing * 2}
                 y={ heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2 }
               >{ round(value, layer.legend!.roundDecimals) }</text>
               <line
@@ -145,7 +519,7 @@ function proportionalSymbolsStackedLegend(layer: LayerDescription): JSX.Element 
                 stroke="black"
                 x1={maxRadius()}
                 y1={ heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2 }
-                x2={maxRadius() * 2 + defaultSpacing}
+                x2={maxRadius() * 2 + defaultSpacing * 2}
                 y2={ heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2 }
               ></line>
             </>;
@@ -156,7 +530,7 @@ function proportionalSymbolsStackedLegend(layer: LayerDescription): JSX.Element 
   </g>;
 }
 
-function proportionalSymbolsVerticalLegend(layer: LayerDescription): JSX.Element {
+function proportionalSymbolsVerticalCircleLegend(layer: LayerDescription): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
 
@@ -229,7 +603,7 @@ function proportionalSymbolsVerticalLegend(layer: LayerDescription): JSX.Element
 
             return <>
               <circle
-                fill="transparent"
+                fill={layer.rendererParameters.color}
                 stroke="black"
                 stroke-width={1}
                 r={symbolSize}
@@ -258,7 +632,7 @@ function proportionalSymbolsVerticalLegend(layer: LayerDescription): JSX.Element
   </g>;
 }
 
-function proportionalSymbolsHorizontalLegend(layer: LayerDescription): JSX.Element {
+function proportionalSymbolsHorizontalCircleLegend(layer: LayerDescription): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
 
@@ -303,10 +677,6 @@ function proportionalSymbolsHorizontalLegend(layer: LayerDescription): JSX.Eleme
     bindElementsLegend();
   });
 
-  createEffect(() => {
-
-  });
-
   let lastSize = 0;
   return <g
     ref={refElement}
@@ -333,7 +703,7 @@ function proportionalSymbolsHorizontalLegend(layer: LayerDescription): JSX.Eleme
 
             return <>
               <circle
-                fill="transparent"
+                fill={layer.rendererParameters.color}
                 stroke="black"
                 stroke-width={1}
                 r={symbolSize}
@@ -371,14 +741,20 @@ function proportionalSymbolsHorizontalLegend(layer: LayerDescription): JSX.Eleme
 export default function legendProportionalSymbols(layer: LayerDescription): JSX.Element {
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || (layer.visible && layer.legend.visible)
+    || (layer.visible && (layer.legend as ProportionalSymbolsLegendParameters).visible)
   }>
     {
-      ({
-        stacked: proportionalSymbolsStackedLegend,
-        vertical: proportionalSymbolsVerticalLegend,
-        horizontal: proportionalSymbolsHorizontalLegend,
-      })[layer.legend.layout](layer)
+      (layer.rendererParameters as ProportionalSymbolsParameters).symbolType === 'circle'
+        ? ({
+          stacked: proportionalSymbolsStackedCircleLegend,
+          vertical: proportionalSymbolsVerticalCircleLegend,
+          horizontal: proportionalSymbolsHorizontalCircleLegend,
+        })[(layer.legend as ProportionalSymbolsLegendParameters).layout](layer)
+        : ({
+          stacked: proportionalSymbolsStackedSquareLegend,
+          vertical: proportionalSymbolsVerticalSquareLegend,
+          horizontal: proportionalSymbolsHorizontalSquareLegend,
+        })[(layer.legend as ProportionalSymbolsLegendParameters).layout](layer)
     }
   </Show>;
 }

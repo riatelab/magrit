@@ -31,13 +31,17 @@ import {
   choroplethPointRenderer,
   choroplethPolygonRenderer,
 } from './MapRenderer/ChoroplethMapRenderer.tsx';
-import legendChoropleth from './LegendRenderer/ChoroplethLegend.tsx';
 import proportionalSymbolsRenderer from './MapRenderer/ProportionalSymbolsMapRenderer.tsx';
+import { defaultLabelsRenderer } from './MapRenderer/LabelsMapRenderer.tsx';
 import graticuleRenderer from './MapRenderer/GraticuleRenderer.tsx';
+
 import RectangleRenderer from './LayoutFeatureRenderer/RectangleRenderer.tsx';
 import EllipseRenderer from './LayoutFeatureRenderer/EllipseRenderer.tsx';
 import FreeDrawingRenderer from './LayoutFeatureRenderer/FreeDrawingRenderer.tsx';
 import ScaleBarRenderer from './LayoutFeatureRenderer/ScaleBarRenderer.tsx';
+
+import legendChoropleth from './LegendRenderer/ChoroplethLegend.tsx';
+import legendProportionalSymbols from './LegendRenderer/ProportionnalSymbolsLegend.tsx';
 
 // Types and enums
 import {
@@ -47,7 +51,6 @@ import {
 
 // Styles
 import '../styles/MapZone.css';
-import legendProportionalSymbols from './LegendRenderer/ProportionnalSymbolsLegend.tsx';
 
 const layoutFeaturesFns = {
   [LayoutFeatureType.Rectangle]: RectangleRenderer,
@@ -213,6 +216,8 @@ export default function MapZone(): JSX.Element {
               if (layer.type === 'linestring') return choroplethLineRenderer(layer);
             } else if (layer.renderer === 'proportionalSymbols') {
               return proportionalSymbolsRenderer(layer);
+            } else if (layer.renderer === 'labels') {
+              if (layer.type === 'point') return defaultLabelsRenderer(layer);
             }
             return null;
           }}
