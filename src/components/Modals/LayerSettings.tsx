@@ -11,13 +11,14 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/L
 import { setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 
 // Types / Interfaces
-import type { LayerDescription, ProportionalSymbolsParameters } from '../../global.d';
+import type { LayerDescription, ProportionalSymbolsParameters, LabelsParameters } from '../../global.d';
 
 // Styles
 import '../../styles/LayerAndLegendSettings.css';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
 
 const updateProp = (
   layerId: string,
@@ -67,6 +68,70 @@ function updateDropShadow(layerId: string, checked: boolean) {
       { dropShadow: checked },
     );
   }
+}
+
+function makeSettingsLabels(
+  props: LayerDescription,
+  Ll: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const rendererParameters = props.rendererParameters as LabelsParameters;
+  return <>
+    <InputFieldNumber
+      label={'Taille de la police'}
+      value={rendererParameters.fontSize}
+      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontSize'], v)}
+      min={1}
+      max={100}
+      step={1}
+    />
+    <InputFieldColor
+      label={'Couleur du texte'}
+      value={rendererParameters.fontColor}
+      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontColor'], v)}
+    />
+    <InputFieldNumber
+      label={'X offset'}
+      value={rendererParameters.textOffset[0]}
+      onChange={
+        (v) => {
+          const value = [v, rendererParameters.textOffset[1]];
+          debouncedUpdateProp(props.id, ['rendererParameters', 'textOffset'], value);
+        }
+      }
+      min={-100}
+      max={100}
+      step={1}
+    />
+    <InputFieldNumber
+      label={'Y offset'}
+      value={rendererParameters.textOffset[0]}
+      onChange={
+        (v) => {
+          const value = [rendererParameters.textOffset[0], v];
+          debouncedUpdateProp(props.id, ['rendererParameters', 'textOffset'], value);
+        }
+      }
+      min={-100}
+      max={100}
+      step={1}
+    />
+    <InputFieldSelect
+      label={'Font style'}
+      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontStyle'], v)}
+      value={rendererParameters.fontStyle}
+    >
+      <option value="normal">Normal</option>
+      <option value="italic">Italic</option>
+    </InputFieldSelect>
+    <InputFieldSelect
+      label={'Font style'}
+      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontStyle'], v)}
+      value={rendererParameters.fontStyle}
+    >
+      <option value="normal">Normal</option>
+      <option value="italic">Italic</option>
+    </InputFieldSelect>
+  </>;
 }
 
 function makeSettingsDefaultPoint(
@@ -366,11 +431,18 @@ export default function LayerSettings(
   const { id, LL } = props; // eslint-disable-line solid/reactivity
   const layerDescription = layersDescriptionStore.layers
     .find((l) => l.id === id) as LayerDescription;
-  const innerElement = {
-    point: makeSettingsDefaultPoint,
-    linestring: makeSettingsDefaultLine,
-    polygon: makeSettingsDefaultPolygon,
-  }[layerDescription.type as ('point' | 'linestring' | 'polygon')](layerDescription, LL);
+
+  let innerElement;
+  if (layerDescription.renderer === 'labels') {
+    innerElement = makeSettingsLabels(layerDescription, LL);
+  } else {
+    innerElement = {
+      point: makeSettingsDefaultPoint,
+      linestring: makeSettingsDefaultLine,
+      polygon: makeSettingsDefaultPolygon,
+    }[layerDescription.type as ('point' | 'linestring' | 'polygon')](layerDescription, LL);
+  }
+
   return <div class="layer-settings">
     <div class="layer-settings__title">
       { LL().LayerSettings.Name() } : { layerDescription.name }

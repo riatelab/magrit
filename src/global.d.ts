@@ -45,9 +45,9 @@ interface LayerDescription {
   // The color of the stroke (not used for Choropleth on linestring layers)
   strokeColor?: string,
   // The width of the stroke
-  strokeWidth: string,
+  strokeWidth?: string,
   // The opacity of the stroke
-  strokeOpacity: number,
+  strokeOpacity?: number,
   // ...
   strokeDasharray?: string,
   // The fill color (not used for Choropleth on point / polygon layers nor for linestring layers)
@@ -69,6 +69,7 @@ interface LayerDescription {
     ProportionalSymbolsParameters
     | ClassificationParameters
     | ProportionalSymbolsParameters & ClassificationParameters
+    | LabelsParameters
     | GraticuleParameters
   ),
   // Parameters of the legend associated to the layer
@@ -295,13 +296,12 @@ export interface LabelsParameters {
   // The text alignment of the labels
   textAlignment: string,
   // The text offset of the labels
-  textOffset: number,
+  textOffset: [number, number],
   // The text buffer of the labels
-  textBuffer: {
-    active: boolean,
-    size?: number,
-    color?: string,
-  }
+  textBuffer?: {
+    size: number,
+    color: string,
+  },
 }
 
 export enum RepresentationType {

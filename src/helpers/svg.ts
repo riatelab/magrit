@@ -54,6 +54,13 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
         r.setAttribute('x', `${projectedCoords[0] - size / 2}`);
         r.setAttribute('y', `${projectedCoords[1] - size / 2}`);
       });
+    } else if (type === 'labels') {
+      g.querySelectorAll('text').forEach((t) => {
+        // eslint-disable-next-line no-underscore-dangle
+        const projectedCoords = globalStore.projection(t.__data__.geometry.coordinates);
+        t.setAttribute('x', `${projectedCoords[0]}`);
+        t.setAttribute('y', `${projectedCoords[1]}`);
+      });
     }
   });
   // Also redraw the path elements in the defs
