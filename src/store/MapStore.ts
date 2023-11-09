@@ -1,5 +1,5 @@
 // Imports from solid-js
-import { createEffect, createMemo, on } from 'solid-js';
+import { createEffect, on } from 'solid-js';
 import { createStore, produce } from 'solid-js/store';
 
 // Helpers
@@ -13,7 +13,6 @@ import { getTargetSvg, redrawPaths } from '../helpers/svg';
 import { debouncedPushUndoStack, resetRedoStackStore } from './stateStackStore';
 import { globalStore, setGlobalStore } from './GlobalStore';
 import {
-  layersDescriptionStore,
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from './LayersDescriptionStore';
@@ -129,6 +128,23 @@ createEffect(
       }
 
       redrawPaths(targetSvg as SVGSVGElement & IZoomable);
+    },
+  ),
+);
+
+// We want to update the projection clipExtent when the mapStore mapDimensions property is updated
+// (which can be when the user resizes the window or when the user changes the map dimensions)
+createEffect(
+  on(
+    () => [mapStore.mapDimensions.width, mapStore.mapDimensions.height],
+    () => {
+      if (!globalStore.projection) return;
+      setGlobalStore(
+        produce((draft) => {
+          draft.projection.clipExtent(getDefaultClipExtent());
+        }),
+      );
+      redrawPaths(getTargetSvg());
     },
   ),
 );

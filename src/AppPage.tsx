@@ -2,7 +2,6 @@
 import {
   JSX, onCleanup, onMount, Show,
 } from 'solid-js';
-import { produce } from 'solid-js/store';
 
 // Imports from other packages
 import initGdalJs from 'gdal3.js';
@@ -18,7 +17,6 @@ import { clickLinkFromDataUrl } from './helpers/exports';
 import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
 import { round } from './helpers/math';
 import { initDb, storeProject } from './helpers/storage';
-import { getTargetSvg, redrawPaths } from './helpers/svg';
 
 // Sub-components
 import AboutModal from './components/Modals/AboutModal.tsx';
@@ -229,17 +227,8 @@ const AppPage: () => JSX.Element = () => {
         },
       });
 
-      // Update the clipExtent of the projection
-      // (as it depends on the dimensions of the map)
-      setGlobalStore(
-        produce((draft) => {
-          draft.projection.clipExtent(getDefaultClipExtent());
-        }),
-      );
-
-      // Redraw the map (this is necessary because the map dimensions have changed and because
-      // we use a clipExtent for the projection that depends on the dimensions of the map)
-      redrawPaths(getTargetSvg());
+      // Note that the clipExtent is automatically updated (in MapStore)
+      // and that the path are automatically updated (triggered from MapStore too)
     } else if (applicationSettingsStore.resizeBehavior === ResizeBehavior.KeepMapSize) {
       // Do nothing (at least for now)
     }

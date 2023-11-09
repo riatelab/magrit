@@ -6,7 +6,7 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 import { unproxify } from '../../helpers/common';
 
 // Stores
-import { globalStore, setGlobalStore } from '../../store/GlobalStore';
+import { globalStore } from '../../store/GlobalStore';
 import { mapStore, setMapStore } from '../../store/MapStore';
 import { setModalStore } from '../../store/ModalStore';
 
@@ -168,6 +168,8 @@ export default function MapConfiguration(): JSX.Element {
                 height: mapStore.mapDimensions.height,
               },
             });
+            // Note that the clipExtent is automatically updated (in MapStore)
+            // and that the path are automatically updated (triggered from MapStore too)
           }}
         />
       </div>
@@ -189,6 +191,8 @@ export default function MapConfiguration(): JSX.Element {
                 height: +e.target.value,
               },
             });
+            // Note that the clipExtent is automatically updated (in MapStore)
+            // and that the path are automatically updated (triggered from MapStore too)
           }}
         />
       </div>
