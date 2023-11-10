@@ -211,6 +211,31 @@ function makeSettingsProportionalSymbolsLegend(
     <FieldText layer={layer} LL={LL} role={'note'} />
     <FieldRoundDecimals layer={layer} LL={LL} />
     <div class="field">
+      <label class="label">{ LL().Legend.Modal.ChooseValues() }</label>
+      <div class="control">
+        <input
+          style="width: 7.5em !important; font-size: 0.9rem;"
+          type="number"
+        />
+        <input
+          style="width: 7.5em !important; font-size: 0.9rem;"
+          type="number"
+        />
+        <input
+          style="width: 7.5em !important; font-size: 0.9rem;"
+          type="number"
+        />
+        <input
+          style="width: 7.5em !important; font-size: 0.9rem;"
+          type="number"
+        />
+        <input
+          style="width: 7.5em !important; font-size: 0.9rem;"
+          type="number"
+        />
+      </div>
+    </div>
+    <div class="field">
       <label class="label">{ LL().Legend.Modal.LegendSymbolLayout() }</label>
       <div class="control">
         <label class="radio" style={{ 'margin-right': '2em' }}>
@@ -248,6 +273,22 @@ function makeSettingsProportionalSymbolsLegend(
         </label>
       </div>
     </div>
+    <Show when={['horizontal', 'vertical'].includes(layer.legend?.layout)}>
+      <div class="field">
+        <label class="label">{ LL().Legend.Modal.SymbolsSpacing() }</label>
+        <div class="control">
+          <input
+            class="input"
+            type="number"
+            min={0}
+            max={100}
+            step={1}
+            value={ layer.legend?.spacing }
+            onChange={(ev) => debouncedUpdateProps(layer.id, ['legend', 'spacing'], +ev.target.value)}
+          />
+        </div>
+      </div>
+    </Show>
     <hr />
     <div onClick={() => setDisplayMoreOptions(!displayMoreOptions())}>
       <p class="label"> { LL().Legend.Modal.MoreOptions() } </p>

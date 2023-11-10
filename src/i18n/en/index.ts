@@ -344,6 +344,8 @@ const en = {
       BoxStrokeWidth: 'Box stroke width',
       RoundDecimals: 'Round values',
       MoreOptions: 'More options...',
+      SymbolsSpacing: 'Spacing between symbols',
+      ChooseValues: 'Choice of values',
     },
   },
   CommonTextElement: {

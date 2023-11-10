@@ -200,6 +200,7 @@ function onClickValidate(
       type: LegendType.proportional,
       layout: 'stacked',
       values: legendValues,
+      spacing: 5,
       labels: {
         fontSize: '11px',
         fontFamily: 'Sans-serif',

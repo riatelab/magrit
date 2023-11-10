@@ -1201,6 +1201,14 @@ type RootTranslation = {
 			 * M​o​r​e​ ​o​p​t​i​o​n​s​.​.​.
 			 */
 			MoreOptions: string
+			/**
+			 * S​p​a​c​i​n​g​ ​b​e​t​w​e​e​n​ ​s​y​m​b​o​l​s
+			 */
+			SymbolsSpacing: string
+			/**
+			 * C​h​o​i​c​e​ ​o​f​ ​v​a​l​u​e​s
+			 */
+			ChooseValues: string
 		}
 	}
 	CommonTextElement: {
@@ -2430,6 +2438,14 @@ export type TranslationFunctions = {
 			 * More options...
 			 */
 			MoreOptions: () => LocalizedString
+			/**
+			 * Spacing between symbols
+			 */
+			SymbolsSpacing: () => LocalizedString
+			/**
+			 * Choice of values
+			 */
+			ChooseValues: () => LocalizedString
 		}
 	}
 	CommonTextElement: {

@@ -57,9 +57,9 @@ function proportionalSymbolsStackedSquareLegend(layer: LayerDescription): JSX.El
 
   const heightTitleSubtitle = createMemo(() => {
     if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
-      return heightTitle() + defaultSpacing;
+      return heightTitle();
     }
-    return heightTitle() + defaultSpacing + getTextSize(
+    return heightTitle() + getTextSize(
       layer.legend.subtitle.text,
       layer.legend.subtitle.fontSize,
       layer.legend.subtitle.fontFamily,
@@ -122,8 +122,8 @@ function proportionalSymbolsStackedSquareLegend(layer: LayerDescription): JSX.El
             return <>
               <rect
                 fill={layer.rendererParameters.color}
-                stroke="black"
-                stroke-width={1}
+                stroke={layer.strokeColor}
+                stroke-width={layer.strokeWidth}
                 width={symbolSize}
                 height={symbolSize}
                 x={maxHeight() - symbolSize}
@@ -182,9 +182,9 @@ function proportionalSymbolsHorizontalSquareLegend(layer: LayerDescription): JSX
 
   const heightTitleSubtitle = createMemo(() => {
     if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
-      return heightTitle() + defaultSpacing;
+      return heightTitle();
     }
-    return heightTitle() + defaultSpacing + getTextSize(
+    return heightTitle() + getTextSize(
       layer.legend.subtitle.text,
       layer.legend.subtitle.fontSize,
       layer.legend.subtitle.fontFamily,
@@ -194,8 +194,8 @@ function proportionalSymbolsHorizontalSquareLegend(layer: LayerDescription): JSX
   const positionNote = createMemo(() => (
     heightTitleSubtitle()
     + maxHeight()
-    + +(layer.legend.note.fontSize.replace('px', ''))
-    + defaultSpacing
+    + +(layer.legend.labels.fontSize.replace('px', ''))
+    + defaultSpacing * 3
   ));
   const bindElementsLegend = () => {
     computeRectangleBox(refElement);
@@ -218,10 +218,28 @@ function proportionalSymbolsHorizontalSquareLegend(layer: LayerDescription): JSX
         layer.legend?.subtitle?.text,
         layer.legend?.note?.text,
         layer.legend.roundDecimals,
+        layer.legend.spacing,
       );
     }
   });
-  let lastSize = 0;
+  // Precompute the size and position of the symbols now
+  // instead of computing it in the For directive
+  // (and use createMemo to make it reactive)
+  const sizesAndPositions = createMemo(() => {
+    let lastSize = 0;
+    return layer.legend.values.toReversed()
+      .map((value, i) => {
+        const symbolSize = propSize.scale(value);
+        const x = lastSize + i * layer.legend.spacing;
+        lastSize += symbolSize;
+        return {
+          size: symbolSize,
+          x,
+          y: heightTitleSubtitle() - symbolSize + maxHeight(),
+          value,
+        };
+      });
+  });
 
   return <g
     ref={refElement}
@@ -241,38 +259,32 @@ function proportionalSymbolsHorizontalSquareLegend(layer: LayerDescription): JSX
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
     { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
     <g class="legend-content">
-      <For each={layer.legend.values.toReversed()}>
+      <For each={sizesAndPositions()}>
         {
-          (value, i) => {
-            const symbolSize = propSize.scale(value);
-            const x = maxHeight() + lastSize + i() * defaultSpacing;
-            lastSize += symbolSize;
-
-            return <>
-              <rect
-                fill={layer.rendererParameters.color}
-                stroke="black"
-                stroke-width={1}
-                width={symbolSize}
-                height={symbolSize}
-                x={x - maxHeight()}
-                y={ heightTitleSubtitle() - symbolSize + maxHeight() }
-              ></rect>
-              <text
-                font-size={layer.legend.labels.fontSize}
-                font-family={layer.legend.labels.fontFamily}
-                font-color={layer.legend.labels.fontColor}
-                font-style={layer.legend.labels.fontStyle}
-                font-weight={layer.legend.labels.fontWeight}
-                fill={layer.legend.labels.fontColor}
-                text-anchor="start"
-                dominant-baseline="middle"
-                style={{ 'user-select': 'none' }}
-                x={ x - maxHeight() }
-                y={ heightTitleSubtitle() - symbolSize + maxHeight() - 5}
-              >{ round(value, layer.legend!.roundDecimals) }</text>
-            </>;
-          }
+          (d) => <>
+            <rect
+              fill={layer.rendererParameters.color}
+              stroke={layer.strokeColor}
+              stroke-width={layer.strokeWidth}
+              width={d.size}
+              height={d.size}
+              x={d.x}
+              y={d.y}
+            ></rect>
+            <text
+              font-size={layer.legend.labels.fontSize}
+              font-family={layer.legend.labels.fontFamily}
+              font-color={layer.legend.labels.fontColor}
+              font-style={layer.legend.labels.fontStyle}
+              font-weight={layer.legend.labels.fontWeight}
+              fill={layer.legend.labels.fontColor}
+              text-anchor="middle"
+              dominant-baseline="hanging"
+              style={{ 'user-select': 'none' }}
+              x={d.x + d.size / 2}
+              y={heightTitleSubtitle() + maxHeight() + defaultSpacing * 2}
+            >{ round(d.value, layer.legend!.roundDecimals).toLocaleString() }</text>
+          </>
         }
       </For>
     </g>
@@ -302,9 +314,9 @@ function proportionalSymbolsVerticalSquareLegend(layer: LayerDescription): JSX.E
 
   const heightTitleSubtitle = createMemo(() => {
     if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
-      return heightTitle() + defaultSpacing;
+      return heightTitle();
     }
-    return heightTitle() + defaultSpacing + getTextSize(
+    return heightTitle() + getTextSize(
       layer.legend.subtitle.text,
       layer.legend.subtitle.fontSize,
       layer.legend.subtitle.fontFamily,
@@ -312,10 +324,12 @@ function proportionalSymbolsVerticalSquareLegend(layer: LayerDescription): JSX.E
   });
 
   const positionNote = createMemo(() => (
-    heightTitleSubtitle()
-    + sum(layer.legend.values.map((v) => propSize.scale(v) + defaultSpacing))
-    + +(layer.legend.note.fontSize.replace('px', ''))
-    + defaultSpacing * 2
+    heightTitleSubtitle() // The size necessary for the title and subtitle
+    + ( // The size for all the symbols and the spacing between them
+      sum(layer.legend.values.map((v) => propSize.scale(v) + layer.legend.spacing))
+      - layer.legend.spacing
+    )
+    + defaultSpacing * 2 // Spacing between last symbol and note
   ));
 
   const bindElementsLegend = () => {
@@ -342,7 +356,23 @@ function proportionalSymbolsVerticalSquareLegend(layer: LayerDescription): JSX.E
       );
     }
   });
-  let lastSize = 0;
+  // Precompute the size and position of the symbols now
+  // instead of computing it in the For directive
+  // (and use createMemo to make it reactive)
+  const sizesAndPositions = createMemo(() => {
+    let lastSize = 0;
+    return layer.legend.values.toReversed()
+      .map((value, i) => {
+        const symbolSize = propSize.scale(value);
+        lastSize += symbolSize;
+        return {
+          size: symbolSize,
+          x: (maxHeight() - symbolSize) / 2,
+          y: heightTitleSubtitle() - symbolSize + lastSize + layer.legend.spacing * i,
+          value,
+        };
+      });
+  });
 
   return <g
     ref={refElement}
@@ -362,22 +392,17 @@ function proportionalSymbolsVerticalSquareLegend(layer: LayerDescription): JSX.E
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
     { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
     <g class="legend-content">
-      <For each={layer.legend.values.toReversed()}>
+      <For each={sizesAndPositions()}>
         {
-          (value, i) => {
-            const symbolSize = propSize.scale(value);
-            const x = maxHeight() + lastSize + i() * defaultSpacing;
-            lastSize += symbolSize;
-
-            return <>
+          (d) => <>
               <rect
                 fill={layer.rendererParameters.color}
-                stroke="black"
-                stroke-width={1}
-                width={symbolSize}
-                height={symbolSize}
-                x={(maxHeight() - symbolSize) / 2}
-                y={ heightTitleSubtitle() - symbolSize + lastSize + (defaultSpacing * 2) * i() }
+                stroke={layer.strokeColor}
+                stroke-width={layer.strokeWidth}
+                width={d.size}
+                height={d.size}
+                x={d.x}
+                y={d.y}
               ></rect>
               <text
                 font-size={layer.legend.labels.fontSize}
@@ -390,16 +415,9 @@ function proportionalSymbolsVerticalSquareLegend(layer: LayerDescription): JSX.E
                 dominant-baseline="middle"
                 style={{ 'user-select': 'none' }}
                 x={ maxHeight() + defaultSpacing * 2 }
-                y={
-                  heightTitleSubtitle()
-                  - symbolSize
-                  + lastSize
-                  + (defaultSpacing * 2) * i()
-                  + symbolSize / 2
-                }
-              >{ round(value, layer.legend!.roundDecimals) }</text>
-            </>;
-          }
+                y={ d.y + d.size / 2 }
+              >{ round(d.value, layer.legend!.roundDecimals).toLocaleString() }</text>
+            </>
         }
       </For>
     </g>
@@ -429,9 +447,9 @@ function proportionalSymbolsStackedCircleLegend(layer: LayerDescription): JSX.El
 
   const heightTitleSubtitle = createMemo(() => {
     if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
-      return heightTitle() + defaultSpacing;
+      return heightTitle();
     }
-    return heightTitle() + defaultSpacing + getTextSize(
+    return heightTitle() + getTextSize(
       layer.legend.subtitle.text,
       layer.legend.subtitle.fontSize,
       layer.legend.subtitle.fontFamily,
@@ -494,8 +512,8 @@ function proportionalSymbolsStackedCircleLegend(layer: LayerDescription): JSX.El
             return <>
               <circle
                 fill={layer.rendererParameters.color}
-                stroke="black"
-                stroke-width={1}
+                stroke={layer.strokeColor}
+                stroke-width={layer.strokeWidth}
                 r={symbolSize}
                 cx={maxRadius()}
                 cy={ heightTitleSubtitle() - symbolSize + maxRadius() * 2 }
@@ -545,25 +563,27 @@ function proportionalSymbolsVerticalCircleLegend(layer: LayerDescription): JSX.E
   );
 
   const heightTitle = createMemo(
-    () => +(layer.legend.title.fontSize.replace('px', '')) + defaultSpacing,
+    () => getTextSize(
+      layer.legend.title.text,
+      layer.legend.title.fontSize,
+      layer.legend.title.fontFamily,
+    ).height + defaultSpacing,
   );
 
   const heightTitleSubtitle = createMemo(() => {
     if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
-      return heightTitle() + defaultSpacing;
+      return heightTitle();
     }
-    return heightTitle() + +(
-      layer.legend.subtitle.fontSize.replace('px', '')) + defaultSpacing;
+    return heightTitle() + getTextSize(
+      layer.legend.subtitle.text,
+      layer.legend.subtitle.fontSize,
+      layer.legend.subtitle.fontFamily,
+    ).height + defaultSpacing;
   });
 
-  const positionNote = createMemo(() => (
-    heightTitleSubtitle()
-    + sum(layer.legend.values.map((v) => propSize.scale(v) * 2 + defaultSpacing * 4))
-    + +(layer.legend.note.fontSize.replace('px', ''))
-    + defaultSpacing
-  ));
-
-  const sizeNote = createMemo(() => +(layer.legend.title.fontSize.replace('px', '')) + defaultSpacing);
+  // const sizeNote = createMemo(
+  //   () => +(layer.legend.title.fontSize.replace('px', '')) + defaultSpacing,
+  // );
 
   const bindElementsLegend = () => {
     computeRectangleBox(refElement);
@@ -575,8 +595,25 @@ function proportionalSymbolsVerticalCircleLegend(layer: LayerDescription): JSX.E
     bindElementsLegend();
   });
 
-  let lastPosition = heightTitleSubtitle();
-  let lastSize = 0;
+  // Precompute the size and position of the symbols now
+  // instead of computing it in the For directive
+  // (and use createMemo to make it reactive)
+  const sizesAndPositions = createMemo(() => {
+    let lastPosition = heightTitleSubtitle();
+    return layer.legend.values.toReversed()
+      .map((value, i) => {
+        const symbolSize = propSize.scale(value);
+        const cy = symbolSize + lastPosition;
+        lastPosition = cy + symbolSize + layer.legend.spacing;
+        return {
+          size: symbolSize,
+          x: maxRadius(),
+          y: cy,
+          value,
+        };
+      });
+  });
+
   return <g
     ref={refElement}
     class="legend proportionalSymbols"
@@ -593,42 +630,41 @@ function proportionalSymbolsVerticalCircleLegend(layer: LayerDescription): JSX.E
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
     <g class="legend-content">
-      <For each={layer.legend.values.toReversed()}>
+      <For each={sizesAndPositions()}>
         {
-          (value) => {
-            const symbolSize = propSize.scale(value);
-            const cy = symbolSize + lastSize + lastPosition + defaultSpacing * 2;
-            lastPosition = cy;
-            lastSize = symbolSize;
-
-            return <>
-              <circle
-                fill={layer.rendererParameters.color}
-                stroke="black"
-                stroke-width={1}
-                r={symbolSize}
-                cx={maxRadius()}
-                cy={ cy }
-              ></circle>
-              <text
-                font-size={layer.legend.labels.fontSize}
-                font-family={layer.legend.labels.fontFamily}
-                font-color={layer.legend.labels.fontColor}
-                font-style={layer.legend.labels.fontStyle}
-                font-weight={layer.legend.labels.fontWeight}
-                fill={layer.legend.labels.fontColor}
-                text-anchor="start"
-                dominant-baseline="middle"
-                style={{ 'user-select': 'none' }}
-                x={maxRadius() * 2 + defaultSpacing}
-                y={ cy }
-              >{ round(value, layer.legend!.roundDecimals).toLocaleString() }</text>
-            </>;
-          }
+          (d) => <>
+            <circle
+              fill={layer.rendererParameters.color}
+              stroke={layer.strokeColor}
+              stroke-width={layer.strokeWidth}
+              r={d.size}
+              cx={d.x}
+              cy={d.y}
+            ></circle>
+            <text
+              font-size={layer.legend.labels.fontSize}
+              font-family={layer.legend.labels.fontFamily}
+              font-color={layer.legend.labels.fontColor}
+              font-style={layer.legend.labels.fontStyle}
+              font-weight={layer.legend.labels.fontWeight}
+              fill={layer.legend.labels.fontColor}
+              text-anchor="start"
+              dominant-baseline="middle"
+              style={{ 'user-select': 'none' }}
+              x={d.x * 2 + defaultSpacing}
+              y={d.y}
+            >{ round(d.value, layer.legend!.roundDecimals).toLocaleString() }</text>
+          </>
         }
       </For>
     </g>
-    { makeLegendText(layer.legend.note, [0, lastPosition + defaultSpacing + sizeNote()], 'note') }
+    {
+      makeLegendText(
+        layer.legend.note,
+        [0, sizesAndPositions()[sizesAndPositions().length - 1].y + defaultSpacing * 3],
+        'note',
+      )
+    }
   </g>;
 }
 
@@ -647,25 +683,27 @@ function proportionalSymbolsHorizontalCircleLegend(layer: LayerDescription): JSX
   );
 
   const heightTitle = createMemo(
-    () => +(layer.legend.title.fontSize.replace('px', '')) + defaultSpacing,
+    () => getTextSize(
+      layer.legend.title.text,
+      layer.legend.title.fontSize,
+      layer.legend.title.fontFamily,
+    ).height + defaultSpacing,
   );
 
   const heightTitleSubtitle = createMemo(() => {
     if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
-      return heightTitle() + defaultSpacing;
+      return heightTitle();
     }
-    return heightTitle() + +(
-      layer.legend.subtitle.fontSize.replace('px', '')) + defaultSpacing;
+    return heightTitle() + getTextSize(
+      layer.legend.subtitle.text,
+      layer.legend.subtitle.fontSize,
+      layer.legend.subtitle.fontFamily,
+    ).height + defaultSpacing;
   });
 
   const positionNote = createMemo(() => (
-    heightTitleSubtitle()
-    + sum(layer.legend.values.map((v) => propSize.scale(v) * 2 + defaultSpacing * 4))
-    + +(layer.legend.note.fontSize.replace('px', ''))
-    + defaultSpacing
+    maxRadius() * 2 + heightTitleSubtitle() + defaultSpacing * 3 + +(layer.legend.labels.fontSize.replace('px', ''))
   ));
-
-  const sizeNote = createMemo(() => +(layer.legend.title.fontSize.replace('px', '')) + defaultSpacing);
 
   const bindElementsLegend = () => {
     computeRectangleBox(refElement);
@@ -677,7 +715,22 @@ function proportionalSymbolsHorizontalCircleLegend(layer: LayerDescription): JSX
     bindElementsLegend();
   });
 
-  let lastSize = 0;
+  const sizesAndPositions = createMemo(() => {
+    let lastSize = 0;
+    return layer.legend.values.toReversed()
+      .map((value, i) => {
+        const symbolSize = propSize.scale(value);
+        const x = maxRadius() + lastSize * 2 + layer.legend.spacing * i;
+        lastSize += symbolSize;
+        return {
+          size: symbolSize,
+          x,
+          y: maxRadius() + heightTitleSubtitle() + (maxRadius() - symbolSize),
+          value,
+        };
+      });
+  });
+
   return <g
     ref={refElement}
     class="legend proportionalSymbols"
@@ -694,44 +747,38 @@ function proportionalSymbolsHorizontalCircleLegend(layer: LayerDescription): JSX
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
     <g class="legend-content">
-      <For each={layer.legend.values.toReversed()}>
+      <For each={sizesAndPositions()}>
         {
-          (value) => {
-            const symbolSize = propSize.scale(value);
-            const cx = maxRadius() + lastSize * 2;
-            lastSize += symbolSize;
-
-            return <>
-              <circle
-                fill={layer.rendererParameters.color}
-                stroke="black"
-                stroke-width={1}
-                r={symbolSize}
-                cx={ cx }
-                cy={ maxRadius() + heightTitleSubtitle() + (maxRadius() - symbolSize)}
-              ></circle>
-              <text
-                font-size={layer.legend.labels.fontSize}
-                font-family={layer.legend.labels.fontFamily}
-                font-color={layer.legend.labels.fontColor}
-                font-style={layer.legend.labels.fontStyle}
-                font-weight={layer.legend.labels.fontWeight}
-                fill={layer.legend.labels.fontColor}
-                text-anchor="middle"
-                dominant-baseline="middle"
-                style={{ 'user-select': 'none' }}
-                x={ cx }
-                y={ maxRadius() * 2 + heightTitleSubtitle() + defaultSpacing * 2}
-              >{ round(value, layer.legend!.roundDecimals) }</text>
-            </>;
-          }
+          (d) => <>
+            <circle
+              fill={layer.rendererParameters.color}
+              stroke={layer.strokeColor}
+              stroke-width={layer.strokeWidth}
+              r={d.size}
+              cx={d.x}
+              cy={d.y}
+            ></circle>
+            <text
+              font-size={layer.legend.labels.fontSize}
+              font-family={layer.legend.labels.fontFamily}
+              font-color={layer.legend.labels.fontColor}
+              font-style={layer.legend.labels.fontStyle}
+              font-weight={layer.legend.labels.fontWeight}
+              fill={layer.legend.labels.fontColor}
+              text-anchor="middle"
+              dominant-baseline="hanging"
+              style={{ 'user-select': 'none' }}
+              x={d.x}
+              y={maxRadius() * 2 + heightTitleSubtitle() + defaultSpacing * 2}
+            >{ round(d.value, layer.legend!.roundDecimals).toLocaleString() }</text>
+          </>
         }
       </For>
     </g>
     {
       makeLegendText(
         layer.legend.note,
-        [0, maxRadius() * 2 + heightTitleSubtitle() + defaultSpacing * 2 + sizeNote()],
+        [0, positionNote()],
         'note',
       )
     }

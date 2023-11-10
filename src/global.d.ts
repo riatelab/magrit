@@ -372,7 +372,7 @@ interface ChoroplethLegendParameters extends LegendParametersBase {
   boxWidth: number,
   // The height of each box
   boxHeight: number,
-  // The (horizontal or vertical,  wrt. 'orientation') spacing between boxes
+  // The (horizontal or vertical, wrt. 'orientation') spacing between boxes
   boxSpacing: number,
   // The (horizontal or vertical, wrt. 'orientation') spacing between the last box
   // and the no-data box if any
@@ -396,6 +396,9 @@ interface ProportionalSymbolsLegendParameters extends LegendParametersBase {
   // (by default it is the min, the max and two other values,
   // but the user can change it to any value, in order to have only two or three values)
   values: number[],
+  // The spacing between the symbols when the legend is not stacked
+  // (i.e. when the layout is horizontal or vertical)
+  spacing: number,
   // The text properties of the labels
   labels: LegendTextElement,
 }

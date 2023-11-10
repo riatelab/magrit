@@ -344,6 +344,8 @@ const fr = {
       BoxStrokeWidth: 'Épaisseur des lignes des boites',
       RoundDecimals: 'Arrondir les valeurs',
       MoreOptions: 'Plus d\'options...',
+      SymbolsSpacing: 'Espace entre les symboles',
+      ChooseValues: 'Choix des valeurs',
     },
   },
   CommonTextElement: {
