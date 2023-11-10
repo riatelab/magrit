@@ -44,7 +44,7 @@ const findMatchingProjections = (search: string): ScoredResult<EpsgDbEntryType>[
   const matchingProjections: ScoredResult<EpsgDbEntryType>[] = [];
 
   // First, we split the search string into words
-  // (so we split on space, comma, slash, and underscore)
+  // (so we split on space, comma, slash and underscore)
   const searchWords = searchString.split(/[/\s_-]/g);
 
   // Then, we search for
@@ -55,7 +55,10 @@ const findMatchingProjections = (search: string): ScoredResult<EpsgDbEntryType>[
       // (so score will be 1 if all words match, 0.5 if half of the words match, etc.)
       let score = 0;
       searchWords.forEach((word) => {
-        if (projection.name.toLowerCase().includes(word)) {
+        if (
+          projection.name.toLowerCase().includes(word)
+          || (projection.area !== null && projection.area.toLowerCase().includes(word))
+        ) {
           score += 1 / searchWords.length;
         }
       });
@@ -95,83 +98,95 @@ export default function ProjectionSelection(
         console.log(matchingProjections());
       }}
     />
-    <div class="is-flex">
-      <div class="projection-selection-list" style={{ width: '50%' }}>
+    <div class="is-flex" style={{ 'column-gap': '1em', height: '30vh' }}>
+      <div
+        class="projection-selection-list"
+        style={{ width: '50%', height: '100%' }}
+      >
         <Show when={matchingProjections() !== null}>
-          { props.LL().ProjectionSelection.NMatchingProjections(matchingProjections()!.length) }
-          <Show when={matchingProjections()!.length > 30}>
+          <div class="projection-selection-list__header" style={{ 'margin-block-end': '1em' }}>
+            { props.LL().ProjectionSelection.NMatchingProjections(matchingProjections()!.length) }
+          </div>
+          <Show when={matchingProjections()!.length > 80}>
             <div class="projection-selection-list__warning">
               { props.LL().ProjectionSelection.TooManyResults() }
             </div>
           </Show>
-          <Show when={matchingProjections()!.length <= 30}>
-            <For each={matchingProjections()!}>
-              {(elem) => (
-                <div
-                  class="projection-selection-list__item"
-                  onClick={() => {
-                    if (selectedProjection() && selectedProjection()!.code === elem.item.code) {
-                      setSelectedProjection(null);
-                    } else {
-                      setSelectedProjection(elem.item);
-                    }
-                  }}
-                >
-                  { elem.item.name } ({ elem.item.code }) - <small>Score : {elem.score}</small>
-                </div>
-              )}
-            </For>
+          <Show when={matchingProjections()!.length <= 80}>
+            <div style={{ height: '90%', 'overflow-y': 'auto' }}>
+              <For each={matchingProjections()!}>
+                {(elem) => (
+                  <div
+                    class="projection-selection-list__item"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      if (selectedProjection() && selectedProjection()!.code === elem.item.code) {
+                        setSelectedProjection(null);
+                      } else {
+                        setSelectedProjection(elem.item);
+                      }
+                    }}
+                  >
+                    { elem.item.name } ({ elem.item.code }) - <small>Score : {elem.score}</small>
+                  </div>
+                )}
+              </For>
+            </div>
           </Show>
         </Show>
       </div>
       <div class="projection-selection-details" style={{ width: '50%' }}>
-        <Show when={selectedProjection() !== null}>
-          <p>
-            <b>{ selectedProjection()!.name }</b>
-            ({ selectedProjection()!.code })
-          </p>
-          <p>
-            <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.Kind() }</span> {
-            {
-              'CRS-PROJCRS': props.LL().ProjectionSelection.ProjCRS(),
-              'CRS-GEOGCRS': props.LL().ProjectionSelection.GeogCRS(),
-            }[selectedProjection()!.kind]
-          }</p>
-          <p>
-            <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.BboxGeo() }</span>
-            \ { selectedProjection()!.bbox.join(', ') }</p>
-          <p>
-            <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.Area() }</span>
-            \ { selectedProjection()!.area }</p>
-          <p>
-            <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.Unit() }</span>
-            \ { selectedProjection()!.unit }</p>
-          <p>
-            <a
-              href={`https://epsg.io/${selectedProjection()!.code}`}
-              target="_blank"
-              ref="noopener noreferrer"
-            >
-              <FiExternalLink style={{ height: '1em', width: '1em', 'vertical-align': 'text-top' }}/>
-              { props.LL().ProjectionSelection.MoreInformation() }
-            </a>
-          </p>
-          <div style={{ 'text-align': 'center' }}>
-            <button
-              onClick={() => {
-                setMapStore(
-                  'projection',
-                  {
-                    type: 'proj4',
-                    name: selectedProjection()!.name,
-                    value: selectedProjection()!.proj4,
-                    bounds: selectedProjection()!.bbox,
-                  },
-                );
-              }}
-            >Apply</button>
-          </div>
-        </Show>
+        <div style={{ 'margin-block-end': '2em' }}>
+        </div>
+          <Show when={selectedProjection() !== null}>
+            <div style={{ height: '80%', 'overflow-y': 'auto' }}>
+              <p>
+                <b>{ selectedProjection()!.name }</b>
+                \ ({ selectedProjection()!.code })
+              </p>
+              <p>
+                <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.Kind() }</span> {
+                {
+                  'CRS-PROJCRS': props.LL().ProjectionSelection.ProjCRS(),
+                  'CRS-GEOGCRS': props.LL().ProjectionSelection.GeogCRS(),
+                }[selectedProjection()!.kind]
+              }</p>
+              <p>
+                <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.BboxGeo() }</span>
+                \ { selectedProjection()!.bbox.join(', ') }</p>
+              <p>
+                <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.Area() }</span>
+                \ { selectedProjection()!.area }</p>
+              <p>
+                <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.Unit() }</span>
+                \ { selectedProjection()!.unit }</p>
+              <p>
+                <a
+                  href={`https://epsg.io/${selectedProjection()!.code}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FiExternalLink style={{ height: '1em', width: '1em', 'vertical-align': 'text-top' }}/>
+                  { props.LL().ProjectionSelection.MoreInformation() }
+                </a>
+              </p>
+            </div>
+            <div style={{ 'text-align': 'center' }}>
+              <button
+                onClick={() => {
+                  setMapStore(
+                    'projection',
+                    {
+                      type: 'proj4',
+                      name: selectedProjection()!.name,
+                      value: selectedProjection()!.proj4,
+                      bounds: selectedProjection()!.bbox,
+                    },
+                  );
+                }}
+              >Apply</button>
+            </div>
+          </Show>
       </div>
     </div>
   </div>;
