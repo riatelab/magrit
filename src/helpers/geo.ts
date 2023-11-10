@@ -311,7 +311,7 @@ function squareForceCollide() {
     });
   }
 
-  force.initialize = (arg0) => (nodes = arg0);
+  force.initialize = (arg0: any) => (nodes = arg0);
 
   return force;
 }
@@ -342,7 +342,7 @@ export const makeDorlingDemersSimulation = (
   },
   iterations: number,
   strokeWidth: number,
-) => {
+): GeoJSONFeature[] => {
   // Util to compute the size of circles, given the
   // reference value and size set by the user
   const propSizer = new PropSizer(

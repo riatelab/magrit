@@ -1,6 +1,6 @@
 import JSZip from 'jszip';
 
-import { GeoJSONFeatureCollection } from '../global.d';
+import { GeoJSONFeatureCollection, GeoJSONFeature } from '../global.d';
 
 /**
  * Convert the given file(s) to a GeoJSON feature collection.
@@ -13,16 +13,16 @@ export async function convertToGeoJSON(
   params: { openOpts: string[]; opts: string[] } = { opts: [], openOpts: [] },
 ): Promise<GeoJSONFeatureCollection> {
   const openOptions = params.openOpts || [];
-  const input = await globalThis.Gdal.open(fileOrFiles, openOptions);
+  const input = await globalThis.gdal.open(fileOrFiles, openOptions);
   const options = [
     '-f', 'GeoJSON',
     '-t_srs', 'EPSG:4326',
     '-lco', 'RFC7946=NO',
     '-lco', 'WRITE_NON_FINITE_VALUES=YES',
   ].concat(params.opts || []);
-  const output = await globalThis.Gdal.ogr2ogr(input.datasets[0], options);
-  const bytes = await globalThis.Gdal.getFileBytes(output);
-  await globalThis.Gdal.close(input);
+  const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
+  const bytes = await globalThis.gdal.getFileBytes(output);
+  await globalThis.gdal.close(input);
   return JSON.parse(new TextDecoder().decode(bytes));
 }
 
@@ -88,7 +88,7 @@ export async function convertFromGeoJSON(
     { type: 'application/geo+json' },
   );
   // Open the GeoJSON file
-  const input = await globalThis.Gdal.open(inputFile);
+  const input = await globalThis.gdal.open(inputFile);
   // Set the options for the conversion
   const options = [
     '-f', format,
@@ -97,7 +97,7 @@ export async function convertFromGeoJSON(
   if (format === 'ESRI Shapefile') {
     options.push('-t_srs', crs);
     options.push('-lco', 'ENCODING=UTF-8');
-    const output = await globalThis.Gdal.ogr2ogr(input.datasets[0], options);
+    const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
     // We will return a zip file (encoded in base 64) containing all the shapefile files
     const zip = new JSZip();
     // Add the cpg file
@@ -109,11 +109,11 @@ export async function convertFromGeoJSON(
           local: output.local.replace('.shp', `.${ext}`),
           real: output.real.replace('.shp', `.${ext}`),
         };
-        const rawData = await globalThis.Gdal.getFileBytes(outputPath);
+        const rawData = await globalThis.gdal.getFileBytes(outputPath);
         const blob = new Blob([rawData], { type: '' });
         zip.file(`${layerName}.${ext}`, blob, { binary: true });
       });
-    await globalThis.Gdal.close(input);
+    await globalThis.gdal.close(input);
     // Generate the zip file (base64 encoded)
     const resZip = await zip.generateAsync({ type: 'base64' });
     return resZip;
@@ -121,24 +121,24 @@ export async function convertFromGeoJSON(
   if (format === 'GML') {
     options.push('-t_srs', crs);
     // For KML and GML, we only return a text file
-    const output = await globalThis.Gdal.ogr2ogr(input.datasets[0], options);
-    const bytes = await globalThis.Gdal.getFileBytes(output);
-    await globalThis.Gdal.close(input);
+    const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
+    const bytes = await globalThis.gdal.getFileBytes(output);
+    await globalThis.gdal.close(input);
     return new TextDecoder().decode(bytes);
   }
   if (format === 'KML') {
     // For KML and GML, we only return a text file
-    const output = await globalThis.Gdal.ogr2ogr(input.datasets[0], options);
-    const bytes = await globalThis.Gdal.getFileBytes(output);
-    await globalThis.Gdal.close(input);
+    const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
+    const bytes = await globalThis.gdal.getFileBytes(output);
+    await globalThis.gdal.close(input);
     return new TextDecoder().decode(bytes);
   }
   if (format === 'GPKG') {
     options.push('-t_srs', crs);
     // For GPKG, we return the binary file, encoded in base64
-    const output = await globalThis.Gdal.ogr2ogr(input.datasets[0], options);
-    const bytes = await globalThis.Gdal.getFileBytes(output);
-    await globalThis.Gdal.close(input);
+    const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
+    const bytes = await globalThis.gdal.getFileBytes(output);
+    await globalThis.gdal.close(input);
     const b64Data = await uintArrayToBase64(bytes);
     return b64Data;
   }

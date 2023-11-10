@@ -1,5 +1,5 @@
 // Imports from solid-js
-import { For, JSX, onMount } from 'solid-js';
+import { For, JSX } from 'solid-js';
 import { autofocus } from '@solid-primitives/autofocus';
 
 // Stores

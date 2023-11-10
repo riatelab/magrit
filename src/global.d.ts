@@ -6,7 +6,7 @@ import type { Dexie } from 'dexie';
 import type { Variable } from './helpers/typeDetection';
 
 declare namespace globalThis {
-  let gdal: typeof Gdal;
+  let gdal: Gdal;
   // let Dexie: DexieConstructor;
   // db is an instance of Dexie
   let db: typeof Dexie & { projects: Dexie.Table<any, number> };
@@ -26,6 +26,7 @@ type LayerDescription = {
   // The type of representation of the layer
   renderer: RepresentationType,
   // The data for the layer
+  // (this is either a GeoJSONFeatureCollection or a Sphere, as a special case)
   data: GeoJSONFeatureCollection,
   // Description of the fields of the layer - undefined if no fields
   fields: Variable[] | undefined,
