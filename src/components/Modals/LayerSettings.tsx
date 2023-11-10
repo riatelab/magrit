@@ -11,7 +11,12 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/L
 import { setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 
 // Types / Interfaces
-import type { LayerDescription, ProportionalSymbolsParameters, LabelsParameters } from '../../global.d';
+import type {
+  LayerDescription,
+  ProportionalSymbolsParameters,
+  LabelsParameters,
+  ClassificationParameters,
+} from '../../global.d';
 
 // Styles
 import '../../styles/LayerAndLegendSettings.css';
@@ -19,6 +24,7 @@ import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import InputFieldText from '../Inputs/InputText.tsx';
 
 const updateProp = (
   layerId: string,
@@ -163,13 +169,15 @@ function makeSettingsDefaultPoint(
             setClassificationPanelStore({
               show: true,
               layerName: props.name,
-              variableName: props.rendererParameters.variable,
+              variableName: (props.rendererParameters as ClassificationParameters).variable,
               series: props.data.features
-                .map((f) => f.properties[props.rendererParameters.variable]),
-              nClasses: props.rendererParameters.classes,
-              colorScheme: props.rendererParameters.palette.name,
-              invertColorScheme: props.rendererParameters.reversePalette,
-              noDataColor: props.rendererParameters.nodataColor,
+                .map((f) => f.properties[(
+                  props.rendererParameters as ClassificationParameters).variable]),
+              nClasses: (props.rendererParameters as ClassificationParameters).classes,
+              colorScheme: (props.rendererParameters as ClassificationParameters).palette.name,
+              invertColorScheme: (
+                props.rendererParameters as ClassificationParameters).reversePalette,
+              noDataColor: (props.rendererParameters as ClassificationParameters).nodataColor,
               onCancel: () => {
                 setLayersDescriptionStore(
                   'layers',
@@ -247,8 +255,19 @@ function makeSettingsDefaultPoint(
             'rendererParameters',
             { avoidOverlapping: checked },
           );
+          // TODO: update the map
         }}
       />
+      <Show when={(props.rendererParameters as ProportionalSymbolsParameters).avoidOverlapping}>
+        <InputFieldNumber
+          label={'Iterations'}
+          value={(props.rendererParameters as ProportionalSymbolsParameters).iterations}
+          onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'iterations'], v)}
+          min={1}
+          max={1000}
+          step={1}
+        />
+      </Show>
     </Show>
     <InputFieldCheckbox
       label={ LL().LayerSettings.DropShadow() }
@@ -281,13 +300,15 @@ function makeSettingsDefaultLine(
             setClassificationPanelStore({
               show: true,
               layerName: props.name,
-              variableName: props.rendererParameters.variable,
+              variableName: (props.rendererParameters as ClassificationParameters).variable,
               series: props.data.features
-                .map((f) => f.properties[props.rendererParameters.variable]),
-              nClasses: props.rendererParameters.classes,
-              colorScheme: props.rendererParameters.palette.name,
-              invertColorScheme: props.rendererParameters.reversePalette,
-              noDataColor: props.rendererParameters.nodataColor,
+                .map((f) => f.properties[(
+                  props.rendererParameters as ClassificationParameters).variable]),
+              nClasses: (props.rendererParameters as ClassificationParameters).classes,
+              colorScheme: (props.rendererParameters as ClassificationParameters).palette.name,
+              invertColorScheme: (
+                props.rendererParameters as ClassificationParameters).reversePalette,
+              noDataColor: (props.rendererParameters as ClassificationParameters).nodataColor,
               onCancel: () => {
                 setLayersDescriptionStore(
                   'layers',
@@ -310,7 +331,7 @@ function makeSettingsDefaultLine(
     </Show>
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeOpacity() }
-      value={ props.strokeOpacity }
+      value={ props.strokeOpacity! }
       onChange={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
       min={0}
       max={1}
@@ -318,7 +339,7 @@ function makeSettingsDefaultLine(
     />
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeWidth() }
-      value={+props.strokeWidth.replace('px', '')}
+      value={+props.strokeWidth!.replace('px', '')}
       onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', `${v}px`)}
       min={0}
       max={10}
@@ -356,14 +377,16 @@ function makeSettingsDefaultPolygon(
             setClassificationPanelStore({
               show: true,
               layerName: props.name,
-              variableName: props.rendererParameters.variable,
+              variableName: (props.rendererParameters as ClassificationParameters).variable,
               series: props.data.features
-                .map((f) => f.properties[props.rendererParameters.variable]),
-              classificationMethod: props.rendererParameters.method,
-              nClasses: props.rendererParameters.classes,
-              colorScheme: props.rendererParameters.palette.name,
-              invertColorScheme: props.rendererParameters.reversePalette,
-              noDataColor: props.rendererParameters.nodataColor,
+                .map((f) => f.properties[(
+                  props.rendererParameters as ClassificationParameters).variable]),
+              classificationMethod: (props.rendererParameters as ClassificationParameters).method,
+              nClasses: (props.rendererParameters as ClassificationParameters).classes,
+              colorScheme: (props.rendererParameters as ClassificationParameters).palette.name,
+              invertColorScheme: (
+                props.rendererParameters as ClassificationParameters).reversePalette,
+              noDataColor: (props.rendererParameters as ClassificationParameters).nodataColor,
               onCancel: () => {
                 setLayersDescriptionStore(
                   'layers',
@@ -406,7 +429,7 @@ function makeSettingsDefaultPolygon(
     />
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeWidth() }
-      value={+props.strokeWidth.replace('px', '')}
+      value={+props.strokeWidth!.replace('px', '')}
       onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', `${v}px`)}
       min={0}
       max={10}
@@ -445,7 +468,12 @@ export default function LayerSettings(
 
   return <div class="layer-settings">
     <div class="layer-settings__title">
-      { LL().LayerSettings.Name() } : { layerDescription.name }
+      <InputFieldText
+        label={ LL().LayerSettings.Name() }
+        value={ layerDescription.name }
+        onChange={(v) => updateProp(layerDescription.id, 'name', v)}
+        width={460}
+      />
     </div>
     <br />
     <div class="layer-settings__content">

@@ -44,6 +44,8 @@ type LayerDescription = {
   fillColor?: string,
   // The opacity of the fill (not used for linestring layers)
   fillOpacity?: number,
+  // The radius of the point (not used for linestring / polygon layers)
+  pointRadius?: number,
   // Whether there is a drop shadow or not (we may want to replace the boolean value
   // by an object describing the drop shadow parameters in the future)
   dropShadow: boolean,
@@ -210,6 +212,9 @@ export interface ProportionalSymbolsParameters {
   // (i.e. whether to use a force simulation or not to create
   // a Dorling / Demers like representation)
   avoidOverlapping: boolean,
+  // The number of iterations of the force simulation
+  // (only used if avoidOverlapping is true)
+  iterations: number,
 }
 
 export interface CategoricalChoroplethParameters {

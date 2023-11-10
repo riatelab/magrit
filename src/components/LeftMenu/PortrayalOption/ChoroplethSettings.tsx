@@ -23,7 +23,7 @@ import { findSuitableName, isNumber } from '../../../helpers/common';
 import d3 from '../../../helpers/d3-custom';
 import { generateIdLayer } from '../../../helpers/layers';
 import { Mmin } from '../../../helpers/math';
-import type { VariableType } from '../../../helpers/typeDetection';
+import { VariableType } from '../../../helpers/typeDetection';
 
 // Subcomponents
 import InputResultName from './InputResultName.tsx';
