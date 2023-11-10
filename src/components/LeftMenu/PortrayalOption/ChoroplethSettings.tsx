@@ -1,6 +1,6 @@
 // Import from solid-js
 import {
-  createEffect, createMemo, createSignal, For,
+  createMemo, createSignal, For,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 

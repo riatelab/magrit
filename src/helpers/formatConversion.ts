@@ -1,5 +1,6 @@
 import JSZip from 'jszip';
-import { GeoJSONFeatureCollection } from '../global';
+
+import { GeoJSONFeatureCollection } from '../global.d';
 
 /**
  * Convert the given file(s) to a GeoJSON feature collection.

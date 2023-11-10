@@ -14,7 +14,7 @@ import { globalStore } from '../../store/GlobalStore';
 // Types / Interfaces / Enums
 import {
   LabelsParameters,
-  type LayerDescription, ProportionalSymbolsParameters,
+  type LayerDescriptionLabels,
   RenderVisibility,
 } from '../../global.d';
 
@@ -25,7 +25,7 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
 ];
 
 export function defaultLabelsRenderer(
-  layerDescription: LayerDescription,
+  layerDescription: LayerDescriptionLabels,
 ): JSX.Element {
   const rendererParameters = layerDescription.rendererParameters as LabelsParameters;
 
@@ -62,7 +62,7 @@ export function defaultLabelsRenderer(
 }
 
 export function graticuleLabelsRenderer(
-  layerDescription: LayerDescription,
+  layerDescription: LayerDescriptionLabels,
 ): JSX.Element {
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden

@@ -10,8 +10,8 @@ import { SupportedGeoFileTypes } from './supportedFormats';
 import { convertFromGeoJSON } from './formatConversion';
 
 // Types / Interfaces
-import type { GeoJSONFeatureCollection } from '../global';
 import { getTargetSvg, redrawPaths } from './svg';
+import type { GeoJSONFeatureCollection } from '../global.d';
 
 /**
  * Get the dimensions of the SVG map element.

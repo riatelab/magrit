@@ -26,7 +26,7 @@ import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Types / Interfaces / Enums
 import {
-  type LayerDescription,
+  type LayerDescription, LayerDescriptionProportionalSymbols,
   ProportionalSymbolsLegendParameters,
   ProportionalSymbolsParameters,
   RenderVisibility,
@@ -34,7 +34,9 @@ import {
 
 const defaultSpacing = 5;
 
-function proportionalSymbolsStackedSquareLegend(layer: LayerDescription): JSX.Element {
+function stackedSquareLegend(
+  layer: LayerDescriptionProportionalSymbols,
+): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
   const propSize = new (PropSizer as any)(
@@ -132,7 +134,6 @@ function proportionalSymbolsStackedSquareLegend(layer: LayerDescription): JSX.El
               <text
                 font-size={layer.legend.labels.fontSize}
                 font-family={layer.legend.labels.fontFamily}
-                font-color={layer.legend.labels.fontColor}
                 font-style={layer.legend.labels.fontStyle}
                 font-weight={layer.legend.labels.fontWeight}
                 fill={layer.legend.labels.fontColor}
@@ -159,7 +160,9 @@ function proportionalSymbolsStackedSquareLegend(layer: LayerDescription): JSX.El
   </g>;
 }
 
-function proportionalSymbolsHorizontalSquareLegend(layer: LayerDescription): JSX.Element {
+function horizontalSquareLegend(
+  layer: LayerDescriptionProportionalSymbols,
+): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
   const propSize = new (PropSizer as any)(
@@ -274,7 +277,6 @@ function proportionalSymbolsHorizontalSquareLegend(layer: LayerDescription): JSX
             <text
               font-size={layer.legend.labels.fontSize}
               font-family={layer.legend.labels.fontFamily}
-              font-color={layer.legend.labels.fontColor}
               font-style={layer.legend.labels.fontStyle}
               font-weight={layer.legend.labels.fontWeight}
               fill={layer.legend.labels.fontColor}
@@ -291,7 +293,9 @@ function proportionalSymbolsHorizontalSquareLegend(layer: LayerDescription): JSX
   </g>;
 }
 
-function proportionalSymbolsVerticalSquareLegend(layer: LayerDescription): JSX.Element {
+function verticalSquareLegend(
+  layer: LayerDescriptionProportionalSymbols,
+): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
   const propSize = new (PropSizer as any)(
@@ -407,7 +411,6 @@ function proportionalSymbolsVerticalSquareLegend(layer: LayerDescription): JSX.E
               <text
                 font-size={layer.legend.labels.fontSize}
                 font-family={layer.legend.labels.fontFamily}
-                font-color={layer.legend.labels.fontColor}
                 font-style={layer.legend.labels.fontStyle}
                 font-weight={layer.legend.labels.fontWeight}
                 fill={layer.legend.labels.fontColor}
@@ -424,7 +427,9 @@ function proportionalSymbolsVerticalSquareLegend(layer: LayerDescription): JSX.E
   </g>;
 }
 
-function proportionalSymbolsStackedCircleLegend(layer: LayerDescription): JSX.Element {
+function stackedCircleLegend(
+  layer: LayerDescriptionProportionalSymbols,
+): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
   const propSize = new (PropSizer as any)(
@@ -521,7 +526,6 @@ function proportionalSymbolsStackedCircleLegend(layer: LayerDescription): JSX.El
               <text
                 font-size={layer.legend.labels.fontSize}
                 font-family={layer.legend.labels.fontFamily}
-                font-color={layer.legend.labels.fontColor}
                 font-style={layer.legend.labels.fontStyle}
                 font-weight={layer.legend.labels.fontWeight}
                 fill={layer.legend.labels.fontColor}
@@ -548,7 +552,9 @@ function proportionalSymbolsStackedCircleLegend(layer: LayerDescription): JSX.El
   </g>;
 }
 
-function proportionalSymbolsVerticalCircleLegend(layer: LayerDescription): JSX.Element {
+function verticalCircleLegend(
+  layer: LayerDescriptionProportionalSymbols,
+): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
 
@@ -644,7 +650,6 @@ function proportionalSymbolsVerticalCircleLegend(layer: LayerDescription): JSX.E
             <text
               font-size={layer.legend.labels.fontSize}
               font-family={layer.legend.labels.fontFamily}
-              font-color={layer.legend.labels.fontColor}
               font-style={layer.legend.labels.fontStyle}
               font-weight={layer.legend.labels.fontWeight}
               fill={layer.legend.labels.fontColor}
@@ -668,7 +673,9 @@ function proportionalSymbolsVerticalCircleLegend(layer: LayerDescription): JSX.E
   </g>;
 }
 
-function proportionalSymbolsHorizontalCircleLegend(layer: LayerDescription): JSX.Element {
+function horizontalCircleLegend(
+  layer: LayerDescriptionProportionalSymbols,
+): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
 
@@ -761,7 +768,6 @@ function proportionalSymbolsHorizontalCircleLegend(layer: LayerDescription): JSX
             <text
               font-size={layer.legend.labels.fontSize}
               font-family={layer.legend.labels.fontFamily}
-              font-color={layer.legend.labels.fontColor}
               font-style={layer.legend.labels.fontStyle}
               font-weight={layer.legend.labels.fontWeight}
               fill={layer.legend.labels.fontColor}
@@ -785,7 +791,9 @@ function proportionalSymbolsHorizontalCircleLegend(layer: LayerDescription): JSX
   </g>;
 }
 
-export default function legendProportionalSymbols(layer: LayerDescription): JSX.Element {
+export default function legendProportionalSymbols(
+  layer: LayerDescriptionProportionalSymbols,
+): JSX.Element {
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
     || (layer.visible && (layer.legend as ProportionalSymbolsLegendParameters).visible)
@@ -793,14 +801,14 @@ export default function legendProportionalSymbols(layer: LayerDescription): JSX.
     {
       (layer.rendererParameters as ProportionalSymbolsParameters).symbolType === 'circle'
         ? ({
-          stacked: proportionalSymbolsStackedCircleLegend,
-          vertical: proportionalSymbolsVerticalCircleLegend,
-          horizontal: proportionalSymbolsHorizontalCircleLegend,
+          stacked: stackedCircleLegend,
+          vertical: verticalCircleLegend,
+          horizontal: horizontalCircleLegend,
         })[(layer.legend as ProportionalSymbolsLegendParameters).layout](layer)
         : ({
-          stacked: proportionalSymbolsStackedSquareLegend,
-          vertical: proportionalSymbolsVerticalSquareLegend,
-          horizontal: proportionalSymbolsHorizontalSquareLegend,
+          stacked: stackedSquareLegend,
+          vertical: verticalSquareLegend,
+          horizontal: horizontalSquareLegend,
         })[(layer.legend as ProportionalSymbolsLegendParameters).layout](layer)
     }
   </Show>;

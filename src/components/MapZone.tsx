@@ -45,8 +45,16 @@ import legendProportionalSymbols from './LegendRenderer/ProportionnalSymbolsLege
 
 // Types and enums
 import {
-  Ellipse, FreeDrawing, type IZoomable, LayoutFeatureType,
-  Rectangle, ZoomBehavior, ScaleBar,
+  Ellipse,
+  FreeDrawing,
+  type IZoomable,
+  LayoutFeatureType,
+  Rectangle,
+  ZoomBehavior,
+  ScaleBar,
+  type LayerDescriptionChoropleth,
+  type LayerDescriptionProportionalSymbols,
+  type LayerDescriptionLabels,
 } from '../global.d';
 
 // Styles
@@ -211,13 +219,13 @@ export default function MapZone(): JSX.Element {
               if (layer.type === 'point') return defaultPointRenderer(layer);
               if (layer.type === 'linestring') return defaultLineRenderer(layer);
             } else if (layer.renderer === 'choropleth') {
-              if (layer.type === 'polygon') return choroplethPolygonRenderer(layer);
-              if (layer.type === 'point') return choroplethPointRenderer(layer);
-              if (layer.type === 'linestring') return choroplethLineRenderer(layer);
+              if (layer.type === 'polygon') return choroplethPolygonRenderer(layer as LayerDescriptionChoropleth);
+              if (layer.type === 'point') return choroplethPointRenderer(layer as LayerDescriptionChoropleth);
+              if (layer.type === 'linestring') return choroplethLineRenderer(layer as LayerDescriptionChoropleth);
             } else if (layer.renderer === 'proportionalSymbols') {
-              return proportionalSymbolsRenderer(layer);
+              return proportionalSymbolsRenderer(layer as LayerDescriptionProportionalSymbols);
             } else if (layer.renderer === 'labels') {
-              if (layer.type === 'point') return defaultLabelsRenderer(layer);
+              if (layer.type === 'point') return defaultLabelsRenderer(layer as LayerDescriptionLabels);
             }
             return null;
           }}

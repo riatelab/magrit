@@ -17,6 +17,8 @@ import type { TranslationFunctions } from '../../i18n/i18n-types';
 // Types / Interfaces / Enums
 import {
   type LayerDescription,
+  type LayerDescriptionChoropleth,
+  type LayerDescriptionProportionalSymbols,
   LegendType,
 } from '../../global.d';
 
@@ -45,7 +47,9 @@ const updateProps = (layerId: string, props: string[], value: string | number) =
 
 const debouncedUpdateProps = debounce(updateProps, 250);
 
-function TextOptionTable(props: { layer: LayerDescription, LL: Accessor<TranslationFunctions> }) {
+function TextOptionTable(
+  props: { layer: LayerDescription, LL: Accessor<TranslationFunctions> },
+): JSX.Element {
   return <table style={{ 'text-align': 'center' }}>
     <thead>
     <tr>
@@ -197,7 +201,7 @@ function FieldRoundDecimals(
   </div>;
 }
 function makeSettingsProportionalSymbolsLegend(
-  layer: LayerDescription,
+  layer: LayerDescriptionProportionalSymbols,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
   const [
@@ -300,7 +304,7 @@ function makeSettingsProportionalSymbolsLegend(
 }
 
 function makeSettingsChoroplethLegend(
-  layer: LayerDescription,
+  layer: LayerDescriptionChoropleth,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
   const [
@@ -441,6 +445,19 @@ function makeSettingsChoroplethLegend(
   </>;
 }
 
+function getInnerPanel(ld: LayerDescription, LL: Accessor<TranslationFunctions>): JSX.Element {
+  if (ld.legend?.type === LegendType.choropleth) {
+    return makeSettingsChoroplethLegend(ld as LayerDescriptionChoropleth, LL);
+  }
+  if (ld.legend?.type === LegendType.proportional) {
+    return makeSettingsProportionalSymbolsLegend(ld as LayerDescriptionProportionalSymbols, LL);
+  }
+  if (ld.legend?.type === LegendType.labels) {
+    return <></>;
+  }
+  return <></>;
+}
+
 export default function LegendSettings(
   props: {
     layerId: string,
@@ -460,16 +477,10 @@ export default function LegendSettings(
   }
 
   return <div class="legend-settings">
-    {/* <div class="legend-settings__title"> */}
-    {/*   { LL().Legend.Modal.Title() } */}
-    {/* </div> */}
     <br />
     <div class="legend-settings__content">
       {
-        ({
-          [LegendType.choropleth]: makeSettingsChoroplethLegend,
-          [LegendType.proportional]: makeSettingsProportionalSymbolsLegend,
-        })[layerDescription.legend!.type](layerDescription, LL)
+        getInnerPanel(layerDescription, LL)
       }
     </div>
   </div>;

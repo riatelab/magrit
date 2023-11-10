@@ -31,14 +31,14 @@ import {
 import {
   ChoroplethLegendParameters,
   type ClassificationParameters,
-  type LayerDescription,
+  type LayerDescription, LayerDescriptionChoropleth,
   Orientation,
   RenderVisibility,
 } from '../../global.d';
 
 const defaultSpacing = 5;
 
-function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
+function verticalLegend(layer: LayerDescription): JSX.Element {
   // Check that the layer has all the required attributes
   // Since this is done during layer creation, this should not happen in practice,
   // and the following checks are here:
@@ -217,7 +217,6 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
             }
             font-size={legendParameters.labels.fontSize}
             font-family={legendParameters.labels.fontFamily}
-            font-color={legendParameters.labels.fontColor}
             font-style={legendParameters.labels.fontStyle}
             font-weight={legendParameters.labels.fontWeight}
             fill={legendParameters.labels.fontColor}
@@ -239,7 +238,6 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
           }
           font-size={legendParameters.labels.fontSize}
           font-family={legendParameters.labels.fontFamily}
-          font-color={legendParameters.labels.fontColor}
           font-style={legendParameters.labels.fontStyle}
           font-weight={legendParameters.labels.fontWeight}
           fill={legendParameters.labels.fontColor}
@@ -252,7 +250,7 @@ function choroplethVerticalLegend(layer: LayerDescription): JSX.Element {
   </g>;
 }
 
-function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
+function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
   // Check that the layer has all the required attributes
   // Since this is done during layer creation, this should not happen in practice
   // and the following checks are here:
@@ -420,7 +418,6 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
             y={distanceLabelsToTop()}
             font-size={legendParameters.labels.fontSize}
             font-family={legendParameters.labels.fontFamily}
-            font-color={legendParameters.labels.fontColor}
             font-style={legendParameters.labels.fontStyle}
             font-weight={legendParameters.labels.fontWeight}
             fill={legendParameters.labels.fontColor}
@@ -440,7 +437,6 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
           y={distanceLabelsToTop()}
           font-size={legendParameters.labels.fontSize}
           font-family={legendParameters.labels.fontFamily}
-          font-color={legendParameters.labels.fontColor}
           font-style={legendParameters.labels.fontStyle}
           font-weight={legendParameters.labels.fontWeight}
           fill={legendParameters.labels.fontColor}
@@ -453,15 +449,15 @@ function choroplethHorizontalLegend(layer: LayerDescription): JSX.Element {
   </g>;
 }
 
-export default function legendChoropleth(layer: LayerDescription): JSX.Element {
+export default function legendChoropleth(layer: LayerDescriptionChoropleth): JSX.Element {
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
     || (layer.visible && layer.legend!.visible)
   }>
     {
       ({
-        [Orientation.vertical]: choroplethVerticalLegend,
-        [Orientation.horizontal]: choroplethHorizontalLegend,
+        [Orientation.vertical]: verticalLegend,
+        [Orientation.horizontal]: horizontalLegend,
       })[(layer.legend as ChoroplethLegendParameters).orientation](layer)
     }
   </Show>;

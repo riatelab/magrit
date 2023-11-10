@@ -14,7 +14,7 @@ import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Types / Interfaces / Enums
 import {
-  LayerDescription,
+  LayerDescription, LayerDescriptionProportionalSymbols,
   ProportionalSymbolsParameters,
   ProportionalSymbolsSymbolType,
   RenderVisibility,
@@ -27,7 +27,7 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
 ];
 
 export default function proportionalSymbolsRenderer(
-  layerDescription: LayerDescription,
+  layerDescription: LayerDescriptionProportionalSymbols,
 ): JSX.Element {
   // This should never happen...
   // We are doing it to inform TypeScript that we are sure that the rendererParameters

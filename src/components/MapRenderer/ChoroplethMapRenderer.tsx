@@ -21,7 +21,7 @@ import bindData from '../../directives/bind-data';
 import {
   ClassificationMethod,
   ClassificationParameters,
-  LayerDescription,
+  LayerDescriptionChoropleth,
   RenderVisibility,
 } from '../../global.d';
 
@@ -32,7 +32,7 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
 ];
 
 export function choroplethPolygonRenderer(
-  layerDescription: LayerDescription,
+  layerDescription: LayerDescriptionChoropleth,
 ): JSX.Element {
   const rendererParameters = createMemo(
     () => layerDescription.rendererParameters as ClassificationParameters,
@@ -89,7 +89,7 @@ export function choroplethPolygonRenderer(
 }
 
 export function choroplethPointRenderer(
-  layerDescription: LayerDescription,
+  layerDescription: LayerDescriptionChoropleth,
 ): JSX.Element {
   const rendererParameters = createMemo(
     () => layerDescription.rendererParameters as ClassificationParameters,
@@ -145,7 +145,7 @@ export function choroplethPointRenderer(
 }
 
 export function choroplethLineRenderer(
-  layerDescription: LayerDescription,
+  layerDescription: LayerDescriptionChoropleth,
 ): JSX.Element {
   const rendererParameters = createMemo(
     () => layerDescription.rendererParameters as ClassificationParameters,

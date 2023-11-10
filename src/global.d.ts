@@ -27,7 +27,7 @@ type CustomFileList = FileEntry[];
 
 // The description of a layer
 // (it contains all the necessary elements to display the layer and its legend if any)
-interface LayerDescription {
+type LayerDescription = {
   // The internal unique identifier of the layer
   id: string,
   // The name of the layer (as displayed in the UI, can be changed by the user)
@@ -61,20 +61,71 @@ interface LayerDescription {
   // We use auto by default on all layers of less than 10000 features.
   // For Polygon layers of more than 10000 features, we use optimizeSpeed.
   shapeRendering: ('auto' | 'optimizeSpeed' | 'crispEdges' | 'geometricPrecision'),
-  // The radius of the point (not used for linestring / polygon layers)
-  pointRadius?: number,
   // Specific parameters for the current renderer (e.g. proportional symbols)
   // Note: we may move away the 'classification' field to use this "rendererParameters" field
   rendererParameters?: (
     ProportionalSymbolsParameters
     | ClassificationParameters
+    | CategoricalChoroplethParameters
     | ProportionalSymbolsParameters & ClassificationParameters
+    | ProportionalSymbolsParameters & CategoricalChoroplethParameters
     | LabelsParameters
     | GraticuleParameters
+    // | DefaultRendererParameters
   ),
   // Parameters of the legend associated to the layer
-  legend?: ChoroplethLegendParameters | ProportionalSymbolsLegendParameters,
+  legend?: (
+    ChoroplethLegendParameters
+    | ProportionalSymbolsLegendParameters
+    | LabelsLegendParameters
+  ),
+};
+
+interface DefaultRendererParameters {
+  // The color of the stroke (not used for Choropleth on linestring layers)
+  strokeColor?: string,
+  // The width of the stroke
+  strokeWidth?: string,
+  // The opacity of the stroke
+  strokeOpacity?: number,
+  // ...
+  strokeDasharray?: string,
+  // The fill color (not used for Choropleth on point / polygon layers nor for linestring layers)
+  fillColor?: string,
+  // The opacity of the fill (not used for linestring layers)
+  fillOpacity?: number,
+  // The radius of the point (not used for linestring / polygon layers)
+  pointRadius?: number,
 }
+
+// type LayerDescriptionDefault = LayerDescription & {
+//   renderer: RepresentationType.default,
+//   rendererParameters: DefaultRendererParameters
+// };
+
+type LayerDescriptionChoropleth = LayerDescription & {
+  renderer: RepresentationType.choropleth,
+  rendererParameters: ClassificationParameters,
+  legend: ChoroplethLegendParameters,
+};
+
+type LayerDescriptionProportionalSymbols = LayerDescription & {
+  renderer: RepresentationType.proportionalSymbols,
+  rendererParameters: ProportionalSymbolsParameters,
+  legend: ProportionalSymbolsLegendParameters,
+};
+
+type LayerDescriptionLabels = LayerDescription & {
+  renderer: RepresentationType.labels,
+  rendererParameters: LabelsParameters,
+  legend: LabelsLegendParameters,
+};
+
+type LayerDescriptionCategoricalChoropleth = LayerDescription & {
+  renderer: RepresentationType.categorical,
+  rendererParameters: CategoricalChoroplethParameters,
+  legend: ChoroplethLegendParameters,
+};
 
 export enum ProportionalSymbolsColorMode {
   singleColor = 'singleColor',
@@ -87,80 +138,6 @@ export enum ProportionalSymbolsSymbolType {
   circle = 'circle',
   square = 'square',
   line = 'line',
-}
-
-type GeoJSONRecord = { [key in string | number]: unknown };
-
-type GeoJSONPosition = [longitude: number, latitude: number, elevation?: number];
-
-interface GeoJSONGeometryBase extends GeoJSONRecord {
-  bbox?: number[];
-}
-
-interface Point extends GeoJSONGeometryBase {
-  type: 'Point',
-  coordinates: GeoJSONPosition,
-}
-
-interface MultiPoint extends GeoJSONGeometryBase {
-  type: 'MultiPoint',
-  coordinates: GeoJSONPosition[],
-}
-
-interface LineString extends GeoJSONGeometryBase {
-  type: 'LineString',
-  coordinates: GeoJSONPosition[],
-}
-
-interface MultiLineString extends GeoJSONGeometryBase {
-  type: 'MultiLineString',
-  coordinates: GeoJSONPosition[][],
-}
-
-interface Polygon extends GeoJSONGeometryBase {
-  type: 'Polygon',
-  coordinates: GeoJSONPosition[][],
-}
-
-interface MultiPolygon extends GeoJSONGeometryBase {
-  type: 'MultiPolygon',
-  coordinates: GeoJSONPosition[][][],
-}
-
-interface GeometryCollection extends GeoJSONGeometryBase {
-  type: 'GeometryCollection',
-  geometries: GeoJSONGeometry[],
-}
-
-// A GeoJSON Feature
-interface GeoJSONFeature {
-  type: string,
-  id?: string | number,
-  geometry: GeoJSONGeometryType,
-  properties: GeoJSONRecord,
-}
-
-// GeoJSON Geometry types
-type GeoJSONGeometryType = (
-  Point
-  | MultiPoint
-  | LineString
-  | MultiLineString
-  | Polygon
-  | MultiPolygon
-  | GeometryCollection
-);
-
-// A GeoJSON Geometry
-interface GeoJSONGeometry {
-  type: string,
-  coordinates: [],
-}
-
-// A GeoJSON FeatureCollection
-interface GeoJSONFeatureCollection {
-  type: string,
-  features: GeoJSONFeature[],
 }
 
 // The supported data types for the fields of a layer
@@ -273,6 +250,17 @@ export interface ProportionalSymbolsParameters {
   avoidOverlapping: boolean,
 }
 
+export interface CategoricalChoroplethParameters {
+  // The name of the variable
+  variable: string,
+  // The color scheme to use
+  palette: Palette | CustomPalette,
+  // The color to use for features with no data
+  nodataColor: string,
+  // Whether to reverse the palette or not
+  reversePalette: boolean,
+}
+
 export interface GraticuleParameters {
   step: number,
   extent?: [number, number, number, number],
@@ -362,7 +350,7 @@ interface LegendTextElement {
 }
 
 /**
- * The parameters of the legend for choropleth map
+ * The parameters of the legend for choropleth and categorical choropleth maps
  */
 interface ChoroplethLegendParameters extends LegendParametersBase {
   type: LegendType.choropleth,
@@ -404,7 +392,7 @@ interface ProportionalSymbolsLegendParameters extends LegendParametersBase {
 }
 
 interface LabelsLegendParameters extends LegendParametersBase {
-  // TODO
+  type: LegendType.labels,
 }
 
 export type LegendParameters = (
@@ -439,6 +427,7 @@ export enum LegendType {
   choropleth = 'choropleth',
   proportional = 'proportional',
   categorical = 'categorical',
+  labels = 'labels',
   waffle = 'waffle',
 }
 
@@ -624,3 +613,76 @@ export type ScoredResult<T> = {
 };
 
 export type SearchResults<T> = ScoredResult<T>[];
+
+type GeoJSONRecord = { [key in string | number]: unknown };
+type GeoJSONPosition = [longitude: number, latitude: number, elevation?: number];
+
+interface GeoJSONGeometryBase extends GeoJSONRecord {
+  bbox?: number[];
+}
+
+interface Point extends GeoJSONGeometryBase {
+  type: 'Point',
+  coordinates: GeoJSONPosition,
+}
+
+interface MultiPoint extends GeoJSONGeometryBase {
+  type: 'MultiPoint',
+  coordinates: GeoJSONPosition[],
+}
+
+interface LineString extends GeoJSONGeometryBase {
+  type: 'LineString',
+  coordinates: GeoJSONPosition[],
+}
+
+interface MultiLineString extends GeoJSONGeometryBase {
+  type: 'MultiLineString',
+  coordinates: GeoJSONPosition[][],
+}
+
+interface Polygon extends GeoJSONGeometryBase {
+  type: 'Polygon',
+  coordinates: GeoJSONPosition[][],
+}
+
+interface MultiPolygon extends GeoJSONGeometryBase {
+  type: 'MultiPolygon',
+  coordinates: GeoJSONPosition[][][],
+}
+
+interface GeometryCollection extends GeoJSONGeometryBase {
+  type: 'GeometryCollection',
+  geometries: GeoJSONGeometry[],
+}
+
+// A GeoJSON Feature
+interface GeoJSONFeature {
+  type: string,
+  id?: string | number,
+  geometry: GeoJSONGeometryType,
+  properties: GeoJSONRecord,
+}
+
+// GeoJSON Geometry types
+type GeoJSONGeometryType = (
+  Point
+  | MultiPoint
+  | LineString
+  | MultiLineString
+  | Polygon
+  | MultiPolygon
+  | GeometryCollection
+  );
+
+// A GeoJSON Geometry
+interface GeoJSONGeometry {
+  type: string,
+  coordinates: [],
+}
+
+// A GeoJSON FeatureCollection
+interface GeoJSONFeatureCollection {
+  type: string,
+  features: GeoJSONFeature[],
+}
