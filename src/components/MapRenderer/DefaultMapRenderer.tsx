@@ -8,14 +8,14 @@ import { extractMeshAndMergedPolygonToGeojson } from '../../helpers/topojson';
 import { unproxify } from '../../helpers/common';
 
 // Stores
-import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
 
 // Directives
 import bindData from '../../directives/bind-data';
 
 // Types / Interfaces / Enums
-import { LayerDescription, RenderVisibility } from '../../global.d';
+import { LayerDescription } from '../../global.d';
 
 // For now we keep an array of directives
 // because otherwise the import is not detected by the compiler...

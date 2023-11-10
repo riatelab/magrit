@@ -11,7 +11,7 @@ import { makeHexColorWithAlpha } from '../helpers/color';
 // Stores
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
-import { applicationSettingsStore } from '../store/ApplicationSettingsStore';
+import { applicationSettingsStore, ZoomBehavior } from '../store/ApplicationSettingsStore';
 import {
   getDefaultClipExtent,
   mapStore,
@@ -50,7 +50,6 @@ import {
   type IZoomable,
   LayoutFeatureType,
   Rectangle,
-  ZoomBehavior,
   ScaleBar,
   type LayerDescriptionChoropleth,
   type LayerDescriptionProportionalSymbols,

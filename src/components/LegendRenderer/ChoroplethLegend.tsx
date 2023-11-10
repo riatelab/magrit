@@ -13,7 +13,7 @@ import { isNumber } from '../../helpers/common';
 import { round } from '../../helpers/math';
 
 // Stores
-import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
 
 // Sub-components and helpers for legend rendering
 import {
@@ -33,7 +33,6 @@ import {
   type ClassificationParameters,
   type LayerDescription, LayerDescriptionChoropleth,
   Orientation,
-  RenderVisibility,
 } from '../../global.d';
 
 const defaultSpacing = 5;

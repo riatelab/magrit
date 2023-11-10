@@ -8,14 +8,13 @@ import { unproxify } from '../../helpers/common';
 import bindData from '../../directives/bind-data';
 
 // Stores
-import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
 
 // Types / Interfaces / Enums
 import {
   LabelsParameters,
   type LayerDescriptionLabels,
-  RenderVisibility,
 } from '../../global.d';
 
 // For now we keep an array of directives

@@ -8,6 +8,7 @@ import initGdalJs from 'gdal3.js';
 import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'; // eslint-disable-line import/extensions
 import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url';
 import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url';
+import type { Dexie } from 'dexie';
 import { Transition } from 'solid-transition-group';
 import { Toaster } from 'solid-toast';
 
@@ -43,7 +44,7 @@ import {
   type MapStoreType,
   mapStore,
   setMapStore,
-  setMapStoreBase, getDefaultClipExtent,
+  setMapStoreBase,
 } from './store/MapStore';
 import {
   defaultLayersDescription,
@@ -54,14 +55,14 @@ import { modalStore, setModalStore } from './store/ModalStore';
 import { niceAlertStore, setNiceAlertStore } from './store/NiceAlertStore';
 import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
 import { tableWindowStore } from './store/TableWindowStore';
-import { applicationSettingsStore } from './store/ApplicationSettingsStore';
+import { applicationSettingsStore, ResizeBehavior } from './store/ApplicationSettingsStore';
 import { datasetCatalogStore } from './store/DatasetCatalogStore';
 import { modalWithChildrenStore } from './store/ModalWithChildrenStore';
 import { contextMenuStore, resetContextMenuStore } from './store/ContextMenuStore';
 import { undo, redo } from './store/undo-redo';
 
 // Types and enums
-import { LayerDescription, LayoutFeature, ResizeBehavior } from './global.d';
+import { LayerDescription, LayoutFeature } from './global.d';
 
 // Other stuff
 import { version } from '../package.json';
@@ -80,7 +81,7 @@ const loadGdal = async (): Promise<Gdal> => initGdalJs({
 
 let timeout: NodeJS.Timeout | null | undefined = null;
 
-const db = initDb();
+const db = initDb() as Dexie & { projects: Dexie.Table<any, number> };
 
 const onBeforeUnloadWindow = (ev) => {
   // If there is no layer or if
@@ -357,7 +358,7 @@ const AppPage: () => JSX.Element = () => {
       });
 
     // Load GDAL
-    globalThis.Gdal = await loadGdal();
+    globalThis.gdal = await loadGdal();
 
     // ... and store the number of drivers in the global store (we may change this)
     // setGlobalStore({

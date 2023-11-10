@@ -10,14 +10,13 @@ import bindData from '../../directives/bind-data';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
-import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
 
 // Types / Interfaces / Enums
 import {
-  LayerDescription, LayerDescriptionProportionalSymbols,
+  LayerDescriptionProportionalSymbols,
   ProportionalSymbolsParameters,
   ProportionalSymbolsSymbolType,
-  RenderVisibility,
 } from '../../global.d';
 
 // For now we keep an array of directives

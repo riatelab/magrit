@@ -1,11 +1,38 @@
-import { DataType, VariableType } from '../global.d';
 import { isNumber } from './common';
+
+// The supported data types for the fields of a layer
+export enum DataType {
+  string = 'string',
+  number = 'number',
+  boolean = 'boolean',
+  date = 'date',
+}
+
+// The supported ("cartographic") types for the fields of a layer
+export enum VariableType {
+  identifier = 'identifier',
+  ratio = 'ratio',
+  stock = 'stock',
+  categorical = 'categorical',
+  unknown = 'unknown',
+}
+
+export interface Variable {
+  // The name of the described variable
+  name: string,
+  // Whether the variable has missing values or not
+  hasMissingValues: boolean,
+  // The type of the variable
+  type: VariableType,
+  // The data type of the variable
+  dataType: DataType,
+}
 
 // Detect the types of a field:
 // - its DataType
 // - its VariableType
 // - whether it has missing values
-export default function detectTypeField(
+export function detectTypeField(
   values: never[],
 ): { dataType: DataType, variableType: VariableType, hasMissingValues: boolean } {
   // We will loop through the values of the field and try to detect the type of the field

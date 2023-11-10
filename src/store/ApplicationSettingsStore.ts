@@ -1,5 +1,20 @@
 import { createStore } from 'solid-js/store';
-import { RenderVisibility, ResizeBehavior, ZoomBehavior } from '../global.d';
+
+export enum RenderVisibility {
+  RenderAsHidden,
+  // RenderAsDisplayNone,
+  DoNotRender,
+}
+
+export enum ZoomBehavior {
+  Redraw,
+  Transform,
+}
+
+export enum ResizeBehavior {
+  ShrinkGrow,
+  KeepMapSize,
+}
 
 // A bunch of (global) settings for the application
 // (this is not the same as GlobalStore, which contains the state of the application)

@@ -1,29 +1,18 @@
 // declare global {
 // import { WebR } from '@r-wasm/webr/webr-main';
+import type { Gdal } from 'gdal3.js/src/index.d';
 import type { Palette } from 'dicopal/dist/index.d';
 import type { Dexie } from 'dexie';
+import type { Variable } from './helpers/typeDetection';
 
 declare namespace globalThis {
-  let Gdal: typeof Gdal;
+  let gdal: typeof Gdal;
   // let Dexie: DexieConstructor;
   // db is an instance of Dexie
-  let db: typeof Dexie;
+  let db: typeof Dexie & { projects: Dexie.Table<any, number> };
   // WebR instance
   // let webR: WebR;
 }
-
-// A file, dropped by the user
-interface FileEntry {
-  // The name of the file (without the extension)
-  name: string,
-  // The extension of the file (e.g. 'csv')
-  ext: string,
-  // The actual File object
-  file: File,
-}
-
-// A list of FileEntry, dropped by the user
-type CustomFileList = FileEntry[];
 
 // The description of a layer
 // (it contains all the necessary elements to display the layer and its legend if any)
@@ -138,34 +127,6 @@ export enum ProportionalSymbolsSymbolType {
   circle = 'circle',
   square = 'square',
   line = 'line',
-}
-
-// The supported data types for the fields of a layer
-export enum DataType {
-  string = 'string',
-  number = 'number',
-  boolean = 'boolean',
-  date = 'date',
-}
-
-// The supported ("cartographic") types for the fields of a layer
-export enum VariableType {
-  identifier = 'identifier',
-  ratio = 'ratio',
-  stock = 'stock',
-  categorical = 'categorical',
-  unknown = 'unknown',
-}
-
-interface Variable {
-  // The name of the described variable
-  name: string,
-  // Whether the variable has missing values or not
-  hasMissingValues: boolean,
-  // The type of the variable
-  type: VariableType,
-  // The data type of the variable
-  dataType: DataType,
 }
 
 interface ProjectionDefinition {
@@ -401,12 +362,6 @@ export type LegendParameters = (
   | LabelsLegendParameters
 );
 
-export enum RenderVisibility {
-  RenderAsHidden,
-  // RenderAsDisplayNone,
-  DoNotRender,
-}
-
 export enum NumberFormatting {
   useSameLocaleAsBrowser = 'useSameLocaleAsBrowser',
   useSameLocaleAsCurrentLanguage = 'useSameLocaleAsCurrentLanguage',
@@ -435,17 +390,6 @@ export enum Orientation {
   horizontal = 'horizontal',
   vertical = 'vertical',
 }
-
-export enum ZoomBehavior {
-  Redraw,
-  Transform,
-}
-
-export enum ResizeBehavior {
-  ShrinkGrow,
-  KeepMapSize,
-}
-// }
 
 export enum LayoutFeatureType {
   Rectangle,

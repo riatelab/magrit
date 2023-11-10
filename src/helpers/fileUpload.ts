@@ -1,5 +1,17 @@
 import { allowedFileExtensions, allowedMimeTypes } from './supportedFormats';
-import { CustomFileList, FileEntry } from '../global.d';
+
+// A file, dropped by the user
+interface FileEntry {
+  // The name of the file (without the extension)
+  name: string,
+  // The extension of the file (e.g. 'csv')
+  ext: string,
+  // The actual File object
+  file: File,
+}
+
+// A list of FileEntry, dropped by the user
+type CustomFileList = FileEntry[];
 
 export function prepareFileExtensions(files: FileList): CustomFileList {
   return Array.from(files)

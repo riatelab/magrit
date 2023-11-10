@@ -1,7 +1,7 @@
 import { For, JSX, Show } from 'solid-js';
 
 // Stores
-import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
 
 // Helpers
@@ -11,7 +11,7 @@ import { unproxify } from '../../helpers/common';
 import bindData from '../../directives/bind-data';
 
 // Types / Interfaces / Enums
-import { type LayerDescription, RenderVisibility } from '../../global.d';
+import { type LayerDescription } from '../../global.d';
 
 // For now we keep an array of directives
 // because otherwise the import is not detected by the compiler...

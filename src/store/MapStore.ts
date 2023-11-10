@@ -83,7 +83,9 @@ createEffect(
   on(
     () => [mapStore.scale, mapStore.translate, mapStore.rotate],
     () => {
-      console.log('MapStore.ts: createEffect: mapStore.scale, mapStore.translate, mapStore.rotate');
+      // console.log(
+      //   'MapStore.ts: createEffect: mapStore.scale, mapStore.translate, mapStore.rotate',
+      // );
       if (
         !globalStore.projection
       ) {
@@ -105,7 +107,7 @@ createEffect(
                 const layerDescription = (
                   l as LayerDescription & { rendererParameters: ProportionalSymbolsParameters });
                 if (layerDescription.rendererParameters.avoidOverlapping) {
-                  const newFeatures = makeDorlingDemersSimulation(
+                  layerDescription.data.features = makeDorlingDemersSimulation(
                     unproxify(layerDescription.data.features),
                     layerDescription.rendererParameters.variable,
                     {
@@ -115,7 +117,6 @@ createEffect(
                     100,
                     +layerDescription.strokeWidth.replace('px', ''),
                   );
-                  layerDescription.data.features = newFeatures;
                 }
               });
           },
@@ -155,7 +156,7 @@ createEffect(
   on(
     () => mapStore.projection.value,
     () => {
-      console.log('MapStore.ts: createEffect: mapStore.projection.value');
+      // console.log('MapStore.ts: createEffect: mapStore.projection.value');
       // 1. Instantiate the projection (whether it is a d3 or proj4 projection)
       let projection;
       if (mapStore.projection.type === 'd3') {

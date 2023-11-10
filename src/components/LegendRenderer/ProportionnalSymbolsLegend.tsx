@@ -22,14 +22,13 @@ import {
 } from './common.tsx';
 
 // Stores
-import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
 
 // Types / Interfaces / Enums
 import {
-  type LayerDescription, LayerDescriptionProportionalSymbols,
+  type LayerDescriptionProportionalSymbols,
   ProportionalSymbolsLegendParameters,
   ProportionalSymbolsParameters,
-  RenderVisibility,
 } from '../../global.d';
 
 const defaultSpacing = 5;

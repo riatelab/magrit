@@ -16,13 +16,14 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../../stor
 import { setClassificationPanelStore } from '../../../store/ClassificationPanelStore';
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
 
-// Helper functions
+// Helper
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { noop } from '../../../helpers/classification';
 import { findSuitableName, isNumber } from '../../../helpers/common';
 import d3 from '../../../helpers/d3-custom';
 import { generateIdLayer } from '../../../helpers/layers';
 import { Mmin } from '../../../helpers/math';
+import type { VariableType } from '../../../helpers/typeDetection';
 
 // Subcomponents
 import InputResultName from './InputResultName.tsx';
@@ -45,7 +46,6 @@ import {
   LegendType,
   Orientation,
   RepresentationType,
-  VariableType,
 } from '../../../global.d';
 
 interface ChoroplethSettingsProps {

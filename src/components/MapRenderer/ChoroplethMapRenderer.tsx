@@ -11,7 +11,7 @@ import { getClassifier } from '../../helpers/classification';
 import { isNumber, unproxify } from '../../helpers/common';
 
 // Stores
-import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
 
 // Directives
@@ -22,7 +22,6 @@ import {
   ClassificationMethod,
   ClassificationParameters,
   LayerDescriptionChoropleth,
-  RenderVisibility,
 } from '../../global.d';
 
 // For now we keep an array of directives
