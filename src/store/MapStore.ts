@@ -113,8 +113,9 @@ createEffect(
                     {
                       referenceSize: layerDescription.rendererParameters.referenceRadius,
                       referenceValue: layerDescription.rendererParameters.referenceValue,
+                      symbolType: layerDescription.rendererParameters.symbolType,
                     },
-                    100,
+                    layerDescription.rendererParameters.iterations,
                     +layerDescription.strokeWidth.replace('px', ''),
                   );
                 }

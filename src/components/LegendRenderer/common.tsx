@@ -52,10 +52,10 @@ export function makeLegendText(
 
 export const distanceBoxContent = 10;
 
-export function computeRectangleBox(refElement: SVGElement, ...args: any[]) {
+export function computeRectangleBox(refElement: SVGGElement, ...args: any[]) {
   // First we reset the box to its 0-size so it doesn't interfere with the
   // computation of the bbox of the refElement group
-  const rectangleBoxLegend = refElement.querySelector('.legend-box') as SVGElement;
+  const rectangleBoxLegend = refElement.querySelector('.legend-box') as SVGRectElement;
   rectangleBoxLegend.setAttribute('width', '0px');
   rectangleBoxLegend.setAttribute('height', '0px');
   rectangleBoxLegend.setAttribute('x', '0px');
@@ -80,7 +80,7 @@ export function makeRectangleBox(width = 0, height = 0): JSX.Element {
   />;
 }
 
-export function bindMouseEnterLeave(refElement: SVGElement): void {
+export function bindMouseEnterLeave(refElement: SVGGElement): void {
   // Color the .legend-box element when the mouse is over the refElement group
   refElement.addEventListener('mouseover', () => {
     const rectangleBoxLegend = refElement.querySelector('.legend-box') as SVGRectElement;

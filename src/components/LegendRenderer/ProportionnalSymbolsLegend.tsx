@@ -25,13 +25,20 @@ import {
 import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
 
 // Types / Interfaces / Enums
-import {
-  type LayerDescriptionProportionalSymbols,
+import type {
+  LayerDescription,
+  LayerDescriptionProportionalSymbols,
   ProportionalSymbolsLegendParameters,
   ProportionalSymbolsParameters,
 } from '../../global.d';
 
 const defaultSpacing = 5;
+
+const bindElementsLegend = (refElement: SVGGElement, layer: LayerDescription) => {
+  computeRectangleBox(refElement);
+  bindMouseEnterLeave(refElement);
+  bindDragBehavior(refElement, layer);
+};
 
 function stackedSquareLegend(
   layer: LayerDescriptionProportionalSymbols,
@@ -70,17 +77,11 @@ function stackedSquareLegend(
   const positionNote = createMemo(() => (
     heightTitleSubtitle()
     + maxHeight()
-    + +(layer.legend.note.fontSize.replace('px', ''))
-    + defaultSpacing
+    + defaultSpacing * 2
   ));
-  const bindElementsLegend = () => {
-    computeRectangleBox(refElement);
-    bindMouseEnterLeave(refElement);
-    bindDragBehavior(refElement, layer);
-  };
 
   onMount(() => {
-    bindElementsLegend();
+    bindElementsLegend(refElement, layer);
   });
 
   createEffect(() => {
@@ -108,7 +109,7 @@ function stackedSquareLegend(
       e.stopPropagation();
       triggerContextMenuLegend(e, layer.id, LL);
     }}
-    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
     style={{ cursor: 'grab' }}
   >
     { makeRectangleBox() }
@@ -123,6 +124,7 @@ function stackedSquareLegend(
             return <>
               <rect
                 fill={layer.rendererParameters.color}
+                fill-opacity={layer.fillOpacity}
                 stroke={layer.strokeColor}
                 stroke-width={layer.strokeWidth}
                 width={symbolSize}
@@ -141,7 +143,7 @@ function stackedSquareLegend(
                 style={{ 'user-select': 'none' }}
                 x={maxHeight() + defaultSpacing * 2}
                 y={ heightTitleSubtitle() + maxHeight() - symbolSize}
-              >{ round(value, layer.legend!.roundDecimals) }</text>
+              >{ round(value, layer.legend!.roundDecimals).toLocaleString() }</text>
               <line
                 stroke-width={0.8}
                 stroke-dasharray="2"
@@ -199,14 +201,9 @@ function horizontalSquareLegend(
     + +(layer.legend.labels.fontSize.replace('px', ''))
     + defaultSpacing * 3
   ));
-  const bindElementsLegend = () => {
-    computeRectangleBox(refElement);
-    bindMouseEnterLeave(refElement);
-    bindDragBehavior(refElement, layer);
-  };
 
   onMount(() => {
-    bindElementsLegend();
+    bindElementsLegend(refElement, layer);
   });
 
   createEffect(() => {
@@ -253,7 +250,7 @@ function horizontalSquareLegend(
       e.stopPropagation();
       triggerContextMenuLegend(e, layer.id, LL);
     }}
-    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
     style={{ cursor: 'grab' }}
   >
     { makeRectangleBox() }
@@ -266,6 +263,7 @@ function horizontalSquareLegend(
           (d) => <>
             <rect
               fill={layer.rendererParameters.color}
+              fill-opacity={layer.fillOpacity}
               stroke={layer.strokeColor}
               stroke-width={layer.strokeWidth}
               width={d.size}
@@ -335,14 +333,8 @@ function verticalSquareLegend(
     + defaultSpacing * 2 // Spacing between last symbol and note
   ));
 
-  const bindElementsLegend = () => {
-    computeRectangleBox(refElement);
-    bindMouseEnterLeave(refElement);
-    bindDragBehavior(refElement, layer);
-  };
-
   onMount(() => {
-    bindElementsLegend();
+    bindElementsLegend(refElement, layer);
   });
 
   createEffect(() => {
@@ -387,7 +379,7 @@ function verticalSquareLegend(
       e.stopPropagation();
       triggerContextMenuLegend(e, layer.id, LL);
     }}
-    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
     style={{ cursor: 'grab' }}
   >
     { makeRectangleBox() }
@@ -400,6 +392,7 @@ function verticalSquareLegend(
           (d) => <>
               <rect
                 fill={layer.rendererParameters.color}
+                fill-opacity={layer.fillOpacity}
                 stroke={layer.strokeColor}
                 stroke-width={layer.strokeWidth}
                 width={d.size}
@@ -463,17 +456,11 @@ function stackedCircleLegend(
   const positionNote = createMemo(() => (
     heightTitleSubtitle()
     + maxRadius() * 2
-    + +(layer.legend.note.fontSize.replace('px', ''))
-    + defaultSpacing
+    + defaultSpacing * 2
   ));
-  const bindElementsLegend = () => {
-    computeRectangleBox(refElement);
-    bindMouseEnterLeave(refElement);
-    bindDragBehavior(refElement, layer);
-  };
 
   onMount(() => {
-    bindElementsLegend();
+    bindElementsLegend(refElement, layer);
   });
 
   createEffect(() => {
@@ -501,7 +488,7 @@ function stackedCircleLegend(
       e.stopPropagation();
       triggerContextMenuLegend(e, layer.id, LL);
     }}
-    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
     style={{ cursor: 'grab' }}
   >
     { makeRectangleBox() }
@@ -516,6 +503,7 @@ function stackedCircleLegend(
             return <>
               <circle
                 fill={layer.rendererParameters.color}
+                fill-opacity={layer.fillOpacity}
                 stroke={layer.strokeColor}
                 stroke-width={layer.strokeWidth}
                 r={symbolSize}
@@ -533,7 +521,7 @@ function stackedCircleLegend(
                 style={{ 'user-select': 'none' }}
                 x={maxRadius() * 2 + defaultSpacing * 2}
                 y={ heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2 }
-              >{ round(value, layer.legend!.roundDecimals) }</text>
+              >{ round(value, layer.legend!.roundDecimals).toLocaleString() }</text>
               <line
                 stroke-width={0.8}
                 stroke-dasharray="2"
@@ -586,18 +574,8 @@ function verticalCircleLegend(
     ).height + defaultSpacing;
   });
 
-  // const sizeNote = createMemo(
-  //   () => +(layer.legend.title.fontSize.replace('px', '')) + defaultSpacing,
-  // );
-
-  const bindElementsLegend = () => {
-    computeRectangleBox(refElement);
-    bindMouseEnterLeave(refElement);
-    bindDragBehavior(refElement, layer);
-  };
-
   onMount(() => {
-    bindElementsLegend();
+    bindElementsLegend(refElement, layer);
   });
 
   // Precompute the size and position of the symbols now
@@ -606,7 +584,7 @@ function verticalCircleLegend(
   const sizesAndPositions = createMemo(() => {
     let lastPosition = heightTitleSubtitle();
     return layer.legend.values.toReversed()
-      .map((value, i) => {
+      .map((value) => {
         const symbolSize = propSize.scale(value);
         const cy = symbolSize + lastPosition;
         lastPosition = cy + symbolSize + layer.legend.spacing;
@@ -629,7 +607,7 @@ function verticalCircleLegend(
       e.stopPropagation();
       triggerContextMenuLegend(e, layer.id, LL);
     }}
-    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
   >
     { makeRectangleBox() }
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
@@ -640,6 +618,7 @@ function verticalCircleLegend(
           (d) => <>
             <circle
               fill={layer.rendererParameters.color}
+              fill-opacity={layer.fillOpacity}
               stroke={layer.strokeColor}
               stroke-width={layer.strokeWidth}
               r={d.size}
@@ -711,14 +690,8 @@ function horizontalCircleLegend(
     maxRadius() * 2 + heightTitleSubtitle() + defaultSpacing * 3 + +(layer.legend.labels.fontSize.replace('px', ''))
   ));
 
-  const bindElementsLegend = () => {
-    computeRectangleBox(refElement);
-    bindMouseEnterLeave(refElement);
-    bindDragBehavior(refElement, layer);
-  };
-
   onMount(() => {
-    bindElementsLegend();
+    bindElementsLegend(refElement, layer);
   });
 
   const sizesAndPositions = createMemo(() => {
@@ -747,7 +720,7 @@ function horizontalCircleLegend(
       e.stopPropagation();
       triggerContextMenuLegend(e, layer.id, LL);
     }}
-    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
   >
     { makeRectangleBox() }
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
@@ -758,6 +731,7 @@ function horizontalCircleLegend(
           (d) => <>
             <circle
               fill={layer.rendererParameters.color}
+              fill-opacity={layer.fillOpacity}
               stroke={layer.strokeColor}
               stroke-width={layer.strokeWidth}
               r={d.size}
