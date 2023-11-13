@@ -13,6 +13,7 @@ import { getTargetSvg, redrawPaths } from '../helpers/svg';
 import { debouncedPushUndoStack, resetRedoStackStore } from './stateStackStore';
 import { globalStore, setGlobalStore } from './GlobalStore';
 import {
+  layersDescriptionStore,
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from './LayersDescriptionStore';
@@ -74,6 +75,42 @@ const setMapStore = (...args: any[]) => {
   resetRedoStackStore();
   // Update the store
   setMapStoreBase.apply(null, args as never); // eslint-disable-line prefer-spread
+};
+
+/**
+ * Fit the extent of the projection to the extent of the layer, with margins.
+ *
+ * @param {string} id
+ * @param {number} [margin=0.03] - The margin to apply to the extent of the layer.
+ */
+const fitExtent = (id: string, margin = 0.03) => {
+  // Get a reference to the SVG element
+  const svgElem = getTargetSvg();
+
+  // Margin so that the extent of the layer is not on the border of the map
+  const marginX = mapStore.mapDimensions.width * margin;
+  const marginY = mapStore.mapDimensions.height * margin;
+
+  // Fit the extent of the projection to the extent of the layer, with margins
+  globalStore.projection.fitExtent(
+    [
+      [marginX, marginY],
+      [mapStore.mapDimensions.width - marginX, mapStore.mapDimensions.height - marginY],
+    ],
+    layersDescriptionStore.layers.find((l) => l.id === id)?.data,
+  );
+
+  // Update the global store with the new scale and translate
+  setMapStore({
+    scale: globalStore.projection.scale(),
+    translate: globalStore.projection.translate(),
+  });
+
+  // Reset the __zoom property of the svg element by using the zoomIdentity
+  svgElem.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
+
+  // Redraw the paths
+  redrawPaths(svgElem);
 };
 
 // We want to redraw path automatically when the mapStore is updated
@@ -220,8 +257,9 @@ createEffect(
 );
 
 export {
+  fitExtent,
+  getDefaultClipExtent,
   mapStore,
   setMapStoreBase,
   setMapStore,
-  getDefaultClipExtent,
 };

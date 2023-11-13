@@ -119,7 +119,8 @@ export default function LayoutFeatures(): JSX.Element {
               setLayersDescriptionStore(
                 produce(
                   (draft) => {
-                    draft.layers.push(makeDefaultSphere());
+                    // We always want the sphere to be under the other layers
+                    draft.layers.unshift(makeDefaultSphere());
                   },
                 ),
               );

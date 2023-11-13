@@ -11,7 +11,7 @@ interface FileEntry {
 }
 
 // A list of FileEntry, dropped by the user
-type CustomFileList = FileEntry[];
+export type CustomFileList = FileEntry[];
 
 export function prepareFileExtensions(files: FileList): CustomFileList {
   return Array.from(files)

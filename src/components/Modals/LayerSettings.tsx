@@ -78,12 +78,12 @@ function updateDropShadow(layerId: string, checked: boolean) {
 
 function makeSettingsLabels(
   props: LayerDescription,
-  Ll: Accessor<TranslationFunctions>,
+  LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
   const rendererParameters = props.rendererParameters as LabelsParameters;
   return <>
     <InputFieldNumber
-      label={'Taille de la police'}
+      label={ LL().LayerSettings.FontSize() }
       value={rendererParameters.fontSize}
       onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontSize'], v)}
       min={1}
@@ -91,12 +91,12 @@ function makeSettingsLabels(
       step={1}
     />
     <InputFieldColor
-      label={'Couleur du texte'}
+      label={ LL().LayerSettings.TextColor() }
       value={rendererParameters.fontColor}
       onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontColor'], v)}
     />
     <InputFieldNumber
-      label={'X offset'}
+      label={ LL().LayerSettings.XOffset() }
       value={rendererParameters.textOffset[0]}
       onChange={
         (v) => {
@@ -109,8 +109,8 @@ function makeSettingsLabels(
       step={1}
     />
     <InputFieldNumber
-      label={'Y offset'}
-      value={rendererParameters.textOffset[0]}
+      label={ LL().LayerSettings.YOffset() }
+      value={rendererParameters.textOffset[1]}
       onChange={
         (v) => {
           const value = [rendererParameters.textOffset[0], v];
@@ -122,7 +122,7 @@ function makeSettingsLabels(
       step={1}
     />
     <InputFieldSelect
-      label={'Font style'}
+      label={ LL().LayerSettings.FontStyle() }
       onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontStyle'], v)}
       value={rendererParameters.fontStyle}
     >
@@ -130,12 +130,12 @@ function makeSettingsLabels(
       <option value="italic">Italic</option>
     </InputFieldSelect>
     <InputFieldSelect
-      label={'Font style'}
-      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontStyle'], v)}
-      value={rendererParameters.fontStyle}
+      label={ LL().LayerSettings.FontWeight() }
+      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontWeight'], v)}
+      value={rendererParameters.fontWeight}
     >
       <option value="normal">Normal</option>
-      <option value="italic">Italic</option>
+      <option value="bold">Bold</option>
     </InputFieldSelect>
   </>;
 }
@@ -199,6 +199,22 @@ function makeSettingsDefaultPoint(
       </div>
     </Show>
     <Show when={props.renderer === 'proportionalSymbols'}>
+      <InputFieldNumber
+        label={ LL().PortrayalSection.ProportionalSymbolsOptions.ReferenceSize() }
+        value={(props.rendererParameters as ProportionalSymbolsParameters).referenceRadius}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'referenceRadius'], v)}
+        min={1}
+        max={200}
+        step={0.1}
+      />
+      <InputFieldNumber
+        label={ LL().PortrayalSection.ProportionalSymbolsOptions.OnValue() }
+        value={(props.rendererParameters as ProportionalSymbolsParameters).referenceValue}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'referenceValue'], v)}
+        min={1}
+        max={99999999999}
+        step={0.1}
+      />
       <InputFieldColor
         label={ LL().LayerSettings.FillColor() }
         value={ (props.rendererParameters as ProportionalSymbolsParameters).color as string }
@@ -355,11 +371,12 @@ function makeSettingsDefaultPolygon(
   return <>
     {/*
       The way the entities are colored depends on the renderer...
-        - For 'default' renderer (i.e. no classification), we can choose the color manually
+        - For 'default' renderer (i.e. no classification) or 'sphere',
+          we can choose the color manually
         - For 'choropleth' renderer, we propose to reopen the classification modal
         - For 'proportional' renderer, ... (TODO)
     */}
-    <Show when={props.renderer === 'default'}>
+    <Show when={props.renderer === 'default' || props.renderer === 'sphere'}>
       <InputFieldColor
         label={ LL().LayerSettings.FillColor() }
         value={props.fillColor!}

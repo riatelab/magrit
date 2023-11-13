@@ -10,6 +10,7 @@ import { fieldTypingModalStore, setFieldTypingModalStore } from '../../store/Fie
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { unproxify } from '../../helpers/common';
 import { detectTypeField, VariableType, Variable } from '../../helpers/typeDetection';
+import { LayerDescription } from '../../global';
 
 export default function FieldTypingModal(): JSX.Element {
   const { LL } = useI18nContext();
@@ -119,7 +120,7 @@ export default function FieldTypingModal(): JSX.Element {
           onClick={ () => {
             setLayersDescriptionStore(
               'layers',
-              (l) => l.id === layerId,
+              (l: LayerDescription) => l.id === layerId,
               { fields: descriptions },
             );
             setFieldTypingModalStore({ show: false, layerId: '' });

@@ -1,5 +1,10 @@
 // Imports from solid-js
-import { For, JSX, Show } from 'solid-js';
+import {
+  createMemo,
+  For,
+  JSX,
+  Show,
+} from 'solid-js';
 
 // Helpers
 import { unproxify } from '../../helpers/common';
@@ -28,22 +33,12 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
 export default function proportionalSymbolsRenderer(
   layerDescription: LayerDescriptionProportionalSymbols,
 ): JSX.Element {
-  // This should never happen...
-  // We are doing it to inform TypeScript that we are sure that the rendererParameters
-  // property is not null (and so avoid the "Object is possibly 'null'" warning)
-  if (layerDescription.rendererParameters == null) {
-    throw Error('Unexpected Error: Renderer parameters not found');
-  }
-
-  // The parameters for this renderer
-  const rendererParameters = layerDescription.rendererParameters as ProportionalSymbolsParameters;
-
   // Will scale the symbols according to the value of the variable
-  const propSize = new (PropSizer as any)(
-    rendererParameters.referenceValue,
-    rendererParameters.referenceRadius,
-    rendererParameters.symbolType,
-  );
+  const propSize = createMemo(() => new PropSizer(
+    layerDescription.rendererParameters.referenceValue,
+    layerDescription.rendererParameters.referenceRadius,
+    layerDescription.rendererParameters.symbolType,
+  ));
 
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
@@ -65,28 +60,33 @@ export default function proportionalSymbolsRenderer(
         {
           (feature) => {
             const projectedCoords = globalStore.projection(feature.geometry.coordinates);
-            if (rendererParameters.symbolType === ProportionalSymbolsSymbolType.circle) {
-              const symbolSize = propSize.scale(
-                feature.properties[rendererParameters.variable],
-              );
+            if (
+              layerDescription.rendererParameters.symbolType
+              === ProportionalSymbolsSymbolType.circle
+            ) {
               return <circle
-                r={symbolSize}
+                r={propSize().scale(
+                  feature.properties[layerDescription.rendererParameters.variable],
+                )}
                 cx={projectedCoords[0]}
                 cy={projectedCoords[1]}
-                fill={rendererParameters.color as string}
+                fill={layerDescription.rendererParameters.color as string}
                 use:bindData={unproxify(feature)}
               ></circle>;
             }
-            if (rendererParameters.symbolType === ProportionalSymbolsSymbolType.square) {
-              const symbolSize = propSize.scale(
-                feature.properties[rendererParameters.variable],
-              );
+            if (
+              layerDescription.rendererParameters.symbolType
+              === ProportionalSymbolsSymbolType.square
+            ) {
+              const symbolSize = createMemo(() => propSize().scale(
+                feature.properties[layerDescription.rendererParameters.variable],
+              ));
               return <rect
-                width={symbolSize}
-                height={symbolSize}
-                x={projectedCoords[0] - symbolSize / 2}
-                y={projectedCoords[1] - symbolSize / 2}
-                fill={rendererParameters.color}
+                width={symbolSize()}
+                height={symbolSize()}
+                x={projectedCoords[0] - symbolSize() / 2}
+                y={projectedCoords[1] - symbolSize() / 2}
+                fill={layerDescription.rendererParameters.color as string}
                 use:bindData={unproxify(feature)}
               ></rect>;
             }

@@ -6,6 +6,7 @@ type GlobalStoreType = {
   windowDimensions: { width: number, height: number },
   projection: any,
   pathGenerator: any,
+  userHasAddedLayer: boolean,
 };
 
 const [
@@ -17,6 +18,7 @@ const [
   windowDimensions: { width: 0, height: 0 },
   projection: null,
   pathGenerator: null,
+  userHasAddedLayer: false,
 } as GlobalStoreType);
 
 export {

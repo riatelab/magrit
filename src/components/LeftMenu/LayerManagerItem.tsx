@@ -15,18 +15,15 @@ import {
 import { FiType } from 'solid-icons/fi';
 
 // Helpers
-import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
-import { getTargetSvg, redrawPaths } from '../../helpers/svg';
 
 // Stores
-import { globalStore } from '../../store/GlobalStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 import { setModalStore } from '../../store/ModalStore';
 import { setNiceAlertStore } from '../../store/NiceAlertStore';
 import { setTableWindowStore } from '../../store/TableWindowStore';
-import { mapStore, setMapStore } from '../../store/MapStore';
+import { fitExtent } from '../../store/MapStore';
 import { setFieldTypingModalStore } from '../../store/FieldTypingModalStore';
 
 // Other components / subcomponents
@@ -51,40 +48,14 @@ const onClickEye = (id: string) => {
   const visibilityState = layersDescriptionStore.layers.find((l) => l.id === id)?.visible;
   setLayersDescriptionStore(
     'layers',
-    (l) => l.id === id,
+    (l: LayerDescription) => l.id === id,
     { visible: !visibilityState },
   );
 };
 
 const onCLickMagnifyingGlass = (id: string) => {
   console.log('click magnifying glass on item ', id);
-  // Get a reference to the SVG element
-  const svgElem = getTargetSvg();
-
-  // Margin so that the extent of the layer is not on the border of the map
-  const marginX = mapStore.mapDimensions.width * 0.03;
-  const marginY = mapStore.mapDimensions.height * 0.03;
-
-  // Fit the extent of the projection to the extent of the layer, with margins
-  globalStore.projection.fitExtent(
-    [
-      [marginX, marginY],
-      [mapStore.mapDimensions.width - marginX, mapStore.mapDimensions.height - marginY],
-    ],
-    layersDescriptionStore.layers.find((l) => l.id === id)?.data,
-  );
-
-  // Update the global store with the new scale and translate
-  setMapStore({
-    scale: globalStore.projection.scale(),
-    translate: globalStore.projection.translate(),
-  });
-
-  // Reset the __zoom property of the svg element by using the zoomIdentity
-  svgElem.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
-
-  // Redraw the paths
-  redrawPaths(svgElem);
+  fitExtent(id);
 };
 
 const onClickTable = (id: string) => {

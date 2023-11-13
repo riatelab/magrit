@@ -56,6 +56,9 @@ const fr = {
     confirmButton: 'Ajouter à la carte',
     cancelButton: 'Annuler',
   },
+  MapZone: {
+    DropFilesHere: 'Glisser-déposer vos jeux de données ici ! (ou utiliser le menu d\'import des données)',
+  },
   LeftMenu: {
     Import: 'Import des données',
     MapConfiguration: 'Configuration de la carte',
@@ -209,6 +212,12 @@ const fr = {
     PointRadius: 'Rayon du point',
     DropShadow: 'Ajouter une ombre',
     ChangeClassification: 'Changer les options de discrétisation',
+    FontSize: 'Taille de la police',
+    TextColor: 'Couleur du texte',
+    XOffset: 'Décalage en X',
+    YOffset: 'Décalage en Y',
+    FontStyle: 'Style de police',
+    FontWeight: 'Épaisseur de police',
   },
   ProjectionSelection: {
     title: 'Sélection de la projection',

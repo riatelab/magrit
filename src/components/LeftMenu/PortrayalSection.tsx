@@ -1,8 +1,5 @@
 import {
-  createSignal,
-  JSX,
-  onMount,
-  Show,
+  createSignal, JSX, onMount, Show,
 } from 'solid-js';
 
 // Helpers
@@ -73,7 +70,13 @@ export default function PortrayalSection(): JSX.Element {
   const [
     availableVariables,
     setAvailableVariables,
-  ] = createSignal<string | null>(null);
+  ] = createSignal<{
+    hasCategorical: boolean,
+    hasStock: boolean,
+    hasRatio: boolean,
+    hasIdentifier: boolean,
+    // hasUnknown,
+  } | null>(null);
   const [
     selectedPortrayal,
     setSelectedPortrayal,
@@ -115,25 +118,26 @@ export default function PortrayalSection(): JSX.Element {
           { LL().PortrayalSection.PortrayalTypes.ProportionalSymbols() }
         </li>
         <li
+          onClick={ () => { setSelectedPortrayal(RepresentationType.categorical); } }
+          classList={{ 'is-hidden': !availableVariables()?.hasCategorical, selected: selectedPortrayal() === RepresentationType.categorical }}
+        >
+        </li>
+        <li
+          onClick={ () => { setSelectedPortrayal(RepresentationType.discontinuity); } }
+          classList={{
+            'is-hidden': !availableVariables()?.hasStock || !availableVariables()?.hasRatio,
+            selected: selectedPortrayal() === RepresentationType.discontinuity,
+          }}
+        >
+        </li>
+        <li
           onClick={ () => { setSelectedPortrayal(RepresentationType.labels); } }
           classList={{
-            'is-hidden': !layerAnyAvailableVariable(targetLayer()),
+            'is-hidden': !layerAnyAvailableVariable(targetLayer() as string),
             selected: selectedPortrayal() === RepresentationType.labels,
           }}
         >
           { LL().PortrayalSection.PortrayalTypes.Labels() }
-        </li>
-        <li
-          onClick={ () => { setSelectedPortrayal('foo'); } }
-          classList={{ 'is-hidden': !availableVariables()?.hasIdentifier, selected: selectedPortrayal() === 'foo' }}
-        >
-          Fooo
-        </li>
-        <li
-          onClick={ () => { setSelectedPortrayal('bar'); } }
-          classList={{ 'is-hidden': !availableVariables()?.hasCategorical, selected: selectedPortrayal() === 'bar' }}
-        >
-          Baar
         </li>
       </ul>
       <Show when={

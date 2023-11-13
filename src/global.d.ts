@@ -265,6 +265,7 @@ export enum RepresentationType {
   categorical = 'categorical',
   proportionalSymbolsAndCategories = 'proportionalSymbolsAndCategories',
   proportionalSymbolsAndRatio = 'proportionalSymbolsAndRatio',
+  discontinuity = 'discontinuity',
   sphere = 'sphere',
   graticule = 'graticule',
   labels = 'labels',

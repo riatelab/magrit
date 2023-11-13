@@ -105,7 +105,7 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
   // the mousemove event is triggered, and we want to be able to move the
   // refElement group even if the mouse is not over it.
   let outerSvg: SVGSVGElement;
-  let elem: Element = refElement;
+  let elem: Element = refElement.parentElement as Element;
   while (true) {
     if (elem.tagName.toLowerCase() === 'svg') {
       outerSvg = elem as SVGSVGElement;
@@ -265,7 +265,7 @@ export function triggerContextMenuLegend(
         callback: () => {
           setLayersDescriptionStore(
             'layers',
-            (l) => l.id === layerId,
+            (l: LayerDescription) => l.id === layerId,
             'legend',
             { visible: false },
           );

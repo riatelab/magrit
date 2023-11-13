@@ -56,6 +56,9 @@ const en = {
     confirmButton: 'Add to map',
     cancelButton: 'Cancel',
   },
+  MapZone: {
+    DropFilesHere: 'Drag and drop your file(s) here ! (or use the import menu)',
+  },
   LeftMenu: {
     Import: 'Data import',
     MapConfiguration: 'Map configuration',
@@ -209,6 +212,12 @@ const en = {
     PointRadius: 'Point radius',
     DropShadow: 'Add a shadow',
     ChangeClassification: 'Change classification options',
+    FontSize: 'Font size',
+    TextColor: 'Text color',
+    XOffset: 'X offset',
+    YOffset: 'Y offset',
+    FontStyle: 'Font style',
+    FontWeight: 'Font weight',
   },
   ProjectionSelection: {
     title: 'Projection selection',

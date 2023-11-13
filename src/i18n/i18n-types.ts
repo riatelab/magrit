@@ -205,6 +205,12 @@ type RootTranslation = {
 		 */
 		cancelButton: string
 	}
+	MapZone: {
+		/**
+		 * D​r​a​g​ ​a​n​d​ ​d​r​o​p​ ​y​o​u​r​ ​f​i​l​e​(​s​)​ ​h​e​r​e​ ​!​ ​(​o​r​ ​u​s​e​ ​t​h​e​ ​i​m​p​o​r​t​ ​m​e​n​u​)
+		 */
+		DropFilesHere: string
+	}
 	LeftMenu: {
 		/**
 		 * D​a​t​a​ ​i​m​p​o​r​t
@@ -724,6 +730,30 @@ type RootTranslation = {
 		 * C​h​a​n​g​e​ ​c​l​a​s​s​i​f​i​c​a​t​i​o​n​ ​o​p​t​i​o​n​s
 		 */
 		ChangeClassification: string
+		/**
+		 * F​o​n​t​ ​s​i​z​e
+		 */
+		FontSize: string
+		/**
+		 * T​e​x​t​ ​c​o​l​o​r
+		 */
+		TextColor: string
+		/**
+		 * X​ ​o​f​f​s​e​t
+		 */
+		XOffset: string
+		/**
+		 * Y​ ​o​f​f​s​e​t
+		 */
+		YOffset: string
+		/**
+		 * F​o​n​t​ ​s​t​y​l​e
+		 */
+		FontStyle: string
+		/**
+		 * F​o​n​t​ ​w​e​i​g​h​t
+		 */
+		FontWeight: string
 	}
 	ProjectionSelection: {
 		/**
@@ -1442,6 +1472,12 @@ export type TranslationFunctions = {
 		 */
 		cancelButton: () => LocalizedString
 	}
+	MapZone: {
+		/**
+		 * Drag and drop your file(s) here ! (or use the import menu)
+		 */
+		DropFilesHere: () => LocalizedString
+	}
 	LeftMenu: {
 		/**
 		 * Data import
@@ -1961,6 +1997,30 @@ export type TranslationFunctions = {
 		 * Change classification options
 		 */
 		ChangeClassification: () => LocalizedString
+		/**
+		 * Font size
+		 */
+		FontSize: () => LocalizedString
+		/**
+		 * Text color
+		 */
+		TextColor: () => LocalizedString
+		/**
+		 * X offset
+		 */
+		XOffset: () => LocalizedString
+		/**
+		 * Y offset
+		 */
+		YOffset: () => LocalizedString
+		/**
+		 * Font style
+		 */
+		FontStyle: () => LocalizedString
+		/**
+		 * Font weight
+		 */
+		FontWeight: () => LocalizedString
 	}
 	ProjectionSelection: {
 		/**

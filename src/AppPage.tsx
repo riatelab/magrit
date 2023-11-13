@@ -376,7 +376,10 @@ const AppPage: () => JSX.Element = () => {
       setNiceAlertStore({
         show: true,
         content: () => <p>{ LL().Alerts.ReloadLastProject(date.toLocaleDateString())}</p>,
-        confirmCallback: () => { reloadFromProjectObject(data); },
+        confirmCallback: () => {
+          setGlobalStore({ userHasAddedLayer: true });
+          reloadFromProjectObject(data);
+        },
         focusOn: 'confirm',
       });
     }

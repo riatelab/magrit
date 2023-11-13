@@ -1,12 +1,18 @@
 // Imports from solid-js
-import { For, JSX, onMount } from 'solid-js';
+import {
+  For,
+  JSX,
+  onMount,
+  Show,
+} from 'solid-js';
 
 // Imports from other packages
 import d3 from '../helpers/d3-custom';
 
 // Helpers
-import { debounce } from '../helpers/common';
 import { makeHexColorWithAlpha } from '../helpers/color';
+import { debounce } from '../helpers/common';
+import { useI18nContext } from '../i18n/i18n-solid';
 
 // Stores
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
@@ -16,7 +22,6 @@ import {
   getDefaultClipExtent,
   mapStore,
   setMapStore,
-  setMapStoreBase,
 } from '../store/MapStore';
 
 // Sub-components
@@ -53,7 +58,7 @@ import {
   ScaleBar,
   type LayerDescriptionChoropleth,
   type LayerDescriptionProportionalSymbols,
-  type LayerDescriptionLabels,
+  type LayerDescriptionLabels, ID3Element,
 } from '../global.d';
 
 // Styles
@@ -69,20 +74,39 @@ const layoutFeaturesFns = {
 export default function MapZone(): JSX.Element {
   let svgElem: SVGSVGElement & IZoomable;
 
-  // Set up the map when the component is created
-  setMapStoreBase({
-    scale: 160,
-    translate: [mapStore.mapDimensions.width / 2, mapStore.mapDimensions.height / 2],
-  });
+  const { LL } = useI18nContext();
 
+  // Set up the projection when the component is mounted
   const projection = d3[mapStore.projection.value]()
-    .translate(mapStore.translate)
-    .scale(mapStore.scale)
+    .translate([mapStore.mapDimensions.width / 2, mapStore.mapDimensions.height / 2])
+    .scale(160)
     .clipExtent(getDefaultClipExtent());
 
+  // Zoom the map on the sphere when the component is mounted
+  projection.fitExtent(
+    [
+      [
+        mapStore.mapDimensions.width * 0.1,
+        mapStore.mapDimensions.height * 0.1,
+      ],
+      [
+        mapStore.mapDimensions.width - mapStore.mapDimensions.width * 0.1,
+        mapStore.mapDimensions.height - mapStore.mapDimensions.height * 0.1,
+      ],
+    ],
+    { type: 'Sphere' },
+  );
+
+  // Store the projection and the pathGenerator in the global store
   setGlobalStore({
     projection,
     pathGenerator: d3.geoPath(projection),
+  });
+
+  // Store the map store with the new scale and translate
+  setMapStore({
+    scale: globalStore.projection.scale(),
+    translate: globalStore.projection.translate(),
   });
 
   // When applyZoomPan is called with redraw = false,
@@ -98,7 +122,7 @@ export default function MapZone(): JSX.Element {
   const applyZoomPan = (e, redraw: boolean) => {
     if (!redraw) {
       // We just change the transform attribute of the layers
-      svgElem.querySelectorAll('g.layer').forEach((g: SVGGElement) => {
+      svgElem.querySelectorAll('g.layer').forEach((g: Element) => {
         g.setAttribute('transform', e.transform);
       });
     } else {
@@ -159,7 +183,7 @@ export default function MapZone(): JSX.Element {
     });
 
   const getClipSphere = () => {
-    const el = <path d={globalStore.pathGenerator({ type: 'Sphere' })} />;
+    const el = <path d={globalStore.pathGenerator({ type: 'Sphere' })} /> as JSX.Element & ID3Element;
     // eslint-disable-next-line no-underscore-dangle
     el.__data__ = { type: 'Sphere' };
     return <clipPath id="clip-sphere">{ el }</clipPath>;
@@ -246,6 +270,19 @@ export default function MapZone(): JSX.Element {
             feature as Rectangle & Ellipse & FreeDrawing & ScaleBar,
           )}
         </For>
+        <Show when={!globalStore.userHasAddedLayer}>
+          <foreignObject
+            x={0} y={0}
+            width={mapStore.mapDimensions.width} height={mapStore.mapDimensions.height}
+          >
+            <div
+              class="map-zone__inner-placeholder is-flex is-justify-content-center is-align-content-center"
+              style={{ 'flex-wrap': 'wrap', height: '100%' }}
+            >
+              <p>{ LL().MapZone.DropFilesHere() }</p>
+            </div>
+          </foreignObject>
+        </Show>
       </svg>
     </div>
   </div>;

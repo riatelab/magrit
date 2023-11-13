@@ -28,10 +28,10 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
   // the mousemove event is triggered, and we want to be able to move the
   // refElement group even if the mouse is not over it.
   let outerSvg: SVGSVGElement;
-  let elem: Element = refElement as Element;
+  let elem: Element = refElement.parentElement as Element;
   while (true) {
     if (elem.tagName.toLowerCase() === 'svg') {
-      outerSvg = elem as unknown as SVGSVGElement;
+      outerSvg = elem as SVGSVGElement;
       break;
     } else {
       elem = elem.parentElement as Element;

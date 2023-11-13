@@ -6,10 +6,11 @@ import { produce } from 'solid-js/store';
 import { getPalette } from 'dicopal';
 
 // Stores
-import { overlayDropStore, setOverlayDropStore } from '../store/OverlayDropStore';
-import { layersDescriptionStore, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
 import { setFieldTypingModalStore } from '../store/FieldTypingModalStore';
-import { setGlobalStore } from '../store/GlobalStore';
+import { globalStore, setGlobalStore } from '../store/GlobalStore';
+import { setLayersDescriptionStore } from '../store/LayersDescriptionStore';
+import { fitExtent } from '../store/MapStore';
+import { overlayDropStore, setOverlayDropStore } from '../store/OverlayDropStore';
 
 // Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
@@ -18,10 +19,17 @@ import { convertToGeoJSON, getGeometryType } from '../helpers/formatConversion';
 import { generateIdLayer } from '../helpers/layers';
 
 // Types / Interfaces / Enums
-import { type CustomFileList } from '../global';
+import type { CustomFileList } from '../helpers/fileUpload';
+import { GeoJSONFeatureCollection } from '../global';
 
 // Styles
 import '../styles/OverlayDrop.css';
+
+/*
+TODO: most of the logic in the file should be moved to a helper (because in the future it
+  will be used in other places than the overlay drop - notably the view dedicated to
+  handling files / user data)
+*/
 
 const getDefaultRenderingParams = (geomType: string) => {
   const pal = getPalette('Vivid', 10)!.colors;
@@ -62,7 +70,7 @@ const getDefaultRenderingParams = (geomType: string) => {
   return {};
 };
 
-function addLayer(geojson: GeoJSON.FeatureCollection, name: string) {
+function addLayer(geojson: GeoJSONFeatureCollection, name: string) {
   const geomType = getGeometryType(geojson);
   const layerId = generateIdLayer();
 
@@ -78,17 +86,34 @@ function addLayer(geojson: GeoJSON.FeatureCollection, name: string) {
     shapeRendering: geomType === 'polygon' && geojson.features.length > 10000 ? 'optimizeSpeed' : 'auto',
   };
 
+  let firstLayer = false;
+
   // TODO: ideally, we should push the state *after* having
   //   asking field types to the user so that it is only
-  //   one entry in the undo/redo stack
+  //   one entry in the undo/redo stack...
+  //   (however this is not doable with the current architecture
+  //   because we need to know the layerId, and to have it in the LayersDescriptionStore,
+  //   to be able to ask the user for the field types...)
   setLayersDescriptionStore(
     produce(
       (draft) => {
+        if (!globalStore.userHasAddedLayer) {
+          // eslint-disable-next-line no-param-reassign
+          draft.layers = [];
+          setGlobalStore({ userHasAddedLayer: true });
+          firstLayer = true;
+        }
         draft.layers.push(newLayerDescription);
       },
     ),
   );
 
+  // If this is the first layer, zoom on it:
+  if (firstLayer) {
+    fitExtent(layerId);
+  }
+
+  // Open modal for field typing
   setFieldTypingModalStore({
     show: true,
     layerId,
