@@ -76,6 +76,7 @@ function onClickValidate(
     referenceValue: refValueForSymbolSize,
     avoidOverlapping,
     iterations: 100,
+    movable: false,
   } as ProportionalSymbolsParameters;
 
   // Copy dataset

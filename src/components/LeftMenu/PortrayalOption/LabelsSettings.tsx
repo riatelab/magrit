@@ -58,6 +58,14 @@ function onClickValidate(
     });
   }
 
+  // Store the original position of the features (we will need it
+  // later if the user wants to change the position of the
+  // labels manually)
+  newData.features.forEach((feature) => {
+    // eslint-disable-next-line no-param-reassign
+    feature.geometry.originalCoordinates = feature.geometry.coordinates;
+  });
+
   const newLayerDescription = {
     id: generateIdLayer(),
     name: newLayerName,
@@ -87,6 +95,7 @@ function onClickValidate(
         size: 0,
         color: '#fefefe',
       },
+      movable: false,
     } as LabelsParameters,
   };
 

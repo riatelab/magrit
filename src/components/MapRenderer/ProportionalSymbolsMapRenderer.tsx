@@ -2,13 +2,13 @@
 import {
   createMemo,
   For,
-  JSX,
+  JSX, onMount,
   Show,
 } from 'solid-js';
 
 // Helpers
-import { unproxify } from '../../helpers/common';
 import { PropSizer } from '../../helpers/geo';
+import bindDragBehavior from './common.tsx';
 
 // Directives
 import bindData from '../../directives/bind-data';
@@ -20,7 +20,6 @@ import { applicationSettingsStore, RenderVisibility } from '../../store/Applicat
 // Types / Interfaces / Enums
 import {
   LayerDescriptionProportionalSymbols,
-  ProportionalSymbolsParameters,
   ProportionalSymbolsSymbolType,
 } from '../../global.d';
 
@@ -33,6 +32,7 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
 export default function proportionalSymbolsRenderer(
   layerDescription: LayerDescriptionProportionalSymbols,
 ): JSX.Element {
+  let refElement: SVGGElement;
   // Will scale the symbols according to the value of the variable
   const propSize = createMemo(() => new PropSizer(
     layerDescription.rendererParameters.referenceValue,
@@ -40,11 +40,19 @@ export default function proportionalSymbolsRenderer(
     layerDescription.rendererParameters.symbolType,
   ));
 
+  onMount(() => {
+    refElement.querySelectorAll('circle, rect')
+      .forEach((symbolElement, i) => {
+        bindDragBehavior(symbolElement, layerDescription, i);
+      });
+  });
+
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
     || layerDescription.visible
   }>
     <g
+      ref={refElement}
       id={layerDescription.id}
       class="layer proportional-symbols"
       visibility={layerDescription.visible ? undefined : 'hidden'}
@@ -59,7 +67,9 @@ export default function proportionalSymbolsRenderer(
       <For each={layerDescription.data.features}>
         {
           (feature) => {
-            const projectedCoords = globalStore.projection(feature.geometry.coordinates);
+            const projectedCoords = createMemo(
+              () => globalStore.projection(feature.geometry.coordinates),
+            );
             if (
               layerDescription.rendererParameters.symbolType
               === ProportionalSymbolsSymbolType.circle
@@ -68,10 +78,10 @@ export default function proportionalSymbolsRenderer(
                 r={propSize().scale(
                   feature.properties[layerDescription.rendererParameters.variable],
                 )}
-                cx={projectedCoords[0]}
-                cy={projectedCoords[1]}
+                cx={projectedCoords()[0]}
+                cy={projectedCoords()[1]}
                 fill={layerDescription.rendererParameters.color as string}
-                use:bindData={unproxify(feature)}
+                use:bindData={feature}
               ></circle>;
             }
             if (
@@ -84,10 +94,10 @@ export default function proportionalSymbolsRenderer(
               return <rect
                 width={symbolSize()}
                 height={symbolSize()}
-                x={projectedCoords[0] - symbolSize() / 2}
-                y={projectedCoords[1] - symbolSize() / 2}
+                x={projectedCoords()[0] - symbolSize() / 2}
+                y={projectedCoords()[1] - symbolSize() / 2}
                 fill={layerDescription.rendererParameters.color as string}
-                use:bindData={unproxify(feature)}
+                use:bindData={feature}
               ></rect>;
             }
             return null;

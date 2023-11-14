@@ -727,9 +727,17 @@ type RootTranslation = {
 		 */
 		DropShadow: string
 		/**
+		 * A​l​l​o​w​ ​m​o​v​i​n​g​ ​s​y​m​b​o​l​s
+		 */
+		AllowMovingSymbols: string
+		/**
 		 * C​h​a​n​g​e​ ​c​l​a​s​s​i​f​i​c​a​t​i​o​n​ ​o​p​t​i​o​n​s
 		 */
 		ChangeClassification: string
+		/**
+		 * F​o​n​t​ ​f​a​m​i​l​y
+		 */
+		FontFamily: string
 		/**
 		 * F​o​n​t​ ​s​i​z​e
 		 */
@@ -754,6 +762,10 @@ type RootTranslation = {
 		 * F​o​n​t​ ​w​e​i​g​h​t
 		 */
 		FontWeight: string
+		/**
+		 * A​l​l​o​w​ ​m​o​v​i​n​g​ ​l​a​b​e​l​s
+		 */
+		AllowMovingLabels: string
 	}
 	ProjectionSelection: {
 		/**
@@ -1994,9 +2006,17 @@ export type TranslationFunctions = {
 		 */
 		DropShadow: () => LocalizedString
 		/**
+		 * Allow moving symbols
+		 */
+		AllowMovingSymbols: () => LocalizedString
+		/**
 		 * Change classification options
 		 */
 		ChangeClassification: () => LocalizedString
+		/**
+		 * Font family
+		 */
+		FontFamily: () => LocalizedString
 		/**
 		 * Font size
 		 */
@@ -2021,6 +2041,10 @@ export type TranslationFunctions = {
 		 * Font weight
 		 */
 		FontWeight: () => LocalizedString
+		/**
+		 * Allow moving labels
+		 */
+		AllowMovingLabels: () => LocalizedString
 	}
 	ProjectionSelection: {
 		/**

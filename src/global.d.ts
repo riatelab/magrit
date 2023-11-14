@@ -215,6 +215,8 @@ export interface ProportionalSymbolsParameters {
   // The number of iterations of the force simulation
   // (only used if avoidOverlapping is true)
   iterations: number,
+  // Whether the symbols can be moved by the user or not
+  movable: boolean,
 }
 
 export interface CategoricalChoroplethParameters {
@@ -257,6 +259,8 @@ export interface LabelsParameters {
     size: number,
     color: string,
   },
+  // Whether the labels can be moved by the user or not
+  movable: boolean,
 }
 
 export enum RepresentationType {

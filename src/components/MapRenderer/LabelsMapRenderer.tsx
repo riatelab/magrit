@@ -1,8 +1,14 @@
 // Import from solid-js
-import { For, JSX, Show } from 'solid-js';
+import {
+  createMemo,
+  For,
+  JSX,
+  onMount,
+  Show,
+} from 'solid-js';
 
 // Helpers
-import { unproxify } from '../../helpers/common';
+import bindDragBehavior from './common.tsx';
 
 // Directives
 import bindData from '../../directives/bind-data';
@@ -26,28 +32,41 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
 export function defaultLabelsRenderer(
   layerDescription: LayerDescriptionLabels,
 ): JSX.Element {
+  let refElement: SVGGElement;
   const rendererParameters = layerDescription.rendererParameters as LabelsParameters;
+
+  onMount(() => {
+    refElement.querySelectorAll('text')
+      .forEach((textElement, i) => {
+        bindDragBehavior(textElement, layerDescription, i);
+      });
+  });
 
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
     || layerDescription.visible
   }>
     <g
+      ref={refElement}
       id={layerDescription.id}
       class={'layer labels'}
       visibility={layerDescription.visible ? undefined : 'hidden'}
       filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
+      style={{ 'user-select': 'none' }}
     >
       <For each={layerDescription.data.features}>
         {
-          (feature) => {
-            const projectedCoords = globalStore.projection(feature.geometry.coordinates);
+          (feature, i) => {
+            const projectedCoords = createMemo(
+              () => globalStore.projection(feature.geometry.coordinates),
+            );
             return <text
-              use:bindData={unproxify(feature)}
-              x={projectedCoords[0] + rendererParameters.textOffset[0]}
-              y={projectedCoords[1] + rendererParameters.textOffset[1]}
+              use:bindData={feature}
+              x={projectedCoords()[0] + rendererParameters.textOffset[0]}
+              y={projectedCoords()[1] + rendererParameters.textOffset[1]}
               alignment-baseline={rendererParameters.textAlignment}
               text-anchor={rendererParameters.textAnchor}
+              font-style={rendererParameters.fontStyle}
               font-family={rendererParameters.fontFamily}
               font-size={rendererParameters.fontSize}
               font-weight={rendererParameters.fontWeight}
@@ -63,6 +82,7 @@ export function defaultLabelsRenderer(
 export function graticuleLabelsRenderer(
   layerDescription: LayerDescriptionLabels,
 ): JSX.Element {
+  const rendererParameters = layerDescription.rendererParameters as LabelsParameters;
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
     || layerDescription.visible
@@ -71,7 +91,14 @@ export function graticuleLabelsRenderer(
       <For each={layerDescription.data.features}>
         {
           (feature) => <text
-            use:bindData={unproxify(feature)}
+            use:bindData={feature}
+            alignment-baseline={rendererParameters.textAlignment}
+            text-anchor={rendererParameters.textAnchor}
+            font-style={rendererParameters.fontStyle}
+            font-family={rendererParameters.fontFamily}
+            font-size={rendererParameters.fontSize}
+            font-weight={rendererParameters.fontWeight}
+            fill={rendererParameters.fontColor}
           ></text>
         }
       </For>

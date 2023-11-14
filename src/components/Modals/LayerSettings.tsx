@@ -1,10 +1,23 @@
 // Imports from solid-js
-import { Accessor, JSX, Show } from 'solid-js';
+import {
+  Accessor,
+  For,
+  JSX,
+  Show,
+} from 'solid-js';
 
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
-import { createDropShadow } from '../MapRenderer/FilterDropShadow';
 import { debounce, unproxify } from '../../helpers/common';
+import { webSafeFonts } from '../../helpers/font';
+import { createDropShadow } from '../MapRenderer/FilterDropShadow';
+
+// Sub-components
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
+import InputFieldColor from '../Inputs/InputColor.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import InputFieldText from '../Inputs/InputText.tsx';
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
@@ -13,6 +26,7 @@ import { setClassificationPanelStore } from '../../store/ClassificationPanelStor
 // Types / Interfaces
 import type {
   LayerDescription,
+  LayerDescriptionLabels,
   ProportionalSymbolsParameters,
   LabelsParameters,
   ClassificationParameters,
@@ -20,11 +34,6 @@ import type {
 
 // Styles
 import '../../styles/LayerAndLegendSettings.css';
-import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
-import InputFieldColor from '../Inputs/InputColor.tsx';
-import InputFieldNumber from '../Inputs/InputNumber.tsx';
-import InputFieldSelect from '../Inputs/InputSelect.tsx';
-import InputFieldText from '../Inputs/InputText.tsx';
 
 const updateProp = (
   layerId: string,
@@ -77,11 +86,20 @@ function updateDropShadow(layerId: string, checked: boolean) {
 }
 
 function makeSettingsLabels(
-  props: LayerDescription,
+  props: LayerDescriptionLabels,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
   const rendererParameters = props.rendererParameters as LabelsParameters;
   return <>
+    <InputFieldSelect
+      label={ LL().LayerSettings.FontFamily() }
+      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontFamily'], v)}
+      value={rendererParameters.fontFamily}
+    >
+      <For each={webSafeFonts}>
+        {(font) => <option value={font}>{font}</option>}
+      </For>
+    </InputFieldSelect>
     <InputFieldNumber
       label={ LL().LayerSettings.FontSize() }
       value={rendererParameters.fontSize}
@@ -137,6 +155,11 @@ function makeSettingsLabels(
       <option value="normal">Normal</option>
       <option value="bold">Bold</option>
     </InputFieldSelect>
+    <InputFieldCheckbox
+      label={ LL().LayerSettings.AllowMovingLabels() }
+      checked={rendererParameters.movable}
+      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}
+    />
   </>;
 }
 
@@ -284,6 +307,11 @@ function makeSettingsDefaultPoint(
           step={1}
         />
       </Show>
+      <InputFieldCheckbox
+        label={ LL().LayerSettings.AllowMovingSymbols() }
+        checked={(props.rendererParameters as ProportionalSymbolsParameters).movable}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}
+      />
     </Show>
     <InputFieldCheckbox
       label={ LL().LayerSettings.DropShadow() }
@@ -474,7 +502,7 @@ export default function LayerSettings(
 
   let innerElement;
   if (layerDescription.renderer === 'labels') {
-    innerElement = makeSettingsLabels(layerDescription, LL);
+    innerElement = makeSettingsLabels(layerDescription as LayerDescriptionLabels, LL);
   } else {
     innerElement = {
       point: makeSettingsDefaultPoint,
