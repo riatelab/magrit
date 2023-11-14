@@ -87,10 +87,7 @@ const onBeforeUnloadWindow = (ev) => {
   // If there is no layer or if
   // there is only the sphere layer and or the graticule layer,
   // do nothing
-  if (
-    layersDescriptionStore.layers.length <= 2
-    && layersDescriptionStore.layers.every((l) => l.renderer === 'sphere' || l.renderer === 'graticule')
-  ) {
+  if (!globalStore.userHasAddedLayer) {
     return;
   }
   // Otherwise we store the state of the current projet

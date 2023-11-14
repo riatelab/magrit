@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store';
-import { makeDefaultGraticule, makeDefaultSphere } from '../helpers/layers';
+import { makeDefaultGraticule, makeDefaultSphere, makeDefaultWorldLand } from '../helpers/layers';
 import { debounce, unproxify } from '../helpers/common';
 import {
   type Ellipse,
@@ -22,6 +22,7 @@ export type LayersDescriptionStoreType = {
 const defaultLayersDescription = (): LayersDescriptionStoreType => ({
   layers: [
     makeDefaultSphere(),
+    makeDefaultWorldLand(),
     makeDefaultGraticule(),
   ],
   layoutFeatures: [
