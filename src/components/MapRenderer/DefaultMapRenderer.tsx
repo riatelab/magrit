@@ -6,6 +6,7 @@ import {
 // Helpers
 import { extractMeshAndMergedPolygonToGeojson } from '../../helpers/topojson';
 import { unproxify } from '../../helpers/common';
+import { mergeFilterIds } from './common.tsx';
 
 // Stores
 import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
@@ -42,7 +43,7 @@ export function defaultPolygonRendererOld(
       stroke-linecap="round"
       stroke-linejoin="round"
       clip-path="url(#clip-sphere)"
-      filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
+      filter={mergeFilterIds(layerDescription)}
       shape-rendering={layerDescription.shapeRendering}
     >
       <For each={layerDescription.data.features}>
@@ -82,7 +83,7 @@ export function defaultPolygonRenderer(
       stroke-linecap="round"
       stroke-linejoin="round"
       clip-path="url(#clip-sphere)"
-      filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
+      filter={mergeFilterIds(layerDescription)}
       shape-rendering={layerDescription.shapeRendering}
     >
       <path
@@ -119,7 +120,7 @@ export function defaultPointRenderer(
       stroke-linecap="round"
       stroke-linejoin="round"
       // clip-path="url(#clip-sphere)"
-      filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
+      filter={mergeFilterIds(layerDescription)}
     >
       <For each={layerDescription.data.features}>
         {
@@ -152,7 +153,7 @@ export function defaultLineRenderer(
       stroke-linecap="round"
       stroke-linejoin="round"
       clip-path="url(#clip-sphere)"
-      filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
+      filter={mergeFilterIds(layerDescription)}
     >
       <For each={layerDescription.data.features}>
         {
@@ -183,6 +184,7 @@ export function sphereRenderer(layerDescription: LayerDescription): JSX.Element 
       stroke-opacity={layerDescription.strokeOpacity}
       stroke-linecap="round"
       stroke-linejoin="round"
+      filter={mergeFilterIds(layerDescription)}
     >
       <path
         vector-effect="non-scaling-stroke"

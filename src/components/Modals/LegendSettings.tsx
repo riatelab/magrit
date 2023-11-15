@@ -6,6 +6,9 @@ import {
   Show,
 } from 'solid-js';
 
+// Imports from other libs
+import { FaSolidPlus } from 'solid-icons/fa';
+
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 
@@ -294,8 +297,14 @@ function makeSettingsProportionalSymbolsLegend(
       </div>
     </Show>
     <hr />
-    <div onClick={() => setDisplayMoreOptions(!displayMoreOptions())}>
-      <p class="label"> { LL().Legend.Modal.MoreOptions() } </p>
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        { LL().Legend.Modal.MoreOptions() }
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }} />
+      </p>
     </div>
     <Show when={displayMoreOptions()}>
       <TextOptionTable layer={layer} LL={LL} />
@@ -434,9 +443,13 @@ function makeSettingsChoroplethLegend(
       </div>
     </div>
     <hr />
-    <div onClick={() => setDisplayMoreOptions(!displayMoreOptions())}>
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
       <p class="label">
         { LL().Legend.Modal.MoreOptions() }
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }} />
       </p>
     </div>
     <Show when={displayMoreOptions()}>

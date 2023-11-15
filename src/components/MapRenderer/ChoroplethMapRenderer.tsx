@@ -9,6 +9,7 @@ import {
 // Helpers
 import { getClassifier } from '../../helpers/classification';
 import { isNumber, unproxify } from '../../helpers/common';
+import { mergeFilterIds } from './common.tsx';
 
 // Stores
 import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
@@ -66,7 +67,7 @@ export function choroplethPolygonRenderer(
       stroke-linecap="round"
       stroke-linejoin="round"
       clip-path="url(#clip-sphere)"
-      filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
+      filter={mergeFilterIds(layerDescription)}
       shape-rendering={layerDescription.shapeRendering}
       >
       <For each={layerDescription.data.features}>
@@ -123,7 +124,7 @@ export function choroplethPointRenderer(
       stroke-linecap="round"
       stroke-linejoin="round"
       // clip-path="url(#clip-sphere)"
-      filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
+      filter={mergeFilterIds(layerDescription)}
     >
       <For each={layerDescription.data.features}>
         {
@@ -178,7 +179,7 @@ export function choroplethLineRenderer(
       stroke-linecap="round"
       stroke-linejoin="round"
       clip-path="url(#clip-sphere)"
-      filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
+      filter={mergeFilterIds(layerDescription)}
     >
       <For each={layerDescription.data.features}>
         {

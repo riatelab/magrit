@@ -8,7 +8,7 @@ import {
 } from 'solid-js';
 
 // Helpers
-import bindDragBehavior from './common.tsx';
+import { bindDragBehavior, mergeFilterIds } from './common.tsx';
 
 // Directives
 import bindData from '../../directives/bind-data';
@@ -51,7 +51,7 @@ export function defaultLabelsRenderer(
       id={layerDescription.id}
       class={'layer labels'}
       visibility={layerDescription.visible ? undefined : 'hidden'}
-      filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
+      filter={mergeFilterIds(layerDescription)}
       style={{ 'user-select': 'none' }}
     >
       <For each={layerDescription.data.features}>

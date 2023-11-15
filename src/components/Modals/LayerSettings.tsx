@@ -1,16 +1,19 @@
 // Imports from solid-js
 import {
   Accessor,
+  createSignal,
   For,
   JSX,
   Show,
 } from 'solid-js';
 
+// Imports from other libs
+import { FaSolidPlus } from 'solid-icons/fa';
+
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { debounce, unproxify } from '../../helpers/common';
 import { webSafeFonts } from '../../helpers/font';
-import { createDropShadow } from '../MapRenderer/FilterDropShadow';
 
 // Sub-components
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
@@ -18,9 +21,13 @@ import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
+import InputFieldButton from '../Inputs/InputButton.tsx';
 
 // Stores
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+import {
+  layersDescriptionStore,
+  setLayersDescriptionStore,
+} from '../../store/LayersDescriptionStore';
 import { setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 
 // Types / Interfaces
@@ -63,26 +70,35 @@ const updateProp = (
 
 const debouncedUpdateProp = debounce(updateProp, 250);
 
-function updateDropShadow(layerId: string, checked: boolean) {
-  // Mutate the store for the layer
-  const layer = layersDescriptionStore.layers.find((l) => l.id === layerId);
-  if (layer) {
-    if (checked) {
-      // Need to investigate why this is not working as expected
-      // (i.e. the filter should be added automatically to the def section)
-      const filter = createDropShadow(layerId);
-      (document.querySelector('.map-zone svg defs') as SVGDefsElement).appendChild(filter);
-    } else {
-      // Same here, it should be removed automatically
-      const filter = document.querySelector(`#filter-drop-shadow-${layerId}`);
-      if (filter) filter.remove();
-    }
-    setLayersDescriptionStore(
-      'layers',
-      (l: LayerDescription) => l.id === layerId,
-      { dropShadow: checked },
-    );
-  }
+function aestheticsSection(
+  props: LayerDescription,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [displayAesthetics, setDisplayAesthetics] = createSignal(false);
+  return <>
+    <div
+      style={{ cursor: 'pointer' }}
+      onClick={() => setDisplayAesthetics(!displayAesthetics())}
+    >
+      <p class="label">
+        { LL().LayerSettings.AestheticFilter() }
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }} />
+      </p>
+    </div>
+    <br />
+    <Show when={displayAesthetics()}>
+      <InputFieldCheckbox
+        label={ LL().LayerSettings.DropShadow() }
+        checked={ props.dropShadow }
+        onChange={(checked) => updateProp(props.id, 'dropShadow', checked)}
+      />
+      <InputFieldCheckbox
+        label={ LL().LayerSettings.Blur() }
+        checked={ props.blurFilter }
+        onChange={(checked) => updateProp(props.id, 'blurFilter', checked)}
+      />
+    </Show>
+  </>;
 }
 
 function makeSettingsLabels(
@@ -159,6 +175,12 @@ function makeSettingsLabels(
       label={ LL().LayerSettings.AllowMovingLabels() }
       checked={rendererParameters.movable}
       onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}
+    />
+    <InputFieldButton
+      label={'Reset label locations'}
+      onClick={() => {
+        // TODO...
+      }}
     />
   </>;
 }
@@ -313,11 +335,7 @@ function makeSettingsDefaultPoint(
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}
       />
     </Show>
-    <InputFieldCheckbox
-      label={ LL().LayerSettings.DropShadow() }
-      checked={ props.dropShadow }
-      onChange={(checked) => updateDropShadow(props.id, checked)}
-    />
+    { aestheticsSection(props, LL) }
   </>;
 }
 
@@ -480,11 +498,7 @@ function makeSettingsDefaultPolygon(
       max={10}
       step={0.1}
     />
-    <InputFieldCheckbox
-      label={ LL().LayerSettings.DropShadow() }
-      checked={ props.dropShadow }
-      onChange={(checked) => updateDropShadow(props.id, checked)}
-    />
+    { aestheticsSection(props, LL) }
   </>;
 }
 

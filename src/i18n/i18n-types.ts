@@ -723,9 +723,17 @@ type RootTranslation = {
 		 */
 		PointRadius: string
 		/**
+		 * A​e​s​t​h​e​t​i​c​ ​f​i​l​t​e​r
+		 */
+		AestheticFilter: string
+		/**
 		 * A​d​d​ ​a​ ​s​h​a​d​o​w
 		 */
 		DropShadow: string
+		/**
+		 * B​l​u​r
+		 */
+		Blur: string
 		/**
 		 * A​l​l​o​w​ ​m​o​v​i​n​g​ ​s​y​m​b​o​l​s
 		 */
@@ -2002,9 +2010,17 @@ export type TranslationFunctions = {
 		 */
 		PointRadius: () => LocalizedString
 		/**
+		 * Aesthetic filter
+		 */
+		AestheticFilter: () => LocalizedString
+		/**
 		 * Add a shadow
 		 */
 		DropShadow: () => LocalizedString
+		/**
+		 * Blur
+		 */
+		Blur: () => LocalizedString
 		/**
 		 * Allow moving symbols
 		 */

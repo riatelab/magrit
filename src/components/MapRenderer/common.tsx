@@ -5,7 +5,7 @@ import { globalStore } from '../../store/GlobalStore';
 // Types etc.
 import type { LabelsParameters, LayerDescription, ProportionalSymbolsParameters } from '../../global';
 
-export default function bindDragBehavior(
+export function bindDragBehavior(
   element: SVGElement,
   layer: LayerDescription,
   ix: number,
@@ -130,4 +130,15 @@ export default function bindDragBehavior(
     redDot.setAttribute('y', `${yOriginal - (5 / 2)}`);
     outerSvg.appendChild(redDot);
   });
+}
+
+export function mergeFilterIds(layerDescription: LayerDescription): string | undefined {
+  const ids = [];
+  if (layerDescription.dropShadow) {
+    ids.push(`url(#filter-drop-shadow-${layerDescription.id})`);
+  }
+  if (layerDescription.blurFilter) {
+    ids.push(`url(#filter-blur-${layerDescription.id})`);
+  }
+  return ids.length > 0 ? ids.join(' ') : undefined;
 }

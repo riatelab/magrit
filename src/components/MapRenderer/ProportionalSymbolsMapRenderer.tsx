@@ -8,7 +8,7 @@ import {
 
 // Helpers
 import { PropSizer } from '../../helpers/geo';
-import bindDragBehavior from './common.tsx';
+import { bindDragBehavior, mergeFilterIds } from './common.tsx';
 
 // Directives
 import bindData from '../../directives/bind-data';
@@ -62,7 +62,7 @@ export default function proportionalSymbolsRenderer(
       stroke-opacity={layerDescription.strokeOpacity}
       stroke-linecap="round"
       stroke-linejoin="round"
-      filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
+      filter={mergeFilterIds(layerDescription)}
     >
       <For each={layerDescription.data.features}>
         {

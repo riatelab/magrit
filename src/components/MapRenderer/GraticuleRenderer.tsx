@@ -6,6 +6,7 @@ import { globalStore } from '../../store/GlobalStore';
 
 // Helpers
 import { unproxify } from '../../helpers/common';
+import { mergeFilterIds } from './common.tsx';
 
 // Directives
 import bindData from '../../directives/bind-data';
@@ -36,7 +37,7 @@ export default function graticuleRenderer(layerDescription: LayerDescription): J
       stroke-linejoin="round"
       stroke-dasharray={layerDescription.strokeDasharray}
       clip-path="url(#clip-sphere)"
-      filter={layerDescription.dropShadow ? `url(#filter-drop-shadow-${layerDescription.id})` : undefined}
+      filter={mergeFilterIds(layerDescription)}
     >
       <For each={layerDescription.data.features}>
         {

@@ -214,16 +214,21 @@ export default function MapZone(): JSX.Element {
       >
         <defs>
           <For each={ layersDescriptionStore.layers }>
-            {(layer) => {
-              if (layer.dropShadow) {
-                return <filter id={`filter-drop-shadow-${layer.id}`} width="200%" height="200%">
-                  <feOffset result="offOut" in="SourceAlpha" dx="5" dy="5" />
-                  <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" />
-                  <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
-                </filter>;
-              }
-              return null;
-            }}
+            {(layer) => <>
+                <Show when={layer.dropShadow}>
+                  <filter id={`filter-drop-shadow-${layer.id}`} width="200%" height="200%">
+                    <feOffset result="offOut" in="SourceAlpha" dx="5" dy="5" />
+                    <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" />
+                    <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+                  </filter>
+                </Show>
+                <Show when={layer.blurFilter}>
+                  <filter id={`filter-blur-${layer.id}`}>
+                    <feGaussianBlur stdDeviation="5" />
+                  </filter>
+                </Show>
+              </>
+            }
           </For>
           { getClipSphere() }
         </defs>
