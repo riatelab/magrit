@@ -33,7 +33,10 @@ export default function FieldTypingModal(): JSX.Element {
   } else {
     // ...otherwise, try to guess the type of each field
     descriptions = fields.map((field) => {
-      const o = detectTypeField(layer.data.features.map((ft) => ft.properties[field]));
+      const o = detectTypeField(
+        layer.data.features.map((ft) => ft.properties[field]),
+        field,
+      );
       return {
         name: field,
         hasMissingValues: o.hasMissingValues,

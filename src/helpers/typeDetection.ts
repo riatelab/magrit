@@ -34,6 +34,7 @@ export interface Variable {
 // - whether it has missing values
 export function detectTypeField(
   values: never[],
+  fieldName: string,
 ): { dataType: DataType, variableType: VariableType, hasMissingValues: boolean } {
   // We will loop through the values of the field and try to detect the type of the field
   // We will use the following rules:
@@ -70,6 +71,7 @@ export function detectTypeField(
   const filteredValues = values.filter((v) => v !== null);
   const filteredDatatypes = dt.filter((v) => v !== null);
   const hasMissingValues = filteredDatatypes.length !== dt.length;
+  const hasDuplicates = filteredValues.length !== (new Set(filteredValues)).size;
 
   if (filteredDatatypes.every((d) => d === DataType.number)) {
     // All the (non-missing) values are of type 'number'
@@ -83,7 +85,8 @@ export function detectTypeField(
     } else if (filteredValues.every((v) => Number.isInteger(v))) {
       // We check if all the values are strictly different
       if (
-        filteredValues.every((v) => filteredValues.indexOf(v) === filteredValues.lastIndexOf(v))
+        !hasDuplicates
+        // filteredValues.every((v) => filteredValues.indexOf(v) === filteredValues.lastIndexOf(v))
       ) {
         // If all the values are strictly different (and if there is no missing value in the field),
         // we probably have an identifier... but this could be a stock or ratio too.
@@ -117,9 +120,45 @@ export function detectTypeField(
       // ...otherwise this is probably a categorical variable
       variableType = VariableType.categorical;
     }
+  } else if (
+    !hasMissingValues
+    && filteredDatatypes.every((d) => d === DataType.number || d === DataType.string)
+    && !hasDuplicates
+    // && filteredValues.every((v) => filteredValues.indexOf(v) === filteredValues.lastIndexOf(v))
+  ) {
+    // Here we have a mix of numbers and strings, no duplicates and no missing values
+    // so it might be an identifier (for example France Department codes
+    // are both number stored as string "01", "11", etc.
+    // and regular strings "2A" and "2B")
+    dataType = DataType.string; // We want to consider all the entries as string
+    variableType = VariableType.identifier; // And it might be an identifier
   } else {
     dataType = DataType.string;
     variableType = VariableType.unknown;
+  }
+
+  // Perform some extra-checks to correct the variable type...
+  // - If we have no missing value, no duplicate and all the values are integers,
+  //   it could be an identifier or a stock.. so if the field name contains "population",
+  //   we will consider it as a stock
+  if (
+    dataType === DataType.number
+    && variableType === VariableType.identifier
+    && (
+      fieldName.toLowerCase().startsWith('pop')
+      || fieldName.toLowerCase().endsWith('pop')
+    )
+  ) {
+    variableType = VariableType.stock;
+  }
+  // - If we have no missing value and no duplicate and we still haven't found a variable type,
+  //   we can probably consider this as an identifier
+  if (
+    !hasDuplicates
+    && !hasMissingValues
+    && variableType === VariableType.unknown
+  ) {
+    variableType = VariableType.identifier;
   }
 
   return {
