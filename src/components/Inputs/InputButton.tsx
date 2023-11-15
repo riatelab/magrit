@@ -4,12 +4,17 @@ import { type LocalizedString } from 'typesafe-i18n';
 interface InputFieldButtonProps {
   label: LocalizedString | string;
   onClick: () => void;
+  disabled?: boolean;
 }
 
 export default function InputFieldButton(props: InputFieldButtonProps): JSX.Element {
   return <div class="field is-justify-content-center">
     <div class="control">
-      <button class="button" onClick={props.onClick}>
+      <button
+        class="button"
+        onClick={props.onClick}
+        disabled={props.disabled}
+      >
         { props.label }
       </button>
     </div>

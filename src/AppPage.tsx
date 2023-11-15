@@ -397,9 +397,6 @@ const AppPage: () => JSX.Element = () => {
         <Show when={classificationPanelStore.show}>
           <ClassificationPanel />
         </Show>
-        <Show when={niceAlertStore.show}>
-          <NiceAlert />
-        </Show>
         <Show when={tableWindowStore.show}>
           <TableWindow />
         </Show>
@@ -416,6 +413,18 @@ const AppPage: () => JSX.Element = () => {
           <ModalWithChildren>
             { modalWithChildrenStore.content }
           </ModalWithChildren>
+        </Show>
+      </Transition>
+      {/*
+        We put the NiceAlert component outside of the previous Transition component
+        and we put it lower than it in the DOM
+        because we want it to be displayed on top of the other modals
+        (for example when asking for confirmation when closing
+        the table modal after having made changes)
+      */}
+      <Transition name="slide-fade">
+        <Show when={niceAlertStore.show}>
+          <NiceAlert />
         </Show>
       </Transition>
       <Show when={contextMenuStore.show}>

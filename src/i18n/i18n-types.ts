@@ -868,6 +868,10 @@ type RootTranslation = {
 			 */
 			newColumnContent: string
 			/**
+			 * N​e​w​ ​c​o​l​u​m​n​ ​t​y​p​e
+			 */
+			newColumnType: string
+			/**
 			 * C​o​m​p​u​t​a​t​i​o​n​ ​b​a​s​e​d​ ​o​n​ ​t​w​o​ ​n​u​m​e​r​i​c​a​l​ ​c​o​l​u​m​n​s
 			 */
 			numericalValues: string
@@ -880,13 +884,25 @@ type RootTranslation = {
 			 */
 			formula: string
 			/**
-			 * C​o​n​s​t​a​n​t​ ​v​a​l​u​e
+			 * C​o​n​s​t​a​n​t​ ​v​a​l​u​e​.​.​.
 			 */
 			constantValue: string
 			/**
 			 * O​p​e​r​a​t​i​o​n​ ​t​o​ ​b​e​ ​p​e​r​f​o​r​m​e​d
 			 */
 			operation: string
+			/**
+			 * C​o​n​c​a​t​e​n​a​t​e
+			 */
+			concatenate: string
+			/**
+			 * T​r​u​n​c​a​t​e
+			 */
+			truncate: string
+			/**
+			 * C​o​m​p​u​t​e
+			 */
+			compute: string
 		}
 	}
 	FieldsTyping: {
@@ -2155,6 +2171,10 @@ export type TranslationFunctions = {
 			 */
 			newColumnContent: () => LocalizedString
 			/**
+			 * New column type
+			 */
+			newColumnType: () => LocalizedString
+			/**
 			 * Computation based on two numerical columns
 			 */
 			numericalValues: () => LocalizedString
@@ -2167,13 +2187,25 @@ export type TranslationFunctions = {
 			 */
 			formula: () => LocalizedString
 			/**
-			 * Constant value
+			 * Constant value...
 			 */
 			constantValue: () => LocalizedString
 			/**
 			 * Operation to be performed
 			 */
 			operation: () => LocalizedString
+			/**
+			 * Concatenate
+			 */
+			concatenate: () => LocalizedString
+			/**
+			 * Truncate
+			 */
+			truncate: () => LocalizedString
+			/**
+			 * Compute
+			 */
+			compute: () => LocalizedString
 		}
 	}
 	FieldsTyping: {
