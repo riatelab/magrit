@@ -45,6 +45,7 @@ export const makeDefaultWorldLand = (): LayerDescription => ({
   fillColor: '#d1d1d1',
   fillOpacity: 1,
   dropShadow: false,
+  blurFilter: false,
   shapeRendering: 'auto',
   fields: [],
   renderer: 'default' as RepresentationType,
@@ -62,6 +63,7 @@ export const makeDefaultSphere = (): LayerDescription => ({
   fillColor: '#e8e8f6',
   fillOpacity: 1,
   dropShadow: false,
+  blurFilter: false,
   shapeRendering: 'auto',
   fields: [],
   renderer: 'sphere' as RepresentationType,
@@ -78,6 +80,7 @@ export const makeDefaultGraticule = (): LayerDescription => ({
   strokeOpacity: 0.3,
   strokeDasharray: '5 5',
   dropShadow: false,
+  blurFilter: false,
   shapeRendering: 'auto',
   renderer: 'graticule' as RepresentationType,
   data: {

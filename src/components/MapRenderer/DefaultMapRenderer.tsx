@@ -51,7 +51,7 @@ export function defaultPolygonRendererOld(
           (feature) => <path
               d={globalStore.pathGenerator(feature)}
               vector-effect="non-scaling-stroke"
-              use:bindData={() => unproxify(feature)}
+              use:bindData={unproxify(feature)}
             />
         }
       </For>

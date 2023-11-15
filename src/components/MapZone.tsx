@@ -217,9 +217,11 @@ export default function MapZone(): JSX.Element {
             {(layer) => <>
                 <Show when={layer.dropShadow}>
                   <filter id={`filter-drop-shadow-${layer.id}`} width="200%" height="200%">
-                    <feOffset result="offOut" in="SourceAlpha" dx="5" dy="5" />
-                    <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" />
-                    <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+                    <feDropShadow dx="5" dy="5" stdDeviation="0" />
+                    {/* TODO: investigate the various ways of drawing drop shadows */}
+                    {/* <feOffset result="offOut" in="SourceAlpha" dx="5" dy="5" /> */}
+                    {/* <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" /> */}
+                    {/* <feBlend in="SourceGraphic" in2="blurOut" mode="normal" /> */}
                   </filter>
                 </Show>
                 <Show when={layer.blurFilter}>

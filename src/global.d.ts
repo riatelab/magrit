@@ -644,3 +644,13 @@ interface GeoJSONFeatureCollection {
   type: string,
   features: GeoJSONFeature[],
 }
+
+interface DropShadowOptions {
+  dx: number,
+  dy: number,
+  stdDeviation: number,
+}
+
+interface BlurOptions {
+  stdDeviation: number,
+}

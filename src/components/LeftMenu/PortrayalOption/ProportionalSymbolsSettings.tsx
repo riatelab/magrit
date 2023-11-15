@@ -165,6 +165,7 @@ function onClickValidate(
     fillColor: propSymbolsParameters.color,
     fillOpacity: 1,
     dropShadow: false,
+    blurFilter: false,
     shapeRendering: 'auto',
     rendererParameters: propSymbolsParameters,
     legend: {

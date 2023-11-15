@@ -80,6 +80,7 @@ function onClickValidate(
     // fillColor: '#000000',
     // fillOpacity: 1,
     dropShadow: false,
+    blurFilter: false,
     shapeRendering: 'auto',
     rendererParameters: {
       variable: targetVariable,
