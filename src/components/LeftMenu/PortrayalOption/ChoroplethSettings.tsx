@@ -37,6 +37,7 @@ import imgJenks from '../../../assets/jenks.png';
 import imgMoreOption from '../../../assets/buttons2.svg';
 
 // Types
+import { PortrayalSettingsProps } from './common';
 import {
   type ChoroplethLegendParameters,
   type ClassificationParameters,
@@ -47,10 +48,6 @@ import {
   Orientation,
   RepresentationType,
 } from '../../../global.d';
-
-interface ChoroplethSettingsProps {
-  layerId: string;
-}
 
 // eslint-disable-next-line prefer-destructuring
 const defaultColorScheme = applicationSettingsStore.defaultColorScheme;
@@ -154,7 +151,7 @@ function onClickValidate(
     ),
   );
 }
-export default function ChoroplethSettings(props: ChoroplethSettingsProps): JSX.Element {
+export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.Element {
   const { LL } = useI18nContext();
 
   // The description of the layer for which we are creating the settings menu

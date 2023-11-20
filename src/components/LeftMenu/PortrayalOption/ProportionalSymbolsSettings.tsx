@@ -47,6 +47,7 @@ import {
   ProportionalSymbolsColorMode,
   ProportionalSymbolsSymbolType,
 } from '../../../global.d';
+import { PortrayalSettingsProps } from './common';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -227,12 +228,8 @@ function onClickValidate(
   );
 }
 
-interface ProportionalSymbolsSettingsProps {
-  layerId: string;
-}
-
 export default function ProportionalSymbolsSettings(
-  props: ProportionalSymbolsSettingsProps,
+  props: PortrayalSettingsProps,
 ): JSX.Element {
   const { LL } = useI18nContext();
 

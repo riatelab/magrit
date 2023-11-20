@@ -266,6 +266,19 @@ export interface LabelsParameters {
   movable: boolean,
 }
 
+interface DiscontinuityParameters {
+  // The name of the variable used
+  variable: string,
+  // The type of discontinuity
+  type: 'absolute' | 'relative',
+  // The classification method
+  classificationMethod: ClassificationMethod,
+  // The number of classes
+  classes: number,
+  // The break values (computed or manually set)
+  breaks: number[],
+}
+
 export enum RepresentationType {
   choropleth = 'choropleth',
   proportionalSymbols = 'proportionalSymbols',

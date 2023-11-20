@@ -6,6 +6,7 @@ import * as polylabel from 'polylabel';
 
 // Helpers
 import d3 from './d3-custom';
+import topojson, {} from './topojson';
 import {
   Mabs,
   max,
@@ -397,4 +398,31 @@ export const makeDorlingDemersSimulation = (
   });
 
   return features;
+};
+
+export const computeDiscontinuity = (
+  referenceLayerId: string,
+  referenceVariableName: string,
+  discontinuityType: 'relative' | 'absolute',
+) => {
+  // Get the reference layer data
+  // TODO
+
+  // Add a unique id to each feature
+  // TODO
+
+  // Convert to topojson
+  // TODO
+
+  // Function to get the id of a pair of features
+  const getId = (a, b) => `${a.id}__${b.id}`;
+
+  // Compute the discontinuity
+  if (discontinuityType === 'relative') {
+
+  } else { // discontinuityType === 'absolute'
+
+  }
+
+  return undefined;
 };

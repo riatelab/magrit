@@ -26,6 +26,7 @@ import {
   LabelsParameters,
   RepresentationType,
 } from '../../../global';
+import { PortrayalSettingsProps } from './common';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -109,7 +110,7 @@ function onClickValidate(
   );
 }
 
-export default function LabelsSettings(props: { layerId: string }): JSX.Element {
+export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Element {
   const { LL } = useI18nContext();
 
   // The description of the layer for which we are creating the settings menu
