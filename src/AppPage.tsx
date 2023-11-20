@@ -4,6 +4,7 @@ import {
 } from 'solid-js';
 
 // Imports from other packages
+import * as contours from 'contour-wasm';
 import initGdalJs from 'gdal3.js';
 import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'; // eslint-disable-line import/extensions
 import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url';
