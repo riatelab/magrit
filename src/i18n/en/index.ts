@@ -156,6 +156,7 @@ const en = {
       Choropleth: 'Choropleth',
       ProportionalSymbols: 'Proportional symbols',
       Labels: 'Labels',
+      Discontinuity: 'Discontinuity',
       NoPortrayal: 'No portrayal for the selected layer - Please verify the typing of the fields or select another layer',
     },
     RepresentationChoice: 'Representation choice',

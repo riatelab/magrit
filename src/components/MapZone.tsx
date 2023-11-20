@@ -37,6 +37,7 @@ import {
   choroplethPolygonRenderer,
 } from './MapRenderer/ChoroplethMapRenderer.tsx';
 import proportionalSymbolsRenderer from './MapRenderer/ProportionalSymbolsMapRenderer.tsx';
+import discontinuityRenderer from './MapRenderer/DiscontinuityMapRenderer.tsx';
 import { defaultLabelsRenderer } from './MapRenderer/LabelsMapRenderer.tsx';
 import graticuleRenderer from './MapRenderer/GraticuleRenderer.tsx';
 
@@ -56,9 +57,12 @@ import {
   LayoutFeatureType,
   Rectangle,
   ScaleBar,
+  type LayerDescription,
   type LayerDescriptionChoropleth,
+  type LayerDescriptionDiscontinuity,
   type LayerDescriptionProportionalSymbols,
-  type LayerDescriptionLabels, ID3Element,
+  type LayerDescriptionLabels,
+  type ID3Element,
 } from '../global.d';
 
 // Styles
@@ -256,6 +260,8 @@ export default function MapZone(): JSX.Element {
               return proportionalSymbolsRenderer(layer as LayerDescriptionProportionalSymbols);
             } else if (layer.renderer === 'labels') {
               if (layer.type === 'point') return defaultLabelsRenderer(layer as LayerDescriptionLabels);
+            } else if (layer.renderer === 'discontinuity') {
+              return discontinuityRenderer(layer as LayerDescriptionDiscontinuity);
             }
             return null;
           }}

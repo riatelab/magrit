@@ -122,6 +122,12 @@ type LayerDescriptionCategoricalChoropleth = LayerDescription & {
   legend: ChoroplethLegendParameters,
 };
 
+type LayerDescriptionDiscontinuity = LayerDescription & {
+  renderer: RepresentationType.discontinuity,
+  rendererParameters: DiscontinuityParameters,
+  legend: DiscontinuityLegendParameters,
+};
+
 export enum ProportionalSymbolsColorMode {
   singleColor = 'singleColor',
   twoColors = 'twoColors',
@@ -383,6 +389,10 @@ interface LabelsLegendParameters extends LegendParametersBase {
   type: LegendType.labels,
 }
 
+interface DiscontinuityLegendParameters extends LegendParametersBase {
+  type: LegendType.discontinuity,
+}
+
 export type LegendParameters = (
   ChoroplethLegendParameters
   | ProportionalSymbolsLegendParameters
@@ -409,6 +419,7 @@ export enum LegendType {
   choropleth = 'choropleth',
   proportional = 'proportional',
   categorical = 'categorical',
+  discontinuity = 'discontinuity',
   labels = 'labels',
   waffle = 'waffle',
 }

@@ -21,14 +21,20 @@ import {
   ascending,
   descending,
   getNumberOfDecimals,
-  isNumber,
+  isNumber, unproxify,
 } from './common';
 
 // Stores
 import { globalStore } from '../store/GlobalStore';
 
 // Types / Interfaces / Enums
-import { GeoJSONFeature, type GeoJSONGeometry, ProportionalSymbolsSymbolType } from '../global.d';
+import {
+  GeoJSONFeature,
+  GeoJSONFeatureCollection,
+  type GeoJSONGeometry,
+  ProportionalSymbolsSymbolType,
+} from '../global.d';
+import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 
 export const getLargestPolygon = (geom: GeoJSONGeometry) => {
   const areas = [];
@@ -406,23 +412,117 @@ export const computeDiscontinuity = (
   discontinuityType: 'relative' | 'absolute',
 ) => {
   // Get the reference layer data
-  // TODO
+  const refLayer = unproxify(
+    layersDescriptionStore.layers
+      .find((l) => l.id === referenceLayerId)
+      ?.data as never,
+  ) as GeoJSONFeatureCollection;
 
   // Add a unique id to each feature
-  // TODO
+  refLayer.features.forEach((f, i) => {
+    if (!f.id) f.id = i; // eslint-disable-line no-param-reassign
+  });
 
   // Convert to topojson
-  // TODO
+  const topology = topojson.topology({ layer: refLayer }, 1e5);
 
   // Function to get the id of a pair of features
-  const getId = (a, b) => `${a.id}__${b.id}`;
+  const getId = (a: GeoJSONFeature, b: GeoJSONFeature): [string, string] => [`${a.id}__${b.id}`, `${b.id}__${a.id}`];
 
   // Compute the discontinuity
+  const resultValue = new Map<string, number>();
+
+  let temp1 = [];
+
   if (discontinuityType === 'relative') {
-
+    temp1 = topojson.mesh(
+      topology,
+      topology.objects.layer,
+      (a: GeoJSONFeature, b: GeoJSONFeature) => {
+        if (a !== b) {
+          const valA = a.properties[referenceVariableName];
+          const valB = b.properties[referenceVariableName];
+          if (!isNumber(valA) || !isNumber(valB)) {
+            return false;
+          }
+          const [newId, newIdRev] = getId(a, b);
+          if (!(resultValue.get(newId) || resultValue.get(newIdRev))) {
+            const value = Mmax(+valA! / +valB!, +valB! / +valA!);
+            resultValue.set(newId, value);
+          }
+          return true;
+        }
+        return false;
+      },
+    );
   } else { // discontinuityType === 'absolute'
-
+    temp1 = topojson.mesh(
+      topology,
+      topology.objects.layer,
+      (a: GeoJSONFeature, b: GeoJSONFeature) => {
+        if (a !== b) {
+          const valA = a.properties[referenceVariableName];
+          const valB = b.properties[referenceVariableName];
+          if (!isNumber(valA) || !isNumber(valB)) {
+            return false;
+          }
+          const [newId, newIdRev] = getId(a, b);
+          if (!(resultValue.get(newId) || resultValue.get(newIdRev))) {
+            const value = Mmax(+valA! - +valB!, +valB! - +valA!);
+            resultValue.set(newId, value);
+          }
+          return true;
+        }
+        return false;
+      },
+    );
   }
 
-  return undefined;
+  const arrDisc = [];
+  // const arrTmp = [];
+  const entries = Array.from(resultValue.entries());
+  for (let i = 0, n = entries.length; i < n; i += 1) {
+    const kv = entries[i];
+    if (!Number.isNaN(kv[1])) {
+      arrDisc.push(kv);
+      // arrTmp.push(kv[1]);
+    }
+  }
+
+  arrDisc.sort((a, b) => a[1] - b[1]);
+  // arrTmp.sort((a, b) => a - b);
+
+  const nbFt = arrDisc.length;
+  const dRes = [];
+  for (let i = 0; i < nbFt; i += 1) {
+    const idFt = arrDisc[i][0];
+    const val = arrDisc[i][1];
+    const geom = topojson.mesh(
+      topology,
+      topology.objects.layer,
+      (a: GeoJSONFeature, b: GeoJSONFeature) => {
+        const aId = idFt.split('_')[0];
+        const bId = idFt.split('_')[1];
+        const [refAId, refBId] = getId(a, b)[0].split('_');
+        return (a !== b // eslint-disable-next-line no-mixed-operators
+          && (refAId === aId && refBId === bId || refAId === bId && refBId === aId));
+      },
+    );
+    const [feature1, feature2] = idFt.split('__');
+    dRes.push({
+      type: 'Feature',
+      geometry: geom,
+      properties: {
+        feature1,
+        feature2,
+        value: val,
+      },
+    });
+  }
+  dRes.sort((a, b) => b.properties.value - a.properties.value);
+
+  return {
+    type: 'FeatureCollection',
+    features: dRes,
+  };
 };

@@ -546,6 +546,10 @@ type RootTranslation = {
 			 */
 			Labels: string
 			/**
+			 * D​i​s​c​o​n​t​i​n​u​i​t​y
+			 */
+			Discontinuity: string
+			/**
 			 * N​o​ ​p​o​r​t​r​a​y​a​l​ ​f​o​r​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​l​a​y​e​r​ ​-​ ​P​l​e​a​s​e​ ​v​e​r​i​f​y​ ​t​h​e​ ​t​y​p​i​n​g​ ​o​f​ ​t​h​e​ ​f​i​e​l​d​s​ ​o​r​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​l​a​y​e​r
 			 */
 			NoPortrayal: string
@@ -1848,6 +1852,10 @@ export type TranslationFunctions = {
 			 * Labels
 			 */
 			Labels: () => LocalizedString
+			/**
+			 * Discontinuity
+			 */
+			Discontinuity: () => LocalizedString
 			/**
 			 * No portrayal for the selected layer - Please verify the typing of the fields or select another layer
 			 */

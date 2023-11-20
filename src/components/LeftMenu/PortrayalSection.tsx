@@ -20,6 +20,7 @@ import { RepresentationType } from '../../global.d';
 
 // Styles
 import '../../styles/PortrayalSection.css';
+import DiscontinuitySettings from './PortrayalOption/DiscontinuitySettings.tsx';
 
 function layerAvailableVariables(layerId: string) {
   const layer = layersDescriptionStore.layers
@@ -129,6 +130,7 @@ export default function PortrayalSection(): JSX.Element {
             selected: selectedPortrayal() === RepresentationType.discontinuity,
           }}
         >
+          { LL().PortrayalSection.PortrayalTypes.Discontinuity() }
         </li>
         <li
           onClick={ () => { setSelectedPortrayal(RepresentationType.labels); } }
@@ -142,7 +144,7 @@ export default function PortrayalSection(): JSX.Element {
       </ul>
       <Show when={
         availableVariables()
-        && !layerAnyAvailableVariable(targetLayer())
+        && !layerAnyAvailableVariable(targetLayer() as string)
         && !availableVariables()?.hasRatio
         && !availableVariables()?.hasStock
         && !availableVariables()?.hasCategorical
@@ -153,15 +155,19 @@ export default function PortrayalSection(): JSX.Element {
     <div class="portrayal-section__portrayal-options">
 
       <Show when={ selectedPortrayal() === RepresentationType.choropleth }>
-        <ChoroplethSettings layerId={ targetLayer() } />
+        <ChoroplethSettings layerId={ targetLayer() as string } />
       </Show>
 
       <Show when={ selectedPortrayal() === RepresentationType.proportionalSymbols }>
-        <ProportionalSymbolsSettings layerId={ targetLayer() } />
+        <ProportionalSymbolsSettings layerId={ targetLayer() as string } />
+      </Show>
+
+      <Show when={ selectedPortrayal() === RepresentationType.discontinuity }>
+        <DiscontinuitySettings layerId={ targetLayer() as string } />
       </Show>
 
       <Show when={ selectedPortrayal() === RepresentationType.labels }>
-        <LabelsSettings layerId={ targetLayer() } />
+        <LabelsSettings layerId={ targetLayer() as string } />
       </Show>
 
       <Show when={ selectedPortrayal() === 'foo' }>

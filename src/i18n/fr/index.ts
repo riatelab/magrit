@@ -156,6 +156,7 @@ const fr = {
       Choropleth: 'Choropleth',
       ProportionalSymbols: 'Symboles proportionnels',
       Labels: 'Étiquettes',
+      Discontinuity: 'Discontinuité',
       NoPortrayal: 'Aucune représentation pour la couche choisie - Veuillez vérifier le types des champs de la couche ou sélectionner une autre couche',
     },
     RepresentationChoice: 'Choix de la représentation',
