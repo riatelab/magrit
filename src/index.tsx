@@ -3,6 +3,7 @@ import { Route, Router, Routes } from '@solidjs/router';
 import { JSX } from 'solid-js';
 // import { WebR } from '@r-wasm/webr';
 
+import 'solid-devtools'; // eslint-disable-line import/no-extraneous-dependencies
 // import { useRegisterSW } from 'virtual:pwa-register/solid';
 // import { registerSW } from 'virtual:pwa-register';
 

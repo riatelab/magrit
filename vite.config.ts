@@ -6,10 +6,12 @@ import eslint from 'vite-plugin-eslint';
 // import { VitePWA } from 'vite-plugin-pwa';
 import solidPlugin from 'vite-plugin-solid';
 import wasm from 'vite-plugin-wasm';
+import devtools from 'solid-devtools/vite';
 
 export default defineConfig({
   plugins: [
     wasm(),
+    devtools(),
     solidPlugin({ ssr: false }),
     // VitePWA({
     //   injectRegister: 'script',
