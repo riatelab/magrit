@@ -157,6 +157,7 @@ const en = {
       ProportionalSymbols: 'Proportional symbols',
       Labels: 'Labels',
       Discontinuity: 'Discontinuity',
+      Categorical: 'Categorical choropleth',
       NoPortrayal: 'No portrayal for the selected layer - Please verify the typing of the fields or select another layer',
     },
     RepresentationChoice: 'Representation choice',

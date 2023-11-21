@@ -550,6 +550,10 @@ type RootTranslation = {
 			 */
 			Discontinuity: string
 			/**
+			 * C​a​t​e​g​o​r​i​c​a​l​ ​c​h​o​r​o​p​l​e​t​h
+			 */
+			Categorical: string
+			/**
 			 * N​o​ ​p​o​r​t​r​a​y​a​l​ ​f​o​r​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​l​a​y​e​r​ ​-​ ​P​l​e​a​s​e​ ​v​e​r​i​f​y​ ​t​h​e​ ​t​y​p​i​n​g​ ​o​f​ ​t​h​e​ ​f​i​e​l​d​s​ ​o​r​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​l​a​y​e​r
 			 */
 			NoPortrayal: string
@@ -1882,6 +1886,10 @@ export type TranslationFunctions = {
 			 * Discontinuity
 			 */
 			Discontinuity: () => LocalizedString
+			/**
+			 * Categorical choropleth
+			 */
+			Categorical: () => LocalizedString
 			/**
 			 * No portrayal for the selected layer - Please verify the typing of the fields or select another layer
 			 */

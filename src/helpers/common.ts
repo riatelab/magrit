@@ -16,6 +16,10 @@ export function isNumber(value: any): boolean {
   return value !== null && value !== '' && isFinite(value);
 }
 
+export function isNonNull(value: any): boolean {
+  return value !== null && value !== undefined && value !== '';
+}
+
 export const ascending = (a: number, b: number) => a - b;
 
 export const ascendingKeyAccessor = (

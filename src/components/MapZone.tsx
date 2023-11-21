@@ -62,12 +62,17 @@ import {
   type LayerDescriptionDiscontinuity,
   type LayerDescriptionProportionalSymbols,
   type LayerDescriptionLabels,
-  type ID3Element,
+  type ID3Element, LayerDescriptionCategoricalChoropleth,
 } from '../global.d';
 
 // Styles
 import '../styles/MapZone.css';
 import legendDiscontinuity from './LegendRenderer/DiscontinuityLegendRenderer.tsx';
+import {
+  categoricalChoroplethLineRenderer,
+  categoricalChoroplethPointRenderer,
+  categoricalChoroplethPolygonRenderer,
+} from './MapRenderer/CategoricalChoroplethMapRenderer.tsx';
 
 const layoutFeaturesFns = {
   [LayoutFeatureType.Rectangle]: RectangleRenderer,
@@ -257,6 +262,10 @@ export default function MapZone(): JSX.Element {
               if (layer.type === 'polygon') return choroplethPolygonRenderer(layer as LayerDescriptionChoropleth);
               if (layer.type === 'point') return choroplethPointRenderer(layer as LayerDescriptionChoropleth);
               if (layer.type === 'linestring') return choroplethLineRenderer(layer as LayerDescriptionChoropleth);
+            } else if (layer.renderer === 'categorical') {
+              if (layer.type === 'polygon') return categoricalChoroplethPolygonRenderer(layer as LayerDescriptionCategoricalChoropleth);
+              if (layer.type === 'point') return categoricalChoroplethPointRenderer(layer as LayerDescriptionCategoricalChoropleth);
+              if (layer.type === 'linestring') return categoricalChoroplethLineRenderer(layer as LayerDescriptionCategoricalChoropleth);
             } else if (layer.renderer === 'proportionalSymbols') {
               return proportionalSymbolsRenderer(layer as LayerDescriptionProportionalSymbols);
             } else if (layer.renderer === 'labels') {

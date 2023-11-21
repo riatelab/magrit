@@ -14,13 +14,14 @@ import DropdownMenu from '../DropdownMenu.tsx';
 import ChoroplethSettings from './PortrayalOption/ChoroplethSettings.tsx';
 import LabelsSettings from './PortrayalOption/LabelsSettings.tsx';
 import ProportionalSymbolsSettings from './PortrayalOption/ProportionalSymbolsSettings.tsx';
+import DiscontinuitySettings from './PortrayalOption/DiscontinuitySettings.tsx';
+import CategoricalChoroplethSettings from './PortrayalOption/CategoricalChoroplethSettings.tsx';
 
 // Types / Interfaces / Enums
 import { RepresentationType } from '../../global.d';
 
 // Styles
 import '../../styles/PortrayalSection.css';
-import DiscontinuitySettings from './PortrayalOption/DiscontinuitySettings.tsx';
 
 function layerAvailableVariables(layerId: string) {
   const layer = layersDescriptionStore.layers
@@ -120,8 +121,12 @@ export default function PortrayalSection(): JSX.Element {
         </li>
         <li
           onClick={ () => { setSelectedPortrayal(RepresentationType.categorical); } }
-          classList={{ 'is-hidden': !availableVariables()?.hasCategorical, selected: selectedPortrayal() === RepresentationType.categorical }}
+          classList={{
+            'is-hidden': !availableVariables()?.hasCategorical,
+            selected: selectedPortrayal() === RepresentationType.categorical,
+          }}
         >
+          { LL().PortrayalSection.PortrayalTypes.Categorical() }
         </li>
         <li
           onClick={ () => { setSelectedPortrayal(RepresentationType.discontinuity); } }
@@ -164,6 +169,10 @@ export default function PortrayalSection(): JSX.Element {
 
       <Show when={ selectedPortrayal() === RepresentationType.discontinuity }>
         <DiscontinuitySettings layerId={ targetLayer() as string } />
+      </Show>
+
+      <Show when={ selectedPortrayal() === RepresentationType.categorical }>
+        <CategoricalChoroplethSettings layerId={ targetLayer() as string } />
       </Show>
 
       <Show when={ selectedPortrayal() === RepresentationType.labels }>

@@ -228,12 +228,12 @@ export interface ProportionalSymbolsParameters {
 export interface CategoricalChoroplethParameters {
   // The name of the variable
   variable: string,
-  // The color scheme to use
-  palette: Palette | CustomPalette,
+  // The mapping between categories and colors,
+  // stored as an array of [category, categoryName, color] tuples,
+  // one per category.
+  mapping: [string | number, string, string][],
   // The color to use for features with no data
-  nodataColor: string,
-  // Whether to reverse the palette or not
-  reversePalette: boolean,
+  noDataColor: string,
 }
 
 export interface GraticuleParameters {

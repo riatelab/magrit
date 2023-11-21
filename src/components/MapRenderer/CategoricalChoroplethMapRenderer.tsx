@@ -7,7 +7,6 @@ import {
 } from 'solid-js';
 
 // Helpers
-import { getClassifier } from '../../helpers/classification';
 import { isNumber, unproxify } from '../../helpers/common';
 import { mergeFilterIds } from './common.tsx';
 
@@ -20,9 +19,8 @@ import bindData from '../../directives/bind-data';
 
 // Types / Interfaces / Enums
 import {
-  ClassificationMethod,
-  ClassificationParameters,
-  LayerDescriptionChoropleth,
+  CategoricalChoroplethParameters,
+  LayerDescriptionCategoricalChoropleth,
 } from '../../global.d';
 
 // For now we keep an array of directives
@@ -31,29 +29,27 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
   bindData,
 ];
 
-export function choroplethPolygonRenderer(
-  layerDescription: LayerDescriptionChoropleth,
+export function categoricalChoroplethPolygonRenderer(
+  layerDescription: LayerDescriptionCategoricalChoropleth,
 ): JSX.Element {
   const rendererParameters = createMemo(
-    () => layerDescription.rendererParameters as ClassificationParameters,
+    () => layerDescription.rendererParameters as CategoricalChoroplethParameters,
   );
 
-  const classifier = createMemo(() => {
-    const Cls = getClassifier(ClassificationMethod.manual);
-    return new Cls(null, null, rendererParameters().breaks);
-  });
-
-  const colors = createMemo(
-    () => (rendererParameters().reversePalette
-      ? rendererParameters().palette.colors.toReversed()
-      : rendererParameters().palette.colors),
+  const colorsMap = createMemo(
+    () => {
+      const map = new Map<string | number, string>(
+        rendererParameters().mapping.map(([value, _, color]) => [value, color]),
+      );
+      return map;
+    },
   );
 
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
     || layerDescription.visible
   }>
-      <g
+    <g
       id={layerDescription.id}
       class="layer choropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
@@ -67,15 +63,11 @@ export function choroplethPolygonRenderer(
       clip-path="url(#clip-sphere)"
       filter={mergeFilterIds(layerDescription)}
       shape-rendering={layerDescription.shapeRendering}
-      >
+    >
       <For each={layerDescription.data.features}>
         {
           (feature) => <path
-            fill={
-              isNumber(feature.properties[rendererParameters().variable])
-                ? colors()[classifier().getClass(feature.properties[rendererParameters().variable])]
-                : rendererParameters().nodataColor
-            }
+            fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
             d={globalStore.pathGenerator(feature)}
             vector-effect="non-scaling-stroke"
             use:bindData={unproxify(feature)}
@@ -86,22 +78,20 @@ export function choroplethPolygonRenderer(
   </Show>;
 }
 
-export function choroplethPointRenderer(
-  layerDescription: LayerDescriptionChoropleth,
+export function categoricalChoroplethPointRenderer(
+  layerDescription: LayerDescriptionCategoricalChoropleth,
 ): JSX.Element {
   const rendererParameters = createMemo(
-    () => layerDescription.rendererParameters as ClassificationParameters,
+    () => layerDescription.rendererParameters as CategoricalChoroplethParameters,
   );
 
-  const classifier = createMemo(() => {
-    const Cls = getClassifier(ClassificationMethod.manual);
-    return new Cls(null, null, rendererParameters().breaks);
-  });
-
-  const colors = createMemo(
-    () => (rendererParameters().reversePalette
-      ? rendererParameters().palette.colors.toReversed()
-      : rendererParameters().palette.colors),
+  const colorsMap = createMemo(
+    () => {
+      const map = new Map<string | number, string>(
+        rendererParameters().mapping.map(([value, _, color]) => [value, color]),
+      );
+      return map;
+    },
   );
 
   return <Show when={
@@ -125,11 +115,7 @@ export function choroplethPointRenderer(
       <For each={layerDescription.data.features}>
         {
           (feature) => <path
-            fill={
-              isNumber(feature.properties[rendererParameters().variable])
-                ? colors()[classifier().getClass(feature.properties[rendererParameters().variable])]
-                : rendererParameters().nodataColor
-            }
+            fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
             d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
             vector-effect="non-scaling-stroke"
             use:bindData={unproxify(feature)}
@@ -140,22 +126,20 @@ export function choroplethPointRenderer(
   </Show>;
 }
 
-export function choroplethLineRenderer(
-  layerDescription: LayerDescriptionChoropleth,
+export function categoricalChoroplethLineRenderer(
+  layerDescription: LayerDescriptionCategoricalChoropleth,
 ): JSX.Element {
   const rendererParameters = createMemo(
-    () => layerDescription.rendererParameters as ClassificationParameters,
+    () => layerDescription.rendererParameters as CategoricalChoroplethParameters,
   );
 
-  const classifier = createMemo(() => {
-    const Cls = getClassifier(ClassificationMethod.manual);
-    return new Cls(null, null, rendererParameters().breaks);
-  });
-
-  const colors = createMemo(
-    () => (rendererParameters().reversePalette
-      ? rendererParameters().palette.colors.toReversed()
-      : rendererParameters().palette.colors),
+  const colorsMap = createMemo(
+    () => {
+      const map = new Map<string | number, string>(
+        rendererParameters().mapping.map(([value, _, color]) => [value, color]),
+      );
+      return map;
+    },
   );
 
   return <Show when={
@@ -179,9 +163,7 @@ export function choroplethLineRenderer(
         {
           (feature) => <path
             stroke={
-              isNumber(feature.properties[rendererParameters().variable])
-                ? colors()[classifier().getClass(feature.properties[rendererParameters().variable])]
-                : rendererParameters().nodataColor
+              colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])
             }
             d={globalStore.pathGenerator(feature)}
             vector-effect="non-scaling-stroke"
