@@ -20,7 +20,7 @@ import type { TranslationFunctions } from '../../i18n/i18n-types';
 // Types / Interfaces / Enums
 import {
   type LayerDescription,
-  type LayerDescriptionChoropleth,
+  type LayerDescriptionChoropleth, LayerDescriptionDiscontinuity, LayerDescriptionLabels,
   type LayerDescriptionProportionalSymbols,
   LegendType,
 } from '../../global.d';
@@ -414,7 +414,7 @@ function makeSettingsChoroplethLegend(
       </div>
     </Show>
     <div class="field">
-      <label class="label">{ LL().Legend.Modal.LegendChoroplethOrientation() }</label>
+      <label class="label">{ LL().Legend.Modal.LegendOrientation() }</label>
       <div class="control">
         <label class="radio" style={{ 'margin-right': '2em' }}>
           <input
@@ -426,7 +426,7 @@ function makeSettingsChoroplethLegend(
               debouncedUpdateProps(layer.id, ['legend', 'orientation'], value);
             }}
           />
-          { LL().Legend.Modal.LegendChoroplethOrientationHorizontal() }
+          { LL().Legend.Modal.LegendOrientationHorizontal() }
         </label>
         <label class="radio">
           <input
@@ -438,7 +438,7 @@ function makeSettingsChoroplethLegend(
               debouncedUpdateProps(layer.id, ['legend', 'orientation'], value);
             }}
           />
-          { LL().Legend.Modal.LegendChoroplethOrientationVertical() }
+          { LL().Legend.Modal.LegendOrientationVertical() }
         </label>
       </div>
     </div>
@@ -458,6 +458,91 @@ function makeSettingsChoroplethLegend(
   </>;
 }
 
+function makeSettingsDiscontinuityLegend(
+  layer: LayerDescriptionDiscontinuity,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <>
+   <FieldText layer={layer} LL={LL} role={'title'} />
+   <FieldText layer={layer} LL={LL} role={'subtitle'} />
+   <FieldText layer={layer} LL={LL} role={'note'} />
+   <FieldRoundDecimals layer={layer} LL={LL} />
+   <div class="field">
+     <label class="label">{ LL().Legend.Modal.LineLength() }</label>
+     <div class="control">
+       <input
+         class="input"
+         type="number"
+         value={ layer.legend.lineLength }
+         min={0}
+         max={100}
+         step={1}
+         onChange={(ev) => debouncedUpdateProps(layer.id, ['legend', 'lineLength'], +ev.target.value)}
+       />
+     </div>
+   </div>
+    <div class="field">
+      <label class="label">{ LL().Legend.Modal.LegendOrientation() }</label>
+      <div class="control">
+        <label class="radio" style={{ 'margin-right': '2em' }}>
+          <input
+            type="radio"
+            name="legend-orientation"
+            {...(layer.legend?.orientation === 'horizontal' ? { checked: true } : {}) }
+            onChange={(ev) => {
+              const value = ev.target.checked ? 'horizontal' : 'vertical';
+              debouncedUpdateProps(layer.id, ['legend', 'orientation'], value);
+            }}
+          />
+          { LL().Legend.Modal.LegendOrientationHorizontal() }
+        </label>
+        <label class="radio">
+          <input
+            type="radio"
+            name="legend-orientation"
+            {...(layer.legend?.orientation === 'vertical' ? { checked: true } : {}) }
+            onChange={(ev) => {
+              const value = ev.target.checked ? 'vertical' : 'horizontal';
+              debouncedUpdateProps(layer.id, ['legend', 'orientation'], value);
+            }}
+          />
+          { LL().Legend.Modal.LegendOrientationVertical() }
+        </label>
+      </div>
+    </div>
+    <hr />
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        { LL().Legend.Modal.MoreOptions() }
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }} />
+      </p>
+    </div>
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable layer={layer} LL={LL} />
+    </Show>
+ </>;
+}
+
+function makeSettingsLabels(
+  layer: LayerDescriptionLabels,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <></>;
+}
+
 function getInnerPanel(ld: LayerDescription, LL: Accessor<TranslationFunctions>): JSX.Element {
   if (ld.legend?.type === LegendType.choropleth) {
     return makeSettingsChoroplethLegend(ld as LayerDescriptionChoropleth, LL);
@@ -465,8 +550,11 @@ function getInnerPanel(ld: LayerDescription, LL: Accessor<TranslationFunctions>)
   if (ld.legend?.type === LegendType.proportional) {
     return makeSettingsProportionalSymbolsLegend(ld as LayerDescriptionProportionalSymbols, LL);
   }
+  if (ld.legend?.type === LegendType.discontinuity) {
+    return makeSettingsDiscontinuityLegend(ld as LayerDescriptionDiscontinuity, LL);
+  }
   if (ld.legend?.type === LegendType.labels) {
-    return <></>;
+    return makeSettingsLabels(ld as LayerDescriptionLabels, LL);
   }
   return <></>;
 }

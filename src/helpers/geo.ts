@@ -410,7 +410,7 @@ export const computeDiscontinuity = (
   referenceLayerId: string,
   referenceVariableName: string,
   discontinuityType: 'relative' | 'absolute',
-) => {
+): GeoJSONFeatureCollection => {
   // Get the reference layer data
   const refLayer = unproxify(
     layersDescriptionStore.layers
@@ -426,16 +426,15 @@ export const computeDiscontinuity = (
   // Convert to topojson
   const topology = topojson.topology({ layer: refLayer }, 1e5);
 
-  // Function to get the id of a pair of features
-  const getId = (a: GeoJSONFeature, b: GeoJSONFeature): [string, string] => [`${a.id}__${b.id}`, `${b.id}__${a.id}`];
+  // Functions to get the id of a pair of features
+  const getPairIds = (a: GeoJSONFeature, b: GeoJSONFeature): [string, string] => [`${a.id}__${b.id}`, `${b.id}__${a.id}`];
+  const getIds = (a: GeoJSONFeature, b: GeoJSONFeature): [string, string] => [`${a.id}`, `${b.id}`];
 
-  // Compute the discontinuity
+  // Compute the discontinuity values between each pair of features
   const resultValue = new Map<string, number>();
 
-  let temp1 = [];
-
   if (discontinuityType === 'relative') {
-    temp1 = topojson.mesh(
+    topojson.mesh(
       topology,
       topology.objects.layer,
       (a: GeoJSONFeature, b: GeoJSONFeature) => {
@@ -445,18 +444,17 @@ export const computeDiscontinuity = (
           if (!isNumber(valA) || !isNumber(valB)) {
             return false;
           }
-          const [newId, newIdRev] = getId(a, b);
+          const [newId, newIdRev] = getPairIds(a, b);
           if (!(resultValue.get(newId) || resultValue.get(newIdRev))) {
             const value = Mmax(+valA! / +valB!, +valB! / +valA!);
             resultValue.set(newId, value);
           }
-          return true;
         }
         return false;
       },
     );
   } else { // discontinuityType === 'absolute'
-    temp1 = topojson.mesh(
+    topojson.mesh(
       topology,
       topology.objects.layer,
       (a: GeoJSONFeature, b: GeoJSONFeature) => {
@@ -466,12 +464,11 @@ export const computeDiscontinuity = (
           if (!isNumber(valA) || !isNumber(valB)) {
             return false;
           }
-          const [newId, newIdRev] = getId(a, b);
+          const [newId, newIdRev] = getPairIds(a, b);
           if (!(resultValue.get(newId) || resultValue.get(newIdRev))) {
             const value = Mmax(+valA! - +valB!, +valB! - +valA!);
             resultValue.set(newId, value);
           }
-          return true;
         }
         return false;
       },
@@ -479,48 +476,48 @@ export const computeDiscontinuity = (
   }
 
   const arrDisc = [];
-  // const arrTmp = [];
   const entries = Array.from(resultValue.entries());
   for (let i = 0, n = entries.length; i < n; i += 1) {
     const kv = entries[i];
     if (!Number.isNaN(kv[1])) {
       arrDisc.push(kv);
-      // arrTmp.push(kv[1]);
     }
   }
-
-  arrDisc.sort((a, b) => a[1] - b[1]);
-  // arrTmp.sort((a, b) => a - b);
 
   const nbFt = arrDisc.length;
   const dRes = [];
   for (let i = 0; i < nbFt; i += 1) {
     const idFt = arrDisc[i][0];
+    const [aId, bId] = idFt.split('__');
     const val = arrDisc[i][1];
     const geom = topojson.mesh(
       topology,
       topology.objects.layer,
       (a: GeoJSONFeature, b: GeoJSONFeature) => {
-        const aId = idFt.split('_')[0];
-        const bId = idFt.split('_')[1];
-        const [refAId, refBId] = getId(a, b)[0].split('_');
-        return (a !== b // eslint-disable-next-line no-mixed-operators
-          && (refAId === aId && refBId === bId || refAId === bId && refBId === aId));
+        if (a === b) return false;
+        const [refAId, refBId] = getIds(a, b);
+        // eslint-disable-next-line no-mixed-operators
+        return (refAId === aId && refBId === bId || refAId === bId && refBId === aId);
       },
     );
-    const [feature1, feature2] = idFt.split('__');
+
+    // For each feature, we store the discontinuity value
+    // and the ids of the two features involved
     dRes.push({
       type: 'Feature',
       geometry: geom,
       properties: {
-        feature1,
-        feature2,
+        feature1: aId,
+        feature2: bId,
         value: val,
       },
     });
   }
+
+  // Sort (descending) the features by the computed value
   dRes.sort((a, b) => b.properties.value - a.properties.value);
 
+  // Return the result as a GeoJSONFeatureCollection
   return {
     type: 'FeatureCollection',
     features: dRes,

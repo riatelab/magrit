@@ -16,6 +16,8 @@ export const getTargetSvg = (): SVGSVGElement & IZoomable => {
   return targetSvg as SVGSVGElement & IZoomable;
 };
 
+const simpleRedrawRenderers = ['default', 'choropleth', 'discontinuity', 'graticule', 'sphere'];
+
 /**
  * Redraw the paths of the SVG element
  * as well as the various symbols (circles, ...), using the updated projection.
@@ -34,7 +36,7 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
     // Remove the transform attribute from the elements on which it was defined
     g.removeAttribute('transform');
     // Redraw the paths
-    if (['default', 'graticule', 'sphere', 'choropleth'].includes(type)) {
+    if (simpleRedrawRenderers.includes(type)) {
       g.querySelectorAll('path').forEach((p) => {
         p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
       });

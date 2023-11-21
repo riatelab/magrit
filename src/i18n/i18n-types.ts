@@ -654,6 +654,28 @@ type RootTranslation = {
 			 */
 			LimitValue: string
 		}
+		DiscontinuityOptions: {
+			/**
+			 * D​i​s​c​o​n​t​i​n​u​i​t​y​ ​t​y​p​e
+			 */
+			DiscontinuityType: string
+			/**
+			 * R​e​l​a​t​i​v​e
+			 */
+			Relative: string
+			/**
+			 * A​b​s​o​l​u​t​e
+			 */
+			Absolute: string
+			/**
+			 * C​l​a​s​s​i​f​i​c​a​t​i​o​n​ ​t​y​p​e
+			 */
+			Classification: string
+			/**
+			 * T​h​r​e​s​h​o​l​d​ ​o​f​ ​d​i​s​c​o​n​t​i​n​u​i​t​y​ ​t​o​ ​d​i​s​p​l​a​y
+			 */
+			DiscontinuityThreshold: string
+		}
 	}
 	ExportSection: {
 		/**
@@ -1210,15 +1232,15 @@ type RootTranslation = {
 			/**
 			 * L​e​g​e​n​d​ ​o​r​i​e​n​t​a​t​i​o​n
 			 */
-			LegendChoroplethOrientation: string
+			LegendOrientation: string
 			/**
 			 * H​o​r​i​z​o​n​t​a​l
 			 */
-			LegendChoroplethOrientationHorizontal: string
+			LegendOrientationHorizontal: string
 			/**
 			 * V​e​r​t​i​c​a​l
 			 */
-			LegendChoroplethOrientationVertical: string
+			LegendOrientationVertical: string
 			/**
 			 * L​e​g​e​n​d​ ​l​a​y​o​u​t
 			 */
@@ -1279,6 +1301,10 @@ type RootTranslation = {
 			 * C​h​o​i​c​e​ ​o​f​ ​v​a​l​u​e​s
 			 */
 			ChooseValues: string
+			/**
+			 * L​i​n​e​ ​l​e​n​g​t​h
+			 */
+			LineLength: string
 		}
 	}
 	CommonTextElement: {
@@ -1961,6 +1987,28 @@ export type TranslationFunctions = {
 			 */
 			LimitValue: () => LocalizedString
 		}
+		DiscontinuityOptions: {
+			/**
+			 * Discontinuity type
+			 */
+			DiscontinuityType: () => LocalizedString
+			/**
+			 * Relative
+			 */
+			Relative: () => LocalizedString
+			/**
+			 * Absolute
+			 */
+			Absolute: () => LocalizedString
+			/**
+			 * Classification type
+			 */
+			Classification: () => LocalizedString
+			/**
+			 * Threshold of discontinuity to display
+			 */
+			DiscontinuityThreshold: () => LocalizedString
+		}
 	}
 	ExportSection: {
 		/**
@@ -2517,15 +2565,15 @@ export type TranslationFunctions = {
 			/**
 			 * Legend orientation
 			 */
-			LegendChoroplethOrientation: () => LocalizedString
+			LegendOrientation: () => LocalizedString
 			/**
 			 * Horizontal
 			 */
-			LegendChoroplethOrientationHorizontal: () => LocalizedString
+			LegendOrientationHorizontal: () => LocalizedString
 			/**
 			 * Vertical
 			 */
-			LegendChoroplethOrientationVertical: () => LocalizedString
+			LegendOrientationVertical: () => LocalizedString
 			/**
 			 * Legend layout
 			 */
@@ -2586,6 +2634,10 @@ export type TranslationFunctions = {
 			 * Choice of values
 			 */
 			ChooseValues: () => LocalizedString
+			/**
+			 * Line length
+			 */
+			LineLength: () => LocalizedString
 		}
 	}
 	CommonTextElement: {

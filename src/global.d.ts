@@ -64,16 +64,13 @@ type LayerDescription = {
     | CategoricalChoroplethParameters
     | ProportionalSymbolsParameters & ClassificationParameters
     | ProportionalSymbolsParameters & CategoricalChoroplethParameters
+    | DiscontinuityParameters
     | LabelsParameters
     | GraticuleParameters
     // | DefaultRendererParameters
   ),
   // Parameters of the legend associated to the layer
-  legend?: (
-    ChoroplethLegendParameters
-    | ProportionalSymbolsLegendParameters
-    | LabelsLegendParameters
-  ),
+  legend?: LegendParameters,
 };
 
 interface DefaultRendererParameters {
@@ -283,6 +280,8 @@ interface DiscontinuityParameters {
   classes: number,
   // The break values (computed or manually set)
   breaks: number[],
+  // The thickness of the discontinuity, for each class
+  sizes: number[],
 }
 
 export enum RepresentationType {
@@ -387,16 +386,27 @@ interface ProportionalSymbolsLegendParameters extends LegendParametersBase {
 
 interface LabelsLegendParameters extends LegendParametersBase {
   type: LegendType.labels,
+  // The text properties of the labels
+  labels: LegendTextElement,
 }
 
 interface DiscontinuityLegendParameters extends LegendParametersBase {
   type: LegendType.discontinuity,
+  // Whether the legend is horizontal or vertical
+  orientation: Orientation,
+  // The text properties of the labels
+  labels: LegendTextElement,
+  // Length of each line in the legend
+  // (if the legend is horizontal, the total length of
+  // the legend is the sum of the lengths of the lines)
+  lineLength: number,
 }
 
 export type LegendParameters = (
   ChoroplethLegendParameters
   | ProportionalSymbolsLegendParameters
   | LabelsLegendParameters
+  | DiscontinuityLegendParameters
 );
 
 export enum NumberFormatting {

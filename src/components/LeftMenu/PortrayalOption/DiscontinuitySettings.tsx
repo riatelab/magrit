@@ -7,6 +7,14 @@ import {
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
+// Imports from other packages
+import {
+  quantile,
+  equal,
+  jenks,
+  q6,
+} from 'statsbreaks';
+
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
@@ -35,12 +43,15 @@ function onClickValidate(
   discontinuityType: 'absolute' | 'relative',
   newLayerName: string,
 ): void {
-  console.log(newLayerName);
   const newData = computeDiscontinuity(
     referenceLayerId,
     targetVariable,
     discontinuityType,
   );
+
+  const values = newData.features.map((f) => f.properties.value as number);
+
+  const breaks = quantile(values, { nb: 4 });
 
   const fields = [
     {
@@ -58,7 +69,7 @@ function onClickValidate(
     id: generateIdLayer(),
     name: newLayerName,
     data: newData,
-    type: 'line',
+    type: 'linestring',
     fields,
     renderer: 'discontinuity' as RepresentationType,
     visible: true,
@@ -69,7 +80,12 @@ function onClickValidate(
     blurFilter: false,
     shapeRendering: 'auto',
     rendererParameters: {
-
+      variable: targetVariable,
+      type: discontinuityType,
+      classificationMethod: 'manual',
+      classes: 4,
+      breaks,
+      sizes: [2, 5, 9, 15],
     } as DiscontinuityParameters,
     legend: {
       title: {
@@ -106,6 +122,8 @@ function onClickValidate(
         stroke: '#000000',
       },
       type: LegendType.discontinuity,
+      orientation: 'horizontal',
+      lineLength: 45,
       labels: {
         fontSize: '11px',
         fontFamily: 'Sans-serif',
@@ -139,7 +157,7 @@ export default function DiscontinuitySettings(
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>(`Discontonuity_${layerDescription().name}`);
+  ] = createSignal<string>(`Discontinuity_${layerDescription().name}`);
   const [
     targetVariable,
     setTargetVariable,
@@ -169,12 +187,16 @@ export default function DiscontinuitySettings(
       </For>
     </InputFieldSelect>
     <InputFieldSelect
-      label={'Discontinuity type'}
+      label={ LL().PortrayalSection.DiscontinuityOptions.DiscontinuityType() }
       onChange={(value) => setDiscontinuityType(value as 'absolute' | 'relative')}
       value={discontinuityType()}
     >
-      <option value="absolute">Absolute</option>
-      <option value="relative">Relative</option>
+      <option value="absolute">
+        { LL().PortrayalSection.DiscontinuityOptions.Absolute() }
+      </option>
+      <option value="relative">
+        { LL().PortrayalSection.DiscontinuityOptions.Relative() }
+      </option>
     </InputFieldSelect>
     <InputResultName
       onKeyUp={(value) => setNewLayerName(value)}

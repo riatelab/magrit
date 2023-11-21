@@ -399,14 +399,16 @@ function makeSettingsDefaultLine(
       max={1}
       step={0.1}
     />
-    <InputFieldNumber
-      label={ LL().LayerSettings.StrokeWidth() }
-      value={+props.strokeWidth!.replace('px', '')}
-      onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', `${v}px`)}
-      min={0}
-      max={10}
-      step={0.1}
-    />
+    <Show when={props.renderer !== 'discontinuity'}>
+      <InputFieldNumber
+        label={ LL().LayerSettings.StrokeWidth() }
+        value={+props.strokeWidth!.replace('px', '')}
+        onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', `${v}px`)}
+        min={0}
+        max={10}
+        step={0.1}
+      />
+    </Show>
   </>;
 }
 

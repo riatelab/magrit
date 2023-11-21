@@ -285,3 +285,9 @@ export function triggerContextMenuLegend(
     ],
   });
 }
+
+export const bindElementsLegend = (refElement: SVGGElement, layer: LayerDescription) => {
+  computeRectangleBox(refElement);
+  bindMouseEnterLeave(refElement);
+  bindDragBehavior(refElement, layer);
+};

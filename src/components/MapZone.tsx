@@ -67,6 +67,7 @@ import {
 
 // Styles
 import '../styles/MapZone.css';
+import legendDiscontinuity from './LegendRenderer/DiscontinuityLegendRenderer.tsx';
 
 const layoutFeaturesFns = {
   [LayoutFeatureType.Rectangle]: RectangleRenderer,
@@ -270,10 +271,13 @@ export default function MapZone(): JSX.Element {
         <For each={ layersDescriptionStore.layers }>
           {(layer) => {
             if (layer.renderer === 'choropleth') {
-              return legendChoropleth(layer);
+              return legendChoropleth(layer as LayerDescriptionChoropleth);
             }
             if (layer.renderer === 'proportionalSymbols') {
-              return legendProportionalSymbols(layer);
+              return legendProportionalSymbols(layer as LayerDescriptionProportionalSymbols);
+            }
+            if (layer.renderer === 'discontinuity') {
+              return legendDiscontinuity(layer as LayerDescriptionDiscontinuity);
             }
             return null;
           }}

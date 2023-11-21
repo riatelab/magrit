@@ -17,9 +17,8 @@ import { applicationSettingsStore, RenderVisibility } from '../../store/Applicat
 
 // Sub-components and helpers for legend rendering
 import {
+  bindElementsLegend,
   computeRectangleBox,
-  bindDragBehavior,
-  bindMouseEnterLeave,
   getTextSize,
   makeLegendSettingsModal,
   makeLegendText,
@@ -92,6 +91,11 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
       ).height + defaultSpacing;
     }
     vDistanceToTop += legendParameters.boxSpacing / 2;
+    vDistanceToTop += getTextSize(
+      '1234567890',
+      legendParameters.labels.fontSize,
+      legendParameters.labels.fontFamily,
+    ).height / 2;
     return vDistanceToTop;
   });
 
@@ -121,16 +125,10 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
 
   let refElement: SVGGElement;
 
-  const bindElementsLegend = () => {
-    computeRectangleBox(refElement);
-    bindMouseEnterLeave(refElement);
-    bindDragBehavior(refElement, layer);
-  };
-
   onMount(() => {
     // We need to wait for the legend to be rendered before we can compute its size
     // and bind the drag behavior and the mouse enter / leave behavior.
-    bindElementsLegend();
+    bindElementsLegend(refElement, layer);
   });
 
   createEffect(() => {
@@ -157,7 +155,7 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
     class="legend choropleth"
     transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
-    ondblclick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
     onContextMenu={(e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -330,16 +328,10 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
 
   let refElement: SVGGElement;
 
-  const bindElementsLegend = () => {
-    computeRectangleBox(refElement);
-    bindMouseEnterLeave(refElement);
-    bindDragBehavior(refElement, layer);
-  };
-
   onMount(() => {
     // We need to wait for the legend to be rendered before we can compute its size
     // and bind the drag behavior and the mouse enter / leave behavior.
-    bindElementsLegend();
+    bindElementsLegend(refElement, layer);
   });
 
   createEffect(() => {
@@ -371,7 +363,7 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
       e.stopPropagation();
       triggerContextMenuLegend(e, layer.id, LL);
     } }
-    ondblclick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
     style={{ cursor: 'grab' }}
   >
     { makeRectangleBox() }

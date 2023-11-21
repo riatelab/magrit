@@ -15,10 +15,13 @@ import { round, sum } from '../../helpers/math';
 
 // Sub-components
 import {
+  bindElementsLegend,
+  computeRectangleBox,
+  getTextSize,
+  makeLegendSettingsModal,
   makeLegendText,
   makeRectangleBox,
-  makeLegendSettingsModal,
-  triggerContextMenuLegend, computeRectangleBox, bindMouseEnterLeave, bindDragBehavior, getTextSize,
+  triggerContextMenuLegend,
 } from './common.tsx';
 
 // Stores
@@ -33,12 +36,6 @@ import type {
 } from '../../global.d';
 
 const defaultSpacing = 5;
-
-const bindElementsLegend = (refElement: SVGGElement, layer: LayerDescription) => {
-  computeRectangleBox(refElement);
-  bindMouseEnterLeave(refElement);
-  bindDragBehavior(refElement, layer);
-};
 
 function stackedSquareLegend(
   layer: LayerDescriptionProportionalSymbols,
