@@ -189,7 +189,7 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
       </For>
       <Show when={hasNoData()}>
         <rect
-          fill={rendererParameters.nodataColor}
+          fill={rendererParameters.noDataColor}
           x={0}
           y={
             distanceToTop()
@@ -386,7 +386,7 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
       </For>
       <Show when={hasNoData()}>
         <rect
-          fill={rendererParameters.nodataColor}
+          fill={rendererParameters.noDataColor}
           x={
             colors.length * (legendParameters.boxWidth + legendParameters.boxSpacing)
             - legendParameters.boxSpacing

@@ -192,7 +192,7 @@ interface ClassificationParameters {
   // Description of the palette used for the choropleth
   palette: Palette | CustomPalette,
   // The color to use for features with no data
-  nodataColor: string,
+  noDataColor: string,
   // Entities by class
   entitiesByClass: number[],
   // Whether to reverse the palette or not

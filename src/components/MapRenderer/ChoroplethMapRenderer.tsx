@@ -74,7 +74,7 @@ export function choroplethPolygonRenderer(
             fill={
               isNumber(feature.properties[rendererParameters().variable])
                 ? colors()[classifier().getClass(feature.properties[rendererParameters().variable])]
-                : rendererParameters().nodataColor
+                : rendererParameters().noDataColor
             }
             d={globalStore.pathGenerator(feature)}
             vector-effect="non-scaling-stroke"
@@ -128,7 +128,7 @@ export function choroplethPointRenderer(
             fill={
               isNumber(feature.properties[rendererParameters().variable])
                 ? colors()[classifier().getClass(feature.properties[rendererParameters().variable])]
-                : rendererParameters().nodataColor
+                : rendererParameters().noDataColor
             }
             d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
             vector-effect="non-scaling-stroke"
@@ -181,7 +181,7 @@ export function choroplethLineRenderer(
             stroke={
               isNumber(feature.properties[rendererParameters().variable])
                 ? colors()[classifier().getClass(feature.properties[rendererParameters().variable])]
-                : rendererParameters().nodataColor
+                : rendererParameters().noDataColor
             }
             d={globalStore.pathGenerator(feature)}
             vector-effect="non-scaling-stroke"

@@ -191,7 +191,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
     classes: numberOfClasses(),
     breaks: quantile(values(), { nb: numberOfClasses(), precision: null }),
     palette: pal(),
-    nodataColor: noDataColor(),
+    noDataColor: noDataColor(),
     entitiesByClass: [],
     reversePalette: false,
   } as ClassificationParameters);
@@ -223,7 +223,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
             classes: numberOfClasses(),
             breaks: quantile(values(), { nb: numberOfClasses(), precision: null }),
             palette: pal(),
-            nodataColor: defaultNoDataColor,
+            noDataColor: defaultNoDataColor,
             entitiesByClass: [],
             reversePalette: false,
           } as ClassificationParameters);
@@ -251,7 +251,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
               classes: numberOfClasses(),
               breaks: quantile(values(), { nb: numberOfClasses(), precision: null }),
               palette: pal(),
-              nodataColor: defaultNoDataColor,
+              noDataColor: defaultNoDataColor,
               entitiesByClass: [],
               reversePalette: false,
             } as ClassificationParameters);
@@ -269,7 +269,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
               classes: numberOfClasses(),
               breaks: equal(values(), { nb: numberOfClasses(), precision: null }),
               palette: pal(),
-              nodataColor: defaultNoDataColor,
+              noDataColor: defaultNoDataColor,
               entitiesByClass: [],
               reversePalette: false,
             } as ClassificationParameters);
@@ -287,7 +287,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
               classes: 6,
               breaks: q6(values(), { precision: null }),
               palette: getPalette(defaultColorScheme, 6) as Palette,
-              nodataColor: defaultNoDataColor,
+              noDataColor: defaultNoDataColor,
               entitiesByClass: [],
               reversePalette: false,
             } as ClassificationParameters);
@@ -305,7 +305,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
               classes: numberOfClasses(),
               breaks: jenks(values(), { nb: numberOfClasses(), precision: null }),
               palette: pal(),
-              nodataColor: defaultNoDataColor,
+              noDataColor: defaultNoDataColor,
               entitiesByClass: [],
               reversePalette: false,
             } as ClassificationParameters);
@@ -325,7 +325,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
               nClasses: numberOfClasses(),
               colorScheme: defaultColorScheme,
               invertColorScheme: false,
-              noDataColor: targetClassification().nodataColor,
+              noDataColor: targetClassification().noDataColor,
               onCancel: noop,
               onConfirm: (classification: ClassificationParameters) => {
                 setTargetClassification(classification);

@@ -122,7 +122,7 @@ export default function ClassificationPanel(): JSX.Element {
       classes,
       breaks,
       palette,
-      nodataColor: noDataColor(),
+      noDataColor: noDataColor(),
       entitiesByClass,
       reversePalette,
     } as ClassificationParameters;
