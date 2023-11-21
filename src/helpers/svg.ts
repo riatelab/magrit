@@ -16,7 +16,7 @@ export const getTargetSvg = (): SVGSVGElement & IZoomable => {
   return targetSvg as SVGSVGElement & IZoomable;
 };
 
-const simpleRedrawRenderers = ['default', 'choropleth', 'discontinuity', 'graticule', 'sphere'];
+const simpleRedrawRenderers = ['default', 'choropleth', 'discontinuity', 'graticule', 'sphere', 'categorical-choropleth'];
 
 /**
  * Redraw the paths of the SVG element

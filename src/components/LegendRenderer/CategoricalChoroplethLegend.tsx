@@ -5,11 +5,10 @@ import {
 } from 'solid-js';
 
 // Import from other packages
-import { getColors } from 'dicopal';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { isNumber } from '../../helpers/common';
+import { isNonNull, isNumber } from '../../helpers/common';
 import { round } from '../../helpers/math';
 
 // Stores
@@ -28,15 +27,15 @@ import {
 
 // Import some type descriptions
 import {
+  CategoricalChoroplethParameters,
   ChoroplethLegendParameters,
-  type ClassificationParameters,
-  type LayerDescription, LayerDescriptionChoropleth,
+  type LayerDescriptionCategoricalChoropleth,
   Orientation,
 } from '../../global.d';
 
 const defaultSpacing = 5;
 
-function verticalLegend(layer: LayerDescription): JSX.Element {
+function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Element {
   // Check that the layer has all the required attributes
   // Since this is done during layer creation, this should not happen in practice,
   // and the following checks are here:
@@ -46,11 +45,8 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
   if (!layer.rendererParameters) {
     throw new Error('Classification attribute is not defined - this should not happen');
   }
-  const rendererParameters = layer.rendererParameters as ClassificationParameters;
+  const rendererParameters = layer.rendererParameters as CategoricalChoroplethParameters;
 
-  if (!rendererParameters.palette) {
-    throw new Error('Classification.palette attribute is not defined - this should not happen');
-  }
   if (!layer.legend) {
     throw new Error('Legend attribute is not defined - this should not happen');
   }
@@ -59,16 +55,6 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
   const legendParameters = layer.legend as ChoroplethLegendParameters;
 
   const { LL } = useI18nContext();
-
-  const colors = getColors(
-    rendererParameters.palette.name,
-    rendererParameters.classes,
-    rendererParameters.reversePalette,
-  ) as string[]; // this can't be undefined because we checked it above
-
-  if (!colors) {
-    throw new Error(`Could not get colors for scheme ${layer.rendererParameters.palette.name}`);
-  }
 
   const heightTitle = createMemo(() => (
     getTextSize(
@@ -91,11 +77,6 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
       ).height + defaultSpacing;
     }
     vDistanceToTop += legendParameters.boxSpacing / 2;
-    vDistanceToTop += getTextSize(
-      '1234567890',
-      legendParameters.labels.fontSize,
-      legendParameters.labels.fontFamily,
-    ).height / 2;
     return vDistanceToTop;
   });
 
@@ -104,13 +85,17 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
   );
 
   const hasNoData = createMemo(() => layer.data.features.filter(
-    (feature) => !isNumber(feature.properties[rendererParameters.variable]),
+    (feature) => !isNonNull(feature.properties[rendererParameters.variable]),
   ).length > 0);
+
+  const labelsAndColors = createMemo(
+    () => rendererParameters.mapping.map(([_, categoryName, color]) => [categoryName, color]),
+  );
 
   const positionNote = createMemo(() => {
     if (hasNoData()) {
       return distanceToTop()
-        + (colors.length - 1) * boxHeightAndSpacing()
+        + (labelsAndColors().length - 1) * boxHeightAndSpacing()
         + legendParameters.boxSpacingNoData
         + legendParameters.boxHeight * 1.5
         + defaultSpacing * 3
@@ -120,7 +105,7 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
           legendParameters.labels.fontFamily,
         ).height;
     }
-    return distanceToTop() + (colors.length) * boxHeightAndSpacing() + defaultSpacing * 3;
+    return distanceToTop() + labelsAndColors().length * boxHeightAndSpacing() + defaultSpacing * 3;
   });
 
   let refElement: SVGGElement;
@@ -138,6 +123,7 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
         distanceToTop(),
         boxHeightAndSpacing(),
         heightTitle(),
+        hasNoData(),
         legendParameters.roundDecimals,
         legendParameters.boxWidth,
         legendParameters.title.text,
@@ -152,7 +138,7 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
 
   return <g
     ref={refElement}
-    class="legend choropleth"
+    class="legend categorical-choropleth"
     transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
     onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
@@ -174,9 +160,9 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
       )
     }
     <g class="legend-content">
-      <For each={colors.toReversed()}>
+      <For each={labelsAndColors()}>
         {
-          (color, i) => <rect
+          ([categoryName, color], i) => <rect
             fill={color}
             x={0}
             y={distanceToTop() + i() * boxHeightAndSpacing()}
@@ -193,7 +179,7 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
           x={0}
           y={
             distanceToTop()
-            + (colors.length - 1) * boxHeightAndSpacing()
+            + (labelsAndColors().length - 1) * boxHeightAndSpacing()
             + legendParameters.boxHeight
             + legendParameters.boxSpacingNoData
           }
@@ -203,15 +189,11 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
           height={legendParameters.boxHeight}
         />
       </Show>
-      <For each={rendererParameters.breaks.toReversed()}>
+      <For each={labelsAndColors()}>
         {
-          (value, i) => <text
+          ([categoryName, color], i) => <text
             x={legendParameters.boxWidth + defaultSpacing}
-            y={
-              distanceToTop()
-              + i() * boxHeightAndSpacing()
-              - legendParameters.boxSpacing / 2
-            }
+            y={distanceToTop() + i() * boxHeightAndSpacing() + (legendParameters.boxHeight / 2)}
             font-size={legendParameters.labels.fontSize}
             font-family={legendParameters.labels.fontFamily}
             font-style={legendParameters.labels.fontStyle}
@@ -220,7 +202,7 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
             style={{ 'user-select': 'none' }}
             text-anchor="start"
             dominant-baseline="middle"
-          >{ round(value, legendParameters.roundDecimals).toLocaleString() }</text>
+          >{ categoryName }</text>
         }
       </For>
       <Show when={hasNoData()}>
@@ -228,7 +210,7 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
           x={legendParameters.boxWidth + defaultSpacing}
           y={
             distanceToTop()
-            + (colors.length - 1) * boxHeightAndSpacing()
+            + (labelsAndColors().length - 1) * boxHeightAndSpacing()
             + legendParameters.boxSpacingNoData
             + legendParameters.boxHeight * 1.5
             + defaultSpacing / 3
@@ -247,7 +229,8 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
   </g>;
 }
 
-function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
+/*
+function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Element {
   // Check that the layer has all the required attributes
   // Since this is done during layer creation, this should not happen in practice
   // and the following checks are here:
@@ -257,11 +240,8 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
   if (!layer.rendererParameters) {
     throw new Error('Classification attribute is not defined - this should not happen');
   }
-  const rendererParameters = layer.rendererParameters as ClassificationParameters;
+  const rendererParameters = layer.rendererParameters as CategoricalChoroplethParameters;
 
-  if (!rendererParameters.palette) {
-    throw new Error('Classification.palette attribute is not defined - this should not happen');
-  }
   if (!layer.legend) {
     throw new Error('Legend attribute is not defined - this should not happen');
   }
@@ -269,15 +249,6 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
   const legendParameters = layer.legend as ChoroplethLegendParameters;
 
   const { LL } = useI18nContext();
-  const colors = getColors(
-    rendererParameters.palette.name,
-    rendererParameters.classes,
-    rendererParameters.reversePalette,
-  ) as string[]; // this can't be undefined because we checked it above
-
-  if (!colors) {
-    throw new Error(`Could not get colors for scheme ${rendererParameters.palette.name}`);
-  }
 
   // We need to compute the position of:
   // - the legend title
@@ -294,10 +265,10 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
   const heightSubtitle = createMemo(() => (
     legendParameters.subtitle && legendParameters.subtitle.text
       ? getTextSize(
-        legendParameters.subtitle.text,
-        legendParameters.subtitle.fontSize,
-        legendParameters.subtitle.fontFamily,
-      ).height + defaultSpacing
+      legendParameters.subtitle.text,
+      legendParameters.subtitle.fontSize,
+      legendParameters.subtitle.fontFamily,
+    ).height + defaultSpacing
       : 0
   ));
 
@@ -355,7 +326,7 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
 
   return <g
     ref={refElement}
-    class="legend choropleth"
+    class="legend categorical-choropleth"
     transform={`translate(${legendParameters.position[0]}, ${legendParameters.position[1]})`}
     visibility={layer.visible && legendParameters.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {
@@ -439,8 +410,11 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
     </g>
   </g>;
 }
+*/
 
-export default function legendChoropleth(layer: LayerDescriptionChoropleth): JSX.Element {
+export default function legendCategoricalChoropleth(
+  layer: LayerDescriptionCategoricalChoropleth,
+): JSX.Element {
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
     || (layer.visible && layer.legend!.visible)
@@ -448,7 +422,7 @@ export default function legendChoropleth(layer: LayerDescriptionChoropleth): JSX
     {
       ({
         [Orientation.vertical]: verticalLegend,
-        [Orientation.horizontal]: horizontalLegend,
+        [Orientation.horizontal]: verticalLegend,
       })[(layer.legend as ChoroplethLegendParameters).orientation](layer)
     }
   </Show>;

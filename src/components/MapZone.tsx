@@ -73,6 +73,7 @@ import {
   categoricalChoroplethPointRenderer,
   categoricalChoroplethPolygonRenderer,
 } from './MapRenderer/CategoricalChoroplethMapRenderer.tsx';
+import legendCategoricalChoropleth from './LegendRenderer/CategoricalChoroplethLegend.tsx';
 
 const layoutFeaturesFns = {
   [LayoutFeatureType.Rectangle]: RectangleRenderer,
@@ -281,6 +282,9 @@ export default function MapZone(): JSX.Element {
           {(layer) => {
             if (layer.renderer === 'choropleth') {
               return legendChoropleth(layer as LayerDescriptionChoropleth);
+            }
+            if (layer.renderer === 'categorical') {
+              return legendCategoricalChoropleth(layer as LayerDescriptionCategoricalChoropleth);
             }
             if (layer.renderer === 'proportionalSymbols') {
               return legendProportionalSymbols(layer as LayerDescriptionProportionalSymbols);

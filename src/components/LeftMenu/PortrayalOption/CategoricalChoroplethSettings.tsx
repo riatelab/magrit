@@ -120,11 +120,11 @@ function onClickValidate(
       // Part specific to choropleth
       type: LegendType.choropleth,
       orientation: Orientation.vertical,
-      boxWidth: 30,
+      boxWidth: 45,
       boxHeight: 30,
       boxSpacing: 5,
-      boxSpacingNoData: 10,
-      boxCornerRadius: 20,
+      boxSpacingNoData: 5,
+      boxCornerRadius: 0,
       labels: {
         fontSize: '11px',
         fontFamily: 'Sans-serif',

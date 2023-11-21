@@ -7,7 +7,7 @@ import {
 } from 'solid-js';
 
 // Helpers
-import { isNumber, unproxify } from '../../helpers/common';
+import { unproxify } from '../../helpers/common';
 import { mergeFilterIds } from './common.tsx';
 
 // Stores
@@ -38,9 +38,12 @@ export function categoricalChoroplethPolygonRenderer(
 
   const colorsMap = createMemo(
     () => {
-      const map = new Map<string | number, string>(
+      const map = new Map<string | number | null | undefined, string>(
         rendererParameters().mapping.map(([value, _, color]) => [value, color]),
       );
+      map.set('', rendererParameters().noDataColor);
+      map.set(null, rendererParameters().noDataColor);
+      map.set(undefined, rendererParameters().noDataColor);
       return map;
     },
   );
@@ -51,7 +54,7 @@ export function categoricalChoroplethPolygonRenderer(
   }>
     <g
       id={layerDescription.id}
-      class="layer choropleth"
+      class="layer categorical-choropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       // fill={layerDescription.fillColor}
       fill-opacity={layerDescription.fillOpacity}
@@ -87,9 +90,12 @@ export function categoricalChoroplethPointRenderer(
 
   const colorsMap = createMemo(
     () => {
-      const map = new Map<string | number, string>(
+      const map = new Map<string | number | null | undefined, string>(
         rendererParameters().mapping.map(([value, _, color]) => [value, color]),
       );
+      map.set('', rendererParameters().noDataColor);
+      map.set(null, rendererParameters().noDataColor);
+      map.set(undefined, rendererParameters().noDataColor);
       return map;
     },
   );
@@ -100,7 +106,7 @@ export function categoricalChoroplethPointRenderer(
   }>
     <g
       id={layerDescription.id}
-      class="layer choropleth"
+      class="layer categorical-choropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       // fill={layerDescription.fillColor}
       fill-opacity={layerDescription.fillOpacity}
@@ -135,9 +141,12 @@ export function categoricalChoroplethLineRenderer(
 
   const colorsMap = createMemo(
     () => {
-      const map = new Map<string | number, string>(
+      const map = new Map<string | number | null | undefined, string>(
         rendererParameters().mapping.map(([value, _, color]) => [value, color]),
       );
+      map.set('', rendererParameters().noDataColor);
+      map.set(null, rendererParameters().noDataColor);
+      map.set(undefined, rendererParameters().noDataColor);
       return map;
     },
   );
@@ -148,7 +157,7 @@ export function categoricalChoroplethLineRenderer(
   }>
     <g
       id={layerDescription.id}
-      class="layer choropleth"
+      class="layer categorical-choropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       fill="none"
       // stroke={layerDescription.strokeColor}
