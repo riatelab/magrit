@@ -126,7 +126,7 @@ const onClickTyping = (id: string) => {
 export default function LayerManagerItem(props: { 'props': LayerDescription }): JSX.Element {
   const { LL } = useI18nContext();
 
-  return <div class="layer-manager-item">
+  return <div class="layer-manager-item" onDblClick={() => { onClickSettings(props.props.id, LL); }}>
     <div class="layer-manager-item__name" title={ props.props.name }>
       <span>{ props.props.name }</span>
     </div>

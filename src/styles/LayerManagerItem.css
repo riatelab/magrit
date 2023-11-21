@@ -32,4 +32,5 @@
 /* Style for the item that is currently being dragged */
 .sortable-chosen .layer-manager-item {
     background-color: #d2d2d2;
+    transition: background-color 0.15s ease-in-out;
 }
