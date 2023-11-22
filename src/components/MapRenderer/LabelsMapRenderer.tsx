@@ -52,7 +52,7 @@ export function defaultLabelsRenderer(
       class={'layer labels'}
       visibility={layerDescription.visible ? undefined : 'hidden'}
       filter={mergeFilterIds(layerDescription)}
-      style={{ 'user-select': 'none' }}
+      style={{ 'user-select': 'none', 'stroke-linejoin': 'round', 'paint-order': 'stroke' }}
     >
       <For each={layerDescription.data.features}>
         {
@@ -71,6 +71,11 @@ export function defaultLabelsRenderer(
               font-size={rendererParameters.fontSize}
               font-weight={rendererParameters.fontWeight}
               fill={rendererParameters.fontColor}
+              {...(
+                rendererParameters.halo
+                  ? { stroke: rendererParameters.halo.color, 'stroke-width': rendererParameters.halo.width }
+                  : {}
+              )}
             >{ feature.properties[rendererParameters.variable] }</text>;
           }
         }

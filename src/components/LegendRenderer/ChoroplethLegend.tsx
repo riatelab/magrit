@@ -22,7 +22,7 @@ import {
   getTextSize,
   makeLegendSettingsModal,
   makeLegendText,
-  makeRectangleBox,
+  RectangleBox,
   triggerContextMenuLegend,
 } from './common.tsx';
 
@@ -36,26 +36,8 @@ import {
 
 const defaultSpacing = 5;
 
-function verticalLegend(layer: LayerDescription): JSX.Element {
-  // Check that the layer has all the required attributes
-  // Since this is done during layer creation, this should not happen in practice,
-  // and the following checks are here:
-  // - to make Typescript happy
-  // - to make sure the layer is correctly defined.
-  // In the future, we might want to remove these checks.
-  if (!layer.rendererParameters) {
-    throw new Error('Classification attribute is not defined - this should not happen');
-  }
+function verticalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
   const rendererParameters = layer.rendererParameters as ClassificationParameters;
-
-  if (!rendererParameters.palette) {
-    throw new Error('Classification.palette attribute is not defined - this should not happen');
-  }
-  if (!layer.legend) {
-    throw new Error('Legend attribute is not defined - this should not happen');
-  }
-
-  // const legendParameters = createMemo(() => layer.legend as ChoroplethLegendParameters);
   const legendParameters = layer.legend as ChoroplethLegendParameters;
 
   const { LL } = useI18nContext();
@@ -110,17 +92,20 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
   const positionNote = createMemo(() => {
     if (hasNoData()) {
       return distanceToTop()
-        + (colors.length - 1) * boxHeightAndSpacing()
+        + colors.length * boxHeightAndSpacing()
+        - legendParameters.boxSpacing
         + legendParameters.boxSpacingNoData
-        + legendParameters.boxHeight * 1.5
-        + defaultSpacing * 3
-        + getTextSize(
-          legendParameters.noDataLabel,
-          legendParameters.labels.fontSize,
-          legendParameters.labels.fontFamily,
-        ).height;
+        + legendParameters.boxHeight
+        + defaultSpacing * 3;
     }
-    return distanceToTop() + (colors.length) * boxHeightAndSpacing() + defaultSpacing * 3;
+    return distanceToTop()
+      + (colors.length) * boxHeightAndSpacing()
+      + getTextSize(
+        legendParameters.noDataLabel,
+        legendParameters.labels.fontSize,
+        legendParameters.labels.fontFamily,
+      ).height / 2
+      + defaultSpacing * 3;
   });
 
   let refElement: SVGGElement;
@@ -138,6 +123,8 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
         distanceToTop(),
         boxHeightAndSpacing(),
         heightTitle(),
+        hasNoData(),
+        positionNote(),
         legendParameters.roundDecimals,
         legendParameters.boxWidth,
         legendParameters.title.text,
@@ -163,7 +150,7 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
     } }
     style={{ cursor: 'grab' }}
   >
-    { makeRectangleBox() }
+    <RectangleBox backgroundRect={legendParameters.backgroundRect} />
     { makeLegendText(legendParameters.title, [0, 0], 'title') }
     { makeLegendText(legendParameters.subtitle, [0, heightTitle()], 'subtitle') }
     {
@@ -248,24 +235,7 @@ function verticalLegend(layer: LayerDescription): JSX.Element {
 }
 
 function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
-  // Check that the layer has all the required attributes
-  // Since this is done during layer creation, this should not happen in practice
-  // and the following checks are here:
-  // - to make Typescript happy
-  // - to make sure that the layer is correctly defined.
-  // In the future, we might want to remove these checks.
-  if (!layer.rendererParameters) {
-    throw new Error('Classification attribute is not defined - this should not happen');
-  }
   const rendererParameters = layer.rendererParameters as ClassificationParameters;
-
-  if (!rendererParameters.palette) {
-    throw new Error('Classification.palette attribute is not defined - this should not happen');
-  }
-  if (!layer.legend) {
-    throw new Error('Legend attribute is not defined - this should not happen');
-  }
-
   const legendParameters = layer.legend as ChoroplethLegendParameters;
 
   const { LL } = useI18nContext();
@@ -286,7 +256,7 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
   // To do so, we need to know the size of each of these elements (and the presence / absence of
   // each of them).
   const heightTitle = createMemo(() => (getTextSize(
-    legendParameters.title.text,
+    legendParameters.title.text || '',
     legendParameters.title.fontSize,
     legendParameters.title.fontFamily,
   ).height + defaultSpacing));
@@ -343,12 +313,14 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
         distanceBoxesToTop(),
         distanceLabelsToTop(),
         distanceNoteToTop(),
+        hasNoData(),
         legendParameters.title.text,
         legendParameters.subtitle?.text,
         legendParameters.note?.text,
         legendParameters.roundDecimals,
         legendParameters.boxSpacing,
         legendParameters.boxSpacingNoData,
+        legendParameters.boxWidth,
       );
     }
   });
@@ -366,7 +338,7 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
     onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
     style={{ cursor: 'grab' }}
   >
-    { makeRectangleBox() }
+    <RectangleBox backgroundRect={legendParameters.backgroundRect} />
     { makeLegendText(legendParameters.title, [0, 0], 'title') }
     { makeLegendText(legendParameters.subtitle, [0, heightTitle()], 'subtitle') }
     { makeLegendText(legendParameters.note, [0, distanceNoteToTop()], 'note') }

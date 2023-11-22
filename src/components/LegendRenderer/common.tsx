@@ -19,6 +19,7 @@ import LegendSettings from '../Modals/LegendSettings.tsx';
 // Types / interfaces / enums
 import type { LayerDescription, LegendTextElement } from '../../global';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
+import { BackgroundRect } from '../../global';
 
 export function makeLegendText(
   props: LegendTextElement,
@@ -69,26 +70,33 @@ export function computeRectangleBox(refElement: SVGGElement, ...args: any[]) {
   rectangleBoxLegend.setAttribute('y', `${bbox.y - distanceBoxContent}px`);
 }
 
-export function makeRectangleBox(width = 0, height = 0): JSX.Element {
+export function RectangleBox(props: { backgroundRect: BackgroundRect }): JSX.Element {
   return <rect
     class={'legend-box'}
-    style={{ fill: 'green', 'fill-opacity': '0' }}
     x={0}
     y={0}
-    width={width}
-    height={height}
+    width={0}
+    height={0}
+    fill={props.backgroundRect.visible ? props.backgroundRect.fill : 'transparent'}
+    fill-opacity={props.backgroundRect.visible ? props.backgroundRect.fillOpacity : 0}
+    stroke={props.backgroundRect.visible ? props.backgroundRect.stroke : undefined}
+    stroke-opacity={props.backgroundRect.visible ? props.backgroundRect.strokeOpacity : undefined}
+    stroke-width={props.backgroundRect.visible ? props.backgroundRect.strokeWidth : undefined}
   />;
 }
-
 export function bindMouseEnterLeave(refElement: SVGGElement): void {
   // Color the .legend-box element when the mouse is over the refElement group
+  // (maybe the .legend-box element already has a color,
+  // that's why we use the style attribute instead of the fill attribute here,
+  // so that when the style attribute is used it overrides the fill and fill-opacity attributes).
   refElement.addEventListener('mouseover', () => {
     const rectangleBoxLegend = refElement.querySelector('.legend-box') as SVGRectElement;
     rectangleBoxLegend.setAttribute('style', 'fill: green; fill-opacity: 0.1');
   });
+  // Remove the style attribute when the mouse leaves the refElement group.
   refElement.addEventListener('mouseleave', () => {
     const rectangleBoxLegend = refElement.querySelector('.legend-box') as SVGRectElement;
-    rectangleBoxLegend.setAttribute('style', 'fill-opacity: 0');
+    rectangleBoxLegend.removeAttribute('style');
   });
 }
 
@@ -181,8 +189,8 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
     outerSvg.addEventListener('mousemove', moveElement);
     outerSvg.addEventListener('mouseup', deselectElement);
     // Cursor style
-    // First change the cursor of the refElement group to default value
-    refElement.style.cursor = 'default'; // eslint-disable-line no-param-reassign
+    // First change the cursor of the refElement group to grabbing
+    refElement.style.cursor = 'grabbing'; // eslint-disable-line no-param-reassign
     // Then change the cursor of the parent SVG element to grabbing
     outerSvg.style.cursor = 'grabbing'; // eslint-disable-line no-param-reassign
 

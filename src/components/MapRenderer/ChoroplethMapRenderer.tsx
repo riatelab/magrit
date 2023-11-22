@@ -57,7 +57,6 @@ export function choroplethPolygonRenderer(
       id={layerDescription.id}
       class="layer choropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
-      // fill={layerDescription.fillColor}
       fill-opacity={layerDescription.fillOpacity}
       stroke={layerDescription.strokeColor}
       stroke-width={layerDescription.strokeWidth}
@@ -112,7 +111,6 @@ export function choroplethPointRenderer(
       id={layerDescription.id}
       class="layer choropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
-      // fill={layerDescription.fillColor}
       fill-opacity={layerDescription.fillOpacity}
       stroke={layerDescription.strokeColor}
       stroke-width={layerDescription.strokeWidth}
@@ -167,7 +165,6 @@ export function choroplethLineRenderer(
       class="layer choropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       fill="none"
-      // stroke={layerDescription.strokeColor}
       stroke-width={layerDescription.strokeWidth}
       stroke-opacity={layerDescription.strokeOpacity}
       stroke-linecap="round"

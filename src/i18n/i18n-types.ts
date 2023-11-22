@@ -801,6 +801,18 @@ type RootTranslation = {
 		 */
 		FontWeight: string
 		/**
+		 * B​u​f​f​e​r​ ​a​r​o​u​n​d​ ​t​e​x​t
+		 */
+		BufferAroundText: string
+		/**
+		 * B​u​f​f​e​r​ ​c​o​l​o​r
+		 */
+		BufferColor: string
+		/**
+		 * B​u​f​f​e​r​ ​w​i​d​t​h
+		 */
+		BufferWidth: string
+		/**
 		 * A​l​l​o​w​ ​m​o​v​i​n​g​ ​l​a​b​e​l​s
 		 */
 		AllowMovingLabels: string
@@ -1233,6 +1245,30 @@ type RootTranslation = {
 			 * L​e​g​e​n​d​ ​n​o​t​e
 			 */
 			LegendNote: string
+			/**
+			 * D​i​s​p​l​a​y​ ​a​ ​r​e​c​t​a​n​g​l​e​ ​u​n​d​e​r​ ​t​h​e​ ​l​e​g​e​n​d
+			 */
+			DisplayBackgroundRectangle: string
+			/**
+			 * B​a​c​k​g​r​o​u​n​d​ ​r​e​c​t​a​n​g​l​e​ ​c​o​l​o​r
+			 */
+			BackgroundRectangleColor: string
+			/**
+			 * B​a​c​k​g​r​o​u​n​d​ ​r​e​c​t​a​n​g​l​e​ ​f​i​l​l​ ​o​p​a​c​i​t​y
+			 */
+			BackgroundRectangleOpacity: string
+			/**
+			 * B​a​c​k​g​r​o​u​n​d​ ​r​e​c​t​a​n​g​l​e​ ​s​t​r​o​k​e​ ​c​o​l​o​r
+			 */
+			BackgroundRectangleStrokeColor: string
+			/**
+			 * B​a​c​k​g​r​o​u​n​d​ ​r​e​c​t​a​n​g​l​e​ ​s​t​r​o​k​e​ ​w​i​d​t​h
+			 */
+			BackgroundRectangleStrokeWidth: string
+			/**
+			 * B​a​c​k​g​r​o​u​n​d​ ​r​e​c​t​a​n​g​l​e​ ​s​t​r​o​k​e​ ​o​p​a​c​i​t​y
+			 */
+			BackgroundRectangleStrokeOpacity: string
 			/**
 			 * L​e​g​e​n​d​ ​o​r​i​e​n​t​a​t​i​o​n
 			 */
@@ -2138,6 +2174,18 @@ export type TranslationFunctions = {
 		 */
 		FontWeight: () => LocalizedString
 		/**
+		 * Buffer around text
+		 */
+		BufferAroundText: () => LocalizedString
+		/**
+		 * Buffer color
+		 */
+		BufferColor: () => LocalizedString
+		/**
+		 * Buffer width
+		 */
+		BufferWidth: () => LocalizedString
+		/**
 		 * Allow moving labels
 		 */
 		AllowMovingLabels: () => LocalizedString
@@ -2570,6 +2618,30 @@ export type TranslationFunctions = {
 			 * Legend note
 			 */
 			LegendNote: () => LocalizedString
+			/**
+			 * Display a rectangle under the legend
+			 */
+			DisplayBackgroundRectangle: () => LocalizedString
+			/**
+			 * Background rectangle color
+			 */
+			BackgroundRectangleColor: () => LocalizedString
+			/**
+			 * Background rectangle fill opacity
+			 */
+			BackgroundRectangleOpacity: () => LocalizedString
+			/**
+			 * Background rectangle stroke color
+			 */
+			BackgroundRectangleStrokeColor: () => LocalizedString
+			/**
+			 * Background rectangle stroke width
+			 */
+			BackgroundRectangleStrokeWidth: () => LocalizedString
+			/**
+			 * Background rectangle stroke opacity
+			 */
+			BackgroundRectangleStrokeOpacity: () => LocalizedString
 			/**
 			 * Legend orientation
 			 */

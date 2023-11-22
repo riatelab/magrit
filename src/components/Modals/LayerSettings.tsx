@@ -172,6 +172,46 @@ function makeSettingsLabels(
       <option value="bold">Bold</option>
     </InputFieldSelect>
     <InputFieldCheckbox
+      label={ LL().LayerSettings.BufferAroundText() }
+      checked={rendererParameters.halo !== undefined}
+      onChange={(v) => {
+        if (v) {
+          debouncedUpdateProp(props.id, ['rendererParameters', 'halo'], { color: '#ffffff', width: 2 });
+        } else {
+          debouncedUpdateProp(props.id, ['rendererParameters', 'halo'], undefined);
+        }
+      }}
+    />
+    <Show when={rendererParameters.halo !== undefined}>
+      <InputFieldColor
+        label={ LL().LayerSettings.BufferColor() }
+        value={rendererParameters.halo!.color}
+        onChange={(v) => {
+          const haloProps = {
+            color: v,
+            width: rendererParameters.halo!.width,
+          };
+          debouncedUpdateProp(props.id, ['rendererParameters', 'halo'], haloProps);
+        }}
+      />
+      <InputFieldNumber
+        label={ LL().LayerSettings.BufferWidth() }
+        value={rendererParameters.halo!.width}
+        onChange={
+          (v) => {
+            const haloProps = {
+              color: rendererParameters.halo!.color,
+              width: v,
+            };
+            debouncedUpdateProp(props.id, ['rendererParameters', 'halo'], haloProps);
+          }
+        }
+        min={0}
+        max={10}
+        step={1}
+      />
+    </Show>
+    <InputFieldCheckbox
       label={ LL().LayerSettings.AllowMovingLabels() }
       checked={rendererParameters.movable}
       onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}

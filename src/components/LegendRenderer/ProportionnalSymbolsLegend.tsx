@@ -20,7 +20,7 @@ import {
   getTextSize,
   makeLegendSettingsModal,
   makeLegendText,
-  makeRectangleBox,
+  RectangleBox,
   triggerContextMenuLegend,
 } from './common.tsx';
 
@@ -109,7 +109,7 @@ function stackedSquareLegend(
     onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
     style={{ cursor: 'grab' }}
   >
-    { makeRectangleBox() }
+    <RectangleBox backgroundRect={layer.legend.backgroundRect} />
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
     { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
@@ -250,7 +250,7 @@ function horizontalSquareLegend(
     onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
     style={{ cursor: 'grab' }}
   >
-    { makeRectangleBox() }
+    <RectangleBox backgroundRect={layer.legend.backgroundRect} />
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
     { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
@@ -379,7 +379,7 @@ function verticalSquareLegend(
     onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
     style={{ cursor: 'grab' }}
   >
-    { makeRectangleBox() }
+    <RectangleBox backgroundRect={layer.legend.backgroundRect} />
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
     { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
@@ -488,7 +488,7 @@ function stackedCircleLegend(
     onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
     style={{ cursor: 'grab' }}
   >
-    { makeRectangleBox() }
+    <RectangleBox backgroundRect={layer.legend.backgroundRect} />
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
     { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
@@ -606,7 +606,7 @@ function verticalCircleLegend(
     }}
     onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
   >
-    { makeRectangleBox() }
+    <RectangleBox backgroundRect={layer.legend.backgroundRect} />
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
     <g class="legend-content">
@@ -719,7 +719,7 @@ function horizontalCircleLegend(
     }}
     onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
   >
-    { makeRectangleBox() }
+    <RectangleBox backgroundRect={layer.legend.backgroundRect} />
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
     <g class="legend-content">

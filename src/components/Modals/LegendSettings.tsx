@@ -14,7 +14,13 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/L
 
 // Helpers
 import { webSafeFonts } from '../../helpers/font';
-import { capitalizeFirstLetter, debounce, isNumber } from '../../helpers/common';
+import {
+  ascending,
+  capitalizeFirstLetter,
+  debounce,
+  isNumber,
+  unproxify,
+} from '../../helpers/common';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
 
 // Types / Interfaces / Enums
@@ -24,6 +30,9 @@ import {
   type LayerDescriptionProportionalSymbols,
   LegendType,
 } from '../../global.d';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
+import InputFieldColor from '../Inputs/InputColor.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
 
 /**
  * Update a single property of a layer in the layersDescriptionStore,
@@ -203,6 +212,112 @@ function FieldRoundDecimals(
     </div>
   </div>;
 }
+
+function OptionBackgroundRectangle(
+  props: {
+    layer: LayerDescription,
+    LL: Accessor<TranslationFunctions>,
+  },
+): JSX.Element {
+  return <>
+    <InputFieldCheckbox
+      label={ props.LL().Legend.Modal.DisplayBackgroundRectangle() }
+      checked={props.layer.legend!.backgroundRect.visible}
+      onChange={(v) => {
+        if (v && !props.layer.legend!.backgroundRect.fill) {
+          updateProps(props.layer.id, ['legend', 'backgroundRect', 'fill'], '#ffffff');
+        }
+        if (v && !props.layer.legend!.backgroundRect.fillOpacity) {
+          updateProps(props.layer.id, ['legend', 'backgroundRect', 'fillOpacity'], 1);
+        }
+        if (v && !props.layer.legend!.backgroundRect.stroke) {
+          updateProps(props.layer.id, ['legend', 'backgroundRect', 'stroke'], '#000000');
+        }
+        if (v && !props.layer.legend!.backgroundRect.strokeWidth) {
+          updateProps(props.layer.id, ['legend', 'backgroundRect', 'strokeWidth'], 1);
+        }
+        if (v && !props.layer.legend!.backgroundRect.strokeOpacity) {
+          updateProps(props.layer.id, ['legend', 'backgroundRect', 'strokeOpacity'], 1);
+        }
+        debouncedUpdateProps(props.layer.id, ['legend', 'backgroundRect', 'visible'], v);
+      }}
+    />
+    <Show when={props.layer.legend!.backgroundRect.visible}>
+      <InputFieldColor
+        label={ props.LL().Legend.Modal.BackgroundRectangleColor() }
+        value={ props.layer.legend!.backgroundRect.fill! }
+        onChange={(v) => debouncedUpdateProps(props.layer.id, ['legend', 'backgroundRect', 'fill'], v)}
+      />
+      <InputFieldNumber
+        label={ props.LL().Legend.Modal.BackgroundRectangleOpacity() }
+        value={ props.layer.legend!.backgroundRect.fillOpacity! }
+        onChange={(v) => debouncedUpdateProps(props.layer.id, ['legend', 'backgroundRect', 'fillOpacity'], v)}
+        min={0}
+        max={1}
+        step={0.1}
+      />
+      <InputFieldColor
+        label={ props.LL().Legend.Modal.BackgroundRectangleStrokeColor() }
+        value={ props.layer.legend!.backgroundRect.stroke! }
+        onChange={(v) => debouncedUpdateProps(props.layer.id, ['legend', 'backgroundRect', 'stroke'], v)}
+      />
+      <InputFieldNumber
+        label={ props.LL().Legend.Modal.BackgroundRectangleStrokeOpacity() }
+        value={ props.layer.legend!.backgroundRect.strokeOpacity! }
+        onChange={(v) => debouncedUpdateProps(props.layer.id, ['legend', 'backgroundRect', 'strokeOpacity'], v)}
+        min={0}
+        max={1}
+        step={0.1}
+      />
+      <InputFieldNumber
+        label={ props.LL().Legend.Modal.BackgroundRectangleStrokeWidth() }
+        value={ props.layer.legend!.backgroundRect.strokeWidth! }
+        onChange={(v) => debouncedUpdateProps(props.layer.id, ['legend', 'backgroundRect', 'strokeWidth'], v)}
+        min={0}
+        max={10}
+        step={1}
+      />
+    </Show>
+  </>;
+}
+
+function FieldChangeValues(
+  props: { layer: LayerDescriptionProportionalSymbols, LL: Accessor<TranslationFunctions> },
+): JSX.Element {
+  const styleInputElement = { width: '8.5em !important', 'font-size': '0.9rem' };
+  return <div class="field">
+    <label class="label">{ props.LL().Legend.Modal.ChooseValues() }</label>
+    <div class="control">
+      <FaSolidPlus
+        style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}
+        onClick={() => {
+          const values = unproxify(props.layer.legend.values.slice()) as number[];
+          values.unshift(1);
+          debouncedUpdateProps(props.layer.id, ['legend', 'values'], values);
+        }}
+      />
+      <For each={props.layer.legend.values}>
+        {
+          (value, i) => <input
+            style={styleInputElement}
+            type="number"
+            min={0}
+            step={1}
+            value={value}
+            onChange={(ev) => {
+              const newValue = +ev.target.value;
+              const values = unproxify(props.layer.legend.values.slice()) as number[];
+              values[i()] = newValue;
+              values.sort(ascending);
+              debouncedUpdateProps(props.layer.id, ['legend', 'values'], values.filter((v) => v !== 0));
+            }}
+          />
+        }
+      </For>
+    </div>
+  </div>;
+}
+
 function makeSettingsProportionalSymbolsLegend(
   layer: LayerDescriptionProportionalSymbols,
   LL: Accessor<TranslationFunctions>,
@@ -217,31 +332,7 @@ function makeSettingsProportionalSymbolsLegend(
     <FieldText layer={layer} LL={LL} role={'subtitle'} />
     <FieldText layer={layer} LL={LL} role={'note'} />
     <FieldRoundDecimals layer={layer} LL={LL} />
-    <div class="field">
-      <label class="label">{ LL().Legend.Modal.ChooseValues() }</label>
-      <div class="control">
-        <input
-          style="width: 7.5em !important; font-size: 0.9rem;"
-          type="number"
-        />
-        <input
-          style="width: 7.5em !important; font-size: 0.9rem;"
-          type="number"
-        />
-        <input
-          style="width: 7.5em !important; font-size: 0.9rem;"
-          type="number"
-        />
-        <input
-          style="width: 7.5em !important; font-size: 0.9rem;"
-          type="number"
-        />
-        <input
-          style="width: 7.5em !important; font-size: 0.9rem;"
-          type="number"
-        />
-      </div>
-    </div>
+    <FieldChangeValues layer={layer} LL={LL} />
     <div class="field">
       <label class="label">{ LL().Legend.Modal.LegendSymbolLayout() }</label>
       <div class="control">
@@ -308,6 +399,8 @@ function makeSettingsProportionalSymbolsLegend(
     </div>
     <Show when={displayMoreOptions()}>
       <TextOptionTable layer={layer} LL={LL} />
+      <hr />
+      <OptionBackgroundRectangle layer={layer} LL={LL} />
     </Show>
   </>;
 }
@@ -454,6 +547,8 @@ function makeSettingsChoroplethLegend(
     </div>
     <Show when={displayMoreOptions()}>
       <TextOptionTable layer={layer} LL={LL} />
+      <hr />
+      <OptionBackgroundRectangle layer={layer} LL={LL} />
     </Show>
   </>;
 }
@@ -527,6 +622,8 @@ function makeSettingsDiscontinuityLegend(
     </div>
     <Show when={displayMoreOptions()}>
       <TextOptionTable layer={layer} LL={LL} />
+      <hr />
+      <OptionBackgroundRectangle layer={layer} LL={LL} />
     </Show>
  </>;
 }

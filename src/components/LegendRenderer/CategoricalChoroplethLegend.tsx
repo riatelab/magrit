@@ -21,7 +21,7 @@ import {
   getTextSize,
   makeLegendSettingsModal,
   makeLegendText,
-  makeRectangleBox,
+  RectangleBox,
   triggerContextMenuLegend,
 } from './common.tsx';
 
@@ -95,15 +95,11 @@ function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Eleme
   const positionNote = createMemo(() => {
     if (hasNoData()) {
       return distanceToTop()
-        + (labelsAndColors().length - 1) * boxHeightAndSpacing()
+        + (labelsAndColors().length) * boxHeightAndSpacing()
+        - legendParameters.boxSpacing
         + legendParameters.boxSpacingNoData
-        + legendParameters.boxHeight * 1.5
-        + defaultSpacing * 3
-        + getTextSize(
-          legendParameters.noDataLabel,
-          legendParameters.labels.fontSize,
-          legendParameters.labels.fontFamily,
-        ).height;
+        + legendParameters.boxHeight
+        + defaultSpacing * 3;
     }
     return distanceToTop() + labelsAndColors().length * boxHeightAndSpacing() + defaultSpacing * 3;
   });
@@ -149,7 +145,7 @@ function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Eleme
     } }
     style={{ cursor: 'grab' }}
   >
-    { makeRectangleBox() }
+    <RectangleBox backgroundRect={legendParameters.backgroundRect} />
     { makeLegendText(legendParameters.title, [0, 0], 'title') }
     { makeLegendText(legendParameters.subtitle, [0, heightTitle()], 'subtitle') }
     {
@@ -229,7 +225,6 @@ function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Eleme
   </g>;
 }
 
-/*
 function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Element {
   // Check that the layer has all the required attributes
   // Since this is done during layer creation, this should not happen in practice
@@ -265,10 +260,10 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
   const heightSubtitle = createMemo(() => (
     legendParameters.subtitle && legendParameters.subtitle.text
       ? getTextSize(
-      legendParameters.subtitle.text,
-      legendParameters.subtitle.fontSize,
-      legendParameters.subtitle.fontFamily,
-    ).height + defaultSpacing
+        legendParameters.subtitle.text,
+        legendParameters.subtitle.fontSize,
+        legendParameters.subtitle.fontFamily,
+      ).height + defaultSpacing
       : 0
   ));
 
@@ -294,8 +289,12 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
     + heightLegendLabels());
 
   const hasNoData = createMemo(() => layer.data.features.filter(
-    (feature) => !isNumber(feature.properties[rendererParameters.variable]),
+    (feature) => !isNonNull(feature.properties[rendererParameters.variable]),
   ).length > 0);
+
+  const labelsAndColors = createMemo(
+    () => rendererParameters.mapping.map(([_, categoryName, color]) => [categoryName, color]),
+  );
 
   let refElement: SVGGElement;
 
@@ -337,14 +336,14 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
     onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
     style={{ cursor: 'grab' }}
   >
-    { makeRectangleBox() }
+    <RectangleBox backgroundRect={legendParameters.backgroundRect} />
     { makeLegendText(legendParameters.title, [0, 0], 'title') }
     { makeLegendText(legendParameters.subtitle, [0, heightTitle()], 'subtitle') }
     { makeLegendText(legendParameters.note, [0, distanceNoteToTop()], 'note') }
     <g class="legend-content">
-      <For each={colors}>
+      <For each={labelsAndColors()}>
         {
-          (color, i) => <rect
+          ([categoryName, color], i) => <rect
             fill={color}
             x={i() * (legendParameters.boxWidth + legendParameters.boxSpacing)}
             y={distanceBoxesToTop()}
@@ -359,7 +358,7 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
         <rect
           fill={rendererParameters.noDataColor}
           x={
-            colors.length * (legendParameters.boxWidth + legendParameters.boxSpacing)
+            labelsAndColors().length * (legendParameters.boxWidth + legendParameters.boxSpacing)
             - legendParameters.boxSpacing
             + legendParameters.boxSpacingNoData
           }
@@ -370,12 +369,12 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
           height={legendParameters.boxHeight}
         />
       </Show>
-      <For each={rendererParameters.breaks}>
+      <For each={labelsAndColors()}>
         {
-          (value, i) => <text
+          ([categoryName, color], i) => <text
             x={
               (i() * (legendParameters.boxWidth + legendParameters.boxSpacing))
-              - legendParameters.boxSpacing / 2
+              + legendParameters.boxWidth / 2 // Center the text
             }
             y={distanceLabelsToTop()}
             font-size={legendParameters.labels.fontSize}
@@ -386,15 +385,16 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
             style={{ 'user-select': 'none' }}
             text-anchor="middle"
             dominant-baseline="hanging"
-          >{ round(value, legendParameters.roundDecimals).toLocaleString() }</text>
+          >{ categoryName }</text>
         }
       </For>
       <Show when={hasNoData()}>
         <text
           x={
-            colors.length * (legendParameters.boxWidth + legendParameters.boxSpacing)
-            + legendParameters.boxSpacingNoData
-            + legendParameters.boxWidth / 3
+            labelsAndColors().length * (legendParameters.boxWidth + legendParameters.boxSpacing)
+            - legendParameters.boxSpacing // Remove the last box spacing
+            + legendParameters.boxSpacingNoData // and replace it with the no data box spacing
+            + legendParameters.boxWidth / 2 // Center the text
           }
           y={distanceLabelsToTop()}
           font-size={legendParameters.labels.fontSize}
@@ -410,7 +410,6 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
     </g>
   </g>;
 }
-*/
 
 export default function legendCategoricalChoropleth(
   layer: LayerDescriptionCategoricalChoropleth,
@@ -422,7 +421,7 @@ export default function legendCategoricalChoropleth(
     {
       ({
         [Orientation.vertical]: verticalLegend,
-        [Orientation.horizontal]: verticalLegend,
+        [Orientation.horizontal]: horizontalLegend,
       })[(layer.legend as ChoroplethLegendParameters).orientation](layer)
     }
   </Show>;

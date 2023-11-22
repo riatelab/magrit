@@ -113,9 +113,6 @@ function onClickValidate(
       roundDecimals: 1,
       backgroundRect: {
         visible: false,
-        fill: '#ffffff',
-        fillOpacity: 1,
-        stroke: '#000000',
       },
       // Part specific to choropleth
       type: LegendType.choropleth,

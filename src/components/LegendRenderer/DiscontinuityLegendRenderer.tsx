@@ -1,4 +1,5 @@
 import {
+  createEffect,
   createMemo,
   For,
   type JSX,
@@ -12,10 +13,12 @@ import { round } from '../../helpers/math';
 
 // Sub-components and helpers for legend rendering
 import {
-  bindElementsLegend,
-  getTextSize, makeLegendSettingsModal,
+  bindElementsLegend, computeRectangleBox,
+  getTextSize,
+  makeLegendSettingsModal,
   makeLegendText,
-  makeRectangleBox, triggerContextMenuLegend,
+  RectangleBox,
+  triggerContextMenuLegend,
 } from './common.tsx';
 
 // Stores
@@ -99,6 +102,24 @@ function verticalDiscontinuityLegend(
     bindElementsLegend(refElement, layer);
   });
 
+  createEffect(() => {
+    if (refElement && layer.visible && layer.legend?.visible) {
+      computeRectangleBox(
+        refElement,
+        heightTitle(),
+        heightTitleSubtitle(),
+        positionNote(),
+        positionsLabel(),
+        sizesAndPositions(),
+        layer.legend.title.text,
+        layer.legend.subtitle?.text,
+        layer.legend.note?.text,
+        layer.legend.roundDecimals,
+        layer.legend.lineLength,
+      );
+    }
+  });
+
   return <g
     ref={refElement}
     class="legend discontinuity"
@@ -112,7 +133,7 @@ function verticalDiscontinuityLegend(
     onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
     style={{ cursor: 'grab' }}
   >
-    { makeRectangleBox() }
+    <RectangleBox backgroundRect={layer.legend.backgroundRect} />
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
     <g class="legend-content">
@@ -196,6 +217,23 @@ function horizontalDiscontinuityLegend(
     bindElementsLegend(refElement, layer);
   });
 
+  createEffect(() => {
+    if (refElement && layer.visible && layer.legend?.visible) {
+      computeRectangleBox(
+        refElement,
+        heightTitle(),
+        heightTitleSubtitle(),
+        positionNote(),
+        maxSize(),
+        layer.legend.title.text,
+        layer.legend.subtitle?.text,
+        layer.legend.note?.text,
+        layer.legend.roundDecimals,
+        layer.legend.lineLength,
+      );
+    }
+  });
+
   return <g
     ref={refElement}
     class="legend discontinuity"
@@ -209,7 +247,7 @@ function horizontalDiscontinuityLegend(
     onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
     style={{ cursor: 'grab' }}
   >
-    { makeRectangleBox() }
+    <RectangleBox backgroundRect={layer.legend.backgroundRect} />
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
     <g class="legend-content">

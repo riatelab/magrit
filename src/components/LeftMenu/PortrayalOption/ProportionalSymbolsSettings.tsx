@@ -200,9 +200,6 @@ function onClickValidate(
       roundDecimals: 0,
       backgroundRect: {
         visible: false,
-        fill: '#ffffff',
-        fillOpacity: 1,
-        stroke: '#000000',
       },
       // Part specific to proportional symbols
       type: LegendType.proportional,

@@ -267,6 +267,11 @@ export interface LabelsParameters {
   },
   // Whether the labels can be moved by the user or not
   movable: boolean,
+  // Stroke to create a halo around the labels
+  halo?: {
+    color: string,
+    width: number,
+  },
 }
 
 interface DiscontinuityParameters {
@@ -313,16 +318,22 @@ interface LegendParametersBase {
   // Whether to round the values displayed in the legend
   roundDecimals: number | null,
   // Rectangle behind the legend
-  backgroundRect: {
-    // Whether to display the rectangle behind the legend
-    visible: boolean,
-    // The fill color of the rectangle
-    fill?: string,
-    // The fill opacity of the rectangle
-    fillOpacity?: number,
-    // The stroke color of the rectangle
-    stroke?: string,
-  },
+  backgroundRect: BackgroundRect,
+}
+
+export interface BackgroundRect {
+  // Whether to display the rectangle behind the legend
+  visible: boolean,
+  // The fill color of the rectangle
+  fill?: string,
+  // The fill opacity of the rectangle
+  fillOpacity?: number,
+  // The stroke color of the rectangle
+  stroke?: string,
+  // The stroke width of the rectangle
+  strokeWidth?: number,
+  // The stroke opacity of the rectangle
+  strokeOpacity?: number,
 }
 
 interface LegendTextElement {

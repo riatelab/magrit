@@ -117,9 +117,6 @@ function onClickValidate(
       roundDecimals: 2,
       backgroundRect: {
         visible: false,
-        fill: '#fefefe',
-        fillOpacity: 1,
-        stroke: '#000000',
       },
       type: LegendType.discontinuity,
       orientation: 'horizontal',
