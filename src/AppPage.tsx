@@ -60,10 +60,11 @@ import { applicationSettingsStore, ResizeBehavior } from './store/ApplicationSet
 import { datasetCatalogStore } from './store/DatasetCatalogStore';
 import { modalWithChildrenStore } from './store/ModalWithChildrenStore';
 import { contextMenuStore, resetContextMenuStore } from './store/ContextMenuStore';
+import { resetUndoRedoStackStore } from './store/stateStackStore';
 import { undo, redo } from './store/undo-redo';
 
 // Types and enums
-import { LayerDescription, LayoutFeature } from './global.d';
+import type { LayerDescription, LayoutFeature } from './global.d';
 
 // Other stuff
 import { version } from '../package.json';
@@ -280,6 +281,9 @@ const AppPage: () => JSX.Element = () => {
           // Remove all layers
           setLayersDescriptionStore(defaultLayersDescription());
 
+          // Reset the "userHasAddedLayer" flag
+          setGlobalStore({ userHasAddedLayer: false });
+
           // Reset the map store
           // (this will also reset the projection and pathGenerator in the global store)
           setMapStore({
@@ -295,6 +299,9 @@ const AppPage: () => JSX.Element = () => {
               name: 'NaturalEarth2',
             },
           });
+
+          // Reset the undo/redo store
+          resetUndoRedoStackStore();
         };
 
         setNiceAlertStore({

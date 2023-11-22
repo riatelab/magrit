@@ -67,6 +67,34 @@ const resetRedoStackStore = () => {
 };
 
 /**
+ * Reset the undo stack and the redo stack to empty arrays.
+ */
+const resetUndoRedoStackStore = () => {
+  setStateStackStore(
+    produce((draft: StateStackStoreType) => {
+      // eslint-disable-next-line no-param-reassign
+      draft.redoStack = [];
+      // eslint-disable-next-line no-param-reassign
+      draft.undoStack = [];
+    }),
+  );
+};
+
+/**
+ * Reset the undo stack to an empty array.
+ *
+ * @return {void}
+ */
+const resetUndoStackStore = () => {
+  setStateStackStore(
+    produce((draft: StateStackStoreType) => {
+      // eslint-disable-next-line no-param-reassign
+      draft.undoStack = [];
+    }),
+  );
+};
+
+/**
  * This is a wrapper around the pushUndoStackStore function.
  * The call to pushUndoStackStore is debounced to avoid pushing
  * too many (probably intermediate) states to the undo stack.
@@ -77,7 +105,9 @@ export {
   stateStackStore,
   setStateStackStore,
   debouncedPushUndoStack,
-  pushUndoStackStore,
   pushRedoStackStore,
+  pushUndoStackStore,
   resetRedoStackStore,
+  resetUndoStackStore,
+  resetUndoRedoStackStore,
 };
