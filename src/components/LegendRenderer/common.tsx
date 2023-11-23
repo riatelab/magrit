@@ -204,16 +204,22 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
   });
 }
 
+const optionsBBox = {
+  fill: true,
+  stroke: true,
+};
+
 // Determine the size of an SVG text element before displaying it
 export function getTextSize(
   text: string,
   fontSize: number,
   fontFamily: string,
-  strokeWidth?: number,
+  strokeWidth: number = 0,
 ): { width: number, height: number } {
   // Create an element to measure the text
   const elem = document.createElementNS('http://www.w3.org/2000/svg', 'text');
   elem.style.visibility = 'hidden';
+  elem.style.paintOrder = 'stroke';
   elem.setAttribute('font-size', `${fontSize}px`);
   elem.setAttribute('font-family', fontFamily);
   elem.setAttribute('stroke-width', `${strokeWidth}px` || '0px');
@@ -222,7 +228,7 @@ export function getTextSize(
   // Add the element to the DOM (but it is invisible)
   (document.querySelector('svg.map-zone__map') as SVGElement).appendChild(elem);
   // Compute the size of the text
-  const bb = elem.getBBox();
+  const bb = elem.getBBox(optionsBBox);
   // Remove the element from the DOM
   elem.remove();
   return { width: bb.width, height: bb.height };

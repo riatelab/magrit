@@ -117,6 +117,7 @@ function onClickValidate(
         fontWeight: 'bold',
       } as LegendTextElement,
       subtitle: {
+        text: 'This is a subtitle',
         fontSize: 12,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
@@ -124,7 +125,7 @@ function onClickValidate(
         fontWeight: 'normal',
       },
       note: {
-        text: undefined,
+        text: 'This is a bottom note',
         fontSize: 11,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
@@ -138,6 +139,7 @@ function onClickValidate(
       },
       type: LegendType.labels,
       labels: {
+        text: `${referenceLayerDescription.name} (${targetVariable})`,
         fontSize: 11,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
