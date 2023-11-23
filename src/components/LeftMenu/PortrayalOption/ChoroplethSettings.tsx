@@ -24,6 +24,7 @@ import d3 from '../../../helpers/d3-custom';
 import { generateIdLayer } from '../../../helpers/layers';
 import { Mmin } from '../../../helpers/math';
 import { VariableType } from '../../../helpers/typeDetection';
+import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
 // Subcomponents
 import InputResultName from './InputResultName.tsx';
@@ -68,6 +69,9 @@ function onClickValidate(
     throw new Error('Unexpected Error: Reference layer not found');
   }
 
+  // Find a position for the legend
+  const legendPosition = getPossibleLegendPosition(120, 340);
+
   // Prepare the layer description for the new layer
   const newLayerDescription = {
     id: generateIdLayer(),
@@ -110,7 +114,7 @@ function onClickValidate(
         fontStyle: 'normal',
         fontWeight: 'normal',
       },
-      position: [100, 100],
+      position: legendPosition,
       visible: true,
       roundDecimals: 1,
       backgroundRect: {

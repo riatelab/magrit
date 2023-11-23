@@ -9,9 +9,12 @@ import {
 import { setContextMenuStore } from '../../store/ContextMenuStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 import { setModalStore } from '../../store/ModalStore';
+import { mapStore } from '../../store/MapStore';
 
 // Helpers
 import { unproxify } from '../../helpers/common';
+import getMaximalAvailableRectangle from '../../helpers/maximal-rectangle';
+import { getTargetSvg } from '../../helpers/svg';
 
 // Subcomponents
 import LegendSettings from '../Modals/LegendSettings.tsx';
@@ -298,4 +301,27 @@ export const bindElementsLegend = (refElement: SVGGElement, layer: LayerDescript
   computeRectangleBox(refElement);
   bindMouseEnterLeave(refElement);
   bindDragBehavior(refElement, layer);
+};
+
+export const getAllLegendNodes = (): NodeListOf<SVGGElement> => document.querySelectorAll('g.legend');
+
+export const getPossibleLegendPosition = (sizeX, sizeY): [number, number] => {
+  const legendNodes = getAllLegendNodes();
+  if (legendNodes.length === 0) {
+    // If this is the first legend, we put it at the top left corner
+    return [10, 10];
+  }
+  const mapDimensions = { ...mapStore.mapDimensions };
+  const mapBox = getTargetSvg().getBoundingClientRect();
+  const mapPosition = { x0: mapBox.x, y0: mapBox.y };
+  const legendDimensions = sizeX && sizeY
+    ? { width: sizeX, height: sizeY }
+    : { width: 40, height: 100 };
+  const aRect = getMaximalAvailableRectangle(
+    legendNodes,
+    mapDimensions,
+    mapPosition,
+    legendDimensions,
+  );
+  return [aRect.x > -1 ? aRect.x : 10, aRect.y > -1 ? aRect.y : 10];
 };

@@ -22,6 +22,7 @@ import {
 } from '../../../helpers/geo';
 import { generateIdLayer } from '../../../helpers/layers';
 import { max, min } from '../../../helpers/math';
+import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
 // Sub-components
 import InputResultName from './InputResultName.tsx';
@@ -152,6 +153,9 @@ function onClickValidate(
     propSize.getValue,
   );
 
+  // Find a position for the legend
+  const legendPosition = getPossibleLegendPosition(150, 150);
+
   const newLayerDescription = {
     id: generateIdLayer(),
     name: newLayerName,
@@ -195,7 +199,7 @@ function onClickValidate(
         fontStyle: 'normal',
         fontWeight: 'normal',
       } as LegendTextElement,
-      position: [100, 100],
+      position: legendPosition,
       visible: true,
       roundDecimals: 0,
       backgroundRect: {

@@ -18,6 +18,7 @@ import {
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
+import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
 // Subcomponents
 import InputFieldSelect from '../../Inputs/InputSelect.tsx';
@@ -64,6 +65,9 @@ function onClickValidate(
       name: 'feature2', hasMissingValues: false, type: VariableType.categorical, dataType: DataType.string,
     },
   ] as Variable[];
+
+  // Find a position for the legend
+  const legendPosition = getPossibleLegendPosition(250, 110);
 
   const newLayerDescription = {
     id: generateIdLayer(),
@@ -112,7 +116,7 @@ function onClickValidate(
         fontStyle: 'normal',
         fontWeight: 'normal',
       } as LegendTextElement,
-      position: [100, 100],
+      position: legendPosition,
       visible: true,
       roundDecimals: 2,
       backgroundRect: {

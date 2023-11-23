@@ -15,6 +15,7 @@ import { useI18nContext } from '../../../i18n/i18n-solid';
 import { findSuitableName } from '../../../helpers/common';
 import { coordsPointOnFeature } from '../../../helpers/geo';
 import { generateIdLayer } from '../../../helpers/layers';
+import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
 // Subcomponents
 import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
@@ -22,7 +23,7 @@ import InputResultName from './InputResultName.tsx';
 
 // Types / Interfaces / Enums
 import {
-  GeoJSONFeatureCollection,
+  GeoJSONFeatureCollection, LabelsLegendParameters,
   LabelsParameters,
   RepresentationType,
 } from '../../../global';
@@ -67,6 +68,9 @@ function onClickValidate(
     feature.geometry.originalCoordinates = feature.geometry.coordinates;
   });
 
+  // Find a position for the legend
+  const legendPosition = getPossibleLegendPosition(100, 100);
+
   const newLayerDescription = {
     id: generateIdLayer(),
     name: newLayerName,
@@ -97,6 +101,9 @@ function onClickValidate(
         size: 0,
         color: '#fefefe',
       },
+      legend: {
+        position: legendPosition,
+      } as LabelsLegendParameters,
       movable: false,
     } as LabelsParameters,
   };

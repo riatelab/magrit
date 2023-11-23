@@ -16,6 +16,7 @@ import { findSuitableName, isNonNull } from '../../../helpers/common';
 import { VariableType } from '../../../helpers/typeDetection';
 import { randomColor } from '../../../helpers/color';
 import { PortrayalSettingsProps } from './common';
+import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
@@ -63,6 +64,9 @@ function onClickValidate(
 
   const mapping = Array.from(categories).map((c) => [c, c, randomColor()]);
 
+  // Find a position for the legend
+  const legendPosition = getPossibleLegendPosition(120, 340);
+
   const newLayerDescription = {
     id: generateIdLayer(),
     name: newName,
@@ -108,7 +112,7 @@ function onClickValidate(
         fontStyle: 'normal',
         fontWeight: 'normal',
       },
-      position: [100, 100],
+      position: legendPosition,
       visible: true,
       roundDecimals: 1,
       backgroundRect: {
