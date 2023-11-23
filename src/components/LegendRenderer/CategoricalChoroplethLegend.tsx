@@ -158,6 +158,7 @@ function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Eleme
             ry={legendParameters.boxCornerRadius}
             width={legendParameters.boxWidth}
             height={legendParameters.boxHeight}
+            stroke={legendParameters.stroke ? layer.strokeColor : undefined}
           />
         }
       </For>
@@ -175,6 +176,7 @@ function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Eleme
           ry={legendParameters.boxCornerRadius}
           width={legendParameters.boxWidth}
           height={legendParameters.boxHeight}
+          stroke={legendParameters.stroke ? layer.strokeColor : undefined}
         />
       </Show>
       <For each={labelsAndColors()}>
@@ -349,6 +351,7 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
             ry={legendParameters.boxCornerRadius}
             width={legendParameters.boxWidth}
             height={legendParameters.boxHeight}
+            stroke={legendParameters.stroke ? layer.strokeColor : undefined}
           />
         }
       </For>
@@ -365,6 +368,7 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
           ry={legendParameters.boxCornerRadius}
           width={legendParameters.boxWidth}
           height={legendParameters.boxHeight}
+          stroke={legendParameters.stroke ? layer.strokeColor : undefined}
         />
       </Show>
       <For each={labelsAndColors()}>

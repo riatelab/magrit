@@ -371,10 +371,14 @@ interface ChoroplethLegendParameters extends LegendParametersBase {
   boxSpacingNoData: number,
   // The corner radius of each box (rx and ry of each rect)
   boxCornerRadius: number,
-  // The text properties of the labels
+  // The text properties of the labels (and no-data label if any)
   labels: LegendTextElement,
   // The label of the no-data box
   noDataLabel: string,
+  // Whether to display the stroke of the boxes
+  stroke: boolean,
+  // Whether to display a tick between each box
+  tick: boolean,
 }
 
 /**

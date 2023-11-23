@@ -136,6 +136,8 @@ function onClickValidate(
         fontWeight: 'normal',
       } as LegendTextElement,
       noDataLabel: 'No data',
+      stroke: false,
+      tick: false,
     } as ChoroplethLegendParameters,
   } as LayerDescription;
 

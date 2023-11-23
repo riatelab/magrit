@@ -6,6 +6,7 @@ import {
 
 // Import from other packages
 import { getColors } from 'dicopal';
+import { range } from 'd3-array';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -164,6 +165,7 @@ function verticalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
             ry={legendParameters.boxCornerRadius}
             width={legendParameters.boxWidth}
             height={legendParameters.boxHeight}
+            stroke={legendParameters.stroke ? layer.strokeColor : undefined}
           />
         }
       </For>
@@ -181,7 +183,22 @@ function verticalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
           ry={legendParameters.boxCornerRadius}
           width={legendParameters.boxWidth}
           height={legendParameters.boxHeight}
+          stroke={legendParameters.stroke ? layer.strokeColor : undefined}
         />
+      </Show>
+      <Show when={legendParameters.tick}>
+        <For each={range(1, colors.length, 1)}>
+          {
+            (i) => <line
+              x1={0}
+              x2={legendParameters.boxWidth + defaultSpacing / 2}
+              y1={distanceToTop() + i * boxHeightAndSpacing()}
+              y2={distanceToTop() + i * boxHeightAndSpacing()}
+              stroke={legendParameters.labels.fontColor}
+              stroke-width={1}
+            />
+          }
+        </For>
       </Show>
       <For each={rendererParameters.breaks.toReversed()}>
         {
@@ -352,6 +369,7 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
             ry={legendParameters.boxCornerRadius}
             width={legendParameters.boxWidth}
             height={legendParameters.boxHeight}
+            stroke={legendParameters.stroke ? layer.strokeColor : undefined}
           />
         }
       </For>
@@ -368,7 +386,26 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
           ry={legendParameters.boxCornerRadius}
           width={legendParameters.boxWidth}
           height={legendParameters.boxHeight}
+          stroke={legendParameters.stroke ? layer.strokeColor : undefined}
         />
+      </Show>
+      <Show when={console.log('aaa') || legendParameters.tick}>
+        <For each={range(1, colors.length, 1)}>
+          {
+            (i) => <line
+              x1={
+                (i * (legendParameters.boxWidth + legendParameters.boxSpacing))
+              }
+              x2={
+                (i * (legendParameters.boxWidth + legendParameters.boxSpacing))
+              }
+              y1={distanceBoxesToTop()}
+              y2={distanceBoxesToTop() + legendParameters.boxHeight + defaultSpacing / 2}
+              stroke={legendParameters.labels.fontColor}
+              stroke-width={1}
+            />
+          }
+        </For>
       </Show>
       <For each={rendererParameters.breaks}>
         {

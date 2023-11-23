@@ -328,5 +328,9 @@ export const getPossibleLegendPosition = (sizeX, sizeY): [number, number] => {
     mapPosition,
     legendDimensions,
   );
-  return [aRect.x > -1 ? aRect.x : 10, aRect.y > -1 ? aRect.y : 10];
+
+  // If the legend is too close to the top left border of the map,
+  // (x=0 and y=0) or if no position is available (x=-1 and y=-1),
+  // we move it down and/or right
+  return [aRect.x > 0 ? aRect.x : 10, aRect.y > 0 ? aRect.y : 10];
 };

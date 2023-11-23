@@ -43,7 +43,11 @@ import InputFieldNumber from '../Inputs/InputNumber.tsx';
  * @param {string | number} value - The new value of the property.
  * @return {void}
  */
-const updateProps = (layerId: string, props: string[], value: string | number) => {
+const updateProps = (
+  layerId: string,
+  props: string[],
+  value: string | number | boolean,
+) => {
   const allPropsExceptLast = props.slice(0, props.length - 1);
   const lastProp = props[props.length - 1];
   const args = [
@@ -342,7 +346,7 @@ function makeSettingsProportionalSymbolsLegend(
             name="legend-layout"
             {...(layer.legend?.layout === 'stacked' ? { checked: true } : {}) }
             onChange={() => {
-              debouncedUpdateProps(layer.id, ['legend', 'layout'], 'stacked');
+              updateProps(layer.id, ['legend', 'layout'], 'stacked');
             }}
           />
           { LL().Legend.Modal.LegendSymbolLayoutStacked() }
@@ -353,7 +357,7 @@ function makeSettingsProportionalSymbolsLegend(
             name="legend-layout"
             {...(layer.legend?.layout === 'horizontal' ? { checked: true } : {}) }
             onChange={() => {
-              debouncedUpdateProps(layer.id, ['legend', 'layout'], 'horizontal');
+              updateProps(layer.id, ['legend', 'layout'], 'horizontal');
             }}
           />
           { LL().Legend.Modal.LegendSymbolLayoutHorizontal() }
@@ -364,7 +368,7 @@ function makeSettingsProportionalSymbolsLegend(
             name="legend-layout"
             {...(layer.legend?.layout === 'vertical' ? { checked: true } : {}) }
             onChange={() => {
-              debouncedUpdateProps(layer.id, ['legend', 'layout'], 'vertical');
+              updateProps(layer.id, ['legend', 'layout'], 'vertical');
             }}
           />
           { LL().Legend.Modal.LegendSymbolLayoutVertical() }
@@ -461,7 +465,15 @@ function makeSettingsChoroplethLegend(
           max={100}
           step={1}
           value={ layer.legend?.boxCornerRadius }
-          onChange={(ev) => debouncedUpdateProps(layer.id, ['legend', 'boxCornerRadius'], +ev.target.value)}
+          onChange={(ev) => {
+            const radiusValue = +ev.target.value;
+            // Remove the tick if the radius is > 0
+            // (because the tick is interesting only for square / rectangular boxes)
+            if (radiusValue > 0 && layer.legend!.tick) {
+              updateProps(layer.id, ['legend', 'tick'], false);
+            }
+            debouncedUpdateProps(layer.id, ['legend', 'boxCornerRadius'], radiusValue);
+          }}
         />
       </div>
     </div>
@@ -475,10 +487,42 @@ function makeSettingsChoroplethLegend(
           max={100}
           step={1}
           value={ layer.legend?.boxSpacing }
-          onChange={(ev) => debouncedUpdateProps(layer.id, ['legend', 'boxSpacing'], +ev.target.value)}
+          onChange={(ev) => {
+            const spacingValue = +ev.target.value;
+            // Remove the tick if the spacing is > 0
+            // (because the tick is interesting only if boxes are adjacent)
+            if (spacingValue > 0 && layer.legend!.tick) {
+              updateProps(layer.id, ['legend', 'tick'], false);
+            }
+            debouncedUpdateProps(layer.id, ['legend', 'boxSpacing'], spacingValue);
+          }}
         />
       </div>
     </div>
+    <div class="field">
+      <label class="label">{ 'Display stroke for each box' }</label>
+      <div class="control">
+        <input
+          type="checkbox"
+          checked={layer.legend!.stroke}
+          onChange={(ev) => updateProps(layer.id, ['legend', 'stroke'], ev.target.checked)}
+        />
+      </div>
+    </div>
+    <Show when={layer.renderer === 'choropleth' && layer.legend?.boxSpacing === 0 && layer.legend?.boxCornerRadius === 0}>
+      <div class="field">
+        <label class="label">
+          { 'Display tick between each box' }
+        </label>
+        <div class="control">
+          <input
+            type="checkbox"
+            checked={layer.legend!.tick}
+            onChange={(ev) => updateProps(layer.id, ['legend', 'tick'], ev.target.checked)}
+          />
+        </div>
+      </div>
+    </Show>
     <Show when={hasNoData}>
       <div class="field">
         <label class="label">{ LL().Legend.Modal.BoxSpacingNoData() }</label>
@@ -516,7 +560,7 @@ function makeSettingsChoroplethLegend(
             {...(layer.legend?.orientation === 'horizontal' ? { checked: true } : {}) }
             onChange={(ev) => {
               const value = ev.target.checked ? 'horizontal' : 'vertical';
-              debouncedUpdateProps(layer.id, ['legend', 'orientation'], value);
+              updateProps(layer.id, ['legend', 'orientation'], value);
             }}
           />
           { LL().Legend.Modal.LegendOrientationHorizontal() }
@@ -528,7 +572,7 @@ function makeSettingsChoroplethLegend(
             {...(layer.legend?.orientation === 'vertical' ? { checked: true } : {}) }
             onChange={(ev) => {
               const value = ev.target.checked ? 'vertical' : 'horizontal';
-              debouncedUpdateProps(layer.id, ['legend', 'orientation'], value);
+              updateProps(layer.id, ['legend', 'orientation'], value);
             }}
           />
           { LL().Legend.Modal.LegendOrientationVertical() }
@@ -591,7 +635,7 @@ function makeSettingsDiscontinuityLegend(
             {...(layer.legend?.orientation === 'horizontal' ? { checked: true } : {}) }
             onChange={(ev) => {
               const value = ev.target.checked ? 'horizontal' : 'vertical';
-              debouncedUpdateProps(layer.id, ['legend', 'orientation'], value);
+              updateProps(layer.id, ['legend', 'orientation'], value);
             }}
           />
           { LL().Legend.Modal.LegendOrientationHorizontal() }
@@ -603,7 +647,7 @@ function makeSettingsDiscontinuityLegend(
             {...(layer.legend?.orientation === 'vertical' ? { checked: true } : {}) }
             onChange={(ev) => {
               const value = ev.target.checked ? 'vertical' : 'horizontal';
-              debouncedUpdateProps(layer.id, ['legend', 'orientation'], value);
+              updateProps(layer.id, ['legend', 'orientation'], value);
             }}
           />
           { LL().Legend.Modal.LegendOrientationVertical() }
