@@ -81,7 +81,7 @@ function TextOptionTable(
             <input
               class="input"
               type="number"
-              value={ props.layer.legend![textElement].fontSize.replace('px', '') }
+              value={ props.layer.legend![textElement].fontSize }
               min={0}
               max={100}
               step={1}
@@ -89,7 +89,7 @@ function TextOptionTable(
                 (ev) => debouncedUpdateProps(
                   props.layer.id,
                   ['legend', textElement, 'fontSize'],
-                  `${ev.target.value}px`,
+                  +ev.target.value,
                 )
               }
             />

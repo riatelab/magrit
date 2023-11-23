@@ -25,6 +25,7 @@ import {
 } from '../store/MapStore';
 
 // Sub-components
+// - for rendering the layers
 import {
   defaultLineRenderer,
   defaultPointRenderer,
@@ -41,13 +42,23 @@ import discontinuityRenderer from './MapRenderer/DiscontinuityMapRenderer.tsx';
 import { defaultLabelsRenderer } from './MapRenderer/LabelsMapRenderer.tsx';
 import graticuleRenderer from './MapRenderer/GraticuleRenderer.tsx';
 
+// - for rendering the layout features
 import RectangleRenderer from './LayoutFeatureRenderer/RectangleRenderer.tsx';
 import EllipseRenderer from './LayoutFeatureRenderer/EllipseRenderer.tsx';
 import FreeDrawingRenderer from './LayoutFeatureRenderer/FreeDrawingRenderer.tsx';
 import ScaleBarRenderer from './LayoutFeatureRenderer/ScaleBarRenderer.tsx';
 
+// - for rendering the legends
 import legendChoropleth from './LegendRenderer/ChoroplethLegend.tsx';
 import legendProportionalSymbols from './LegendRenderer/ProportionnalSymbolsLegend.tsx';
+import legendDiscontinuity from './LegendRenderer/DiscontinuityLegendRenderer.tsx';
+import {
+  categoricalChoroplethLineRenderer,
+  categoricalChoroplethPointRenderer,
+  categoricalChoroplethPolygonRenderer,
+} from './MapRenderer/CategoricalChoroplethMapRenderer.tsx';
+import legendCategoricalChoropleth from './LegendRenderer/CategoricalChoroplethLegend.tsx';
+import legendLabels from './LegendRenderer/LabelsLegendRenderer.tsx';
 
 // Types and enums
 import {
@@ -67,13 +78,6 @@ import {
 
 // Styles
 import '../styles/MapZone.css';
-import legendDiscontinuity from './LegendRenderer/DiscontinuityLegendRenderer.tsx';
-import {
-  categoricalChoroplethLineRenderer,
-  categoricalChoroplethPointRenderer,
-  categoricalChoroplethPolygonRenderer,
-} from './MapRenderer/CategoricalChoroplethMapRenderer.tsx';
-import legendCategoricalChoropleth from './LegendRenderer/CategoricalChoroplethLegend.tsx';
 
 const layoutFeaturesFns = {
   [LayoutFeatureType.Rectangle]: RectangleRenderer,
@@ -291,6 +295,9 @@ export default function MapZone(): JSX.Element {
             }
             if (layer.renderer === 'discontinuity') {
               return legendDiscontinuity(layer as LayerDescriptionDiscontinuity);
+            }
+            if (layer.renderer === 'labels') {
+              return legendLabels(layer as LayerDescriptionLabels);
             }
             return null;
           }}

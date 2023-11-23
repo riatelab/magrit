@@ -35,7 +35,7 @@ type LayerDescription = {
   // The color of the stroke (not used for Choropleth on linestring layers)
   strokeColor?: string,
   // The width of the stroke
-  strokeWidth?: string,
+  strokeWidth?: number,
   // The opacity of the stroke
   strokeOpacity?: number,
   // ...
@@ -77,7 +77,7 @@ interface DefaultRendererParameters {
   // The color of the stroke (not used for Choropleth on linestring layers)
   strokeColor?: string,
   // The width of the stroke
-  strokeWidth?: string,
+  strokeWidth?: number,
   // The opacity of the stroke
   strokeOpacity?: number,
   // ...
@@ -341,8 +341,8 @@ interface LegendTextElement {
   // (optional because LegendTextElement can be used to describe multiple text elements
   // for the labels of the legends)
   text?: string,
-  // The font size of the text (stored as a string, e.g. '12px')
-  fontSize: string,
+  // The font size of the text, in pixels, stored as a number
+  fontSize: number,
   // The font family of the text (might include a fallback)
   fontFamily: string,
   // The font color of the text (stored as a string, e.g. '#000000')

@@ -94,7 +94,7 @@ function onClickValidate(
     legend: {
       title: {
         text: targetVariable,
-        fontSize: '13px',
+        fontSize: 13,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
         fontStyle: 'normal',
@@ -102,7 +102,7 @@ function onClickValidate(
       } as LegendTextElement,
       subtitle: {
         text: 'This is a subtitle',
-        fontSize: '12px',
+        fontSize: 12,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
         fontStyle: 'normal',
@@ -110,7 +110,7 @@ function onClickValidate(
       } as LegendTextElement,
       note: {
         text: 'This is a bottom note',
-        fontSize: '11px',
+        fontSize: 11,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
         fontStyle: 'normal',
@@ -126,7 +126,7 @@ function onClickValidate(
       orientation: 'horizontal',
       lineLength: 45,
       labels: {
-        fontSize: '11px',
+        fontSize: 11,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
         fontStyle: 'normal',

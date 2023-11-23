@@ -13,7 +13,8 @@ import { round } from '../../helpers/math';
 
 // Sub-components and helpers for legend rendering
 import {
-  bindElementsLegend, computeRectangleBox,
+  bindElementsLegend,
+  computeRectangleBox,
   getTextSize,
   makeLegendSettingsModal,
   makeLegendText,
@@ -210,7 +211,7 @@ function horizontalDiscontinuityLegend(
     + defaultSpacing);
 
   const positionNote = createMemo(() => (
-    distanceLabelsToTop() + defaultSpacing + +(layer.legend.labels.fontSize.replace('px', ''))
+    distanceLabelsToTop() + defaultSpacing + layer.legend.labels.fontSize
   ));
 
   onMount(() => {

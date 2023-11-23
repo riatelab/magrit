@@ -165,7 +165,7 @@ function onClickValidate(
     renderer: 'proportionalSymbols' as RepresentationType,
     visible: true,
     strokeColor: '#000000',
-    strokeWidth: '1px',
+    strokeWidth: 1,
     strokeOpacity: 1,
     fillColor: propSymbolsParameters.color,
     fillOpacity: 1,
@@ -177,7 +177,7 @@ function onClickValidate(
       // Legend common part
       title: {
         text: targetVariable,
-        fontSize: '13px',
+        fontSize: 13,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
         fontStyle: 'normal',
@@ -185,7 +185,7 @@ function onClickValidate(
       } as LegendTextElement,
       subtitle: {
         text: 'This is a subtitle',
-        fontSize: '12px',
+        fontSize: 12,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
         fontStyle: 'normal',
@@ -193,7 +193,7 @@ function onClickValidate(
       } as LegendTextElement,
       note: {
         text: 'This is a bottom note',
-        fontSize: '11px',
+        fontSize: 11,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
         fontStyle: 'normal',
@@ -211,7 +211,7 @@ function onClickValidate(
       values: legendValues,
       spacing: 5,
       labels: {
-        fontSize: '11px',
+        fontSize: 11,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
         fontStyle: 'normal',

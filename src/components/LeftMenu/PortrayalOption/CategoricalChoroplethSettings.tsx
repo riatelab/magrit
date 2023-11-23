@@ -76,7 +76,7 @@ function onClickValidate(
     renderer: 'categorical' as RepresentationType,
     visible: true,
     strokeColor: '#000000',
-    strokeWidth: '0.4px',
+    strokeWidth: 0.4,
     strokeOpacity: 1,
     fillOpacity: 1,
     dropShadow: false,
@@ -91,14 +91,14 @@ function onClickValidate(
       // Part common to all legends
       title: {
         text: targetVariable,
-        fontSize: '13px',
+        fontSize: 13,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
         fontStyle: 'normal',
         fontWeight: 'bold',
       } as LegendTextElement,
       subtitle: {
-        fontSize: '12px',
+        fontSize: 12,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
         fontStyle: 'normal',
@@ -106,7 +106,7 @@ function onClickValidate(
       },
       note: {
         text: undefined,
-        fontSize: '11px',
+        fontSize: 11,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
         fontStyle: 'normal',
@@ -127,7 +127,7 @@ function onClickValidate(
       boxSpacingNoData: 5,
       boxCornerRadius: 0,
       labels: {
-        fontSize: '11px',
+        fontSize: 11,
         fontFamily: 'Sans-serif',
         fontColor: '#000000',
         fontStyle: 'normal',

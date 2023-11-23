@@ -29,7 +29,6 @@ import { applicationSettingsStore, RenderVisibility } from '../../store/Applicat
 
 // Types / Interfaces / Enums
 import type {
-  LayerDescription,
   LayerDescriptionProportionalSymbols,
   ProportionalSymbolsLegendParameters,
   ProportionalSymbolsParameters,
@@ -195,7 +194,7 @@ function horizontalSquareLegend(
   const positionNote = createMemo(() => (
     heightTitleSubtitle()
     + maxHeight()
-    + +(layer.legend.labels.fontSize.replace('px', ''))
+    + layer.legend.labels.fontSize
     + defaultSpacing * 3
   ));
 
@@ -684,7 +683,7 @@ function horizontalCircleLegend(
   });
 
   const positionNote = createMemo(() => (
-    maxRadius() * 2 + heightTitleSubtitle() + defaultSpacing * 3 + +(layer.legend.labels.fontSize.replace('px', ''))
+    maxRadius() * 2 + heightTitleSubtitle() + defaultSpacing * 3 + layer.legend.labels.fontSize
   ));
 
   onMount(() => {

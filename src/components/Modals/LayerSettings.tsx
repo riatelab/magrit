@@ -329,8 +329,8 @@ function makeSettingsDefaultPoint(
     />
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeWidth() }
-      value={+props.strokeWidth.replace('px', '')}
-      onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', `${v}px`)}
+      value={props.strokeWidth!}
+      onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
       min={0}
       max={10}
       step={0.1}
@@ -442,8 +442,8 @@ function makeSettingsDefaultLine(
     <Show when={props.renderer !== 'discontinuity'}>
       <InputFieldNumber
         label={ LL().LayerSettings.StrokeWidth() }
-        value={+props.strokeWidth!.replace('px', '')}
-        onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', `${v}px`)}
+        value={props.strokeWidth!}
+        onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
         min={0}
         max={10}
         step={0.1}
@@ -534,8 +534,8 @@ function makeSettingsDefaultPolygon(
     />
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeWidth() }
-      value={+props.strokeWidth!.replace('px', '')}
-      onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', `${v}px`)}
+      value={props.strokeWidth!}
+      onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
       min={0}
       max={10}
       step={0.1}

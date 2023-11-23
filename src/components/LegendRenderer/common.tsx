@@ -30,7 +30,6 @@ export function makeLegendText(
   role: 'title' | 'subtitle' | 'note',
 ): JSX.Element {
   if (!props || !props.text) return <></>;
-  const fontSize = createMemo(() => +(props.fontSize.replace('px', '')));
   return <g class={`legend-${role}`}>
     <text
       style={{ 'user-select': 'none' }}
@@ -45,7 +44,7 @@ export function makeLegendText(
       <For each={props.text!.split('\\n')}>
         {(line, i) => <tspan
           x={position[0]}
-          y={position[1] + i() * fontSize() * 1.1}
+          y={position[1] + i() * props.fontSize * 1.1}
         >
           { line }
         </tspan>}
@@ -208,18 +207,18 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
 // Determine the size of an SVG text element before displaying it
 export function getTextSize(
   text: string,
-  fontSize: string,
+  fontSize: number,
   fontFamily: string,
+  strokeWidth?: number,
 ): { width: number, height: number } {
-  // Font size as a number
-  const fontSizePx = +(fontSize.replace('px', ''));
   // Create an element to measure the text
   const elem = document.createElementNS('http://www.w3.org/2000/svg', 'text');
   elem.style.visibility = 'hidden';
-  elem.setAttribute('font-size', fontSize);
+  elem.setAttribute('font-size', `${fontSize}px`);
   elem.setAttribute('font-family', fontFamily);
+  elem.setAttribute('stroke-width', `${strokeWidth}px` || '0px');
   // Add all the lines of the text
-  elem.innerHTML = `${text.split('\\n').map((line, i) => `<tspan y="${fontSizePx * i * 1.1}">${line}</tspan>`).join('')}`;
+  elem.innerHTML = `${text.split('\\n').map((line, i) => `<tspan y="${fontSize * i * 1.1}">${line}</tspan>`).join('')}`;
   // Add the element to the DOM (but it is invisible)
   (document.querySelector('svg.map-zone__map') as SVGElement).appendChild(elem);
   // Compute the size of the text

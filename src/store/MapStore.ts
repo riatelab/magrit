@@ -153,7 +153,7 @@ createEffect(
                       symbolType: layerDescription.rendererParameters.symbolType,
                     },
                     layerDescription.rendererParameters.iterations,
-                    +layerDescription.strokeWidth.replace('px', ''),
+                    layerDescription.strokeWidth,
                   );
                 }
               });

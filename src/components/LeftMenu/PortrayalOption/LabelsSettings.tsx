@@ -23,10 +23,13 @@ import InputResultName from './InputResultName.tsx';
 
 // Types / Interfaces / Enums
 import {
-  GeoJSONFeatureCollection, LabelsLegendParameters,
+  GeoJSONFeatureCollection,
+  LabelsLegendParameters,
   LabelsParameters,
+  LegendTextElement,
+  LegendType,
   RepresentationType,
-} from '../../../global';
+} from '../../../global.d';
 import { PortrayalSettingsProps } from './common';
 
 function onClickValidate(
@@ -80,7 +83,7 @@ function onClickValidate(
     renderer: 'labels' as RepresentationType,
     visible: true,
     // strokeColor: '#000000',
-    // strokeWidth: '1px',
+    // strokeWidth: 1,
     // strokeOpacity: 1,
     // fillColor: '#000000',
     // fillOpacity: 1,
@@ -101,11 +104,47 @@ function onClickValidate(
         size: 0,
         color: '#fefefe',
       },
-      legend: {
-        position: legendPosition,
-      } as LabelsLegendParameters,
       movable: false,
     } as LabelsParameters,
+    legend: {
+      // Part common to all legends
+      title: {
+        text: targetVariable,
+        fontSize: 13,
+        fontFamily: 'Sans-serif',
+        fontColor: '#000000',
+        fontStyle: 'normal',
+        fontWeight: 'bold',
+      } as LegendTextElement,
+      subtitle: {
+        fontSize: 12,
+        fontFamily: 'Sans-serif',
+        fontColor: '#000000',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+      },
+      note: {
+        text: undefined,
+        fontSize: 11,
+        fontFamily: 'Sans-serif',
+        fontColor: '#000000',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+      },
+      position: legendPosition,
+      visible: true,
+      backgroundRect: {
+        visible: false,
+      },
+      type: LegendType.labels,
+      labels: {
+        fontSize: 11,
+        fontFamily: 'Sans-serif',
+        fontColor: '#000000',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+      } as LegendTextElement,
+    } as LabelsLegendParameters,
   };
 
   setLayersDescriptionStore(

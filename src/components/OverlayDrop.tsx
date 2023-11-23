@@ -39,7 +39,7 @@ const getDefaultRenderingParams = (geomType: string) => {
     return {
       renderer: 'default',
       strokeColor: '#9d9d9d',
-      strokeWidth: '1px',
+      strokeWidth: 1,
       strokeOpacity: 1,
       fillColor: color,
       fillOpacity: 1,
@@ -52,7 +52,7 @@ const getDefaultRenderingParams = (geomType: string) => {
     return {
       renderer: 'default',
       strokeColor: color,
-      strokeWidth: '1.5px',
+      strokeWidth: 1.5,
       strokeOpacity: 1,
       dropShadow: false,
       blurFilter: false,
@@ -62,7 +62,7 @@ const getDefaultRenderingParams = (geomType: string) => {
     return {
       renderer: 'default',
       strokeColor: '#9d9d9d',
-      strokeWidth: '0.4px',
+      strokeWidth: 0.4,
       strokeOpacity: 1,
       fillColor: color,
       fillOpacity: 0.85,

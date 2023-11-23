@@ -9,7 +9,6 @@ import {
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { isNonNull, isNumber } from '../../helpers/common';
-import { round } from '../../helpers/math';
 
 // Stores
 import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
