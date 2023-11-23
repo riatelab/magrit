@@ -153,13 +153,6 @@ function verticalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
     <RectangleBox backgroundRect={legendParameters.backgroundRect} />
     { makeLegendText(legendParameters.title, [0, 0], 'title') }
     { makeLegendText(legendParameters.subtitle, [0, heightTitle()], 'subtitle') }
-    {
-      makeLegendText(
-        legendParameters.note,
-        [0, positionNote()],
-        'note',
-      )
-    }
     <g class="legend-content">
       <For each={colors.toReversed()}>
         {
@@ -231,6 +224,13 @@ function verticalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
         >{ legendParameters.noDataLabel }</text>
       </Show>
     </g>
+    {
+      makeLegendText(
+        legendParameters.note,
+        [0, positionNote()],
+        'note',
+      )
+    }
   </g>;
 }
 
@@ -341,7 +341,6 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
     <RectangleBox backgroundRect={legendParameters.backgroundRect} />
     { makeLegendText(legendParameters.title, [0, 0], 'title') }
     { makeLegendText(legendParameters.subtitle, [0, heightTitle()], 'subtitle') }
-    { makeLegendText(legendParameters.note, [0, distanceNoteToTop()], 'note') }
     <g class="legend-content">
       <For each={colors}>
         {
@@ -409,6 +408,7 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
         >{ legendParameters.noDataLabel }</text>
       </Show>
     </g>
+    { makeLegendText(legendParameters.note, [0, distanceNoteToTop()], 'note') }
   </g>;
 }
 

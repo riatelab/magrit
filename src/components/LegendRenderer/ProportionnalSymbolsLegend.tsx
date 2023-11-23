@@ -111,7 +111,6 @@ function stackedSquareLegend(
     <RectangleBox backgroundRect={layer.legend.backgroundRect} />
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
-    { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
     <g class="legend-content">
       <For each={layer.legend.values.toReversed()}>
         {
@@ -154,6 +153,7 @@ function stackedSquareLegend(
         }
       </For>
     </g>
+    { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
   </g>;
 }
 
@@ -252,7 +252,6 @@ function horizontalSquareLegend(
     <RectangleBox backgroundRect={layer.legend.backgroundRect} />
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
-    { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
     <g class="legend-content">
       <For each={sizesAndPositions()}>
         {
@@ -283,6 +282,7 @@ function horizontalSquareLegend(
         }
       </For>
     </g>
+    { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
   </g>;
 }
 
@@ -381,7 +381,6 @@ function verticalSquareLegend(
     <RectangleBox backgroundRect={layer.legend.backgroundRect} />
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
-    { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
     <g class="legend-content">
       <For each={sizesAndPositions()}>
         {
@@ -412,6 +411,7 @@ function verticalSquareLegend(
         }
       </For>
     </g>
+    { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
   </g>;
 }
 
@@ -490,7 +490,6 @@ function stackedCircleLegend(
     <RectangleBox backgroundRect={layer.legend.backgroundRect} />
     { makeLegendText(layer.legend.title, [0, 0], 'title') }
     { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
-    { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
     <g class="legend-content">
       <For each={layer.legend.values.toReversed()}>
         {
@@ -532,6 +531,7 @@ function stackedCircleLegend(
         }
       </For>
     </g>
+    { makeLegendText(layer.legend.note, [0, positionNote()], 'note') }
   </g>;
 }
 
