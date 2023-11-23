@@ -20,6 +20,9 @@ import { useI18nContext } from '../../../i18n/i18n-solid';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
+// Stores
+import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
+
 // Subcomponents
 import InputFieldSelect from '../../Inputs/InputSelect.tsx';
 
@@ -94,27 +97,15 @@ function onClickValidate(
     legend: {
       title: {
         text: targetVariable,
-        fontSize: 13,
-        fontFamily: 'Sans-serif',
-        fontColor: '#000000',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
+        ...applicationSettingsStore.defaultLegendSettings.title,
       } as LegendTextElement,
       subtitle: {
         text: 'This is a subtitle',
-        fontSize: 12,
-        fontFamily: 'Sans-serif',
-        fontColor: '#000000',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
       } as LegendTextElement,
       note: {
         text: 'This is a bottom note',
-        fontSize: 11,
-        fontFamily: 'Sans-serif',
-        fontColor: '#000000',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
+        ...applicationSettingsStore.defaultLegendSettings.note,
       } as LegendTextElement,
       position: legendPosition,
       visible: true,
@@ -126,11 +117,7 @@ function onClickValidate(
       orientation: 'horizontal',
       lineLength: 45,
       labels: {
-        fontSize: 11,
-        fontFamily: 'Sans-serif',
-        fontColor: '#000000',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
+        ...applicationSettingsStore.defaultLegendSettings.labels,
       } as LegendTextElement,
     },
   } as LayerDescription;

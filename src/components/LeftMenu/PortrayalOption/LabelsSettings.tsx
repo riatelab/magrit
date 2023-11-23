@@ -9,6 +9,7 @@ import { produce } from 'solid-js/store';
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
+import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
 
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
@@ -110,27 +111,15 @@ function onClickValidate(
       // Part common to all legends
       title: {
         text: targetVariable,
-        fontSize: 13,
-        fontFamily: 'Sans-serif',
-        fontColor: '#000000',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
+        ...applicationSettingsStore.defaultLegendSettings.title,
       } as LegendTextElement,
       subtitle: {
         text: 'This is a subtitle',
-        fontSize: 12,
-        fontFamily: 'Sans-serif',
-        fontColor: '#000000',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
       },
       note: {
         text: 'This is a bottom note',
-        fontSize: 11,
-        fontFamily: 'Sans-serif',
-        fontColor: '#000000',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
+        ...applicationSettingsStore.defaultLegendSettings.note,
       },
       position: legendPosition,
       visible: true,
@@ -140,11 +129,7 @@ function onClickValidate(
       type: LegendType.labels,
       labels: {
         text: `${referenceLayerDescription.name} (${targetVariable})`,
-        fontSize: 11,
-        fontFamily: 'Sans-serif',
-        fontColor: '#000000',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
+        ...applicationSettingsStore.defaultLegendSettings.labels,
       } as LegendTextElement,
     } as LabelsLegendParameters,
   };

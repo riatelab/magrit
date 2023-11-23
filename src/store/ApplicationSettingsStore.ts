@@ -1,4 +1,5 @@
 import { createStore } from 'solid-js/store';
+import { LegendTextElement } from '../global';
 
 export enum RenderVisibility {
   RenderAsHidden,
@@ -46,6 +47,13 @@ type ApplicationSettingsStoreType = {
   // is rendered outside the SVG viewport (which is not visible
   // but can be computationally expensive to render).
   useClipExtent: boolean,
+  // Default font size for legends
+  defaultLegendSettings: {
+    title: Partial<LegendTextElement>,
+    subtitle: Partial<LegendTextElement>,
+    labels: Partial<LegendTextElement>,
+    note: Partial<LegendTextElement>,
+  },
 };
 
 const computedStyle = getComputedStyle(document.documentElement);
@@ -61,6 +69,36 @@ const [
   leftMenuWidth: +computedStyle.getPropertyValue('--left-menu-width').replace('px', ''),
   renderVisibility: RenderVisibility.DoNotRender,
   useClipExtent: true,
+  defaultLegendSettings: {
+    title: {
+      fontSize: 13,
+      fontFamily: 'Sans-serif',
+      fontColor: '#000000',
+      fontStyle: 'normal',
+      fontWeight: 'bold',
+    },
+    subtitle: {
+      fontSize: 12,
+      fontFamily: 'Sans-serif',
+      fontColor: '#000000',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+    },
+    labels: {
+      fontSize: 11,
+      fontFamily: 'Sans-serif',
+      fontColor: '#000000',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+    },
+    note: {
+      fontSize: 11,
+      fontFamily: 'Sans-serif',
+      fontColor: '#000000',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+    },
+  },
 } as ApplicationSettingsStoreType);
 
 export {

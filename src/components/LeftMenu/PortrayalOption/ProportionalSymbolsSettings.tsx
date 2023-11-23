@@ -33,6 +33,7 @@ import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
+import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
 
 // Types / Interfaces / Enums
 import type {
@@ -177,27 +178,15 @@ function onClickValidate(
       // Legend common part
       title: {
         text: targetVariable,
-        fontSize: 13,
-        fontFamily: 'Sans-serif',
-        fontColor: '#000000',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
+        ...applicationSettingsStore.defaultLegendSettings.title,
       } as LegendTextElement,
       subtitle: {
         text: 'This is a subtitle',
-        fontSize: 12,
-        fontFamily: 'Sans-serif',
-        fontColor: '#000000',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
       } as LegendTextElement,
       note: {
         text: 'This is a bottom note',
-        fontSize: 11,
-        fontFamily: 'Sans-serif',
-        fontColor: '#000000',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
+        ...applicationSettingsStore.defaultLegendSettings.note,
       } as LegendTextElement,
       position: legendPosition,
       visible: true,
@@ -211,11 +200,7 @@ function onClickValidate(
       values: legendValues,
       spacing: 5,
       labels: {
-        fontSize: 11,
-        fontFamily: 'Sans-serif',
-        fontColor: '#000000',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
+        ...applicationSettingsStore.defaultLegendSettings.labels,
       } as LegendTextElement,
     } as ProportionalSymbolsLegendParameters,
   } as LayerDescription;
