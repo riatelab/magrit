@@ -13,8 +13,6 @@
 
 .map-zone__map {
   margin: auto;
-  /*width: 90%;*/
-  /*height: 90%;*/
   border: dashed 2px grey
 }
 
@@ -27,4 +25,5 @@
   color: grey;
   text-align: center;
   opacity: 0.7;
+  cursor: default;
 }

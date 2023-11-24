@@ -44,6 +44,7 @@
     "@turf/turf": "^6.5.0",
     "ag-grid-community": "^30.2.1",
     "ag-grid-solid": "^30.2.1",
+    "alasql": "^4.2.2",
     "bulma": "^0.9.4",
     "contour-wasm": "^0.2.0",
     "d3-array": "^3.2.4",

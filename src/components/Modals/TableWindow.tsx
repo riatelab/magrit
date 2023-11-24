@@ -10,6 +10,10 @@ import {
 import AgGridSolid from 'ag-grid-solid';
 import 'ag-grid-community/styles/ag-grid.css'; // grid core CSS
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // optional theme
+
+// Imports from other packages
+import alasql from 'alasql';
+
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { unproxify } from '../../helpers/common';
@@ -129,6 +133,10 @@ export default function TableWindow(): JSX.Element {
     selectedOperator,
     setSelectedOperator,
   ] = createSignal<string>('add');
+  const [
+    sampleOutput,
+    setSampleOutput,
+  ] = createSignal<string>('');
 
   const newVariables: Variable[] = [];
 
@@ -431,6 +439,58 @@ export default function TableWindow(): JSX.Element {
                 </Show>
               </div>
             </Show>
+            <div class="field-block">
+              <label class="label">{ 'Formula' }</label>
+              <div class="control">
+                <input
+                  class="input"
+                  id="formula"
+                  type="text"
+                  // TODO: add a placeholder
+                  // TODO: compute the result while the user is typing (on a sample of the data)
+                />
+              </div>
+              <div class="control">
+                <button
+                  class="button is-primary"
+                  style={{ width: '100%' }}
+                  onClick={ () => {
+                    // TODO: use signals instead of directly manipulating the DOM
+                    const formula = (document.getElementById('formula') as HTMLInputElement).value;
+                    const query = `SELECT ${formula} as newValue FROM ?`;
+                    try {
+                      const newColumn = alasql(query, [rowData()]);
+                      if (newColumn[0].newValue === undefined) {
+                        // TODO: use signals instead of directly manipulating the DOM
+                        document.getElementById('sample-output')?.classList.add('has-text-danger');
+                        setSampleOutput('Error - Empty result');
+                        // TODO: we may try to parse the query here (as it is syntactically correct
+                        //   since no error was thrown by alasql)
+                        //   and detect why the output is empty (e.g. a column name is wrong, etc.)
+                      } else {
+                        // TODO: use signals instead of directly manipulating the DOM
+                        document.getElementById('sample-output')?.classList.remove('has-text-danger');
+                        setSampleOutput(
+                          `[0] ${newColumn[0].newValue}\n[1] ${newColumn[1].newValue}\n[2] ${newColumn[2].newValue}`,
+                        );
+                      }
+                    } catch (e) {
+                      // TODO: use signals instead of directly manipulating the DOM
+                      document.getElementById('sample-output')?.classList.add('has-text-danger');
+                      setSampleOutput('Error while parsing formula');
+                    }
+                  }}
+                >{ 'Compute' }</button>
+              </div>
+              <div class="control" style={{ display: 'flex' }}>
+                <div style={{ display: 'flex', 'align-items': 'center', width: '15%' }}>
+                  <label class="label">{ 'Sample output' }</label>
+                </div>
+                <pre style={{ width: '100%' }} id="sample-output">
+                  { sampleOutput() }
+                </pre>
+              </div>
+            </div>
           </div>
           <br />
           <InputFieldButton
