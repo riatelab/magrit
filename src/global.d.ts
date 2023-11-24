@@ -125,12 +125,12 @@ type LayerDescriptionDiscontinuity = LayerDescription & {
   legend: DiscontinuityLegendParameters,
 };
 
-export enum ProportionalSymbolsColorMode {
-  singleColor = 'singleColor',
-  twoColors = 'twoColors',
-  ratioVariable = 'ratioVariable',
-  categoricalVariable = 'categoricalVariable',
-}
+// export enum ProportionalSymbolsColorMode {
+//   singleColor = 'singleColor',
+//   twoColors = 'twoColors',
+//   ratioVariable = 'ratioVariable',
+//   categoricalVariable = 'categoricalVariable',
+// }
 
 export enum ProportionalSymbolsSymbolType {
   circle = 'circle',
@@ -202,10 +202,8 @@ interface ClassificationParameters {
 export interface ProportionalSymbolsParameters {
   // The name of the variable used to compute the radius of the symbols
   variable: string,
-  // The color mode of the proportional symbols
-  colorMode: ProportionalSymbolsColorMode,
   // The color to use for the symbols
-  color: string | [string, string],
+  color: string,
   // The type of symbol to use
   symbolType: ProportionalSymbolsSymbolType,
   // The reference radius size (in pixels)
@@ -223,6 +221,8 @@ export interface ProportionalSymbolsParameters {
   iterations: number,
   // Whether the symbols can be moved by the user or not
   movable: boolean,
+  // The color mode of the proportional symbols
+  // colorMode: ProportionalSymbolsColorMode,
 }
 
 export interface CategoricalChoroplethParameters {

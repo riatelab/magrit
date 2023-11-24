@@ -150,6 +150,7 @@ const fr = {
     ToggleVisibility: 'Afficher / Masquer',
     Settings: 'Paramètres',
     Typing: 'Typage des champs',
+    Legend: 'Afficher / masquer la légende',
   },
   PortrayalSection: {
     PortrayalTypes: {

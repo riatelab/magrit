@@ -150,6 +150,7 @@ const en = {
     ToggleVisibility: 'Toggle visibility',
     Settings: 'Settings',
     Typing: 'Fields typing',
+    Legend: 'Display / hide legend',
   },
   PortrayalSection: {
     PortrayalTypes: {

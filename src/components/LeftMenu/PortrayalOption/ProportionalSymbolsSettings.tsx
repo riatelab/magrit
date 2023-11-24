@@ -13,6 +13,7 @@ import { getPalette } from 'dicopal';
 
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
+import { randomColorFromCategoricalPalette } from '../../../helpers/color';
 import { descendingKeyAccessor, findSuitableName, isNumber } from '../../../helpers/common';
 import {
   computeCandidateValuesForSymbolsLegend,
@@ -25,11 +26,12 @@ import { max, min } from '../../../helpers/math';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
 // Sub-components
-import InputResultName from './InputResultName.tsx';
-import InputFieldSelect from '../../Inputs/InputSelect.tsx';
-import InputFieldNumber from '../../Inputs/InputNumber.tsx';
-import InputFieldCheckbox from '../../Inputs/InputCheckbox.tsx';
 import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
+import InputFieldCheckbox from '../../Inputs/InputCheckbox.tsx';
+import InputFieldColor from '../../Inputs/InputColor.tsx';
+import InputFieldNumber from '../../Inputs/InputNumber.tsx';
+import InputFieldSelect from '../../Inputs/InputSelect.tsx';
+import InputResultName from './InputResultName.tsx';
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
@@ -42,11 +44,10 @@ import type {
   ProportionalSymbolsLegendParameters,
   ProportionalSymbolsParameters,
   RepresentationType,
-} from '../../../global.d';
+} from '../../../global';
 import {
   LegendTextElement,
   LegendType,
-  ProportionalSymbolsColorMode,
   ProportionalSymbolsSymbolType,
 } from '../../../global.d';
 import { PortrayalSettingsProps } from './common';
@@ -56,8 +57,8 @@ function onClickValidate(
   targetVariable: string,
   refSymbolSize: number,
   refValueForSymbolSize: number,
+  color: string,
   newLayerName: string,
-  modeColor: ProportionalSymbolsColorMode,
   symbolType: ProportionalSymbolsSymbolType,
   extent: [number, number],
   avoidOverlapping: boolean,
@@ -72,8 +73,7 @@ function onClickValidate(
 
   const propSymbolsParameters = {
     variable: targetVariable,
-    colorMode: modeColor,
-    color: '#9b0e0e',
+    color,
     symbolType,
     referenceRadius: refSymbolSize,
     referenceValue: refValueForSymbolSize,
@@ -136,11 +136,6 @@ function onClickValidate(
   // (so that the biggest symbols are drawn first)
   newData.features
     .sort(descendingKeyAccessor((d) => d.properties[targetVariable]));
-
-  const pal = getPalette('Vivid', 10)!.colors;
-  const color = pal[Math.floor(Math.random() * pal.length)];
-
-  propSymbolsParameters.color = color;
 
   const propSize = new (PropSizer as any)(
     propSymbolsParameters.referenceValue,
@@ -254,10 +249,6 @@ export default function ProportionalSymbolsSettings(
     setNewLayerName,
   ] = createSignal<string>(`ProportionalSymbols_${layerDescription().name}`);
   const [
-    modeColor,
-    setModeColor,
-  ] = createSignal<ProportionalSymbolsColorMode>(ProportionalSymbolsColorMode.singleColor);
-  const [
     symbolType,
     setSymbolType,
   ] = createSignal<ProportionalSymbolsSymbolType>(ProportionalSymbolsSymbolType.circle);
@@ -270,9 +261,9 @@ export default function ProportionalSymbolsSettings(
     setRefValueForSymbolSize,
   ] = createSignal<number>(maxValues());
   const [
-    colorOrColors,
-    setColorOrColors,
-  ] = createSignal<string | [string, string]>('#fefefe');
+    color,
+    setColor,
+  ] = createSignal<string>(randomColorFromCategoricalPalette('Vivid'));
   const [
     avoidOverlapping,
     setAvoidOverlapping,
@@ -295,8 +286,8 @@ export default function ProportionalSymbolsSettings(
       targetVariable(),
       refSymbolSize(),
       refValueForSymbolSize(),
+      color(),
       layerName,
-      modeColor(),
       symbolType(),
       [minValues(), maxValues()],
       avoidOverlapping(),
@@ -341,6 +332,11 @@ export default function ProportionalSymbolsSettings(
       min={ 1 }
       max={ 999 }
       step={ 0.1 }
+    />
+    <InputFieldColor
+      label={ LL().PortrayalSection.CommonOptions.Color() }
+      value={ color() }
+      onChange={(value) => { setColor(value); }}
     />
     <InputFieldCheckbox
       label={ LL().PortrayalSection.ProportionalSymbolsOptions.AvoidOverlapping() }

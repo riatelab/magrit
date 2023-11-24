@@ -10,7 +10,7 @@ function updateCache(mat: number[][], rows: number, x: number, cache: number[]) 
   }
 }
 
-function fillMat(mat: number[][], xs: any[], ys: any[]) {
+function fillMat(mat: number[][], xs: [number, number], ys: [number, number]) {
   for (let x = xs[0]; x < xs[1]; x += 1) {
     for (let y = ys[0]; y < ys[1]; y += 1) {
       mat[x][y] = 0; // eslint-disable-line no-param-reassign
@@ -45,7 +45,7 @@ function getMaxRect(
       if (cache[y] < width) {
         let y0;
         let w0;
-        while (true) {
+        do {
           const pop = stack.pop();
           y0 = pop!.y;
           w0 = pop!.width;
@@ -55,10 +55,12 @@ function getMaxRect(
             bestLowerRight = { x: x + width - 1, y: y - 1 };
           }
           width = w0;
-          if (cache[y] >= width) break;
-        }
+        } while (cache[y] < width);
+
         width = cache[y];
-        if (width !== 0) stack.push({ y: y0, width: w0 });
+        if (width !== 0) {
+          stack.push({ y: y0, width: w0 });
+        }
       }
     }
   }

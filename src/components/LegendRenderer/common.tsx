@@ -129,7 +129,7 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
   let [positionX, positionY] = layer.legend!.position;
   let i = 0;
   const moveElement = (e: MouseEvent) => {
-    if (((i++) % 3) === 0) { // eslint-disable-line no-plusplus
+    if (((i++) % 2) === 0) { // eslint-disable-line no-plusplus
       // We skip some mousemove events to improve performance
       return;
     }

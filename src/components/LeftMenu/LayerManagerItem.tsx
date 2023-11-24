@@ -53,8 +53,8 @@ const onClickEye = (id: string) => {
   );
 };
 
-const onCLickMagnifyingGlass = (id: string) => {
-  console.log('click magnifying glass on item ', id);
+const onClickFitExtent = (id: string) => {
+  console.log('click fit extent on item ', id);
   fitExtent(id);
 };
 
@@ -96,7 +96,6 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
   // Create a new modal window with the settings of the layer
   const layerDescription = layersDescriptionStore.layers.find((l) => l.id === id);
   const initialLayerDescription = { ...layerDescription };
-  console.log('layerDescription', layerDescription);
   setModalStore({
     show: true,
     content: () => <LayerSettings id={ id } LL={ LL } />,
@@ -123,60 +122,67 @@ const onClickTyping = (id: string) => {
   });
 };
 
-export default function LayerManagerItem(props: { 'props': LayerDescription }): JSX.Element {
+export default function LayerManagerItem(props: { 'layer': LayerDescription }): JSX.Element {
   const { LL } = useI18nContext();
 
-  return <div class="layer-manager-item" onDblClick={() => { onClickSettings(props.props.id, LL); }}>
-    <div class="layer-manager-item__name" title={ props.props.name }>
-      <span>{ props.props.name }</span>
+  return <div class="layer-manager-item" onDblClick={() => { onClickSettings(props.layer.id, LL); }}>
+    <div class="layer-manager-item__name" title={ props.layer.name }>
+      <span>{ props.layer.name }</span>
     </div>
     <div class="layer-manager-item__icons">
       <div class="layer-manager-item__icons-left">
         <Show
-          when={props.props.type === 'table'}
+          when={props.layer.type !== 'table'}
           fallback={
-            <div title={ LL().LayerManager[props.props.type]() }>
-              <i
-                class={ typeIcons[props.props.type as ('point' | 'linestring' | 'polygon' | 'raster')] }
-              />
+            <div title={ LL().LayerManager.table() }>
+              <FaSolidTableCells />
             </div>
           }
         >
-          <div title={ LL().LayerManager.table() }>
-            <FaSolidTableCells />
+          <div title={ LL().LayerManager[props.layer.type]() } style={{ cursor: 'help' }}>
+            <i
+              class={ typeIcons[props.layer.type as ('point' | 'linestring' | 'polygon' | 'raster')] }
+            />
           </div>
+          <Show when={props.layer.legend !== undefined}>
+            <div title={ LL().LayerManager.Legend() } style={{ cursor: 'pointer' }}>
+              <i class="fg-map-legend" />
+            </div>
+          </Show>
         </Show>
-
     </div>
     <div class="layer-manager-item__icons-right">
-      <Show when={props.props.type !== 'table'}>
+      <Show when={props.layer.type !== 'table'}>
         <div title={ LL().LayerManager.Settings() }>
-          <FaSolidGears onClick={() => { onClickSettings(props.props.id, LL); }} />
+          <FaSolidGears
+            onClick={(e) => { onClickSettings(props.layer.id, LL); }}
+          />
         </div>
-        <Show when={props.props.visible}>
+        <Show when={props.layer.visible}>
           <div title={ LL().LayerManager.ToggleVisibility() }>
-            <FaSolidEye onClick={() => { onClickEye(props.props.id); }} />
+            <FaSolidEye onClick={() => { onClickEye(props.layer.id); }} />
           </div>
         </Show>
-        <Show when={!props.props.visible}>
+        <Show when={!props.layer.visible}>
           <div title={ LL().LayerManager.ToggleVisibility() }>
-            <FaSolidEyeSlash onClick={() => { onClickEye(props.props.id); }} />
+            <FaSolidEyeSlash onClick={() => { onClickEye(props.layer.id); }} />
           </div>
         </Show>
         <div title={ LL().LayerManager.FitZoom() }>
-          <FaSolidMagnifyingGlass onClick={() => { onCLickMagnifyingGlass(props.props.id); }} />
+          {/* <i class="fg-extent" onClick={() => { onClickFitExtent(props.layer.id); }} /> */}
+          <FaSolidMagnifyingGlass onClick={() => { onClickFitExtent(props.layer.id); }} />
         </div>
       </Show>
-      <Show when={props.props.fields && props.props.fields.length > 0}>
+      <Show when={props.layer.fields && props.layer.fields.length > 0}>
         <div title={ LL().LayerManager.AttributeTable() }>
-          <FaSolidTable onClick={() => { onClickTable(props.props.id); }} />
+          <FaSolidTable onClick={() => { onClickTable(props.layer.id); }} />
         </div>
         <div title={ LL().LayerManager.Typing() }>
-          <FiType onClick={() => { onClickTyping(props.props.id); }}/>
+          <FiType onClick={() => { onClickTyping(props.layer.id); }}/>
         </div>
       </Show>
       <div title={ LL().LayerManager.Delete() }>
-        <FaSolidTrash onClick={() => { onClickTrash(props.props.id, LL); }} />
+        <FaSolidTrash onClick={() => { onClickTrash(props.layer.id, LL); }} />
       </div>
     </div>
   </div>

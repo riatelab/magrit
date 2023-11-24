@@ -18,7 +18,7 @@ const LayerManager = (): JSX.Element => <div class="layer-manager">
   >
     {
       (item) => <LayerManagerItem
-        props={item}
+        layer={item}
       />
     }
   </Sortable>

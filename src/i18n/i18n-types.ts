@@ -530,6 +530,10 @@ type RootTranslation = {
 		 * F​i​e​l​d​s​ ​t​y​p​i​n​g
 		 */
 		Typing: string
+		/**
+		 * D​i​s​p​l​a​y​ ​/​ ​h​i​d​e​ ​l​e​g​e​n​d
+		 */
+		Legend: string
 	}
 	PortrayalSection: {
 		PortrayalTypes: {
@@ -1903,6 +1907,10 @@ export type TranslationFunctions = {
 		 * Fields typing
 		 */
 		Typing: () => LocalizedString
+		/**
+		 * Display / hide legend
+		 */
+		Legend: () => LocalizedString
 	}
 	PortrayalSection: {
 		PortrayalTypes: {
