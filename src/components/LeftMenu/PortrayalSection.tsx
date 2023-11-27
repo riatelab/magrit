@@ -120,10 +120,10 @@ export default function PortrayalSection(): JSX.Element {
           { LL().PortrayalSection.PortrayalTypes.ProportionalSymbols() }
         </li>
         <li
-          onClick={ () => { setSelectedPortrayal(RepresentationType.categorical); } }
+          onClick={ () => { setSelectedPortrayal(RepresentationType.categoricalChoropleth); } }
           classList={{
             'is-hidden': !availableVariables()?.hasCategorical,
-            selected: selectedPortrayal() === RepresentationType.categorical,
+            selected: selectedPortrayal() === RepresentationType.categoricalChoropleth,
           }}
         >
           { LL().PortrayalSection.PortrayalTypes.Categorical() }
@@ -171,7 +171,7 @@ export default function PortrayalSection(): JSX.Element {
         <DiscontinuitySettings layerId={ targetLayer() as string } />
       </Show>
 
-      <Show when={ selectedPortrayal() === RepresentationType.categorical }>
+      <Show when={ selectedPortrayal() === RepresentationType.categoricalChoropleth }>
         <CategoricalChoroplethSettings layerId={ targetLayer() as string } />
       </Show>
 

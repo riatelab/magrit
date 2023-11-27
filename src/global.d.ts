@@ -65,6 +65,8 @@ type LayerDescription = {
     | ProportionalSymbolsParameters & ClassificationParameters
     | ProportionalSymbolsParameters & CategoricalChoroplethParameters
     | DiscontinuityParameters
+    | CartogramParameters
+    | GriddedLayerParameters
     | LabelsParameters
     | GraticuleParameters
     // | DefaultRendererParameters
@@ -114,7 +116,7 @@ type LayerDescriptionLabels = LayerDescription & {
 };
 
 type LayerDescriptionCategoricalChoropleth = LayerDescription & {
-  renderer: RepresentationType.categorical,
+  renderer: RepresentationType.categoricalChoropleth,
   rendererParameters: CategoricalChoroplethParameters,
   legend: ChoroplethLegendParameters,
 };
@@ -123,6 +125,30 @@ type LayerDescriptionDiscontinuity = LayerDescription & {
   renderer: RepresentationType.discontinuity,
   rendererParameters: DiscontinuityParameters,
   legend: DiscontinuityLegendParameters,
+};
+
+type LayerDescriptionCartogram = LayerDescription & {
+  renderer: RepresentationType.cartogram,
+  rendererParameters: CartogramParameters,
+  legend: null,
+};
+
+type LayerDescriptionGriddedLayer = LayerDescription & {
+  renderer: RepresentationType.grid,
+  rendererParameters: GriddedLayerParameters,
+  legend: ChoroplethLegendParameters,
+};
+
+type LayerDescriptionWaffle = LayerDescription & {
+  renderer: RepresentationType.waffle,
+  rendererParameters: GriddedLayerParameters,
+  legend: WaffleLegendParameters,
+};
+
+type LayerDescriptionCategoricalPictogram = LayerDescription & {
+  renderer: RepresentationType.categoricalPictogram,
+  rendererParameters: CategoricalPictogramParameters,
+  legend: null,
 };
 
 // export enum ProportionalSymbolsColorMode {
@@ -289,17 +315,61 @@ interface DiscontinuityParameters {
   sizes: number[],
 }
 
+interface CartogramParameters {
+  // The name of the variable used to compute the cartogram
+  variable: string,
+  // The type of cartogram method
+  method: CartogramMethod,
+  // The number of iterations of the cartogram algorithm (only used for Dougenik for now)
+  iterations?: number,
+}
+
+interface GriddedLayerParameters {
+  // The name of the variable used to compute the gridded layer
+  variable: string,
+  // The shape of grid cell
+  cellType: GridCellShape,
+  // The size of the grid cell
+  cellSize: number,
+}
+
+interface CategoricalPictogramParameters {
+  // The name of the variable used to compute the pictogram
+  variable: string,
+  // The mapping between categories and icons,
+  // stored as an array of [category, categoryName, icon] tuples,
+  // one per category.
+  mapping: [string | number, string, string][],
+}
+
 export enum RepresentationType {
   choropleth = 'choropleth',
   proportionalSymbols = 'proportionalSymbols',
-  categorical = 'categorical',
+  categoricalChoropleth = 'categoricalChoropleth',
+  categoricalPictogram = 'categoricalPictogram',
   proportionalSymbolsAndCategories = 'proportionalSymbolsAndCategories',
   proportionalSymbolsAndRatio = 'proportionalSymbolsAndRatio',
   discontinuity = 'discontinuity',
+  cartogram = 'cartogram',
+  grid = 'grid',
+  waffle = 'waffle',
   sphere = 'sphere',
   graticule = 'graticule',
   labels = 'labels',
   default = 'default',
+}
+
+export enum CartogramMethod {
+  Dougenik = 'Dougenik',
+  Olson = 'Olson',
+  GastnerSeguyMore = 'GastnerSeguyMore',
+}
+
+export enum GridCellShape {
+  square = 'square',
+  diamond = 'diamond',
+  hexagon = 'hexagon',
+  triangle = 'triangle',
 }
 
 interface LegendParametersBase {
@@ -417,11 +487,16 @@ interface DiscontinuityLegendParameters extends LegendParametersBase {
   lineLength: number,
 }
 
+interface WaffleLegendParameters extends LegendParametersBase {
+  type: LegendType.waffle,
+}
+
 export type LegendParameters = (
   ChoroplethLegendParameters
   | ProportionalSymbolsLegendParameters
   | LabelsLegendParameters
   | DiscontinuityLegendParameters
+  | WaffleLegendParameters
 );
 
 export enum NumberFormatting {
