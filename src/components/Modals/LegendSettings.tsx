@@ -1,7 +1,8 @@
 // Imports from solid-js
 import {
   Accessor,
-  createSignal, For,
+  createSignal,
+  For,
   JSX,
   Show,
 } from 'solid-js';

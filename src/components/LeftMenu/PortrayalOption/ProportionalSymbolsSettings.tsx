@@ -9,7 +9,6 @@ import {
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
-import { getPalette } from 'dicopal';
 
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
@@ -137,7 +136,7 @@ function onClickValidate(
   newData.features
     .sort(descendingKeyAccessor((d) => d.properties[targetVariable]));
 
-  const propSize = new (PropSizer as any)(
+  const propSize = new PropSizer(
     propSymbolsParameters.referenceValue,
     propSymbolsParameters.referenceRadius,
     propSymbolsParameters.symbolType,

@@ -10,7 +10,9 @@ import { fieldTypingModalStore, setFieldTypingModalStore } from '../../store/Fie
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { unproxify } from '../../helpers/common';
 import { detectTypeField, VariableType, Variable } from '../../helpers/typeDetection';
-import { LayerDescription } from '../../global';
+
+// Types / Interfaces / Enums
+import type { LayerDescription } from '../../global';
 
 export default function FieldTypingModal(): JSX.Element {
   const { LL } = useI18nContext();

@@ -53,7 +53,7 @@ export function makeLegendText(
 
 export const distanceBoxContent = 10;
 
-export function computeRectangleBox(refElement: SVGGElement, ...args: any[]) {
+export function computeRectangleBox(refElement: SVGGElement, ...args: never[]) {
   // First we reset the box to its 0-size so it doesn't interfere with the
   // computation of the bbox of the refElement group
   const rectangleBoxLegend = refElement.querySelector('.legend-box') as SVGRectElement;

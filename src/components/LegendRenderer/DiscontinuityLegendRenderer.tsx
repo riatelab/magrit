@@ -64,7 +64,7 @@ function verticalDiscontinuityLegend(
   const sizesAndPositions = createMemo(() => {
     let lastSize = 0;
     return layer.rendererParameters.sizes.toReversed()
-      .map((size, i) => {
+      .map((size) => {
         const result = {
           size,
           x: 0,
@@ -140,7 +140,7 @@ function verticalDiscontinuityLegend(
     <g class="legend-content">
       <For each={sizesAndPositions()}>
         {
-          ({ size, y }, i) => <line
+          ({ size, y }) => <line
             x1={0}
             x2={layer.legend.lineLength}
             y1={y}

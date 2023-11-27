@@ -1,7 +1,5 @@
 // Imports from solid-js
-import {
-  createSignal, JSX, Show,
-} from 'solid-js';
+import { createSignal, JSX } from 'solid-js';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';

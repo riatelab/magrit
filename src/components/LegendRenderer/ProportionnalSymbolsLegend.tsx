@@ -41,7 +41,7 @@ function stackedSquareLegend(
 ): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
-  const propSize = new (PropSizer as any)(
+  const propSize = new PropSizer(
     layer.rendererParameters.referenceValue,
     layer.rendererParameters.referenceRadius,
     layer.rendererParameters.symbolType,
@@ -162,7 +162,7 @@ function horizontalSquareLegend(
 ): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
-  const propSize = new (PropSizer as any)(
+  const propSize = new PropSizer(
     layer.rendererParameters.referenceValue,
     layer.rendererParameters.referenceRadius,
     layer.rendererParameters.symbolType,
@@ -291,7 +291,7 @@ function verticalSquareLegend(
 ): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
-  const propSize = new (PropSizer as any)(
+  const propSize = new PropSizer(
     layer.rendererParameters.referenceValue,
     layer.rendererParameters.referenceRadius,
     layer.rendererParameters.symbolType,
@@ -420,7 +420,7 @@ function stackedCircleLegend(
 ): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
-  const propSize = new (PropSizer as any)(
+  const propSize = new PropSizer(
     layer.rendererParameters.referenceValue,
     layer.rendererParameters.referenceRadius,
     layer.rendererParameters.symbolType,
@@ -541,7 +541,7 @@ function verticalCircleLegend(
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
 
-  const propSize = new (PropSizer as any)(
+  const propSize = new PropSizer(
     layer.rendererParameters.referenceValue,
     layer.rendererParameters.referenceRadius,
     layer.rendererParameters.symbolType,
@@ -653,7 +653,7 @@ function horizontalCircleLegend(
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
 
-  const propSize = new (PropSizer as any)(
+  const propSize = new PropSizer(
     layer.rendererParameters.referenceValue,
     layer.rendererParameters.referenceRadius,
     layer.rendererParameters.symbolType,

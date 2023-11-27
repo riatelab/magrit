@@ -1,7 +1,16 @@
-import Sortable from 'solid-sortablejs';
+// Imports from solid-js
 import { JSX } from 'solid-js';
+
+// Imports from other packages
+import Sortable from 'solid-sortablejs';
+
+// Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+
+// Sub-components
 import LayerManagerItem from './LayerManagerItem.tsx';
+
+// Styles
 import '../../styles/LayerManager.css';
 
 const setLayersDescriptionStoreWrapper = (newLayersDescriptionStore: []) => {
@@ -23,4 +32,5 @@ const LayerManager = (): JSX.Element => <div class="layer-manager">
     }
   </Sortable>
 </div>;
+
 export default LayerManager;

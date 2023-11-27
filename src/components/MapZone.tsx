@@ -68,7 +68,6 @@ import {
   LayoutFeatureType,
   Rectangle,
   ScaleBar,
-  type LayerDescription,
   type LayerDescriptionChoropleth,
   type LayerDescriptionDiscontinuity,
   type LayerDescriptionProportionalSymbols,

@@ -37,7 +37,7 @@ import type {
   ProportionalSymbolsParameters,
   LabelsParameters,
   ClassificationParameters,
-} from '../../global.d';
+} from '../../global';
 
 // Styles
 import '../../styles/LayerAndLegendSettings.css';

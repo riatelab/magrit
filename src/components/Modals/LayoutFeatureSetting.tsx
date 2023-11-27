@@ -13,6 +13,7 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/L
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import InputFieldText from '../Inputs/InputText.tsx';
 
 // Helpers
 import type { TranslationFunctions } from '../../i18n/i18n-types';
@@ -28,7 +29,6 @@ import {
   type ScaleBar,
   ScaleBarStyle,
 } from '../../global.d';
-import InputFieldText from '../Inputs/InputText.tsx';
 
 /**
  * Update a single property of a layout feature in the layersDescriptionStore,
