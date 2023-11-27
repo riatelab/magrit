@@ -1,13 +1,14 @@
 // Import from solid-js
 import {
+  createMemo,
   createSignal,
   For,
-  JSX,
+  JSX, onMount,
   Show,
 } from 'solid-js';
 
 // Ag-grid stuffs
-import AgGridSolid from 'ag-grid-solid';
+import AgGridSolid, { AgGridSolidRef } from 'ag-grid-solid';
 import 'ag-grid-community/styles/ag-grid.css'; // grid core CSS
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // optional theme
 
@@ -35,7 +36,7 @@ import { setNiceAlertStore } from '../../store/NiceAlertStore';
 import { setTableWindowStore, tableWindowStore } from '../../store/TableWindowStore';
 
 // Types / Interfaces / Enums
-import { GeoJSONFeature, GeoJSONFeatureCollection, LayerDescription } from '../../global.d';
+import type { GeoJSONFeature, GeoJSONFeatureCollection, LayerDescription } from '../../global';
 
 // Styles
 import '../../styles/TableWindow.css';
@@ -55,6 +56,393 @@ const operatorToFunction: { [key: string]: (a: any, b: any) => number | string }
   },
 };
 
+function NewFieldPanel(
+  props: {
+    layer: LayerDescription;
+    rowData: () => any[];
+    columnDefs: () => any[];
+    updateData: (variableName: string, newColumn: any[]) => void;
+  },
+): JSX.Element {
+  const { LL } = useI18nContext();
+
+  // Signals for the new column form
+  const [
+    newColumnName,
+    setNewColumnName,
+  ] = createSignal<string>('');
+  const [
+    newColumnContent,
+    setNewColumnContent,
+  ] = createSignal<'numerical' | 'non-numerical'>('numerical');
+  const [
+    newColumnType,
+    setNewColumnType,
+  ] = createSignal<VariableType>(VariableType.unknown);
+  const [
+    selectedFieldLeft,
+    setSelectedFieldLeft,
+  ] = createSignal<string>(props.columnDefs()[0].field);
+  const [
+    selectedFieldRight,
+    setSelectedFieldRight,
+  ] = createSignal<string>(props.columnDefs()[0].field);
+  const [
+    selectedOperator,
+    setSelectedOperator,
+  ] = createSignal<string>('add');
+  const [
+    constantValue,
+    setConstantValue,
+  ] = createSignal<number>(1);
+  const [
+    sampleOutputSimple,
+    setSampleOutputSimple,
+  ] = createSignal<string>('');
+  const [
+    currentFormula,
+    setCurrentFormula,
+  ] = createSignal<string>('');
+  const [
+    sampleOutputExpert,
+    setSampleOutputExpert,
+  ] = createSignal<string>('');
+
+  const [
+    activeTab,
+    setActiveTab,
+  ] = createSignal<'simple' | 'expert'>('simple');
+
+  const isEnabledComputeSimple = createMemo(() => newColumnName() !== ''
+    && newColumnType() !== VariableType.unknown
+    && selectedFieldLeft() !== ''
+    && selectedFieldRight() !== '');
+
+  const isEnabledComputeExpert = createMemo(() => newColumnName() !== ''
+    && newColumnType() !== VariableType.unknown
+    && currentFormula() !== ''
+    && sampleOutputExpert() !== ''
+    && !sampleOutputExpert().startsWith('Error'));
+
+  const onClickComputeSimple = () => {
+    const variableName = newColumnName();
+    console.log(
+      variableName,
+      selectedFieldLeft(),
+      selectedFieldRight(),
+      selectedOperator(),
+      newColumnType(),
+    );
+
+    // The function that will be used to compute the new column
+    const fn = operatorToFunction[selectedOperator()];
+
+    // Compute the new column
+    const newColumn = props.rowData().map((row) => {
+      const left = row[selectedFieldLeft()];
+      // eslint-disable-next-line no-nested-ternary
+      const right = selectedOperator() === 'truncate'
+        ? constantValue()
+        : selectedFieldRight() === '~~constant~~'
+          ? constantValue()
+          : row[selectedFieldRight()];
+      return fn(left, right);
+    });
+
+    console.log(newColumn);
+
+    props.updateData(variableName, newColumn);
+  };
+
+  const onClickComputeExpert = () => {
+    const variableName = newColumnName();
+    const formula = currentFormula();
+    const query = `SELECT ${formula} as newValue FROM ?`;
+    const newColumn = alasql(query, [props.rowData()]);
+
+    props.updateData(variableName, newColumn.map((d) => d.newValue));
+  };
+
+  return <div>
+    <h3>{ LL().DataTable.NewColumnModal.title() }</h3>
+    <div class="tabs is-large is-centered">
+      <ul style={{ margin: '0' }}>
+        <li
+          classList={{ 'is-active': activeTab() === 'simple' }}
+          onClick={ () => { setActiveTab('simple'); }}
+        ><a>Simple</a></li>
+        <li
+          classList={{ 'is-active': activeTab() === 'expert' }}
+          onClick={ () => { setActiveTab('expert'); }}
+        ><a>Expert</a></li>
+      </ul>
+    </div>
+    <div style={{ display: activeTab() === 'simple' ? 'block' : 'none' }}>
+      <div class="field-block">
+        <label class="label">{ LL().DataTable.NewColumnModal.name() }</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            placeholder={ LL().DataTable.NewColumnModal.namePlaceholder() }
+            value={ newColumnName() }
+            onChange={ (e) => { setNewColumnName(e.target.value); } }
+          />
+        </div>
+      </div>
+      <div class="field-block">
+        <label class="label">{ LL().DataTable.NewColumnModal.newColumnType() }</label>
+        <div class="select" style={{ width: '100%' }}>
+          <select
+            style={{ width: '100%' }}
+            onChange={ (e) => {
+              setNewColumnType(e.target.value as VariableType);
+            } }
+            value={ newColumnType() }
+          >
+            <For each={Object.keys(VariableType).toReversed()}>
+              {
+                (type) => (
+                  <option value={ type }>{ LL().FieldsTyping.VariableTypes[type]() }</option>)
+              }
+            </For>
+          </select>
+        </div>
+      </div>
+      <div class="field-block">
+        <label class="label">{ LL().DataTable.NewColumnModal.newColumnContent() }</label>
+        <div class="select" style={{ width: '100%' }}>
+          <select
+            style={{ width: '100%' }}
+            onChange={ (e) => {
+              setNewColumnContent(e.target.value as 'numerical' | 'non-numerical');
+            } }
+            value={ newColumnContent() }
+          >
+            <option value="numerical">{ LL().DataTable.NewColumnModal.numericalValues() }</option>
+            <option value="non-numerical">{ LL().DataTable.NewColumnModal.nonNumericalValues() }</option>
+          </select>
+        </div>
+      </div>
+      <Show when={ newColumnContent() === 'numerical' }>
+        <div class="field-block">
+          <label class="label">{ LL().DataTable.NewColumnModal.formula() }</label>
+          <div class="select" style={{ width: '40%' }}>
+            <select
+              style={{ width: '100%' }}
+              onChange={ (e) => { setSelectedFieldLeft(e.target.value); } }
+              value={ selectedFieldLeft() }
+            >
+              <For each={props.layer.fields.filter(((d) => d.dataType === DataType.number))}>
+                {
+                  (field) => (
+                    <option value={ field.name }>{ field.name }</option>)
+                }
+              </For>
+            </select>
+          </div>
+          <div class="select" style={{ width: '20%' }}>
+            <select
+              style={{ width: '100%' }}
+              onChange={ (e) => { setSelectedOperator(e.target.value); }}
+              value={ selectedOperator() }
+            >
+              <option value="add">+</option>
+              <option value="sub">-</option>
+              <option value="mul">*</option>
+              <option value="div">/</option>
+              <option value="pow">^</option>
+            </select>
+          </div>
+          <div class="select" style={{ width: selectedFieldRight() !== '~~constant~~' ? '40%' : '20%' }}>
+            <select
+              style={{ width: '100%' }}
+              onChange={ (e) => { setSelectedFieldRight(e.target.value); } }
+              value={ selectedFieldRight() }
+            >
+              <For each={props.layer.fields!.filter(((d) => d.dataType === DataType.number))}>
+                {
+                  (field) => (
+                    <option value={ field.name }>{ field.name }</option>)
+                }
+              </For>
+              <option value="~~constant~~" style={{ 'font-style': 'italic' }}>
+                { LL().DataTable.NewColumnModal.constantValue() }
+              </option>
+            </select>
+          </div>
+          <Show when={selectedFieldRight() === '~~constant~~'}>
+            <div class="control" style={{ width: '20%', display: 'inline-block' }}>
+              <input
+                class="input"
+                type="number"
+                style={{ height: '2em' }}
+                value={constantValue()}
+                onChange={ (e) => { setConstantValue(+e.target.value); } }
+              />
+            </div>
+          </Show>
+        </div>
+      </Show>
+      <Show when={ newColumnContent() === 'non-numerical' }>
+        <div class="field-block">
+          <label class="label">{ LL().DataTable.NewColumnModal.operation() }</label>
+          <label class="label"> </label>
+          <div class="select" style={{ width: '40%' }}>
+            <select
+              onChange={ (e) => { setSelectedFieldLeft(e.target.value); } }
+              value={ selectedFieldLeft() }
+              style={{ width: '100%' }}
+            >
+              <For each={props.layer.fields}>
+                {
+                  (field) => (
+                    <option value={ field.name }>{ field.name }</option>)
+                }
+              </For>
+            </select>
+          </div>
+          <div class="select" style={{ width: '20%' }}>
+            <select
+              style={{ width: '100%' }}
+              onChange={ (e) => { setSelectedOperator(e.target.value); }}
+              value={ selectedOperator() }
+            >
+              <option value="concatenate">{ LL().DataTable.NewColumnModal.concatenate() }</option>
+              <option value="truncate">{ LL().DataTable.NewColumnModal.truncate() }</option>
+            </select>
+          </div>
+          <Show when={selectedOperator() === 'concatenate'}>
+            <div class="select" style={{ width: '40%' }}>
+              <select
+                style={{ width: '100%' }}
+                onChange={ (e) => { setSelectedFieldRight(e.target.value); } }
+                value={ selectedFieldRight() }
+              >
+                <For each={props.layer.fields}>
+                  {
+                    (field) => (
+                      <option value={ field.name }>{ field.name }</option>)
+                  }
+                </For>
+              </select>
+            </div>
+          </Show>
+          <Show when={selectedOperator() === 'truncate'}>
+            <div style={{ width: '40%', display: 'inline-block' }}>
+              <input
+                type="number"
+                class="input"
+                style={{ width: '100%', height: '2em' }}
+                value={constantValue()}
+                onChange={ (e) => { setConstantValue(+e.target.value); } }
+              />
+            </div>
+          </Show>
+        </div>
+      </Show>
+
+      <br />
+      <InputFieldButton
+        label={ LL().DataTable.NewColumnModal.compute() }
+        disabled={!isEnabledComputeSimple()}
+        onClick={onClickComputeSimple}
+      />
+    </div>
+    <div style={{ display: activeTab() === 'expert' ? 'block' : 'none' }}>
+      <div class="field-block">
+        <label class="label">{ LL().DataTable.NewColumnModal.name() }</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            placeholder={ LL().DataTable.NewColumnModal.namePlaceholder() }
+            value={ newColumnName() }
+            onChange={ (e) => { setNewColumnName(e.target.value); } }
+          />
+        </div>
+      </div>
+      <div class="field-block">
+        <label class="label">{ LL().DataTable.NewColumnModal.newColumnType() }</label>
+        <div class="select" style={{ width: '100%' }}>
+          <select
+            style={{ width: '100%' }}
+            onChange={ (e) => {
+              setNewColumnType(e.target.value as VariableType);
+            } }
+            value={ newColumnType() }
+          >
+            <For each={Object.keys(VariableType).toReversed()}>
+              {
+                (type) => (
+                  <option value={ type }>{ LL().FieldsTyping.VariableTypes[type]() }</option>)
+              }
+            </For>
+          </select>
+        </div>
+      </div>
+      <div class="field-block">
+        <label class="label">{ 'Formula' }</label>
+        <div class="control" style={{ width: '80%', display: 'inline-block' }}>
+          <input
+            class="input"
+            id="formula"
+            type="text"
+            onKeyUp={ (e) => {
+              setCurrentFormula(e.target.value);
+            } }
+            // TODO: add a placeholder
+          />
+        </div>
+        <div class="control" style={{ width: '20%', display: 'inline-block' }}>
+          <button
+            class="button is-primary"
+            style={{ width: '100%' }}
+            onClick={ () => {
+              let formula = currentFormula();
+              formula = formula.replace(/\$length/i, props.rowData().length.toString());
+              const query = `SELECT ${formula} as newValue FROM ?`;
+              try {
+                const newColumn = alasql(query, [props.rowData().slice(0, 3)]);
+                if (newColumn[0].newValue === undefined) {
+                  setSampleOutputExpert('Error - Empty result');
+                  // TODO: we may try to parse the query here (as it is syntactically correct
+                  //   since no error was thrown by alasql)
+                  //   and detect why the output is empty (e.g. a column name is wrong, etc.)
+                } else {
+                  setSampleOutputExpert(
+                    `[0] ${newColumn[0].newValue}\n[1] ${newColumn[1].newValue}\n[2] ${newColumn[2].newValue}`,
+                  );
+                }
+              } catch (e) {
+                setSampleOutputExpert('Error while parsing formula');
+              }
+            }}
+          >{ 'Preview' }</button>
+        </div>
+        <div class="control" style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', 'align-items': 'center', width: '15%' }}>
+            <label class="label">{ 'Sample output' }</label>
+          </div>
+          <pre
+            style={{ width: '100%' }}
+            classList={{ 'has-text-danger': sampleOutputExpert().startsWith('Error') }}
+            id="sample-output"
+          >
+            { sampleOutputExpert() }
+          </pre>
+        </div>
+      </div>
+      <br />
+      <InputFieldButton
+        label={ LL().DataTable.NewColumnModal.compute() }
+        disabled={!isEnabledComputeExpert()}
+        onClick={onClickComputeExpert}
+      />
+    </div>
+  </div>;
+}
+
 export default function TableWindow(): JSX.Element {
   const { LL } = useI18nContext();
   // Extract layerId and editable from tableWindowStore
@@ -71,6 +459,9 @@ export default function TableWindow(): JSX.Element {
   }
 
   const { name: layerName } = layer;
+
+  // Ref to the ag-grid table
+  let agGridRef: AgGridSolidRef;
 
   // The data to be displayed
   // (we use a signal because we may add new columns)
@@ -90,6 +481,10 @@ export default function TableWindow(): JSX.Element {
       .map((key) => ({ field: key, headerName: key })),
   );
 
+  // The new variables that will be added to the layer description
+  // when the modal is closed and if the user chooses to save the data
+  const newVariables: Variable[] = [];
+
   // Other option for ag-grid table
   const defaultColDef = {
     editable,
@@ -107,38 +502,6 @@ export default function TableWindow(): JSX.Element {
     currentPanel,
     setCurrentPanel,
   ] = createSignal<'table' | 'newColumn'>('table');
-
-  // Signals for the new column form
-  const [
-    newColumnContent,
-    setNewColumnContent,
-  ] = createSignal<'numerical' | 'non-numerical'>('numerical');
-  const [
-    newColumnType,
-    setNewColumnType,
-  ] = createSignal<VariableType>(VariableType.unknown);
-  const [
-    newColumnName,
-    setNewColumnName,
-  ] = createSignal<string>('');
-  const [
-    selectedFieldLeft,
-    setSelectedFieldLeft,
-  ] = createSignal<string>(columnDefs()[0].field);
-  const [
-    selectedFieldRight,
-    setSelectedFieldRight,
-  ] = createSignal<string>(columnDefs()[0].field);
-  const [
-    selectedOperator,
-    setSelectedOperator,
-  ] = createSignal<string>('add');
-  const [
-    sampleOutput,
-    setSampleOutput,
-  ] = createSignal<string>('');
-
-  const newVariables: Variable[] = [];
 
   // Change the state of the tableWindowStore to close the modal
   const closeModal = () => {
@@ -195,32 +558,8 @@ export default function TableWindow(): JSX.Element {
     }
   };
 
-  // Function that is called when the user clicks the "compute" button
-  // in the new column form
-  const onClickCompute = () => {
-    const variableName = newColumnName();
-    console.log(
-      variableName,
-      selectedFieldLeft(),
-      selectedFieldRight(),
-      selectedOperator(),
-      newColumnType(),
-    );
-
-    // The function that will be used to compute the new column
-    const fn = operatorToFunction[selectedOperator()];
-
-    // Compute the new column
-    const newColumn = rowData().map((row) => {
-      const left = row[selectedFieldLeft()];
-      const right = selectedFieldRight() === '~~constant~~'
-        ? 1
-        : row[selectedFieldRight()];
-      return fn(left, right);
-    });
-
-    console.log(newColumn);
-
+  // Function that is called from the NewFieldPanel to update the data...
+  const updateData = (variableName, newColumn) => {
     // We need to update the data for the table
     setRowData(
       rowData().map((row, i) => ({
@@ -228,19 +567,44 @@ export default function TableWindow(): JSX.Element {
         [variableName]: newColumn[i],
       })),
     );
+
+    // Update the column definitions
     setColumnDefs(
       columnDefs().concat({ field: variableName, headerName: variableName }),
     );
+
+    // Remember that the data has been edited (to ask for confirmation when closing the modal)
     setDataEdited(true);
 
+    // Detect the type of the new variable
     const t = detectTypeField(newColumn as never[], variableName);
 
+    // Add the new variable to the list of new variables
+    // (will be used to update the layer description)
     newVariables.push({
       name: variableName,
       hasMissingValues: t.hasMissingValues,
       type: t.variableType,
       dataType: t.dataType,
     } as Variable);
+
+    // Go back to the table panel
+    setCurrentPanel('table');
+
+    // Wait for the table to be rendered
+    setTimeout(() => {
+      // Scroll to the new column
+      agGridRef.api.ensureColumnVisible(variableName);
+
+      // Highlight the new column for a few seconds
+      const headerAndCells = document.querySelectorAll(`[col-id="${variableName}"]`);
+      headerAndCells.forEach((d) => {
+        d.classList.add('ag-new-cell-highlight');
+        setTimeout(() => {
+          d.classList.remove('ag-new-cell-highlight');
+        }, 750);
+      });
+    }, 50);
   };
 
   // Function that is called when the user clicks the "export csv" button
@@ -252,6 +616,12 @@ export default function TableWindow(): JSX.Element {
     );
   };
 
+  onMount(() => {
+    setTimeout(() => {
+      console.log('aaa', agGridRef);
+    }, 1);
+  });
+
   return <div class="table-window modal" style={{ display: 'flex' }}>
     <div class="modal-background" />
     <div class="modal-card">
@@ -259,7 +629,7 @@ export default function TableWindow(): JSX.Element {
         <p class="modal-card-title">{ LL().DataTable.titleGeo() }</p>
         {/* <button class="delete" aria-label="close"></button> */}
       </header>
-      <section class="modal-card-body" style="height: 80vh;">
+      <section class="modal-card-body" style={{ height: '80vh' }}>
         {/*
           Table panel
         */}
@@ -269,8 +639,9 @@ export default function TableWindow(): JSX.Element {
             &nbsp;- { LL().DataTable.Features(rowData().length) }
             &nbsp;- { LL().DataTable.Columns(columnDefs().length) }
           </h3>
-          <div class="ag-theme-alpine" style="height: 70vh;">
+          <div class="ag-theme-alpine" style={{ height: '70vh' }}>
             <AgGridSolid
+              ref={ agGridRef! }
               rowData={ rowData() }
               columnDefs={ columnDefs() }
               defaultColDef={ defaultColDef }
@@ -282,221 +653,11 @@ export default function TableWindow(): JSX.Element {
           New column panel
         */}
         <Show when={ currentPanel() === 'newColumn' }>
-          <div>
-            <h3>{ LL().DataTable.NewColumnModal.title() }</h3>
-            <div class="field-block">
-              <label class="label">{ LL().DataTable.NewColumnModal.name() }</label>
-              <div class="control">
-                <input
-                  class="input"
-                  type="text"
-                  placeholder={ LL().DataTable.NewColumnModal.namePlaceholder() }
-                  value={ newColumnName() }
-                  onChange={ (e) => { setNewColumnName(e.target.value); } }
-                />
-              </div>
-            </div>
-            <div class="field-block">
-              <label class="label">{ LL().DataTable.NewColumnModal.newColumnContent() }</label>
-              <div class="select" style={{ width: '100%' }}>
-                <select
-                  style={{ width: '100%' }}
-                  onChange={ (e) => {
-                    setNewColumnContent(e.target.value as 'numerical' | 'non-numerical');
-                  } }
-                  value={ newColumnContent() }
-                >
-                  <option value="numerical">{ LL().DataTable.NewColumnModal.numericalValues() }</option>
-                  <option value="non-numerical">{ LL().DataTable.NewColumnModal.nonNumericalValues() }</option>
-                </select>
-              </div>
-            </div>
-            <div class="field-block">
-              <label class="label">{ LL().DataTable.NewColumnModal.newColumnType() }</label>
-              <div class="select" style={{ width: '100%' }}>
-                <select
-                  style={{ width: '100%' }}
-                  onChange={ (e) => {
-                    setNewColumnType(e.target.value as VariableType);
-                  } }
-                  value={ newColumnType() }
-                >
-                  <For each={Object.keys(VariableType)}>
-                    {
-                      (type) => (
-                        <option value={ type }>{ LL().FieldsTyping.VariableTypes[type]() }</option>)
-                    }
-                  </For>
-                </select>
-              </div>
-            </div>
-            <Show when={ newColumnContent() === 'numerical' }>
-              <div class="field-block">
-                <label class="label">{ LL().DataTable.NewColumnModal.formula() }</label>
-                <div class="select" style={{ width: '40%' }}>
-                  <select
-                    style={{ width: '100%' }}
-                    onChange={ (e) => { setSelectedFieldLeft(e.target.value); } }
-                  >
-                    <For each={layer.fields.filter(((d) => d.dataType === DataType.number))}>
-                      {
-                        (field) => (
-                          <option value={ field.name }>{ field.name }</option>)
-                      }
-                    </For>
-                  </select>
-                </div>
-                <div class="select" style={{ width: '20%' }}>
-                  <select
-                    style={{ width: '100%' }}
-                    onChange={ (e) => { setSelectedOperator(e.target.value); }}
-                  >
-                    <option value="add">+</option>
-                    <option value="sub">-</option>
-                    <option value="mul">*</option>
-                    <option value="div">/</option>
-                    <option value="pow">^</option>
-                  </select>
-                </div>
-                <div class="select" style={{ width: selectedFieldRight() !== '~~constant~~' ? '40%' : '20%' }}>
-                  <select
-                    style={{ width: '100%' }}
-                    onChange={ (e) => { setSelectedFieldRight(e.target.value); } }
-                  >
-                    <For each={layer.fields.filter(((d) => d.dataType === DataType.number))}>
-                      {
-                        (field) => (
-                          <option value={ field.name }>{ field.name }</option>)
-                      }
-                    </For>
-                    <option value="~~constant~~" style={{ 'font-style': 'italic' }}>
-                      { LL().DataTable.NewColumnModal.constantValue() }
-                    </option>
-                  </select>
-                </div>
-                <Show when={selectedFieldRight() === '~~constant~~'}>
-                  <div class="control" style={{ width: '20%', display: 'inline-block' }}>
-                    <input
-                      class="input"
-                      type="number"
-                      style={{ height: '2em' }}
-                      value={1}
-                    />
-                  </div>
-                </Show>
-              </div>
-            </Show>
-            <Show when={ newColumnContent() === 'non-numerical' }>
-              <div class="field-block">
-                <label class="label">{ LL().DataTable.NewColumnModal.operation() }</label>
-                <label class="label"> </label>
-                <div class="select" style={{ width: '40%' }}>
-                  <select
-                    onChange={ (e) => { setSelectedFieldLeft(e.target.value); } }
-                    style={{ width: '100%' }}
-                  >
-                    <For each={layer.fields}>
-                      {
-                        (field) => (
-                          <option value={ field.name }>{ field.name }</option>)
-                      }
-                    </For>
-                  </select>
-                </div>
-                <div class="select" style={{ width: '20%' }}>
-                  <select
-                    style={{ width: '100%' }}
-                    onChange={ (e) => { setSelectedOperator(e.target.value); }}
-                  >
-                    <option value="concatenate">{ LL().DataTable.NewColumnModal.concatenate() }</option>
-                    <option value="truncate">{ LL().DataTable.NewColumnModal.truncate() }</option>
-                  </select>
-                </div>
-                <Show when={selectedOperator() === 'concatenate'}>
-                  <div class="select" style={{ width: '40%' }}>
-                    <select
-                      style={{ width: '100%' }}
-                      onChange={ (e) => { setSelectedFieldRight(e.target.value); } }
-                    >
-                      <For each={layer.fields}>
-                        {
-                          (field) => (
-                            <option value={ field.name }>{ field.name }</option>)
-                        }
-                      </For>
-                    </select>
-                  </div>
-                </Show>
-                <Show when={selectedOperator() === 'truncate'}>
-                  <div style={{ width: '40%', height: '2em' }}>
-                    <input
-                      type="number"
-                      class="input"
-                      style={{ width: '100%' }}
-                      value={2}
-                    />
-                  </div>
-                </Show>
-              </div>
-            </Show>
-            <div class="field-block">
-              <label class="label">{ 'Formula' }</label>
-              <div class="control">
-                <input
-                  class="input"
-                  id="formula"
-                  type="text"
-                  // TODO: add a placeholder
-                  // TODO: compute the result while the user is typing (on a sample of the data)
-                />
-              </div>
-              <div class="control">
-                <button
-                  class="button is-primary"
-                  style={{ width: '100%' }}
-                  onClick={ () => {
-                    // TODO: use signals instead of directly manipulating the DOM
-                    const formula = (document.getElementById('formula') as HTMLInputElement).value;
-                    const query = `SELECT ${formula} as newValue FROM ?`;
-                    try {
-                      const newColumn = alasql(query, [rowData()]);
-                      if (newColumn[0].newValue === undefined) {
-                        // TODO: use signals instead of directly manipulating the DOM
-                        document.getElementById('sample-output')?.classList.add('has-text-danger');
-                        setSampleOutput('Error - Empty result');
-                        // TODO: we may try to parse the query here (as it is syntactically correct
-                        //   since no error was thrown by alasql)
-                        //   and detect why the output is empty (e.g. a column name is wrong, etc.)
-                      } else {
-                        // TODO: use signals instead of directly manipulating the DOM
-                        document.getElementById('sample-output')?.classList.remove('has-text-danger');
-                        setSampleOutput(
-                          `[0] ${newColumn[0].newValue}\n[1] ${newColumn[1].newValue}\n[2] ${newColumn[2].newValue}`,
-                        );
-                      }
-                    } catch (e) {
-                      // TODO: use signals instead of directly manipulating the DOM
-                      document.getElementById('sample-output')?.classList.add('has-text-danger');
-                      setSampleOutput('Error while parsing formula');
-                    }
-                  }}
-                >{ 'Compute' }</button>
-              </div>
-              <div class="control" style={{ display: 'flex' }}>
-                <div style={{ display: 'flex', 'align-items': 'center', width: '15%' }}>
-                  <label class="label">{ 'Sample output' }</label>
-                </div>
-                <pre style={{ width: '100%' }} id="sample-output">
-                  { sampleOutput() }
-                </pre>
-              </div>
-            </div>
-          </div>
-          <br />
-          <InputFieldButton
-            label={ LL().DataTable.NewColumnModal.compute() }
-            onClick={onClickCompute}
-            disabled={newColumnName() === ''}
+          <NewFieldPanel
+            layer={ layer }
+            rowData={ rowData }
+            columnDefs={ columnDefs }
+            updateData={ updateData }
           />
         </Show>
       </section>
