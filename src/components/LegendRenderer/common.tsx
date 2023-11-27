@@ -1,6 +1,5 @@
 import {
   type Accessor,
-  createMemo,
   For,
   type JSX,
 } from 'solid-js';
@@ -20,9 +19,8 @@ import { getTargetSvg } from '../../helpers/svg';
 import LegendSettings from '../Modals/LegendSettings.tsx';
 
 // Types / interfaces / enums
-import type { LayerDescription, LegendTextElement } from '../../global';
+import type { BackgroundRect, LayerDescription, LegendTextElement } from '../../global';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
-import { BackgroundRect } from '../../global';
 
 export function makeLegendText(
   props: LegendTextElement,

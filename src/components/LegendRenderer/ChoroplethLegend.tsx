@@ -35,7 +35,7 @@ import {
   Orientation,
 } from '../../global.d';
 
-const defaultSpacing = 5;
+const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
 function verticalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
   const rendererParameters = layer.rendererParameters as ClassificationParameters;
@@ -389,7 +389,7 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
           stroke={legendParameters.stroke ? layer.strokeColor : undefined}
         />
       </Show>
-      <Show when={console.log('aaa') || legendParameters.tick}>
+      <Show when={legendParameters.tick}>
         <For each={range(1, colors.length, 1)}>
           {
             (i) => <line
@@ -408,7 +408,10 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
         </For>
       </Show>
       <For each={rendererParameters.breaks}>
-        {
+        { // TODO: Last break value should take into account
+          //  the boxSpacingNoData parameter if there is no data
+          //  (especially if the boxSpacingNoData is inferior to the boxSpacing... which is
+          //  somehow a weird case)
           (value, i) => <text
             x={
               (i() * (legendParameters.boxWidth + legendParameters.boxSpacing))
@@ -430,8 +433,9 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
         <text
           x={
             colors.length * (legendParameters.boxWidth + legendParameters.boxSpacing)
+            - legendParameters.boxSpacing
             + legendParameters.boxSpacingNoData
-            + legendParameters.boxWidth / 3
+            + legendParameters.boxWidth / 2
           }
           y={distanceLabelsToTop()}
           font-size={legendParameters.labels.fontSize}

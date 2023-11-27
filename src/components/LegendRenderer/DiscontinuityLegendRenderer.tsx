@@ -24,9 +24,9 @@ import {
 
 // Stores
 import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
-import { DiscontinuityLegendParameters, LayerDescriptionDiscontinuity } from '../../global';
+import type { DiscontinuityLegendParameters, LayerDescriptionDiscontinuity } from '../../global';
 
-const defaultSpacing = 5;
+const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
 function verticalDiscontinuityLegend(
   layer: LayerDescriptionDiscontinuity,

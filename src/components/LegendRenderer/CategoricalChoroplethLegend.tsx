@@ -1,14 +1,18 @@
 // Import from solid-js
 import {
-  createEffect, createMemo,
-  For, JSX, onMount, Show,
+  createEffect,
+  createMemo,
+  For,
+  JSX,
+  onMount,
+  Show,
 } from 'solid-js';
 
 // Import from other packages
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { isNonNull, isNumber } from '../../helpers/common';
+import { isNonNull } from '../../helpers/common';
 
 // Stores
 import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
@@ -25,14 +29,15 @@ import {
 } from './common.tsx';
 
 // Import some type descriptions
-import {
+import type {
   CategoricalChoroplethParameters,
   ChoroplethLegendParameters,
-  type LayerDescriptionCategoricalChoropleth,
-  Orientation,
-} from '../../global.d';
+  LayerDescriptionCategoricalChoropleth,
+} from '../../global';
 
-const defaultSpacing = 5;
+import { Orientation } from '../../global.d';
+
+const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
 function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Element {
   // Check that the layer has all the required attributes

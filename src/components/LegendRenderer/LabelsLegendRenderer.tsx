@@ -23,9 +23,9 @@ import {
 
 // Stores
 import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
-import { LayerDescriptionLabels, LabelsLegendParameters } from '../../global';
+import type { LayerDescriptionLabels, LabelsLegendParameters } from '../../global';
 
-const defaultSpacing = 5;
+const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
 export default function legendLabels(
   layer: LayerDescriptionLabels,

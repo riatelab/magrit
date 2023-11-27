@@ -49,6 +49,7 @@ type ApplicationSettingsStoreType = {
   useClipExtent: boolean,
   // Default font size for legends
   defaultLegendSettings: {
+    spacing: number,
     title: Partial<LegendTextElement>,
     subtitle: Partial<LegendTextElement>,
     labels: Partial<LegendTextElement>,
@@ -70,6 +71,7 @@ const [
   renderVisibility: RenderVisibility.DoNotRender,
   useClipExtent: true,
   defaultLegendSettings: {
+    spacing: 5,
     title: {
       fontSize: 13,
       fontFamily: 'Sans-serif',

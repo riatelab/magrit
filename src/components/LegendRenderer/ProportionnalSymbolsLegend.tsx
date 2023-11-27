@@ -32,9 +32,9 @@ import type {
   LayerDescriptionProportionalSymbols,
   ProportionalSymbolsLegendParameters,
   ProportionalSymbolsParameters,
-} from '../../global.d';
+} from '../../global';
 
-const defaultSpacing = 5;
+const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
 function stackedSquareLegend(
   layer: LayerDescriptionProportionalSymbols,
@@ -125,7 +125,7 @@ function stackedSquareLegend(
                 width={symbolSize}
                 height={symbolSize}
                 x={maxHeight() - symbolSize}
-                y={ heightTitleSubtitle() - symbolSize + maxHeight()}
+                y={heightTitleSubtitle() - symbolSize + maxHeight()}
               ></rect>
               <text
                 font-size={layer.legend.labels.fontSize}
@@ -137,16 +137,16 @@ function stackedSquareLegend(
                 dominant-baseline="middle"
                 style={{ 'user-select': 'none' }}
                 x={maxHeight() + defaultSpacing * 2}
-                y={ heightTitleSubtitle() + maxHeight() - symbolSize}
+                y={heightTitleSubtitle() + maxHeight() - symbolSize}
               >{ round(value, layer.legend!.roundDecimals).toLocaleString() }</text>
               <line
                 stroke-width={0.8}
                 stroke-dasharray="2"
                 stroke="black"
                 x1={maxHeight()}
-                y1={ heightTitleSubtitle() + maxHeight() - symbolSize}
+                y1={heightTitleSubtitle() + maxHeight() - symbolSize}
                 x2={maxHeight() + defaultSpacing * 2}
-                y2={ heightTitleSubtitle() + maxHeight() - symbolSize}
+                y2={heightTitleSubtitle() + maxHeight() - symbolSize}
               ></line>
             </>;
           }
@@ -404,8 +404,8 @@ function verticalSquareLegend(
                 text-anchor="start"
                 dominant-baseline="middle"
                 style={{ 'user-select': 'none' }}
-                x={ maxHeight() + defaultSpacing * 2 }
-                y={ d.y + d.size / 2 }
+                x={maxHeight() + defaultSpacing * 2}
+                y={d.y + d.size / 2}
               >{ round(d.value, layer.legend!.roundDecimals).toLocaleString() }</text>
             </>
         }
@@ -503,7 +503,7 @@ function stackedCircleLegend(
                 stroke-width={layer.strokeWidth}
                 r={symbolSize}
                 cx={maxRadius()}
-                cy={ heightTitleSubtitle() - symbolSize + maxRadius() * 2 }
+                cy={heightTitleSubtitle() - symbolSize + maxRadius() * 2}
               ></circle>
               <text
                 font-size={layer.legend.labels.fontSize}
@@ -515,16 +515,16 @@ function stackedCircleLegend(
                 dominant-baseline="middle"
                 style={{ 'user-select': 'none' }}
                 x={maxRadius() * 2 + defaultSpacing * 2}
-                y={ heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2 }
+                y={heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2}
               >{ round(value, layer.legend!.roundDecimals).toLocaleString() }</text>
               <line
                 stroke-width={0.8}
                 stroke-dasharray="2"
                 stroke="black"
                 x1={maxRadius()}
-                y1={ heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2 }
+                y1={heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2}
                 x2={maxRadius() * 2 + defaultSpacing * 2}
-                y2={ heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2 }
+                y2={heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2}
               ></line>
             </>;
           }

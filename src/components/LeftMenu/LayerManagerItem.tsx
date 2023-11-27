@@ -1,6 +1,5 @@
 // Imports from solid-js
 import { Accessor, JSX, Show } from 'solid-js';
-import { render } from 'solid-js/web';
 
 // Imports from other packages
 import {
@@ -116,10 +115,47 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
 };
 
 const onClickTyping = (id: string) => {
+  console.log('click typing on item ', id);
   setFieldTypingModalStore({
     show: true,
     layerId: id,
   });
+};
+
+const onClickLegend = (id: string) => {
+  console.log('click legend on item ', id);
+  // TODO: we want to handle various cases, mostly as in Magrit v1:
+  //  - no legend for this kind of layer (the legend icon should not be displayed at all so
+  //    we shouldn't reach the present code in this case)
+  //  - legend available but not visible (we should toggle the visibility of the legend)
+  //  - legend available and visible (we should toggle the visibility of the legend)
+  //  - no legend for now, but we can create one for the layer, such as for layer
+  //    that use 'default' renderer (in this cas we should create it and add it
+  //    to the LayerDescription / to the map)
+  const ld = layersDescriptionStore.layers.find((l) => l.id === id)!;
+  if (ld.legend === undefined || ld.legend === null) {
+    setNiceAlertStore({
+      show: true,
+      type: 'warning',
+      content: () => <p>Legend not available for this layer</p>,
+      confirmCallback: (): void => undefined,
+      cancelCallback: (): void => undefined,
+      focusOn: 'cancel',
+    });
+  } else {
+    // We just want to toggle the visibility of the legend
+    // TODO: here we should check that the legend is still within the visibility zone.
+    //  If it is no longer in the visibility zone (because the user has shrunk the map area),
+    //  he/she may click on this button to make a hidden legend reappear... (and we should
+    //  handle this case).
+    setLayersDescriptionStore(
+      'layers',
+      (l: LayerDescription) => l.id === id,
+      'legend',
+      'visible',
+      (v: boolean) => !v,
+    );
+  }
 };
 
 export default function LayerManagerItem(props: { 'layer': LayerDescription }): JSX.Element {
@@ -133,11 +169,7 @@ export default function LayerManagerItem(props: { 'layer': LayerDescription }): 
       <div class="layer-manager-item__icons-left">
         <Show
           when={props.layer.type !== 'table'}
-          fallback={
-            <div title={ LL().LayerManager.table() }>
-              <FaSolidTableCells />
-            </div>
-          }
+          fallback={<div title={ LL().LayerManager.table() }><FaSolidTableCells /></div>}
         >
           <div title={ LL().LayerManager[props.layer.type]() } style={{ cursor: 'help' }}>
             <i
@@ -146,7 +178,10 @@ export default function LayerManagerItem(props: { 'layer': LayerDescription }): 
           </div>
           <Show when={props.layer.legend !== undefined}>
             <div title={ LL().LayerManager.Legend() } style={{ cursor: 'pointer' }}>
-              <i class="fg-map-legend" />
+              <i
+                class="fg-map-legend"
+                onClick={() => { onClickLegend(props.layer.id, LL); }}
+              />
             </div>
           </Show>
         </Show>
