@@ -182,6 +182,8 @@ const reloadFromProjectObject = (
   setMapStore(map);
   // Update the layer description store with the layers and layout features
   setLayersDescriptionStore({ layers, layoutFeatures });
+  // Reverse the "userHasAddedLayer" flag
+  setGlobalStore({ userHasAddedLayer: true });
 };
 
 const AppPage: () => JSX.Element = () => {
