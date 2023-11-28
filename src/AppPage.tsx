@@ -441,7 +441,9 @@ const AppPage: () => JSX.Element = () => {
         <ContextMenu />
       </Show>
     </main>
-    <Toaster />
+    <Toaster
+      position={'bottom-center'}
+    />
     <OverlayDrop />
     {/* <ReloadPrompt /> */}
   </div>;

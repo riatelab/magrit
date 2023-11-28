@@ -54,7 +54,7 @@ export function categoricalChoroplethPolygonRenderer(
   }>
     <g
       id={layerDescription.id}
-      class="layer categorical-choropleth"
+      class="layer categoricalChoropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       // fill={layerDescription.fillColor}
       fill-opacity={layerDescription.fillOpacity}
@@ -106,7 +106,7 @@ export function categoricalChoroplethPointRenderer(
   }>
     <g
       id={layerDescription.id}
-      class="layer categorical-choropleth"
+      class="layer categoricalChoropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       // fill={layerDescription.fillColor}
       fill-opacity={layerDescription.fillOpacity}
@@ -157,7 +157,7 @@ export function categoricalChoroplethLineRenderer(
   }>
     <g
       id={layerDescription.id}
-      class="layer categorical-choropleth"
+      class="layer categoricalChoropleth"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       fill="none"
       // stroke={layerDescription.strokeColor}

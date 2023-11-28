@@ -16,7 +16,7 @@ export const getTargetSvg = (): SVGSVGElement & IZoomable => {
   return targetSvg as SVGSVGElement & IZoomable;
 };
 
-const simpleRedrawRenderers = ['default', 'choropleth', 'discontinuity', 'graticule', 'sphere', 'categorical-choropleth'];
+const simpleRedrawRenderers = ['default', 'choropleth', 'discontinuity', 'graticule', 'sphere', 'categoricalChoropleth'];
 
 /**
  * Redraw the paths of the SVG element
@@ -40,7 +40,7 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
       g.querySelectorAll('path').forEach((p) => {
         p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
       });
-    } else if (type === 'proportional-symbols') {
+    } else if (type === 'proportionalSymbols') {
       // Redraw the symbols (circles)
       g.querySelectorAll('circle').forEach((c) => {
         // eslint-disable-next-line no-underscore-dangle

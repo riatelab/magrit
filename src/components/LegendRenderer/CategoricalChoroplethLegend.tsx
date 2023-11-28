@@ -138,7 +138,8 @@ function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Eleme
 
   return <g
     ref={refElement}
-    class="legend categorical-choropleth"
+    class="legend categoricalChoropleth"
+    for={layer.id}
     transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
     onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
@@ -331,7 +332,8 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
 
   return <g
     ref={refElement}
-    class="legend categorical-choropleth"
+    class="legend categoricalChoropleth"
+    for={layer.id}
     transform={`translate(${legendParameters.position[0]}, ${legendParameters.position[1]})`}
     visibility={layer.visible && legendParameters.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {

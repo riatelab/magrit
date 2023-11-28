@@ -92,6 +92,7 @@ export default function legendLabels(
     <g
       ref={refElement}
       class="legend labels"
+      for={layer.id}
       transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
       visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
       onContextMenu={(e) => {

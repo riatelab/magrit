@@ -54,7 +54,7 @@ export default function proportionalSymbolsRenderer(
     <g
       ref={refElement}
       id={layerDescription.id}
-      class="layer proportional-symbols"
+      class="layer proportionalSymbols"
       visibility={layerDescription.visible ? undefined : 'hidden'}
       fill-opacity={layerDescription.fillOpacity}
       stroke={layerDescription.strokeColor}

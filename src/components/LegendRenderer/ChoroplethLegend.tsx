@@ -141,6 +141,7 @@ function verticalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
   return <g
     ref={refElement}
     class="legend choropleth"
+    for={layer.id}
     transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
     onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
@@ -191,7 +192,7 @@ function verticalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
           {
             (i) => <line
               x1={0}
-              x2={legendParameters.boxWidth + defaultSpacing / 2}
+              x2={legendParameters.boxWidth + (2 * defaultSpacing) / 3}
               y1={distanceToTop() + i * boxHeightAndSpacing()}
               y2={distanceToTop() + i * boxHeightAndSpacing()}
               stroke={legendParameters.labels.fontColor}
@@ -345,6 +346,7 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
   return <g
     ref={refElement}
     class="legend choropleth"
+    for={layer.id}
     transform={`translate(${legendParameters.position[0]}, ${legendParameters.position[1]})`}
     visibility={layer.visible && legendParameters.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {
@@ -400,7 +402,7 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
                 (i * (legendParameters.boxWidth + legendParameters.boxSpacing))
               }
               y1={distanceBoxesToTop()}
-              y2={distanceBoxesToTop() + legendParameters.boxHeight + defaultSpacing / 2}
+              y2={distanceBoxesToTop() + legendParameters.boxHeight + (2 * defaultSpacing) / 3}
               stroke={legendParameters.labels.fontColor}
               stroke-width={1}
             />

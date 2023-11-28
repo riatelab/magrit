@@ -124,6 +124,7 @@ function verticalDiscontinuityLegend(
   return <g
     ref={refElement}
     class="legend discontinuity"
+    for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {
@@ -238,6 +239,7 @@ function horizontalDiscontinuityLegend(
   return <g
     ref={refElement}
     class="legend discontinuity"
+    for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {

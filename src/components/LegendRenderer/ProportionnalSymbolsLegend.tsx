@@ -98,6 +98,7 @@ function stackedSquareLegend(
   return <g
     ref={refElement}
     class="legend proportionalSymbols"
+    for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {
@@ -239,6 +240,7 @@ function horizontalSquareLegend(
   return <g
     ref={refElement}
     class="legend proportionalSymbols"
+    for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {
@@ -368,6 +370,7 @@ function verticalSquareLegend(
   return <g
     ref={refElement}
     class="legend proportionalSymbols"
+    for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {
@@ -477,6 +480,7 @@ function stackedCircleLegend(
   return <g
     ref={refElement}
     class="legend proportionalSymbols"
+    for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {
@@ -596,6 +600,7 @@ function verticalCircleLegend(
   return <g
     ref={refElement}
     class="legend proportionalSymbols"
+    for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {
@@ -709,6 +714,7 @@ function horizontalCircleLegend(
   return <g
     ref={refElement}
     class="legend proportionalSymbols"
+    for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {

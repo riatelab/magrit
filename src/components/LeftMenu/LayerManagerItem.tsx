@@ -12,6 +12,7 @@ import {
   FaSolidTableCells,
 } from 'solid-icons/fa';
 import { FiType } from 'solid-icons/fi';
+import toast from 'solid-toast';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -22,7 +23,7 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/L
 import { setModalStore } from '../../store/ModalStore';
 import { setNiceAlertStore } from '../../store/NiceAlertStore';
 import { setTableWindowStore } from '../../store/TableWindowStore';
-import { fitExtent } from '../../store/MapStore';
+import { fitExtent, mapStore } from '../../store/MapStore';
 import { setFieldTypingModalStore } from '../../store/FieldTypingModalStore';
 
 // Other components / subcomponents
@@ -122,7 +123,7 @@ const onClickTyping = (id: string) => {
   });
 };
 
-const onClickLegend = (id: string) => {
+const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
   console.log('click legend on item ', id);
   // TODO: we want to handle various cases, mostly as in Magrit v1:
   //  - no legend for this kind of layer (the legend icon should not be displayed at all so
@@ -143,11 +144,7 @@ const onClickLegend = (id: string) => {
       focusOn: 'cancel',
     });
   } else {
-    // We just want to toggle the visibility of the legend
-    // TODO: here we should check that the legend is still within the visibility zone.
-    //  If it is no longer in the visibility zone (because the user has shrunk the map area),
-    //  he/she may click on this button to make a hidden legend reappear... (and we should
-    //  handle this case).
+    // Toggle the visibility of the legend
     setLayersDescriptionStore(
       'layers',
       (l: LayerDescription) => l.id === id,
@@ -155,6 +152,42 @@ const onClickLegend = (id: string) => {
       'visible',
       (v: boolean) => !v,
     );
+    // We check that the legend is still within the visibility zone.
+    // If it is no longer in the visibility zone (because the user has shrunk the map area),
+    // we replace it a the closer position within the visibility zone.
+    if (
+      ld.legend.visible
+      && (ld.legend.position[0] > mapStore.mapDimensions.width
+        || ld.legend.position[1] > mapStore.mapDimensions.height)
+    ) {
+      const legendNode = document.querySelector(`g.legend[for="${id}"]`) as SVGGElement;
+      const { width, height } = legendNode.getBBox();
+      const newPosition = [ld.legend.position[0], ld.legend.position[1]];
+      if (ld.legend.position[0] > mapStore.mapDimensions.width) {
+        newPosition[0] = mapStore.mapDimensions.width - width;
+      }
+      if (ld.legend.position[1] > mapStore.mapDimensions.height) {
+        newPosition[1] = mapStore.mapDimensions.height - height;
+      }
+      setLayersDescriptionStore(
+        'layers',
+        (l: LayerDescription) => l.id === id,
+        'legend',
+        'position',
+        newPosition,
+      );
+      toast.success(LL().LayerManager.LegendDisplacement(), {
+        duration: 5000,
+        style: {
+          background: '#1f2937',
+          color: '#f3f4f6',
+        },
+        iconTheme: {
+          primary: '#38bdf8',
+          secondary: '#1f2937',
+        },
+      });
+    }
   }
 };
 
@@ -180,6 +213,10 @@ export default function LayerManagerItem(props: { 'layer': LayerDescription }): 
             <div title={ LL().LayerManager.Legend() } style={{ cursor: 'pointer' }}>
               <i
                 class="fg-map-legend"
+                style={{
+                  color: props.layer.legend?.visible ? 'black' : 'grey',
+                  transform: props.layer.legend?.visible ? '' : 'rotate(3deg)',
+                }}
                 onClick={() => { onClickLegend(props.layer.id, LL); }}
               />
             </div>
