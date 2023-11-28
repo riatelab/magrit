@@ -151,6 +151,12 @@ type LayerDescriptionCategoricalPictogram = LayerDescription & {
   legend: null,
 };
 
+type LayerDescriptionSmoothedLayer = LayerDescription & {
+  renderer: RepresentationType.smoothed
+  rendererParameters: SmoothedLayerParameters,
+  legend: ChoroplethLegendParameters,
+};
+
 // export enum ProportionalSymbolsColorMode {
 //   singleColor = 'singleColor',
 //   twoColors = 'twoColors',
@@ -333,6 +339,17 @@ interface GriddedLayerParameters {
   cellSize: number,
 }
 
+interface SmoothedLayerParameters {
+  // The name of the variable used to compute the smoothed layer
+  variable: string,
+  // The smoothing method
+  method: SmoothingMethod,
+  // The smoothing parameters
+  smoothingParameters: StewartParameters | KdeParameters,
+  // The parameters of the grid used to compute the smoothed layer
+  gridParameters: GridParameters,
+}
+
 interface CategoricalPictogramParameters {
   // The name of the variable used to compute the pictogram
   variable: string,
@@ -350,6 +367,7 @@ export enum RepresentationType {
   proportionalSymbolsAndCategories = 'proportionalSymbolsAndCategories',
   proportionalSymbolsAndRatio = 'proportionalSymbolsAndRatio',
   discontinuity = 'discontinuity',
+  smoothed = 'smoothed',
   cartogram = 'cartogram',
   grid = 'grid',
   waffle = 'waffle',
@@ -363,6 +381,30 @@ export enum CartogramMethod {
   Dougenik = 'Dougenik',
   Olson = 'Olson',
   GastnerSeguyMore = 'GastnerSeguyMore',
+}
+
+export enum SmoothingMethod {
+  Stewart = 'Stewart',
+  Kde = 'Kde',
+}
+
+export interface KdeParameters {
+  bandwidth: number;
+  kernel: 'gaussian' | 'epanechnikov' | 'triangular' | 'uniform';
+}
+
+export interface GridParameters {
+  xMin: number;
+  xMax: number;
+  yMin: number;
+  yMax: number;
+  resolution: number
+}
+
+interface StewartParameters {
+  alpha: number;
+  beta: number;
+  span: number;
 }
 
 export enum GridCellShape {

@@ -38,7 +38,7 @@ const getDefaultRenderingParams = (geomType: string) => {
   if (geomType === 'point') {
     return {
       renderer: 'default',
-      strokeColor: '#9d9d9d',
+      strokeColor: '#212121',
       strokeWidth: 1,
       strokeOpacity: 1,
       fillColor: color,
@@ -61,7 +61,7 @@ const getDefaultRenderingParams = (geomType: string) => {
   if (geomType === 'polygon') {
     return {
       renderer: 'default',
-      strokeColor: '#9d9d9d',
+      strokeColor: '#212121',
       strokeWidth: 0.4,
       strokeOpacity: 1,
       fillColor: color,

@@ -16,6 +16,7 @@ import LabelsSettings from './PortrayalOption/LabelsSettings.tsx';
 import ProportionalSymbolsSettings from './PortrayalOption/ProportionalSymbolsSettings.tsx';
 import DiscontinuitySettings from './PortrayalOption/DiscontinuitySettings.tsx';
 import CategoricalChoroplethSettings from './PortrayalOption/CategoricalChoroplethSettings.tsx';
+import SmoothingSettings from './PortrayalOption/SmoothingSettings.tsx';
 
 // Types / Interfaces / Enums
 import { RepresentationType } from '../../global.d';
@@ -109,13 +110,19 @@ export default function PortrayalSection(): JSX.Element {
       <ul>
         <li
           onClick={ () => { setSelectedPortrayal(RepresentationType.choropleth); } }
-          classList={{ 'is-hidden': !availableVariables()?.hasRatio, selected: selectedPortrayal() === RepresentationType.choropleth }}
+          classList={{
+            'is-hidden': !availableVariables()?.hasRatio,
+            selected: selectedPortrayal() === RepresentationType.choropleth,
+          }}
         >
           { LL().PortrayalSection.PortrayalTypes.Choropleth() }
         </li>
         <li
           onClick={ () => { setSelectedPortrayal(RepresentationType.proportionalSymbols); } }
-          classList={{ 'is-hidden': !availableVariables()?.hasStock, selected: selectedPortrayal() === RepresentationType.proportionalSymbols }}
+          classList={{
+            'is-hidden': !availableVariables()?.hasStock,
+            selected: selectedPortrayal() === RepresentationType.proportionalSymbols,
+          }}
         >
           { LL().PortrayalSection.PortrayalTypes.ProportionalSymbols() }
         </li>
@@ -145,6 +152,15 @@ export default function PortrayalSection(): JSX.Element {
           }}
         >
           { LL().PortrayalSection.PortrayalTypes.Labels() }
+        </li>
+        <li
+          onClick={ () => { setSelectedPortrayal(RepresentationType.smoothed); } }
+          classList={{
+            'is-hidden': !layerAnyAvailableVariable(targetLayer() as string),
+            selected: selectedPortrayal() === RepresentationType.smoothed,
+          }}
+        >
+          { LL().PortrayalSection.PortrayalTypes.Smoothed() }
         </li>
       </ul>
       <Show when={
@@ -179,18 +195,8 @@ export default function PortrayalSection(): JSX.Element {
         <LabelsSettings layerId={ targetLayer() as string } />
       </Show>
 
-      <Show when={ selectedPortrayal() === 'foo' }>
-        <div class="portrayal-section__portrayal-options-choropleth">
-          <div>
-            Foooo
-          </div>
-          <div>
-            Fooo
-          </div>
-          <div>
-            { targetLayer() }
-          </div>
-        </div>
+      <Show when={ selectedPortrayal() === RepresentationType.smoothed }>
+        <SmoothingSettings layerId={ targetLayer() as string } />
       </Show>
     </div>
   </div>;

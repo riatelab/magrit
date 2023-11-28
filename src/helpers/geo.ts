@@ -26,6 +26,7 @@ import {
 
 // Stores
 import { globalStore } from '../store/GlobalStore';
+import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 
 // Types / Interfaces / Enums
 import {
@@ -34,7 +35,6 @@ import {
   type GeoJSONGeometry,
   ProportionalSymbolsSymbolType,
 } from '../global.d';
-import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 
 export const getLargestPolygon = (geom: GeoJSONGeometry) => {
   const areas = [];
@@ -105,6 +105,50 @@ export const coordsPointOnFeature = (geom: GeoJSONGeometry) => {
     return nearestPoint(centroid, vertices as never).geometry.coordinates;
   }
   return null;
+};
+
+export const makeCentroidLayer = (
+  layer: GeoJSONFeatureCollection,
+  type: 'point' | 'linestring' | 'polygon',
+  fields?: string[],
+): GeoJSONFeatureCollection => {
+  // Copy the dataset
+  const newData = JSON.parse(JSON.stringify(layer)) as GeoJSONFeatureCollection;
+
+  // Compute the centroid of each feature
+  if (type !== 'point') {
+    newData.features.forEach((feature) => {
+      // eslint-disable-next-line no-param-reassign
+      feature.geometry = {
+        type: 'Point',
+        coordinates: coordsPointOnFeature(feature.geometry),
+      };
+
+      if (fields) {
+        const o = {};
+        fields.forEach((field) => {
+          // eslint-disable-next-line no-param-reassign
+          o[field] = feature.properties[field];
+        });
+        feature.properties = o; // eslint-disable-line no-param-reassign
+      }
+    });
+  }
+
+  // Only keep the requested fields if a list of fields is provided
+  // (otherwise keep all fields)
+  if (fields) {
+    newData.features.forEach((feature) => {
+      const o = {};
+      fields.forEach((field) => {
+        // eslint-disable-next-line no-param-reassign
+        o[field] = feature.properties[field];
+      });
+      feature.properties = o; // eslint-disable-line no-param-reassign
+    });
+  }
+
+  return newData;
 };
 
 export class PropSizer {

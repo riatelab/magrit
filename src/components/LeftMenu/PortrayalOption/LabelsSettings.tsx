@@ -14,7 +14,7 @@ import { applicationSettingsStore } from '../../../store/ApplicationSettingsStor
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { findSuitableName } from '../../../helpers/common';
-import { coordsPointOnFeature } from '../../../helpers/geo';
+import { coordsPointOnFeature, makeCentroidLayer } from '../../../helpers/geo';
 import { generateIdLayer } from '../../../helpers/layers';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
@@ -45,24 +45,12 @@ function onClickValidate(
     throw new Error('Unexpected Error: Reference layer not found');
   }
 
-  // Copy the data of the reference layer
-  const newData = JSON.parse(
-    JSON.stringify(
-      referenceLayerDescription.data,
-    ),
-  ) as GeoJSONFeatureCollection;
-
-  // As we want to position labels on the features of the reference layer,
-  // we need to convert the features of the reference layer to points
-  if (referenceLayerDescription.type !== 'point') {
-    newData.features.forEach((feature) => {
-      // eslint-disable-next-line no-param-reassign
-      feature.geometry = {
-        type: 'Point',
-        coordinates: coordsPointOnFeature(feature.geometry),
-      };
-    });
-  }
+  // Convert the layer to a point layer (if it is not already a point layer)
+  // in order to be able to position and display labels
+  const newData = makeCentroidLayer(
+    referenceLayerDescription.data,
+    referenceLayerDescription.type as 'point' | 'linestring' | 'polygon',
+  );
 
   // Store the original position of the features (we will need it
   // later if the user wants to change the position of the

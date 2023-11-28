@@ -562,6 +562,10 @@ type RootTranslation = {
 			 */
 			Categorical: string
 			/**
+			 * S​m​o​o​t​h​e​d​ ​m​a​p
+			 */
+			Smoothed: string
+			/**
 			 * N​o​ ​p​o​r​t​r​a​y​a​l​ ​f​o​r​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​l​a​y​e​r​ ​-​ ​P​l​e​a​s​e​ ​v​e​r​i​f​y​ ​t​h​e​ ​t​y​p​i​n​g​ ​o​f​ ​t​h​e​ ​f​i​e​l​d​s​ ​o​r​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​l​a​y​e​r
 			 */
 			NoPortrayal: string
@@ -687,6 +691,64 @@ type RootTranslation = {
 			 * T​h​r​e​s​h​o​l​d​ ​o​f​ ​d​i​s​c​o​n​t​i​n​u​i​t​y​ ​t​o​ ​d​i​s​p​l​a​y
 			 */
 			DiscontinuityThreshold: string
+		}
+		SmoothingOptions: {
+			/**
+			 * S​m​o​o​t​h​i​n​g​ ​t​y​p​e
+			 */
+			Type: string
+			/**
+			 * S​t​e​w​a​r​t​'​s​ ​p​o​t​e​n​t​i​a​l
+			 */
+			Stewart: string
+			/**
+			 * K​e​r​n​e​l​ ​d​e​n​s​i​t​y​ ​e​s​t​i​m​a​t​i​o​n
+			 */
+			KDE: string
+			/**
+			 * B​a​n​d​w​i​d​t​h
+			 */
+			Bandwidth: string
+			/**
+			 * K​e​r​n​e​l​ ​t​y​p​e
+			 */
+			KernelType: string
+			/**
+			 * P​a​r​e​t​o
+			 */
+			Pareto: string
+			/**
+			 * G​a​u​s​s​i​a​n
+			 */
+			Gaussian: string
+			/**
+			 * E​p​a​n​e​c​h​n​i​k​o​v
+			 */
+			Epanechnikov: string
+			/**
+			 * Q​u​a​r​t​i​c
+			 */
+			Quartic: string
+			/**
+			 * T​r​i​a​n​g​u​l​a​r
+			 */
+			Triangular: string
+			/**
+			 * U​n​i​f​o​r​m
+			 */
+			Uniform: string
+			/**
+			 * S​p​a​n
+			 */
+			Span: string
+			/**
+			 * A​l​p​h​a
+			 */
+			Alpha: string
+			/**
+			 * B​e​t​a
+			 */
+			Beta: string
 		}
 	}
 	ExportSection: {
@@ -1995,6 +2057,10 @@ export type TranslationFunctions = {
 			 */
 			Categorical: () => LocalizedString
 			/**
+			 * Smoothed map
+			 */
+			Smoothed: () => LocalizedString
+			/**
 			 * No portrayal for the selected layer - Please verify the typing of the fields or select another layer
 			 */
 			NoPortrayal: () => LocalizedString
@@ -2120,6 +2186,64 @@ export type TranslationFunctions = {
 			 * Threshold of discontinuity to display
 			 */
 			DiscontinuityThreshold: () => LocalizedString
+		}
+		SmoothingOptions: {
+			/**
+			 * Smoothing type
+			 */
+			Type: () => LocalizedString
+			/**
+			 * Stewart's potential
+			 */
+			Stewart: () => LocalizedString
+			/**
+			 * Kernel density estimation
+			 */
+			KDE: () => LocalizedString
+			/**
+			 * Bandwidth
+			 */
+			Bandwidth: () => LocalizedString
+			/**
+			 * Kernel type
+			 */
+			KernelType: () => LocalizedString
+			/**
+			 * Pareto
+			 */
+			Pareto: () => LocalizedString
+			/**
+			 * Gaussian
+			 */
+			Gaussian: () => LocalizedString
+			/**
+			 * Epanechnikov
+			 */
+			Epanechnikov: () => LocalizedString
+			/**
+			 * Quartic
+			 */
+			Quartic: () => LocalizedString
+			/**
+			 * Triangular
+			 */
+			Triangular: () => LocalizedString
+			/**
+			 * Uniform
+			 */
+			Uniform: () => LocalizedString
+			/**
+			 * Span
+			 */
+			Span: () => LocalizedString
+			/**
+			 * Alpha
+			 */
+			Alpha: () => LocalizedString
+			/**
+			 * Beta
+			 */
+			Beta: () => LocalizedString
 		}
 	}
 	ExportSection: {

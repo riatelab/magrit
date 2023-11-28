@@ -22,6 +22,8 @@ export enum ResizeBehavior {
 type ApplicationSettingsStoreType = {
   // The default color scheme for the Choropleth representation
   defaultColorScheme: string,
+  // The default "no data" color for the Choropleth representation
+  defaultNoDataColor: string,
   // The default behavior when zooming
   // (either redraw the paths or apply a transform to the SVG)
   zoomBehavior: ZoomBehavior,
@@ -64,6 +66,7 @@ const [
   setApplicationSettingsStore,
 ] = createStore({
   defaultColorScheme: 'YlOrRd',
+  defaultNoDataColor: '#ffffff',
   zoomBehavior: ZoomBehavior.Redraw,
   resizeBehavior: ResizeBehavior.ShrinkGrow,
   headerHeight: +computedStyle.getPropertyValue('--header-height').replace('px', ''),

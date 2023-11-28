@@ -38,7 +38,7 @@ import imgJenks from '../../../assets/jenks.png';
 import imgMoreOption from '../../../assets/buttons2.svg';
 
 // Types
-import { PortrayalSettingsProps } from './common';
+import type { PortrayalSettingsProps } from './common';
 import {
   type ChoroplethLegendParameters,
   type ClassificationParameters,
@@ -52,7 +52,8 @@ import {
 
 // eslint-disable-next-line prefer-destructuring
 const defaultColorScheme = applicationSettingsStore.defaultColorScheme;
-const defaultNoDataColor = '#ffffff';
+// eslint-disable-next-line prefer-destructuring
+const defaultNoDataColor = applicationSettingsStore.defaultNoDataColor;
 
 function onClickValidate(
   referenceLayerId: string,
