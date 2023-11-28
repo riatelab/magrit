@@ -151,6 +151,7 @@ const en = {
     Settings: 'Settings',
     Typing: 'Fields typing',
     Legend: 'Display / hide legend',
+    LegendDisplacement: 'The position of the legend has been changed to reposition it in the map display area.',
   },
   PortrayalSection: {
     PortrayalTypes: {
@@ -272,6 +273,19 @@ const en = {
       concatenate: 'Concatenate',
       truncate: 'Truncate',
       compute: 'Compute',
+      sampleOutput: 'Sample output',
+      errorParsingFormula: 'Error while parsing the formula',
+      errorEmptyResult: 'Error - empty result',
+      noteSpecialCharacters: 'Note that column names containing special characters or spaces must be enclosed in backticks or in brackets.',
+      '/': 'Division',
+      '+': 'Addition',
+      '-': 'Subtraction',
+      '*': 'Multiplication',
+      'POWER()': 'Power operator',
+      'CONCAT()': 'Concatenate 2 or more strings',
+      'SUBSTRING()': 'Extract a substring',
+      specialFieldLength: 'Special field - The length of the dataset (number of features)',
+      specialFieldArea: 'Special field - The area of the feature (only for polygon layers - in the current projection of the layer)',
     },
   },
   FieldsTyping: {

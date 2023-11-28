@@ -8,7 +8,7 @@
 
 div[col-id][role="columnheader"],
 div[col-id][role="gridcell"] {
-    transition : background-color 1s cubic-bezier(0.06, 0.72, 0.96, 0.14);
+    transition : background-color 1s linear;
 }
 
 div.ag-new-cell-highlight[col-id][role="columnheader"],

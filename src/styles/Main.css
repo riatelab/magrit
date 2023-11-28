@@ -45,3 +45,7 @@ input[type=checkbox], input[type=radio] {
 .modal-card-foot, .modal-card-head {
   padding: 1em !important;
 }
+
+.is-cursor-pointer {
+  cursor: pointer;
+}

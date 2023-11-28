@@ -66,6 +66,8 @@ function NewFieldPanel(
 ): JSX.Element {
   const { LL } = useI18nContext();
 
+  // Reference to the input field for the formula
+  let refInputFormula: HTMLInputElement;
   // Signals for the new column form
   const [
     newColumnName,
@@ -122,7 +124,7 @@ function NewFieldPanel(
     && newColumnType() !== VariableType.unknown
     && currentFormula() !== ''
     && sampleOutputExpert() !== ''
-    && !sampleOutputExpert().startsWith('Error'));
+    && !sampleOutputExpert().startsWith('Err'));
 
   const onClickComputeSimple = () => {
     const variableName = newColumnName();
@@ -294,10 +296,10 @@ function NewFieldPanel(
               value={ selectedFieldLeft() }
               style={{ width: '100%' }}
             >
-              <For each={props.layer.fields}>
+              <For each={props.columnDefs()}>
                 {
                   (field) => (
-                    <option value={ field.name }>{ field.name }</option>)
+                    <option value={ field.field }>{ field.field }</option>)
                 }
               </For>
             </select>
@@ -319,10 +321,10 @@ function NewFieldPanel(
                 onChange={ (e) => { setSelectedFieldRight(e.target.value); } }
                 value={ selectedFieldRight() }
               >
-                <For each={props.layer.fields}>
+                <For each={props.columnDefs()}>
                   {
                     (field) => (
-                      <option value={ field.name }>{ field.name }</option>)
+                      <option value={ field.field }>{ field.field }</option>)
                   }
                 </For>
               </select>
@@ -382,12 +384,104 @@ function NewFieldPanel(
         </div>
       </div>
       <div class="field-block">
-        <label class="label">{ 'Formula' }</label>
+        <label class="label">{ LL().DataTable.NewColumnModal.formula() }</label>
+        <div class="control is-flex">
+          <div class="is-flex" style={{ width: '50%', 'column-gap': '0.3em' }}>
+            <For each={props.columnDefs()}>
+              {
+                (field) => (
+                  <span
+                    class="tag is-warning is-cursor-pointer"
+                    title={
+                      /[àâäéèêëîïôöùûüç ]/i.test(field.field)
+                        ? `${field.field} - ${LL().DataTable.NewColumnModal.noteSpecialCharacters()}`
+                        : field.field
+                    }
+                    onClick={() => {
+                      let fieldValue = field.field;
+                      if (
+                        fieldValue.includes(' ')
+                        || /[àâäéèêëîïôöùûüç]/i.test(fieldValue)
+                      ) {
+                        fieldValue = `[${fieldValue}]`;
+                      }
+                      if (currentFormula() === '') {
+                        setCurrentFormula(fieldValue);
+                      } else {
+                        setCurrentFormula(`${currentFormula()} ${fieldValue}`);
+                      }
+                      refInputFormula.focus();
+                    }}
+                  >{ field.field }</span>
+                )
+              }
+            </For>
+            <For each={['$Length', '$Area']}>
+              {
+                (specialField) => (
+                  <span
+                    class="tag is-success is-cursor-pointer"
+                    title={ LL().DataTable.NewColumnModal[specialField.replace('$', 'specialField')]() }
+                    onClick={() => {
+                      if (currentFormula() === '') {
+                        setCurrentFormula(specialField);
+                      } else {
+                        setCurrentFormula(`${currentFormula()} ${specialField}`);
+                      }
+                      refInputFormula.focus();
+                    }}
+                  >{ specialField }</span>
+                )
+              }
+            </For>
+          </div>
+          <div class="is-flex" style={{ width: '50%', 'flex-flow': 'row-reverse', 'column-gap': '0.3em' }}>
+            <For each={['POWER()', 'SUBSTRING()', 'CONCAT()']}>
+              {
+                (func) => (
+                  <span
+                    class="tag is-info is-cursor-pointer"
+                    title={ LL().DataTable.NewColumnModal[func]() }
+                    onClick={() => {
+                      if (currentFormula() === '') {
+                        setCurrentFormula(func);
+                      } else {
+                        setCurrentFormula(`${currentFormula()} ${func.slice(0, -1)}`);
+                      }
+                      refInputFormula.focus();
+                    }}
+                  >{ func }</span>
+                )
+              }
+            </For>
+            <For each={['*', '+', '-', '/']}>
+              {
+                (op) => (
+                  <span
+                    class="tag is-link is-cursor-pointer"
+                    title={ LL().DataTable.NewColumnModal[op]() }
+                    onClick={() => {
+                      if (currentFormula() === '') {
+                        setCurrentFormula(op);
+                      } else {
+                        setCurrentFormula(`${currentFormula()} ${op}`);
+                      }
+                      refInputFormula.focus();
+                    }}
+                  >{ op }</span>
+                )
+              }
+            </For>
+          </div>
+        </div>
+        <br />
         <div class="control" style={{ width: '80%', display: 'inline-block' }}>
           <input
+            ref={(el) => { refInputFormula = el; }}
             class="input"
             id="formula"
             type="text"
+            value={currentFormula()}
             onKeyUp={ (e) => {
               setCurrentFormula(e.target.value);
             } }
@@ -405,7 +499,7 @@ function NewFieldPanel(
               try {
                 const newColumn = alasql(query, [props.rowData().slice(0, 3)]);
                 if (newColumn[0].newValue === undefined) {
-                  setSampleOutputExpert('Error - Empty result');
+                  setSampleOutputExpert(LL().DataTable.NewColumnModal.errorEmptyResult());
                   // TODO: we may try to parse the query here (as it is syntactically correct
                   //   since no error was thrown by alasql)
                   //   and detect why the output is empty (e.g. a column name is wrong, etc.)
@@ -415,14 +509,14 @@ function NewFieldPanel(
                   );
                 }
               } catch (e) {
-                setSampleOutputExpert('Error while parsing formula');
+                setSampleOutputExpert(LL().DataTable.NewColumnModal.errorParsingFormula());
               }
             }}
           >{ 'Preview' }</button>
         </div>
         <div class="control" style={{ display: 'flex' }}>
           <div style={{ display: 'flex', 'align-items': 'center', width: '15%' }}>
-            <label class="label">{ 'Sample output' }</label>
+            <label class="label">{ LL().DataTable.NewColumnModal.sampleOutput() }</label>
           </div>
           <pre
             style={{ width: '100%' }}
@@ -615,12 +709,6 @@ export default function TableWindow(): JSX.Element {
       `${layerName}.csv`,
     );
   };
-
-  onMount(() => {
-    setTimeout(() => {
-      console.log('aaa', agGridRef);
-    }, 1);
-  });
 
   return <div class="table-window modal" style={{ display: 'flex' }}>
     <div class="modal-background" />

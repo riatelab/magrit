@@ -151,6 +151,7 @@ const fr = {
     Settings: 'Paramètres',
     Typing: 'Typage des champs',
     Legend: 'Afficher / masquer la légende',
+    LegendDisplacement: 'La position de la légende a été modifiée afin de la repositionner dans la zone d\'affichage de la carte.',
   },
   PortrayalSection: {
     PortrayalTypes: {
@@ -272,6 +273,19 @@ const fr = {
       concatenate: 'Concaténer',
       truncate: 'Tronquer',
       compute: 'Calculer',
+      sampleOutput: 'Exemple de résultat',
+      errorParsingFormula: 'Erreur lors de l\'analyse de la formule',
+      errorEmptyResult: 'Erreur - résultat vide',
+      noteSpecialCharacters: 'Notez que les noms de champs contenant des caractères spéciaux ou des espaces doivent être entourés de backticks ou de crochets.',
+      '/': 'Division',
+      '*': 'Multiplication',
+      '-': 'Soustraction',
+      '+': 'Addition',
+      'POWER()': 'Puissance',
+      'CONCAT()': 'Concaténation',
+      'SUBSTRING()': 'Extraction d\'une sous-chaîne de caractères',
+      specialFieldLength: 'Champ spécial - La taille du jeu de données (nombre d\'entités)',
+      specialFieldArea: 'Champ spécial - L\'aire de l\'entité (seulement pour les polygones - dans la projection actuelle de la couche)',
     },
   },
   FieldsTyping: {

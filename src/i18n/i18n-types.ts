@@ -534,6 +534,10 @@ type RootTranslation = {
 		 * D​i​s​p​l​a​y​ ​/​ ​h​i​d​e​ ​l​e​g​e​n​d
 		 */
 		Legend: string
+		/**
+		 * T​h​e​ ​p​o​s​i​t​i​o​n​ ​o​f​ ​t​h​e​ ​l​e​g​e​n​d​ ​h​a​s​ ​b​e​e​n​ ​c​h​a​n​g​e​d​ ​t​o​ ​r​e​p​o​s​i​t​i​o​n​ ​i​t​ ​i​n​ ​t​h​e​ ​m​a​p​ ​d​i​s​p​l​a​y​ ​a​r​e​a​.
+		 */
+		LegendDisplacement: string
 	}
 	PortrayalSection: {
 		PortrayalTypes: {
@@ -949,6 +953,58 @@ type RootTranslation = {
 			 * C​o​m​p​u​t​e
 			 */
 			compute: string
+			/**
+			 * S​a​m​p​l​e​ ​o​u​t​p​u​t
+			 */
+			sampleOutput: string
+			/**
+			 * E​r​r​o​r​ ​w​h​i​l​e​ ​p​a​r​s​i​n​g​ ​t​h​e​ ​f​o​r​m​u​l​a
+			 */
+			errorParsingFormula: string
+			/**
+			 * E​r​r​o​r​ ​-​ ​e​m​p​t​y​ ​r​e​s​u​l​t
+			 */
+			errorEmptyResult: string
+			/**
+			 * N​o​t​e​ ​t​h​a​t​ ​c​o​l​u​m​n​ ​n​a​m​e​s​ ​c​o​n​t​a​i​n​i​n​g​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r​s​ ​o​r​ ​s​p​a​c​e​s​ ​m​u​s​t​ ​b​e​ ​e​n​c​l​o​s​e​d​ ​i​n​ ​b​a​c​k​t​i​c​k​s​ ​o​r​ ​i​n​ ​b​r​a​c​k​e​t​s​.
+			 */
+			noteSpecialCharacters: string
+			/**
+			 * D​i​v​i​s​i​o​n
+			 */
+			'/': string
+			/**
+			 * A​d​d​i​t​i​o​n
+			 */
+			'+': string
+			/**
+			 * S​u​b​t​r​a​c​t​i​o​n
+			 */
+			'-': string
+			/**
+			 * M​u​l​t​i​p​l​i​c​a​t​i​o​n
+			 */
+			'*': string
+			/**
+			 * P​o​w​e​r​ ​o​p​e​r​a​t​o​r
+			 */
+			'POWER()': string
+			/**
+			 * C​o​n​c​a​t​e​n​a​t​e​ ​2​ ​o​r​ ​m​o​r​e​ ​s​t​r​i​n​g​s
+			 */
+			'CONCAT()': string
+			/**
+			 * E​x​t​r​a​c​t​ ​a​ ​s​u​b​s​t​r​i​n​g
+			 */
+			'SUBSTRING()': string
+			/**
+			 * S​p​e​c​i​a​l​ ​f​i​e​l​d​ ​-​ ​T​h​e​ ​l​e​n​g​t​h​ ​o​f​ ​t​h​e​ ​d​a​t​a​s​e​t​ ​(​n​u​m​b​e​r​ ​o​f​ ​f​e​a​t​u​r​e​s​)
+			 */
+			specialFieldLength: string
+			/**
+			 * S​p​e​c​i​a​l​ ​f​i​e​l​d​ ​-​ ​T​h​e​ ​a​r​e​a​ ​o​f​ ​t​h​e​ ​f​e​a​t​u​r​e​ ​(​o​n​l​y​ ​f​o​r​ ​p​o​l​y​g​o​n​ ​l​a​y​e​r​s​ ​-​ ​i​n​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​p​r​o​j​e​c​t​i​o​n​ ​o​f​ ​t​h​e​ ​l​a​y​e​r​)
+			 */
+			specialFieldArea: string
 		}
 	}
 	FieldsTyping: {
@@ -1911,6 +1967,10 @@ export type TranslationFunctions = {
 		 * Display / hide legend
 		 */
 		Legend: () => LocalizedString
+		/**
+		 * The position of the legend has been changed to reposition it in the map display area.
+		 */
+		LegendDisplacement: () => LocalizedString
 	}
 	PortrayalSection: {
 		PortrayalTypes: {
@@ -2326,6 +2386,58 @@ export type TranslationFunctions = {
 			 * Compute
 			 */
 			compute: () => LocalizedString
+			/**
+			 * Sample output
+			 */
+			sampleOutput: () => LocalizedString
+			/**
+			 * Error while parsing the formula
+			 */
+			errorParsingFormula: () => LocalizedString
+			/**
+			 * Error - empty result
+			 */
+			errorEmptyResult: () => LocalizedString
+			/**
+			 * Note that column names containing special characters or spaces must be enclosed in backticks or in brackets.
+			 */
+			noteSpecialCharacters: () => LocalizedString
+			/**
+			 * Division
+			 */
+			'/': () => LocalizedString
+			/**
+			 * Addition
+			 */
+			'+': () => LocalizedString
+			/**
+			 * Subtraction
+			 */
+			'-': () => LocalizedString
+			/**
+			 * Multiplication
+			 */
+			'*': () => LocalizedString
+			/**
+			 * Power operator
+			 */
+			'POWER()': () => LocalizedString
+			/**
+			 * Concatenate 2 or more strings
+			 */
+			'CONCAT()': () => LocalizedString
+			/**
+			 * Extract a substring
+			 */
+			'SUBSTRING()': () => LocalizedString
+			/**
+			 * Special field - The length of the dataset (number of features)
+			 */
+			specialFieldLength: () => LocalizedString
+			/**
+			 * Special field - The area of the feature (only for polygon layers - in the current projection of the layer)
+			 */
+			specialFieldArea: () => LocalizedString
 		}
 	}
 	FieldsTyping: {
