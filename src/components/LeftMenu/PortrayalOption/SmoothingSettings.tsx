@@ -8,7 +8,7 @@ import {
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
-
+import { bbox } from '@turf/turf';
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 
@@ -17,6 +17,8 @@ import { useI18nContext } from '../../../i18n/i18n-solid';
 import { findSuitableName } from '../../../helpers/common';
 import { generateIdLayer } from '../../../helpers/layers';
 import { VariableType } from '../../../helpers/typeDetection';
+import { computeStewart } from '../../../helpers/smoothing';
+import { Mpow } from '../../../helpers/math';
 
 // Subcomponents
 import InputResultName from './InputResultName.tsx';
@@ -25,11 +27,15 @@ import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
-  type LayerDescriptionSmoothedLayer, SmoothedLayerParameters,
+  GridParameters,
+  type LayerDescriptionSmoothedLayer,
+  RepresentationType,
+  SmoothedLayerParameters,
   SmoothingMethod,
+  StewartParameters,
 } from '../../../global.d';
 
-function onClickValidate(
+async function onClickValidate(
   referenceLayerId: string,
   newName: string,
   targetVariable: string,
@@ -41,6 +47,32 @@ function onClickValidate(
     throw new Error('Unexpected Error: Reference layer not found');
   }
 
+  const bboxLayer = bbox(referenceLayerDescription.data);
+
+  const stewartParams = {
+    beta: 2,
+    alpha: 0.6931471805 / Mpow(2, 2),
+    span: 2,
+  } as StewartParameters;
+
+  const gridParams = {
+    xMin: bboxLayer[0],
+    yMin: bboxLayer[1],
+    xMax: bboxLayer[2],
+    yMax: bboxLayer[3],
+    resolution: 1,
+  } as GridParameters;
+
+  const newData = await computeStewart(
+    referenceLayerDescription.data,
+    referenceLayerDescription.type as 'point' | 'polygon',
+    targetVariable,
+    gridParams,
+    stewartParams,
+  );
+
+  console.log(newData);
+
   const rendererParameters = {
 
   } as SmoothedLayerParameters;
@@ -48,6 +80,20 @@ function onClickValidate(
   const newLayerDescription = {
     id: generateIdLayer(),
     name: newName,
+    type: 'polygon',
+    renderer: 'default' as RepresentationType,
+    data: newData,
+    fields: [],
+    visible: true,
+    strokeColor: '#000000',
+    strokeWidth: 1,
+    strokeOpacity: 1,
+    fillColor: '#abcdef',
+    fillOpacity: 1,
+    dropShadow: false,
+    blurFilter: false,
+    shapeRendering: 'crispEdges',
+    legend: null,
     rendererParameters,
   } as LayerDescriptionSmoothedLayer;
 
@@ -88,12 +134,12 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     setNewLayerName,
   ] = createSignal(`Smoothed_${layerDescription().name}`);
 
-  const makePortrayal = () => {
+  const makePortrayal = async () => {
     const layerName = findSuitableName(
       newLayerName() || LL().PortrayalSection.NewLayer(),
       layersDescriptionStore.layers.map((l) => l.name),
     );
-    onClickValidate(
+    await onClickValidate(
       props.layerId,
       layerName,
       targetVariable(),

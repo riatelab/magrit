@@ -2,9 +2,12 @@
 import { GPU } from 'gpu.js';
 import { pointGrid } from '@turf/turf';
 import type { BBox } from '@turf/turf';
+import { isobands } from 'contour-wasm';
+import { quantile } from 'statsbreaks';
 
 // Helpers
 import { makeCentroidLayer } from './geo';
+import { intersection } from './geos';
 
 // Types
 import type {
@@ -34,6 +37,35 @@ function makePointGrid(
     bb[3] += offsetY;
   }
   return pointGrid(bb as BBox, gridParameters.resolution) as GeoJSONFeatureCollection;
+}
+
+function makeContourLayer(
+  grid: GeoJSONFeatureCollection,
+  thresholds: number[],
+): GeoJSONFeatureCollection {
+  const xCoords = new Set(grid.features.map((d) => d.geometry.coordinates[0]));
+  const yCoords = new Set(grid.features.map((d) => d.geometry.coordinates[1]));
+  const width = xCoords.size;
+  const height = yCoords.size;
+  const values = new Float64Array(
+    grid.features.map((d) => d.properties.z) as number[],
+  );
+  const options = {
+    x_origin: Math.min(...xCoords),
+    y_origin: Math.min(...yCoords),
+    x_step: grid.features[width].geometry.coordinates[0] - grid.features[0].geometry.coordinates[0],
+    y_step: grid.features[1].geometry.coordinates[1] - grid.features[0].geometry.coordinates[1],
+  };
+
+  const intervals = new Float64Array(thresholds);
+  const contours = isobands(
+    values,
+    width,
+    height,
+    intervals,
+    options,
+  );
+  return contours;
 }
 
 function haversineDistance(lon1: number, lat1: number, lon2: number, lat2: number): number {
@@ -104,13 +136,13 @@ function computeKdeInner(
   return value / vs;
 }
 
-export function computeStewart(
+export async function computeStewart(
   data: GeoJSONFeatureCollection,
   inputType: 'point' | 'polygon',
   variableName: string,
   gridParameters: GridParameters,
   stewartParameters: StewartParameters,
-): GeoJSONFeatureCollection {
+): Promise<GeoJSONFeatureCollection> {
   // Make a suitable grid of points
   const grid = makePointGrid(gridParameters, false);
 
@@ -174,12 +206,16 @@ export function computeStewart(
 
   // Add the potential values to the grid
   grid.features.forEach((cell, i) => {
-    cell.properties.pot = pots[i]; // eslint-disable-line no-param-reassign
+    cell.properties.z = pots[i]; // eslint-disable-line no-param-reassign
   });
 
-  // TODO: we want to return the contours built from the grid (possibly clipped by the reference layer),
-  //  not the grid
-  return grid;
+  const thresholds = quantile(Array.from(pots), { nb: 7 });
+
+  const contours = makeContourLayer(grid, thresholds);
+
+  // const clippedContours = await intersection(contours, data);
+
+  return contours;
 }
 
 const computeNormalizer = (values: number[]): number => {
@@ -317,13 +353,14 @@ export function computeKde(
       },
     );
 
-  const values = kernel(xCells, yCells, xDots, yDots, values) as Float32Array;
+  const resultValues = kernel(xCells, yCells, xDots, yDots, values) as Float32Array;
 
   grid.features.forEach((cell, i) => {
     cell.properties.z = values[i]; // eslint-disable-line no-param-reassign
   });
 
-  // TODO: we want to return the contours built from the grid (possibly clipped by the reference layer),
+  // TODO: we want to return the contours built from the grid
+  //  (possibly clipped by the reference layer),
   //  not the grid
   return grid;
 }

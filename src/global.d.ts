@@ -1,6 +1,7 @@
 // declare global {
 // import { WebR } from '@r-wasm/webr/webr-main';
 import type { Gdal } from 'gdal3.js/src/index.d';
+// import type geos from 'geos-wasm';
 import type { Palette } from 'dicopal/dist/index.d';
 import type { Dexie } from 'dexie';
 import type { Variable } from './helpers/typeDetection';
@@ -12,6 +13,7 @@ declare namespace globalThis {
   let db: typeof Dexie & { projects: Dexie.Table<any, number> };
   // WebR instance
   // let webR: WebR;
+  let geos: nevernpm ;
 }
 
 // The description of a layer
@@ -398,7 +400,7 @@ export interface GridParameters {
   xMax: number;
   yMin: number;
   yMax: number;
-  resolution: number
+  resolution: number;
 }
 
 interface StewartParameters {
