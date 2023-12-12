@@ -2,7 +2,7 @@
 import { topology } from 'topojson-server';
 
 // Stores
-import { getDefaultClipExtent, mapStore } from '../store/MapStore';
+import { getDefaultClipExtent } from '../store/MapStore';
 import { globalStore } from '../store/GlobalStore';
 
 // Helpers
@@ -11,7 +11,7 @@ import { convertFromGeoJSON } from './formatConversion';
 
 // Types / Interfaces
 import { getTargetSvg, redrawPaths } from './svg';
-import type { GeoJSONFeatureCollection } from '../global.d';
+import type { GeoJSONFeatureCollection } from '../global';
 
 /**
  * Get the dimensions of the SVG map element.

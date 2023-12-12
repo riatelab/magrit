@@ -14,7 +14,7 @@ import { applicationSettingsStore } from '../../../store/ApplicationSettingsStor
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { findSuitableName } from '../../../helpers/common';
-import { coordsPointOnFeature, makeCentroidLayer } from '../../../helpers/geo';
+import { makeCentroidLayer } from '../../../helpers/geo';
 import { generateIdLayer } from '../../../helpers/layers';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
@@ -24,10 +24,9 @@ import InputResultName from './InputResultName.tsx';
 
 // Types / Interfaces / Enums
 import {
-  GeoJSONFeatureCollection,
-  LabelsLegendParameters,
-  LabelsParameters,
-  LegendTextElement,
+  type LabelsLegendParameters,
+  type LabelsParameters,
+  type LegendTextElement,
   LegendType,
   RepresentationType,
 } from '../../../global.d';

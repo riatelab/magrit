@@ -164,7 +164,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
     onClickValidate(
       props.layerId,
       targetVariable(),
-      newLayerName(),
+      layerName,
     );
   };
 

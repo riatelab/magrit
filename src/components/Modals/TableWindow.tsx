@@ -23,7 +23,6 @@ import { unproxify } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
 import { clickLinkFromDataUrl } from '../../helpers/exports';
 import {
-  DataType,
   detectTypeField,
   type Variable,
   VariableType,

@@ -29,9 +29,9 @@ import {
 
 // Import some type descriptions
 import {
-  ChoroplethLegendParameters,
+  type ChoroplethLegendParameters,
   type ClassificationParameters,
-  type LayerDescription, LayerDescriptionChoropleth,
+  type LayerDescriptionChoropleth,
   Orientation,
 } from '../../global.d';
 
@@ -144,7 +144,7 @@ function verticalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
     for={layer.id}
     transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
     visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
-    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
     onContextMenu={(e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -354,7 +354,7 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
       e.stopPropagation();
       triggerContextMenuLegend(e, layer.id, LL);
     } }
-    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
     style={{ cursor: 'grab' }}
   >
     <RectangleBox backgroundRect={legendParameters.backgroundRect} />

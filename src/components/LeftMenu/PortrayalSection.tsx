@@ -1,5 +1,5 @@
 import {
-  createSignal, JSX, onMount, Show,
+  createSignal, JSX, Show,
 } from 'solid-js';
 
 // Helpers
@@ -84,8 +84,6 @@ export default function PortrayalSection(): JSX.Element {
     selectedPortrayal,
     setSelectedPortrayal,
   ] = createSignal<RepresentationType | null>(null);
-
-  onMount(() => { console.log('PortrayalSection mounted'); });
 
   // Todo: this should be reactive instead of unmounting
   //   in "LeftMenu"

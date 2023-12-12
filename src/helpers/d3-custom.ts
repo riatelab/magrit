@@ -140,132 +140,136 @@ import type { GeoProjection, GeoRawProjection } from 'd3-geo';
 import hatanoRaw from './projection-hatano';
 import winkel1Raw from './projection-winkel1';
 
-// We want the features that were offered by 'd3-selection-multi'
-// (deprecated and incompatible with new 'd3-selection' versions)
-// to be available on the 'd3-selection' module.
-function attrsFunctionSelection(_selection, map) {
-  return _selection.each(function (...args) {
-    const x = map.apply(this, args);
-    const s = select(this);
-    Object.entries(x).forEach(([k, v]) => {
-      s.attr(k, v);
-    });
-  });
-}
-
-function attrsObjectSelection(_selection, map) {
-  Object.entries(map).forEach(([k, v]) => {
-    _selection.attr(k, v);
-  });
-  return _selection;
-}
-
-const attrsSelection = function (map) {
-  return (typeof map === 'function' ? attrsFunctionSelection : attrsObjectSelection)(this, map);
-};
-
-function propertiesFunctionSelection(_selection, map) {
-  return _selection.each(function onEachPropertiesFunctionSelection(...args) {
-    const x = map.apply(this, args);
-    const s = select(this);
-    Object.entries(x).forEach(([k, v]) => {
-      s.property(k, v);
-    });
-  });
-}
-
-function propertiesObjectSelection(_selection, map) {
-  Object.entries(map).forEach(([k, v]) => {
-    _selection.property(k, v);
-  });
-  return _selection;
-}
-
-function propertiesSelection(map) {
-  return (
-    typeof map === 'function'
-      ? propertiesFunctionSelection
-      : propertiesObjectSelection
-  )(this, map);
-}
-
-function stylesFunctionSelection(_selection, map, priority) {
-  return _selection.each(function onEachStylesFunctionSelection(...args) {
-    const x = map.apply(this, args);
-    const s = select(this);
-    Object.entries(x).forEach(([k, v]) => {
-      s.style(k, v, priority);
-    });
-  });
-}
-
-function stylesObjectSelection(_selection, map, priority) {
-  Object.entries(map).forEach(([k, v]) => {
-    _selection.style(k, v, priority);
-  });
-  return _selection;
-}
-
-function stylesSelection(map, priority) {
-  return (
-    typeof map === 'function'
-      ? stylesFunctionSelection
-      : stylesObjectSelection
-  )(this, map, priority == null ? '' : priority);
-}
-
-selection.prototype.attrs = attrsSelection;
-selection.prototype.styles = stylesSelection;
-selection.prototype.properties = propertiesSelection;
-
-function attrsFunctionTransition(_transition, map) {
-  return _transition.each(function onEachAttrsFunctionTransition(...args) {
-    const x = map.apply(this, args);
-    const t = select(this).transition(_transition);
-    Object.entries(x).forEach(([k, v]) => {
-      t.attr(k, v);
-    });
-  });
-}
-
-function attrsObjectTransition(_transition, map) {
-  Object.entries(map).forEach(([k, v]) => {
-    _transition.attr(k, v);
-  });
-  return _transition;
-}
-
-function attrsTransition(map) {
-  return (typeof map === 'function' ? attrsFunctionTransition : attrsObjectTransition)(this, map);
-}
-
-function stylesFunctionTransition(_transition, map, priority) {
-  return _transition.each(function onEachStylesFunctionTransition(...args) {
-    const x = map.apply(this, args);
-    const t = select(this).transition(_transition);
-    Object.entries(x).forEach(([k, v]) => {
-      t.style(k, v, priority);
-    });
-  });
-}
-
-function stylesObjectTransition(_transition, map, priority) {
-  Object.entries(map).forEach(([k, v]) => {
-    _transition.style(k, v, priority);
-  });
-  return _transition;
-}
-
-function stylesTransition(map, priority) {
-  return (
-    typeof map === 'function'
-      ? stylesFunctionTransition
-      : stylesObjectTransition
-  )(this, map, priority == null ? '' : priority);
-}
-
-transition.prototype.attrs = attrsTransition;
-transition.prototype.styles = stylesTransition;
+// // We want the features that were offered by 'd3-selection-multi'
+// // (deprecated and incompatible with new 'd3-selection' versions)
+// // to be available on the 'd3-selection' module.
+// function attrsFunctionSelection(_selection, map) {
+//   return _selection.each(function (...args) {
+//     const x = map.apply(this, args);
+//     const s = select(this);
+//     Object.entries(x).forEach(([k, v]) => {
+//       s.attr(k, v);
+//     });
+//   });
+// }
+//
+// function attrsObjectSelection(_selection, map) {
+//   Object.entries(map).forEach(([k, v]) => {
+//     _selection.attr(k, v);
+//   });
+//   return _selection;
+// }
+//
+// const attrsSelection = function (map) {
+//   return (typeof map === 'function' ? attrsFunctionSelection : attrsObjectSelection)(this, map);
+// };
+//
+// function propertiesFunctionSelection(_selection, map) {
+//   return _selection.each(function onEachPropertiesFunctionSelection(...args) {
+//     const x = map.apply(this, args);
+//     const s = select(this);
+//     Object.entries(x).forEach(([k, v]) => {
+//       s.property(k, v);
+//     });
+//   });
+// }
+//
+// function propertiesObjectSelection(_selection, map) {
+//   Object.entries(map).forEach(([k, v]) => {
+//     _selection.property(k, v);
+//   });
+//   return _selection;
+// }
+//
+// function propertiesSelection(map) {
+//   return (
+//     typeof map === 'function'
+//       ? propertiesFunctionSelection
+//       : propertiesObjectSelection
+//   )(this, map);
+// }
+//
+// function stylesFunctionSelection(_selection, map, priority) {
+//   return _selection.each(function onEachStylesFunctionSelection(...args) {
+//     const x = map.apply(this, args);
+//     const s = select(this);
+//     Object.entries(x).forEach(([k, v]) => {
+//       s.style(k, v, priority);
+//     });
+//   });
+// }
+//
+// function stylesObjectSelection(_selection, map, priority) {
+//   Object.entries(map).forEach(([k, v]) => {
+//     _selection.style(k, v, priority);
+//   });
+//   return _selection;
+// }
+//
+// function stylesSelection(map, priority) {
+//   return (
+//     typeof map === 'function'
+//       ? stylesFunctionSelection
+//       : stylesObjectSelection
+//   )(this, map, priority == null ? '' : priority);
+// }
+//
+// selection.prototype.attrs = attrsSelection;
+// selection.prototype.styles = stylesSelection;
+// selection.prototype.properties = propertiesSelection;
+//
+// function attrsFunctionTransition(_transition, map) {
+//   return _transition.each(function onEachAttrsFunctionTransition(...args) {
+//     const x = map.apply(this, args);
+//     const t = select(this).transition(_transition);
+//     Object.entries(x).forEach(([k, v]) => {
+//       t.attr(k, v);
+//     });
+//   });
+// }
+//
+// function attrsObjectTransition(_transition, map) {
+//   Object.entries(map).forEach(([k, v]) => {
+//     _transition.attr(k, v);
+//   });
+//   return _transition;
+// }
+//
+// function attrsTransition(map) {
+//   return (
+//     typeof map === 'function'
+//       ? attrsFunctionTransition
+//       : attrsObjectTransition
+//   )(this, map);
+// }
+//
+// function stylesFunctionTransition(_transition, map, priority) {
+//   return _transition.each(function onEachStylesFunctionTransition(...args) {
+//     const x = map.apply(this, args);
+//     const t = select(this).transition(_transition);
+//     Object.entries(x).forEach(([k, v]) => {
+//       t.style(k, v, priority);
+//     });
+//   });
+// }
+//
+// function stylesObjectTransition(_transition, map, priority) {
+//   Object.entries(map).forEach(([k, v]) => {
+//     _transition.style(k, v, priority);
+//   });
+//   return _transition;
+// }
+//
+// function stylesTransition(map, priority) {
+//   return (
+//     typeof map === 'function'
+//       ? stylesFunctionTransition
+//       : stylesObjectTransition
+//   )(this, map, priority == null ? '' : priority);
+// }
+//
+// transition.prototype.attrs = attrsTransition;
+// transition.prototype.styles = stylesTransition;
 
 const geoWinkel1 = () => geoProjection(winkel1Raw(45)).scale(160);
 const geoHatano = (() => geoProjection(hatanoRaw).scale(160));

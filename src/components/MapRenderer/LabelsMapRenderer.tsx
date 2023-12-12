@@ -56,7 +56,7 @@ export function defaultLabelsRenderer(
     >
       <For each={layerDescription.data.features}>
         {
-          (feature, i) => {
+          (feature) => {
             const projectedCoords = createMemo(
               () => globalStore.projection(feature.geometry.coordinates),
             );

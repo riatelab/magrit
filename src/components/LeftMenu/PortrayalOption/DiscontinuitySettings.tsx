@@ -19,19 +19,19 @@ import {
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
+import { computeDiscontinuity } from '../../../helpers/geo';
+import { generateIdLayer } from '../../../helpers/layers';
 
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
 
 // Subcomponents
 import InputFieldSelect from '../../Inputs/InputSelect.tsx';
+import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
+import InputResultName from './InputResultName.tsx';
 
 // Types / Interfaces / Enums
-import { PortrayalSettingsProps } from './common';
-import { computeDiscontinuity } from '../../../helpers/geo';
-import InputResultName from './InputResultName.tsx';
-import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
-import { generateIdLayer } from '../../../helpers/layers';
+import type { PortrayalSettingsProps } from './common';
 import { DataType, Variable, VariableType } from '../../../helpers/typeDetection';
 import {
   DiscontinuityParameters,

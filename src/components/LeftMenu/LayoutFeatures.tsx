@@ -1,7 +1,5 @@
 // Import from solid-js
-import {
-  createSignal, JSX, Show,
-} from 'solid-js';
+import { JSX } from 'solid-js';
 import { produce } from 'solid-js/store';
 
 // Assets
@@ -94,7 +92,7 @@ export default function LayoutFeatures(): JSX.Element {
           src={layoutFeatureGraticule}
           alt={ LL().LayoutFeatures.Graticule() }
           title={ LL().LayoutFeatures.Graticule() }
-          onClick={(e) => {
+          onClick={() => {
             if (!alreadyHasGraticule(layersDescriptionStore.layers)) {
               setLayersDescriptionStore(
                 produce(
@@ -114,7 +112,7 @@ export default function LayoutFeatures(): JSX.Element {
           src={layoutFeatureSphere}
           alt={ LL().LayoutFeatures.Sphere() }
           title={ LL().LayoutFeatures.Sphere() }
-          onClick={(e) => {
+          onClick={() => {
             if (!alreadyHasSphere(layersDescriptionStore.layers)) {
               setLayersDescriptionStore(
                 produce(

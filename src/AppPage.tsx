@@ -4,7 +4,6 @@ import {
 } from 'solid-js';
 
 // Imports from other packages
-import * as contours from 'contour-wasm';
 import initGdalJs from 'gdal3.js';
 import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'; // eslint-disable-line import/extensions
 import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url';
@@ -64,7 +63,7 @@ import { resetUndoRedoStackStore } from './store/stateStackStore';
 import { undo, redo } from './store/undo-redo';
 
 // Types and enums
-import type { LayerDescription, LayoutFeature } from './global.d';
+import type { LayerDescription, LayoutFeature } from './global';
 
 // Other stuff
 import { version } from '../package.json';

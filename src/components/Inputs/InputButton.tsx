@@ -12,7 +12,7 @@ export default function InputFieldButton(props: InputFieldButtonProps): JSX.Elem
     <div class="control">
       <button
         class="button"
-        onClick={props.onClick}
+        onClick={props.onClick} // eslint-disable-line solid/reactivity
         disabled={props.disabled}
       >
         { props.label }

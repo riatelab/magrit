@@ -1,13 +1,9 @@
 import { createStore } from 'solid-js/store';
 import { makeDefaultGraticule, makeDefaultSphere, makeDefaultWorldLand } from '../helpers/layers';
-import { debounce, unproxify } from '../helpers/common';
+import { unproxify } from '../helpers/common';
 import {
-  type Ellipse,
-  type FreeDrawing,
   type LayerDescription,
-  type Rectangle,
-  type ScaleBar,
-  LayoutFeature,
+  type LayoutFeature,
   LayoutFeatureType,
   DistanceUnit,
   ScaleBarStyle,

@@ -1,5 +1,5 @@
 // Imports from solid-js
-import { JSX, onMount } from 'solid-js';
+import { JSX } from 'solid-js';
 import { autofocus } from '@solid-primitives/autofocus';
 
 // Imports from other packages

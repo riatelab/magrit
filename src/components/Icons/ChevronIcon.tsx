@@ -1,5 +1,3 @@
-import { transition } from 'd3-transition';
-
 export default function ChevronIcon() {
   return <svg
     aria-hidden="true"
