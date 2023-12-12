@@ -1,6 +1,6 @@
 // Imports from solid-js
 import { JSX, onMount } from 'solid-js';
-import { NavLink } from '@solidjs/router';
+import { A } from '@solidjs/router';
 
 // Imports from other packages
 import { CgDarkMode } from 'solid-icons/cg';
@@ -71,7 +71,7 @@ export function HeaderBarWelcome(): JSX.Element {
         <div class="navbar-item">
           <DropdownLanguage />
           <div class="buttons">
-            <NavLink href="/app" class="button is-primary">{ LL().StartApplication() }</NavLink>
+            <A href="/app" class="button is-primary">{ LL().StartApplication() }</A>
           </div>
         </div>
       </div>

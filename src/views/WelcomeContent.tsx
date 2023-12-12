@@ -1,5 +1,5 @@
 import '../styles/Welcome.css';
-import { NavLink } from '@solidjs/router';
+import { A } from '@solidjs/router';
 import { useI18nContext } from '../i18n/i18n-solid';
 
 export default function WelcomeContent() {
@@ -7,7 +7,7 @@ export default function WelcomeContent() {
   return <main class="landing-page container is-widescreen">
     <h2 class="has-text-centered m-2">Magrit - Cartographie thématique</h2>
     <div class="has-text-centered mt-4 mb-6">
-      <NavLink href="/app" class="button is-primary has-text-centered">{ LL().StartApplication() }</NavLink>
+      <A href="/app" class="button is-primary has-text-centered">{ LL().StartApplication() }</A>
     </div>
     <div class="intro-section-wrapper columns is-desktop">
       <div class="intro-section column">
