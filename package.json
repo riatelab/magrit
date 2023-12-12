@@ -31,7 +31,7 @@
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-pwa": "^0.17.4",
     "vite-plugin-solid": "^2.8.0",
-    "vite-plugin-wasm": "Menci/vite-plugin-wasm",
+    "vite-plugin-wasm": "^3.2.2",
     "vitest": "^1.0.4"
   },
   "dependencies": {
