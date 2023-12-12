@@ -101,6 +101,9 @@ const en = {
       Up: 'Up',
       Down: 'Down',
     },
+    DrawingInstructions: {
+      Line: 'Click to start drawing a line. Click again to add a point. Double-click to finish.',
+    },
     Modal: {
       Title: 'Settings', // 'Settings for {{ type }}',
       FillColor: 'Fill color',

@@ -43,9 +43,10 @@ import { defaultLabelsRenderer } from './MapRenderer/LabelsMapRenderer.tsx';
 import graticuleRenderer from './MapRenderer/GraticuleRenderer.tsx';
 
 // - for rendering the layout features
-import RectangleRenderer from './LayoutFeatureRenderer/RectangleRenderer.tsx';
 import EllipseRenderer from './LayoutFeatureRenderer/EllipseRenderer.tsx';
 import FreeDrawingRenderer from './LayoutFeatureRenderer/FreeDrawingRenderer.tsx';
+import LineRenderer from './LayoutFeatureRenderer/LineRenderer.tsx';
+import RectangleRenderer from './LayoutFeatureRenderer/RectangleRenderer.tsx';
 import ScaleBarRenderer from './LayoutFeatureRenderer/ScaleBarRenderer.tsx';
 
 // - for rendering the legends
@@ -79,6 +80,7 @@ import {
 import '../styles/MapZone.css';
 
 const layoutFeaturesFns = {
+  [LayoutFeatureType.Line]: LineRenderer,
   [LayoutFeatureType.Rectangle]: RectangleRenderer,
   [LayoutFeatureType.Ellipse]: EllipseRenderer,
   [LayoutFeatureType.FreeDrawing]: FreeDrawingRenderer,
@@ -227,6 +229,18 @@ export default function MapZone(): JSX.Element {
         onContextMenu={(e) => e.preventDefault()}
       >
         <defs>
+          <marker
+            id="arrow-head"
+            viewBox="0 -5 10 10"
+            refX="5"
+            refY="0"
+            orient="auto"
+            markerWidth="4"
+            markerHeight="4"
+            style={{ 'stroke-width': '1px' }}
+          >
+            <path d="M0,-5L10,0L0,5" class="arrowHead"></path>
+          </marker>
           <For each={ layersDescriptionStore.layers }>
             {(layer) => <>
                 <Show when={layer.dropShadow}>

@@ -689,9 +689,11 @@ export interface Line extends LayoutFeatureBase {
   // The stroke opacity of the line
   strokeOpacity: number,
   // The dash array of the line
-  strokeDasharray: string,
+  strokeDasharray: string | undefined,
   // Whether to display an arrow at the end of the line
   arrow: boolean,
+  // The points of the line / arrow
+  points: [number, number][],
 }
 
 export interface FreeDrawing extends LayoutFeatureBase {

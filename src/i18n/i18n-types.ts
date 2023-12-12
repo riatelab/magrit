@@ -352,6 +352,12 @@ type RootTranslation = {
 			 */
 			Down: string
 		}
+		DrawingInstructions: {
+			/**
+			 * C​l​i​c​k​ ​t​o​ ​s​t​a​r​t​ ​d​r​a​w​i​n​g​ ​a​ ​l​i​n​e​.​ ​C​l​i​c​k​ ​a​g​a​i​n​ ​t​o​ ​a​d​d​ ​a​ ​p​o​i​n​t​.​ ​D​o​u​b​l​e​-​c​l​i​c​k​ ​t​o​ ​f​i​n​i​s​h​.
+			 */
+			Line: string
+		}
 		Modal: {
 			/**
 			 * S​e​t​t​i​n​g​s
@@ -1830,6 +1836,12 @@ export type TranslationFunctions = {
 			 * Down
 			 */
 			Down: () => LocalizedString
+		}
+		DrawingInstructions: {
+			/**
+			 * Click to start drawing a line. Click again to add a point. Double-click to finish.
+			 */
+			Line: () => LocalizedString
 		}
 		Modal: {
 			/**

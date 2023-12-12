@@ -2,6 +2,10 @@
 import { JSX } from 'solid-js';
 import { produce } from 'solid-js/store';
 
+// Imports from other packages
+import toast from 'solid-toast';
+import { v4 as uuidv4 } from 'uuid';
+
 // Assets
 import layoutFeatureRectangle from '../../assets/layout-features/rect-01.png';
 import layoutFeatureGraticule from '../../assets/layout-features/graticule-01.png';
@@ -15,7 +19,11 @@ import layoutFeatureEllipse from '../../assets/layout-features/ellipse-01.png';
 
 // Stores
 import { mapStore, setMapStore } from '../../store/MapStore';
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+import {
+  layersDescriptionStore,
+  LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../../store/LayersDescriptionStore';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -25,6 +33,13 @@ import {
   makeDefaultGraticule,
   makeDefaultSphere,
 } from '../../helpers/layers';
+import { getTargetSvg } from '../../helpers/svg';
+
+// Types / Interfaces
+import type { Line } from '../../global';
+import { LayoutFeatureType } from '../../global.d';
+
+const generateIdLayoutFeature = () => `LayoutFeature-${uuidv4()}`;
 
 export default function LayoutFeatures(): JSX.Element {
   const { LL } = useI18nContext();
@@ -70,6 +85,68 @@ export default function LayoutFeatures(): JSX.Element {
     <div class="field-block">
       <label class="label">{ LL().LayoutFeatures.MapSkinElements() }</label>
       <div class="is-flex is-justify-content-space-evenly">
+        <img
+          class="layout-features-section__icon-element"
+          src={layoutFeatureArrow}
+          alt={ LL().LayoutFeatures.Line() }
+          title={ LL().LayoutFeatures.Line() }
+          onClick={(e) => {
+            toast.success(LL().LayoutFeatures.DrawingInstructions.Line(), {
+              duration: 5000,
+              style: {
+                background: '#1f2937',
+                color: '#f3f4f6',
+              },
+              iconTheme: {
+                primary: '#38bdf8',
+                secondary: '#1f2937',
+              },
+            });
+            const svgElement = getTargetSvg();
+
+            const pts: [number, number][] = [];
+            const onClick = (ev: MouseEvent) => {
+              // Get click coordinates
+              const pt = svgElement.createSVGPoint();
+              pt.x = ev.clientX;
+              pt.y = ev.clientY;
+              const cursorPt = pt.matrixTransform(svgElement.getScreenCTM()!.inverse());
+              pts.push([cursorPt.x, cursorPt.y]);
+            };
+            const onDblClick = () => {
+              // Remove last point
+              pts.pop();
+              // Remove event listeners
+              svgElement.removeEventListener('click', onClick);
+              svgElement.removeEventListener('dblclick', onDblClick);
+              // Reset cursor
+              svgElement.style.cursor = 'default';
+              // Create the layout feature
+              const lineDescription = {
+                id: generateIdLayoutFeature(),
+                type: LayoutFeatureType.Line,
+                position: [0, 0],
+                strokeColor: '#000000',
+                strokeWidth: 4,
+                strokeOpacity: 1,
+                strokeDasharray: undefined,
+                arrow: true,
+                points: pts,
+              } as Line;
+              // Add the layout feature to the store (and so to the map)
+              setLayersDescriptionStore(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeatures.push(lineDescription);
+                  },
+                ),
+              );
+            };
+            svgElement.style.cursor = 'crosshair';
+            svgElement.addEventListener('click', onClick);
+            svgElement.addEventListener('dblclick', onDblClick);
+          }}
+        />
         <img
           class="layout-features-section__icon-element"
           src={layoutFeatureRectangle}
@@ -137,13 +214,6 @@ export default function LayoutFeatures(): JSX.Element {
           src={layoutFeatureScaleBar}
           alt={ LL().LayoutFeatures.ScaleBar() }
           title={ LL().LayoutFeatures.ScaleBar() }
-          onClick={(e) => {}}
-        />
-        <img
-          class="layout-features-section__icon-element"
-          src={layoutFeatureArrow}
-          alt={ LL().LayoutFeatures.Line() }
-          title={ LL().LayoutFeatures.Line() }
           onClick={(e) => {}}
         />
         <img

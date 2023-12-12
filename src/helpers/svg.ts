@@ -66,7 +66,7 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
     }
   });
   // Also redraw the path elements in the defs
-  svgElement.querySelectorAll('defs path').forEach((p) => {
+  svgElement.querySelectorAll('defs clipPath > path').forEach((p) => {
     // eslint-disable-next-line no-underscore-dangle
     p.setAttribute('d', globalStore.pathGenerator(p.__data__));
   });

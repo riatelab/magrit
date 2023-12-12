@@ -101,6 +101,9 @@ const fr = {
       Up: 'Monter',
       Down: 'Descendre',
     },
+    DrawingInstructions: {
+      Line: 'Cliquez pour commencer à dessiner une ligne. Cliquez à nouveau pour ajouter un point. Double-cliquez pour terminer.',
+    },
     Modal: {
       Title: 'Propriétés', // 'Propriétés pour {{ type d'objet }}'
       FillColor: 'Couleur de remplissage',
