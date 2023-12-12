@@ -1,7 +1,7 @@
 import initGeosJs from 'geos-wasm';
 import { geojsonToGeosGeom, geosGeomToGeojson } from 'geos-wasm/helpers';
 
-import { GeoJSONFeature, GeoJSONFeatureCollection } from '../global.d';
+import type { GeoJSONFeature, GeoJSONFeatureCollection} from '../global';
 
 /**
  * Get the geos instance, using the singleton pattern.
