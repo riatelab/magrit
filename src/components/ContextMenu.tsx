@@ -9,6 +9,7 @@ export default function ContextMenu(): JSX.Element {
         position: 'absolute',
         left: `${contextMenuStore.position[0]}px`,
         top: `${contextMenuStore.position[1]}px`,
+        'z-index': 1000,
       }}
       onContextMenu={(event) => event.preventDefault()}
     >

@@ -962,7 +962,15 @@ type RootTranslation = {
 		 * N​e​w​ ​c​o​l​u​m​n​.​.​.
 		 */
 		NewColumn: string
+		/**
+		 * D​e​l​e​t​e​ ​c​o​l​u​m​n
+		 */
+		DeleteColumn: string
 		NewColumnModal: {
+			/**
+			 * B​a​c​k​ ​t​o​ ​d​a​t​a​ ​t​a​b​l​e
+			 */
+			BackToDatatable: string
 			/**
 			 * N​e​w​ ​c​o​l​u​m​n
 			 */
@@ -976,41 +984,13 @@ type RootTranslation = {
 			 */
 			namePlaceholder: string
 			/**
-			 * N​e​w​ ​c​o​l​u​m​n​ ​c​o​n​t​e​n​t
-			 */
-			newColumnContent: string
-			/**
 			 * N​e​w​ ​c​o​l​u​m​n​ ​t​y​p​e
 			 */
 			newColumnType: string
 			/**
-			 * C​o​m​p​u​t​a​t​i​o​n​ ​b​a​s​e​d​ ​o​n​ ​t​w​o​ ​n​u​m​e​r​i​c​a​l​ ​c​o​l​u​m​n​s
-			 */
-			numericalValues: string
-			/**
-			 * C​o​m​p​u​t​a​t​i​o​n​ ​b​a​s​e​d​ ​o​n​ ​o​n​e​ ​(​o​r​ ​t​w​o​)​ ​n​o​n​-​n​u​m​e​r​i​c​a​l​ ​c​o​l​u​m​n​(​s​)
-			 */
-			nonNumericalValues: string
-			/**
 			 * F​o​r​m​u​l​a
 			 */
 			formula: string
-			/**
-			 * C​o​n​s​t​a​n​t​ ​v​a​l​u​e​.​.​.
-			 */
-			constantValue: string
-			/**
-			 * O​p​e​r​a​t​i​o​n​ ​t​o​ ​b​e​ ​p​e​r​f​o​r​m​e​d
-			 */
-			operation: string
-			/**
-			 * C​o​n​c​a​t​e​n​a​t​e
-			 */
-			concatenate: string
-			/**
-			 * T​r​u​n​c​a​t​e
-			 */
-			truncate: string
 			/**
 			 * C​o​m​p​u​t​e
 			 */
@@ -1064,9 +1044,13 @@ type RootTranslation = {
 			 */
 			specialFieldLength: string
 			/**
-			 * S​p​e​c​i​a​l​ ​f​i​e​l​d​ ​-​ ​T​h​e​ ​a​r​e​a​ ​o​f​ ​t​h​e​ ​f​e​a​t​u​r​e​ ​(​o​n​l​y​ ​f​o​r​ ​p​o​l​y​g​o​n​ ​l​a​y​e​r​s​ ​-​ ​i​n​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​p​r​o​j​e​c​t​i​o​n​ ​o​f​ ​t​h​e​ ​l​a​y​e​r​)
+			 * S​p​e​c​i​a​l​ ​f​i​e​l​d​ ​-​ ​T​h​e​ ​a​r​e​a​ ​o​f​ ​t​h​e​ ​f​e​a​t​u​r​e​,​ ​i​n​ ​s​q​u​a​r​e​ ​m​e​t​e​r​s​ ​(​o​n​l​y​ ​f​o​r​ ​p​o​l​y​g​o​n​ ​l​a​y​e​r​s​)​.​ ​N​o​t​e​ ​t​h​a​t​ ​t​h​i​s​ ​c​a​l​c​u​l​a​t​i​o​n​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​g​e​o​g​r​a​p​h​i​c​a​l​ ​c​o​o​r​d​i​n​a​t​e​s​ ​a​n​d​ ​i​s​ ​m​a​d​e​ ​o​n​ ​t​h​e​ ​s​p​h​e​r​o​i​d​.​ ​T​h​i​s​ ​r​e​s​u​l​t​ ​m​a​y​ ​b​e​ ​l​e​s​s​ ​a​c​c​u​r​a​t​e​ ​t​h​a​n​ ​i​f​ ​t​h​e​ ​c​a​l​c​u​l​a​t​i​o​n​ ​h​a​d​ ​b​e​e​n​ ​c​a​r​r​i​e​d​ ​o​u​t​ ​i​n​ ​a​ ​l​o​c​a​l​ ​p​r​o​j​e​c​t​i​o​n​ ​b​a​s​e​d​ ​o​n​ ​a​n​ ​a​d​a​p​t​e​d​ ​e​l​l​i​p​s​o​i​d​.
 			 */
 			specialFieldArea: string
+			/**
+			 * S​p​e​c​i​a​l​ ​f​i​e​l​d​ ​-​ ​T​h​e​ ​(​i​n​t​e​r​n​a​l​)​ ​r​o​w​ ​i​d​ ​o​f​ ​t​h​e​ ​f​e​a​t​u​r​e
+			 */
+			specialFieldId: string
 		}
 	}
 	FieldsTyping: {
@@ -2457,7 +2441,15 @@ export type TranslationFunctions = {
 		 * New column...
 		 */
 		NewColumn: () => LocalizedString
+		/**
+		 * Delete column
+		 */
+		DeleteColumn: () => LocalizedString
 		NewColumnModal: {
+			/**
+			 * Back to data table
+			 */
+			BackToDatatable: () => LocalizedString
 			/**
 			 * New column
 			 */
@@ -2471,41 +2463,13 @@ export type TranslationFunctions = {
 			 */
 			namePlaceholder: () => LocalizedString
 			/**
-			 * New column content
-			 */
-			newColumnContent: () => LocalizedString
-			/**
 			 * New column type
 			 */
 			newColumnType: () => LocalizedString
 			/**
-			 * Computation based on two numerical columns
-			 */
-			numericalValues: () => LocalizedString
-			/**
-			 * Computation based on one (or two) non-numerical column(s)
-			 */
-			nonNumericalValues: () => LocalizedString
-			/**
 			 * Formula
 			 */
 			formula: () => LocalizedString
-			/**
-			 * Constant value...
-			 */
-			constantValue: () => LocalizedString
-			/**
-			 * Operation to be performed
-			 */
-			operation: () => LocalizedString
-			/**
-			 * Concatenate
-			 */
-			concatenate: () => LocalizedString
-			/**
-			 * Truncate
-			 */
-			truncate: () => LocalizedString
 			/**
 			 * Compute
 			 */
@@ -2559,9 +2523,13 @@ export type TranslationFunctions = {
 			 */
 			specialFieldLength: () => LocalizedString
 			/**
-			 * Special field - The area of the feature (only for polygon layers - in the current projection of the layer)
+			 * Special field - The area of the feature, in square meters (only for polygon layers). Note that this calculation is based on the geographical coordinates and is made on the spheroid. This result may be less accurate than if the calculation had been carried out in a local projection based on an adapted ellipsoid.
 			 */
 			specialFieldArea: () => LocalizedString
+			/**
+			 * Special field - The (internal) row id of the feature
+			 */
+			specialFieldId: () => LocalizedString
 		}
 	}
 	FieldsTyping: {

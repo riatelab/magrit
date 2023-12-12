@@ -1,5 +1,5 @@
 import { render } from 'solid-js/web';
-import { Route, Router, Routes } from '@solidjs/router';
+import { Route, Router } from '@solidjs/router';
 import { JSX } from 'solid-js';
 // import { WebR } from '@r-wasm/webr';
 
@@ -40,10 +40,8 @@ render(
   () => (
   <TypesafeI18n locale={'en'}>
     <Router>
-      <Routes>
-        <Route path="/" element={ <WelcomePage /> } />
-        <Route path="/app" element={ <AppPage /> } />
-      </Routes>
+      <Route path="/" component={ WelcomePage } />
+      <Route path="/app" component={ AppPage } />
     </Router>
   </TypesafeI18n>
   ) as JSX.Element,
