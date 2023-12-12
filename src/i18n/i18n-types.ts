@@ -361,6 +361,10 @@ type RootTranslation = {
 			 * C​l​i​c​k​ ​t​o​ ​l​o​c​a​t​e​ ​t​h​e​ ​f​i​r​s​t​ ​c​o​r​n​e​r​ ​o​f​ ​t​h​e​ ​r​e​c​t​a​n​g​l​e​.​ ​C​l​i​c​k​ ​a​g​a​i​n​ ​t​o​ ​l​o​c​a​t​e​ ​t​h​e​ ​o​p​p​o​s​i​t​e​ ​c​o​r​n​e​r​.
 			 */
 			Rectangle: string
+			/**
+			 * C​l​i​c​k​ ​t​o​ ​l​o​c​a​t​e​ ​t​h​e​ ​c​e​n​t​e​r​ ​o​f​ ​t​h​e​ ​e​l​l​i​p​s​e​.​ ​C​l​i​c​k​ ​a​g​a​i​n​ ​t​o​ ​l​o​c​a​t​e​ ​a​ ​p​o​i​n​t​ ​o​n​ ​t​h​e​ ​e​l​l​i​p​s​e​.
+			 */
+			Ellipse: string
 		}
 		Modal: {
 			/**
@@ -1850,6 +1854,10 @@ export type TranslationFunctions = {
 			 * Click to locate the first corner of the rectangle. Click again to locate the opposite corner.
 			 */
 			Rectangle: () => LocalizedString
+			/**
+			 * Click to locate the center of the ellipse. Click again to locate a point on the ellipse.
+			 */
+			Ellipse: () => LocalizedString
 		}
 		Modal: {
 			/**

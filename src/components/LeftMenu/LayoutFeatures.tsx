@@ -33,10 +33,11 @@ import {
   makeDefaultGraticule,
   makeDefaultSphere,
 } from '../../helpers/layers';
+import { Mabs, Msqrt } from '../../helpers/math';
 import { getTargetSvg } from '../../helpers/svg';
 
 // Types / Interfaces
-import type { Line, Rectangle } from '../../global';
+import type { Ellipse, Line, Rectangle } from '../../global';
 import { LayoutFeatureType } from '../../global.d';
 
 const generateIdLayoutFeature = () => `LayoutFeature-${uuidv4()}`;
@@ -90,7 +91,7 @@ export default function LayoutFeatures(): JSX.Element {
           src={layoutFeatureArrow}
           alt={ LL().LayoutFeatures.Line() }
           title={ LL().LayoutFeatures.Line() }
-          onClick={(e) => {
+          onClick={() => {
             toast.success(LL().LayoutFeatures.DrawingInstructions.Line(), {
               duration: 5000,
               style: {
@@ -152,7 +153,7 @@ export default function LayoutFeatures(): JSX.Element {
           src={layoutFeatureRectangle}
           alt={ LL().LayoutFeatures.Rectangle() }
           title={ LL().LayoutFeatures.Rectangle() }
-          onClick={(e) => {
+          onClick={() => {
             toast.success(LL().LayoutFeatures.DrawingInstructions.Rectangle(), {
               duration: 5000,
               style: {
@@ -209,7 +210,60 @@ export default function LayoutFeatures(): JSX.Element {
           src={layoutFeatureEllipse}
           alt={ LL().LayoutFeatures.Ellipse() }
           title={ LL().LayoutFeatures.Ellipse() }
-          onClick={(e) => {}}
+          onClick={() => {
+            toast.success(LL().LayoutFeatures.DrawingInstructions.Ellipse(), {
+              duration: 5000,
+              style: {
+                background: '#1f2937',
+                color: '#f3f4f6',
+              },
+              iconTheme: {
+                primary: '#38bdf8',
+                secondary: '#1f2937',
+              },
+            });
+            const svgElement = getTargetSvg();
+            const pts = [] as [number, number][];
+            const onClick = (ev: MouseEvent) => {
+              const pt = svgElement.createSVGPoint();
+              pt.x = ev.clientX;
+              pt.y = ev.clientY;
+              const cursorPt = pt.matrixTransform(svgElement.getScreenCTM()!.inverse());
+              pts.push([cursorPt.x, cursorPt.y]);
+              if (pts.length === 2) {
+                svgElement.removeEventListener('click', onClick);
+                svgElement.style.cursor = 'default';
+
+                // Compute the distance between the two points
+                const distance = Msqrt(
+                  Mabs(pts[0][0] - pts[1][0]) ** 2 + Mabs(pts[0][1] - pts[1][1]) ** 2,
+                );
+                const ellipseDescription = {
+                  id: generateIdLayoutFeature(),
+                  type: LayoutFeatureType.Ellipse,
+                  rx: distance,
+                  ry: distance,
+                  position: pts[0],
+                  rotation: 0,
+                  fillColor: '#000000',
+                  fillOpacity: 0,
+                  strokeColor: '#000000',
+                  strokeWidth: 4,
+                  strokeOpacity: 1,
+                } as Ellipse;
+
+                setLayersDescriptionStore(
+                  produce(
+                    (draft: LayersDescriptionStoreType) => {
+                      draft.layoutFeatures.push(ellipseDescription);
+                    },
+                  ),
+                );
+              }
+            };
+            svgElement.style.cursor = 'crosshair';
+            svgElement.addEventListener('click', onClick);
+          }}
         />
         <img
           classList={{

@@ -104,6 +104,7 @@ const en = {
     DrawingInstructions: {
       Line: 'Click to start drawing a line. Click again to add a point. Double-click to finish.',
       Rectangle: 'Click to locate the first corner of the rectangle. Click again to locate the opposite corner.',
+      Ellipse: 'Click to locate the center of the ellipse. Click again to locate a point on the ellipse.',
     },
     Modal: {
       Title: 'Settings', // 'Settings for {{ type }}',
