@@ -123,7 +123,7 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
   });
 
   return <g
-    ref={refElement}
+    ref={refElement!}
     class="layout-feature scale-bar"
     onContextMenu={(e) => {
       e.preventDefault();

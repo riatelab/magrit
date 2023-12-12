@@ -365,6 +365,10 @@ type RootTranslation = {
 			 * C​l​i​c​k​ ​t​o​ ​l​o​c​a​t​e​ ​t​h​e​ ​c​e​n​t​e​r​ ​o​f​ ​t​h​e​ ​e​l​l​i​p​s​e​.​ ​C​l​i​c​k​ ​a​g​a​i​n​ ​t​o​ ​l​o​c​a​t​e​ ​a​ ​p​o​i​n​t​ ​o​n​ ​t​h​e​ ​e​l​l​i​p​s​e​.
 			 */
 			Ellipse: string
+			/**
+			 * C​l​i​c​k​ ​t​o​ ​s​t​a​r​t​ ​d​r​a​w​i​n​g​ ​t​h​e​ ​d​e​s​i​r​e​d​ ​s​h​a​p​e​ ​a​n​d​ ​r​e​l​e​a​s​e​ ​t​o​ ​f​i​n​i​s​h​.
+			 */
+			FreeDrawing: string
 		}
 		Modal: {
 			/**
@@ -1858,6 +1862,10 @@ export type TranslationFunctions = {
 			 * Click to locate the center of the ellipse. Click again to locate a point on the ellipse.
 			 */
 			Ellipse: () => LocalizedString
+			/**
+			 * Click to start drawing the desired shape and release to finish.
+			 */
+			FreeDrawing: () => LocalizedString
 		}
 		Modal: {
 			/**

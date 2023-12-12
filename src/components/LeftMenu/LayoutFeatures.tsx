@@ -37,7 +37,12 @@ import { Mabs, Msqrt } from '../../helpers/math';
 import { getTargetSvg } from '../../helpers/svg';
 
 // Types / Interfaces
-import type { Ellipse, Line, Rectangle } from '../../global';
+import type {
+  Ellipse,
+  FreeDrawing,
+  Line,
+  Rectangle,
+} from '../../global';
 import { LayoutFeatureType } from '../../global.d';
 
 const generateIdLayoutFeature = () => `LayoutFeature-${uuidv4()}`;
@@ -311,28 +316,101 @@ export default function LayoutFeatures(): JSX.Element {
           src={layoutFeatureNorthArrow}
           alt={ LL().LayoutFeatures.NorthArrow() }
           title={ LL().LayoutFeatures.NorthArrow() }
-          onClick={(e) => {}}
+          onClick={() => {}}
         />
         <img
           class="layout-features-section__icon-element"
           src={layoutFeatureScaleBar}
           alt={ LL().LayoutFeatures.ScaleBar() }
           title={ LL().LayoutFeatures.ScaleBar() }
-          onClick={(e) => {}}
+          onClick={() => {}}
         />
         <img
           class="layout-features-section__icon-element"
           src={layoutFeatureText}
           alt={ LL().LayoutFeatures.Text() }
           title={ LL().LayoutFeatures.Text() }
-          onClick={(e) => {}}
+          onClick={() => {}}
         />
         <img
           class="layout-features-section__icon-element disabled"
           src={layoutFeatureDraw}
           alt={ LL().LayoutFeatures.FreeDrawing() }
           title={ LL().LayoutFeatures.FreeDrawing() }
-          onClick={(e) => {}}
+          onClick={() => {
+            toast.success(LL().LayoutFeatures.DrawingInstructions.FreeDrawing(), {
+              duration: 5000,
+              style: {
+                background: '#1f2937',
+                color: '#f3f4f6',
+              },
+              iconTheme: {
+                primary: '#38bdf8',
+                secondary: '#1f2937',
+              },
+            });
+            const svgElement = getTargetSvg();
+            // Add a rect on top of the svg element to catch mouse events
+            // const rectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            // rectElement.setAttribute('width', '100%');
+            // rectElement.setAttribute('height', '100%');
+            // rectElement.setAttribute('fill', 'transparent');
+            // svgElement.appendChild(rectElement);
+
+            const pts: [number, number][] = [];
+            let started = false;
+
+            const onMouseMove = (ev) => {
+              console.log('dragging');
+              if (started) {
+                // Get click coordinates
+                const pt = svgElement.createSVGPoint();
+                pt.x = ev.clientX;
+                pt.y = ev.clientY;
+                const cursorPt = pt.matrixTransform(svgElement.getScreenCTM()!.inverse());
+                pts.push([cursorPt.x, cursorPt.y]);
+              }
+            };
+
+            const onMouseUp = () => {
+              svgElement.removeEventListener('click', onClick); // eslint-disable-line @typescript-eslint/no-use-before-define
+              svgElement.removeEventListener('mousemove', onMouseMove);
+              svgElement.removeEventListener('mouseup', onMouseUp);
+              svgElement.remove();
+              console.log('stopped');
+              console.log(pts);
+              started = false;
+              svgElement.style.cursor = 'default';
+
+              const freeDrawingDescription = {
+                id: generateIdLayoutFeature(),
+                type: LayoutFeatureType.Line,
+                position: [0, 0],
+                strokeColor: '#000000',
+                strokeWidth: 4,
+                strokeOpacity: 1,
+                path: `M ${pts.map((p) => `${p[0]},${p[1]}`).join(' L ')}`,
+              } as FreeDrawing;
+
+              setLayersDescriptionStore(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeatures.push(freeDrawingDescription);
+                  },
+                ),
+              );
+            };
+
+            const onClick = (ev: MouseEvent) => {
+              console.log('click before draw');
+              started = true;
+              svgElement.addEventListener('dragstart', onMouseMove);
+              svgElement.addEventListener('dragend', onMouseUp);
+            };
+
+            svgElement.style.cursor = 'crosshair';
+            svgElement.addEventListener('click', onClick);
+          }}
         />
       </div>
     </div>

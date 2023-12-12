@@ -105,6 +105,7 @@ const fr = {
       Line: 'Cliquez pour commencer à dessiner une ligne. Cliquez à nouveau pour ajouter un point. Double-cliquez pour terminer.',
       Rectangle: 'Cliquez une première fois pour localiser le premier coin du rectangle. Cliquez une seconde fois pour localiser le coin opposé.',
       Ellipse: 'Cliquez une première fois pour localiser le centre de l\'ellipse. Cliquez une seconde fois pour localiser le point sur le bord de l\'ellipse.',
+      FreeDrawing: 'Cliquez pour commencer à dessiner puis relâchez le bouton de la souris pour terminer.',
     },
     Modal: {
       Title: 'Propriétés', // 'Propriétés pour {{ type d'objet }}'
