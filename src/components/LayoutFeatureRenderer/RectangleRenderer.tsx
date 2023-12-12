@@ -6,7 +6,7 @@ import { bindDragBehavior, makeLayoutFeaturesSettingsModal, triggerContextMenuLa
 import { useI18nContext } from '../../i18n/i18n-solid';
 
 // Types / Interfaces / Enums
-import type { Rectangle } from '../../global.d';
+import type { Rectangle } from '../../global';
 
 export default function RectangleRenderer(props: Rectangle): JSX.Element {
   const { LL } = useI18nContext();
@@ -17,7 +17,7 @@ export default function RectangleRenderer(props: Rectangle): JSX.Element {
   });
 
   return <g
-    ref={refElement}
+    ref={refElement!}
     class="layout-feature rectangle"
     onContextMenu={(e) => {
       e.preventDefault();
@@ -25,10 +25,11 @@ export default function RectangleRenderer(props: Rectangle): JSX.Element {
       triggerContextMenuLayoutFeature(e, props.id, LL);
     }}
     onDblClick={() => { makeLayoutFeaturesSettingsModal(props.id, LL); }}
+    transform={`translate(${props.position[0]}, ${props.position[1]})`}
   >
     <rect
-      x={props.position[0]}
-      y={props.position[1]}
+      x={0}
+      y={0}
       width={props.width}
       height={props.height}
       fill={props.fillColor}

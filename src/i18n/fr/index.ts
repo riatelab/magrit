@@ -103,6 +103,7 @@ const fr = {
     },
     DrawingInstructions: {
       Line: 'Cliquez pour commencer à dessiner une ligne. Cliquez à nouveau pour ajouter un point. Double-cliquez pour terminer.',
+      Rectangle: 'Cliquez une première fois pour localiser le premier coin du rectangle. Cliquez une seconde fois pour localiser le coin opposé.',
     },
     Modal: {
       Title: 'Propriétés', // 'Propriétés pour {{ type d'objet }}'

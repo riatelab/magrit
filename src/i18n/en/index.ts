@@ -103,6 +103,7 @@ const en = {
     },
     DrawingInstructions: {
       Line: 'Click to start drawing a line. Click again to add a point. Double-click to finish.',
+      Rectangle: 'Click to locate the first corner of the rectangle. Click again to locate the opposite corner.',
     },
     Modal: {
       Title: 'Settings', // 'Settings for {{ type }}',

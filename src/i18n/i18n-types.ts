@@ -357,6 +357,10 @@ type RootTranslation = {
 			 * C​l​i​c​k​ ​t​o​ ​s​t​a​r​t​ ​d​r​a​w​i​n​g​ ​a​ ​l​i​n​e​.​ ​C​l​i​c​k​ ​a​g​a​i​n​ ​t​o​ ​a​d​d​ ​a​ ​p​o​i​n​t​.​ ​D​o​u​b​l​e​-​c​l​i​c​k​ ​t​o​ ​f​i​n​i​s​h​.
 			 */
 			Line: string
+			/**
+			 * C​l​i​c​k​ ​t​o​ ​l​o​c​a​t​e​ ​t​h​e​ ​f​i​r​s​t​ ​c​o​r​n​e​r​ ​o​f​ ​t​h​e​ ​r​e​c​t​a​n​g​l​e​.​ ​C​l​i​c​k​ ​a​g​a​i​n​ ​t​o​ ​l​o​c​a​t​e​ ​t​h​e​ ​o​p​p​o​s​i​t​e​ ​c​o​r​n​e​r​.
+			 */
+			Rectangle: string
 		}
 		Modal: {
 			/**
@@ -1842,6 +1846,10 @@ export type TranslationFunctions = {
 			 * Click to start drawing a line. Click again to add a point. Double-click to finish.
 			 */
 			Line: () => LocalizedString
+			/**
+			 * Click to locate the first corner of the rectangle. Click again to locate the opposite corner.
+			 */
+			Rectangle: () => LocalizedString
 		}
 		Modal: {
 			/**
