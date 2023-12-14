@@ -722,6 +722,17 @@ export interface Text extends LayoutFeatureBase {
   fontStyle: 'normal' | 'italic',
   // The font weight of the text
   fontWeight: 'normal' | 'bold',
+  // The text anchor of the text
+  textAnchor: 'start' | 'middle' | 'end',
+  // The text alignment of the text
+  textAlignment: 'left' | 'center' | 'right',
+  // Whether to display a rectangle behind the text
+  backgroundRect: BackgroundRect,
+  // Whether to create a halo around the text
+  halo?: {
+    color: string,
+    width: number,
+  },
 }
 
 export type LayoutFeature = (

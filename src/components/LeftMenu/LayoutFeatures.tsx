@@ -42,10 +42,38 @@ import type {
   FreeDrawing,
   Line,
   Rectangle,
+  ScaleBar,
 } from '../../global';
-import { LayoutFeatureType } from '../../global.d';
+import { DistanceUnit, LayoutFeatureType, ScaleBarStyle } from '../../global.d';
 
 const generateIdLayoutFeature = () => `LayoutFeature-${uuidv4()}`;
+
+const makeTemporaryPoint = (x: number, y: number) => {
+  const widthPoint = 5;
+  const elem = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  elem.classList.add('temporary-point');
+  elem.setAttribute('x', `${x - widthPoint / 2}`);
+  elem.setAttribute('y', `${y - widthPoint / 2}`);
+  elem.setAttribute('width', `${widthPoint}`);
+  elem.setAttribute('height', `${widthPoint}`);
+  elem.setAttribute('fill', 'red');
+  return elem;
+};
+
+const addTemporaryPoint = (x: number, y: number) => {
+  const svgElement = getTargetSvg();
+  svgElement.appendChild(makeTemporaryPoint(x, y));
+};
+
+const getSvgCoordinates = (svgElement: SVGSVGElement, ev: MouseEvent) => {
+  // Get click coordinates in screen space
+  const pt = svgElement.createSVGPoint();
+  pt.x = ev.clientX;
+  pt.y = ev.clientY;
+
+  // Transform the screen coordinates into the svg coordinates
+  return pt.matrixTransform(svgElement.getScreenCTM()!.inverse());
+};
 
 export default function LayoutFeatures(): JSX.Element {
   const { LL } = useI18nContext();
@@ -112,12 +140,12 @@ export default function LayoutFeatures(): JSX.Element {
 
             const pts: [number, number][] = [];
             const onClick = (ev: MouseEvent) => {
-              // Get click coordinates
-              const pt = svgElement.createSVGPoint();
-              pt.x = ev.clientX;
-              pt.y = ev.clientY;
-              const cursorPt = pt.matrixTransform(svgElement.getScreenCTM()!.inverse());
+              // Point coordinates in SVG space
+              const cursorPt = getSvgCoordinates(svgElement, ev);
               pts.push([cursorPt.x, cursorPt.y]);
+
+              // Add a temporary point
+              addTemporaryPoint(cursorPt.x, cursorPt.y);
             };
             const onDblClick = () => {
               // Remove last point
@@ -127,6 +155,8 @@ export default function LayoutFeatures(): JSX.Element {
               svgElement.removeEventListener('dblclick', onDblClick);
               // Reset cursor
               svgElement.style.cursor = 'default';
+              // Remove temporary points
+              svgElement.querySelectorAll('.temporary-point').forEach((elem) => elem.remove());
               // Create the layout feature
               const lineDescription = {
                 id: generateIdLayoutFeature(),
@@ -173,15 +203,21 @@ export default function LayoutFeatures(): JSX.Element {
             const svgElement = getTargetSvg();
             const pts = [] as [number, number][];
             const onClick = (ev: MouseEvent) => {
-              const pt = svgElement.createSVGPoint();
-              pt.x = ev.clientX;
-              pt.y = ev.clientY;
-              const cursorPt = pt.matrixTransform(svgElement.getScreenCTM()!.inverse());
+              // Point coordinates in SVG space
+              const cursorPt = getSvgCoordinates(svgElement, ev);
               pts.push([cursorPt.x, cursorPt.y]);
+
+              // Add a temporary point
+              addTemporaryPoint(cursorPt.x, cursorPt.y);
+
+              // When we have two points, we can create the rectangle
               if (pts.length === 2) {
+                // Clean up everything
                 svgElement.removeEventListener('click', onClick);
                 svgElement.style.cursor = 'default';
+                svgElement.querySelectorAll('.temporary-point').forEach((elem) => elem.remove());
 
+                // Create the rectangle
                 const rectangleDescription = {
                   id: generateIdLayoutFeature(),
                   type: LayoutFeatureType.Rectangle,
@@ -230,19 +266,25 @@ export default function LayoutFeatures(): JSX.Element {
             const svgElement = getTargetSvg();
             const pts = [] as [number, number][];
             const onClick = (ev: MouseEvent) => {
-              const pt = svgElement.createSVGPoint();
-              pt.x = ev.clientX;
-              pt.y = ev.clientY;
-              const cursorPt = pt.matrixTransform(svgElement.getScreenCTM()!.inverse());
+              // Point coordinates in SVG space
+              const cursorPt = getSvgCoordinates(svgElement, ev);
               pts.push([cursorPt.x, cursorPt.y]);
+
+              // Add temporary point
+              addTemporaryPoint(cursorPt.x, cursorPt.y);
+
               if (pts.length === 2) {
+                // Clean up everything
                 svgElement.removeEventListener('click', onClick);
                 svgElement.style.cursor = 'default';
+                svgElement.querySelectorAll('.temporary-point').forEach((elem) => elem.remove());
 
                 // Compute the distance between the two points
                 const distance = Msqrt(
                   Mabs(pts[0][0] - pts[1][0]) ** 2 + Mabs(pts[0][1] - pts[1][1]) ** 2,
                 );
+
+                // Create the ellipse
                 const ellipseDescription = {
                   id: generateIdLayoutFeature(),
                   type: LayoutFeatureType.Ellipse,
@@ -323,7 +365,30 @@ export default function LayoutFeatures(): JSX.Element {
           src={layoutFeatureScaleBar}
           alt={ LL().LayoutFeatures.ScaleBar() }
           title={ LL().LayoutFeatures.ScaleBar() }
-          onClick={() => {}}
+          onClick={() => {
+            const scaleBarDescription = {
+              id: generateIdLayoutFeature(),
+              type: LayoutFeatureType.ScaleBar,
+              position: [100, 100],
+              width: 500,
+              height: 10,
+              distance: 200,
+              rotation: 0,
+              unit: DistanceUnit.km,
+              label: 'Kilometers',
+              tickValues: [0, 50, 100, 250, 500],
+              tickPadding: 10,
+              style: ScaleBarStyle.blackAndWhiteBar,
+            } as ScaleBar;
+
+            setLayersDescriptionStore(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeatures.push(scaleBarDescription);
+                },
+              ),
+            );
+          }}
         />
         <img
           class="layout-features-section__icon-element"
@@ -351,65 +416,81 @@ export default function LayoutFeatures(): JSX.Element {
             });
             const svgElement = getTargetSvg();
             // Add a rect on top of the svg element to catch mouse events
-            // const rectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-            // rectElement.setAttribute('width', '100%');
-            // rectElement.setAttribute('height', '100%');
-            // rectElement.setAttribute('fill', 'transparent');
-            // svgElement.appendChild(rectElement);
+            const rectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rectElement.setAttribute('width', '100%');
+            rectElement.setAttribute('height', '100%');
+            rectElement.setAttribute('fill', 'transparent');
+            svgElement.appendChild(rectElement);
 
+            // Store the current lockZoomPan value
+            const lockZoomPanValue = mapStore.lockZoomPan;
+
+            // Disable zoom and pan temporarily
+            setMapStore({
+              lockZoomPan: true,
+            });
+
+            // The points of the free drawing
             const pts: [number, number][] = [];
+
             let started = false;
 
-            const onMouseMove = (ev) => {
-              console.log('dragging');
+            function startDrag(ev: MouseEvent) {
+              started = true;
+            }
+
+            function drag(ev: MouseEvent) {
+              ev.preventDefault();
+              ev.stopPropagation();
               if (started) {
-                // Get click coordinates
-                const pt = svgElement.createSVGPoint();
-                pt.x = ev.clientX;
-                pt.y = ev.clientY;
-                const cursorPt = pt.matrixTransform(svgElement.getScreenCTM()!.inverse());
+                // Point coordinates in SVG space
+                const cursorPt = getSvgCoordinates(svgElement, ev);
                 pts.push([cursorPt.x, cursorPt.y]);
               }
-            };
+            }
 
-            const onMouseUp = () => {
-              svgElement.removeEventListener('click', onClick); // eslint-disable-line @typescript-eslint/no-use-before-define
-              svgElement.removeEventListener('mousemove', onMouseMove);
-              svgElement.removeEventListener('mouseup', onMouseUp);
-              svgElement.remove();
-              console.log('stopped');
-              console.log(pts);
-              started = false;
-              svgElement.style.cursor = 'default';
+            function endDrag(ev: MouseEvent) {
+              if (started) {
+                // eslint-disable-next-line @typescript-eslint/no-use-before-define
+                rectElement.removeEventListener('mousedown', startDrag);
+                rectElement.removeEventListener('mousemove', drag);
+                rectElement.removeEventListener('mouseup', endDrag);
+                rectElement.removeEventListener('mouseleave', endDrag);
+                rectElement.remove();
+                started = false;
+                svgElement.style.cursor = 'default';
 
-              const freeDrawingDescription = {
-                id: generateIdLayoutFeature(),
-                type: LayoutFeatureType.Line,
-                position: [0, 0],
-                strokeColor: '#000000',
-                strokeWidth: 4,
-                strokeOpacity: 1,
-                path: `M ${pts.map((p) => `${p[0]},${p[1]}`).join(' L ')}`,
-              } as FreeDrawing;
+                const freeDrawingDescription = {
+                  id: generateIdLayoutFeature(),
+                  type: LayoutFeatureType.FreeDrawing,
+                  position: [0, 0],
+                  strokeColor: '#000000',
+                  strokeWidth: 4,
+                  strokeOpacity: 1,
+                  path: `M ${pts.map((p) => `${p[0]},${p[1]}`).join(' L ')}`,
+                } as FreeDrawing;
 
-              setLayersDescriptionStore(
-                produce(
-                  (draft: LayersDescriptionStoreType) => {
-                    draft.layoutFeatures.push(freeDrawingDescription);
-                  },
-                ),
-              );
-            };
+                setLayersDescriptionStore(
+                  produce(
+                    (draft: LayersDescriptionStoreType) => {
+                      draft.layoutFeatures.push(freeDrawingDescription);
+                    },
+                  ),
+                );
 
-            const onClick = (ev: MouseEvent) => {
-              console.log('click before draw');
-              started = true;
-              svgElement.addEventListener('dragstart', onMouseMove);
-              svgElement.addEventListener('dragend', onMouseUp);
-            };
+                // Restore the lockZoomPan value
+                setMapStore({
+                  lockZoomPan: lockZoomPanValue,
+                });
+              }
+            }
+
+            rectElement.addEventListener('mousedown', startDrag);
+            rectElement.addEventListener('mousemove', drag);
+            rectElement.addEventListener('mouseup', endDrag);
+            rectElement.addEventListener('mouseleave', endDrag);
 
             svgElement.style.cursor = 'crosshair';
-            svgElement.addEventListener('click', onClick);
           }}
         />
       </div>
