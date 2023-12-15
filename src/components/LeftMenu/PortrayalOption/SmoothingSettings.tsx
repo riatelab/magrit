@@ -16,7 +16,7 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../../stor
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { findSuitableName } from '../../../helpers/common';
 import { generateIdLayer } from '../../../helpers/layers';
-import { VariableType } from '../../../helpers/typeDetection';
+import { Variable, VariableType } from '../../../helpers/typeDetection';
 import { computeStewart } from '../../../helpers/smoothing';
 import { Mpow } from '../../../helpers/math';
 
@@ -74,7 +74,10 @@ async function onClickValidate(
   console.log(newData);
 
   const rendererParameters = {
-
+    variable: targetVariable,
+    method: SmoothingMethod.Stewart,
+    smoothingParameters: stewartParams,
+    gridParameters: gridParams,
   } as SmoothedLayerParameters;
 
   const newLayerDescription = {
@@ -83,7 +86,20 @@ async function onClickValidate(
     type: 'polygon',
     renderer: 'default' as RepresentationType,
     data: newData,
-    fields: [],
+    fields: [
+      {
+        name: 'min_v',
+        type: VariableType.stock,
+        hasMissingValues: false,
+        dataType: 'number',
+      } as Variable,
+      {
+        name: 'max_v',
+        type: VariableType.stock,
+        hasMissingValues: false,
+        dataType: 'number',
+      } as Variable,
+    ],
     visible: true,
     strokeColor: '#000000',
     strokeWidth: 1,
@@ -93,7 +109,7 @@ async function onClickValidate(
     dropShadow: false,
     blurFilter: false,
     shapeRendering: 'crispEdges',
-    legend: null,
+    legend: undefined,
     rendererParameters,
   } as LayerDescriptionSmoothedLayer;
 

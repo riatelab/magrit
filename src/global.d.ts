@@ -70,6 +70,7 @@ type LayerDescription = {
     | GriddedLayerParameters
     | LabelsParameters
     | GraticuleParameters
+    | SmoothedLayerParameters
     // | DefaultRendererParameters
   ),
   // Parameters of the legend associated to the layer

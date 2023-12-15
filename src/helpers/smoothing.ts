@@ -47,9 +47,18 @@ function makeContourLayer(
   const yCoords = new Set(grid.features.map((d) => d.geometry.coordinates[1]));
   const width = xCoords.size;
   const height = yCoords.size;
-  const values = new Float64Array(
-    grid.features.map((d) => d.properties.z) as number[],
-  );
+  // const values = new Float64Array(
+  //   grid.features.toReversed().map((d) => d.properties.z) as number[],
+  // );
+  // We need to change the order of the values
+  const v = [];
+  for (let i = 0; i < height; i += 1) {
+    for (let j = 0; j < width; j += 1) {
+      v.push(grid.features[j * height + i].properties.z);
+    }
+  }
+  console.log(v);
+  const values = new Float64Array(v);
   const options = {
     x_origin: Math.min(...xCoords),
     y_origin: Math.min(...yCoords),
@@ -143,6 +152,8 @@ export async function computeStewart(
   gridParameters: GridParameters,
   stewartParameters: StewartParameters,
 ): Promise<GeoJSONFeatureCollection> {
+  console.group('computeStewart');
+  console.time('preparation');
   // Make a suitable grid of points
   const grid = makePointGrid(gridParameters, false);
 
@@ -169,7 +180,7 @@ export async function computeStewart(
     xDots[i] = inputLayer.features[i].geometry.coordinates[0];
     // eslint-disable-next-line prefer-destructuring
     yDots[i] = inputLayer.features[i].geometry.coordinates[1];
-    values[i] = inputLayer.features[i].properties[variableName];
+    values[i] = inputLayer.features[i].properties[variableName] as number;
   }
 
   // Create the GPU instance and define the kernel
@@ -201,21 +212,29 @@ export async function computeStewart(
       },
     );
 
+  console.timeEnd('preparation');
+  console.time('kernel');
   // Actually compute the potential values
   const pots = kernel(xCells, yCells, xDots, yDots, values) as Float32Array;
 
+  console.timeEnd('kernel');
+  console.time('contours');
   // Add the potential values to the grid
   grid.features.forEach((cell, i) => {
     cell.properties.z = pots[i]; // eslint-disable-line no-param-reassign
   });
 
   const thresholds = quantile(Array.from(pots), { nb: 7 });
+  console.log(thresholds);
 
   const contours = makeContourLayer(grid, thresholds);
+  console.timeEnd('contours');
+  console.time('intersection');
+  const clippedContours = await intersection(contours, data);
+  console.timeEnd('intersection');
+  console.groupEnd();
 
-  // const clippedContours = await intersection(contours, data);
-
-  return contours;
+  return clippedContours;
 }
 
 const computeNormalizer = (values: number[]): number => {
