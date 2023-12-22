@@ -8,6 +8,7 @@ import { quantile } from 'statsbreaks';
 // Helpers
 import { makeCentroidLayer } from './geo';
 import { intersection } from './geos';
+import { max } from './math';
 
 // Types
 import type {
@@ -57,7 +58,7 @@ function makeContourLayer(
       v.push(grid.features[j * height + i].properties.z);
     }
   }
-  console.log(v);
+
   const values = new Float64Array(v);
   const options = {
     x_origin: Math.min(...xCoords),
@@ -67,6 +68,7 @@ function makeContourLayer(
   };
 
   const intervals = new Float64Array(thresholds);
+
   const contours = isobands(
     values,
     width,
@@ -74,6 +76,12 @@ function makeContourLayer(
     intervals,
     options,
   );
+
+  contours.features.forEach((ft, i) => {
+    // eslint-disable-next-line no-param-reassign
+    ft.properties.center = (ft.properties.min_v + ft.properties.max_v) / 2;
+  });
+
   return contours;
 }
 
@@ -99,7 +107,7 @@ function haversineDistance(lon1: number, lat1: number, lon2: number, lat2: numbe
   return this.constants.R * c;
 }
 
-function computeStewartInner(
+function computeStewartInnerExponential(
   xCell: number[],
   yCell: number[],
   xDot: number[],
@@ -116,6 +124,27 @@ function computeStewartInner(
     );
     // eslint-disable-next-line prefer-exponentiation-operator, no-restricted-properties
     sum += (values[i] * Math.exp(-this.constants.alpha * Math.pow(dist, this.constants.beta)));
+  }
+  return sum;
+}
+
+function computeStewartInnerPareto(
+  xCell: number[],
+  yCell: number[],
+  xDot: number[],
+  yDot: number[],
+  values: number[],
+): number {
+  let sum = 0;
+  for (let i = 0; i < this.constants.size; i++) { // eslint-disable-line no-plusplus
+    const dist = this.haversineDistance(
+      xDot[i],
+      yDot[i],
+      xCell[this.thread.x],
+      yCell[this.thread.x],
+    );
+    // eslint-disable-next-line prefer-exponentiation-operator, no-restricted-properties
+    sum += (values[i] * Math.pow(1 + this.constants.alpha * dist, -this.constants.beta));
   }
   return sum;
 }
@@ -155,10 +184,15 @@ export async function computeStewart(
   console.group('computeStewart');
   console.time('preparation');
   // Make a suitable grid of points
-  const grid = makePointGrid(gridParameters, false);
+  const grid = makePointGrid(gridParameters, true);
 
   // Compute the inputs points from
   const inputLayer = makeCentroidLayer(data, inputType, [variableName]);
+
+  // Appropriate function to compute the potential
+  const computeStewartInner = stewartParameters.function === 'gaussian'
+    ? computeStewartInnerExponential
+    : computeStewartInnerPareto;
 
   // Extract coordinates values from the grid and the input points
   // in arrays that can be passed to the GPU
@@ -183,8 +217,11 @@ export async function computeStewart(
     values[i] = inputLayer.features[i].properties[variableName] as number;
   }
 
+  console.timeEnd('preparation');
+  console.time('kernel');
+
   // Create the GPU instance and define the kernel
-  const gpu = new GPU();
+  const gpu = new GPU({ mode: 'webgl2' });
   const kernel = gpu
     .addFunction(
       haversineDistance,
@@ -212,20 +249,21 @@ export async function computeStewart(
       },
     );
 
-  console.timeEnd('preparation');
-  console.time('kernel');
   // Actually compute the potential values
   const pots = kernel(xCells, yCells, xDots, yDots, values) as Float32Array;
 
   console.timeEnd('kernel');
   console.time('contours');
+
   // Add the potential values to the grid
   grid.features.forEach((cell, i) => {
     cell.properties.z = pots[i]; // eslint-disable-line no-param-reassign
   });
 
-  const thresholds = quantile(Array.from(pots), { nb: 7 });
-  console.log(thresholds);
+  const maxPot = max(pots);
+
+  const thresholds = [0, 0.03, 0.06, 0.1, 0.25, 0.4, 0.55, 0.75, 0.85, 0.925, 1]
+    .map((d) => d * maxPot);
 
   const contours = makeContourLayer(grid, thresholds);
   console.timeEnd('contours');
@@ -245,15 +283,15 @@ const computeNormalizer = (values: number[]): number => {
   return 1 / sum;
 };
 
-export function computeKde(
+export async function computeKde(
   data: GeoJSONFeatureCollection,
   inputType: 'point' | 'polygon',
   variableName: string,
   gridParameters: GridParameters,
   kdeParameters: KdeParameters,
-): GeoJSONFeatureCollection {
+): Promise<GeoJSONFeatureCollection> {
   // Make a suitable grid of points
-  const grid = makePointGrid(gridParameters, false);
+  const grid = makePointGrid(gridParameters, true);
 
   // Compute the inputs points from
   const inputLayer = makeCentroidLayer(data, inputType, [variableName]);
@@ -375,11 +413,18 @@ export function computeKde(
   const resultValues = kernel(xCells, yCells, xDots, yDots, values) as Float32Array;
 
   grid.features.forEach((cell, i) => {
-    cell.properties.z = values[i]; // eslint-disable-line no-param-reassign
+    cell.properties.z = resultValues[i]; // eslint-disable-line no-param-reassign
   });
+  console.log(resultValues);
+  const maxPot = max(resultValues);
 
-  // TODO: we want to return the contours built from the grid
-  //  (possibly clipped by the reference layer),
-  //  not the grid
-  return grid;
+  const thresholds = [0, 0.03, 0.06, 0.1, 0.25, 0.4, 0.55, 0.75, 0.85, 0.925, 1]
+    .map((d) => d * maxPot);
+  console.log(thresholds);
+
+  const contours = makeContourLayer(grid, thresholds);
+
+  const clippedContours = await intersection(contours, data);
+
+  return clippedContours;
 }

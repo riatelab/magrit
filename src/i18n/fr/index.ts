@@ -209,6 +209,7 @@ const fr = {
     },
     SmoothingOptions: {
       Type: 'Type de lissage',
+      Resolution: 'Résolution de la grille (km)',
       Stewart: 'Potentiel de Stewart',
       KDE: 'Estimation de densité par noyau',
       Bandwidth: 'Largeur de bande',

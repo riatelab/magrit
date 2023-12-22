@@ -716,6 +716,10 @@ type RootTranslation = {
 			 */
 			Type: string
 			/**
+			 * G​r​i​d​ ​r​e​s​o​l​u​t​i​o​n​ ​(​k​m​)
+			 */
+			Resolution: string
+			/**
 			 * S​t​e​w​a​r​t​'​s​ ​p​o​t​e​n​t​i​a​l
 			 */
 			Stewart: string
@@ -2212,6 +2216,10 @@ export type TranslationFunctions = {
 			 * Smoothing type
 			 */
 			Type: () => LocalizedString
+			/**
+			 * Grid resolution (km)
+			 */
+			Resolution: () => LocalizedString
 			/**
 			 * Stewart's potential
 			 */

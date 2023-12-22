@@ -209,6 +209,7 @@ const en = {
     },
     SmoothingOptions: {
       Type: 'Smoothing type',
+      Resolution: 'Grid resolution (km)',
       Stewart: 'Stewart\'s potential',
       KDE: 'Kernel density estimation',
       Bandwidth: 'Bandwidth',

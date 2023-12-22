@@ -350,6 +350,13 @@ interface SmoothedLayerParameters {
   smoothingParameters: StewartParameters | KdeParameters,
   // The parameters of the grid used to compute the smoothed layer
   gridParameters: GridParameters,
+  // The palette used to color the smoothed layer
+  palette: Palette | CustomPalette,
+  // The thresholds used to compute the contour of the
+  // smoothed layer from the grid
+  thresholds: number[],
+  // Whether to reverse the palette or not
+  reversePalette: boolean,
 }
 
 interface CategoricalPictogramParameters {
@@ -407,6 +414,7 @@ interface StewartParameters {
   alpha: number;
   beta: number;
   span: number;
+  function: 'gaussian' | 'pareto';
 }
 
 export enum GridCellShape {

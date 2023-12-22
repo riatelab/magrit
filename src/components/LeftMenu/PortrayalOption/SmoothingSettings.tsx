@@ -5,10 +5,13 @@ import {
   For,
   Show,
 } from 'solid-js';
+import type { JSX } from 'solid-js';
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
 import { bbox } from '@turf/turf';
+import { getPalette } from 'dicopal';
+
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 
@@ -17,7 +20,7 @@ import { useI18nContext } from '../../../i18n/i18n-solid';
 import { findSuitableName } from '../../../helpers/common';
 import { generateIdLayer } from '../../../helpers/layers';
 import { Variable, VariableType } from '../../../helpers/typeDetection';
-import { computeStewart } from '../../../helpers/smoothing';
+import { computeKde, computeStewart } from '../../../helpers/smoothing';
 import { Mpow } from '../../../helpers/math';
 
 // Subcomponents
@@ -27,18 +30,22 @@ import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
-  GridParameters,
+  type GridParameters,
+  type KdeParameters,
   type LayerDescriptionSmoothedLayer,
   RepresentationType,
-  SmoothedLayerParameters,
+  type SmoothedLayerParameters,
   SmoothingMethod,
-  StewartParameters,
+  type StewartParameters,
 } from '../../../global.d';
 
 async function onClickValidate(
   referenceLayerId: string,
   newName: string,
   targetVariable: string,
+  resolution: number,
+  smoothingMethod: SmoothingMethod,
+  parameters: Partial<StewartParameters> | KdeParameters,
 ) {
   const referenceLayerDescription = layersDescriptionStore.layers
     .find((l) => l.id === referenceLayerId);
@@ -49,46 +56,89 @@ async function onClickValidate(
 
   const bboxLayer = bbox(referenceLayerDescription.data);
 
-  const stewartParams = {
-    beta: 2,
-    alpha: 0.6931471805 / Mpow(2, 2),
-    span: 2,
-  } as StewartParameters;
-
   const gridParams = {
     xMin: bboxLayer[0],
     yMin: bboxLayer[1],
     xMax: bboxLayer[2],
     yMax: bboxLayer[3],
-    resolution: 1,
+    resolution,
   } as GridParameters;
 
-  const newData = await computeStewart(
-    referenceLayerDescription.data,
-    referenceLayerDescription.type as 'point' | 'polygon',
-    targetVariable,
-    gridParams,
-    stewartParams,
-  );
+  let newData;
+  if (smoothingMethod === SmoothingMethod.Kde) {
+    const kdeParams = {
+      kernel: (parameters as KdeParameters).kernel,
+      bandwidth: (parameters as KdeParameters).bandwidth,
+    } as KdeParameters;
 
-  console.log(newData);
+    newData = await computeKde(
+      referenceLayerDescription.data,
+      referenceLayerDescription.type as 'point' | 'polygon',
+      targetVariable,
+      gridParams,
+      kdeParams,
+    );
+  } else if (smoothingMethod === SmoothingMethod.Stewart) {
+    const fn = (parameters as StewartParameters).function;
+
+    const alpha = fn === 'gaussian'
+      ? (
+        0.6931471805
+        / Mpow(
+          (parameters as StewartParameters).span,
+          (parameters as StewartParameters).beta,
+        )
+      ) : (
+        (Mpow(
+          2.0,
+          (1.0 / (parameters as StewartParameters).beta),
+        ) - 1.0) / (parameters as StewartParameters).span
+      );
+
+    const stewartParams = {
+      beta: (parameters as StewartParameters).beta,
+      span: (parameters as StewartParameters).span,
+      function: fn,
+      alpha,
+    } as StewartParameters;
+
+    newData = await computeStewart(
+      referenceLayerDescription.data,
+      referenceLayerDescription.type as 'point' | 'polygon',
+      targetVariable,
+      gridParams,
+      stewartParams,
+    );
+  }
+
+  const thresholds = newData.features.map((f) => f.properties.min_v)
+    .concat([newData.features[newData.features.length - 1].properties.max_v]);
 
   const rendererParameters = {
     variable: targetVariable,
-    method: SmoothingMethod.Stewart,
-    smoothingParameters: stewartParams,
+    method: smoothingMethod,
+    smoothingParameters: parameters,
     gridParameters: gridParams,
+    thresholds,
+    palette: getPalette('Carrots', thresholds.length - 1),
+    reversePalette: true,
   } as SmoothedLayerParameters;
 
   const newLayerDescription = {
     id: generateIdLayer(),
     name: newName,
     type: 'polygon',
-    renderer: 'default' as RepresentationType,
+    renderer: 'smoothed' as RepresentationType,
     data: newData,
     fields: [
       {
         name: 'min_v',
+        type: VariableType.stock,
+        hasMissingValues: false,
+        dataType: 'number',
+      } as Variable,
+      {
+        name: 'center_v',
         type: VariableType.stock,
         hasMissingValues: false,
         dataType: 'number',
@@ -133,6 +183,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     .fields?.filter((variable) => (
       variable.type === VariableType.ratio || variable.type === VariableType.stock)));
 
+  // Signals for common options
   const [
     targetVariable,
     setTargetVariable,
@@ -142,23 +193,61 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     setTargetSmoothingMethod,
   ] = createSignal<SmoothingMethod>(SmoothingMethod.Kde);
   const [
-    targetKernelType,
-    setTargetKernelType,
-  ] = createSignal<'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform' | 'pareto'>('gaussian');
+    targetResolution,
+    setTargetResolution,
+  ] = createSignal<number>(10);
   const [
     newLayerName,
     setNewLayerName,
   ] = createSignal(`Smoothed_${layerDescription().name}`);
+
+  // Signals for KDE options
+  const [
+    targetKdeKernelType,
+    setTargetKdeKernelType,
+  ] = createSignal<'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform'>('gaussian');
+  const [
+    targetBandwidth,
+    setTargetBandwidth,
+  ] = createSignal<number>(5);
+
+  // Signals for Stewart options
+  const [
+    targetStewartKernelType,
+    setTargetStewartKernelType,
+  ] = createSignal<'gaussian' | 'pareto'>('gaussian');
+  const [
+    targetSpan,
+    setTargetSpan,
+  ] = createSignal<number>(5);
+  const [
+    targetBeta,
+    setTargetBeta,
+  ] = createSignal<number>(2);
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
       newLayerName() || LL().PortrayalSection.NewLayer(),
       layersDescriptionStore.layers.map((l) => l.name),
     );
+    const params = targetSmoothingMethod() === SmoothingMethod.Kde
+      ? {
+        kernel: targetKdeKernelType(),
+        bandwidth: targetBandwidth(),
+      } as KdeParameters
+      : {
+        function: targetStewartKernelType(),
+        span: targetSpan(),
+        beta: targetBeta(),
+      } as Partial<StewartParameters>;
+
     await onClickValidate(
       props.layerId,
       layerName,
       targetVariable(),
+      targetResolution(),
+      targetSmoothingMethod(),
+      params,
     );
   };
 
@@ -184,11 +273,25 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       <div class="select" style={{ 'max-width': '60%' }}>
         <select
           value={targetSmoothingMethod()}
-          onChange={(e) => setTargetSmoothingMethod(e.currentTarget.value)}
+          onChange={(e) => setTargetSmoothingMethod(e.currentTarget.value as SmoothingMethod)}
         >
           <option value="Kde">{ LL().PortrayalSection.SmoothingOptions.KDE() }</option>
           <option value="Stewart">{ LL().PortrayalSection.SmoothingOptions.Stewart() }</option>
         </select>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">
+        { LL().PortrayalSection.SmoothingOptions.Resolution() }
+      </label>
+      <div class="control">
+        <input
+          type="number"
+          class="input"
+          value={targetResolution()}
+          step={0.1}
+          onChange={(e) => setTargetResolution(+e.currentTarget.value)}
+        />
       </div>
     </div>
     <Show when={targetSmoothingMethod() === SmoothingMethod.Kde}>
@@ -198,26 +301,30 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         </label>
         <div class="select" style={{ 'max-width': '60%' }}>
           <select
-            value={targetKernelType()}
-            onChange={(e) => setTargetKernelType(e.currentTarget.value)}
+            value={targetKdeKernelType()}
+            onChange={(e) => setTargetKdeKernelType(
+              e.currentTarget.value as 'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform',
+            )}
           >
-            <option value="gaussian">{ LL().PortrayalSection.SmoothingOptions.Gaussian() }</option>
-            <option value="epanechnikov">{ LL().PortrayalSection.SmoothingOptions.Epanechnikov() }</option>
-            <option value="triangular">{ LL().PortrayalSection.SmoothingOptions.Triangular() }</option>
-            <option value="uniform">{ LL().PortrayalSection.SmoothingOptions.Uniform() }</option>
+            <option value="gaussian">{LL().PortrayalSection.SmoothingOptions.Gaussian()}</option>
+            <option value="epanechnikov">{LL().PortrayalSection.SmoothingOptions.Epanechnikov()}</option>
+            <option value="quartic">{LL().PortrayalSection.SmoothingOptions.Quartic()}</option>
+            <option value="triangular">{LL().PortrayalSection.SmoothingOptions.Triangular()}</option>
+            <option value="uniform">{LL().PortrayalSection.SmoothingOptions.Uniform()}</option>
           </select>
         </div>
       </div>
       <div class="field">
         <label class="label">
-          { LL().PortrayalSection.SmoothingOptions.Bandwidth() }
+          {LL().PortrayalSection.SmoothingOptions.Bandwidth() }
         </label>
         <div class="control">
           <input
             type="number"
             class="input"
-            value={5}
+            value={targetBandwidth()}
             step={1}
+            onChange={(e) => setTargetBandwidth(+e.currentTarget.value)}
           />
         </div>
       </div>
@@ -229,8 +336,8 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         </label>
         <div class="select" style={{ 'max-width': '60%' }}>
           <select
-            value={targetKernelType()}
-            onChange={(e) => setTargetKernelType(e.currentTarget.value)}
+            value={targetStewartKernelType()}
+            onChange={(e) => setTargetStewartKernelType(e.currentTarget.value as 'gaussian' | 'pareto')}
           >
             <option value="gaussian">{ LL().PortrayalSection.SmoothingOptions.Gaussian() }</option>
             <option value="pareto">{ LL().PortrayalSection.SmoothingOptions.Pareto() }</option>
@@ -245,8 +352,9 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
           <input
             type="number"
             class="input"
-            value={5}
+            value={targetSpan()}
             step={1}
+            onChange={(e) => setTargetSpan(+e.currentTarget.value)}
           />
         </div>
       </div>
@@ -258,8 +366,9 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
           <input
             type="number"
             class="input"
-            value={2}
+            value={targetBeta()}
             step={1}
+            onChange={(e) => setTargetBeta(+e.currentTarget.value)}
           />
         </div>
       </div>

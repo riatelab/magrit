@@ -41,6 +41,7 @@ import proportionalSymbolsRenderer from './MapRenderer/ProportionalSymbolsMapRen
 import discontinuityRenderer from './MapRenderer/DiscontinuityMapRenderer.tsx';
 import { defaultLabelsRenderer } from './MapRenderer/LabelsMapRenderer.tsx';
 import graticuleRenderer from './MapRenderer/GraticuleRenderer.tsx';
+import smoothedMapRenderer from './MapRenderer/SmoothedMapRenderer.tsx';
 
 // - for rendering the layout features
 import EllipseRenderer from './LayoutFeatureRenderer/EllipseRenderer.tsx';
@@ -73,7 +74,9 @@ import {
   type LayerDescriptionDiscontinuity,
   type LayerDescriptionProportionalSymbols,
   type LayerDescriptionLabels,
-  type ID3Element, LayerDescriptionCategoricalChoropleth,
+  type ID3Element,
+  type LayerDescriptionCategoricalChoropleth,
+  type LayerDescriptionSmoothedLayer,
 } from '../global.d';
 
 // Styles
@@ -290,6 +293,8 @@ export default function MapZone(): JSX.Element {
               if (layer.type === 'point') return defaultLabelsRenderer(layer as LayerDescriptionLabels);
             } else if (layer.renderer === 'discontinuity') {
               return discontinuityRenderer(layer as LayerDescriptionDiscontinuity);
+            } else if (layer.renderer === 'smoothed') {
+              return smoothedMapRenderer(layer as LayerDescriptionSmoothedLayer);
             }
             return null;
           }}
