@@ -56,13 +56,12 @@ export default function NiceAlert(): JSX.Element {
     autofocus: true,
   };
 
-  return <div class="modal nice-alert" style={{ display: 'flex' }} ref={refParentNode}>
+  return <div class="modal nice-alert" style={{ display: 'flex' }} ref={refParentNode!}>
     <div class="modal-background"></div>
     <div class="modal-card">
-      <header class="modal-card-head">
-        {/* <button class="delete" aria-label="close"></button> */}
-      </header>
-      <section class="modal-card-body f-modal-alert">
+      <section
+        class="modal-card-body f-modal-alert is-flex is-flex-direction-column is-justify-content-center"
+      >
         { makeAnimation(niceAlertStore.type as string) }
         { niceAlertStore.content }
       </section>

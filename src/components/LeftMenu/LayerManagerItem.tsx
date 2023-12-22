@@ -71,8 +71,11 @@ const onClickTable = (id: string) => {
 
 const onClickTrash = (id: string, LL: Accessor<TranslationFunctions>) => {
   console.log('click trash on item ', id);
+
+  const ld = layersDescriptionStore.layers.find((l) => l.id === id)!;
+
   const innerElement = () => <>
-    <p>{ LL().Alerts.DeleteLayer() } { id } ?</p>
+    <p>{ LL().Alerts.DeleteLayer() } <i><b>{ ld.name }</b></i> ?</p>
   </>;
 
   const onDeleteConfirmed = (): void => {
