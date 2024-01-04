@@ -43,7 +43,7 @@ async function onClickValidate(
   referenceLayerId: string,
   newName: string,
   targetVariable: string,
-  resolution: number,
+  gridParams: GridParameters,
   smoothingMethod: SmoothingMethod,
   parameters: Partial<StewartParameters> | KdeParameters,
 ) {
@@ -53,16 +53,6 @@ async function onClickValidate(
   if (referenceLayerDescription === undefined) {
     throw new Error('Unexpected Error: Reference layer not found');
   }
-
-  const bboxLayer = bbox(referenceLayerDescription.data);
-
-  const gridParams = {
-    xMin: bboxLayer[0],
-    yMin: bboxLayer[1],
-    xMax: bboxLayer[2],
-    yMax: bboxLayer[3],
-    resolution,
-  } as GridParameters;
 
   let newData;
   if (smoothingMethod === SmoothingMethod.Kde) {
@@ -172,6 +162,13 @@ async function onClickValidate(
   );
 }
 
+const computeAppropritateResolution = (box: number[], n: number) => {
+  const bboxWidth = box[2] - box[0];
+  const bboxHeight = box[3] - box[1];
+  const bboxArea = bboxWidth * bboxHeight;
+  return Math.sqrt(bboxArea / n);
+};
+
 export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.Element {
   const { LL } = useI18nContext();
 
@@ -179,6 +176,10 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   const layerDescription = createMemo(() => layersDescriptionStore.layers
     .find((l) => l.id === props.layerId)!);
 
+  // The bbox of the layer to be smoothed
+  const bboxLayer = createMemo(() => bbox(layerDescription().data));
+
+  // The fields of the layer to be smoothed
   const targetFields = createMemo(() => layerDescription()
     .fields?.filter((variable) => (
       variable.type === VariableType.ratio || variable.type === VariableType.stock)));
@@ -195,7 +196,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   const [
     targetResolution,
     setTargetResolution,
-  ] = createSignal<number>(10);
+  ] = createSignal<number>(+(computeAppropritateResolution(bboxLayer(), 1).toPrecision(2)));
   const [
     newLayerName,
     setNewLayerName,
@@ -241,11 +242,19 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         beta: targetBeta(),
       } as Partial<StewartParameters>;
 
+    const gridParams = {
+      xMin: bboxLayer()[0],
+      yMin: bboxLayer()[1],
+      xMax: bboxLayer()[2],
+      yMax: bboxLayer()[3],
+      resolution: targetResolution(),
+    } as GridParameters;
+
     await onClickValidate(
       props.layerId,
       layerName,
       targetVariable(),
-      targetResolution(),
+      gridParams,
       targetSmoothingMethod(),
       params,
     );

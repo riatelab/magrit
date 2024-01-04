@@ -1,5 +1,5 @@
 // Imports from solid-js
-import { onMount } from 'solid-js';
+import { onMount, type JSX } from 'solid-js';
 
 // Imports from other packages
 import { FaSolidAngleDown } from 'solid-icons/fa';

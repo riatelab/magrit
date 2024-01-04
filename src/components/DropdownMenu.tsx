@@ -1,4 +1,4 @@
-import { JSX, For } from 'solid-js';
+import { type JSX, For } from 'solid-js';
 import { FaSolidAngleDown } from 'solid-icons/fa';
 
 interface DropdownMenuEntry {
@@ -15,6 +15,7 @@ interface DropdownMenuProps {
   entries: DropdownMenuEntry[];
   defaultEntry: DropdownMenuEntry | DropdownMenuPlaceholder;
   onChange: (value: string) => void;
+  prefix?: string;
   style?: { [key: string]: string };
 }
 
@@ -27,7 +28,7 @@ function onClickOutsideDropdown(): void {
   document.removeEventListener('click', onClickOutsideDropdown);
 }
 
-function setDropdownItemTarget(event: Event): void {
+function setDropdownItemTarget(event: Event, props: DropdownMenuProps): void {
   const target = event.currentTarget as HTMLElement;
 
   // Reference to the root of the dropdown component
@@ -39,7 +40,7 @@ function setDropdownItemTarget(event: Event): void {
   // Set the dropdown item target
   const dropdownItemTarget = dropdownRoot
     .querySelector('.dropdown-item-target')!;
-  dropdownItemTarget.textContent = target.textContent;
+  dropdownItemTarget.textContent = `${props.prefix ? props.prefix : ''}${target.textContent}`;
   dropdownItemTarget.value = target.value;
 
   // Close the dropdown (collapse the dropdown menu)
@@ -89,7 +90,7 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
         <For each={props.entries}>
           {(entry) => (
             <a href="#" class="dropdown-item" value={entry.value} onClick={ (ev) => {
-              setDropdownItemTarget(ev);
+              setDropdownItemTarget(ev, props);
               props.onChange(entry.value);
             } }>
               {entry.name}

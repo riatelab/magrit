@@ -74,6 +74,7 @@ export const capitalizeFirstLetter = (str: string): string => str[0].toUpperCase
  * @returns {string} - The first available name.
  */
 export const findSuitableName = (name: string, existingNames: Array<string>): string => {
+  // FIXME: there seems to be a bug here (when adding a new layer that is already named 'Layer (1)')
   const exp = /\s\((\d+)\)$/;
   const cleanNames = existingNames.map((n) => n.replace(exp, ''));
   const cleanName = name.replace(exp, '');

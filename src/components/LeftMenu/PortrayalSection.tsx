@@ -1,5 +1,10 @@
 import {
-  createSignal, JSX, Show,
+  createMemo,
+  createSignal,
+  type JSX,
+  Match,
+  Show,
+  Switch,
 } from 'solid-js';
 
 // Helpers
@@ -85,26 +90,76 @@ export default function PortrayalSection(): JSX.Element {
     setSelectedPortrayal,
   ] = createSignal<RepresentationType | null>(null);
 
+  const availablePortrayals = createMemo(() => {
+    const entries = [];
+
+    if (availableVariables()?.hasRatio) {
+      entries.push({
+        name: LL().PortrayalSection.PortrayalTypes.Choropleth(),
+        value: RepresentationType.choropleth,
+      });
+    }
+    if (availableVariables()?.hasStock) {
+      entries.push({
+        name: LL().PortrayalSection.PortrayalTypes.ProportionalSymbols(),
+        value: RepresentationType.proportionalSymbols,
+      });
+      entries.push({
+        name: LL().PortrayalSection.PortrayalTypes.Smoothed(),
+        value: RepresentationType.smoothed,
+      });
+    }
+    if (availableVariables()?.hasCategorical) {
+      entries.push({
+        name: LL().PortrayalSection.PortrayalTypes.Categorical(),
+        value: RepresentationType.categoricalChoropleth,
+      });
+    }
+    if (availableVariables()?.hasStock && availableVariables()?.hasRatio) {
+      entries.push({
+        name: LL().PortrayalSection.PortrayalTypes.Discontinuity(),
+        value: RepresentationType.discontinuity,
+      });
+    }
+    if (layerAnyAvailableVariable(targetLayer() as string)) {
+      entries.push({
+        name: LL().PortrayalSection.PortrayalTypes.Labels(),
+        value: RepresentationType.labels,
+      });
+    }
+
+    return entries;
+  });
+
   // Todo: this should be reactive instead of unmounting
   //   in "LeftMenu"
   return <div class="portrayal-section">
     <DropdownMenu
-      id={'portrayal-section__portrayal-dropdown'}
+      id={'portrayal-section__target-layer-dropdown'}
       entries={
         layersDescriptionStore.layers
           .filter(isCandidateForRepresentation)
           .map((layer) => ({ name: layer.name, value: layer.id }))}
       defaultEntry={ { name: LL().PortrayalSection.TargetLayer() } }
+      prefix={ 'Layer: '}
       onChange={ (value) => {
         // Deselect the portrayal selected if any
         setSelectedPortrayal(null);
         // Set the target layer...
         setTargetLayer(value);
         // ...and compute the available portrayals for the variable of this layer
-        setAvailableVariables(layerAvailableVariables(targetLayer()));
+        setAvailableVariables(layerAvailableVariables(targetLayer()!));
       } }
     />
-    <div class="portrayal-section__portrayal-selection">
+    <Show when={ targetLayer() }>
+      <DropdownMenu
+        id={'portrayal-section__portrayal-dropdown'}
+        entries={ availablePortrayals() }
+        defaultEntry={{ name: LL().PortrayalSection.ChooseARepresentation() }}
+        onChange={(v) => setSelectedPortrayal(v as RepresentationType)}
+      />
+    </Show>
+    {/* <div class="portrayal-section__portrayal-selection">
       <ul>
         <li
           onClick={ () => { setSelectedPortrayal(RepresentationType.choropleth); } }
@@ -170,32 +225,29 @@ export default function PortrayalSection(): JSX.Element {
       }>
         <p><i>{ LL().PortrayalSection.PortrayalTypes.NoPortrayal() }</i></p>
       </Show>
-    </div>
+    </div> */}
+    <hr />
     <div class="portrayal-section__portrayal-options">
-
-      <Show when={ selectedPortrayal() === RepresentationType.choropleth }>
-        <ChoroplethSettings layerId={ targetLayer() as string } />
-      </Show>
-
-      <Show when={ selectedPortrayal() === RepresentationType.proportionalSymbols }>
-        <ProportionalSymbolsSettings layerId={ targetLayer() as string } />
-      </Show>
-
-      <Show when={ selectedPortrayal() === RepresentationType.discontinuity }>
-        <DiscontinuitySettings layerId={ targetLayer() as string } />
-      </Show>
-
-      <Show when={ selectedPortrayal() === RepresentationType.categoricalChoropleth }>
-        <CategoricalChoroplethSettings layerId={ targetLayer() as string } />
-      </Show>
-
-      <Show when={ selectedPortrayal() === RepresentationType.labels }>
-        <LabelsSettings layerId={ targetLayer() as string } />
-      </Show>
-
-      <Show when={ selectedPortrayal() === RepresentationType.smoothed }>
-        <SmoothingSettings layerId={ targetLayer() as string } />
-      </Show>
+      <Switch>
+        <Match when={ selectedPortrayal() === RepresentationType.choropleth }>
+          <ChoroplethSettings layerId={ targetLayer() as string } />
+        </Match>
+        <Match when={ selectedPortrayal() === RepresentationType.proportionalSymbols }>
+          <ProportionalSymbolsSettings layerId={ targetLayer() as string } />
+        </Match>
+        <Match when={ selectedPortrayal() === RepresentationType.discontinuity }>
+          <DiscontinuitySettings layerId={ targetLayer() as string } />
+        </Match>
+        <Match when={ selectedPortrayal() === RepresentationType.categoricalChoropleth }>
+          <CategoricalChoroplethSettings layerId={ targetLayer() as string } />
+        </Match>
+        <Match when={ selectedPortrayal() === RepresentationType.labels }>
+          <LabelsSettings layerId={ targetLayer() as string } />
+        </Match>
+        <Match when={ selectedPortrayal() === RepresentationType.smoothed }>
+          <SmoothingSettings layerId={ targetLayer() as string } />
+        </Match>
+      </Switch>
     </div>
   </div>;
 }

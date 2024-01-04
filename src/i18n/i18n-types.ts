@@ -593,6 +593,14 @@ type RootTranslation = {
 		 */
 		RepresentationChoice: string
 		/**
+		 * C​h​o​o​s​e​ ​a​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n
+		 */
+		ChooseARepresentation: string
+		/**
+		 * L​a​y​e​r​:​ 
+		 */
+		DropdownPrefixLayer: string
+		/**
 		 * T​a​r​g​e​t​ ​l​a​y​e​r
 		 */
 		TargetLayer: string
@@ -2093,6 +2101,14 @@ export type TranslationFunctions = {
 		 * Representation choice
 		 */
 		RepresentationChoice: () => LocalizedString
+		/**
+		 * Choose a representation
+		 */
+		ChooseARepresentation: () => LocalizedString
+		/**
+		 * Layer: 
+		 */
+		DropdownPrefixLayer: () => LocalizedString
 		/**
 		 * Target layer
 		 */
