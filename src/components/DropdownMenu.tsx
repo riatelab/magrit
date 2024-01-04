@@ -32,18 +32,18 @@ function setDropdownItemTarget(event: Event): void {
 
   // Reference to the root of the dropdown component
   const dropdownRoot = target
-    .parentElement
-    .parentElement
-    .parentElement;
+    .parentElement!
+    .parentElement!
+    .parentElement!;
 
   // Set the dropdown item target
   const dropdownItemTarget = dropdownRoot
-    .querySelector('.dropdown-item-target');
+    .querySelector('.dropdown-item-target')!;
   dropdownItemTarget.textContent = target.textContent;
   dropdownItemTarget.value = target.value;
 
   // Close the dropdown (collapse the dropdown menu)
-  dropdownRoot.querySelector('.dropdown-menu').classList.toggle('is-block');
+  dropdownRoot.querySelector('.dropdown-menu')!.classList.toggle('is-block');
 }
 
 function onClickDropdown(event: Event): void {
@@ -54,7 +54,7 @@ function onClickDropdown(event: Event): void {
   }
   // Expand the dropdown menu
   const target = event.currentTarget as HTMLElement;
-  target.parentElement.querySelector('.dropdown-menu').classList.toggle('is-block');
+  target.parentElement!.querySelector('.dropdown-menu')!.classList.toggle('is-block');
 
   // Add an event listener to close the dropdown menu when clicking outside
   document.addEventListener('click', onClickOutsideDropdown);

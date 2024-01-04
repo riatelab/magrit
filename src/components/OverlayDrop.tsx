@@ -20,7 +20,8 @@ import { generateIdLayer } from '../helpers/layers';
 
 // Types / Interfaces / Enums
 import type { CustomFileList } from '../helpers/fileUpload';
-import { GeoJSONFeatureCollection } from '../global';
+import { GeoJSONFeatureCollection, LayerDescription } from '../global';
+import type { LayersDescriptionStoreType } from '../store/LayersDescriptionStore';
 
 // Styles
 import '../styles/OverlayDrop.css';
@@ -99,14 +100,14 @@ function addLayer(geojson: GeoJSONFeatureCollection, name: string) {
   //   to be able to ask the user for the field types...)
   setLayersDescriptionStore(
     produce(
-      (draft) => {
+      (draft: LayersDescriptionStoreType) => {
         if (!globalStore.userHasAddedLayer) {
           // eslint-disable-next-line no-param-reassign
           draft.layers = [];
           setGlobalStore({ userHasAddedLayer: true });
           firstLayer = true;
         }
-        draft.layers.push(newLayerDescription);
+        draft.layers.push(newLayerDescription as LayerDescription);
       },
     ),
   );
@@ -137,7 +138,9 @@ const convertDroppedFiles = async (files: CustomFileList) => {
     res = await convertToGeoJSON(files.map((f) => f.file));
     console.log('res', res);
   } catch (e) {
+    // TODO: display error message and/or improve error handling
     console.error(e);
+    return;
   }
   setGlobalStore({ isLoading: false });
 

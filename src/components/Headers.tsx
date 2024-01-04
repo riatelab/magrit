@@ -152,7 +152,7 @@ export function HeaderBarApp(): JSX.Element {
           >
             <FaSolidCircleQuestion />
           </button>
-          <DropdownLanguage title={ LL().HeaderApp.Language() }/>
+          <DropdownLanguage />
           <div class="buttons" />
         </div>
       </div>

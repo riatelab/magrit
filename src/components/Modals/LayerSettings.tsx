@@ -250,7 +250,7 @@ function makeSettingsDefaultPoint(
           style={{ margin: 'auto' }}
           onClick={() => {
             // Save current state of classification parameters
-            const params = unproxify(props.rendererParameters);
+            const params = unproxify(props.rendererParameters as never);
             setClassificationPanelStore({
               show: true,
               layerName: props.name,
@@ -398,7 +398,7 @@ function makeSettingsDefaultLine(
           style={{ margin: 'auto' }}
           onClick={() => {
             // Save current state of classification parameters
-            const params = unproxify(props.rendererParameters);
+            const params = unproxify(props.rendererParameters as never);
             setClassificationPanelStore({
               show: true,
               layerName: props.name,
@@ -478,7 +478,7 @@ function makeSettingsDefaultPolygon(
           style={{ margin: 'auto' }}
           onClick={() => {
             // Save current state of classification parameters
-            const params = unproxify(props.rendererParameters);
+            const params = unproxify(props.rendererParameters as never);
             setClassificationPanelStore({
               show: true,
               layerName: props.name,

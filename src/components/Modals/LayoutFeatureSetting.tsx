@@ -287,7 +287,11 @@ function makeSettingsScaleBar(
       width={ 200 }
     >
       <For each={Object.keys(ScaleBarStyle)}>
-        {(style) => <option value={style}>{ LL().LayoutFeatures.Modal[style]() }</option>}
+        {
+          (style) => <option value={style}>
+            { LL().LayoutFeatures.Modal[style as keyof typeof ScaleBarStyle]() }
+          </option>
+        }
       </For>
     </InputFieldSelect>
     <InputFieldNumber
@@ -324,7 +328,11 @@ function makeSettingsScaleBar(
       value={ft.unit}
     >
       <For each={Object.keys(DistanceUnit)}>
-        {(unit) => <option value={unit}>{ LL().LayoutFeatures.Modal[unit]() }</option>}
+        {
+          (unit) => <option value={unit}>
+            { LL().LayoutFeatures.Modal[unit as keyof typeof DistanceUnit]() }
+          </option>
+        }
       </For>
     </InputFieldSelect>
     <Show when={ft.style === ScaleBarStyle.blackAndWhiteBar}>

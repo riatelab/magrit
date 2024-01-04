@@ -31,12 +31,12 @@ export default function FieldTypingModal(): JSX.Element {
 
   if (layer.fields) {
     // If the layers fields are already typed, use them..
-    descriptions = unproxify(layer.fields) as Variable[];
+    descriptions = unproxify(layer.fields as never) as Variable[];
   } else {
     // ...otherwise, try to guess the type of each field
     descriptions = fields.map((field) => {
       const o = detectTypeField(
-        layer.data.features.map((ft) => ft.properties[field]),
+        layer.data.features.map((ft) => ft.properties[field]) as never[],
         field,
       );
       return {
@@ -66,7 +66,7 @@ export default function FieldTypingModal(): JSX.Element {
       });
   };
 
-  return <div class="modal-window modal" style={{ display: 'flex' }} ref={refParentNode}>
+  return <div class="modal-window modal" style={{ display: 'flex' }} ref={refParentNode!}>
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
@@ -114,7 +114,7 @@ export default function FieldTypingModal(): JSX.Element {
             const newDescriptions = getNewDescriptions();
             setLayersDescriptionStore(
               'layers',
-              (l) => l.id === layerId,
+              (l: LayerDescription) => l.id === layerId,
               { fields: newDescriptions },
             );
             setFieldTypingModalStore({ show: false, layerId: '' });

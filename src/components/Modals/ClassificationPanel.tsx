@@ -133,11 +133,11 @@ export default function ClassificationPanel(): JSX.Element {
   const { LL } = useI18nContext();
 
   // The values that we are gonna use for the classification
-  const filteredSeries = classificationPanelStore.series
+  const filteredSeries = classificationPanelStore.series!
     .filter((d) => isNumber(d))
     .map((d) => +d);
 
-  const missingValues = classificationPanelStore.series.length - filteredSeries.length;
+  const missingValues = classificationPanelStore.series!.length - filteredSeries.length;
 
   // Basic statistical summary displayed to the user
   const statSummary = prepareStatisticalSummary(filteredSeries);
@@ -339,7 +339,7 @@ export default function ClassificationPanel(): JSX.Element {
                     .find((d) => d.value === classificationMethod())!
                 }
                 onChange={(value) => {
-                  setClassificationMethod(value);
+                  setClassificationMethod(value as ClassificationMethod);
                   updateClassificationParameters();
                 }}
               />
@@ -566,14 +566,18 @@ export default function ClassificationPanel(): JSX.Element {
         <button
           class="button is-success classification-panel__confirm-button"
           onClick={() => {
-            classificationPanelStore.onConfirm(currentBreaksInfo());
+            if (classificationPanelStore.onConfirm) {
+              classificationPanelStore.onConfirm(currentBreaksInfo());
+            }
             setClassificationPanelStore({ show: false });
           }}
         >{ LL().SuccessButton() }</button>
         <button
           class="button classification-panel__cancel-button"
           onClick={() => {
-            classificationPanelStore.onCancel();
+            if (classificationPanelStore.onCancel) {
+              classificationPanelStore.onCancel();
+            }
             setClassificationPanelStore({ show: false });
           }}
         >{ LL().CancelButton() }</button>
