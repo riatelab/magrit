@@ -7,12 +7,15 @@ import topojson from './topojson';
 
 // Types
 import {
+  GeoJSONFeatureCollection,
   type LayerDescription,
   type MultiLineString,
   RepresentationType,
 } from '../global';
 
 export const generateIdLayer = () => `Layer-${uuidv4()}`;
+
+export const generateIdTable = () => `Table-${uuidv4()}`;
 
 /**
  * Whether the map already has a sphere layer.
@@ -49,7 +52,9 @@ export const makeDefaultWorldLand = (): LayerDescription => ({
   shapeRendering: 'auto',
   fields: [],
   renderer: 'default' as RepresentationType,
-  data: topojson.feature(worldLand, worldLand.objects.world_country),
+  data: ( // We know types are correct here, so we just use 'never' to avoid type checking
+    topojson.feature(worldLand as never, worldLand.objects.world_country as never)
+  ) as unknown as GeoJSONFeatureCollection,
 });
 
 export const makeDefaultSphere = (): LayerDescription => ({
@@ -67,7 +72,7 @@ export const makeDefaultSphere = (): LayerDescription => ({
   shapeRendering: 'auto',
   fields: [],
   renderer: 'sphere' as RepresentationType,
-  data: { type: 'Sphere' },
+  data: { type: 'Sphere' } as never,
 });
 
 export const makeDefaultGraticule = (): LayerDescription => ({

@@ -16,6 +16,7 @@ export enum SupportedGeoFileTypes {
  */
 export enum SupportedTabularFileTypes {
   CSV = 'csv',
+  TSV = 'tsv',
   ODS = 'ods',
   XLX = 'xls',
   XLSX = 'xlsx',
@@ -78,6 +79,8 @@ export const allowedFileExtensions: string[] = [
   'kml',
   'flatgeobuf',
   'csv',
+  'tsv',
   'xls',
   'xlsx',
+  'ods',
 ];

@@ -27,6 +27,10 @@ type RootTranslation = {
 	 */
 	CancelButton: string
 	/**
+	 * L​o​a​d​i​n​g​.​.​.
+	 */
+	LoadingMessage: string
+	/**
 	 * D​r​o​p​ ​y​o​u​r​ ​f​i​l​e​(​s​)​ ​h​e​r​e​ ​!
 	 */
 	DropFilesHere: string
@@ -55,6 +59,10 @@ type RootTranslation = {
 		 * D​e​l​e​t​e​ ​l​a​y​e​r
 		 */
 		DeleteLayer: string
+		/**
+		 * D​e​l​e​t​e​ ​t​a​b​l​e
+		 */
+		DeleteTable: string
 		/**
 		 * C​r​e​a​t​e​ ​a​ ​n​e​w​ ​e​m​p​t​y​ ​p​r​o​j​e​c​t​ ​?
 		 */
@@ -1537,6 +1545,10 @@ export type TranslationFunctions = {
 	 */
 	CancelButton: () => LocalizedString
 	/**
+	 * Loading...
+	 */
+	LoadingMessage: () => LocalizedString
+	/**
 	 * Drop your file(s) here !
 	 */
 	DropFilesHere: () => LocalizedString
@@ -1565,6 +1577,10 @@ export type TranslationFunctions = {
 		 * Delete layer
 		 */
 		DeleteLayer: () => LocalizedString
+		/**
+		 * Delete table
+		 */
+		DeleteTable: () => LocalizedString
 		/**
 		 * Create a new empty project ?
 		 */

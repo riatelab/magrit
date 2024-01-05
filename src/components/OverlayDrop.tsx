@@ -14,13 +14,20 @@ import { overlayDropStore, setOverlayDropStore } from '../store/OverlayDropStore
 
 // Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
-import { isAuthorizedFile } from '../helpers/fileUpload';
-import { convertToGeoJSON, getGeometryType } from '../helpers/formatConversion';
-import { generateIdLayer } from '../helpers/layers';
+import {
+  isAuthorizedFile,
+  isTabularFile,
+  isGeojson,
+  isTopojson,
+} from '../helpers/fileUpload';
+import { convertTabularDatasetToJSON, convertToGeoJSON, getGeometryType } from '../helpers/formatConversion';
+import { generateIdLayer, generateIdTable } from '../helpers/layers';
+import { convertTopojsonToGeojson } from '../helpers/topojson';
+import { detectTypeField, Variable } from '../helpers/typeDetection';
 
 // Types / Interfaces / Enums
 import type { CustomFileList } from '../helpers/fileUpload';
-import { GeoJSONFeatureCollection, LayerDescription } from '../global';
+import { GeoJSONFeatureCollection, LayerDescription, TableDescription } from '../global';
 import type { LayersDescriptionStoreType } from '../store/LayersDescriptionStore';
 
 // Styles
@@ -78,6 +85,21 @@ function addLayer(geojson: GeoJSONFeatureCollection, name: string) {
   const geomType = getGeometryType(geojson);
   const layerId = generateIdLayer();
 
+  const fieldsName: string[] = Object.keys(geojson.features[0].properties);
+
+  const fieldsDescription: Variable[] = fieldsName.map((field) => {
+    const o = detectTypeField(
+      geojson.features.map((ft) => ft.properties[field]) as never[],
+      field,
+    );
+    return {
+      name: field,
+      hasMissingValues: o.hasMissingValues,
+      type: o.variableType,
+      dataType: o.dataType,
+    };
+  });
+
   // Add the new layer to the LayerManager by adding it
   // to the layersDescriptionStore
   const newLayerDescription = {
@@ -86,18 +108,13 @@ function addLayer(geojson: GeoJSONFeatureCollection, name: string) {
     type: geomType,
     data: geojson,
     visible: true,
+    fields: fieldsDescription,
     ...getDefaultRenderingParams(geomType),
     shapeRendering: geomType === 'polygon' && geojson.features.length > 10000 ? 'optimizeSpeed' : 'auto',
   };
 
   let firstLayer = false;
 
-  // TODO: ideally, we should push the state *after* having
-  //   asking field types to the user so that it is only
-  //   one entry in the undo/redo stack...
-  //   (however this is not doable with the current architecture
-  //   because we need to know the layerId, and to have it in the LayersDescriptionStore,
-  //   to be able to ask the user for the field types...)
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
@@ -120,8 +137,47 @@ function addLayer(geojson: GeoJSONFeatureCollection, name: string) {
   // Open modal for field typing
   setFieldTypingModalStore({
     show: true,
-    layerId,
+    targetId: layerId,
+    targetType: 'layer',
   });
+}
+
+function addTabularLayer(data: object[], name: string) {
+  const fields: string[] = Object.keys(data[0]);
+
+  const descriptions = fields.map((field) => {
+    const o = detectTypeField(
+      data.map((ft) => ft[field]) as never[],
+      field,
+    );
+    return {
+      name: field,
+      hasMissingValues: o.hasMissingValues,
+      type: o.variableType,
+      dataType: o.dataType,
+    };
+  });
+  const tableDescription = {
+    id: generateIdTable(),
+    name,
+    fields: descriptions,
+    data,
+  } as TableDescription;
+
+  setLayersDescriptionStore(
+    produce(
+      (draft: LayersDescriptionStoreType) => {
+        // TODO: Do we want to clean the map (as we do when the first layer is added)
+        //       when adding the first table?
+        // if (!globalStore.userHasAddedLayer) {
+        //   // eslint-disable-next-line no-param-reassign
+        //   draft.layers = [];
+        //   setGlobalStore({ userHasAddedLayer: true });
+        // }
+        draft.tables.push(tableDescription);
+      },
+    ),
+  );
 }
 
 const convertDroppedFiles = async (files: CustomFileList) => {
@@ -133,18 +189,32 @@ const convertDroppedFiles = async (files: CustomFileList) => {
     files: [],
   });
   setGlobalStore({ isLoading: true });
-  let res;
-  try {
-    res = await convertToGeoJSON(files.map((f) => f.file));
-    console.log('res', res);
-  } catch (e) {
-    // TODO: display error message and/or improve error handling
-    console.error(e);
-    return;
+  if (await isTopojson(authorizedFiles)) {
+    const res = convertTopojsonToGeojson(await files[0].file.text());
+    Object.keys(res).forEach((layerName) => {
+      addLayer(res[layerName], layerName);
+    });
+  } else if (await isGeojson(authorizedFiles)) {
+    const res = JSON.parse(await authorizedFiles[0].file.text());
+    addLayer(res, authorizedFiles[0].name);
+  } else if (isTabularFile(authorizedFiles)) {
+    const res = await convertTabularDatasetToJSON(authorizedFiles[0].file, authorizedFiles[0].ext);
+    console.log(res);
+    addTabularLayer(res, authorizedFiles[0].name);
+  } else {
+    // TODO: handle GeoPackages that may contain multiple layers
+    let res;
+    try {
+      res = await convertToGeoJSON(authorizedFiles.map((f) => f.file));
+    } catch (e) {
+      // TODO: display error message and/or improve error handling
+      console.error(e);
+      return;
+    }
+    addLayer(res, authorizedFiles[0].name);
   }
-  setGlobalStore({ isLoading: false });
 
-  addLayer(res, files[0].name);
+  setGlobalStore({ isLoading: false });
 };
 
 const displayFiles = (files: CustomFileList): JSX.Element => {
@@ -190,7 +260,6 @@ export default function OverlayDrop(): JSX.Element {
           </button>
         </div>
       </div>
-
     </div>
   </div>;
 }

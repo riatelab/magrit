@@ -1,5 +1,10 @@
 import { selection, select, selectAll } from 'd3-selection';
-import { csvFormat } from 'd3-dsv';
+import {
+  csvFormat,
+  csvParse,
+  dsvFormat,
+  tsvParse,
+} from 'd3-dsv';
 import { transition } from 'd3-transition';
 import {
   zoom,
@@ -380,6 +385,9 @@ export default {
   zoomIdentity,
   zoomTransform,
   csvFormat,
+  dsvFormat,
+  csvParse,
+  tsvParse,
   bin,
   nice,
   extent,

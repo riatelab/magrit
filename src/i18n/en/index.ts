@@ -4,6 +4,7 @@ const en = {
   StartApplication: 'Start Application',
   SuccessButton: 'Confirm',
   CancelButton: 'Cancel',
+  LoadingMessage: 'Loading...',
   DropFilesHere: 'Drop your file(s) here !',
   SupportedVectorFormats: 'Supported vector formats are: ESRI Shapefile (.shp, .shx, .dbf, .prf, .cpg), GeoJSON (.json ou .geojson), TopoJSON (.topojson ou .json), GML (.gml) and KML (.kml).',
   SupportedTabularFormats: 'Supported tabular formats are: Excel (.xls, .xlsx), CSV (.csv) and OpenDocument Spreadsheet (.ods).',
@@ -12,6 +13,7 @@ const en = {
   ImportFiles: 'Import file(s)',
   Alerts: {
     DeleteLayer: 'Delete layer',
+    DeleteTable: 'Delete table',
     EmptyProject: 'Create a new empty project ?',
     SaveEditedData: 'Save changes ?',
     ReloadLastProject: 'A project was automatically saved when the page was closed on {}. Reload this project ?',

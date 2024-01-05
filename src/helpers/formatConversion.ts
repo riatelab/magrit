@@ -1,6 +1,12 @@
 import JSZip from 'jszip';
 
-import { GeoJSONFeatureCollection, GeoJSONFeature } from '../global.d';
+import { SupportedTabularFileTypes } from './supportedFormats';
+
+// Helpers
+import d3 from './d3-custom';
+
+// Types
+import type { GeoJSONFeatureCollection, GeoJSONFeature } from '../global';
 
 /**
  * Convert the given file(s) to a GeoJSON feature collection.
@@ -53,7 +59,36 @@ export function getGeometryType(geojsonLayer: GeoJSONFeatureCollection): string 
   return typesArray[0].toLowerCase();
 }
 
-export function convertTabularDataset() {
+function findCsvDelimiter(rawText: string): string {
+  const delimiters = [',', ';', '\t'];
+  const lines = rawText.split('\n');
+  const counts = delimiters.map((d) => lines[0].split(d).length);
+  const maxCount = Math.max(...counts);
+  const maxIndex = counts.indexOf(maxCount);
+  return delimiters[maxIndex];
+}
+
+export async function convertTabularDatasetToJSON(
+  file: File,
+  ext: SupportedTabularFileTypes[keyof SupportedTabularFileTypes],
+): Promise<object[]> {
+  console.log(file);
+  if (ext === 'csv' || ext === 'tsv') {
+    const text = await file.text();
+    const delimiter = findCsvDelimiter(text);
+    console.log('found delimiter', delimiter);
+    return d3.dsvFormat(delimiter).parse(text);
+  }
+  if (ext === 'xlsx') {
+    return [];
+  }
+  if (ext === 'xls') {
+    return [];
+  }
+  if (ext === 'ods') {
+    return [];
+  }
+  return [];
 }
 
 async function uintArrayToBase64(data: Uint8Array): Promise<string> {
@@ -103,20 +138,21 @@ export async function convertFromGeoJSON(
     // Add the cpg file
     zip.file(`${layerName}.cpg`, 'UTF-8');
     // Add the other files
-    await ['shp', 'shx', 'dbf', 'prj']
-      .forEach(async (ext) => {
-        const outputPath = {
-          local: output.local.replace('.shp', `.${ext}`),
-          real: output.real.replace('.shp', `.${ext}`),
-        };
-        const rawData = await globalThis.gdal.getFileBytes(outputPath);
-        const blob = new Blob([rawData], { type: '' });
-        zip.file(`${layerName}.${ext}`, blob, { binary: true });
-      });
+    const shpExts = ['shp', 'shx', 'dbf', 'prj'];
+    for (let i = 0; i < shpExts.length; i += 1) {
+      const ext = shpExts[i];
+      const outputPath = {
+        local: output.local.replace('.shp', `.${ext}`),
+        real: output.real.replace('.shp', `.${ext}`),
+      };
+      // eslint-disable-next-line no-await-in-loop
+      const rawData = await globalThis.gdal.getFileBytes(outputPath);
+      const blob = new Blob([rawData], { type: '' });
+      zip.file(`${layerName}.${ext}`, blob, { binary: true });
+    }
     await globalThis.gdal.close(input);
     // Generate the zip file (base64 encoded)
-    const resZip = await zip.generateAsync({ type: 'base64' });
-    return resZip;
+    return zip.generateAsync({ type: 'base64' });
   }
   if (format === 'GML') {
     options.push('-t_srs', crs);
@@ -139,8 +175,7 @@ export async function convertFromGeoJSON(
     const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
     const bytes = await globalThis.gdal.getFileBytes(output);
     await globalThis.gdal.close(input);
-    const b64Data = await uintArrayToBase64(bytes);
-    return b64Data;
+    return uintArrayToBase64(bytes);
   }
   return '';
 }

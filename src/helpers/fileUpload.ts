@@ -1,4 +1,4 @@
-import { allowedFileExtensions, allowedMimeTypes } from './supportedFormats';
+import { allowedFileExtensions, allowedMimeTypes, SupportedTabularFileTypes } from './supportedFormats';
 
 // A file, dropped by the user
 interface FileEntry {
@@ -51,3 +51,16 @@ export function isAuthorizedFile(file: FileEntry): boolean {
   }
   return false;
 }
+
+export const isTabularFile = (files: CustomFileList): boolean => Object
+  .keys(SupportedTabularFileTypes)
+  .map((key) => SupportedTabularFileTypes[key as never] as string)
+  .indexOf(files[0].ext) > -1;
+
+export const isTopojson = async (files: CustomFileList) => files.length === 1
+  && (files[0].ext === 'topojson' || files[0].ext === 'json')
+  && (await files[0].file.text()).includes('Topology');
+
+export const isGeojson = async (files: CustomFileList) => files.length === 1
+  && (files[0].ext === 'geojson' || files[0].ext === 'json')
+  && (await files[0].file.text()).includes('FeatureCollection');

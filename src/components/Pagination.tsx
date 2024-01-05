@@ -9,11 +9,11 @@ interface PaginationProps {
 
 const makeButtonsToRender = (pps: PaginationProps) => {
   // We want :
-  // - first page
-  // - last page
-  // - current page
-  // - current page - 1
-  // - current page + 1
+  // - first page,
+  // - current page - 1,
+  // - current page,
+  // - current page + 1,
+  // - last page.
   // We also want to take care of not having duplicates.
   let btns = [...new Set([
     1,
@@ -25,14 +25,14 @@ const makeButtonsToRender = (pps: PaginationProps) => {
   btns = btns
     .filter((page) => page > 0 && page <= pps.totalPages);
   if (btns[0] !== btns[1] - 1) {
-    // Add ellipsis between first and second element
+    // Add an ellipsis between first and second element
     btns = [btns[0], -1, ...btns.slice(1)];
   }
   if (
     btns[btns.length - 1]
     !== btns[btns.length - 2] + 1
   ) {
-    // Add ellipsis between second last and last element
+    // Add an ellipsis between second last and last element
     btns = [
       ...btns.slice(0, btns.length - 1),
       -1,

@@ -3,50 +3,41 @@ import { For, JSX } from 'solid-js';
 import { autofocus } from '@solid-primitives/autofocus';
 
 // Stores
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
-import { fieldTypingModalStore, setFieldTypingModalStore } from '../../store/FieldTypingModalStore';
+import {
+  layersDescriptionStore,
+  LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../../store/LayersDescriptionStore';
+import {
+  fieldTypingModalStore,
+  resetFieldTypingModalStore,
+} from '../../store/FieldTypingModalStore';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { unproxify } from '../../helpers/common';
-import { detectTypeField, VariableType, Variable } from '../../helpers/typeDetection';
+import { VariableType, Variable } from '../../helpers/typeDetection';
 
 // Types / Interfaces / Enums
 import type { LayerDescription } from '../../global';
 
 export default function FieldTypingModal(): JSX.Element {
   const { LL } = useI18nContext();
-  const { layerId } = fieldTypingModalStore;
-  const layer = layersDescriptionStore.layers.find((l) => l.id === layerId);
+  const { targetId, targetType } = fieldTypingModalStore;
 
-  let refParentNode: HTMLDivElement;
+  // Do we need to search for the dataset in the "layers" or "tables" array?
+  const key = `${targetType}s` as Exclude<keyof LayersDescriptionStoreType, 'layoutFeatures'>;
+
+  const dataset = layersDescriptionStore[key].find((l) => l.id === targetId);
 
   // This should never happen (due to the way the modal is called)
-  if (!layer) {
-    throw new Error('Layer not found');
+  if (!dataset) {
+    throw new Error(`Layer or table '${targetId}' not found`);
   }
 
-  const fields: string[] = Object.keys(layer.data.features[0].properties);
-  let descriptions: Variable[];
+  const descriptions = unproxify(dataset.fields as never) as Variable[];
 
-  if (layer.fields) {
-    // If the layers fields are already typed, use them..
-    descriptions = unproxify(layer.fields as never) as Variable[];
-  } else {
-    // ...otherwise, try to guess the type of each field
-    descriptions = fields.map((field) => {
-      const o = detectTypeField(
-        layer.data.features.map((ft) => ft.properties[field]) as never[],
-        field,
-      );
-      return {
-        name: field,
-        hasMissingValues: o.hasMissingValues,
-        type: o.variableType,
-        dataType: o.dataType,
-      };
-    });
-  }
+  let refParentNode: HTMLDivElement;
 
   const getNewDescriptions = () => {
     // Get all the select elements
@@ -112,23 +103,28 @@ export default function FieldTypingModal(): JSX.Element {
           autofocus
           onClick={ () => {
             const newDescriptions = getNewDescriptions();
-            setLayersDescriptionStore(
-              'layers',
-              (l: LayerDescription) => l.id === layerId,
-              { fields: newDescriptions },
-            );
-            setFieldTypingModalStore({ show: false, layerId: '' });
+            // Compare the new descriptions with the old ones
+            // to avoid changing the store if nothing changed
+            if (JSON.stringify(newDescriptions) !== JSON.stringify(descriptions)) {
+              setLayersDescriptionStore(
+                'layers',
+                (l: LayerDescription) => l.id === targetId,
+                { fields: newDescriptions },
+              );
+            }
+            resetFieldTypingModalStore();
           } }
         >{ LL().SuccessButton() }</button>
         <button
           class="button"
           onClick={ () => {
+            // Reset the descriptions to their original values when clicking on cancel
             setLayersDescriptionStore(
               'layers',
-              (l: LayerDescription) => l.id === layerId,
+              (l: LayerDescription) => l.id === targetId,
               { fields: descriptions },
             );
-            setFieldTypingModalStore({ show: false, layerId: '' });
+            resetFieldTypingModalStore();
           } }
         >{ LL().CancelButton() }</button>
       </footer>

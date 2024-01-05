@@ -22,7 +22,7 @@ const [
  * @param {object} data - The state to push.
  * @return {void}
  */
-const pushUndoStackStore = (type: 'mapStore' | 'layersDescription', data: unknown) => {
+const pushUndoStackStore = (type: 'mapStore' | 'layersDescription', data: object): void => {
   setStateStackStore(
     produce((draft: StateStackStoreType) => {
       draft.undoStack.push({ type, data });
@@ -41,7 +41,7 @@ const pushUndoStackStore = (type: 'mapStore' | 'layersDescription', data: unknow
  * @param {object} data - The state to push.
  * @return {void}
  */
-const pushRedoStackStore = (type: 'mapStore' | 'layersDescription', data: unknown) => {
+const pushRedoStackStore = (type: 'mapStore' | 'layersDescription', data: object): void => {
   setStateStackStore(
     produce((draft: StateStackStoreType) => {
       draft.redoStack.push({ type, data });
@@ -57,7 +57,7 @@ const pushRedoStackStore = (type: 'mapStore' | 'layersDescription', data: unknow
  *
  * @return {void}
  */
-const resetRedoStackStore = () => {
+const resetRedoStackStore = (): void => {
   setStateStackStore(
     produce((draft: StateStackStoreType) => {
       // eslint-disable-next-line no-param-reassign
@@ -67,7 +67,7 @@ const resetRedoStackStore = () => {
 };
 
 /**
- * Reset the undo stack and the redo stack to empty arrays.
+ * Reset the undo stack, and the redo stack to empty arrays.
  */
 const resetUndoRedoStackStore = () => {
   setStateStackStore(
@@ -85,7 +85,7 @@ const resetUndoRedoStackStore = () => {
  *
  * @return {void}
  */
-const resetUndoStackStore = () => {
+const resetUndoStackStore = (): void => {
   setStateStackStore(
     produce((draft: StateStackStoreType) => {
       // eslint-disable-next-line no-param-reassign

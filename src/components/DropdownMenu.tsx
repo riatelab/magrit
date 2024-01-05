@@ -41,7 +41,6 @@ function setDropdownItemTarget(event: Event, props: DropdownMenuProps): void {
   const dropdownItemTarget = dropdownRoot
     .querySelector('.dropdown-item-target')!;
   dropdownItemTarget.textContent = `${props.prefix ? props.prefix : ''}${target.textContent}`;
-  dropdownItemTarget.value = target.value;
 
   // Close the dropdown (collapse the dropdown menu)
   dropdownRoot.querySelector('.dropdown-menu')!.classList.toggle('is-block');
@@ -89,10 +88,10 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
       <div class="dropdown-content" style={{ 'z-index': 1001 }}>
         <For each={props.entries}>
           {(entry) => (
-            <a href="#" class="dropdown-item" value={entry.value} onClick={ (ev) => {
+            <a href="#" class="dropdown-item" onClick={ (ev) => {
               setDropdownItemTarget(ev, props);
               props.onChange(entry.value);
-            } }>
+            }}>
               {entry.name}
             </a>
           )}

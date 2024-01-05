@@ -23,7 +23,7 @@ type LayerDescription = {
   // The name of the layer (as displayed in the UI, can be changed by the user)
   name: string,
   // Type of the layer
-  type: 'point' | 'linestring' | 'polygon' | 'raster' | 'table',
+  type: 'point' | 'linestring' | 'polygon' | 'raster',
   // The type of representation of the layer
   renderer: RepresentationType,
   // The data for the layer
@@ -75,6 +75,17 @@ type LayerDescription = {
   ),
   // Parameters of the legend associated to the layer
   legend?: LegendParameters,
+};
+
+type TableDescription = {
+  // The internal unique identifier of the table
+  id: string,
+  // The name of the table (as displayed in the UI, can be changed by the user)
+  name: string,
+  // Description of the fields of the table
+  fields: Variable[],
+  // The data for the table (as an array of records)
+  data: Record<string, any>[]
 };
 
 interface DefaultRendererParameters {

@@ -30,7 +30,7 @@ import { setFieldTypingModalStore } from '../../store/FieldTypingModalStore';
 import LayerSettings from '../Modals/LayerSettings.tsx';
 
 // Types / Interfaces / Enums
-import type { LayerDescription } from '../../global';
+import type { LayerDescription, TableDescription } from '../../global';
 
 // Styles
 import 'font-gis/css/font-gis.css';
@@ -69,7 +69,7 @@ const onClickTable = (id: string) => {
   });
 };
 
-const onClickTrash = (id: string, LL: Accessor<TranslationFunctions>) => {
+const onClickTrashLayer = (id: string, LL: Accessor<TranslationFunctions>) => {
   console.log('click trash on item ', id);
 
   const ld = layersDescriptionStore.layers.find((l) => l.id === id)!;
@@ -118,11 +118,12 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
   });
 };
 
-const onClickTyping = (id: string) => {
+const onClickTyping = (id: string, type: 'table' | 'layer') => {
   console.log('click typing on item ', id);
   setFieldTypingModalStore({
     show: true,
-    layerId: id,
+    targetId: id,
+    targetType: type,
   });
 };
 
@@ -194,7 +195,7 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
   }
 };
 
-export default function LayerManagerItem(props: { 'layer': LayerDescription }): JSX.Element {
+export function LayerManagerLayerItem(props: { 'layer': LayerDescription }): JSX.Element {
   const { LL } = useI18nContext();
 
   return <div class="layer-manager-item" onDblClick={() => { onClickSettings(props.layer.id, LL); }}>
@@ -203,31 +204,25 @@ export default function LayerManagerItem(props: { 'layer': LayerDescription }): 
     </div>
     <div class="layer-manager-item__icons">
       <div class="layer-manager-item__icons-left">
-        <Show
-          when={props.layer.type !== 'table'}
-          fallback={<div title={ LL().LayerManager.table() }><FaSolidTableCells /></div>}
-        >
-          <div title={ LL().LayerManager[props.layer.type]() } style={{ cursor: 'help' }}>
+        <div title={ LL().LayerManager[props.layer.type]() } style={{ cursor: 'help' }}>
+          <i
+            class={ typeIcons[props.layer.type as ('point' | 'linestring' | 'polygon' | 'raster')] }
+          />
+        </div>
+        <Show when={props.layer.legend !== undefined}>
+          <div title={ LL().LayerManager.Legend() } style={{ cursor: 'pointer' }}>
             <i
-              class={ typeIcons[props.layer.type as ('point' | 'linestring' | 'polygon' | 'raster')] }
+              class="fg-map-legend"
+              style={{
+                color: props.layer.legend?.visible ? 'black' : 'grey',
+                transform: props.layer.legend?.visible ? '' : 'rotate(3deg)',
+              }}
+              onClick={() => { onClickLegend(props.layer.id, LL); }}
             />
           </div>
-          <Show when={props.layer.legend !== undefined}>
-            <div title={ LL().LayerManager.Legend() } style={{ cursor: 'pointer' }}>
-              <i
-                class="fg-map-legend"
-                style={{
-                  color: props.layer.legend?.visible ? 'black' : 'grey',
-                  transform: props.layer.legend?.visible ? '' : 'rotate(3deg)',
-                }}
-                onClick={() => { onClickLegend(props.layer.id, LL); }}
-              />
-            </div>
-          </Show>
         </Show>
-    </div>
-    <div class="layer-manager-item__icons-right">
-      <Show when={props.layer.type !== 'table'}>
+      </div>
+      <div class="layer-manager-item__icons-right">
         <div title={ LL().LayerManager.Settings() }>
           <FaSolidGears
             onClick={(e) => { onClickSettings(props.layer.id, LL); }}
@@ -247,19 +242,71 @@ export default function LayerManagerItem(props: { 'layer': LayerDescription }): 
           {/* <i class="fg-extent" onClick={() => { onClickFitExtent(props.layer.id); }} /> */}
           <FaSolidMagnifyingGlass onClick={() => { onClickFitExtent(props.layer.id); }} />
         </div>
-      </Show>
-      <Show when={props.layer.fields && props.layer.fields.length > 0}>
-        <div title={ LL().LayerManager.AttributeTable() }>
-          <FaSolidTable onClick={() => { onClickTable(props.layer.id); }} />
+        <Show when={props.layer.fields && props.layer.fields.length > 0}>
+          <div title={ LL().LayerManager.AttributeTable() }>
+            <FaSolidTable onClick={() => { onClickTable(props.layer.id); }} />
+          </div>
+          <div title={ LL().LayerManager.Typing() }>
+            <FiType onClick={() => { onClickTyping(props.layer.id, 'layer'); }}/>
+          </div>
+        </Show>
+        <div title={ LL().LayerManager.Delete() }>
+          <FaSolidTrash onClick={() => { onClickTrashLayer(props.layer.id, LL); }} />
         </div>
-        <div title={ LL().LayerManager.Typing() }>
-          <FiType onClick={() => { onClickTyping(props.layer.id); }}/>
-        </div>
-      </Show>
-      <div title={ LL().LayerManager.Delete() }>
-        <FaSolidTrash onClick={() => { onClickTrash(props.layer.id, LL); }} />
       </div>
     </div>
-  </div>
+  </div>;
+}
+
+const onClickTrashTable = (id: string, LL: Accessor<TranslationFunctions>) => {
+  console.log('click trash on item ', id);
+
+  const td = layersDescriptionStore.tables.find((l) => l.id === id)!;
+
+  const innerElement = () => <>
+    <p>{ LL().Alerts.DeleteTable() } <i><b>{ td.name }</b></i> ?</p>
+  </>;
+
+  const onDeleteConfirmed = (): void => {
+    const tables = layersDescriptionStore.tables
+      .filter((tableDescription) => tableDescription.id !== id);
+    setLayersDescriptionStore({ tables });
+  };
+
+  setNiceAlertStore({
+    show: true,
+    type: 'warning',
+    content: innerElement,
+    confirmCallback: onDeleteConfirmed,
+    cancelCallback: (): void => undefined,
+    focusOn: 'cancel',
+  });
+};
+
+export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX.Element {
+  const { LL } = useI18nContext();
+
+  return <div class="layer-manager-item" onDblClick={() => { onClickSettings(props.table.id, LL); }}>
+    <div class="layer-manager-item__name" title={ props.table.name }>
+      <span>{ props.table.name }</span>
+    </div>
+    <div class="layer-manager-item__icons">
+      <div class="layer-manager-item__icons-left">
+        <div title={LL().LayerManager.table()}><FaSolidTableCells/></div>
+      </div>
+      <div class="layer-manager-item__icons-right">
+        <Show when={props.table.fields && props.table.fields.length > 0}>
+          <div title={ LL().LayerManager.AttributeTable() }>
+            <FaSolidTable onClick={() => { onClickTable(props.table.id); }} />
+          </div>
+          <div title={ LL().LayerManager.Typing() }>
+            <FiType onClick={() => { onClickTyping(props.table.id, 'table'); }}/>
+          </div>
+        </Show>
+        <div title={ LL().LayerManager.Delete() }>
+          <FaSolidTrash onClick={() => { onClickTrashTable(props.table.id, LL); }} />
+        </div>
+      </div>
+    </div>
   </div>;
 }

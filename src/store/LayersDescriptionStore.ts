@@ -1,12 +1,13 @@
 import { createStore } from 'solid-js/store';
 import { makeDefaultGraticule, makeDefaultSphere, makeDefaultWorldLand } from '../helpers/layers';
 import { unproxify } from '../helpers/common';
-import type { LayerDescription, LayoutFeature } from '../global';
+import type { LayerDescription, LayoutFeature, TableDescription } from '../global';
 import { debouncedPushUndoStack, resetRedoStackStore } from './stateStackStore';
 
 export type LayersDescriptionStoreType = {
   layers: LayerDescription[],
   layoutFeatures: LayoutFeature[],
+  tables: TableDescription[],
 };
 
 const defaultLayersDescription = (): LayersDescriptionStoreType => ({
@@ -16,6 +17,7 @@ const defaultLayersDescription = (): LayersDescriptionStoreType => ({
     makeDefaultGraticule(),
   ],
   layoutFeatures: [],
+  tables: [],
 });
 
 const [
@@ -30,7 +32,7 @@ const [
  */
 const setLayersDescriptionStore = (...args: any[]) => {
   // Push the current state to the (undo) state stack
-  debouncedPushUndoStack('layersDescription', unproxify(layersDescriptionStore));
+  debouncedPushUndoStack('layersDescription', unproxify(layersDescriptionStore as never));
   // Reset the redo stack
   resetRedoStackStore();
   // Apply the changes to the store

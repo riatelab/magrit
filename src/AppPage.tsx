@@ -63,7 +63,7 @@ import { resetUndoRedoStackStore } from './store/stateStackStore';
 import { undo, redo } from './store/undo-redo';
 
 // Types and enums
-import type { LayerDescription, LayoutFeature } from './global';
+import type { LayerDescription, LayoutFeature, TableDescription } from './global';
 
 // Other stuff
 import { version } from '../package.json';
@@ -93,12 +93,13 @@ const onBeforeUnloadWindow = (ev) => {
   }
   // Otherwise we store the state of the current projet
   // in the local DB (indexedDB via Dexie)
-  const { layers, layoutFeatures } = layersDescriptionStore;
+  const { layers, layoutFeatures, tables } = layersDescriptionStore;
   const map = { ...mapStore };
   const obj = {
     layers,
     layoutFeatures,
     map,
+    tables,
   };
 
   storeProject(db, obj);
@@ -153,7 +154,7 @@ const dropHandler = (e: Event): void => {
   e.stopPropagation();
   if (!draggedElementsAreFiles(e as DragEvent)) return;
   // Store name and type of the files dropped in a new array (CustomFileList) of FileEntry.
-  const files = prepareFileExtensions((e as DragEvent).dataTransfer.files);
+  const files = prepareFileExtensions((e as DragEvent).dataTransfer!.files);
   setOverlayDropStore({ files });
   if (timeout) {
     clearTimeout(timeout);
@@ -169,18 +170,24 @@ const reloadFromProjectObject = (
     layers: LayerDescription[],
     layoutFeatures: LayoutFeature[],
     map: MapStoreType,
+    tables: TableDescription[],
   },
 ): void => {
   // The state we want to use
-  const { layers, layoutFeatures, map } = obj;
+  const {
+    layers,
+    layoutFeatures,
+    map,
+    tables,
+  } = obj;
   // Reset the layers description store before changing the map store
   // (this avoid redrawing the map for the potential current layers)
-  setLayersDescriptionStore({ layers: [], layoutFeatures: [] });
+  setLayersDescriptionStore({ layers: [], layoutFeatures: [], tables: [] });
   // Update the map store
   // (this updates the projection and pathGenerator in the global store)
   setMapStore(map);
   // Update the layer description store with the layers and layout features
-  setLayersDescriptionStore({ layers, layoutFeatures });
+  setLayersDescriptionStore({ layers, layoutFeatures, tables });
   // Reverse the "userHasAddedLayer" flag
   setGlobalStore({ userHasAddedLayer: true });
 };
@@ -308,11 +315,11 @@ const AppPage: () => JSX.Element = () => {
         setNiceAlertStore({
           show: true,
           content: () => <div
-            class="is-flex is-justify-content-center is-align-items-center"
-            style={{ height: '100%' }}
-          >
-            <h4>{ LL().Alerts.EmptyProject() }</h4>
-          </div>,
+              class="is-flex is-justify-content-center is-align-items-center"
+              style={{ height: '100%' }}
+            >
+              <h4>{ LL().Alerts.EmptyProject() }</h4>
+            </div>,
           confirmCallback: createNewProject,
           focusOn: 'confirm',
         });
@@ -320,12 +327,13 @@ const AppPage: () => JSX.Element = () => {
 
     document.getElementById('button-export-project')
       ?.addEventListener('click', () => {
-        const { layers, layoutFeatures } = layersDescriptionStore;
+        const { layers, layoutFeatures, tables } = layersDescriptionStore;
         const map = { ...mapStore };
         const obj = {
           layers,
           layoutFeatures,
           map,
+          tables,
         };
         const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(obj))}`;
         return clickLinkFromDataUrl(dataStr, 'export-project.mjson');
