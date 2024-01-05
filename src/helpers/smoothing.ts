@@ -3,12 +3,12 @@ import { GPU } from 'gpu.js';
 import { pointGrid } from '@turf/turf';
 import type { BBox } from '@turf/turf';
 import { isobands } from 'contour-wasm';
-import { quantile } from 'statsbreaks';
 
 // Helpers
 import { makeCentroidLayer } from './geo';
 import { intersection } from './geos';
 import { max } from './math';
+import { convertToTopojsonQuantizeAndBackToGeojson } from './topojson';
 
 // Types
 import type {
@@ -82,7 +82,8 @@ function makeContourLayer(
     ft.properties.center = (ft.properties.min_v + ft.properties.max_v) / 2;
   });
 
-  return contours;
+  // Convert the contour layer to TopoJSON, apply the quantization and convert back to GeoJSON
+  return convertToTopojsonQuantizeAndBackToGeojson(contours) as GeoJSONFeatureCollection;
 }
 
 function haversineDistance(lon1: number, lat1: number, lon2: number, lat2: number): number {
@@ -157,7 +158,7 @@ function computeKdeInner(
   values: number[],
 ): number {
   let value = 0;
-  let vs = 0;
+  // let vs = 0;
   for (let i = 0; i < this.constants.size; i++) { // eslint-disable-line no-plusplus
     const dist = this.haversineDistance(
       xDot[i],
@@ -166,12 +167,13 @@ function computeKdeInner(
       yCell[this.thread.x],
     );
     // eslint-disable-next-line prefer-exponentiation-operator, no-restricted-properties
-    const k = this.k(dist);
-    const v = this.constants.normalizer * values[i];
+    const k = this.k(dist, this.constants.bandwidth);
+    // const v = this.constants.normalizer * values[i];
+    const v = values[i];
     value += k * v;
-    vs += v;
+    // vs += v;
   }
-  return value / vs;
+  return value; // / vs;
 }
 
 export async function computeStewart(
@@ -340,10 +342,10 @@ export async function computeKde(
 
   if (kdeParameters.kernel === 'gaussian') {
     gpu
-      .addFunction(
-        function k(dist: number): number { // eslint-disable-line prefer-arrow-callback
+      .addFunction( // eslint-disable-next-line prefer-arrow-callback
+        function k(dist: number, bandwidth: number): number {
           // eslint-disable-next-line prefer-exponentiation-operator, no-restricted-properties
-          return Math.exp(-0.5 * Math.pow(dist, 2));
+          return Math.exp(-(1 / bandwidth) * Math.pow(dist, 2));
         },
         {
           argumentTypes: {

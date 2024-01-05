@@ -11,11 +11,11 @@ const topojson = {
 };
 
 export const convertToTopojsonQuantizeAndBackToGeojson = (
-  geojson: any,
+  geojson: GeoJSONFeatureCollection,
   quantization: number = 1e5,
-) => {
+): GeoJSONFeatureCollection => {
   const topology = topojson.topology({ collection: geojson }, quantization);
-  return topojson.feature(topology, topology.objects.collection);
+  return topojson.feature(topology, topology.objects.collection) as GeoJSONFeatureCollection;
 };
 
 export const convertToTopojsonSimplifyAndBackToGeojson = (
