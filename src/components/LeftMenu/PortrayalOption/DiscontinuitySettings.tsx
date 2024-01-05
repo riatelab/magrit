@@ -19,11 +19,13 @@ import {
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
+import { findSuitableName } from '../../../helpers/common';
 import { computeDiscontinuity } from '../../../helpers/geo';
 import { generateIdLayer } from '../../../helpers/layers';
 
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
+import { setGlobalStore } from '../../../store/GlobalStore';
 
 // Subcomponents
 import InputFieldSelect from '../../Inputs/InputSelect.tsx';
@@ -156,12 +158,25 @@ export default function DiscontinuitySettings(
   ] = createSignal<'absolute' | 'relative'>('absolute');
 
   const makePortrayal = () => {
-    onClickValidate(
-      layerDescription().id,
-      targetVariable(),
-      discontinuityType(),
-      newLayerName(),
+    const layerName = findSuitableName(
+      newLayerName() || LL().PortrayalSection.NewLayer(),
+      layersDescriptionStore.layers.map((d) => d.name),
     );
+
+    // Display loading overlay
+    setGlobalStore({ isLoading: true });
+
+    // Create the portrayal
+    setTimeout(() => {
+      onClickValidate(
+        layerDescription().id,
+        targetVariable(),
+        discontinuityType(),
+        layerName,
+      );
+      // Hide loading overlay
+      setGlobalStore({ isLoading: false });
+    }, 0);
   };
 
   return <div class="portrayal-section__portrayal-options-discontinuity">

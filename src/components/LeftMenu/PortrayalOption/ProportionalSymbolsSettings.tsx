@@ -33,8 +33,9 @@ import InputFieldSelect from '../../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
 
 // Stores
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
+import { setGlobalStore } from '../../../store/GlobalStore';
+import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 
 // Types / Interfaces / Enums
 import type {
@@ -276,21 +277,30 @@ export default function ProportionalSymbolsSettings(
 
   const makePortrayal = () => {
     console.log('makePortrayal');
+    // Compute a suitable name for the new layer
     const layerName = findSuitableName(
       newLayerName() || LL().PortrayalSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
-    onClickValidate(
-      layerDescription().id,
-      targetVariable(),
-      refSymbolSize(),
-      refValueForSymbolSize(),
-      color(),
-      layerName,
-      symbolType(),
-      [minValues(), maxValues()],
-      avoidOverlapping(),
-    );
+    // Display loading overlay
+    setGlobalStore({ isLoading: true });
+
+    // Actually make the new layer
+    setTimeout(() => {
+      onClickValidate(
+        layerDescription().id,
+        targetVariable(),
+        refSymbolSize(),
+        refValueForSymbolSize(),
+        color(),
+        layerName,
+        symbolType(),
+        [minValues(), maxValues()],
+        avoidOverlapping(),
+      );
+      // Remove overlay
+      setGlobalStore({ isLoading: false });
+    }, 0);
   };
 
   return <div class="portrayal-section__portrayal-options-proportional-symbols">

@@ -19,8 +19,9 @@ import { PortrayalSettingsProps } from './common';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
 // Stores
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
+import { setGlobalStore } from '../../../store/GlobalStore';
+import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 
 // Subcomponents
 import InputResultName from './InputResultName.tsx';
@@ -161,11 +162,20 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
       newLayerName() || LL().PortrayalSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
-    onClickValidate(
-      props.layerId,
-      targetVariable(),
-      layerName,
-    );
+
+    // Display loading overlay
+    setGlobalStore({ isLoading: true });
+
+    // Create the portrayal
+    setTimeout(() => {
+      onClickValidate(
+        props.layerId,
+        targetVariable(),
+        layerName,
+      );
+      // Hide loading overlay
+      setGlobalStore({ isLoading: false });
+    }, 0);
   };
 
   return <div class="portrayal-section__portrayal-options-choropleth">

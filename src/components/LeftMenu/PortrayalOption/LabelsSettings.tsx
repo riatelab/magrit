@@ -8,8 +8,9 @@ import {
 import { produce } from 'solid-js/store';
 
 // Stores
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
+import { setGlobalStore } from '../../../store/GlobalStore';
+import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
@@ -145,16 +146,25 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
   const [newLayerName, setNewLayerName] = createSignal<string>(`Labels_${layerDescription().name}`);
 
   function makePortrayal() {
+    // Find a suitable name for the new layer
     const layerName = findSuitableName(
       newLayerName() || LL().PortrayalSection.NewLayer(),
       layersDescriptionStore.layers.map((l) => l.name),
     );
 
-    onClickValidate(
-      props.layerId,
-      targetVariable(),
-      layerName,
-    );
+    // Display loading overlay
+    setGlobalStore({ isLoading: true });
+
+    // Create the portrayal
+    setTimeout(() => {
+      onClickValidate(
+        props.layerId,
+        targetVariable(),
+        layerName,
+      );
+      // Hide loading overlay
+      setGlobalStore({ isLoading: false });
+    }, 0);
   }
 
   return <div class="portrayal-section__portrayal-options-labels">

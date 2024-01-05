@@ -12,9 +12,10 @@ import {
 import { FaSolidCircleCheck } from 'solid-icons/fa';
 
 // Stores
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
-import { setClassificationPanelStore } from '../../../store/ClassificationPanelStore';
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
+import { setClassificationPanelStore } from '../../../store/ClassificationPanelStore';
+import { setGlobalStore } from '../../../store/GlobalStore';
+import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 
 // Helper
 import { useI18nContext } from '../../../i18n/i18n-solid';
@@ -189,14 +190,22 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
       newLayerName() || LL().PortrayalSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
-    onClickValidate(
-      props.layerId,
-      targetVariable(),
-      targetClassification(),
-      layerName,
-      LL().ClassificationPanel
-        .classificationMethodLegendDescriptions[targetClassification().method](),
-    );
+    // Display loading overlay
+    setGlobalStore({ isLoading: true });
+
+    // Actually create the layer
+    setTimeout(() => {
+      onClickValidate(
+        props.layerId,
+        targetVariable(),
+        targetClassification(),
+        layerName,
+        LL().ClassificationPanel
+          .classificationMethodLegendDescriptions[targetClassification().method](),
+      );
+      // Hide loading overlay
+      setGlobalStore({ isLoading: false });
+    }, 0);
   };
 
   return <div class="portrayal-section__portrayal-options-choropleth">

@@ -13,6 +13,7 @@ import { bbox } from '@turf/turf';
 import { getPalette } from 'dicopal';
 
 // Stores
+import { setGlobalStore } from '../../../store/GlobalStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
 
 // Helper
@@ -250,14 +251,23 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       resolution: targetResolution(),
     } as GridParameters;
 
-    await onClickValidate(
-      props.layerId,
-      layerName,
-      targetVariable(),
-      gridParams,
-      targetSmoothingMethod(),
-      params,
-    );
+    // Display loading overlay
+    setGlobalStore({ isLoading: true });
+
+    // Actually make the new layer
+    setTimeout(async () => {
+      await onClickValidate(
+        props.layerId,
+        layerName,
+        targetVariable(),
+        gridParams,
+        targetSmoothingMethod(),
+        params,
+      );
+
+      // Hide loading overlay
+      setGlobalStore({ isLoading: false });
+    }, 0);
   };
 
   return <div class="portrayal-section__portrayal-options-smoothed">
