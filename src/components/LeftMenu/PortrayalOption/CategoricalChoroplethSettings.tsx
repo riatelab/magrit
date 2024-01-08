@@ -21,7 +21,11 @@ import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
 import { setGlobalStore } from '../../../store/GlobalStore';
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
+import {
+  layersDescriptionStore,
+  LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../../../store/LayersDescriptionStore';
 
 // Subcomponents
 import InputResultName from './InputResultName.tsx';
@@ -74,7 +78,7 @@ function onClickValidate(
     data: referenceLayerDescription.data,
     type: referenceLayerDescription.type,
     fields: referenceLayerDescription.fields,
-    renderer: 'categorical' as RepresentationType,
+    renderer: 'categoricalChoropleth' as RepresentationType,
     visible: true,
     strokeColor: '#000000',
     strokeWidth: 0.4,
@@ -127,7 +131,7 @@ function onClickValidate(
 
   setLayersDescriptionStore(
     produce(
-      (draft) => {
+      (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
       },
     ),
@@ -142,7 +146,8 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
     .find((l) => l.id === props.layerId)!);
 
   // The fields of the layer that are of type 'ratio'
-  // (i.e. the fields that can be used for the choropleth)
+  // (i.e. the fields that can be used for the choropleth).
+  // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = createMemo(() => layerDescription()
     .fields?.filter((variable) => variable.type === VariableType.categorical));
 
@@ -151,7 +156,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal<string>(targetFields()[0].name);
+  ] = createSignal<string>(targetFields()![0].name);
   const [
     newLayerName,
     setNewLayerName,

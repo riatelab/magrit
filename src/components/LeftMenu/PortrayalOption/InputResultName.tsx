@@ -27,7 +27,7 @@ export default function InputResultName(props: ResultNameInputProps): JSX.Elemen
           if (props.onChange) props.onChange(e.target.value);
         }}
         onKeyUp={(e) => {
-          if (props.onKeyUp) props.onKeyUp(e.target.value);
+          if (props.onKeyUp) props.onKeyUp((e.target as EventTarget & HTMLInputElement).value);
           if (e.key === 'Enter' && props.onEnter) props.onEnter();
         }}
       />

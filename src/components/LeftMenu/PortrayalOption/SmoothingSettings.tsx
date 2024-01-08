@@ -14,7 +14,11 @@ import { getPalette } from 'dicopal';
 
 // Stores
 import { setGlobalStore } from '../../../store/GlobalStore';
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
+import {
+  layersDescriptionStore,
+  LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../../../store/LayersDescriptionStore';
 
 // Helper
 import { useI18nContext } from '../../../i18n/i18n-solid';
@@ -69,7 +73,7 @@ async function onClickValidate(
       gridParams,
       kdeParams,
     );
-  } else if (smoothingMethod === SmoothingMethod.Stewart) {
+  } else { // smoothingMethod === SmoothingMethod.Stewart
     const fn = (parameters as StewartParameters).function;
 
     const alpha = fn === 'gaussian'
@@ -156,7 +160,7 @@ async function onClickValidate(
 
   setLayersDescriptionStore(
     produce(
-      (draft) => {
+      (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
       },
     ),
@@ -180,7 +184,8 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   // The bbox of the layer to be smoothed
   const bboxLayer = createMemo(() => bbox(layerDescription().data));
 
-  // The fields of the layer to be smoothed
+  // The fields of the layer to be smoothed.
+  // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = createMemo(() => layerDescription()
     .fields?.filter((variable) => (
       variable.type === VariableType.ratio || variable.type === VariableType.stock)));
@@ -189,7 +194,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal<string>(targetFields()[0].name);
+  ] = createSignal<string>(targetFields()![0].name);
   const [
     targetSmoothingMethod,
     setTargetSmoothingMethod,

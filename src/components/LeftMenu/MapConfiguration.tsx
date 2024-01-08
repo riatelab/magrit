@@ -109,7 +109,7 @@ function onChangeProjectionEntry(value: string) {
   // or "other"
   if (value === 'other') {
     // Save the current projection definition if the user clics on "cancel"
-    const currentProjection = unproxify(mapStore.projection);
+    const currentProjection = unproxify(mapStore.projection as never);
     // Open the modal that will allow the user to select a projection
     setModalStore({
       show: true,

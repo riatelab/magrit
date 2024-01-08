@@ -20,5 +20,5 @@ export default function MultipleSelect(props: ParentProps<MultipleSelectProps>):
         {c()}
       </select>
     </div>
-  </div>
+  </div>;
 }

@@ -17,7 +17,11 @@ import {
 
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
+import {
+  layersDescriptionStore,
+  LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../../../store/LayersDescriptionStore';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 import { findSuitableName } from '../../../helpers/common';
 import { computeDiscontinuity } from '../../../helpers/geo';
@@ -34,11 +38,11 @@ import InputResultName from './InputResultName.tsx';
 
 // Types / Interfaces / Enums
 import type { PortrayalSettingsProps } from './common';
-import { DataType, Variable, VariableType } from '../../../helpers/typeDetection';
+import { DataType, type Variable, VariableType } from '../../../helpers/typeDetection';
 import {
-  DiscontinuityParameters,
-  LayerDescription,
-  LegendTextElement,
+  type DiscontinuityParameters,
+  type LayerDescription,
+  type LegendTextElement,
   LegendType,
   RepresentationType,
 } from '../../../global.d';
@@ -126,7 +130,7 @@ function onClickValidate(
 
   setLayersDescriptionStore(
     produce(
-      (draft) => {
+      (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
       },
     ),
@@ -141,6 +145,8 @@ export default function DiscontinuitySettings(
   const layerDescription = createMemo(() => layersDescriptionStore.layers
     .find((l) => l.id === props.layerId)!);
 
+  // The fields that can be used for computing the discontinuity.
+  // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = createMemo(() => layerDescription()
     .fields?.filter((variable) => variable.type === 'stock' || variable.type === 'ratio'));
 
@@ -151,7 +157,7 @@ export default function DiscontinuitySettings(
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal(targetFields()[0].name);
+  ] = createSignal(targetFields()![0].name);
   const [
     discontinuityType,
     setDiscontinuityType,

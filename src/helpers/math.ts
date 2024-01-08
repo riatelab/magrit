@@ -18,6 +18,22 @@ export const Matan = Math.atan;
 export const Matan2 = Math.atan2;
 export const Mtan = Math.tan;
 
+type UnsignedNumberArray = Uint8Array
+| Uint16Array
+| Uint32Array;
+
+type SignedNumberArray = Int8Array
+| Int16Array
+| Int32Array;
+
+type FloatNumberArray = Float32Array
+| Float64Array;
+
+type NumberArray = UnsignedNumberArray
+| SignedNumberArray
+| FloatNumberArray
+| number[];
+
 /**
  * Rounds a number to a specified number of decimal places.
  * @param {number} num
@@ -36,7 +52,7 @@ export function round(num: number, decimalPlaces: number | null): number {
  * @param {number[]} arr
  * @returns {number}
  */
-export function min(arr: number[]): number { // TODO: rename as minUnchecked ?
+export function min(arr: NumberArray): number { // TODO: rename as minUnchecked ?
   let minVal = Infinity;
   for (let i = 0, l = arr.length; i < l; i += 1) {
     if (arr[i] < minVal) {
@@ -51,7 +67,7 @@ export function min(arr: number[]): number { // TODO: rename as minUnchecked ?
  * @param {number[]} arr
  * @returns {number}
  */
-export function max(arr: number[]): number { // TODO: rename as maxUnchecked ?
+export function max(arr: NumberArray): number { // TODO: rename as maxUnchecked ?
   let maxVal = -Infinity;
   for (let i = 0, l = arr.length; i < l; i += 1) {
     if (arr[i] > maxVal) {
@@ -67,7 +83,7 @@ export function max(arr: number[]): number { // TODO: rename as maxUnchecked ?
  * @param {number[]} arr - An array of numbers.
  * @returns {[number, number]} - The minimum and maximum values of the array.
  */
-export function extent(arr: number[]): [number, number] { // TODO: rename as extentUnchecked ?
+export function extent(arr: NumberArray): [number, number] { // TODO: rename as extentUnchecked ?
   let minVal = arr[0];
   let maxVal = arr[0];
   for (let i = 1, l = arr.length; i < l; i += 1) {
@@ -86,7 +102,7 @@ export function extent(arr: number[]): [number, number] { // TODO: rename as ext
  * @param {number[]} arr - An array of numbers.
  * @return - The sum of the array.
  */
-export function sum(arr: number[]): number {
+export function sum(arr: NumberArray): number {
   let sumVal = arr[0];
   for (let i = 1, l = arr.length; i < l; i += 1) {
     sumVal += arr[i];
@@ -99,7 +115,7 @@ export function sum(arr: number[]): number {
  * @param {number[]} arr - An array of numbers.
  * @return {number} - The mean of the array.
  */
-export function mean(arr: number[]): number {
+export function mean(arr: NumberArray): number {
   return sum(arr) / arr.length;
 }
 
@@ -109,7 +125,7 @@ export function mean(arr: number[]): number {
  * @param {number[]} arr - An array of numbers.
  * @return {boolean} - True or False, whether it contains negatives values or not.
  */
-export function hasNegative(arr: number[]) {
+export function hasNegative(arr: NumberArray): boolean {
   for (let i = 0, l = arr.length; i < l; i += 1) {
     if (arr[i] < 0) return true;
   }
@@ -158,20 +174,20 @@ export function haversineDistance(A: [number, number], B: [number, number]) {
  * @param {number[]} values - The dataset.
  * @returns {number} - The IQR.
  */
-export function IQR(values: number[]): number {
+export function IQR(values: NumberArray): number {
   return d3.quantile(values, 0.75) as number - (d3.quantile(values, 0.25) as number);
 }
 
-export const lowerQuartile = (values: number[]): number => d3.quantile(values, 0.25) as number;
+export const lowerQuartile = (values: NumberArray): number => d3.quantile(values, 0.25) as number;
 
-export const upperQuartile = (values: number[]): number => d3.quantile(values, 0.75) as number;
+export const upperQuartile = (values: NumberArray): number => d3.quantile(values, 0.75) as number;
 
-export const lowerWhisker = (values: number[]): number => Mmax(
+export const lowerWhisker = (values: NumberArray): number => Mmax(
   min(values),
   lowerQuartile(values) - 1.5 * IQR(values),
 );
 
-export const upperWhisker = (values: number[]): number => Mmin(
+export const upperWhisker = (values: NumberArray): number => Mmin(
   max(values),
   upperQuartile(values) + 1.5 * IQR(values),
 );

@@ -15,7 +15,11 @@ import { FaSolidCircleCheck } from 'solid-icons/fa';
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
 import { setClassificationPanelStore } from '../../../store/ClassificationPanelStore';
 import { setGlobalStore } from '../../../store/GlobalStore';
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
+import {
+  layersDescriptionStore,
+  LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../../../store/LayersDescriptionStore';
 
 // Helper
 import { useI18nContext } from '../../../i18n/i18n-solid';
@@ -134,7 +138,7 @@ function onClickValidate(
 
   setLayersDescriptionStore(
     produce(
-      (draft) => {
+      (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
       },
     ),
@@ -148,7 +152,8 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
     .find((l) => l.id === props.layerId)!);
 
   // The fields of the layer that are of type 'ratio'
-  // (i.e. the fields that can be used for the choropleth)
+  // (i.e. the fields that can be used for the choropleth).
+  // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = createMemo(() => layerDescription()
     .fields?.filter((variable) => variable.type === VariableType.ratio));
 
@@ -161,7 +166,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
   const values = createMemo(() => layerDescription().data.features
     .map((f) => f.properties[targetVariable()])
     .filter((d) => isNumber(d))
-    .map((d) => +d) as number[]);
+    .map((d: any) => +d) as number[]);
 
   const [
     noDataColor,

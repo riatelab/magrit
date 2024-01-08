@@ -5,7 +5,7 @@ export function unproxify(value: typeof Proxy<(Array<any> | object)>): (Array<an
   if (value instanceof Object) {
     return Object.fromEntries(
       Object.entries({ ...value })
-        .map(([k, v]) => [k, unproxify(v)]),
+        .map(([k, v]) => [k, unproxify(v as never)]),
     );
   }
   return value;
@@ -41,15 +41,15 @@ export const descendingKeyAccessor = (
  * @param {boolean} [immediate] - Trigger the function immediately.
  */
 export const debounce = (func: (...args: any[]) => any, delay: number, immediate?: boolean) => {
-  let timerId;
-  return (...args) => {
+  let timerId: number | undefined;
+  return (...args: any[]) => {
     const boundFunc = func.bind(this, ...args);
     clearTimeout(timerId);
     if (immediate && !timerId) {
       boundFunc();
     }
     const calleeFunc = immediate ? () => {
-      timerId = null;
+      timerId = undefined;
     } : boundFunc;
     timerId = setTimeout(calleeFunc, delay);
   };

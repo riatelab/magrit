@@ -35,7 +35,11 @@ import InputResultName from './InputResultName.tsx';
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
 import { setGlobalStore } from '../../../store/GlobalStore';
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
+import {
+  layersDescriptionStore,
+  LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../../../store/LayersDescriptionStore';
 
 // Types / Interfaces / Enums
 import type {
@@ -50,7 +54,7 @@ import {
   LegendType,
   ProportionalSymbolsSymbolType,
 } from '../../../global.d';
-import { PortrayalSettingsProps } from './common';
+import type { PortrayalSettingsProps } from './common';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -94,7 +98,7 @@ function onClickValidate(
       // eslint-disable-next-line no-param-reassign
       feature.geometry = {
         type: 'Point',
-        coordinates: coordsPointOnFeature(feature.geometry),
+        coordinates: coordsPointOnFeature(feature.geometry as never),
       };
     });
   }
@@ -202,7 +206,7 @@ function onClickValidate(
 
   setLayersDescriptionStore(
     produce(
-      (draft) => {
+      (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
       },
     ),
@@ -221,6 +225,8 @@ export default function ProportionalSymbolsSettings(
   //   throw Error('Unexpected Error: Layer not found');
   // }
 
+  // The fields of the layer that are of type 'stock'.
+  // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = createMemo(() => layerDescription()
     .fields?.filter((variable) => variable.type === 'stock'));
 
@@ -231,13 +237,13 @@ export default function ProportionalSymbolsSettings(
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal<string>(targetFields()[0].name);
+  ] = createSignal<string>(targetFields()![0].name);
 
   // Reactive variable that contains the values of the target variable
   const values = createMemo(() => layerDescription().data.features
     .map((feature) => feature.properties[targetVariable()])
     .filter((value) => isNumber(value))
-    .map((value) => +value) as number[]);
+    .map((value: any) => +value) as number[]);
 
   // Reactive variables that contains the min and the max values
   // of the target variable

@@ -10,7 +10,11 @@ import { produce } from 'solid-js/store';
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
 import { setGlobalStore } from '../../../store/GlobalStore';
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../../store/LayersDescriptionStore';
+import {
+  layersDescriptionStore,
+  LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../../../store/LayersDescriptionStore';
 
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
@@ -27,11 +31,12 @@ import InputResultName from './InputResultName.tsx';
 import {
   type LabelsLegendParameters,
   type LabelsParameters,
+  type LayerDescriptionLabels,
   type LegendTextElement,
   LegendType,
   RepresentationType,
 } from '../../../global.d';
-import { PortrayalSettingsProps } from './common';
+import type { PortrayalSettingsProps } from './common';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -120,11 +125,11 @@ function onClickValidate(
         ...applicationSettingsStore.defaultLegendSettings.labels,
       } as LegendTextElement,
     } as LabelsLegendParameters,
-  };
+  } as LayerDescriptionLabels;
 
   setLayersDescriptionStore(
     produce(
-      (draft) => {
+      (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
       },
     ),
@@ -139,10 +144,11 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
     .find((l) => l.id === props.layerId)!);
 
   // The fields of the layer that can be used as a target variable for this portrayal
-  // (i.e. all the fields)
+  // (i.e. all the fields).
+  // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = createMemo(() => layerDescription().fields);
 
-  const [targetVariable, setTargetVariable] = createSignal<string>(targetFields()[0].name);
+  const [targetVariable, setTargetVariable] = createSignal<string>(targetFields()![0].name);
   const [newLayerName, setNewLayerName] = createSignal<string>(`Labels_${layerDescription().name}`);
 
   function makePortrayal() {

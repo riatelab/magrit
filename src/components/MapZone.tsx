@@ -96,7 +96,7 @@ export default function MapZone(): JSX.Element {
   const { LL } = useI18nContext();
 
   // Set up the projection when the component is mounted
-  const projection = d3[mapStore.projection.value]()
+  const projection = d3[mapStore.projection.value as keyof typeof d3]()
     .translate([mapStore.mapDimensions.width / 2, mapStore.mapDimensions.height / 2])
     .scale(160)
     .clipExtent(getDefaultClipExtent());
@@ -138,11 +138,11 @@ export default function MapZone(): JSX.Element {
   // the values used in the transform attribute up to now
   // and remove the transform attribute from the elements on
   // which it was defined).
-  const applyZoomPan = (e, redraw: boolean) => {
+  const applyZoomPan = (e: MouseEvent & d3.D3ZoomEvent<any, any>, redraw: boolean) => {
     if (!redraw) {
       // We just change the transform attribute of the layers
       svgElem.querySelectorAll('g.layer').forEach((g: Element) => {
-        g.setAttribute('transform', e.transform);
+        g.setAttribute('transform', e.transform.toString());
       });
     } else {
       // We need the previous projection scale, rotate and translate values
@@ -222,7 +222,7 @@ export default function MapZone(): JSX.Element {
   return <div class="map-zone">
     <div class="map-zone__inner">
       <svg
-        ref={svgElem}
+        ref={svgElem!}
         width={mapStore.mapDimensions.width}
         height={mapStore.mapDimensions.height}
         style={{
@@ -283,7 +283,7 @@ export default function MapZone(): JSX.Element {
               if (layer.type === 'polygon') return choroplethPolygonRenderer(layer as LayerDescriptionChoropleth);
               if (layer.type === 'point') return choroplethPointRenderer(layer as LayerDescriptionChoropleth);
               if (layer.type === 'linestring') return choroplethLineRenderer(layer as LayerDescriptionChoropleth);
-            } else if (layer.renderer === 'categorical') {
+            } else if (layer.renderer === 'categoricalChoropleth') {
               if (layer.type === 'polygon') return categoricalChoroplethPolygonRenderer(layer as LayerDescriptionCategoricalChoropleth);
               if (layer.type === 'point') return categoricalChoroplethPointRenderer(layer as LayerDescriptionCategoricalChoropleth);
               if (layer.type === 'linestring') return categoricalChoroplethLineRenderer(layer as LayerDescriptionCategoricalChoropleth);
@@ -305,7 +305,7 @@ export default function MapZone(): JSX.Element {
             if (layer.renderer === 'choropleth') {
               return legendChoropleth(layer as LayerDescriptionChoropleth);
             }
-            if (layer.renderer === 'categorical') {
+            if (layer.renderer === 'categoricalChoropleth') {
               return legendCategoricalChoropleth(layer as LayerDescriptionCategoricalChoropleth);
             }
             if (layer.renderer === 'proportionalSymbols') {

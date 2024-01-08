@@ -324,7 +324,7 @@ export default function LayoutFeatures(): JSX.Element {
             if (!alreadyHasGraticule(layersDescriptionStore.layers)) {
               setLayersDescriptionStore(
                 produce(
-                  (draft) => {
+                  (draft: LayersDescriptionStoreType) => {
                     draft.layers.push(makeDefaultGraticule());
                   },
                 ),
@@ -344,7 +344,7 @@ export default function LayoutFeatures(): JSX.Element {
             if (!alreadyHasSphere(layersDescriptionStore.layers)) {
               setLayersDescriptionStore(
                 produce(
-                  (draft) => {
+                  (draft: LayersDescriptionStoreType) => {
                     // We always want the sphere to be under the other layers
                     draft.layers.unshift(makeDefaultSphere());
                   },

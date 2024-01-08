@@ -569,7 +569,7 @@ export enum NumberFormatting {
 }
 
 export interface ID3Element {
-  __data__: GeoJSONFeature,
+  __data__: GeoJSONFeature | { type: 'Sphere' },
 }
 
 export interface IZoomable {
