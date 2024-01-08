@@ -2,7 +2,6 @@ import type { JSX } from 'solid-js';
 import { useI18nContext } from '../i18n/i18n-solid';
 import '../styles/LoadingOverlay.css';
 
-// FIXME: the position of the text is sometimes wrong
 export default function LoadingOverlay(): JSX.Element {
   const { LL } = useI18nContext();
 
