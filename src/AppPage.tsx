@@ -32,7 +32,6 @@ import ClassificationPanel from './components/Modals/ClassificationPanel.tsx';
 import { HeaderBarApp } from './components/Headers.tsx';
 import ExampleDataModal from './components/Modals/ExampleDatasetModal.tsx';
 import ContextMenu from './components/ContextMenu.tsx';
-import ModalWithChildren from './components/Modals/ModalWithChildren.tsx';
 // import ReloadPrompt from './components/ReloadPrompt.tsx';
 
 // Stores
@@ -56,7 +55,6 @@ import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore'
 import { tableWindowStore } from './store/TableWindowStore';
 import { applicationSettingsStore, ResizeBehavior } from './store/ApplicationSettingsStore';
 import { datasetCatalogStore } from './store/DatasetCatalogStore';
-import { modalWithChildrenStore } from './store/ModalWithChildrenStore';
 import { contextMenuStore, resetContextMenuStore } from './store/ContextMenuStore';
 import { resetUndoRedoStackStore } from './store/stateStackStore';
 import { undo, redo } from './store/undo-redo';
@@ -432,11 +430,6 @@ const AppPage: () => JSX.Element = () => {
         </Show>
         <Show when={modalStore.show}>
           <DefaultModal />
-        </Show>
-        <Show when={modalWithChildrenStore.show}>
-          <ModalWithChildren>
-            { modalWithChildrenStore.content }
-          </ModalWithChildren>
         </Show>
       </Transition>
       {/*
