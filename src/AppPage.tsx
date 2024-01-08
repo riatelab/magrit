@@ -8,7 +8,6 @@ import initGdalJs from 'gdal3.js';
 import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'; // eslint-disable-line import/extensions
 import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url';
 import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url';
-import type { Dexie } from 'dexie';
 import { Transition } from 'solid-transition-group';
 import { Toaster } from 'solid-toast';
 
@@ -63,7 +62,12 @@ import { resetUndoRedoStackStore } from './store/stateStackStore';
 import { undo, redo } from './store/undo-redo';
 
 // Types and enums
-import type { LayerDescription, LayoutFeature, TableDescription } from './global';
+import type {
+  DexieDb,
+  LayerDescription,
+  LayoutFeature,
+  TableDescription,
+} from './global';
 
 // Other stuff
 import { version } from '../package.json';
@@ -82,15 +86,20 @@ const loadGdal = async (): Promise<Gdal> => initGdalJs({
 
 let timeout: NodeJS.Timeout | null | undefined = null;
 
-const db = initDb() as Dexie & { projects: Dexie.Table<any, number> };
+const db = initDb() as DexieDb;
 
-const onBeforeUnloadWindow = (ev) => {
+const onBeforeUnloadWindow = (ev: Event) => {
   // If there is no layer or if
   // there is only the sphere layer and or the graticule layer,
   // do nothing
   if (!globalStore.userHasAddedLayer) {
     return;
   }
+
+  // This is to prevent the browser from closing the window (or tab)
+  // by displaying a confirmation dialog.
+  ev.returnValue = true; // eslint-disable-line no-param-reassign
+
   // Otherwise we store the state of the current projet
   // in the local DB (indexedDB via Dexie)
   const { layers, layoutFeatures, tables } = layersDescriptionStore;
@@ -103,9 +112,6 @@ const onBeforeUnloadWindow = (ev) => {
   };
 
   storeProject(db, obj);
-
-  // The message is usually ignored in modern browsers
-  ev.returnValue = 'Confirm exit ?'; // eslint-disable-line no-param-reassign
 };
 
 const dragEnterHandler = (e: Event): void => {
@@ -345,7 +351,7 @@ const AppPage: () => JSX.Element = () => {
         elem.type = 'file';
         elem.accept = '.mjson';
         elem.onchange = (e) => {
-          const file = e.target.files[0];
+          const file = (e.target as HTMLInputElement).files?.[0];
           if (!file) return;
           const reader = new FileReader();
           reader.onload = (event) => {
@@ -372,6 +378,7 @@ const AppPage: () => JSX.Element = () => {
       });
 
     // Load GDAL
+    // @ts-expect-error - we should fix the type of globalThis.gdal
     globalThis.gdal = await loadGdal();
 
     // ... and store the number of drivers in the global store (we may change this)

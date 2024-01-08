@@ -4,16 +4,26 @@ import type { Gdal } from 'gdal3.js/src/index.d';
 import type { Palette } from 'dicopal/dist/index.d';
 import type { Dexie } from 'dexie';
 import type { Variable } from './helpers/typeDetection';
+import type { MapStoreType } from './store/MapStore';
 
 declare namespace globalThis {
   let gdal: Gdal;
   // let Dexie: DexieConstructor;
   // db is an instance of Dexie
-  let db: typeof Dexie & { projects: Dexie.Table<any, number> };
+  let db: DexieDb;
   // WebR instance
   // let webR: WebR;
   let geos: never;
 }
+
+type DexieDb = Dexie
+& { projects: Dexie.Table<
+{ date: Date, data: {
+  layers: LayerDescription[],
+  layoutFeatures: LayoutFeature[],
+  map: MapStoreType,
+  tables: TableDescription[],
+} }, number> };
 
 // The description of a layer
 // (it contains all the necessary elements to display the layer and its legend if any)
