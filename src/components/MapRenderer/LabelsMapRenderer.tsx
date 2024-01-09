@@ -42,61 +42,24 @@ export function defaultLabelsRenderer(
       });
   });
 
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || layerDescription.visible
-  }>
-    <g
-      ref={refElement}
-      id={layerDescription.id}
-      class={'layer labels'}
-      visibility={layerDescription.visible ? undefined : 'hidden'}
-      filter={mergeFilterIds(layerDescription)}
-      style={{ 'user-select': 'none', 'stroke-linejoin': 'round', 'paint-order': 'stroke' }}
-    >
-      <For each={layerDescription.data.features}>
-        {
-          (feature) => {
-            const projectedCoords = createMemo(
-              () => globalStore.projection(feature.geometry.coordinates),
-            );
-            return <text
-              use:bindData={feature}
-              x={projectedCoords()[0] + rendererParameters.textOffset[0]}
-              y={projectedCoords()[1] + rendererParameters.textOffset[1]}
-              alignment-baseline={rendererParameters.textAlignment}
-              text-anchor={rendererParameters.textAnchor}
-              font-style={rendererParameters.fontStyle}
-              font-family={rendererParameters.fontFamily}
-              font-size={rendererParameters.fontSize}
-              font-weight={rendererParameters.fontWeight}
-              fill={rendererParameters.fontColor}
-              {...(
-                rendererParameters.halo
-                  ? { stroke: rendererParameters.halo.color, 'stroke-width': rendererParameters.halo.width }
-                  : {}
-              )}
-            >{ feature.properties[rendererParameters.variable] }</text>;
-          }
-        }
-      </For>
-    </g>
-  </Show>;
-}
-
-export function graticuleLabelsRenderer(
-  layerDescription: LayerDescriptionLabels,
-): JSX.Element {
-  const rendererParameters = layerDescription.rendererParameters as LabelsParameters;
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || layerDescription.visible
-  }>
-    <g>
-      <For each={layerDescription.data.features}>
-        {
-          (feature) => <text
+  return <g
+    ref={refElement}
+    id={layerDescription.id}
+    class={'layer labels'}
+    visibility={layerDescription.visible ? undefined : 'hidden'}
+    filter={mergeFilterIds(layerDescription)}
+    style={{ 'user-select': 'none', 'stroke-linejoin': 'round', 'paint-order': 'stroke' }}
+  >
+    <For each={layerDescription.data.features}>
+      {
+        (feature) => {
+          const projectedCoords = createMemo(
+            () => globalStore.projection(feature.geometry.coordinates),
+          );
+          return <text
             use:bindData={feature}
+            x={projectedCoords()[0] + rendererParameters.textOffset[0]}
+            y={projectedCoords()[1] + rendererParameters.textOffset[1]}
             alignment-baseline={rendererParameters.textAlignment}
             text-anchor={rendererParameters.textAnchor}
             font-style={rendererParameters.fontStyle}
@@ -104,9 +67,36 @@ export function graticuleLabelsRenderer(
             font-size={rendererParameters.fontSize}
             font-weight={rendererParameters.fontWeight}
             fill={rendererParameters.fontColor}
-          ></text>
+            {...(
+              rendererParameters.halo
+                ? { stroke: rendererParameters.halo.color, 'stroke-width': rendererParameters.halo.width }
+                : {}
+            )}
+          >{ feature.properties[rendererParameters.variable] }</text>;
         }
-      </For>
-    </g>
-  </Show>;
+      }
+    </For>
+  </g>;
+}
+
+export function graticuleLabelsRenderer(
+  layerDescription: LayerDescriptionLabels,
+): JSX.Element {
+  const rendererParameters = layerDescription.rendererParameters as LabelsParameters;
+  return <g>
+    <For each={layerDescription.data.features}>
+      {
+        (feature) => <text
+          use:bindData={feature}
+          alignment-baseline={rendererParameters.textAlignment}
+          text-anchor={rendererParameters.textAnchor}
+          font-style={rendererParameters.fontStyle}
+          font-family={rendererParameters.fontFamily}
+          font-size={rendererParameters.fontSize}
+          font-weight={rendererParameters.fontWeight}
+          fill={rendererParameters.fontColor}
+        ></text>
+      }
+    </For>
+  </g>;
 }

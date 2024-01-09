@@ -295,15 +295,12 @@ function horizontalDiscontinuityLegend(
 export default function legendDiscontinuity(
   layer: LayerDescriptionDiscontinuity,
 ): JSX.Element {
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || (layer.visible && (layer.legend as DiscontinuityLegendParameters).visible)
-  }>
+  return <>
     {
       ({
         vertical: verticalDiscontinuityLegend,
         horizontal: horizontalDiscontinuityLegend,
       })[layer.legend.orientation](layer)
     }
-  </Show>;
+  </>;
 }

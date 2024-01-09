@@ -463,15 +463,12 @@ function horizontalLegend(
 export default function legendChoropleth(
   layer: LayerDescriptionChoropleth | LayerDescriptionSmoothedLayer,
 ): JSX.Element {
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || (layer.visible && layer.legend!.visible)
-  }>
+  return <>
     {
       ({
         [Orientation.vertical]: verticalLegend,
         [Orientation.horizontal]: horizontalLegend,
       })[(layer.legend as ChoroplethLegendParameters).orientation](layer)
     }
-  </Show>;
+  </>;
 }

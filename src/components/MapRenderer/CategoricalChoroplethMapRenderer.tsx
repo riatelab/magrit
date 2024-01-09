@@ -48,37 +48,32 @@ export function categoricalChoroplethPolygonRenderer(
     },
   );
 
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || layerDescription.visible
-  }>
-    <g
-      id={layerDescription.id}
-      class="layer categoricalChoropleth"
-      visibility={layerDescription.visible ? undefined : 'hidden'}
-      // fill={layerDescription.fillColor}
-      fill-opacity={layerDescription.fillOpacity}
-      stroke={layerDescription.strokeColor}
-      stroke-width={layerDescription.strokeWidth}
-      stroke-opacity={layerDescription.strokeOpacity}
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      clip-path="url(#clip-sphere)"
-      filter={mergeFilterIds(layerDescription)}
-      shape-rendering={layerDescription.shapeRendering}
-    >
-      <For each={layerDescription.data.features}>
-        {
-          (feature) => <path
-            fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
-            d={globalStore.pathGenerator(feature)}
-            vector-effect="non-scaling-stroke"
-            use:bindData={unproxify(feature)}
-          />
-        }
-      </For>
-    </g>
-  </Show>;
+  return <g
+    id={layerDescription.id}
+    class="layer categoricalChoropleth"
+    visibility={layerDescription.visible ? undefined : 'hidden'}
+    // fill={layerDescription.fillColor}
+    fill-opacity={layerDescription.fillOpacity}
+    stroke={layerDescription.strokeColor}
+    stroke-width={layerDescription.strokeWidth}
+    stroke-opacity={layerDescription.strokeOpacity}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    clip-path="url(#clip-sphere)"
+    filter={mergeFilterIds(layerDescription)}
+    shape-rendering={layerDescription.shapeRendering}
+  >
+    <For each={layerDescription.data.features}>
+      {
+        (feature) => <path
+          fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
+          d={globalStore.pathGenerator(feature)}
+          vector-effect="non-scaling-stroke"
+          use:bindData={unproxify(feature)}
+        />
+      }
+    </For>
+  </g>;
 }
 
 export function categoricalChoroplethPointRenderer(
@@ -100,36 +95,31 @@ export function categoricalChoroplethPointRenderer(
     },
   );
 
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || layerDescription.visible
-  }>
-    <g
-      id={layerDescription.id}
-      class="layer categoricalChoropleth"
-      visibility={layerDescription.visible ? undefined : 'hidden'}
-      // fill={layerDescription.fillColor}
-      fill-opacity={layerDescription.fillOpacity}
-      stroke={layerDescription.strokeColor}
-      stroke-width={layerDescription.strokeWidth}
-      stroke-opacity={layerDescription.strokeOpacity}
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      // clip-path="url(#clip-sphere)"
-      filter={mergeFilterIds(layerDescription)}
-    >
-      <For each={layerDescription.data.features}>
-        {
-          (feature) => <path
-            fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
-            d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
-            vector-effect="non-scaling-stroke"
-            use:bindData={unproxify(feature)}
-          />
-        }
-      </For>
-    </g>
-  </Show>;
+  return <g
+    id={layerDescription.id}
+    class="layer categoricalChoropleth"
+    visibility={layerDescription.visible ? undefined : 'hidden'}
+    // fill={layerDescription.fillColor}
+    fill-opacity={layerDescription.fillOpacity}
+    stroke={layerDescription.strokeColor}
+    stroke-width={layerDescription.strokeWidth}
+    stroke-opacity={layerDescription.strokeOpacity}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    // clip-path="url(#clip-sphere)"
+    filter={mergeFilterIds(layerDescription)}
+  >
+    <For each={layerDescription.data.features}>
+      {
+        (feature) => <path
+          fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
+          d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
+          vector-effect="non-scaling-stroke"
+          use:bindData={unproxify(feature)}
+        />
+      }
+    </For>
+  </g>;
 }
 
 export function categoricalChoroplethLineRenderer(
@@ -151,35 +141,30 @@ export function categoricalChoroplethLineRenderer(
     },
   );
 
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || layerDescription.visible
-  }>
-    <g
-      id={layerDescription.id}
-      class="layer categoricalChoropleth"
-      visibility={layerDescription.visible ? undefined : 'hidden'}
-      fill="none"
-      // stroke={layerDescription.strokeColor}
-      stroke-width={layerDescription.strokeWidth}
-      stroke-opacity={layerDescription.strokeOpacity}
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      clip-path="url(#clip-sphere)"
-      filter={mergeFilterIds(layerDescription)}
-    >
-      <For each={layerDescription.data.features}>
-        {
-          (feature) => <path
-            stroke={
-              colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])
-            }
-            d={globalStore.pathGenerator(feature)}
-            vector-effect="non-scaling-stroke"
-            use:bindData={unproxify(feature)}
-          />
-        }
-      </For>
-    </g>
-  </Show>;
+  return <g
+    id={layerDescription.id}
+    class="layer categoricalChoropleth"
+    visibility={layerDescription.visible ? undefined : 'hidden'}
+    fill="none"
+    // stroke={layerDescription.strokeColor}
+    stroke-width={layerDescription.strokeWidth}
+    stroke-opacity={layerDescription.strokeOpacity}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    clip-path="url(#clip-sphere)"
+    filter={mergeFilterIds(layerDescription)}
+  >
+    <For each={layerDescription.data.features}>
+      {
+        (feature) => <path
+          stroke={
+            colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])
+          }
+          d={globalStore.pathGenerator(feature)}
+          vector-effect="non-scaling-stroke"
+          use:bindData={unproxify(feature)}
+        />
+      }
+    </For>
+  </g>;
 }

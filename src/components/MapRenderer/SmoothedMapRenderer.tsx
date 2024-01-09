@@ -49,36 +49,31 @@ export default function smoothedMapRenderer(
       : rendererParameters().palette.colors),
   );
 
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || layerDescription.visible
-  }>
-    <g
-      id={layerDescription.id}
-      class="layer choropleth"
-      visibility={layerDescription.visible ? undefined : 'hidden'}
-      fill-opacity={layerDescription.fillOpacity}
-      stroke={layerDescription.strokeColor}
-      stroke-width={layerDescription.strokeWidth}
-      stroke-opacity={layerDescription.strokeOpacity}
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      clip-path="url(#clip-sphere)"
-      filter={mergeFilterIds(layerDescription)}
-      shape-rendering={layerDescription.shapeRendering}
-    >
-      <For each={layerDescription.data.features}>
-        {
-          (feature) => <path
-            fill={
-              colors()[classifier().getClass(feature.properties.center)]
-            }
-            d={globalStore.pathGenerator(feature)}
-            vector-effect="non-scaling-stroke"
-            use:bindData={unproxify(feature)}
-          />
-        }
-      </For>
-    </g>
-  </Show>;
+  return <g
+    id={layerDescription.id}
+    class="layer choropleth"
+    visibility={layerDescription.visible ? undefined : 'hidden'}
+    fill-opacity={layerDescription.fillOpacity}
+    stroke={layerDescription.strokeColor}
+    stroke-width={layerDescription.strokeWidth}
+    stroke-opacity={layerDescription.strokeOpacity}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    clip-path="url(#clip-sphere)"
+    filter={mergeFilterIds(layerDescription)}
+    shape-rendering={layerDescription.shapeRendering}
+  >
+    <For each={layerDescription.data.features}>
+      {
+        (feature) => <path
+          fill={
+            colors()[classifier().getClass(feature.properties.center)]
+          }
+          d={globalStore.pathGenerator(feature)}
+          vector-effect="non-scaling-stroke"
+          use:bindData={unproxify(feature)}
+        />
+      }
+    </For>
+  </g>;
 }

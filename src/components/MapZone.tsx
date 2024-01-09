@@ -17,7 +17,7 @@ import { useI18nContext } from '../i18n/i18n-solid';
 // Stores
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
-import { applicationSettingsStore, ZoomBehavior } from '../store/ApplicationSettingsStore';
+import { applicationSettingsStore, RenderVisibility, ZoomBehavior } from '../store/ApplicationSettingsStore';
 import {
   getDefaultClipExtent,
   mapStore,
@@ -76,7 +76,7 @@ import {
   type LayerDescriptionLabels,
   type ID3Element,
   type LayerDescriptionCategoricalChoropleth,
-  type LayerDescriptionSmoothedLayer,
+  type LayerDescriptionSmoothedLayer, LayerDescription,
 } from '../global.d';
 
 // Styles
@@ -88,6 +88,59 @@ const layoutFeaturesFns = {
   [LayoutFeatureType.Ellipse]: EllipseRenderer,
   [LayoutFeatureType.FreeDrawing]: FreeDrawingRenderer,
   [LayoutFeatureType.ScaleBar]: ScaleBarRenderer,
+};
+
+const dispatchLegendRenderer = (layer: LayerDescription) => {
+  if (layer.renderer === 'choropleth') {
+    return legendChoropleth(layer as LayerDescriptionChoropleth);
+  }
+  if (layer.renderer === 'categoricalChoropleth') {
+    return legendCategoricalChoropleth(layer as LayerDescriptionCategoricalChoropleth);
+  }
+  if (layer.renderer === 'proportionalSymbols') {
+    return legendProportionalSymbols(layer as LayerDescriptionProportionalSymbols);
+  }
+  if (layer.renderer === 'discontinuity') {
+    return legendDiscontinuity(layer as LayerDescriptionDiscontinuity);
+  }
+  if (layer.renderer === 'labels') {
+    return legendLabels(layer as LayerDescriptionLabels);
+  }
+  if (layer.renderer === 'smoothed') {
+    return legendChoropleth(layer as LayerDescriptionSmoothedLayer);
+  }
+  return null;
+};
+
+const dispatchMapRenderer = (layer: LayerDescription) => {
+  if (layer.renderer === 'sphere') {
+    return sphereRenderer(layer);
+  }
+  if (layer.renderer === 'graticule') {
+    return graticuleRenderer(layer);
+  }
+  if (layer.renderer === 'default') {
+    if (layer.type === 'polygon') return defaultPolygonRenderer(layer);
+    if (layer.type === 'point') return defaultPointRenderer(layer);
+    if (layer.type === 'linestring') return defaultLineRenderer(layer);
+  } else if (layer.renderer === 'choropleth') {
+    if (layer.type === 'polygon') return choroplethPolygonRenderer(layer as LayerDescriptionChoropleth);
+    if (layer.type === 'point') return choroplethPointRenderer(layer as LayerDescriptionChoropleth);
+    if (layer.type === 'linestring') return choroplethLineRenderer(layer as LayerDescriptionChoropleth);
+  } else if (layer.renderer === 'categoricalChoropleth') {
+    if (layer.type === 'polygon') return categoricalChoroplethPolygonRenderer(layer as LayerDescriptionCategoricalChoropleth);
+    if (layer.type === 'point') return categoricalChoroplethPointRenderer(layer as LayerDescriptionCategoricalChoropleth);
+    if (layer.type === 'linestring') return categoricalChoroplethLineRenderer(layer as LayerDescriptionCategoricalChoropleth);
+  } else if (layer.renderer === 'proportionalSymbols') {
+    return proportionalSymbolsRenderer(layer as LayerDescriptionProportionalSymbols);
+  } else if (layer.renderer === 'labels') {
+    if (layer.type === 'point') return defaultLabelsRenderer(layer as LayerDescriptionLabels);
+  } else if (layer.renderer === 'discontinuity') {
+    return discontinuityRenderer(layer as LayerDescriptionDiscontinuity);
+  } else if (layer.renderer === 'smoothed') {
+    return smoothedMapRenderer(layer as LayerDescriptionSmoothedLayer);
+  }
+  return null;
 };
 
 export default function MapZone(): JSX.Element {
@@ -268,60 +321,19 @@ export default function MapZone(): JSX.Element {
 
         {/* Generate SVG group for each layer */}
         <For each={ layersDescriptionStore.layers }>
-          {(layer) => {
-            if (layer.renderer === 'sphere') {
-              return sphereRenderer(layer);
-            }
-            if (layer.renderer === 'graticule') {
-              return graticuleRenderer(layer);
-            }
-            if (layer.renderer === 'default') {
-              if (layer.type === 'polygon') return defaultPolygonRenderer(layer);
-              if (layer.type === 'point') return defaultPointRenderer(layer);
-              if (layer.type === 'linestring') return defaultLineRenderer(layer);
-            } else if (layer.renderer === 'choropleth') {
-              if (layer.type === 'polygon') return choroplethPolygonRenderer(layer as LayerDescriptionChoropleth);
-              if (layer.type === 'point') return choroplethPointRenderer(layer as LayerDescriptionChoropleth);
-              if (layer.type === 'linestring') return choroplethLineRenderer(layer as LayerDescriptionChoropleth);
-            } else if (layer.renderer === 'categoricalChoropleth') {
-              if (layer.type === 'polygon') return categoricalChoroplethPolygonRenderer(layer as LayerDescriptionCategoricalChoropleth);
-              if (layer.type === 'point') return categoricalChoroplethPointRenderer(layer as LayerDescriptionCategoricalChoropleth);
-              if (layer.type === 'linestring') return categoricalChoroplethLineRenderer(layer as LayerDescriptionCategoricalChoropleth);
-            } else if (layer.renderer === 'proportionalSymbols') {
-              return proportionalSymbolsRenderer(layer as LayerDescriptionProportionalSymbols);
-            } else if (layer.renderer === 'labels') {
-              if (layer.type === 'point') return defaultLabelsRenderer(layer as LayerDescriptionLabels);
-            } else if (layer.renderer === 'discontinuity') {
-              return discontinuityRenderer(layer as LayerDescriptionDiscontinuity);
-            } else if (layer.renderer === 'smoothed') {
-              return smoothedMapRenderer(layer as LayerDescriptionSmoothedLayer);
-            }
-            return null;
-          }}
+          {(layer) => <Show when={
+              applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
+              || layer.visible
+            }>{ dispatchMapRenderer(layer) }</Show>
+          }
         </For>
         {/* Generate legend group for each layer */}
         <For each={ layersDescriptionStore.layers }>
-          {(layer) => {
-            if (layer.renderer === 'choropleth') {
-              return legendChoropleth(layer as LayerDescriptionChoropleth);
-            }
-            if (layer.renderer === 'categoricalChoropleth') {
-              return legendCategoricalChoropleth(layer as LayerDescriptionCategoricalChoropleth);
-            }
-            if (layer.renderer === 'proportionalSymbols') {
-              return legendProportionalSymbols(layer as LayerDescriptionProportionalSymbols);
-            }
-            if (layer.renderer === 'discontinuity') {
-              return legendDiscontinuity(layer as LayerDescriptionDiscontinuity);
-            }
-            if (layer.renderer === 'labels') {
-              return legendLabels(layer as LayerDescriptionLabels);
-            }
-            if (layer.renderer === 'smoothed') {
-              return legendChoropleth(layer as LayerDescriptionSmoothedLayer);
-            }
-            return null;
-          }}
+          {(layer) => <Show when={
+            applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
+            || (layer.visible && layer.legend!.visible)
+            }>{ dispatchLegendRenderer(layer) }</Show>
+          }
         </For>
         <For each={ layersDescriptionStore.layoutFeatures }>
           {(feature) => layoutFeaturesFns[feature.type](

@@ -85,60 +85,55 @@ export default function legendLabels(
     );
   });
 
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || (layer.visible && (layer.legend as LabelsLegendParameters).visible)
-  }>
-    <g
-      ref={refElement}
-      class="legend labels"
-      for={layer.id}
-      transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
-      visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
-      onContextMenu={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        triggerContextMenuLegend(e, layer.id, LL);
-      }}
-      onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
-    >
-      <RectangleBox backgroundRect={layer.legend.backgroundRect} />
-      { makeLegendText(layer.legend.title, [0, 0], 'title') }
-      { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
-      <g class="legend-content">
-        <text
+  return <g
+    ref={refElement}
+    class="legend labels"
+    for={layer.id}
+    transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
+    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerContextMenuLegend(e, layer.id, LL);
+    }}
+    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
+  >
+    <RectangleBox backgroundRect={layer.legend.backgroundRect} />
+    { makeLegendText(layer.legend.title, [0, 0], 'title') }
+    { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
+    <g class="legend-content">
+      <text
+        x={0}
+        y={heightTitleSubtitle() + sizeDisplayedEntry().height}
+      >
+        <tspan
           x={0}
-          y={heightTitleSubtitle() + sizeDisplayedEntry().height}
-        >
-          <tspan
-            x={0}
-            text-anchor="start"
-            font-style={layer.rendererParameters.fontStyle}
-            font-family={layer.rendererParameters.fontFamily}
-            font-size={layer.rendererParameters.fontSize}
-            font-weight={layer.rendererParameters.fontWeight}
-            fill={layer.rendererParameters.fontColor}
-            {...(
-              layer.rendererParameters.halo
-                ? { stroke: layer.rendererParameters.halo.color, 'stroke-width': layer.rendererParameters.halo.width }
-                : {}
-            )}
-            style={{ 'paint-order': 'stroke' }}
-          >{ layer.data.features[0].properties[layer.rendererParameters.variable] }</tspan>
-          <tspan
-            text-anchor="start"
-            x={sizeDisplayedEntry().width}
-          >{ `: ${layer.legend.labels.text}` }</tspan>
-        </text>
+          text-anchor="start"
+          font-style={layer.rendererParameters.fontStyle}
+          font-family={layer.rendererParameters.fontFamily}
+          font-size={layer.rendererParameters.fontSize}
+          font-weight={layer.rendererParameters.fontWeight}
+          fill={layer.rendererParameters.fontColor}
+          {...(
+            layer.rendererParameters.halo
+              ? { stroke: layer.rendererParameters.halo.color, 'stroke-width': layer.rendererParameters.halo.width }
+              : {}
+          )}
+          style={{ 'paint-order': 'stroke' }}
+        >{ layer.data.features[0].properties[layer.rendererParameters.variable] }</tspan>
+        <tspan
+          text-anchor="start"
+          x={sizeDisplayedEntry().width}
+        >{ `: ${layer.legend.labels.text}` }</tspan>
+      </text>
 
-      </g>
-      {
-        makeLegendText(
-          layer.legend.note,
-          [0, positionNote()],
-          'note',
-        )
-      }
     </g>
-  </Show>;
+    {
+      makeLegendText(
+        layer.legend.note,
+        [0, positionNote()],
+        'note',
+      )
+    }
+  </g>;
 }

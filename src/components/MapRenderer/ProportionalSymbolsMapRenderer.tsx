@@ -47,63 +47,58 @@ export default function proportionalSymbolsRenderer(
       });
   });
 
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || layerDescription.visible
-  }>
-    <g
-      ref={refElement}
-      id={layerDescription.id}
-      class="layer proportionalSymbols"
-      visibility={layerDescription.visible ? undefined : 'hidden'}
-      fill-opacity={layerDescription.fillOpacity}
-      stroke={layerDescription.strokeColor}
-      stroke-width={layerDescription.strokeWidth}
-      stroke-opacity={layerDescription.strokeOpacity}
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      filter={mergeFilterIds(layerDescription)}
-    >
-      <For each={layerDescription.data.features}>
-        {
-          (feature) => {
-            const projectedCoords = createMemo(
-              () => globalStore.projection(feature.geometry.coordinates),
-            );
-            if (
-              layerDescription.rendererParameters.symbolType
-              === ProportionalSymbolsSymbolType.circle
-            ) {
-              return <circle
-                r={propSize().scale(
-                  feature.properties[layerDescription.rendererParameters.variable],
-                )}
-                cx={projectedCoords()[0]}
-                cy={projectedCoords()[1]}
-                fill={layerDescription.rendererParameters.color as string}
-                use:bindData={feature}
-              ></circle>;
-            }
-            if (
-              layerDescription.rendererParameters.symbolType
-              === ProportionalSymbolsSymbolType.square
-            ) {
-              const symbolSize = createMemo(() => propSize().scale(
+  return <g
+    ref={refElement}
+    id={layerDescription.id}
+    class="layer proportionalSymbols"
+    visibility={layerDescription.visible ? undefined : 'hidden'}
+    fill-opacity={layerDescription.fillOpacity}
+    stroke={layerDescription.strokeColor}
+    stroke-width={layerDescription.strokeWidth}
+    stroke-opacity={layerDescription.strokeOpacity}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    filter={mergeFilterIds(layerDescription)}
+  >
+    <For each={layerDescription.data.features}>
+      {
+        (feature) => {
+          const projectedCoords = createMemo(
+            () => globalStore.projection(feature.geometry.coordinates),
+          );
+          if (
+            layerDescription.rendererParameters.symbolType
+            === ProportionalSymbolsSymbolType.circle
+          ) {
+            return <circle
+              r={propSize().scale(
                 feature.properties[layerDescription.rendererParameters.variable],
-              ));
-              return <rect
-                width={symbolSize()}
-                height={symbolSize()}
-                x={projectedCoords()[0] - symbolSize() / 2}
-                y={projectedCoords()[1] - symbolSize() / 2}
-                fill={layerDescription.rendererParameters.color as string}
-                use:bindData={feature}
-              ></rect>;
-            }
-            return null;
+              )}
+              cx={projectedCoords()[0]}
+              cy={projectedCoords()[1]}
+              fill={layerDescription.rendererParameters.color as string}
+              use:bindData={feature}
+            ></circle>;
           }
+          if (
+            layerDescription.rendererParameters.symbolType
+            === ProportionalSymbolsSymbolType.square
+          ) {
+            const symbolSize = createMemo(() => propSize().scale(
+              feature.properties[layerDescription.rendererParameters.variable],
+            ));
+            return <rect
+              width={symbolSize()}
+              height={symbolSize()}
+              x={projectedCoords()[0] - symbolSize() / 2}
+              y={projectedCoords()[1] - symbolSize() / 2}
+              fill={layerDescription.rendererParameters.color as string}
+              use:bindData={feature}
+            ></rect>;
+          }
+          return null;
         }
-      </For>
-    </g>
-  </Show>;
+      }
+    </For>
+  </g>;
 }

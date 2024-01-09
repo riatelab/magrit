@@ -769,10 +769,7 @@ function horizontalCircleLegend(
 export default function legendProportionalSymbols(
   layer: LayerDescriptionProportionalSymbols,
 ): JSX.Element {
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || (layer.visible && (layer.legend as ProportionalSymbolsLegendParameters).visible)
-  }>
+  return <>
     {
       (layer.rendererParameters as ProportionalSymbolsParameters).symbolType === 'circle'
         ? ({
@@ -786,5 +783,5 @@ export default function legendProportionalSymbols(
           horizontal: horizontalSquareLegend,
         })[(layer.legend as ProportionalSymbolsLegendParameters).layout](layer)
     }
-  </Show>;
+  </>;
 }

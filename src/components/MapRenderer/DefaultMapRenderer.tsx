@@ -27,36 +27,31 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
 export function defaultPolygonRendererOld(
   layerDescription: LayerDescription,
 ): JSX.Element {
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || layerDescription.visible
-  }>
-    <g
-      id={layerDescription.id}
-      class="layer default"
-      visibility={layerDescription.visible ? undefined : 'hidden'}
-      fill={layerDescription.fillColor}
-      fill-opacity={layerDescription.fillOpacity}
-      stroke={layerDescription.strokeColor}
-      stroke-width={layerDescription.strokeWidth}
-      stroke-opacity={layerDescription.strokeOpacity}
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      clip-path="url(#clip-sphere)"
-      filter={mergeFilterIds(layerDescription)}
-      shape-rendering={layerDescription.shapeRendering}
-    >
-      <For each={layerDescription.data.features}>
-        {
-          (feature) => <path
-              d={globalStore.pathGenerator(feature)}
-              vector-effect="non-scaling-stroke"
-              use:bindData={unproxify(feature)}
-            />
-        }
-      </For>
-    </g>
-  </Show>;
+  return <g
+    id={layerDescription.id}
+    class="layer default"
+    visibility={layerDescription.visible ? undefined : 'hidden'}
+    fill={layerDescription.fillColor}
+    fill-opacity={layerDescription.fillOpacity}
+    stroke={layerDescription.strokeColor}
+    stroke-width={layerDescription.strokeWidth}
+    stroke-opacity={layerDescription.strokeOpacity}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    clip-path="url(#clip-sphere)"
+    filter={mergeFilterIds(layerDescription)}
+    shape-rendering={layerDescription.shapeRendering}
+  >
+    <For each={layerDescription.data.features}>
+      {
+        (feature) => <path
+            d={globalStore.pathGenerator(feature)}
+            vector-effect="non-scaling-stroke"
+            use:bindData={unproxify(feature)}
+          />
+      }
+    </For>
+  </g>;
 }
 
 export function defaultPolygonRenderer(
@@ -67,113 +62,94 @@ export function defaultPolygonRenderer(
   const meshAndPolygons = createMemo(
     () => extractMeshAndMergedPolygonToGeojson(layerDescription.data),
   );
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || layerDescription.visible
-  }>
-    <g
-      id={layerDescription.id}
-      class="layer default"
-      visibility={layerDescription.visible ? undefined : 'hidden'}
-      fill={layerDescription.fillColor}
-      fill-opacity={layerDescription.fillOpacity}
-      stroke={layerDescription.strokeColor}
-      stroke-width={layerDescription.strokeWidth}
-      stroke-opacity={layerDescription.strokeOpacity}
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      clip-path="url(#clip-sphere)"
-      filter={mergeFilterIds(layerDescription)}
-      shape-rendering={layerDescription.shapeRendering}
-    >
-      <path
-        use:bindData={meshAndPolygons().polygons}
-        d={globalStore.pathGenerator(meshAndPolygons().polygons)}
-        vector-effect="non-scaling-stroke"
-      />
-      <path
-        use:bindData={meshAndPolygons().mesh}
-        d={globalStore.pathGenerator(meshAndPolygons().mesh)}
-        vector-effect="non-scaling-stroke"
-        fill="none"
-      />;
-    </g>
-  </Show>;
+  return <g
+    id={layerDescription.id}
+    class="layer default"
+    visibility={layerDescription.visible ? undefined : 'hidden'}
+    fill={layerDescription.fillColor}
+    fill-opacity={layerDescription.fillOpacity}
+    stroke={layerDescription.strokeColor}
+    stroke-width={layerDescription.strokeWidth}
+    stroke-opacity={layerDescription.strokeOpacity}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    clip-path="url(#clip-sphere)"
+    filter={mergeFilterIds(layerDescription)}
+    shape-rendering={layerDescription.shapeRendering}
+  >
+    <path
+      use:bindData={meshAndPolygons().polygons}
+      d={globalStore.pathGenerator(meshAndPolygons().polygons)}
+      vector-effect="non-scaling-stroke"
+    />
+    <path
+      use:bindData={meshAndPolygons().mesh}
+      d={globalStore.pathGenerator(meshAndPolygons().mesh)}
+      vector-effect="non-scaling-stroke"
+      fill="none"
+    />;
+  </g>;
 }
 
 export function defaultPointRenderer(
   layerDescription: LayerDescription,
 ): JSX.Element {
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || layerDescription.visible
-  }>
-    <g
-      id={layerDescription.id}
-      class="layer default"
-      visibility={layerDescription.visible ? undefined : 'hidden'}
-      fill={layerDescription.fillColor}
-      fill-opacity={layerDescription.fillOpacity}
-      stroke={layerDescription.strokeColor}
-      stroke-width={layerDescription.strokeWidth}
-      stroke-opacity={layerDescription.strokeOpacity}
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      // clip-path="url(#clip-sphere)"
-      filter={mergeFilterIds(layerDescription)}
-    >
-      <For each={layerDescription.data.features}>
-        {
-          (feature) => <path
-            d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
-            vector-effect="non-scaling-stroke"
-            use:bindData={unproxify(feature)}
-          />
-        }
-      </For>
-    </g>
-  </Show>;
+  return <g
+    id={layerDescription.id}
+    class="layer default"
+    visibility={layerDescription.visible ? undefined : 'hidden'}
+    fill={layerDescription.fillColor}
+    fill-opacity={layerDescription.fillOpacity}
+    stroke={layerDescription.strokeColor}
+    stroke-width={layerDescription.strokeWidth}
+    stroke-opacity={layerDescription.strokeOpacity}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    // clip-path="url(#clip-sphere)"
+    filter={mergeFilterIds(layerDescription)}
+  >
+    <For each={layerDescription.data.features}>
+      {
+        (feature) => <path
+          d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
+          vector-effect="non-scaling-stroke"
+          use:bindData={unproxify(feature)}
+        />
+      }
+    </For>
+  </g>;
 }
 
 export function defaultLineRenderer(
   layerDescription: LayerDescription,
 ): JSX.Element {
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || layerDescription.visible
-  }>
-    <g
-      id={layerDescription.id}
-      class="layer default"
-      visibility={layerDescription.visible ? undefined : 'hidden'}
-      fill="none"
-      stroke={layerDescription.strokeColor}
-      stroke-width={layerDescription.strokeWidth}
-      stroke-opacity={layerDescription.strokeOpacity}
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      clip-path="url(#clip-sphere)"
-      filter={mergeFilterIds(layerDescription)}
-    >
-      <For each={layerDescription.data.features}>
-        {
-          (feature) => <path
-            d={globalStore.pathGenerator(feature)}
-            vector-effect="non-scaling-stroke"
-            use:bindData={unproxify(feature)}
-          />
-        }
-      </For>
-    </g>
-  </Show>;
+  return <g
+    id={layerDescription.id}
+    class="layer default"
+    visibility={layerDescription.visible ? undefined : 'hidden'}
+    fill="none"
+    stroke={layerDescription.strokeColor}
+    stroke-width={layerDescription.strokeWidth}
+    stroke-opacity={layerDescription.strokeOpacity}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    clip-path="url(#clip-sphere)"
+    filter={mergeFilterIds(layerDescription)}
+  >
+    <For each={layerDescription.data.features}>
+      {
+        (feature) => <path
+          d={globalStore.pathGenerator(feature)}
+          vector-effect="non-scaling-stroke"
+          use:bindData={unproxify(feature)}
+        />
+      }
+    </For>
+  </g>;
 }
 
 export function sphereRenderer(layerDescription: LayerDescription): JSX.Element {
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || layerDescription.visible
-  }>
-    <g
+  return <g
       class="layer sphere"
       id={layerDescription.id}
       visibility={layerDescription.visible ? undefined : 'hidden'}
@@ -191,6 +167,5 @@ export function sphereRenderer(layerDescription: LayerDescription): JSX.Element 
         d={globalStore.pathGenerator(layerDescription.data)}
         use:bindData={unproxify(layerDescription.data)}
       />
-    </g>
-  </Show>;
+    </g>;
 }

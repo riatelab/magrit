@@ -42,32 +42,27 @@ export default function discontinuityRenderer(
 
   const sizes = createMemo(() => rendererParameters().sizes);
 
-  return <Show when={
-    applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-    || layerDescription.visible
-  }>
-    <g
-      id={layerDescription.id}
-      class="layer discontinuity"
-      visibility={layerDescription.visible ? undefined : 'hidden'}
-      fill="none"
-      stroke={layerDescription.strokeColor}
-      stroke-opacity={layerDescription.strokeOpacity}
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      clip-path="url(#clip-sphere)"
-      filter={mergeFilterIds(layerDescription)}
-    >
-      <For each={layerDescription.data.features}>
-        {
-          (feature) => <path
-            d={globalStore.pathGenerator(feature)}
-            vector-effect="non-scaling-stroke"
-            stroke-width={sizes()[classifier().getClass(feature.properties.value)]}
-            use:bindData={unproxify(feature as never)}
-          />
-        }
-      </For>
-    </g>
-  </Show>;
+  return <g
+    id={layerDescription.id}
+    class="layer discontinuity"
+    visibility={layerDescription.visible ? undefined : 'hidden'}
+    fill="none"
+    stroke={layerDescription.strokeColor}
+    stroke-opacity={layerDescription.strokeOpacity}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    clip-path="url(#clip-sphere)"
+    filter={mergeFilterIds(layerDescription)}
+  >
+    <For each={layerDescription.data.features}>
+      {
+        (feature) => <path
+          d={globalStore.pathGenerator(feature)}
+          vector-effect="non-scaling-stroke"
+          stroke-width={sizes()[classifier().getClass(feature.properties.value)]}
+          use:bindData={unproxify(feature as never)}
+        />
+      }
+    </For>
+  </g>;
 }
