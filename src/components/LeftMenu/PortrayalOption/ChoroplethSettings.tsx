@@ -117,11 +117,11 @@ function onClickValidate(
       // Part specific to choropleth
       type: LegendType.choropleth,
       orientation: Orientation.vertical,
-      boxWidth: 30,
+      boxWidth: 50,
       boxHeight: 30,
-      boxSpacing: 5,
+      boxSpacing: 0,
       boxSpacingNoData: 10,
-      boxCornerRadius: 20,
+      boxCornerRadius: 0,
       labels: {
         ...applicationSettingsStore.defaultLegendSettings.labels,
       } as LegendTextElement,

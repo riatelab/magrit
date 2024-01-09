@@ -29,23 +29,26 @@ import {
 
 // Import some type descriptions
 import {
+  AllowChoroplethLegend,
   type ChoroplethLegendParameters,
-  type ClassificationParameters,
   type LayerDescriptionChoropleth,
+  type LayerDescriptionSmoothedLayer,
   Orientation,
 } from '../../global.d';
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
-function verticalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
-  const rendererParameters = layer.rendererParameters as ClassificationParameters;
+function verticalLegend(
+  layer: LayerDescriptionChoropleth | LayerDescriptionSmoothedLayer,
+): JSX.Element {
+  const rendererParameters = layer.rendererParameters as AllowChoroplethLegend;
   const legendParameters = layer.legend as ChoroplethLegendParameters;
 
   const { LL } = useI18nContext();
 
   const colors = getColors(
     rendererParameters.palette.name,
-    rendererParameters.classes,
+    rendererParameters.breaks.length - 1,
     rendererParameters.reversePalette,
   ) as string[]; // this can't be undefined because we checked it above
 
@@ -252,14 +255,16 @@ function verticalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
   </g>;
 }
 
-function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
-  const rendererParameters = layer.rendererParameters as ClassificationParameters;
+function horizontalLegend(
+  layer: LayerDescriptionChoropleth | LayerDescriptionSmoothedLayer,
+): JSX.Element {
+  const rendererParameters = layer.rendererParameters as AllowChoroplethLegend;
   const legendParameters = layer.legend as ChoroplethLegendParameters;
 
   const { LL } = useI18nContext();
   const colors = getColors(
     rendererParameters.palette.name,
-    rendererParameters.classes,
+    rendererParameters.breaks.length - 1,
     rendererParameters.reversePalette,
   ) as string[]; // this can't be undefined because we checked it above
 
@@ -455,7 +460,9 @@ function horizontalLegend(layer: LayerDescriptionChoropleth): JSX.Element {
   </g>;
 }
 
-export default function legendChoropleth(layer: LayerDescriptionChoropleth): JSX.Element {
+export default function legendChoropleth(
+  layer: LayerDescriptionChoropleth | LayerDescriptionSmoothedLayer,
+): JSX.Element {
   return <Show when={
     applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
     || (layer.visible && layer.legend!.visible)

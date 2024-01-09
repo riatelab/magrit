@@ -40,7 +40,7 @@ export default function smoothedMapRenderer(
 
   const classifier = createMemo(() => {
     const Cls = getClassifier(ClassificationMethod.manual);
-    return new Cls(null, null, rendererParameters().thresholds);
+    return new Cls(null, null, rendererParameters().breaks);
   });
 
   const colors = createMemo(

@@ -13,6 +13,7 @@ import { bbox } from '@turf/turf';
 import { getPalette } from 'dicopal';
 
 // Stores
+import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
 import { setGlobalStore } from '../../../store/GlobalStore';
 import {
   layersDescriptionStore,
@@ -27,6 +28,7 @@ import { generateIdLayer } from '../../../helpers/layers';
 import { Variable, VariableType } from '../../../helpers/typeDetection';
 import { computeKde, computeStewart } from '../../../helpers/smoothing';
 import { Mpow } from '../../../helpers/math';
+import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
 // Subcomponents
 import InputResultName from './InputResultName.tsx';
@@ -35,9 +37,10 @@ import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
+  type ChoroplethLegendParameters,
   type GridParameters,
   type KdeParameters,
-  type LayerDescriptionSmoothedLayer,
+  type LayerDescriptionSmoothedLayer, type LegendTextElement, LegendType, Orientation,
   RepresentationType,
   type SmoothedLayerParameters,
   SmoothingMethod,
@@ -114,10 +117,13 @@ async function onClickValidate(
     method: smoothingMethod,
     smoothingParameters: parameters,
     gridParameters: gridParams,
-    thresholds,
+    breaks: thresholds,
     palette: getPalette('Carrots', thresholds.length - 1),
     reversePalette: true,
   } as SmoothedLayerParameters;
+
+  // Find a position for the legend
+  const legendPosition = getPossibleLegendPosition(120, 340);
 
   const newLayerDescription = {
     id: generateIdLayer(),
@@ -144,6 +150,12 @@ async function onClickValidate(
         hasMissingValues: false,
         dataType: 'number',
       } as Variable,
+      {
+        name: targetVariable,
+        type: VariableType.stock,
+        hasMissingValues: false,
+        dataType: 'number',
+      },
     ],
     visible: true,
     strokeColor: '#000000',
@@ -154,7 +166,39 @@ async function onClickValidate(
     dropShadow: false,
     blurFilter: false,
     shapeRendering: 'crispEdges',
-    legend: undefined,
+    legend: {
+      // Part common to all legends
+      title: {
+        text: targetVariable,
+        ...applicationSettingsStore.defaultLegendSettings.title,
+      } as LegendTextElement,
+      subtitle: {
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      } as LegendTextElement,
+      note: {
+        ...applicationSettingsStore.defaultLegendSettings.note,
+      } as LegendTextElement,
+      position: legendPosition,
+      visible: true,
+      roundDecimals: 1,
+      backgroundRect: {
+        visible: false,
+      },
+      // Part specific to choropleth
+      type: LegendType.choropleth,
+      orientation: Orientation.vertical,
+      boxWidth: 50,
+      boxHeight: 30,
+      boxSpacing: 0,
+      boxSpacingNoData: 10,
+      boxCornerRadius: 0,
+      labels: {
+        ...applicationSettingsStore.defaultLegendSettings.labels,
+      } as LegendTextElement,
+      noDataLabel: 'No data',
+      stroke: false,
+      tick: false,
+    } as ChoroplethLegendParameters,
     rendererParameters,
   } as LayerDescriptionSmoothedLayer;
 
@@ -167,7 +211,7 @@ async function onClickValidate(
   );
 }
 
-const computeAppropritateResolution = (box: number[], n: number) => {
+const computeAppropriateResolution = (box: number[], n: number) => {
   const bboxWidth = box[2] - box[0];
   const bboxHeight = box[3] - box[1];
   const bboxArea = bboxWidth * bboxHeight;
@@ -190,6 +234,9 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     .fields?.filter((variable) => (
       variable.type === VariableType.ratio || variable.type === VariableType.stock)));
 
+  // Approriate resolution for the grid
+  const appropriateResolution = +(computeAppropriateResolution(bboxLayer(), 1).toPrecision(2));
+
   // Signals for common options
   const [
     targetVariable,
@@ -198,11 +245,11 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   const [
     targetSmoothingMethod,
     setTargetSmoothingMethod,
-  ] = createSignal<SmoothingMethod>(SmoothingMethod.Kde);
+  ] = createSignal<SmoothingMethod>(SmoothingMethod.Stewart);
   const [
     targetResolution,
     setTargetResolution,
-  ] = createSignal<number>(+(computeAppropritateResolution(bboxLayer(), 1).toPrecision(2)));
+  ] = createSignal<number>(appropriateResolution);
   const [
     newLayerName,
     setNewLayerName,
@@ -216,7 +263,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   const [
     targetBandwidth,
     setTargetBandwidth,
-  ] = createSignal<number>(5);
+  ] = createSignal<number>(+(appropriateResolution * 2.25).toPrecision(2));
 
   // Signals for Stewart options
   const [
@@ -226,7 +273,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   const [
     targetSpan,
     setTargetSpan,
-  ] = createSignal<number>(5);
+  ] = createSignal<number>(+(appropriateResolution * 2.25).toPrecision(2));
   const [
     targetBeta,
     setTargetBeta,
@@ -299,14 +346,14 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
           value={targetSmoothingMethod()}
           onChange={(e) => setTargetSmoothingMethod(e.currentTarget.value as SmoothingMethod)}
         >
-          <option value="Kde">{ LL().PortrayalSection.SmoothingOptions.KDE() }</option>
-          <option value="Stewart">{ LL().PortrayalSection.SmoothingOptions.Stewart() }</option>
+          <option value="Stewart">{LL().PortrayalSection.SmoothingOptions.Stewart()}</option>
+          <option value="Kde">{LL().PortrayalSection.SmoothingOptions.KDE()}</option>
         </select>
       </div>
     </div>
     <div class="field">
       <label class="label">
-        { LL().PortrayalSection.SmoothingOptions.Resolution() }
+        {LL().PortrayalSection.SmoothingOptions.Resolution() }
       </label>
       <div class="control">
         <input

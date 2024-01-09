@@ -375,7 +375,7 @@ interface SmoothedLayerParameters {
   palette: Palette | CustomPalette,
   // The thresholds used to compute the contour of the
   // smoothed layer from the grid
-  thresholds: number[],
+  breaks: number[],
   // Whether to reverse the palette or not
   reversePalette: boolean,
 }
@@ -388,6 +388,21 @@ interface CategoricalPictogramParameters {
   // one per category.
   mapping: [string | number, string, string][],
 }
+
+type AllowChoroplethLegend = Pick<ClassificationParameters, 'variable' | 'palette' | 'breaks' | 'reversePalette' | 'noDataColor'>;
+
+// interface AllowChoroplethLegend {
+//   variable: string,
+//   // The palette used to color the smoothed layer
+//   palette: Palette | CustomPalette,
+//   // The thresholds used to compute the contour of the
+//   // smoothed layer from the grid
+//   breaks: number[],
+//   // Whether to reverse the palette or not
+//   reversePalette: boolean,
+//   // The color to use for features with no data
+//   noDataColor: string,
+// }
 
 export enum RepresentationType {
   choropleth = 'choropleth',
@@ -420,7 +435,7 @@ export enum SmoothingMethod {
 
 export interface KdeParameters {
   bandwidth: number;
-  kernel: 'gaussian' | 'epanechnikov' | 'triangular' | 'uniform';
+  kernel: 'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform';
 }
 
 export interface GridParameters {

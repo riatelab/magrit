@@ -317,6 +317,9 @@ export default function MapZone(): JSX.Element {
             if (layer.renderer === 'labels') {
               return legendLabels(layer as LayerDescriptionLabels);
             }
+            if (layer.renderer === 'smoothed') {
+              return legendChoropleth(layer as LayerDescriptionSmoothedLayer);
+            }
             return null;
           }}
         </For>

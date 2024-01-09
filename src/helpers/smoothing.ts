@@ -77,11 +77,6 @@ function makeContourLayer(
     options,
   );
 
-  contours.features.forEach((ft, i) => {
-    // eslint-disable-next-line no-param-reassign
-    ft.properties.center = (ft.properties.min_v + ft.properties.max_v) / 2;
-  });
-
   // Convert the contour layer to TopoJSON, apply the quantization and convert back to GeoJSON
   return convertToTopojsonQuantizeAndBackToGeojson(contours) as GeoJSONFeatureCollection;
 }
@@ -167,13 +162,10 @@ function computeKdeInner(
       yCell[this.thread.x],
     );
     // eslint-disable-next-line prefer-exponentiation-operator, no-restricted-properties
-    const k = this.k(dist, this.constants.bandwidth);
-    // const v = this.constants.normalizer * values[i];
-    const v = values[i];
-    value += k * v;
-    // vs += v;
+    const kv = this.k(dist, this.constants.bandwidth);
+    value += kv * values[i];
   }
-  return value; // / vs;
+  return value;
 }
 
 export async function computeStewart(
@@ -268,6 +260,13 @@ export async function computeStewart(
     .map((d) => d * maxPot);
 
   const contours = makeContourLayer(grid, thresholds);
+  contours.features.forEach((ft) => {
+    // eslint-disable-next-line no-param-reassign
+    ft.properties.center = (ft.properties.min_v + ft.properties.max_v) / 2;
+    // eslint-disable-next-line no-param-reassign
+    ft.properties[variableName] = ft.properties.center;
+  });
+
   console.timeEnd('contours');
   console.time('intersection');
   const clippedContours = await intersection(contours, data);
@@ -344,8 +343,8 @@ export async function computeKde(
     gpu
       .addFunction( // eslint-disable-next-line prefer-arrow-callback
         function k(dist: number, bandwidth: number): number {
-          // eslint-disable-next-line prefer-exponentiation-operator, no-restricted-properties
-          return Math.exp(-(1 / bandwidth) * Math.pow(dist, 2));
+          const exponent = -(dist * dist) / (2 * bandwidth * bandwidth);
+          return Math.exp(exponent) / (Math.sqrt(2 * Math.PI) * bandwidth);
         },
         {
           argumentTypes: {
@@ -357,9 +356,32 @@ export async function computeKde(
   } else if (kdeParameters.kernel === 'epanechnikov') {
     gpu
       .addFunction(
-        function k(dist: number): number { // eslint-disable-line prefer-arrow-callback
-          // eslint-disable-next-line prefer-exponentiation-operator, no-restricted-properties
-          return 0.75 * (1 - Math.pow(dist, 2));
+        // eslint-disable-next-line prefer-arrow-callback
+        function k(dist: number, bandwidth: number): number {
+          const u = dist / bandwidth;
+          if (Math.abs(u) <= 1) {
+            return (3 / 4) * (1 - u * u) / bandwidth; // eslint-disable-line no-mixed-operators
+          }
+          return 0;
+        },
+        {
+          argumentTypes: {
+            dist: 'Number',
+          },
+          returnType: 'Number',
+        },
+      );
+  } else if (kdeParameters.kernel === 'quartic') {
+    gpu
+      .addFunction( // eslint-disable-next-line prefer-arrow-callback
+        function k(dist: number, bandwidth: number): number {
+          const u = dist / bandwidth;
+          if (Math.abs(u) <= 1) {
+            const t = (1 - u * u) * (1 - u * u);
+            // eslint-disable-next-line no-restricted-properties, prefer-exponentiation-operator
+            return ((15 / 16) * t) / bandwidth;
+          }
+          return 0;
         },
         {
           argumentTypes: {
@@ -371,8 +393,13 @@ export async function computeKde(
   } else if (kdeParameters.kernel === 'triangular') {
     gpu
       .addFunction(
-        function k(dist: number): number { // eslint-disable-line prefer-arrow-callback
-          return 1 - Math.abs(dist);
+        // eslint-disable-next-line prefer-arrow-callback
+        function k(dist: number, bandwidth: number): number {
+          const u = dist / bandwidth;
+          if (Math.abs(u) <= 1) {
+            return (1 - Math.abs(u)) / bandwidth;
+          }
+          return 0;
         },
         {
           argumentTypes: {
@@ -384,8 +411,13 @@ export async function computeKde(
   } else { // (kdeParameters.kernel === 'uniform')
     gpu
       .addFunction(
-        function k(dist: number): number { // eslint-disable-line prefer-arrow-callback
-          return 0.5;
+        // eslint-disable-next-line prefer-arrow-callback
+        function k(dist: number, bandwidth: number): number {
+          const u = dist / bandwidth;
+          if (Math.abs(u) <= 1) {
+            return 1 / (2 * bandwidth);
+          }
+          return 0;
         },
         {
           argumentTypes: {
@@ -426,7 +458,12 @@ export async function computeKde(
 
   const contours = makeContourLayer(grid, thresholds);
 
-  const clippedContours = await intersection(contours, data);
+  contours.features.forEach((ft) => {
+    // eslint-disable-next-line no-param-reassign
+    ft.properties.center = (ft.properties.min_v + ft.properties.max_v) / 2;
+    // eslint-disable-next-line no-param-reassign
+    ft.properties[variableName] = ft.properties.center;
+  });
 
-  return clippedContours;
+  return intersection(contours, data);
 }
