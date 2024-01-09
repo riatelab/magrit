@@ -10,6 +10,7 @@ import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url';
 import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url';
 import { Transition } from 'solid-transition-group';
 import { Toaster } from 'solid-toast';
+import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
 import { useI18nContext } from './i18n/i18n-solid';
@@ -169,14 +170,19 @@ const dropHandler = (e: Event): void => {
   }
 };
 
-const reloadFromProjectObject = (
+const reloadFromProjectObject = async (
   obj: {
     layers: LayerDescription[],
     layoutFeatures: LayoutFeature[],
     map: MapStoreType,
     tables: TableDescription[],
   },
-): void => {
+): Promise<void> => {
+  // Display a loading overlay because it may take some time
+  setGlobalStore({ isLoading: true });
+
+  await yieldOrContinue('user-visible');
+
   // The state we want to use
   const {
     layers,
@@ -184,6 +190,7 @@ const reloadFromProjectObject = (
     map,
     tables,
   } = obj;
+
   // Reset the layers description store before changing the map store
   // (this avoid redrawing the map for the potential current layers)
   setLayersDescriptionStore({ layers: [], layoutFeatures: [], tables: [] });
@@ -192,8 +199,8 @@ const reloadFromProjectObject = (
   setMapStore(map);
   // Update the layer description store with the layers and layout features
   setLayersDescriptionStore({ layers, layoutFeatures, tables });
-  // Reverse the "userHasAddedLayer" flag
-  setGlobalStore({ userHasAddedLayer: true });
+  // Reverse the "userHasAddedLayer" flag and hide the loading overlay
+  setGlobalStore({ userHasAddedLayer: true, isLoading: false });
 };
 
 const AppPage: () => JSX.Element = () => {

@@ -4,6 +4,9 @@ import {
   type JSX,
 } from 'solid-js';
 
+// Imports from other packages
+import { yieldOrContinue } from 'main-thread-scheduling';
+
 // Stores
 import { setContextMenuStore } from '../../store/ContextMenuStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
@@ -126,11 +129,14 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
   // Get the initial position of the legend
   let [positionX, positionY] = layer.legend!.position;
   let i = 0;
-  const moveElement = (e: MouseEvent) => {
+  const moveElement = async (e: MouseEvent) => {
     if (((i++) % 2) === 0) { // eslint-disable-line no-plusplus
       // We skip some mousemove events to improve performance
       return;
     }
+
+    await yieldOrContinue('user-visible');
+
     const dx = e.clientX - x;
     const dy = e.clientY - y;
 
@@ -155,7 +161,14 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
     y = e.clientY;
   };
 
-  const deselectElement = () => {
+  const deselectElement = async () => {
+    refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
+    outerSvg.style.cursor = 'default'; // eslint-disable-line no-param-reassign
+    outerSvg.removeEventListener('mousemove', moveElement);
+    outerSvg.removeEventListener('mouseup', deselectElement);
+
+    await yieldOrContinue('user-visible');
+
     // Update the position in the layersDescriptionStore
     // once the user has released the mouse button
     setLayersDescriptionStore(
@@ -169,10 +182,6 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
         ],
       },
     );
-    refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
-    outerSvg.style.cursor = 'default'; // eslint-disable-line no-param-reassign
-    outerSvg.removeEventListener('mousemove', moveElement);
-    outerSvg.removeEventListener('mouseup', deselectElement);
   };
 
   refElement.addEventListener('mousedown', (e) => {
@@ -181,6 +190,7 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
     // If the mousedown is triggered by another button, we return immediately.
     if (e.button > 1) return;
     e.stopPropagation();
+
     // isDragging = true;
     x = e.clientX;
     y = e.clientY;

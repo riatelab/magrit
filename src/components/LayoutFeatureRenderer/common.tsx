@@ -44,9 +44,12 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
       // We skip some mousemove events to improve performance
       return;
     }
+
     const dx = e.clientX - x;
     const dy = e.clientY - y;
 
+    // TODO: we should do as we do for legends and use
+    //  the transform attribute while dragging
     setLayersDescriptionStore(
       'layoutFeatures',
       (l: LayoutFeature) => l.id === props.id,

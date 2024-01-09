@@ -66,6 +66,7 @@
     "geos-wasm": "^1.2.1",
     "gpu.js": "^2.16.0",
     "jszip": "^3.10.1",
+    "main-thread-scheduling": "^10.0.0",
     "polylabel": "^1.1.0",
     "proj4": "^2.9.2",
     "solid-icons": "^1.1.0",
