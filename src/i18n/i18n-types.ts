@@ -942,6 +942,10 @@ type RootTranslation = {
 		 * A​l​l​o​w​ ​m​o​v​i​n​g​ ​l​a​b​e​l​s
 		 */
 		AllowMovingLabels: string
+		/**
+		 * P​a​l​e​t​t​e
+		 */
+		Palette: string
 	}
 	ProjectionSelection: {
 		/**
@@ -1330,6 +1334,18 @@ type RootTranslation = {
 		 * s​t​a​n​d​a​r​d​ ​d​e​v​i​a​t​i​o​n​s
 		 */
 		howManyStdDev: string
+		/**
+		 * C​o​l​o​r​ ​s​c​h​e​m​e​ ​t​y​p​e
+		 */
+		typeScheme: string
+		/**
+		 * S​e​q​u​e​n​t​i​a​l
+		 */
+		sequential: string
+		/**
+		 * D​i​v​e​r​g​i​n​g
+		 */
+		diverging: string
 		/**
 		 * P​a​l​e​t​t​e
 		 */
@@ -2477,6 +2493,10 @@ export type TranslationFunctions = {
 		 * Allow moving labels
 		 */
 		AllowMovingLabels: () => LocalizedString
+		/**
+		 * Palette
+		 */
+		Palette: () => LocalizedString
 	}
 	ProjectionSelection: {
 		/**
@@ -2865,6 +2885,18 @@ export type TranslationFunctions = {
 		 * standard deviations
 		 */
 		howManyStdDev: () => LocalizedString
+		/**
+		 * Color scheme type
+		 */
+		typeScheme: () => LocalizedString
+		/**
+		 * Sequential
+		 */
+		sequential: () => LocalizedString
+		/**
+		 * Diverging
+		 */
+		diverging: () => LocalizedString
 		/**
 		 * Palette
 		 */

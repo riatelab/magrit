@@ -360,6 +360,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
           type="number"
           class="input"
           value={targetResolution()}
+          min={0}
           step={0.1}
           onChange={(e) => setTargetResolution(+e.currentTarget.value)}
         />
@@ -395,6 +396,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
             class="input"
             value={targetBandwidth()}
             step={1}
+            min={0}
             onChange={(e) => setTargetBandwidth(+e.currentTarget.value)}
           />
         </div>
@@ -424,6 +426,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
             type="number"
             class="input"
             value={targetSpan()}
+            min={0}
             step={1}
             onChange={(e) => setTargetSpan(+e.currentTarget.value)}
           />
@@ -448,6 +451,14 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       onKeyUp={ (value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />
-    <ButtonValidation label={ LL().PortrayalSection.CreateLayer() } onClick={ makePortrayal } />
+    <ButtonValidation
+      label={ LL().PortrayalSection.CreateLayer() }
+      onClick={ makePortrayal }
+      disabled={
+        targetResolution() <= 0
+        || (targetSmoothingMethod() === SmoothingMethod.Kde && targetBandwidth() <= 0)
+        || (targetSmoothingMethod() === SmoothingMethod.Stewart && targetSpan() <= 0)
+      }
+    />
   </div>;
 }

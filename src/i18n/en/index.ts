@@ -271,6 +271,7 @@ const en = {
     BufferColor: 'Buffer color',
     BufferWidth: 'Buffer width',
     AllowMovingLabels: 'Allow moving labels',
+    Palette: 'Palette',
   },
   ProjectionSelection: {
     title: 'Projection selection',
@@ -380,6 +381,9 @@ const en = {
     meanPositionBoundary: 'Class boundary',
     amplitude: 'Amplitude',
     howManyStdDev: 'standard deviations',
+    typeScheme: 'Color scheme type',
+    sequential: 'Sequential',
+    diverging: 'Diverging',
     palette: 'Palette',
     reversePalette: 'Reverse palette',
     displayMean: 'Display mean',

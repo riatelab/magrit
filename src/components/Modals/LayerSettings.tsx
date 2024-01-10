@@ -9,6 +9,7 @@ import {
 
 // Imports from other libs
 import { FaSolidPlus } from 'solid-icons/fa';
+import { getPalette, getPalettes } from 'dicopal';
 
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
@@ -36,7 +37,7 @@ import type {
   LayerDescriptionLabels,
   ProportionalSymbolsParameters,
   LabelsParameters,
-  ClassificationParameters,
+  ClassificationParameters, SmoothedLayerParameters,
 } from '../../global';
 
 // Styles
@@ -456,6 +457,12 @@ function makeSettingsDefaultPolygon(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
+  const availableSequentialPalettes = getPalettes({ type: 'sequential', number: 8 })
+    .map((d) => ({
+      name: `${d.name} (${d.provider})`,
+      value: d.name,
+    }));
+
   return <>
     {/*
       The way the entities are colored depends on the renderer...
@@ -510,6 +517,24 @@ function makeSettingsDefaultPolygon(
           }}
         >{ LL().LayerSettings.ChangeClassification() }</button>
       </div>
+    </Show>
+    <Show when={props.renderer === 'smoothed'}>
+      <InputFieldSelect
+        label={LL().LayerSettings.Palette()}
+        onChange={(palName) => {
+          const n = (props.rendererParameters as SmoothedLayerParameters).breaks.length - 1;
+          const palette = getPalette(palName, n);
+          debouncedUpdateProp(props.id, ['rendererParameters', 'palette'], palette);
+        }}
+        value={(props.rendererParameters as SmoothedLayerParameters).palette.name}
+        width={220}
+      >
+        <For each={availableSequentialPalettes}>
+          {
+            (d) => <option value={d.value}>{d.name}</option>
+          }
+        </For>
+      </InputFieldSelect>
     </Show>
     <InputFieldColor
       label={ LL().LayerSettings.StrokeColor() }

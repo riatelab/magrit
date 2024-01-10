@@ -271,6 +271,7 @@ const fr = {
     BufferColor: 'Couleur du tampon',
     BufferWidth: 'Largeur du tampon',
     AllowMovingLabels: 'Autoriser le déplacement des étiquettes',
+    Palette: 'Palette',
   },
   ProjectionSelection: {
     title: 'Sélection de la projection',
@@ -380,6 +381,9 @@ const fr = {
     meanPositionBoundary: 'Limite de la classe',
     amplitude: 'Amplitude',
     howManyStdDev: 'écart-types',
+    typeScheme: 'Type de progression colorée',
+    sequential: 'Séquentielle',
+    diverging: 'Divergente',
     palette: 'Palette de couleurs',
     reversePalette: 'Inverser la palette',
     displayMean: 'Afficher la moyenne',
