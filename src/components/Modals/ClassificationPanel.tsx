@@ -1,6 +1,6 @@
 // Imports from solid-js
 import {
-  createSignal, JSX, onCleanup, onMount, Show,
+  createSignal, JSX, Match, onCleanup, onMount, Show, Switch,
 } from 'solid-js';
 
 // Imports from other packages
@@ -142,7 +142,13 @@ export default function ClassificationPanel(): JSX.Element {
   // Basic statistical summary displayed to the user
   const statSummary = prepareStatisticalSummary(filteredSeries);
 
-  const availablePalettes = getPalettes({ type: 'sequential', number: 9 })
+  const availableSequentialPalettes = getPalettes({ type: 'sequential', number: 8 })
+    .map((d) => ({
+      name: `${d.name} (${d.provider})`,
+      value: d.name,
+    }));
+
+  const availableDivergingPalettes = getPalettes({ type: 'diverging', number: 8 })
     .map((d) => ({
       name: `${d.name} (${d.provider})`,
       value: d.name,
@@ -175,6 +181,11 @@ export default function ClassificationPanel(): JSX.Element {
     meanPositionRole,
     setMeanPositionRole,
   ] = createSignal<'center' | 'boundary'>('center');
+  // - the type of color scheme chosen by the user (sequential or diverging)
+  const [
+    typeScheme,
+    setTypeScheme,
+  ] = createSignal<'sequential' | 'diverging' | 'custom'>('sequential');
   // - the color palette chosen by the user for the current classification method
   const [
     paletteName,
@@ -463,101 +474,159 @@ export default function ClassificationPanel(): JSX.Element {
                   }
                 </div>
                 <div>
-                  { makeColoredBucketPlot(currentBreaksInfo()) }
+                  {makeColoredBucketPlot(currentBreaksInfo())}
+                </div>
+                <div class="is-flex is-flex-direction-row is-justify-content-space-around mt-2">
+                  <div class="control">
+                    <label class="label">
+                      <input
+                        style={{ 'vertical-align': 'text-bottom' }}
+                        type="checkbox"
+                        checked={classificationPlotOption().mean}
+                        onChange={(e) => {
+                          setClassificationPlotOption({
+                            ...classificationPlotOption(),
+                            mean: e.target.checked,
+                          });
+                        }}
+                      />
+                      {LL().ClassificationPanel.displayMean()}
+                    </label>
+                  </div>
+                  <div class="control">
+                    <label class="label">
+                      <input
+                        style={{ 'vertical-align': 'text-bottom' }}
+                        type="checkbox"
+                        checked={classificationPlotOption().median}
+                        onChange={(e) => {
+                          setClassificationPlotOption({
+                            ...classificationPlotOption(),
+                            median: e.target.checked,
+                          });
+                        }}
+                      />
+                      {LL().ClassificationPanel.displayMedian()}
+                    </label>
+                  </div>
+                  <div class="control">
+                    <label class="label">
+                      <input
+                        style={{ 'vertical-align': 'text-bottom' }}
+                        type="checkbox"
+                        checked={classificationPlotOption().sd}
+                        onChange={(e) => {
+                          setClassificationPlotOption({
+                            ...classificationPlotOption(),
+                            sd: e.target.checked,
+                          });
+                        }}
+                      />
+                      {LL().ClassificationPanel.displayStdDev()}
+                    </label>
+                  </div>
                 </div>
               </div>
               <div style={{ width: '40%', 'text-align': 'left', padding: '2em' }}>
                 <div style={{ 'flex-grow': 1 }}>
-                  <p class="label is-marginless">{ LL().ClassificationPanel.palette() }</p>
-                  <DropdownMenu
-                    id={'dropdown-palette-name'}
-                    style={{ width: '220px' }}
-                    entries={availablePalettes}
-                    defaultEntry={
-                      availablePalettes.find((d) => d.value === paletteName())!
-                    }
-                    onChange={(value) => {
-                      setPaletteName(value);
-                      updateClassificationParameters();
-                    }}
-                  />
+                  <p class="label is-marginless">{LL().ClassificationPanel.typeScheme()}</p>
+                  <label class="radio" for="type-scheme-sequential">
+                    <input
+                      type={'radio'}
+                      name={'type-scheme'}
+                      id={'type-scheme-sequential'}
+                      onChange={() => {
+                        setTypeScheme('sequential');
+                        setPaletteName(availableSequentialPalettes[0].value);
+                        updateClassificationParameters();
+                      }}
+                      checked
+                    />
+                    {LL().ClassificationPanel.sequential()}
+                  </label>
+                  <label class="radio" for="type-scheme-diverging">
+                    <input
+                      type={'radio'}
+                      name={'type-scheme'}
+                      id={'type-scheme-diverging'}
+                      onChange={() => {
+                        setTypeScheme('diverging');
+                        setPaletteName(availableDivergingPalettes[0].value);
+                        updateClassificationParameters();
+                      }}
+                    />
+                    {LL().ClassificationPanel.diverging()}
+                  </label>
                 </div>
-                <br />
+                <br/>
+                <div style={{ 'flex-grow': 1 }}>
+                  <p class="label is-marginless">{LL().ClassificationPanel.palette()}</p>
+                  <Switch>
+                    <Match when={typeScheme() === 'sequential'}>
+                      <DropdownMenu
+                        id={'dropdown-palette-name'}
+                        style={{ width: '220px' }}
+                        entries={availableSequentialPalettes}
+                        defaultEntry={
+                          availableSequentialPalettes.find((d) => d.value === paletteName())
+                          || availableSequentialPalettes[0]
+                        }
+                        onChange={(value) => {
+                          setPaletteName(value);
+                          updateClassificationParameters();
+                        }}
+                      />
+                    </Match>
+                    <Match when={typeScheme() === 'diverging'}>
+                      <DropdownMenu
+                        id={'dropdown-palette-name'}
+                        style={{ width: '220px' }}
+                        entries={availableDivergingPalettes}
+                        defaultEntry={
+                          availableDivergingPalettes.find((d) => d.value === paletteName())
+                          || availableDivergingPalettes[0]
+                        }
+                        onChange={(value) => {
+                          setPaletteName(value);
+                          updateClassificationParameters();
+                        }}
+                      />
+                    </Match>
+                  </Switch>
+                </div>
+                <br/>
                 <div class="control">
                   <label class="label">
                     <input
                       type="checkbox"
-                      checked={ isPaletteReversed() }
+                      checked={isPaletteReversed()}
                       onChange={(e) => {
                         setIsPaletteReversed(e.target.checked);
                         updateClassificationParameters();
                       }}
                     />
-                    { LL().ClassificationPanel.reversePalette() }
+                    {LL().ClassificationPanel.reversePalette()}
                   </label>
                 </div>
-                <br />
-                <div class="control">
-                  <label class="label">
+                <br/>
+                <Show when={missingValues > 0}>
+                  <div class="control is-flex is-align-content-center">
                     <input
-                      type="checkbox"
-                      checked={ classificationPlotOption().mean }
+                      class="color mr-5"
+                      type="color"
+                      value={noDataColor()}
                       onChange={(e) => {
-                        setClassificationPlotOption({
-                          ...classificationPlotOption(),
-                          mean: e.target.checked,
-                        });
+                        setNoDataColor(e.target.value);
+                        updateClassificationParameters();
                       }}
                     />
-                    { LL().ClassificationPanel.displayMean() }
-                  </label>
-                </div>
-                <div class="control">
-                  <label class="label">
-                    <input
-                      type="checkbox"
-                      checked={ classificationPlotOption().median }
-                      onChange={(e) => {
-                        setClassificationPlotOption({
-                          ...classificationPlotOption(),
-                          median: e.target.checked,
-                        });
-                      }}
-                    />
-                    { LL().ClassificationPanel.displayMedian() }
-                  </label>
-                </div>
-                <div class="control">
-                  <label class="label">
-                    <input
-                      type="checkbox"
-                      checked={ classificationPlotOption().sd }
-                      onChange={(e) => {
-                        setClassificationPlotOption({
-                          ...classificationPlotOption(),
-                          sd: e.target.checked,
-                        });
-                      }}
-                    />
-                    { LL().ClassificationPanel.displayStdDev() }
-                  </label>
-                </div>
+                    <p class="label">
+                      {LL().ClassificationPanel.missingValues(missingValues)}
+                    </p>
+                  </div>
+                </Show>
               </div>
             </div>
-            <Show when={missingValues > 0}>
-              <p class="label">{ LL().ClassificationPanel.missingValues(missingValues) }</p>
-              <div class="control">
-                <input
-                  class="color"
-                  type="color"
-                  value={ noDataColor() }
-                  onChange={(e) => {
-                    setNoDataColor(e.target.value);
-                    updateClassificationParameters();
-                  }}
-                />
-              </div>
-            </Show>
           </div>
         </div>
 
@@ -571,7 +640,7 @@ export default function ClassificationPanel(): JSX.Element {
             }
             setClassificationPanelStore({ show: false });
           }}
-        >{ LL().SuccessButton() }</button>
+        >{LL().SuccessButton()}</button>
         <button
           class="button classification-panel__cancel-button"
           onClick={() => {
