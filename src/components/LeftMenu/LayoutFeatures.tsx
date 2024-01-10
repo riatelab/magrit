@@ -38,11 +38,13 @@ import { getTargetSvg } from '../../helpers/svg';
 
 // Types / Interfaces
 import type {
+  BackgroundRect,
   Ellipse,
   FreeDrawing,
   Line,
   Rectangle,
   ScaleBar,
+  Text,
 } from '../../global';
 import { DistanceUnit, LayoutFeatureType, ScaleBarStyle } from '../../global.d';
 
@@ -168,6 +170,7 @@ export default function LayoutFeatures(): JSX.Element {
                 strokeDasharray: undefined,
                 arrow: true,
                 points: pts,
+                backgroundRect: { visible: false } as BackgroundRect,
               } as Line;
               // Add the layout feature to the store (and so to the map)
               setLayersDescriptionStore(
@@ -329,6 +332,18 @@ export default function LayoutFeatures(): JSX.Element {
                   },
                 ),
               );
+
+              toast.success(LL().LayoutFeatures.ConfirmationMessages.Graticule(), {
+                duration: 5000,
+                style: {
+                  background: '#1f2937',
+                  color: '#f3f4f6',
+                },
+                iconTheme: {
+                  primary: '#38bdf8',
+                  secondary: '#1f2937',
+                },
+              });
             }
           }}
         />
@@ -350,6 +365,17 @@ export default function LayoutFeatures(): JSX.Element {
                   },
                 ),
               );
+              toast.success(LL().LayoutFeatures.ConfirmationMessages.Sphere(), {
+                duration: 5000,
+                style: {
+                  background: '#1f2937',
+                  color: '#f3f4f6',
+                },
+                iconTheme: {
+                  primary: '#38bdf8',
+                  secondary: '#1f2937',
+                },
+              });
             }
           }}
         />
@@ -395,7 +421,61 @@ export default function LayoutFeatures(): JSX.Element {
           src={layoutFeatureText}
           alt={ LL().LayoutFeatures.Text() }
           title={ LL().LayoutFeatures.Text() }
-          onClick={() => {}}
+          onClick={() => {
+            toast.success(LL().LayoutFeatures.DrawingInstructions.Text(), {
+              duration: 5000,
+              style: {
+                background: '#1f2937',
+                color: '#f3f4f6',
+              },
+              iconTheme: {
+                primary: '#38bdf8',
+                secondary: '#1f2937',
+              },
+            });
+
+            const svgElement = getTargetSvg();
+            const onClick = (ev: MouseEvent) => {
+              // Point coordinates in SVG space
+              const cursorPt = getSvgCoordinates(svgElement, ev);
+
+              // Add a temporary point
+              addTemporaryPoint(cursorPt.x, cursorPt.y);
+
+              // Create the text
+              const textDescription = {
+                id: generateIdLayoutFeature(),
+                type: LayoutFeatureType.Text,
+                position: [cursorPt.x, cursorPt.y],
+                text: LL().LayoutFeatures.DrawingInstructions.TextPlaceholder(),
+                fontSize: 12,
+                fontFamily: 'Sans-serif',
+                fontColor: '#000000',
+                fontOpacity: 1,
+                fontStyle: 'normal',
+                fontWeight: 'normal',
+                textAnchor: 'start',
+                rotation: 0,
+                backgroundRect: { visible: false } as BackgroundRect,
+              } as Text;
+
+              setLayersDescriptionStore(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeatures.push(textDescription);
+                  },
+                ),
+              );
+
+              // Clean up everything
+              svgElement.removeEventListener('click', onClick);
+              svgElement.style.cursor = 'default';
+              svgElement.querySelectorAll('.temporary-point')
+                .forEach((elem) => elem.remove());
+            };
+            svgElement.style.cursor = 'crosshair';
+            svgElement.addEventListener('click', onClick);
+          }}
         />
         <img
           class="layout-features-section__icon-element disabled"

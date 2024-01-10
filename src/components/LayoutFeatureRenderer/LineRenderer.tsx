@@ -2,7 +2,11 @@
 import { type JSX, onMount } from 'solid-js';
 
 // Helpers
-import { bindDragBehavior, makeLayoutFeaturesSettingsModal, triggerContextMenuLayoutFeature } from './common.tsx';
+import {
+  bindDragBehavior, bindElementsLayoutFeature,
+  makeLayoutFeaturesSettingsModal, RectangleBox,
+  triggerContextMenuLayoutFeature,
+} from './common.tsx';
 import { useI18nContext } from '../../i18n/i18n-solid';
 
 // Types / Interfaces / Enums
@@ -13,7 +17,7 @@ export default function LineRenderer(props: Line): JSX.Element {
   let refElement: SVGGElement;
 
   onMount(() => {
-    bindDragBehavior(refElement, props);
+    bindElementsLayoutFeature(refElement, props);
   });
 
   return <g
@@ -26,8 +30,8 @@ export default function LineRenderer(props: Line): JSX.Element {
     }}
     onDblClick={() => { makeLayoutFeaturesSettingsModal(props.id, LL); }}
     transform={`translate(${props.position[0]}, ${props.position[1]})`}
-
   >
+    <RectangleBox backgroundRect={props.backgroundRect} />
     <path
       stroke={props.strokeColor}
       stroke-opacity={props.strokeOpacity}

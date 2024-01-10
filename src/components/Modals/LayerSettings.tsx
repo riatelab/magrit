@@ -384,7 +384,7 @@ function makeSettingsDefaultLine(
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
   return <>
-    <Show when={ props.renderer === 'default' }>
+    <Show when={ props.renderer === 'default' || props.renderer === 'discontinuity' }>
       <InputFieldColor
         label={ LL().LayerSettings.StrokeColor() }
         value={ props.strokeColor! }

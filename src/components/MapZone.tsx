@@ -49,6 +49,7 @@ import FreeDrawingRenderer from './LayoutFeatureRenderer/FreeDrawingRenderer.tsx
 import LineRenderer from './LayoutFeatureRenderer/LineRenderer.tsx';
 import RectangleRenderer from './LayoutFeatureRenderer/RectangleRenderer.tsx';
 import ScaleBarRenderer from './LayoutFeatureRenderer/ScaleBarRenderer.tsx';
+import TextRenderer from './LayoutFeatureRenderer/TextRenderer.tsx';
 
 // - for rendering the legends
 import legendChoropleth from './LegendRenderer/ChoroplethLegend.tsx';
@@ -76,7 +77,7 @@ import {
   type LayerDescriptionLabels,
   type ID3Element,
   type LayerDescriptionCategoricalChoropleth,
-  type LayerDescriptionSmoothedLayer, LayerDescription,
+  type LayerDescriptionSmoothedLayer, LayerDescription, Text, Line,
 } from '../global.d';
 
 // Styles
@@ -88,6 +89,7 @@ const layoutFeaturesFns = {
   [LayoutFeatureType.Ellipse]: EllipseRenderer,
   [LayoutFeatureType.FreeDrawing]: FreeDrawingRenderer,
   [LayoutFeatureType.ScaleBar]: ScaleBarRenderer,
+  [LayoutFeatureType.Text]: TextRenderer,
 };
 
 const dispatchLegendRenderer = (layer: LayerDescription) => {
@@ -331,13 +333,13 @@ export default function MapZone(): JSX.Element {
         <For each={ layersDescriptionStore.layers }>
           {(layer) => <Show when={
             applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-            || (layer.visible && layer.legend!.visible)
+            || (layer.visible && layer.legend?.visible)
             }>{ dispatchLegendRenderer(layer) }</Show>
           }
         </For>
         <For each={ layersDescriptionStore.layoutFeatures }>
           {(feature) => layoutFeaturesFns[feature.type](
-            feature as Rectangle & Ellipse & FreeDrawing & ScaleBar,
+            feature as Rectangle & Ellipse & FreeDrawing & ScaleBar & Text & Line,
           )}
         </For>
         <Show when={!globalStore.userHasAddedLayer}>

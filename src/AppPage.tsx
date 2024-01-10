@@ -317,6 +317,8 @@ const AppPage: () => JSX.Element = () => {
               value: 'geoNaturalEarth2',
               name: 'NaturalEarth2',
             },
+            backgroundColor: '#ffffff',
+            backgroundColorOpacity: 1,
           });
 
           // Reset the undo/redo store

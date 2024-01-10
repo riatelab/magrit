@@ -360,6 +360,16 @@ type RootTranslation = {
 			 */
 			Down: string
 		}
+		ConfirmationMessages: {
+			/**
+			 * T​h​e​ ​"​S​p​h​e​r​e​"​ ​l​a​y​e​r​ ​h​a​s​ ​b​e​e​n​ ​a​d​d​e​d​ ​t​o​ ​t​h​e​ ​m​a​p​.
+			 */
+			Sphere: string
+			/**
+			 * T​h​e​ ​"​G​r​a​t​i​c​u​l​e​"​ ​l​a​y​e​r​ ​h​a​s​ ​b​e​e​n​ ​a​d​d​e​d​ ​t​o​ ​t​h​e​ ​m​a​p​.
+			 */
+			Graticule: string
+		}
 		DrawingInstructions: {
 			/**
 			 * C​l​i​c​k​ ​t​o​ ​s​t​a​r​t​ ​d​r​a​w​i​n​g​ ​a​ ​l​i​n​e​.​ ​C​l​i​c​k​ ​a​g​a​i​n​ ​t​o​ ​a​d​d​ ​a​ ​p​o​i​n​t​.​ ​D​o​u​b​l​e​-​c​l​i​c​k​ ​t​o​ ​f​i​n​i​s​h​.
@@ -377,6 +387,14 @@ type RootTranslation = {
 			 * C​l​i​c​k​ ​t​o​ ​s​t​a​r​t​ ​d​r​a​w​i​n​g​ ​t​h​e​ ​d​e​s​i​r​e​d​ ​s​h​a​p​e​ ​a​n​d​ ​r​e​l​e​a​s​e​ ​t​o​ ​f​i​n​i​s​h​.
 			 */
 			FreeDrawing: string
+			/**
+			 * C​l​i​c​k​ ​t​o​ ​l​o​c​a​t​e​ ​t​h​e​ ​t​e​x​t​.
+			 */
+			Text: string
+			/**
+			 * T​y​p​e​ ​y​o​u​r​ ​t​e​x​t​ ​h​e​r​e​.​.​.
+			 */
+			TextPlaceholder: string
 		}
 		Modal: {
 			/**
@@ -1877,6 +1895,16 @@ export type TranslationFunctions = {
 			 */
 			Down: () => LocalizedString
 		}
+		ConfirmationMessages: {
+			/**
+			 * The "Sphere" layer has been added to the map.
+			 */
+			Sphere: () => LocalizedString
+			/**
+			 * The "Graticule" layer has been added to the map.
+			 */
+			Graticule: () => LocalizedString
+		}
 		DrawingInstructions: {
 			/**
 			 * Click to start drawing a line. Click again to add a point. Double-click to finish.
@@ -1894,6 +1922,14 @@ export type TranslationFunctions = {
 			 * Click to start drawing the desired shape and release to finish.
 			 */
 			FreeDrawing: () => LocalizedString
+			/**
+			 * Click to locate the text.
+			 */
+			Text: () => LocalizedString
+			/**
+			 * Type your text here...
+			 */
+			TextPlaceholder: () => LocalizedString
 		}
 		Modal: {
 			/**

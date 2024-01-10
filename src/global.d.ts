@@ -739,6 +739,8 @@ export interface Line extends LayoutFeatureBase {
   arrow: boolean,
   // The points of the line / arrow
   points: [number, number][],
+  // Whether to display a rectangle behind the layout feature
+  backgroundRect: BackgroundRect,
 }
 
 export interface FreeDrawing extends LayoutFeatureBase {
@@ -763,14 +765,16 @@ export interface Text extends LayoutFeatureBase {
   fontFamily: string,
   // The font color of the text
   fontColor: string,
+  // The font color opacity of the text
+  fontOpacity: number,
   // The font style of the text
   fontStyle: 'normal' | 'italic',
   // The font weight of the text
   fontWeight: 'normal' | 'bold',
   // The text anchor of the text
   textAnchor: 'start' | 'middle' | 'end',
-  // The text alignment of the text
-  textAlignment: 'left' | 'center' | 'right',
+  // The angle of rotation of the text
+  rotation: number,
   // Whether to display a rectangle behind the text
   backgroundRect: BackgroundRect,
   // Whether to create a halo around the text

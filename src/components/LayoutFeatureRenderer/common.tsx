@@ -1,5 +1,5 @@
 // Import from solid-js
-import { type Accessor } from 'solid-js';
+import { type Accessor, type JSX } from 'solid-js';
 
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
@@ -14,7 +14,7 @@ import { setModalStore } from '../../store/ModalStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Types
-import { type LayoutFeature } from '../../global';
+import type { BackgroundRect, LayoutFeature } from '../../global';
 
 export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): void {
   // Allow the user to move the refElement group by dragging it on the screen.
@@ -197,3 +197,62 @@ export function triggerContextMenuLayoutFeature(
     ],
   });
 }
+
+export const distanceBoxContent = 10;
+
+export function RectangleBox(
+  props: { backgroundRect: BackgroundRect, position?: [number, number], transform?: string },
+): JSX.Element {
+  return <rect
+    class={'layout-feature-box'}
+    width={0}
+    height={0}
+    x={props.position ? `${props.position[0] - distanceBoxContent}px` : 0}
+    y={props.position ? `${props.position[1] - distanceBoxContent}px` : 0}
+    fill={props.backgroundRect.visible ? props.backgroundRect.fill : 'transparent'}
+    fill-opacity={props.backgroundRect.visible ? props.backgroundRect.fillOpacity : 0}
+    stroke={props.backgroundRect.visible ? props.backgroundRect.stroke : undefined}
+    stroke-opacity={props.backgroundRect.visible ? props.backgroundRect.strokeOpacity : undefined}
+    stroke-width={props.backgroundRect.visible ? props.backgroundRect.strokeWidth : undefined}
+    transform={props.transform}
+  />;
+}
+
+export function computeRectangleBox(refElement: SVGGElement, ...args: never[]) {
+  // First we reset the box to its 0-size so it doesn't interfere with the
+  // computation of the bbox of the refElement group
+  const rectangleBoxLegend = refElement.querySelector('.layout-feature-box') as SVGRectElement;
+  rectangleBoxLegend.setAttribute('width', '0px');
+  rectangleBoxLegend.setAttribute('height', '0px');
+
+  // We compute the bbox of the refElement group
+  const bbox = refElement.getBBox();
+
+  // We set the size of the box to the size of the bbox of the refElement group + a margin
+  rectangleBoxLegend.setAttribute('width', `${bbox.width + distanceBoxContent * 2}px`);
+  rectangleBoxLegend.setAttribute('height', `${bbox.height + distanceBoxContent * 2}px`);
+  // rectangleBoxLegend.setAttribute('x', `${bbox.x - distanceBoxContent}px`);
+  // rectangleBoxLegend.setAttribute('y', `${bbox.y - distanceBoxContent}px`);
+}
+
+function bindMouseEnterLeave(refElement: SVGGElement): void {
+  // Color the .legend-box element when the mouse is over the refElement group
+  // (maybe the .legend-box element already has a color,
+  // that's why we use the style attribute instead of the fill attribute here,
+  // so that when the style attribute is used it overrides the fill and fill-opacity attributes).
+  refElement.addEventListener('mouseover', () => {
+    const rectangleBoxLegend = refElement.querySelector('.layout-feature-box') as SVGRectElement;
+    rectangleBoxLegend.setAttribute('style', 'fill: green; fill-opacity: 0.1');
+  });
+  // Remove the style attribute when the mouse leaves the refElement group.
+  refElement.addEventListener('mouseleave', () => {
+    const rectangleBoxLegend = refElement.querySelector('.layout-feature-box') as SVGRectElement;
+    rectangleBoxLegend.removeAttribute('style');
+  });
+}
+
+export const bindElementsLayoutFeature = (refElement: SVGGElement, lf: LayoutFeature) => {
+  computeRectangleBox(refElement);
+  bindMouseEnterLeave(refElement);
+  bindDragBehavior(refElement, lf);
+};
