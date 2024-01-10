@@ -112,6 +112,7 @@ export function makeClassificationPlot(
     marginBottom: 20,
     x: {
       domain: minmax,
+      tickFormat: (d) => d.toLocaleString(),
     },
     y: {
       nice: false,
@@ -303,6 +304,7 @@ export function makeDistributionPlot(values: number[]): ((SVGSVGElement | HTMLEl
     },
     x: {
       domain: d3.nice(...valuesExtent, 10),
+      tickFormat: (d) => d.toLocaleString(),
       label: null,
     },
   });
