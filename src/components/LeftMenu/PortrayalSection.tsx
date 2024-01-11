@@ -28,6 +28,7 @@ import { RepresentationType } from '../../global.d';
 
 // Styles
 import '../../styles/PortrayalSection.css';
+import CartogramSettings from './PortrayalOption/CartogramSettings.tsx';
 
 function layerAvailableVariables(layerId: string) {
   const layer = layersDescriptionStore.layers
@@ -55,6 +56,17 @@ function layerAvailableVariables(layerId: string) {
     hasIdentifier,
     // hasUnknown,
   };
+}
+
+function layerGeometryType(layerId: string) {
+  const layer = layersDescriptionStore.layers
+    .find((l) => l.id === layerId);
+
+  if (!layer) {
+    return null;
+  }
+
+  return layer.type;
 }
 
 function layerAnyAvailableVariable(layerId: string) {
@@ -91,36 +103,72 @@ export default function PortrayalSection(): JSX.Element {
   ] = createSignal<RepresentationType | null>(null);
 
   const availablePortrayals = createMemo(() => {
+    const geometryType = layerGeometryType(targetLayer() as string);
     const entries = [];
 
+    // Choropleth inputs:
+    //   - variable: ratio
+    //   - geometry: point, line, polygon
     if (availableVariables()?.hasRatio) {
       entries.push({
         name: LL().PortrayalSection.PortrayalTypes.Choropleth(),
         value: RepresentationType.choropleth,
       });
     }
+    // Proportional symbols inputs:
+    //   - variable: stock
+    //   - geometry: point, line, polygon
     if (availableVariables()?.hasStock) {
       entries.push({
         name: LL().PortrayalSection.PortrayalTypes.ProportionalSymbols(),
         value: RepresentationType.proportionalSymbols,
       });
+    }
+    // Smoothed portrayal inputs:
+    //   - variable: stock
+    //   - geometry: point, polygon
+    if (
+      availableVariables()?.hasStock
+      && (geometryType === 'polygon' || geometryType === 'point')
+    ) {
       entries.push({
         name: LL().PortrayalSection.PortrayalTypes.Smoothed(),
         value: RepresentationType.smoothed,
       });
     }
+    // Categorical choropleth inputs:
+    //   - variable: categorical
+    //   - geometry: point, line, polygon
     if (availableVariables()?.hasCategorical) {
       entries.push({
         name: LL().PortrayalSection.PortrayalTypes.Categorical(),
         value: RepresentationType.categoricalChoropleth,
       });
     }
-    if (availableVariables()?.hasStock && availableVariables()?.hasRatio) {
+    // Discontinuity inputs:
+    //   - variable: stock, ratio
+    //   - geometry: polygon
+    if (
+      (availableVariables()?.hasStock || availableVariables()?.hasRatio)
+      && geometryType === 'polygon'
+    ) {
       entries.push({
         name: LL().PortrayalSection.PortrayalTypes.Discontinuity(),
         value: RepresentationType.discontinuity,
       });
     }
+    // Cartogram inputs:
+    //   - variable: stock
+    //   - geometry: polygon
+    if (availableVariables()?.hasStock && geometryType === 'polygon') {
+      entries.push({
+        name: LL().PortrayalSection.PortrayalTypes.Cartogram(),
+        value: RepresentationType.cartogram,
+      });
+    }
+    // Label inputs:
+    //   - variable: any
+    //   - geometry: point, line, polygon
     if (layerAnyAvailableVariable(targetLayer() as string)) {
       entries.push({
         name: LL().PortrayalSection.PortrayalTypes.Labels(),
@@ -159,73 +207,6 @@ export default function PortrayalSection(): JSX.Element {
         onChange={(v) => setSelectedPortrayal(v as RepresentationType)}
       />
     </Show>
-    {/* <div class="portrayal-section__portrayal-selection">
-      <ul>
-        <li
-          onClick={ () => { setSelectedPortrayal(RepresentationType.choropleth); } }
-          classList={{
-            'is-hidden': !availableVariables()?.hasRatio,
-            selected: selectedPortrayal() === RepresentationType.choropleth,
-          }}
-        >
-          { LL().PortrayalSection.PortrayalTypes.Choropleth() }
-        </li>
-        <li
-          onClick={ () => { setSelectedPortrayal(RepresentationType.proportionalSymbols); } }
-          classList={{
-            'is-hidden': !availableVariables()?.hasStock,
-            selected: selectedPortrayal() === RepresentationType.proportionalSymbols,
-          }}
-        >
-          { LL().PortrayalSection.PortrayalTypes.ProportionalSymbols() }
-        </li>
-        <li
-          onClick={ () => { setSelectedPortrayal(RepresentationType.categoricalChoropleth); } }
-          classList={{
-            'is-hidden': !availableVariables()?.hasCategorical,
-            selected: selectedPortrayal() === RepresentationType.categoricalChoropleth,
-          }}
-        >
-          { LL().PortrayalSection.PortrayalTypes.Categorical() }
-        </li>
-        <li
-          onClick={ () => { setSelectedPortrayal(RepresentationType.discontinuity); } }
-          classList={{
-            'is-hidden': !availableVariables()?.hasStock || !availableVariables()?.hasRatio,
-            selected: selectedPortrayal() === RepresentationType.discontinuity,
-          }}
-        >
-          { LL().PortrayalSection.PortrayalTypes.Discontinuity() }
-        </li>
-        <li
-          onClick={ () => { setSelectedPortrayal(RepresentationType.labels); } }
-          classList={{
-            'is-hidden': !layerAnyAvailableVariable(targetLayer() as string),
-            selected: selectedPortrayal() === RepresentationType.labels,
-          }}
-        >
-          { LL().PortrayalSection.PortrayalTypes.Labels() }
-        </li>
-        <li
-          onClick={ () => { setSelectedPortrayal(RepresentationType.smoothed); } }
-          classList={{
-            'is-hidden': !layerAnyAvailableVariable(targetLayer() as string),
-            selected: selectedPortrayal() === RepresentationType.smoothed,
-          }}
-        >
-          { LL().PortrayalSection.PortrayalTypes.Smoothed() }
-        </li>
-      </ul>
-      <Show when={
-        availableVariables()
-        && !layerAnyAvailableVariable(targetLayer() as string)
-        && !availableVariables()?.hasRatio
-        && !availableVariables()?.hasStock
-        && !availableVariables()?.hasCategorical
-      }>
-        <p><i>{ LL().PortrayalSection.PortrayalTypes.NoPortrayal() }</i></p>
-      </Show>
-    </div> */}
     <hr />
     <div class="portrayal-section__portrayal-options">
       <Switch>
@@ -246,6 +227,9 @@ export default function PortrayalSection(): JSX.Element {
         </Match>
         <Match when={ selectedPortrayal() === RepresentationType.smoothed }>
           <SmoothingSettings layerId={ targetLayer() as string } />
+        </Match>
+        <Match when={ selectedPortrayal() === RepresentationType.cartogram }>
+          <CartogramSettings layerId={ targetLayer() as string } />
         </Match>
       </Switch>
     </div>
