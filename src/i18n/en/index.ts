@@ -207,8 +207,6 @@ const en = {
         line: 'Line',
       },
       AvoidOverlapping: 'Avoid overlapping symbols',
-      SingleColor: 'One color',
-      TwoColor: 'Two colors',
       LimitValue: 'Limit value',
     },
     DiscontinuityOptions: {

@@ -180,13 +180,6 @@ type LayerDescriptionSmoothedLayer = LayerDescription & {
   legend: ChoroplethLegendParameters,
 };
 
-// export enum ProportionalSymbolsColorMode {
-//   singleColor = 'singleColor',
-//   twoColors = 'twoColors',
-//   ratioVariable = 'ratioVariable',
-//   categoricalVariable = 'categoricalVariable',
-// }
-
 export enum ProportionalSymbolsSymbolType {
   circle = 'circle',
   square = 'square',

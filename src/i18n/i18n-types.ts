@@ -714,14 +714,6 @@ type RootTranslation = {
 			 */
 			AvoidOverlapping: string
 			/**
-			 * O​n​e​ ​c​o​l​o​r
-			 */
-			SingleColor: string
-			/**
-			 * T​w​o​ ​c​o​l​o​r​s
-			 */
-			TwoColor: string
-			/**
 			 * L​i​m​i​t​ ​v​a​l​u​e
 			 */
 			LimitValue: string
@@ -2290,14 +2282,6 @@ export type TranslationFunctions = {
 			 * Avoid overlapping symbols
 			 */
 			AvoidOverlapping: () => LocalizedString
-			/**
-			 * One color
-			 */
-			SingleColor: () => LocalizedString
-			/**
-			 * Two colors
-			 */
-			TwoColor: () => LocalizedString
 			/**
 			 * Limit value
 			 */

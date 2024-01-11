@@ -207,8 +207,6 @@ const fr = {
         line: 'Ligne',
       },
       AvoidOverlapping: 'Éviter le chevauchement des symboles',
-      SingleColor: 'Une couleur',
-      TwoColor: 'Deux couleurs',
       LimitValue: 'Valeur limite',
     },
     DiscontinuityOptions: {
