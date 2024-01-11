@@ -174,6 +174,12 @@ type LayerDescriptionCategoricalPictogram = LayerDescription & {
   legend: null,
 };
 
+type LayerDescriptionLinks = LayerDescription & {
+  renderer: RepresentationType.links,
+  rendererParameters: LinksParameters,
+  legend: null,
+};
+
 type LayerDescriptionSmoothedLayer = LayerDescription & {
   renderer: RepresentationType.smoothed
   rendererParameters: SmoothedLayerParameters,
@@ -382,6 +388,21 @@ interface CategoricalPictogramParameters {
   mapping: [string | number, string, string][],
 }
 
+interface LinksParameters {
+  // Classification parameters (if not specified, the links are not classified
+  // and their width is computed as a direct proportion of the value of the variable)
+  classification?: {
+    // The classification method to group the links
+    classificationMethod: ClassificationMethod,
+    // The number of classes
+    classes: number,
+  },
+  // TODO: add other parameters, notably about the appearance of the links
+  //  (arrow head or not, etc.),
+  //  about shifting the links to show both directions
+  //  if necessary, about the curvature of the links, etc.
+}
+
 type AllowChoroplethLegend = Pick<ClassificationParameters, 'variable' | 'palette' | 'breaks' | 'reversePalette' | 'noDataColor'>;
 
 // interface AllowChoroplethLegend {
@@ -407,6 +428,7 @@ export enum RepresentationType {
   discontinuity = 'discontinuity',
   smoothed = 'smoothed',
   cartogram = 'cartogram',
+  links = 'links',
   grid = 'grid',
   waffle = 'waffle',
   sphere = 'sphere',
