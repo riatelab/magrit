@@ -7,22 +7,10 @@ import {
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
-// Imports from other packages
-import {
-  quantile,
-  equal,
-  jenks,
-  q6,
-} from 'statsbreaks';
-
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
-import {
-  layersDescriptionStore,
-  LayersDescriptionStoreType,
-  setLayersDescriptionStore,
-} from '../../../store/LayersDescriptionStore';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
+import { getClassificationFunction } from '../../../helpers/classification';
 import { findSuitableName } from '../../../helpers/common';
 import { computeDiscontinuity } from '../../../helpers/geo';
 import { generateIdLayer } from '../../../helpers/layers';
@@ -30,6 +18,11 @@ import { generateIdLayer } from '../../../helpers/layers';
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
 import { setGlobalStore } from '../../../store/GlobalStore';
+import {
+  layersDescriptionStore,
+  LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../../../store/LayersDescriptionStore';
 
 // Subcomponents
 import InputFieldSelect from '../../Inputs/InputSelect.tsx';
@@ -40,6 +33,7 @@ import InputResultName from './InputResultName.tsx';
 import type { PortrayalSettingsProps } from './common';
 import { DataType, type Variable, VariableType } from '../../../helpers/typeDetection';
 import {
+  ClassificationMethod,
   type DiscontinuityParameters,
   type LayerDescription,
   type LegendTextElement,
@@ -47,10 +41,19 @@ import {
   RepresentationType,
 } from '../../../global.d';
 
+const subsetClassificationMethodsForDiscontinuity = [
+  'quantiles',
+  'equalIntervals',
+  // 'q6',
+  'jenks',
+  'geometricProgression',
+];
+
 function onClickValidate(
   referenceLayerId: string,
   targetVariable: string,
   discontinuityType: 'absolute' | 'relative',
+  classificationMethod: ClassificationMethod,
   newLayerName: string,
 ): void {
   const newData = computeDiscontinuity(
@@ -61,17 +64,17 @@ function onClickValidate(
 
   const values = newData.features.map((f) => f.properties.value as number);
 
-  const breaks = quantile(values, { nb: 4 });
+  const breaks = getClassificationFunction(classificationMethod)(values, { nb: 4 });
 
   const fields = [
     {
       name: 'value', hasMissingValues: false, type: VariableType.ratio, dataType: DataType.number,
     },
     {
-      name: 'feature1', hasMissingValues: false, type: VariableType.categorical, dataType: DataType.string,
+      name: 'ID-feature1', hasMissingValues: false, type: VariableType.categorical, dataType: DataType.string,
     },
     {
-      name: 'feature2', hasMissingValues: false, type: VariableType.categorical, dataType: DataType.string,
+      name: 'ID-feature2', hasMissingValues: false, type: VariableType.categorical, dataType: DataType.string,
     },
   ] as Variable[];
 
@@ -95,10 +98,10 @@ function onClickValidate(
     rendererParameters: {
       variable: targetVariable,
       type: discontinuityType,
-      classificationMethod: 'manual',
+      classificationMethod,
       classes: 4,
       breaks,
-      sizes: [2, 5, 9, 15],
+      sizes: [2, 5, 9, 14],
     } as DiscontinuityParameters,
     legend: {
       title: {
@@ -106,11 +109,9 @@ function onClickValidate(
         ...applicationSettingsStore.defaultLegendSettings.title,
       } as LegendTextElement,
       subtitle: {
-        text: 'This is a subtitle',
         ...applicationSettingsStore.defaultLegendSettings.subtitle,
       } as LegendTextElement,
       note: {
-        text: 'This is a bottom note',
         ...applicationSettingsStore.defaultLegendSettings.note,
       } as LegendTextElement,
       position: legendPosition,
@@ -155,6 +156,10 @@ export default function DiscontinuitySettings(
     setNewLayerName,
   ] = createSignal<string>(`Discontinuity_${layerDescription().name}`);
   const [
+    classificationMethod,
+    setClassificationMethod,
+  ] = createSignal<ClassificationMethod>('quantiles' as ClassificationMethod);
+  const [
     targetVariable,
     setTargetVariable,
   ] = createSignal(targetFields()![0].name);
@@ -178,6 +183,7 @@ export default function DiscontinuitySettings(
         layerDescription().id,
         targetVariable(),
         discontinuityType(),
+        classificationMethod(),
         layerName,
       );
       // Hide loading overlay
@@ -206,6 +212,20 @@ export default function DiscontinuitySettings(
       <option value="relative">
         { LL().PortrayalSection.DiscontinuityOptions.Relative() }
       </option>
+    </InputFieldSelect>
+    <InputFieldSelect
+      label={LL().PortrayalSection.DiscontinuityOptions.Classification()}
+      onChange={(value) => setClassificationMethod(value as ClassificationMethod)}
+      value={classificationMethod()}
+      width={180}
+    >
+      <For each={subsetClassificationMethodsForDiscontinuity}>
+        {
+          (method) => <option value={method}>
+            { LL().ClassificationPanel.classificationMethods[method]() }
+          </option>
+        }
+      </For>
     </InputFieldSelect>
     <InputResultName
       onKeyUp={(value) => setNewLayerName(value)}

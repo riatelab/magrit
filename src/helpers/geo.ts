@@ -551,8 +551,8 @@ export const computeDiscontinuity = (
       type: 'Feature',
       geometry: geom,
       properties: {
-        feature1: aId,
-        feature2: bId,
+        'ID-feature1': aId,
+        'ID-feature2': bId,
         value: val,
       },
     });
