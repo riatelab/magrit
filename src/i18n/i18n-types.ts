@@ -610,6 +610,10 @@ type RootTranslation = {
 			 */
 			Smoothed: string
 			/**
+			 * C​a​r​t​o​g​r​a​m
+			 */
+			Cartogram: string
+			/**
 			 * N​o​ ​p​o​r​t​r​a​y​a​l​ ​f​o​r​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​l​a​y​e​r​ ​-​ ​P​l​e​a​s​e​ ​v​e​r​i​f​y​ ​t​h​e​ ​t​y​p​i​n​g​ ​o​f​ ​t​h​e​ ​f​i​e​l​d​s​ ​o​r​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​l​a​y​e​r
 			 */
 			NoPortrayal: string
@@ -805,6 +809,28 @@ type RootTranslation = {
 			 * B​e​t​a
 			 */
 			Beta: string
+		}
+		CartogramOptions: {
+			/**
+			 * A​l​g​o​r​i​t​h​m​ ​t​o​ ​u​s​e
+			 */
+			Algorithm: string
+			/**
+			 * I​t​e​r​a​t​i​o​n​s
+			 */
+			Iterations: string
+			/**
+			 * D​o​u​g​e​n​i​k​ ​e​t​ ​a​l​.​ ​(​1​9​8​5​)
+			 */
+			Dougenik: string
+			/**
+			 * O​l​s​o​n​ ​(​2​0​0​5​)
+			 */
+			Olson: string
+			/**
+			 * G​a​s​t​n​e​r​,​ ​S​e​g​u​y​ ​&​ ​M​o​r​e​ ​(​2​0​1​8​)
+			 */
+			GastnerSeguyMore: string
 		}
 	}
 	ExportSection: {
@@ -2161,6 +2187,10 @@ export type TranslationFunctions = {
 			 */
 			Smoothed: () => LocalizedString
 			/**
+			 * Cartogram
+			 */
+			Cartogram: () => LocalizedString
+			/**
 			 * No portrayal for the selected layer - Please verify the typing of the fields or select another layer
 			 */
 			NoPortrayal: () => LocalizedString
@@ -2356,6 +2386,28 @@ export type TranslationFunctions = {
 			 * Beta
 			 */
 			Beta: () => LocalizedString
+		}
+		CartogramOptions: {
+			/**
+			 * Algorithm to use
+			 */
+			Algorithm: () => LocalizedString
+			/**
+			 * Iterations
+			 */
+			Iterations: () => LocalizedString
+			/**
+			 * Dougenik et al. (1985)
+			 */
+			Dougenik: () => LocalizedString
+			/**
+			 * Olson (2005)
+			 */
+			Olson: () => LocalizedString
+			/**
+			 * Gastner, Seguy & More (2018)
+			 */
+			GastnerSeguyMore: () => LocalizedString
 		}
 	}
 	ExportSection: {

@@ -175,6 +175,7 @@ const en = {
       Discontinuity: 'Discontinuity',
       Categorical: 'Categorical choropleth',
       Smoothed: 'Smoothed map',
+      Cartogram: 'Cartogram',
       NoPortrayal: 'No portrayal for the selected layer - Please verify the typing of the fields or select another layer',
     },
     RepresentationChoice: 'Representation choice',
@@ -233,6 +234,13 @@ const en = {
       Span: 'Span',
       Alpha: 'Alpha',
       Beta: 'Beta',
+    },
+    CartogramOptions: {
+      Algorithm: 'Algorithm to use',
+      Iterations: 'Iterations',
+      Dougenik: 'Dougenik et al. (1985)',
+      Olson: 'Olson (2005)',
+      GastnerSeguyMore: 'Gastner, Seguy & More (2018)',
     },
   },
   ExportSection: {

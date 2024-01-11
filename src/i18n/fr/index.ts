@@ -175,6 +175,7 @@ const fr = {
       Discontinuity: 'Discontinuité',
       Categorical: 'Choropleth catégorielle',
       Smoothed: 'Carte lissée',
+      Cartogram: 'Cartogramme',
       NoPortrayal: 'Aucune représentation pour la couche choisie - Veuillez vérifier le types des champs de la couche ou sélectionner une autre couche',
     },
     RepresentationChoice: 'Choix de la représentation',
@@ -233,6 +234,13 @@ const fr = {
       Span: 'Portée',
       Alpha: 'Alpha',
       Beta: 'Beta',
+    },
+    CartogramOptions: {
+      Algorithm: 'Algorithme à utiliser',
+      Iterations: 'Nombre d\'itérations',
+      Dougenik: 'Dougenik et al. (1985)',
+      Olson: 'Olson (2005)',
+      GastnerSeguyMore: 'Gastner, Seguy & More (2018)',
     },
   },
   ExportSection: {
