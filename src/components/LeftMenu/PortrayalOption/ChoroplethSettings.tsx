@@ -1,6 +1,9 @@
 // Import from solid-js
 import {
-  createMemo, createSignal, For,
+  createMemo,
+  createSignal,
+  For,
+  type JSX,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
@@ -54,6 +57,7 @@ import {
   Orientation,
   RepresentationType,
 } from '../../../global.d';
+import InputFieldSelect from '../../Inputs/InputSelect.tsx';
 
 // eslint-disable-next-line prefer-destructuring
 const defaultColorScheme = applicationSettingsStore.defaultColorScheme;
@@ -214,28 +218,27 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
   };
 
   return <div class="portrayal-section__portrayal-options-choropleth">
-    <div class="field">
-      <label class="label">{ LL().PortrayalSection.CommonOptions.Variable() }</label>
-      <div class="select" style={{ 'max-width': '60%' }}>
-        <select onChange={ (ev) => {
-          setTargetVariable(ev.target.value);
-          setTargetClassification({
-            variable: targetVariable(), // eslint-disable-line solid/reactivity
-            method: ClassificationMethod.quantiles,
-            classes: numberOfClasses(),
-            breaks: quantile(values(), { nb: numberOfClasses(), precision: null }),
-            palette: pal(),
-            noDataColor: defaultNoDataColor,
-            entitiesByClass: [],
-            reversePalette: false,
-          } as ClassificationParameters);
-        }}>
-          <For each={targetFields()}>
-            { (variable) => <option value={ variable.name }>{ variable.name }</option> }
-          </For>
-        </select>
-      </div>
-    </div>
+    <InputFieldSelect
+      label={ LL().PortrayalSection.CommonOptions.Variable() }
+      onChange={(value) => {
+        setTargetVariable(value);
+        setTargetClassification({
+          variable: targetVariable(), // eslint-disable-line solid/reactivity
+          method: ClassificationMethod.quantiles,
+          classes: numberOfClasses(),
+          breaks: quantile(values(), { nb: numberOfClasses(), precision: null }),
+          palette: pal(),
+          noDataColor: defaultNoDataColor,
+          entitiesByClass: [],
+          reversePalette: false,
+        } as ClassificationParameters);
+      }}
+      value={ targetVariable() }
+    >
+      <For each={targetFields()}>
+        { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+      </For>
+    </InputFieldSelect>
     <div class="field-block">
       <label class="label">{ LL().PortrayalSection.ChoroplethOptions.Classification() }</label>
       <div style={{
