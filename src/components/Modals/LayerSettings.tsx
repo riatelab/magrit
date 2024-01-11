@@ -471,7 +471,7 @@ function makeSettingsDefaultPolygon(
         - For 'choropleth' renderer, we propose to reopen the classification modal
         - For 'proportional' renderer, ... (TODO)
     */}
-    <Show when={props.renderer === 'default' || props.renderer === 'sphere'}>
+    <Show when={props.renderer === 'default' || props.renderer === 'sphere' || props.renderer === 'cartogram'}>
       <InputFieldColor
         label={ LL().LayerSettings.FillColor() }
         value={props.fillColor!}

@@ -121,7 +121,7 @@ const dispatchMapRenderer = (layer: LayerDescription) => {
   if (layer.renderer === 'graticule') {
     return graticuleRenderer(layer);
   }
-  if (layer.renderer === 'default') {
+  if (layer.renderer === 'default' || layer.renderer === 'cartogram') {
     if (layer.type === 'polygon') return defaultPolygonRenderer(layer);
     if (layer.type === 'point') return defaultPointRenderer(layer);
     if (layer.type === 'linestring') return defaultLineRenderer(layer);

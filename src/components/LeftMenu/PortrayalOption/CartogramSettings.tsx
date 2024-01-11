@@ -10,7 +10,8 @@ import { produce } from 'solid-js/store';
 
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
-import { findSuitableName } from '../../../helpers/common';
+import { computeOlsonCartogram } from '../../../helpers/cartogram-olson';
+import { findSuitableName, unproxify } from '../../../helpers/common';
 import { generateIdLayer } from '../../../helpers/layers';
 import { VariableType } from '../../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
@@ -31,7 +32,12 @@ import {
 
 // Types / Interfaces / Enums
 import type { PortrayalSettingsProps } from './common';
-import { CartogramMethod, LayerDescriptionCartogram, RepresentationType } from '../../../global.d';
+import {
+  CartogramMethod,
+  type CartogramParameters,
+  type LayerDescriptionCartogram,
+  RepresentationType,
+} from '../../../global.d';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -46,13 +52,37 @@ function onClickValidate(
     throw new Error('Unexpected Error: Reference layer not found');
   }
 
+  const newData = computeOlsonCartogram(
+    referenceLayerDescription.data,
+    targetVariable,
+  );
+
+  console.log(unproxify(referenceLayerDescription.data), newData);
+
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(120, 340);
 
   const newLayerDescription = {
     id: generateIdLayer(),
     name: newName,
+    type: 'polygon',
     renderer: 'cartogram' as RepresentationType,
+    data: newData,
+    fields: referenceLayerDescription.fields,
+    visible: true,
+    strokeColor: '#000000',
+    strokeWidth: 0.5,
+    strokeOpacity: 1,
+    fillColor: '#a12f2f',
+    fillOpacity: 1,
+    dropShadow: false,
+    blurFilter: false,
+    shapeRendering: referenceLayerDescription.shapeRendering,
+    rendererParameters: {
+      variable: targetVariable,
+      method: cartogramMethod,
+    } as CartogramParameters,
+    legend: undefined,
   } as LayerDescriptionCartogram;
 
   setLayersDescriptionStore(
@@ -81,7 +111,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
   // the target variable, the target layer name, the method to use
   // (and the number of iterations for some algorithms)
   const [targetVariable, setTargetVariable] = createSignal<string>(targetFields()[0].name);
-  const [newLayerName, setNewLayerName] = createSignal<string>(`Choropleth_${layerDescription().name}`);
+  const [newLayerName, setNewLayerName] = createSignal<string>(`Cartogram_${layerDescription().name}`);
   const [
     cartogramMethod,
     setCartogramMethod,
