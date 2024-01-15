@@ -1,4 +1,6 @@
 // Imports from other packages
+import initGoCart from 'go-cart-wasm';
+import cartWasmUrl from 'go-cart-wasm/dist/cart.wasm?url';
 import { area, transformScale } from '@turf/turf';
 
 // Helpers
@@ -7,7 +9,27 @@ import { isNumber } from './common';
 // Types
 import type { GeoJSONFeatureCollection } from '../global';
 
-export function computeOlsonCartogram(
+let goCart: {
+  makeCartogram: (
+    data: GeoJSONFeatureCollection,
+    variableName: string,
+  ) => GeoJSONFeatureCollection,
+};
+
+initGoCart({
+  locateFile: () => cartWasmUrl,
+}).then((module: never) => {
+  goCart = module;
+});
+
+export function computeCartogramGastnerSeguyMore(
+  data: GeoJSONFeatureCollection,
+  variableName: string,
+): GeoJSONFeatureCollection {
+  return goCart.makeCartogram(data, variableName);
+}
+
+export function computeCartogramOlson(
   data: GeoJSONFeatureCollection,
   variableName: string,
 ): GeoJSONFeatureCollection {

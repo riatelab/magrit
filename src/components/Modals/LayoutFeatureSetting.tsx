@@ -14,9 +14,11 @@ import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
+import InputFieldTextarea from '../Inputs/InputTextarea.tsx';
 
 // Helpers
 import type { TranslationFunctions } from '../../i18n/i18n-types';
+import { webSafeFonts } from '../../helpers/font';
 
 // Types / Interfaces / Enums
 import {
@@ -27,7 +29,7 @@ import {
   LayoutFeatureType,
   type Rectangle,
   type ScaleBar,
-  ScaleBarStyle,
+  ScaleBarStyle, Text,
 } from '../../global.d';
 
 /**
@@ -355,6 +357,145 @@ function makeSettingsScaleBar(
   </>;
 }
 
+function makeSettingsText(
+  layoutFeatureId: string,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const ft = layersDescriptionStore.layoutFeatures
+    .find((f) => f.id === layoutFeatureId) as Text;
+
+  return <>
+    <InputFieldTextarea
+      label={LL().LayoutFeatures.Modal.TextContent()}
+      value={ft.text}
+      rows={ft.text.split('\n').length}
+      onChange={(value) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['text'],
+        value,
+      )}
+    />
+    <div>
+      <label
+        className="label"
+        style={{ 'margin-bottom': '0.5em' }}
+      >
+        {LL().LayoutFeatures.Modal.TextProperties()}
+      </label>
+    </div>
+    <div
+      class="is-flex is-justify-content-space-around mb-5"
+      // style={{ 'margin-bottom': '1.5em !important' }}
+    >
+      <select
+        class="select"
+        value={ft.fontFamily}
+        style={{ width: '100px' }}
+        onChange={(e) => updateLayoutFeatureProperty(
+          layoutFeatureId,
+          ['fontFamily'],
+          e.currentTarget.value,
+        )}
+      >
+        <For each={webSafeFonts}>
+          {(font) => <option value={font}>{font}</option>}
+        </For>
+      </select>
+      <div>
+        <input
+          class="input"
+          type="number"
+          value={ft.fontSize}
+          style={{ width: '70px' }}
+          onChange={(e) => updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['fontSize'],
+            +e.currentTarget.value,
+          )}
+        />
+        <span
+          style={{ 'vertical-align': 'sub', 'margin-left': '0.2em' }}
+        >px</span>
+      </div>
+      <input
+        class="input"
+        type="color"
+        value={ft.fontColor}
+        style={{ width: '70px', padding: '0.2em' }}
+        onChange={(e) => updateLayoutFeatureProperty(
+          layoutFeatureId,
+          ['fontColor'],
+          e.currentTarget.value,
+        )}
+      />
+    </div>
+    <div>
+      <label
+        class="label"
+        style={{ 'margin-bottom': '0.5em' }}
+      >
+        {LL().LayoutFeatures.Modal.TextAnchor()}
+      </label>
+    </div>
+    <div class="mb-5 is-flex is-justify-content-space-evenly">
+      <label>
+        <input
+          type="radio"
+          name="radio-text-anchor"
+          value="start"
+          {...(ft.textAnchor === 'start' ? { checked: true } : {}) }
+          onChange={(e) => updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['textAnchor'],
+            e.currentTarget.value,
+          )}
+        />
+        { LL().LayoutFeatures.Modal.Start() }
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="radio-text-anchor"
+          value="middle"
+          {...(ft.textAnchor === 'middle' ? { checked: true } : {}) }
+          onChange={(e) => updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['textAnchor'],
+            e.currentTarget.value,
+          )}
+        />
+        { LL().LayoutFeatures.Modal.Middle() }
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="radio-text-anchor"
+          value="end"
+          {...(ft.textAnchor === 'end' ? { checked: true } : {}) }
+          onChange={(e) => updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['textAnchor'],
+            e.currentTarget.value,
+          )}
+        />
+        { LL().LayoutFeatures.Modal.End() }
+      </label>
+    </div>
+    <InputFieldNumber
+      label={LL().LayoutFeatures.Modal.Rotation()}
+      value={ft.rotation}
+      onChange={(v) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['rotation'],
+        v,
+      )}
+      min={0}
+      max={360}
+      step={1}
+    />
+  </>;
+}
+
 function makeSettingsFreeDrawing(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
@@ -428,6 +569,7 @@ export default function LayoutFeatureSettings(
           [LayoutFeatureType.Ellipse]: makeSettingsEllipse,
           [LayoutFeatureType.ScaleBar]: makeSettingsScaleBar,
           [LayoutFeatureType.FreeDrawing]: makeSettingsFreeDrawing,
+          [LayoutFeatureType.Text]: makeSettingsText,
         })[layoutFeature.type](layoutFeatureId, LL)
       }
     </div>

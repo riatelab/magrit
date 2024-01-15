@@ -497,6 +497,62 @@ type RootTranslation = {
 			 * T​i​c​k​ ​v​a​l​u​e​s​ ​(​c​o​m​m​a​ ​s​e​p​a​r​a​t​e​d​,​ ​s​t​a​r​t​i​n​g​ ​f​r​o​m​ ​0​)
 			 */
 			TickValues: string
+			/**
+			 * T​e​x​t​ ​c​o​n​t​e​n​t
+			 */
+			TextContent: string
+			/**
+			 * T​e​x​t​ ​p​r​o​p​e​r​t​i​e​s
+			 */
+			TextProperties: string
+			/**
+			 * F​o​n​t​ ​s​i​z​e
+			 */
+			FontSize: string
+			/**
+			 * F​o​n​t​ ​f​a​m​i​l​y
+			 */
+			FontFamily: string
+			/**
+			 * F​o​n​t​ ​w​e​i​g​h​t
+			 */
+			FontWeight: string
+			/**
+			 * F​o​n​t​ ​s​t​y​l​e
+			 */
+			FontStyle: string
+			/**
+			 * N​o​r​m​a​l
+			 */
+			Normal: string
+			/**
+			 * B​o​l​d
+			 */
+			Bold: string
+			/**
+			 * I​t​a​l​i​c
+			 */
+			Italic: string
+			/**
+			 * U​n​d​e​r​l​i​n​e
+			 */
+			Underline: string
+			/**
+			 * T​e​x​t​ ​a​n​c​h​o​r
+			 */
+			TextAnchor: string
+			/**
+			 * S​t​a​r​t
+			 */
+			Start: string
+			/**
+			 * M​i​d​d​l​e
+			 */
+			Middle: string
+			/**
+			 * E​n​d
+			 */
+			End: string
 		}
 	}
 	AboutPanel: {
@@ -2066,6 +2122,62 @@ export type TranslationFunctions = {
 			 * Tick values (comma separated, starting from 0)
 			 */
 			TickValues: () => LocalizedString
+			/**
+			 * Text content
+			 */
+			TextContent: () => LocalizedString
+			/**
+			 * Text properties
+			 */
+			TextProperties: () => LocalizedString
+			/**
+			 * Font size
+			 */
+			FontSize: () => LocalizedString
+			/**
+			 * Font family
+			 */
+			FontFamily: () => LocalizedString
+			/**
+			 * Font weight
+			 */
+			FontWeight: () => LocalizedString
+			/**
+			 * Font style
+			 */
+			FontStyle: () => LocalizedString
+			/**
+			 * Normal
+			 */
+			Normal: () => LocalizedString
+			/**
+			 * Bold
+			 */
+			Bold: () => LocalizedString
+			/**
+			 * Italic
+			 */
+			Italic: () => LocalizedString
+			/**
+			 * Underline
+			 */
+			Underline: () => LocalizedString
+			/**
+			 * Text anchor
+			 */
+			TextAnchor: () => LocalizedString
+			/**
+			 * Start
+			 */
+			Start: () => LocalizedString
+			/**
+			 * Middle
+			 */
+			Middle: () => LocalizedString
+			/**
+			 * End
+			 */
+			End: () => LocalizedString
 		}
 	}
 	AboutPanel: {

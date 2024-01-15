@@ -64,6 +64,7 @@
     "font-gis": "^1.0.5",
     "gdal3.js": "^2.6.0",
     "geos-wasm": "^1.2.1",
+    "go-cart-wasm": "^0.3.0",
     "gpu.js": "^2.16.0",
     "jszip": "^3.10.1",
     "main-thread-scheduling": "^10.0.0",

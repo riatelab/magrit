@@ -10,7 +10,7 @@ import { produce } from 'solid-js/store';
 
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
-import { computeOlsonCartogram } from '../../../helpers/cartogram-olson';
+import { computeCartogramGastnerSeguyMore, computeCartogramOlson } from '../../../helpers/cartograms';
 import { findSuitableName, unproxify } from '../../../helpers/common';
 import { generateIdLayer } from '../../../helpers/layers';
 import { VariableType } from '../../../helpers/typeDetection';
@@ -52,10 +52,18 @@ function onClickValidate(
     throw new Error('Unexpected Error: Reference layer not found');
   }
 
-  const newData = computeOlsonCartogram(
-    referenceLayerDescription.data,
-    targetVariable,
-  );
+  let newData;
+  if (cartogramMethod === CartogramMethod.Olson) {
+    newData = computeCartogramOlson(
+      referenceLayerDescription.data,
+      targetVariable,
+    );
+  } else if (cartogramMethod === CartogramMethod.GastnerSeguyMore) {
+    newData = computeCartogramGastnerSeguyMore(
+      referenceLayerDescription.data,
+      targetVariable,
+    );
+  }
 
   console.log(unproxify(referenceLayerDescription.data), newData);
 

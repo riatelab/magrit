@@ -44,7 +44,7 @@ export default function TextRenderer(props: Text): JSX.Element {
       pointer-events={'none'}
       transform={props.rotation !== 0 ? `rotate(${props.rotation} ${props.position[0]} ${props.position[1]})` : undefined}
     >
-      <For each={props.text!.split('\\n')}>
+      <For each={props.text!.split('\n')}>
         {(line, i) => <tspan
             x={props.position[0]}
             y={props.position[1] + i() * 1.1 * props.fontSize}
