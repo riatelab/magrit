@@ -16,7 +16,7 @@ import { setDatasetCatalogStore } from '../../store/DatasetCatalogStore';
 * - Choose the encoding (amongst a list of possible encodings or a custom one)
 */
 
-export default function ImportWizardModal(): JSX.Element {
+export default function TabularImportWizardModal(): JSX.Element {
   const { LL } = useI18nContext();
 
   return <div class="modal-window modal" style={{ display: 'flex' }}>

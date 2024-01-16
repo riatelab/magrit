@@ -1,5 +1,7 @@
 // Import from solid-js
-import { For, JSX, Show } from 'solid-js';
+import {
+  createMemo, For, JSX, Show,
+} from 'solid-js';
 
 // Stores
 import { overlayDropStore } from '../store/OverlayDropStore';
@@ -14,25 +16,20 @@ import { convertAndAddFiles, isAuthorizedFile } from '../helpers/fileUpload';
 // Styles
 import '../styles/OverlayDrop.css';
 
-/*
-TODO: most of the logic in the file should be moved to a helper (because in the future it
-  will be used in other places than the overlay drop - notably the view dedicated to
-  handling files / user data)
-*/
-
-const displayFiles = (files: CustomFileList): JSX.Element => {
+const FileListDisplay = (props: { files: CustomFileList }): JSX.Element => {
   const { LL } = useI18nContext();
+  const length = createMemo(() => props.files.length);
 
   return <>
-    <Show when={files.length === 0}>
+    <Show when={length() === 0}>
       <p>{ LL().DropFilesHere() }</p>
     </Show>
-    <Show when={files.length > 0}>
+    <Show when={length() > 0}>
       <p>
-        { LL().FilesDetected(files.length) }
+        { LL().FilesDetected(length()) }
       </p>
       <ul>
-        <For each={files}>
+        <For each={props.files}>
           {
             (file) => {
               const authorized = isAuthorizedFile(file);
@@ -54,7 +51,7 @@ export default function OverlayDrop(): JSX.Element {
   return <div class="overlay-drop" classList={{ visible: overlayDropStore.show }}>
     <div class="overlay-drop__content">
       <div class="overlay-drop__content__title">
-        { displayFiles(overlayDropStore.files) }
+        <FileListDisplay files={overlayDropStore.files} />
       </div>
       <div class="columns is-centered has-text-centered">
         <div class="column is-half">
