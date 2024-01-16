@@ -7,6 +7,9 @@ import {
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
+// Imports from other packages
+import { yieldOrContinue } from 'main-thread-scheduling';
+
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
 import { setGlobalStore } from '../../../store/GlobalStore';
@@ -151,7 +154,7 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
   const [targetVariable, setTargetVariable] = createSignal<string>(targetFields()![0].name);
   const [newLayerName, setNewLayerName] = createSignal<string>(`Labels_${layerDescription().name}`);
 
-  function makePortrayal() {
+  const makePortrayal = async () => {
     // Find a suitable name for the new layer
     const layerName = findSuitableName(
       newLayerName() || LL().PortrayalSection.NewLayer(),
@@ -160,6 +163,8 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
 
     // Display loading overlay
     setGlobalStore({ isLoading: true });
+
+    await yieldOrContinue('user-visible');
 
     // Create the portrayal
     setTimeout(() => {
@@ -171,7 +176,7 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
       // Hide loading overlay
       setGlobalStore({ isLoading: false });
     }, 0);
-  }
+  };
 
   return <div class="portrayal-section__portrayal-options-labels">
     <div class="field">

@@ -9,6 +9,7 @@ import {
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
+import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
@@ -281,7 +282,7 @@ export default function ProportionalSymbolsSettings(
     setRefValueForSymbolSize(maxValues);
   });
 
-  const makePortrayal = () => {
+  const makePortrayal = async () => {
     console.log('makePortrayal');
     // Compute a suitable name for the new layer
     const layerName = findSuitableName(
@@ -290,6 +291,8 @@ export default function ProportionalSymbolsSettings(
     );
     // Display loading overlay
     setGlobalStore({ isLoading: true });
+
+    await yieldOrContinue('user-visible');
 
     // Actually make the new layer
     setTimeout(() => {

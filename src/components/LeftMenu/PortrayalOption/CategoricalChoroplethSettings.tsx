@@ -7,7 +7,7 @@ import {
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
-import { getPalette, Palette } from 'dicopal';
+import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
 import { generateIdLayer } from '../../../helpers/layers';
@@ -162,7 +162,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
     setNewLayerName,
   ] = createSignal<string>(`Categorical_${layerDescription().name}`);
 
-  const makePortrayal = () => {
+  const makePortrayal = async () => {
     const layerName = findSuitableName(
       newLayerName() || LL().PortrayalSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
@@ -170,6 +170,8 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
 
     // Display loading overlay
     setGlobalStore({ isLoading: true });
+
+    await yieldOrContinue('user-visible');
 
     // Create the portrayal
     setTimeout(() => {

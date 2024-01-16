@@ -13,6 +13,7 @@ import {
   quantile, equal, jenks, q6,
 } from 'statsbreaks';
 import { FaSolidCircleCheck } from 'solid-icons/fa';
+import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
@@ -194,13 +195,15 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
     reversePalette: false,
   } as ClassificationParameters);
 
-  const makePortrayal = () => {
+  const makePortrayal = async () => {
     const layerName = findSuitableName(
       newLayerName() || LL().PortrayalSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
     // Display loading overlay
     setGlobalStore({ isLoading: true });
+
+    await yieldOrContinue('user-visible');
 
     // Actually create the layer
     setTimeout(() => {

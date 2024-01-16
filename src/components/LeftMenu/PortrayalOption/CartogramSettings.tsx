@@ -8,6 +8,9 @@ import {
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
+// Imports from other packages
+import { yieldOrContinue } from 'main-thread-scheduling';
+
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { computeCartogramGastnerSeguyMore, computeCartogramOlson } from '../../../helpers/cartograms';
@@ -129,7 +132,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
     setNumberOfIterations,
   ] = createSignal<number>(5);
 
-  const makePortrayal = () => {
+  const makePortrayal = async () => {
     const layerName = findSuitableName(
       newLayerName() || LL().PortrayalSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
@@ -137,6 +140,8 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
 
     // Display loading overlay
     setGlobalStore({ isLoading: true });
+
+    await yieldOrContinue('user-visible');
 
     // Create the portrayal
     setTimeout(() => {

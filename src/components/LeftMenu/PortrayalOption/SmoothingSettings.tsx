@@ -9,8 +9,9 @@ import type { JSX } from 'solid-js';
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
-import { bbox } from '@turf/turf';
 import { getPalette } from 'dicopal';
+import { yieldOrContinue } from 'main-thread-scheduling';
+import { bbox } from '@turf/turf';
 
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
@@ -40,7 +41,10 @@ import {
   type ChoroplethLegendParameters,
   type GridParameters,
   type KdeParameters,
-  type LayerDescriptionSmoothedLayer, type LegendTextElement, LegendType, Orientation,
+  type LayerDescriptionSmoothedLayer,
+  type LegendTextElement,
+  LegendType,
+  Orientation,
   RepresentationType,
   type SmoothedLayerParameters,
   SmoothingMethod,
@@ -306,19 +310,21 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     // Display loading overlay
     setGlobalStore({ isLoading: true });
 
+    await yieldOrContinue('user-visible');
+
     // Actually make the new layer
-    setTimeout(async () => {
-      await onClickValidate(
+    setTimeout(() => {
+      onClickValidate(
         props.layerId,
         layerName,
         targetVariable(),
         gridParams,
         targetSmoothingMethod(),
         params,
-      );
-
-      // Hide loading overlay
-      setGlobalStore({ isLoading: false });
+      ).then(() => {
+        // Hide loading overlay
+        setGlobalStore({ isLoading: false });
+      });
     }, 0);
   };
 
