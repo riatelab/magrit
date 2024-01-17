@@ -470,17 +470,16 @@ export async function computeKde(
 
   const resultValues = kernel(xCells, yCells, xDots, yDots, values) as Float32Array;
 
+  await setLoadingMessage('SmoothingContours');
+
   grid.features.forEach((cell, i) => {
     cell.properties.z = resultValues[i]; // eslint-disable-line no-param-reassign
   });
-  console.log(resultValues);
+
   const maxPot = max(resultValues);
 
   const thresholds = [0, 0.03, 0.06, 0.1, 0.25, 0.4, 0.55, 0.75, 0.85, 0.925, 1]
     .map((d) => d * maxPot);
-  console.log(thresholds);
-
-  await setLoadingMessage('SmoothingContours');
 
   const contours = makeContourLayer(grid, thresholds);
 

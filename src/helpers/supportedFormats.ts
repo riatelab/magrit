@@ -18,7 +18,7 @@ export enum SupportedTabularFileTypes {
   CSV = 'csv',
   TSV = 'tsv',
   ODS = 'ods',
-  XLX = 'xls',
+  XLS = 'xls',
   XLSX = 'xlsx',
 }
 

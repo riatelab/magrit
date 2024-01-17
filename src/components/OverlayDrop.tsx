@@ -55,7 +55,10 @@ export default function OverlayDrop(): JSX.Element {
       </div>
       <div class="columns is-centered has-text-centered">
         <div class="column is-half">
-          <button class="button is-success" onClick={async () => { await convertAndAddFiles(overlayDropStore.files); }}>
+          <button
+            class="button is-success"
+            onClick={async () => { await convertAndAddFiles(overlayDropStore.files); }}
+          >
             { LL().ImportFiles() }
           </button>
         </div>

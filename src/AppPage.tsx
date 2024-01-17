@@ -27,12 +27,13 @@ import LeftMenu from './components/LeftMenu/LeftMenu.tsx';
 import LoadingOverlay from './components/LoadingOverlay.tsx';
 import MapZone from './components/MapZone.tsx';
 import NiceAlert from './components/Modals/NiceAlert.tsx';
-import OverlayDrop from './components/OverlayDrop.tsx';
 import TableWindow from './components/Modals/TableWindow.tsx';
 import ClassificationPanel from './components/Modals/ClassificationPanel.tsx';
 import { HeaderBarApp } from './components/Headers.tsx';
 import ExampleDataModal from './components/Modals/ExampleDatasetModal.tsx';
 import ContextMenu from './components/ContextMenu.tsx';
+import ImportWindow from './components/ImportWindow.tsx';
+// import OverlayDrop from './components/OverlayDrop.tsx';
 // import ReloadPrompt from './components/ReloadPrompt.tsx';
 
 // Stores
@@ -160,7 +161,10 @@ const dropHandler = (e: Event): void => {
   if (!draggedElementsAreFiles(e as DragEvent)) return;
   // Store name and type of the files dropped in a new array (CustomFileList) of FileEntry.
   const files = prepareFileExtensions((e as DragEvent).dataTransfer!.files);
-  setOverlayDropStore({ files });
+  // Add the dropped files to the existing file list
+  setOverlayDropStore(
+    { files: overlayDropStore.files.concat(files) },
+  );
   if (timeout) {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
@@ -462,7 +466,10 @@ const AppPage: () => JSX.Element = () => {
     <Toaster
       position={'bottom-center'}
     />
-    <OverlayDrop />
+    {/* <OverlayDrop /> */}
+    <Show when={overlayDropStore.show}>
+      <ImportWindow />
+    </Show>
     {/* <ReloadPrompt /> */}
   </div>;
 };

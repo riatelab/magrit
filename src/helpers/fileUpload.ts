@@ -23,7 +23,7 @@ import { setOverlayDropStore } from '../store/OverlayDropStore';
 import { GeoJSONFeatureCollection, LayerDescription, TableDescription } from '../global';
 
 // A file, dropped by the user
-interface FileEntry {
+export interface FileEntry {
   // The name of the file (without the extension)
   name: string,
   // The extension of the file (e.g. 'csv')
