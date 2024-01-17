@@ -19,7 +19,7 @@ import { generateIdLayer } from '../../../helpers/layers';
 
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setGlobalStore } from '../../../store/GlobalStore';
+import { setGlobalStore, setLoading } from '../../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
@@ -113,7 +113,7 @@ export default function GridSettings(
     );
 
     // Display loading overlay
-    setGlobalStore({ isLoading: true });
+    setLoading(true);
 
     await yieldOrContinue('user-visible');
 
@@ -125,7 +125,7 @@ export default function GridSettings(
         layerName,
       );
       // Hide loading overlay
-      setGlobalStore({ isLoading: false });
+      setLoading(false);
     }, 0);
   };
 

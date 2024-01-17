@@ -15,7 +15,7 @@ import { bbox } from '@turf/turf';
 
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setGlobalStore } from '../../../store/GlobalStore';
+import { setGlobalStore, setLoading } from '../../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
@@ -263,7 +263,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   const [
     targetKdeKernelType,
     setTargetKdeKernelType,
-  ] = createSignal<'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform'>('gaussian');
+  ] = createSignal<'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform' | 'biweight'>('gaussian');
   const [
     targetBandwidth,
     setTargetBandwidth,
@@ -308,7 +308,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     } as GridParameters;
 
     // Display loading overlay
-    setGlobalStore({ isLoading: true });
+    setLoading(true);
 
     await yieldOrContinue('user-visible');
 
@@ -323,7 +323,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         params,
       ).then(() => {
         // Hide loading overlay
-        setGlobalStore({ isLoading: false });
+        setLoading(false);
       });
     }, 0);
   };
@@ -381,7 +381,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
           <select
             value={targetKdeKernelType()}
             onChange={(e) => setTargetKdeKernelType(
-              e.currentTarget.value as 'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform',
+              e.currentTarget.value as 'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform' | 'biweight',
             )}
           >
             <option value="gaussian">{LL().PortrayalSection.SmoothingOptions.Gaussian()}</option>
@@ -389,6 +389,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
             <option value="quartic">{LL().PortrayalSection.SmoothingOptions.Quartic()}</option>
             <option value="triangular">{LL().PortrayalSection.SmoothingOptions.Triangular()}</option>
             <option value="uniform">{LL().PortrayalSection.SmoothingOptions.Uniform()}</option>
+            <option value="biweight">{LL().PortrayalSection.SmoothingOptions.Biweight()}</option>
           </select>
         </div>
       </div>

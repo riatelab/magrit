@@ -18,7 +18,7 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
 import { setClassificationPanelStore } from '../../../store/ClassificationPanelStore';
-import { setGlobalStore } from '../../../store/GlobalStore';
+import { setGlobalStore, setLoading } from '../../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
@@ -201,7 +201,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
       layersDescriptionStore.layers.map((d) => d.name),
     );
     // Display loading overlay
-    setGlobalStore({ isLoading: true });
+    setLoading(true);
 
     await yieldOrContinue('user-visible');
 
@@ -216,7 +216,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
           .classificationMethodLegendDescriptions[targetClassification().method](),
       );
       // Hide loading overlay
-      setGlobalStore({ isLoading: false });
+      setLoading(false);
     }, 0);
   };
 

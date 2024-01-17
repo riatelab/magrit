@@ -26,7 +26,7 @@ import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
 import InputFieldNumber from '../../Inputs/InputNumber.tsx';
 
 // Stores
-import { setGlobalStore } from '../../../store/GlobalStore';
+import { setGlobalStore, setLoading } from '../../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
@@ -139,7 +139,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
     );
 
     // Display loading overlay
-    setGlobalStore({ isLoading: true });
+    setLoading(true);
 
     await yieldOrContinue('user-visible');
 
@@ -152,7 +152,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
         layerName,
       );
       // Hide loading overlay
-      setGlobalStore({ isLoading: false });
+      setLoading(false);
     }, 0);
   };
 

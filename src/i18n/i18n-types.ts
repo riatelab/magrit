@@ -27,10 +27,6 @@ type RootTranslation = {
 	 */
 	CancelButton: string
 	/**
-	 * L​o​a​d​i​n​g​.​.​.
-	 */
-	LoadingMessage: string
-	/**
 	 * D​r​o​p​ ​y​o​u​r​ ​f​i​l​e​(​s​)​ ​h​e​r​e​ ​!
 	 */
 	DropFilesHere: string
@@ -76,6 +72,36 @@ type RootTranslation = {
 		 * @param {unknown} 0
 		 */
 		ReloadLastProject: RequiredParams<'0'>
+	}
+	LoadingMessages: {
+		/**
+		 * L​o​a​d​i​n​g​.​.​.
+		 */
+		Default: string
+		/**
+		 * R​e​l​o​a​d​i​n​g​ ​p​r​o​j​e​c​t​.​.​.
+		 */
+		Reloading: string
+		/**
+		 * D​a​t​a​ ​p​r​e​p​a​r​a​t​i​o​n​.​.​.
+		 */
+		SmoothingDataPreparation: string
+		/**
+		 * C​o​m​p​u​t​i​n​g​ ​K​D​E​ ​o​n​ ​G​P​U​.​.​.
+		 */
+		SmoothingComputingGPUKDE: string
+		/**
+		 * C​o​m​p​u​t​i​n​g​ ​S​t​e​w​a​r​t​'​s​ ​p​o​t​e​n​t​i​a​l​ ​o​n​ ​G​P​U​.​.​.
+		 */
+		SmoothingComputingGPUStewart: string
+		/**
+		 * C​o​m​p​u​t​i​n​g​ ​c​o​n​t​o​u​r​s​.​.​.
+		 */
+		SmoothingContours: string
+		/**
+		 * C​l​i​p​p​i​n​g​ ​c​o​n​t​o​u​r​s​ ​w​i​t​h​ ​m​a​s​k​ ​l​a​y​e​r​.​.​.
+		 */
+		SmoothingIntersections: string
 	}
 	HeaderApp: {
 		/**
@@ -845,6 +871,10 @@ type RootTranslation = {
 			 * U​n​i​f​o​r​m
 			 */
 			Uniform: string
+			/**
+			 * B​i​w​e​i​g​h​t
+			 */
+			Biweight: string
 			/**
 			 * S​p​a​n
 			 */
@@ -1653,10 +1683,6 @@ export type TranslationFunctions = {
 	 */
 	CancelButton: () => LocalizedString
 	/**
-	 * Loading...
-	 */
-	LoadingMessage: () => LocalizedString
-	/**
 	 * Drop your file(s) here !
 	 */
 	DropFilesHere: () => LocalizedString
@@ -1701,6 +1727,36 @@ export type TranslationFunctions = {
 		 * A project was automatically saved when the page was closed on {0}. Reload this project ?
 		 */
 		ReloadLastProject: (arg0: unknown) => LocalizedString
+	}
+	LoadingMessages: {
+		/**
+		 * Loading...
+		 */
+		Default: () => LocalizedString
+		/**
+		 * Reloading project...
+		 */
+		Reloading: () => LocalizedString
+		/**
+		 * Data preparation...
+		 */
+		SmoothingDataPreparation: () => LocalizedString
+		/**
+		 * Computing KDE on GPU...
+		 */
+		SmoothingComputingGPUKDE: () => LocalizedString
+		/**
+		 * Computing Stewart's potential on GPU...
+		 */
+		SmoothingComputingGPUStewart: () => LocalizedString
+		/**
+		 * Computing contours...
+		 */
+		SmoothingContours: () => LocalizedString
+		/**
+		 * Clipping contours with mask layer...
+		 */
+		SmoothingIntersections: () => LocalizedString
 	}
 	HeaderApp: {
 		/**
@@ -2470,6 +2526,10 @@ export type TranslationFunctions = {
 			 * Uniform
 			 */
 			Uniform: () => LocalizedString
+			/**
+			 * Biweight
+			 */
+			Biweight: () => LocalizedString
 			/**
 			 * Span
 			 */

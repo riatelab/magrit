@@ -38,7 +38,7 @@ import ContextMenu from './components/ContextMenu.tsx';
 // Stores
 import { classificationPanelStore } from './store/ClassificationPanelStore';
 import { fieldTypingModalStore } from './store/FieldTypingModalStore';
-import { globalStore, setGlobalStore } from './store/GlobalStore';
+import { globalStore, setGlobalStore, setLoading } from './store/GlobalStore';
 import {
   type MapStoreType,
   mapStore,
@@ -179,7 +179,7 @@ const reloadFromProjectObject = async (
   },
 ): Promise<void> => {
   // Display a loading overlay because it may take some time
-  setGlobalStore({ isLoading: true });
+  setLoading(true, 'Reloading');
 
   await yieldOrContinue('user-visible');
 
@@ -199,8 +199,10 @@ const reloadFromProjectObject = async (
   setMapStore(map);
   // Update the layer description store with the layers and layout features
   setLayersDescriptionStore({ layers, layoutFeatures, tables });
-  // Reverse the "userHasAddedLayer" flag and hide the loading overlay
-  setGlobalStore({ userHasAddedLayer: true, isLoading: false });
+  // Reverse the "userHasAddedLayer" flag
+  setGlobalStore({ userHasAddedLayer: true });
+  // Hide the loading overlay
+  setLoading(false);
 };
 
 const AppPage: () => JSX.Element = () => {

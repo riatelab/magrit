@@ -20,7 +20,7 @@ import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setGlobalStore } from '../../../store/GlobalStore';
+import { setGlobalStore, setLoading } from '../../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
@@ -169,7 +169,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
     );
 
     // Display loading overlay
-    setGlobalStore({ isLoading: true });
+    setLoading(true);
 
     await yieldOrContinue('user-visible');
 
@@ -181,7 +181,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
         layerName,
       );
       // Hide loading overlay
-      setGlobalStore({ isLoading: false });
+      setLoading(false);
     }, 0);
   };
 

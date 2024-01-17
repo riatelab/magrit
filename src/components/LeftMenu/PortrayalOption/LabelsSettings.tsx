@@ -12,7 +12,7 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setGlobalStore } from '../../../store/GlobalStore';
+import { setGlobalStore, setLoading } from '../../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
@@ -162,7 +162,7 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
     );
 
     // Display loading overlay
-    setGlobalStore({ isLoading: true });
+    setLoading(true);
 
     await yieldOrContinue('user-visible');
 
@@ -174,7 +174,7 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
         layerName,
       );
       // Hide loading overlay
-      setGlobalStore({ isLoading: false });
+      setLoading(false);
     }, 0);
   };
 

@@ -35,7 +35,7 @@ import InputResultName from './InputResultName.tsx';
 
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setGlobalStore } from '../../../store/GlobalStore';
+import { setGlobalStore, setLoading } from '../../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
@@ -290,7 +290,7 @@ export default function ProportionalSymbolsSettings(
       layersDescriptionStore.layers.map((d) => d.name),
     );
     // Display loading overlay
-    setGlobalStore({ isLoading: true });
+    setLoading(true);
 
     await yieldOrContinue('user-visible');
 
@@ -308,7 +308,7 @@ export default function ProportionalSymbolsSettings(
         avoidOverlapping(),
       );
       // Remove overlay
-      setGlobalStore({ isLoading: false });
+      setLoading(false);
     }, 0);
   };
 
