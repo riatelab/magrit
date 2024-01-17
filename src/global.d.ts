@@ -450,7 +450,7 @@ export enum SmoothingMethod {
 
 export interface KdeParameters {
   bandwidth: number;
-  kernel: 'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform';
+  kernel: 'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform' | 'biweight';
 }
 
 export interface GridParameters {

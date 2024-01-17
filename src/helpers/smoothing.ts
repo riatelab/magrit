@@ -4,6 +4,9 @@ import { pointGrid } from '@turf/turf';
 import type { BBox } from '@turf/turf';
 import { isobands } from 'contour-wasm';
 
+// Stores
+import { setLoadingMessage } from '../store/GlobalStore';
+
 // Helpers
 import { makeCentroidLayer } from './geo';
 import { intersection } from './geos';
@@ -291,6 +294,7 @@ export async function computeKde(
   gridParameters: GridParameters,
   kdeParameters: KdeParameters,
 ): Promise<GeoJSONFeatureCollection> {
+  await setLoadingMessage('SmoothingDataPreparation');
   // Make a suitable grid of points
   const grid = makePointGrid(gridParameters, true);
 
@@ -408,6 +412,24 @@ export async function computeKde(
           returnType: 'Number',
         },
       );
+  } else if (kdeParameters.kernel === 'biweight') {
+    gpu
+      .addFunction(
+        // eslint-disable-next-line prefer-arrow-callback
+        function k(dist: number, bandwidth: number): number {
+          const u = dist / bandwidth;
+          if (Math.abs(u) <= 1) {
+            return (1 - Math.abs(u)) * bandwidth;
+          }
+          return 0;
+        },
+        {
+          argumentTypes: {
+            dist: 'Number',
+          },
+          returnType: 'Number',
+        },
+      );
   } else { // (kdeParameters.kernel === 'uniform')
     gpu
       .addFunction(
@@ -444,6 +466,8 @@ export async function computeKde(
       },
     );
 
+  await setLoadingMessage('SmoothingComputingGPUKDE');
+
   const resultValues = kernel(xCells, yCells, xDots, yDots, values) as Float32Array;
 
   grid.features.forEach((cell, i) => {
@@ -456,6 +480,8 @@ export async function computeKde(
     .map((d) => d * maxPot);
   console.log(thresholds);
 
+  await setLoadingMessage('SmoothingContours');
+
   const contours = makeContourLayer(grid, thresholds);
 
   contours.features.forEach((ft) => {
@@ -465,5 +491,6 @@ export async function computeKde(
     ft.properties[variableName] = ft.properties.center;
   });
 
+  await setLoadingMessage('SmoothingIntersection');
   return intersection(contours, data);
 }
