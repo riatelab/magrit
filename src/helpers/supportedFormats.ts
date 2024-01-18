@@ -20,6 +20,7 @@ export enum SupportedTabularFileTypes {
   ODS = 'ods',
   XLS = 'xls',
   XLSX = 'xlsx',
+  JSON = 'json',
 }
 
 /**

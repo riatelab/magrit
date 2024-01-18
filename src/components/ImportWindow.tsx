@@ -1,12 +1,27 @@
-import { createEffect, createMemo, For, JSX, on } from 'solid-js';
+import {
+  createMemo,
+  createResource,
+  createSignal,
+  For,
+  JSX,
+  Show,
+} from 'solid-js';
+
+import { FaSolidTrashCan } from 'solid-icons/fa';
+import { VsTriangleDown, VsTriangleRight } from 'solid-icons/vs';
+import d3 from '../helpers/d3-custom';
+
 import { overlayDropStore } from '../store/OverlayDropStore';
+
 import { CustomFileList, FileEntry } from '../helpers/fileUpload';
 import { SupportedGeoFileTypes, SupportedTabularFileTypes } from '../helpers/supportedFormats';
+import { findCsvDelimiter } from '../helpers/formatConversion';
 
 interface ItemDescription {
   name: string,
   features: number,
   geometryType?: 'point' | 'line' | 'polygon' | 'unknown',
+  delimiter?: string,
 }
 
 interface DatasetInformation {
@@ -16,6 +31,88 @@ interface DatasetInformation {
   complete: boolean,
   layers: ItemDescription[],
 }
+
+interface InvalidDataset {
+  name: string,
+  valid: boolean,
+  reason: string,
+}
+
+const analyseDatasetGeoJSON = (
+  content: string,
+  name: string,
+): DatasetInformation | InvalidDataset => {
+  const obj = JSON.parse(content);
+  return {
+    type: 'geo',
+    name,
+    detailedType: SupportedGeoFileTypes.GeoJSON,
+    complete: true,
+    layers: [
+      {
+        name,
+        features: obj.features.length,
+        geometryType: obj.features[0]?.geometry?.type || 'unknown',
+      },
+    ],
+  };
+};
+
+const analyzeDatasetTopoJSON = (
+  content: string,
+  name: string,
+): DatasetInformation | InvalidDataset => {
+  const obj = JSON.parse(content);
+  return {
+    type: 'geo',
+    name,
+    detailedType: SupportedGeoFileTypes.TopoJSON,
+    complete: true,
+    layers: Object.keys(obj.objects).map((layerName) => ({
+      name: layerName,
+      features: obj.objects[layerName].geometries.length,
+      geometryType: obj.objects[layerName].geometries[0]?.type || 'unknown',
+    })),
+  };
+};
+
+const analyseDatasetTabularJSON = (
+  content: string,
+  name: string,
+): DatasetInformation | InvalidDataset => {
+  const obj = JSON.parse(content);
+
+  if (!Array.isArray(obj)) {
+    return {
+      name,
+      valid: false,
+      reason: 'The JSON file is not an array of objects',
+    };
+  }
+  return {
+    type: 'tabular',
+    name,
+    detailedType: SupportedTabularFileTypes.JSON,
+    complete: true,
+    layers: [
+      {
+        name,
+        features: obj.length,
+      },
+    ],
+  };
+};
+
+const analyseDatasetTabularText = (
+  content: string,
+  name: string,
+): DatasetInformation | InvalidDataset => {
+  const delimiter = findCsvDelimiter(content);
+  const ds = d3.dsvFormat(delimiter).parse(content);
+  return {
+    name,
+  };
+};
 
 const analyzeDataset = async (
   ds: { [key: string]: { name: string, files: FileEntry[] } },
@@ -33,53 +130,40 @@ const analyzeDataset = async (
   // Extract the name of the dataset
   const name = Object.keys(ds)[0];
   // Create the result object
-  const result: Partial<DatasetInformation> = {
+  let result: Partial<DatasetInformation> = {
     name,
   };
+  console.log(ds[name].files);
   // Determine the type of the dataset
   if (ds[name].files.length === 1) {
     // Only one file
     const file = ds[name].files[0];
-    if (file.file.type === 'application/json') {
+    console.log(file.file.type);
+    if (file.file.type.includes('json') || file.ext.includes('json')) {
+      // At this point we have a JSON file, it can be a GeoJSON or a TopoJSON or
+      // tabular data or something else...
       // Read the file to determine the type
       const content = await file.file.text();
-      if (content.includes('FeatureCollection')) {
-        const obj = JSON.parse(content);
-        result.type = 'geo';
-        result.detailedType = SupportedGeoFileTypes.GeoJSON;
-        result.complete = true;
-        result.layers = [
-          {
-            name: file.name,
-            features: obj.features.length,
-            geometryType: obj.features[0]?.geometry?.type || 'unknown',
-          },
-        ];
-      } else if (content.includes('Topology')) {
-        result.type = 'geo';
-        result.detailedType = SupportedGeoFileTypes.TopoJSON;
-        result.complete = true;
-        const obj = JSON.parse(content);
-        result.layers = Object.keys(obj.objects).map((layerName) => ({
-          name: layerName,
-          features: obj.objects[layerName].geometries.length,
-          geometryType: obj.objects[layerName].geometries[0]?.type || 'unknown',
-        }));
+      if (content.includes('"FeatureCollection"')) {
+        // We have a GeoJSON file
+        result = analyseDatasetGeoJSON(content, name);
+      } else if (content.includes('"Topology"')) {
+        // We have a TopoJSON file
+        result = analyzeDatasetTopoJSON(content, name);
+        console.log(result);
       } else {
-        console.log('Unhandled JSON file');
+        // We have a JSON file but it's not a GeoJSON or a TopoJSON
+        // So it's probably tabular data.
+        result = analyseDatasetTabularJSON(content, name);
       }
-    } else if (file.file.type === 'application/vnd.google-earth.kml+xml') {
-      result.type = 'geo';
-      result.detailedType = SupportedGeoFileTypes.KML;
-      result.complete = true;
-      result.layers = [
-        {
-          name: file.name,
-          features: 0,
-          geometryType: 'unknown',
-        },
-      ];
+    } else if (file.file.type.includes('text/') || ['tsv', 'csv', 'txt'].includes(file.ext)) {
+      // We have a text file, it can be a CSV or a TSV or something else...
+      // Read the file to determine the type
+      const content = await file.file.text();
+      result = analyseDatasetTabularText(content, name);
     }
+  } else { // We have multiple files, so it's probably a shapefile
+
   }
 
   return result as DatasetInformation;
@@ -93,7 +177,6 @@ const groupFiles = (
   const groupedFiles: { [key: string]: { name: string, files: FileEntry[] } } = {};
   files.forEach((file) => {
     if (groupedFiles[file.name] === undefined) {
-      console.log(file.file);
       groupedFiles[file.name] = {
         name: file.name,
         files: [file],
@@ -106,7 +189,6 @@ const groupFiles = (
           && f.file.size === file.file.size
           && f.file.lastModified === file.file.lastModified))
       ) {
-        console.log('File already exists');
         return;
       }
       groupedFiles[file.name].files.push(file);
@@ -118,15 +200,23 @@ const groupFiles = (
 export default function ImportWindow(): JSX.Element {
   let refParentNode: HTMLDivElement;
 
+  const [expanded, setExpanded] = createSignal<string[]>([]);
+
+  const handleExpanded = (name: string) => () => {
+    if (expanded().includes(name)) {
+      setExpanded(expanded().filter((n) => n !== name));
+    } else {
+      setExpanded([...expanded(), name]);
+    }
+  };
+
   const groupedFiles = createMemo(() => groupFiles(overlayDropStore.files));
 
-  createEffect(
-    on(
-      () => overlayDropStore.files,
-      async () => {
-        const result = await analyzeDataset(groupedFiles());
-        console.log(result);
-      },
+  const [fileDescriptions] = createResource(
+    groupedFiles,
+    async () => Promise.all(
+      Object.keys(groupedFiles())
+        .map(async (fileName) => analyzeDataset({ [fileName]: groupedFiles()[fileName] })),
     ),
   );
 
@@ -139,26 +229,87 @@ export default function ImportWindow(): JSX.Element {
       <section class="modal-card-body">
         <h3>Import files</h3>
         <p>Drop other files if needed...</p>
-        <table class="table is-striped is-striped">
+        <table class="table">
           <thead>
-            <tr>
-              <th>Layer name</th>
-              <th>Features</th>
-              <th>Geometry type</th>
-              <th>Fit extent</th>
-            </tr>
+            <Show when={expanded().length === 0}>
+              <tr>
+                <th></th>
+                <th>Layer name</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Delete ?</th>
+              </tr>
+            </Show>
+            <Show when={expanded().length > 0}>
+              <tr>
+                <th></th>
+                <th>Layer name</th>
+                <th>Features</th>
+                <th>Geometry type</th>
+                <th>Add to map</th>
+                <th>Simplify</th>
+                <th>Delete ?</th>
+              </tr>
+            </Show>
           </thead>
           <tbody>
-            <For each={Object.keys(groupedFiles())}>
+            <For each={fileDescriptions()}>
               {
-                (fileName) => <tr>
-                  <td>{fileName}</td>
-                  <td>{groupedFiles()[fileName].files.length}</td>
-                  <td>Point</td>
-                  <td><input type="checkbox" /></td>
-                </tr>
+                (dsInfo: DatasetInformation) => <>
+                  <tr class="entry-title">
+                    <td>
+                      <Show
+                        when={expanded().includes(dsInfo.name)}
+                        fallback={
+                          <VsTriangleRight onClick={handleExpanded(dsInfo.name)} />
+                        }
+                      >
+                        <VsTriangleDown onClick={handleExpanded(dsInfo.name)} />
+                      </Show>
+                    </td>
+                    <td>{dsInfo.name}.{dsInfo.detailedType}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><FaSolidTrashCan/></td>
+                  </tr>
+                  <Show when={expanded().includes(dsInfo.name)}>
+                    <For each={dsInfo.layers}>
+                      {
+                        (layer) => {
+                          if (dsInfo.type === 'geo') {
+                            return <tr class="entry-detail" style={{ background: '#fafafa' }}>
+                              <td></td>
+                              <td>- {layer.name}</td>
+                              <td>{layer.features} features</td>
+                              <td>{layer.geometryType || 'None'}</td>
+                              <td><input type="checkbox"/></td>
+                              <td><input type="checkbox"/></td>
+                              <td></td>
+                            </tr>;
+                          }
+                          return <tr class="entry-detail" style={{ background: '#fafafa' }}>
+                            <td></td>
+                            <td>- {layer.name}</td>
+                            <td>{layer.features} features</td>
+                            <td>x</td>
+                            <td><input type="checkbox"/></td>
+                            <td><input type="checkbox"/></td>
+                            <td></td>
+                          </tr>;
+                        }
+                      }
+                    </For>
+                  </Show>
+                </>
               }
             </For>
+            <Show when={fileDescriptions.loading}>
+              <tr><td>{ 'Loading' }</td></tr>
+            </Show>
           </tbody>
         </table>
       </section>

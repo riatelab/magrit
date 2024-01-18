@@ -59,7 +59,7 @@ export function getGeometryType(geojsonLayer: GeoJSONFeatureCollection): string 
   return typesArray[0].toLowerCase();
 }
 
-function findCsvDelimiter(rawText: string): string {
+export function findCsvDelimiter(rawText: string): string {
   const delimiters = [',', ';', '\t'];
   const lines = rawText.split('\n');
   const counts = delimiters.map((d) => lines[0].split(d).length);
