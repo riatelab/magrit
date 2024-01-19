@@ -1,0 +1,9 @@
+.file-import-table tr.entry-detail > td:nth-child(n + 3),
+.file-import-table tr.entry-title > td:nth-child(n + 3),
+.file-import-table thead > tr > th:nth-child(n + 3) {
+    text-align: center;
+}
+
+.file-import-table tr.entry-detail {
+    background: #fafafa;
+}

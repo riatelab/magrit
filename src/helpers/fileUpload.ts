@@ -8,7 +8,12 @@ import { getPalette } from 'dicopal';
 // Helpers
 import { convertTabularDatasetToJSON, convertToGeoJSON, getGeometryType } from './formatConversion';
 import { generateIdLayer, generateIdTable } from './layers';
-import { allowedFileExtensions, allowedMimeTypes, SupportedTabularFileTypes } from './supportedFormats';
+import {
+  allowedFileExtensions,
+  allowedMimeTypes,
+  SupportedGeoFileTypes,
+  SupportedTabularFileTypes,
+} from './supportedFormats';
 import { convertTopojsonToGeojson } from './topojson';
 import { detectTypeField, Variable } from './typeDetection';
 
@@ -17,7 +22,6 @@ import { setFieldTypingModalStore } from '../store/FieldTypingModalStore';
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
 import { type LayersDescriptionStoreType, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
 import { fitExtent } from '../store/MapStore';
-import { setOverlayDropStore } from '../store/OverlayDropStore';
 
 // Types
 import { GeoJSONFeatureCollection, LayerDescription, TableDescription } from '../global';
@@ -129,7 +133,7 @@ const getDefaultRenderingParams = (geomType: string) => {
   return {};
 };
 
-function addLayer(geojson: GeoJSONFeatureCollection, name: string) {
+function addLayer(geojson: GeoJSONFeatureCollection, name: string, fit: boolean) {
   const geomType = getGeometryType(geojson);
   const layerId = generateIdLayer();
 
@@ -161,8 +165,6 @@ function addLayer(geojson: GeoJSONFeatureCollection, name: string) {
     shapeRendering: geomType === 'polygon' && geojson.features.length > 10000 ? 'optimizeSpeed' : 'auto',
   };
 
-  let firstLayer = false;
-
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
@@ -170,15 +172,13 @@ function addLayer(geojson: GeoJSONFeatureCollection, name: string) {
           // eslint-disable-next-line no-param-reassign
           draft.layers = [];
           setGlobalStore({ userHasAddedLayer: true });
-          firstLayer = true;
         }
         draft.layers.push(newLayerDescription as LayerDescription);
       },
     ),
   );
 
-  // If this is the first layer, zoom on it:
-  if (firstLayer) {
+  if (fit) {
     fitExtent(layerId);
   }
 
@@ -233,25 +233,26 @@ function addTabularLayer(data: object[], name: string) {
 //    we have several files describing a single layer (SHP) or several files describing
 //    several datasets, bearing in mind that the user can (and may want to) also
 //    add geo and tabular datasets at the same time.
-export const convertAndAddFiles = async (files: CustomFileList) => {
+export const convertAndAddFiles = async (
+  files: CustomFileList,
+  format: SupportedTabularFileTypes | SupportedGeoFileTypes,
+  layerName: string,
+  fit: boolean,
+) => {
   // Filter out the files that are not supported
   const authorizedFiles = files.filter(isAuthorizedFile);
-  // TODO: maybe display a message to the user if some files were not handled ?
-  console.log('convertDroppedFiles', files, '\nauthorizedFiles', authorizedFiles);
-  // Remove the "drop" overlay
-  setOverlayDropStore({ show: false, files: [] });
-  // Add the "loading" overlay
-  setGlobalStore({ isLoading: true });
 
   // Convert the file and add it to the store (and so to the map if its a geo layer)
-  if (await isTopojson(authorizedFiles)) {
+  if (format === SupportedGeoFileTypes.TopoJSON) {
     const res = convertTopojsonToGeojson(await files[0].file.text());
-    Object.keys(res).forEach((layerName) => {
-      addLayer(res[layerName], layerName);
+    Object.keys(res).forEach((l) => {
+      if (l === layerName) {
+        addLayer(res[layerName], layerName, fit);
+      }
     });
-  } else if (await isGeojson(authorizedFiles)) {
+  } else if (format === SupportedGeoFileTypes.GeoJSON) {
     const res = JSON.parse(await authorizedFiles[0].file.text());
-    addLayer(res, authorizedFiles[0].name);
+    addLayer(res, authorizedFiles[0].name, fit);
   } else if (isTabularFile(authorizedFiles)) {
     const res = await convertTabularDatasetToJSON(authorizedFiles[0].file, authorizedFiles[0].ext);
     addTabularLayer(res, authorizedFiles[0].name);
@@ -266,8 +267,6 @@ export const convertAndAddFiles = async (files: CustomFileList) => {
       toast.error(`Error while reading file: ${e.message ? e.message : e}`);
       return;
     }
-    addLayer(res, authorizedFiles[0].name);
+    addLayer(res, layerName, fit);
   }
-
-  setGlobalStore({ isLoading: false });
 };

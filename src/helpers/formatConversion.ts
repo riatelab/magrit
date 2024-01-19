@@ -79,6 +79,13 @@ export async function convertTabularDatasetToJSON(
     console.log('found delimiter', delimiter);
     return d3.dsvFormat(delimiter).parse(text);
   }
+  if (ext === 'json') {
+    const text = await file.text();
+    return JSON.parse(text);
+  }
+  if (ext === 'txt') {
+    return [];
+  }
   if (ext === 'xlsx') {
     return [];
   }
@@ -179,3 +186,16 @@ export async function convertFromGeoJSON(
   }
   return '';
 }
+
+export const getDatasetInfo = async (
+  fileOrFiles: File | File[],
+  params = { opts: [], openOpts: [] },
+) => {
+  const openOptions = params.openOpts || [];
+  const options = params.opts || [];
+  const input = await globalThis.gdal.open(fileOrFiles, openOptions);
+  // const result = globalThis.gdal.getInfo(input.datasets[0]);
+  const result = await globalThis.gdal.ogrinfo(input.datasets[0], options);
+  await globalThis.gdal.close(input);
+  return result;
+};

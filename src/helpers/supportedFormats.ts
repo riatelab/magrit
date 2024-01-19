@@ -17,6 +17,7 @@ export enum SupportedGeoFileTypes {
 export enum SupportedTabularFileTypes {
   CSV = 'csv',
   TSV = 'tsv',
+  TXT = 'txt',
   ODS = 'ods',
   XLS = 'xls',
   XLSX = 'xlsx',
@@ -84,4 +85,19 @@ export const allowedFileExtensions: string[] = [
   'xls',
   'xlsx',
   'ods',
+];
+
+export const shapefileExtensions: string[] = [
+  'shp',
+  'shx',
+  'prj',
+  'dbf',
+  'cpg',
+];
+
+export const shapefileMandatoryExtensions: string[] = [
+  'shp',
+  'shx',
+  'dbf',
+  'prj',
 ];

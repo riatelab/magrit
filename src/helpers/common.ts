@@ -87,3 +87,8 @@ export const findSuitableName = (name: string, existingNames: Array<string>): st
   }
   return `${name} (${i})`;
 };
+
+export const splitLastOccurrence = (str: string, substring: string) => {
+  const lastIndex = str.lastIndexOf(substring);
+  return [str.slice(0, lastIndex), str.slice(lastIndex + 1)];
+};

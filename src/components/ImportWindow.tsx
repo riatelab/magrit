@@ -6,22 +6,35 @@ import {
   JSX,
   Show,
 } from 'solid-js';
+import { createMutable } from 'solid-js/store';
 
 import { FaSolidTrashCan } from 'solid-icons/fa';
 import { VsTriangleDown, VsTriangleRight } from 'solid-icons/vs';
 import d3 from '../helpers/d3-custom';
 
-import { overlayDropStore } from '../store/OverlayDropStore';
+import { setGlobalStore } from '../store/GlobalStore';
+import { overlayDropStore, setOverlayDropStore } from '../store/OverlayDropStore';
 
-import { CustomFileList, FileEntry } from '../helpers/fileUpload';
-import { SupportedGeoFileTypes, SupportedTabularFileTypes } from '../helpers/supportedFormats';
-import { findCsvDelimiter } from '../helpers/formatConversion';
+import { splitLastOccurrence } from '../helpers/common';
+import { convertAndAddFiles, CustomFileList, FileEntry } from '../helpers/fileUpload';
+import {
+  shapefileExtensions,
+  shapefileMandatoryExtensions,
+  SupportedGeoFileTypes,
+  SupportedTabularFileTypes,
+} from '../helpers/supportedFormats';
+import { findCsvDelimiter, getDatasetInfo } from '../helpers/formatConversion';
 
-interface ItemDescription {
+import '../styles/ImportWindow.css';
+
+interface LayerOrTableDescription {
   name: string,
   features: number,
   geometryType?: 'point' | 'line' | 'polygon' | 'unknown',
   delimiter?: string,
+  addToProject: boolean,
+  simplify: boolean,
+  fitMap: boolean,
 }
 
 interface DatasetInformation {
@@ -29,13 +42,19 @@ interface DatasetInformation {
   type: 'tabular' | 'geo',
   detailedType: SupportedGeoFileTypes | SupportedTabularFileTypes,
   complete: boolean,
-  layers: ItemDescription[],
+  layers: LayerOrTableDescription[],
 }
 
 interface InvalidDataset {
   name: string,
   valid: boolean,
   reason: string,
+}
+
+interface DatasetDescription {
+  name: string,
+  files: FileEntry[],
+  info: DatasetInformation,
 }
 
 const analyseDatasetGeoJSON = (
@@ -53,6 +72,59 @@ const analyseDatasetGeoJSON = (
         name,
         features: obj.features.length,
         geometryType: obj.features[0]?.geometry?.type || 'unknown',
+        addToProject: true,
+        simplify: false,
+        fitMap: false,
+      },
+    ],
+  };
+};
+
+const analyseDatasetGeoPackage = async (
+  file: FileEntry,
+): Promise<DatasetInformation | InvalidDataset> => {
+  const result = await getDatasetInfo(file.file);
+
+  const layers = result.layers.map((layer) => ({
+    name: layer.name,
+    features: layer.featureCount,
+    geometryType: layer.geometryFields[0] ? layer.geometryFields[0].type : 'unknown',
+    addToProject: true,
+    simplify: false,
+    fitMap: false,
+  }));
+
+  return {
+    type: 'geo',
+    name: file.name,
+    detailedType: SupportedGeoFileTypes.GeoPackage,
+    complete: true,
+    layers,
+  };
+};
+
+const analyseDatasetShapefile = async (
+  files: FileEntry[],
+): Promise<DatasetInformation | InvalidDataset> => {
+  const result = await getDatasetInfo(files.map((f) => f.file));
+  console.log(result);
+
+  const name = splitLastOccurrence(files[0].name, '.')[0];
+
+  return {
+    type: 'geo',
+    name,
+    detailedType: SupportedGeoFileTypes.Shapefile,
+    complete: true,
+    layers: [
+      {
+        name: result.layers[0].name,
+        features: result.layers[0].featureCount,
+        geometryType: result.layers[0].geometryFields[0]
+          ? result.layers[0].geometryFields[0].type : 'unknown',
+        addToProject: true,
+        simplify: false,
+        fitMap: false,
       },
     ],
   };
@@ -72,6 +144,9 @@ const analyzeDatasetTopoJSON = (
       name: layerName,
       features: obj.objects[layerName].geometries.length,
       geometryType: obj.objects[layerName].geometries[0]?.type || 'unknown',
+      addToProject: true,
+      simplify: false,
+      fitMap: false,
     })),
   };
 };
@@ -98,6 +173,9 @@ const analyseDatasetTabularJSON = (
       {
         name,
         features: obj.length,
+        addToProject: true,
+        simplify: false,
+        fitMap: false,
       },
     ],
   };
@@ -106,11 +184,32 @@ const analyseDatasetTabularJSON = (
 const analyseDatasetTabularText = (
   content: string,
   name: string,
+  ext: 'csv' | 'tsv',
 ): DatasetInformation | InvalidDataset => {
   const delimiter = findCsvDelimiter(content);
   const ds = d3.dsvFormat(delimiter).parse(content);
+  // eslint-disable-next-line no-nested-ternary
+  const detailedType = ext === 'csv'
+    ? SupportedTabularFileTypes.CSV
+    : ext === 'tsv'
+      ? SupportedTabularFileTypes.TSV
+      : SupportedTabularFileTypes.TXT;
+
   return {
+    type: 'tabular',
     name,
+    detailedType,
+    complete: true,
+    layers: [
+      {
+        name,
+        features: ds.length,
+        delimiter,
+        addToProject: true,
+        simplify: false,
+        fitMap: false,
+      },
+    ],
   };
 };
 
@@ -160,10 +259,34 @@ const analyzeDataset = async (
       // We have a text file, it can be a CSV or a TSV or something else...
       // Read the file to determine the type
       const content = await file.file.text();
-      result = analyseDatasetTabularText(content, name);
+      result = analyseDatasetTabularText(content, name, file.ext);
+    } else if (file.file.type === 'application/geopackage+sqlite3' || file.ext === 'gpkg') {
+      result = await analyseDatasetGeoPackage(file);
+    } else if (
+      shapefileExtensions.includes(file.ext)
+    ) {
+      result = {
+        type: 'geo',
+        name,
+        detailedType: SupportedGeoFileTypes.Shapefile,
+        complete: false,
+        layers: [],
+      };
     }
   } else { // We have multiple files, so it's probably a shapefile
-
+    const exts = ds[name].files.map((f) => f.ext);
+    if (!shapefileMandatoryExtensions.every((e) => exts.includes(e))) {
+      result = {
+        type: 'geo',
+        name,
+        detailedType: SupportedGeoFileTypes.Shapefile,
+        complete: false,
+        layers: [],
+      };
+    } else {
+      result = await analyseDatasetShapefile(ds[name].files);
+      console.log(result);
+    }
   }
 
   return result as DatasetInformation;
@@ -197,8 +320,43 @@ const groupFiles = (
   return groupedFiles;
 };
 
+const formatFileExtension = (exts: string[]): string => {
+  if (exts.length > 1) {
+    return `{${exts.join(',')}}`;
+  }
+  return exts[0];
+};
+
 export default function ImportWindow(): JSX.Element {
   let refParentNode: HTMLDivElement;
+
+  // const groupedFiles = createMemo(() => groupFiles(overlayDropStore.files));
+  const droppedFiles = createMemo(() => overlayDropStore.files);
+
+  const [fileDescriptions] = createResource<any, any>(
+    droppedFiles,
+    async () => {
+      const groupedFiles = groupFiles(droppedFiles());
+      return createMutable(await Promise.all(
+        Object.keys(groupedFiles)
+          .map(async (fileName) => {
+            // Use existing description if available
+            if (
+              fileDescriptions()
+                .find((f: DatasetDescription) => f.name === fileName && f.info && f.info.complete)
+            ) {
+              return fileDescriptions().find((f: DatasetDescription) => f.name === fileName);
+            }
+            const dsInfo = await analyzeDataset({ [fileName]: groupedFiles[fileName] });
+
+            return {
+              ...groupedFiles[fileName],
+              info: dsInfo,
+            } as DatasetDescription;
+          }),
+      ));
+    },
+  );
 
   const [expanded, setExpanded] = createSignal<string[]>([]);
 
@@ -210,15 +368,20 @@ export default function ImportWindow(): JSX.Element {
     }
   };
 
-  const groupedFiles = createMemo(() => groupFiles(overlayDropStore.files));
-
-  const [fileDescriptions] = createResource(
-    groupedFiles,
-    async () => Promise.all(
-      Object.keys(groupedFiles())
-        .map(async (fileName) => analyzeDataset({ [fileName]: groupedFiles()[fileName] })),
-    ),
-  );
+  const handleCheckFitMap = (layer: LayerOrTableDescription) => {
+    const newCheckedState = !layer.fitMap;
+    if (newCheckedState) {
+      // Remove the checked state of the other datasets
+      fileDescriptions().forEach((f: DatasetDescription) => {
+        f.info.layers.forEach((l: LayerOrTableDescription) => {
+          // eslint-disable-next-line no-param-reassign
+          l.fitMap = false;
+        });
+      });
+    }
+    // eslint-disable-next-line no-param-reassign
+    layer.fitMap = !layer.fitMap;
+  };
 
   return <div class="modal-window modal overlay-drop" style={{ display: 'flex' }} ref={refParentNode!}>
     <div class="modal-background"></div>
@@ -229,12 +392,13 @@ export default function ImportWindow(): JSX.Element {
       <section class="modal-card-body">
         <h3>Import files</h3>
         <p>Drop other files if needed...</p>
-        <table class="table">
+        <table class="table file-import-table">
           <thead>
             <Show when={expanded().length === 0}>
               <tr>
                 <th></th>
                 <th>Layer name</th>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -248,8 +412,9 @@ export default function ImportWindow(): JSX.Element {
                 <th>Layer name</th>
                 <th>Features</th>
                 <th>Geometry type</th>
-                <th>Add to map</th>
+                <th>Add to project</th>
                 <th>Simplify</th>
+                <th>Fit map to extent</th>
                 <th>Delete ?</th>
               </tr>
             </Show>
@@ -257,47 +422,100 @@ export default function ImportWindow(): JSX.Element {
           <tbody>
             <For each={fileDescriptions()}>
               {
-                (dsInfo: DatasetInformation) => <>
+                (fileDescription) => <>
                   <tr class="entry-title">
                     <td>
                       <Show
-                        when={expanded().includes(dsInfo.name)}
+                        when={expanded().includes(fileDescription.info.name)}
                         fallback={
-                          <VsTriangleRight onClick={handleExpanded(dsInfo.name)} />
+                          <VsTriangleRight class="is-clickable" onClick={handleExpanded(fileDescription.info.name)}/>
                         }
                       >
-                        <VsTriangleDown onClick={handleExpanded(dsInfo.name)} />
+                        <VsTriangleDown class="is-clickable" onClick={handleExpanded(fileDescription.info.name)}/>
                       </Show>
                     </td>
-                    <td>{dsInfo.name}.{dsInfo.detailedType}</td>
+                    <td>
+                      {fileDescription.info.name}
+                      .{formatFileExtension(fileDescription.files.map((f) => f.ext))}
+                      <Show when={!fileDescription.info.complete}>
+                        <span class="tag is-warning ml-3" style={{ 'vertical-align': 'top' }}>
+                          Incomplete
+                        </span>
+                      </Show>
+                    </td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><FaSolidTrashCan/></td>
+                    <td></td>
+                    <td>
+                      <FaSolidTrashCan
+                        class="is-clickable"
+                        onClick={() => {
+                          setOverlayDropStore(
+                            'files',
+                            overlayDropStore.files
+                              .filter((f) => f.name !== fileDescription.info.name),
+                          );
+                          if (expanded().includes(fileDescription.info.name)) {
+                            setExpanded(expanded().filter((n) => n !== fileDescription.info.name));
+                          }
+                        }}
+                      />
+                    </td>
                   </tr>
-                  <Show when={expanded().includes(dsInfo.name)}>
-                    <For each={dsInfo.layers}>
+                  <Show when={expanded().includes(fileDescription.info.name)}>
+                    <For each={fileDescription.info.layers}>
                       {
                         (layer) => {
-                          if (dsInfo.type === 'geo') {
-                            return <tr class="entry-detail" style={{ background: '#fafafa' }}>
+                          if (fileDescription.info.type === 'geo') {
+                            return <tr class="entry-detail">
                               <td></td>
-                              <td>- {layer.name}</td>
+                              <td>↳ {layer.name}</td>
                               <td>{layer.features} features</td>
                               <td>{layer.geometryType || 'None'}</td>
-                              <td><input type="checkbox"/></td>
-                              <td><input type="checkbox"/></td>
+                              <td>
+                                <input
+                                  type="checkbox"
+                                  checked={layer.addToProject}
+                                  onClick={() => {
+                                    // eslint-disable-next-line no-param-reassign
+                                    layer.addToProject = !layer.addToProject;
+                                  }}
+                                /></td>
+                              <td>
+                                <input
+                                  type="checkbox"
+                                  checked={layer.simplify}
+                                  onClick={() => {
+                                    // eslint-disable-next-line no-param-reassign
+                                    layer.simplify = !layer.simplify;
+                                  }}
+                                /></td>
+                              <td>
+                                <input
+                                  type="checkbox"
+                                  class="fit-map"
+                                  checked={layer.fitMap}
+                                  onClick={() => handleCheckFitMap(layer)}
+                                />
+                              </td>
                               <td></td>
                             </tr>;
                           }
-                          return <tr class="entry-detail" style={{ background: '#fafafa' }}>
+                          return <tr class="entry-detail">
                             <td></td>
-                            <td>- {layer.name}</td>
+                            <td>↳ {layer.name}</td>
                             <td>{layer.features} features</td>
-                            <td>x</td>
-                            <td><input type="checkbox"/></td>
-                            <td><input type="checkbox"/></td>
+                            <td><i>NA</i></td>
+                            <td>
+                              <input
+                                type="checkbox"
+                                checked={layer.fitMap}
+                                onClick={() => handleCheckFitMap(layer)}
+                              /></td>
+                            <td><i>NA</i></td>
+                            <td><i>NA</i></td>
                             <td></td>
                           </tr>;
                         }
@@ -308,11 +526,46 @@ export default function ImportWindow(): JSX.Element {
               }
             </For>
             <Show when={fileDescriptions.loading}>
-              <tr><td>{ 'Loading' }</td></tr>
+              <tr>
+                <td>{'Loading'}</td>
+              </tr>
             </Show>
           </tbody>
         </table>
       </section>
+      <footer class="modal-card-foot">
+        <button
+          disabled={fileDescriptions.loading || droppedFiles().length === 0}
+          class="button is-success confirm-button"
+          onClick={async () => {
+            // Remove the "drop" overlay
+            setOverlayDropStore({ show: false, files: [] });
+            // Add the "loading" overlay
+            setGlobalStore({ isLoading: true });
+            await Promise.all(fileDescriptions().map(async (ds: DatasetDescription) => {
+              await Promise.all(ds.info.layers.map(async (l: LayerOrTableDescription) => {
+                if (l.addToProject) {
+                  await convertAndAddFiles(
+                    ds.files,
+                    ds.info.detailedType,
+                    l.name,
+                    l.fitMap,
+                  );
+                }
+              }));
+            }));
+            // Remove the "loading" overlay
+            setGlobalStore({ isLoading: false });
+          }}
+        >Import selected datasets
+        </button>
+        <button
+          class="button cancel-button"
+          onClick={() => {
+          }}
+        >Cancel
+        </button>
+      </footer>
     </div>
   </div>;
 }
