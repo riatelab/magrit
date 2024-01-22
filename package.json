@@ -45,7 +45,7 @@
     "@solidjs/router": "^0.10.9",
     "@turf/turf": "^6.5.0",
     "ag-grid-community": "^31.0.2",
-    "ag-grid-solid": "^31.0.1",
+    "ag-grid-solid": "^31.0.2",
     "alasql": "^4.2.5",
     "bulma": "^0.9.4",
     "contour-wasm": "^0.3.0",
