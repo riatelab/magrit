@@ -31,8 +31,14 @@ interface LayerOrTableDescription {
   name: string,
   features: number,
   geometryType?: 'point' | 'line' | 'polygon' | 'unknown',
+  crs?: {
+    name: string,
+    code?: string,
+    wkt?: string,
+  },
   delimiter?: string,
   addToProject: boolean,
+  useCRS: boolean,
   simplify: boolean,
   fitMap: boolean,
 }
@@ -57,6 +63,37 @@ interface DatasetDescription {
   info: DatasetInformation,
 }
 
+const readCrs = (geomColumn) => {
+  if (
+    geomColumn.coordinateSystem?.projjson?.id?.code
+    && geomColumn.coordinateSystem?.projjson?.id?.authority
+  ) {
+    return {
+      name: geomColumn.coordinateSystem?.projjson?.name,
+      code: `${geomColumn.coordinateSystem.projjson.id.authority}:${geomColumn.coordinateSystem.projjson.id.code}`,
+      wkt: geomColumn.coordinateSystem?.wkt,
+    };
+  }
+  return {
+    name: geomColumn.coordinateSystem?.projjson?.name,
+    code: undefined,
+    wkt: geomColumn.coordinateSystem?.wkt,
+  };
+};
+
+const formatCrsTitle = (crs) => {
+  if (crs.code && crs.wkt) {
+    return `${crs.code} - ${crs.wkt}`;
+  }
+  if (crs.wkt) {
+    return crs.wkt;
+  }
+  if (crs.code) {
+    return crs.code;
+  }
+  return 'Unknown';
+};
+
 const analyseDatasetGeoJSON = (
   content: string,
   name: string,
@@ -72,7 +109,12 @@ const analyseDatasetGeoJSON = (
         name,
         features: obj.features.length,
         geometryType: obj.features[0]?.geometry?.type || 'unknown',
+        crs: { // TODO: read layer with gdal and detect CRS if any
+          name: 'WGS 84',
+          code: 'ESPG:4326',
+        },
         addToProject: true,
+        useCRS: false,
         simplify: false,
         fitMap: false,
       },
@@ -80,55 +122,78 @@ const analyseDatasetGeoJSON = (
   };
 };
 
-const analyseDatasetGeoPackage = async (
-  file: FileEntry,
+const analyseDatasetGDAL = async (
+  fileOrFiles: FileEntry | FileEntry[],
 ): Promise<DatasetInformation | InvalidDataset> => {
-  const result = await getDatasetInfo(file.file);
-
+  const ds = Array.isArray(fileOrFiles)
+    ? fileOrFiles.map((fe) => fe.file)
+    : fileOrFiles.file;
+  const name = Array.isArray(fileOrFiles)
+    ? fileOrFiles[0].name
+    : fileOrFiles.name;
+  const result = await getDatasetInfo(ds);
+  console.log(result);
   const layers = result.layers.map((layer) => ({
     name: layer.name,
     features: layer.featureCount,
     geometryType: layer.geometryFields[0] ? layer.geometryFields[0].type : 'unknown',
+    crs: readCrs(layer.geometryFields[0]),
     addToProject: true,
     simplify: false,
     fitMap: false,
   }));
 
+  /* eslint-disable no-nested-ternary */
+  const detailedType = result.driverLongName === 'GeoPackage'
+    ? SupportedGeoFileTypes.GeoPackage
+    : result.driverLongName === 'ESRI Shapefile'
+      ? SupportedGeoFileTypes.Shapefile
+      : result.driverLongName === 'Keyhole Markup Language (KML)'
+        ? SupportedGeoFileTypes.KML
+        : result.driverLongName === 'GeoJSON'
+          ? SupportedGeoFileTypes.GeoJSON
+          : result.driverLongName === 'Geographic Markup Language (GML)'
+            ? SupportedGeoFileTypes.GML
+            : result.driverLongName === 'TopoJSON'
+              ? SupportedGeoFileTypes.TopoJSON : 'Unknown';
+  /* eslint-enable no-nested-ternary */
   return {
     type: 'geo',
-    name: file.name,
-    detailedType: SupportedGeoFileTypes.GeoPackage,
+    name,
+    detailedType,
     complete: true,
     layers,
   };
 };
 
-const analyseDatasetShapefile = async (
-  files: FileEntry[],
-): Promise<DatasetInformation | InvalidDataset> => {
-  const result = await getDatasetInfo(files.map((f) => f.file));
-  console.log(result);
-
-  const name = splitLastOccurrence(files[0].name, '.')[0];
-
-  return {
-    type: 'geo',
-    name,
-    detailedType: SupportedGeoFileTypes.Shapefile,
-    complete: true,
-    layers: [
-      {
-        name: result.layers[0].name,
-        features: result.layers[0].featureCount,
-        geometryType: result.layers[0].geometryFields[0]
-          ? result.layers[0].geometryFields[0].type : 'unknown',
-        addToProject: true,
-        simplify: false,
-        fitMap: false,
-      },
-    ],
-  };
-};
+// const analyseDatasetShapefile = async (
+//   files: FileEntry[],
+// ): Promise<DatasetInformation | InvalidDataset> => {
+//   const result = await getDatasetInfo(files.map((f) => f.file));
+//   // console.log(result);
+//
+//   const name = splitLastOccurrence(files[0].name, '.')[0];
+//
+//   return {
+//     type: 'geo',
+//     name,
+//     detailedType: SupportedGeoFileTypes.Shapefile,
+//     complete: true,
+//     layers: [
+//       {
+//         name: result.layers[0].name,
+//         features: result.layers[0].featureCount,
+//         geometryType: result.layers[0].geometryFields[0]
+//           ? result.layers[0].geometryFields[0].type : 'unknown',
+//         crs: readCrs(result.layers[0].geometryFields[0]),
+//         addToProject: true,
+//         useCRS: false,
+//         simplify: false,
+//         fitMap: false,
+//       },
+//     ],
+//   };
+// };
 
 const analyzeDatasetTopoJSON = (
   content: string,
@@ -144,6 +209,10 @@ const analyzeDatasetTopoJSON = (
       name: layerName,
       features: obj.objects[layerName].geometries.length,
       geometryType: obj.objects[layerName].geometries[0]?.type || 'unknown',
+      crs: {
+        name: 'WGS 84',
+        code: 'ESPG:4326',
+      },
       addToProject: true,
       simplify: false,
       fitMap: false,
@@ -175,6 +244,7 @@ const analyseDatasetTabularJSON = (
         features: obj.length,
         addToProject: true,
         simplify: false,
+        useCRS: false,
         fitMap: false,
       },
     ],
@@ -206,6 +276,7 @@ const analyseDatasetTabularText = (
         features: ds.length,
         delimiter,
         addToProject: true,
+        useCRS: false,
         simplify: false,
         fitMap: false,
       },
@@ -245,7 +316,8 @@ const analyzeDataset = async (
       const content = await file.file.text();
       if (content.includes('"FeatureCollection"')) {
         // We have a GeoJSON file
-        result = analyseDatasetGeoJSON(content, name);
+        // result = analyseDatasetGeoJSON(content, name);
+        result = await analyseDatasetGDAL(file);
       } else if (content.includes('"Topology"')) {
         // We have a TopoJSON file
         result = analyzeDatasetTopoJSON(content, name);
@@ -261,7 +333,11 @@ const analyzeDataset = async (
       const content = await file.file.text();
       result = analyseDatasetTabularText(content, name, file.ext);
     } else if (file.file.type === 'application/geopackage+sqlite3' || file.ext === 'gpkg') {
-      result = await analyseDatasetGeoPackage(file);
+      result = await analyseDatasetGDAL(file);
+    } else if (file.file.type === 'application/gml+xml') {
+      result = await analyseDatasetGDAL(file);
+    } else if (file.file.type === 'application/vnd.google-earth.kml+xml') {
+      result = await analyseDatasetGDAL(file);
     } else if (
       shapefileExtensions.includes(file.ext)
     ) {
@@ -284,7 +360,7 @@ const analyzeDataset = async (
         layers: [],
       };
     } else {
-      result = await analyseDatasetShapefile(ds[name].files);
+      result = await analyseDatasetGDAL(ds[name].files);
       console.log(result);
     }
   }
@@ -403,6 +479,8 @@ export default function ImportWindow(): JSX.Element {
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
+                <th></th>
                 <th>Delete ?</th>
               </tr>
             </Show>
@@ -412,10 +490,12 @@ export default function ImportWindow(): JSX.Element {
                 <th>Layer name</th>
                 <th>Features</th>
                 <th>Geometry type</th>
+                <th>CRS</th>
                 <th>Add to project</th>
+                <th>Use projection</th>
                 <th>Simplify</th>
                 <th>Fit map to extent</th>
-                <th>Delete ?</th>
+                <th>Delete</th>
               </tr>
             </Show>
           </thead>
@@ -448,6 +528,8 @@ export default function ImportWindow(): JSX.Element {
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
+                    <td></td>
                     <td>
                       <FaSolidTrashCan
                         class="is-clickable"
@@ -474,6 +556,16 @@ export default function ImportWindow(): JSX.Element {
                               <td>↳ {layer.name}</td>
                               <td>{layer.features} features</td>
                               <td>{layer.geometryType || 'None'}</td>
+                              <td
+                                title={formatCrsTitle(layer.crs)}
+                              >
+                                { // eslint-disable-next-line no-nested-ternary
+                                  layer.crs.name
+                                    ? layer.crs.name
+                                    : layer.crs.code
+                                      ? layer.crs.code : layer.crs.wkt
+                                }
+                              </td>
                               <td>
                                 <input
                                   type="checkbox"
@@ -481,6 +573,15 @@ export default function ImportWindow(): JSX.Element {
                                   onClick={() => {
                                     // eslint-disable-next-line no-param-reassign
                                     layer.addToProject = !layer.addToProject;
+                                  }}
+                                /></td>
+                              <td>
+                                <input
+                                  type="checkbox"
+                                  checked={layer.useCRS}
+                                  onClick={() => {
+                                    // eslint-disable-next-line no-param-reassign
+                                    layer.useCRS = !layer.useCRS;
                                   }}
                                 /></td>
                               <td>
@@ -508,12 +609,17 @@ export default function ImportWindow(): JSX.Element {
                             <td>↳ {layer.name}</td>
                             <td>{layer.features} features</td>
                             <td><i>NA</i></td>
+                            <td><i>NA</i></td>
                             <td>
                               <input
                                 type="checkbox"
-                                checked={layer.fitMap}
-                                onClick={() => handleCheckFitMap(layer)}
+                                checked={layer.addToProject}
+                                onClick={() => {
+                                  // eslint-disable-next-line no-param-reassign
+                                  layer.addToProject = !layer.addToProject;
+                                }}
                               /></td>
+                            <td><i>NA</i></td>
                             <td><i>NA</i></td>
                             <td><i>NA</i></td>
                             <td></td>
