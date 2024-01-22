@@ -203,7 +203,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
     // Display loading overlay
     setLoading(true);
 
-    await yieldOrContinue('user-visible');
+    await yieldOrContinue('smooth');
 
     // Actually create the layer
     setTimeout(() => {

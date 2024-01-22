@@ -310,7 +310,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     // Display loading overlay
     setLoading(true);
 
-    await yieldOrContinue('user-visible');
+    await yieldOrContinue('smooth');
 
     // Actually make the new layer
     setTimeout(() => {

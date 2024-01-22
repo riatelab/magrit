@@ -135,7 +135,7 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
       return;
     }
 
-    await yieldOrContinue('user-visible');
+    await yieldOrContinue('smooth');
 
     const dx = e.clientX - x;
     const dy = e.clientY - y;
@@ -167,7 +167,7 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
     outerSvg.removeEventListener('mousemove', moveElement);
     outerSvg.removeEventListener('mouseup', deselectElement);
 
-    await yieldOrContinue('user-visible');
+    await yieldOrContinue('smooth');
 
     // Update the position in the layersDescriptionStore
     // once the user has released the mouse button

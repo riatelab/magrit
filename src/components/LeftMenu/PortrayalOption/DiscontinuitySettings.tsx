@@ -180,7 +180,7 @@ export default function DiscontinuitySettings(
     // Display loading overlay
     setLoading(true);
 
-    await yieldOrContinue('user-visible');
+    await yieldOrContinue('smooth');
 
     // Create the portrayal
     setTimeout(() => {

@@ -292,7 +292,7 @@ export default function ProportionalSymbolsSettings(
     // Display loading overlay
     setLoading(true);
 
-    await yieldOrContinue('user-visible');
+    await yieldOrContinue('smooth');
 
     // Actually make the new layer
     setTimeout(() => {

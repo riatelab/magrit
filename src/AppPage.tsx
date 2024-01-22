@@ -185,7 +185,7 @@ const reloadFromProjectObject = async (
   // Display a loading overlay because it may take some time
   setLoading(true, 'Reloading');
 
-  await yieldOrContinue('user-visible');
+  await yieldOrContinue('smooth');
 
   // The state we want to use
   const {

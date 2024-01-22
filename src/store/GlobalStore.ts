@@ -41,9 +41,9 @@ const setLoading = (isLoading: boolean, message?: string) => {
 };
 
 const setLoadingMessage = async (message: string) => {
-  await yieldOrContinue('background');
+  await yieldOrContinue('idle');
   setGlobalStore('loadingMessage', message);
-  await yieldOrContinue('user-visible');
+  await yieldOrContinue('interactive');
 };
 
 export {
