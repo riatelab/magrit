@@ -71,7 +71,7 @@ export function draggedElementsAreFiles(e: DragEvent): boolean {
 export function isAuthorizedFile(file: FileEntry): boolean {
   if (
     allowedMimeTypes.indexOf(file.file.type) > -1
-    && allowedFileExtensions.indexOf(file.ext) > -1
+    || allowedFileExtensions.indexOf(file.ext) > -1
   ) {
     return true;
   }

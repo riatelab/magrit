@@ -13,10 +13,14 @@ import { VsTriangleDown, VsTriangleRight } from 'solid-icons/vs';
 import d3 from '../helpers/d3-custom';
 
 import { setGlobalStore } from '../store/GlobalStore';
+import { setMapStore } from '../store/MapStore';
 import { overlayDropStore, setOverlayDropStore } from '../store/OverlayDropStore';
 
-import { splitLastOccurrence } from '../helpers/common';
-import { convertAndAddFiles, CustomFileList, FileEntry } from '../helpers/fileUpload';
+import {
+  convertAndAddFiles,
+  CustomFileList,
+  FileEntry,
+} from '../helpers/fileUpload';
 import {
   shapefileExtensions,
   shapefileMandatoryExtensions,
@@ -63,7 +67,7 @@ interface DatasetDescription {
   info: DatasetInformation,
 }
 
-const readCrs = (geomColumn) => {
+const readCrs = (geomColumn: any) => {
   if (
     geomColumn.coordinateSystem?.projjson?.id?.code
     && geomColumn.coordinateSystem?.projjson?.id?.authority
@@ -81,7 +85,9 @@ const readCrs = (geomColumn) => {
   };
 };
 
-const formatCrsTitle = (crs) => {
+const formatCrsTitle = (
+  crs: { name: string, code?: string, wkt?: string },
+) => {
   if (crs.code && crs.wkt) {
     return `${crs.code} - ${crs.wkt}`;
   }
@@ -94,33 +100,61 @@ const formatCrsTitle = (crs) => {
   return 'Unknown';
 };
 
-const analyseDatasetGeoJSON = (
-  content: string,
-  name: string,
-): DatasetInformation | InvalidDataset => {
-  const obj = JSON.parse(content);
-  return {
-    type: 'geo',
-    name,
-    detailedType: SupportedGeoFileTypes.GeoJSON,
-    complete: true,
-    layers: [
-      {
-        name,
-        features: obj.features.length,
-        geometryType: obj.features[0]?.geometry?.type || 'unknown',
-        crs: { // TODO: read layer with gdal and detect CRS if any
-          name: 'WGS 84',
-          code: 'ESPG:4326',
-        },
-        addToProject: true,
-        useCRS: false,
-        simplify: false,
-        fitMap: false,
-      },
-    ],
-  };
-};
+// const analyseDatasetGeoJSON = (
+//   content: string,
+//   name: string,
+// ): DatasetInformation | InvalidDataset => {
+//   const obj = JSON.parse(content);
+//   return {
+//     type: 'geo',
+//     name,
+//     detailedType: SupportedGeoFileTypes.GeoJSON,
+//     complete: true,
+//     layers: [
+//       {
+//         name,
+//         features: obj.features.length,
+//         geometryType: obj.features[0]?.geometry?.type || 'unknown',
+//         crs: { // TODO: read layer with gdal and detect CRS if any
+//           name: 'WGS 84',
+//           code: 'ESPG:4326',
+//         },
+//         addToProject: true,
+//         useCRS: false,
+//         simplify: false,
+//         fitMap: false,
+//       },
+//     ],
+//   };
+// };
+// const analyseDatasetShapefile = async (
+//   files: FileEntry[],
+// ): Promise<DatasetInformation | InvalidDataset> => {
+//   const result = await getDatasetInfo(files.map((f) => f.file));
+//   // console.log(result);
+//
+//   const name = splitLastOccurrence(files[0].name, '.')[0];
+//
+//   return {
+//     type: 'geo',
+//     name,
+//     detailedType: SupportedGeoFileTypes.Shapefile,
+//     complete: true,
+//     layers: [
+//       {
+//         name: result.layers[0].name,
+//         features: result.layers[0].featureCount,
+//         geometryType: result.layers[0].geometryFields[0]
+//           ? result.layers[0].geometryFields[0].type : 'unknown',
+//         crs: readCrs(result.layers[0].geometryFields[0]),
+//         addToProject: true,
+//         useCRS: false,
+//         simplify: false,
+//         fitMap: false,
+//       },
+//     ],
+//   };
+// };
 
 const analyseDatasetGDAL = async (
   fileOrFiles: FileEntry | FileEntry[],
@@ -165,35 +199,6 @@ const analyseDatasetGDAL = async (
     layers,
   };
 };
-
-// const analyseDatasetShapefile = async (
-//   files: FileEntry[],
-// ): Promise<DatasetInformation | InvalidDataset> => {
-//   const result = await getDatasetInfo(files.map((f) => f.file));
-//   // console.log(result);
-//
-//   const name = splitLastOccurrence(files[0].name, '.')[0];
-//
-//   return {
-//     type: 'geo',
-//     name,
-//     detailedType: SupportedGeoFileTypes.Shapefile,
-//     complete: true,
-//     layers: [
-//       {
-//         name: result.layers[0].name,
-//         features: result.layers[0].featureCount,
-//         geometryType: result.layers[0].geometryFields[0]
-//           ? result.layers[0].geometryFields[0].type : 'unknown',
-//         crs: readCrs(result.layers[0].geometryFields[0]),
-//         addToProject: true,
-//         useCRS: false,
-//         simplify: false,
-//         fitMap: false,
-//       },
-//     ],
-//   };
-// };
 
 const analyzeDatasetTopoJSON = (
   content: string,
@@ -303,12 +308,10 @@ const analyzeDataset = async (
   let result: Partial<DatasetInformation> = {
     name,
   };
-  console.log(ds[name].files);
   // Determine the type of the dataset
   if (ds[name].files.length === 1) {
     // Only one file
     const file = ds[name].files[0];
-    console.log(file.file.type);
     if (file.file.type.includes('json') || file.ext.includes('json')) {
       // At this point we have a JSON file, it can be a GeoJSON or a TopoJSON or
       // tabular data or something else...
@@ -332,11 +335,17 @@ const analyzeDataset = async (
       // Read the file to determine the type
       const content = await file.file.text();
       result = analyseDatasetTabularText(content, name, file.ext);
-    } else if (file.file.type === 'application/geopackage+sqlite3' || file.ext === 'gpkg') {
-      result = await analyseDatasetGDAL(file);
-    } else if (file.file.type === 'application/gml+xml') {
-      result = await analyseDatasetGDAL(file);
-    } else if (file.file.type === 'application/vnd.google-earth.kml+xml') {
+    } else if (
+      file.file.type === 'application/vnd.ms-excel'
+      || file.file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
+      // result = analyseDatasetTabularText(content, name, file.ext);
+    } else if (
+      file.file.type === 'application/geopackage+sqlite3'
+      || file.file.type === 'application/gml+xml'
+      || file.file.type === 'application/vnd.google-earth.kml+xml'
+      // TODO: handle zip files...
+    ) {
       result = await analyseDatasetGDAL(file);
     } else if (
       shapefileExtensions.includes(file.ext)
@@ -648,6 +657,29 @@ export default function ImportWindow(): JSX.Element {
             setOverlayDropStore({ show: false, files: [] });
             // Add the "loading" overlay
             setGlobalStore({ isLoading: true });
+            // Do we have to use a specific CRS ?
+            let crsToUse: object | undefined;
+            fileDescriptions()
+              .forEach((ds: DatasetDescription) => {
+                ds.info.layers.forEach((l: LayerOrTableDescription) => {
+                  if (l.useCRS) {
+                    crsToUse = l.crs;
+                  }
+                });
+              });
+            if (crsToUse) {
+              setMapStore(
+                'projection',
+                { // TODO: improve compatibility between CRS description from GDAL
+                  //       and the one used in the mapStore
+                  type: 'proj4',
+                  name: crsToUse.name,
+                  value: crsToUse.code,
+                  // bounds: selectedProjection()!.bbox,
+                },
+              );
+            }
+            // Import the selected datasets
             await Promise.all(fileDescriptions().map(async (ds: DatasetDescription) => {
               await Promise.all(ds.info.layers.map(async (l: LayerOrTableDescription) => {
                 if (l.addToProject) {

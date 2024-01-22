@@ -9,13 +9,13 @@ import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'; // eslint-disable-li
 import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url';
 import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url';
 import { Transition } from 'solid-transition-group';
-import { Toaster } from 'solid-toast';
+import toast, { Toaster } from 'solid-toast';
 import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
 import { useI18nContext } from './i18n/i18n-solid';
 import { clickLinkFromDataUrl } from './helpers/exports';
-import { draggedElementsAreFiles, prepareFileExtensions } from './helpers/fileUpload';
+import { draggedElementsAreFiles, isAuthorizedFile, prepareFileExtensions } from './helpers/fileUpload';
 import { round } from './helpers/math';
 import { initDb, storeProject } from './helpers/storage';
 
@@ -161,9 +161,18 @@ const dropHandler = (e: Event): void => {
   if (!draggedElementsAreFiles(e as DragEvent)) return;
   // Store name and type of the files dropped in a new array (CustomFileList) of FileEntry.
   const files = prepareFileExtensions((e as DragEvent).dataTransfer!.files);
+  // Filter out the files that are not supported
+  const filteredFiles = [];
+  for (let i = 0; i < files.length; i += 1) {
+    if (isAuthorizedFile(files[i])) {
+      filteredFiles.push(files[i]);
+    } else {
+      toast.error(`Unsupported file format for file : ${files[i].name}.${files[i].ext}`);
+    }
+  }
   // Add the dropped files to the existing file list
   setOverlayDropStore(
-    { files: overlayDropStore.files.concat(files) },
+    { files: overlayDropStore.files.concat(filteredFiles) },
   );
   if (timeout) {
     clearTimeout(timeout);

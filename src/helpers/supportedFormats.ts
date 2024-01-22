@@ -41,7 +41,7 @@ export const allowedMimeTypes: string[] = [
   'application/x-esri-shape', // For .shx files
   'application/x-esri-crs', // For .prj files
   'application/x-dbf', // For .dbf files
-  '', // For .cpg files
+  // '', // For .cpg files
   // For geojson
   'application/json',
   'application/geo+json',
