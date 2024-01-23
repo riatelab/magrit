@@ -250,9 +250,9 @@ export const convertAndAddFiles = async (
         addLayer(res[layerName], layerName, fit);
       }
     });
-  } else if (format === SupportedGeoFileTypes.GeoJSON) {
-    const res = JSON.parse(await authorizedFiles[0].file.text());
-    addLayer(res, authorizedFiles[0].name, fit);
+  // } else if (format === SupportedGeoFileTypes.GeoJSON) {
+  //   const res = JSON.parse(await authorizedFiles[0].file.text());
+  //   addLayer(res, authorizedFiles[0].name, fit);
   } else if (isTabularFile(authorizedFiles)) {
     const res = await convertTabularDatasetToJSON(authorizedFiles[0].file, authorizedFiles[0].ext);
     addTabularLayer(res, authorizedFiles[0].name);

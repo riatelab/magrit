@@ -67,6 +67,21 @@ interface DatasetDescription {
   info: DatasetInformation,
 }
 
+const convertBounds = (
+  bbox?: {
+    east_longitude: number, north_latitude: number, south_latitude: number, west_longitude: number,
+  },
+) => {
+  if (!bbox) return undefined;
+  const {
+    east_longitude: east,
+    north_latitude: north,
+    south_latitude: south,
+    west_longitude: west,
+  } = bbox;
+  return [north, west, south, east];
+};
+
 const readCrs = (geomColumn: any) => {
   if (
     geomColumn.coordinateSystem?.projjson?.id?.code
@@ -76,12 +91,14 @@ const readCrs = (geomColumn: any) => {
       name: geomColumn.coordinateSystem?.projjson?.name,
       code: `${geomColumn.coordinateSystem.projjson.id.authority}:${geomColumn.coordinateSystem.projjson.id.code}`,
       wkt: geomColumn.coordinateSystem?.wkt,
+      bounds: convertBounds(geomColumn.coordinateSystem?.projjson?.bbox),
     };
   }
   return {
     name: geomColumn.coordinateSystem?.projjson?.name,
     code: undefined,
     wkt: geomColumn.coordinateSystem?.wkt,
+    bounds: convertBounds(geomColumn.coordinateSystem?.projjson?.bbox),
   };
 };
 
@@ -165,7 +182,10 @@ const analyseDatasetGDAL = async (
   const name = Array.isArray(fileOrFiles)
     ? fileOrFiles[0].name
     : fileOrFiles.name;
-  const result = await getDatasetInfo(ds);
+  const result = await getDatasetInfo(
+    ds,
+    { opts: ['-wkt_format', 'WKT1'] },
+  );
   console.log(result);
   const layers = result.layers.map((layer) => ({
     name: layer.name,
@@ -217,6 +237,7 @@ const analyzeDatasetTopoJSON = (
       crs: {
         name: 'WGS 84',
         code: 'ESPG:4326',
+        wkt: 'GEOGCS["WGS 84", DATUM["WGS_1984", SPHEROID["WGS 84",6378137,298.257223563, AUTHORITY["EPSG","7030"]], AUTHORITY["EPSG","6326"]], PRIMEM["Greenwich",0, AUTHORITY["EPSG","8901"]], UNIT["degree",0.0174532925199433, AUTHORITY["EPSG","9122"]], AUTHORITY["EPSG","4326"]]',
       },
       addToProject: true,
       simplify: false,
@@ -674,7 +695,7 @@ export default function ImportWindow(): JSX.Element {
                   //       and the one used in the mapStore
                   type: 'proj4',
                   name: crsToUse.name,
-                  value: crsToUse.code,
+                  value: crsToUse.wkt,
                   // bounds: selectedProjection()!.bbox,
                 },
               );

@@ -29,7 +29,11 @@ export async function convertToGeoJSON(
   const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
   const bytes = await globalThis.gdal.getFileBytes(output);
   await globalThis.gdal.close(input);
-  return JSON.parse(new TextDecoder().decode(bytes));
+  const layer = JSON.parse(new TextDecoder().decode(bytes));
+  const features = layer.features.filter((f: GeoJSONFeature) => f.geometry);
+  console.log(layer.features.length - features.length, 'features were removed because they had no geometry');
+  layer.features = features;
+  return layer;
 }
 
 /**
@@ -189,7 +193,7 @@ export async function convertFromGeoJSON(
 
 export const getDatasetInfo = async (
   fileOrFiles: File | File[],
-  params = { opts: [], openOpts: [] },
+  params: { opts?: string[], openOpts?: string[] } = { opts: [], openOpts: [] },
 ) => {
   const openOptions = params.openOpts || [];
   const options = params.opts || [];
