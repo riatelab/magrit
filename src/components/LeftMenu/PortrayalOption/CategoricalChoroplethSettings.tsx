@@ -35,7 +35,7 @@ import InputFieldSelect from '../../Inputs/InputSelect.tsx';
 // Types / Interfaces / Enums
 import {
   CategoricalChoroplethParameters,
-  ChoroplethLegendParameters,
+  ChoroplethLegendParameters, LayerDescriptionCategoricalChoropleth,
   LegendTextElement,
   LegendType,
   Orientation,
@@ -127,7 +127,12 @@ function onClickValidate(
       stroke: false,
       tick: false,
     } as ChoroplethLegendParameters,
-  };
+  } as LayerDescriptionCategoricalChoropleth;
+
+  if (newLayerDescription.type === 'point') {
+    // We also need to transfert the pointRadius parameter
+    newLayerDescription.pointRadius = referenceLayerDescription.pointRadius || 5;
+  }
 
   setLayersDescriptionStore(
     produce(
