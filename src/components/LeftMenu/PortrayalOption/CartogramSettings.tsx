@@ -18,6 +18,7 @@ import { findSuitableName, unproxify } from '../../../helpers/common';
 import { generateIdLayer } from '../../../helpers/layers';
 import { VariableType } from '../../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
+import rewindLayer from '../../../helpers/rewind';
 
 // Subcomponents
 import InputFieldSelect from '../../Inputs/InputSelect.tsx';
@@ -66,7 +67,11 @@ function onClickValidate(
       referenceLayerDescription.data,
       targetVariable,
     );
+  } else {
+    throw new Error('Unexpected Error: Unknown or unimplemented cartogram method');
   }
+
+  newData = rewindLayer(newData);
 
   console.log(unproxify(referenceLayerDescription.data), newData);
 

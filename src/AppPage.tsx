@@ -33,7 +33,6 @@ import { HeaderBarApp } from './components/Headers.tsx';
 import ExampleDataModal from './components/Modals/ExampleDatasetModal.tsx';
 import ContextMenu from './components/ContextMenu.tsx';
 import ImportWindow from './components/ImportWindow.tsx';
-// import OverlayDrop from './components/OverlayDrop.tsx';
 // import ReloadPrompt from './components/ReloadPrompt.tsx';
 
 // Stores
@@ -53,7 +52,7 @@ import {
 } from './store/LayersDescriptionStore';
 import { modalStore, setModalStore } from './store/ModalStore';
 import { niceAlertStore, setNiceAlertStore } from './store/NiceAlertStore';
-import { overlayDropStore, setOverlayDropStore } from './store/OverlayDropStore';
+import { fileDropStore, setFileDropStore } from './store/FileDropStore';
 import { tableWindowStore } from './store/TableWindowStore';
 import { applicationSettingsStore, ResizeBehavior } from './store/ApplicationSettingsStore';
 import { datasetCatalogStore } from './store/DatasetCatalogStore';
@@ -120,7 +119,7 @@ const dragEnterHandler = (e: Event): void => {
   // Only files should trigger the opening of the drop overlay
   if (!draggedElementsAreFiles(e as DragEvent)) return;
 
-  setOverlayDropStore({ show: true });
+  setFileDropStore({ show: true });
   // clearTimeout(timeout);
 };
 
@@ -130,7 +129,7 @@ const dragOverHandler = (e: Event): void => {
   // Only files should trigger the opening of the drop overlay
   if (!draggedElementsAreFiles(e as DragEvent)) return;
 
-  setOverlayDropStore({ show: true });
+  setFileDropStore({ show: true });
   if (timeout) {
     clearTimeout(timeout);
     // timeout = setTimeout(() => {
@@ -148,8 +147,8 @@ const dragLeaveHandler = (e: Event): void => {
   // We want the drop overlay to close if the cursor leaves the drop area
   // and there are no files in the drop area
   timeout = setTimeout(() => {
-    if (overlayDropStore.files.length < 1) {
-      setOverlayDropStore({ show: false, files: [] });
+    if (fileDropStore.files.length < 1) {
+      setFileDropStore({ show: false, files: [] });
       timeout = null;
     }
   }, 1000);
@@ -171,8 +170,8 @@ const dropHandler = (e: Event): void => {
     }
   }
   // Add the dropped files to the existing file list
-  setOverlayDropStore(
-    { files: overlayDropStore.files.concat(filteredFiles) },
+  setFileDropStore(
+    { files: fileDropStore.files.concat(filteredFiles) },
   );
   if (timeout) {
     clearTimeout(timeout);
@@ -475,8 +474,7 @@ const AppPage: () => JSX.Element = () => {
     <Toaster
       position={'bottom-center'}
     />
-    {/* <OverlayDrop /> */}
-    <Show when={overlayDropStore.show}>
+    <Show when={fileDropStore.show}>
       <ImportWindow />
     </Show>
     {/* <ReloadPrompt /> */}

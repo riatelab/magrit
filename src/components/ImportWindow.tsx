@@ -8,20 +8,28 @@ import {
 } from 'solid-js';
 import { createMutable } from 'solid-js/store';
 
+// Import from other packages
 import { FaSolidTrashCan } from 'solid-icons/fa';
 import { VsTriangleDown, VsTriangleRight } from 'solid-icons/vs';
-import d3 from '../helpers/d3-custom';
+import toast from 'solid-toast';
 
+// Helpers
+import d3 from '../helpers/d3-custom';
+import { useI18nContext } from '../i18n/i18n-solid';
+
+// Stores
 import { setGlobalStore } from '../store/GlobalStore';
 import { setMapStore } from '../store/MapStore';
-import { overlayDropStore, setOverlayDropStore } from '../store/OverlayDropStore';
+import { fileDropStore, setFileDropStore } from '../store/FileDropStore';
 
+// Helpers
 import {
   convertAndAddFiles,
   CustomFileList,
-  FileEntry,
+  FileEntry, isAuthorizedFile, prepareFileExtensions,
 } from '../helpers/fileUpload';
 import {
+  allowedFileExtensions,
   shapefileExtensions,
   shapefileMandatoryExtensions,
   SupportedGeoFileTypes,
@@ -29,17 +37,14 @@ import {
 } from '../helpers/supportedFormats';
 import { findCsvDelimiter, getDatasetInfo } from '../helpers/formatConversion';
 
+// Styles
 import '../styles/ImportWindow.css';
 
 interface LayerOrTableDescription {
   name: string,
   features: number,
   geometryType?: 'point' | 'line' | 'polygon' | 'unknown',
-  crs?: {
-    name: string,
-    code?: string,
-    wkt?: string,
-  },
+  crs?: GdalCrs,
   delimiter?: string,
   addToProject: boolean,
   useCRS: boolean,
@@ -67,6 +72,27 @@ interface DatasetDescription {
   info: DatasetInformation,
 }
 
+interface GdalCrs {
+  name: string,
+  code?: string,
+  wkt?: string,
+  bounds?: number[],
+}
+
+const countLayerToImport = (fileDescriptions: DatasetDescription[]) => {
+  if (!fileDescriptions) return 0;
+  let total = 0;
+  fileDescriptions.forEach((f: DatasetDescription) => {
+    f.info.layers.forEach((l: LayerOrTableDescription) => {
+      if (l.addToProject) {
+        total += 1;
+      }
+    });
+  });
+
+  return total;
+};
+
 const convertBounds = (
   bbox?: {
     east_longitude: number, north_latitude: number, south_latitude: number, west_longitude: number,
@@ -82,7 +108,7 @@ const convertBounds = (
   return [north, west, south, east];
 };
 
-const readCrs = (geomColumn: any) => {
+const readCrs = (geomColumn: any): GdalCrs => {
   if (
     geomColumn.coordinateSystem?.projjson?.id?.code
     && geomColumn.coordinateSystem?.projjson?.id?.authority
@@ -434,10 +460,40 @@ const formatFileExtension = (exts: string[]): string => {
 };
 
 export default function ImportWindow(): JSX.Element {
+  const { LL } = useI18nContext();
   let refParentNode: HTMLDivElement;
 
+  function handleInputFiles() {
+    const input = document.createElement('input');
+    const aft = allowedFileExtensions.map((ext) => `.${ext}`).join(', ');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', aft);
+    input.setAttribute('multiple', '');
+    input.onchange = async (event) => {
+      // TODO: the following code could be put in a function
+      //       as there is some code duplication with the drop handler in AppPage.tsx
+      const theFiles = prepareFileExtensions((event.target as HTMLInputElement).files);
+      const filteredFiles = [];
+
+      if (theFiles) {
+        for (let i = 0; i < theFiles.length; i += 1) {
+          if (isAuthorizedFile(theFiles[i])) {
+            filteredFiles.push(theFiles[i]);
+          } else {
+            toast.error(LL().ImportWindow.UnsupportedFileFormat(`${theFiles[i].name}.${theFiles[i].ext}`));
+          }
+        }
+        // Add the dropped files to the existing file list
+        setFileDropStore(
+          { files: fileDropStore.files.concat(filteredFiles) },
+        );
+      }
+    };
+    input.click();
+  }
+
   // const groupedFiles = createMemo(() => groupFiles(overlayDropStore.files));
-  const droppedFiles = createMemo(() => overlayDropStore.files);
+  const droppedFiles = createMemo(() => fileDropStore.files);
 
   const [fileDescriptions] = createResource<any, any>(
     droppedFiles,
@@ -464,29 +520,37 @@ export default function ImportWindow(): JSX.Element {
     },
   );
 
-  const [expanded, setExpanded] = createSignal<string[]>([]);
+  const [hidden, setHidden] = createSignal<string[]>([]);
 
-  const handleExpanded = (name: string) => () => {
-    if (expanded().includes(name)) {
-      setExpanded(expanded().filter((n) => n !== name));
+  const handleHidden = (name: string) => () => {
+    if (hidden().includes(name)) {
+      setHidden(hidden().filter((n) => n !== name));
     } else {
-      setExpanded([...expanded(), name]);
+      setHidden([...hidden(), name]);
     }
   };
 
-  const handleCheckFitMap = (layer: LayerOrTableDescription) => {
-    const newCheckedState = !layer.fitMap;
+  /**
+   * Handle click on checkboxes to set the "fitMap" or "useCRS" property of a layer
+   * (because only one layer can have this property set to true).
+   *
+   * @param {LayerOrTableDescription} layer
+   * @param {'fitMap' | 'useCRS'} prop
+   * @returns {void}
+   */
+  const handleCheckUnique = (layer: LayerOrTableDescription, prop: 'fitMap' | 'useCRS') => {
+    const newCheckedState = !layer[prop];
     if (newCheckedState) {
       // Remove the checked state of the other datasets
       fileDescriptions().forEach((f: DatasetDescription) => {
         f.info.layers.forEach((l: LayerOrTableDescription) => {
           // eslint-disable-next-line no-param-reassign
-          l.fitMap = false;
+          l[prop] = false;
         });
       });
     }
     // eslint-disable-next-line no-param-reassign
-    layer.fitMap = !layer.fitMap;
+    layer[prop] = newCheckedState;
   };
 
   return <div class="modal-window modal overlay-drop" style={{ display: 'flex' }} ref={refParentNode!}>
@@ -496,36 +560,46 @@ export default function ImportWindow(): JSX.Element {
       style={{ width: '80vw', height: '80vh' }}
     >
       <section class="modal-card-body">
-        <h3>Import files</h3>
-        <p>Drop other files if needed...</p>
+        <h2>{ LL().ImportWindow.Title() }</h2>
+        <p
+          class="is-clickable is-medium"
+          style={{ 'text-decoration': 'underline', color: 'hsl(229deg,53%,53%)' }}
+          onClick={handleInputFiles} // eslint-disable-line no-empty-function
+        >
+          { LL().ImportWindow.Instructions() }
+        </p>
+        <p>
+          { LL().ImportWindow.SupportedVectorFormats() }
+        </p>
+        <p>
+          { LL().ImportWindow.SupportedTabularFormats() }
+        </p>
         <table class="table file-import-table">
           <thead>
-            <Show when={expanded().length === 0}>
+            <Show when={hidden().length > 0}>
               <tr>
                 <th></th>
-                <th>Layer name</th>
+                <th>{ LL().ImportWindow.LayerName() }</th>
                 <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
-                <th></th>
-                <th>Delete ?</th>
+                <th>{ LL().ImportWindow.Delete() }</th>
               </tr>
             </Show>
-            <Show when={expanded().length > 0}>
+            <Show when={hidden().length === 0}>
               <tr>
                 <th></th>
-                <th>Layer name</th>
-                <th>Features</th>
-                <th>Geometry type</th>
-                <th>CRS</th>
-                <th>Add to project</th>
-                <th>Use projection</th>
-                <th>Simplify</th>
-                <th>Fit map to extent</th>
-                <th>Delete</th>
+                <th>{ LL().ImportWindow.LayerName() }</th>
+                <th>{ LL().ImportWindow.Features() }</th>
+                <th>{ LL().ImportWindow.GeometryType() }</th>
+                <th>{ LL().ImportWindow.CRS() }</th>
+                <th>{ LL().ImportWindow.UseProjection() }</th>
+                <th>{ LL().ImportWindow.Simplify() }</th>
+                <th>{ LL().ImportWindow.FitExtent() }</th>
+                <th>{ LL().ImportWindow.Delete() }</th>
               </tr>
             </Show>
           </thead>
@@ -536,24 +610,27 @@ export default function ImportWindow(): JSX.Element {
                   <tr class="entry-title">
                     <td>
                       <Show
-                        when={expanded().includes(fileDescription.info.name)}
+                        when={!hidden().includes(fileDescription.info.name)}
                         fallback={
-                          <VsTriangleRight class="is-clickable" onClick={handleExpanded(fileDescription.info.name)}/>
+                          <VsTriangleRight class="is-clickable" onClick={handleHidden(fileDescription.info.name)}/>
                         }
                       >
-                        <VsTriangleDown class="is-clickable" onClick={handleExpanded(fileDescription.info.name)}/>
+                        <VsTriangleDown class="is-clickable" onClick={handleHidden(fileDescription.info.name)}/>
                       </Show>
                     </td>
                     <td>
                       {fileDescription.info.name}
                       .{formatFileExtension(fileDescription.files.map((f) => f.ext))}
                       <Show when={!fileDescription.info.complete}>
-                        <span class="tag is-warning ml-3" style={{ 'vertical-align': 'top' }}>
-                          Incomplete
+                        <span
+                          class="tag is-warning ml-3"
+                          style={{ 'vertical-align': 'top' }}
+                          title={ LL().ImportWindow.IncompleteMessage() }
+                        >
+                          { LL().ImportWindow.Incomplete() }
                         </span>
                       </Show>
                     </td>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -564,25 +641,33 @@ export default function ImportWindow(): JSX.Element {
                       <FaSolidTrashCan
                         class="is-clickable"
                         onClick={() => {
-                          setOverlayDropStore(
+                          setFileDropStore(
                             'files',
-                            overlayDropStore.files
+                            fileDropStore.files
                               .filter((f) => f.name !== fileDescription.info.name),
                           );
-                          if (expanded().includes(fileDescription.info.name)) {
-                            setExpanded(expanded().filter((n) => n !== fileDescription.info.name));
+                          if (hidden().includes(fileDescription.info.name)) {
+                            setHidden(hidden().filter((n) => n !== fileDescription.info.name));
                           }
                         }}
                       />
                     </td>
                   </tr>
-                  <Show when={expanded().includes(fileDescription.info.name)}>
+                  <Show when={!hidden().includes(fileDescription.info.name)}>
                     <For each={fileDescription.info.layers}>
                       {
                         (layer) => {
                           if (fileDescription.info.type === 'geo') {
                             return <tr class="entry-detail">
-                              <td></td>
+                              <td>
+                                <input
+                                  type="checkbox"
+                                  checked={layer.addToProject}
+                                  onClick={() => {
+                                    // eslint-disable-next-line no-param-reassign
+                                    layer.addToProject = !layer.addToProject;
+                                  }}
+                                /></td>
                               <td>↳ {layer.name}</td>
                               <td>{layer.features} features</td>
                               <td>{layer.geometryType || 'None'}</td>
@@ -599,20 +684,8 @@ export default function ImportWindow(): JSX.Element {
                               <td>
                                 <input
                                   type="checkbox"
-                                  checked={layer.addToProject}
-                                  onClick={() => {
-                                    // eslint-disable-next-line no-param-reassign
-                                    layer.addToProject = !layer.addToProject;
-                                  }}
-                                /></td>
-                              <td>
-                                <input
-                                  type="checkbox"
                                   checked={layer.useCRS}
-                                  onClick={() => {
-                                    // eslint-disable-next-line no-param-reassign
-                                    layer.useCRS = !layer.useCRS;
-                                  }}
+                                  onClick={() => handleCheckUnique(layer, 'useCRS')}
                                 /></td>
                               <td>
                                 <input
@@ -628,18 +701,13 @@ export default function ImportWindow(): JSX.Element {
                                   type="checkbox"
                                   class="fit-map"
                                   checked={layer.fitMap}
-                                  onClick={() => handleCheckFitMap(layer)}
+                                  onClick={() => handleCheckUnique(layer, 'fitMap')}
                                 />
                               </td>
                               <td></td>
                             </tr>;
                           }
                           return <tr class="entry-detail">
-                            <td></td>
-                            <td>↳ {layer.name}</td>
-                            <td>{layer.features} features</td>
-                            <td><i>NA</i></td>
-                            <td><i>NA</i></td>
                             <td>
                               <input
                                 type="checkbox"
@@ -649,6 +717,10 @@ export default function ImportWindow(): JSX.Element {
                                   layer.addToProject = !layer.addToProject;
                                 }}
                               /></td>
+                            <td>↳ {layer.name}</td>
+                            <td>{layer.features} features</td>
+                            <td><i>NA</i></td>
+                            <td><i>NA</i></td>
                             <td><i>NA</i></td>
                             <td><i>NA</i></td>
                             <td><i>NA</i></td>
@@ -663,7 +735,16 @@ export default function ImportWindow(): JSX.Element {
             </For>
             <Show when={fileDescriptions.loading}>
               <tr>
-                <td>{'Loading'}</td>
+                <td>
+                  <button
+                    class="button is-loading"
+                    style={{
+                      border: 0,
+                      padding: '0.1 1em',
+                      'vertical-align': 'middle',
+                    }}
+                  >Loading...</button>
+                  {LL().ImportWindow.AnalyzingDataset()}</td>
               </tr>
             </Show>
           </tbody>
@@ -671,15 +752,19 @@ export default function ImportWindow(): JSX.Element {
       </section>
       <footer class="modal-card-foot">
         <button
-          disabled={fileDescriptions.loading || droppedFiles().length === 0}
+          disabled={
+            fileDescriptions.loading
+            || droppedFiles().length === 0
+            || countLayerToImport(fileDescriptions()) === 0
+          }
           class="button is-success confirm-button"
           onClick={async () => {
             // Remove the "drop" overlay
-            setOverlayDropStore({ show: false, files: [] });
+            setFileDropStore({ show: false, files: [] });
             // Add the "loading" overlay
             setGlobalStore({ isLoading: true });
             // Do we have to use a specific CRS ?
-            let crsToUse: object | undefined;
+            let crsToUse: GdalCrs | undefined;
             fileDescriptions()
               .forEach((ds: DatasetDescription) => {
                 ds.info.layers.forEach((l: LayerOrTableDescription) => {
@@ -691,38 +776,52 @@ export default function ImportWindow(): JSX.Element {
             if (crsToUse) {
               setMapStore(
                 'projection',
-                { // TODO: improve compatibility between CRS description from GDAL
-                  //       and the one used in the mapStore
+                {
                   type: 'proj4',
                   name: crsToUse.name,
                   value: crsToUse.wkt,
-                  // bounds: selectedProjection()!.bbox,
+                  bounds: crsToUse.bounds,
                 },
               );
             }
+            // Disable type checking here as we will reuse immediately the content of the array
+            const dsToImport: never[][] = [];
             // Import the selected datasets
             await Promise.all(fileDescriptions().map(async (ds: DatasetDescription) => {
               await Promise.all(ds.info.layers.map(async (l: LayerOrTableDescription) => {
                 if (l.addToProject) {
-                  await convertAndAddFiles(
-                    ds.files,
-                    ds.info.detailedType,
-                    l.name,
-                    l.fitMap,
-                  );
+                  // We push the necessary information to an array,
+                  // then we will loop on this array (this seems to
+                  // avoid some problems with async/await and context switching
+                  // when we need to import multiple layers from the same GeoPackage file).
+                  dsToImport.push([ds.files, ds.info.detailedType, l.name, l.fitMap] as never[]);
                 }
               }));
             }));
+            for (let i = 0; i < dsToImport.length; i += 1) {
+              const [files, type, name, fitMap] = dsToImport[i];
+              // We want to wait for the import of the current layer to be finished
+              // before starting to import the next one...
+              // eslint-disable-next-line no-await-in-loop
+              await convertAndAddFiles(
+                files,
+                type,
+                name,
+                fitMap,
+              );
+            }
             // Remove the "loading" overlay
             setGlobalStore({ isLoading: false });
           }}
-        >Import selected datasets
+        > { LL().ImportWindow.ImportButton(countLayerToImport(fileDescriptions())) }
         </button>
         <button
           class="button cancel-button"
           onClick={() => {
+            // Remove the "drop" overlay
+            setFileDropStore({ show: false, files: [] });
           }}
-        >Cancel
+        > { LL().ImportWindow.CancelButton() }
         </button>
       </footer>
     </div>

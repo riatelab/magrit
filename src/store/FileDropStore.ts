@@ -2,20 +2,20 @@ import { createStore } from 'solid-js/store';
 
 import type { CustomFileList } from '../helpers/fileUpload';
 
-type OverlayDropStoreType = {
+type FileDropStoreType = {
   show: boolean,
   files: CustomFileList,
 };
 
 const [
-  overlayDropStore,
-  setOverlayDropStore,
+  fileDropStore,
+  setFileDropStore,
 ] = createStore({
   show: false,
   files: [],
-} as OverlayDropStoreType);
+} as FileDropStoreType);
 
 export {
-  overlayDropStore,
-  setOverlayDropStore,
+  fileDropStore,
+  setFileDropStore,
 };

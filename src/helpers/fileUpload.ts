@@ -16,6 +16,7 @@ import {
 } from './supportedFormats';
 import { convertTopojsonToGeojson } from './topojson';
 import { detectTypeField, Variable } from './typeDetection';
+import rewindLayer from './rewind';
 
 // Stores
 import { setFieldTypingModalStore } from '../store/FieldTypingModalStore';
@@ -44,7 +45,6 @@ export function prepareFileExtensions(files: FileList): CustomFileList {
     .map((file: File) => {
       const name = file.name.substring(0, file.name.lastIndexOf('.'));
       const ext = file.name.substring(file.name.lastIndexOf('.') + 1, file.name.length).toLowerCase();
-      // console.log(file.type, name, ext, file);
       const o: { name: string, ext: string, file: File } = {
         ext,
         file,
@@ -134,14 +134,15 @@ const getDefaultRenderingParams = (geomType: string) => {
 };
 
 function addLayer(geojson: GeoJSONFeatureCollection, name: string, fit: boolean) {
-  const geomType = getGeometryType(geojson);
+  const rewoundGeojson = rewindLayer(geojson, true);
+  const geomType = getGeometryType(rewoundGeojson);
   const layerId = generateIdLayer();
 
-  const fieldsName: string[] = Object.keys(geojson.features[0].properties);
+  const fieldsName: string[] = Object.keys(rewoundGeojson.features[0].properties);
 
   const fieldsDescription: Variable[] = fieldsName.map((field) => {
     const o = detectTypeField(
-      geojson.features.map((ft) => ft.properties[field]) as never[],
+      rewoundGeojson.features.map((ft) => ft.properties[field]) as never[],
       field,
     );
     return {
@@ -158,11 +159,11 @@ function addLayer(geojson: GeoJSONFeatureCollection, name: string, fit: boolean)
     id: layerId,
     name,
     type: geomType,
-    data: geojson,
+    data: rewoundGeojson,
     visible: true,
     fields: fieldsDescription,
     ...getDefaultRenderingParams(geomType),
-    shapeRendering: geomType === 'polygon' && geojson.features.length > 10000 ? 'optimizeSpeed' : 'auto',
+    shapeRendering: geomType === 'polygon' && rewoundGeojson.features.length > 10000 ? 'optimizeSpeed' : 'auto',
   };
 
   setLayersDescriptionStore(
@@ -228,20 +229,12 @@ function addTabularLayer(data: object[], name: string) {
   );
 }
 
-// TODO: allow the user to add several layers at the same time.
-//    So we'll have several files - we'll need to disambiguate the situation to find out whether
-//    we have several files describing a single layer (SHP) or several files describing
-//    several datasets, bearing in mind that the user can (and may want to) also
-//    add geo and tabular datasets at the same time.
 export const convertAndAddFiles = async (
   files: CustomFileList,
   format: SupportedTabularFileTypes | SupportedGeoFileTypes,
   layerName: string,
   fit: boolean,
 ) => {
-  // Filter out the files that are not supported
-  const authorizedFiles = files.filter(isAuthorizedFile);
-
   // Convert the file and add it to the store (and so to the map if its a geo layer)
   if (format === SupportedGeoFileTypes.TopoJSON) {
     const res = convertTopojsonToGeojson(await files[0].file.text());
@@ -253,14 +246,19 @@ export const convertAndAddFiles = async (
   // } else if (format === SupportedGeoFileTypes.GeoJSON) {
   //   const res = JSON.parse(await authorizedFiles[0].file.text());
   //   addLayer(res, authorizedFiles[0].name, fit);
-  } else if (isTabularFile(authorizedFiles)) {
-    const res = await convertTabularDatasetToJSON(authorizedFiles[0].file, authorizedFiles[0].ext);
-    addTabularLayer(res, authorizedFiles[0].name);
+  } else if (!(format === SupportedGeoFileTypes.GeoJSON) && isTabularFile(files)) {
+    const res = await convertTabularDatasetToJSON(files[0].file, files[0].ext);
+    addTabularLayer(res, files[0].name);
   } else {
-    // TODO: handle GeoPackages that may contain multiple layers
     let res;
     try {
-      res = await convertToGeoJSON(authorizedFiles.map((f) => f.file));
+      const opts = format === SupportedGeoFileTypes.GeoPackage
+        ? ['-nln', layerName, '-sql', `SELECT * FROM '${layerName}'`]
+        : [];
+      res = await convertToGeoJSON(
+        files.map((f) => f.file),
+        { opts, openOpts: [] },
+      );
     } catch (e: any) {
       // TODO: display error message and/or improve error handling
       console.error(e);

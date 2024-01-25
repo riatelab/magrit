@@ -1,6 +1,6 @@
 import JSZip from 'jszip';
 
-import { SupportedTabularFileTypes } from './supportedFormats';
+import { SupportedGeoFileTypes, SupportedTabularFileTypes } from './supportedFormats';
 
 // Helpers
 import d3 from './d3-custom';
@@ -30,6 +30,8 @@ export async function convertToGeoJSON(
   const bytes = await globalThis.gdal.getFileBytes(output);
   await globalThis.gdal.close(input);
   const layer = JSON.parse(new TextDecoder().decode(bytes));
+  // Todo: maybe this filtering should be in the caller of this function
+  //  (and maybe we could display a toast message when some features are removed to inform the user)
   const features = layer.features.filter((f: GeoJSONFeature) => f.geometry);
   console.log(layer.features.length - features.length, 'features were removed because they had no geometry');
   layer.features = features;

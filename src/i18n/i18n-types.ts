@@ -26,30 +26,6 @@ type RootTranslation = {
 	 * C​a​n​c​e​l
 	 */
 	CancelButton: string
-	/**
-	 * D​r​o​p​ ​y​o​u​r​ ​f​i​l​e​(​s​)​ ​h​e​r​e​ ​!
-	 */
-	DropFilesHere: string
-	/**
-	 * S​u​p​p​o​r​t​e​d​ ​v​e​c​t​o​r​ ​f​o​r​m​a​t​s​ ​a​r​e​:​ ​E​S​R​I​ ​S​h​a​p​e​f​i​l​e​ ​(​.​s​h​p​,​ ​.​s​h​x​,​ ​.​d​b​f​,​ ​.​p​r​f​,​ ​.​c​p​g​)​,​ ​G​e​o​J​S​O​N​ ​(​.​j​s​o​n​ ​o​u​ ​.​g​e​o​j​s​o​n​)​,​ ​T​o​p​o​J​S​O​N​ ​(​.​t​o​p​o​j​s​o​n​ ​o​u​ ​.​j​s​o​n​)​,​ ​G​M​L​ ​(​.​g​m​l​)​ ​a​n​d​ ​K​M​L​ ​(​.​k​m​l​)​.
-	 */
-	SupportedVectorFormats: string
-	/**
-	 * S​u​p​p​o​r​t​e​d​ ​t​a​b​u​l​a​r​ ​f​o​r​m​a​t​s​ ​a​r​e​:​ ​E​x​c​e​l​ ​(​.​x​l​s​,​ ​.​x​l​s​x​)​,​ ​C​S​V​ ​(​.​c​s​v​)​ ​a​n​d​ ​O​p​e​n​D​o​c​u​m​e​n​t​ ​S​p​r​e​a​d​s​h​e​e​t​ ​(​.​o​d​s​)​.
-	 */
-	SupportedTabularFormats: string
-	/**
-	 * U​n​s​u​p​p​o​r​t​e​d​ ​f​o​r​m​a​t
-	 */
-	UnsupportedFormat: string
-	/**
-	 * {​{​O​n​e​ ​f​i​l​e​ ​d​e​t​e​c​t​e​d​|​?​?​ ​f​i​l​e​s​ ​d​e​t​e​c​t​e​d​}​}
-	 */
-	FilesDetected: string
-	/**
-	 * I​m​p​o​r​t​ ​f​i​l​e​(​s​)
-	 */
-	ImportFiles: string
 	Alerts: {
 		/**
 		 * D​e​l​e​t​e​ ​l​a​y​e​r
@@ -239,6 +215,80 @@ type RootTranslation = {
 		 */
 		cancelButton: string
 	}
+	ImportWindow: {
+		/**
+		 * D​a​t​a​ ​i​m​p​o​r​t
+		 */
+		Title: string
+		/**
+		 * D​r​a​g​ ​a​n​d​ ​d​r​o​p​ ​o​n​e​ ​o​r​ ​m​o​r​e​ ​d​a​t​a​s​e​t​s​ ​h​e​r​e​ ​(​g​e​o​g​r​a​p​h​i​c​a​l​ ​o​r​ ​t​a​b​u​l​a​r​)​ ​o​r​ ​c​l​i​c​k​ ​h​e​r​e​ ​t​o​ ​s​e​l​e​c​t​ ​a​ ​f​i​l​e​.
+		 */
+		Instructions: string
+		/**
+		 * S​u​p​p​o​r​t​e​d​ ​v​e​c​t​o​r​ ​f​o​r​m​a​t​s​ ​a​r​e​:​ ​E​S​R​I​ ​S​h​a​p​e​f​i​l​e​ ​(​.​s​h​p​,​ ​.​s​h​x​,​ ​.​d​b​f​,​ ​.​p​r​f​,​ ​.​c​p​g​)​,​ ​G​e​o​P​a​c​k​a​g​e​ ​(​.​g​p​k​g​)​,​ ​G​e​o​J​S​O​N​ ​(​.​g​e​o​j​s​o​n​ ​o​r​ ​.​j​s​o​n​)​,​ ​T​o​p​o​J​S​O​N​ ​(​.​t​o​p​o​j​s​o​n​ ​o​u​ ​.​j​s​o​n​)​,​ ​G​M​L​ ​(​.​g​m​l​)​ ​a​n​d​ ​K​M​L​ ​(​.​k​m​l​)​.
+		 */
+		SupportedVectorFormats: string
+		/**
+		 * S​u​p​p​o​r​t​e​d​ ​t​a​b​u​l​a​r​ ​f​o​r​m​a​t​s​ ​a​r​e​:​ ​E​x​c​e​l​ ​(​.​x​l​s​,​ ​.​x​l​s​x​)​,​ ​C​S​V​ ​(​.​c​s​v​)​,​ ​T​S​V​ ​(​.​t​s​v​)​ ​a​n​d​ ​O​p​e​n​D​o​c​u​m​e​n​t​ ​S​p​r​e​a​d​s​h​e​e​t​ ​(​.​o​d​s​)​.
+		 */
+		SupportedTabularFormats: string
+		/**
+		 * A​n​a​l​y​z​i​n​g​ ​d​a​t​a​s​e​t​.​.​.
+		 */
+		AnalyzingDataset: string
+		/**
+		 * C​a​n​c​e​l
+		 */
+		CancelButton: string
+		/**
+		 * {​{​N​o​ ​d​a​t​a​s​e​t​ ​t​o​ ​i​m​p​o​r​t​|​I​m​p​o​r​t​ ​d​a​t​a​s​e​t​|​I​m​p​o​r​t​ ​?​?​ ​d​a​t​a​s​e​t​s​}​}
+		 */
+		ImportButton: string
+		/**
+		 * L​a​y​e​r​ ​n​a​m​e
+		 */
+		LayerName: string
+		/**
+		 * F​e​a​t​u​r​e​s
+		 */
+		Features: string
+		/**
+		 * G​e​o​m​e​t​r​y​ ​t​y​p​e
+		 */
+		GeometryType: string
+		/**
+		 * C​R​S
+		 */
+		CRS: string
+		/**
+		 * U​s​e​ ​t​h​i​s​ ​p​r​o​j​e​c​t​i​o​n
+		 */
+		UseProjection: string
+		/**
+		 * S​i​m​p​l​i​f​y
+		 */
+		Simplify: string
+		/**
+		 * F​i​t​ ​e​x​t​e​n​t
+		 */
+		FitExtent: string
+		/**
+		 * D​e​l​e​t​e​ ​?
+		 */
+		Delete: string
+		/**
+		 * I​n​c​o​m​p​l​e​t​e
+		 */
+		Incomplete: string
+		/**
+		 * T​h​e​ ​d​a​t​a​s​e​t​ ​i​s​ ​i​n​c​o​m​p​l​e​t​e​ ​a​n​d​ ​c​a​n​n​o​t​ ​b​e​ ​i​m​p​o​r​t​e​d​.​ ​P​l​e​a​s​e​ ​a​d​d​ ​t​h​e​ ​o​t​h​e​r​ ​m​a​n​d​a​t​o​r​y​ ​f​i​l​e​s​.
+		 */
+		IncompleteMessage: string
+		/**
+		 * U​n​s​u​p​p​o​r​t​e​d​ ​f​i​l​e​ ​f​o​r​m​a​t​ ​f​o​r​ ​{​{​f​i​l​e​}​}
+		 */
+		UnsupportedFileFormat: string
+	}
 	MapZone: {
 		/**
 		 * D​r​a​g​ ​a​n​d​ ​d​r​o​p​ ​y​o​u​r​ ​f​i​l​e​(​s​)​ ​h​e​r​e​ ​!​ ​(​o​r​ ​u​s​e​ ​t​h​e​ ​i​m​p​o​r​t​ ​m​e​n​u​)
@@ -273,13 +323,9 @@ type RootTranslation = {
 	}
 	ImportSection: {
 		/**
-		 * O​p​e​n​ ​g​e​o​s​p​a​t​i​a​l​ ​f​i​l​e​.​.​.
+		 * O​p​e​n​ ​d​a​t​a​ ​i​m​p​o​r​t​ ​w​i​n​d​o​w​.​.​.
 		 */
-		OpenGeospatialFile: string
-		/**
-		 * O​p​e​n​ ​t​a​b​u​l​a​r​ ​f​i​l​e​.​.​.
-		 */
-		OpenTabularFile: string
+		OpenImportWindow: string
 		/**
 		 * E​x​a​m​p​l​e​ ​d​a​t​a​s​e​t​s
 		 */
@@ -1682,30 +1728,6 @@ export type TranslationFunctions = {
 	 * Cancel
 	 */
 	CancelButton: () => LocalizedString
-	/**
-	 * Drop your file(s) here !
-	 */
-	DropFilesHere: () => LocalizedString
-	/**
-	 * Supported vector formats are: ESRI Shapefile (.shp, .shx, .dbf, .prf, .cpg), GeoJSON (.json ou .geojson), TopoJSON (.topojson ou .json), GML (.gml) and KML (.kml).
-	 */
-	SupportedVectorFormats: () => LocalizedString
-	/**
-	 * Supported tabular formats are: Excel (.xls, .xlsx), CSV (.csv) and OpenDocument Spreadsheet (.ods).
-	 */
-	SupportedTabularFormats: () => LocalizedString
-	/**
-	 * Unsupported format
-	 */
-	UnsupportedFormat: () => LocalizedString
-	/**
-	 * {{One file detected|?? files detected}}
-	 */
-	FilesDetected: (arg0: number | string | boolean) => LocalizedString
-	/**
-	 * Import file(s)
-	 */
-	ImportFiles: () => LocalizedString
 	Alerts: {
 		/**
 		 * Delete layer
@@ -1894,6 +1916,80 @@ export type TranslationFunctions = {
 		 */
 		cancelButton: () => LocalizedString
 	}
+	ImportWindow: {
+		/**
+		 * Data import
+		 */
+		Title: () => LocalizedString
+		/**
+		 * Drag and drop one or more datasets here (geographical or tabular) or click here to select a file.
+		 */
+		Instructions: () => LocalizedString
+		/**
+		 * Supported vector formats are: ESRI Shapefile (.shp, .shx, .dbf, .prf, .cpg), GeoPackage (.gpkg), GeoJSON (.geojson or .json), TopoJSON (.topojson ou .json), GML (.gml) and KML (.kml).
+		 */
+		SupportedVectorFormats: () => LocalizedString
+		/**
+		 * Supported tabular formats are: Excel (.xls, .xlsx), CSV (.csv), TSV (.tsv) and OpenDocument Spreadsheet (.ods).
+		 */
+		SupportedTabularFormats: () => LocalizedString
+		/**
+		 * Analyzing dataset...
+		 */
+		AnalyzingDataset: () => LocalizedString
+		/**
+		 * Cancel
+		 */
+		CancelButton: () => LocalizedString
+		/**
+		 * {{No dataset to import|Import dataset|Import ?? datasets}}
+		 */
+		ImportButton: (arg0: number | string | boolean) => LocalizedString
+		/**
+		 * Layer name
+		 */
+		LayerName: () => LocalizedString
+		/**
+		 * Features
+		 */
+		Features: () => LocalizedString
+		/**
+		 * Geometry type
+		 */
+		GeometryType: () => LocalizedString
+		/**
+		 * CRS
+		 */
+		CRS: () => LocalizedString
+		/**
+		 * Use this projection
+		 */
+		UseProjection: () => LocalizedString
+		/**
+		 * Simplify
+		 */
+		Simplify: () => LocalizedString
+		/**
+		 * Fit extent
+		 */
+		FitExtent: () => LocalizedString
+		/**
+		 * Delete ?
+		 */
+		Delete: () => LocalizedString
+		/**
+		 * Incomplete
+		 */
+		Incomplete: () => LocalizedString
+		/**
+		 * The dataset is incomplete and cannot be imported. Please add the other mandatory files.
+		 */
+		IncompleteMessage: () => LocalizedString
+		/**
+		 * Unsupported file format for {{file}}
+		 */
+		UnsupportedFileFormat: (arg0: number | string | boolean) => LocalizedString
+	}
 	MapZone: {
 		/**
 		 * Drag and drop your file(s) here ! (or use the import menu)
@@ -1928,13 +2024,9 @@ export type TranslationFunctions = {
 	}
 	ImportSection: {
 		/**
-		 * Open geospatial file...
+		 * Open data import window...
 		 */
-		OpenGeospatialFile: () => LocalizedString
-		/**
-		 * Open tabular file...
-		 */
-		OpenTabularFile: () => LocalizedString
+		OpenImportWindow: () => LocalizedString
 		/**
 		 * Example datasets
 		 */

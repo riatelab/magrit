@@ -197,7 +197,8 @@ interface ProjectionDefinition {
   type: 'd3' | 'proj4',
   // The name of the projection (or the key to get the name from i18n)
   name: string,
-  // The definition of the projection (string compatible with proj4 or d3 projection name)
+  // The definition of the projection.
+  // We allow proj4 string, WKT1 string, or a d3 projection name.
   value: string,
   // The bounds of the projection (as ymax, xmin, ymin, xmax)
   // (optional, only used for proj4 projections)

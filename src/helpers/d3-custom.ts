@@ -43,6 +43,8 @@ import {
   // Projections that will be available in the application
   geoNaturalEarth1,
   geoEqualEarth,
+  geoStream,
+  geoTransform,
 } from 'd3-geo';
 import {
   // Other projections that will be available in the application
@@ -377,6 +379,8 @@ export default {
   geoLength,
   geoGraticule,
   geoIdentity,
+  geoStream,
+  geoTransform,
   selection,
   select,
   selectAll,
