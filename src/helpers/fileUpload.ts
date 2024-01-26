@@ -184,11 +184,11 @@ function addLayer(geojson: GeoJSONFeatureCollection, name: string, fit: boolean)
   }
 
   // Open modal for field typing
-  setFieldTypingModalStore({
-    show: true,
-    targetId: layerId,
-    targetType: 'layer',
-  });
+  // setFieldTypingModalStore({
+  //   show: true,
+  //   targetId: layerId,
+  //   targetType: 'layer',
+  // });
 }
 
 function addTabularLayer(data: object[], name: string) {

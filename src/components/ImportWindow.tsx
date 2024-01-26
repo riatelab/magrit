@@ -9,7 +9,7 @@ import {
 import { createMutable } from 'solid-js/store';
 
 // Import from other packages
-import { FaSolidTrashCan } from 'solid-icons/fa';
+import { FaSolidCircleInfo, FaSolidTrashCan } from 'solid-icons/fa';
 import { VsTriangleDown, VsTriangleRight } from 'solid-icons/vs';
 import toast from 'solid-toast';
 
@@ -55,7 +55,7 @@ interface LayerOrTableDescription {
 interface DatasetInformation {
   name: string,
   type: 'tabular' | 'geo',
-  detailedType: SupportedGeoFileTypes | SupportedTabularFileTypes,
+  detailedType: SupportedGeoFileTypes | SupportedTabularFileTypes | 'Unknown',
   complete: boolean,
   layers: LayerOrTableDescription[],
 }
@@ -213,7 +213,7 @@ const analyseDatasetGDAL = async (
     { opts: ['-wkt_format', 'WKT1'] },
   );
   console.log(result);
-  const layers = result.layers.map((layer) => ({
+  const layers = result.layers.map((layer: any) => ({
     name: layer.name,
     features: layer.featureCount,
     geometryType: layer.geometryFields[0] ? layer.geometryFields[0].type : 'unknown',
@@ -268,6 +268,7 @@ const analyzeDatasetTopoJSON = (
       addToProject: true,
       simplify: false,
       fitMap: false,
+      useCRS: false,
     })),
   };
 };
@@ -306,7 +307,7 @@ const analyseDatasetTabularJSON = (
 const analyseDatasetTabularText = (
   content: string,
   name: string,
-  ext: 'csv' | 'tsv',
+  ext: 'csv' | 'tsv' | 'txt',
 ): DatasetInformation | InvalidDataset => {
   const delimiter = findCsvDelimiter(content);
   const ds = d3.dsvFormat(delimiter).parse(content);
@@ -381,7 +382,7 @@ const analyzeDataset = async (
       // We have a text file, it can be a CSV or a TSV or something else...
       // Read the file to determine the type
       const content = await file.file.text();
-      result = analyseDatasetTabularText(content, name, file.ext);
+      result = analyseDatasetTabularText(content, name, file.ext as 'csv' | 'tsv' | 'txt');
     } else if (
       file.file.type === 'application/vnd.ms-excel'
       || file.file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -472,7 +473,7 @@ export default function ImportWindow(): JSX.Element {
     input.onchange = async (event) => {
       // TODO: the following code could be put in a function
       //       as there is some code duplication with the drop handler in AppPage.tsx
-      const theFiles = prepareFileExtensions((event.target as HTMLInputElement).files);
+      const theFiles = prepareFileExtensions((event.target as HTMLInputElement).files!);
       const filteredFiles = [];
 
       if (theFiles) {
@@ -568,12 +569,6 @@ export default function ImportWindow(): JSX.Element {
         >
           { LL().ImportWindow.Instructions() }
         </p>
-        <p>
-          { LL().ImportWindow.SupportedVectorFormats() }
-        </p>
-        <p>
-          { LL().ImportWindow.SupportedTabularFormats() }
-        </p>
         <table class="table file-import-table">
           <thead>
             <Show when={hidden().length > 0}>
@@ -620,7 +615,7 @@ export default function ImportWindow(): JSX.Element {
                     </td>
                     <td>
                       {fileDescription.info.name}
-                      .{formatFileExtension(fileDescription.files.map((f) => f.ext))}
+                      .{formatFileExtension(fileDescription.files.map((f: FileEntry) => f.ext))}
                       <Show when={!fileDescription.info.complete}>
                         <span
                           class="tag is-warning ml-3"
@@ -749,6 +744,21 @@ export default function ImportWindow(): JSX.Element {
             </Show>
           </tbody>
         </table>
+      </section>
+      <section
+        class="has-text-centered"
+        style={{
+          padding: '20px',
+          background: '#cafbe5',
+          'border-top': '1px solid #dbdbdb',
+        }}
+      >
+        <FaSolidCircleInfo
+          fill="darkgreen"
+          style={{ height: '1.5em', width: '1.5em' }}
+        />
+        <p>{LL().ImportWindow.SupportedVectorFormats()}</p>
+        <p>{LL().ImportWindow.SupportedTabularFormats()}</p>
       </section>
       <footer class="modal-card-foot">
         <button
