@@ -29,6 +29,7 @@ import { RepresentationType } from '../../global.d';
 // Styles
 import '../../styles/PortrayalSection.css';
 import CartogramSettings from './PortrayalOption/CartogramSettings.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
 
 function layerAvailableVariables(layerId: string) {
   const layer = layersDescriptionStore.layers
@@ -192,8 +193,12 @@ export default function PortrayalSection(): JSX.Element {
       prefix={ 'Layer: '}
       onChange={ (value) => {
         // Deselect the portrayal selected if any
+        // (will unmount the settings component)
         setSelectedPortrayal(null);
-        // Set the target layer...
+        // Set the target layer to null in order to
+        // unmout the DropdownMenu for available portrayals
+        setTargetLayer(null);
+        // Set the target layer
         setTargetLayer(value);
         // ...and compute the available portrayals for the variable of this layer
         setAvailableVariables(layerAvailableVariables(targetLayer()!));

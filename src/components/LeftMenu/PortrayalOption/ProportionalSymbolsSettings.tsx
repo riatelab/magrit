@@ -226,6 +226,8 @@ export default function ProportionalSymbolsSettings(
   //   throw Error('Unexpected Error: Layer not found');
   // }
 
+  const geometryType = createMemo(() => layerDescription().type);
+
   // The fields of the layer that are of type 'stock'.
   // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = createMemo(() => layerDescription()
@@ -327,7 +329,12 @@ export default function ProportionalSymbolsSettings(
       onChange={(value) => { setSymbolType(value as ProportionalSymbolsSymbolType); }}
       value={ symbolType() }
     >
-      <For each={Object.values(ProportionalSymbolsSymbolType)}>
+      <For each={
+        // For points and polygons we allow circle and square
+        // For linestrings we allow circle, square and line
+        Object.values(ProportionalSymbolsSymbolType)
+          .filter((st) => (geometryType() === 'linestring' ? true : st !== ProportionalSymbolsSymbolType.line))
+      }>
         {
           (st) => <option
             value={ st }
