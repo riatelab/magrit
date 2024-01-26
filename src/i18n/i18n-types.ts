@@ -225,7 +225,7 @@ type RootTranslation = {
 		 */
 		Instructions: string
 		/**
-		 * S​u​p​p​o​r​t​e​d​ ​v​e​c​t​o​r​ ​f​o​r​m​a​t​s​ ​a​r​e​:​ ​E​S​R​I​ ​S​h​a​p​e​f​i​l​e​ ​(​.​s​h​p​,​ ​.​s​h​x​,​ ​.​d​b​f​,​ ​.​p​r​f​,​ ​.​c​p​g​)​,​ ​G​e​o​P​a​c​k​a​g​e​ ​(​.​g​p​k​g​)​,​ ​G​e​o​J​S​O​N​ ​(​.​g​e​o​j​s​o​n​ ​o​r​ ​.​j​s​o​n​)​,​ ​T​o​p​o​J​S​O​N​ ​(​.​t​o​p​o​j​s​o​n​ ​o​u​ ​.​j​s​o​n​)​,​ ​G​M​L​ ​(​.​g​m​l​)​ ​a​n​d​ ​K​M​L​ ​(​.​k​m​l​)​.
+		 * S​u​p​p​o​r​t​e​d​ ​v​e​c​t​o​r​ ​f​o​r​m​a​t​s​ ​a​r​e​:​ ​E​S​R​I​ ​S​h​a​p​e​f​i​l​e​ ​(​.​s​h​p​,​ ​.​s​h​x​,​ ​.​d​b​f​,​ ​.​p​r​j​,​ ​.​c​p​g​)​,​ ​G​e​o​P​a​c​k​a​g​e​ ​(​.​g​p​k​g​)​,​ ​G​e​o​J​S​O​N​ ​(​.​g​e​o​j​s​o​n​ ​o​r​ ​.​j​s​o​n​)​,​ ​T​o​p​o​J​S​O​N​ ​(​.​t​o​p​o​j​s​o​n​ ​o​r​ ​.​j​s​o​n​)​,​ ​G​M​L​ ​(​.​g​m​l​)​ ​a​n​d​ ​K​M​L​ ​(​.​k​m​l​)​.
 		 */
 		SupportedVectorFormats: string
 		/**
@@ -683,6 +683,10 @@ type RootTranslation = {
 		 */
 		Delete: string
 		/**
+		 * J​o​i​n​ ​t​o​ ​a​ ​g​e​o​s​p​a​t​i​a​l​ ​l​a​y​e​r
+		 */
+		Join: string
+		/**
 		 * A​t​t​r​i​b​u​t​e​ ​t​a​b​l​e
 		 */
 		AttributeTable: string
@@ -1096,6 +1100,36 @@ type RootTranslation = {
 		 * P​a​l​e​t​t​e
 		 */
 		Palette: string
+	}
+	JoinModal: {
+		/**
+		 * J​o​i​n​ ​t​o​ ​a​ ​g​e​o​s​p​a​t​i​a​l​ ​l​a​y​e​r
+		 */
+		Title: string
+		/**
+		 * T​h​i​s​ ​f​e​a​t​u​r​e​ ​a​l​l​o​w​s​ ​y​o​u​ ​t​o​ ​j​o​i​n​ ​d​a​t​a​ ​f​r​o​m​ ​a​ ​t​a​b​l​e​ ​t​o​ ​a​ ​g​e​o​s​p​a​t​i​a​l​ ​l​a​y​e​r​.​ ​D​a​t​a​ ​f​r​o​m​ ​t​h​e​ ​t​a​b​l​e​ ​i​s​ ​a​d​d​e​d​ ​t​o​ ​t​h​e​ ​g​e​o​s​p​a​t​i​a​l​ ​l​a​y​e​r​ ​b​a​s​e​d​ ​o​n​ ​a​ ​f​i​e​l​d​ ​c​o​m​m​o​n​ ​t​o​ ​b​o​t​h​ ​d​a​t​a​s​e​t​s​.
+		 */
+		Information: string
+		/**
+		 * S​e​l​e​c​t​ ​t​h​e​ ​l​a​y​e​r​ ​t​o​ ​j​o​i​n​ ​t​o
+		 */
+		TargetLayer: string
+		/**
+		 * S​e​l​e​c​t​ ​a​ ​l​a​y​e​r
+		 */
+		TargetLayerPlaceholder: string
+		/**
+		 * S​e​l​e​c​t​ ​t​h​e​ ​f​i​e​l​d​ ​t​o​ ​j​o​i​n​ ​o​n​ ​(​t​a​b​l​e​)
+		 */
+		JoinFieldTable: string
+		/**
+		 * S​e​l​e​c​t​ ​t​h​e​ ​f​i​e​l​d​ ​t​o​ ​j​o​i​n​ ​o​n​ ​(​l​a​y​e​r​)
+		 */
+		JoinFieldLayer: string
+		/**
+		 * S​e​l​e​c​t​ ​a​ ​f​i​e​l​d
+		 */
+		JoinFieldPlaceholder: string
 	}
 	ProjectionSelection: {
 		/**
@@ -1926,7 +1960,7 @@ export type TranslationFunctions = {
 		 */
 		Instructions: () => LocalizedString
 		/**
-		 * Supported vector formats are: ESRI Shapefile (.shp, .shx, .dbf, .prf, .cpg), GeoPackage (.gpkg), GeoJSON (.geojson or .json), TopoJSON (.topojson ou .json), GML (.gml) and KML (.kml).
+		 * Supported vector formats are: ESRI Shapefile (.shp, .shx, .dbf, .prj, .cpg), GeoPackage (.gpkg), GeoJSON (.geojson or .json), TopoJSON (.topojson or .json), GML (.gml) and KML (.kml).
 		 */
 		SupportedVectorFormats: () => LocalizedString
 		/**
@@ -2384,6 +2418,10 @@ export type TranslationFunctions = {
 		 */
 		Delete: () => LocalizedString
 		/**
+		 * Join to a geospatial layer
+		 */
+		Join: () => LocalizedString
+		/**
 		 * Attribute table
 		 */
 		AttributeTable: () => LocalizedString
@@ -2797,6 +2835,36 @@ export type TranslationFunctions = {
 		 * Palette
 		 */
 		Palette: () => LocalizedString
+	}
+	JoinModal: {
+		/**
+		 * Join to a geospatial layer
+		 */
+		Title: () => LocalizedString
+		/**
+		 * This feature allows you to join data from a table to a geospatial layer. Data from the table is added to the geospatial layer based on a field common to both datasets.
+		 */
+		Information: () => LocalizedString
+		/**
+		 * Select the layer to join to
+		 */
+		TargetLayer: () => LocalizedString
+		/**
+		 * Select a layer
+		 */
+		TargetLayerPlaceholder: () => LocalizedString
+		/**
+		 * Select the field to join on (table)
+		 */
+		JoinFieldTable: () => LocalizedString
+		/**
+		 * Select the field to join on (layer)
+		 */
+		JoinFieldLayer: () => LocalizedString
+		/**
+		 * Select a field
+		 */
+		JoinFieldPlaceholder: () => LocalizedString
 	}
 	ProjectionSelection: {
 		/**

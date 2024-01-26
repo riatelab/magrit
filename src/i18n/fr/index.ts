@@ -63,7 +63,7 @@ const fr = {
   ImportWindow: {
     Title: 'Import des données',
     Instructions: 'Faites glisser un ou plusieurs jeux de données (géographiques ou tabulaires) pour les ajouter ou cliquez ici pour sélectionner un fichier.',
-    SupportedVectorFormats: 'Les formats vectoriels supportés sont : ESRI Shapefile (.shp, .shx, .dbf, .prf, .cpg), GeoPackage (.gpkg), GeoJSON (.json ou .geojson), TopoJSON (.topojson ou .json), GML (.gml), KML (.kml).',
+    SupportedVectorFormats: 'Les formats vectoriels supportés sont : ESRI Shapefile (.shp, .shx, .dbf, .prj, .cpg), GeoPackage (.gpkg), GeoJSON (.geojson ou .json), TopoJSON (.topojson ou .json), GML (.gml), KML (.kml).',
     SupportedTabularFormats: 'Les formats de fichiers tabulaires supportés sont : Excel (.xls, .xlsx), CSV (.csv), TSV (.tsv) et les feuilles de calculs OpenDocument (.ods).',
     AnalyzingDataset: 'Analyse du jeu de données...',
     CancelButton: 'Annuler',
@@ -196,6 +196,7 @@ const fr = {
     table: 'Tableau de données',
     Delete: 'Suppression de la couche',
     AttributeTable: 'Table attributaire',
+    Join: 'Joindre à un jeu de données géospatial',
     FitZoom: 'Zoom sur la couche',
     ToggleVisibility: 'Afficher / Masquer',
     Settings: 'Paramètres',
@@ -315,6 +316,15 @@ const fr = {
     BufferWidth: 'Largeur du tampon',
     AllowMovingLabels: 'Autoriser le déplacement des étiquettes',
     Palette: 'Palette',
+  },
+  JoinModal: {
+    Title: 'Joindre à une couche géospatiale',
+    Information: 'Cette fonctionnalité permet de joindre les données d\'un tableau à une couche géospatiale. Les données du tableau sont ajoutées à la couche géospatiale en fonction d\'un champ commun aux deux jeux de données.',
+    TargetLayer: 'Sélectionner la couche cible',
+    TargetLayerPlaceholder: 'Sélectionner une couche',
+    JoinFieldTable: 'Champ de la table à utiliser pour la jointure',
+    JoinFieldLayer: 'Champ de la couche à utiliser pour la jointure',
+    JoinFieldPlaceholder: 'Sélectionner un champ',
   },
   ProjectionSelection: {
     title: 'Sélection de la projection',

@@ -63,7 +63,7 @@ const en = {
   ImportWindow: {
     Title: 'Data import',
     Instructions: 'Drag and drop one or more datasets here (geographical or tabular) or click here to select a file.',
-    SupportedVectorFormats: 'Supported vector formats are: ESRI Shapefile (.shp, .shx, .dbf, .prf, .cpg), GeoPackage (.gpkg), GeoJSON (.geojson or .json), TopoJSON (.topojson ou .json), GML (.gml) and KML (.kml).',
+    SupportedVectorFormats: 'Supported vector formats are: ESRI Shapefile (.shp, .shx, .dbf, .prj, .cpg), GeoPackage (.gpkg), GeoJSON (.geojson or .json), TopoJSON (.topojson or .json), GML (.gml) and KML (.kml).',
     SupportedTabularFormats: 'Supported tabular formats are: Excel (.xls, .xlsx), CSV (.csv), TSV (.tsv) and OpenDocument Spreadsheet (.ods).',
     AnalyzingDataset: 'Analyzing dataset...',
     CancelButton: 'Cancel',
@@ -194,6 +194,7 @@ const en = {
     raster: 'Raster layer',
     table: 'Data table',
     Delete: 'Remove layer',
+    Join: 'Join to a geospatial layer',
     AttributeTable: 'Attribute table',
     FitZoom: 'Zoom on layer',
     ToggleVisibility: 'Toggle visibility',
@@ -314,6 +315,15 @@ const en = {
     BufferWidth: 'Buffer width',
     AllowMovingLabels: 'Allow moving labels',
     Palette: 'Palette',
+  },
+  JoinModal: {
+    Title: 'Join to a geospatial layer',
+    Information: 'This feature allows you to join data from a table to a geospatial layer. Data from the table is added to the geospatial layer based on a field common to both datasets.',
+    TargetLayer: 'Select the layer to join to',
+    TargetLayerPlaceholder: 'Select a layer',
+    JoinFieldTable: 'Select the field to join on (table)',
+    JoinFieldLayer: 'Select the field to join on (layer)',
+    JoinFieldPlaceholder: 'Select a field',
   },
   ProjectionSelection: {
     title: 'Projection selection',

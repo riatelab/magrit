@@ -11,7 +11,7 @@ import {
   FaSolidTrash,
   FaSolidTableCells,
 } from 'solid-icons/fa';
-import { FiType } from 'solid-icons/fi';
+import { FiType, FiLink } from 'solid-icons/fi';
 import toast from 'solid-toast';
 
 // Helpers
@@ -28,6 +28,7 @@ import { setFieldTypingModalStore } from '../../store/FieldTypingModalStore';
 
 // Other components / subcomponents
 import LayerSettings from '../Modals/LayerSettings.tsx';
+import JoinPanel from '../Modals/JoinModal.tsx';
 
 // Types / Interfaces / Enums
 import type { LayerDescription, TableDescription } from '../../global';
@@ -258,6 +259,25 @@ export function LayerManagerLayerItem(props: { 'layer': LayerDescription }): JSX
   </div>;
 }
 
+const onClickJoin = (id: string, LL: Accessor<TranslationFunctions>) => {
+  console.log('click join on item ', id);
+
+  // const td = layersDescriptionStore.tables.find((l) => l.id === id)!;
+
+  setModalStore({
+    show: true,
+    content: () => <JoinPanel id={ id } LL={ LL } />,
+    title: LL().JoinModal.Title(),
+    confirmCallback: (): void => {
+      // ...
+    },
+    cancelCallback: (): void => {
+      // ...
+    },
+    escapeKey: 'cancel',
+  });
+};
+
 const onClickTrashTable = (id: string, LL: Accessor<TranslationFunctions>) => {
   console.log('click trash on item ', id);
 
@@ -292,18 +312,27 @@ export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX
     </div>
     <div class="layer-manager-item__icons">
       <div class="layer-manager-item__icons-left">
-        <div title={LL().LayerManager.table()}><FaSolidTableCells/></div>
+        <div title={LL().LayerManager.table()} style={{ cursor: 'help' }}>
+          <FaSolidTableCells/>
+        </div>
       </div>
       <div class="layer-manager-item__icons-right">
         <Show when={props.table.fields && props.table.fields.length > 0}>
-          <div title={ LL().LayerManager.AttributeTable() }>
-            <FaSolidTable onClick={() => { onClickTable(props.table.id); }} />
+          <div title={LL().LayerManager.Join()}>
+            <FiLink onClick={() => onClickJoin(props.table.id, LL)}/>
           </div>
-          <div title={ LL().LayerManager.Typing() }>
-            <FiType onClick={() => { onClickTyping(props.table.id, 'table'); }}/>
+          <div title={LL().LayerManager.AttributeTable()}>
+            <FaSolidTable onClick={() => {
+              onClickTable(props.table.id);
+            }}/>
+          </div>
+          <div title={LL().LayerManager.Typing()}>
+            <FiType onClick={() => {
+              onClickTyping(props.table.id, 'table');
+            }}/>
           </div>
         </Show>
-        <div title={ LL().LayerManager.Delete() }>
+        <div title={LL().LayerManager.Delete()}>
           <FaSolidTrash onClick={() => { onClickTrashTable(props.table.id, LL); }} />
         </div>
       </div>
