@@ -267,7 +267,7 @@ const onClickJoin = (id: string, LL: Accessor<TranslationFunctions>) => {
   setModalStore({
     show: true,
     content: () => <JoinPanel id={ id } LL={ LL } />,
-    title: LL().JoinModal.Title(),
+    title: LL().JoinPanel.Title(),
     confirmCallback: (): void => {
       // ...
     },

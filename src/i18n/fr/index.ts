@@ -317,7 +317,7 @@ const fr = {
     AllowMovingLabels: 'Autoriser le déplacement des étiquettes',
     Palette: 'Palette',
   },
-  JoinModal: {
+  JoinPanel: {
     Title: 'Joindre à une couche géospatiale',
     Information: 'Cette fonctionnalité permet de joindre les données d\'un tableau à une couche géospatiale. Les données du tableau sont ajoutées à la couche géospatiale en fonction d\'un champ commun aux deux jeux de données.',
     TargetLayer: 'Sélectionner la couche cible',
@@ -325,6 +325,12 @@ const fr = {
     JoinFieldTable: 'Champ de la table à utiliser pour la jointure',
     JoinFieldLayer: 'Champ de la couche à utiliser pour la jointure',
     JoinFieldPlaceholder: 'Sélectionner un champ',
+    Loading: 'Calcul des correspondances entre les champs...',
+    ResultInformation: 'Informations sur le résultat de la jointure :',
+    Prefix: 'Utiliser un préfixe pour les champs joins ?',
+    PrefixValue: 'Préfixe',
+    SelectFields: 'Sélectionner les champs à joindre ?',
+    Confirm: 'Ajouter les champs à la couche sélectionnée',
   },
   ProjectionSelection: {
     title: 'Sélection de la projection',

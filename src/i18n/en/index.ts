@@ -316,7 +316,7 @@ const en = {
     AllowMovingLabels: 'Allow moving labels',
     Palette: 'Palette',
   },
-  JoinModal: {
+  JoinPanel: {
     Title: 'Join to a geospatial layer',
     Information: 'This feature allows you to join data from a table to a geospatial layer. Data from the table is added to the geospatial layer based on a field common to both datasets.',
     TargetLayer: 'Select the layer to join to',
@@ -324,6 +324,12 @@ const en = {
     JoinFieldTable: 'Select the field to join on (table)',
     JoinFieldLayer: 'Select the field to join on (layer)',
     JoinFieldPlaceholder: 'Select a field',
+    Loading: 'Computing join...',
+    ResultInformation: 'Result information:',
+    Prefix: 'Use a prefix for the joined fields ?',
+    PrefixValue: 'Prefix',
+    SelectFields: 'Select the fields to join ?',
+    Confirm: 'Add fields to the selected layer',
   },
   ProjectionSelection: {
     title: 'Projection selection',

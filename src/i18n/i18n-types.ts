@@ -1101,7 +1101,7 @@ type RootTranslation = {
 		 */
 		Palette: string
 	}
-	JoinModal: {
+	JoinPanel: {
 		/**
 		 * J​o​i​n​ ​t​o​ ​a​ ​g​e​o​s​p​a​t​i​a​l​ ​l​a​y​e​r
 		 */
@@ -1130,6 +1130,30 @@ type RootTranslation = {
 		 * S​e​l​e​c​t​ ​a​ ​f​i​e​l​d
 		 */
 		JoinFieldPlaceholder: string
+		/**
+		 * C​o​m​p​u​t​i​n​g​ ​j​o​i​n​.​.​.
+		 */
+		Loading: string
+		/**
+		 * R​e​s​u​l​t​ ​i​n​f​o​r​m​a​t​i​o​n​:
+		 */
+		ResultInformation: string
+		/**
+		 * U​s​e​ ​a​ ​p​r​e​f​i​x​ ​f​o​r​ ​t​h​e​ ​j​o​i​n​e​d​ ​f​i​e​l​d​s​ ​?
+		 */
+		Prefix: string
+		/**
+		 * P​r​e​f​i​x
+		 */
+		PrefixValue: string
+		/**
+		 * S​e​l​e​c​t​ ​t​h​e​ ​f​i​e​l​d​s​ ​t​o​ ​j​o​i​n​ ​?
+		 */
+		SelectFields: string
+		/**
+		 * A​d​d​ ​f​i​e​l​d​s​ ​t​o​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​l​a​y​e​r
+		 */
+		Confirm: string
 	}
 	ProjectionSelection: {
 		/**
@@ -2836,7 +2860,7 @@ export type TranslationFunctions = {
 		 */
 		Palette: () => LocalizedString
 	}
-	JoinModal: {
+	JoinPanel: {
 		/**
 		 * Join to a geospatial layer
 		 */
@@ -2865,6 +2889,30 @@ export type TranslationFunctions = {
 		 * Select a field
 		 */
 		JoinFieldPlaceholder: () => LocalizedString
+		/**
+		 * Computing join...
+		 */
+		Loading: () => LocalizedString
+		/**
+		 * Result information:
+		 */
+		ResultInformation: () => LocalizedString
+		/**
+		 * Use a prefix for the joined fields ?
+		 */
+		Prefix: () => LocalizedString
+		/**
+		 * Prefix
+		 */
+		PrefixValue: () => LocalizedString
+		/**
+		 * Select the fields to join ?
+		 */
+		SelectFields: () => LocalizedString
+		/**
+		 * Add fields to the selected layer
+		 */
+		Confirm: () => LocalizedString
 	}
 	ProjectionSelection: {
 		/**

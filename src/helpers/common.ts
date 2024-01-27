@@ -92,3 +92,7 @@ export const splitLastOccurrence = (str: string, substring: string) => {
   const lastIndex = str.lastIndexOf(substring);
   return [str.slice(0, lastIndex), str.slice(lastIndex + 1)];
 };
+
+export function sleep(time: number): Promise<void> {
+  return new Promise((resolve) => { setTimeout(resolve, time); });
+}
