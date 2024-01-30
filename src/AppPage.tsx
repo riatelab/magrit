@@ -430,7 +430,10 @@ const AppPage: () => JSX.Element = () => {
     db.projects.clear();
   });
 
-  return <div onClick={ () => { resetContextMenuStore(); } }>
+  return <div
+      onClick={ () => { resetContextMenuStore(); } }
+      onContextMenu={ () => { resetContextMenuStore(); } }
+    >
     <HeaderBarApp />
     <main class="is-fullhd">
       <LeftMenu />

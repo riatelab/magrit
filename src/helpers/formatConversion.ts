@@ -82,7 +82,6 @@ export async function convertTabularDatasetToJSON(
   if (ext === 'csv' || ext === 'tsv') {
     const text = await file.text();
     const delimiter = findCsvDelimiter(text);
-    console.log('found delimiter', delimiter);
     return d3.dsvFormat(delimiter).parse(text);
   }
   if (ext === 'json') {

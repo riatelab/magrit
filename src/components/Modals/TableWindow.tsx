@@ -92,9 +92,9 @@ function NewFieldPanel(
     .replaceAll(/\$id/gi, '[@@uuid]')
     .replaceAll(/\$area/gi, '[@@area]');
 
-  const hasSpecialFieldId = (formula) => formula.includes('@@uuid');
+  const hasSpecialFieldId = (formula: string) => formula.includes('@@uuid');
 
-  const hasSpecialFieldArea = (formula) => formula.includes('@@area');
+  const hasSpecialFieldArea = (formula: string) => formula.includes('@@area');
 
   // Insert a value (chosen from the list of fields / special fields / operator)
   // in the formula at the caret position (taking care of the selection if needed)
@@ -124,6 +124,7 @@ function NewFieldPanel(
     const formula = replaceSpecialFields(currentFormula());
     const query = `SELECT ${formula} as newValue FROM ?`;
     const data = props.rowData().slice(0, 3);
+
     if (hasSpecialFieldId(formula)) {
       data.forEach((d, i) => {
         d['@@uuid'] = i; // eslint-disable-line no-param-reassign
@@ -134,6 +135,7 @@ function NewFieldPanel(
         d['@@area'] = area(props.layer.data.features[i].geometry); // eslint-disable-line no-param-reassign
       });
     }
+
     try {
       const newColumn = alasql(query, [data]);
       if (newColumn[0].newValue === undefined) {
@@ -232,7 +234,7 @@ function NewFieldPanel(
                   <span
                     class="tag is-warning is-cursor-pointer"
                     title={
-                      /[àâäéèêëîïôöùûüç ]/i.test(field.field)
+                      /[àâäéèêëîïôöùûüç -]/i.test(field.field)
                         ? `${field.field} - ${LL().DataTable.NewColumnModal.noteSpecialCharacters()}`
                         : field.field
                     }
@@ -240,10 +242,7 @@ function NewFieldPanel(
                       // If the field name contains spaces or special characters,
                       // we need to put it between brackets
                       let fieldValue = field.field;
-                      if (
-                        fieldValue.includes(' ')
-                        || /[àâäéèêëîïôöùûüç]/i.test(fieldValue)
-                      ) {
+                      if (/[àâäéèêëîïôöùûüç -]/i.test(fieldValue)) {
                         fieldValue = `[${fieldValue}]`;
                       }
                       // Insert the field in the formula
@@ -323,7 +322,7 @@ function NewFieldPanel(
             type="text"
             value={currentFormula()}
             onKeyUp={ (e) => {
-              const element = e.target;
+              const element = e.target as EventTarget & HTMLInputElement;
               setCurrentFormula(element.value);
               computeSampleOutput();
             }}
@@ -380,7 +379,7 @@ export default function TableWindow(): JSX.Element {
   const [
     rowData,
     setRowData,
-  ] = createSignal<any[]>((unproxify(layer.data) as GeoJSONFeatureCollection)
+  ] = createSignal<any[]>((unproxify(layer.data as never) as GeoJSONFeatureCollection)
     .features
     .map((feature: GeoJSONFeature) => feature.properties));
 
@@ -437,7 +436,7 @@ export default function TableWindow(): JSX.Element {
         // Prepare the new data in case cell values have been changed or new columns have been added
         const newData = {
           type: 'FeatureCollection',
-          features: unproxify(layer.data).features
+          features: (unproxify(layer.data as never) as GeoJSONFeatureCollection).features
             .map((feature: GeoJSONFeature, i: number) => {
               feature.properties = rowData()[i]; // eslint-disable-line no-param-reassign
               return feature;
@@ -471,7 +470,7 @@ export default function TableWindow(): JSX.Element {
   };
 
   // Function that is called from the NewFieldPanel to update the data...
-  const updateData = (variableName, newColumn) => {
+  const updateData = (variableName: string, newColumn: any[]) => {
     // We need to update the data for the table
     setRowData(
       rowData().map((row, i) => ({
@@ -560,15 +559,29 @@ export default function TableWindow(): JSX.Element {
     // Let some time for the table to be rendered
     setTimeout(() => {
       // Add a context menu on the headers of the table
-      // to propose to remove a column
-      parentGridRef.querySelectorAll('.ag-header-container > .ag-header-row > .ag-header-cell')
-        .forEach((elem) => {
-          elem.addEventListener('contextmenu', (e) => {
-            const colId = elem.getAttribute('col-id')!;
-            e.preventDefault();
-            e.stopPropagation();
-            triggerContextMenu(e as MouseEvent, colId);
-          });
+      // to propose to remove a column.
+      // We need to add the listener on the parent of the header cells because
+      // all the header cells aren't rendered (only the visible ones).
+      parentGridRef.querySelector('.ag-header-container')
+        ?.addEventListener('contextmenu', (e) => {
+          const target = e.target as HTMLElement;
+          if (
+            !target.classList.contains('ag-header-cell-label')
+            && !target.classList.contains('ag-header-cell-text')
+          ) {
+            // The user clicked on the header container but not on a header cell
+            // (maybe on a resize handle for example).
+            return;
+          }
+          e.preventDefault();
+          e.stopPropagation();
+          // Go up in the DOM to find the column id
+          let elem = target;
+          while (!elem.classList.contains('ag-header-cell')) {
+            elem = elem.parentElement!;
+          }
+          const colId = elem.getAttribute('col-id')!;
+          triggerContextMenu(e as MouseEvent, colId);
         });
     }, 125);
   });
