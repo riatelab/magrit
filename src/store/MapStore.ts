@@ -21,6 +21,7 @@ import { applicationSettingsStore } from './ApplicationSettingsStore';
 
 // Types
 import type {
+  GeoJSONFeature,
   IZoomable, LayerDescription, ProjectionDefinition, ProportionalSymbolsParameters,
 } from '../global';
 
@@ -64,13 +65,25 @@ const getDefaultClipExtent = () => (
 );
 
 /**
+ * Get the extent, in geographic coordinates, covered by the current map view.
+ *
+ */
+export const getCurrentExtent = (targetSvg: SVGSVGElement): number[][] => {
+  const topLeft = globalStore.projection.invert([0, 0]);
+  const bottomRight = globalStore.projection.invert(
+    [mapStore.mapDimensions.width, mapStore.mapDimensions.height],
+  );
+  return [topLeft, bottomRight];
+};
+
+/**
  * This is a wrapper around the setMapStoreBase function.
  * The wrapper is used to push the current state to the undo stack
  * before actually updating the store.
  */
 const setMapStore = (...args: any[]) => {
   // Push the current state to the undo stack
-  debouncedPushUndoStack('mapStore', unproxify(mapStore));
+  debouncedPushUndoStack('mapStore', unproxify(mapStore as never));
   // Reset the redo stack
   resetRedoStackStore();
   // Update the store
@@ -145,7 +158,7 @@ createEffect(
                   l as LayerDescription & { rendererParameters: ProportionalSymbolsParameters });
                 if (layerDescription.rendererParameters.avoidOverlapping) {
                   layerDescription.data.features = makeDorlingDemersSimulation(
-                    unproxify(layerDescription.data.features),
+                    unproxify(layerDescription.data.features as never) as GeoJSONFeature[],
                     layerDescription.rendererParameters.variable,
                     {
                       referenceSize: layerDescription.rendererParameters.referenceRadius,
@@ -153,7 +166,7 @@ createEffect(
                       symbolType: layerDescription.rendererParameters.symbolType,
                     },
                     layerDescription.rendererParameters.iterations,
-                    layerDescription.strokeWidth,
+                    layerDescription.strokeWidth as number,
                   );
                 }
               });
@@ -188,6 +201,29 @@ createEffect(
   ),
 );
 
+const isConicalProjection = (proj4StringOrWkt: string) => {
+  if (
+    proj4StringOrWkt.includes('proj=aea')
+    || proj4StringOrWkt.includes('Albers_Conic_Equal_Area')
+    || proj4StringOrWkt.includes('Equal_Area_Conic')
+  ) {
+    return true;
+  }
+  if (
+    proj4StringOrWkt.includes('proj=lcc')
+    || proj4StringOrWkt.includes('proj=leac')
+    || proj4StringOrWkt.includes('Lambert_Conformal_Conic')) {
+    return true;
+  }
+  if (
+    proj4StringOrWkt.includes('proj=eqdc')
+    || proj4StringOrWkt.includes('Equidistant_Conic')
+  ) {
+    return true;
+  }
+  return false;
+};
+
 // We want to update the projection and pathGenerator when the mapStore is updated
 // So we listen here to the mapStore projection property and update the projection accordingly
 createEffect(
@@ -195,7 +231,17 @@ createEffect(
     () => mapStore.projection.value,
     () => {
       // console.log('MapStore.ts: createEffect: mapStore.projection.value');
-      // 1. Instantiate the projection (whether it is a d3 or proj4 projection)
+      // 0. We don't need to execute what follows if the map is not yet initialized
+      const targetSvg = document.querySelector('svg.map-zone__map');
+      if (!targetSvg) {
+        console.log('SVG not found');
+        return;
+      }
+
+      // 1. Get the current extent so we try to keep the same extent after the projection change
+      const currentExtent = getCurrentExtent(targetSvg as SVGSVGElement & IZoomable);
+
+      // 2. Instantiate the projection (whether it is a d3 or proj4 projection)
       let projection;
       if (mapStore.projection.type === 'd3') {
         projection = d3[mapStore.projection.value]()
@@ -204,50 +250,107 @@ createEffect(
           .scale(mapStore.scale)
           .clipExtent(getDefaultClipExtent());
       } else { // mapStore.projection.type === 'proj4'
+        console.log(mapStore.projection.value);
         projection = getD3ProjectionFromProj4(getProjection(mapStore.projection.value));
         projection.clipExtent(getDefaultClipExtent());
-        if (mapStore.projection.bounds && JSON.stringify(mapStore.projection.bounds) !== '[90,-180,-90,180]') {
-          // Apply a clipping polygon to the projection
-          // if the bounds are not worldwide (i.e. [90,-180,-90,180])
-          const [ymax, xmin, ymin, xmax] = mapStore.projection.bounds!;
+        // If the projection defines bounds and is conical, we want to apply a clipping polygon
+        // to the projection to avoid the projection to be drawn outside of the bounds
+        // (which is sometimes computationally very expensive)
+        if (
+          mapStore.projection.bounds
+          && JSON.stringify(mapStore.projection.bounds) !== '[90,-180,-90,180]'
+          // && isConicalProjection(mapStore.projection.value)
+        ) {
+          // We want to apply a clipping polygon to the projection
+          // if the bounds are not worldwide (i.e. [90,-180,-90,180]).
+          // First we will expand the bounds by 20 degree in each direction
+          const [ymax0, xmin0, ymin0, xmax0] = mapStore.projection.bounds!;
+
+          const ymax = ymax0 + 20 > 90 ? 90 : ymax0 + 20;
+          const xmin = xmin0 - 20 < -180 ? -180 : xmin0 - 20;
+          const ymin = ymin0 - 20 < -90 ? -90 : ymin0 - 20;
+          const xmax = xmax0 + 20 > 180 ? 180 : xmax0 + 20;
+
           const clippingPolygon = {
             type: 'Polygon',
             coordinates: [[
               [xmin, ymax], [xmax, ymax], [xmax, ymin], [xmin, ymin], [xmin, ymax],
             ]],
           };
-          projection.preclip(d3.geoClipPolygon(clippingPolygon));
-          // Also zoom on the clipping polygon
-          // Margin so that the extent of the layer is not on the border of the map
-          const marginX = mapStore.mapDimensions.width * 0.03;
-          const marginY = mapStore.mapDimensions.height * 0.03;
 
-          // Fit the extent of the projection to the extent of the layer, with margins
-          projection.fitExtent(
-            [
-              [marginX, marginY],
-              [mapStore.mapDimensions.width - marginX, mapStore.mapDimensions.height - marginY],
-            ],
-            {
-              type: 'FeatureCollection',
-              features: [
-                { type: 'Feature', geometry: clippingPolygon },
-              ],
-            } as any,
-          );
+          projection.preclip(d3.geoClipPolygon(clippingPolygon));
+          // // Also zoom on the clipping polygon
+          // // Margin so that the extent of the layer is not on the border of the map
+          // const marginX = mapStore.mapDimensions.width * 0.03;
+          // const marginY = mapStore.mapDimensions.height * 0.03;
+          //
+          // // Fit the extent of the projection to the extent of the layer, with margins
+          // projection.fitExtent(
+          //   [
+          //     [marginX, marginY],
+          //     [mapStore.mapDimensions.width - marginX, mapStore.mapDimensions.height - marginY],
+          //   ],
+          //   {
+          //     type: 'FeatureCollection',
+          //     features: [
+          //       { type: 'Feature', geometry: clippingPolygon },
+          //     ],
+          //   } as any,
+          // );
         }
+        // else {
+        //   const [ymax, xmin, ymin, xmax] = [90, -180, -90, 180];
+        //   const clippingPolygon = {
+        //     type: 'Polygon',
+        //     coordinates: [[
+        //       [xmin, ymax], [xmax, ymax], [xmax, ymin], [xmin, ymin], [xmin, ymax],
+        //     ]],
+        //   };
+        //
+        //   projection.preclip(d3.geoClipPolygon(clippingPolygon));
+        // }
       }
 
-      // 2. Instantiate the corresponding path generator
+      // 3. Fit the map to the previous extent
+      // TODO: investigate why currentExtent is sometimes undefined
+      if (currentExtent[0] && currentExtent[1]) {
+        projection.fitExtent(
+          [
+            [0, 0],
+            [mapStore.mapDimensions.width, mapStore.mapDimensions.height],
+          ],
+          {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'Polygon',
+                  coordinates: [[
+                    [currentExtent[0][0], currentExtent[0][1]],
+                    [currentExtent[1][0], currentExtent[0][1]],
+                    [currentExtent[1][0], currentExtent[1][1]],
+                    [currentExtent[0][0], currentExtent[1][1]],
+                    [currentExtent[0][0], currentExtent[0][1]],
+                  ]],
+                },
+              },
+            ],
+          },
+        );
+      }
+
+      // 4. Instantiate the corresponding path generator
       const pathGenerator = d3.geoPath(projection);
 
-      // 3. Update the global store with the new projection and pathGenerator
+      // 5. Update the global store with the new projection and pathGenerator
       setGlobalStore({
         projection,
         pathGenerator,
       });
 
-      // Update the global store with the new scale and translate if they changed
+      // 6. Update the global store with the new scale and translate if they changed
       setMapStore({
         scale: projection.scale(),
         translate: projection.translate(),

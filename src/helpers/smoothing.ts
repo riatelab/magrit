@@ -40,6 +40,20 @@ function makePointGrid(
     bb[1] -= offsetY;
     bb[3] += offsetY;
   }
+  // We dont want points to be outside the sphere
+  // (lon between -180 and 180, lat between -90 and 90)
+  if (bb[0] < -180) {
+    bb[0] = -180;
+  }
+  if (bb[2] > 180) {
+    bb[2] = 180;
+  }
+  if (bb[1] < -90) {
+    bb[1] = -90;
+  }
+  if (bb[3] > 90) {
+    bb[3] = 90;
+  }
   return pointGrid(bb as BBox, gridParameters.resolution) as GeoJSONFeatureCollection;
 }
 

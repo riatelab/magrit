@@ -1,6 +1,6 @@
 import d3 from './d3-custom';
 import { globalStore } from '../store/GlobalStore';
-import { IZoomable } from '../global';
+import type { IZoomable } from '../global';
 
 /**
  * Get the SVG map element.

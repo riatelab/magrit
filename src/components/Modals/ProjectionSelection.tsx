@@ -1,7 +1,10 @@
 // Imports for solid-js
 import {
-  type Accessor, createSignal, For,
-  type JSX, Show,
+  type Accessor,
+  createSignal,
+  For,
+  type JSX,
+  Show,
 } from 'solid-js';
 
 // Imports from other external libraries

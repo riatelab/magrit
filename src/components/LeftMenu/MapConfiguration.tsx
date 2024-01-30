@@ -70,7 +70,7 @@ const availableProjections = [
   'Miller',
   'ModifiedSereographic',
   'Mollweide',
-  'NellHammr',
+  'NellHammer',
   'InterrupteduarticAuthalic',
   'Nicolosi',
   'Patterson',
