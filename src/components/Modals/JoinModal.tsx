@@ -14,6 +14,7 @@ import {
 } from 'solid-js';
 
 // Imports from other packages
+import { yieldOrContinue } from 'main-thread-scheduling';
 import { FaSolidCircleInfo } from 'solid-icons/fa';
 
 // Helpers
@@ -21,16 +22,17 @@ import { TranslationFunctions } from '../../i18n/i18n-types';
 import { sleep, unproxify } from '../../helpers/common';
 
 // Stores
-import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { setLoading } from '../../store/GlobalStore';
 
 // Sub-components
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
+import MultipleSelect from '../MultipleSelect.tsx';
 
 // Types / Interfaces / Enums
 import type { GeoJSONFeature, LayerDescription, TableDescription } from '../../global';
-import MultipleSelect from '../MultipleSelect.tsx';
 
 interface JoinResult {
   nFeaturesTable: number,
@@ -173,7 +175,7 @@ const doJoin = async (
           ...Object.fromEntries(
             Object.entries(jsonItem).map(([k, v]) => [`${prefixValue}${k}`, v]),
           ),
-          [layerField]: feature.properties[layerField],
+          // [layerField]: feature.properties[layerField],
         },
       };
     }
@@ -199,12 +201,45 @@ const doJoin = async (
             .filter(([k, v]) => selectedFields.includes(k))
             .map(([k, v]) => [`${prefixValue}${k}`, v]),
         ),
-        [layerField]: feature.properties[layerField],
+        // [layerField]: feature.properties[layerField],
       },
     };
   }) as GeoJSONFeature[];
 
-  console.log(jointData);
+  const newFieldsDescription = selectFields
+    ? tableDescription.fields.filter((f) => selectedFields.includes(f.name))
+    : tableDescription.fields;
+
+  if (usePrefix) {
+    newFieldsDescription.forEach((variable) => {
+      // eslint-disable-next-line no-param-reassign
+      variable.name = `${prefixValue}${variable.name}`;
+    });
+  }
+
+  await yieldOrContinue('smooth');
+
+  setLayersDescriptionStore(
+    'layers',
+    (l: LayerDescription) => l.id === layerId,
+    'data',
+    { type: 'FeatureCollection', features: jointData },
+  );
+
+  await yieldOrContinue('smooth');
+
+  setLayersDescriptionStore(
+    'layers',
+    (l: LayerDescription) => l.id === layerId,
+    'fields',
+    [
+      ...layerDescription.fields!,
+      ...newFieldsDescription
+        .filter((f) => !layerDescription.fields!.map((l) => l.name).includes(f.name)),
+    ],
+  );
+
+  await yieldOrContinue('smooth');
 };
 
 export default function JoinPanel(
@@ -234,7 +269,10 @@ export default function JoinPanel(
 
   // We use a resource to check the join, this allow us to easily
   // display a loading indicator while the join is being checked
-  const [joinResult, { mutate: mutateJoinResult }] = createResource(
+  const [
+    joinResult,
+    { mutate: mutateJoinResult, refetch: refetchJoinResult },
+  ] = createResource(
     allSelected, // Recompute when all the fields are selected
     // eslint-disable-next-line solid/reactivity
     async () => checkJoin(
@@ -260,9 +298,9 @@ export default function JoinPanel(
     refSuccessButton.disabled = true;
 
     refSuccessButton
-      .addEventListener('click', () => {
-        console.log(targetLayerId(), targetFieldLayer(), targetFieldTable());
-        doJoin(
+      .addEventListener('click', async () => {
+        setLoading(true);
+        await doJoin(
           id,
           targetFieldTable(),
           targetLayerId(),
@@ -272,6 +310,7 @@ export default function JoinPanel(
           selectFields(),
           selectedFields(),
         );
+        setLoading(false);
       });
 
     createEffect(
@@ -282,6 +321,9 @@ export default function JoinPanel(
           if (!allSelected()) {
             // Mutate the resource to reset the join result to undefined
             mutateJoinResult(undefined);
+          } else {
+            // Refetch the resource to check the join
+            refetchJoinResult();
           }
         },
       ),
@@ -303,6 +345,7 @@ export default function JoinPanel(
         style={{ height: '1.5em', width: '1.5em' }}
       />
       <p>{LL().JoinPanel.Information()}</p>
+      <p>{LL().JoinPanel.Information2()}</p>
     </section>
     <InputFieldSelect
       label={LL().JoinPanel.TargetLayer()}
@@ -356,9 +399,22 @@ export default function JoinPanel(
       </Match>
       <Match when={!joinResult.loading && joinResult()}>
         <hr/>
-        <h3>{ LL().JoinPanel.ResultInformation() }</h3>
-
-        <hr />
+        <h3>{LL().JoinPanel.ResultInformation()}</h3>
+        <p>
+          <strong>{LL().JoinPanel.MatchedGeometry()}</strong>
+          &nbsp;{joinResult()?.nMatchLayer}/{joinResult()?.nFeaturesLayer}
+          <Show when={joinResult()?.nNoDataLayer > 0}>
+            &nbsp;&nbsp;({joinResult()?.nNoDataLayer}&nbsp;{LL().JoinPanel.NoData()})
+          </Show>
+        </p>
+        <p>
+          <strong>{LL().JoinPanel.MatchedData()}</strong>
+          &nbsp;{joinResult()?.nMatchTable}/{joinResult()?.nFeaturesTable}
+          <Show when={joinResult()?.nNoDataTable > 0}>
+            &nbsp;&nbsp;({joinResult()?.nNoDataTable}&nbsp;{LL().JoinPanel.NoData()})
+          </Show>
+        </p>
+        <hr/>
         <InputFieldCheckbox
           label={LL().JoinPanel.Prefix()}
           checked={usePrefix()}
@@ -368,7 +424,9 @@ export default function JoinPanel(
           <InputFieldText
             label={LL().JoinPanel.PrefixValue()}
             value={prefixValue()}
-            onChange={(v) => { setPrefixValue(v); }}
+            onChange={(v) => {
+              setPrefixValue(v);
+            }}
           />
         </Show>
         <InputFieldCheckbox
@@ -377,7 +435,12 @@ export default function JoinPanel(
           onChange={(v) => setSelectFields(v)}
         />
         <Show when={selectFields()}>
-          <MultipleSelect size={tableDescription.fields.length}>
+          <MultipleSelect
+            onChange={(e) => {
+              setSelectedFields(Array.from(e.target.selectedOptions).map((d: any) => d.value));
+            }}
+            size={tableDescription.fields.length}
+          >
             <For each={tableDescription.fields}>
               {(field) => <option value={field.name}>{field.name}</option>}
             </For>

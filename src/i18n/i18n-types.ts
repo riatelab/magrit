@@ -1111,6 +1111,10 @@ type RootTranslation = {
 		 */
 		Information: string
 		/**
+		 * O​n​l​y​ ​f​i​e​l​d​s​ ​w​i​t​h​ ​u​n​i​q​u​e​ ​v​a​l​u​e​s​ ​a​r​e​ ​a​v​a​i​l​a​b​l​e​ ​f​o​r​ ​t​h​e​ ​j​o​i​n​.
+		 */
+		Information2: string
+		/**
 		 * S​e​l​e​c​t​ ​t​h​e​ ​l​a​y​e​r​ ​t​o​ ​j​o​i​n​ ​t​o
 		 */
 		TargetLayer: string
@@ -1138,6 +1142,18 @@ type RootTranslation = {
 		 * R​e​s​u​l​t​ ​i​n​f​o​r​m​a​t​i​o​n​:
 		 */
 		ResultInformation: string
+		/**
+		 * G​e​o​m​e​t​r​i​e​s​ ​h​a​v​i​n​g​ ​a​ ​m​a​t​c​h​:
+		 */
+		MatchedGeometry: string
+		/**
+		 * T​a​b​l​e​ ​r​o​w​s​ ​h​a​v​i​n​g​ ​a​ ​m​a​t​c​h​:
+		 */
+		MatchedData: string
+		/**
+		 * n​o​ ​d​a​t​a
+		 */
+		NoData: string
 		/**
 		 * U​s​e​ ​a​ ​p​r​e​f​i​x​ ​f​o​r​ ​t​h​e​ ​j​o​i​n​e​d​ ​f​i​e​l​d​s​ ​?
 		 */
@@ -2870,6 +2886,10 @@ export type TranslationFunctions = {
 		 */
 		Information: () => LocalizedString
 		/**
+		 * Only fields with unique values are available for the join.
+		 */
+		Information2: () => LocalizedString
+		/**
 		 * Select the layer to join to
 		 */
 		TargetLayer: () => LocalizedString
@@ -2897,6 +2917,18 @@ export type TranslationFunctions = {
 		 * Result information:
 		 */
 		ResultInformation: () => LocalizedString
+		/**
+		 * Geometries having a match:
+		 */
+		MatchedGeometry: () => LocalizedString
+		/**
+		 * Table rows having a match:
+		 */
+		MatchedData: () => LocalizedString
+		/**
+		 * no data
+		 */
+		NoData: () => LocalizedString
 		/**
 		 * Use a prefix for the joined fields ?
 		 */

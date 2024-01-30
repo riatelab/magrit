@@ -319,6 +319,7 @@ const en = {
   JoinPanel: {
     Title: 'Join to a geospatial layer',
     Information: 'This feature allows you to join data from a table to a geospatial layer. Data from the table is added to the geospatial layer based on a field common to both datasets.',
+    Information2: 'Only fields with unique values are available for the join.',
     TargetLayer: 'Select the layer to join to',
     TargetLayerPlaceholder: 'Select a layer',
     JoinFieldTable: 'Select the field to join on (table)',
@@ -326,6 +327,9 @@ const en = {
     JoinFieldPlaceholder: 'Select a field',
     Loading: 'Computing join...',
     ResultInformation: 'Result information:',
+    MatchedGeometry: 'Geometries having a match:',
+    MatchedData: 'Table rows having a match:',
+    NoData: 'no data',
     Prefix: 'Use a prefix for the joined fields ?',
     PrefixValue: 'Prefix',
     SelectFields: 'Select the fields to join ?',
