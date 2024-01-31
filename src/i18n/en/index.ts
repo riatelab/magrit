@@ -74,6 +74,8 @@ const en = {
     CRS: 'CRS',
     UseProjection: 'Use this projection',
     Simplify: 'Simplify',
+    SimplifyDisabledTooltip: 'Simplification is only available for (Multi)LineString and (Multi)Polygon vector layers.',
+    SimplifyTooltip: 'Simplify the geometries of the layer to reduce the size of the dataset and improve performance. A new window will open to allow you to choose the simplification options.',
     FitExtent: 'Fit extent',
     Delete: 'Delete ?',
     Incomplete: 'Incomplete',
@@ -348,6 +350,9 @@ const en = {
     Area: 'Area:',
     Unit: 'Unit:',
     MoreInformation: 'More information',
+  },
+  SimplificationModal: {
+    title: 'Simplification of geometries',
   },
   DataTable: {
     titleGeo: 'Attribute table',

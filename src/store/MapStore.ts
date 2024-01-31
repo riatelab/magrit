@@ -231,7 +231,6 @@ createEffect(
       // 0. We don't need to execute what follows if the map is not yet initialized
       const targetSvg = document.querySelector('svg.map-zone__map');
       if (!targetSvg) {
-        console.log('SVG not found');
         return;
       }
 

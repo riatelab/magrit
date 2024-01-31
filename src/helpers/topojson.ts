@@ -10,6 +10,13 @@ const topojson = {
   ...t3,
 };
 
+/**
+ * Convert a GeoJSON FeatureCollection to a TopoJSON file in order to apply quantization
+ * then convert it back to a GeoJSON FeatureCollection.
+ *
+ * @param {GeoJSONFeatureCollection} geojson
+ * @param {number} quantization
+ */
 export const convertToTopojsonQuantizeAndBackToGeojson = (
   geojson: GeoJSONFeatureCollection,
   quantization: number = 1e5,
@@ -18,13 +25,25 @@ export const convertToTopojsonQuantizeAndBackToGeojson = (
   return topojson.feature(topology, topology.objects.collection) as GeoJSONFeatureCollection;
 };
 
+/**
+ * Simplify a TopoJSON file, using the quantile method to determine the minimum weight.
+ *
+ * @param {object} topology
+ * @param {number} tolerance
+ */
+export const simplifyTopojson = (topology: object, tolerance: number) => {
+  const presimplified = topojson.presimplify(topology);
+  const minWeight = topojson.quantile(presimplified, tolerance);
+  return topojson.simplify(presimplified, minWeight);
+};
+
 export const convertToTopojsonSimplifyAndBackToGeojson = (
   geojson: any,
   quantization:number = 1e5,
   tolerance: number = 1e-5,
 ) => {
   const topology = topojson.topology({ collection: geojson }, quantization);
-  const simplified = topojson.simplify(topology, tolerance);
+  const simplified = simplifyTopojson(topology, tolerance);
   return topojson.feature(simplified, simplified.objects.collection);
 };
 

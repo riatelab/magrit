@@ -74,6 +74,8 @@ const fr = {
     CRS: 'SCR',
     UseProjection: 'Utiliser la projection',
     Simplify: 'Simplifier',
+    SimplifyDisabledTooltip: 'La simplification n\'est proposée que pour les jeux de données vectoriels (Multi)LineString et (Multi)Polygon.',
+    SimplifyTooltip: 'Simplifier (généraliser) les géométries. Une fenêtre permettant de choisir le niveau de simplification s\'ouvrira.',
     FitExtent: 'Zoomer sur la couche',
     Delete: 'Supprimer ?',
     Incomplete: 'Incomplet',
@@ -349,6 +351,9 @@ const fr = {
     Area: 'Zone :',
     Unit: 'Unité :',
     MoreInformation: 'Plus d\'informations',
+  },
+  SimplificationModal: {
+    title: 'Simplification des géométries',
   },
   DataTable: {
     titleGeo: 'Table attributaire',

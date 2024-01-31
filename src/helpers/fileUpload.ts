@@ -132,7 +132,7 @@ const getDefaultRenderingParams = (geomType: string) => {
   return {};
 };
 
-function addLayer(geojson: GeoJSONFeatureCollection, name: string, fit: boolean) {
+function addLayer(geojson: GeoJSONFeatureCollection, name: string, fit: boolean): string {
   const rewoundGeojson = rewindLayer(geojson, true);
   const geomType = getGeometryType(rewoundGeojson);
   const layerId = generateIdLayer();
@@ -181,9 +181,12 @@ function addLayer(geojson: GeoJSONFeatureCollection, name: string, fit: boolean)
   if (fit) {
     fitExtent(layerId);
   }
+
+  return layerId;
 }
 
-function addTabularLayer(data: object[], name: string) {
+function addTabularLayer(data: object[], name: string): string {
+  const tableId = generateIdTable();
   const fields: string[] = Object.keys(data[0]);
 
   const descriptions = fields.map((field) => {
@@ -199,7 +202,7 @@ function addTabularLayer(data: object[], name: string) {
     };
   });
   const tableDescription = {
-    id: generateIdTable(),
+    id: tableId,
     name,
     fields: descriptions,
     data,
@@ -219,44 +222,52 @@ function addTabularLayer(data: object[], name: string) {
       },
     ),
   );
+
+  return tableId;
 }
 
+/**
+ * Convert a layer and add it to the store (and so to the map).
+ *
+ * @param files
+ * @param format
+ * @param layerName
+ * @param fit
+ */
 export const convertAndAddFiles = async (
   files: CustomFileList,
   format: SupportedTabularFileTypes | SupportedGeoFileTypes,
   layerName: string,
   fit: boolean,
-) => {
-  // Convert the file and add it to the store (and so to the map if its a geo layer)
+): Promise<string> => {
+  // If the file is a TopoJSON file,
+  // we don't use GDAL and convert it directly to GeoJSON
   if (format === SupportedGeoFileTypes.TopoJSON) {
     const res = convertTopojsonToGeojson(await files[0].file.text());
-    Object.keys(res).forEach((l) => {
-      if (l === layerName) {
-        addLayer(res[layerName], layerName, fit);
-      }
-    });
-  // } else if (format === SupportedGeoFileTypes.GeoJSON) {
-  //   const res = JSON.parse(await authorizedFiles[0].file.text());
-  //   addLayer(res, authorizedFiles[0].name, fit);
-  } else if (!(format === SupportedGeoFileTypes.GeoJSON) && isTabularFile(files)) {
-    const res = await convertTabularDatasetToJSON(files[0].file, files[0].ext);
-    addTabularLayer(res, files[0].name);
-  } else {
-    let res;
-    try {
-      const opts = format === SupportedGeoFileTypes.GeoPackage
-        ? ['-nln', layerName, '-sql', `SELECT * FROM '${layerName}'`]
-        : [];
-      res = await convertToGeoJSON(
-        files.map((f) => f.file),
-        { opts, openOpts: [] },
-      );
-    } catch (e: any) {
-      // TODO: display error message and/or improve error handling
-      console.error(e);
-      toast.error(`Error while reading file: ${e.message ? e.message : e}`);
-      return;
-    }
-    addLayer(res, layerName, fit);
+    return addLayer(res[layerName], layerName, fit);
   }
+
+  // If the file is a tabular file, we convert it to JSON manually too
+  if (!(format === SupportedGeoFileTypes.GeoJSON) && isTabularFile(files)) {
+    const res = await convertTabularDatasetToJSON(files[0].file, files[0].ext);
+    return addTabularLayer(res, files[0].name);
+  }
+
+  // Otherwise we use GDAL to convert the file to GeoJSON
+  let res;
+  try {
+    const opts = format === SupportedGeoFileTypes.GeoPackage
+      ? ['-nln', layerName, '-sql', `SELECT * FROM '${layerName}'`]
+      : [];
+    res = await convertToGeoJSON(
+      files.map((f) => f.file),
+      { opts, openOpts: [] },
+    );
+  } catch (e: any) {
+    console.error(e);
+    toast.error(`Error while reading file: ${e.message ? e.message : e}`);
+    // TODO: ensure that the error is handled by the caller
+    throw e;
+  }
+  return addLayer(res, layerName, fit);
 };

@@ -269,6 +269,14 @@ type RootTranslation = {
 		 */
 		Simplify: string
 		/**
+		 * S​i​m​p​l​i​f​i​c​a​t​i​o​n​ ​i​s​ ​o​n​l​y​ ​a​v​a​i​l​a​b​l​e​ ​f​o​r​ ​(​M​u​l​t​i​)​L​i​n​e​S​t​r​i​n​g​ ​a​n​d​ ​(​M​u​l​t​i​)​P​o​l​y​g​o​n​ ​v​e​c​t​o​r​ ​l​a​y​e​r​s​.
+		 */
+		SimplifyDisabledTooltip: string
+		/**
+		 * S​i​m​p​l​i​f​y​ ​t​h​e​ ​g​e​o​m​e​t​r​i​e​s​ ​o​f​ ​t​h​e​ ​l​a​y​e​r​ ​t​o​ ​r​e​d​u​c​e​ ​t​h​e​ ​s​i​z​e​ ​o​f​ ​t​h​e​ ​d​a​t​a​s​e​t​ ​a​n​d​ ​i​m​p​r​o​v​e​ ​p​e​r​f​o​r​m​a​n​c​e​.​ ​A​ ​n​e​w​ ​w​i​n​d​o​w​ ​w​i​l​l​ ​o​p​e​n​ ​t​o​ ​a​l​l​o​w​ ​y​o​u​ ​t​o​ ​c​h​o​o​s​e​ ​t​h​e​ ​s​i​m​p​l​i​f​i​c​a​t​i​o​n​ ​o​p​t​i​o​n​s​.
+		 */
+		SimplifyTooltip: string
+		/**
 		 * F​i​t​ ​e​x​t​e​n​t
 		 */
 		FitExtent: string
@@ -1221,6 +1229,12 @@ type RootTranslation = {
 		 */
 		MoreInformation: string
 	}
+	SimplificationModal: {
+		/**
+		 * S​i​m​p​l​i​f​i​c​a​t​i​o​n​ ​o​f​ ​g​e​o​m​e​t​r​i​e​s
+		 */
+		title: string
+	}
 	DataTable: {
 		/**
 		 * A​t​t​r​i​b​u​t​e​ ​t​a​b​l​e
@@ -2043,6 +2057,14 @@ export type TranslationFunctions = {
 		 * Simplify
 		 */
 		Simplify: () => LocalizedString
+		/**
+		 * Simplification is only available for (Multi)LineString and (Multi)Polygon vector layers.
+		 */
+		SimplifyDisabledTooltip: () => LocalizedString
+		/**
+		 * Simplify the geometries of the layer to reduce the size of the dataset and improve performance. A new window will open to allow you to choose the simplification options.
+		 */
+		SimplifyTooltip: () => LocalizedString
 		/**
 		 * Fit extent
 		 */
@@ -2995,6 +3017,12 @@ export type TranslationFunctions = {
 		 * More information
 		 */
 		MoreInformation: () => LocalizedString
+	}
+	SimplificationModal: {
+		/**
+		 * Simplification of geometries
+		 */
+		title: () => LocalizedString
 	}
 	DataTable: {
 		/**

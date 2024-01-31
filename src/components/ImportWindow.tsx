@@ -16,17 +16,12 @@ import toast from 'solid-toast';
 // Helpers
 import d3 from '../helpers/d3-custom';
 import { useI18nContext } from '../i18n/i18n-solid';
-
-// Stores
-import { setGlobalStore } from '../store/GlobalStore';
-import { setMapStore } from '../store/MapStore';
-import { fileDropStore, setFileDropStore } from '../store/FileDropStore';
-
-// Helpers
 import {
   convertAndAddFiles,
   CustomFileList,
-  FileEntry, isAuthorizedFile, prepareFileExtensions,
+  FileEntry,
+  isAuthorizedFile,
+  prepareFileExtensions,
 } from '../helpers/fileUpload';
 import {
   allowedFileExtensions,
@@ -36,6 +31,15 @@ import {
   SupportedTabularFileTypes,
 } from '../helpers/supportedFormats';
 import { findCsvDelimiter, getDatasetInfo } from '../helpers/formatConversion';
+
+// Stores
+import { fileDropStore, setFileDropStore } from '../store/FileDropStore';
+import { setGlobalStore } from '../store/GlobalStore';
+import { setMapStore } from '../store/MapStore';
+import { setModalStore } from '../store/ModalStore';
+
+// Other components
+import SimplificationModal from './Modals/SimplificationModal.tsx';
 
 // Styles
 import '../styles/ImportWindow.css';
@@ -686,6 +690,12 @@ export default function ImportWindow(): JSX.Element {
                                 <input
                                   type="checkbox"
                                   checked={layer.simplify}
+                                  disabled={layer.geometryType.toLowerCase().includes('point')}
+                                  title={
+                                    layer.geometryType.toLowerCase().includes('point')
+                                      ? LL().ImportWindow.SimplifyDisabledTooltip()
+                                      : LL().ImportWindow.SimplifyTooltip()
+                                  }
                                   onClick={() => {
                                     // eslint-disable-next-line no-param-reassign
                                     layer.simplify = !layer.simplify;
@@ -796,6 +806,7 @@ export default function ImportWindow(): JSX.Element {
             }
             // Disable type checking here as we will reuse immediately the content of the array
             const dsToImport: never[][] = [];
+            const dsToSimplify: string[] = [];
             // Import the selected datasets
             await Promise.all(fileDescriptions().map(async (ds: DatasetDescription) => {
               await Promise.all(ds.info.layers.map(async (l: LayerOrTableDescription) => {
@@ -804,24 +815,45 @@ export default function ImportWindow(): JSX.Element {
                   // then we will loop on this array (this seems to
                   // avoid some problems with async/await and context switching
                   // when we need to import multiple layers from the same GeoPackage file).
-                  dsToImport.push([ds.files, ds.info.detailedType, l.name, l.fitMap] as never[]);
+                  dsToImport.push(
+                    [ds.files, ds.info.detailedType, l.name, l.fitMap, l.simplify] as never[],
+                  );
                 }
               }));
             }));
             for (let i = 0; i < dsToImport.length; i += 1) {
-              const [files, type, name, fitMap] = dsToImport[i];
+              const [files, type, name, fitMap, simplify] = dsToImport[i];
               // We want to wait for the import of the current layer to be finished
               // before starting to import the next one...
               // eslint-disable-next-line no-await-in-loop
-              await convertAndAddFiles(
+              const id = await convertAndAddFiles(
                 files,
                 type,
                 name,
                 fitMap,
               );
+
+              // We push the id of the layer(s) to simplify to an array,
+              // and when all the layers are imported, we will simplify
+              // it/them.
+              if (simplify) {
+                dsToSimplify.push(id);
+              }
             }
+
             // Remove the "loading" overlay
             setGlobalStore({ isLoading: false });
+
+            // The layers are loaded and the loading overlay is removed,
+            // we can now display the simplification modal if needed.
+            if (dsToSimplify.length > 0) {
+              setModalStore({
+                show: true,
+                title: LL().SimplificationModal.title(),
+                content: () => <SimplificationModal ids={dsToSimplify} />,
+                width: '60vw',
+              });
+            }
           }}
         > { LL().ImportWindow.ImportButton(countLayerToImport(fileDescriptions())) }
         </button>
