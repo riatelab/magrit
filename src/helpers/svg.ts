@@ -1,5 +1,6 @@
 import d3 from './d3-custom';
 import { globalStore } from '../store/GlobalStore';
+import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import type { IZoomable } from '../global';
 
 /**
@@ -16,7 +17,7 @@ export const getTargetSvg = (): SVGSVGElement & IZoomable => {
   return targetSvg as SVGSVGElement & IZoomable;
 };
 
-const simpleRedrawRenderers = ['default', 'choropleth', 'discontinuity', 'graticule', 'sphere', 'categoricalChoropleth'];
+const simpleRedrawRenderers = new Set(['default', 'choropleth', 'discontinuity', 'graticule', 'sphere', 'categoricalChoropleth']);
 
 /**
  * Redraw the paths of the SVG element
@@ -32,15 +33,24 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
 
   // For each layer...
   svgElement.querySelectorAll('g.layer').forEach((g) => {
-    const type = Array.from(g.classList).filter((d) => d !== 'layer')[0];
+    const typePortrayal = Array.from(g.classList).filter((d) => d !== 'layer')[0];
     // Remove the transform attribute from the elements on which it was defined
     g.removeAttribute('transform');
     // Redraw the paths
-    if (simpleRedrawRenderers.includes(type)) {
+    if (simpleRedrawRenderers.has(typePortrayal)) {
+      // We need to read the layer description to know the type of geometry
+      // because we need to set the pointRadius for point geometries
+      const ld = layersDescriptionStore.layers
+        .find((l) => l.id === g.id)!;
+
+      if (ld.type === 'point') {
+        globalStore.pathGenerator.pointRadius(ld.pointRadius!);
+      }
+
       g.querySelectorAll('path').forEach((p) => {
         p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
       });
-    } else if (type === 'proportionalSymbols') {
+    } else if (typePortrayal === 'proportionalSymbols') {
       // Redraw the symbols (circles)
       g.querySelectorAll('circle').forEach((c) => {
         // eslint-disable-next-line no-underscore-dangle
@@ -56,7 +66,7 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
         r.setAttribute('x', `${projectedCoords[0] - size / 2}`);
         r.setAttribute('y', `${projectedCoords[1] - size / 2}`);
       });
-    } else if (type === 'labels') {
+    } else if (typePortrayal === 'labels') {
       g.querySelectorAll('text').forEach((t) => {
         // eslint-disable-next-line no-underscore-dangle
         const projectedCoords = globalStore.projection(t.__data__.geometry.coordinates);
