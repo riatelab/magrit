@@ -71,7 +71,7 @@ const availableProjections = [
   'ModifiedSereographic',
   'Mollweide',
   'NellHammer',
-  'InterrupteduarticAuthalic',
+  'InterruptedQuarticAuthalic',
   'Nicolosi',
   'Patterson',
   'Polyconic',

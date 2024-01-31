@@ -119,9 +119,6 @@ const fitExtent = (id: string, margin = 0.03) => {
     translate: globalStore.projection.translate(),
   });
 
-  // Reset the __zoom property of the svg element by using the zoomIdentity
-  svgElem.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
-
   // Redraw the paths
   redrawPaths(svgElem);
 };
@@ -263,13 +260,13 @@ createEffect(
         ) {
           // We want to apply a clipping polygon to the projection
           // if the bounds are not worldwide (i.e. [90,-180,-90,180]).
-          // First we will expand the bounds by 20 degree in each direction
+          // First we will expand the bounds by 15 degree in each direction
           const [ymax0, xmin0, ymin0, xmax0] = mapStore.projection.bounds!;
 
-          const ymax = ymax0 + 20 > 90 ? 90 : ymax0 + 20;
-          const xmin = xmin0 - 20 < -180 ? -180 : xmin0 - 20;
-          const ymin = ymin0 - 20 < -90 ? -90 : ymin0 - 20;
-          const xmax = xmax0 + 20 > 180 ? 180 : xmax0 + 20;
+          const ymax = ymax0 + 15 > 90 ? 90 : ymax0 + 15;
+          const xmin = xmin0 - 15 < -180 ? -180 : xmin0 - 15;
+          const ymin = ymin0 - 15 < -90 ? -90 : ymin0 - 15;
+          const xmax = xmax0 + 15 > 180 ? 180 : xmax0 + 15;
 
           const clippingPolygon = {
             type: 'Polygon',
