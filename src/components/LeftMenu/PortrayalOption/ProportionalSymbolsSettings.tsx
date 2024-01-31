@@ -94,7 +94,10 @@ function onClickValidate(
     ),
   ) as GeoJSONFeatureCollection;
 
-  if (referenceLayerDescription.type === 'polygon') {
+  if (
+    referenceLayerDescription.type === 'polygon'
+    || (referenceLayerDescription.type === 'linestring' && symbolType !== ProportionalSymbolsSymbolType.line)
+  ) {
     newData.features.forEach((feature) => {
       // eslint-disable-next-line no-param-reassign
       feature.geometry = {
@@ -161,7 +164,7 @@ function onClickValidate(
     id: generateIdLayer(),
     name: newLayerName,
     data: newData,
-    type: 'point',
+    type: symbolType === ProportionalSymbolsSymbolType.line ? 'linestring' : 'point',
     fields: referenceLayerDescription.fields,
     renderer: 'proportionalSymbols' as RepresentationType,
     visible: true,

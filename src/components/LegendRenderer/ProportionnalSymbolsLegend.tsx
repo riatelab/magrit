@@ -578,6 +578,21 @@ function verticalCircleLegend(
     bindElementsLegend(refElement, layer);
   });
 
+  createEffect(() => {
+    if (refElement && layer.visible && layer.legend?.visible) {
+      computeRectangleBox(
+        refElement,
+        heightTitle(),
+        heightTitleSubtitle(),
+        layer.legend.title.text,
+        layer.legend?.subtitle?.text,
+        layer.legend?.note?.text,
+        layer.legend.roundDecimals,
+        layer.legend.spacing,
+      );
+    }
+  });
+
   // Precompute the size and position of the symbols now
   // instead of computing it in the For directive
   // (and use createMemo to make it reactive)
@@ -693,6 +708,22 @@ function horizontalCircleLegend(
 
   onMount(() => {
     bindElementsLegend(refElement, layer);
+  });
+
+  createEffect(() => {
+    if (refElement && layer.visible && layer.legend?.visible) {
+      computeRectangleBox(
+        refElement,
+        heightTitle(),
+        heightTitleSubtitle(),
+        positionNote(),
+        layer.legend.title.text,
+        layer.legend?.subtitle?.text,
+        layer.legend?.note?.text,
+        layer.legend.roundDecimals,
+        layer.legend.spacing,
+      );
+    }
   });
 
   const sizesAndPositions = createMemo(() => {

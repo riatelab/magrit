@@ -32,13 +32,15 @@ import {
 import { setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 
 // Types / Interfaces
-import type {
+import {
   LayerDescription,
   LayerDescriptionLabels,
   ProportionalSymbolsParameters,
   LabelsParameters,
-  ClassificationParameters, SmoothedLayerParameters,
-} from '../../global';
+  ClassificationParameters,
+  SmoothedLayerParameters,
+  ProportionalSymbolsSymbolType,
+} from '../../global.d';
 
 // Styles
 import '../../styles/LayerAndLegendSettings.css';
@@ -285,8 +287,20 @@ function makeSettingsDefaultPoint(
       </div>
     </Show>
     <Show when={props.renderer === 'proportionalSymbols'}>
+      <InputFieldSelect
+        label={LL().PortrayalSection.ProportionalSymbolsOptions.SymbolType()}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'symbolType'], v)}
+        value={(props.rendererParameters as ProportionalSymbolsParameters).symbolType}
+      >
+        <option value={ProportionalSymbolsSymbolType.circle}>
+          { LL().PortrayalSection.ProportionalSymbolsOptions.SymbolTypes.circle() }
+        </option>
+        <option value={ProportionalSymbolsSymbolType.square}>
+          { LL().PortrayalSection.ProportionalSymbolsOptions.SymbolTypes.square() }
+        </option>
+      </InputFieldSelect>
       <InputFieldNumber
-        label={ LL().PortrayalSection.ProportionalSymbolsOptions.ReferenceSize() }
+        label={LL().PortrayalSection.ProportionalSymbolsOptions.ReferenceSize()}
         value={(props.rendererParameters as ProportionalSymbolsParameters).referenceRadius}
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'referenceRadius'], v)}
         min={1}
@@ -384,6 +398,8 @@ function makeSettingsDefaultLine(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
+  // TODO: we have layer of proportionnal symbols with geometry type "linestring"
+  //  so we should handle this case here
   return <>
     <Show when={ props.renderer === 'default' || props.renderer === 'discontinuity' }>
       <InputFieldColor
