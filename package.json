@@ -43,7 +43,7 @@
     "@r-wasm/webr": "^0.1.1",
     "@solid-primitives/autofocus": "^0.0.109",
     "@solidjs/router": "^0.10.10",
-    "@turf/turf": "^6.5.0",
+    "@turf/turf": "7.0.0-alpha.111",
     "ag-grid-community": "^31.0.3",
     "ag-grid-solid": "^31.0.3",
     "alasql": "^4.2.6",
