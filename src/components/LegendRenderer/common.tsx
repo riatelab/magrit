@@ -264,7 +264,7 @@ export function makeLegendSettingsModal(layerId: string, LL: Accessor<Translatio
       );
     },
     escapeKey: 'cancel',
-    width: 700,
+    width: '700px',
   });
 }
 

@@ -95,9 +95,9 @@ export default function DefaultModal(): JSX.Element {
     window.removeEventListener('resize', resizeListener);
   });
 
-  return <div class="modal-window modal" style={{ display: 'flex' }} ref={refParentNode}>
+  return <div class="modal-window modal" style={{ display: 'flex' }} ref={refParentNode!}>
     <div class="modal-background"></div>
-    <div class="modal-card" style={ modalStore.width ? { width: `${modalStore.width}px` } : {} }>
+    <div class="modal-card" style={ modalStore.width ? { width: modalStore.width } : {} }>
       <header
         class="modal-card-head"
         style={{ cursor: 'grab' }}

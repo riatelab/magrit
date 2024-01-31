@@ -10,7 +10,7 @@ type ModalStoreType = {
   successButton: string | null,
   cancelButton: string | null,
   escapeKey: 'confirm' | 'cancel' | null,
-  width?: number,
+  width?: string,
 };
 
 const getEmptyModalStore = () => ({

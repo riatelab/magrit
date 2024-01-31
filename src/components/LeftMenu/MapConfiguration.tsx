@@ -123,7 +123,7 @@ function onChangeProjectionEntry(value: string) {
       cancelCallback: () => {
         setMapStore('projection', currentProjection);
       },
-      width: 900,
+      width: '900px',
     });
   } else {
     // The projection function name in d3 is 'geo' + the value
