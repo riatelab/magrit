@@ -19,7 +19,6 @@ import { detectTypeField, Variable } from './typeDetection';
 import rewindLayer from './rewind';
 
 // Stores
-import { setFieldTypingModalStore } from '../store/FieldTypingModalStore';
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
 import { type LayersDescriptionStoreType, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
 import { fitExtent } from '../store/MapStore';
@@ -182,13 +181,6 @@ function addLayer(geojson: GeoJSONFeatureCollection, name: string, fit: boolean)
   if (fit) {
     fitExtent(layerId);
   }
-
-  // Open modal for field typing
-  // setFieldTypingModalStore({
-  //   show: true,
-  //   targetId: layerId,
-  //   targetType: 'layer',
-  // });
 }
 
 function addTabularLayer(data: object[], name: string) {

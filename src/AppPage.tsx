@@ -21,7 +21,6 @@ import { initDb, storeProject } from './helpers/storage';
 
 // Sub-components
 import AboutModal from './components/Modals/AboutModal.tsx';
-import FieldTypingModal from './components/Modals/FieldTypingModal.tsx';
 import DefaultModal from './components/Modals/ModalWindow.tsx';
 import LeftMenu from './components/LeftMenu/LeftMenu.tsx';
 import LoadingOverlay from './components/LoadingOverlay.tsx';
@@ -37,7 +36,6 @@ import ImportWindow from './components/ImportWindow.tsx';
 
 // Stores
 import { classificationPanelStore } from './store/ClassificationPanelStore';
-import { fieldTypingModalStore } from './store/FieldTypingModalStore';
 import { globalStore, setGlobalStore, setLoading } from './store/GlobalStore';
 import {
   type MapStoreType,
@@ -448,9 +446,6 @@ const AppPage: () => JSX.Element = () => {
         <Show when={tableWindowStore.show}>
           <TableWindow />
         </Show>
-        <Show when={fieldTypingModalStore.show}>
-          <FieldTypingModal />
-        </Show>
         <Show when={datasetCatalogStore.show}>
           <ExampleDataModal />
         </Show>
@@ -458,6 +453,9 @@ const AppPage: () => JSX.Element = () => {
           <DefaultModal />
         </Show>
       </Transition>
+      <Show when={fileDropStore.show}>
+        <ImportWindow />
+      </Show>
       {/*
         We put the NiceAlert component outside of the previous Transition component
         and we put it lower than it in the DOM
@@ -477,9 +475,6 @@ const AppPage: () => JSX.Element = () => {
     <Toaster
       position={'bottom-center'}
     />
-    <Show when={fileDropStore.show}>
-      <ImportWindow />
-    </Show>
     {/* <ReloadPrompt /> */}
   </div>;
 };

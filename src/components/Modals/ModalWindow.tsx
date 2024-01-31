@@ -19,8 +19,6 @@ export default function DefaultModal(): JSX.Element {
   const { LL } = useI18nContext();
   const successButton: LocalizedString = LL()[modalStore.successButton || 'SuccessButton']();
   const cancelButton: LocalizedString = LL()[modalStore.cancelButton || 'CancelButton']();
-  const confirmCallback = modalStore.confirmCallback || (() => {});
-  const cancelCallback = modalStore.cancelCallback || (() => {});
 
   let refParentNode: HTMLDivElement;
 
@@ -115,11 +113,17 @@ export default function DefaultModal(): JSX.Element {
           class="button is-success confirm-button"
           ref={autofocus}
           autofocus
-          onClick={ () => { confirmCallback(); resetModalStore(); } }
+          onClick={ () => {
+            (modalStore.confirmCallback || (() => {}))();
+            resetModalStore();
+          }}
         >{ successButton }</button>
         <button
           class="button cancel-button"
-          onClick={ () => { cancelCallback(); resetModalStore(); } }
+          onClick={ () => {
+            (modalStore.cancelCallback || (() => {}))();
+            resetModalStore();
+          } }
         >{ cancelButton }</button>
       </footer>
     </div>

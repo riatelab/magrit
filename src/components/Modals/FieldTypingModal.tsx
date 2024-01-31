@@ -1,6 +1,5 @@
 // Imports from solid-js
-import { For, JSX } from 'solid-js';
-import { autofocus } from '@solid-primitives/autofocus';
+import { For, JSX, onMount } from 'solid-js';
 
 // Stores
 import {
@@ -8,10 +7,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
-import {
-  fieldTypingModalStore,
-  resetFieldTypingModalStore,
-} from '../../store/FieldTypingModalStore';
+import { setModalStore } from '../../store/ModalStore';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -19,11 +15,20 @@ import { unproxify } from '../../helpers/common';
 import { VariableType, Variable } from '../../helpers/typeDetection';
 
 // Types / Interfaces / Enums
-import type { LayerDescription } from '../../global';
+import type { LayerDescription, TableDescription } from '../../global';
 
-export default function FieldTypingModal(): JSX.Element {
+export default function FieldTypingModal(
+  props: {
+    id: string,
+    type: 'layer' | 'table',
+  },
+): JSX.Element {
   const { LL } = useI18nContext();
-  const { targetId, targetType } = fieldTypingModalStore;
+
+  // We can destructure the props directly here because we don't
+  // care about losing their reactivity (they won't change while the modal is open)
+  // eslint-disable-next-line solid/reactivity
+  const { id: targetId, type: targetType } = props;
 
   // Do we need to search for the dataset in the "layers" or "tables" array?
   const key = `${targetType}s` as Exclude<keyof LayersDescriptionStoreType, 'layoutFeatures'>;
@@ -57,77 +62,61 @@ export default function FieldTypingModal(): JSX.Element {
       });
   };
 
-  return <div class="modal-window modal" style={{ display: 'flex' }} ref={refParentNode!}>
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">{ LL().FieldsTyping.ModalTitle() }</p>
-        {/* <button class="delete" aria-label="close"></button> */}
-      </header>
-      <section class="modal-card-body">
-        <For each={descriptions}>
-          {
-            (field) => (
-              <div class="field">
-                <label class="label">{ field.name }</label>
-                <div class="control">
-                  <div class="select">
-                    <select>
-                      <option value="identifier" selected={field.type === VariableType.identifier}>
-                        { LL().FieldsTyping.VariableTypes.identifier() }
-                      </option>
-                      <option value="stock" selected={field.type === VariableType.stock}>
-                        { LL().FieldsTyping.VariableTypes.stock() }
-                      </option>
-                      <option value="ratio" selected={field.type === VariableType.ratio}>
-                        { LL().FieldsTyping.VariableTypes.ratio() }
-                      </option>
-                      <option value="categorical" selected={field.type === VariableType.categorical}>
-                        { LL().FieldsTyping.VariableTypes.categorical() }
-                      </option>
-                      <option value="unknown" selected={field.type === VariableType.unknown}>
-                        { LL().FieldsTyping.VariableTypes.unknown() }
-                      </option>
-                    </select>
-                  </div>
-                </div>
+  onMount(() => {
+    setModalStore({
+      confirmCallback: () => {
+        const newDescriptions = getNewDescriptions();
+        // Compare the new descriptions with the old ones
+        // to avoid changing the store if nothing changed
+        if (JSON.stringify(newDescriptions) !== JSON.stringify(descriptions)) {
+          setLayersDescriptionStore(
+            key,
+            (l: LayerDescription | TableDescription) => l.id === targetId,
+            { fields: newDescriptions },
+          );
+        }
+      },
+      cancelCallback: () => {
+        // Reset the descriptions to their original values when clicking on cancel
+        setLayersDescriptionStore(
+          key,
+          (l: LayerDescription | TableDescription) => l.id === targetId,
+          { fields: descriptions },
+        );
+      },
+    });
+  });
+
+  return <div ref={refParentNode!}>
+    <For each={descriptions}>
+      {
+        (field) => (
+          <div class="field">
+            <label class="label">{field.name}</label>
+            <div class="control">
+              <div class="select">
+                <select>
+                  <option value="identifier" selected={field.type === VariableType.identifier}>
+                    {LL().FieldsTyping.VariableTypes.identifier()}
+                  </option>
+                  <option value="stock" selected={field.type === VariableType.stock}>
+                    {LL().FieldsTyping.VariableTypes.stock()}
+                  </option>
+                  <option value="ratio" selected={field.type === VariableType.ratio}>
+                    {LL().FieldsTyping.VariableTypes.ratio()}
+                  </option>
+                  <option value="categorical" selected={field.type === VariableType.categorical}>
+                    {LL().FieldsTyping.VariableTypes.categorical()}
+                  </option>
+                  <option value="unknown" selected={field.type === VariableType.unknown}>
+                    {LL().FieldsTyping.VariableTypes.unknown()}
+                  </option>
+                </select>
               </div>
-            )
-          }
-        </For>
-      </section>
-      <footer class="modal-card-foot">
-        <button
-          class="button is-success"
-          ref={autofocus}
-          autofocus
-          onClick={ () => {
-            const newDescriptions = getNewDescriptions();
-            // Compare the new descriptions with the old ones
-            // to avoid changing the store if nothing changed
-            if (JSON.stringify(newDescriptions) !== JSON.stringify(descriptions)) {
-              setLayersDescriptionStore(
-                'layers',
-                (l: LayerDescription) => l.id === targetId,
-                { fields: newDescriptions },
-              );
-            }
-            resetFieldTypingModalStore();
-          } }
-        >{ LL().SuccessButton() }</button>
-        <button
-          class="button"
-          onClick={ () => {
-            // Reset the descriptions to their original values when clicking on cancel
-            setLayersDescriptionStore(
-              'layers',
-              (l: LayerDescription) => l.id === targetId,
-              { fields: descriptions },
-            );
-            resetFieldTypingModalStore();
-          } }
-        >{ LL().CancelButton() }</button>
-      </footer>
-    </div>
+            </div>
+          </div>
+        )
+      }
+    </For>
   </div>;
 }

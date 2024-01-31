@@ -24,7 +24,6 @@ import { setModalStore } from '../../store/ModalStore';
 import { setNiceAlertStore } from '../../store/NiceAlertStore';
 import { setTableWindowStore } from '../../store/TableWindowStore';
 import { fitExtent, mapStore } from '../../store/MapStore';
-import { setFieldTypingModalStore } from '../../store/FieldTypingModalStore';
 
 // Other components / subcomponents
 import LayerSettings from '../Modals/LayerSettings.tsx';
@@ -36,6 +35,7 @@ import type { LayerDescription, TableDescription } from '../../global';
 // Styles
 import 'font-gis/css/font-gis.css';
 import '../../styles/LayerManagerItem.css';
+import FieldTypingModal from '../Modals/FieldTypingModal.tsx';
 
 const typeIcons: { polygon: string; linestring: string; raster: string; point: string } = {
   point: 'fg-point',
@@ -122,12 +122,13 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
   });
 };
 
-const onClickTyping = (id: string, type: 'table' | 'layer') => {
+const onClickTyping = (id: string, type: 'table' | 'layer', LL: Accessor<TranslationFunctions>) => {
   console.log('click typing on item ', id);
-  setFieldTypingModalStore({
+  setModalStore({
     show: true,
-    targetId: id,
-    targetType: type,
+    content: () => <FieldTypingModal type={type} id={id} />,
+    title: LL().FieldsTyping.ModalTitle(),
+    escapeKey: 'cancel',
   });
 };
 
@@ -251,7 +252,7 @@ export function LayerManagerLayerItem(props: { 'layer': LayerDescription }): JSX
             <FaSolidTable onClick={() => { onClickTable(props.layer.id, 'layer'); }} />
           </div>
           <div title={ LL().LayerManager.Typing() }>
-            <FiType onClick={() => { onClickTyping(props.layer.id, 'layer'); }}/>
+            <FiType onClick={() => { onClickTyping(props.layer.id, 'layer', LL); }}/>
           </div>
         </Show>
         <div title={ LL().LayerManager.Delete() }>
@@ -331,7 +332,7 @@ export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX
           </div>
           <div title={LL().LayerManager.Typing()}>
             <FiType onClick={() => {
-              onClickTyping(props.table.id, 'table');
+              onClickTyping(props.table.id, 'table', LL);
             }}/>
           </div>
         </Show>
