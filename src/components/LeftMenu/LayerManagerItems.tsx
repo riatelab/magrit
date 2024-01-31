@@ -59,14 +59,17 @@ const onClickFitExtent = (id: string) => {
   fitExtent(id);
 };
 
-const onClickTable = (id: string) => {
+const onClickTable = (id: string, type: 'layer' | 'table') => {
   console.log('click table on item ', id);
   setTableWindowStore({
     // TODO: only allow edition on some layers
     //  (not layer that have renderer != 'default' for example)
     editable: true,
-    layerId: id,
     show: true,
+    identifier: {
+      type,
+      id,
+    },
   });
 };
 
@@ -91,7 +94,7 @@ const onClickTrashLayer = (id: string, LL: Accessor<TranslationFunctions>) => {
     content: innerElement,
     confirmCallback: onDeleteConfirmed,
     cancelCallback: (): void => undefined,
-    focusOn: 'cancel',
+    focusOn: 'confirm',
   });
 };
 
@@ -146,7 +149,7 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
       content: () => <p>Legend not available for this layer</p>,
       confirmCallback: (): void => undefined,
       cancelCallback: (): void => undefined,
-      focusOn: 'cancel',
+      focusOn: 'confirm',
     });
   } else {
     // Toggle the visibility of the legend
@@ -245,7 +248,7 @@ export function LayerManagerLayerItem(props: { 'layer': LayerDescription }): JSX
         </div>
         <Show when={props.layer.fields && props.layer.fields.length > 0}>
           <div title={ LL().LayerManager.AttributeTable() }>
-            <FaSolidTable onClick={() => { onClickTable(props.layer.id); }} />
+            <FaSolidTable onClick={() => { onClickTable(props.layer.id, 'layer'); }} />
           </div>
           <div title={ LL().LayerManager.Typing() }>
             <FiType onClick={() => { onClickTyping(props.layer.id, 'layer'); }}/>
@@ -299,7 +302,7 @@ const onClickTrashTable = (id: string, LL: Accessor<TranslationFunctions>) => {
     content: innerElement,
     confirmCallback: onDeleteConfirmed,
     cancelCallback: (): void => undefined,
-    focusOn: 'cancel',
+    focusOn: 'confirm',
   });
 };
 
@@ -323,7 +326,7 @@ export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX
           </div>
           <div title={LL().LayerManager.AttributeTable()}>
             <FaSolidTable onClick={() => {
-              onClickTable(props.table.id);
+              onClickTable(props.table.id, 'table');
             }}/>
           </div>
           <div title={LL().LayerManager.Typing()}>
