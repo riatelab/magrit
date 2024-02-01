@@ -24,6 +24,12 @@ async function intersection(
   // and then use the union to clip each feature of layer1
   const unionPtr = geos.GEOSUnaryUnion(geojsonToGeosGeom(layer2, geos));
 
+  // In order to repair invalid geometries and topology issues
+  // we can buffer the union before clipping the features of layer1
+  // (note that the buffer width is in the unit of the dataset, so degrees).
+  const bufferPtr1 = geos.GEOSBuffer(unionPtr, 0.0000091, 1); // about 1 meter
+  const bufferPtr = geos.GEOSBuffer(bufferPtr1, -0.0000091, 8);
+
   // Clip each feature of layer1 with the union of layer2
   const features = [];
   for (let i = 0; i < layer1.features.length; i += 1) {
@@ -31,7 +37,7 @@ async function intersection(
     // Pointer to the clipped feature
     const clippedPtr = geos.GEOSIntersection(
       geojsonToGeosGeom(ft, geos),
-      unionPtr,
+      bufferPtr,
     );
     // Convert back to geojson and add to the result array
     features.push({
@@ -44,8 +50,10 @@ async function intersection(
     geos.GEOSGeom_destroy(clippedPtr);
   }
 
-  // Destroy the union
+  // Destroy the union and the buffers
   geos.GEOSGeom_destroy(unionPtr);
+  geos.GEOSGeom_destroy(bufferPtr1);
+  geos.GEOSGeom_destroy(bufferPtr);
 
   // Build the resulting feature collection
   return {
