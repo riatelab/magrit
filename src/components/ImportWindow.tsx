@@ -43,6 +43,7 @@ import SimplificationModal from './Modals/SimplificationModal.tsx';
 
 // Styles
 import '../styles/ImportWindow.css';
+import { openLayerManager } from './LeftMenu/LeftMenu.tsx';
 
 interface LayerOrTableDescription {
   name: string,
@@ -178,7 +179,6 @@ const formatCrsTitle = (
 //   files: FileEntry[],
 // ): Promise<DatasetInformation | InvalidDataset> => {
 //   const result = await getDatasetInfo(files.map((f) => f.file));
-//   // console.log(result);
 //
 //   const name = splitLastOccurrence(files[0].name, '.')[0];
 //
@@ -203,7 +203,7 @@ const formatCrsTitle = (
 //   };
 // };
 
-const analyseDatasetGDAL = async (
+const analyseTabularDatasetGDAL = async (
   fileOrFiles: FileEntry | FileEntry[],
 ): Promise<DatasetInformation | InvalidDataset> => {
   const ds = Array.isArray(fileOrFiles)
@@ -216,12 +216,54 @@ const analyseDatasetGDAL = async (
     ds,
     { opts: ['-wkt_format', 'WKT1'] },
   );
-  console.log(result);
+
+  const layers = result.layers.map((layer: any) => ({
+    name: layer.name,
+    features: layer.featureCount,
+    useCRS: false,
+    addToProject: true,
+    simplify: false,
+    fitMap: false,
+  }));
+
+  /* eslint-disable no-nested-ternary */
+  const detailedType = result.driverLongName === 'Open Document Spreadsheet'
+    ? SupportedTabularFileTypes.ODS
+    : result.driverLongName === 'MS Excel format'
+      ? SupportedTabularFileTypes.XLS
+      : result.driverLongName === 'MS Office Open XML spreadsheet'
+        ? SupportedTabularFileTypes.XLSX : 'Unknown';
+  /* eslint-enable no-nested-ternary */
+
+  return {
+    type: 'tabular',
+    name,
+    detailedType,
+    complete: true,
+    layers,
+  };
+};
+
+const analyseGeospatialDatasetGDAL = async (
+  fileOrFiles: FileEntry | FileEntry[],
+): Promise<DatasetInformation | InvalidDataset> => {
+  const ds = Array.isArray(fileOrFiles)
+    ? fileOrFiles.map((fe) => fe.file)
+    : fileOrFiles.file;
+  const name = Array.isArray(fileOrFiles)
+    ? fileOrFiles[0].name
+    : fileOrFiles.name;
+  const result = await getDatasetInfo(
+    ds,
+    { opts: ['-wkt_format', 'WKT1'] },
+  );
+
   const layers = result.layers.map((layer: any) => ({
     name: layer.name,
     features: layer.featureCount,
     geometryType: layer.geometryFields[0] ? layer.geometryFields[0].type : 'unknown',
     crs: readCrs(layer.geometryFields[0]),
+    useCRS: false,
     addToProject: true,
     simplify: false,
     fitMap: false,
@@ -372,11 +414,10 @@ const analyzeDataset = async (
       if (content.includes('"FeatureCollection"')) {
         // We have a GeoJSON file
         // result = analyseDatasetGeoJSON(content, name);
-        result = await analyseDatasetGDAL(file);
+        result = await analyseGeospatialDatasetGDAL(file);
       } else if (content.includes('"Topology"')) {
         // We have a TopoJSON file
         result = analyzeDatasetTopoJSON(content, name);
-        console.log(result);
       } else {
         // We have a JSON file but it's not a GeoJSON or a TopoJSON
         // So it's probably tabular data.
@@ -390,15 +431,16 @@ const analyzeDataset = async (
     } else if (
       file.file.type === 'application/vnd.ms-excel'
       || file.file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      || file.file.type === 'application/vnd.oasis.opendocument.spreadsheet'
     ) {
-      // result = analyseDatasetTabularText(content, name, file.ext);
+      result = await analyseTabularDatasetGDAL(file);
     } else if (
       file.file.type === 'application/geopackage+sqlite3'
       || file.file.type === 'application/gml+xml'
       || file.file.type === 'application/vnd.google-earth.kml+xml'
       // TODO: handle zip files...
     ) {
-      result = await analyseDatasetGDAL(file);
+      result = await analyseGeospatialDatasetGDAL(file);
     } else if (
       shapefileExtensions.includes(file.ext)
     ) {
@@ -421,7 +463,7 @@ const analyzeDataset = async (
         layers: [],
       };
     } else {
-      result = await analyseDatasetGDAL(ds[name].files);
+      result = await analyseGeospatialDatasetGDAL(ds[name].files);
       console.log(result);
     }
   }
@@ -821,6 +863,11 @@ export default function ImportWindow(): JSX.Element {
                 }
               }));
             }));
+
+            // TODO: if we only import one layer and if there wasn't any layer in the project,
+            //  we should probably still automatically fit the map to the extent of the layer...
+            //  (maybe we could also display a toast saying
+            //  "The map has been fitted to the extent of the layer")
             for (let i = 0; i < dsToImport.length; i += 1) {
               const [files, type, name, fitMap, simplify] = dsToImport[i];
               // We want to wait for the import of the current layer to be finished
@@ -843,6 +890,9 @@ export default function ImportWindow(): JSX.Element {
 
             // Remove the "loading" overlay
             setGlobalStore({ isLoading: false });
+
+            // Open the layer manager section on the left menu
+            openLayerManager();
 
             // The layers are loaded and the loading overlay is removed,
             // we can now display the simplification modal if needed.

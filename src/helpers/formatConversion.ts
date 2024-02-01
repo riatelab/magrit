@@ -15,7 +15,7 @@ import type { GeoJSONFeatureCollection, GeoJSONFeature } from '../global';
  * @param params
  */
 export async function convertToGeoJSON(
-  fileOrFiles: (File | File[]),
+  fileOrFiles: File | File[],
   params: { openOpts: string[]; opts: string[] } = { opts: [], openOpts: [] },
 ): Promise<GeoJSONFeatureCollection> {
   const openOptions = params.openOpts || [];
@@ -29,14 +29,24 @@ export async function convertToGeoJSON(
   const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
   const bytes = await globalThis.gdal.getFileBytes(output);
   await globalThis.gdal.close(input);
-  const layer = JSON.parse(new TextDecoder().decode(bytes));
-  // Todo: maybe this filtering should be in the caller of this function
-  //  (and maybe we could display a toast message when some features are removed to inform the user)
-  const features = layer.features.filter((f: GeoJSONFeature) => f.geometry);
-  console.log(layer.features.length - features.length, 'features were removed because they had no geometry');
-  layer.features = features;
-  return layer;
+  return JSON.parse(new TextDecoder().decode(bytes));
 }
+
+export async function convertBinaryTabularDatasetToJSON(
+  fileOrFiles: File | File[],
+  params: { openOpts: string[]; opts: string[] } = { opts: [], openOpts: [] },
+): Promise<object[]> {
+  const layer = await convertToGeoJSON(fileOrFiles, params);
+  return layer.features.map((f: GeoJSONFeature) => f.properties);
+}
+
+export const removeFeaturesWithEmptyGeometry = (layer: GeoJSONFeatureCollection) => {
+  const features = layer.features.filter((f: GeoJSONFeature) => f.geometry);
+  const nbRemoved = layer.features.length - features.length;
+  // eslint-disable-next-line no-param-reassign
+  layer.features = features;
+  return { layer, nbRemoved };
+};
 
 /**
  * Get the geometry type of the given GeoJSON layer.

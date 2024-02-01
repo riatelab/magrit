@@ -11,19 +11,31 @@ export enum SupportedGeoFileTypes {
   GeoPackage = 'gpkg',
 }
 
+export enum SupportedTextualTabularFileTypes {
+  CSV = 'csv',
+  TSV = 'tsv',
+  TXT = 'txt',
+  JSON = 'json',
+}
+
+export enum SupportedBinaryTabularFileTypes {
+  ODS = 'ods',
+  XLS = 'xls',
+  XLSX = 'xlsx',
+}
+
 /**
  * Supported file formats for export (tabular data)
  */
 export enum SupportedTabularFileTypes {
   CSV = 'csv',
+  JSON = 'json',
+  ODS = 'ods',
   TSV = 'tsv',
   TXT = 'txt',
-  ODS = 'ods',
   XLS = 'xls',
   XLSX = 'xlsx',
-  JSON = 'json',
 }
-
 /**
  * Allowed mime types for import
  */
@@ -61,6 +73,8 @@ export const allowedMimeTypes: string[] = [
   // For xls, xlsx
   'application/vnd.ms-excel',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  // For ods
+  'application/vnd.oasis.opendocument.spreadsheet',
 ];
 
 /**

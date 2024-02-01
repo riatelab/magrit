@@ -24,10 +24,15 @@ import '../../styles/LeftMenu.css';
 import ImportSection from './ImportSection.tsx';
 import LayoutFeatures from './LayoutFeatures.tsx';
 
+const [expandedSection, setExpandedSection] = createSignal(1);
+
+export function openLayerManager() {
+  setExpandedSection(3);
+}
+
 export default function LeftMenu(): JSX.Element {
   const { LL } = useI18nContext();
 
-  const [expandedSection, setExpandedSection] = createSignal(1);
   return <div class="left-menu" style={{ 'overflow-y': 'auto' }}>
 
     <div class="left-menu__title" onClick={() => setExpandedSection(1)}>

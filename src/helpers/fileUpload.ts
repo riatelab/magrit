@@ -6,13 +6,21 @@ import toast from 'solid-toast';
 import { getPalette } from 'dicopal';
 
 // Helpers
-import { convertTabularDatasetToJSON, convertToGeoJSON, getGeometryType } from './formatConversion';
+import {
+  convertBinaryTabularDatasetToJSON,
+  convertTabularDatasetToJSON,
+  convertToGeoJSON,
+  getGeometryType,
+  removeFeaturesWithEmptyGeometry,
+} from './formatConversion';
 import { generateIdLayer, generateIdTable } from './layers';
 import {
   allowedFileExtensions,
   allowedMimeTypes,
   SupportedGeoFileTypes,
+  SupportedBinaryTabularFileTypes,
   SupportedTabularFileTypes,
+  SupportedTextualTabularFileTypes,
 } from './supportedFormats';
 import { convertTopojsonToGeojson } from './topojson';
 import { detectTypeField, Variable } from './typeDetection';
@@ -80,6 +88,16 @@ export function isAuthorizedFile(file: FileEntry): boolean {
 export const isTabularFile = (files: CustomFileList): boolean => Object
   .keys(SupportedTabularFileTypes)
   .map((key) => SupportedTabularFileTypes[key as never] as string)
+  .indexOf(files[0].ext) > -1;
+
+export const isTextualTabularFile = (files: CustomFileList): boolean => Object
+  .keys(SupportedTextualTabularFileTypes)
+  .map((key) => SupportedTextualTabularFileTypes[key as never] as string)
+  .indexOf(files[0].ext) > -1;
+
+export const isBinaryTabularFile = (files: CustomFileList): boolean => Object
+  .keys(SupportedBinaryTabularFileTypes)
+  .map((key) => SupportedBinaryTabularFileTypes[key as never] as string)
   .indexOf(files[0].ext) > -1;
 
 export const isTopojson = async (files: CustomFileList) => files.length === 1
@@ -244,30 +262,51 @@ export const convertAndAddFiles = async (
   // we don't use GDAL and convert it directly to GeoJSON
   if (format === SupportedGeoFileTypes.TopoJSON) {
     const res = convertTopojsonToGeojson(await files[0].file.text());
-    return addLayer(res[layerName], layerName, fit);
+    const { layer, nbRemoved } = removeFeaturesWithEmptyGeometry(res[layerName]);
+    toast.custom(`Removed ${nbRemoved} features with empty geometries`);
+    return addLayer(layer, layerName, fit);
   }
 
   // If the file is a tabular file, we convert it to JSON manually too
-  if (!(format === SupportedGeoFileTypes.GeoJSON) && isTabularFile(files)) {
+  if (!(format === SupportedGeoFileTypes.GeoJSON) && isTextualTabularFile(files)) {
     const res = await convertTabularDatasetToJSON(files[0].file, files[0].ext);
     return addTabularLayer(res, files[0].name);
   }
 
-  // Otherwise we use GDAL to convert the file to GeoJSON
+  // If the file is a binary tabular file, we use GDA to convert it to JSON
+  if (isBinaryTabularFile(files)) {
+    try {
+      const opts = ['-nln', layerName, '-sql', `SELECT * FROM "${layerName}"`];
+      const res = await convertBinaryTabularDatasetToJSON(
+        files.map((f) => f.file),
+        { opts, openOpts: [] },
+      );
+      return addTabularLayer(res, files[0].name);
+    } catch (e: any) {
+      console.error(e);
+      toast.error(`Error while reading file: ${e.message ? e.message : e}`);
+      // TODO: ensure that the error is handled by the caller
+      throw e;
+    }
+  }
+
+  // Otherwise this is a geospatial file and we use GDAL to convert the file to GeoJSON
   let res;
   try {
     const opts = format === SupportedGeoFileTypes.GeoPackage
-      ? ['-nln', layerName, '-sql', `SELECT * FROM '${layerName}'`]
+      ? ['-nln', layerName, '-sql', `SELECT * FROM "${layerName}"`]
       : [];
     res = await convertToGeoJSON(
       files.map((f) => f.file),
       { opts, openOpts: [] },
     );
+    const { layer, nbRemoved } = removeFeaturesWithEmptyGeometry(res);
+    toast.custom(`Removed ${nbRemoved} features with empty geometries`);
+    return addLayer(layer, layerName, fit);
   } catch (e: any) {
     console.error(e);
     toast.error(`Error while reading file: ${e.message ? e.message : e}`);
     // TODO: ensure that the error is handled by the caller
     throw e;
   }
-  return addLayer(res, layerName, fit);
 };
