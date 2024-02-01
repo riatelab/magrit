@@ -1,8 +1,8 @@
 // Imports from external packages
 import { GPU } from 'gpu.js';
 import { pointGrid } from '@turf/turf';
-import type { BBox } from '@turf/turf';
 import { isobands } from 'contour-wasm';
+import type { BBox } from '@turf/turf';
 
 // Stores
 import { setLoadingMessage } from '../store/GlobalStore';
@@ -10,7 +10,7 @@ import { setLoadingMessage } from '../store/GlobalStore';
 // Helpers
 import { makeCentroidLayer } from './geo';
 import { intersection } from './geos';
-import { max } from './math';
+import { max, min } from './math';
 import { convertToTopojsonQuantizeAndBackToGeojson } from './topojson';
 
 // Types
@@ -57,18 +57,41 @@ function makePointGrid(
   return pointGrid(bb as BBox, gridParameters.resolution) as GeoJSONFeatureCollection;
 }
 
+const computeStep = (
+  xCoords: Set<number>,
+  yCoords: Set<number>,
+): {
+  xStep: number,
+  yStep: number,
+} => {
+  // const xStep = (max(...xCoords) - min(...xCoords)) / (xCoords.size - 1);
+  // const yStep = (max(...yCoords) - min(...yCoords)) / (yCoords.size - 1);
+  const itX = xCoords.values();
+  const itY = yCoords.values();
+  const x0 = itX.next().value;
+  const x1 = itX.next().value;
+  const y0 = itY.next().value;
+  const y1 = itY.next().value;
+  return {
+    xStep: x1 - x0,
+    yStep: y1 - y0,
+  };
+};
+
 function makeContourLayer(
   grid: GeoJSONFeatureCollection,
   thresholds: number[],
 ): GeoJSONFeatureCollection {
   const xCoords = new Set(grid.features.map((d) => d.geometry.coordinates[0]));
   const yCoords = new Set(grid.features.map((d) => d.geometry.coordinates[1]));
+  const { xStep, yStep } = computeStep(xCoords, yCoords);
   const width = xCoords.size;
   const height = yCoords.size;
-  // const values = new Float64Array(
-  //   grid.features.toReversed().map((d) => d.properties.z) as number[],
-  // );
+
   // We need to change the order of the values
+  // TODO: maybe this should be an upstream improvement in contour-wasm,
+  //   supporting a different order of the values (and/or having
+  //   utility function to take a GeoJSON grid of points as input).
   const v = [];
   for (let i = 0; i < height; i += 1) {
     for (let j = 0; j < width; j += 1) {
@@ -80,8 +103,8 @@ function makeContourLayer(
   const options = {
     x_origin: Math.min(...xCoords),
     y_origin: Math.min(...yCoords),
-    x_step: grid.features[width].geometry.coordinates[0] - grid.features[0].geometry.coordinates[0],
-    y_step: grid.features[1].geometry.coordinates[1] - grid.features[0].geometry.coordinates[1],
+    x_step: xStep,
+    y_step: yStep,
   };
 
   const intervals = new Float64Array(thresholds);
@@ -289,7 +312,6 @@ export async function computeStewart(
   const clippedContours = await intersection(contours, data);
   console.timeEnd('intersection');
   console.groupEnd();
-
   return clippedContours;
 }
 
