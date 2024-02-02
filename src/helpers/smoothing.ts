@@ -54,6 +54,11 @@ function makePointGrid(
   if (bb[3] > 90) {
     bb[3] = 90;
   }
+  // FIXME: it seems that turf pointGrid return an empty grid when the bbox
+  //  describe the whole world (i.e. when the bbox is [-180, -90, 180, 90]).
+  //  This is legit but we should handle creating grid larger than an hemisphere
+  //  and grid over the whole world (possibly grids that are not regular / rectangular -
+  //  and so relying on a different contouring algorithm for these cases).
   return pointGrid(bb as BBox, gridParameters.resolution) as GeoJSONFeatureCollection;
 }
 

@@ -633,6 +633,7 @@ const cleanConsecutiveIdenticalPoints = (
  * TODO: better check geometry validity (closing polygons, etc.)
  * TODO: check for points that may create a "flat" polygon
  * TODO: explain why we cant use turf cleanCoords function and the difference in implementation.
+ * TODO: investigate using geos-wasm geos.GEOSMakeValid (but it may be too costly)
  *
  * @param geometry
  */

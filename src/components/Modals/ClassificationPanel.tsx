@@ -63,6 +63,7 @@ function prepareStatisticalSummary(series: number[]) {
 }
 
 function parseUserDefinedBreaks(series: number[], breaksString: string): number[] {
+  // FIXME: it seems there is a bug when parsing user-defined breaks
   const separator = hasNegative(series) ? '- ' : '-';
   const breaks = breaksString.split(separator).map((d) => +d);
   if (breaks.length < 2) {
@@ -140,6 +141,8 @@ export default function ClassificationPanel(): JSX.Element {
   const missingValues = classificationPanelStore.series!.length - filteredSeries.length;
 
   // Basic statistical summary displayed to the user
+  // TODO: statsSummary should include information about the precision of the values
+  //   because later we are rounding the values to 2 decimal places which is wrong in some cases.
   const statSummary = prepareStatisticalSummary(filteredSeries);
 
   const availableSequentialPalettes = getPalettes({ type: 'sequential', number: 8 })
@@ -308,6 +311,7 @@ export default function ClassificationPanel(): JSX.Element {
                   </tr>
                   <tr>
                     <td>{ LL().ClassificationPanel.minimum() }</td>
+                    { /* TODO: find a better decimalPlaces value */}
                     <td>{ round(statSummary.minimum, 2) }</td>
                   </tr>
                   <tr>
