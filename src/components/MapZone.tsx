@@ -177,7 +177,7 @@ export default function MapZone(): JSX.Element {
     pathGenerator: d3.geoPath(projection),
   });
 
-  // Store the map store with the new scale and translate
+  // Update the map store with the new scale and translate
   setMapStore({
     scale: globalStore.projection.scale(),
     translate: globalStore.projection.translate(),
@@ -195,9 +195,10 @@ export default function MapZone(): JSX.Element {
   // which it was defined).
   const applyZoomPan = (e: MouseEvent & d3.D3ZoomEvent<any, any>, redraw: boolean) => {
     if (!redraw) {
+      const t = e.transform.toString();
       // We just change the transform attribute of the layers
       svgElem.querySelectorAll('g.layer').forEach((g: Element) => {
-        g.setAttribute('transform', e.transform.toString());
+        g.setAttribute('transform', t);
       });
     } else {
       // We need the previous projection scale, rotate and translate values
@@ -232,7 +233,11 @@ export default function MapZone(): JSX.Element {
   // too often when zooming
   const redrawDebounced = debounce((e) => {
     applyZoomPan(e, true);
-  }, 25);
+  }, 50);
+
+  // const transformDebounced = debounce((e) => {
+  //   applyZoomPan(e, false);
+  // }, 20);
 
   // Set up the zoom behavior
   const zoom = d3.zoom()

@@ -33,6 +33,8 @@ import {
   GeoJSONFeature,
   GeoJSONFeatureCollection,
   type GeoJSONGeometry,
+  GeoJSONGeometryType,
+  GeoJSONPosition,
   ProportionalSymbolsSymbolType,
 } from '../global.d';
 
@@ -566,4 +568,173 @@ export const computeDiscontinuity = (
     type: 'FeatureCollection',
     features: dRes,
   };
+};
+
+export const countCoordinates = (geometry: GeoJSONGeometryType): number => {
+  if (geometry.type === 'Point') {
+    return 1;
+  }
+  if (geometry.type === 'MultiPoint') {
+    return geometry.coordinates.length;
+  }
+  if (geometry.type === 'LineString') {
+    return geometry.coordinates.length;
+  }
+  if (geometry.type === 'MultiLineString') {
+    return geometry.coordinates.reduce((acc, c) => acc + c.length, 0);
+  }
+  if (geometry.type === 'Polygon') {
+    let nb = 0;
+    for (let i = 0; i < geometry.coordinates.length; i += 1) {
+      nb += geometry.coordinates[i].length;
+    }
+    return nb;
+  }
+  if (geometry.type === 'MultiPolygon') {
+    let nb = 0;
+    for (let i = 0; i < geometry.coordinates.length; i += 1) {
+      for (let j = 0; j < geometry.coordinates[i].length; j += 1) {
+        nb += geometry.coordinates[i][j].length;
+      }
+    }
+    return nb;
+  }
+  if (geometry.type === 'GeometryCollection') {
+    return geometry.geometries.reduce((acc, g) => acc + countCoordinates(g), 0);
+  }
+  return 0;
+};
+
+const equalPoints = (
+  a: number[] | GeoJSONPosition,
+  b: number[] | GeoJSONPosition,
+): boolean => a[0] === b[0] && a[1] === b[1];
+
+const cleanConsecutiveIdenticalPoints = (
+  coords: number[][] | GeoJSONPosition[],
+): GeoJSONPosition[] => {
+  const newCoords = [coords[0]];
+  for (let i = 1; i < coords.length; i += 1) {
+    if (!equalPoints(coords[i], coords[i - 1])) {
+      newCoords.push(coords[i]);
+    }
+  }
+  return newCoords
+    .filter((d) => !Number.isNaN(d[0]) || !Number.isNaN(d[1])) as GeoJSONPosition[];
+};
+
+/**
+ * Clean a GeoJSON geometry by removing (consecutive, excepted for MultiPoints) identical points.
+ * If a geometry is empty after cleaning (less than 2 points for a line,
+ * less than 3 points for a Polygon), it is removed
+ * and the function returns null (which is valid in the geometry
+ * field of a GeoJSON feature according to RFC 7946).
+ *
+ * TODO: better check geometry validity (closing polygons, etc.)
+ * TODO: check for points that may create a "flat" polygon
+ * TODO: explain why we cant use turf cleanCoords function and the difference in implementation.
+ *
+ * @param geometry
+ */
+export const cleanGeometry = (geometry: GeoJSONGeometryType): GeoJSONGeometryType | null => {
+  if (geometry.type === 'Point') {
+    if (geometry.coordinates.length >= 2) {
+      return geometry;
+    }
+    return null;
+  }
+  if (geometry.type === 'MultiPoint') {
+    if (geometry.coordinates.length > 0) {
+      // Remove identical points, whether they are consecutive or not
+      const newCoords = [geometry.coordinates[0]];
+      for (let i = 1; i < geometry.coordinates.length; i += 1) {
+        let found = false;
+        for (let j = 0; j < newCoords.length; j += 1) {
+          if (equalPoints(geometry.coordinates[i], newCoords[j])) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          newCoords.push(geometry.coordinates[i]);
+        }
+      }
+      return {
+        type: 'MultiPoint',
+        coordinates: newCoords,
+      };
+    }
+    return null;
+  }
+  if (geometry.type === 'LineString') {
+    if (geometry.coordinates.length > 1) {
+      // Remove consecutive identical points
+      const newCoords = cleanConsecutiveIdenticalPoints(geometry.coordinates);
+      if (newCoords.length > 1) {
+        return {
+          type: 'LineString',
+          coordinates: newCoords,
+        };
+      }
+      return null;
+    }
+    return null;
+  }
+  if (geometry.type === 'MultiLineString') {
+    if (geometry.coordinates.length > 0) {
+      // Remove consecutive identical points
+      const newCoords = geometry.coordinates
+        .map((coords) => cleanConsecutiveIdenticalPoints(coords));
+      if (newCoords.some((c) => c.length > 1)) {
+        return {
+          type: 'MultiLineString',
+          coordinates: newCoords.filter((c) => c.length > 1),
+        };
+      }
+    }
+    return null;
+  }
+  if (geometry.type === 'Polygon') {
+    if (geometry.coordinates.length > 0) {
+      // Remove consecutive identical points
+      const newCoords = geometry.coordinates
+        .map((coords) => cleanConsecutiveIdenticalPoints(coords));
+      if (newCoords[0].length > 2) {
+        return {
+          type: 'Polygon',
+          coordinates: newCoords,
+        };
+      }
+      return null;
+    }
+    return null;
+  }
+  if (geometry.type === 'MultiPolygon') {
+    if (geometry.coordinates.length > 0) {
+      // Remove consecutive identical points
+      const newCoords = geometry.coordinates
+        .map((coords) => coords.map((c) => cleanConsecutiveIdenticalPoints(c)));
+      if (newCoords.some((c) => c[0].length > 2)) {
+        return {
+          type: 'MultiPolygon',
+          coordinates: newCoords.filter((c) => c[0].length > 2),
+        };
+      }
+      return null;
+    }
+    return null;
+  }
+  if (geometry.type === 'GeometryCollection') {
+    const newGeometries = geometry.geometries
+      .map((g) => cleanGeometry(g))
+      .filter((g) => g !== null);
+    if (newGeometries.length > 0) {
+      return {
+        type: 'GeometryCollection',
+        geometries: newGeometries,
+      };
+    }
+    return null;
+  }
+  return null;
 };

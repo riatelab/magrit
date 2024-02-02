@@ -782,6 +782,7 @@ export default function ImportWindow(): JSX.Element {
             </For>
             <Show when={fileDescriptions.loading}>
               <tr>
+                <td></td>
                 <td>
                   <button
                     class="button is-loading"
