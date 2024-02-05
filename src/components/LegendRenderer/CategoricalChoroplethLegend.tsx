@@ -15,7 +15,7 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 import { isNonNull } from '../../helpers/common';
 
 // Stores
-import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Sub-components and helpers for legend rendering
 import {

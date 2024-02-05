@@ -10,7 +10,8 @@ import {
   Match,
   on,
   onMount,
-  Show, Switch,
+  Show,
+  Switch,
 } from 'solid-js';
 
 // Imports from other packages

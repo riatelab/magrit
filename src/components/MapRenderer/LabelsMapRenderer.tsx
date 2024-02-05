@@ -4,7 +4,6 @@ import {
   For,
   JSX,
   onMount,
-  Show,
 } from 'solid-js';
 
 // Helpers
@@ -14,7 +13,6 @@ import { bindDragBehavior, mergeFilterIds } from './common.tsx';
 import bindData from '../../directives/bind-data';
 
 // Stores
-import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
 
 // Types / Interfaces / Enums

@@ -3,7 +3,6 @@ import {
   createMemo,
   For,
   JSX,
-  Show,
 } from 'solid-js';
 
 // Helpers
@@ -12,7 +11,6 @@ import { unproxify } from '../../helpers/common';
 import { getClassifier } from '../../helpers/classification';
 
 // Stores
-import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
 
 // Directives

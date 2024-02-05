@@ -130,14 +130,15 @@ createEffect(
   on(
     () => [mapStore.scale, mapStore.translate, mapStore.rotate],
     () => {
-      // console.log(
-      //   'MapStore.ts: createEffect: mapStore.scale, mapStore.translate, mapStore.rotate',
-      // );
       if (
         !globalStore.projection
       ) {
+        console.log('MapStore.ts: createEffect: mapStore.scale, mapStore.translate, mapStore.rotate: !globalStore.projection');
         return;
       }
+      console.log(
+        'MapStore.ts: createEffect: mapStore.scale, mapStore.translate, mapStore.rotate',
+      );
       // Update projection
       globalStore.projection
         .scale(mapStore.scale)
@@ -187,7 +188,11 @@ createEffect(
   on(
     () => [mapStore.mapDimensions.width, mapStore.mapDimensions.height],
     () => {
-      if (!globalStore.projection) return;
+      if (!globalStore.projection) {
+        console.log('MapStore.ts: createEffect: mapStore.mapDimensions.width, mapStore.mapDimensions.height: !globalStore.projection');
+        return;
+      }
+      console.log('MapStore.ts: createEffect: mapStore.mapDimensions.width, mapStore.mapDimensions.height');
       setGlobalStore(
         produce((draft) => {
           draft.projection.clipExtent(getDefaultClipExtent());
@@ -227,15 +232,17 @@ createEffect(
   on(
     () => mapStore.projection.value,
     () => {
-      // console.log('MapStore.ts: createEffect: mapStore.projection.value');
+      console.log('MapStore.ts: createEffect: mapStore.projection.value');
       // 0. We don't need to execute what follows if the map is not yet initialized
       const targetSvg = document.querySelector('svg.map-zone__map');
-      if (!targetSvg) {
-        return;
-      }
+      // if (!targetSvg) {
+      //   return;
+      // }
 
       // 1. Get the current extent so we try to keep the same extent after the projection change
-      const currentExtent = getCurrentExtent(targetSvg as SVGSVGElement & IZoomable);
+      const currentExtent = targetSvg
+        ? getCurrentExtent(targetSvg as SVGSVGElement & IZoomable)
+        : null;
 
       // 2. Instantiate the projection (whether it is a d3 or proj4 projection)
       let projection;
@@ -308,8 +315,7 @@ createEffect(
       }
 
       // 3. Fit the map to the previous extent
-      // TODO: investigate why currentExtent is sometimes undefined
-      if (currentExtent[0] && currentExtent[1]) {
+      if (currentExtent && currentExtent[0] && currentExtent[1]) {
         projection.fitExtent(
           [
             [0, 0],

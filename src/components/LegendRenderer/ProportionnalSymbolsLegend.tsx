@@ -5,7 +5,6 @@ import {
   For,
   type JSX,
   onMount,
-  Show,
 } from 'solid-js';
 
 // Helpers

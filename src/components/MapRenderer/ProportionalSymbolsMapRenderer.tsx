@@ -3,7 +3,6 @@ import {
   createMemo,
   For,
   JSX, onMount,
-  Show,
 } from 'solid-js';
 
 // Helpers
@@ -15,7 +14,6 @@ import bindData from '../../directives/bind-data';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
-import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
 
 // Types / Interfaces / Enums
 import {

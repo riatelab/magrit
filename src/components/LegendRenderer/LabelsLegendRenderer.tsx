@@ -3,7 +3,6 @@ import {
   createMemo,
   type JSX,
   onMount,
-  Show,
 } from 'solid-js';
 
 // Helpers
@@ -22,7 +21,7 @@ import {
 } from './common.tsx';
 
 // Stores
-import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import type { LayerDescriptionLabels, LabelsLegendParameters } from '../../global';
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;

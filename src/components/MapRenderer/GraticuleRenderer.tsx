@@ -1,7 +1,6 @@
 import { For, JSX, Show } from 'solid-js';
 
 // Stores
-import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
 
 // Helpers

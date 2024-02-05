@@ -1,6 +1,6 @@
 // Import from solid-js
 import {
-  createMemo, For, JSX, Show,
+  createMemo, For, JSX,
 } from 'solid-js';
 
 // Helpers
@@ -9,7 +9,6 @@ import { unproxify } from '../../helpers/common';
 import { mergeFilterIds } from './common.tsx';
 
 // Stores
-import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
 
 // Directives
