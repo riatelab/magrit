@@ -49,7 +49,7 @@ export const convertToTopojsonSimplifyAndBackToGeojson = (
 
 export const extractMeshAndMergedPolygonToGeojson = (
   geojson: any,
-  quantization: number = 1e5,
+  quantization: number = 1e6,
 ) => {
   const topology = topojson.topology({ collection: geojson }, quantization);
   const mesh = topojson.mesh(topology, topology.objects.collection);

@@ -57,10 +57,13 @@ const getSimplificationInfo = (
   layerName: string,
 ): Partial<SimplificationInfo> => {
   const topoLayer = topo.objects[layerName];
+  console.time('topojson.feature');
   const geoLayer = topojson.feature(topo, topoLayer) as GeoJSONFeatureCollection;
+  console.timeEnd('topojson.feature');
   let nbGeometries = 0;
   let vertices = 0;
   // let vertices2 = 0;
+  console.time('clean, filter and count points');
   geoLayer.features.forEach((feature) => {
     // eslint-disable-next-line no-param-reassign
     feature.geometry = cleanGeometry(feature.geometry);
@@ -73,12 +76,14 @@ const getSimplificationInfo = (
       // vertices2 += feature.geometry.coordinates.flat(Infinity).length / 2;
     }
   });
+  const features = geoLayer.features.filter((f) => f.geometry);
+  console.timeEnd('clean, filter and count points');
   return {
     polygons: nbGeometries,
     edges: 0,
     vertices,
     selfIntersections: 0,
-    features: geoLayer.features.filter((f) => f.geometry),
+    features,
   };
 };
 /*
@@ -203,10 +208,15 @@ export default function SimplificationModal(
         setLayersDescriptionStore(
           produce((draft: LayersDescriptionStoreType) => {
             descriptions.forEach((description, i) => {
-              // eslint-disable-next-line no-param-reassign
-              draft.layers
-                .find((layer) => layer.id === description.id)!
-                .data.features = stats()[i].features;
+              // The target layer
+              const targetLayer = draft.layers
+                .find((layer) => layer.id === description.id)!;
+              // Unmount the layer first...
+              targetLayer.visible = false;
+              // Set the new data
+              targetLayer.data.features = stats()[i].features;
+              // ...and remount it
+              targetLayer.visible = true;
             });
           }),
         );
@@ -223,14 +233,16 @@ export default function SimplificationModal(
     canvas.height = Math.floor(height * window.devicePixelRatio);
 
     // Projection
-    const projection = d3.geoNaturalEarth2()
-      .scale(1)
-      .translate([0, 0])
-      .fitExtent([[0, 0], [width, height]], bboxPolygon);
+    const projectionRaw = (lng: number, lat: number) => [
+      lng, lat,
+    ];
 
+    const projection = d3.geoProjection(projectionRaw as d3.GeoRawProjection)
+      .fitExtent([[5, 5], [width - 5, height - 5]], bboxPolygon);
     // Path
     const path = d3.geoPath(projection)
-      .context(context);
+      .context(context)
+      .digits(0);
 
     // Transform (we will update it when the user zooms in/out)
     let transform = d3.zoomIdentity;
@@ -332,7 +344,7 @@ export default function SimplificationModal(
           formater={(v) => `${round((1 - v * 4) * 100, 2)}%`}
           onChange={(v) => setSimplificationFactor(v)}
           min={0}
-          max={0.25}
+          max={1}
           step={0.0005}
         />
       </div>
