@@ -10,7 +10,7 @@ import { getPalette, getPalettes } from 'dicopal';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import d3 from '../../helpers/d3-custom';
 import { getClassifier } from '../../helpers/classification';
-import { isNumber } from '../../helpers/common';
+import { getMinimumPrecision, isNumber } from '../../helpers/common';
 import {
   extent, hasNegative, Mmin, round,
 } from '../../helpers/math';
@@ -57,6 +57,7 @@ function prepareStatisticalSummary(series: number[]) {
     mean: d3.mean(series) as number,
     median: d3.median(series) as number,
     standardDeviation: d3.deviation(series) as number,
+    precision: getMinimumPrecision(series),
     // variance: d3.variance(series),
     // varianceCoefficient: d3.deviation(series) / d3.mean(series),
   };
@@ -87,7 +88,9 @@ export default function ClassificationPanel(): JSX.Element {
 
   const makeClassificationParameters = (): ClassificationParameters => {
     /* eslint-disable @typescript-eslint/no-use-before-define */
-    const classifier = new (getClassifier(classificationMethod()))(filteredSeries);
+    // For now we use 'null' precision, which avoid rounding to occurs in
+    // statsbreaks code.
+    const classifier = new (getClassifier(classificationMethod()))(filteredSeries, null);
     let breaks;
     let classes;
     if (
@@ -141,8 +144,6 @@ export default function ClassificationPanel(): JSX.Element {
   const missingValues = classificationPanelStore.series!.length - filteredSeries.length;
 
   // Basic statistical summary displayed to the user
-  // TODO: statsSummary should include information about the precision of the values
-  //   because later we are rounding the values to 2 decimal places which is wrong in some cases.
   const statSummary = prepareStatisticalSummary(filteredSeries);
 
   const availableSequentialPalettes = getPalettes({ type: 'sequential', number: 8 })
@@ -312,23 +313,23 @@ export default function ClassificationPanel(): JSX.Element {
                   <tr>
                     <td>{ LL().ClassificationPanel.minimum() }</td>
                     { /* TODO: find a better decimalPlaces value */}
-                    <td>{ round(statSummary.minimum, 2) }</td>
+                    <td>{ round(statSummary.minimum, statSummary.precision) }</td>
                   </tr>
                   <tr>
                     <td>{ LL().ClassificationPanel.maximum() }</td>
-                    <td>{ round(statSummary.maximum, 2) }</td>
+                    <td>{ round(statSummary.maximum, statSummary.precision) }</td>
                   </tr>
                   <tr>
                     <td>{ LL().ClassificationPanel.mean() }</td>
-                    <td>{ round(statSummary.mean, 2) }</td>
+                    <td>{ round(statSummary.mean, statSummary.precision) }</td>
                   </tr>
                   <tr>
                     <td>{ LL().ClassificationPanel.median() }</td>
-                    <td>{ round(statSummary.median, 2) }</td>
+                    <td>{ round(statSummary.median, statSummary.precision) }</td>
                   </tr>
                   <tr>
                     <td>{ LL().ClassificationPanel.standardDeviation() }</td>
-                    <td>{ round(statSummary.standardDeviation, 2) }</td>
+                    <td>{ round(statSummary.standardDeviation, statSummary.precision) }</td>
                   </tr>
                 </tbody>
               </table>
@@ -374,7 +375,7 @@ export default function ClassificationPanel(): JSX.Element {
                   value={numberOfClasses()}
                   min={3}
                   max={9}
-                  onchange={(event) => {
+                  onChange={(event) => {
                     setNumberOfClasses(+event.target.value);
                     updateClassificationParameters();
                   }}

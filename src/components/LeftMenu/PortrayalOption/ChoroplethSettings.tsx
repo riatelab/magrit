@@ -28,7 +28,7 @@ import {
 // Helper
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { noop } from '../../../helpers/classification';
-import { findSuitableName, isNumber } from '../../../helpers/common';
+import { findSuitableName, getMinimumPrecision, isNumber } from '../../../helpers/common';
 import d3 from '../../../helpers/d3-custom';
 import { generateIdLayer } from '../../../helpers/layers';
 import { Mmin } from '../../../helpers/math';
@@ -83,6 +83,9 @@ function onClickValidate(
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(120, 340);
 
+  // How many decimals to display in the legend
+  const minPrecision = getMinimumPrecision(classification.breaks);
+
   // Prepare the layer description for the new layer
   const newLayerDescription = {
     id: generateIdLayer(),
@@ -115,7 +118,7 @@ function onClickValidate(
       } as LegendTextElement,
       position: legendPosition,
       visible: true,
-      roundDecimals: 1,
+      roundDecimals: minPrecision < 0 ? 0 : minPrecision,
       backgroundRect: {
         visible: false,
       },

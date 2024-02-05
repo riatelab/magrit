@@ -10,11 +10,11 @@ import { range } from 'd3-array';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { isNumber } from '../../helpers/common';
+import { isNumber, precisionToMinimumFractionDigits } from '../../helpers/common';
 import { round } from '../../helpers/math';
 
 // Stores
-import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Sub-components and helpers for legend rendering
 import {
@@ -221,7 +221,17 @@ function verticalLegend(
             style={{ 'user-select': 'none' }}
             text-anchor="start"
             dominant-baseline="middle"
-          >{ round(value, legendParameters.roundDecimals).toLocaleString() }</text>
+          >{
+            round(value, legendParameters.roundDecimals)
+              .toLocaleString(
+                applicationSettingsStore.userLocale,
+                {
+                  minimumFractionDigits: precisionToMinimumFractionDigits(
+                    legendParameters.roundDecimals,
+                  ),
+                },
+              )
+          }</text>
         }
       </For>
       <Show when={hasNoData()}>
@@ -433,7 +443,17 @@ function horizontalLegend(
             style={{ 'user-select': 'none' }}
             text-anchor="middle"
             dominant-baseline="hanging"
-          >{ round(value, legendParameters.roundDecimals).toLocaleString() }</text>
+          >{
+            round(value, legendParameters.roundDecimals)
+              .toLocaleString(
+                applicationSettingsStore.userLocale,
+                {
+                  minimumFractionDigits: precisionToMinimumFractionDigits(
+                    legendParameters.roundDecimals,
+                  ),
+                },
+              )
+          }</text>
         }
       </For>
       <Show when={hasNoData()}>

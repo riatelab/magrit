@@ -9,6 +9,7 @@ import {
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { precisionToMinimumFractionDigits } from '../../helpers/common';
 import { round } from '../../helpers/math';
 
 // Sub-components and helpers for legend rendering
@@ -23,7 +24,7 @@ import {
 } from './common.tsx';
 
 // Stores
-import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import type { DiscontinuityLegendParameters, LayerDescriptionDiscontinuity } from '../../global';
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
@@ -164,7 +165,17 @@ function verticalDiscontinuityLegend(
             style={{ 'user-select': 'none' }}
             text-anchor="start"
             dominant-baseline="hanging"
-          >{ round(breakValue, layer.legend.roundDecimals).toLocaleString() }</text>
+          >{
+            round(breakValue, layer.legend.roundDecimals)
+              .toLocaleString(
+                applicationSettingsStore.userLocale,
+                {
+                  minimumFractionDigits: precisionToMinimumFractionDigits(
+                    layer.legend.roundDecimals,
+                  ),
+                },
+              )
+          }</text>
         }
       </For>
     </g>
@@ -279,7 +290,17 @@ function horizontalDiscontinuityLegend(
             style={{ 'user-select': 'none' }}
             text-anchor="middle"
             dominant-baseline="hanging"
-          >{ round(breakValue, layer.legend.roundDecimals).toLocaleString() }</text>
+          >{
+            round(breakValue, layer.legend.roundDecimals)
+              .toLocaleString(
+                applicationSettingsStore.userLocale,
+                {
+                  minimumFractionDigits: precisionToMinimumFractionDigits(
+                    layer.legend.roundDecimals,
+                  ),
+                },
+              )
+          }</text>
         }
       </For>
     </g>

@@ -17,6 +17,10 @@ export enum ResizeBehavior {
   KeepMapSize,
 }
 
+const getUserLocale = () => (navigator.languages && navigator.languages.length
+  ? navigator.languages[0]
+  : navigator.language || 'en-US');
+
 // A bunch of (global) settings for the application
 // (this is not the same as GlobalStore, which contains the state of the application)
 type ApplicationSettingsStoreType = {
@@ -57,6 +61,9 @@ type ApplicationSettingsStoreType = {
     labels: Partial<LegendTextElement>,
     note: Partial<LegendTextElement>,
   },
+  // The locale of the browser (used for formatting numbers and dates)
+  // (maybe in the future we will allow the user to change the locale)
+  userLocale: string,
 };
 
 const computedStyle = getComputedStyle(document.documentElement);
@@ -104,6 +111,7 @@ const [
       fontWeight: 'normal',
     },
   },
+  userLocale: getUserLocale(),
 } as ApplicationSettingsStoreType);
 
 export {

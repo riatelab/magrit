@@ -96,3 +96,29 @@ export const splitLastOccurrence = (str: string, substring: string) => {
 export function sleep(time: number): Promise<void> {
   return new Promise((resolve) => { setTimeout(resolve, time); });
 }
+
+export const getMinimumPrecision = (arr: number[]) => {
+  let minDiff = Infinity;
+
+  for (let i = 0; i < arr.length - 1; i += 1) {
+    for (let j = i + 1; j < arr.length; j += 1) {
+      const diff = Math.abs(arr[i] - arr[j]);
+      if (diff > 0 && diff < minDiff) {
+        minDiff = diff;
+      }
+    }
+  }
+
+  // TODO: we should handle the case when minDiff is still Infinity
+  return minDiff === Infinity ? 0 : Math.ceil(-Math.log10(minDiff));
+};
+
+export const precisionToMinimumFractionDigits = (precision: number) => {
+  if (precision < 0) {
+    return 0;
+  }
+  if (precision > 100) {
+    return 100;
+  }
+  return precision;
+};

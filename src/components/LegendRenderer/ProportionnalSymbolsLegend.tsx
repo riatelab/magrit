@@ -12,6 +12,7 @@ import {
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { PropSizer } from '../../helpers/geo';
 import { round, sum } from '../../helpers/math';
+import { precisionToMinimumFractionDigits } from '../../helpers/common';
 
 // Sub-components
 import {
@@ -25,7 +26,7 @@ import {
 } from './common.tsx';
 
 // Stores
-import { applicationSettingsStore, RenderVisibility } from '../../store/ApplicationSettingsStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Types / Interfaces / Enums
 import type {
@@ -139,7 +140,18 @@ function stackedSquareLegend(
                 style={{ 'user-select': 'none' }}
                 x={maxHeight() + defaultSpacing * 2}
                 y={heightTitleSubtitle() + maxHeight() - symbolSize}
-              >{ round(value, layer.legend!.roundDecimals).toLocaleString() }</text>
+              >{
+                round(value, layer.legend!.roundDecimals)
+                  .toLocaleString(
+                    applicationSettingsStore.userLocale,
+                    {
+                      minimumFractionDigits: precisionToMinimumFractionDigits(
+                        layer.legend!.roundDecimals,
+                      ),
+                    },
+                  )
+                }
+              </text>
               <line
                 stroke-width={0.8}
                 stroke-dasharray="2"
@@ -279,7 +291,17 @@ function horizontalSquareLegend(
               style={{ 'user-select': 'none' }}
               x={d.x + d.size / 2}
               y={heightTitleSubtitle() + maxHeight() + defaultSpacing * 2}
-            >{ round(d.value, layer.legend!.roundDecimals).toLocaleString() }</text>
+            >{
+              round(d.value, layer.legend!.roundDecimals)
+                .toLocaleString(
+                  applicationSettingsStore.userLocale,
+                  {
+                    minimumFractionDigits: precisionToMinimumFractionDigits(
+                      layer.legend!.roundDecimals,
+                    ),
+                  },
+                )
+            }</text>
           </>
         }
       </For>
@@ -409,7 +431,17 @@ function verticalSquareLegend(
                 style={{ 'user-select': 'none' }}
                 x={maxHeight() + defaultSpacing * 2}
                 y={d.y + d.size / 2}
-              >{ round(d.value, layer.legend!.roundDecimals).toLocaleString() }</text>
+              >{
+                round(d.value, layer.legend!.roundDecimals)
+                  .toLocaleString(
+                    applicationSettingsStore.userLocale,
+                    {
+                      minimumFractionDigits: precisionToMinimumFractionDigits(
+                        layer.legend!.roundDecimals,
+                      ),
+                    },
+                  )
+              }</text>
             </>
         }
       </For>
@@ -520,7 +552,17 @@ function stackedCircleLegend(
                 style={{ 'user-select': 'none' }}
                 x={maxRadius() * 2 + defaultSpacing * 2}
                 y={heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2}
-              >{ round(value, layer.legend!.roundDecimals).toLocaleString() }</text>
+              >{
+                round(value, layer.legend!.roundDecimals)
+                  .toLocaleString(
+                    applicationSettingsStore.userLocale,
+                    {
+                      minimumFractionDigits: precisionToMinimumFractionDigits(
+                        layer.legend!.roundDecimals,
+                      ),
+                    },
+                  )
+              }</text>
               <line
                 stroke-width={0.8}
                 stroke-dasharray="2"
@@ -652,7 +694,17 @@ function verticalCircleLegend(
               style={{ 'user-select': 'none' }}
               x={d.x * 2 + defaultSpacing}
               y={d.y}
-            >{ round(d.value, layer.legend!.roundDecimals).toLocaleString() }</text>
+            >{
+              round(d.value, layer.legend!.roundDecimals)
+                .toLocaleString(
+                  applicationSettingsStore.userLocale,
+                  {
+                    minimumFractionDigits: precisionToMinimumFractionDigits(
+                      layer.legend!.roundDecimals,
+                    ),
+                  },
+                )
+            }</text>
           </>
         }
       </For>
@@ -782,7 +834,17 @@ function horizontalCircleLegend(
               style={{ 'user-select': 'none' }}
               x={d.x}
               y={maxRadius() * 2 + heightTitleSubtitle() + defaultSpacing * 2}
-            >{ round(d.value, layer.legend!.roundDecimals).toLocaleString() }</text>
+            >{
+              round(d.value, layer.legend!.roundDecimals)
+                .toLocaleString(
+                  applicationSettingsStore.userLocale,
+                  {
+                    minimumFractionDigits: precisionToMinimumFractionDigits(
+                      layer.legend!.roundDecimals,
+                    ),
+                  },
+                )
+            }</text>
           </>
         }
       </For>
