@@ -36,7 +36,7 @@ import ImportWindow from './components/ImportWindow.tsx';
 
 // Stores
 import { classificationPanelStore } from './store/ClassificationPanelStore';
-import { globalStore, setGlobalStore, setLoading } from './store/GlobalStore';
+import { globalStore, setGlobalStore, setReloadingProject } from './store/GlobalStore';
 import {
   type MapStoreType,
   mapStore,
@@ -114,8 +114,11 @@ const onBeforeUnloadWindow = (ev: Event) => {
 const dragEnterHandler = (e: Event): void => {
   e.preventDefault();
   e.stopPropagation();
+
   // Only files should trigger the opening of the drop overlay
   if (!draggedElementsAreFiles(e as DragEvent)) return;
+  // We dont want the user to be able to drop files while a project is reloading
+  if (globalStore.isReloadingProject) return;
 
   setFileDropStore({ show: true });
   // clearTimeout(timeout);
@@ -124,8 +127,11 @@ const dragEnterHandler = (e: Event): void => {
 const dragOverHandler = (e: Event): void => {
   e.preventDefault();
   e.stopPropagation();
+
   // Only files should trigger the opening of the drop overlay
   if (!draggedElementsAreFiles(e as DragEvent)) return;
+  // We dont want the user to be able to drop files while a project is reloading
+  if (globalStore.isReloadingProject) return;
 
   setFileDropStore({ show: true });
   if (timeout) {
@@ -140,7 +146,11 @@ const dragOverHandler = (e: Event): void => {
 const dragLeaveHandler = (e: Event): void => {
   e.preventDefault();
   e.stopPropagation();
+
+  // Only files should trigger the opening of the drop overlay
   if (!draggedElementsAreFiles(e as DragEvent)) return;
+  // We dont want the user to be able to drop files while a project is reloading
+  if (globalStore.isReloadingProject) return;
 
   // We want the drop overlay to close if the cursor leaves the drop area
   // and there are no files in the drop area
@@ -155,7 +165,12 @@ const dragLeaveHandler = (e: Event): void => {
 const dropHandler = (e: Event): void => {
   e.preventDefault();
   e.stopPropagation();
+
+  // Only files should trigger the opening of the drop overlay
   if (!draggedElementsAreFiles(e as DragEvent)) return;
+  // We dont want the user to be able to drop files while a project is reloading
+  if (globalStore.isReloadingProject) return;
+
   // Store name and type of the files dropped in a new array (CustomFileList) of FileEntry.
   const files = prepareFileExtensions((e as DragEvent).dataTransfer!.files);
   // Filter out the files that are not supported
@@ -188,8 +203,11 @@ const reloadFromProjectObject = async (
     tables: TableDescription[],
   },
 ): Promise<void> => {
-  // Display a loading overlay because it may take some time
-  setLoading(true, 'Reloading');
+  // Set the app in "reloading" mode
+  // (it displays a loading overlay and prevents the user from adding new layers
+  // it  also set a flag the enable restoring the extent of the map
+  // - more details in store/MapStore.ts)
+  setReloadingProject(true);
 
   await yieldOrContinue('smooth');
 
@@ -200,19 +218,18 @@ const reloadFromProjectObject = async (
     map,
     tables,
   } = obj;
-
   // Reset the layers description store before changing the map store
   // (this avoid redrawing the map for the potential current layers)
   setLayersDescriptionStore({ layers: [], layoutFeatures: [], tables: [] });
+  // Update the layer description store with the layers and layout features
+  setLayersDescriptionStore({ layers, layoutFeatures, tables });
   // Update the map store
   // (this updates the projection and pathGenerator in the global store)
   setMapStore(map);
-  // Update the layer description store with the layers and layout features
-  setLayersDescriptionStore({ layers, layoutFeatures, tables });
   // Reverse the "userHasAddedLayer" flag
   setGlobalStore({ userHasAddedLayer: true });
   // Hide the loading overlay
-  setLoading(false);
+  setReloadingProject(false);
 };
 
 const AppPage: () => JSX.Element = () => {

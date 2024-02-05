@@ -3,6 +3,7 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 
 type GlobalStoreType = {
   isLoading: boolean,
+  isReloadingProject: boolean,
   loadingMessage: string,
   workerToCancel: Array<Worker>,
   windowDimensions: { width: number, height: number },
@@ -16,6 +17,7 @@ const [
   setGlobalStore,
 ] = createStore({
   isLoading: false,
+  isReloadingProject: false,
   loadingMessage: '',
   workerToCancel: [],
   windowDimensions: { width: 0, height: 0 },
@@ -46,9 +48,19 @@ const setLoadingMessage = async (message: string) => {
   await yieldOrContinue('interactive');
 };
 
+const setReloadingProject = (isReloadingProject: boolean) => {
+  const loadingMessage = isReloadingProject ? 'Reloading' : '';
+  setGlobalStore({
+    isLoading: isReloadingProject,
+    isReloadingProject,
+    loadingMessage,
+  });
+};
+
 export {
   globalStore,
   setGlobalStore,
   setLoading,
   setLoadingMessage,
+  setReloadingProject,
 };

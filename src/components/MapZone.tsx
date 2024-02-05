@@ -233,7 +233,7 @@ export default function MapZone(): JSX.Element {
   // too often when zooming
   const redrawDebounced = debounce((e) => {
     applyZoomPan(e, true);
-  }, 50);
+  }, 25);
 
   // const transformDebounced = debounce((e) => {
   //   applyZoomPan(e, false);

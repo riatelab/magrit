@@ -136,9 +136,11 @@ createEffect(
         console.log('MapStore.ts: createEffect: mapStore.scale, mapStore.translate, mapStore.rotate: !globalStore.projection');
         return;
       }
-      console.log(
-        'MapStore.ts: createEffect: mapStore.scale, mapStore.translate, mapStore.rotate',
-      );
+      const targetSvg = document.querySelector('svg.map-zone__map');
+      if (!targetSvg) {
+        console.log('MapStore.ts: createEffect: mapStore.scale, mapStore.translate, mapStore.rotate: !targetSvg');
+        return;
+      }
       // Update projection
       globalStore.projection
         .scale(mapStore.scale)
@@ -172,11 +174,6 @@ createEffect(
         ),
       );
 
-      const targetSvg = document.querySelector('svg.map-zone__map');
-      if (!targetSvg) {
-        return;
-      }
-
       redrawPaths(targetSvg as SVGSVGElement & IZoomable);
     },
   ),
@@ -192,7 +189,6 @@ createEffect(
         console.log('MapStore.ts: createEffect: mapStore.mapDimensions.width, mapStore.mapDimensions.height: !globalStore.projection');
         return;
       }
-      console.log('MapStore.ts: createEffect: mapStore.mapDimensions.width, mapStore.mapDimensions.height');
       setGlobalStore(
         produce((draft) => {
           draft.projection.clipExtent(getDefaultClipExtent());
@@ -235,16 +231,11 @@ createEffect(
       console.log('MapStore.ts: createEffect: mapStore.projection.value');
       // 0. We don't need to execute what follows if the map is not yet initialized
       const targetSvg = document.querySelector('svg.map-zone__map');
-      // if (!targetSvg) {
-      //   return;
-      // }
+      if (!targetSvg) {
+        return;
+      }
 
-      // 1. Get the current extent so we try to keep the same extent after the projection change
-      const currentExtent = targetSvg
-        ? getCurrentExtent(targetSvg as SVGSVGElement & IZoomable)
-        : null;
-
-      // 2. Instantiate the projection (whether it is a d3 or proj4 projection)
+      // 1. Instantiate the projection (whether it is a d3 or proj4 projection)
       let projection;
       if (mapStore.projection.type === 'd3') {
         projection = d3[mapStore.projection.value]()
@@ -256,7 +247,7 @@ createEffect(
         console.log(mapStore.projection.value);
         projection = getD3ProjectionFromProj4(getProjection(mapStore.projection.value));
         projection.clipExtent(getDefaultClipExtent());
-        // If the projection defines bounds and is conical, we want to apply a clipping polygon
+        // 2. If the projection defines bounds, we want to apply a clipping polygon
         // to the projection to avoid the projection to be drawn outside of the bounds
         // (which is sometimes computationally very expensive)
         if (
@@ -282,24 +273,6 @@ createEffect(
           };
 
           projection.preclip(d3.geoClipPolygon(clippingPolygon));
-          // // Also zoom on the clipping polygon
-          // // Margin so that the extent of the layer is not on the border of the map
-          // const marginX = mapStore.mapDimensions.width * 0.03;
-          // const marginY = mapStore.mapDimensions.height * 0.03;
-          //
-          // // Fit the extent of the projection to the extent of the layer, with margins
-          // projection.fitExtent(
-          //   [
-          //     [marginX, marginY],
-          //     [mapStore.mapDimensions.width - marginX, mapStore.mapDimensions.height - marginY],
-          //   ],
-          //   {
-          //     type: 'FeatureCollection',
-          //     features: [
-          //       { type: 'Feature', geometry: clippingPolygon },
-          //     ],
-          //   } as any,
-          // );
         }
         // else {
         //   const [ymax, xmin, ymin, xmax] = [90, -180, -90, 180];
@@ -314,33 +287,39 @@ createEffect(
         // }
       }
 
-      // 3. Fit the map to the previous extent
-      if (currentExtent && currentExtent[0] && currentExtent[1]) {
-        projection.fitExtent(
-          [
-            [0, 0],
-            [mapStore.mapDimensions.width, mapStore.mapDimensions.height],
-          ],
-          {
-            type: 'FeatureCollection',
-            features: [
-              {
-                type: 'Feature',
-                properties: {},
-                geometry: {
-                  type: 'Polygon',
-                  coordinates: [[
-                    [currentExtent[0][0], currentExtent[0][1]],
-                    [currentExtent[1][0], currentExtent[0][1]],
-                    [currentExtent[1][0], currentExtent[1][1]],
-                    [currentExtent[0][0], currentExtent[1][1]],
-                    [currentExtent[0][0], currentExtent[0][1]],
-                  ]],
-                },
-              },
+      // 3. Fit the map to the previous extent (because the projection just changed
+      //    and we want to keep the same extent if possible), except if we are reloading the project
+      //    (in which case we don't want to fit the map to the previous extent but to the extent
+      //    of the map as it was when the project was saved)
+      if (!globalStore.isReloadingProject) {
+        const currentExtent = getCurrentExtent(targetSvg as SVGSVGElement & IZoomable);
+        if (currentExtent && currentExtent[0] && currentExtent[1]) {
+          projection.fitExtent(
+            [
+              [0, 0],
+              [mapStore.mapDimensions.width, mapStore.mapDimensions.height],
             ],
-          },
-        );
+            {
+              type: 'FeatureCollection',
+              features: [
+                {
+                  type: 'Feature',
+                  properties: {},
+                  geometry: {
+                    type: 'Polygon',
+                    coordinates: [[
+                      [currentExtent[0][0], currentExtent[0][1]],
+                      [currentExtent[1][0], currentExtent[0][1]],
+                      [currentExtent[1][0], currentExtent[1][1]],
+                      [currentExtent[0][0], currentExtent[1][1]],
+                      [currentExtent[0][0], currentExtent[0][1]],
+                    ]],
+                  },
+                },
+              ],
+            },
+          );
+        }
       }
 
       // 4. Instantiate the corresponding path generator
