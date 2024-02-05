@@ -16,7 +16,7 @@ import { useI18nContext } from '../../../i18n/i18n-solid';
 import { computeCartogramGastnerSeguyMore, computeCartogramOlson } from '../../../helpers/cartograms';
 import { findSuitableName, unproxify } from '../../../helpers/common';
 import { generateIdLayer } from '../../../helpers/layers';
-import { VariableType } from '../../../helpers/typeDetection';
+import { DataType, type Variable, VariableType } from '../../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 import rewindLayer from '../../../helpers/rewind';
 
@@ -27,7 +27,7 @@ import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
 import InputFieldNumber from '../../Inputs/InputNumber.tsx';
 
 // Stores
-import { setGlobalStore, setLoading } from '../../../store/GlobalStore';
+import { setLoading } from '../../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
@@ -73,7 +73,18 @@ function onClickValidate(
 
   newData = rewindLayer(newData);
 
-  console.log(unproxify(referenceLayerDescription.data), newData);
+  console.log(unproxify(referenceLayerDescription.data as never), newData);
+
+  const newFields = unproxify(referenceLayerDescription.fields as never) as Variable[];
+  if (cartogramMethod === CartogramMethod.GastnerSeguyMore) {
+    // There is a new "area-error" field
+    newFields.push({
+      name: 'area_error',
+      type: VariableType.ratio,
+      hasMissingValues: false,
+      dataType: 'number' as DataType,
+    });
+  }
 
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(120, 340);
@@ -84,7 +95,7 @@ function onClickValidate(
     type: 'polygon',
     renderer: 'cartogram' as RepresentationType,
     data: newData,
-    fields: referenceLayerDescription.fields,
+    fields: newFields,
     visible: true,
     strokeColor: '#000000',
     strokeWidth: 0.5,
