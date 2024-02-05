@@ -7,50 +7,58 @@ import solidPlugin from 'vite-plugin-solid';
 
 import wasm from 'vite-plugin-wasm';
 // import devtools from 'solid-devtools/vite';
-// import { VitePWA } from 'vite-plugin-pwa';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   plugins: [
     wasm(),
     // devtools(),
     solidPlugin({ ssr: false }),
-    // VitePWA({
-    //   injectRegister: 'script',
-    //   registerType: 'autoUpdate',
-    //   devOptions: {
-    //     enabled: true,
-    //   },
-    //   workbox: {
-    //     globPatterns: ['**/*'],
-    //   },
-    //   includeAssets: ['**/*'],
-    //   manifest: {
-    //     name: 'Magrit',
-    //     description: 'A thematic cartography tool',
-    //     short_name: 'Magrit',
-    //     theme_color: '#ffffff',
-    //     scope: '/',
-    //     start_url: '/app',
-    //     icons: [
-    //       {
-    //         src: 'pwa-192x192.png',
-    //         sizes: '192x192',
-    //         type: 'image/png',
-    //       },
-    //       {
-    //         src: 'pwa-512x512.png',
-    //         sizes: '512x512',
-    //         type: 'image/png',
-    //       },
-    //       {
-    //         src: 'pwa-512x512.png',
-    //         sizes: '512x512',
-    //         type: 'image/png',
-    //         purpose: 'any maskable',
-    //       },
-    //     ],
-    //   },
-    // }),
+    VitePWA({
+      // injectRegister: 'script',
+      registerType: 'autoUpdate',
+      // devOptions: {
+      //   enabled: true,
+      // },
+      // workbox: {
+      //   globPatterns: ['**/*'],
+      // },
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'service-worker.js',
+      injectManifest: {
+        maximumFileSizeToCacheInBytes: 35000000,
+      },
+      includeAssets: [
+        'assets/*',
+      ],
+      manifest: {
+        name: 'Magrit',
+        description: 'A thematic cartography tool',
+        short_name: 'Magrit',
+        theme_color: '#ffffff',
+        // scope: '/',
+        // start_url: '/app',
+        icons: [
+          {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable',
+          },
+        ],
+      },
+    }),
     eslint(),
   ],
   server: {
@@ -76,6 +84,19 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
+    minify: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          gpujs: ['gpu.js'],
+        },
+      },
+    },
+  },
+  esbuild: {
+    keepNames: true,
+    minifyIdentifiers: false,
+    treeShaking: true,
   },
   resolve: {
     conditions: ['development', 'browser'],
