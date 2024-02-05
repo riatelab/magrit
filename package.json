@@ -1,7 +1,20 @@
 {
   "name": "magrit-solid",
-  "version": "0.0.1",
+  "version": "1.9.99",
   "description": "",
+  "author": {
+    "name": "Matthieu Viry",
+    "email": "matthieu.viry@cnrs.fr"
+  },
+  "homepage": "https://github.com/riatelab/magrit",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riatelab/magrit"
+  },
+  "bugs": {
+    "url": "https://github.com/riatelab/magrit/issues"
+  },
+  "license": "GPL-3.0-or-later",
   "type": "module",
   "scripts": {
     "vite": "vite",
@@ -11,7 +24,6 @@
     "test": "vitest",
     "typesafe-i18n": "typesafe-i18n"
   },
-  "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@solidjs/testing-library": "^0.8.5",
     "@testing-library/jest-dom": "^6.3.0",

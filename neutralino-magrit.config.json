@@ -1,0 +1,29 @@
+{
+  "applicationId": "Magrit desktop",
+  "version": "2.0.0-alpha-1",
+  "defaultMode": "chrome",
+  "documentRoot": "/www/",
+  "url": "/",
+  "enableServer": true,
+  "enableNativeAPI": true,
+  "nativeAllowList": [
+    "app.*"
+  ],
+  "modes": {
+    "window": {
+      "title": "magrit",
+      "width": 800,
+      "height": 600,
+      "minWidth": 800,
+      "minHeight": 600,
+      "icon": "/www/pwa-192x192.png"
+    }
+  },
+  "cli": {
+    "binaryName": "magrit",
+    "resourcesPath": "/www/",
+    "extensionsPath": "/extensions/",
+    "binaryVersion": "5.0.0",
+    "clientVersion": "5.0.0"
+  }
+}
