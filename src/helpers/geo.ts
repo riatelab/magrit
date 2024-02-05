@@ -2,7 +2,7 @@
 import {
   area, booleanPointInPolygon, nearestPoint, pointOnFeature,
 } from '@turf/turf';
-import * as polylabel from 'polylabel';
+import polylabel from 'polylabel';
 
 // Helpers
 import d3 from './d3-custom';
