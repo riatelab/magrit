@@ -82,6 +82,7 @@ import {
 
 // Styles
 import '../styles/MapZone.css';
+import { applyTransformTransition } from '../helpers/transitions';
 
 const layoutFeaturesFns = {
   [LayoutFeatureType.Line]: LineRenderer,
@@ -153,8 +154,8 @@ export default function MapZone(): JSX.Element {
   // Set up the projection when the component is mounted
   const projection = d3[mapStore.projection.value as keyof typeof d3]()
     .translate([mapStore.mapDimensions.width / 2, mapStore.mapDimensions.height / 2])
-    .scale(160)
-    .clipExtent(getDefaultClipExtent());
+    .scale(160);
+    // .clipExtent(getDefaultClipExtent());
 
   // Zoom the map on the sphere when the component is mounted
   projection.fitExtent(
@@ -198,6 +199,7 @@ export default function MapZone(): JSX.Element {
       const t = e.transform.toString();
       // We just change the transform attribute of the layers
       svgElem.querySelectorAll('g.layer').forEach((g: Element) => {
+        // applyTransformTransition(g as SVGGElement, t, 100);
         g.setAttribute('transform', t);
       });
     } else {
@@ -233,7 +235,7 @@ export default function MapZone(): JSX.Element {
   // too often when zooming
   const redrawDebounced = debounce((e) => {
     applyZoomPan(e, true);
-  }, 25);
+  }, 100, true);
 
   // const transformDebounced = debounce((e) => {
   //   applyZoomPan(e, false);

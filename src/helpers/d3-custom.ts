@@ -5,7 +5,10 @@ import {
   dsvFormat,
   tsvParse,
 } from 'd3-dsv';
-import { transition } from 'd3-transition';
+import {
+  transition,
+  interrupt,
+} from 'd3-transition';
 import {
   zoom,
   zoomIdentity,
@@ -143,6 +146,13 @@ import {
 import { quadtree } from 'd3-quadtree';
 import type { D3ZoomEvent } from 'd3-zoom';
 import type { GeoProjection, GeoRawProjection } from 'd3-geo';
+import {
+  easeCubicOut,
+  easeSinOut,
+} from 'd3-ease';
+import {
+  interpolateString,
+} from 'd3-interpolate';
 
 import hatanoRaw from './projection-hatano';
 import winkel1Raw from './projection-winkel1';
@@ -385,6 +395,7 @@ export default {
   select,
   selectAll,
   transition,
+  interrupt,
   zoom,
   zoomIdentity,
   zoomTransform,
@@ -416,6 +427,11 @@ export default {
   forceY,
   // Stuff from d3-quadtree
   quadtree,
+  // Stuff from d3-ease
+  easeCubicOut,
+  easeSinOut,
+  // Stuff from d3-interpolate
+  interpolateString,
 };
 
 export type {

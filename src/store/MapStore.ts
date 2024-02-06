@@ -241,12 +241,11 @@ createEffect(
         projection = d3[mapStore.projection.value]()
           .center(mapStore.center)
           .translate(mapStore.translate)
-          .scale(mapStore.scale)
-          .clipExtent(getDefaultClipExtent());
+          .scale(mapStore.scale);
       } else { // mapStore.projection.type === 'proj4'
         console.log(mapStore.projection.value);
         projection = getD3ProjectionFromProj4(getProjection(mapStore.projection.value));
-        projection.clipExtent(getDefaultClipExtent());
+
         // 2. If the projection defines bounds, we want to apply a clipping polygon
         // to the projection to avoid the projection to be drawn outside of the bounds
         // (which is sometimes computationally very expensive)
@@ -286,6 +285,8 @@ createEffect(
         //   projection.preclip(d3.geoClipPolygon(clippingPolygon));
         // }
       }
+
+      // projection.clipExtent(getDefaultClipExtent());
 
       // 3. Fit the map to the previous extent (because the projection just changed
       //    and we want to keep the same extent if possible), except if we are reloading the project
