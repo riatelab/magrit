@@ -1593,6 +1593,10 @@ type RootTranslation = {
 		 */
 		reversePalette: string
 		/**
+		 * C​e​n​t​r​a​l​ ​c​l​a​s​s
+		 */
+		centralClass: string
+		/**
 		 * D​i​s​p​l​a​y​ ​m​e​a​n
 		 */
 		displayMean: string
@@ -3381,6 +3385,10 @@ export type TranslationFunctions = {
 		 * Reverse palette
 		 */
 		reversePalette: () => LocalizedString
+		/**
+		 * Central class
+		 */
+		centralClass: () => LocalizedString
 		/**
 		 * Display mean
 		 */

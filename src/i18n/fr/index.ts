@@ -454,6 +454,7 @@ const fr = {
     diverging: 'Divergente',
     palette: 'Palette de couleurs',
     reversePalette: 'Inverser la palette',
+    centralClass: 'Classe centrale',
     displayMean: 'Afficher la moyenne',
     displayMedian: 'Afficher la médiane',
     displayStdDev: 'Afficher l\'écart-type',

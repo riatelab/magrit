@@ -453,6 +453,7 @@ const en = {
     diverging: 'Diverging',
     palette: 'Palette',
     reversePalette: 'Reverse palette',
+    centralClass: 'Central class',
     displayMean: 'Display mean',
     displayMedian: 'Display median',
     displayStdDev: 'Display standard deviation',

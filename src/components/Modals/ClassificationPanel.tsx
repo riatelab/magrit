@@ -4,7 +4,13 @@ import {
 } from 'solid-js';
 
 // Imports from other packages
-import { getPalette, getPalettes } from 'dicopal';
+import {
+  getPalette,
+  getPalettes,
+  PaletteType,
+  getSequentialColors,
+  getAsymmetricDivergingColors,
+} from 'dicopal';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -26,7 +32,9 @@ import { classificationPanelStore, setClassificationPanelStore } from '../../sto
 import '../../styles/ClassificationPanel.css';
 
 // Types, interfaces and enums
-import { ClassificationMethod, type ClassificationParameters } from '../../global.d';
+import { ClassificationMethod, type ClassificationParameters, CustomPalette } from '../../global.d';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import InputFieldRange from '../Inputs/InputRange.tsx';
 
 enum OptionsClassification {
   numberOfClasses,
@@ -111,21 +119,49 @@ export default function ClassificationPanel(): JSX.Element {
     } else if (classificationMethod() === ClassificationMethod.manual) {
       breaks = parseUserDefinedBreaks(filteredSeries, customBreaks());
       classes = breaks.length - 1;
+    } else {
+      throw new Error('Classification method not found !');
     }
     const entitiesByClass = classifier.countByClass();
     const palName = paletteName();
-    const palette = getPalette(palName, classes);
-    const reversePalette = isPaletteReversed();
-    if (!palette) {
-      throw new Error('Palette not found !');
+    const customPalette = {
+      id: `${palName}-${classes}${typeScheme() === 'diverging' ? `-${centralClass()}` : ''}`,
+      name: palName,
+      number: classes,
+      type: typeScheme() as PaletteType,
+      provenance: 'dicopal',
+    } as CustomPalette;
+
+    if (typeScheme() === 'sequential') {
+      customPalette.colors = getSequentialColors(palName, classes);
+    } else if (typeScheme() === 'diverging') {
+      const positionCentralClass = centralClass()!;
+      customPalette.divergingOptions = {
+        left: positionCentralClass,
+        right: classes - 1 - positionCentralClass,
+        centralClass: true,
+        balanced: true,
+      };
+      console.log(customPalette.divergingOptions);
+      customPalette.colors = getAsymmetricDivergingColors(
+        palName,
+        customPalette.divergingOptions.left,
+        customPalette.divergingOptions.right,
+        customPalette.divergingOptions.centralClass,
+        customPalette.divergingOptions.balanced,
+      );
+      console.log(customPalette.colors, customPalette.number);
+    } else {
+      throw new Error('Palette type not found !');
     }
+    const reversePalette = isPaletteReversed();
 
     const classificationParameters = {
       variable: classificationPanelStore.variableName,
       method: classificationMethod(),
       classes,
       breaks,
-      palette,
+      palette: customPalette,
       noDataColor: noDataColor(),
       entitiesByClass,
       reversePalette,
@@ -220,6 +256,12 @@ export default function ClassificationPanel(): JSX.Element {
     customBreaks,
     setCustomBreaks,
   ] = createSignal<number[]>(currentBreaksInfo().breaks);
+  // - the inflection point chosen by the user for the
+  //   current classification method (only if 'diverging' is chosen)
+  const [
+    centralClass,
+    setCentralClass,
+  ] = createSignal<number | undefined>(undefined);
   // - display option for the classification plot
   const [
     classificationPlotOption,
@@ -630,11 +672,24 @@ export default function ClassificationPanel(): JSX.Element {
                     </p>
                   </div>
                 </Show>
+                <br />
+                <Show when={typeScheme() === 'diverging'}>
+                  <InputFieldRange
+                    label={LL().ClassificationPanel.centralClass()}
+                    min={1}
+                    max={numberOfClasses() - 1}
+                    step={1}
+                    value={1}
+                    onChange={(value) => {
+                      setCentralClass(value);
+                      updateClassificationParameters();
+                    }}
+                  />
+                </Show>
               </div>
             </div>
           </div>
         </div>
-
       </section>
       <footer class="modal-card-foot">
         <button
