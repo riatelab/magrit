@@ -876,20 +876,27 @@ export default function ImportWindow(): JSX.Element {
               const shouldBeVisible = !simplify;
               // We want to wait for the import of the current layer to be finished
               // before starting to import the next one...
-              // eslint-disable-next-line no-await-in-loop
-              const id = await convertAndAddFiles(
-                files,
-                type,
-                name,
-                fitMap,
-                shouldBeVisible,
-              );
+              // Note that convertAndAddFiles can throw an error, so we need to
+              // catch it here.
+              try {
+                // eslint-disable-next-line no-await-in-loop
+                const id = await convertAndAddFiles(
+                  files,
+                  type,
+                  name,
+                  fitMap,
+                  shouldBeVisible,
+                );
 
-              // We push the id of the layer(s) to simplify to an array,
-              // and when all the layers are imported, we will simplify
-              // it/them.
-              if (simplify) {
-                dsToSimplify.push(id);
+                // We push the id of the layer(s) to simplify to an array,
+                // and when all the layers are imported, we will simplify
+                // it/them.
+                if (simplify) {
+                  dsToSimplify.push(id);
+                }
+              } catch (e: any) {
+                // We catch the error here and display a toast
+                toast.error(`Error while reading file: ${e.message ? e.message : e}`);
               }
             }
 

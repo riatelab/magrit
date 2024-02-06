@@ -268,8 +268,12 @@ export const convertAndAddFiles = async (
   // we don't use GDAL and convert it directly to GeoJSON
   if (format === SupportedGeoFileTypes.TopoJSON) {
     const res = convertTopojsonToGeojson(await files[0].file.text());
+    // We want to remove the features with empty geometries
+    // (i.e. if the geometry is null or undefined or if the coordinates array is empty)
     const { layer, nbRemoved } = removeFeaturesWithEmptyGeometry(res[layerName]);
-    toast.custom(`Removed ${nbRemoved} features with empty geometries`);
+    if (nbRemoved > 0) {
+      toast.custom(`Removed ${nbRemoved} features with empty geometries`);
+    }
     return addLayer(layer, layerName, fit, visible);
   }
 
@@ -290,8 +294,6 @@ export const convertAndAddFiles = async (
       return addTabularLayer(res, files[0].name);
     } catch (e: any) {
       console.error(e);
-      toast.error(`Error while reading file: ${e.message ? e.message : e}`);
-      // TODO: ensure that the error is handled by the caller
       throw e;
     }
   }
@@ -307,12 +309,14 @@ export const convertAndAddFiles = async (
       { opts, openOpts: [] },
     );
     const { layer, nbRemoved } = removeFeaturesWithEmptyGeometry(res);
-    toast.custom(`Removed ${nbRemoved} features with empty geometries`);
+    // We want to remove the features with empty geometries
+    // (i.e. if the geometry is null or undefined or if the coordinates array is empty)
+    if (nbRemoved > 0) {
+      toast.custom(`Removed ${nbRemoved} features with empty geometries`);
+    }
     return addLayer(layer, layerName, fit, visible);
   } catch (e: any) {
     console.error(e);
-    toast.error(`Error while reading file: ${e.message ? e.message : e}`);
-    // TODO: ensure that the error is handled by the caller
     throw e;
   }
 };

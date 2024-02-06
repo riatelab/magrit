@@ -41,7 +41,13 @@ export async function convertBinaryTabularDatasetToJSON(
 }
 
 export const removeFeaturesWithEmptyGeometry = (layer: GeoJSONFeatureCollection) => {
-  const features = layer.features.filter((f: GeoJSONFeature) => f.geometry);
+  // We want features with non-empty geometries
+  // (i.e each geometry is not null nor undefined and there is a non-empty coordinates array).
+  const features = layer.features
+    .filter((f: GeoJSONFeature) => (
+      f.geometry
+      && f.geometry.coordinates
+      && f.geometry.coordinates.length > 0));
   const nbRemoved = layer.features.length - features.length;
   // eslint-disable-next-line no-param-reassign
   layer.features = features;
