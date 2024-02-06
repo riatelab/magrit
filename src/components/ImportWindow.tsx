@@ -871,6 +871,9 @@ export default function ImportWindow(): JSX.Element {
             //  "The map has been fitted to the extent of the layer")
             for (let i = 0; i < dsToImport.length; i += 1) {
               const [files, type, name, fitMap, simplify] = dsToImport[i];
+              // Layers that will be simplified are not visible by default
+              // (so they are not mounted now on the map).
+              const shouldBeVisible = !simplify;
               // We want to wait for the import of the current layer to be finished
               // before starting to import the next one...
               // eslint-disable-next-line no-await-in-loop
@@ -879,6 +882,7 @@ export default function ImportWindow(): JSX.Element {
                 type,
                 name,
                 fitMap,
+                shouldBeVisible,
               );
 
               // We push the id of the layer(s) to simplify to an array,

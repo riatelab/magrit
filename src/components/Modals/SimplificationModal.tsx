@@ -135,6 +135,18 @@ export default function SimplificationModal(
     bboxs.push(bbox(description.data as AllGeoJSON) as [number, number, number, number]);
   });
 
+  setLayersDescriptionStore(
+    produce((draft: LayersDescriptionStoreType) => {
+      descriptions.forEach((description, i) => {
+        // The target layer
+        const targetLayer = draft.layers
+          .find((layer) => layer.id === description.id)!;
+        // unmount the layer from the map while we simplify it
+        targetLayer.visible = false;
+      });
+    }),
+  );
+
   // Merge the bounding boxes of the layers...
   const mergedBbox = bboxs.reduce((acc, bb) => {
     /* eslint-disable no-param-reassign, prefer-destructuring */
@@ -211,11 +223,23 @@ export default function SimplificationModal(
               // The target layer
               const targetLayer = draft.layers
                 .find((layer) => layer.id === description.id)!;
-              // Unmount the layer first...
-              targetLayer.visible = false;
               // Set the new data
               targetLayer.data.features = stats()[i].features;
-              // ...and remount it
+              // and remount the layer on the map
+              targetLayer.visible = true;
+            });
+          }),
+        );
+      },
+      cancelCallback: () => {
+        // If the user clicks on "Cancel", we just remount the layers on the map
+        setLayersDescriptionStore(
+          produce((draft: LayersDescriptionStoreType) => {
+            descriptions.forEach((description) => {
+              // The target layer
+              const targetLayer = draft.layers
+                .find((layer) => layer.id === description.id)!;
+              // and remount the layer on the map
               targetLayer.visible = true;
             });
           }),

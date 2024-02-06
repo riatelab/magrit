@@ -150,7 +150,12 @@ const getDefaultRenderingParams = (geomType: string) => {
   return {};
 };
 
-function addLayer(geojson: GeoJSONFeatureCollection, name: string, fit: boolean): string {
+function addLayer(
+  geojson: GeoJSONFeatureCollection,
+  name: string,
+  fit: boolean,
+  visible: boolean,
+): string {
   const rewoundGeojson = rewindLayer(geojson, true);
   const geomType = getGeometryType(rewoundGeojson);
   const layerId = generateIdLayer();
@@ -177,7 +182,7 @@ function addLayer(geojson: GeoJSONFeatureCollection, name: string, fit: boolean)
     name,
     type: geomType,
     data: rewoundGeojson,
-    visible: true,
+    visible,
     fields: fieldsDescription,
     ...getDefaultRenderingParams(geomType),
     shapeRendering: geomType === 'polygon' && rewoundGeojson.features.length > 10000 ? 'optimizeSpeed' : 'auto',
@@ -257,6 +262,7 @@ export const convertAndAddFiles = async (
   format: SupportedTabularFileTypes | SupportedGeoFileTypes,
   layerName: string,
   fit: boolean,
+  visible: boolean,
 ): Promise<string> => {
   // If the file is a TopoJSON file,
   // we don't use GDAL and convert it directly to GeoJSON
@@ -264,7 +270,7 @@ export const convertAndAddFiles = async (
     const res = convertTopojsonToGeojson(await files[0].file.text());
     const { layer, nbRemoved } = removeFeaturesWithEmptyGeometry(res[layerName]);
     toast.custom(`Removed ${nbRemoved} features with empty geometries`);
-    return addLayer(layer, layerName, fit);
+    return addLayer(layer, layerName, fit, visible);
   }
 
   // If the file is a tabular file, we convert it to JSON manually too
@@ -302,7 +308,7 @@ export const convertAndAddFiles = async (
     );
     const { layer, nbRemoved } = removeFeaturesWithEmptyGeometry(res);
     toast.custom(`Removed ${nbRemoved} features with empty geometries`);
-    return addLayer(layer, layerName, fit);
+    return addLayer(layer, layerName, fit, visible);
   } catch (e: any) {
     console.error(e);
     toast.error(`Error while reading file: ${e.message ? e.message : e}`);
