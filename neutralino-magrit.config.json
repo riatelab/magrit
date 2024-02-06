@@ -1,6 +1,6 @@
 {
   "applicationId": "Magrit desktop",
-  "version": "2.0.0-alpha-1",
+  "version": "1.9.99",
   "defaultMode": "chrome",
   "documentRoot": "/www/",
   "url": "/",
