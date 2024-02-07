@@ -43,6 +43,7 @@ import type {
   Rectangle,
   ScaleBar,
   Text,
+  NorthArrow,
 } from '../../global';
 import {
   DistanceUnit,
@@ -430,7 +431,31 @@ export default function LayoutFeatures(): JSX.Element {
           src={layoutFeatureNorthArrow}
           alt={ LL().LayoutFeatures.NorthArrow() }
           title={ LL().LayoutFeatures.NorthArrow() }
-          onClick={() => {}}
+          onClick={() => {
+            // TODO: we could propose to the user to click on the map to place the north arrow
+            const northArrowDescription = {
+              id: generateIdLayoutFeature(),
+              type: LayoutFeatureType.NorthArrow,
+              position: [100, 100],
+              width: 40,
+              height: 40,
+              autoRotate: false,
+              rotation: 0,
+              style: 'simple',
+              fillColor: '#000000',
+              strokeColor: '#000000',
+              strokeOpacity: 1,
+              backgroundRect: { visible: false } as BackgroundRect,
+            } as NorthArrow;
+
+            setLayersDescriptionStore(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeatures.push(northArrowDescription);
+                },
+              ),
+            );
+          }}
         />
         <img
           class="layout-features-section__icon-element"

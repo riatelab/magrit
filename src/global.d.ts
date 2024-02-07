@@ -695,8 +695,24 @@ export interface NorthArrow extends LayoutFeatureBase {
   width: number,
   // The height of the north arrow
   height: number,
+  // Whether to rotate automatically the north arrow
+  // to always point to the north
+  autoRotate: boolean,
   // The rotation of the north arrow
   rotation: number,
+  // The style of the north arrow
+  style: 'simple' | 'fancy',
+  // The fill color of the north arrow
+  fillColor: string,
+  // The fill opacity of the north arrow
+  // fillOpacity: number,
+  // The stroke color of the north arrow
+  // strokeColor: string,
+  // The stroke width of the north arrow
+  // strokeWidth: number,
+  // The stroke opacity of the north arrow
+  // strokeOpacity: number,
+  backgroundRect: BackgroundRect,
 }
 
 export enum ScaleBarStyle {

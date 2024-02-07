@@ -49,6 +49,7 @@ import LineRenderer from './LayoutFeatureRenderer/LineRenderer.tsx';
 import RectangleRenderer from './LayoutFeatureRenderer/RectangleRenderer.tsx';
 import ScaleBarRenderer from './LayoutFeatureRenderer/ScaleBarRenderer.tsx';
 import TextRenderer from './LayoutFeatureRenderer/TextRenderer.tsx';
+import NorthArrowRenderer from './LayoutFeatureRenderer/NorthArrowRenderer.tsx';
 
 // - for rendering the legends
 import legendChoropleth from './LegendRenderer/ChoroplethLegend.tsx';
@@ -80,7 +81,6 @@ import {
 
 // Styles
 import '../styles/MapZone.css';
-import { applyTransformTransition } from '../helpers/transitions';
 
 const layoutFeaturesFns = {
   [LayoutFeatureType.Line]: LineRenderer,
@@ -88,6 +88,7 @@ const layoutFeaturesFns = {
   [LayoutFeatureType.FreeDrawing]: FreeDrawingRenderer,
   [LayoutFeatureType.ScaleBar]: ScaleBarRenderer,
   [LayoutFeatureType.Text]: TextRenderer,
+  [LayoutFeatureType.NorthArrow]: NorthArrowRenderer,
 };
 
 const dispatchLegendRenderer = (layer: LayerDescription) => {

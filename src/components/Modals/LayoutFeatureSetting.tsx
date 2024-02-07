@@ -25,10 +25,13 @@ import {
   DistanceUnit,
   type FreeDrawing,
   type LayoutFeature,
-  LayoutFeatureType, Line,
+  LayoutFeatureType,
+  type Line,
+  type NorthArrow,
   type Rectangle,
   type ScaleBar,
-  ScaleBarStyle, Text,
+  ScaleBarStyle,
+  type Text,
 } from '../../global.d';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
@@ -459,6 +462,64 @@ function makeSettingsLine(
   </>;
 }
 
+function makeSettingsNorthArrow(
+  layoutFeatureId: string,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const ft = layersDescriptionStore.layoutFeatures
+    .find((f) => f.id === layoutFeatureId) as NorthArrow;
+
+  return <>
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.Width()}
+      value={ ft.width }
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['width'],
+        newValue,
+      )}
+      min={5}
+      max={100}
+      step={1}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.Height()}
+      value={ ft.height }
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['height'],
+        newValue,
+      )}
+      min={5}
+      max={100}
+      step={1}
+    />
+    <InputFieldCheckbox
+      label={ LL().LayoutFeatures.Modal.RotateManually()}
+      checked={ !ft.autoRotate }
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['autoRotate'],
+        !newValue,
+      )}
+    />
+    <Show when={ !ft.autoRotate }>
+      <InputFieldNumber
+        label={ LL().LayoutFeatures.Modal.Rotation()}
+        value={ ft.rotation }
+        onChange={(newValue) => updateLayoutFeatureProperty(
+          layoutFeatureId,
+          ['rotation'],
+          newValue,
+        )}
+        min={0}
+        max={360}
+        step={1}
+      />
+    </Show>
+  </>;
+}
+
 function makeSettingsFreeDrawing(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
@@ -533,6 +594,7 @@ export default function LayoutFeatureSettings(
           [LayoutFeatureType.ScaleBar]: makeSettingsScaleBar,
           [LayoutFeatureType.FreeDrawing]: makeSettingsFreeDrawing,
           [LayoutFeatureType.Text]: makeSettingsText,
+          [LayoutFeatureType.NorthArrow]: makeSettingsNorthArrow,
         })[layoutFeature.type](layoutFeatureId, LL)
       }
     </div>

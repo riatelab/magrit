@@ -503,13 +503,21 @@ type RootTranslation = {
 			 */
 			Rotation: string
 			/**
-			 * X​ ​r​a​d​i​u​s
+			 * R​o​t​a​t​e​ ​m​a​n​u​a​l​l​y
 			 */
-			Rx: string
+			RotateManually: string
 			/**
-			 * Y​ ​r​a​d​i​u​s
+			 * R​o​t​a​t​e​ ​t​o​ ​n​o​r​t​h
 			 */
-			Ry: string
+			RotateToNorth: string
+			/**
+			 * S​i​m​p​l​e​ ​n​o​r​t​h​ ​a​r​r​o​w
+			 */
+			SimpleNorthArrow: string
+			/**
+			 * F​a​n​c​y​ ​n​o​r​t​h​ ​a​r​r​o​w
+			 */
+			FancyNorthArrow: string
 			/**
 			 * W​i​d​t​h
 			 */
@@ -2289,13 +2297,21 @@ export type TranslationFunctions = {
 			 */
 			Rotation: () => LocalizedString
 			/**
-			 * X radius
+			 * Rotate manually
 			 */
-			Rx: () => LocalizedString
+			RotateManually: () => LocalizedString
 			/**
-			 * Y radius
+			 * Rotate to north
 			 */
-			Ry: () => LocalizedString
+			RotateToNorth: () => LocalizedString
+			/**
+			 * Simple north arrow
+			 */
+			SimpleNorthArrow: () => LocalizedString
+			/**
+			 * Fancy north arrow
+			 */
+			FancyNorthArrow: () => LocalizedString
 			/**
 			 * Width
 			 */
