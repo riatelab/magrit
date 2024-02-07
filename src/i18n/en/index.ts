@@ -113,7 +113,6 @@ const en = {
     Sphere: 'Sphere',
     Graticule: 'Graticule',
     Rectangle: 'Rectangle',
-    Ellipse: 'Ellipse',
     Line: 'Line / Arrow',
     Text: 'Text',
     Image: 'Image',
@@ -131,9 +130,8 @@ const en = {
       Graticule: 'The "Graticule" layer has been added to the map.',
     },
     DrawingInstructions: {
-      Line: 'Click to start drawing a line. Click again to add a point. Double-click to finish.',
+      Line: 'Click to start drawing a line. Click again to add a point. Double-click to finish.\nHold the Ctrl key to draw a straight line.',
       Rectangle: 'Click to locate the first corner of the rectangle. Click again to locate the opposite corner.',
-      Ellipse: 'Click to locate the center of the ellipse. Click again to locate a point on the ellipse.',
       FreeDrawing: 'Click to start drawing the desired shape and release to finish.',
       Text: 'Click to locate the text.',
       TextPlaceholder: 'Type your text here...',

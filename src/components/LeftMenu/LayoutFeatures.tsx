@@ -15,7 +15,6 @@ import layoutFeatureNorthArrow from '../../assets/layout-features/north-01.png';
 import layoutFeatureArrow from '../../assets/layout-features/arrow-01.png';
 import layoutFeatureText from '../../assets/layout-features/text-01.png';
 import layoutFeatureDraw from '../../assets/layout-features/draw-01.png';
-import layoutFeatureEllipse from '../../assets/layout-features/ellipse-01.png';
 
 // Stores
 import { mapStore, setMapStore } from '../../store/MapStore';
@@ -39,14 +38,18 @@ import { getTargetSvg } from '../../helpers/svg';
 // Types / Interfaces
 import type {
   BackgroundRect,
-  Ellipse,
   FreeDrawing,
   Line,
   Rectangle,
   ScaleBar,
   Text,
 } from '../../global';
-import { DistanceUnit, LayoutFeatureType, ScaleBarStyle } from '../../global.d';
+import {
+  DistanceUnit,
+  LayoutFeatureType,
+  ScaleBarStyle,
+  ScaleBarBehavior,
+} from '../../global.d';
 
 const generateIdLayoutFeature = () => `LayoutFeature-${uuidv4()}`;
 
@@ -67,6 +70,39 @@ const addTemporaryPoint = (x: number, y: number) => {
   svgElement.appendChild(makeTemporaryPoint(x, y));
 };
 
+const removeTemporaryLines = () => {
+  const svgElement = getTargetSvg();
+  svgElement.querySelectorAll('.temporary-line').forEach((elem) => elem.remove());
+};
+
+const drawTemporaryLine = (points: [number, number][]) => {
+  const svgElement = getTargetSvg();
+  const lineElement = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+  lineElement.classList.add('temporary-line');
+  lineElement.classList.add('confirmed');
+  lineElement.setAttribute('points', points.map((p) => `${p[0]},${p[1]}`).join(' '));
+  lineElement.setAttribute('stroke', 'black');
+  lineElement.setAttribute('stroke-width', '2');
+  lineElement.setAttribute('fill', 'none');
+  svgElement.appendChild(lineElement);
+};
+
+const drawSuggestionLine = (
+  points: [[number, number], [number, number]],
+) => {
+  const svgElement = getTargetSvg();
+  svgElement.querySelectorAll('.suggested').forEach((elem) => elem.remove());
+  const lineElement = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+  lineElement.classList.add('temporary-line');
+  lineElement.classList.add('suggested');
+  lineElement.setAttribute('points', points.map((p) => `${p[0]},${p[1]}`).join(' '));
+  lineElement.setAttribute('stroke', 'black');
+  lineElement.setAttribute('stroke-width', '2');
+  lineElement.setAttribute('stroke-dasharray', '5, 5');
+  lineElement.setAttribute('fill', 'none');
+  svgElement.appendChild(lineElement);
+};
+
 const getSvgCoordinates = (svgElement: SVGSVGElement, ev: MouseEvent) => {
   // Get click coordinates in screen space
   const pt = svgElement.createSVGPoint();
@@ -75,6 +111,32 @@ const getSvgCoordinates = (svgElement: SVGSVGElement, ev: MouseEvent) => {
 
   // Transform the screen coordinates into the svg coordinates
   return pt.matrixTransform(svgElement.getScreenCTM()!.inverse());
+};
+
+const snapToNearestAngle = (
+  lastPt: [number, number],
+  cursorPt: { x: number, y: number },
+  snapAngle: number,
+) => {
+  // We want to calculate the angle between the last point and the cursor
+  // and snap the cursor to the nearest {snapAngle}° angle
+  const dx = cursorPt.x - lastPt[0];
+  const dy = cursorPt.y - lastPt[1];
+  const angle = Math.atan2(dy, dx);
+  const angleInDegrees = angle * (180 / Math.PI);
+  const angleInDegreesNormalized = (angleInDegrees + 360) % 360;
+  const angleInDegreesNormalizedMod15 = angleInDegreesNormalized % snapAngle;
+  const angleInDegreesNormalizedMod15Rounded = Math.round(
+    angleInDegreesNormalizedMod15 / snapAngle,
+  ) * snapAngle;
+  const angleInDegreesNormalizedRounded = angleInDegreesNormalized
+    - angleInDegreesNormalizedMod15 + angleInDegreesNormalizedMod15Rounded;
+  const angleInRadiansRounded = angleInDegreesNormalizedRounded * (Math.PI / 180);
+  const distance = Msqrt(Mabs(dx) ** 2 + Mabs(dy) ** 2);
+  return {
+    x: lastPt[0] + distance * Math.cos(angleInRadiansRounded),
+    y: lastPt[1] + distance * Math.sin(angleInRadiansRounded),
+  };
 };
 
 export default function LayoutFeatures(): JSX.Element {
@@ -143,22 +205,71 @@ export default function LayoutFeatures(): JSX.Element {
             const pts: [number, number][] = [];
             const onClick = (ev: MouseEvent) => {
               // Point coordinates in SVG space
-              const cursorPt = getSvgCoordinates(svgElement, ev);
+              let cursorPt: { x: number, y: number } = getSvgCoordinates(svgElement, ev);
+
+              const isCtrlPressed = ev.ctrlKey;
+
+              if (isCtrlPressed && pts.length > 0) {
+                // We want to calculate the angle between the last point and the cursor
+                // and snap the cursor to the nearest 15° angle
+                cursorPt = snapToNearestAngle(pts[pts.length - 1], cursorPt, 15);
+              }
               pts.push([cursorPt.x, cursorPt.y]);
 
               // Add a temporary point
               addTemporaryPoint(cursorPt.x, cursorPt.y);
+
+              // Draw the temporary line for confirmed points
+              if (pts.length > 1) {
+                drawTemporaryLine(pts.slice(pts.length - 2, pts.length));
+              }
             };
+
+            const onMove = (ev: MouseEvent) => {
+              // Draw line between last point and cursor
+              let cursorPt: { x: number, y: number } = getSvgCoordinates(svgElement, ev);
+              if (pts.length > 0) {
+                const isCtrlPressed = ev.ctrlKey;
+                if (isCtrlPressed) {
+                  // We want to calculate the angle between the last point and the cursor
+                  // and snap the cursor to the nearest 15° angle
+                  cursorPt = snapToNearestAngle(pts[pts.length - 1], cursorPt, 15);
+                }
+
+                drawSuggestionLine(
+                  [
+                    pts[pts.length - 1],
+                    [cursorPt.x, cursorPt.y],
+                  ],
+                );
+              }
+            };
+
             const onDblClick = () => {
-              // Remove last point
+              // Remove last point (the one that was added by the double click)
               pts.pop();
+              // Maybe the user tried a single click, then a double click at the end of the line,
+              // so we need to check the distance between the last two points to see if we should
+              // pop one more point
+              if (pts.length > 3) {
+                const distance = Msqrt(
+                  Mabs(pts[pts.length - 1][0] - pts[pts.length - 2][0]) ** 2
+                  + Mabs(pts[pts.length - 1][1] - pts[pts.length - 2][1]) ** 2,
+                );
+                if (distance < 2) {
+                  pts.pop();
+                }
+              }
               // Remove event listeners
               svgElement.removeEventListener('click', onClick);
               svgElement.removeEventListener('dblclick', onDblClick);
+              svgElement.removeEventListener('mousemove', onMove);
               // Reset cursor
               svgElement.style.cursor = 'default';
               // Remove temporary points
               svgElement.querySelectorAll('.temporary-point').forEach((elem) => elem.remove());
+              // Remove the temporary line
+              removeTemporaryLines();
               // Create the layout feature
               const lineDescription = {
                 id: generateIdLayoutFeature(),
@@ -184,6 +295,7 @@ export default function LayoutFeatures(): JSX.Element {
             svgElement.style.cursor = 'crosshair';
             svgElement.addEventListener('click', onClick);
             svgElement.addEventListener('dblclick', onDblClick);
+            svgElement.addEventListener('mousemove', onMove);
           }}
         />
         <img
@@ -240,72 +352,6 @@ export default function LayoutFeatures(): JSX.Element {
                   produce(
                     (draft: LayersDescriptionStoreType) => {
                       draft.layoutFeatures.push(rectangleDescription);
-                    },
-                  ),
-                );
-              }
-            };
-            svgElement.style.cursor = 'crosshair';
-            svgElement.addEventListener('click', onClick);
-          }}
-        />
-        <img
-          class="layout-features-section__icon-element"
-          src={layoutFeatureEllipse}
-          alt={ LL().LayoutFeatures.Ellipse() }
-          title={ LL().LayoutFeatures.Ellipse() }
-          onClick={() => {
-            toast.success(LL().LayoutFeatures.DrawingInstructions.Ellipse(), {
-              duration: 5000,
-              style: {
-                background: '#1f2937',
-                color: '#f3f4f6',
-              },
-              iconTheme: {
-                primary: '#38bdf8',
-                secondary: '#1f2937',
-              },
-            });
-            const svgElement = getTargetSvg();
-            const pts = [] as [number, number][];
-            const onClick = (ev: MouseEvent) => {
-              // Point coordinates in SVG space
-              const cursorPt = getSvgCoordinates(svgElement, ev);
-              pts.push([cursorPt.x, cursorPt.y]);
-
-              // Add temporary point
-              addTemporaryPoint(cursorPt.x, cursorPt.y);
-
-              if (pts.length === 2) {
-                // Clean up everything
-                svgElement.removeEventListener('click', onClick);
-                svgElement.style.cursor = 'default';
-                svgElement.querySelectorAll('.temporary-point').forEach((elem) => elem.remove());
-
-                // Compute the distance between the two points
-                const distance = Msqrt(
-                  Mabs(pts[0][0] - pts[1][0]) ** 2 + Mabs(pts[0][1] - pts[1][1]) ** 2,
-                );
-
-                // Create the ellipse
-                const ellipseDescription = {
-                  id: generateIdLayoutFeature(),
-                  type: LayoutFeatureType.Ellipse,
-                  rx: distance,
-                  ry: distance,
-                  position: pts[0],
-                  rotation: 0,
-                  fillColor: '#000000',
-                  fillOpacity: 0,
-                  strokeColor: '#000000',
-                  strokeWidth: 4,
-                  strokeOpacity: 1,
-                } as Ellipse;
-
-                setLayersDescriptionStore(
-                  produce(
-                    (draft: LayersDescriptionStoreType) => {
-                      draft.layoutFeatures.push(ellipseDescription);
                     },
                   ),
                 );
@@ -405,6 +451,8 @@ export default function LayoutFeatures(): JSX.Element {
               tickValues: [0, 50, 100, 250, 500],
               tickPadding: 10,
               style: ScaleBarStyle.blackAndWhiteBar,
+              backgroundRect: { visible: false } as BackgroundRect,
+              behavior: 'absoluteSize' as ScaleBarBehavior,
             } as ScaleBar;
 
             setLayersDescriptionStore(

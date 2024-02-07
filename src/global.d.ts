@@ -643,7 +643,6 @@ export enum Orientation {
 
 export enum LayoutFeatureType {
   Rectangle,
-  Ellipse,
   NorthArrow,
   ScaleBar,
   Line,
@@ -690,26 +689,6 @@ export interface Rectangle extends LayoutFeatureBase {
   cornerRadius: number,
 }
 
-export interface Ellipse extends LayoutFeatureBase {
-  type: LayoutFeatureType.Ellipse,
-  // The x radius of the ellipse
-  rx: number,
-  // The y radius of the ellipse
-  ry: number,
-  // The rotation of the ellipse
-  rotation: number,
-  // The fill color of the rectangle
-  fillColor: string,
-  // The fill opacity of the rectangle
-  fillOpacity: number,
-  // The stroke color of the rectangle
-  strokeColor: string,
-  // The stroke width of the rectangle
-  strokeWidth: number,
-  // The stroke opacity of the rectangle
-  strokeOpacity: number,
-}
-
 export interface NorthArrow extends LayoutFeatureBase {
   type: LayoutFeatureType.NorthArrow,
   // The width of the north arrow
@@ -725,6 +704,11 @@ export enum ScaleBarStyle {
   lineWithTicksOnTop = 'lineWithTicksOnTop',
   lineWithTicksOnBottom = 'lineWithTicksOnBottom',
   blackAndWhiteBar = 'blackAndWhiteBar',
+}
+
+export enum ScaleBarBehavior {
+  absoluteSize = 'absoluteSize',
+  geographicSize = 'geographicSize',
 }
 
 export interface ScaleBar extends LayoutFeatureBase {
@@ -747,6 +731,12 @@ export interface ScaleBar extends LayoutFeatureBase {
   tickPadding: number,
   // The style of the scaleBar
   style: ScaleBarStyle,
+  // Whether to display a rectangle behind the layout feature
+  backgroundRect: BackgroundRect,
+  // Whether the scale bar conserves its absolute size
+  // or its geographic size (the distance it represents)
+  // when the map is zoomed in or out
+  behavior: ScaleBarBehavior,
 }
 
 export interface Line extends LayoutFeatureBase {
@@ -810,7 +800,6 @@ export interface Text extends LayoutFeatureBase {
 
 export type LayoutFeature = (
   Rectangle
-  | Ellipse
   | NorthArrow
   | ScaleBar
   | Line

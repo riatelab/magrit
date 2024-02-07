@@ -23,14 +23,14 @@ import { webSafeFonts } from '../../helpers/font';
 // Types / Interfaces / Enums
 import {
   DistanceUnit,
-  type Ellipse,
   type FreeDrawing,
   type LayoutFeature,
-  LayoutFeatureType,
+  LayoutFeatureType, Line,
   type Rectangle,
   type ScaleBar,
   ScaleBarStyle, Text,
 } from '../../global.d';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 /**
  * Update a single property of a layout feature in the layersDescriptionStore,
@@ -38,13 +38,13 @@ import {
  *
  * @param {string} layoutFeatureId - The id of the layout feature to update.
  * @param {string[]} props - The path to the property to update.
- * @param {string | number} value - The new value of the property.
+ * @param {string | number | number[] | boolean | undefined} value - The new value of the property.
  * @return {void}
  */
 const updateLayoutFeatureProperty = (
   layoutFeatureId: string,
   props: string[],
-  value: string | number | number[],
+  value: string | number | number[] | boolean | undefined,
 ) => {
   const allPropsExceptLast = props.slice(0, props.length - 1);
   const lastProp = props[props.length - 1];
@@ -154,106 +154,6 @@ function makeSettingsRectangle(
       )}
       min={0}
       max={100}
-      step={1}
-    />
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.Rotation() }
-      value={ft.rotation}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['rotation'],
-        newValue,
-      )}
-      min={-360}
-      max={360}
-      step={1}
-    />
-  </>;
-}
-
-function makeSettingsEllipse(
-  layoutFeatureId: string,
-  LL: Accessor<TranslationFunctions>,
-): JSX.Element {
-  const ft = layersDescriptionStore.layoutFeatures
-    .find((f) => f.id === layoutFeatureId) as Ellipse;
-  return <>
-    <InputFieldColor
-      label={ LL().LayoutFeatures.Modal.FillColor() }
-      value={ ft.fillColor }
-      onChange={ (newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['fillColor'],
-        newValue,
-      )}
-    />
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.FillOpacity() }
-      value={ft.fillOpacity}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['fillOpacity'],
-        newValue,
-      )}
-      min={0}
-      max={1}
-      step={0.1}
-    />
-    <InputFieldColor
-      label={ LL().LayoutFeatures.Modal.StrokeColor() }
-      value={ft.strokeColor}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['strokeColor'],
-        newValue,
-      )}
-    />
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.StrokeOpacity() }
-      value={ft.strokeOpacity}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['strokeOpacity'],
-        newValue,
-      )}
-      min={0}
-      max={1}
-      step={0.1}
-    />
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.StrokeWidth() }
-      value={ft.strokeWidth}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['strokeWidth'],
-        newValue,
-      )}
-      min={0}
-      max={100}
-      step={1}
-    />
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.Rx() }
-      value={ft.rx}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['rx'],
-        newValue,
-      )}
-      min={0}
-      max={1000}
-      step={1}
-    />
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.Ry() }
-      value={ft.ry}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['ry'],
-        newValue,
-      )}
-      min={0}
-      max={1000}
       step={1}
     />
     <InputFieldNumber
@@ -496,6 +396,69 @@ function makeSettingsText(
   </>;
 }
 
+function makeSettingsLine(
+  layoutFeatureId: string,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const ft = layersDescriptionStore.layoutFeatures
+    .find((f) => f.id === layoutFeatureId) as Line;
+
+  return <>
+    <InputFieldColor
+      label={LL().LayoutFeatures.Modal.StrokeColor()}
+      value={ft.strokeColor}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeColor'],
+        newValue,
+      )}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.StrokeOpacity() }
+      value={ft.strokeOpacity}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeOpacity'],
+        newValue,
+      )}
+      min={0}
+      max={1}
+      step={0.1}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.StrokeWidth() }
+      value={ft.strokeWidth}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeWidth'],
+        newValue,
+      )}
+      min={0}
+      max={100}
+      step={1}
+    />
+    <InputFieldCheckbox
+      label={'Display arrow'}
+      checked={ft.arrow}
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['arrow'],
+        newValue,
+      )}
+    />
+  {/* We also want to allow the line to be dashed */}
+  <InputFieldCheckbox
+    label={'Dashed line'}
+    checked={!!ft.strokeDasharray}
+    onChange={(newValue) => updateLayoutFeatureProperty(
+      layoutFeatureId,
+      ['strokeDasharray'],
+      newValue ? '5 5' : undefined,
+    )}
+  />
+  </>;
+}
+
 function makeSettingsFreeDrawing(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
@@ -565,8 +528,8 @@ export default function LayoutFeatureSettings(
     <div class="layout-features-settings__content">
       {
         ({
+          [LayoutFeatureType.Line]: makeSettingsLine,
           [LayoutFeatureType.Rectangle]: makeSettingsRectangle,
-          [LayoutFeatureType.Ellipse]: makeSettingsEllipse,
           [LayoutFeatureType.ScaleBar]: makeSettingsScaleBar,
           [LayoutFeatureType.FreeDrawing]: makeSettingsFreeDrawing,
           [LayoutFeatureType.Text]: makeSettingsText,

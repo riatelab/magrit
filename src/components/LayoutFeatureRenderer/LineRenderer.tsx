@@ -3,8 +3,9 @@ import { type JSX, onMount } from 'solid-js';
 
 // Helpers
 import {
-  bindDragBehavior, bindElementsLayoutFeature,
-  makeLayoutFeaturesSettingsModal, RectangleBox,
+  bindElementsLayoutFeature,
+  makeLayoutFeaturesSettingsModal,
+  RectangleBox,
   triggerContextMenuLayoutFeature,
 } from './common.tsx';
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -36,6 +37,7 @@ export default function LineRenderer(props: Line): JSX.Element {
       stroke={props.strokeColor}
       stroke-opacity={props.strokeOpacity}
       stroke-width={props.strokeWidth}
+      stroke-dasharray={props.strokeDasharray}
       fill="none"
       marker-end={props.arrow ? 'url(#arrow-head)' : undefined}
       d={`M ${props.points.map((p) => `${p[0]},${p[1]}`).join(' L ')}`}

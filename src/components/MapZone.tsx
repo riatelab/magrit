@@ -44,7 +44,6 @@ import graticuleRenderer from './MapRenderer/GraticuleRenderer.tsx';
 import smoothedMapRenderer from './MapRenderer/SmoothedMapRenderer.tsx';
 
 // - for rendering the layout features
-import EllipseRenderer from './LayoutFeatureRenderer/EllipseRenderer.tsx';
 import FreeDrawingRenderer from './LayoutFeatureRenderer/FreeDrawingRenderer.tsx';
 import LineRenderer from './LayoutFeatureRenderer/LineRenderer.tsx';
 import RectangleRenderer from './LayoutFeatureRenderer/RectangleRenderer.tsx';
@@ -65,7 +64,6 @@ import legendLabels from './LegendRenderer/LabelsLegendRenderer.tsx';
 
 // Types and enums
 import {
-  Ellipse,
   FreeDrawing,
   type IZoomable,
   LayoutFeatureType,
@@ -87,7 +85,6 @@ import { applyTransformTransition } from '../helpers/transitions';
 const layoutFeaturesFns = {
   [LayoutFeatureType.Line]: LineRenderer,
   [LayoutFeatureType.Rectangle]: RectangleRenderer,
-  [LayoutFeatureType.Ellipse]: EllipseRenderer,
   [LayoutFeatureType.FreeDrawing]: FreeDrawingRenderer,
   [LayoutFeatureType.ScaleBar]: ScaleBarRenderer,
   [LayoutFeatureType.Text]: TextRenderer,
@@ -302,15 +299,31 @@ export default function MapZone(): JSX.Element {
             orient="auto"
             markerWidth="4"
             markerHeight="4"
+            stroke="context-stroke"
+            fill="context-stroke"
+            // The two previous lines are used to
+            // make the arrow head the same color as the line
+            // but it only works in Firefox for now.
+            // TODO: use reusable arrow path but clone the marker for each needed color
+            //     <path id="markerPath" d="M0,-5L10,0L0,5" />
+            //     <marker
+            //        id="arrow-head-123" viewBox="0 -5 10 10"
+            //        refX="5" refY="0" markerWidth="4" markerHeight="4" orient="auto"
+            //        fill="the color of the arrow stroke"
+            //        stroke="the color of the arrow stroke"
+            //      >
+            //       <use href="#markerPath" />
+            //     </marker>
+            //     // etc...
             style={{ 'stroke-width': '1px' }}
           >
             <path d="M0,-5L10,0L0,5" class="arrowHead"></path>
           </marker>
-          <For each={ layersDescriptionStore.layers }>
+          <For each={layersDescriptionStore.layers}>
             {(layer) => <>
-                <Show when={layer.dropShadow}>
-                  <filter id={`filter-drop-shadow-${layer.id}`} width="200%" height="200%">
-                    <feDropShadow dx="5" dy="5" stdDeviation="0" />
+              <Show when={layer.dropShadow}>
+                <filter id={`filter-drop-shadow-${layer.id}`} width="200%" height="200%">
+                  <feDropShadow dx="5" dy="5" stdDeviation="0" />
                     {/* TODO: investigate the various ways of drawing drop shadows */}
                     {/* <feOffset result="offOut" in="SourceAlpha" dx="5" dy="5" /> */}
                     {/* <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" /> */}
@@ -346,7 +359,7 @@ export default function MapZone(): JSX.Element {
         </For>
         <For each={ layersDescriptionStore.layoutFeatures }>
           {(feature) => layoutFeaturesFns[feature.type](
-            feature as Rectangle & Ellipse & FreeDrawing & ScaleBar & Text & Line,
+            feature as Rectangle & FreeDrawing & ScaleBar & Text & Line,
           )}
         </For>
         <Show when={!globalStore.userHasAddedLayer}>

@@ -1,8 +1,14 @@
 // Import from solid-js
-import { type JSX, onMount } from 'solid-js';
+import { createEffect, type JSX, onMount } from 'solid-js';
 
 // Helpers
-import { bindDragBehavior, makeLayoutFeaturesSettingsModal, triggerContextMenuLayoutFeature } from './common.tsx';
+import {
+  bindElementsLayoutFeature,
+  computeRectangleBox,
+  makeLayoutFeaturesSettingsModal,
+  RectangleBox,
+  triggerContextMenuLayoutFeature,
+} from './common.tsx';
 import { useI18nContext } from '../../i18n/i18n-solid';
 
 // Types / Interfaces / Enums
@@ -13,7 +19,18 @@ export default function RectangleRenderer(props: Rectangle): JSX.Element {
   let refElement: SVGGElement;
 
   onMount(() => {
-    bindDragBehavior(refElement, props);
+    bindElementsLayoutFeature(refElement, props);
+  });
+
+  createEffect(() => {
+    computeRectangleBox(
+      refElement,
+      // We need to recompute the rectangle box when following properties change
+      props.width,
+      props.height,
+      props.rotation,
+      props.cornerRadius,
+    );
   });
 
   return <g
@@ -39,7 +56,8 @@ export default function RectangleRenderer(props: Rectangle): JSX.Element {
       stroke-opacity={props.strokeOpacity}
       rx={props.cornerRadius}
       ry={props.cornerRadius}
-      transform={props.rotation ? `rotate(${props.rotation} ${props.position[0] + props.width / 2} ${props.position[1] + props.height / 2})` : undefined}
+      transform={props.rotation ? `rotate(${props.rotation} ${props.width / 2} ${props.height / 2})` : undefined}
     ></rect>
+    <RectangleBox backgroundRect={{ visible: false }} />
   </g>;
 }

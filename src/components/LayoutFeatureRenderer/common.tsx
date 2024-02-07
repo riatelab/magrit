@@ -1,6 +1,9 @@
 // Import from solid-js
 import { type Accessor, type JSX } from 'solid-js';
 
+// Imports from other packages
+import { yieldOrContinue } from 'main-thread-scheduling';
+
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { unproxify } from '../../helpers/common';
@@ -16,6 +19,9 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/L
 // Types
 import type { BackgroundRect, LayoutFeature } from '../../global';
 
+// TODO: Some of this code is duplicated in the LegendRenderer/common.tsx file.
+//   Once we finished implementing the legends and the layout features,
+//   we should try refactor this to avoid duplication.
 export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): void {
   // Allow the user to move the refElement group by dragging it on the screen.
   // To do this we change the position property of the corresponding
@@ -38,6 +44,7 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
     }
   }
 
+  let [positionX, positionY] = props.position;
   let i = 0;
   const moveElement = (e: MouseEvent) => {
     if (((i++) % 2) === 0) { // eslint-disable-line no-plusplus
@@ -48,28 +55,49 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
     const dx = e.clientX - x;
     const dy = e.clientY - y;
 
-    // TODO: we should do as we do for legends and use
-    //  the transform attribute while dragging
-    setLayersDescriptionStore(
-      'layoutFeatures',
-      (l: LayoutFeature) => l.id === props.id,
-      {
-        position: [
-          props.position[0] + dx,
-          props.position[1] + dy,
-        ],
-      },
-    );
+    // setLayersDescriptionStore(
+    //   'layoutFeatures',
+    //   (l: LayoutFeature) => l.id === props.id,
+    //   {
+    //     position: [
+    //       props.position[0] + dx,
+    //       props.position[1] + dy,
+    //     ],
+    //   },
+    // );
+    // Compute transform attribute of the refElement group
+    // without updating the position in the layersDescriptionStore (for performance reasons)
+    // (cf. the commented code just above).
+    // We will update the position in the layersDescriptionStore
+    // once the user has released the mouse button (in deselectElement).
+    positionX += dx;
+    positionY += dy;
+    refElement.setAttribute('transform', `translate(${positionX}, ${positionY})`);
 
     x = e.clientX;
     y = e.clientY;
   };
 
-  const deselectElement = () => {
+  const deselectElement = async () => {
     refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
     outerSvg.style.cursor = 'default'; // eslint-disable-line no-param-reassign
     outerSvg.removeEventListener('mousemove', moveElement);
     outerSvg.removeEventListener('mouseup', deselectElement);
+
+    await yieldOrContinue('smooth');
+
+    // Update the position in the layersDescriptionStore
+    // once the user has released the mouse button
+    setLayersDescriptionStore(
+      'layoutFeatures',
+      (l: LayoutFeature) => l.id === props.id,
+      {
+        position: [
+          positionX,
+          positionY,
+        ],
+      },
+    );
   };
 
   refElement.addEventListener('mouseover', () => {
@@ -114,7 +142,7 @@ export function makeLayoutFeaturesSettingsModal(
   // State before opening the modal, in case cancel is clicked
   const layoutFeatureState = unproxify(
     layersDescriptionStore.layoutFeatures
-      .find((l) => l.id === layoutFeatureId) as LayoutFeature,
+      .find((l) => l.id === layoutFeatureId) as never,
   );
   setModalStore({
     show: true,
@@ -218,21 +246,27 @@ export function RectangleBox(
   />;
 }
 
+// TODO: Some of this code is duplicated in the LegendRenderer/common.tsx file.
+//   Once we finished implementing the legends and the layout features,
+//   we should try refactor this to avoid duplication.
 export function computeRectangleBox(refElement: SVGGElement, ...args: never[]) {
   // First we reset the box to its 0-size so it doesn't interfere with the
   // computation of the bbox of the refElement group
   const rectangleBoxLegend = refElement.querySelector('.layout-feature-box') as SVGRectElement;
   rectangleBoxLegend.setAttribute('width', '0px');
   rectangleBoxLegend.setAttribute('height', '0px');
+  rectangleBoxLegend.setAttribute('x', '0px');
+  rectangleBoxLegend.setAttribute('y', '0px');
 
   // We compute the bbox of the refElement group
   const bbox = refElement.getBBox();
+  console.log(bbox);
 
   // We set the size of the box to the size of the bbox of the refElement group + a margin
   rectangleBoxLegend.setAttribute('width', `${bbox.width + distanceBoxContent * 2}px`);
   rectangleBoxLegend.setAttribute('height', `${bbox.height + distanceBoxContent * 2}px`);
-  // rectangleBoxLegend.setAttribute('x', `${bbox.x - distanceBoxContent}px`);
-  // rectangleBoxLegend.setAttribute('y', `${bbox.y - distanceBoxContent}px`);
+  rectangleBoxLegend.setAttribute('x', `${bbox.x - distanceBoxContent}px`);
+  rectangleBoxLegend.setAttribute('y', `${bbox.y - distanceBoxContent}px`);
 }
 
 function bindMouseEnterLeave(refElement: SVGGElement): void {

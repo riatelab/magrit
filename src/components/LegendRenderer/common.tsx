@@ -56,6 +56,9 @@ export function makeLegendText(
 
 export const distanceBoxContent = 10;
 
+// TODO: Some of this code is duplicated in the LayoutFeatureRenderer/common.tsx file.
+//   Once we finished implementing the legends and the layout features,
+//   we should try refactor this to avoid duplication.
 export function computeRectangleBox(refElement: SVGGElement, ...args: never[]) {
   // First we reset the box to its 0-size so it doesn't interfere with the
   // computation of the bbox of the refElement group
@@ -64,8 +67,10 @@ export function computeRectangleBox(refElement: SVGGElement, ...args: never[]) {
   rectangleBoxLegend.setAttribute('height', '0px');
   rectangleBoxLegend.setAttribute('x', '0px');
   rectangleBoxLegend.setAttribute('y', '0px');
+
   // We compute the bbox of the refElement group
   const bbox = refElement.getBBox();
+
   // We set the size of the box to the size of the bbox of the refElement group + a margin
   rectangleBoxLegend.setAttribute('width', `${bbox.width + distanceBoxContent * 2}px`);
   rectangleBoxLegend.setAttribute('height', `${bbox.height + distanceBoxContent * 2}px`);
@@ -103,6 +108,9 @@ export function bindMouseEnterLeave(refElement: SVGGElement): void {
   });
 }
 
+// TODO: Some of this code is duplicated in the LayoutFeatureRenderer/common.tsx file.
+//   Once we finished implementing the legends and the layout features,
+//   we should try refactor this to avoid duplication.
 export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescription): void {
   // Allow the user to move the refElement group
   // by dragging it on the screen.
@@ -152,7 +160,9 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
     //   },
     // );
     // Compute transform attribute of the refElement group
-    // without updating the position in the layersDescriptionStore (for performance reasons)
+    // without updating the position in the layersDescriptionStore (for performance reasons).
+    // We will update the position in the layersDescriptionStore
+    // once the user has released the mouse button (in deselectElement).
     positionX += dx;
     positionY += dy;
     refElement.setAttribute('transform', `translate(${positionX}, ${positionY})`);

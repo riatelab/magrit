@@ -6,32 +6,43 @@ import {
   Match,
   onMount,
   Show,
-  Switch,
+  Switch, createEffect,
 } from 'solid-js';
 
 // Helpers
-import { bindDragBehavior, makeLayoutFeaturesSettingsModal, triggerContextMenuLayoutFeature } from './common.tsx';
+import {
+  bindDragBehavior,
+  bindElementsLayoutFeature, computeRectangleBox,
+  makeLayoutFeaturesSettingsModal,
+  RectangleBox,
+  triggerContextMenuLayoutFeature,
+} from './common.tsx';
 import { useI18nContext } from '../../i18n/i18n-solid';
 
 // Types / Interfaces / Enums
 import { type ScaleBar, ScaleBarStyle } from '../../global.d';
 
+// We only use it internally, this is the start of the coordinate system
+// for this layout feature
+const initialPosition = 0;
+
 function SimpleLineScaleBar(props: ScaleBar): JSX.Element {
   return <>
     <g stroke="black" stroke-width={1}>
       <line
-        x1={props.position[0]}
-        y1={props.position[1]}
-        x2={props.position[0] + props.width}
-        y2={props.position[1]}
+        x1={initialPosition}
+        y1={initialPosition + 20}
+        x2={initialPosition + props.width}
+        y2={initialPosition + 20}
       ></line>
     </g>
     <g>
       <Show when={props.label}>
         <text
-          x={props.position[0] + props.width / 2}
-          y={props.position[1] + 20}
+          x={initialPosition + props.width / 2}
+          y={initialPosition}
           text-anchor="middle"
+          dominant-baseline="hanging"
           style={{ 'user-select': 'none' }}
         >{props.label}</text>
       </Show>
@@ -44,30 +55,31 @@ function LineWithTicks(props: ScaleBar & { direction: 'top' | 'bottom' }): JSX.E
   return <>
     <g stroke="black" stroke-width={1}>
       <line
-        x1={props.position[0]}
-        y1={props.position[1]}
-        x2={props.position[0] + props.width}
-        y2={props.position[1]}
+        x1={initialPosition}
+        y1={initialPosition + 20}
+        x2={initialPosition + props.width}
+        y2={initialPosition + 20}
       ></line>
       <line
-        x1={props.position[0]}
-        y1={props.position[1]}
-        x2={props.position[0]}
-        y2={props.position[1] + props.height * direction()}
+        x1={initialPosition}
+        y1={initialPosition + 20}
+        x2={initialPosition}
+        y2={initialPosition + props.height * direction() + 20}
       ></line>
       <line
-        x1={props.position[0] + props.width}
-        y1={props.position[1]}
-        x2={props.position[0] + props.width}
-        y2={props.position[1] + props.height * direction()}
+        x1={initialPosition + props.width}
+        y1={initialPosition + 20}
+        x2={initialPosition + props.width}
+        y2={initialPosition + props.height * direction() + 20}
       ></line>
     </g>
     <g>
       <Show when={props.label}>
         <text
-          x={props.position[0] + props.width / 2}
-          y={props.position[1] - 20}
+          x={initialPosition + props.width / 2}
+          y={initialPosition}
           text-anchor="middle"
+          dominant-baseline="hanging"
           style={{ 'user-select': 'none' }}
         >{props.label}</text>
       </Show>
@@ -83,8 +95,8 @@ function BlackAndWhiteBar(props: ScaleBar): JSX.Element {
         (tickValue, i) => <g>
           <Show when={i() !== props.tickValues.length - 1}>
             <rect
-              x={props.position[0] + (tickValue * props.width) / maxValue()}
-              y={props.position[1]}
+              x={initialPosition + (tickValue * props.width) / maxValue()}
+              y={initialPosition + 20}
               width={props.tickValues[i() + 1] - tickValue}
               height={props.height}
               fill={i() % 2 === 0 ? 'black' : 'white'}
@@ -93,8 +105,8 @@ function BlackAndWhiteBar(props: ScaleBar): JSX.Element {
             ></rect>
           </Show>
           <text
-            x={props.position[0] + (tickValue * props.width) / maxValue()}
-            y={props.position[1] + props.height + 20}
+            x={initialPosition + (tickValue * props.width) / maxValue()}
+            y={initialPosition + props.height + 40}
             text-anchor="middle"
             style={{ 'user-select': 'none' }}
           >{tickValue}</text>
@@ -104,9 +116,10 @@ function BlackAndWhiteBar(props: ScaleBar): JSX.Element {
     <g>
       <Show when={props.label}>
         <text
-          x={props.position[0] + props.width / 2}
-          y={props.position[1] - 20}
+          x={initialPosition + props.width / 2}
+          y={initialPosition}
           text-anchor="middle"
+          dominant-baseline="hanging"
           style={{ 'user-select': 'none' }}
         >{props.label}</text>
       </Show>
@@ -119,7 +132,20 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
   let refElement: SVGGElement;
 
   onMount(() => {
-    bindDragBehavior(refElement, props);
+    bindElementsLayoutFeature(refElement, props);
+  });
+
+  createEffect(() => {
+    computeRectangleBox(
+      refElement,
+      // We need to recompute rectangle box when the following properties change
+      props.width,
+      props.height,
+      props.style,
+      props.label,
+      props.rotation,
+      props.tickValues,
+    );
   });
 
   return <g
@@ -131,7 +157,8 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
       triggerContextMenuLayoutFeature(e, props.id, LL);
     }}
     onDblClick={() => { makeLayoutFeaturesSettingsModal(props.id, LL); }}
-    >
+    transform={`translate(${props.position[0]}, ${props.position[1]})`}
+  >
     <Switch>
       <Match when={props.style === ScaleBarStyle.simpleLine}>
         <SimpleLineScaleBar {...props} />
@@ -146,5 +173,8 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
         <BlackAndWhiteBar {...props} />
       </Match>
     </Switch>
+    <RectangleBox
+      backgroundRect={props.backgroundRect}
+    />
   </g>;
 }

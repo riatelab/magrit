@@ -113,7 +113,6 @@ const fr = {
     Sphere: 'Sphère',
     Graticule: 'Graticule',
     Rectangle: 'Rectangle',
-    Ellipse: 'Ellipse',
     Line: 'Ligne / Flèche',
     Text: 'Texte',
     Image: 'Image',
@@ -131,9 +130,8 @@ const fr = {
       Graticule: 'La couche "Graticule" a été ajoutée à la carte.',
     },
     DrawingInstructions: {
-      Line: 'Cliquez pour commencer à dessiner une ligne. Cliquez à nouveau pour ajouter un point. Double-cliquez pour terminer.',
+      Line: 'Cliquez pour commencer à dessiner une ligne. Cliquez à nouveau pour ajouter un point. Double-cliquez pour terminer.\nMaintenez la touche "Ctrl" enfoncée pour dessiner une ligne droite.',
       Rectangle: 'Cliquez une première fois pour localiser le premier coin du rectangle. Cliquez une seconde fois pour localiser le coin opposé.',
-      Ellipse: 'Cliquez une première fois pour localiser le centre de l\'ellipse. Cliquez une seconde fois pour localiser le point sur le bord de l\'ellipse.',
       FreeDrawing: 'Cliquez pour commencer à dessiner puis relâchez le bouton de la souris pour terminer.',
       Text: 'Cliquez pour localiser l\'emplacement du texte à ajouter.',
       TextPlaceholder: 'Saisir le texte à ajouter...',

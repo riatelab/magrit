@@ -395,10 +395,6 @@ type RootTranslation = {
 		 */
 		Rectangle: string
 		/**
-		 * E​l​l​i​p​s​e
-		 */
-		Ellipse: string
-		/**
 		 * L​i​n​e​ ​/​ ​A​r​r​o​w
 		 */
 		Line: string
@@ -452,17 +448,14 @@ type RootTranslation = {
 		}
 		DrawingInstructions: {
 			/**
-			 * C​l​i​c​k​ ​t​o​ ​s​t​a​r​t​ ​d​r​a​w​i​n​g​ ​a​ ​l​i​n​e​.​ ​C​l​i​c​k​ ​a​g​a​i​n​ ​t​o​ ​a​d​d​ ​a​ ​p​o​i​n​t​.​ ​D​o​u​b​l​e​-​c​l​i​c​k​ ​t​o​ ​f​i​n​i​s​h​.
+			 * C​l​i​c​k​ ​t​o​ ​s​t​a​r​t​ ​d​r​a​w​i​n​g​ ​a​ ​l​i​n​e​.​ ​C​l​i​c​k​ ​a​g​a​i​n​ ​t​o​ ​a​d​d​ ​a​ ​p​o​i​n​t​.​ ​D​o​u​b​l​e​-​c​l​i​c​k​ ​t​o​ ​f​i​n​i​s​h​.​
+		​H​o​l​d​ ​t​h​e​ ​C​t​r​l​ ​k​e​y​ ​t​o​ ​d​r​a​w​ ​a​ ​s​t​r​a​i​g​h​t​ ​l​i​n​e​.
 			 */
 			Line: string
 			/**
 			 * C​l​i​c​k​ ​t​o​ ​l​o​c​a​t​e​ ​t​h​e​ ​f​i​r​s​t​ ​c​o​r​n​e​r​ ​o​f​ ​t​h​e​ ​r​e​c​t​a​n​g​l​e​.​ ​C​l​i​c​k​ ​a​g​a​i​n​ ​t​o​ ​l​o​c​a​t​e​ ​t​h​e​ ​o​p​p​o​s​i​t​e​ ​c​o​r​n​e​r​.
 			 */
 			Rectangle: string
-			/**
-			 * C​l​i​c​k​ ​t​o​ ​l​o​c​a​t​e​ ​t​h​e​ ​c​e​n​t​e​r​ ​o​f​ ​t​h​e​ ​e​l​l​i​p​s​e​.​ ​C​l​i​c​k​ ​a​g​a​i​n​ ​t​o​ ​l​o​c​a​t​e​ ​a​ ​p​o​i​n​t​ ​o​n​ ​t​h​e​ ​e​l​l​i​p​s​e​.
-			 */
-			Ellipse: string
 			/**
 			 * C​l​i​c​k​ ​t​o​ ​s​t​a​r​t​ ​d​r​a​w​i​n​g​ ​t​h​e​ ​d​e​s​i​r​e​d​ ​s​h​a​p​e​ ​a​n​d​ ​r​e​l​e​a​s​e​ ​t​o​ ​f​i​n​i​s​h​.
 			 */
@@ -2188,10 +2181,6 @@ export type TranslationFunctions = {
 		 */
 		Rectangle: () => LocalizedString
 		/**
-		 * Ellipse
-		 */
-		Ellipse: () => LocalizedString
-		/**
 		 * Line / Arrow
 		 */
 		Line: () => LocalizedString
@@ -2246,16 +2235,13 @@ export type TranslationFunctions = {
 		DrawingInstructions: {
 			/**
 			 * Click to start drawing a line. Click again to add a point. Double-click to finish.
+		Hold the Ctrl key to draw a straight line.
 			 */
 			Line: () => LocalizedString
 			/**
 			 * Click to locate the first corner of the rectangle. Click again to locate the opposite corner.
 			 */
 			Rectangle: () => LocalizedString
-			/**
-			 * Click to locate the center of the ellipse. Click again to locate a point on the ellipse.
-			 */
-			Ellipse: () => LocalizedString
 			/**
 			 * Click to start drawing the desired shape and release to finish.
 			 */

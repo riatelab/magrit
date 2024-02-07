@@ -111,7 +111,7 @@ export default function DefaultModal(): JSX.Element {
       <footer class="modal-card-foot">
         <button
           class="button is-success confirm-button"
-          ref={autofocus}
+          // ref={autofocus}
           autofocus
           onClick={ () => {
             (modalStore.confirmCallback || (() => {}))();

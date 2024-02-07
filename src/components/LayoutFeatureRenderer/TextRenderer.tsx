@@ -1,6 +1,6 @@
 // Import from solid-js
 import {
-  createEffect,
+  createEffect, createMemo,
   For,
   type JSX,
   onMount,
@@ -19,6 +19,10 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 // Types / Interfaces / Enums
 import type { Text } from '../../global';
 
+// We only use it internally, this is the start of the coordinate system
+// for this layout feature
+export const initialPosition = 0;
+
 export default function TextRenderer(props: Text): JSX.Element {
   const { LL } = useI18nContext();
   let refElement: SVGGElement;
@@ -30,8 +34,11 @@ export default function TextRenderer(props: Text): JSX.Element {
   createEffect(() => {
     computeRectangleBox(
       refElement,
+      // We need to recompute the rectangle box when following properties change
       props.fontSize,
       props.text,
+      props.rotation,
+      props.textAnchor,
     );
   });
 
@@ -44,8 +51,8 @@ export default function TextRenderer(props: Text): JSX.Element {
       triggerContextMenuLayoutFeature(e, props.id, LL);
     }}
     onDblClick={() => { makeLayoutFeaturesSettingsModal(props.id, LL); }}
+    transform={`translate(${props.position[0]}, ${props.position[1]})`}
   >
-    <RectangleBox backgroundRect={props.backgroundRect} position={props.position} />
     <text
       style={{ 'user-select': 'none' }}
       font-size={props.fontSize}
@@ -56,17 +63,20 @@ export default function TextRenderer(props: Text): JSX.Element {
       font-weight={props.fontWeight}
       text-anchor={props.textAnchor}
       pointer-events={'none'}
-      transform={props.rotation !== 0 ? `rotate(${props.rotation} ${props.position[0]} ${props.position[1]})` : undefined}
+      transform={props.rotation !== 0 ? `rotate(${props.rotation})` : undefined}
+      dominant-baseline={'hanging'}
     >
       <For each={props.text!.split('\n')}>
         {(line, i) => <tspan
-            x={props.position[0]}
-            y={props.position[1] + i() * 1.1 * props.fontSize}
-            dy="1.2em"
-            alignment-baseline={'ideographic'}
+            x={initialPosition}
+            y={initialPosition + i() * 1.1 * props.fontSize}
+            // dy={i() > 0 ? `${1.1 * props.fontSize}px` : undefined}
           >{line}</tspan>
         }
       </For>
     </text>
+    <RectangleBox
+      backgroundRect={props.backgroundRect}
+    />
   </g>;
 }
