@@ -1,7 +1,10 @@
 import { createStore } from 'solid-js/store';
 import { yieldOrContinue } from 'main-thread-scheduling';
 
+import { version } from '../../package.json';
+
 type GlobalStoreType = {
+  version: string,
   isLoading: boolean,
   isReloadingProject: boolean,
   loadingMessage: string,
@@ -16,6 +19,7 @@ const [
   globalStore,
   setGlobalStore,
 ] = createStore({
+  version,
   isLoading: false,
   isReloadingProject: false,
   loadingMessage: '',

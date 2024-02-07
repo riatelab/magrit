@@ -66,11 +66,16 @@ import type {
   TableDescription,
 } from './global';
 
-// Other stuff
-import { version } from '../package.json';
-
 // Styles
 import './styles/Transitions.css';
+
+interface ProjectDescription {
+  version: string,
+  layers: LayerDescription[],
+  layoutFeatures: LayoutFeature[],
+  map: MapStoreType,
+  tables: TableDescription[],
+}
 
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
   paths: {
@@ -84,6 +89,22 @@ const loadGdal = async (): Promise<Gdal> => initGdalJs({
 let timeout: NodeJS.Timeout | null | undefined = null;
 
 const db = initDb() as DexieDb;
+
+const prepareExportProject = (): ProjectDescription => {
+  // The current version of the application
+  const { version } = globalStore;
+  // The state of the current project (layers, tables and layout features)
+  const { layers, layoutFeatures, tables } = layersDescriptionStore;
+  // The state of the map
+  const map = { ...mapStore };
+  return {
+    version,
+    layers,
+    layoutFeatures,
+    map,
+    tables,
+  };
+};
 
 const onBeforeUnloadWindow = (ev: Event) => {
   // If there is no layer or if
@@ -99,16 +120,8 @@ const onBeforeUnloadWindow = (ev: Event) => {
 
   // Otherwise we store the state of the current projet
   // in the local DB (indexedDB via Dexie)
-  const { layers, layoutFeatures, tables } = layersDescriptionStore;
-  const map = { ...mapStore };
-  const obj = {
-    layers,
-    layoutFeatures,
-    map,
-    tables,
-  };
-
-  storeProject(db, obj);
+  const projectObj = prepareExportProject();
+  storeProject(db, projectObj);
 };
 
 const dragEnterHandler = (e: Event): void => {
@@ -196,12 +209,7 @@ const dropHandler = (e: Event): void => {
 };
 
 const reloadFromProjectObject = async (
-  obj: {
-    layers: LayerDescription[],
-    layoutFeatures: LayoutFeature[],
-    map: MapStoreType,
-    tables: TableDescription[],
-  },
+  obj: ProjectDescription,
 ): Promise<void> => {
   // Set the app in "reloading" mode
   // (it displays a loading overlay and prevents the user from adding new layers
@@ -213,6 +221,7 @@ const reloadFromProjectObject = async (
 
   // The state we want to use
   const {
+    version,
     layers,
     layoutFeatures,
     map,
@@ -316,6 +325,7 @@ const AppPage: () => JSX.Element = () => {
     document.getElementById('button-new-project')
       ?.addEventListener('click', () => {
         const createNewProject = (): void => {
+          setReloadingProject(true);
           // Compute the default dimension of the map
           const mapWidth = round(
             (window.innerWidth - applicationSettingsStore.leftMenuWidth) * 0.9,
@@ -326,7 +336,7 @@ const AppPage: () => JSX.Element = () => {
             0,
           );
 
-          // Remove all layers
+          // Remove all layers and layout features
           setLayersDescriptionStore(defaultLayersDescription());
 
           // Reset the "userHasAddedLayer" flag
@@ -352,6 +362,8 @@ const AppPage: () => JSX.Element = () => {
 
           // Reset the undo/redo store
           resetUndoRedoStackStore();
+
+          setReloadingProject(false);
         };
 
         setNiceAlertStore({
@@ -369,15 +381,8 @@ const AppPage: () => JSX.Element = () => {
 
     document.getElementById('button-export-project')
       ?.addEventListener('click', () => {
-        const { layers, layoutFeatures, tables } = layersDescriptionStore;
-        const map = { ...mapStore };
-        const obj = {
-          layers,
-          layoutFeatures,
-          map,
-          tables,
-        };
-        const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(obj))}`;
+        const projectObj = prepareExportProject();
+        const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(projectObj))}`;
         return clickLinkFromDataUrl(dataStr, 'export-project.mjson');
       });
 
@@ -409,7 +414,10 @@ const AppPage: () => JSX.Element = () => {
           show: true,
           title: LL().AboutPanel.title(),
           escapeKey: 'confirm',
-          content: () => AboutModal({ version, LL }),
+          content: () => AboutModal({
+            LL,
+            version: globalStore.version,
+          }),
         });
       });
 
