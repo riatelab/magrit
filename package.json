@@ -46,6 +46,7 @@
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-pwa": "^0.17.5",
     "vite-plugin-solid": "^2.9.1",
+    "vite-plugin-top-level-await": "^1.4.1",
     "vite-plugin-wasm": "^3.3.0",
     "vitest": "^1.2.2"
   },

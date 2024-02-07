@@ -4,7 +4,7 @@
 import { defineConfig } from 'vite';
 import eslint from 'vite-plugin-eslint';
 import solidPlugin from 'vite-plugin-solid';
-
+import topLevelAwait from "vite-plugin-top-level-await";
 import wasm from 'vite-plugin-wasm';
 // import devtools from 'solid-devtools/vite';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -12,6 +12,17 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
   plugins: [
     wasm(),
+    // We use top-level await, which was added in ES2022
+    // so if we target anything lower than ES2022, we need to
+    // use topLevelAwait plugin.
+    // (See in the build section below - we currently target ES2015
+    //  and before releasing the app we should decide on the target
+    //  and remove the topLevelAwait plugin if it's not needed.).
+    // As of 2024-02-07, top-level await is supported in all
+    // major desktop browsers (https://caniuse.com/mdn-javascript_operators_await_top_level),
+    // since mid-2021 (Chromium 89+, Safari 15+, Firefox 89+, Edge 89+, Opera 75+),
+    // which represents more than 94% of the global market share.
+    topLevelAwait(),
     // devtools(),
     solidPlugin({ ssr: false }),
     VitePWA({
@@ -83,7 +94,7 @@ export default defineConfig({
     isolate: false,
   },
   build: {
-    target: 'esnext',
+    target: 'es2015',
     minify: false,
     rollupOptions: {
       output: {
