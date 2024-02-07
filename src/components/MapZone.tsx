@@ -154,8 +154,8 @@ export default function MapZone(): JSX.Element {
   // Set up the projection when the component is mounted
   const projection = d3[mapStore.projection.value as keyof typeof d3]()
     .translate([mapStore.mapDimensions.width / 2, mapStore.mapDimensions.height / 2])
-    .scale(160);
-    // .clipExtent(getDefaultClipExtent());
+    .scale(160)
+    .clipExtent(getDefaultClipExtent());
 
   // Zoom the map on the sphere when the component is mounted
   projection.fitExtent(

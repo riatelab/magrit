@@ -79,7 +79,7 @@ const [
   headerHeight: +computedStyle.getPropertyValue('--header-height').replace('px', ''),
   leftMenuWidth: +computedStyle.getPropertyValue('--left-menu-width').replace('px', ''),
   renderVisibility: RenderVisibility.DoNotRender,
-  useClipExtent: true,
+  useClipExtent: false,
   defaultLegendSettings: {
     spacing: 5,
     title: {

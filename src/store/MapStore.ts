@@ -69,9 +69,9 @@ const getDefaultClipExtent = () => (
  *
  */
 export const getCurrentExtent = (targetSvg: SVGSVGElement): number[][] => {
-  const topLeft = globalStore.projection.invert([0, 0]);
+  const topLeft = globalStore.projection.invert([5, 5]);
   const bottomRight = globalStore.projection.invert(
-    [mapStore.mapDimensions.width, mapStore.mapDimensions.height],
+    [mapStore.mapDimensions.width - 5, mapStore.mapDimensions.height - 5],
   );
   return [topLeft, bottomRight];
 };
@@ -245,7 +245,9 @@ createEffect(
       } else { // mapStore.projection.type === 'proj4'
         console.log(mapStore.projection.value);
         projection = getD3ProjectionFromProj4(getProjection(mapStore.projection.value));
-
+        projection.center(mapStore.center)
+          .translate(mapStore.translate)
+          .scale(mapStore.scale);
         // 2. If the projection defines bounds, we want to apply a clipping polygon
         // to the projection to avoid the projection to be drawn outside of the bounds
         // (which is sometimes computationally very expensive)
@@ -286,7 +288,7 @@ createEffect(
         // }
       }
 
-      // projection.clipExtent(getDefaultClipExtent());
+      projection.clipExtent(getDefaultClipExtent());
 
       // 3. Fit the map to the previous extent (because the projection just changed
       //    and we want to keep the same extent if possible), except if we are reloading the project
@@ -297,8 +299,8 @@ createEffect(
         if (currentExtent && currentExtent[0] && currentExtent[1]) {
           projection.fitExtent(
             [
-              [0, 0],
-              [mapStore.mapDimensions.width, mapStore.mapDimensions.height],
+              [5, 5],
+              [mapStore.mapDimensions.width - 5, mapStore.mapDimensions.height - 5],
             ],
             {
               type: 'FeatureCollection',
