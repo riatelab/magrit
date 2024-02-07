@@ -41,7 +41,7 @@ export function defaultLabelsRenderer(
   });
 
   return <g
-    ref={refElement}
+    ref={refElement!}
     id={layerDescription.id}
     class={'layer labels'}
     visibility={layerDescription.visible ? undefined : 'hidden'}
@@ -51,6 +51,9 @@ export function defaultLabelsRenderer(
     <For each={layerDescription.data.features}>
       {
         (feature) => {
+          // TODO: we could propose to link the label position to a symbol position
+          //  (so that if the symbol is moved, the label is moved too, if
+          //   it's hidden, the label is hidden too, etc.)
           const projectedCoords = createMemo(
             () => globalStore.projection(feature.geometry.coordinates),
           );

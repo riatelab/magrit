@@ -85,7 +85,7 @@ export default function legendLabels(
   });
 
   return <g
-    ref={refElement}
+    ref={refElement!}
     class="legend labels"
     for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
@@ -104,6 +104,7 @@ export default function legendLabels(
       <text
         x={0}
         y={heightTitleSubtitle() + sizeDisplayedEntry().height}
+        style={{ 'user-select': 'none' }}
       >
         <tspan
           x={0}
@@ -125,7 +126,6 @@ export default function legendLabels(
           x={sizeDisplayedEntry().width}
         >{ `: ${layer.legend.labels.text}` }</tspan>
       </text>
-
     </g>
     {
       makeLegendText(

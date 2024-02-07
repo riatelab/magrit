@@ -1,9 +1,15 @@
 // Import from solid-js
-import { For, type JSX, onMount } from 'solid-js';
+import {
+  createEffect,
+  For,
+  type JSX,
+  onMount,
+} from 'solid-js';
 
 // Helpers
 import {
   bindElementsLayoutFeature,
+  computeRectangleBox,
   makeLayoutFeaturesSettingsModal,
   RectangleBox,
   triggerContextMenuLayoutFeature,
@@ -19,6 +25,14 @@ export default function TextRenderer(props: Text): JSX.Element {
 
   onMount(() => {
     bindElementsLayoutFeature(refElement, props);
+  });
+
+  createEffect(() => {
+    computeRectangleBox(
+      refElement,
+      props.fontSize,
+      props.text,
+    );
   });
 
   return <g
@@ -49,6 +63,7 @@ export default function TextRenderer(props: Text): JSX.Element {
             x={props.position[0]}
             y={props.position[1] + i() * 1.1 * props.fontSize}
             dy="1.2em"
+            alignment-baseline={'ideographic'}
           >{line}</tspan>
         }
       </For>
