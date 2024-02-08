@@ -40,6 +40,8 @@ export function defaultPolygonRendererOld(
     clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
     shape-rendering={layerDescription.shapeRendering}
+    mgt:geometry-type={layerDescription.type}
+    mgt:portrayal-type={layerDescription.renderer}
   >
     <For each={layerDescription.data.features}>
       {
@@ -75,6 +77,8 @@ export function defaultPolygonRenderer(
     clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
     shape-rendering={layerDescription.shapeRendering}
+    mgt:geometry-type={layerDescription.type}
+    mgt:portrayal-type={layerDescription.renderer}
   >
     <path
       use:bindData={meshAndPolygons().polygons}
@@ -106,6 +110,9 @@ export function defaultPointRenderer(
     stroke-linejoin="round"
     // clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
+    mgt:geometry-type={layerDescription.type}
+    mgt:portrayal-type={layerDescription.renderer}
+    mgt:point-radius={layerDescription.pointRadius}
   >
     <For each={layerDescription.data.features}>
       {
@@ -134,6 +141,8 @@ export function defaultLineRenderer(
     stroke-linejoin="round"
     clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
+    mgt:geometry-type={layerDescription.type}
+    mgt:portrayal-type={layerDescription.renderer}
   >
     <For each={layerDescription.data.features}>
       {
@@ -160,6 +169,8 @@ export function sphereRenderer(layerDescription: LayerDescription): JSX.Element 
       stroke-linecap="round"
       stroke-linejoin="round"
       filter={mergeFilterIds(layerDescription)}
+      mgt:geometry-type={layerDescription.type}
+      mgt:portrayal-type={layerDescription.renderer}
     >
       <path
         vector-effect="non-scaling-stroke"

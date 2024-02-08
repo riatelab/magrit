@@ -33,6 +33,8 @@ export default function graticuleRenderer(layerDescription: LayerDescription): J
     stroke-dasharray={layerDescription.strokeDasharray}
     clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
+    mgt:geometry-type={layerDescription.type}
+    mgt:portrayal-type={layerDescription.renderer}
   >
     <For each={layerDescription.data.features}>
       {

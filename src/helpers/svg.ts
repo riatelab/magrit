@@ -1,6 +1,5 @@
 import d3 from './d3-custom';
 import { globalStore } from '../store/GlobalStore';
-import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import type { IZoomable } from '../global';
 
 /**
@@ -33,18 +32,17 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
 
   // For each layer...
   svgElement.querySelectorAll('g.layer').forEach((g) => {
-    const typePortrayal = Array.from(g.classList).filter((d) => d !== 'layer')[0];
     // Remove the transform attribute from the elements on which it was defined
     g.removeAttribute('transform');
-    // Redraw the paths
+    // Get the type of portrayal stored in a custom attribute
+    const typePortrayal = g.getAttribute('mgt:portrayal-type')!;
+    // Redraw the paths according to the type of portrayal
     if (simpleRedrawRenderers.has(typePortrayal)) {
-      // We need to read the layer description to know the type of geometry
+      // We need to read the type of geometry
       // because we need to set the pointRadius for point geometries
-      const ld = layersDescriptionStore.layers
-        .find((l) => l.id === g.id)!;
-
-      if (ld.type === 'point') {
-        globalStore.pathGenerator.pointRadius(ld.pointRadius!);
+      const type = g.getAttribute('mgt:geometry-type')!;
+      if (type === 'point') {
+        globalStore.pathGenerator.pointRadius(+g.getAttribute('mgt:point-radius')!);
       }
 
       g.querySelectorAll('path').forEach((p) => {

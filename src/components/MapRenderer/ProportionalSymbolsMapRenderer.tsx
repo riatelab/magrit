@@ -57,6 +57,8 @@ export default function proportionalSymbolsRenderer(
     stroke-linecap="round"
     stroke-linejoin="round"
     filter={mergeFilterIds(layerDescription)}
+    mgt:geometry-type={layerDescription.type}
+    mgt:portrayal-type={layerDescription.renderer}
   >
     <For each={layerDescription.data.features}>
       {

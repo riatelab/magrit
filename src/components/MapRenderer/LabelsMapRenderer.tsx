@@ -47,6 +47,8 @@ export function defaultLabelsRenderer(
     visibility={layerDescription.visible ? undefined : 'hidden'}
     filter={mergeFilterIds(layerDescription)}
     style={{ 'user-select': 'none', 'stroke-linejoin': 'round', 'paint-order': 'stroke' }}
+    mgt:geometry-type={layerDescription.type}
+    mgt:portrayal-type={layerDescription.renderer}
   >
     <For each={layerDescription.data.features}>
       {
@@ -84,7 +86,10 @@ export function graticuleLabelsRenderer(
   layerDescription: LayerDescriptionLabels,
 ): JSX.Element {
   const rendererParameters = layerDescription.rendererParameters as LabelsParameters;
-  return <g>
+  return <g
+    mgt:geometry-type={layerDescription.type}
+    mgt:portrayal-type={layerDescription.renderer}
+  >
     <For each={layerDescription.data.features}>
       {
         (feature) => <text

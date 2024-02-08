@@ -60,6 +60,8 @@ export function choroplethPolygonRenderer(
     clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
     shape-rendering={layerDescription.shapeRendering}
+    mgt:geometry-type={layerDescription.type}
+    mgt:portrayal-type={layerDescription.renderer}
     >
     <For each={layerDescription.data.features}>
       {
@@ -108,6 +110,8 @@ export function choroplethPointRenderer(
     stroke-linejoin="round"
     // clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
+    mgt:geometry-type={layerDescription.type}
+    mgt:portrayal-type={layerDescription.renderer}
   >
     <For each={layerDescription.data.features}>
       {
@@ -155,6 +159,8 @@ export function choroplethLineRenderer(
     stroke-linejoin="round"
     clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
+    mgt:geometry-type={layerDescription.type}
+    mgt:portrayal-type={layerDescription.renderer}
   >
     <For each={layerDescription.data.features}>
       {
