@@ -1,20 +1,40 @@
 // Import from solid-js
-import { type JSX, onMount } from 'solid-js';
+import {
+  createEffect,
+  type JSX,
+  on,
+  onMount,
+} from 'solid-js';
 
 // Helpers
-import { bindDragBehavior, makeLayoutFeaturesSettingsModal, triggerContextMenuLayoutFeature } from './common.tsx';
+import {
+  bindElementsLayoutFeature,
+  computeRectangleBox,
+  makeLayoutFeaturesSettingsModal,
+  RectangleBox,
+  triggerContextMenuLayoutFeature,
+} from './common.tsx';
 import { useI18nContext } from '../../i18n/i18n-solid';
 
 // Types / Interfaces / Enums
-import type { FreeDrawing } from '../../global.d';
+import type { BackgroundRect, FreeDrawing } from '../../global.d';
 
 export default function FreeDrawingRenderer(props: FreeDrawing): JSX.Element {
   const { LL } = useI18nContext();
   let refElement: SVGGElement;
 
   onMount(() => {
-    bindDragBehavior(refElement, props);
+    bindElementsLayoutFeature(refElement, props);
   });
+
+  createEffect(
+    on(
+      () => props.strokeWidth,
+      () => {
+        computeRectangleBox(refElement);
+      },
+    ),
+  );
 
   return <g
     ref={refElement!}
@@ -34,5 +54,6 @@ export default function FreeDrawingRenderer(props: FreeDrawing): JSX.Element {
       fill="none"
       d={props.path}
     ></path>
+    <RectangleBox backgroundRect={{ visible: false } as BackgroundRect} />
   </g>;
 }
