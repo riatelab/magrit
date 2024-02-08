@@ -37,21 +37,21 @@ export const descendingKeyAccessor = (
  * will not be triggered.
  * The function will be called after it stops being called for 'delay' milliseconds.
  * @param func - The function to debounce.
- * @param {number} delay - The number of milliseconds to delay.
- * @param {boolean} [immediate] - Trigger the function immediately.
+ * @param {number} [delay=300] - The number of milliseconds to delay.
+ * @param {boolean} [immediate=false] - Trigger the function immediately.
  */
-export const debounce = (func: (...args: any[]) => any, delay: number, immediate?: boolean) => {
-  let timerId: number | undefined;
+export const debounce = (
+  func: (...args: any[]) => any,
+  delay: number = 300,
+  immediate: boolean = false,
+) => {
+  let timeoutId: ReturnType<typeof setTimeout>;
   return (...args: any[]) => {
-    const boundFunc = func.bind(this, ...args);
-    clearTimeout(timerId);
-    if (immediate && !timerId) {
-      boundFunc();
+    clearTimeout(timeoutId);
+    if (immediate && !timeoutId) {
+      func.apply(this, args);
     }
-    const calleeFunc = immediate ? () => {
-      timerId = undefined;
-    } : boundFunc;
-    timerId = setTimeout(calleeFunc, delay);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
   };
 };
 
