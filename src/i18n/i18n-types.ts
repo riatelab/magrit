@@ -507,9 +507,13 @@ type RootTranslation = {
 			 */
 			RotateManually: string
 			/**
-			 * R​o​t​a​t​e​ ​t​o​ ​n​o​r​t​h
+			 * R​o​t​a​t​e​ ​a​u​t​o​m​a​t​i​c​a​l​l​y​ ​t​o​ ​g​e​o​g​r​a​p​h​i​c​ ​n​o​r​t​h
 			 */
 			RotateToNorth: string
+			/**
+			 * N​o​r​t​h​ ​a​r​r​o​w​ ​t​y​p​e
+			 */
+			NorthArrowType: string
 			/**
 			 * S​i​m​p​l​e​ ​n​o​r​t​h​ ​a​r​r​o​w
 			 */
@@ -526,6 +530,10 @@ type RootTranslation = {
 			 * H​e​i​g​h​t
 			 */
 			Height: string
+			/**
+			 * T​a​i​l​l​e
+			 */
+			Size: string
 			/**
 			 * D​i​s​t​a​n​c​e​ ​u​n​i​t
 			 */
@@ -2301,9 +2309,13 @@ export type TranslationFunctions = {
 			 */
 			RotateManually: () => LocalizedString
 			/**
-			 * Rotate to north
+			 * Rotate automatically to geographic north
 			 */
 			RotateToNorth: () => LocalizedString
+			/**
+			 * North arrow type
+			 */
+			NorthArrowType: () => LocalizedString
 			/**
 			 * Simple north arrow
 			 */
@@ -2320,6 +2332,10 @@ export type TranslationFunctions = {
 			 * Height
 			 */
 			Height: () => LocalizedString
+			/**
+			 * Taille
+			 */
+			Size: () => LocalizedString
 			/**
 			 * Distance unit
 			 */

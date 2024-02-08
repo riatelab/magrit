@@ -260,7 +260,6 @@ export function computeRectangleBox(refElement: SVGGElement, ...args: never[]) {
 
   // We compute the bbox of the refElement group
   const bbox = refElement.getBBox();
-  console.log(bbox);
 
   // We set the size of the box to the size of the bbox of the refElement group + a margin
   rectangleBoxLegend.setAttribute('width', `${bbox.width + distanceBoxContent * 2}px`);

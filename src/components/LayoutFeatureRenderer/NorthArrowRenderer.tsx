@@ -1,7 +1,18 @@
 // Import from solid-js
-import { createEffect, type JSX, onMount } from 'solid-js';
+import {
+  createEffect,
+  type JSX,
+  on,
+  onMount,
+} from 'solid-js';
+
+// Stores
+import { globalStore } from '../../store/GlobalStore';
+import { setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { mapStore } from '../../store/MapStore';
 
 // Helpers
+import { useI18nContext } from '../../i18n/i18n-solid';
 import {
   bindElementsLayoutFeature,
   computeRectangleBox,
@@ -9,19 +20,21 @@ import {
   RectangleBox,
   triggerContextMenuLayoutFeature,
 } from './common.tsx';
-import { useI18nContext } from '../../i18n/i18n-solid';
+import { debounce } from '../../helpers/common';
+import { Matan2, radToDegConstant } from '../../helpers/math';
 
-import type { NorthArrow } from '../../global';
+// Types / Interfaces / Enums
+import type { LayoutFeature, NorthArrow } from '../../global';
 
 const simpleNorthArrow = (props: NorthArrow) => <g
-  transform={`rotate(${props.rotation} ${props.width / 2} ${props.height / 2})`}
+  transform={`rotate(${props.rotation} ${props.size / 2} ${props.size / 2})`}
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 642.41 929.51"
     version="1.1"
-    width={props.width}
-    height={props.height}
+    width={props.size}
+    height={props.size}
   >
     <g transform="translate(-51.471 -91.49)">
       <path
@@ -32,7 +45,7 @@ const simpleNorthArrow = (props: NorthArrow) => <g
 </g>;
 
 const fancyNorthArrow = (props: NorthArrow) => <g
-  transform={`rotate(${props.rotation} ${props.width / 2} ${props.height / 2})`}
+  transform={`rotate(${props.rotation} ${props.size / 2} ${props.size / 2})`}
 >
   <svg
     xmlns:svg="http://www.w3.org/2000/svg"
@@ -40,8 +53,8 @@ const fancyNorthArrow = (props: NorthArrow) => <g
     xmlns:xlink="http://www.w3.org/1999/xlink"
     version="1.0"
     viewBox="0 0 512.00045 512.00045"
-    width={props.width}
-    height={props.height}
+    width={props.size}
+    height={props.size}
   >
     <defs
       id="defs3829">
@@ -373,6 +386,31 @@ const fancyNorthArrow = (props: NorthArrow) => <g
   </svg>
 </g>;
 
+/**
+ * Compute the angle to north for the the north arrow
+ *
+ * @param position - The current position of the north arrow (in pixels)
+ * @param size - The size of the north arrow (in pixels)
+ * @param projection - The current projection
+ * @return {number} - Angle to use as rotation value for the north arrow
+ */
+const computeAngleToNorth = (
+  position: [number, number],
+  projection: any,
+): number => {
+  const geoPosition = projection.invert(position);
+  const positionSymbolTop = projection([geoPosition[0], geoPosition[1] + 1]);
+  const positionSymbolBottom = projection([geoPosition[0], geoPosition[1] - 1]);
+  const angle = Matan2(
+    positionSymbolTop[0] - positionSymbolBottom[0],
+    positionSymbolBottom[1] - positionSymbolTop[1],
+  ) * radToDegConstant;
+  const posNorth = projection([0, 90]);
+  return position[1] < posNorth[1]
+    ? angle + 180
+    : angle;
+};
+
 export default function NorthArrowRenderer(props: NorthArrow): JSX.Element {
   const { LL } = useI18nContext();
   let refElement: SVGGElement;
@@ -381,16 +419,49 @@ export default function NorthArrowRenderer(props: NorthArrow): JSX.Element {
     bindElementsLayoutFeature(refElement, props);
   });
 
-  createEffect(() => {
-    computeRectangleBox(
-      refElement,
-      // We need to recompute the rectangle box when following properties change
-      props.width,
-      props.height,
-      props.rotation,
-      props.style,
+  // We need to recompute the rectangle box when following properties change
+  createEffect(
+    on(
+      () => [props.size, props.rotation, props.style],
+      () => {
+        computeRectangleBox(refElement);
+      },
+    ),
+  );
+
+  const debouncedUpdate = debounce(() => {
+    const angleToNorth = computeAngleToNorth(
+      props.position,
+      globalStore.projection,
     );
-  });
+    setLayersDescriptionStore(
+      'layoutFeatures',
+      (f: LayoutFeature) => f.id === props.id,
+      'rotation',
+      angleToNorth,
+    );
+  }, 500, false);
+
+  // We need to recompute the rotation when one of the following properties change
+  // (but we debounce the update to avoid too many updates, otherwise it
+  // would be too slow when the map is moving)
+  createEffect(
+    on(
+      () => [
+        props.position,
+        props.size,
+        props.autoRotate,
+        globalStore.projection,
+        mapStore.scale,
+        mapStore.translate,
+      ],
+      () => {
+        if (props.autoRotate && globalStore.projection) {
+          debouncedUpdate();
+        }
+      },
+    ),
+  );
 
   return <g
     ref={refElement!}

@@ -470,24 +470,24 @@ function makeSettingsNorthArrow(
     .find((f) => f.id === layoutFeatureId) as NorthArrow;
 
   return <>
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.Width()}
-      value={ ft.width }
+    <InputFieldSelect
+      label={LL().LayoutFeatures.Modal.NorthArrowType()}
       onChange={(newValue) => updateLayoutFeatureProperty(
         layoutFeatureId,
-        ['width'],
+        ['style'],
         newValue,
       )}
-      min={5}
-      max={100}
-      step={1}
-    />
+      value={ft.style}
+    >
+      <option value="simple">{LL().LayoutFeatures.Modal.SimpleNorthArrow()}</option>
+      <option value="fancy">{LL().LayoutFeatures.Modal.FancyNorthArrow()}</option>
+    </InputFieldSelect>
     <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.Height()}
-      value={ ft.height }
+      label={LL().LayoutFeatures.Modal.Size()}
+      value={ ft.size }
       onChange={(newValue) => updateLayoutFeatureProperty(
         layoutFeatureId,
-        ['height'],
+        ['size'],
         newValue,
       )}
       min={5}
@@ -495,12 +495,12 @@ function makeSettingsNorthArrow(
       step={1}
     />
     <InputFieldCheckbox
-      label={ LL().LayoutFeatures.Modal.RotateManually()}
-      checked={ !ft.autoRotate }
+      label={ LL().LayoutFeatures.Modal.RotateToNorth()}
+      checked={ ft.autoRotate }
       onChange={(newValue) => updateLayoutFeatureProperty(
         layoutFeatureId,
         ['autoRotate'],
-        !newValue,
+        newValue,
       )}
     />
     <Show when={ !ft.autoRotate }>

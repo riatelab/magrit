@@ -691,10 +691,8 @@ export interface Rectangle extends LayoutFeatureBase {
 
 export interface NorthArrow extends LayoutFeatureBase {
   type: LayoutFeatureType.NorthArrow,
-  // The width of the north arrow
-  width: number,
-  // The height of the north arrow
-  height: number,
+  // The size of the north arrow
+  size: number,
   // Whether to rotate automatically the north arrow
   // to always point to the north
   autoRotate: boolean,
