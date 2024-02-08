@@ -469,7 +469,7 @@ export default function NorthArrowRenderer(props: NorthArrow): JSX.Element {
     onContextMenu={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      triggerContextMenuLayoutFeature(e, props.id, LL);
+      triggerContextMenuLayoutFeature(e, props.id, false, LL);
     }}
     onDblClick={() => {
       makeLayoutFeaturesSettingsModal(props.id, LL);

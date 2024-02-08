@@ -124,6 +124,7 @@ const en = {
       Delete: 'Delete',
       Up: 'Up',
       Down: 'Down',
+      Clone: 'Clone',
     },
     ConfirmationMessages: {
       Sphere: 'The "Sphere" layer has been added to the map.',
@@ -135,6 +136,7 @@ const en = {
       FreeDrawing: 'Click to start drawing the desired shape and release to finish.',
       Text: 'Click to locate the text.',
       TextPlaceholder: 'Type your text here...',
+      PressEscToCancel: 'Press Esc to cancel.',
     },
     Modal: {
       Title: 'Settings', // 'Settings for {{ type }}',

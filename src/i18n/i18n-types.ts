@@ -435,6 +435,10 @@ type RootTranslation = {
 			 * D​o​w​n
 			 */
 			Down: string
+			/**
+			 * C​l​o​n​e
+			 */
+			Clone: string
 		}
 		ConfirmationMessages: {
 			/**
@@ -468,6 +472,10 @@ type RootTranslation = {
 			 * T​y​p​e​ ​y​o​u​r​ ​t​e​x​t​ ​h​e​r​e​.​.​.
 			 */
 			TextPlaceholder: string
+			/**
+			 * P​r​e​s​s​ ​E​s​c​ ​t​o​ ​c​a​n​c​e​l​.
+			 */
+			PressEscToCancel: string
 		}
 		Modal: {
 			/**
@@ -2263,6 +2271,10 @@ export type TranslationFunctions = {
 			 * Down
 			 */
 			Down: () => LocalizedString
+			/**
+			 * Clone
+			 */
+			Clone: () => LocalizedString
 		}
 		ConfirmationMessages: {
 			/**
@@ -2296,6 +2308,10 @@ export type TranslationFunctions = {
 			 * Type your text here...
 			 */
 			TextPlaceholder: () => LocalizedString
+			/**
+			 * Press Esc to cancel.
+			 */
+			PressEscToCancel: () => LocalizedString
 		}
 		Modal: {
 			/**

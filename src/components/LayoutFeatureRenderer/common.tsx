@@ -7,12 +7,14 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { unproxify } from '../../helpers/common';
+import { generateIdLayoutFeature } from '../../helpers/layoutFeatures';
 
 // Subcomponents
 import LayoutFeatureSettings from '../Modals/LayoutFeatureSetting.tsx';
 
 // Stores
 import { setContextMenuStore } from '../../store/ContextMenuStore';
+import { mapStore } from '../../store/MapStore';
 import { setModalStore } from '../../store/ModalStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 
@@ -167,62 +169,104 @@ export function makeLayoutFeaturesSettingsModal(
 export function triggerContextMenuLayoutFeature(
   event: MouseEvent,
   layoutFeatureId: string,
+  allowClone: boolean,
   LL: Accessor<TranslationFunctions>,
 ): void {
+  const contextMenuEntries = [
+    {
+      label: LL().LayoutFeatures.ContextMenu.Edit(),
+      callback: () => {
+        makeLayoutFeaturesSettingsModal(layoutFeatureId, LL);
+      },
+    },
+    {
+      label: LL().LayoutFeatures.ContextMenu.Delete(),
+      callback: () => {
+        const layoutFeatures = layersDescriptionStore.layoutFeatures
+          .filter((l) => l.id !== layoutFeatureId);
+        setLayersDescriptionStore({ layoutFeatures });
+      },
+    },
+    {
+      type: 'divider',
+    },
+    {
+      label: LL().LayoutFeatures.ContextMenu.Up(),
+      callback: () => {
+        // We change the place of the layout feature in the layoutFeatures array
+        // so that it changes 1 place down on the svg element
+        // (and so that it is rendered after the previous layout feature)
+        const layoutFeatures = layersDescriptionStore.layoutFeatures.slice();
+        const index = layoutFeatures.findIndex((l) => l.id === layoutFeatureId);
+        if (index < layoutFeatures.length - 1) {
+          const tmp = layoutFeatures[index + 1];
+          layoutFeatures[index + 1] = layoutFeatures[index];
+          layoutFeatures[index] = tmp;
+          setLayersDescriptionStore({ layoutFeatures });
+        }
+      },
+    },
+    {
+      label: LL().LayoutFeatures.ContextMenu.Down(),
+      callback: () => {
+        // We change the place of the layout feature in the layoutFeatures array
+        // so that it changes 1 place up on the svg element
+        // (and so that it is rendered before the previous layout feature)
+        const layoutFeatures = layersDescriptionStore.layoutFeatures.slice();
+        const index = layoutFeatures.findIndex((l) => l.id === layoutFeatureId);
+        if (index > 0) {
+          const tmp = layoutFeatures[index - 1];
+          layoutFeatures[index - 1] = layoutFeatures[index];
+          layoutFeatures[index] = tmp;
+          setLayersDescriptionStore({ layoutFeatures });
+        }
+      },
+    },
+  ];
+
+  if (allowClone) {
+    contextMenuEntries.push({
+      type: 'divider',
+    });
+    contextMenuEntries.push({
+      label: LL().LayoutFeatures.ContextMenu.Clone(),
+      callback: () => {
+        const layoutFeature = layersDescriptionStore.layoutFeatures
+          .find((l) => l.id === layoutFeatureId);
+        if (layoutFeature) {
+          // Compute new position, taking care of the map size,
+          // so that the new layout feature is not outside the map
+          const mapSize = mapStore.mapDimensions;
+          const newPosition = [0, layoutFeature.position[1]];
+          if (layoutFeature.position[0] + 200 > mapSize.width) {
+            newPosition[0] = layoutFeature.position[0] - 100;
+          } else {
+            newPosition[0] = layoutFeature.position[0] + 100;
+          }
+          // if (layoutFeature.position[1] + 100 > mapSize.height) {
+          //   newPosition[1] = layoutFeature.position[1] - 100;
+          // } else {
+          //   newPosition[1] = layoutFeature.position[1] + 100;
+          // }
+          setLayersDescriptionStore({
+            layoutFeatures: [
+              ...layersDescriptionStore.layoutFeatures,
+              {
+                ...layoutFeature,
+                id: generateIdLayoutFeature(),
+                position: newPosition,
+              },
+            ],
+          });
+        }
+      },
+    });
+  }
+
   setContextMenuStore({
     show: true,
     position: [event.clientX, event.clientY],
-    entries: [
-      {
-        label: LL().LayoutFeatures.ContextMenu.Edit(),
-        callback: () => {
-          makeLayoutFeaturesSettingsModal(layoutFeatureId, LL);
-        },
-      },
-      {
-        label: LL().LayoutFeatures.ContextMenu.Delete(),
-        callback: () => {
-          const layoutFeatures = layersDescriptionStore.layoutFeatures
-            .filter((l) => l.id !== layoutFeatureId);
-          setLayersDescriptionStore({ layoutFeatures });
-        },
-      },
-      {
-        type: 'divider',
-      },
-      {
-        label: LL().LayoutFeatures.ContextMenu.Up(),
-        callback: () => {
-          // We change the place of the layout feature in the layoutFeatures array
-          // so that it changes 1 place down on the svg element
-          // (and so that it is rendered after the previous layout feature)
-          const layoutFeatures = layersDescriptionStore.layoutFeatures.slice();
-          const index = layoutFeatures.findIndex((l) => l.id === layoutFeatureId);
-          if (index < layoutFeatures.length - 1) {
-            const tmp = layoutFeatures[index + 1];
-            layoutFeatures[index + 1] = layoutFeatures[index];
-            layoutFeatures[index] = tmp;
-            setLayersDescriptionStore({ layoutFeatures });
-          }
-        },
-      },
-      {
-        label: LL().LayoutFeatures.ContextMenu.Down(),
-        callback: () => {
-          // We change the place of the layout feature in the layoutFeatures array
-          // so that it changes 1 place up on the svg element
-          // (and so that it is rendered before the previous layout feature)
-          const layoutFeatures = layersDescriptionStore.layoutFeatures.slice();
-          const index = layoutFeatures.findIndex((l) => l.id === layoutFeatureId);
-          if (index > 0) {
-            const tmp = layoutFeatures[index - 1];
-            layoutFeatures[index - 1] = layoutFeatures[index];
-            layoutFeatures[index] = tmp;
-            setLayersDescriptionStore({ layoutFeatures });
-          }
-        },
-      },
-    ],
+    entries: contextMenuEntries,
   });
 }
 

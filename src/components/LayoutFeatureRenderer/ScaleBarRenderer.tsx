@@ -154,7 +154,7 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
     onContextMenu={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      triggerContextMenuLayoutFeature(e, props.id, LL);
+      triggerContextMenuLayoutFeature(e, props.id, false, LL);
     }}
     onDblClick={() => { makeLayoutFeaturesSettingsModal(props.id, LL); }}
     transform={`translate(${props.position[0]}, ${props.position[1]})`}
