@@ -180,6 +180,7 @@ const en = {
       Start: 'Start',
       Middle: 'Middle',
       End: 'End',
+      AllowModifyingFillStroke: 'Allow modifying fill and stroke properties',
     },
   },
   AboutPanel: {
@@ -352,6 +353,13 @@ const en = {
     Area: 'Area:',
     Unit: 'Unit:',
     MoreInformation: 'More information',
+  },
+  ImageSymbolSelection: {
+    Title: 'Image import and selection',
+    SelectImage: 'Select a symbol among the available ones...',
+    UploadImage: 'Or upload an image (PNG or SVG)...',
+    Browse: 'Browse...',
+    SelectedImage: 'Selected image:',
   },
   SimplificationModal: {
     title: 'Simplification of geometries',

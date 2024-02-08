@@ -181,6 +181,7 @@ const fr = {
       Start: 'Début',
       Middle: 'Milieu',
       End: 'Fin',
+      AllowModifyingFillStroke: 'Autoriser la modification du remplissage et de la bordure',
     },
   },
   AboutPanel: {
@@ -353,6 +354,13 @@ const fr = {
     Area: 'Zone :',
     Unit: 'Unité :',
     MoreInformation: 'Plus d\'informations',
+  },
+  ImageSymbolSelection: {
+    Title: 'Sélection ou import d\'une image',
+    SelectImage: 'Sélectionner un symbol parmi ceux proposés ...',
+    UploadImage: 'Ou ajouter une image de votre choix (PNG ou SVG) ...',
+    Browse: 'Parcourir ...',
+    SelectedImage: 'Image sélectionnée :',
   },
   SimplificationModal: {
     title: 'Simplification des géométries',

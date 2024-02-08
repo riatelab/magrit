@@ -648,6 +648,7 @@ export enum LayoutFeatureType {
   Line,
   FreeDrawing,
   Text,
+  Image,
 }
 
 export enum DistanceUnit {
@@ -812,6 +813,42 @@ export interface Text extends LayoutFeatureBase {
   },
 }
 
+export enum ImageType {
+  PNG = 'PNG',
+  SVG = 'SVG',
+}
+
+export interface Image extends LayoutFeatureBase {
+  type: LayoutFeatureType.Image,
+  // The image content (either the base64 content of the PNG or the SVG content)
+  content: string,
+  // The size of the image
+  size: number,
+  // The rotation of the image
+  rotation: number,
+  // Whether to display a rectangle behind the image
+  backgroundRect: BackgroundRect,
+  // The type of the image (raster or vector)
+  imageType: ImageType,
+  // Do we allow to modify the fill and stroke of the image (only for SVG images)
+  allowModifyFillStroke?: boolean,
+  // The fill color of the image
+  // (only used optionally for SVG images)
+  fillColor?: string,
+  // The fill opacity of the image
+  // (only used optionally for SVG images)
+  fillOpacity?: number,
+  // The stroke color of the image
+  // (only used optionally for SVG images)
+  strokeColor?: string,
+  // The stroke width of the image
+  // (only used optionally for SVG images)
+  strokeWidth?: number,
+  // The stroke opacity of the image
+  // (only used optionally for SVG images)
+  strokeOpacity?: number,
+}
+
 export type LayoutFeature = (
   Rectangle
   | NorthArrow
@@ -819,6 +856,7 @@ export type LayoutFeature = (
   | Line
   | FreeDrawing
   | Text
+  | Image
 );
 
 export type ScoredResult<T> = {

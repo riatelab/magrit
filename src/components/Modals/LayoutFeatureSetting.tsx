@@ -24,6 +24,7 @@ import { webSafeFonts } from '../../helpers/font';
 import {
   DistanceUnit,
   type FreeDrawing,
+  type Image,
   type LayoutFeature,
   LayoutFeatureType,
   type Line,
@@ -280,7 +281,7 @@ function makeSettingsText(
     />
     <div>
       <label
-        className="label"
+        class="label"
         style={{ 'margin-bottom': '0.5em' }}
       >
         {LL().LayoutFeatures.Modal.TextProperties()}
@@ -462,6 +463,104 @@ function makeSettingsLine(
   </>;
 }
 
+function makeSettingsImage(
+  layoutFeatureId: string,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const ft = layersDescriptionStore.layoutFeatures
+    .find((f) => f.id === layoutFeatureId) as Image;
+
+  return <>
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.Size() }
+      value={ ft.size }
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['size'],
+        newValue,
+      )}
+      min={1}
+      max={400}
+      step={1}
+    />
+    <InputFieldNumber
+      label={ LL().LayoutFeatures.Modal.Rotation() }
+      value={ ft.size }
+      onChange={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['rotation'],
+        newValue,
+      )}
+      min={0}
+      max={360}
+      step={1}
+    />
+    <Show when={ft.imageType === 'SVG'}>
+      <InputFieldCheckbox
+        label={ LL().LayoutFeatures.Modal.AllowModifyingFillStroke() }
+        checked={ ft.allowModifyFillStroke === true }
+        onChange={ (newValue) => {
+          updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['allowModifyFillStroke'],
+            newValue,
+          );
+          if (!newValue) {
+            // We also want to reset the fill and stroke properties
+            updateLayoutFeatureProperty(
+              layoutFeatureId,
+              ['fillColor'],
+              undefined,
+            );
+            updateLayoutFeatureProperty(
+              layoutFeatureId,
+              ['strokeColor'],
+              undefined,
+            );
+            updateLayoutFeatureProperty(
+              layoutFeatureId,
+              ['strokeWidth'],
+              undefined,
+            );
+          }
+        }}
+      />
+      <Show when={ ft.allowModifyFillStroke }>
+        <InputFieldColor
+          label={ LL().LayoutFeatures.Modal.FillColor() }
+          value={ ft.fillColor }
+          onChange={(newValue) => updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['fillColor'],
+            newValue,
+          )}
+        />
+        <InputFieldColor
+          label={ LL().LayoutFeatures.Modal.StrokeColor() }
+          value={ ft.strokeColor }
+          onChange={(newValue) => updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['strokeColor'],
+            newValue,
+          )}
+        />
+        <InputFieldNumber
+          label={ LL().LayoutFeatures.Modal.StrokeWidth()}
+          value={ ft.strokeWidth }
+          onChange={(newValue) => updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['strokeWidth'],
+            newValue,
+          )}
+          min={0}
+          max={10}
+          step={0.1}
+        />
+      </Show>
+    </Show>
+  </>;
+}
+
 function makeSettingsNorthArrow(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
@@ -595,6 +694,7 @@ export default function LayoutFeatureSettings(
           [LayoutFeatureType.FreeDrawing]: makeSettingsFreeDrawing,
           [LayoutFeatureType.Text]: makeSettingsText,
           [LayoutFeatureType.NorthArrow]: makeSettingsNorthArrow,
+          [LayoutFeatureType.Image]: makeSettingsImage,
         })[layoutFeature.type](layoutFeatureId, LL)
       }
     </div>

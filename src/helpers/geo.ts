@@ -1,19 +1,26 @@
 // Imports from external libraries
 import {
-  area, booleanPointInPolygon, nearestPoint, pointOnFeature,
+  area,
+  booleanPointInPolygon,
+  nearestPoint,
+  pointOnFeature,
 } from '@turf/turf';
 import polylabel from 'polylabel';
 
 // Helpers
 import d3 from './d3-custom';
-import topojson, {} from './topojson';
+import topojson from './topojson';
 import {
+  degToRadConstant,
   Mabs,
+  Macos,
   max,
+  Mcos,
   Mfloor,
   Mlog10,
   Mmax,
   Mpow,
+  Msin,
   Msqrt,
   round,
 } from './math';
@@ -21,7 +28,8 @@ import {
   ascending,
   descending,
   getNumberOfDecimals,
-  isNumber, unproxify,
+  isNumber,
+  unproxify,
 } from './common';
 
 // Stores
@@ -738,4 +746,17 @@ export const cleanGeometry = (geometry: GeoJSONGeometryType): GeoJSONGeometryTyp
     return null;
   }
   return null;
+};
+
+export const sphericalLawOfCosine = (
+  pt1: [number, number],
+  pt2: [number, number],
+  radius: number = 6371e3,
+) => {
+  const [lon1, lat1] = pt1;
+  const [lon2, lat2] = pt2;
+  const φ1 = lat1 * degToRadConstant;
+  const φ2 = lat2 * degToRadConstant;
+  const Δλ = (lon2 - lon1) * degToRadConstant;
+  return Macos(Msin(φ1) * Msin(φ2) + Mcos(φ1) * Mcos(φ2) * Mcos(Δλ)) * radius;
 };

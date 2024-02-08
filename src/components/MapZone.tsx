@@ -50,6 +50,7 @@ import RectangleRenderer from './LayoutFeatureRenderer/RectangleRenderer.tsx';
 import ScaleBarRenderer from './LayoutFeatureRenderer/ScaleBarRenderer.tsx';
 import TextRenderer from './LayoutFeatureRenderer/TextRenderer.tsx';
 import NorthArrowRenderer from './LayoutFeatureRenderer/NorthArrowRenderer.tsx';
+import ImageRenderer from './LayoutFeatureRenderer/ImageRenderer.tsx';
 
 // - for rendering the legends
 import legendChoropleth from './LegendRenderer/ChoroplethLegend.tsx';
@@ -89,6 +90,7 @@ const layoutFeaturesFns = {
   [LayoutFeatureType.ScaleBar]: ScaleBarRenderer,
   [LayoutFeatureType.Text]: TextRenderer,
   [LayoutFeatureType.NorthArrow]: NorthArrowRenderer,
+  [LayoutFeatureType.Image]: ImageRenderer,
 };
 
 const dispatchLegendRenderer = (layer: LayerDescription) => {

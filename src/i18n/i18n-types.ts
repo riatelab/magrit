@@ -642,6 +642,10 @@ type RootTranslation = {
 			 * E​n​d
 			 */
 			End: string
+			/**
+			 * A​l​l​o​w​ ​m​o​d​i​f​y​i​n​g​ ​f​i​l​l​ ​a​n​d​ ​s​t​r​o​k​e​ ​p​r​o​p​e​r​t​i​e​s
+			 */
+			AllowModifyingFillStroke: string
 		}
 	}
 	AboutPanel: {
@@ -1237,6 +1241,28 @@ type RootTranslation = {
 		 * M​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n
 		 */
 		MoreInformation: string
+	}
+	ImageSymbolSelection: {
+		/**
+		 * I​m​a​g​e​ ​i​m​p​o​r​t​ ​a​n​d​ ​s​e​l​e​c​t​i​o​n
+		 */
+		Title: string
+		/**
+		 * S​e​l​e​c​t​ ​a​ ​s​y​m​b​o​l​ ​a​m​o​n​g​ ​t​h​e​ ​a​v​a​i​l​a​b​l​e​ ​o​n​e​s​.​.​.
+		 */
+		SelectImage: string
+		/**
+		 * O​r​ ​u​p​l​o​a​d​ ​a​n​ ​i​m​a​g​e​ ​(​P​N​G​ ​o​r​ ​S​V​G​)​.​.​.
+		 */
+		UploadImage: string
+		/**
+		 * B​r​o​w​s​e​.​.​.
+		 */
+		Browse: string
+		/**
+		 * S​e​l​e​c​t​e​d​ ​i​m​a​g​e​:
+		 */
+		SelectedImage: string
 	}
 	SimplificationModal: {
 		/**
@@ -2444,6 +2470,10 @@ export type TranslationFunctions = {
 			 * End
 			 */
 			End: () => LocalizedString
+			/**
+			 * Allow modifying fill and stroke properties
+			 */
+			AllowModifyingFillStroke: () => LocalizedString
 		}
 	}
 	AboutPanel: {
@@ -3039,6 +3069,28 @@ export type TranslationFunctions = {
 		 * More information
 		 */
 		MoreInformation: () => LocalizedString
+	}
+	ImageSymbolSelection: {
+		/**
+		 * Image import and selection
+		 */
+		Title: () => LocalizedString
+		/**
+		 * Select a symbol among the available ones...
+		 */
+		SelectImage: () => LocalizedString
+		/**
+		 * Or upload an image (PNG or SVG)...
+		 */
+		UploadImage: () => LocalizedString
+		/**
+		 * Browse...
+		 */
+		Browse: () => LocalizedString
+		/**
+		 * Selected image:
+		 */
+		SelectedImage: () => LocalizedString
 	}
 	SimplificationModal: {
 		/**
