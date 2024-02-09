@@ -1,8 +1,9 @@
 // Import from solid-js
 import {
-  createEffect, createMemo,
+  createEffect,
   For,
   type JSX,
+  on,
   onMount,
 } from 'solid-js';
 
@@ -31,16 +32,14 @@ export default function TextRenderer(props: Text): JSX.Element {
     bindElementsLayoutFeature(refElement, props);
   });
 
-  createEffect(() => {
-    computeRectangleBox(
-      refElement,
-      // We need to recompute the rectangle box when following properties change
-      props.fontSize,
-      props.text,
-      props.rotation,
-      props.textAnchor,
-    );
-  });
+  createEffect(
+    on( // We need to recompute the rectangle box when following properties change
+      () => [props.fontSize, props.text, props.rotation, props.textAnchor],
+      () => {
+        computeRectangleBox(refElement);
+      },
+    ),
+  );
 
   return <g
     ref={refElement!}

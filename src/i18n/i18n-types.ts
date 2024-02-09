@@ -543,9 +543,25 @@ type RootTranslation = {
 			 */
 			Size: string
 			/**
+			 * S​c​a​l​e​ ​b​a​r​ ​b​e​h​a​v​i​o​r
+			 */
+			ScaleBarBehavior: string
+			/**
+			 * F​i​x​e​d​ ​s​i​z​e​ ​(​i​n​ ​p​x​)​,​ ​d​i​s​p​l​a​y​e​d​ ​d​i​s​t​a​n​c​e​ ​c​o​m​p​u​t​e​d​ ​d​y​n​a​m​i​c​a​l​l​y
+			 */
+			ScaleBarAbsoluteSize: string
+			/**
+			 * F​i​x​e​d​ ​d​i​s​t​a​n​c​e​ ​(​i​n​ ​d​i​s​t​a​n​c​e​ ​u​n​i​t​)​,​ ​s​i​z​e​ ​(​i​n​ ​p​x​)​ ​c​o​m​p​u​t​e​d​ ​d​y​n​a​m​i​c​a​l​l​y
+			 */
+			ScaleBarGeographicSize: string
+			/**
 			 * D​i​s​t​a​n​c​e​ ​u​n​i​t
 			 */
 			Units: string
+			/**
+			 * D​i​s​t​a​n​c​e​ ​u​n​i​t​ ​l​a​b​e​l
+			 */
+			UnitLabel: string
 			/**
 			 * M​e​t​e​r​s
 			 */
@@ -2379,9 +2395,25 @@ export type TranslationFunctions = {
 			 */
 			Size: () => LocalizedString
 			/**
+			 * Scale bar behavior
+			 */
+			ScaleBarBehavior: () => LocalizedString
+			/**
+			 * Fixed size (in px), displayed distance computed dynamically
+			 */
+			ScaleBarAbsoluteSize: () => LocalizedString
+			/**
+			 * Fixed distance (in distance unit), size (in px) computed dynamically
+			 */
+			ScaleBarGeographicSize: () => LocalizedString
+			/**
 			 * Distance unit
 			 */
 			Units: () => LocalizedString
+			/**
+			 * Distance unit label
+			 */
+			UnitLabel: () => LocalizedString
 			/**
 			 * Meters
 			 */

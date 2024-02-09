@@ -6,25 +6,77 @@ import {
   Match,
   onMount,
   Show,
-  Switch, createEffect,
+  Switch,
+  createEffect,
+  on,
 } from 'solid-js';
 
+// Stores
+import { mapStore } from '../../store/MapStore';
+import { globalStore } from '../../store/GlobalStore';
+import { setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+
 // Helpers
+import { useI18nContext } from '../../i18n/i18n-solid';
 import {
-  bindDragBehavior,
   bindElementsLayoutFeature, computeRectangleBox,
   makeLayoutFeaturesSettingsModal,
   RectangleBox,
   triggerContextMenuLayoutFeature,
 } from './common.tsx';
-import { useI18nContext } from '../../i18n/i18n-solid';
+import { sphericalLawOfCosine } from '../../helpers/geo';
+import { Mceil, Mround } from '../../helpers/math';
 
 // Types / Interfaces / Enums
-import { type ScaleBar, ScaleBarStyle } from '../../global.d';
+import {
+  DistanceUnit,
+  type LayoutFeature,
+  type ScaleBar,
+  ScaleBarStyle,
+} from '../../global.d';
 
 // We only use it internally, this is the start of the coordinate system
 // for this layout feature
 const initialPosition = 0;
+
+const convertToUnit = (distance: number, unit: DistanceUnit): number => {
+  if (unit === DistanceUnit.km) {
+    return distance / 1000;
+  }
+  if (unit === DistanceUnit.mi) {
+    return distance / 1609.344;
+  }
+  if (unit === DistanceUnit.ft) {
+    return distance / 0.3048;
+  }
+  if (unit === DistanceUnit.yd) {
+    return distance / 0.9144;
+  }
+  if (unit === DistanceUnit.nmi) {
+    return distance / 1852;
+  }
+  return distance;
+};
+
+const formatDistance = (distance: number, displayUnit: DistanceUnit, label?: string): string => {
+  // We store the distance in meters in the store
+  // but we want to be able to display it in meters, kilometers, miles, feet and yards.
+  const l = label ? ` ${label}` : '';
+  return `${Mround(convertToUnit(distance, displayUnit))} ${l}`;
+};
+
+const getTickValues = (distance: number) => {
+  const progression = [0];
+  if (distance <= 200) {
+    progression.push(Mceil(distance / 3), Mceil(distance / 2), Mceil(distance));
+  } else if (distance <= 500) {
+    progression.push(50, 100, Mceil(distance / 2), distance);
+  } else {
+    progression.push(50, 100, 250, 500, distance);
+  }
+
+  return progression;
+};
 
 function SimpleLineScaleBar(props: ScaleBar): JSX.Element {
   return <>
@@ -37,15 +89,13 @@ function SimpleLineScaleBar(props: ScaleBar): JSX.Element {
       ></line>
     </g>
     <g>
-      <Show when={props.label}>
-        <text
-          x={initialPosition + props.width / 2}
-          y={initialPosition}
-          text-anchor="middle"
-          dominant-baseline="hanging"
-          style={{ 'user-select': 'none' }}
-        >{props.label}</text>
-      </Show>
+      <text
+        x={initialPosition + props.width / 2}
+        y={initialPosition}
+        text-anchor="middle"
+        dominant-baseline="hanging"
+        style={{ 'user-select': 'none' }}
+      >{formatDistance(props.distance, props.unit, props.label)}</text>
     </g>
   </>;
 }
@@ -74,15 +124,13 @@ function LineWithTicks(props: ScaleBar & { direction: 'top' | 'bottom' }): JSX.E
       ></line>
     </g>
     <g>
-      <Show when={props.label}>
-        <text
-          x={initialPosition + props.width / 2}
-          y={initialPosition}
-          text-anchor="middle"
-          dominant-baseline="hanging"
-          style={{ 'user-select': 'none' }}
-        >{props.label}</text>
-      </Show>
+      <text
+        x={initialPosition + props.width / 2}
+        y={initialPosition}
+        text-anchor="middle"
+        dominant-baseline="hanging"
+        style={{ 'user-select': 'none' }}
+      >{formatDistance(props.distance, props.unit, props.label)}</text>
     </g>
   </>;
 }
@@ -135,18 +183,73 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
     bindElementsLayoutFeature(refElement, props);
   });
 
-  createEffect(() => {
-    computeRectangleBox(
-      refElement,
-      // We need to recompute rectangle box when the following properties change
-      props.width,
-      props.height,
-      props.style,
-      props.label,
-      props.rotation,
-      props.tickValues,
+  createEffect(
+    on( // We need to recompute rectangle box when the following properties change
+      () => [props.width, props.height, props.style, props.label, props.rotation, props.tickValues],
+      () => {
+        computeRectangleBox(refElement);
+      },
+    ),
+  );
+
+  if (Number.isNaN(props.distance)) {
+    // We need to compute the distance for the given width.
+    // Geo coordinates of pt1 and pt2:
+    const left = globalStore.projection
+      .invert(props.position);
+    const right = globalStore.projection
+      .invert([props.position[0] + props.width, props.position[1]]);
+    // Compute the distance between the two points
+    const dist = sphericalLawOfCosine(left, right);
+    console.log(dist);
+    setLayersDescriptionStore(
+      'layoutFeatures',
+      (f: LayoutFeature) => f.id === props.id,
+      'distance',
+      dist / 1000,
     );
-  });
+  }
+
+  createEffect(
+    on(
+      () => [
+        props.position,
+        props.width,
+        // props.style,
+        props.behavior,
+        mapStore.scale,
+        mapStore.translate,
+        globalStore.projection,
+      ],
+      () => {
+        if (props.behavior === 'absoluteSize') {
+          // The scale bar is always the same size (in pixels) no matter the zoom level
+          // but we need to recompute the displayed distance
+          // We need to compute the distance for the given width.
+          // Geo coordinates of pt1 and pt2:
+          const left = globalStore.projection
+            .invert(props.position);
+          const right = globalStore.projection
+            .invert([props.position[0] + props.width, props.position[1]]);
+          // Compute the distance between the two points
+          const distance = sphericalLawOfCosine(left, right);
+          const tickValues = getTickValues(convertToUnit(distance, props.unit));
+          setLayersDescriptionStore(
+            'layoutFeatures',
+            (f: LayoutFeature) => f.id === props.id,
+            {
+              distance,
+              tickValues,
+            },
+          );
+        } else { // 'geographicSize'
+          // The scale bar always represents the same distance on the map, no matter the zoom level
+          // but we need to recompute it's pixel size
+
+        }
+      },
+    ),
+  );
 
   return <g
     ref={refElement!}

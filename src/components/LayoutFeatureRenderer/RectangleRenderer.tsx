@@ -1,5 +1,10 @@
 // Import from solid-js
-import { createEffect, type JSX, onMount } from 'solid-js';
+import {
+  createEffect,
+  type JSX,
+  on,
+  onMount,
+} from 'solid-js';
 
 // Helpers
 import {
@@ -22,16 +27,14 @@ export default function RectangleRenderer(props: Rectangle): JSX.Element {
     bindElementsLayoutFeature(refElement, props);
   });
 
-  createEffect(() => {
-    computeRectangleBox(
-      refElement,
-      // We need to recompute the rectangle box when following properties change
-      props.width,
-      props.height,
-      props.rotation,
-      props.cornerRadius,
-    );
-  });
+  createEffect(
+    on(
+      () => [props.width, props.height, props.rotation, props.cornerRadius],
+      () => {
+        computeRectangleBox(refElement);
+      },
+    ),
+  );
 
   return <g
     ref={refElement!}

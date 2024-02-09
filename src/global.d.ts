@@ -657,6 +657,7 @@ export enum DistanceUnit {
   mi = 'mi',
   ft = 'ft',
   yd = 'yd',
+  nmi = 'nmi',
 }
 
 interface LayoutFeatureBase {
@@ -722,7 +723,12 @@ export enum ScaleBarStyle {
 }
 
 export enum ScaleBarBehavior {
+  // Absolute size: the scale bar conserves its size (in pixels)
+  // but the distance it represents changes when the map is zoomed in or out
+  // (and so the distance displayed on the scale bar changes)
   absoluteSize = 'absoluteSize',
+  // Geographic size: the scale bar conserves the distance it represents
+  // (in the given unit) but its size (in pixels) changes when the map is zoomed in or out
   geographicSize = 'geographicSize',
 }
 

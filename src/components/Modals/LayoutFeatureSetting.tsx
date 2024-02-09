@@ -30,7 +30,7 @@ import {
   type Line,
   type NorthArrow,
   type Rectangle,
-  type ScaleBar,
+  type ScaleBar, ScaleBarBehavior,
   ScaleBarStyle,
   type Text,
 } from '../../global.d';
@@ -183,6 +183,22 @@ function makeSettingsScaleBar(
     .find((f) => f.id === layoutFeatureId) as ScaleBar;
   return <>
     <InputFieldSelect
+      label={ LL().LayoutFeatures.Modal.ScaleBarBehavior() }
+      onChange={(value) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['behavior'],
+        value,
+      )}
+      value={ft.behavior}
+    >
+      <option value={ScaleBarBehavior.absoluteSize}>
+        { LL().LayoutFeatures.Modal.ScaleBarAbsoluteSize() }
+      </option>
+      <option value={ScaleBarBehavior.geographicSize}>
+        { LL().LayoutFeatures.Modal.ScaleBarGeographicSize() }
+      </option>
+    </InputFieldSelect>
+    <InputFieldSelect
       label={ LL().LayoutFeatures.Modal.ScaleBarType() }
       onChange={(value) => updateLayoutFeatureProperty(
         layoutFeatureId,
@@ -226,11 +242,32 @@ function makeSettingsScaleBar(
     />
     <InputFieldSelect
       label={ LL().LayoutFeatures.Modal.Units() }
-      onChange={(value) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['unit'],
-        value,
-      )}
+      onChange={(value) => {
+        updateLayoutFeatureProperty(
+          layoutFeatureId,
+          ['unit'],
+          value,
+        );
+        let label = '';
+        if (value === DistanceUnit.m) {
+          label = 'm';
+        } else if (value === DistanceUnit.km) {
+          label = 'km';
+        } else if (value === DistanceUnit.mi) {
+          label = 'mi';
+        } else if (value === DistanceUnit.ft) {
+          label = 'ft';
+        } else if (value === DistanceUnit.yd) {
+          label = 'yd';
+        } else if (value === DistanceUnit.nmi) {
+          label = 'nmi';
+        }
+        updateLayoutFeatureProperty(
+          layoutFeatureId,
+          ['label'],
+          label,
+        );
+      }}
       value={ft.unit}
     >
       <For each={Object.keys(DistanceUnit)}>
@@ -241,6 +278,15 @@ function makeSettingsScaleBar(
         }
       </For>
     </InputFieldSelect>
+    <InputFieldText
+      label={ LL().LayoutFeatures.Modal.UnitLabel() }
+      onChange={(value) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['label'],
+        value,
+      )}
+      value={ft.label}
+    />
     <Show when={ft.style === ScaleBarStyle.blackAndWhiteBar}>
       <InputFieldText
         label={ LL().LayoutFeatures.Modal.TickValues() }
