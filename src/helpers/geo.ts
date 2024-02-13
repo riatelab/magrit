@@ -760,3 +760,16 @@ export const sphericalLawOfCosine = (
   const Δλ = (lon2 - lon1) * degToRadConstant;
   return Macos(Msin(φ1) * Msin(φ2) + Mcos(φ1) * Mcos(φ2) * Mcos(Δλ)) * radius;
 };
+
+/**
+ * Calculates a resolution value adapted to the data set.
+ *
+ * @param box
+ * @param n
+ */
+export const computeAppropriateResolution = (box: number[], n: number) => {
+  const bboxWidth = box[2] - box[0];
+  const bboxHeight = box[3] - box[1];
+  const bboxArea = bboxWidth * bboxHeight;
+  return Math.sqrt(bboxArea / n);
+};

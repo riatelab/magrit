@@ -368,6 +368,14 @@ interface GriddedLayerParameters {
   cellType: GridCellShape,
   // The size of the grid cell
   cellSize: number,
+  // The color to use for features with no data
+  noDataColor: string,
+  // The palette used to color the gridded layer
+  palette: CustomPalette,
+  // The breaks used to compute the contour of the gridded layer from the grid
+  breaks: number[],
+  // Whether to reverse the palette or not
+  reversePalette: boolean,
 }
 
 interface SmoothedLayerParameters {

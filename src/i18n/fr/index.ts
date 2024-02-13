@@ -291,6 +291,14 @@ const fr = {
       Olson: 'Olson (2005)',
       GastnerSeguyMore: 'Gastner, Seguy & More (2018)',
     },
+    GridOptions: {
+      Resolution: 'Résolution de la grille (km)',
+      CellShape: 'Forme des cellules',
+      CellSquare: 'Cellule carrée',
+      CellHexagon: 'Cellule hexagonale',
+      CellDiamond: 'Cellule en losange',
+      CellTriangle: 'Cellule triangulaire',
+    },
   },
   ExportSection: {
     SelectLayers: 'Sélectionner une couche',

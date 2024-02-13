@@ -15,7 +15,7 @@ import { bbox } from '@turf/turf';
 
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setGlobalStore, setLoading } from '../../../store/GlobalStore';
+import { setLoading } from '../../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
@@ -30,6 +30,7 @@ import { Variable, VariableType } from '../../../helpers/typeDetection';
 import { computeKde, computeStewart } from '../../../helpers/smoothing';
 import { Mpow } from '../../../helpers/math';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
+import { computeAppropriateResolution } from '../../../helpers/geo';
 
 // Subcomponents
 import InputResultName from './InputResultName.tsx';
@@ -39,6 +40,7 @@ import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
 import type { PortrayalSettingsProps } from './common';
 import {
   type ChoroplethLegendParameters,
+  CustomPalette,
   type GridParameters,
   type KdeParameters,
   type LayerDescriptionSmoothedLayer,
@@ -122,7 +124,8 @@ async function onClickValidate(
     smoothingParameters: parameters,
     gridParameters: gridParams,
     breaks: thresholds,
-    palette: getPalette('Carrots', thresholds.length - 1),
+    // TODO: wrap 'getPalette' in a function that returns a CustomPalette
+    palette: getPalette('Carrots', thresholds.length - 1) as CustomPalette,
     reversePalette: true,
   } as SmoothedLayerParameters;
 
@@ -215,13 +218,6 @@ async function onClickValidate(
   );
 }
 
-const computeAppropriateResolution = (box: number[], n: number) => {
-  const bboxWidth = box[2] - box[0];
-  const bboxHeight = box[3] - box[1];
-  const bboxArea = bboxWidth * bboxHeight;
-  return Math.sqrt(bboxArea / n);
-};
-
 export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.Element {
   const { LL } = useI18nContext();
 
@@ -238,7 +234,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     .fields?.filter((variable) => (
       variable.type === VariableType.ratio || variable.type === VariableType.stock)));
 
-  // Approriate resolution for the grid
+  // Appropriate resolution for the grid
   const appropriateResolution = +(computeAppropriateResolution(bboxLayer(), 1).toPrecision(2));
 
   // Signals for common options

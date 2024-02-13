@@ -1016,6 +1016,32 @@ type RootTranslation = {
 			 */
 			GastnerSeguyMore: string
 		}
+		GridOptions: {
+			/**
+			 * G​r​i​d​ ​r​e​s​o​l​u​t​i​o​n​ ​(​k​m​)
+			 */
+			Resolution: string
+			/**
+			 * C​e​l​l​ ​s​h​a​p​e
+			 */
+			CellShape: string
+			/**
+			 * S​q​u​a​r​e
+			 */
+			CellSquare: string
+			/**
+			 * H​e​x​a​g​o​n
+			 */
+			CellHexagon: string
+			/**
+			 * T​r​i​a​n​g​l​e
+			 */
+			CellTriangle: string
+			/**
+			 * D​i​a​m​o​n​d
+			 */
+			CellDiamond: string
+		}
 	}
 	ExportSection: {
 		/**
@@ -2875,6 +2901,32 @@ export type TranslationFunctions = {
 			 * Gastner, Seguy & More (2018)
 			 */
 			GastnerSeguyMore: () => LocalizedString
+		}
+		GridOptions: {
+			/**
+			 * Grid resolution (km)
+			 */
+			Resolution: () => LocalizedString
+			/**
+			 * Cell shape
+			 */
+			CellShape: () => LocalizedString
+			/**
+			 * Square
+			 */
+			CellSquare: () => LocalizedString
+			/**
+			 * Hexagon
+			 */
+			CellHexagon: () => LocalizedString
+			/**
+			 * Triangle
+			 */
+			CellTriangle: () => LocalizedString
+			/**
+			 * Diamond
+			 */
+			CellDiamond: () => LocalizedString
 		}
 	}
 	ExportSection: {

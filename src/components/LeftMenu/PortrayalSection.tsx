@@ -22,14 +22,14 @@ import ProportionalSymbolsSettings from './PortrayalOption/ProportionalSymbolsSe
 import DiscontinuitySettings from './PortrayalOption/DiscontinuitySettings.tsx';
 import CategoricalChoroplethSettings from './PortrayalOption/CategoricalChoroplethSettings.tsx';
 import SmoothingSettings from './PortrayalOption/SmoothingSettings.tsx';
+import CartogramSettings from './PortrayalOption/CartogramSettings.tsx';
+import GriddingSettings from './PortrayalOption/GriddingSettings.tsx';
 
 // Types / Interfaces / Enums
 import { RepresentationType } from '../../global.d';
 
 // Styles
 import '../../styles/PortrayalSection.css';
-import CartogramSettings from './PortrayalOption/CartogramSettings.tsx';
-import InputFieldSelect from '../Inputs/InputSelect.tsx';
 
 function layerAvailableVariables(layerId: string) {
   const layer = layersDescriptionStore.layers
@@ -235,6 +235,9 @@ export default function PortrayalSection(): JSX.Element {
         </Match>
         <Match when={ selectedPortrayal() === RepresentationType.cartogram }>
           <CartogramSettings layerId={ targetLayer() as string } />
+        </Match>
+        <Match when={ selectedPortrayal() === RepresentationType.grid }>
+          <GriddingSettings layerId={ targetLayer() as string } />
         </Match>
       </Switch>
     </div>

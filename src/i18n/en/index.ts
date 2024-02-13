@@ -290,6 +290,14 @@ const en = {
       Olson: 'Olson (2005)',
       GastnerSeguyMore: 'Gastner, Seguy & More (2018)',
     },
+    GridOptions: {
+      Resolution: 'Grid resolution (km)',
+      CellShape: 'Cell shape',
+      CellSquare: 'Square',
+      CellHexagon: 'Hexagon',
+      CellTriangle: 'Triangle',
+      CellDiamond: 'Diamond',
+    },
   },
   ExportSection: {
     SelectLayers: 'Select a layer',

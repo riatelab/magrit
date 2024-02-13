@@ -209,6 +209,7 @@ const dropHandler = (e: Event, LL: Accessor<TranslationFunctions>): void => {
   setFileDropStore(
     { files: fileDropStore.files.concat(filteredFiles) },
   );
+
   if (timeout) {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
