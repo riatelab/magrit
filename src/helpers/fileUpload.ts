@@ -185,7 +185,9 @@ function addLayer(
     visible,
     fields: fieldsDescription,
     ...getDefaultRenderingParams(geomType),
-    shapeRendering: geomType === 'polygon' && rewoundGeojson.features.length > 10000 ? 'optimizeSpeed' : 'auto',
+    shapeRendering: 'auto',
+    // shapeRendering: geomType === 'polygon'
+    //   && rewoundGeojson.features.length > 10000 ? 'optimizeSpeed' : 'auto',
   };
 
   setLayersDescriptionStore(

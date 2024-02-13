@@ -235,7 +235,7 @@ export default function MapZone(): JSX.Element {
   // too often when zooming
   const redrawDebounced = debounce((e) => {
     applyZoomPan(e, true);
-  }, 25);
+  }, 20);
 
   // Set up the zoom behavior
   const zoom = d3.zoom()
@@ -252,6 +252,11 @@ export default function MapZone(): JSX.Element {
       }
     })
     .on('end', (e) => {
+      // Clicking on the map triggers a zoom event
+      // but we don't want to redraw the map in this case
+      if (e.transform.k === 1 && e.transform.x === 0 && e.transform.y === 0) {
+        return;
+      }
       if (mapStore.lockZoomPan) {
         svgElem.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
       } else if (applicationSettingsStore.zoomBehavior === ZoomBehavior.Redraw) {
@@ -275,6 +280,8 @@ export default function MapZone(): JSX.Element {
     zoom.apply(null, [sel]);
     // Remove the default double-click zoom behavior
     sel.on('dblclick.zoom', null);
+    // sel.on('click.zoom', (e) => { e.preventDefault(); e.stopPropagation(); });
+    // sel.on('click', (e) => { e.preventDefault(); e.stopPropagation(); });
   });
 
   return <div class="map-zone">
