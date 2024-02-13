@@ -212,10 +212,21 @@ const analyseTabularDatasetGDAL = async (
   const name = Array.isArray(fileOrFiles)
     ? fileOrFiles[0].name
     : fileOrFiles.name;
-  const result = await getDatasetInfo(
-    ds,
-    { opts: ['-wkt_format', 'WKT1'] },
-  );
+
+  let result;
+
+  try {
+    result = await getDatasetInfo(
+      ds,
+      { opts: ['-wkt_format', 'WKT1'] },
+    );
+  } catch (e: any) {
+    return {
+      name,
+      valid: false,
+      reason: e.message ? e.message : 'Unknown error',
+    } as InvalidDataset;
+  }
 
   const layers = result.layers.map((layer: any) => ({
     name: layer.name,
@@ -253,10 +264,21 @@ const analyseGeospatialDatasetGDAL = async (
   const name = Array.isArray(fileOrFiles)
     ? fileOrFiles[0].name
     : fileOrFiles.name;
-  const result = await getDatasetInfo(
-    ds,
-    { opts: ['-wkt_format', 'WKT1'] },
-  );
+
+  let result;
+
+  try {
+    result = await getDatasetInfo(
+      ds,
+      { opts: ['-wkt_format', 'WKT1'] },
+    );
+  } catch (e: any) {
+    return {
+      name,
+      valid: false,
+      reason: e.message ? e.message : 'Unknown error',
+    } as InvalidDataset;
+  }
 
   const layers = result.layers.map((layer: any) => ({
     name: layer.name,
@@ -385,7 +407,7 @@ const analyseDatasetTabularText = (
 
 const analyzeDataset = async (
   ds: { [key: string]: { name: string, files: FileEntry[] } },
-): Promise<DatasetInformation> => {
+): Promise<DatasetInformation | InvalidDataset> => {
   // We need to determine the type of the file, based on the extension and/or
   // the mime type.
   // In some cases, we need to read the file to determine the type (e.g. geojson vs. topojson).
@@ -546,7 +568,7 @@ export default function ImportWindow(): JSX.Element {
     droppedFiles,
     async () => {
       const groupedFiles = groupFiles(droppedFiles());
-      return createMutable(await Promise.all(
+      return createMutable((await Promise.all(
         Object.keys(groupedFiles)
           .map(async (fileName) => {
             // Use existing description if available
@@ -556,14 +578,23 @@ export default function ImportWindow(): JSX.Element {
             ) {
               return fileDescriptions().find((f: DatasetDescription) => f.name === fileName);
             }
-            const dsInfo = await analyzeDataset({ [fileName]: groupedFiles[fileName] });
 
+            const dsInfo = await analyzeDataset({ [fileName]: groupedFiles[fileName] });
+            if ('valid' in dsInfo && dsInfo.valid === false) {
+              // We have an invalid dataset that we don't wan't to add to the list
+              toast.error(LL().ImportWindow.ErrorReadingFile({
+                file: fileName,
+                message: (dsInfo as InvalidDataset).reason,
+              }));
+              // TODO: we should also remove it from the fileDropStore
+              return null;
+            }
             return {
               ...groupedFiles[fileName],
-              info: dsInfo,
+              info: dsInfo as DatasetInformation,
             } as DatasetDescription;
           }),
-      ));
+      )).filter((f) => f !== null));
     },
   );
 
@@ -880,7 +911,7 @@ export default function ImportWindow(): JSX.Element {
               // catch it here.
               try {
                 // eslint-disable-next-line no-await-in-loop
-                const id = await convertAndAddFiles(
+                const { id, nRemoved } = await convertAndAddFiles(
                   files,
                   type,
                   name,
@@ -888,6 +919,11 @@ export default function ImportWindow(): JSX.Element {
                   shouldBeVisible,
                 );
 
+                // If there are empty features, we display a toast to
+                // inform the user about it.
+                if (nRemoved > 0) {
+                  toast.error(LL().ImportWindow.RemovedEmptyFeatures(nRemoved));
+                }
                 // We push the id of the layer(s) to simplify to an array,
                 // and when all the layers are imported, we will simplify
                 // it/them.
@@ -896,7 +932,11 @@ export default function ImportWindow(): JSX.Element {
                 }
               } catch (e: any) {
                 // We catch the error here and display a toast
-                toast.error(`Error while reading file: ${e.message ? e.message : e}`);
+                // toast.error(`Error while reading file: ${e.message ? e.message : e}`);
+                toast.error(LL().ImportWindow.ErrorReadingFile({
+                  file: name,
+                  message: e.message ? `${e.message}` : `${e}`,
+                }));
               }
             }
 

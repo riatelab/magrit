@@ -80,7 +80,9 @@ const fr = {
     Delete: 'Supprimer ?',
     Incomplete: 'Incomplet',
     IncompleteMessage: 'Le jeu de données n\'est pas complet. Merci d\'ajouter les autres fichiers nécessaires',
-    UnsupportedFileFormat: 'Format de fichier non supporté pour {{ file }}',
+    UnsupportedFileFormat: 'Format de fichier non supporté pour {file}',
+    ErrorReadingFile: 'Erreur lors de la lecture du fichier {file} : {message}',
+    RemovedEmptyFeatures: '{{ Aucune entité | Une entité | ?? entités }} avec une géométrie vide retirée(s) du jeu de données.',
   },
   MapZone: {
     DropFilesHere: 'Glisser-déposer vos jeux de données ici ! (ou utiliser le menu d\'import des données)',

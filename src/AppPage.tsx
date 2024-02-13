@@ -1,6 +1,10 @@
 // Imports from solid-js
 import {
-  JSX, onCleanup, onMount, Show,
+  type Accessor,
+  type JSX,
+  onCleanup,
+  onMount,
+  Show,
 } from 'solid-js';
 
 // Imports from other packages
@@ -65,6 +69,7 @@ import type {
   LayoutFeature,
   TableDescription,
 } from './global';
+import type { TranslationFunctions } from './i18n/i18n-types';
 
 // Styles
 import './styles/Transitions.css';
@@ -175,7 +180,7 @@ const dragLeaveHandler = (e: Event): void => {
   }, 1000);
 };
 
-const dropHandler = (e: Event): void => {
+const dropHandler = (e: Event, LL: Accessor<TranslationFunctions>): void => {
   e.preventDefault();
   e.stopPropagation();
 
@@ -192,7 +197,12 @@ const dropHandler = (e: Event): void => {
     if (isAuthorizedFile(files[i])) {
       filteredFiles.push(files[i]);
     } else {
-      toast.error(`Unsupported file format for file : ${files[i].name}.${files[i].ext}`);
+      // toast.error(`Unsupported file format for file : ${files[i].name}.${files[i].ext}`);
+      toast.error(LL().ImportWindow.UnsupportedFileFormat(
+        {
+          file: `${files[i].name}.${files[i].ext}`,
+        },
+      ));
     }
   }
   // Add the dropped files to the existing file list
@@ -309,7 +319,7 @@ const AppPage: () => JSX.Element = () => {
         el.addEventListener('dragenter', dragEnterHandler);
         el.addEventListener('dragover', dragOverHandler);
         el.addEventListener('dragleave', dragLeaveHandler);
-        el.addEventListener('drop', dropHandler);
+        el.addEventListener('drop', (e) => dropHandler(e, LL));
       });
 
     // Add event listener to the window to handle beforeunload events

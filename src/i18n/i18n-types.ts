@@ -293,9 +293,20 @@ type RootTranslation = {
 		 */
 		IncompleteMessage: string
 		/**
-		 * U​n​s​u​p​p​o​r​t​e​d​ ​f​i​l​e​ ​f​o​r​m​a​t​ ​f​o​r​ ​{​{​f​i​l​e​}​}
+		 * U​n​s​u​p​p​o​r​t​e​d​ ​f​i​l​e​ ​f​o​r​m​a​t​ ​f​o​r​ ​{​f​i​l​e​}
+		 * @param {unknown} file
 		 */
-		UnsupportedFileFormat: string
+		UnsupportedFileFormat: RequiredParams<'file'>
+		/**
+		 * E​r​r​o​r​ ​w​h​i​l​e​ ​r​e​a​d​i​n​g​ ​f​i​l​e​ ​{​f​i​l​e​}​:​ ​{​m​e​s​s​a​g​e​}
+		 * @param {unknown} file
+		 * @param {unknown} message
+		 */
+		ErrorReadingFile: RequiredParams<'file' | 'message'>
+		/**
+		 * R​e​m​o​v​e​d​ ​{​{​0​ ​f​e​a​t​u​r​e​|​a​ ​f​e​a​t​u​r​e​|​?​?​ ​f​e​a​t​u​r​e​s​}​}​ ​w​i​t​h​o​u​t​ ​g​e​o​m​e​t​r​y
+		 */
+		RemovedEmptyFeatures: string
 	}
 	MapZone: {
 		/**
@@ -1680,7 +1691,7 @@ type RootTranslation = {
 		 */
 		validate: string
 		/**
-		 * {​{​O​n​e​ ​f​e​a​t​u​r​e​ ​w​i​t​h​o​u​t​ ​d​a​t​a​|​?​?​ ​f​e​a​t​u​r​e​ ​w​i​t​h​o​u​t​ ​d​a​t​a​}​}
+		 * {​{​O​n​e​ ​f​e​a​t​u​r​e​ ​w​i​t​h​o​u​t​ ​d​a​t​a​|​?​?​ ​f​e​a​t​u​r​e​s​ ​w​i​t​h​o​u​t​ ​d​a​t​a​}​}
 		 */
 		missingValues: string
 		/**
@@ -2145,9 +2156,17 @@ export type TranslationFunctions = {
 		 */
 		IncompleteMessage: () => LocalizedString
 		/**
-		 * Unsupported file format for {{file}}
+		 * Unsupported file format for {file}
 		 */
-		UnsupportedFileFormat: (arg0: number | string | boolean) => LocalizedString
+		UnsupportedFileFormat: (arg: { file: unknown }) => LocalizedString
+		/**
+		 * Error while reading file {file}: {message}
+		 */
+		ErrorReadingFile: (arg: { file: unknown, message: unknown }) => LocalizedString
+		/**
+		 * Removed {{0 feature|a feature|?? features}} without geometry
+		 */
+		RemovedEmptyFeatures: (arg0: number | string | boolean) => LocalizedString
 	}
 	MapZone: {
 		/**
@@ -3532,7 +3551,7 @@ export type TranslationFunctions = {
 		 */
 		validate: () => LocalizedString
 		/**
-		 * {{One feature without data|?? feature without data}}
+		 * {{One feature without data|?? features without data}}
 		 */
 		missingValues: (arg0: number | string | boolean) => LocalizedString
 		/**

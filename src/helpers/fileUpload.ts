@@ -2,7 +2,6 @@
 import { produce } from 'solid-js/store';
 
 // Imports from external packages
-import toast from 'solid-toast';
 import { getPalette } from 'dicopal';
 
 // Helpers
@@ -258,6 +257,7 @@ function addTabularLayer(data: object[], name: string): string {
  * @param format
  * @param layerName
  * @param fit
+ * @param visible
  */
 export const convertAndAddFiles = async (
   files: CustomFileList,
@@ -265,7 +265,7 @@ export const convertAndAddFiles = async (
   layerName: string,
   fit: boolean,
   visible: boolean,
-): Promise<string> => {
+): Promise<{ id: string, nRemoved: number }> => {
   // If the file is a TopoJSON file,
   // we don't use GDAL and convert it directly to GeoJSON
   if (format === SupportedGeoFileTypes.TopoJSON) {
@@ -273,16 +273,19 @@ export const convertAndAddFiles = async (
     // We want to remove the features with empty geometries
     // (i.e. if the geometry is null or undefined or if the coordinates array is empty)
     const { layer, nbRemoved } = removeFeaturesWithEmptyGeometry(res[layerName]);
-    if (nbRemoved > 0) {
-      toast.custom(`Removed ${nbRemoved} features with empty geometries`);
-    }
-    return addLayer(layer, layerName, fit, visible);
+    return {
+      id: addLayer(layer, layerName, fit, visible),
+      nRemoved: nbRemoved,
+    };
   }
 
   // If the file is a tabular file, we convert it to JSON manually too
   if (!(format === SupportedGeoFileTypes.GeoJSON) && isTextualTabularFile(files)) {
     const res = await convertTabularDatasetToJSON(files[0].file, files[0].ext);
-    return addTabularLayer(res, files[0].name);
+    return {
+      id: addTabularLayer(res, files[0].name),
+      nRemoved: 0,
+    };
   }
 
   // If the file is a binary tabular file, we use GDA to convert it to JSON
@@ -293,7 +296,10 @@ export const convertAndAddFiles = async (
         files.map((f) => f.file),
         { opts, openOpts: [] },
       );
-      return addTabularLayer(res, files[0].name);
+      return {
+        id: addTabularLayer(res, files[0].name),
+        nRemoved: 0,
+      };
     } catch (e: any) {
       console.error(e);
       throw e;
@@ -310,13 +316,13 @@ export const convertAndAddFiles = async (
       files.map((f) => f.file),
       { opts, openOpts: [] },
     );
-    const { layer, nbRemoved } = removeFeaturesWithEmptyGeometry(res);
     // We want to remove the features with empty geometries
     // (i.e. if the geometry is null or undefined or if the coordinates array is empty)
-    if (nbRemoved > 0) {
-      toast.custom(`Removed ${nbRemoved} features with empty geometries`);
-    }
-    return addLayer(layer, layerName, fit, visible);
+    const { layer, nbRemoved } = removeFeaturesWithEmptyGeometry(res);
+    return {
+      id: addLayer(layer, layerName, fit, visible),
+      nRemoved: nbRemoved,
+    };
   } catch (e: any) {
     console.error(e);
     throw e;

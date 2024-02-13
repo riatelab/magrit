@@ -80,7 +80,9 @@ const en = {
     Delete: 'Delete ?',
     Incomplete: 'Incomplete',
     IncompleteMessage: 'The dataset is incomplete and cannot be imported. Please add the other mandatory files.',
-    UnsupportedFileFormat: 'Unsupported file format for {{ file }}',
+    UnsupportedFileFormat: 'Unsupported file format for {file}',
+    ErrorReadingFile: 'Error while reading file {file}: {message}',
+    RemovedEmptyFeatures: 'Removed {{ 0 feature | a feature | ?? features }} without geometry',
   },
   MapZone: {
     DropFilesHere: 'Drag and drop your file(s) here ! (or use the import menu)',
@@ -476,7 +478,7 @@ const en = {
     logarithmicScale: 'Logarithmic scale',
     breaksInput: 'Enter class limits',
     validate: 'Validate',
-    missingValues: '{{ One feature without data | ?? feature without data }}',
+    missingValues: '{{ One feature without data | ?? features without data }}',
     count: 'Features per class',
   },
   Legend: {
