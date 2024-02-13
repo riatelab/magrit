@@ -155,6 +155,9 @@ export async function exportMapToSvg(
     source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
   }
 
+  // Remove stuff from the mgt namespace
+  source = source.replace(/\bmgt:[^=]+="[^"]*"/g, '');
+
   source = `<?xml version="1.0" standalone="no"?>\r\n${source}`;
 
   const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(source)}`;
@@ -216,13 +219,22 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
       return Promise.reject(err);
     }
   }
+
+  // Remove stuff from the mgt namespace
+  svgXml = svgXml.replace(/\bmgt:[^=]+="[^"]*"/g, '');
+
+  try {
+    await setImageSrc(
+      image,
+      `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgXml)}`,
+    );
+  } catch (err) {
+    targetCanvas.remove();
+    console.warn('Error when setting image source', err);
+    return Promise.reject(err);
+  }
+
   let imgUrl;
-
-  await setImageSrc(
-    image,
-    `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgXml)}`,
-  );
-
   // image.onload = function () {
   context.drawImage(image, 0, 0);
   try {
