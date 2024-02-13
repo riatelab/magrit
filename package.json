@@ -19,7 +19,9 @@
   "scripts": {
     "vite": "vite",
     "dev": "npm-run-all --parallel vite typesafe-i18n",
+    "dev:electron": "MODE=electron npm-run-all --parallel vite typesafe-i18n",
     "build": "vite build",
+    "build:electron": "vite build && electron-builder",
     "serve": "vite preview",
     "test": "vitest",
     "typesafe-i18n": "typesafe-i18n"
@@ -36,6 +38,8 @@
     "@types/topojson-simplify": "^3.0.3",
     "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "electron": "^28.2.2",
+    "electron-builder": "^24.9.1",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-plugin-solid": "^0.13.1",
@@ -43,6 +47,8 @@
     "npm-run-all": "^4.1.5",
     "typescript": "^5.3.3",
     "vite": "^5.1.1",
+    "vite-plugin-electron": "^0.28.1",
+    "vite-plugin-electron-renderer": "^0.14.5",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-pwa": "^0.17.5",
     "vite-plugin-solid": "^2.9.1",
@@ -97,5 +103,6 @@
     "topojson-simplify": "^3.0.3",
     "typesafe-i18n": "^5.26.2",
     "uuid": "^9.0.1"
-  }
+  },
+  "main": "dist-electron/main.js"
 }

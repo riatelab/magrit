@@ -4,12 +4,16 @@
 import { defineConfig } from 'vite';
 import eslint from 'vite-plugin-eslint';
 import solidPlugin from 'vite-plugin-solid';
-import topLevelAwait from "vite-plugin-top-level-await";
+import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
 // import devtools from 'solid-devtools/vite';
-import { VitePWA } from 'vite-plugin-pwa';
+// import { VitePWA } from 'vite-plugin-pwa';
+import electron from 'vite-plugin-electron/simple';
+
+const isDevElectron = process.env.MODE === 'electron';
 
 export default defineConfig({
+  base: './',
   plugins: [
     wasm(),
     // We use top-level await, which was added in ES2022
@@ -25,52 +29,64 @@ export default defineConfig({
     topLevelAwait(),
     // devtools(),
     solidPlugin({ ssr: false }),
-    VitePWA({
-      // injectRegister: 'script',
-      registerType: 'autoUpdate',
-      // devOptions: {
-      //   enabled: true,
-      // },
-      // workbox: {
-      //   globPatterns: ['**/*'],
-      // },
-      strategies: 'injectManifest',
-      srcDir: 'src',
-      filename: 'service-worker.js',
-      injectManifest: {
-        maximumFileSizeToCacheInBytes: 35000000,
-      },
-      includeAssets: [
-        'assets/*',
-      ],
-      manifest: {
-        name: 'Magrit',
-        description: 'A thematic cartography tool',
-        short_name: 'Magrit',
-        theme_color: '#ffffff',
-        // scope: '/',
-        // start_url: '/app',
-        icons: [
-          {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable',
-          },
-        ],
-      },
-    }),
+    // VitePWA({
+    //   // injectRegister: 'script',
+    //   registerType: 'autoUpdate',
+    //   // devOptions: {
+    //   //   enabled: true,
+    //   // },
+    //   // workbox: {
+    //   //   globPatterns: ['**/*'],
+    //   // },
+    //   strategies: 'injectManifest',
+    //   srcDir: 'src',
+    //   filename: 'service-worker.js',
+    //   injectManifest: {
+    //     maximumFileSizeToCacheInBytes: 35000000,
+    //   },
+    //   includeAssets: [
+    //     'assets/*',
+    //   ],
+    //   manifest: {
+    //     name: 'Magrit',
+    //     description: 'A thematic cartography tool',
+    //     short_name: 'Magrit',
+    //     theme_color: '#ffffff',
+    //     // scope: '/',
+    //     // start_url: '/app',
+    //     icons: [
+    //       {
+    //         src: 'pwa-192x192.png',
+    //         sizes: '192x192',
+    //         type: 'image/png',
+    //       },
+    //       {
+    //         src: 'pwa-512x512.png',
+    //         sizes: '512x512',
+    //         type: 'image/png',
+    //       },
+    //       {
+    //         src: 'pwa-512x512.png',
+    //         sizes: '512x512',
+    //         type: 'image/png',
+    //         purpose: 'any maskable',
+    //       },
+    //     ],
+    //   },
+    // }),
     eslint(),
+    isDevElectron ? electron({
+      main: {
+        // Shortcut of `build.lib.entry`
+        entry: 'electron/main.ts',
+      },
+      // preload: {
+      //   // Shortcut of `build.rollupOptions.input`
+      //   input: 'electron/preload.ts',
+      // },
+      // Optional: Use Node.js API in the Renderer process
+      renderer: {},
+    }) : {},
   ],
   server: {
     port: 3000,
@@ -105,7 +121,7 @@ export default defineConfig({
     },
   },
   esbuild: {
-    keepNames: true,
+    // keepNames: true,
     minifyIdentifiers: false,
     treeShaking: true,
   },

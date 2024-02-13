@@ -35,55 +35,31 @@ npm install
 npm run dev
 ```
 
+The application will be available at [http://localhost:3000](http://localhost:3000). 
+
+### Running for development, with electron
+
+```bash
+npm run dev:electron
+```
+
+A window will open with the application running.
+
 ### Building for production
 
 ```bash
 npm run build
 ```
 
-## Bundle Magrit with [neutralino](https://neutralino.js.org/)
+The application will be built in the `dist` directory.
 
-Requirements:
+### Building for production, with electron
 
-- Node.js (>= v18) / NPM (>= 9).
-- `@neutralinojs/neu` is installed globally (i.e. `npm install -g @neutralinojs/neu`).
-- Dev. environment for Magrit v2 (see above).
-- Path to Magrit v2 is stored in environment variable `MAGRIT-CODE` (i.e. `export MAGRITCODE='/home/mthh/code/magrit-v2-solid'`).
-
-- Compile Magrit code as usual:
-
-```
-npm run build
+```bash
+npm run build:electron
 ```
 
-- Initialise a folder to prepare Magrit bundle:
-
-```
-cd /tmp
-neu create magrit-desktop --template neutralinojs/neutralinojs-zero
-cd magrit-desktop
-```
-
-- Replace default configuration file by Magrit's one:
-
-```
-cp $MAGRITCODE/neutralino-magrit.config.json neutralino.config.json
-```
-
-- Delete the default code and replace it by Magrit's one:
-
-```
-rm -rf www/*
-cp -r $MAGRITCODE/dist/* www/
-```
-
-- Prepare the bundle:
-
-```
-neu build --release
-```
-
-- TODO: prepare the bundle for each OS/arch (instead of a bundle that contain all the binary files for all supported systems)
+The application will be built in the `release` directory.
 
 ## License
 
