@@ -229,7 +229,7 @@ const optionsBBox = {
 
 // Determine the size of an SVG text element before displaying it
 export function getTextSize(
-  text: string,
+  text: string | undefined,
   fontSize: number,
   fontFamily: string,
   strokeWidth: number = 0,
@@ -242,7 +242,7 @@ export function getTextSize(
   elem.setAttribute('font-family', fontFamily);
   elem.setAttribute('stroke-width', `${strokeWidth}px` || '0px');
   // Add all the lines of the text
-  elem.innerHTML = `${text.split('\\n').map((line, i) => `<tspan y="${fontSize * i * 1.1}">${line}</tspan>`).join('')}`;
+  elem.innerHTML = `${text?.split('\\n').map((line, i) => `<tspan y="${fontSize * i * 1.1}">${line}</tspan>`).join('')}`;
   // Add the element to the DOM (but it is invisible)
   (document.querySelector('svg.map-zone__map') as SVGElement).appendChild(elem);
   // Compute the size of the text
@@ -257,7 +257,7 @@ export function makeLegendSettingsModal(layerId: string, LL: Accessor<Translatio
   // (in case he/she wants to cancel the changes)
   const legendProperties = unproxify(
     layersDescriptionStore.layers
-      .find((l) => l.id === layerId)?.legend,
+      .find((l) => l.id === layerId)?.legend as never,
   );
   // Open the modal
   setModalStore({
@@ -328,7 +328,10 @@ export const bindElementsLegend = (refElement: SVGGElement, layer: LayerDescript
 
 export const getAllLegendNodes = (): NodeListOf<SVGGElement> => document.querySelectorAll('g.legend');
 
-export const getPossibleLegendPosition = (sizeX, sizeY): [number, number] => {
+export const getPossibleLegendPosition = (
+  sizeX: number,
+  sizeY: number,
+): [number, number] => {
   const legendNodes = getAllLegendNodes();
   if (legendNodes.length === 0) {
     // If this is the first legend, we put it at the top left corner
