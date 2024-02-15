@@ -226,6 +226,7 @@ const fr = {
       Categorical: 'Choropleth catégorielle',
       Smoothed: 'Carte lissée',
       Cartogram: 'Cartogramme',
+      Grid: 'Carroyage',
       NoPortrayal: 'Aucune représentation pour la couche choisie - Veuillez vérifier le types des champs de la couche ou sélectionner une autre couche',
     },
     RepresentationChoice: 'Choix de la représentation',

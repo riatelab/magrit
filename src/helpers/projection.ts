@@ -1,6 +1,17 @@
 import proj4, { InterfaceProjection } from 'proj4';
+
 import d3, { type GeoProjection, type GeoRawProjection } from './d3-custom';
+
+import { degToRadConstant, radToDegConstant } from './math';
+
 import epsg from '../assets/epsg.json';
+
+import type {
+  GeoJSONFeature,
+  GeoJSONFeatureCollection,
+  GeoJSONGeometryType,
+  GeoJSONPosition,
+} from '../global';
 
 export interface EpsgDbEntryType {
   code: string,
@@ -104,4 +115,57 @@ export const getProjection = (projString: string): InterfaceProjection => {
     //   and throw the appropriate error message
     throw new Error(`Invalid proj4 string: ${projString}`);
   }
+};
+
+const reprojGeom = (geom: GeoJSONGeometryType, proj: GeoProjection, invert: boolean = false) => {
+  const projFunc = invert
+    ? (coord) => proj.invert(coord)
+    : (coord) => proj(coord);
+
+  if (geom.type === 'Point') {
+    // eslint-disable-next-line no-param-reassign
+    geom.coordinates = projFunc([geom.coordinates[0], geom.coordinates[1]]) as GeoJSONPosition;
+  } else if (geom.type === 'MultiPoint') {
+    // eslint-disable-next-line no-param-reassign
+    geom.coordinates = geom.coordinates
+      .map((coords) => projFunc([coords[0], coords[1]]) as GeoJSONPosition);
+  } else if (geom.type === 'LineString') {
+    // eslint-disable-next-line no-param-reassign
+    geom.coordinates = geom.coordinates
+      .map((coords) => projFunc([coords[0], coords[1]]) as GeoJSONPosition);
+  } else if (geom.type === 'MultiLineString') {
+    // eslint-disable-next-line no-param-reassign
+    geom.coordinates
+      .map((line) => line.map(
+        (coords) => projFunc([coords[0], coords[1]]) as GeoJSONPosition,
+      ));
+  } else if (geom.type === 'Polygon') {
+    // eslint-disable-next-line no-param-reassign
+    geom.coordinates = geom.coordinates
+      .map((ring) => ring.map(
+        (coords) => projFunc([coords[0], coords[1]]) as GeoJSONPosition,
+      ));
+  } else if (geom.type === 'MultiPolygon') {
+    // eslint-disable-next-line no-param-reassign
+    geom.coordinates = geom.coordinates
+      .map((poly) => poly.map(
+        (ring) => ring.map((coords) => projFunc([coords[0], coords[1]]) as GeoJSONPosition),
+      ));
+  } else if (geom.type === 'GeometryCollection') {
+    // eslint-disable-next-line no-param-reassign
+    geom.geometries = geom.geometries
+      .map((g) => reprojGeom(g as GeoJSONGeometryType, proj, invert));
+  }
+};
+
+export const reprojWithD3 = (
+  proj: GeoProjection,
+  data: GeoJSONFeatureCollection,
+  invert: boolean = false,
+): GeoJSONFeatureCollection => {
+  const newData = JSON.parse(JSON.stringify(data));
+  newData.features.forEach((f: GeoJSONFeature) => {
+    reprojGeom(f.geometry, proj, invert);
+  });
+  return newData;
 };

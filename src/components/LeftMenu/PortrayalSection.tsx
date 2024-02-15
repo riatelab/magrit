@@ -158,6 +158,18 @@ export default function PortrayalSection(): JSX.Element {
         value: RepresentationType.discontinuity,
       });
     }
+    // Grid inputs:
+    //   - variable: stock, ratio
+    //   - geometry: polygon
+    if (
+      (availableVariables()?.hasStock || availableVariables()?.hasRatio)
+      && geometryType === 'polygon'
+    ) {
+      entries.push({
+        name: LL().PortrayalSection.PortrayalTypes.Grid(),
+        value: RepresentationType.grid,
+      });
+    }
     // Cartogram inputs:
     //   - variable: stock
     //   - geometry: polygon

@@ -225,6 +225,7 @@ const en = {
       Categorical: 'Categorical choropleth',
       Smoothed: 'Smoothed map',
       Cartogram: 'Cartogram',
+      Grid: 'Grid',
       NoPortrayal: 'No portrayal for the selected layer - Please verify the typing of the fields or select another layer',
     },
     RepresentationChoice: 'Representation choice',

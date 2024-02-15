@@ -366,8 +366,9 @@ interface GriddedLayerParameters {
   variable: string,
   // The shape of grid cell
   cellType: GridCellShape,
-  // The size of the grid cell
-  cellSize: number,
+  // The parameters of the grid used to compute the gridded layer
+  // (bbox and resolution)
+  gridParameters: GridParameters,
   // The color to use for features with no data
   noDataColor: string,
   // The palette used to color the gridded layer

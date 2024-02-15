@@ -24,15 +24,18 @@ import {
 
 // Helper
 import { useI18nContext } from '../../../i18n/i18n-solid';
-import { findSuitableName } from '../../../helpers/common';
+import { findSuitableName, unproxify } from '../../../helpers/common';
 import { generateIdLayer } from '../../../helpers/layers';
 import { Variable, VariableType } from '../../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 import { computeAppropriateResolution } from '../../../helpers/geo';
+import { computeGriddedLayer } from '../../../helpers/gridding';
 
 // Subcomponents
-import InputResultName from './InputResultName.tsx';
 import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
+import InputFieldNumber from '../../Inputs/InputNumber.tsx';
+import InputFieldSelect from '../../Inputs/InputSelect.tsx';
+import InputResultName from './InputResultName.tsx';
 
 // Types
 import type { PortrayalSettingsProps } from './common';
@@ -45,14 +48,75 @@ import {
   RepresentationType,
   type GriddedLayerParameters,
   GridCellShape,
+  type LayerDescriptionGriddedLayer,
+  CustomPalette,
+  GeoJSONFeatureCollection, LayerDescription,
 } from '../../../global.d';
+
+function onClickValidate(
+  referenceLayerId: string,
+  targetVariable: string,
+  newLayerName: string,
+  gridParameters: GridParameters,
+  cellType: GridCellShape,
+): void {
+  const referenceLayerDescription = layersDescriptionStore.layers
+    .find((l) => l.id === referenceLayerId)!;
+
+  if (referenceLayerDescription === undefined) {
+    throw new Error('Unexpected Error: Reference layer not found');
+  }
+
+  const params = {
+    variable: targetVariable,
+    cellType,
+    gridParameters,
+    noDataColor: '#cecece', // FIXME: use default setting no data color
+    palette: getPalette('Carrots', 6) as CustomPalette,
+    breaks: [], // FIXME: ...
+    reversePalette: true,
+  } as GriddedLayerParameters;
+
+  const newData = computeGriddedLayer(
+    unproxify(referenceLayerDescription.data as never) as GeoJSONFeatureCollection,
+    params,
+  );
+
+  const newLayerDescription = {
+    id: generateIdLayer(),
+    name: newLayerName,
+    type: 'polygon',
+    renderer: 'default',
+    data: newData,
+    fields: [],
+    visible: true,
+    strokeColor: '#000000',
+    strokeWidth: 0.5,
+    strokeOpacity: 1,
+    fillColor: '#a12f2f',
+    fillOpacity: 1,
+    dropShadow: false,
+    blurFilter: false,
+    shapeRendering: referenceLayerDescription.shapeRendering,
+    // rendererParameters: params,
+    legend: {} as never,
+  } as LayerDescription;
+
+  setLayersDescriptionStore(
+    produce(
+      (draft: LayersDescriptionStoreType) => {
+        draft.layers.push(newLayerDescription);
+      },
+    ),
+  );
+}
 
 export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Element {
   const { LL } = useI18nContext();
 
   // The description of the layer of which we want to create a gridded representation
   const layerDescription = createMemo(() => layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId));
+    .find((l) => l.id === props.layerId)!);
 
   // The bbox of the layer
   const bboxLayer = createMemo(() => bbox(layerDescription().data));
@@ -88,33 +152,43 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       layersDescriptionStore.layers.map((l) => l.name),
     );
 
-    // TODO: prepare the other parameters for the gridded layer
+    const gridParams = {
+      xMin: bboxLayer()[0],
+      yMin: bboxLayer()[1],
+      xMax: bboxLayer()[2],
+      yMax: bboxLayer()[3],
+      resolution: targetResolution(),
+    } as GridParameters;
 
     // Display loading overlay
     setLoading(true);
 
     await yieldOrContinue('smooth');
 
+    // Create the portrayal
     setTimeout(() => {
-
+      onClickValidate(
+        layerDescription().id,
+        targetVariable(),
+        layerName,
+        gridParams,
+        cellType(),
+      );
+      // Hide loading overlay
+      setLoading(false);
     }, 0);
   };
 
   return <div class="portrayal-section__portrayal-options-gridded">
-    <div class="field">
-      <label class="label">
-        {LL().PortrayalSection.CommonOptions.Variable()}
-      </label>
-      <div class="select" style={{ 'max-width': '60%' }}>
-        <select
-          onChange={(e) => setTargetVariable(e.currentTarget.value)}
-        >
-          <For each={targetFields()}>
-            {(variable) => <option value={variable.name}>{variable.name}</option>}
-          </For>
-        </select>
-      </div>
-    </div>
+    <InputFieldSelect
+      label={ LL().PortrayalSection.CommonOptions.Variable() }
+      onChange={(value) => { setTargetVariable(value); }}
+      value={ targetVariable() }
+    >
+      <For each={targetFields()}>
+        { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+      </For>
+    </InputFieldSelect>
     <div class="field">
       <label class="label">
         {LL().PortrayalSection.GridOptions.CellShape()}
@@ -131,6 +205,14 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
         </select>
       </div>
     </div>
+    <InputFieldNumber
+      label={LL().PortrayalSection.GridOptions.Resolution()}
+      value={targetResolution()}
+      onChange={(value) => setTargetResolution(value)}
+      min={0}
+      max={500}
+      step={0.1}
+    />
     <InputResultName
       onKeyUp={(value) => {
         setNewLayerName(value);
@@ -140,7 +222,7 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
     <ButtonValidation
       label={LL().PortrayalSection.CreateLayer()}
       onClick={makePortrayal}
-      disabled={true}
+      disabled={targetResolution() <= 0}
     />
   </div>;
 }

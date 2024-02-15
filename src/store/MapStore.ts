@@ -173,8 +173,9 @@ createEffect(
           },
         ),
       );
-
+      console.time('redrawPaths');
       redrawPaths(targetSvg as SVGSVGElement & IZoomable);
+      console.timeEnd('redrawPaths');
     },
   ),
 );
