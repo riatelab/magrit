@@ -1,4 +1,8 @@
 :root {
+  --background-color: #f5f5f5;
+  --border-color: #e5e5e5;
+  --text-color: #4a4a4a;
+  --text-color-deep: #363636;
   --primary-color: hsl(171, 100%, 41%);
   --success-color: hsl(141, 53%, 53%);
   --warning-color: hsl(48, 100%, 67%);
@@ -13,6 +17,14 @@ html {
   overflow-y: auto;
   font-size: 13px;
   box-sizing: border-box;
+}
+
+body {
+  color: var(--text-color) !important;
+}
+
+.label {
+  color: var(--text-color-deep) !important;
 }
 
 .button .has-shadow {

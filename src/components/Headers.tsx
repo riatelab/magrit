@@ -48,10 +48,10 @@ const handleBurgerClick = () => {
 export function HeaderBarWelcome(): JSX.Element {
   onMount(handleBurgerClick);
   const { LL } = useI18nContext();
-  return <nav class="navbar is-black" role="navigation" aria-label="main navigation">
+  return <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="#">
-        <img src={img} style={{ 'background-color': 'black', width: '100%' }} alt="magrit-logo"/>
+        <img src={img} style={{ width: '100%' }} alt="magrit-logo"/>
       </a>
 
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navBarHome">
@@ -69,9 +69,10 @@ export function HeaderBarWelcome(): JSX.Element {
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
-          <DropdownLanguage />
+          <DropdownLanguage/>
+          &nbsp;&nbsp;
           <div class="buttons">
-            <A href="/app" class="button is-primary">{ LL().StartApplication() }</A>
+            <A href="/app" class="button is-primary">{LL().StartApplication()}</A>
           </div>
         </div>
       </div>
@@ -82,10 +83,10 @@ export function HeaderBarWelcome(): JSX.Element {
 export function HeaderBarApp(): JSX.Element {
   const { LL } = useI18nContext();
   onMount(handleBurgerClick);
-  return <nav class="navbar is-black" role="navigation" aria-label="main navigation">
+  return <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="#">
-        <img src={img} style={{ 'background-color': 'black', width: '100%' }} alt="magrit-logo"/>
+        <img src={img} style={{ width: '100%' }} alt="magrit-logo"/>
       </a>
 
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navBarHome">

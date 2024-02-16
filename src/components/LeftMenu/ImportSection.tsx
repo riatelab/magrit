@@ -15,7 +15,7 @@ export default function ImportSection(): JSX.Element {
     <div>
       <a
         class="button is-primary is-outlined"
-        style={{ width: '200px' }}
+        style={{ width: '260px' }}
         onClick={() => { setFileDropStore({ show: true }); }}
       >
         { LL().ImportSection.OpenImportWindow() }
@@ -24,7 +24,7 @@ export default function ImportSection(): JSX.Element {
     <div>
       <a
         class="button is-primary is-outlined"
-        style={{ width: '200px' }}
+        style={{ width: '260px' }}
         onClick={() => { setDatasetCatalogStore({ show: true }); }}
       >
         { LL().ImportSection.ExampleDatasets() }
