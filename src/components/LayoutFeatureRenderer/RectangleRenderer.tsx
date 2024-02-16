@@ -42,7 +42,7 @@ export default function RectangleRenderer(props: Rectangle): JSX.Element {
     onContextMenu={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      triggerContextMenuLayoutFeature(e, props.id, true, LL);
+      triggerContextMenuLayoutFeature(e, props.id, true, true, LL);
     }}
     onDblClick={() => { makeLayoutFeaturesSettingsModal(props.id, LL); }}
     transform={`translate(${props.position[0]}, ${props.position[1]})`}

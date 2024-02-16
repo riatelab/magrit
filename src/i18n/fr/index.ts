@@ -122,7 +122,8 @@ const fr = {
     NorthArrow: 'Flèche Nord',
     FreeDrawing: 'Dessin libre',
     ContextMenu: {
-      Edit: 'Éditer',
+      EditSettings: 'Modifier les paramètres...',
+      Edit: 'Modifier',
       Delete: 'Supprimer',
       Up: 'Monter',
       Down: 'Descendre',
@@ -493,7 +494,7 @@ const fr = {
   },
   Legend: {
     ContextMenu: {
-      Edit: 'Éditer',
+      EditSettings: 'Modifier les paramètres...',
       Hide: 'Masquer',
       Up: 'Monter',
       Down: 'Descendre',

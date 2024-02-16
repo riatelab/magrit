@@ -122,6 +122,7 @@ const en = {
     NorthArrow: 'North arrow',
     FreeDrawing: 'Free drawing',
     ContextMenu: {
+      EditSettings: 'Edit settings...',
       Edit: 'Edit',
       Delete: 'Delete',
       Up: 'Up',
@@ -492,7 +493,7 @@ const en = {
   },
   Legend: {
     ContextMenu: {
-      Edit: 'Edit',
+      EditSettings: 'Edit settings...',
       Hide: 'Hide',
       Up: 'Up',
       Down: 'Down',

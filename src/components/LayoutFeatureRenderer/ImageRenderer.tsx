@@ -48,7 +48,7 @@ export default function ImageRenderer(props: Image): JSX.Element {
     onContextMenu={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      triggerContextMenuLayoutFeature(e, props.id, true, LL);
+      triggerContextMenuLayoutFeature(e, props.id, true, false, LL);
     }}
     onDblClick={() => { makeLayoutFeaturesSettingsModal(props.id, LL); }}
   transform={`translate(${props.position[0]}, ${props.position[1]})`}

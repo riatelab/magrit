@@ -170,23 +170,28 @@ export function triggerContextMenuLayoutFeature(
   event: MouseEvent,
   layoutFeatureId: string,
   allowClone: boolean,
+  allowEdit: boolean,
   LL: Accessor<TranslationFunctions>,
 ): void {
   const contextMenuEntries = [
     {
-      label: LL().LayoutFeatures.ContextMenu.Edit(),
+      label: LL().LayoutFeatures.ContextMenu.EditSettings(),
       callback: () => {
         makeLayoutFeaturesSettingsModal(layoutFeatureId, LL);
       },
     },
-    {
-      label: LL().LayoutFeatures.ContextMenu.Delete(),
+  ];
+
+  if (allowEdit) {
+    contextMenuEntries.push({
+      label: LL().LayoutFeatures.ContextMenu.Edit(),
       callback: () => {
-        const layoutFeatures = layersDescriptionStore.layoutFeatures
-          .filter((l) => l.id !== layoutFeatureId);
-        setLayersDescriptionStore({ layoutFeatures });
+        // TODO: Show markers on the map to allow the user to resize the layout feature
       },
-    },
+    });
+  }
+
+  contextMenuEntries.push(
     {
       type: 'divider',
     },
@@ -222,7 +227,7 @@ export function triggerContextMenuLayoutFeature(
         }
       },
     },
-  ];
+  );
 
   if (allowClone) {
     contextMenuEntries.push({
@@ -262,6 +267,15 @@ export function triggerContextMenuLayoutFeature(
       },
     });
   }
+
+  contextMenuEntries.push({
+    label: LL().LayoutFeatures.ContextMenu.Delete(),
+    callback: () => {
+      const layoutFeatures = layersDescriptionStore.layoutFeatures
+        .filter((l) => l.id !== layoutFeatureId);
+      setLayersDescriptionStore({ layoutFeatures });
+    },
+  });
 
   setContextMenuStore({
     show: true,

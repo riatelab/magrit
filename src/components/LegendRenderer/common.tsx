@@ -289,7 +289,7 @@ export function triggerContextMenuLegend(
     position: [event.clientX, event.clientY],
     entries: [
       {
-        label: LL().Legend.ContextMenu.Edit(),
+        label: LL().Legend.ContextMenu.EditSettings(),
         callback: () => {
           makeLegendSettingsModal(layerId, LL);
         },

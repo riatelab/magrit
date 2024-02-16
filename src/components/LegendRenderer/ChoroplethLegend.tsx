@@ -31,7 +31,7 @@ import {
 import {
   AllowChoroplethLegend,
   type ChoroplethLegendParameters,
-  type LayerDescriptionChoropleth,
+  type LayerDescriptionChoropleth, LayerDescriptionGriddedLayer,
   type LayerDescriptionSmoothedLayer,
   Orientation,
 } from '../../global.d';
@@ -480,8 +480,12 @@ function horizontalLegend(
   </g>;
 }
 
+type HasChoroplethLegend = LayerDescriptionChoropleth
+| LayerDescriptionSmoothedLayer
+| LayerDescriptionGriddedLayer;
+
 export default function legendChoropleth(
-  layer: LayerDescriptionChoropleth | LayerDescriptionSmoothedLayer,
+  layer: HasChoroplethLegend,
 ): JSX.Element {
   return <>
     {

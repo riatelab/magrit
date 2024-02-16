@@ -431,6 +431,10 @@ type RootTranslation = {
 		FreeDrawing: string
 		ContextMenu: {
 			/**
+			 * E​d​i​t​ ​s​e​t​t​i​n​g​s​.​.​.
+			 */
+			EditSettings: string
+			/**
 			 * E​d​i​t
 			 */
 			Edit: string
@@ -1732,9 +1736,9 @@ type RootTranslation = {
 	Legend: {
 		ContextMenu: {
 			/**
-			 * E​d​i​t
+			 * E​d​i​t​ ​s​e​t​t​i​n​g​s​.​.​.
 			 */
-			Edit: string
+			EditSettings: string
 			/**
 			 * H​i​d​e
 			 */
@@ -2320,6 +2324,10 @@ export type TranslationFunctions = {
 		 */
 		FreeDrawing: () => LocalizedString
 		ContextMenu: {
+			/**
+			 * Edit settings...
+			 */
+			EditSettings: () => LocalizedString
 			/**
 			 * Edit
 			 */
@@ -3622,9 +3630,9 @@ export type TranslationFunctions = {
 	Legend: {
 		ContextMenu: {
 			/**
-			 * Edit
+			 * Edit settings...
 			 */
-			Edit: () => LocalizedString
+			EditSettings: () => LocalizedString
 			/**
 			 * Hide
 			 */
