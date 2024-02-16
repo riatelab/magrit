@@ -118,6 +118,9 @@ const dispatchLegendRenderer = (layer: LayerDescription) => {
   if (layer.renderer === 'smoothed') {
     return legendChoropleth(layer as LayerDescriptionSmoothedLayer);
   }
+  if (layer.renderer === 'grid') {
+    return legendChoropleth(layer as LayerDescriptionGriddedLayer);
+  }
   return null;
 };
 

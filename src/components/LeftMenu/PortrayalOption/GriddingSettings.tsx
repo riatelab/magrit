@@ -10,6 +10,7 @@ import { produce } from 'solid-js/store';
 // Imports from other packages
 import { getPalette } from 'dicopal';
 import { yieldOrContinue } from 'main-thread-scheduling';
+import { jenks } from 'statsbreaks';
 import { bbox } from '@turf/turf';
 
 // Stores
@@ -69,7 +70,7 @@ async function onClickValidate(
     cellType,
     gridParameters,
     noDataColor: '#cecece', // FIXME: use default setting no data color
-    palette: getPalette('Carrots', 6) as CustomPalette,
+    palette: getPalette('Carrots', 7) as CustomPalette,
     breaks: [],
     reversePalette: true,
   } as GriddedLayerParameters;
@@ -80,12 +81,9 @@ async function onClickValidate(
   );
 
   // Compute breaks based on the computed values
-  const values = newData.features.map((ft) => ft.properties[`density-${targetVariable}`] as number);
-  const maxValues = max(values);
-
-  // FIXME: this is a temporary solution
-  params.breaks = [0, 0.15, 0.4, 0.6, 0.85, 1]
-    .map((d) => d * maxValues);
+  const values = newData.features
+    .map((ft) => ft.properties[`density-${targetVariable}`] as number);
+  params.breaks = jenks(values, { nb: 7, precision: null });
   params.variable = `density-${targetVariable}`;
 
   // Find a position for the legend
