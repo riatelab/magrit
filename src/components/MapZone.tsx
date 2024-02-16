@@ -77,11 +77,17 @@ import {
   type LayerDescriptionLabels,
   type ID3Element,
   type LayerDescriptionCategoricalChoropleth,
-  type LayerDescriptionSmoothedLayer, LayerDescription, Text, Line,
+  type LayerDescriptionSmoothedLayer,
+  LayerDescription,
+  Text,
+  Line,
+  GriddedLayerParameters,
+  LayerDescriptionGriddedLayer,
 } from '../global.d';
 
 // Styles
 import '../styles/MapZone.css';
+import gridRenderer from './MapRenderer/GridRenderer.tsx';
 
 const layoutFeaturesFns = {
   [LayoutFeatureType.Line]: LineRenderer,
@@ -142,6 +148,8 @@ const dispatchMapRenderer = (layer: LayerDescription) => {
     return discontinuityRenderer(layer as LayerDescriptionDiscontinuity);
   } else if (layer.renderer === 'smoothed') {
     return smoothedMapRenderer(layer as LayerDescriptionSmoothedLayer);
+  } else if (layer.renderer === 'grid') {
+    return gridRenderer(layer as LayerDescriptionGriddedLayer);
   }
   return null;
 };

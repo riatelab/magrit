@@ -9,7 +9,7 @@ import { setLoadingMessage } from '../store/GlobalStore';
 
 // Helpers
 import { makeCentroidLayer } from './geo';
-import { intersection } from './geos';
+import { intersectionLayer } from './geos';
 import { max, min } from './math';
 import { convertToTopojsonQuantizeAndBackToGeojson } from './topojson';
 
@@ -314,7 +314,7 @@ export async function computeStewart(
 
   console.timeEnd('contours');
   console.time('intersection');
-  const clippedContours = await intersection(contours, data);
+  const clippedContours = await intersectionLayer(contours, data);
   console.timeEnd('intersection');
   console.groupEnd();
   return clippedContours;
@@ -532,5 +532,5 @@ export async function computeKde(
   });
 
   await setLoadingMessage('SmoothingIntersection');
-  return intersection(contours, data);
+  return intersectionLayer(contours, data);
 }

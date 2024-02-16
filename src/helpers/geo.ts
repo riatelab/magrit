@@ -773,3 +773,39 @@ export const computeAppropriateResolution = (box: number[], n: number) => {
   const bboxArea = bboxWidth * bboxHeight;
   return Math.sqrt(bboxArea / n);
 };
+
+function calculatePolygonArea(ring: GeoJSONPosition[]) {
+  let areaValue = 0;
+  const n = ring.length;
+  for (let i = 0; i < n; i += 1) {
+    const j = (i + 1) % n;
+    areaValue += ring[i][0] * ring[j][1];
+    areaValue -= ring[j][0] * ring[i][1];
+  }
+  return Math.abs(areaValue) / 2.0;
+}
+
+export function planarArea(feature: GeoJSONFeature) {
+  const { geometry } = feature;
+  let areaValue = 0;
+  if (geometry.type === 'Polygon') {
+    // Calculate area for the outer boundary
+    areaValue += calculatePolygonArea(geometry.coordinates[0]);
+    // Subtract area for any holes
+    for (let i = 1; i < geometry.coordinates.length; i += 1) {
+      areaValue -= calculatePolygonArea(geometry.coordinates[i]);
+    }
+  } else if (geometry.type === 'MultiPolygon') {
+    for (let i = 0; i < geometry.coordinates.length; i += 1) {
+      const polygon = geometry.coordinates[i];
+      // Calculate area for the outer boundary of each polygon
+      let polygonArea = calculatePolygonArea(polygon[0]);
+      // Subtract area for any holes in each polygon
+      for (let j = 1; j < polygon.length; j += 1) {
+        polygonArea -= calculatePolygonArea(polygon[j]);
+      }
+      areaValue += polygonArea;
+    }
+  }
+  return areaValue;
+}

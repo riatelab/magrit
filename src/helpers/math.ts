@@ -37,6 +37,7 @@ type NumberArray = UnsignedNumberArray
 
 export const degToRadConstant = Math.PI / 180;
 export const radToDegConstant = 180 / Math.PI;
+export const SQRT3 = Msqrt(3);
 
 /**
  * Rounds a number to a specified number of decimal places.

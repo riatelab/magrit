@@ -927,6 +927,7 @@ interface GeometryCollection extends GeoJSONGeometryBase {
 interface GeoJSONFeature {
   type: string,
   id?: string | number,
+  bbox?: [number, number, number, number],
   geometry: GeoJSONGeometryType,
   properties: GeoJSONRecord,
 }
@@ -946,12 +947,20 @@ type GeoJSONGeometryType = (
 interface GeoJSONGeometry {
   type: string,
   coordinates: [],
+  bbox?: [number, number, number, number],
 }
 
 // A GeoJSON FeatureCollection
 interface GeoJSONFeatureCollection {
   type: string,
   features: GeoJSONFeature[],
+  bbox?: [number, number, number, number],
+  crs?: {
+    type: string,
+    properties: {
+      name: string,
+    },
+  },
 }
 
 interface DropShadowOptions {

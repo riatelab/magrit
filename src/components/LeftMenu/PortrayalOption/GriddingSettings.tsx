@@ -1,11 +1,10 @@
 // Import from solid-js
+import type { JSX } from 'solid-js';
 import {
   createMemo,
   createSignal,
   For,
-  Show,
 } from 'solid-js';
-import type { JSX } from 'solid-js';
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
@@ -25,11 +24,12 @@ import {
 // Helper
 import { useI18nContext } from '../../../i18n/i18n-solid';
 import { findSuitableName, unproxify } from '../../../helpers/common';
-import { generateIdLayer } from '../../../helpers/layers';
-import { Variable, VariableType } from '../../../helpers/typeDetection';
-import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 import { computeAppropriateResolution } from '../../../helpers/geo';
 import { computeGriddedLayer } from '../../../helpers/gridding';
+import { generateIdLayer } from '../../../helpers/layers';
+import { max } from '../../../helpers/math';
+import { VariableType } from '../../../helpers/typeDetection';
+import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
 // Subcomponents
 import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
@@ -41,25 +41,22 @@ import InputResultName from './InputResultName.tsx';
 import type { PortrayalSettingsProps } from './common';
 import {
   type ChoroplethLegendParameters,
-  type GridParameters,
-  type LegendTextElement,
-  LegendType,
-  Orientation,
-  RepresentationType,
-  type GriddedLayerParameters,
-  GridCellShape,
-  type LayerDescriptionGriddedLayer,
   CustomPalette,
-  GeoJSONFeatureCollection, LayerDescription,
+  GeoJSONFeatureCollection,
+  GridCellShape,
+  type GriddedLayerParameters,
+  type GridParameters,
+  LayerDescription, type LegendTextElement, LegendType, Orientation,
+  RepresentationType,
 } from '../../../global.d';
 
-function onClickValidate(
+async function onClickValidate(
   referenceLayerId: string,
   targetVariable: string,
   newLayerName: string,
   gridParameters: GridParameters,
   cellType: GridCellShape,
-): void {
+): Promise<void> {
   const referenceLayerDescription = layersDescriptionStore.layers
     .find((l) => l.id === referenceLayerId)!;
 
@@ -73,33 +70,90 @@ function onClickValidate(
     gridParameters,
     noDataColor: '#cecece', // FIXME: use default setting no data color
     palette: getPalette('Carrots', 6) as CustomPalette,
-    breaks: [], // FIXME: ...
+    breaks: [],
     reversePalette: true,
   } as GriddedLayerParameters;
 
-  const newData = computeGriddedLayer(
+  const newData = await computeGriddedLayer(
     unproxify(referenceLayerDescription.data as never) as GeoJSONFeatureCollection,
     params,
   );
+
+  // Compute breaks based on the computed values
+  const values = newData.features.map((ft) => ft.properties[`density-${targetVariable}`] as number);
+  const maxValues = max(values);
+
+  // FIXME: this is a temporary solution
+  params.breaks = [0, 0.15, 0.4, 0.6, 0.85, 1]
+    .map((d) => d * maxValues);
+  params.variable = `density-${targetVariable}`;
+
+  // Find a position for the legend
+  const legendPosition = getPossibleLegendPosition(120, 340);
 
   const newLayerDescription = {
     id: generateIdLayer(),
     name: newLayerName,
     type: 'polygon',
-    renderer: 'default',
+    renderer: RepresentationType.grid,
     data: newData,
-    fields: [],
+    fields: [
+      {
+        name: `density-${targetVariable}`,
+        hasMissingValues: false,
+        type: VariableType.ratio,
+        dataType: 'number',
+      },
+      {
+        name: 'sum',
+        hasMissingValues: false,
+        type: VariableType.stock,
+        dataType: 'number',
+      },
+    ],
     visible: true,
     strokeColor: '#000000',
     strokeWidth: 0.5,
     strokeOpacity: 1,
-    fillColor: '#a12f2f',
+    // fillColor: '#a12f2f',
     fillOpacity: 1,
     dropShadow: false,
     blurFilter: false,
-    shapeRendering: referenceLayerDescription.shapeRendering,
-    // rendererParameters: params,
-    legend: {} as never,
+    shapeRendering: 'auto',
+    rendererParameters: params,
+    legend: {
+      // Part common to all legends
+      title: {
+        text: targetVariable,
+        ...applicationSettingsStore.defaultLegendSettings.title,
+      } as LegendTextElement,
+      subtitle: {
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      } as LegendTextElement,
+      note: {
+        ...applicationSettingsStore.defaultLegendSettings.note,
+      } as LegendTextElement,
+      position: legendPosition,
+      visible: true,
+      roundDecimals: 1,
+      backgroundRect: {
+        visible: false,
+      },
+      // Part specific to choropleth
+      type: LegendType.choropleth,
+      orientation: Orientation.vertical,
+      boxWidth: 50,
+      boxHeight: 30,
+      boxSpacing: 0,
+      boxSpacingNoData: 10,
+      boxCornerRadius: 0,
+      labels: {
+        ...applicationSettingsStore.defaultLegendSettings.labels,
+      } as LegendTextElement,
+      noDataLabel: 'No data',
+      stroke: false,
+      tick: false,
+    } as ChoroplethLegendParameters,
   } as LayerDescription;
 
   setLayersDescriptionStore(
@@ -126,7 +180,9 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
     .fields?.filter((variable) => variable.type === VariableType.stock));
 
   // Appropriate resolution for the grid
-  const appropriateResolution = +(computeAppropriateResolution(bboxLayer(), 1).toPrecision(2));
+  // FIXME: this is a temporary solution
+  const appropriateResolution = +(
+    computeAppropriateResolution(bboxLayer(), 0.1).toPrecision(2));
 
   // Signals for options
   const [
@@ -173,9 +229,10 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
         layerName,
         gridParams,
         cellType(),
-      );
-      // Hide loading overlay
-      setLoading(false);
+      ).then(() => {
+        // Hide loading overlay
+        setLoading(false);
+      });
     }, 0);
   };
 
@@ -199,8 +256,8 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
           onChange={(e) => setCellType(e.currentTarget.value as GridCellShape)}
         >
           <option value="square">{LL().PortrayalSection.GridOptions.CellSquare()}</option>
-          <option value="diamond">{LL().PortrayalSection.GridOptions.CellHexagon()}</option>
-          <option value="hexagon">{LL().PortrayalSection.GridOptions.CellDiamond()}</option>
+          <option value="hexagon">{LL().PortrayalSection.GridOptions.CellHexagon()}</option>
+          <option value="diamond">{LL().PortrayalSection.GridOptions.CellDiamond()}</option>
           <option value="triangle">{LL().PortrayalSection.GridOptions.CellTriangle()}</option>
         </select>
       </div>

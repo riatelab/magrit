@@ -26,6 +26,7 @@ const simpleRedrawRenderers = new Set(
     'sphere',
     'categoricalChoropleth',
     'cartogram',
+    'grid',
   ],
 );
 
