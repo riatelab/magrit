@@ -470,3 +470,9 @@ html.is-dark-mode .tabs.is-boxed a:hover {
     background-color: #141415;
     color: #fff;
 }
+
+html.is-dark-mode .card {
+    background-color: #000;
+    border-color: #363636;
+    box-shadow: 0 0.5em 1em -0.125em rgba(238, 238, 238, 0.2), 0 0 0 1px rgba(238, 238, 238, 0.2);
+}
