@@ -358,6 +358,9 @@ const en = {
     SelectFields: 'Select the fields to join ?',
     Confirm: 'Add fields to the selected layer',
   },
+  PortrayalSelection: {
+    Title: 'Portrayal selection',
+  },
   ProjectionSelection: {
     title: 'Projection selection',
     SearchProjection: 'Enter an EPSG code or a projection name',

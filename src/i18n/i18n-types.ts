@@ -1261,6 +1261,12 @@ type RootTranslation = {
 		 */
 		Confirm: string
 	}
+	PortrayalSelection: {
+		/**
+		 * P​o​r​t​r​a​y​a​l​ ​s​e​l​e​c​t​i​o​n
+		 */
+		Title: string
+	}
 	ProjectionSelection: {
 		/**
 		 * P​r​o​j​e​c​t​i​o​n​ ​s​e​l​e​c​t​i​o​n
@@ -3154,6 +3160,12 @@ export type TranslationFunctions = {
 		 * Add fields to the selected layer
 		 */
 		Confirm: () => LocalizedString
+	}
+	PortrayalSelection: {
+		/**
+		 * Portrayal selection
+		 */
+		Title: () => LocalizedString
 	}
 	ProjectionSelection: {
 		/**

@@ -359,6 +359,9 @@ const fr = {
     SelectFields: 'Sélectionner les champs à joindre ?',
     Confirm: 'Ajouter les champs à la couche sélectionnée',
   },
+  PortrayalSelection: {
+    Title: 'Choix d\'une représentation',
+  },
   ProjectionSelection: {
     title: 'Sélection de la projection',
     SearchProjection: 'Entrer un code EPSG ou un nom de projection',
