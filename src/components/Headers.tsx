@@ -104,6 +104,7 @@ export function HeaderBarApp(): JSX.Element {
           <button
             class="button button-header-bar"
             id="button-undo"
+            aria-label={ LL().HeaderApp.Undo() }
             title={ LL().HeaderApp.Undo() }
             disabled={ stateStackStore.undoStack.length === 0}
           >
@@ -112,6 +113,7 @@ export function HeaderBarApp(): JSX.Element {
           <button
             class="button button-header-bar"
             id="button-redo"
+            aria-label={ LL().HeaderApp.Redo() }
             title={ LL().HeaderApp.Redo() }
             disabled={ stateStackStore.redoStack.length === 0 }
           >
@@ -121,6 +123,7 @@ export function HeaderBarApp(): JSX.Element {
           <button
             class="button button-header-bar"
             id="button-night-day"
+            aria-label={ LL().HeaderApp.NightDayMode() }
             title={ LL().HeaderApp.NightDayMode() }
           >
             <CgDarkMode />
@@ -128,6 +131,7 @@ export function HeaderBarApp(): JSX.Element {
           <button
             class="button button-header-bar"
             id="button-new-project"
+            aria-label={ LL().HeaderApp.NewProject() }
             title={ LL().HeaderApp.NewProject() }
           >
             <FaSolidFile />
@@ -135,6 +139,7 @@ export function HeaderBarApp(): JSX.Element {
           <button
             class="button button-header-bar"
             id="button-import-project"
+            aria-label={ LL().HeaderApp.ImportProjet() }
             title={ LL().HeaderApp.ImportProjet() }
           >
             <FaSolidFolderOpen />
@@ -142,6 +147,7 @@ export function HeaderBarApp(): JSX.Element {
           <button
             class="button button-header-bar"
             id="button-export-project"
+            aria-label={ LL().HeaderApp.SaveProject() }
             title={ LL().HeaderApp.SaveProject() }
           >
             <FaSolidFloppyDisk />
@@ -149,6 +155,7 @@ export function HeaderBarApp(): JSX.Element {
           <button
             class="button button-header-bar"
             id="button-about-magrit"
+            aria-label={ LL().HeaderApp.About() }
             title={ LL().HeaderApp.About() }
           >
             <FaSolidCircleQuestion />

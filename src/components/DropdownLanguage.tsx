@@ -34,7 +34,14 @@ export default function DropdownLanguage(): JSX.Element {
       </button>
     </div>
     <div class="dropdown-menu" id="dropdown-menu" role="menu">
-      <div class="dropdown-content" style={{ 'background-color': 'var(--primary-color)', color: 'white !important' }}>
+      <div
+        class="dropdown-content"
+        style={{
+          'background-color': 'var(--primary-color)',
+          color: 'white !important',
+          padding: 0,
+        }}
+      >
         <a
           classList={{ 'dropdown-item is-primary button': true, 'is-active': locale() === 'en' }} onClick={() => loadAndSetLocal('en' as Locales, setLocale)}>en</a>
         <a

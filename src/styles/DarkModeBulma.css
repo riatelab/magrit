@@ -460,3 +460,13 @@ html.is-dark-mode input[type="color"] {
 html.is-dark-mode a {
     color: #ccdaf7; /* Otherwise it doesn't meet WCAG AAA standards for accessible text */
 }
+
+html.is-dark-mode .tabs.is-boxed li.is-active a {
+    background-color: #141415;
+    color: #fff;
+}
+
+html.is-dark-mode .tabs.is-boxed a:hover {
+    background-color: #141415;
+    color: #fff;
+}

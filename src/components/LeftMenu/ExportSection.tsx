@@ -96,26 +96,42 @@ export default function ExportSection(): JSX.Element {
   const [customCrs, setCustomCrs] = createSignal('');
   return <div class="export-section">
     <div class="export-section__tabs tabs is-centered is-boxed is-fullwidth">
-      <ul class="ml-0">
+      <ul class="ml-0" role="tablist">
         <li class="is-active">
-          <a onClick={(ev) => onClickTabButton(ev, 'svg')}>
+          <a
+            id="export-section__content__svg-tab"
+            onClick={(ev) => onClickTabButton(ev, 'svg')}
+            aria-controls="export-section__content__svg"
+          >
             <span>SVG</span>
           </a>
         </li>
         <li>
-          <a onClick={(ev) => onClickTabButton(ev, 'png')}>
+          <a
+            id="export-section__content__png-tab"
+            onClick={(ev) => onClickTabButton(ev, 'png')}
+            aria-controls="export-section__content__png"
+          >
             <span>PNG</span>
           </a>
         </li>
         <li>
-          <a onClick={(ev) => onClickTabButton(ev, 'geo')}>
+          <a
+            id="export-section__content__geo-tab"
+            onClick={(ev) => onClickTabButton(ev, 'geo')}
+            aria-controls="export-section__content__geo"
+          >
             <span>{ LL().ExportSection.Layers() }</span>
           </a>
         </li>
       </ul>
     </div>
     <div class="export-section__content">
-      <div id="export-section__content__svg">
+      <div
+        id="export-section__content__svg"
+        role="tabpanel"
+        aria-labelledby="export-section__content__svg-tab"
+      >
         <InputFieldCheckbox
           label={ LL().ExportSection.ClipSvgCurrentExtent() }
           checked={ clipCurrentExtentChecked() }
@@ -131,7 +147,12 @@ export default function ExportSection(): JSX.Element {
         </div>
 
       </div>
-      <div id="export-section__content__png" class="is-hidden">
+      <div
+        id="export-section__content__png"
+        role="tabpanel"
+        class="is-hidden"
+        aria-labelledby="export-section__content__png-tab"
+      >
         <div class="has-text-centered">
           <button
             onClick={ async () => { await exportMapToPng('export.png', 1); } }
@@ -141,7 +162,12 @@ export default function ExportSection(): JSX.Element {
           </button>
         </div>
       </div>
-      <div id="export-section__content__geo" class="is-hidden">
+      <div
+        id="export-section__content__geo"
+        role="tabpanel"
+        class="is-hidden"
+        aria-labelledby="export-section__content__geo-tab"
+      >
         <DropdownMenu
           id={'export-section__content__geo__layers'}
           entries={

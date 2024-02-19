@@ -306,6 +306,8 @@ export default function MapZone(): JSX.Element {
         }}
         class="map-zone__map"
         onContextMenu={(e) => e.preventDefault()}
+        tabindex="0"
+        aria-label="map zone"
       >
         <defs>
           <marker

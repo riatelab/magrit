@@ -38,7 +38,7 @@ export default function LeftMenu(): JSX.Element {
     <div class="left-menu__title" onClick={() => setExpandedSection(1)}>
       <div class="left-menu__title-inner">
         <TbFileImport style={{ height: '1.1em' }} />
-        { LL().LeftMenu.Import() }
+        <span>{ LL().LeftMenu.Import() }</span>
       </div>
       <span class={`chevron-button ${expandedSection() === 1 ? 'is-active' : ''}`}>
         <ChevronIcon />
@@ -53,7 +53,7 @@ export default function LeftMenu(): JSX.Element {
     <div class="left-menu__title" onClick={() => setExpandedSection(2)}>
       <div class="left-menu__title-inner">
         <AiOutlineLayout />
-        { LL().LeftMenu.MapConfiguration() }
+        <span>{ LL().LeftMenu.MapConfiguration() }</span>
       </div>
       <span class={`chevron-button ${expandedSection() === 2 ? 'is-active' : ''}`}>
         <ChevronIcon />
@@ -68,7 +68,7 @@ export default function LeftMenu(): JSX.Element {
     <div class="left-menu__title" onClick={() => setExpandedSection(3)}>
       <div class="left-menu__title-inner">
         <FiLayers />
-        { LL().LeftMenu.LayerManager() }
+        <span>{ LL().LeftMenu.LayerManager() }</span>
       </div>
       <span class={`chevron-button ${expandedSection() === 3 ? 'is-active' : ''}`}>
         <ChevronIcon />
@@ -83,7 +83,7 @@ export default function LeftMenu(): JSX.Element {
     <div class="left-menu__title" onClick={() => setExpandedSection(4)}>
       <div class="left-menu__title-inner">
         <AiOutlineBarChart />
-        { LL().LeftMenu.RepresentationChoice() }
+        <span>{ LL().LeftMenu.RepresentationChoice() }</span>
       </div>
       <span class={`chevron-button ${expandedSection() === 4 ? 'is-active' : ''}`}>
         <ChevronIcon />
@@ -101,7 +101,7 @@ export default function LeftMenu(): JSX.Element {
     <div class="left-menu__title" onClick={() => setExpandedSection(5)}>
       <div class="left-menu__title-inner">
         <RiDocumentPagesLine />
-        { LL().LeftMenu.LayoutFeatures() }
+        <span>{ LL().LeftMenu.LayoutFeatures() }</span>
       </div>
       <span class={`chevron-button ${expandedSection() === 5 ? 'is-active' : ''}`}>
         <ChevronIcon />
@@ -116,7 +116,7 @@ export default function LeftMenu(): JSX.Element {
     <div class="left-menu__title" onClick={() => setExpandedSection(6)}>
       <div class="left-menu__title-inner">
         <TiExportOutline />
-        { LL().LeftMenu.ExportSection() }
+        <span>{ LL().LeftMenu.ExportSection() }</span>
       </div>
       <span class={`chevron-button ${expandedSection() === 6 ? 'is-active' : ''}`}>
         <ChevronIcon />
