@@ -3,6 +3,7 @@
   position: fixed;
   left: var(--left-menu-width);
   height: calc(100vh - var(--header-height));
+  background-color: var(--map-container-background);
 }
 
 .map-zone__inner {

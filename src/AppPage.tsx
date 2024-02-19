@@ -18,6 +18,8 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
 import { useI18nContext } from './i18n/i18n-solid';
+import { isLocale } from './i18n/i18n-util';
+import { loadLocale } from './i18n/i18n-util.sync';
 import { clickLinkFromDataUrl } from './helpers/exports';
 import { draggedElementsAreFiles, isAuthorizedFile, prepareFileExtensions } from './helpers/fileUpload';
 import { round } from './helpers/math';
@@ -219,6 +221,20 @@ const dropHandler = (e: Event, LL: Accessor<TranslationFunctions>): void => {
   }
 };
 
+function enableDarkMode() {
+  const body = document.querySelector('html');
+  if (body) {
+    body.classList.add('is-dark-mode');
+  }
+}
+
+function enableLightMode() {
+  const body = document.querySelector('html');
+  if (body) {
+    body.classList.remove('is-dark-mode');
+  }
+}
+
 const reloadFromProjectObject = async (
   obj: ProjectDescription,
 ): Promise<void> => {
@@ -254,7 +270,19 @@ const reloadFromProjectObject = async (
 
 const AppPage: () => JSX.Element = () => {
   const { setLocale, LL } = useI18nContext();
-  setLocale('en');
+  // Read the user locale from the application settings store
+  const { userLocale } = applicationSettingsStore;
+  // Split the locale to get the language only
+  const userLanguage = userLocale.split('-')[0];
+  // Is it available in the list of available locales ?
+  if (isLocale(userLanguage)) {
+    loadLocale(userLanguage);
+    // If yes, set the locale
+    setLocale(userLanguage);
+  } else {
+    // If not, set the default locale
+    setLocale('en');
+  }
 
   // Set the maximum dimensions of the map for the current window size
   // (we need it before mounting the component because the map is
@@ -313,6 +341,27 @@ const AppPage: () => JSX.Element = () => {
   onMount(async () => {
     // Add event listener to the window to handle resize events
     window.addEventListener('resize', onResize);
+
+    // Handle the light / dark mode according to user preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // User prefers dark mode
+      enableDarkMode();
+    } else {
+      // User prefers light mode or the preference is not available
+      enableLightMode();
+    }
+
+    // Listen for changes in the color scheme preference
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+      if (event.matches) {
+        // User has switched to dark mode
+        enableDarkMode();
+      } else {
+        // User has switched to light mode
+        enableLightMode();
+      }
+    });
+
     // Add event listeners to the root element and the overlay drop
     // in order to handle drag and drop events (for files upload only)
     document.querySelectorAll('div#root, .overlay-drop')
@@ -331,6 +380,14 @@ const AppPage: () => JSX.Element = () => {
       ?.addEventListener('click', undo);
     document.getElementById('button-redo')
       ?.addEventListener('click', redo);
+
+    document.getElementById('button-night-day')
+      ?.addEventListener('click', () => {
+        const body = document.querySelector('html');
+        if (body) {
+          body.classList.toggle('is-dark-mode');
+        }
+      });
 
     // Event listeners for the buttons of the header bar
     document.getElementById('button-new-project')
@@ -435,14 +492,6 @@ const AppPage: () => JSX.Element = () => {
     // Load GDAL
     // @ts-expect-error - we should fix the type of globalThis.gdal
     globalThis.gdal = await loadGdal();
-
-    // ... and store the number of drivers in the global store (we may change this)
-    // setGlobalStore({
-    //   nDrivers: (
-    //     Object.keys(Gdal.drivers.raster).length
-    //     + Object.keys(Gdal.drivers.vector).length
-    //   ),
-    // });
 
     // Is there a project in the DB ?
     const project = await db.projects.toArray();

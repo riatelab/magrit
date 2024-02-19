@@ -396,7 +396,7 @@ export default function SimplificationModal(
       </div>
     </div>
     <div class="simplification-modal__map-container">
-      <canvas></canvas>
+      <canvas style={{ background: 'white' }}></canvas>
     </div>
   </div>;
 }

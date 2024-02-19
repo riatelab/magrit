@@ -12,6 +12,7 @@ import './helpers/array.extension';
 
 import 'bulma/css/bulma.min.css';
 import '@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css';
+import './styles/DarkModeBulma.css';
 import './styles/Main.css';
 
 import WelcomePage from './WelcomePage.tsx';
