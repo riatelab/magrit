@@ -641,7 +641,7 @@ export default function ImportWindow(): JSX.Element {
         <h2>{ LL().ImportWindow.Title() }</h2>
         <p
           class="is-clickable is-medium"
-          style={{ 'text-decoration': 'underline', color: 'hsl(229deg,53%,53%)' }}
+          style={{ 'text-decoration': 'underline' }}
           onClick={handleInputFiles} // eslint-disable-line no-empty-function
         >
           { LL().ImportWindow.Instructions() }

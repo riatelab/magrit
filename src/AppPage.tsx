@@ -20,6 +20,7 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 import { useI18nContext } from './i18n/i18n-solid';
 import { isLocale } from './i18n/i18n-util';
 import { loadLocale } from './i18n/i18n-util.sync';
+import { initializeLightDarkMode, toggleDarkMode } from './helpers/darkmode';
 import { clickLinkFromDataUrl } from './helpers/exports';
 import { draggedElementsAreFiles, isAuthorizedFile, prepareFileExtensions } from './helpers/fileUpload';
 import { round } from './helpers/math';
@@ -221,20 +222,6 @@ const dropHandler = (e: Event, LL: Accessor<TranslationFunctions>): void => {
   }
 };
 
-function enableDarkMode() {
-  const body = document.querySelector('html');
-  if (body) {
-    body.classList.add('is-dark-mode');
-  }
-}
-
-function enableLightMode() {
-  const body = document.querySelector('html');
-  if (body) {
-    body.classList.remove('is-dark-mode');
-  }
-}
-
 const reloadFromProjectObject = async (
   obj: ProjectDescription,
 ): Promise<void> => {
@@ -343,24 +330,10 @@ const AppPage: () => JSX.Element = () => {
     window.addEventListener('resize', onResize);
 
     // Handle the light / dark mode according to user preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      // User prefers dark mode
-      enableDarkMode();
-    } else {
-      // User prefers light mode or the preference is not available
-      enableLightMode();
-    }
-
-    // Listen for changes in the color scheme preference
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
-      if (event.matches) {
-        // User has switched to dark mode
-        enableDarkMode();
-      } else {
-        // User has switched to light mode
-        enableLightMode();
-      }
-    });
+    // (internally it uses the prefers-color-scheme media query,
+    // and we also subscribe to changes in the user preference
+    // to update the mode accordingly)
+    initializeLightDarkMode();
 
     // Add event listeners to the root element and the overlay drop
     // in order to handle drag and drop events (for files upload only)
@@ -375,19 +348,15 @@ const AppPage: () => JSX.Element = () => {
     // Add event listener to the window to handle beforeunload events
     window.addEventListener('beforeunload', onBeforeUnloadWindow);
 
-    // Add event listener to the window to handle undo/redo events
+    // Add event listener to handle undo/redo events
     document.getElementById('button-undo')
       ?.addEventListener('click', undo);
     document.getElementById('button-redo')
       ?.addEventListener('click', redo);
 
+    // Add event listener to handle the light / dark mode
     document.getElementById('button-night-day')
-      ?.addEventListener('click', () => {
-        const body = document.querySelector('html');
-        if (body) {
-          body.classList.toggle('is-dark-mode');
-        }
-      });
+      ?.addEventListener('click', toggleDarkMode);
 
     // Event listeners for the buttons of the header bar
     document.getElementById('button-new-project')

@@ -11,8 +11,8 @@ import {
 
 // Ag-grid stuffs
 import AgGridSolid, { AgGridSolidRef } from 'ag-grid-solid';
-import 'ag-grid-community/styles/ag-grid.css'; // grid core CSS
-import 'ag-grid-community/styles/ag-theme-alpine.css'; // optional theme
+import 'ag-grid-community/styles/ag-grid.min.css'; // grid core CSS
+import 'ag-grid-community/styles/ag-theme-quartz.min.css'; // theme
 
 // Imports from other packages
 import alasql from 'alasql';
@@ -22,6 +22,7 @@ import { area } from '@turf/turf';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { unproxify } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
+import { isDarkMode } from '../../helpers/darkmode';
 import { clickLinkFromDataUrl } from '../../helpers/exports';
 import {
   detectTypeField,
@@ -670,7 +671,11 @@ export default function TableWindow(): JSX.Element {
             &nbsp;- { LL().DataTable.Features(rowData().length) }
             &nbsp;- { LL().DataTable.Columns(columnDefs().length) }
           </h3>
-          <div ref={ parentGridRef! } class="ag-theme-alpine" style={{ height: '70vh' }}>
+          <div
+            ref={ parentGridRef! }
+            class={ isDarkMode() ? 'ag-theme-quartz-dark' : 'ag-theme-quartz' }
+            style={{ height: '70vh' }}
+          >
             <AgGridSolid
               ref={ agGridRef! }
               rowData={ rowData() }

@@ -35,11 +35,11 @@ html.is-dark-mode .button:hover:not([disabled]) {
     color: #242424 !important;
 }
 html.is-dark-mode .button.is-primary {
-    border-color: #3e8ed0 !important;
-    color: #3e8ed0 !important;
+    border-color: #a8b6ee !important;
+    color: #a8b6ee !important;
 }
 html.is-dark-mode .button.is-primary:hover {
-    background-color: #3e8ed0;
+    background-color: #a8b6ee;
     color: white;
 }
 html.is-dark-mode .button.is-info {
@@ -91,7 +91,7 @@ html.is-dark-mode .button.is-white:hover {
     color: #242424;
 }
 html.is-dark-mode .select select:focus, html.is-dark-mode .textarea:focus, html.is-dark-mode .input:focus, html.is-dark-mode .taginput .taginput-container.is-focusable:focus, html.is-dark-mode .select select.is-focused, html.is-dark-mode .is-focused.textarea, html.is-dark-mode .is-focused.input, html.is-dark-mode .taginput .is-focused.taginput-container.is-focusable, html.is-dark-mode .select select:active, html.is-dark-mode .textarea:active, html.is-dark-mode .input:active, html.is-dark-mode .taginput .taginput-container.is-focusable:active, html.is-dark-mode .select select.is-active, html.is-dark-mode .is-active.textarea, html.is-dark-mode .is-active.input, html.is-dark-mode .taginput .is-active.taginput-container.is-focusable {
-    border-color: #3e8ed0;
+    border-color: #a8b6ee;
 }
 html.is-dark-mode .radio:hover, html.is-dark-mode .checkbox:hover {
     color: whitesmoke;
@@ -126,15 +126,15 @@ html.is-dark-mode .b-slider .b-slider-thumb-wrapper .b-slider-thumb {
 }
 html.is-dark-mode .notification.is-primary {
     background-color: transparent;
-    border: 1px solid #3e8ed0;
-    color: #3e8ed0;
+    border: 1px solid #a8b6ee;
+    color: #a8b6ee;
 }
 html.is-dark-mode .notification.is-primary .button {
-    border-color: #3e8ed0 !important;
-    color: #3e8ed0 !important;
+    border-color: #a8b6ee !important;
+    color: #a8b6ee !important;
 }
 html.is-dark-mode .notification.is-primary .button:hover {
-    background-color: #3e8ed0;
+    background-color: #a8b6ee;
     color: white !important;
 }
 html.is-dark-mode .notification.is-info {
@@ -220,8 +220,8 @@ html.is-dark-mode .tag.is-delete {
 }
 html.is-dark-mode .tag.is-primary {
     background-color: transparent;
-    border: 1px solid #3e8ed0;
-    color: #3e8ed0;
+    border: 1px solid #a8b6ee;
+    color: #a8b6ee;
 }
 html.is-dark-mode .tag.is-info {
     background-color: transparent;
@@ -304,7 +304,7 @@ html.is-dark-mode hr {
     background-color: #363636;
 }
 html.is-dark-mode a {
-    color: #3e8ed0;
+    color: #a8b6ee;
 }
 html.is-dark-mode .media {
     border-color: #363636;
@@ -314,10 +314,10 @@ html.is-dark-mode nav.navbar {
     box-shadow: 0 1px #363636;
 }
 html.is-dark-mode nav.navbar .navbar-item {
-    color: #3e8ed0;
+    color: #a8b6ee;
 }
 html.is-dark-mode nav.navbar .navbar-item .navbar-link {
-    color: #3e8ed0;
+    color: #a8b6ee;
 }
 html.is-dark-mode nav.navbar .navbar-item .input {
     color: whitesmoke;
@@ -455,4 +455,8 @@ html.is-dark-mode input[type="color"] {
     background-color: black;
     border-color: #818181;
     color: white;
+}
+
+html.is-dark-mode a {
+    color: #ccdaf7; /* Otherwise it doesn't meet WCAG AAA standards for accessible text */
 }

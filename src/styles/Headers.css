@@ -1,6 +1,6 @@
 .navbar {
   height: var(--header-height);
-  background-color: var(--background-color);
+  background-color: var(--background-color) !important;
   border-bottom: 1px solid var(--border-color);
 }
 
