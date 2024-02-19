@@ -50,6 +50,7 @@ const availableProjections = [
   'Guyou',
   'Hammer',
   'HammerRetroazimuthal',
+  'Hatano',
   'Healpix',
   'Hill',
   'Homolosine',

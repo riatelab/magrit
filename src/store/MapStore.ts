@@ -144,8 +144,11 @@ createEffect(
       // Update projection
       globalStore.projection
         .scale(mapStore.scale)
-        .translate(mapStore.translate)
-        .rotate(mapStore.rotate);
+        .translate(mapStore.translate);
+
+      if (globalStore.projection.rotate) {
+        globalStore.projection.rotate(mapStore.rotate);
+      }
 
       // Recompute position for proportional symbols layers with the avoidOverlapping option
       setLayersDescriptionStore(
