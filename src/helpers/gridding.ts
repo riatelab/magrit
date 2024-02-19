@@ -153,7 +153,14 @@ const generateHexGrid = (
   extent: [number, number, number, number],
   cellSize: number,
 ): GeoJSONFeatureCollection => {
-  const [xmin, ymin, xmax, ymax] = extent;
+  let [xmin, ymin, xmax, ymax] = extent;
+  // TODO... why does it seems like we need to adjust the extent
+  //         when clipping the grid afterwards.. but when using the
+  //         non-clipped grid, we don't need to do that?
+  xmin -= cellSize / 2;
+  ymin -= cellSize / 2;
+  xmax += cellSize * 2.5;
+  ymax += cellSize * 2.5;
   const hexWidth = SQRT3 * cellSize;
   const hexHeight = 2 * cellSize;
   const verticalSpacing = hexHeight * (3 / 4);
