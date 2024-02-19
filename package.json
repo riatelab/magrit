@@ -19,9 +19,9 @@
   "scripts": {
     "vite": "vite",
     "dev": "npm-run-all --parallel vite typesafe-i18n",
-    "dev:electron": "MODE=electron npm-run-all --parallel vite typesafe-i18n",
+    "dev:electron": "MODE=electrondev npm-run-all --parallel vite typesafe-i18n",
     "build": "vite build",
-    "build:electron": "vite build && electron-builder",
+    "build:electron": "MODE=electronbuild vite build && electron-builder",
     "serve": "vite preview",
     "test": "vitest",
     "typesafe-i18n": "typesafe-i18n"

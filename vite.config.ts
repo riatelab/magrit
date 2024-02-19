@@ -8,7 +8,8 @@ import wasm from 'vite-plugin-wasm';
 // import devtools from 'solid-devtools/vite';
 import electron from 'vite-plugin-electron/simple';
 
-const isDevElectron = process.env.MODE === 'electron';
+const isDevElectron = process.env.MODE === 'electrondev';
+const isBuildElectron = process.env.MODE === 'electronbuild';
 
 export default defineConfig({
   base: './',
@@ -24,7 +25,8 @@ export default defineConfig({
     // major desktop browsers (https://caniuse.com/mdn-javascript_operators_await_top_level),
     // since mid-2021 (Chromium 89+, Safari 15+, Firefox 89+, Edge 89+, Opera 75+),
     // which represents more than 94% of the global market share.
-    topLevelAwait(),
+    // However, if we are building for electron, no need to use topLevelAwait.
+    (isDevElectron || isBuildElectron) ? {} : topLevelAwait(),
     // devtools(),
     solidPlugin({ ssr: false }),
     eslint(),
@@ -63,15 +65,15 @@ export default defineConfig({
     isolate: false,
   },
   build: {
-    target: 'es2015',
+    target: (isDevElectron || isBuildElectron) ? 'es2022' : 'es2015',
     minify: false,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          gpujs: ['gpu.js'],
-        },
-      },
-    },
+    // rollupOptions: {
+    //   output: {
+    //     manualChunks: {
+    //       gpujs: ['gpu.js'],
+    //     },
+    //   },
+    // },
   },
   esbuild: {
     // keepNames: true,
