@@ -223,7 +223,7 @@ const en = {
       ProportionalSymbols: 'Proportional symbols',
       Labels: 'Labels',
       Discontinuity: 'Discontinuity',
-      Categorical: 'Categorical choropleth',
+      CategoricalChoropleth: 'Categorical choropleth',
       Smoothed: 'Smoothed map',
       Cartogram: 'Cartogram',
       Grid: 'Grid',
@@ -360,6 +360,19 @@ const en = {
   },
   PortrayalSelection: {
     Title: 'Portrayal selection',
+    Title2: 'Options for the selected portrayal',
+    Back: 'Back to portrayal selection',
+    Information: 'Select the representation you wish to apply to your data layer. Greyed-out representations indicate that your dataset does not contain any data allowing you to perform this type of representation. If you suspect this is an error, you can change the field type in the Layer Manager.',
+    Descriptions: {
+      Choropleth: 'A choropleth map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable.',
+      ProportionalSymbols: 'A proportional symbols map is a thematic map in which the size of a symbol varies in proportion to the value of a variable.',
+      Labels: 'A labels map is a thematic map in which the value of a variable is displayed as a label.',
+      Discontinuity: 'A discontinuity map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable, but with a discontinuity at a given threshold.',
+      CategoricalChoropleth: 'A categorical choropleth map is a thematic map in which areas are shaded or patterned in proportion to the value of a categorical variable.',
+      Smoothed: 'A smoothed map is a thematic map in which the value of a variable is smoothed using a kernel density estimation.',
+      Cartogram: 'A cartogram is a thematic map in which the geometry of areas is distorted in proportion to the value of a variable.',
+      Grid: 'A grid map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable, but with a grid layout.',
+    },
   },
   ProjectionSelection: {
     title: 'Projection selection',

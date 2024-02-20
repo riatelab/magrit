@@ -64,6 +64,7 @@ import { datasetCatalogStore } from './store/DatasetCatalogStore';
 import { contextMenuStore, resetContextMenuStore } from './store/ContextMenuStore';
 import { resetUndoRedoStackStore } from './store/stateStackStore';
 import { undo, redo } from './store/undo-redo';
+import { portrayalSelectionStore } from './store/PortrayalSelectionStore';
 
 // Types and enums
 import type {
@@ -76,6 +77,7 @@ import type { TranslationFunctions } from './i18n/i18n-types';
 
 // Styles
 import './styles/Transitions.css';
+import PortrayalSelection from './components/Modals/PortrayalSelection.tsx';
 
 interface ProjectDescription {
   version: string,
@@ -509,6 +511,9 @@ const AppPage: () => JSX.Element = () => {
       </Transition>
       <Show when={fileDropStore.show}>
         <ImportWindow />
+      </Show>
+      <Show when={portrayalSelectionStore.show}>
+        <PortrayalSelection />
       </Show>
       {/*
         We put the NiceAlert component outside of the previous Transition component

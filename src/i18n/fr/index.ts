@@ -224,7 +224,7 @@ const fr = {
       ProportionalSymbols: 'Symboles proportionnels',
       Labels: 'Étiquettes',
       Discontinuity: 'Discontinuité',
-      Categorical: 'Choropleth catégorielle',
+      CategoricalChoropleth: 'Choropleth catégorielle',
       Smoothed: 'Carte lissée',
       Cartogram: 'Cartogramme',
       Grid: 'Carroyage',
@@ -361,6 +361,19 @@ const fr = {
   },
   PortrayalSelection: {
     Title: 'Choix d\'une représentation',
+    Title2: 'Options de création de la représentation',
+    Back: 'Retour au choix de la représentation',
+    Information: 'Sélectionnez la représentation que vous souhaitez appliquer à votre couche de données. Les représentations grisées indiquent que votre jeu de données ne contient de données permettant d\'effectuer ce type de représentation. Si vous pensez qu\'il s\'agit d\'une erreur, vous pouvez modifier le type des champs dans le gestionnaire de couches.',
+    Descriptions: {
+      Choropleth: 'Une carte choroplèthe est une carte thématique dans laquelle les zones sont colorées ou ombrées en fonction de la valeur d\'une variable statistique.',
+      ProportionalSymbols: 'Une carte à symboles proportionnels est une carte thématique dans laquelle des symboles de tailles différentes sont utilisés pour représenter des valeurs différentes.',
+      Labels: 'Une carte avec étiquettes est une carte thématique dans laquelle des étiquettes sont utilisées pour représenter des valeurs différentes.',
+      Discontinuity: 'Une carte avec discontinuité est une carte thématique dans laquelle les discontinuités sont mises en évidence.',
+      CategoricalChoropleth: 'Une carte choroplèthe catégorielle est une carte thématique dans laquelle les zones sont colorées ou ombrées en fonction de la valeur d\'une variable catégorielle.',
+      Smoothed: 'Une carte lissée est une carte thématique dans laquelle les valeurs sont lissées pour une meilleure lisibilité.',
+      Cartogram: 'Un cartogramme est une carte thématique dans laquelle les zones sont redimensionnées en fonction de la valeur d\'une variable statistique.',
+      Grid: 'Un carroyage est une carte thématique dans laquelle les zones sont redimensionnées en fonction de la valeur d\'une variable statistique.',
+    },
   },
   ProjectionSelection: {
     title: 'Sélection de la projection',

@@ -796,7 +796,7 @@ type RootTranslation = {
 			/**
 			 * C​a​t​e​g​o​r​i​c​a​l​ ​c​h​o​r​o​p​l​e​t​h
 			 */
-			Categorical: string
+			CategoricalChoropleth: string
 			/**
 			 * S​m​o​o​t​h​e​d​ ​m​a​p
 			 */
@@ -1266,6 +1266,52 @@ type RootTranslation = {
 		 * P​o​r​t​r​a​y​a​l​ ​s​e​l​e​c​t​i​o​n
 		 */
 		Title: string
+		/**
+		 * O​p​t​i​o​n​s​ ​f​o​r​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​p​o​r​t​r​a​y​a​l
+		 */
+		Title2: string
+		/**
+		 * B​a​c​k​ ​t​o​ ​p​o​r​t​r​a​y​a​l​ ​s​e​l​e​c​t​i​o​n
+		 */
+		Back: string
+		/**
+		 * S​e​l​e​c​t​ ​t​h​e​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​a​p​p​l​y​ ​t​o​ ​y​o​u​r​ ​d​a​t​a​ ​l​a​y​e​r​.​ ​G​r​e​y​e​d​-​o​u​t​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​s​ ​i​n​d​i​c​a​t​e​ ​t​h​a​t​ ​y​o​u​r​ ​d​a​t​a​s​e​t​ ​d​o​e​s​ ​n​o​t​ ​c​o​n​t​a​i​n​ ​a​n​y​ ​d​a​t​a​ ​a​l​l​o​w​i​n​g​ ​y​o​u​ ​t​o​ ​p​e​r​f​o​r​m​ ​t​h​i​s​ ​t​y​p​e​ ​o​f​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​.​ ​I​f​ ​y​o​u​ ​s​u​s​p​e​c​t​ ​t​h​i​s​ ​i​s​ ​a​n​ ​e​r​r​o​r​,​ ​y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​t​h​e​ ​f​i​e​l​d​ ​t​y​p​e​ ​i​n​ ​t​h​e​ ​L​a​y​e​r​ ​M​a​n​a​g​e​r​.
+		 */
+		Information: string
+		Descriptions: {
+			/**
+			 * A​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​a​r​e​a​s​ ​a​r​e​ ​s​h​a​d​e​d​ ​o​r​ ​p​a​t​t​e​r​n​e​d​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​.
+			 */
+			Choropleth: string
+			/**
+			 * A​ ​p​r​o​p​o​r​t​i​o​n​a​l​ ​s​y​m​b​o​l​s​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​s​i​z​e​ ​o​f​ ​a​ ​s​y​m​b​o​l​ ​v​a​r​i​e​s​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​.
+			 */
+			ProportionalSymbols: string
+			/**
+			 * A​ ​l​a​b​e​l​s​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​ ​i​s​ ​d​i​s​p​l​a​y​e​d​ ​a​s​ ​a​ ​l​a​b​e​l​.
+			 */
+			Labels: string
+			/**
+			 * A​ ​d​i​s​c​o​n​t​i​n​u​i​t​y​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​a​r​e​a​s​ ​a​r​e​ ​s​h​a​d​e​d​ ​o​r​ ​p​a​t​t​e​r​n​e​d​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​,​ ​b​u​t​ ​w​i​t​h​ ​a​ ​d​i​s​c​o​n​t​i​n​u​i​t​y​ ​a​t​ ​a​ ​g​i​v​e​n​ ​t​h​r​e​s​h​o​l​d​.
+			 */
+			Discontinuity: string
+			/**
+			 * A​ ​c​a​t​e​g​o​r​i​c​a​l​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​a​r​e​a​s​ ​a​r​e​ ​s​h​a​d​e​d​ ​o​r​ ​p​a​t​t​e​r​n​e​d​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​c​a​t​e​g​o​r​i​c​a​l​ ​v​a​r​i​a​b​l​e​.
+			 */
+			CategoricalChoropleth: string
+			/**
+			 * A​ ​s​m​o​o​t​h​e​d​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​ ​i​s​ ​s​m​o​o​t​h​e​d​ ​u​s​i​n​g​ ​a​ ​k​e​r​n​e​l​ ​d​e​n​s​i​t​y​ ​e​s​t​i​m​a​t​i​o​n​.
+			 */
+			Smoothed: string
+			/**
+			 * A​ ​c​a​r​t​o​g​r​a​m​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​g​e​o​m​e​t​r​y​ ​o​f​ ​a​r​e​a​s​ ​i​s​ ​d​i​s​t​o​r​t​e​d​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​.
+			 */
+			Cartogram: string
+			/**
+			 * A​ ​g​r​i​d​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​a​r​e​a​s​ ​a​r​e​ ​s​h​a​d​e​d​ ​o​r​ ​p​a​t​t​e​r​n​e​d​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​,​ ​b​u​t​ ​w​i​t​h​ ​a​ ​g​r​i​d​ ​l​a​y​o​u​t​.
+			 */
+			Grid: string
+		}
 	}
 	ProjectionSelection: {
 		/**
@@ -2696,7 +2742,7 @@ export type TranslationFunctions = {
 			/**
 			 * Categorical choropleth
 			 */
-			Categorical: () => LocalizedString
+			CategoricalChoropleth: () => LocalizedString
 			/**
 			 * Smoothed map
 			 */
@@ -3166,6 +3212,52 @@ export type TranslationFunctions = {
 		 * Portrayal selection
 		 */
 		Title: () => LocalizedString
+		/**
+		 * Options for the selected portrayal
+		 */
+		Title2: () => LocalizedString
+		/**
+		 * Back to portrayal selection
+		 */
+		Back: () => LocalizedString
+		/**
+		 * Select the representation you wish to apply to your data layer. Greyed-out representations indicate that your dataset does not contain any data allowing you to perform this type of representation. If you suspect this is an error, you can change the field type in the Layer Manager.
+		 */
+		Information: () => LocalizedString
+		Descriptions: {
+			/**
+			 * A choropleth map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable.
+			 */
+			Choropleth: () => LocalizedString
+			/**
+			 * A proportional symbols map is a thematic map in which the size of a symbol varies in proportion to the value of a variable.
+			 */
+			ProportionalSymbols: () => LocalizedString
+			/**
+			 * A labels map is a thematic map in which the value of a variable is displayed as a label.
+			 */
+			Labels: () => LocalizedString
+			/**
+			 * A discontinuity map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable, but with a discontinuity at a given threshold.
+			 */
+			Discontinuity: () => LocalizedString
+			/**
+			 * A categorical choropleth map is a thematic map in which areas are shaded or patterned in proportion to the value of a categorical variable.
+			 */
+			CategoricalChoropleth: () => LocalizedString
+			/**
+			 * A smoothed map is a thematic map in which the value of a variable is smoothed using a kernel density estimation.
+			 */
+			Smoothed: () => LocalizedString
+			/**
+			 * A cartogram is a thematic map in which the geometry of areas is distorted in proportion to the value of a variable.
+			 */
+			Cartogram: () => LocalizedString
+			/**
+			 * A grid map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable, but with a grid layout.
+			 */
+			Grid: () => LocalizedString
+		}
 	}
 	ProjectionSelection: {
 		/**

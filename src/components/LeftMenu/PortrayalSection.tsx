@@ -9,7 +9,12 @@ import {
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { isCandidateForRepresentation } from '../../helpers/layerDescription';
+import {
+  isCandidateForRepresentation,
+  layerGeometryType,
+  layerAnyAvailableVariable,
+  layerAvailableVariables
+} from '../../helpers/layerDescription';
 
 // Stores
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
@@ -30,56 +35,7 @@ import { RepresentationType } from '../../global.d';
 
 // Styles
 import '../../styles/PortrayalSection.css';
-
-function layerAvailableVariables(layerId: string) {
-  const layer = layersDescriptionStore.layers
-    .find((l) => l.id === layerId);
-
-  if (!layer || !layer.fields) {
-    return {
-      hasCategorical: false,
-      hasStock: false,
-      hasRatio: false,
-      hasIdentifier: false,
-    };
-  }
-
-  const hasCategorical = layer.fields.some((f) => f.type === 'categorical');
-  const hasStock = layer.fields.some((f) => f.type === 'stock');
-  const hasRatio = layer.fields.some((f) => f.type === 'ratio');
-  const hasIdentifier = layer.fields.some((f) => f.type === 'identifier');
-  // const hasUnknown = layer.fields.some((f) => f.type === 'unknown');
-
-  return {
-    hasCategorical,
-    hasStock,
-    hasRatio,
-    hasIdentifier,
-    // hasUnknown,
-  };
-}
-
-function layerGeometryType(layerId: string) {
-  const layer = layersDescriptionStore.layers
-    .find((l) => l.id === layerId);
-
-  if (!layer) {
-    return null;
-  }
-
-  return layer.type;
-}
-
-function layerAnyAvailableVariable(layerId: string) {
-  const layer = layersDescriptionStore.layers
-    .find((l) => l.id === layerId);
-
-  if (!layer || !layer.fields) {
-    return false;
-  }
-
-  return layer.fields.length > 0;
-}
+import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
 
 export default function PortrayalSection(): JSX.Element {
   const { LL } = useI18nContext();
@@ -142,7 +98,7 @@ export default function PortrayalSection(): JSX.Element {
     //   - geometry: point, line, polygon
     if (availableVariables()?.hasCategorical) {
       entries.push({
-        name: LL().PortrayalSection.PortrayalTypes.Categorical(),
+        name: LL().PortrayalSection.PortrayalTypes.CategoricalChoropleth(),
         value: RepresentationType.categoricalChoropleth,
       });
     }
@@ -217,15 +173,25 @@ export default function PortrayalSection(): JSX.Element {
       } }
     />
     <Show when={ targetLayer() }>
-      <DropdownMenu
-        id={'portrayal-section__portrayal-dropdown'}
-        entries={ availablePortrayals() }
-        defaultEntry={{ name: LL().PortrayalSection.ChooseARepresentation() }}
-        onChange={(v) => setSelectedPortrayal(v as RepresentationType)}
-      />
+      <button
+        onClick={() => {
+          setPortrayalSelectionStore({
+            show: true,
+            layerId: targetLayer()!,
+          });
+        }}
+      >
+        Open Portrayal choice modal
+      </button>
+      {/* <DropdownMenu */}
+      {/*   id={'portrayal-section__portrayal-dropdown'} */}
+      {/*   entries={ availablePortrayals() } */}
+      {/*   defaultEntry={{ name: LL().PortrayalSection.ChooseARepresentation() }} */}
+      {/*   onChange={(v) => setSelectedPortrayal(v as RepresentationType)} */}
+      {/* /> */}
     </Show>
     <hr />
-    <div class="portrayal-section__portrayal-options">
+{/*    <div class="portrayal-section__portrayal-options">
       <Switch>
         <Match when={ selectedPortrayal() === RepresentationType.choropleth }>
           <ChoroplethSettings layerId={ targetLayer() as string } />
@@ -252,6 +218,6 @@ export default function PortrayalSection(): JSX.Element {
           <GriddingSettings layerId={ targetLayer() as string } />
         </Match>
       </Switch>
-    </div>
+    </div> */}
   </div>;
 }

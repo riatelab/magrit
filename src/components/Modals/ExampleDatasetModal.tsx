@@ -91,7 +91,9 @@ const datasets = Array.from({ length: 100 })
     return o;
   });
 
-function CardDatasetEntry(ds: DatasetEntry & { onClick: any }): JSX.Element {
+function CardDatasetEntry(
+  ds: DatasetEntry & { onClick: (arg0: MouseEvent) => void },
+): JSX.Element {
   const { locale } = useI18nContext();
   return <div class="card" style={{ margin: '1em' }} onClick={(e) => ds.onClick(e)}>
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
