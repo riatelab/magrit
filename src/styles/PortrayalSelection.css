@@ -1,0 +1,3 @@
+.portrayal-selection .card.is-disabled {
+    filter: opacity(0.5);
+}

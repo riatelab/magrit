@@ -229,6 +229,7 @@ const en = {
       Grid: 'Grid',
       NoPortrayal: 'No portrayal for the selected layer - Please verify the typing of the fields or select another layer',
     },
+    OpenModal: 'Open portrayal selection modal...',
     RepresentationChoice: 'Representation choice',
     ChooseARepresentation: 'Choose a representation',
     DropdownPrefixLayer: 'Layer: ',
@@ -363,7 +364,7 @@ const en = {
     Title2: 'Options for the selected portrayal',
     Back: 'Back to portrayal selection',
     Information: 'Select the representation you wish to apply to your data layer. Greyed-out representations indicate that your dataset does not contain any data allowing you to perform this type of representation. If you suspect this is an error, you can change the field type in the Layer Manager.',
-    Descriptions: {
+    ShortDescriptions: {
       Choropleth: 'A choropleth map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable.',
       ProportionalSymbols: 'A proportional symbols map is a thematic map in which the size of a symbol varies in proportion to the value of a variable.',
       Labels: 'A labels map is a thematic map in which the value of a variable is displayed as a label.',
@@ -373,11 +374,14 @@ const en = {
       Cartogram: 'A cartogram is a thematic map in which the geometry of areas is distorted in proportion to the value of a variable.',
       Grid: 'A grid map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable, but with a grid layout.',
     },
+    LongDescriptions: {
+      Choropleth: '',
+    },
   },
   ProjectionSelection: {
     title: 'Projection selection',
     SearchProjection: 'Enter an EPSG code or a projection name',
-    NMatchingProjections: '{{One projection found | ?? projections found}}',
+    NMatchingProjections: '{{No matching projection | One projection found | ?? projections found}}',
     TooManyResults: 'Too many results, please refine your search.',
     Kind: 'Kind:',
     ProjCRS: 'Projected coordinate reference system',

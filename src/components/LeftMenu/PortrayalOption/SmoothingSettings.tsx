@@ -21,6 +21,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
 
 // Helper
 import { useI18nContext } from '../../../i18n/i18n-solid';
@@ -52,6 +53,7 @@ import {
   SmoothingMethod,
   type StewartParameters,
 } from '../../../global.d';
+import { openLayerManager } from '../LeftMenu.tsx';
 
 async function onClickValidate(
   referenceLayerId: string,
@@ -172,7 +174,7 @@ async function onClickValidate(
     fillOpacity: 1,
     dropShadow: false,
     blurFilter: false,
-    shapeRendering: 'crispEdges',
+    shapeRendering: 'auto',
     legend: {
       // Part common to all legends
       title: {
@@ -303,6 +305,9 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       resolution: targetResolution(),
     } as GridParameters;
 
+    // Close the current modal
+    setPortrayalSelectionStore({ show: false, layerId: '' });
+
     // Display loading overlay
     setLoading(true);
 
@@ -311,7 +316,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     // Actually make the new layer
     setTimeout(() => {
       onClickValidate(
-        props.layerId,
+        layerDescription().id,
         layerName,
         targetVariable(),
         gridParams,
@@ -320,6 +325,9 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       ).then(() => {
         // Hide loading overlay
         setLoading(false);
+
+        // Open the LayerManager to show the new layer
+        openLayerManager();
       });
     }, 0);
   };

@@ -35,12 +35,13 @@ import InputResultName from './InputResultName.tsx';
 
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setGlobalStore, setLoading } from '../../../store/GlobalStore';
+import { setLoading } from '../../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
 
 // Types / Interfaces / Enums
 import type {
@@ -56,6 +57,7 @@ import {
   ProportionalSymbolsSymbolType,
 } from '../../../global.d';
 import type { PortrayalSettingsProps } from './common';
+import { openLayerManager } from '../LeftMenu.tsx';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -294,6 +296,10 @@ export default function ProportionalSymbolsSettings(
       newLayerName() || LL().PortrayalSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
+
+    // Close the current modal
+    setPortrayalSelectionStore({ show: false, layerId: '' });
+
     // Display loading overlay
     setLoading(true);
 
@@ -314,6 +320,9 @@ export default function ProportionalSymbolsSettings(
       );
       // Remove overlay
       setLoading(false);
+
+      // Open the LayerManager to show the new layer
+      openLayerManager();
     }, 0);
   };
 

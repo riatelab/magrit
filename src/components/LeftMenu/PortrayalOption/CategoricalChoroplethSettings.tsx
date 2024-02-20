@@ -20,12 +20,13 @@ import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setGlobalStore, setLoading } from '../../../store/GlobalStore';
+import { setLoading } from '../../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
 
 // Subcomponents
 import InputResultName from './InputResultName.tsx';
@@ -41,6 +42,7 @@ import {
   Orientation,
   RepresentationType,
 } from '../../../global.d';
+import { openLayerManager } from '../LeftMenu.tsx';
 
 const defaultNoDataColor = '#ffffff';
 
@@ -173,6 +175,9 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
+    // Close the current modal
+    setPortrayalSelectionStore({ show: false, layerId: '' });
+
     // Display loading overlay
     setLoading(true);
 
@@ -181,12 +186,15 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
     // Create the portrayal
     setTimeout(() => {
       onClickValidate(
-        props.layerId,
+        layerDescription().id,
         targetVariable(),
         layerName,
       );
       // Hide loading overlay
       setLoading(false);
+
+      // Open the LayerManager to show the new layer
+      openLayerManager();
     }, 0);
   };
 

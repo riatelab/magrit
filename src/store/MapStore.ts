@@ -243,9 +243,12 @@ createEffect(
       let projection;
       if (mapStore.projection.type === 'd3') {
         projection = d3[mapStore.projection.value]()
-          .center(mapStore.center)
           .translate(mapStore.translate)
           .scale(mapStore.scale);
+
+        if (projection.center) {
+          projection.center(mapStore.center);
+        }
       } else { // mapStore.projection.type === 'proj4'
         console.log(mapStore.projection.value);
         projection = getD3ProjectionFromProj4(getProjection(mapStore.projection.value));

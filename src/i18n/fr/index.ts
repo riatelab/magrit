@@ -230,6 +230,7 @@ const fr = {
       Grid: 'Carroyage',
       NoPortrayal: 'Aucune représentation pour la couche choisie - Veuillez vérifier le types des champs de la couche ou sélectionner une autre couche',
     },
+    OpenModal: 'Ouvrir la fenêtre de paramétrage de la représentation',
     RepresentationChoice: 'Choix de la représentation',
     ChooseARepresentation: 'Choisir une représentation',
     DropdownPrefixLayer: 'Couche : ',
@@ -343,7 +344,7 @@ const fr = {
   JoinPanel: {
     Title: 'Joindre à une couche géospatiale',
     Information: 'Cette fonctionnalité permet de joindre les données d\'un tableau à une couche géospatiale. Les données du tableau sont ajoutées à la couche géospatiale en fonction d\'un champ commun aux deux jeux de données.',
-    Information2: 'Seulement les champs contenant des valeurs unique peuvent être utilisés pour réaliser la jointure.',
+    Information2: 'Seulement les champs contenant des valeurs uniques peuvent être utilisés pour réaliser la jointure.',
     TargetLayer: 'Sélectionner la couche cible',
     TargetLayerPlaceholder: 'Sélectionner une couche',
     JoinFieldTable: 'Champ de la table à utiliser pour la jointure',
@@ -363,8 +364,8 @@ const fr = {
     Title: 'Choix d\'une représentation',
     Title2: 'Options de création de la représentation',
     Back: 'Retour au choix de la représentation',
-    Information: 'Sélectionnez la représentation que vous souhaitez appliquer à votre couche de données. Les représentations grisées indiquent que votre jeu de données ne contient de données permettant d\'effectuer ce type de représentation. Si vous pensez qu\'il s\'agit d\'une erreur, vous pouvez modifier le type des champs dans le gestionnaire de couches.',
-    Descriptions: {
+    Information: 'Sélectionnez la représentation que vous souhaitez appliquer à votre couche de données. Les représentations grisées indiquent que votre jeu de données ne contient pas de données permettant d\'effectuer ce type de représentation. Si vous pensez qu\'il s\'agit d\'une erreur, vous pouvez modifier le type des champs dans le gestionnaire de couches.',
+    ShortDescriptions: {
       Choropleth: 'Une carte choroplèthe est une carte thématique dans laquelle les zones sont colorées ou ombrées en fonction de la valeur d\'une variable statistique.',
       ProportionalSymbols: 'Une carte à symboles proportionnels est une carte thématique dans laquelle des symboles de tailles différentes sont utilisés pour représenter des valeurs différentes.',
       Labels: 'Une carte avec étiquettes est une carte thématique dans laquelle des étiquettes sont utilisées pour représenter des valeurs différentes.',
@@ -374,11 +375,14 @@ const fr = {
       Cartogram: 'Un cartogramme est une carte thématique dans laquelle les zones sont redimensionnées en fonction de la valeur d\'une variable statistique.',
       Grid: 'Un carroyage est une carte thématique dans laquelle les zones sont redimensionnées en fonction de la valeur d\'une variable statistique.',
     },
+    LongDescriptions: {
+      Choropleth: '',
+    },
   },
   ProjectionSelection: {
     title: 'Sélection de la projection',
     SearchProjection: 'Entrer un code EPSG ou un nom de projection',
-    NMatchingProjections: '{{ Une projection | ?? projections }} correspondante(s)',
+    NMatchingProjections: '{{Aucune projection correspondante | Une projection correspondante | ?? projections correspondantes}}',
     TooManyResults: 'Trop de résultats, veuillez affiner votre recherche.',
     Kind: 'Type :',
     ProjCRS: 'Système de référence spatiale projeté',

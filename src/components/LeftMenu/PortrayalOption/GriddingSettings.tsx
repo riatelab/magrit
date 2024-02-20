@@ -21,6 +21,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
 
 // Helper
 import { useI18nContext } from '../../../i18n/i18n-solid';
@@ -50,6 +51,7 @@ import {
   LayerDescription, type LegendTextElement, LegendType, Orientation,
   RepresentationType,
 } from '../../../global.d';
+import { openLayerManager } from '../LeftMenu.tsx';
 
 async function onClickValidate(
   referenceLayerId: string,
@@ -214,6 +216,9 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       resolution: targetResolution(),
     } as GridParameters;
 
+    // Close the current modal
+    setPortrayalSelectionStore({ show: false, layerId: '' });
+
     // Display loading overlay
     setLoading(true);
 
@@ -230,6 +235,9 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       ).then(() => {
         // Hide loading overlay
         setLoading(false);
+
+        // Open the LayerManager to show the new layer
+        openLayerManager();
       });
     }, 0);
   };

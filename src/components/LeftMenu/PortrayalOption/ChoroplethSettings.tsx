@@ -18,12 +18,13 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 // Stores
 import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
 import { setClassificationPanelStore } from '../../../store/ClassificationPanelStore';
-import { setGlobalStore, setLoading } from '../../../store/GlobalStore';
+import { setLoading } from '../../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
 
 // Helper
 import { useI18nContext } from '../../../i18n/i18n-solid';
@@ -59,6 +60,7 @@ import {
   RepresentationType,
 } from '../../../global.d';
 import InputFieldSelect from '../../Inputs/InputSelect.tsx';
+import { openLayerManager } from '../LeftMenu.tsx';
 
 // eslint-disable-next-line prefer-destructuring
 const defaultColorScheme = applicationSettingsStore.defaultColorScheme;
@@ -203,6 +205,10 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
       newLayerName() || LL().PortrayalSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
+
+    // Close the current modal
+    setPortrayalSelectionStore({ show: false, layerId: '' });
+
     // Display loading overlay
     setLoading(true);
 
@@ -211,7 +217,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
     // Actually create the layer
     setTimeout(() => {
       onClickValidate(
-        props.layerId,
+        layerDescription().id,
         targetVariable(),
         targetClassification(),
         layerName,
@@ -220,6 +226,9 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
       );
       // Hide loading overlay
       setLoading(false);
+
+      // Open the LayerManager to show the new layer
+      openLayerManager();
     }, 0);
   };
 

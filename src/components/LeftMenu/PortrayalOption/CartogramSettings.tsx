@@ -33,6 +33,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
 
 // Types / Interfaces / Enums
 import type { PortrayalSettingsProps } from './common';
@@ -42,6 +43,7 @@ import {
   type LayerDescriptionCartogram,
   RepresentationType,
 } from '../../../global.d';
+import { openLayerManager } from '../LeftMenu.tsx';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -154,6 +156,9 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
+    // Close the current modal
+    setPortrayalSelectionStore({ show: false, layerId: '' });
+
     // Display loading overlay
     setLoading(true);
 
@@ -169,6 +174,9 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
       );
       // Hide loading overlay
       setLoading(false);
+
+      // Open the LayerManager to show the new layer
+      openLayerManager();
     }, 0);
   };
 

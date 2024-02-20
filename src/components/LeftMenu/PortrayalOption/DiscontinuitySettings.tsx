@@ -26,6 +26,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
 
 // Subcomponents
 import InputFieldSelect from '../../Inputs/InputSelect.tsx';
@@ -43,6 +44,7 @@ import {
   LegendType,
   RepresentationType,
 } from '../../../global.d';
+import { openLayerManager } from '../LeftMenu.tsx';
 
 const subsetClassificationMethodsForDiscontinuity = [
   'quantiles',
@@ -177,6 +179,9 @@ export default function DiscontinuitySettings(
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
+    // Close the current modal
+    setPortrayalSelectionStore({ show: false, layerId: '' });
+
     // Display loading overlay
     setLoading(true);
 
@@ -193,6 +198,9 @@ export default function DiscontinuitySettings(
       );
       // Hide loading overlay
       setLoading(false);
+
+      // Open the LayerManager to show the new layer
+      openLayerManager();
     }, 0);
   };
 

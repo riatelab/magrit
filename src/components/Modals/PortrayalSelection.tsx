@@ -1,9 +1,9 @@
 // Imports from solid-js
 import {
-  createSignal, For,
+  createSignal,
+  For,
   type JSX,
   Match,
-  onMount,
   Show,
   Switch,
 } from 'solid-js';
@@ -13,8 +13,12 @@ import { FaSolidArrowLeftLong } from 'solid-icons/fa';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { layerAvailableVariables, layerGeometryType } from '../../helpers/layerDescription';
+import { layerAnyAvailableVariable, layerAvailableVariables, layerGeometryType } from '../../helpers/layerDescription';
 
+// Stores
+import { portrayalSelectionStore, setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+
+// Subcomponents
 import CartogramSettings from '../LeftMenu/PortrayalOption/CartogramSettings.tsx';
 import ChoroplethSettings from '../LeftMenu/PortrayalOption/ChoroplethSettings.tsx';
 import ProportionalSymbolsSettings from '../LeftMenu/PortrayalOption/ProportionalSymbolsSettings.tsx';
@@ -25,6 +29,9 @@ import SmoothingSettings from '../LeftMenu/PortrayalOption/SmoothingSettings.tsx
 import GriddingSettings from '../LeftMenu/PortrayalOption/GriddingSettings.tsx';
 
 import { RepresentationType } from '../../global.d';
+
+import '../../styles/PortrayalSelection.css';
+import InformationBanner from '../InformationBanner.tsx';
 
 interface PortrayalDescription {
   // id: string;
@@ -94,7 +101,7 @@ function CardPortrayal(
     </header>
     <section class="card-content">
       <div class="content">
-        { LL().PortrayalSelection.Descriptions[pDesc.name] }
+        { LL().PortrayalSelection.ShortDescriptions[pDesc.name] }
       </div>
 
     </section>
@@ -102,7 +109,7 @@ function CardPortrayal(
 }
 
 export default function PortrayalSelection(
-  props: {
+  ppp: {
     layerId?: string,
   },
 ): JSX.Element {
@@ -112,6 +119,9 @@ export default function PortrayalSelection(
     setSelectedPortrayal,
   ] = createSignal<string | null>(null);
   let refParentNode: HTMLDivElement;
+
+  // Todo: choose if we want to use the store or the props
+  const props = portrayalSelectionStore;
 
   // Clone the portrayalDescriptions array
   const portrayals = portrayalDescriptions.slice();
@@ -123,17 +133,57 @@ export default function PortrayalSelection(
     });
   } else {
     // What are the available variable for the selected layer?
+    const hasAnyVariable = layerAnyAvailableVariable(props.layerId);
     const vars = layerAvailableVariables(props.layerId);
     // What is the geometry type for the selected layer ?
     const geomType = layerGeometryType(props.layerId);
 
     // Set the enable flag for
-    portrayals.forEach()
+    portrayals.forEach((p) => {
+      switch (p.representationType) {
+        case RepresentationType.choropleth:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = vars.hasRatio;
+          break;
+        case RepresentationType.proportionalSymbols:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = vars.hasStock;
+          break;
+        case RepresentationType.labels:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = hasAnyVariable;
+          break;
+        case RepresentationType.discontinuity:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = (vars.hasRatio || vars.hasStock) && geomType === 'polygon';
+          break;
+        case RepresentationType.categoricalChoropleth:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = vars.hasCategorical;
+          break;
+        case RepresentationType.grid:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = vars.hasStock && geomType === 'polygon';
+          break;
+        case RepresentationType.smoothed:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = vars.hasStock && (geomType === 'polygon' || geomType === 'point');
+          break;
+        case RepresentationType.cartogram:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = vars.hasStock;
+          break;
+        default:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = false;
+          break;
+      }
+    });
   }
 
   return <div class="modal-window modal portrayal-selection" style={{ display: 'flex' }} ref={refParentNode!}>
     <div class="modal-background" />
-    <div class="modal-card" style={{ width: '90vw', height: '90vh' }}>
+    <div class="modal-card" style={{ width: '70vw', height: '90vh' }}>
       <header class="modal-card-head">
         <Show when={!selectedPortrayal()}>
           <p class="modal-card-title">{ LL().PortrayalSelection.Title() }</p>
@@ -146,7 +196,9 @@ export default function PortrayalSelection(
       </header>
       <section class="modal-card-body">
         <Show when={!selectedPortrayal()}>
-          <div class="m-6">{LL().PortrayalSelection.Information()}</div>
+          <InformationBanner expanded={true}>
+            <p>{ LL().PortrayalSelection.Information() }</p>
+          </InformationBanner>
           <div
             style={{
               display: 'grid',
@@ -158,7 +210,7 @@ export default function PortrayalSelection(
                 (p) => <CardPortrayal
                   {...p}
                   onClick={(e, pDesc) => {
-                    setSelectedPortrayal(pDesc.name);
+                    setSelectedPortrayal(pDesc.representationType);
                   }}
                 />
               }
@@ -205,7 +257,7 @@ export default function PortrayalSelection(
           </Show>
         </div>
         <div>
-          <Show when={selectedPortrayal()}>
+          <Show when={selectedPortrayal() && true === false}>
             <button
               class="button is-success confirm-button"
             >
@@ -214,6 +266,7 @@ export default function PortrayalSelection(
           </Show>
           <button
             class="button cancel-button"
+            onClick={() => { setPortrayalSelectionStore({ show: false, layerId: '' }); }}
           >
             { LL().CancelButton() }
           </button>

@@ -815,6 +815,10 @@ type RootTranslation = {
 			NoPortrayal: string
 		}
 		/**
+		 * O​p​e​n​ ​p​o​r​t​r​a​y​a​l​ ​s​e​l​e​c​t​i​o​n​ ​m​o​d​a​l​.​.​.
+		 */
+		OpenModal: string
+		/**
 		 * R​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​c​h​o​i​c​e
 		 */
 		RepresentationChoice: string
@@ -1278,7 +1282,7 @@ type RootTranslation = {
 		 * S​e​l​e​c​t​ ​t​h​e​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​a​p​p​l​y​ ​t​o​ ​y​o​u​r​ ​d​a​t​a​ ​l​a​y​e​r​.​ ​G​r​e​y​e​d​-​o​u​t​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​s​ ​i​n​d​i​c​a​t​e​ ​t​h​a​t​ ​y​o​u​r​ ​d​a​t​a​s​e​t​ ​d​o​e​s​ ​n​o​t​ ​c​o​n​t​a​i​n​ ​a​n​y​ ​d​a​t​a​ ​a​l​l​o​w​i​n​g​ ​y​o​u​ ​t​o​ ​p​e​r​f​o​r​m​ ​t​h​i​s​ ​t​y​p​e​ ​o​f​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​.​ ​I​f​ ​y​o​u​ ​s​u​s​p​e​c​t​ ​t​h​i​s​ ​i​s​ ​a​n​ ​e​r​r​o​r​,​ ​y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​t​h​e​ ​f​i​e​l​d​ ​t​y​p​e​ ​i​n​ ​t​h​e​ ​L​a​y​e​r​ ​M​a​n​a​g​e​r​.
 		 */
 		Information: string
-		Descriptions: {
+		ShortDescriptions: {
 			/**
 			 * A​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​a​r​e​a​s​ ​a​r​e​ ​s​h​a​d​e​d​ ​o​r​ ​p​a​t​t​e​r​n​e​d​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​.
 			 */
@@ -1312,6 +1316,9 @@ type RootTranslation = {
 			 */
 			Grid: string
 		}
+		LongDescriptions: {
+			Choropleth: string
+		}
 	}
 	ProjectionSelection: {
 		/**
@@ -1323,7 +1330,7 @@ type RootTranslation = {
 		 */
 		SearchProjection: string
 		/**
-		 * {​{​O​n​e​ ​p​r​o​j​e​c​t​i​o​n​ ​f​o​u​n​d​|​?​?​ ​p​r​o​j​e​c​t​i​o​n​s​ ​f​o​u​n​d​}​}
+		 * {​{​N​o​ ​m​a​t​c​h​i​n​g​ ​p​r​o​j​e​c​t​i​o​n​|​O​n​e​ ​p​r​o​j​e​c​t​i​o​n​ ​f​o​u​n​d​|​?​?​ ​p​r​o​j​e​c​t​i​o​n​s​ ​f​o​u​n​d​}​}
 		 */
 		NMatchingProjections: string
 		/**
@@ -2761,6 +2768,10 @@ export type TranslationFunctions = {
 			NoPortrayal: () => LocalizedString
 		}
 		/**
+		 * Open portrayal selection modal...
+		 */
+		OpenModal: () => LocalizedString
+		/**
 		 * Representation choice
 		 */
 		RepresentationChoice: () => LocalizedString
@@ -3224,7 +3235,7 @@ export type TranslationFunctions = {
 		 * Select the representation you wish to apply to your data layer. Greyed-out representations indicate that your dataset does not contain any data allowing you to perform this type of representation. If you suspect this is an error, you can change the field type in the Layer Manager.
 		 */
 		Information: () => LocalizedString
-		Descriptions: {
+		ShortDescriptions: {
 			/**
 			 * A choropleth map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable.
 			 */
@@ -3258,6 +3269,9 @@ export type TranslationFunctions = {
 			 */
 			Grid: () => LocalizedString
 		}
+		LongDescriptions: {
+			Choropleth: () => LocalizedString
+		}
 	}
 	ProjectionSelection: {
 		/**
@@ -3269,7 +3283,7 @@ export type TranslationFunctions = {
 		 */
 		SearchProjection: () => LocalizedString
 		/**
-		 * {{One projection found|?? projections found}}
+		 * {{No matching projection|One projection found|?? projections found}}
 		 */
 		NMatchingProjections: (arg0: number | string | boolean) => LocalizedString
 		/**

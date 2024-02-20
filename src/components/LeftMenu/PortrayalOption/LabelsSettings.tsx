@@ -18,6 +18,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
 
 // Helpers
 import { useI18nContext } from '../../../i18n/i18n-solid';
@@ -40,6 +41,7 @@ import {
   RepresentationType,
 } from '../../../global.d';
 import type { PortrayalSettingsProps } from './common';
+import { openLayerManager } from '../LeftMenu.tsx';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -161,6 +163,9 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
       layersDescriptionStore.layers.map((l) => l.name),
     );
 
+    // Close the current modal
+    setPortrayalSelectionStore({ show: false, layerId: '' });
+
     // Display loading overlay
     setLoading(true);
 
@@ -169,12 +174,15 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
     // Create the portrayal
     setTimeout(() => {
       onClickValidate(
-        props.layerId,
+        layerDescription().id,
         targetVariable(),
         layerName,
       );
       // Hide loading overlay
       setLoading(false);
+
+      // Open the LayerManager to show the new layer
+      openLayerManager();
     }, 0);
   };
 

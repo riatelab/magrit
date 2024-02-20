@@ -1,5 +1,5 @@
-import { LayerDescription } from '../global';
-import { layersDescriptionStore } from '../store/LayersDescriptionStore.ts';
+import { layersDescriptionStore } from '../store/LayersDescriptionStore';
+import type { LayerDescription } from '../global';
 
 const supportedLayerTypes = ['point', 'linestring', 'polygon'];
 const isExportableLayer = (layerDescription: LayerDescription) => (
