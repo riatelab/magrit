@@ -44,6 +44,7 @@ import SimplificationModal from './Modals/SimplificationModal.tsx';
 // Styles
 import '../styles/ImportWindow.css';
 import { openLayerManager } from './LeftMenu/LeftMenu.tsx';
+import InformationBanner from './InformationBanner.tsx';
 
 interface LayerOrTableDescription {
   name: string,
@@ -829,21 +830,10 @@ export default function ImportWindow(): JSX.Element {
           </tbody>
         </table>
       </section>
-      <section
-        class="has-text-centered"
-        style={{
-          padding: '20px',
-          background: '#cafbe5',
-          'border-top': '1px solid #dbdbdb',
-        }}
-      >
-        <FaSolidCircleInfo
-          fill="darkgreen"
-          style={{ height: '1.5em', width: '1.5em' }}
-        />
+      <InformationBanner>
         <p>{LL().ImportWindow.SupportedVectorFormats()}</p>
         <p>{LL().ImportWindow.SupportedTabularFormats()}</p>
-      </section>
+      </InformationBanner>
       <footer class="modal-card-foot">
         <button
           disabled={

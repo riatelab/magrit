@@ -34,6 +34,7 @@ import MultipleSelect from '../MultipleSelect.tsx';
 
 // Types / Interfaces / Enums
 import type { GeoJSONFeature, LayerDescription, TableDescription } from '../../global';
+import InformationBanner from '../InformationBanner.tsx';
 
 interface JoinResult {
   nFeaturesTable: number,
@@ -332,22 +333,10 @@ export default function JoinPanel(
   });
 
   return <div class="join-panel" ref={refJoinPanel!}>
-    <section
-      class="has-text-centered"
-      style={{
-        padding: '20px',
-        margin: '0 -20px 20px',
-        background: '#cafbe5',
-        'border-top': '1px solid #dbdbdb',
-      }}
-    >
-      <FaSolidCircleInfo
-        fill="darkgreen"
-        style={{ height: '1.5em', width: '1.5em' }}
-      />
+    <InformationBanner expanded={true}>
       <p>{LL().JoinPanel.Information()}</p>
       <p>{LL().JoinPanel.Information2()}</p>
-    </section>
+    </InformationBanner>
     <InputFieldSelect
       label={LL().JoinPanel.TargetLayer()}
       onChange={(v) => {
