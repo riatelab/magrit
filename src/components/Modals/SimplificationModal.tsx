@@ -35,6 +35,7 @@ import { GeoJSONFeature, GeoJSONFeatureCollection } from '../../global';
 
 // Style
 import '../../styles/SimplificationModal.css';
+import '../../styles/RangeSlider.css';
 
 interface SimplificationInfo {
   name: string;

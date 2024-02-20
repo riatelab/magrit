@@ -1,5 +1,7 @@
 import { createEffect, createSignal, JSX } from 'solid-js';
 
+import '../../styles/RangeSlider.css';
+
 interface InputFieldRangeNumberProps {
   label: string;
   // formater?: (value: number) => string;
