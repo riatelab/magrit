@@ -5,6 +5,7 @@ import eslint from 'vite-plugin-eslint';
 import solidPlugin from 'vite-plugin-solid';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
+import svgLoader from 'vite-svg-loader';
 // import devtools from 'solid-devtools/vite';
 import electron from 'vite-plugin-electron/simple';
 
@@ -29,6 +30,7 @@ export default defineConfig({
     (isDevElectron || isBuildElectron) ? {} : topLevelAwait(),
     // devtools(),
     solidPlugin({ ssr: false }),
+    svgLoader(),
     eslint(),
     isDevElectron ? electron({
       main: {

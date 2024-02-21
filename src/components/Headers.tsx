@@ -22,7 +22,7 @@ import { useI18nContext } from '../i18n/i18n-solid';
 import DropdownLanguage from './DropdownLanguage.tsx';
 
 // Assets
-import img from '../assets/magrit.svg';
+import img from '../assets/magrit.svg?url';
 
 // Styles
 import '../styles/Headers.css';

@@ -17,6 +17,9 @@ import type { TranslationFunctions } from '../../i18n/i18n-types';
 import { generateIdLayoutFeature } from '../../helpers/layoutFeatures';
 import sanitizeSVG from '../../helpers/sanitize-svg';
 
+// All the images of our symbol library
+import images from '../../helpers/symbol-library';
+
 // Types / Interfaces / Enums
 import {
   type BackgroundRect,
@@ -79,12 +82,25 @@ export default function ImageSymbolSelection(
         height: '20vh',
         overflow: 'auto',
         border: 'solid 1px rgb(29, 88, 139)',
+        background: 'whitesmoke',
       }}
     >
       {/* TODO: add list of symbols... */}
-      <For each={[]}>
+      <For each={images}>
         {
-          (elem) => (<div></div>)
+          (svgContent) => <div
+            style={{
+              width: '40px',
+              height: '40px',
+              display: 'inline-block',
+              'background-size': '40px 40px',
+              'background-image': `url(data:image/svg+xml;base64,${btoa(svgContent)})`,
+            }}
+            onClick={() => {
+              setImageType(ImageType.SVG);
+              setImageContent(svgContent);
+            }}
+          ></div>
         }
       </For>
     </div>
@@ -132,6 +148,7 @@ export default function ImageSymbolSelection(
         height: '60px',
         overflow: 'auto',
         border: 'solid 1px rgb(29, 88, 139)',
+        'background-color': 'whitesmoke',
         'background-image': backgroundValue(imageContent()),
         'background-repeat': 'no-repeat',
         'background-size': 'cover',
