@@ -15,6 +15,7 @@ import { LayersDescriptionStoreType, setLayersDescriptionStore } from '../../sto
 // Helpers
 import type { TranslationFunctions } from '../../i18n/i18n-types';
 import { generateIdLayoutFeature } from '../../helpers/layoutFeatures';
+import sanitizeSVG from '../../helpers/sanitize-svg';
 
 // Types / Interfaces / Enums
 import {
@@ -105,7 +106,7 @@ export default function ImageSymbolSelection(
                 const reader = new FileReader();
                 reader.onload = (ev) => {
                   setImageType(ImageType.SVG);
-                  setImageContent(ev.target?.result as string);
+                  setImageContent(sanitizeSVG(ev.target?.result as string));
                 };
                 reader.readAsText(file);
               } else {

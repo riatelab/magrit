@@ -6,11 +6,6 @@ import {
   onMount,
 } from 'solid-js';
 
-// Stores
-import { globalStore } from '../../store/GlobalStore';
-import { setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
-import { mapStore } from '../../store/MapStore';
-
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import {
@@ -23,6 +18,12 @@ import {
 
 // Types / Interfaces / Enums
 import type { LayoutFeature, Image } from '../../global';
+
+const createCustomViewBox = (content: string): string | undefined => {
+  const width = content.match(/width="(\d+(\.\d+)?)"/)?.[1];
+  const height = content.match(/height="(\d+(\.\d+)?)"/)?.[1];
+  return (width && height) ? `0 0 ${width} ${height}` : undefined;
+};
 
 export default function ImageRenderer(props: Image): JSX.Element {
   const { LL } = useI18nContext();
@@ -51,10 +52,10 @@ export default function ImageRenderer(props: Image): JSX.Element {
       triggerContextMenuLayoutFeature(e, props.id, true, false, LL);
     }}
     onDblClick={() => { makeLayoutFeaturesSettingsModal(props.id, LL); }}
-  transform={`translate(${props.position[0]}, ${props.position[1]})`}
+    transform={`translate(${props.position[0]}, ${props.position[1]})`}
   >
     <g
-      transform={`rotate(${props.rotation} ${props.size / 2} ${props.size / 2})`}
+      transform={props.rotation !== 0 ? `rotate(${props.rotation} ${props.size / 2} ${props.size / 2})` : undefined}
       fill={props.fillColor}
       fill-opacity={props.fillOpacity}
       stroke={props.strokeColor}
@@ -63,9 +64,14 @@ export default function ImageRenderer(props: Image): JSX.Element {
     >
       {
         props.imageType === 'SVG'
-          // eslint-disable-next-line solid/no-innerhtml
-          ? <svg width={props.size} height={props.size} innerHTML={props.content} />
-          : <image href={props.content} width={props.size} height={props.size} />
+          ? <svg
+            // eslint-disable-next-line solid/no-innerhtml
+              innerHTML={props.content}
+              viewBox={createCustomViewBox(props.content)}
+              width={props.size}
+              height={props.size}
+            />
+          : <image width={props.size} height={props.size} href={props.content} />
       }
     </g>
     <RectangleBox backgroundRect={props.backgroundRect} />

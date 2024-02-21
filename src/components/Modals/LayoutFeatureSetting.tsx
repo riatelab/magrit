@@ -531,7 +531,7 @@ function makeSettingsImage(
     />
     <InputFieldNumber
       label={ LL().LayoutFeatures.Modal.Rotation() }
-      value={ ft.size }
+      value={ ft.rotation }
       onChange={(newValue) => updateLayoutFeatureProperty(
         layoutFeatureId,
         ['rotation'],
