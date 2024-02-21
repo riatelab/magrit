@@ -219,7 +219,7 @@ export function LayerManagerLayerItem(props: { 'layer': LayerDescription }): JSX
             <i
               class="fg-map-legend"
               style={{
-                color: props.layer.legend?.visible ? 'black' : 'grey',
+                color: props.layer.legend?.visible ? 'currentColor' : 'grey',
                 transform: props.layer.legend?.visible ? '' : 'rotate(3deg)',
               }}
               onClick={() => { onClickLegend(props.layer.id, LL); }}
