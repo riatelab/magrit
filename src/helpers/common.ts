@@ -1,12 +1,20 @@
-export function unproxify(value: typeof Proxy<(Array<any> | object)>): (Array<any> | object) {
-  if (value instanceof Array) {
-    return value.map(unproxify);
+export function unproxify(value: any): any {
+  if (Array.isArray(value)) {
+    const result = [];
+    const l = value.length;
+    for (let i = 0; i < l; i += 1) {
+      result.push(unproxify(value[i]));
+    }
+    return result;
   }
-  if (value instanceof Object) {
-    return Object.fromEntries(
-      Object.entries({ ...value })
-        .map(([k, v]) => [k, unproxify(v as never)]),
-    );
+  if (value !== null && typeof value === 'object') {
+    const result: Record<string, any> = {};
+    const entries = Object.entries(value);
+    const l = entries.length;
+    for (let i = 0; i < l; i += 1) {
+      result[entries[i][0]] = unproxify(entries[i][1] as never);
+    }
+    return result;
   }
   return value;
 }

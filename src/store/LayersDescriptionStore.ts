@@ -32,7 +32,7 @@ const [
  */
 const setLayersDescriptionStore = (...args: any[]) => {
   // Push the current state to the (undo) state stack
-  debouncedPushUndoStack('layersDescription', unproxify(layersDescriptionStore as never));
+  debouncedPushUndoStack('layersDescription', unproxify(layersDescriptionStore));
   // Reset the redo stack
   resetRedoStackStore();
   // Apply the changes to the store

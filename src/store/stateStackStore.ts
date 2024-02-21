@@ -99,7 +99,7 @@ const resetUndoStackStore = (): void => {
  * The call to pushUndoStackStore is debounced to avoid pushing
  * too many (probably intermediate) states to the undo stack.
  */
-const debouncedPushUndoStack = debounce(pushUndoStackStore, 500, true);
+const debouncedPushUndoStack = debounce(pushUndoStackStore, 500);
 
 export {
   stateStackStore,

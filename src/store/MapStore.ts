@@ -83,7 +83,7 @@ export const getCurrentExtent = (targetSvg: SVGSVGElement): number[][] => {
  */
 const setMapStore = (...args: any[]) => {
   // Push the current state to the undo stack
-  debouncedPushUndoStack('mapStore', unproxify(mapStore as never));
+  debouncedPushUndoStack('mapStore', unproxify(mapStore));
   // Reset the redo stack
   resetRedoStackStore();
   // Update the store
@@ -150,32 +150,44 @@ createEffect(
         globalStore.projection.rotate(mapStore.rotate);
       }
 
-      // Recompute position for proportional symbols layers with the avoidOverlapping option
-      setLayersDescriptionStore(
-        produce(
-          (draft: LayersDescriptionStoreType) => {
-            draft.layers
-              .filter((l) => l.rendererParameters && l.rendererParameters.avoidOverlapping === true)
-              .forEach((l) => {
-                const layerDescription = (
-                  l as LayerDescription & { rendererParameters: ProportionalSymbolsParameters });
-                if (layerDescription.rendererParameters.avoidOverlapping) {
-                  layerDescription.data.features = makeDorlingDemersSimulation(
-                    unproxify(layerDescription.data.features as never) as GeoJSONFeature[],
-                    layerDescription.rendererParameters.variable,
-                    {
-                      referenceSize: layerDescription.rendererParameters.referenceRadius,
-                      referenceValue: layerDescription.rendererParameters.referenceValue,
-                      symbolType: layerDescription.rendererParameters.symbolType,
-                    },
-                    layerDescription.rendererParameters.iterations,
-                    layerDescription.strokeWidth as number,
-                  );
-                }
-              });
-          },
-        ),
-      );
+      // Do we need to recompute positions for proportional symbols layers
+      // with avoidOverlapping option?
+      // (we need to do this if at least one layer has the avoidOverlapping option set to true)
+      // If we don't need to recompute positions, we can just redraw the paths, we avoid calling
+      // setLayersDescriptionStore (which is computationally expensive because it moves
+      // previous state to the undo redo stack)
+      const needToRecomputePositions = layersDescriptionStore.layers
+        .some((l) => l.rendererParameters && l.rendererParameters.avoidOverlapping === true);
+
+      if (needToRecomputePositions) {
+        setLayersDescriptionStore(
+          produce(
+            (draft: LayersDescriptionStoreType) => {
+              // Recompute position for proportional symbols layers with the avoidOverlapping option
+              draft.layers
+                .filter((l) => (
+                  l.rendererParameters && l.rendererParameters.avoidOverlapping === true))
+                .forEach((l) => {
+                  const layerDescription = (
+                    l as LayerDescription & { rendererParameters: ProportionalSymbolsParameters });
+                  if (layerDescription.rendererParameters.avoidOverlapping) {
+                    layerDescription.data.features = makeDorlingDemersSimulation(
+                      unproxify(layerDescription.data.features as never) as GeoJSONFeature[],
+                      layerDescription.rendererParameters.variable,
+                      {
+                        referenceSize: layerDescription.rendererParameters.referenceRadius,
+                        referenceValue: layerDescription.rendererParameters.referenceValue,
+                        symbolType: layerDescription.rendererParameters.symbolType,
+                      },
+                      layerDescription.rendererParameters.iterations,
+                      layerDescription.strokeWidth as number,
+                    );
+                  }
+                });
+            },
+          ),
+        );
+      }
       console.time('redrawPaths');
       redrawPaths(targetSvg as SVGSVGElement & IZoomable);
       console.timeEnd('redrawPaths');
