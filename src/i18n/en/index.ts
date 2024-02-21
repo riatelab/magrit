@@ -312,6 +312,8 @@ const en = {
     ExportSvg: 'Export as SVG',
     CustomCRS: 'Custom CRS',
     ClipSvgCurrentExtent: 'Clip SVG to current extent',
+    Width: 'Width (px)',
+    Height: 'Height (px)',
   },
   LayerSettings: {
     LayerSettings: 'Layer settings',

@@ -1092,6 +1092,14 @@ type RootTranslation = {
 		 * C​l​i​p​ ​S​V​G​ ​t​o​ ​c​u​r​r​e​n​t​ ​e​x​t​e​n​t
 		 */
 		ClipSvgCurrentExtent: string
+		/**
+		 * W​i​d​t​h​ ​(​p​x​)
+		 */
+		Width: string
+		/**
+		 * H​e​i​g​h​t​ ​(​p​x​)
+		 */
+		Height: string
 	}
 	LayerSettings: {
 		/**
@@ -3045,6 +3053,14 @@ export type TranslationFunctions = {
 		 * Clip SVG to current extent
 		 */
 		ClipSvgCurrentExtent: () => LocalizedString
+		/**
+		 * Width (px)
+		 */
+		Width: () => LocalizedString
+		/**
+		 * Height (px)
+		 */
+		Height: () => LocalizedString
 	}
 	LayerSettings: {
 		/**

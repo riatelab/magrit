@@ -1,5 +1,6 @@
 // Imports from solid-js
 import {
+  createEffect,
   createSignal, JSX, Show,
 } from 'solid-js';
 
@@ -7,14 +8,17 @@ import {
 import { exportMapToPng, exportMapToSvg, exportToGeo } from '../../helpers/exports';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { isExportableLayer } from '../../helpers/layerDescription';
+import { Mround } from '../../helpers/math';
 import { SupportedGeoFileTypes } from '../../helpers/supportedFormats';
 
 // Stores
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { mapStore } from '../../store/MapStore';
 
 // Sub-components
 import DropdownMenu from '../DropdownMenu.tsx';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
 
 const noCrsFormats = ['GeoJSON', 'CSV', 'KML', 'TopoJSON'];
 
@@ -94,6 +98,22 @@ export default function ExportSection(): JSX.Element {
   const [selectedFormat, setSelectedFormat] = createSignal(null);
   const [selectedCrs, setSelectedCrs] = createSignal(null);
   const [customCrs, setCustomCrs] = createSignal('');
+  const [
+    exportWidth,
+    setExportWidth,
+  ] = createSignal(mapStore.mapDimensions.width);
+  const [
+    exportHeight,
+    setExportHeight,
+  ] = createSignal(mapStore.mapDimensions.height);
+
+  // We also want to update the width and height
+  // displayed in these menu when the map dimensions change
+  createEffect(() => {
+    setExportWidth(mapStore.mapDimensions.width);
+    setExportHeight(mapStore.mapDimensions.height);
+  });
+
   return <div class="export-section">
     <div class="export-section__tabs tabs is-centered is-boxed is-fullwidth">
       <ul class="ml-0" role="tablist">
@@ -153,9 +173,40 @@ export default function ExportSection(): JSX.Element {
         class="is-hidden"
         aria-labelledby="export-section__content__png-tab"
       >
+        <InputFieldNumber
+          label={ LL().ExportSection.Width() }
+          value={ exportWidth() }
+          onChange={(v) => {
+            const { width, height } = mapStore.mapDimensions;
+            const ratio = height / width;
+            const computedValue = Mround(v * ratio * 10) / 10;
+            setExportWidth(v);
+            setExportHeight(computedValue);
+          }}
+          min={1}
+          max={10000}
+          step={0.1}
+        />
+        <InputFieldNumber
+          label={ LL().ExportSection.Height() }
+          value={ exportHeight() }
+          onChange={(v) => {
+            const { width, height } = mapStore.mapDimensions;
+            const ratio = width / height;
+            const computedValue = Mround(v * ratio * 10) / 10;
+            setExportHeight(v);
+            setExportWidth(computedValue);
+          }}
+          min={1}
+          max={10000}
+          step={0.1}
+        />
         <div class="has-text-centered">
           <button
-            onClick={ async () => { await exportMapToPng('export.png', 1); } }
+            onClick={async () => {
+              const scaleFactor = exportHeight() / mapStore.mapDimensions.height;
+              await exportMapToPng('export.png', scaleFactor);
+            }}
             class="button is-success"
           >
             { LL().ExportSection.ExportPng() }
@@ -227,7 +278,7 @@ export default function ExportSection(): JSX.Element {
         <div class="has-text-centered">
           <button
             class="button is-success text-align-center"
-            disabled={ isButtonDisabled(
+            disabled={isButtonDisabled(
               selectedLayer(),
               selectedFormat(),
               selectedCrs(),

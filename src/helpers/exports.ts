@@ -142,12 +142,13 @@ export async function exportMapToSvg(
     // Redraw the paths
     redrawPaths(targetSvg);
   }
-  // eslint-disable-next-line no-param-reassign
+
   const outputNameClean = cleanOutputName(outputName, 'svg');
 
   const serializer = new XMLSerializer();
   let source = serializer.serializeToString(targetSvg);
 
+  // Add namespaces declarations if they are missing
   if (!source.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
     source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
   }
@@ -155,17 +156,23 @@ export async function exportMapToSvg(
     source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
   }
 
+  // Remove id / class / etc. of the root of the SVG element that we are
+  // using to identify the map in the application
+  source = source.replace('class="map-zone__map"', '')
+    .replace('id="map-zone__map"', '')
+    .replace('aria-label="map zone"', '')
+    .replace('tabindex="0"', '');
+
   // Remove stuff from the mgt namespace
   source = source.replace(/\bmgt:[^=]+="[^"]*"/g, '');
 
+  // Add the XML declaration at the beginning of the document
   source = `<?xml version="1.0" standalone="no"?>\r\n${source}`;
 
   const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(source)}`;
 
   return clickLinkFromDataUrl(url, outputNameClean)
-    .then(() => {
-      Promise.resolve(true);
-    })
+    .then(() => Promise.resolve(true))
     .catch((err) => {
       console.warn('Error while downloading SVG file', err);
       Promise.reject(err);

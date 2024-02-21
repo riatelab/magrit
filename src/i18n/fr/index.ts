@@ -313,6 +313,8 @@ const fr = {
     ExportSvg: 'Exporter en SVG',
     CustomCRS: 'SCR personnalisé',
     ClipSvgCurrentExtent: 'Découper le SVG sur l\'emprise actuelle',
+    Width: 'Largeur (px)',
+    Height: 'Hauteur (px)',
   },
   LayerSettings: {
     LayerSettings: 'Paramètres de la couche',

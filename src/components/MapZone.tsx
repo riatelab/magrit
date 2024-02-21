@@ -301,6 +301,7 @@ export default function MapZone(): JSX.Element {
         ref={svgElem!}
         width={mapStore.mapDimensions.width}
         height={mapStore.mapDimensions.height}
+        viewBox={`0 0 ${mapStore.mapDimensions.width} ${mapStore.mapDimensions.height}`}
         style={{
           'background-color': makeHexColorWithAlpha(mapStore.backgroundColor, mapStore.backgroundColorOpacity),
         }}
