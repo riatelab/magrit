@@ -481,3 +481,9 @@ html.is-dark-mode .button.is-success[disabled] {
     background-color: #363636;
     color: #818181;
 }
+
+html.is-dark-mode .content table thead td,
+html.is-dark-mode .content table thead th,
+html.is-dark-mode .content table th {
+    color: #dbdbdb;
+}
