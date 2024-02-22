@@ -51,7 +51,7 @@ export function HeaderBarWelcome(): JSX.Element {
   return <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="#">
-        <img src={img} style={{ width: '100%' }} alt="magrit-logo"/>
+        <img class="magrit-logo" src={img} style={{ width: '100%' }} alt="magrit-logo"/>
       </a>
 
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navBarHome">
@@ -94,7 +94,7 @@ export function HeaderBarApp(): JSX.Element {
   return <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="#">
-        <img src={img} style={{ width: '100%' }} alt="magrit-logo"/>
+        <img class="magrit-logo" src={img} style={{ width: '100%' }} alt="magrit-logo"/>
       </a>
 
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navBarHome">

@@ -1,5 +1,6 @@
 import { type Accessor, type JSX } from 'solid-js';
 import { type TranslationFunctions } from '../../i18n/i18n-types';
+import magritLogo from '../../assets/magrit-logo-only.png';
 
 export default function AboutModal(
   props: {
@@ -16,11 +17,13 @@ export default function AboutModal(
 
   return <>
     <div>
-      <p>
+      <p class="has-text-centered">
         <b>Version { version }</b>
       </p>
     </div>
-    <br />
+    <div class="has-text-centered">
+      <img class="magrit-logo" src={magritLogo} alt="magrit-logo" style={{ width: '100px' }} />
+    </div>
     <div>
       <p><b>{ LL().AboutPanel.description() }</b></p>
     </div>

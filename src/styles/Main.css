@@ -53,10 +53,10 @@ html.is-dark-mode {
 Overwrite some of our values (we will handle that
 in a cleaner way in the future)
  */
-.navbar-item > img {
+img.magrit-logo {
   transition: 400ms ease-out;
 }
-html.is-dark-mode .navbar-item > img {
+html.is-dark-mode img.magrit-logo {
   filter:invert(1);
 }
 
