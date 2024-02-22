@@ -248,6 +248,7 @@ const en = {
       ColorScheme: 'Color scheme',
       ColorSchemeInvert: 'Invert color scheme',
       CurrentNumberOfClasses: '{{ One class | ?? classes }}',
+      DisplayChartOnMap: 'Display a class summary chart on the map',
     },
     ProportionalSymbolsOptions: {
       ReferenceSize: 'Reference size (px)',
@@ -300,6 +301,9 @@ const en = {
       CellHexagon: 'Hexagon',
       CellTriangle: 'Triangle',
       CellDiamond: 'Diamond',
+    },
+    CategoricalChoroplethOptions: {
+      DisplayChartOnMap: 'Display a frequency histogram by category on the map',
     },
   },
   ExportSection: {

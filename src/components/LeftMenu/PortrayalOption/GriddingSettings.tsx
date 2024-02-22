@@ -29,7 +29,6 @@ import { findSuitableName, unproxify } from '../../../helpers/common';
 import { computeAppropriateResolution } from '../../../helpers/geo';
 import { computeGriddedLayer } from '../../../helpers/gridding';
 import { generateIdLayer } from '../../../helpers/layers';
-import { max } from '../../../helpers/math';
 import { VariableType } from '../../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 
@@ -48,7 +47,10 @@ import {
   GridCellShape,
   type GriddedLayerParameters,
   type GridParameters,
-  LayerDescription, type LegendTextElement, LegendType, Orientation,
+  LayerDescription,
+  type LegendTextElement,
+  LegendType,
+  Orientation,
   RepresentationType,
 } from '../../../global.d';
 import { openLayerManager } from '../LeftMenu.tsx';
@@ -247,27 +249,23 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       label={ LL().PortrayalSection.CommonOptions.Variable() }
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
+      width={200}
     >
       <For each={targetFields()}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
       </For>
     </InputFieldSelect>
-    <div class="field">
-      <label class="label">
-        {LL().PortrayalSection.GridOptions.CellShape()}
-      </label>
-      <div class="select" style={{ 'max-width': '60%' }}>
-        <select
-          value={cellType()}
-          onChange={(e) => setCellType(e.currentTarget.value as GridCellShape)}
-        >
-          <option value="square">{LL().PortrayalSection.GridOptions.CellSquare()}</option>
-          <option value="hexagon">{LL().PortrayalSection.GridOptions.CellHexagon()}</option>
-          <option value="diamond">{LL().PortrayalSection.GridOptions.CellDiamond()}</option>
-          <option value="triangle">{LL().PortrayalSection.GridOptions.CellTriangle()}</option>
-        </select>
-      </div>
-    </div>
+    <InputFieldSelect
+      label={LL().PortrayalSection.GridOptions.CellShape()}
+      onChange={(v) => { setCellType(v as GridCellShape); }}
+      value={cellType()}
+      width={200}
+    >
+      <option value="square">{LL().PortrayalSection.GridOptions.CellSquare()}</option>
+      <option value="hexagon">{LL().PortrayalSection.GridOptions.CellHexagon()}</option>
+      <option value="diamond">{LL().PortrayalSection.GridOptions.CellDiamond()}</option>
+      <option value="triangle">{LL().PortrayalSection.GridOptions.CellTriangle()}</option>
+    </InputFieldSelect>
     <InputFieldNumber
       label={LL().PortrayalSection.GridOptions.Resolution()}
       value={targetResolution()}

@@ -881,6 +881,10 @@ type RootTranslation = {
 			 * {​{​O​n​e​ ​c​l​a​s​s​|​?​?​ ​c​l​a​s​s​e​s​}​}
 			 */
 			CurrentNumberOfClasses: string
+			/**
+			 * D​i​s​p​l​a​y​ ​a​ ​c​l​a​s​s​ ​s​u​m​m​a​r​y​ ​c​h​a​r​t​ ​o​n​ ​t​h​e​ ​m​a​p
+			 */
+			DisplayChartOnMap: string
 		}
 		ProportionalSymbolsOptions: {
 			/**
@@ -1053,6 +1057,12 @@ type RootTranslation = {
 			 * D​i​a​m​o​n​d
 			 */
 			CellDiamond: string
+		}
+		CategoricalChoroplethOptions: {
+			/**
+			 * D​i​s​p​l​a​y​ ​a​ ​f​r​e​q​u​e​n​c​y​ ​h​i​s​t​o​g​r​a​m​ ​b​y​ ​c​a​t​e​g​o​r​y​ ​o​n​ ​t​h​e​ ​m​a​p
+			 */
+			DisplayChartOnMap: string
 		}
 	}
 	ExportSection: {
@@ -2842,6 +2852,10 @@ export type TranslationFunctions = {
 			 * {{One class|?? classes}}
 			 */
 			CurrentNumberOfClasses: (arg0: number | string | boolean) => LocalizedString
+			/**
+			 * Display a class summary chart on the map
+			 */
+			DisplayChartOnMap: () => LocalizedString
 		}
 		ProportionalSymbolsOptions: {
 			/**
@@ -3014,6 +3028,12 @@ export type TranslationFunctions = {
 			 * Diamond
 			 */
 			CellDiamond: () => LocalizedString
+		}
+		CategoricalChoroplethOptions: {
+			/**
+			 * Display a frequency histogram by category on the map
+			 */
+			DisplayChartOnMap: () => LocalizedString
 		}
 	}
 	ExportSection: {

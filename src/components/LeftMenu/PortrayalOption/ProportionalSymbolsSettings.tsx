@@ -331,6 +331,7 @@ export default function ProportionalSymbolsSettings(
       label={ LL().PortrayalSection.CommonOptions.Variable() }
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
+      width={200}
     >
       <For each={targetFields()}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
@@ -340,6 +341,7 @@ export default function ProportionalSymbolsSettings(
       label={ LL().PortrayalSection.ProportionalSymbolsOptions.SymbolType() }
       onChange={(value) => { setSymbolType(value as ProportionalSymbolsSymbolType); }}
       value={ symbolType() }
+      width={200}
     >
       <For each={
         // For points and polygons we allow circle and square

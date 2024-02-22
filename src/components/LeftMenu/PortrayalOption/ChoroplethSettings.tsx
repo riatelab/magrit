@@ -45,7 +45,7 @@ import imgQuantiles from '../../../assets/quantiles.png';
 import imgEqualIntervals from '../../../assets/equal_intervals.png';
 import imgQ6 from '../../../assets/q6.png';
 import imgJenks from '../../../assets/jenks.png';
-import imgMoreOption from '../../../assets/buttons2.svg';
+import imgMoreOption from '../../../assets/buttons2.svg?url';
 
 // Types
 import type { PortrayalSettingsProps } from './common';
@@ -61,6 +61,7 @@ import {
 } from '../../../global.d';
 import InputFieldSelect from '../../Inputs/InputSelect.tsx';
 import { openLayerManager } from '../LeftMenu.tsx';
+import InputFieldCheckbox from '../../Inputs/InputCheckbox.tsx';
 
 // eslint-disable-next-line prefer-destructuring
 const defaultColorScheme = applicationSettingsStore.defaultColorScheme;
@@ -171,7 +172,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
   // the target variable, the target layer name and the classification parameters
   const [targetVariable, setTargetVariable] = createSignal<string>(targetFields()[0].name);
   const [newLayerName, setNewLayerName] = createSignal<string>(`Choropleth_${layerDescription().name}`);
-
+  const [displayChartOnMap, setDisplayChartOnMap] = createSignal<boolean>(false);
   // Collect the values of the target variable (only those that are numbers)
   const values = createMemo(() => layerDescription().data.features
     .map((f) => f.properties[targetVariable()])
@@ -249,6 +250,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
         } as ClassificationParameters);
       }}
       value={ targetVariable() }
+      width={200}
     >
       <For each={targetFields()}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
@@ -257,7 +259,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
     <div class="field-block">
       <label class="label">{ LL().PortrayalSection.ChoroplethOptions.Classification() }</label>
       <div style={{
-        width: '50%', display: 'flex', 'justify-content': 'space-between', margin: 'auto',
+        width: '30vh', display: 'flex', 'justify-content': 'space-between', margin: 'auto',
       }}>
         <img
           class={`mini-button${targetClassification().method === ClassificationMethod.quantiles ? ' selected' : ''}`}
@@ -364,6 +366,11 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
           LL().PortrayalSection.ChoroplethOptions.CurrentNumberOfClasses(targetClassification().classes) }
       </div>
     </div>
+    <InputFieldCheckbox
+      label={LL().PortrayalSection.ChoroplethOptions.DisplayChartOnMap()}
+      checked={displayChartOnMap()}
+      onChange={(v) => { setDisplayChartOnMap(v); }}
+    />
     <InputResultName
       onKeyUp={ (value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}

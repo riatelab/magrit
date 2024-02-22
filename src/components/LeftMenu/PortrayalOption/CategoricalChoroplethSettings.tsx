@@ -32,19 +32,36 @@ import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionSto
 import InputResultName from './InputResultName.tsx';
 import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
 import InputFieldSelect from '../../Inputs/InputSelect.tsx';
+import { openLayerManager } from '../LeftMenu.tsx';
 
 // Types / Interfaces / Enums
 import {
-  CategoricalChoroplethParameters,
-  ChoroplethLegendParameters, LayerDescriptionCategoricalChoropleth,
-  LegendTextElement,
+  type CategoricalChoroplethParameters,
+  type ChoroplethLegendParameters, GeoJSONFeature,
+  type LayerDescriptionCategoricalChoropleth,
+  type LegendTextElement,
   LegendType,
   Orientation,
   RepresentationType,
 } from '../../../global.d';
-import { openLayerManager } from '../LeftMenu.tsx';
+import InputFieldCheckbox from '../../Inputs/InputCheckbox.tsx';
 
 const defaultNoDataColor = '#ffffff';
+// const nullSymbol = Symbol('null');
+// type NullType = typeof nullSymbol;
+
+const makeCategoriesMap = (
+  features: GeoJSONFeature[],
+  variable: string,
+): Map<string | number | null, number> => {
+  const m = new Map();
+  features.forEach((f) => {
+    const value = f.properties[variable];
+    if (isNonNull(value)) m.set(value, (m.get(value) || 0) + 1);
+    else m.set(null, (m.get(null) || 0) + 1);
+  });
+  return m;
+};
 
 function onClickValidate(
   referenceLayerId: string,
@@ -59,17 +76,11 @@ function onClickValidate(
     throw new Error('Unexpected Error: Reference layer not found');
   }
 
-  const categories = new Set();
-  let hasMissing = false;
+  const categories = makeCategoriesMap(referenceLayerDescription.data.features, targetVariable);
 
-  referenceLayerDescription.data.features
-    .forEach((d) => {
-      const value = d.properties[targetVariable];
-      if (isNonNull(value)) categories.add(value);
-      else hasMissing = true;
-    });
-
-  const mapping = Array.from(categories).map((c) => [c, c, randomColor()]);
+  const mapping: [string | number | null, string, string, number][] = Array.from(categories)
+    .map((c) => [c[0], c[0], randomColor(), c[1]])
+    .sort((a, b) => a[0] - b[0]);
 
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(120, 340);
@@ -168,7 +179,10 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(`Categorical_${layerDescription().name}`);
-
+  const [
+    displayChartOnMap,
+    setDisplayChartOnMap,
+  ] = createSignal<boolean>(false);
   const makePortrayal = async () => {
     const layerName = findSuitableName(
       newLayerName() || LL().PortrayalSection.NewLayer(),
@@ -203,11 +217,17 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
       label={ LL().PortrayalSection.CommonOptions.Variable() }
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
+      width={200}
     >
       <For each={targetFields()}>
         { (variable) => <option value={variable.name}>{variable.name}</option> }
       </For>
     </InputFieldSelect>
+    <InputFieldCheckbox
+      label={LL().PortrayalSection.CategoricalChoroplethOptions.DisplayChartOnMap()}
+      checked={displayChartOnMap()}
+      onChange={(v) => { setDisplayChartOnMap(v); }}
+    />
     <InputResultName
       onKeyUp={(value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}

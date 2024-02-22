@@ -209,6 +209,7 @@ export default function DiscontinuitySettings(
       label={ LL().PortrayalSection.CommonOptions.Variable() }
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
+      width={200}
     >
       <For each={targetFields()}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
@@ -218,6 +219,7 @@ export default function DiscontinuitySettings(
       label={ LL().PortrayalSection.DiscontinuityOptions.DiscontinuityType() }
       onChange={(value) => setDiscontinuityType(value as 'absolute' | 'relative')}
       value={discontinuityType()}
+      width={200}
     >
       <option value="absolute">
         { LL().PortrayalSection.DiscontinuityOptions.Absolute() }
@@ -230,7 +232,7 @@ export default function DiscontinuitySettings(
       label={LL().PortrayalSection.DiscontinuityOptions.Classification()}
       onChange={(value) => setClassificationMethod(value as ClassificationMethod)}
       value={classificationMethod()}
-      width={180}
+      width={200}
     >
       <For each={subsetClassificationMethodsForDiscontinuity}>
         {

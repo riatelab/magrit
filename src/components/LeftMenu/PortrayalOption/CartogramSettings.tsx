@@ -162,7 +162,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
     // Display loading overlay
     setLoading(true);
 
-    await yieldOrContinue('smooth');
+    await yieldOrContinue('interactive');
 
     // Create the portrayal
     setTimeout(() => {
@@ -185,6 +185,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
       label={ LL().PortrayalSection.CommonOptions.Variable() }
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
+      width={200}
     >
       <For each={targetFields()}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }

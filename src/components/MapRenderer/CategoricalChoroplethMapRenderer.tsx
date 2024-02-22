@@ -37,7 +37,7 @@ export function categoricalChoroplethPolygonRenderer(
   const colorsMap = createMemo(
     () => {
       const map = new Map<string | number | null | undefined, string>(
-        rendererParameters().mapping.map(([value, _, color]) => [value, color]),
+        rendererParameters().mapping.map(([value, _, color, n]) => [value, color]),
       );
       map.set('', rendererParameters().noDataColor);
       map.set(null, rendererParameters().noDataColor);
@@ -86,7 +86,7 @@ export function categoricalChoroplethPointRenderer(
   const colorsMap = createMemo(
     () => {
       const map = new Map<string | number | null | undefined, string>(
-        rendererParameters().mapping.map(([value, _, color]) => [value, color]),
+        rendererParameters().mapping.map(([value, _, color, n]) => [value, color]),
       );
       map.set('', rendererParameters().noDataColor);
       map.set(null, rendererParameters().noDataColor);
@@ -134,7 +134,7 @@ export function categoricalChoroplethLineRenderer(
   const colorsMap = createMemo(
     () => {
       const map = new Map<string | number | null | undefined, string>(
-        rendererParameters().mapping.map(([value, _, color]) => [value, color]),
+        rendererParameters().mapping.map(([value, _, color, n]) => [value, color]),
       );
       map.set('', rendererParameters().noDataColor);
       map.set(null, rendererParameters().noDataColor);

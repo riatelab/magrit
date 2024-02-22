@@ -34,8 +34,10 @@ import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
 import { computeAppropriateResolution } from '../../../helpers/geo';
 
 // Subcomponents
+import InputFieldSelect from '../../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
 import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
+import { openLayerManager } from '../LeftMenu.tsx';
 
 // Types
 import type { PortrayalSettingsProps } from './common';
@@ -53,7 +55,6 @@ import {
   SmoothingMethod,
   type StewartParameters,
 } from '../../../global.d';
-import { openLayerManager } from '../LeftMenu.tsx';
 
 async function onClickValidate(
   referenceLayerId: string,
@@ -333,34 +334,27 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   };
 
   return <div class="portrayal-section__portrayal-options-smoothed">
-    <div class="field">
-      <label class="label">
-        { LL().PortrayalSection.CommonOptions.Variable() }
-      </label>
-      <div class="select" style={{ 'max-width': '60%' }}>
-        <select
-          onChange={(e) => setTargetVariable(e.currentTarget.value)}
-        >
-          <For each={targetFields()}>
-            { (variable) => <option value={ variable.name }>{ variable.name }</option> }
-          </For>
-        </select>
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">
-        { LL().PortrayalSection.SmoothingOptions.Type() }
-      </label>
-      <div class="select" style={{ 'max-width': '60%' }}>
-        <select
-          value={targetSmoothingMethod()}
-          onChange={(e) => setTargetSmoothingMethod(e.currentTarget.value as SmoothingMethod)}
-        >
-          <option value="Stewart">{LL().PortrayalSection.SmoothingOptions.Stewart()}</option>
-          <option value="Kde">{LL().PortrayalSection.SmoothingOptions.KDE()}</option>
-        </select>
-      </div>
-    </div>
+    <InputFieldSelect
+      label={ LL().PortrayalSection.CommonOptions.Variable() }
+      onChange={(v) => { setTargetVariable(v); }}
+      value={targetVariable()}
+      width={200}
+    >
+      <For each={targetFields()}>
+        { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+      </For>
+    </InputFieldSelect>
+    <InputFieldSelect
+      label={LL().PortrayalSection.SmoothingOptions.Type()}
+      onChange={(v) => {
+        setTargetSmoothingMethod(v as SmoothingMethod);
+      }}
+      value={targetSmoothingMethod()}
+      width={200}
+    >
+      <option value="Stewart">{LL().PortrayalSection.SmoothingOptions.Stewart()}</option>
+      <option value="Kde">{LL().PortrayalSection.SmoothingOptions.KDE()}</option>
+    </InputFieldSelect>
     <div class="field">
       <label class="label">
         {LL().PortrayalSection.SmoothingOptions.Resolution() }
@@ -373,30 +367,28 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
           min={0}
           step={0.1}
           onChange={(e) => setTargetResolution(+e.currentTarget.value)}
+          style={{ width: '200px' }}
         />
       </div>
     </div>
     <Show when={targetSmoothingMethod() === SmoothingMethod.Kde}>
-      <div class="field">
-        <label class="label">
-          { LL().PortrayalSection.SmoothingOptions.KernelType() }
-        </label>
-        <div class="select" style={{ 'max-width': '60%' }}>
-          <select
-            value={targetKdeKernelType()}
-            onChange={(e) => setTargetKdeKernelType(
-              e.currentTarget.value as 'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform' | 'biweight',
-            )}
-          >
-            <option value="gaussian">{LL().PortrayalSection.SmoothingOptions.Gaussian()}</option>
-            <option value="epanechnikov">{LL().PortrayalSection.SmoothingOptions.Epanechnikov()}</option>
-            <option value="quartic">{LL().PortrayalSection.SmoothingOptions.Quartic()}</option>
-            <option value="triangular">{LL().PortrayalSection.SmoothingOptions.Triangular()}</option>
-            <option value="uniform">{LL().PortrayalSection.SmoothingOptions.Uniform()}</option>
-            <option value="biweight">{LL().PortrayalSection.SmoothingOptions.Biweight()}</option>
-          </select>
-        </div>
-      </div>
+      <InputFieldSelect
+        label={LL().PortrayalSection.SmoothingOptions.KernelType()}
+        onChange={(v) => {
+          setTargetKdeKernelType(
+            v as 'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform' | 'biweight',
+          );
+        }}
+        value={targetKdeKernelType()}
+        width={200}
+      >
+        <option value="gaussian">{LL().PortrayalSection.SmoothingOptions.Gaussian()}</option>
+        <option value="epanechnikov">{LL().PortrayalSection.SmoothingOptions.Epanechnikov()}</option>
+        <option value="quartic">{LL().PortrayalSection.SmoothingOptions.Quartic()}</option>
+        <option value="triangular">{LL().PortrayalSection.SmoothingOptions.Triangular()}</option>
+        <option value="uniform">{LL().PortrayalSection.SmoothingOptions.Uniform()}</option>
+        <option value="biweight">{LL().PortrayalSection.SmoothingOptions.Biweight()}</option>
+      </InputFieldSelect>
       <div class="field">
         <label class="label">
           {LL().PortrayalSection.SmoothingOptions.Bandwidth() }
@@ -409,25 +401,23 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
             step={1}
             min={0}
             onChange={(e) => setTargetBandwidth(+e.currentTarget.value)}
+            style={{ width: '200px' }}
           />
         </div>
       </div>
     </Show>
     <Show when={targetSmoothingMethod() === SmoothingMethod.Stewart}>
-      <div class="field">
-        <label class="label">
-          { LL().PortrayalSection.SmoothingOptions.KernelType() }
-        </label>
-        <div class="select" style={{ 'max-width': '60%' }}>
-          <select
-            value={targetStewartKernelType()}
-            onChange={(e) => setTargetStewartKernelType(e.currentTarget.value as 'gaussian' | 'pareto')}
-          >
-            <option value="gaussian">{ LL().PortrayalSection.SmoothingOptions.Gaussian() }</option>
-            <option value="pareto">{ LL().PortrayalSection.SmoothingOptions.Pareto() }</option>
-          </select>
-        </div>
-      </div>
+      <InputFieldSelect
+        label={LL().PortrayalSection.SmoothingOptions.KernelType()}
+        onChange={(v) => {
+          setTargetStewartKernelType(v as 'gaussian' | 'pareto');
+        }}
+        value={targetStewartKernelType()}
+        width={200}
+      >
+        <option value="gaussian">{LL().PortrayalSection.SmoothingOptions.Gaussian()}</option>
+        <option value="pareto">{LL().PortrayalSection.SmoothingOptions.Pareto()}</option>
+      </InputFieldSelect>
       <div class="field">
         <label class="label">
           { LL().PortrayalSection.SmoothingOptions.Span() }
@@ -440,6 +430,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
             min={0}
             step={1}
             onChange={(e) => setTargetSpan(+e.currentTarget.value)}
+            style={{ width: '200px' }}
           />
         </div>
       </div>
@@ -454,6 +445,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
             value={targetBeta()}
             step={1}
             onChange={(e) => setTargetBeta(+e.currentTarget.value)}
+            style={{ width: '200px' }}
           />
         </div>
       </div>

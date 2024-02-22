@@ -185,6 +185,12 @@ type LayerDescriptionSmoothedLayer = LayerDescription & {
   legend: ChoroplethLegendParameters,
 };
 
+type LayerDescriptionMushroomLayer = LayerDescription & {
+  renderer: RepresentationType.mushroom,
+  rendererParameters: null,
+  legend: MushroomLegendParameters,
+};
+
 export enum ProportionalSymbolsSymbolType {
   circle = 'circle',
   square = 'square',
@@ -292,9 +298,10 @@ export interface CategoricalChoroplethParameters {
   // The name of the variable
   variable: string,
   // The mapping between categories and colors,
-  // stored as an array of [category, categoryName, color] tuples,
+  // stored as an array of
+  // [category, categoryName, color, number of values] tuples,
   // one per category.
-  mapping: [string | number, string, string][],
+  mapping: [string | null | number, string, string, number][],
   // The color to use for features with no data
   noDataColor: string,
 }
@@ -449,6 +456,7 @@ export enum RepresentationType {
   links = 'links',
   grid = 'grid',
   waffle = 'waffle',
+  mushroom = 'mushroom',
   sphere = 'sphere',
   graticule = 'graticule',
   labels = 'labels',
@@ -612,6 +620,10 @@ interface WaffleLegendParameters extends LegendParametersBase {
   type: LegendType.waffle,
 }
 
+interface MushroomLegendParameters extends LegendParametersBase {
+  type: LegendType.mushroom,
+}
+
 export type LegendParameters = (
   ChoroplethLegendParameters
   | ProportionalSymbolsLegendParameters
@@ -643,6 +655,7 @@ export enum LegendType {
   discontinuity = 'discontinuity',
   labels = 'labels',
   waffle = 'waffle',
+  mushroom = 'mushroom',
 }
 
 export enum Orientation {

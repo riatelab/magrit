@@ -93,7 +93,10 @@ function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Eleme
   ).length > 0);
 
   const labelsAndColors = createMemo(
-    () => rendererParameters.mapping.map(([_, categoryName, color]) => [categoryName, color]),
+    () => rendererParameters.mapping
+      .map(([_, categoryName, color, n]) => [categoryName, color])
+      // No data information has been stored with null value / null category name
+      .filter(([categoryName]) => categoryName !== null),
   );
 
   const positionNote = createMemo(() => {
@@ -300,7 +303,7 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
   ).length > 0);
 
   const labelsAndColors = createMemo(
-    () => rendererParameters.mapping.map(([_, categoryName, color]) => [categoryName, color]),
+    () => rendererParameters.mapping.map(([_, categoryName, color, n]) => [categoryName, color]),
   );
 
   let refElement: SVGGElement;

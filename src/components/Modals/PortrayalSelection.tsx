@@ -27,11 +27,13 @@ import CategoricalChoroplethSettings from '../LeftMenu/PortrayalOption/Categoric
 import LabelsSettings from '../LeftMenu/PortrayalOption/LabelsSettings.tsx';
 import SmoothingSettings from '../LeftMenu/PortrayalOption/SmoothingSettings.tsx';
 import GriddingSettings from '../LeftMenu/PortrayalOption/GriddingSettings.tsx';
+import InformationBanner from '../InformationBanner.tsx';
 
+// Type / interfaces / enums
 import { RepresentationType } from '../../global.d';
 
+// Styles
 import '../../styles/PortrayalSelection.css';
-import InformationBanner from '../InformationBanner.tsx';
 
 interface PortrayalDescription {
   // id: string;
@@ -87,7 +89,7 @@ function CardPortrayal(
       'is-clickable': pDesc.enabled,
       'is-disabled': !pDesc.enabled,
     }}
-    style={{ margin: '1em', height: '12em' }}
+    style={{ 'min-height': '11em' }}
     onClick={
       pDesc.enabled
         ? (e) => pDesc.onClick(e, pDesc)
@@ -194,38 +196,41 @@ export default function PortrayalSelection(
             &nbsp;- { LL().PortrayalSection.PortrayalTypes[selectedPortrayal()!] }</p>
         </Show>
       </header>
-      <section class="modal-card-body">
+      <section class="modal-card-body is-flex is-flex-direction-column">
         <Show when={!selectedPortrayal()}>
           <InformationBanner expanded={true}>
             <p>{ LL().PortrayalSelection.Information() }</p>
           </InformationBanner>
-          <div
-            style={{
-              display: 'grid',
-              'grid-template-columns': 'repeat(auto-fill, minmax(25vw, 1fr))',
-            }}
-          >
-            <For each={portrayalDescriptions}>
-              {
-                (p) => <CardPortrayal
-                  {...p}
-                  onClick={(e, pDesc) => {
-                    setSelectedPortrayal(pDesc.representationType);
-                  }}
-                />
-              }
-            </For>
-          </div>
+          <section style={{ height: '100%', overflow: 'auto', padding: '1em' }}>
+            <div
+              style={{
+                display: 'grid',
+                'grid-template-columns': 'repeat(auto-fill, minmax(27rem, 1fr))',
+                'grid-gap': '1rem',
+              }}
+            >
+              <For each={portrayalDescriptions}>
+                {
+                  (p) => <CardPortrayal
+                    {...p}
+                    onClick={(e, pDesc) => {
+                      setSelectedPortrayal(pDesc.representationType);
+                    }}
+                  />
+                }
+              </For>
+            </div>
+          </section>
         </Show>
         <Show when={selectedPortrayal()}>
           <Switch>
-            <Match when={ selectedPortrayal() === RepresentationType.choropleth }>
-              <ChoroplethSettings layerId={ props.layerId! } />
+            <Match when={selectedPortrayal() === RepresentationType.choropleth}>
+              <ChoroplethSettings layerId={props.layerId!}/>
             </Match>
-            <Match when={ selectedPortrayal() === RepresentationType.proportionalSymbols }>
-              <ProportionalSymbolsSettings layerId={ props.layerId! } />
+            <Match when={selectedPortrayal() === RepresentationType.proportionalSymbols}>
+              <ProportionalSymbolsSettings layerId={props.layerId!}/>
             </Match>
-            <Match when={ selectedPortrayal() === RepresentationType.discontinuity }>
+            <Match when={selectedPortrayal() === RepresentationType.discontinuity }>
               <DiscontinuitySettings layerId={ props.layerId! } />
             </Match>
             <Match when={ selectedPortrayal() === RepresentationType.categoricalChoropleth }>
@@ -247,23 +252,19 @@ export default function PortrayalSelection(
         </Show>
       </section>
       <footer class="modal-card-foot" style={{ 'justify-content': 'space-between' }}>
-        <div
-          class="is-clickable"
-          title={ LL().PortrayalSelection.Back() }
-          onClick={() => setSelectedPortrayal(null)}
-        >
+        <div>
           <Show when={selectedPortrayal()}>
-            <FaSolidArrowLeftLong />
+            <button
+              class="button"
+              onClick={() => setSelectedPortrayal(null)}
+            >
+              <FaSolidArrowLeftLong />
+              &nbsp;
+              <span>{ LL().PortrayalSelection.Back() }</span>
+            </button>
           </Show>
         </div>
         <div>
-          <Show when={selectedPortrayal() && true === false}>
-            <button
-              class="button is-success confirm-button"
-            >
-              { LL().SuccessButton() }
-            </button>
-          </Show>
           <button
             class="button cancel-button"
             onClick={() => { setPortrayalSelectionStore({ show: false, layerId: '' }); }}

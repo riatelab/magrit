@@ -249,6 +249,7 @@ const fr = {
       ColorScheme: 'Palette de couleurs',
       ColorSchemeInvert: 'Inverser la palette',
       CurrentNumberOfClasses: '{{ Une classe | ?? classes }}',
+      DisplayChartOnMap: 'Afficher un graphique de résumé des classes sur la carte',
     },
     ProportionalSymbolsOptions: {
       ReferenceSize: 'Taille de référence (px)',
@@ -301,6 +302,9 @@ const fr = {
       CellHexagon: 'Cellule hexagonale',
       CellDiamond: 'Cellule en losange',
       CellTriangle: 'Cellule triangulaire',
+    },
+    CategoricalChoroplethOptions: {
+      DisplayChartOnMap: 'Afficher un histogramme de fréquence par catégorie sur la carte',
     },
   },
   ExportSection: {

@@ -490,6 +490,11 @@ const AppPage: () => JSX.Element = () => {
         <LoadingOverlay />
       </Show>
       <Transition name="slide-fade">
+        <Show when={portrayalSelectionStore.show}>
+          <PortrayalSelection />
+        </Show>
+      </Transition>
+      <Transition name="slide-fade">
         <Show when={classificationPanelStore.show}>
           <ClassificationPanel />
         </Show>
@@ -505,9 +510,6 @@ const AppPage: () => JSX.Element = () => {
       </Transition>
       <Show when={fileDropStore.show}>
         <ImportWindow />
-      </Show>
-      <Show when={portrayalSelectionStore.show}>
-        <PortrayalSelection />
       </Show>
       {/*
         We put the NiceAlert component outside of the previous Transition component
