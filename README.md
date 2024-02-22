@@ -11,9 +11,10 @@
 - It's **designed for teaching and learning cartography**.
 - It lets you import **your own geometry dataset** (**Shapefile**, **GeoJSON**, **GML**, **GeoPackage**, etc.) and optionally your **tabular file** (CSV, XLS, XLSX, etc.).
 - We also provide many sample datasets to try out the various representations and become familiar with the application.
-- It allows to **render and combine a wide variety of maps**: choropleth, proportional symbols, cartogram, discontinuity, etc.
+- It allows to **render and combine a wide variety of maps**: choropleth, proportional symbols, cartogram, discontinuity, smoothed maps, etc.
 - It supports all the most popular modern desktop browsers.
-- Magrit is written in modern JS (ES6) and uses notably the d3.js library as well as various WebAssembly modules (GDAL, GEOS, etc.)
+- Magrit is written in modern JS and uses notably [solid.js](https://github.com/solidjs/solid) and [d3.js](https://github.com/d3/d3) libraries
+  as well as various WebAssembly modules ([GDAL](https://github.com/bugra9/gdal3.js), [GEOS](https://github.com/chrispahm/geos-wasm), etc.)
 
 
 ## Usage
