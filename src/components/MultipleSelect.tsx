@@ -3,7 +3,7 @@ import { children } from 'solid-js';
 
 interface MultipleSelectProps {
   size?: number;
-  onChange?: JSX.ChangeEventHandler<HTMLSelectElement, any>;
+  onChange?: JSX.ChangeEventHandler<HTMLSelectElement, Event>;
   style?: { [key: string]: string };
 }
 
@@ -13,7 +13,9 @@ export default function MultipleSelect(props: ParentProps<MultipleSelectProps>):
   return <div class={'control'}>
     <div class={'select is-multiple'}>
       <select
-        onChange={props.onChange}
+        onChange={(e) => {
+          if (props.onChange) props.onChange(e);
+        }}
         multiple={true}
         size={props.size || 3}
       >
