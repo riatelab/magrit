@@ -304,7 +304,9 @@ const fr = {
       CellTriangle: 'Cellule triangulaire',
     },
     CategoricalChoroplethOptions: {
-      DisplayChartOnMap: 'Afficher un histogramme de fréquence par catégorie sur la carte',
+      DisplayChartOnMap: 'Afficher l\'histogramme de fréquence par catégorie sur la carte',
+      Categories: '{{Une catégories | ?? catégories}}',
+      HasNull: 'Contient des valeurs nulles ou non renseignées',
     },
   },
   ExportSection: {

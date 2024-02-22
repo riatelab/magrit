@@ -303,7 +303,9 @@ const en = {
       CellDiamond: 'Diamond',
     },
     CategoricalChoroplethOptions: {
-      DisplayChartOnMap: 'Display a frequency histogram by category on the map',
+      DisplayChartOnMap: 'Display the frequency histogram by category on the map',
+      Categories: '{{One category | ?? categories}}',
+      HasNull: 'Contains null or empty values',
     },
   },
   ExportSection: {

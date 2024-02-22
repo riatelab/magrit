@@ -3,11 +3,16 @@ import {
   createMemo,
   createSignal,
   For,
+  type JSX,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
+import { getColors } from 'dicopal';
 import { yieldOrContinue } from 'main-thread-scheduling';
+import { FaSolidArrowRight } from 'solid-icons/fa';
+import * as Plot from '@observablehq/plot';
+import type { Plot as PlotType } from '@observablehq/plot';
 
 // Helpers
 import { generateIdLayer } from '../../../helpers/layers';
@@ -29,9 +34,10 @@ import {
 import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
 
 // Subcomponents
-import InputResultName from './InputResultName.tsx';
 import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
+import InputFieldCheckbox from '../../Inputs/InputCheckbox.tsx';
 import InputFieldSelect from '../../Inputs/InputSelect.tsx';
+import InputResultName from './InputResultName.tsx';
 import { openLayerManager } from '../LeftMenu.tsx';
 
 // Types / Interfaces / Enums
@@ -44,11 +50,31 @@ import {
   Orientation,
   RepresentationType,
 } from '../../../global.d';
-import InputFieldCheckbox from '../../Inputs/InputCheckbox.tsx';
 
 const defaultNoDataColor = '#ffffff';
 // const nullSymbol = Symbol('null');
 // type NullType = typeof nullSymbol;
+
+type CategoricalChoroplethMapping = [string | number | null, string | null, string, number];
+
+const selectDefaultColors = (n: number): string[] => {
+  let colors;
+  if (n <= 7) {
+    // We use colors from the otake ito palette
+    // which is safe for colorblind people but we skip the first color
+    colors = getColors('Okabe_Ito_Categorigal', 8)!.toReversed().slice(0, n);
+  } else if (n <= 12) {
+    // We use colors from Set3 of colorbrewer
+    colors = getColors('Set3', 12)!.toReversed().slice(0, n);
+  } else if (n <= 20) {
+    // We use colors from Tableau (but this is paired colors)
+    colors = getColors('Tableau', 20)!.toReversed().slice(0, n);
+  } else {
+    // Return an array of random color
+    colors = Array.from({ length: n }, randomColor);
+  }
+  return colors;
+};
 
 const makeCategoriesMap = (
   features: GeoJSONFeature[],
@@ -61,6 +87,22 @@ const makeCategoriesMap = (
     else m.set(null, (m.get(null) || 0) + 1);
   });
   return m;
+};
+
+const makeCategoriesMapping = (
+  categories: Map<string | number | null, number>,
+): CategoricalChoroplethMapping[] => {
+  const hasNull = categories.has(null);
+  const n = categories.size - (hasNull ? 1 : 0);
+  const colors = selectDefaultColors(n);
+  return Array.from(categories)
+    .map((c, i) => [
+      c[0],
+      c[0] ? String(c[0]) : null,
+      colors[i] || defaultNoDataColor,
+      c[1],
+    ])
+    .sort((a, b) => a[0] - b[0]);
 };
 
 function onClickValidate(
@@ -77,10 +119,7 @@ function onClickValidate(
   }
 
   const categories = makeCategoriesMap(referenceLayerDescription.data.features, targetVariable);
-
-  const mapping: [string | number | null, string, string, number][] = Array.from(categories)
-    .map((c) => [c[0], c[0], randomColor(), c[1]])
-    .sort((a, b) => a[0] - b[0]);
+  const mapping = makeCategoriesMapping(categories);
 
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(120, 340);
@@ -156,6 +195,83 @@ function onClickValidate(
   );
 }
 
+function CategoriesSummary(props: { mapping: CategoricalChoroplethMapping[] }): JSX.Element {
+  const { LL } = useI18nContext();
+  const hasNull = createMemo(() => props.mapping.some((m) => m[0] === null));
+  const nCategories = createMemo(() => props.mapping.length - (hasNull() ? 1 : 0));
+  return <div style={{ 'margin-top': '-1em', 'margin-bottom': '1em' }}>
+    <div>
+      <FaSolidArrowRight />&nbsp;
+      <span>{ LL().PortrayalSection.CategoricalChoroplethOptions.Categories(nCategories()) }</span>
+      {
+        hasNull()
+          ? <>
+              <br />
+              <FaSolidArrowRight/>&nbsp;
+              <span>{ LL().PortrayalSection.CategoricalChoroplethOptions.HasNull() }</span>
+          </>
+          : ''
+      }
+    </div>
+  </div>;
+}
+
+function CategoriesPlot(props: { mapping: CategoricalChoroplethMapping[] }): JSX.Element {
+  const { LL } = useI18nContext();
+  const domain = createMemo(() => props.mapping.map((m) => m[1]));
+  const range = createMemo(() => props.mapping.map((m) => m[2]));
+  const data = createMemo(() => props.mapping.map((m, i) => ({
+    position: i,
+    category: m[1],
+    color: m[2],
+    frequency: m[3],
+  })));
+  return <div
+    style={{
+      padding: '1em',
+      border: 'solid 1px currentColor',
+      'margin-bottom': '1em',
+    }}
+  >
+    {
+      Plot.plot({
+        height: 200,
+        color: {
+          domain: domain(),
+          range: range(),
+          legend: true,
+        },
+        x: {
+          type: 'band',
+          tickFormat: null,
+          ticks: 0,
+          // TODO: use i18ned labels
+        },
+        y: {
+          // TODO: use i18ned labels
+        },
+        marks: [
+          Plot.barY(
+            data(),
+            {
+              x: 'category',
+              y: 'frequency',
+              fill: 'color',
+              channels: {
+                position: (d) => d.position,
+              },
+              sort: {
+                y: 'position',
+              },
+            },
+          ),
+          Plot.ruleY([0]),
+        ],
+      })
+    }
+  </div>;
+}
+
 export default function CategoricalChoroplethSettings(props: PortrayalSettingsProps): JSX.Element {
   const { LL } = useI18nContext();
 
@@ -179,6 +295,12 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(`Categorical_${layerDescription().name}`);
+  const [
+    categoriesMapping,
+    setCategoriesMapping,
+  ] = createSignal<CategoricalChoroplethMapping[]>(
+    makeCategoriesMapping(makeCategoriesMap(layerDescription().data.features, targetVariable())),
+  );
   const [
     displayChartOnMap,
     setDisplayChartOnMap,
@@ -215,7 +337,14 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
   return <div class="portrayal-section__portrayal-options-choropleth">
     <InputFieldSelect
       label={ LL().PortrayalSection.CommonOptions.Variable() }
-      onChange={(value) => { setTargetVariable(value); }}
+      onChange={(value) => {
+        setTargetVariable(value);
+        setCategoriesMapping(
+          makeCategoriesMapping(
+            makeCategoriesMap(layerDescription().data.features, value),
+          ),
+        );
+      }}
       value={ targetVariable() }
       width={200}
     >
@@ -223,6 +352,8 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
         { (variable) => <option value={variable.name}>{variable.name}</option> }
       </For>
     </InputFieldSelect>
+    <CategoriesSummary mapping={categoriesMapping()} />
+    <CategoriesPlot mapping={categoriesMapping()} />
     <InputFieldCheckbox
       label={LL().PortrayalSection.CategoricalChoroplethOptions.DisplayChartOnMap()}
       checked={displayChartOnMap()}

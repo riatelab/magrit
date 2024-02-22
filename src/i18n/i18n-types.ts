@@ -1060,9 +1060,17 @@ type RootTranslation = {
 		}
 		CategoricalChoroplethOptions: {
 			/**
-			 * D​i​s​p​l​a​y​ ​a​ ​f​r​e​q​u​e​n​c​y​ ​h​i​s​t​o​g​r​a​m​ ​b​y​ ​c​a​t​e​g​o​r​y​ ​o​n​ ​t​h​e​ ​m​a​p
+			 * D​i​s​p​l​a​y​ ​t​h​e​ ​f​r​e​q​u​e​n​c​y​ ​h​i​s​t​o​g​r​a​m​ ​b​y​ ​c​a​t​e​g​o​r​y​ ​o​n​ ​t​h​e​ ​m​a​p
 			 */
 			DisplayChartOnMap: string
+			/**
+			 * {​{​O​n​e​ ​c​a​t​e​g​o​r​y​|​?​?​ ​c​a​t​e​g​o​r​i​e​s​}​}
+			 */
+			Categories: string
+			/**
+			 * C​o​n​t​a​i​n​s​ ​n​u​l​l​ ​o​r​ ​e​m​p​t​y​ ​v​a​l​u​e​s
+			 */
+			HasNull: string
 		}
 	}
 	ExportSection: {
@@ -3031,9 +3039,17 @@ export type TranslationFunctions = {
 		}
 		CategoricalChoroplethOptions: {
 			/**
-			 * Display a frequency histogram by category on the map
+			 * Display the frequency histogram by category on the map
 			 */
 			DisplayChartOnMap: () => LocalizedString
+			/**
+			 * {{One category|?? categories}}
+			 */
+			Categories: (arg0: number | string | boolean) => LocalizedString
+			/**
+			 * Contains null or empty values
+			 */
+			HasNull: () => LocalizedString
 		}
 	}
 	ExportSection: {
