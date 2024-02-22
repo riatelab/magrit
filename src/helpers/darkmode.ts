@@ -36,6 +36,8 @@ export const listenToPrefersDarkMode = () => {
 };
 
 export const initializeLightDarkMode = () => {
+  // Todo: we should store somewhere (localStorage or cookie?) the user preference
+  //    and use it to initialize the mode if it exists
   listenToPrefersDarkMode();
   if (userPrefersDarkMode()) {
     enableDarkMode();

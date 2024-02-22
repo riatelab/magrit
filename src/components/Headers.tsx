@@ -69,6 +69,14 @@ export function HeaderBarWelcome(): JSX.Element {
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
+          <button
+            class="button button-header-bar"
+            id="button-night-day"
+            aria-label={LL().HeaderApp.NightDayMode()}
+            title={LL().HeaderApp.NightDayMode()}
+          >
+            <CgDarkMode/>
+          </button>
           <DropdownLanguage/>
           &nbsp;&nbsp;
           <div class="buttons">

@@ -331,12 +331,6 @@ const AppPage: () => JSX.Element = () => {
     // Add event listener to the window to handle resize events
     window.addEventListener('resize', onResize);
 
-    // Handle the light / dark mode according to user preference
-    // (internally it uses the prefers-color-scheme media query,
-    // and we also subscribe to changes in the user preference
-    // to update the mode accordingly)
-    initializeLightDarkMode();
-
     // Add event listeners to the root element and the overlay drop
     // in order to handle drag and drop events (for files upload only)
     document.querySelectorAll('div#root, .overlay-drop')

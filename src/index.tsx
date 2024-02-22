@@ -8,6 +8,7 @@ import { JSX } from 'solid-js';
 
 import TypesafeI18n from './i18n/i18n-solid';
 import { loadLocale } from './i18n/i18n-util.sync';
+import { initializeLightDarkMode } from './helpers/darkmode';
 import './helpers/array.extension';
 
 import 'bulma/css/bulma.min.css';
@@ -36,6 +37,12 @@ const root = document.getElementById('root') as HTMLElement;
 root.classList.add('content');
 
 loadLocale('en');
+
+// Handle the light / dark mode according to user preference
+// (internally it uses the prefers-color-scheme media query,
+// and we also subscribe to changes in the user preference
+// to update the mode accordingly)
+initializeLightDarkMode();
 
 render(
   () => (
