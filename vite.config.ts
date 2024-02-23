@@ -19,7 +19,7 @@ export default defineConfig({
     // We use top-level await, which was added in ES2022
     // so if we target anything lower than ES2022, we need to
     // use topLevelAwait plugin.
-    // (See in the build section below - we currently target ES2015
+    // (See in the build section below - we currently target ES2020,
     //  and before releasing the app we should decide on the target
     //  and remove the topLevelAwait plugin if it's not needed.).
     // As of 2024-02-07, top-level await is supported in all
@@ -67,7 +67,7 @@ export default defineConfig({
     isolate: false,
   },
   build: {
-    target: (isDevElectron || isBuildElectron) ? 'es2022' : 'es2015',
+    target: isBuildElectron ? 'es2022' : 'es2020',
     minify: false,
     // rollupOptions: {
     //   output: {
