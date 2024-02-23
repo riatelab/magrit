@@ -1,8 +1,6 @@
 import proj4, { InterfaceProjection } from 'proj4';
-
+import * as projModule from 'mproj/dist/mproj';
 import d3, { type GeoProjection, type GeoRawProjection } from './d3-custom';
-
-import { degToRadConstant, radToDegConstant } from './math';
 
 import epsg from '../assets/epsg.json';
 
@@ -12,6 +10,8 @@ import type {
   GeoJSONGeometryType,
   GeoJSONPosition,
 } from '../global';
+
+const mproj = projModule.default;
 
 export interface EpsgDbEntryType {
   code: string,
@@ -29,7 +29,7 @@ export interface EpsgDbType {
   [key: string]: EpsgDbEntryType
 }
 
-// TODO: we will filter out entries with null proj4 string or null wkt
+// TODO: we should filter out entries with null proj4 string or null wkt
 //   directly in the source file to avoid loading a lot of useless data
 export const epsgDb: EpsgDbType = Object.fromEntries(
   Object.entries(epsg)
@@ -86,6 +86,7 @@ export const projEquals = (proj1: string, proj2: string): boolean => {
  */
 export const getD3ProjectionFromProj4 = (proj: InterfaceProjection): GeoProjection => {
   // Create the custom d3 projection using proj 4 forward and inverse functions.
+  // Internally, Proj4js and mapshaper-proj uses radians.
   // We just use constant values to convert from degrees to radians and vice versa
   // to avoid capturing any variable from the closure.
   const projRaw: GeoRawProjection = (
@@ -104,16 +105,29 @@ export const getD3ProjectionFromProj4 = (proj: InterfaceProjection): GeoProjecti
 export const getProjection = (projString: string): InterfaceProjection => {
   // TODO: maybe we should resolve EPSG -> proj4 string here
   //  (and throw an error if the EPSG code isn't found)
+  // Here we try to read the proj4 string with mapshaper-proj (mpoj)
+  // If it fails, we try with proj4js.
+  // If it fails again, we throw an error.
   try {
-    return proj4(projString);
-  } catch (e) {
-    // Error messages from proj4js are not very helpful
-    // (as they only contains the input string)
-    // So we throw a more informative message that will be caught
-    // by the caller.
-    // TODO: diagnose why proj4js failed to parse the string
+    return mproj(projString);
+  } catch (errMproj) {
+    // TODO: diagnose why mproj failed to parse the string
     //   and throw the appropriate error message
-    throw new Error(`Invalid proj4 string: ${projString}`);
+    console.log(errMproj);
+    try {
+      return proj4(projString);
+    } catch (errProjJs) {
+      // TODO: diagnose why mproj failed to parse the string
+      //   and throw the appropriate error message
+      console.log(errProjJs);
+      // Error messages from proj4js are not very helpful
+      // (as they only contains the input string)
+      // So we throw a more informative message that will be caught
+      // by the caller.
+      throw new Error(
+        `Failed to instantiate a projection for the following proj4 string: ${projString}`,
+      );
+    }
   }
 };
 

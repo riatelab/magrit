@@ -91,6 +91,7 @@
     "gpu.js": "^2.16.0",
     "jszip": "^3.10.1",
     "main-thread-scheduling": "^13.0.0",
+    "mproj": "^0.0.37",
     "pako": "^2.1.0",
     "polylabel": "^1.1.0",
     "proj4": "^2.10.0",
