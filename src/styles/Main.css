@@ -49,6 +49,13 @@ html.is-dark-mode {
     --danger-color: hsl(348, 100%, 61%);
 }
 
+@media screen and (max-width: 1023px) {
+    html {
+        --left-menu-width: 310px;
+        --header-height: 42px;
+    }
+}
+
 /*
 Overwrite some of our values (we will handle that
 in a cleaner way in the future)

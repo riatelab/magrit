@@ -19,12 +19,6 @@ import './styles/Main.css';
 import WelcomePage from './WelcomePage.tsx';
 import AppPage from './AppPage.tsx';
 
-// if ('serviceWorker' in navigator) {
-//   // && !/localhost/.test(window.location)) {
-//   console.log('foo');
-//   registerSW();
-// }
-
 // Maybe we should use https://www.npmjs.com/package/vite-plugin-static-copy
 // to copy all WebR files to the dist folder
 // and then use the '/dist/' baseUrl to load them from there
