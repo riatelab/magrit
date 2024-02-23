@@ -654,7 +654,12 @@ export default function TableWindow(): JSX.Element {
         });
     }, 125);
   });
-  return <div class="table-window modal" style={{ display: 'flex' }}>
+  return <div
+    class="table-window modal"
+    style={{ display: 'flex' }}
+    aria-modal="true"
+    role="dialog"
+  >
     <div class="modal-background" />
     <div class="modal-card">
       <header class="modal-card-head">

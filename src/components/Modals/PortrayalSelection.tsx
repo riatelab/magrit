@@ -179,7 +179,13 @@ export default function PortrayalSelection(): JSX.Element {
     }
   });
 
-  return <div class="modal-window modal portrayal-selection" style={{ display: 'flex' }} ref={refParentNode!}>
+  return <div
+    class="modal-window modal portrayal-selection"
+    style={{ display: 'flex' }}
+    ref={refParentNode!}
+    aria-modal="true"
+    role="dialog"
+  >
     <div class="modal-background" />
     <div class="modal-card" style={{ width: '70vw', height: '90vh' }}>
       <header class="modal-card-head">

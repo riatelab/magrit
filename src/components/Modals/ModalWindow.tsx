@@ -95,7 +95,13 @@ export default function DefaultModal(): JSX.Element {
     window.removeEventListener('resize', resizeListener);
   });
 
-  return <div class="modal-window modal" style={{ display: 'flex' }} ref={refParentNode!}>
+  return <div
+    class="modal-window modal"
+    style={{ display: 'flex' }}
+    ref={refParentNode!}
+    aria-modal="true"
+    role="dialog"
+  >
     <div class="modal-background"></div>
     <div class="modal-card" style={ modalStore.width ? { width: modalStore.width } : {} }>
       <header

@@ -22,21 +22,29 @@ import InputFieldNumber from '../Inputs/InputNumber.tsx';
 
 const noCrsFormats = ['GeoJSON', 'CSV', 'KML', 'TopoJSON'];
 
-function onClickTabButton(event: Event, tab: string) {
-  const tabsParentElement = event.currentTarget.parentElement.parentElement.parentElement;
-  // Change the active tab
+function onClickTabButton(event: Event & { currentTarget: HTMLAnchorElement }, tab: string) {
+  const tabsParentElement = event.currentTarget.parentElement!.parentElement!.parentElement!;
+
+  // Change the active tab, reflect the change in the aria-selected attribute
   const tabButtons = tabsParentElement.querySelectorAll('li.is-active');
   for (let i = 0; i < tabButtons.length; i++) { // eslint-disable-line no-plusplus
     tabButtons[i].classList.remove('is-active');
+    tabButtons[i].firstElementChild!.setAttribute('aria-selected', 'false');
   }
-  event.currentTarget.parentElement.classList.add('is-active');
+  event.currentTarget.parentElement!.classList.add('is-active');
+  event.currentTarget.setAttribute('aria-selected', 'true');
   // Get all elements with class="tab-content" and hide them
   const tabContent = document.querySelectorAll('.export-section__content > div');
   for (let i = 0; i < tabContent.length; i++) { // eslint-disable-line no-plusplus
     tabContent[i].classList.add('is-hidden');
+    tabContent[i].setAttribute('hidden', 'hidden');
   }
+
   // Remove the class 'is-hidden' on the tab that should be opened by the button
-  (document.getElementById(`export-section__content__${tab}`) as HTMLElement).classList.remove('is-hidden');
+  // and the attribute 'hidden'
+  const displayedTab = document.getElementById(`export-section__content__${tab}`) as HTMLElement;
+  displayedTab.classList.remove('is-hidden');
+  displayedTab.removeAttribute('hidden');
 }
 
 function isButtonDisabled(
@@ -114,34 +122,41 @@ export default function ExportSection(): JSX.Element {
     setExportHeight(mapStore.mapDimensions.height);
   });
 
+  // TODO: handle focusing on the tab names to allow keyboard navigation between tabs
+  //  (currently the focus is inside the tab content, so the user can't
+  //  navigate between tabs using the keyboard)
   return <div class="export-section">
     <div class="export-section__tabs tabs is-centered is-boxed is-fullwidth">
-      <ul class="ml-0" role="tablist">
-        <li class="is-active">
+      <ul class="ml-0" role="tablist" aria-label={LL().ExportSection.Description()}>
+        <li class="is-active" role="presentation">
           <a
             id="export-section__content__svg-tab"
             onClick={(ev) => onClickTabButton(ev, 'svg')}
             aria-controls="export-section__content__svg"
+            aria-selected="true"
+            role="tab"
           >
-            <span>SVG</span>
+            SVG
           </a>
         </li>
-        <li>
+        <li role="presentation">
           <a
             id="export-section__content__png-tab"
             onClick={(ev) => onClickTabButton(ev, 'png')}
             aria-controls="export-section__content__png"
+            role="tab"
           >
-            <span>PNG</span>
+            PNG
           </a>
         </li>
-        <li>
+        <li role="presentation">
           <a
             id="export-section__content__geo-tab"
             onClick={(ev) => onClickTabButton(ev, 'geo')}
             aria-controls="export-section__content__geo"
+            role="tab"
           >
-            <span>{ LL().ExportSection.Layers() }</span>
+            { LL().ExportSection.Layers() }
           </a>
         </li>
       </ul>
@@ -150,6 +165,7 @@ export default function ExportSection(): JSX.Element {
       <div
         id="export-section__content__svg"
         role="tabpanel"
+        tabindex="0"
         aria-labelledby="export-section__content__svg-tab"
       >
         <InputFieldCheckbox
@@ -170,6 +186,7 @@ export default function ExportSection(): JSX.Element {
       <div
         id="export-section__content__png"
         role="tabpanel"
+        tabindex="0"
         class="is-hidden"
         aria-labelledby="export-section__content__png-tab"
       >
@@ -216,6 +233,7 @@ export default function ExportSection(): JSX.Element {
       <div
         id="export-section__content__geo"
         role="tabpanel"
+        tabindex="0"
         class="is-hidden"
         aria-labelledby="export-section__content__geo-tab"
       >

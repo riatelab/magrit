@@ -56,7 +56,13 @@ export default function NiceAlert(): JSX.Element {
     autofocus: true,
   };
 
-  return <div class="modal nice-alert" style={{ display: 'flex' }} ref={refParentNode!}>
+  return <div
+    class="modal nice-alert"
+    style={{ display: 'flex' }}
+    ref={refParentNode!}
+    aria-modal="true"
+    role="dialog"
+  >
     <div class="modal-background"></div>
     <div class="modal-card">
       <section

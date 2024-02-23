@@ -312,6 +312,7 @@ const fr = {
     },
   },
   ExportSection: {
+    Description: 'Sélection du type d\'export et du format de fichier à exporter.',
     SelectLayers: 'Sélectionner une couche',
     SelectFormat: 'Sélectionner un format',
     SelectCRS: 'Sélectionner un SCR',

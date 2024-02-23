@@ -257,7 +257,12 @@ export default function ExampleDataModal(): JSX.Element {
     });
   };
 
-  return <div class="modal-window modal" style={{ display: 'flex' }}>
+  return <div
+    class="modal-window modal"
+    style={{ display: 'flex' }}
+    aria-modal="true"
+    role="dialog"
+  >
     <div class="modal-background"></div>
     <div class="modal-card" style={{ width: '90vw', height: '90vh' }}>
       <header class="modal-card-head">

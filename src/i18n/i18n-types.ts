@@ -1084,6 +1084,10 @@ type RootTranslation = {
 	}
 	ExportSection: {
 		/**
+		 * S​e​l​e​c​t​i​o​n​ ​o​f​ ​t​h​e​ ​t​y​p​e​ ​o​f​ ​e​x​p​o​r​t​ ​a​n​d​ ​t​h​e​ ​f​o​r​m​a​t​ ​o​f​ ​t​h​e​ ​f​i​l​e​ ​t​o​ ​b​e​ ​g​e​n​e​r​a​t​e​d​.
+		 */
+		Description: string
+		/**
 		 * S​e​l​e​c​t​ ​a​ ​l​a​y​e​r
 		 */
 		SelectLayers: string
@@ -3074,6 +3078,10 @@ export type TranslationFunctions = {
 		}
 	}
 	ExportSection: {
+		/**
+		 * Selection of the type of export and the format of the file to be generated.
+		 */
+		Description: () => LocalizedString
 		/**
 		 * Select a layer
 		 */

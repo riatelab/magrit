@@ -332,7 +332,13 @@ export default function ClassificationPanel(): JSX.Element {
     document.body.removeEventListener('keydown', listenerEscKey);
   });
 
-  return <div class="modal-window modal classification-panel" style={{ display: 'flex' }} ref={refParentNode!}>
+  return <div
+    class="modal-window modal classification-panel"
+    style={{ display: 'flex' }}
+    ref={refParentNode!}
+    aria-modal="true"
+    role="dialog"
+  >
     <div class="modal-background" />
     <div class="modal-card">
       <header class="modal-card-head">

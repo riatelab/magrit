@@ -311,6 +311,7 @@ const en = {
     },
   },
   ExportSection: {
+    Description: 'Selection of the type of export and the format of the file to be generated.',
     SelectLayers: 'Select a layer',
     SelectFormat: 'Select a format',
     SelectCRS: 'Select a CRS',
