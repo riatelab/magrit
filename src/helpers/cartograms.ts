@@ -16,17 +16,21 @@ let goCart: {
   ) => GeoJSONFeatureCollection,
 };
 
-initGoCart({
-  locateFile: () => cartWasmUrl,
-}).then((module: never) => {
-  goCart = module;
-});
+async function getGoCart() {
+  if (!goCart) {
+    goCart = await initGoCart({
+      locateFile: () => cartWasmUrl,
+    });
+  }
 
-export function computeCartogramGastnerSeguyMore(
+  return goCart;
+}
+
+export async function computeCartogramGastnerSeguyMore(
   data: GeoJSONFeatureCollection,
   variableName: string,
-): GeoJSONFeatureCollection {
-  return goCart.makeCartogram(data, variableName);
+): Promise<GeoJSONFeatureCollection> {
+  return (await getGoCart()).makeCartogram(data, variableName);
 }
 
 export function computeCartogramOlson(

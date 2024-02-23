@@ -1,7 +1,7 @@
 // Imports from external packages
 import { GPU } from 'gpu.js';
 import { pointGrid } from '@turf/turf';
-import { isobands } from 'contour-wasm';
+import type { isobands } from 'contour-wasm';
 import type { BBox } from '@turf/turf';
 
 // Stores
@@ -10,7 +10,7 @@ import { setLoadingMessage } from '../store/GlobalStore';
 // Helpers
 import { makeCentroidLayer } from './geo';
 import { intersectionLayer } from './geos';
-import { max, min } from './math';
+import { max } from './math';
 import { convertToTopojsonQuantizeAndBackToGeojson } from './topojson';
 
 // Types
@@ -20,6 +20,15 @@ import type {
   KdeParameters,
   StewartParameters,
 } from '../global';
+
+let contourModule: { isobands: typeof isobands } | null = null;
+
+async function getContourWasm() {
+  if (!contourModule) {
+    contourModule = await import('contour-wasm');
+  }
+  return contourModule;
+}
 
 function makePointGrid(
   gridParameters: GridParameters,
@@ -83,10 +92,11 @@ const computeStep = (
   };
 };
 
-function makeContourLayer(
+async function makeContourLayer(
   grid: GeoJSONFeatureCollection,
   thresholds: number[],
 ): GeoJSONFeatureCollection {
+  console.time('gridPreparationForContours');
   const xCoords = new Set(grid.features.map((d) => d.geometry.coordinates[0]));
   const yCoords = new Set(grid.features.map((d) => d.geometry.coordinates[1]));
   const { xStep, yStep } = computeStep(xCoords, yCoords);
@@ -103,7 +113,7 @@ function makeContourLayer(
       v.push(grid.features[j * height + i].properties.z);
     }
   }
-
+  console.timeEnd('gridPreparationForContours');
   const values = new Float64Array(v);
   const options = {
     x_origin: Math.min(...xCoords),
@@ -114,7 +124,7 @@ function makeContourLayer(
 
   const intervals = new Float64Array(thresholds);
 
-  const contours = isobands(
+  const contours = (await getContourWasm()).isobands(
     values,
     width,
     height,
@@ -304,7 +314,7 @@ export async function computeStewart(
   const thresholds = [0, 0.03, 0.06, 0.1, 0.25, 0.4, 0.55, 0.75, 0.85, 0.925, 1]
     .map((d) => d * maxPot);
 
-  const contours = makeContourLayer(grid, thresholds);
+  const contours = await makeContourLayer(grid, thresholds);
   contours.features.forEach((ft) => {
     // eslint-disable-next-line no-param-reassign
     ft.properties.center = (ft.properties.min_v + ft.properties.max_v) / 2;
@@ -522,7 +532,7 @@ export async function computeKde(
   const thresholds = [0, 0.03, 0.06, 0.1, 0.25, 0.4, 0.55, 0.75, 0.85, 0.925, 1]
     .map((d) => d * maxPot);
 
-  const contours = makeContourLayer(grid, thresholds);
+  const contours = await makeContourLayer(grid, thresholds);
 
   contours.features.forEach((ft) => {
     // eslint-disable-next-line no-param-reassign

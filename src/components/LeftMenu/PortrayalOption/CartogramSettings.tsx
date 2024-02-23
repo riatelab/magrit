@@ -45,7 +45,7 @@ import {
 } from '../../../global.d';
 import { openLayerManager } from '../LeftMenu.tsx';
 
-function onClickValidate(
+async function onClickValidate(
   referenceLayerId: string,
   targetVariable: string,
   cartogramMethod: CartogramMethod,
@@ -65,7 +65,7 @@ function onClickValidate(
       targetVariable,
     );
   } else if (cartogramMethod === CartogramMethod.GastnerSeguyMore) {
-    newData = computeCartogramGastnerSeguyMore(
+    newData = await computeCartogramGastnerSeguyMore(
       referenceLayerDescription.data,
       targetVariable,
     );
@@ -171,12 +171,13 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
         targetVariable(),
         cartogramMethod(),
         layerName,
-      );
-      // Hide loading overlay
-      setLoading(false);
+      ).then(() => {
+        // Hide loading overlay
+        setLoading(false);
 
-      // Open the LayerManager to show the new layer
-      openLayerManager();
+        // Open the LayerManager to show the new layer
+        openLayerManager();
+      });
     }, 0);
   };
 
