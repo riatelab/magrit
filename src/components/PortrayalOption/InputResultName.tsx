@@ -1,5 +1,5 @@
 import { JSX } from 'solid-js';
-import { useI18nContext } from '../../../i18n/i18n-solid';
+import { useI18nContext } from '../../i18n/i18n-solid';
 
 interface ResultNameInputProps {
   // The value of the input, as a string, may be empty

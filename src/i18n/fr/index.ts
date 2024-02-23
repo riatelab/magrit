@@ -297,11 +297,13 @@ const fr = {
     },
     GridOptions: {
       Resolution: 'Résolution de la grille (km)',
+      ResolutionWithUnit: 'Résolution de la grille ({unit})',
       CellShape: 'Forme des cellules',
       CellSquare: 'Cellule carrée',
       CellHexagon: 'Cellule hexagonale',
       CellDiamond: 'Cellule en losange',
       CellTriangle: 'Cellule triangulaire',
+      WarningGeo: 'La projection cartographique actuelle est géographique (ou son unité est en degrés). La résolution de la grille est donc exprimée en degrés. Privilégiez, lorsque que c\'est possible, l\'utilisation de données projetées (avec une unité de distance en mètres par exemple) pour une meilleure précision.',
     },
     CategoricalChoroplethOptions: {
       DisplayChartOnMap: 'Afficher l\'histogramme de fréquence par catégorie sur la carte',

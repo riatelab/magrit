@@ -208,6 +208,9 @@ interface ProjectionDefinition {
   // The bounds of the projection (as ymax, xmin, ymin, xmax)
   // (optional, only used for proj4 projections)
   bounds?: [number, number, number, number],
+  // The code of the projection (optional, only used for proj4 projections that
+  // were created from an EPSG code)
+  code?: number,
 }
 
 export enum ClassificationMethod {

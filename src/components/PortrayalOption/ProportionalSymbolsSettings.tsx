@@ -12,36 +12,36 @@ import { produce } from 'solid-js/store';
 import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
-import { useI18nContext } from '../../../i18n/i18n-solid';
-import { randomColorFromCategoricalPalette } from '../../../helpers/color';
-import { descendingKeyAccessor, findSuitableName, isNumber } from '../../../helpers/common';
+import { useI18nContext } from '../../i18n/i18n-solid';
+import { randomColorFromCategoricalPalette } from '../../helpers/color';
+import { descendingKeyAccessor, findSuitableName, isNumber } from '../../helpers/common';
 import {
   computeCandidateValuesForSymbolsLegend,
   coordsPointOnFeature,
   makeDorlingDemersSimulation,
   PropSizer,
-} from '../../../helpers/geo';
-import { generateIdLayer } from '../../../helpers/layers';
-import { max, min } from '../../../helpers/math';
-import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
+} from '../../helpers/geo';
+import { generateIdLayer } from '../../helpers/layers';
+import { max, min } from '../../helpers/math';
+import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Sub-components
-import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
-import InputFieldCheckbox from '../../Inputs/InputCheckbox.tsx';
-import InputFieldColor from '../../Inputs/InputColor.tsx';
-import InputFieldNumber from '../../Inputs/InputNumber.tsx';
-import InputFieldSelect from '../../Inputs/InputSelect.tsx';
+import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
+import InputFieldColor from '../Inputs/InputColor.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
 
 // Stores
-import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setLoading } from '../../../store/GlobalStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { setLoading } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
-} from '../../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
+} from '../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
 
 // Types / Interfaces / Enums
 import type {
@@ -50,14 +50,14 @@ import type {
   ProportionalSymbolsLegendParameters,
   ProportionalSymbolsParameters,
   RepresentationType,
-} from '../../../global';
+} from '../../global';
 import {
   LegendTextElement,
   LegendType,
   ProportionalSymbolsSymbolType,
-} from '../../../global.d';
+} from '../../global.d';
 import type { PortrayalSettingsProps } from './common';
-import { openLayerManager } from '../LeftMenu.tsx';
+import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 function onClickValidate(
   referenceLayerId: string,

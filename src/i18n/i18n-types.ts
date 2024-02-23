@@ -1038,6 +1038,11 @@ type RootTranslation = {
 			 */
 			Resolution: string
 			/**
+			 * G​r​i​d​ ​r​e​s​o​l​u​t​i​o​n​ ​(​{​u​n​i​t​}​)
+			 * @param {unknown} unit
+			 */
+			ResolutionWithUnit: RequiredParams<'unit'>
+			/**
 			 * C​e​l​l​ ​s​h​a​p​e
 			 */
 			CellShape: string
@@ -1057,6 +1062,10 @@ type RootTranslation = {
 			 * D​i​a​m​o​n​d
 			 */
 			CellDiamond: string
+			/**
+			 * T​h​e​ ​c​u​r​r​e​n​t​ ​m​a​p​ ​p​r​o​j​e​c​t​i​o​n​ ​i​s​ ​g​e​o​g​r​a​p​h​i​c​ ​(​o​r​ ​i​t​s​ ​u​n​i​t​ ​i​s​ ​d​e​g​r​e​e​s​)​.​ ​T​h​e​ ​g​r​i​d​ ​r​e​s​o​l​u​t​i​o​n​ ​i​s​ ​t​h​e​r​e​f​o​r​e​ ​e​x​p​r​e​s​s​e​d​ ​i​n​ ​d​e​g​r​e​e​s​.​ ​W​h​e​n​e​v​e​r​ ​p​o​s​s​i​b​l​e​,​ ​y​o​u​ ​s​h​o​u​l​d​ ​u​s​e​ ​p​r​o​j​e​c​t​e​d​ ​d​a​t​a​ ​(​w​i​t​h​ ​a​ ​d​i​s​t​a​n​c​e​ ​u​n​i​t​ ​i​n​ ​m​e​t​r​e​s​,​ ​f​o​r​ ​e​x​a​m​p​l​e​)​ ​f​o​r​ ​g​r​e​a​t​e​r​ ​a​c​c​u​r​a​c​y​.
+			 */
+			WarningGeo: string
 		}
 		CategoricalChoroplethOptions: {
 			/**
@@ -3021,6 +3030,10 @@ export type TranslationFunctions = {
 			 */
 			Resolution: () => LocalizedString
 			/**
+			 * Grid resolution ({unit})
+			 */
+			ResolutionWithUnit: (arg: { unit: unknown }) => LocalizedString
+			/**
 			 * Cell shape
 			 */
 			CellShape: () => LocalizedString
@@ -3040,6 +3053,10 @@ export type TranslationFunctions = {
 			 * Diamond
 			 */
 			CellDiamond: () => LocalizedString
+			/**
+			 * The current map projection is geographic (or its unit is degrees). The grid resolution is therefore expressed in degrees. Whenever possible, you should use projected data (with a distance unit in metres, for example) for greater accuracy.
+			 */
+			WarningGeo: () => LocalizedString
 		}
 		CategoricalChoroplethOptions: {
 			/**

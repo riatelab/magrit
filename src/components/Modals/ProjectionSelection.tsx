@@ -184,6 +184,7 @@ export default function ProjectionSelection(
                       name: selectedProjection()!.name,
                       value: selectedProjection()!.proj4,
                       bounds: selectedProjection()!.bbox,
+                      code: `EPSG:${selectedProjection()!.code}`,
                     },
                   );
                 }}

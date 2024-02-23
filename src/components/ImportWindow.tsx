@@ -865,6 +865,7 @@ export default function ImportWindow(): JSX.Element {
                   name: crsToUse.name,
                   value: crsToUse.wkt,
                   bounds: crsToUse.bounds,
+                  code: crsToUse.code,
                 },
               );
             }

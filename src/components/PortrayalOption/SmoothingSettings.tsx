@@ -14,30 +14,30 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 import { bbox } from '@turf/turf';
 
 // Stores
-import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setLoading } from '../../../store/GlobalStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { setLoading } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
-} from '../../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
+} from '../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
 
 // Helper
-import { useI18nContext } from '../../../i18n/i18n-solid';
-import { findSuitableName } from '../../../helpers/common';
-import { generateIdLayer } from '../../../helpers/layers';
-import { Variable, VariableType } from '../../../helpers/typeDetection';
-import { computeKde, computeStewart } from '../../../helpers/smoothing';
-import { Mpow } from '../../../helpers/math';
-import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
-import { computeAppropriateResolution } from '../../../helpers/geo';
+import { useI18nContext } from '../../i18n/i18n-solid';
+import { findSuitableName } from '../../helpers/common';
+import { generateIdLayer } from '../../helpers/layers';
+import { Variable, VariableType } from '../../helpers/typeDetection';
+import { computeKde, computeStewart } from '../../helpers/smoothing';
+import { Mpow } from '../../helpers/math';
+import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
+import { computeAppropriateResolution } from '../../helpers/geo';
 
 // Subcomponents
-import InputFieldSelect from '../../Inputs/InputSelect.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
-import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
-import { openLayerManager } from '../LeftMenu.tsx';
+import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
+import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Types
 import type { PortrayalSettingsProps } from './common';
@@ -54,7 +54,7 @@ import {
   type SmoothedLayerParameters,
   SmoothingMethod,
   type StewartParameters,
-} from '../../../global.d';
+} from '../../global.d';
 
 async function onClickValidate(
   referenceLayerId: string,

@@ -12,28 +12,28 @@ import { produce } from 'solid-js/store';
 import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
-import { useI18nContext } from '../../../i18n/i18n-solid';
-import { computeCartogramGastnerSeguyMore, computeCartogramOlson } from '../../../helpers/cartograms';
-import { findSuitableName, unproxify } from '../../../helpers/common';
-import { generateIdLayer } from '../../../helpers/layers';
-import { DataType, type Variable, VariableType } from '../../../helpers/typeDetection';
-import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
-import rewindLayer from '../../../helpers/rewind';
+import { useI18nContext } from '../../i18n/i18n-solid';
+import { computeCartogramGastnerSeguyMore, computeCartogramOlson } from '../../helpers/cartograms';
+import { findSuitableName, unproxify } from '../../helpers/common';
+import { generateIdLayer } from '../../helpers/layers';
+import { DataType, type Variable, VariableType } from '../../helpers/typeDetection';
+import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
+import rewindLayer from '../../helpers/rewind';
 
 // Subcomponents
-import InputFieldSelect from '../../Inputs/InputSelect.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
-import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
-import InputFieldNumber from '../../Inputs/InputNumber.tsx';
+import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
 
 // Stores
-import { setLoading } from '../../../store/GlobalStore';
+import { setLoading } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
-} from '../../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
+} from '../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
 
 // Types / Interfaces / Enums
 import type { PortrayalSettingsProps } from './common';
@@ -42,8 +42,8 @@ import {
   type CartogramParameters,
   type LayerDescriptionCartogram,
   RepresentationType,
-} from '../../../global.d';
-import { openLayerManager } from '../LeftMenu.tsx';
+} from '../../global.d';
+import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 async function onClickValidate(
   referenceLayerId: string,

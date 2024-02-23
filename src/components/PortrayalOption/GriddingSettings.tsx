@@ -4,6 +4,7 @@ import {
   createMemo,
   createSignal,
   For,
+  Show,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
@@ -14,29 +15,33 @@ import { jenks } from 'statsbreaks';
 import { bbox } from '@turf/turf';
 
 // Stores
-import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setLoading } from '../../../store/GlobalStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { setLoading } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
-} from '../../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
+} from '../../store/LayersDescriptionStore';
+import { mapStore } from '../../store/MapStore';
+import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
 
 // Helper
-import { useI18nContext } from '../../../i18n/i18n-solid';
-import { findSuitableName, unproxify } from '../../../helpers/common';
-import { computeAppropriateResolution } from '../../../helpers/geo';
-import { computeGriddedLayer } from '../../../helpers/gridding';
-import { generateIdLayer } from '../../../helpers/layers';
-import { VariableType } from '../../../helpers/typeDetection';
-import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
+import { useI18nContext } from '../../i18n/i18n-solid';
+import { findSuitableName, unproxify } from '../../helpers/common';
+import { computeAppropriateResolution } from '../../helpers/geo';
+import { computeGriddedLayer } from '../../helpers/gridding';
+import { generateIdLayer } from '../../helpers/layers';
+import { epsgDb, EpsgDbEntryType, getUnitFromProjectionString } from '../../helpers/projection';
+import { VariableType } from '../../helpers/typeDetection';
+import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
+import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Subcomponents
-import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
-import InputFieldNumber from '../../Inputs/InputNumber.tsx';
-import InputFieldSelect from '../../Inputs/InputSelect.tsx';
+import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
+import WarningBanner from '../WarningBanner.tsx';
 
 // Types
 import type { PortrayalSettingsProps } from './common';
@@ -52,8 +57,7 @@ import {
   LegendType,
   Orientation,
   RepresentationType,
-} from '../../../global.d';
-import { openLayerManager } from '../LeftMenu.tsx';
+} from '../../global.d';
 
 async function onClickValidate(
   referenceLayerId: string,
@@ -182,8 +186,37 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
   const targetFields = createMemo(() => layerDescription()
     .fields?.filter((variable) => variable.type === VariableType.stock));
 
+  // The description of the current projection
+  const currentProjection = unproxify(mapStore.projection);
+  let isGeo;
+  let distanceUnit;
+  if (currentProjection.type === 'd3') {
+    isGeo = true;
+    distanceUnit = 'degrees';
+  } else { // currentProjection.type === 'proj4'
+    let desc;
+    if (
+      currentProjection.code
+      // eslint-disable-next-line no-cond-assign
+      && (desc = epsgDb[currentProjection.code.replace('EPSG:', '')])
+    ) {
+      // We have a code so we can use the EPSG database
+      isGeo = (desc as EpsgDbEntryType).unit
+        ? (desc as EpsgDbEntryType).unit === 'degrees'
+        : true;
+      distanceUnit = desc.unit || 'degrees';
+    } else {
+      // We dont have a code so we need to see in the proj4 string or in the WKT1 string
+      distanceUnit = getUnitFromProjectionString(currentProjection.value);
+      // TODO: we need to harmonise the units returned by getUnitFromProjectionString
+      isGeo = !distanceUnit || distanceUnit === 'degrees';
+    }
+  }
+
+  console.log(isGeo, distanceUnit);
+
   // Appropriate resolution for the grid
-  // FIXME: this is a temporary solution
+  // FIXME: this is a temporary solution, and we should account for the distance unit
   const appropriateResolution = +(
     computeAppropriateResolution(bboxLayer(), 0.1).toPrecision(2));
 
@@ -267,8 +300,13 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       <option value="diamond">{LL().PortrayalSection.GridOptions.CellDiamond()}</option>
       <option value="triangle">{LL().PortrayalSection.GridOptions.CellTriangle()}</option>
     </InputFieldSelect>
+    <Show when={isGeo}>
+      <WarningBanner expanded={true}>
+        { LL().PortrayalSection.GridOptions.WarningGeo() }
+      </WarningBanner>
+    </Show>
     <InputFieldNumber
-      label={LL().PortrayalSection.GridOptions.Resolution()}
+      label={LL().PortrayalSection.GridOptions.ResolutionWithUnit({ unit: distanceUnit })}
       value={targetResolution()}
       onChange={(value) => setTargetResolution(value)}
       min={0}

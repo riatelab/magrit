@@ -296,11 +296,13 @@ const en = {
     },
     GridOptions: {
       Resolution: 'Grid resolution (km)',
+      ResolutionWithUnit: 'Grid resolution ({unit})',
       CellShape: 'Cell shape',
       CellSquare: 'Square',
       CellHexagon: 'Hexagon',
       CellTriangle: 'Triangle',
       CellDiamond: 'Diamond',
+      WarningGeo: 'The current map projection is geographic (or its unit is degrees). The grid resolution is therefore expressed in degrees. Whenever possible, you should use projected data (with a distance unit in metres, for example) for greater accuracy.',
     },
     CategoricalChoroplethOptions: {
       DisplayChartOnMap: 'Display the frequency histogram by category on the map',

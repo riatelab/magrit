@@ -15,30 +15,30 @@ import * as Plot from '@observablehq/plot';
 import type { Plot as PlotType } from '@observablehq/plot';
 
 // Helpers
-import { generateIdLayer } from '../../../helpers/layers';
-import { useI18nContext } from '../../../i18n/i18n-solid';
-import { findSuitableName, isNonNull } from '../../../helpers/common';
-import { VariableType } from '../../../helpers/typeDetection';
-import { randomColor } from '../../../helpers/color';
+import { generateIdLayer } from '../../helpers/layers';
+import { useI18nContext } from '../../i18n/i18n-solid';
+import { findSuitableName, isNonNull } from '../../helpers/common';
+import { VariableType } from '../../helpers/typeDetection';
+import { randomColor } from '../../helpers/color';
 import { PortrayalSettingsProps } from './common';
-import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
+import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Stores
-import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setLoading } from '../../../store/GlobalStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { setLoading } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
-} from '../../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
+} from '../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
 
 // Subcomponents
-import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
-import InputFieldCheckbox from '../../Inputs/InputCheckbox.tsx';
-import InputFieldSelect from '../../Inputs/InputSelect.tsx';
+import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
-import { openLayerManager } from '../LeftMenu.tsx';
+import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Types / Interfaces / Enums
 import {
@@ -49,7 +49,7 @@ import {
   LegendType,
   Orientation,
   RepresentationType,
-} from '../../../global.d';
+} from '../../global.d';
 
 const defaultNoDataColor = '#ffffff';
 // const nullSymbol = Symbol('null');

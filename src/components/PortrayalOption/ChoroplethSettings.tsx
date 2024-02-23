@@ -16,36 +16,36 @@ import { FaSolidCircleCheck } from 'solid-icons/fa';
 import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Stores
-import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setClassificationPanelStore } from '../../../store/ClassificationPanelStore';
-import { setLoading } from '../../../store/GlobalStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { setClassificationPanelStore } from '../../store/ClassificationPanelStore';
+import { setLoading } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
-} from '../../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
+} from '../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
 
 // Helper
-import { useI18nContext } from '../../../i18n/i18n-solid';
-import { noop } from '../../../helpers/classification';
-import { findSuitableName, getMinimumPrecision, isNumber } from '../../../helpers/common';
-import d3 from '../../../helpers/d3-custom';
-import { generateIdLayer } from '../../../helpers/layers';
-import { Mmin } from '../../../helpers/math';
-import { VariableType } from '../../../helpers/typeDetection';
-import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
+import { useI18nContext } from '../../i18n/i18n-solid';
+import { noop } from '../../helpers/classification';
+import { findSuitableName, getMinimumPrecision, isNumber } from '../../helpers/common';
+import d3 from '../../helpers/d3-custom';
+import { generateIdLayer } from '../../helpers/layers';
+import { Mmin } from '../../helpers/math';
+import { VariableType } from '../../helpers/typeDetection';
+import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Subcomponents
 import InputResultName from './InputResultName.tsx';
-import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
+import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 
 // Assets
-import imgQuantiles from '../../../assets/quantiles.png';
-import imgEqualIntervals from '../../../assets/equal_intervals.png';
-import imgQ6 from '../../../assets/q6.png';
-import imgJenks from '../../../assets/jenks.png';
-import imgMoreOption from '../../../assets/buttons2.svg?url';
+import imgQuantiles from '../../assets/quantiles.png';
+import imgEqualIntervals from '../../assets/equal_intervals.png';
+import imgQ6 from '../../assets/q6.png';
+import imgJenks from '../../assets/jenks.png';
+import imgMoreOption from '../../assets/buttons2.svg?url';
 
 // Types
 import type { PortrayalSettingsProps } from './common';
@@ -58,10 +58,10 @@ import {
   LegendType,
   Orientation,
   RepresentationType,
-} from '../../../global.d';
-import InputFieldSelect from '../../Inputs/InputSelect.tsx';
-import { openLayerManager } from '../LeftMenu.tsx';
-import InputFieldCheckbox from '../../Inputs/InputCheckbox.tsx';
+} from '../../global.d';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 // eslint-disable-next-line prefer-destructuring
 const defaultColorScheme = applicationSettingsStore.defaultColorScheme;

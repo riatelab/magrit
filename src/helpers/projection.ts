@@ -65,6 +65,26 @@ const proj4stringToObj = (projString: string): { [key: string]: string | boolean
   return o;
 };
 
+export const getUnitFromProjectionString = (projString: string) => {
+  // The projection can be either a proj4 string or a wkt string
+  const isProj4 = projString.trim().startsWith('+');
+  if (isProj4) {
+    const p = proj4stringToObj(projString);
+    if (p.units) {
+      return p.units;
+    }
+  } else {
+    // We have a WKT1 string, so the unit, if any,
+    // is written like UNIT["name of the unit",value]
+    // We can use a regex to extract the name of the unit
+    const match = projString.match(/UNIT\["([^"]+)",([^]]+)]/);
+    if (match) {
+      return match[1].toLowerCase();
+    }
+  }
+  return null;
+};
+
 /**
  * Parse two proj4 strings and compare if they are equivalent.
  *

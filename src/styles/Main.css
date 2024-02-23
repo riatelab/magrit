@@ -90,6 +90,10 @@ html.is-dark-mode .information-banner {
     background-color: #045933 !important; /* Or maybe #0e2a10 ? */
 }
 
+html.is-dark-mode .warning-banner {
+    background-color: #a3a300 !important;
+}
+
 html.is-dark-mode .portrayal-selection .mini-button.selected {
     border: solid 2px darkgreen;
 }

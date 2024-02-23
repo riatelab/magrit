@@ -7,37 +7,37 @@ import {
 } from 'solid-js';
 
 // Import from other libraries
-import { FaSolidCircleInfo } from 'solid-icons/fa';
+import { FaSolidTriangleExclamation } from 'solid-icons/fa';
 
-type InformationBannerProps = {
+type WarningBannerProps = {
   // When used in a modal, we may want to expand the banner to the full width of the modal.
   expanded?: boolean,
 };
 
 /**
- * This is a component used to display an information banner in a modal or in a page.
+ * This is a component used to display a warning banner in a modal or in a page.
  * @param props
  * @constructor
  */
-export default function InformationBanner(props: ParentProps<InformationBannerProps>): JSX.Element {
+export default function WarningBanner(props: ParentProps<WarningBannerProps>): JSX.Element {
   const c = children(() => props.children);
   const expanded = createMemo(() => props.expanded ?? false);
 
   return <section
-    class="banner information-banner has-text-centered"
+    class="banner warning-banner has-text-centered"
     style={{
       padding: '20px',
       margin: expanded() ? '0 -20px 20px' : '0',
-      background: '#cafbe5',
+      background: '#f4fbca',
       'border-top': '1px solid var(--border-color)',
     }}
   >
-    <FaSolidCircleInfo
-      class="information-banner__icon"
+    <FaSolidTriangleExclamation
+      class="warning-banner__icon"
       fill="currentColor"
       style={{ height: '1.5em', width: '1.5em' }}
     />
-    <div class="information-banner__content">
+    <div class="warning-banner__content">
       { c() }
     </div>
   </section>;

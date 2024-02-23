@@ -11,24 +11,24 @@ import { produce } from 'solid-js/store';
 import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Stores
-import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setGlobalStore, setLoading } from '../../../store/GlobalStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { setGlobalStore, setLoading } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
-} from '../../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
+} from '../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
 
 // Helpers
-import { useI18nContext } from '../../../i18n/i18n-solid';
-import { findSuitableName } from '../../../helpers/common';
-import { makeCentroidLayer } from '../../../helpers/geo';
-import { generateIdLayer } from '../../../helpers/layers';
-import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
+import { useI18nContext } from '../../i18n/i18n-solid';
+import { findSuitableName } from '../../helpers/common';
+import { makeCentroidLayer } from '../../helpers/geo';
+import { generateIdLayer } from '../../helpers/layers';
+import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Subcomponents
-import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
+import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputResultName from './InputResultName.tsx';
 
 // Types / Interfaces / Enums
@@ -39,9 +39,9 @@ import {
   type LegendTextElement,
   LegendType,
   RepresentationType,
-} from '../../../global.d';
+} from '../../global.d';
 import type { PortrayalSettingsProps } from './common';
-import { openLayerManager } from '../LeftMenu.tsx';
+import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 function onClickValidate(
   referenceLayerId: string,

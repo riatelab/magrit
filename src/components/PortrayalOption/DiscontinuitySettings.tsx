@@ -11,31 +11,31 @@ import { produce } from 'solid-js/store';
 import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
-import { useI18nContext } from '../../../i18n/i18n-solid';
-import { getPossibleLegendPosition } from '../../LegendRenderer/common.tsx';
-import { getClassificationFunction } from '../../../helpers/classification';
-import { findSuitableName } from '../../../helpers/common';
-import { computeDiscontinuity } from '../../../helpers/geo';
-import { generateIdLayer } from '../../../helpers/layers';
+import { useI18nContext } from '../../i18n/i18n-solid';
+import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
+import { getClassificationFunction } from '../../helpers/classification';
+import { findSuitableName } from '../../helpers/common';
+import { computeDiscontinuity } from '../../helpers/geo';
+import { generateIdLayer } from '../../helpers/layers';
 
 // Stores
-import { applicationSettingsStore } from '../../../store/ApplicationSettingsStore';
-import { setGlobalStore, setLoading } from '../../../store/GlobalStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { setGlobalStore, setLoading } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
-} from '../../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../../store/PortrayalSelectionStore';
+} from '../../store/LayersDescriptionStore';
+import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
 
 // Subcomponents
-import InputFieldSelect from '../../Inputs/InputSelect.tsx';
-import ButtonValidation from '../../Inputs/InputButtonValidation.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputResultName from './InputResultName.tsx';
 
 // Types / Interfaces / Enums
 import type { PortrayalSettingsProps } from './common';
-import { DataType, type Variable, VariableType } from '../../../helpers/typeDetection';
+import { DataType, type Variable, VariableType } from '../../helpers/typeDetection';
 import {
   ClassificationMethod,
   type DiscontinuityParameters,
@@ -43,8 +43,8 @@ import {
   type LegendTextElement,
   LegendType,
   RepresentationType,
-} from '../../../global.d';
-import { openLayerManager } from '../LeftMenu.tsx';
+} from '../../global.d';
+import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 const subsetClassificationMethodsForDiscontinuity = [
   'quantiles',
