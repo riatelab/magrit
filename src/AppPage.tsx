@@ -483,7 +483,7 @@ const AppPage: () => JSX.Element = () => {
       onContextMenu={ () => { resetContextMenuStore(); } }
     >
     <HeaderBarApp />
-    <main class="is-fullhd">
+    <main>
       <LeftMenu />
       <MapZone />
       <Show when={globalStore.isLoading }>

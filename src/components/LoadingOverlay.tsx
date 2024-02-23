@@ -5,11 +5,19 @@ import '../styles/LoadingOverlay.css';
 
 export default function LoadingOverlay(): JSX.Element {
   const { LL } = useI18nContext();
+  const message = createMemo(() => (globalStore.loadingMessage === ''
+    ? LL().LoadingMessages.Default()
+    : LL().LoadingMessages[globalStore.loadingMessage]()));
 
-  return <div class="loading-overlay">
+  // Accessibility attributes are notably based on https://stackoverflow.com/a/59566339
+  return <div
+    class="loading-overlay"
+    role="progressbar"
+    aria-live="assertive"
+    aria-busy="true"
+    aria-valuetext={ message() }
+  >
     <div class="loading-overlay__spinner" />
-    <div class="loading-overlay__text">{ globalStore.loadingMessage === ''
-      ? LL().LoadingMessages.Default()
-      : LL().LoadingMessages[globalStore.loadingMessage]() }</div>
+    <div class="loading-overlay__text" aria-hidden="true">{ message() }</div>
   </div>;
 }
