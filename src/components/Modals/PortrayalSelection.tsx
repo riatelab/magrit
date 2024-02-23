@@ -13,7 +13,12 @@ import { FaSolidArrowLeftLong } from 'solid-icons/fa';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { layerAnyAvailableVariable, layerAvailableVariables, layerGeometryType } from '../../helpers/layerDescription';
+import {
+  getLayerName,
+  layerAnyAvailableVariable,
+  layerAvailableVariables,
+  layerGeometryType,
+} from '../../helpers/layerDescription';
 
 // Stores
 import { portrayalSelectionStore, setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
@@ -38,7 +43,7 @@ import '../../styles/PortrayalSelection.css';
 interface PortrayalDescription {
   // id: string;
   name: string;
-  representationType: RepresentationType;
+  type: RepresentationType;
   enabled: boolean;
   // description: string;
 }
@@ -46,35 +51,35 @@ interface PortrayalDescription {
 const portrayalDescriptions: Partial<PortrayalDescription>[] = [
   {
     name: 'Choropleth',
-    representationType: RepresentationType.choropleth,
+    type: RepresentationType.choropleth,
   },
   {
     name: 'ProportionalSymbols',
-    representationType: RepresentationType.proportionalSymbols,
+    type: RepresentationType.proportionalSymbols,
   },
   {
     name: 'Labels',
-    representationType: RepresentationType.labels,
+    type: RepresentationType.labels,
   },
   {
     name: 'Discontinuity',
-    representationType: RepresentationType.discontinuity,
+    type: RepresentationType.discontinuity,
   },
   {
     name: 'CategoricalChoropleth',
-    representationType: RepresentationType.categoricalChoropleth,
+    type: RepresentationType.categoricalChoropleth,
   },
   {
     name: 'Smoothed',
-    representationType: RepresentationType.smoothed,
+    type: RepresentationType.smoothed,
   },
   {
     name: 'Cartogram',
-    representationType: RepresentationType.cartogram,
+    type: RepresentationType.cartogram,
   },
   {
     name: 'Grid',
-    representationType: RepresentationType.grid,
+    type: RepresentationType.grid,
   },
 ];
 
@@ -119,7 +124,7 @@ export default function PortrayalSelection(
   const [
     selectedPortrayal,
     setSelectedPortrayal,
-  ] = createSignal<string | null>(null);
+  ] = createSignal<PortrayalDescription | null>(null);
   let refParentNode: HTMLDivElement;
 
   // Todo: choose if we want to use the store or the props
@@ -142,7 +147,7 @@ export default function PortrayalSelection(
 
     // Set the enable flag for
     portrayals.forEach((p) => {
-      switch (p.representationType) {
+      switch (p.type) {
         case RepresentationType.choropleth:
           // eslint-disable-next-line no-param-reassign
           p.enabled = vars.hasRatio;
@@ -193,7 +198,7 @@ export default function PortrayalSelection(
         <Show when={selectedPortrayal()}>
           <p class="modal-card-title">
             { LL().PortrayalSelection.Title2() }
-            &nbsp;- { LL().PortrayalSection.PortrayalTypes[selectedPortrayal()!] }</p>
+            &nbsp;- { LL().PortrayalSection.PortrayalTypes[selectedPortrayal()!.name] }</p>
         </Show>
       </header>
       <section class="modal-card-body is-flex is-flex-direction-column">
@@ -201,6 +206,10 @@ export default function PortrayalSelection(
           <InformationBanner expanded={true}>
             <p>{ LL().PortrayalSelection.Information() }</p>
           </InformationBanner>
+          <div class="has-text-centered mb-4">
+            {LL().PortrayalSelection.Layer()}
+            &nbsp;<b>{ getLayerName(props.layerId) }</b>
+          </div>
           <section style={{ height: '100%', overflow: 'auto', padding: '1em' }}>
             <div
               style={{
@@ -214,7 +223,7 @@ export default function PortrayalSelection(
                   (p) => <CardPortrayal
                     {...p}
                     onClick={(e, pDesc) => {
-                      setSelectedPortrayal(pDesc.representationType);
+                      setSelectedPortrayal(pDesc);
                     }}
                   />
                 }
@@ -223,30 +232,34 @@ export default function PortrayalSelection(
           </section>
         </Show>
         <Show when={selectedPortrayal()}>
+          <div class="mb-4 is-size-4">
+            {LL().PortrayalSelection.Layer()}
+            &nbsp;<b>{getLayerName(props.layerId)}</b>
+          </div>
           <Switch>
-            <Match when={selectedPortrayal() === RepresentationType.choropleth}>
+            <Match when={selectedPortrayal()!.type === RepresentationType.choropleth}>
               <ChoroplethSettings layerId={props.layerId!}/>
             </Match>
-            <Match when={selectedPortrayal() === RepresentationType.proportionalSymbols}>
+            <Match when={selectedPortrayal()!.type === RepresentationType.proportionalSymbols}>
               <ProportionalSymbolsSettings layerId={props.layerId!}/>
             </Match>
-            <Match when={selectedPortrayal() === RepresentationType.discontinuity }>
-              <DiscontinuitySettings layerId={ props.layerId! } />
+            <Match when={selectedPortrayal()!.type === RepresentationType.discontinuity}>
+              <DiscontinuitySettings layerId={props.layerId!}/>
             </Match>
-            <Match when={ selectedPortrayal() === RepresentationType.categoricalChoropleth }>
-              <CategoricalChoroplethSettings layerId={ props.layerId! } />
+            <Match when={selectedPortrayal()!.type === RepresentationType.categoricalChoropleth}>
+              <CategoricalChoroplethSettings layerId={props.layerId!}/>
             </Match>
-            <Match when={ selectedPortrayal() === RepresentationType.labels }>
-              <LabelsSettings layerId={ props.layerId! } />
+            <Match when={selectedPortrayal()!.type === RepresentationType.labels}>
+              <LabelsSettings layerId={props.layerId!}/>
             </Match>
-            <Match when={ selectedPortrayal() === RepresentationType.smoothed }>
-              <SmoothingSettings layerId={ props.layerId! } />
+            <Match when={selectedPortrayal()!.type === RepresentationType.smoothed}>
+              <SmoothingSettings layerId={props.layerId!}/>
             </Match>
-            <Match when={ selectedPortrayal() === RepresentationType.cartogram }>
-              <CartogramSettings layerId={ props.layerId! } />
+            <Match when={selectedPortrayal()!.type === RepresentationType.cartogram}>
+              <CartogramSettings layerId={props.layerId!}/>
             </Match>
-            <Match when={ selectedPortrayal() === RepresentationType.grid }>
-              <GriddingSettings layerId={ props.layerId! } />
+            <Match when={selectedPortrayal()!.type === RepresentationType.grid}>
+              <GriddingSettings layerId={props.layerId!}/>
             </Match>
           </Switch>
         </Show>

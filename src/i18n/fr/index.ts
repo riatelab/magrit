@@ -371,6 +371,7 @@ const fr = {
   PortrayalSelection: {
     Title: 'Choix d\'une représentation',
     Title2: 'Options de création de la représentation',
+    Layer: 'Couche :',
     Back: 'Retour au choix de la représentation',
     Information: 'Sélectionnez la représentation que vous souhaitez appliquer à votre couche de données. Les représentations grisées indiquent que votre jeu de données ne contient pas de données permettant d\'effectuer ce type de représentation. Si vous pensez qu\'il s\'agit d\'une erreur, vous pouvez modifier le type des champs dans le gestionnaire de couches.',
     ShortDescriptions: {

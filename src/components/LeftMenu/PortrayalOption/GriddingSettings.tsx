@@ -131,6 +131,7 @@ async function onClickValidate(
       } as LegendTextElement,
       subtitle: {
         ...applicationSettingsStore.defaultLegendSettings.subtitle,
+        text: '(unit / km²)',
       } as LegendTextElement,
       note: {
         ...applicationSettingsStore.defaultLegendSettings.note,

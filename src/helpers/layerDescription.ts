@@ -61,7 +61,19 @@ function layerAnyAvailableVariable(layerId: string) {
   return layer.fields.length > 0;
 }
 
+function getLayerName(layerIr: string) {
+  const layer = layersDescriptionStore.layers
+    .find((l) => l.id === layerIr);
+
+  if (!layer) {
+    return null;
+  }
+
+  return layer.name;
+}
+
 export {
+  getLayerName,
   isExportableLayer,
   isCandidateForRepresentation,
   layerAvailableVariables,

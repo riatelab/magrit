@@ -47,6 +47,8 @@ html.is-dark-mode {
     --success-color: hsl(141, 53%, 53%);
     --warning-color: hsl(48, 100%, 67%);
     --danger-color: hsl(348, 100%, 61%);
+    scrollbar-color: #626262 #000000;
+    /* color-scheme: dark; */
 }
 
 @media screen and (max-width: 1023px) {
@@ -88,6 +90,9 @@ html.is-dark-mode .information-banner {
     background-color: #045933 !important; /* Or maybe #0e2a10 ? */
 }
 
+html.is-dark-mode .portrayal-selection .mini-button.selected {
+    border: solid 2px darkgreen;
+}
 
 /*
 Overwrite Bulma's default to help

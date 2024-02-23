@@ -1301,6 +1301,10 @@ type RootTranslation = {
 		 */
 		Title2: string
 		/**
+		 * L​a​y​e​r​:
+		 */
+		Layer: string
+		/**
 		 * B​a​c​k​ ​t​o​ ​p​o​r​t​r​a​y​a​l​ ​s​e​l​e​c​t​i​o​n
 		 */
 		Back: string
@@ -3279,6 +3283,10 @@ export type TranslationFunctions = {
 		 * Options for the selected portrayal
 		 */
 		Title2: () => LocalizedString
+		/**
+		 * Layer:
+		 */
+		Layer: () => LocalizedString
 		/**
 		 * Back to portrayal selection
 		 */

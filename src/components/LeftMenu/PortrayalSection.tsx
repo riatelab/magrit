@@ -12,11 +12,6 @@ import { isCandidateForRepresentation } from '../../helpers/layerDescription';
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 import { portrayalSelectionStore, setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
 
-// Types / Interfaces / Enums
-
-// Styles
-import '../../styles/PortrayalSection.css';
-
 export default function PortrayalSection(): JSX.Element {
   const { LL } = useI18nContext();
 

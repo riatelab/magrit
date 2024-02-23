@@ -370,6 +370,7 @@ const en = {
   PortrayalSelection: {
     Title: 'Portrayal selection',
     Title2: 'Options for the selected portrayal',
+    Layer: 'Layer:',
     Back: 'Back to portrayal selection',
     Information: 'Select the representation you wish to apply to your data layer. Greyed-out representations indicate that your dataset does not contain any data allowing you to perform this type of representation. If you suspect this is an error, you can change the field type in the Layer Manager.',
     ShortDescriptions: {
