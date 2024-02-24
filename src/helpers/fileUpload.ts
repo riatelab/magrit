@@ -7,7 +7,7 @@ import { getPalette } from 'dicopal';
 // Helpers
 import {
   convertBinaryTabularDatasetToJSON,
-  convertTabularDatasetToJSON,
+  convertTextualTabularDatasetToJSON,
   convertToGeoJSON,
   getGeometryType,
   removeFeaturesWithEmptyGeometry,
@@ -281,7 +281,7 @@ export const convertAndAddFiles = async (
 
   // If the file is a tabular file, we convert it to JSON manually too
   if (!(format === SupportedGeoFileTypes.GeoJSON) && isTextualTabularFile(files)) {
-    const res = await convertTabularDatasetToJSON(files[0].file, files[0].ext);
+    const res = await convertTextualTabularDatasetToJSON(files[0].file, files[0].ext);
     return {
       id: addTabularLayer(res, files[0].name),
       nRemoved: 0,

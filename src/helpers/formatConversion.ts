@@ -1,6 +1,6 @@
 import JSZip from 'jszip';
 
-import { SupportedGeoFileTypes, SupportedTabularFileTypes } from './supportedFormats';
+import { SupportedTabularFileTypes } from './supportedFormats';
 
 // Helpers
 import d3 from './d3-custom';
@@ -90,7 +90,7 @@ export function findCsvDelimiter(rawText: string): string {
   return delimiters[maxIndex];
 }
 
-export async function convertTabularDatasetToJSON(
+export async function convertTextualTabularDatasetToJSON(
   file: File,
   ext: SupportedTabularFileTypes[keyof SupportedTabularFileTypes],
 ): Promise<object[]> {
@@ -102,20 +102,14 @@ export async function convertTabularDatasetToJSON(
   }
   if (ext === 'json') {
     const text = await file.text();
+    // TODO: we should check that we have an array of objects, with the same keys
     return JSON.parse(text);
   }
   if (ext === 'txt') {
+    // TODO: handle other textual formats ?
     return [];
   }
-  if (ext === 'xlsx') {
-    return [];
-  }
-  if (ext === 'xls') {
-    return [];
-  }
-  if (ext === 'ods') {
-    return [];
-  }
+  // TODO: we should throw an error if we don't know how to handle the file
   return [];
 }
 
@@ -163,20 +157,13 @@ export async function convertFromGeoJSON(
     const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
     // We will return a zip file (encoded in base 64) containing all the shapefile files
     const zip = new JSZip();
-    // Add the cpg file
-    zip.file(`${layerName}.cpg`, 'UTF-8');
     // Add the other files
-    const shpExts = ['shp', 'shx', 'dbf', 'prj'];
-    for (let i = 0; i < shpExts.length; i += 1) {
-      const ext = shpExts[i];
-      const outputPath = {
-        local: output.local.replace('.shp', `.${ext}`),
-        real: output.real.replace('.shp', `.${ext}`),
-      };
+    for (let i = 0; i < output.all.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
-      const rawData = await globalThis.gdal.getFileBytes(outputPath);
+      const rawData = await globalThis.gdal.getFileBytes(output.all[i]);
       const blob = new Blob([rawData], { type: '' });
-      zip.file(`${layerName}.${ext}`, blob, { binary: true });
+      const fileName = output.all[i].local.replace('/output/', '');
+      zip.file(fileName, blob, { binary: true });
     }
     await globalThis.gdal.close(input);
     // Generate the zip file (base64 encoded)
@@ -205,6 +192,8 @@ export async function convertFromGeoJSON(
     await globalThis.gdal.close(input);
     return uintArrayToBase64(bytes);
   }
+  // TODO: we should throw an error if we don't know how to handle the format
+  //  (which should probably not happen due to the format selection in the UI)
   return '';
 }
 
