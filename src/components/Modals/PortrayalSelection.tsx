@@ -4,6 +4,7 @@ import {
   For,
   type JSX,
   Match,
+  onMount,
   Show,
   Switch,
 } from 'solid-js';
@@ -83,7 +84,8 @@ const portrayalDescriptions: PortrayalDescription[] = [
 
 function CardPortrayal(
   pDesc: PortrayalDescription & {
-    onClick: ((arg0: MouseEvent, arg1: PortrayalDescription) => void) },
+    onClick: ((arg0: MouseEvent | KeyboardEvent, arg1: PortrayalDescription) => void),
+  },
 ): JSX.Element {
   const { LL } = useI18nContext();
   return <div
@@ -100,6 +102,18 @@ function CardPortrayal(
         ? (e) => pDesc.onClick(e, pDesc)
         : undefined
     }
+    onKeyDown={
+      pDesc.enabled
+        ? (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            pDesc.onClick(e, pDesc);
+          }
+        }
+        : undefined
+    }
+    aria-role="button"
+    aria-disabled={!pDesc.enabled}
+    tabindex={pDesc.enabled ? 0 : undefined}
   >
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
       <p class="card-header-title">
@@ -177,6 +191,10 @@ export default function PortrayalSelection(): JSX.Element {
         p.enabled = false;
         break;
     }
+  });
+
+  onMount(() => {
+    (refParentNode.querySelector('.modal-card-body')! as HTMLDivElement).focus();
   });
 
   return <div

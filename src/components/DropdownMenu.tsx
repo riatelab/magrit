@@ -1,4 +1,4 @@
-import { type JSX, For } from 'solid-js';
+import { type JSX, For, onMount } from 'solid-js';
 import { FaSolidAngleDown } from 'solid-icons/fa';
 
 interface DropdownMenuEntry {
@@ -46,18 +46,50 @@ function setDropdownItemTarget(event: Event, props: DropdownMenuProps): void {
   dropdownRoot.querySelector('.dropdown-menu')!.classList.toggle('is-block');
 }
 
+function onKeyDownDropdown(e: KeyboardEvent): void {
+  const trigger = e.currentTarget as HTMLElement;
+  const dropdown = trigger.parentElement!;
+  const menu = dropdown.querySelector('.dropdown-menu')!;
+
+  if (e.key === 'Enter' || e.key === 'Space') {
+    e.preventDefault();
+    menu.classList.toggle('is-block');
+    const isOpen = menu.classList.contains('is-block');
+    trigger.setAttribute('aria-expanded', `${isOpen}`);
+
+    if (isOpen) {
+      (menu.querySelector('.dropdown-item')! as HTMLAnchorElement).focus();
+    }
+  }
+
+  if (e.key === 'Escape') {
+    dropdown.classList.remove('is-active');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.focus();
+  }
+}
+
 function onClickDropdown(event: Event): void {
   // Collapse all other dropdown menus
-  const dropdowns = document.querySelectorAll('.dropdown-menu.is-block');
+  const dropdowns = document.querySelectorAll('.dropdown');
   for (let i = 0; i < dropdowns.length; i++) { // eslint-disable-line no-plusplus
-    dropdowns[i].classList.remove('is-block');
+    dropdowns[i].querySelector('.dropdown-menu')!.classList.remove('is-block');
+    dropdowns[i].querySelector('.dropdown-trigger button')!.setAttribute('aria-expanded', 'false');
   }
-  // Expand the dropdown menu
-  const target = event.currentTarget as HTMLElement;
-  target.parentElement!.querySelector('.dropdown-menu')!.classList.toggle('is-block');
+  // Toggle state of this dropdown menu
+  const trigger = event.currentTarget as HTMLElement;
+  const dropdown = trigger.parentElement!;
+  const isOpen = dropdown.querySelector('.dropdown-menu')!.classList.toggle('is-block');
+  trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  console.log('isOpen', isOpen);
 
-  // Add an event listener to close the dropdown menu when clicking outside
-  document.addEventListener('click', onClickOutsideDropdown);
+  if (isOpen) {
+    // Add an event listener to close the dropdown menu when clicking outside
+    document.addEventListener('click', onClickOutsideDropdown);
+  } else {
+    // Remove the event listener to close the dropdown menu when clicking outside
+    document.removeEventListener('click', onClickOutsideDropdown);
+  }
 }
 
 const defaultStyleDropdown = {
@@ -65,8 +97,39 @@ const defaultStyleDropdown = {
 };
 
 export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
-  return <div class="dropdown" style={{ ...defaultStyleDropdown, ...props.style }} id={props.id}>
-    <div class="dropdown-trigger" style={{ width: '100%' }} onClick={ onClickDropdown }>
+  let refParentNode: HTMLDivElement;
+
+  onMount(() => {
+    const items: NodeListOf<HTMLAnchorElement> = refParentNode.querySelectorAll('.dropdown-item');
+    items
+      .forEach((item) => {
+        item.addEventListener('keydown', (e: KeyboardEvent) => {
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            const nextElement = (
+              (e.target as HTMLAnchorElement)?.nextElementSibling as HTMLAnchorElement) || items[0];
+            nextElement.focus();
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            const prevElement = ((e.target as HTMLAnchorElement)
+              ?.previousElementSibling as HTMLAnchorElement) || items[items.length - 1];
+            prevElement.focus();
+          }
+        });
+      });
+  });
+  return <div
+    class="dropdown"
+    style={{ ...defaultStyleDropdown, ...props.style }}
+    id={props.id}
+    ref={refParentNode!}
+  >
+    <div
+      class="dropdown-trigger"
+      style={{ width: '100%' }}
+      onClick={ onClickDropdown }
+      onKeyDown={ onKeyDownDropdown }
+    >
       <button class="button" aria-haspopup="true" aria-controls={ props.id } style={{ width: '100%' }}>
         <span
           class="dropdown-item-target"

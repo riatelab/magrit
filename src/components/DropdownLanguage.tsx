@@ -12,8 +12,10 @@ import { Locales } from '../i18n/i18n-types';
 function handleDropdownMenu(dropdown: HTMLDivElement | undefined): void {
   if (!dropdown) return;
   dropdown.addEventListener('click', () => {
-    dropdown.classList.toggle('is-active');
-    (dropdown.querySelector('.dropdown-content > a')! as HTMLDivElement).focus();
+    const isOpen = dropdown.querySelector('.dropdown-menu')!.classList.toggle('is-block');
+    if (isOpen) {
+      (dropdown.querySelector('.dropdown-item')! as HTMLDivElement).focus();
+    }
   });
 }
 

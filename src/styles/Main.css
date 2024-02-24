@@ -131,6 +131,12 @@ but just store them in css variables)
   color: var(--modal-card-title-color) !important;
 }*/
 
+.dropdown-content {
+  border-left: solid 1px var(--border-color);
+  border-bottom: solid 1px var(--border-color);
+  border-right: solid 1px var(--border-color);
+}
+
 .button .has-shadow {
   box-shadow: 0 0.5rem 0.8rem var(--button-shadow) !important;
 }
