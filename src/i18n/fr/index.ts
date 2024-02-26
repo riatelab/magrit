@@ -309,6 +309,13 @@ const fr = {
       DisplayChartOnMap: 'Afficher l\'histogramme de fréquence par catégorie sur la carte',
       Categories: '{{Une catégories | ?? catégories}}',
       HasNull: 'Contient des valeurs nulles ou non renseignées',
+      NoNull: 'Pas de valeurs nulles ou non renseignées',
+      ShowChart: 'Afficher le graphique',
+      XAxisCategories: 'Catégories',
+      YAxisCount: 'Nombre',
+      Customize: 'Personnaliser les couleurs et les noms de classes',
+      Value: 'Valeur :',
+      Count: 'Nombre : ',
     },
   },
   ExportSection: {

@@ -1080,6 +1080,34 @@ type RootTranslation = {
 			 * C​o​n​t​a​i​n​s​ ​n​u​l​l​ ​o​r​ ​e​m​p​t​y​ ​v​a​l​u​e​s
 			 */
 			HasNull: string
+			/**
+			 * N​o​ ​n​u​l​l​ ​o​r​ ​e​m​p​t​y​ ​v​a​l​u​e​s
+			 */
+			NoNull: string
+			/**
+			 * S​h​o​w​ ​c​h​a​r​t
+			 */
+			ShowChart: string
+			/**
+			 * C​a​t​e​g​o​r​i​e​s
+			 */
+			XAxisCategories: string
+			/**
+			 * C​o​u​n​t
+			 */
+			YAxisCount: string
+			/**
+			 * C​u​s​t​o​m​i​z​e​ ​c​a​t​e​g​o​r​y​ ​n​a​m​e​s​ ​a​n​d​ ​c​o​l​o​r​s
+			 */
+			Customize: string
+			/**
+			 * V​a​l​u​e​:
+			 */
+			Value: string
+			/**
+			 * C​o​u​n​t​:
+			 */
+			Count: string
 		}
 	}
 	ExportSection: {
@@ -3075,6 +3103,34 @@ export type TranslationFunctions = {
 			 * Contains null or empty values
 			 */
 			HasNull: () => LocalizedString
+			/**
+			 * No null or empty values
+			 */
+			NoNull: () => LocalizedString
+			/**
+			 * Show chart
+			 */
+			ShowChart: () => LocalizedString
+			/**
+			 * Categories
+			 */
+			XAxisCategories: () => LocalizedString
+			/**
+			 * Count
+			 */
+			YAxisCount: () => LocalizedString
+			/**
+			 * Customize category names and colors
+			 */
+			Customize: () => LocalizedString
+			/**
+			 * Value:
+			 */
+			Value: () => LocalizedString
+			/**
+			 * Count:
+			 */
+			Count: () => LocalizedString
 		}
 	}
 	ExportSection: {

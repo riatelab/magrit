@@ -20,7 +20,7 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 import { useI18nContext } from './i18n/i18n-solid';
 import { isLocale } from './i18n/i18n-util';
 import { loadLocale } from './i18n/i18n-util.sync';
-import { initializeLightDarkMode, toggleDarkMode } from './helpers/darkmode';
+import { toggleDarkMode } from './helpers/darkmode';
 import { clickLinkFromDataUrl } from './helpers/exports';
 import { draggedElementsAreFiles, isAuthorizedFile, prepareFileExtensions } from './helpers/fileUpload';
 import { round } from './helpers/math';

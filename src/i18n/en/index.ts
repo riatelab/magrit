@@ -308,6 +308,13 @@ const en = {
       DisplayChartOnMap: 'Display the frequency histogram by category on the map',
       Categories: '{{One category | ?? categories}}',
       HasNull: 'Contains null or empty values',
+      NoNull: 'No null or empty values',
+      ShowChart: 'Show chart',
+      XAxisCategories: 'Categories',
+      YAxisCount: 'Count',
+      Customize: 'Customize category names and colors',
+      Value: 'Value:',
+      Count: 'Count:',
     },
   },
   ExportSection: {
