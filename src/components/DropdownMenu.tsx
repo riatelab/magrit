@@ -81,7 +81,6 @@ function onClickDropdown(event: Event): void {
   const dropdown = trigger.parentElement!;
   const isOpen = dropdown.querySelector('.dropdown-menu')!.classList.toggle('is-block');
   trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  console.log('isOpen', isOpen);
 
   if (isOpen) {
     // Add an event listener to close the dropdown menu when clicking outside

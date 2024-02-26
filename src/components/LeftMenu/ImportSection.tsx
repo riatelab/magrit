@@ -5,8 +5,11 @@ import { type JSX } from 'solid-js';
 import { useI18nContext } from '../../i18n/i18n-solid';
 
 // Stores
-import { setDatasetCatalogStore } from '../../store/DatasetCatalogStore';
 import { setFileDropStore } from '../../store/FileDropStore';
+import { setModalStore } from '../../store/ModalStore';
+
+// Subcomponents
+import ExampleDatasetModal from '../Modals/ExampleDatasetModal.tsx';
 
 export default function ImportSection(): JSX.Element {
   const { LL } = useI18nContext();
@@ -25,7 +28,17 @@ export default function ImportSection(): JSX.Element {
       <a
         class="button is-primary is-outlined"
         style={{ width: '260px' }}
-        onClick={() => { setDatasetCatalogStore({ show: true }); }}
+        onClick={() => {
+          setModalStore({
+            show: true,
+            title: LL().DatasetCatalog.title(),
+            content: () => <ExampleDatasetModal />,
+            escapeKey: 'cancel',
+            width: '90vw',
+            successButton: LL().DatasetCatalog.confirmButton(),
+            cancelButton: LL().DatasetCatalog.cancelButton(),
+          });
+        }}
       >
         { LL().ImportSection.ExampleDatasets() }
       </a>

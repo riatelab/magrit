@@ -18,7 +18,7 @@ import { ImFilter } from 'solid-icons/im';
 import { useI18nContext } from '../../i18n/i18n-solid';
 
 // Stores
-import { setDatasetCatalogStore } from '../../store/DatasetCatalogStore';
+import { setModalStore } from '../../store/ModalStore';
 
 // Subcomponents
 import Pagination from '../Pagination.tsx';
@@ -199,7 +199,7 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
 // - A (paginated) list of datasets
 // - A section with the details of the selected dataset
 // - A button to confirm the selection and add it to the map
-export default function ExampleDataModal(): JSX.Element {
+export default function ExampleDatasetModal(): JSX.Element {
   const { LL } = useI18nContext();
   // Array of datasets (potentially filtered using the search bar)
   const [
@@ -228,12 +228,6 @@ export default function ExampleDataModal(): JSX.Element {
   // The total number of pages
   const totalPages = createMemo(() => Math.ceil(filteredDatasets().length / maxEntryPerPage));
 
-  // Focus the cancel button when the modal is opened
-  onMount(() => {
-    (document.querySelector('.cancel-button') as HTMLElement)
-      .focus();
-  });
-
   // Filter the datasets using the search terms
   // (for now we are only filtering on exact matches on the keywords)
   const filterDs = () => {
@@ -257,121 +251,102 @@ export default function ExampleDataModal(): JSX.Element {
     });
   };
 
-  return <div
-    class="modal-window modal"
-    style={{ display: 'flex' }}
-    aria-modal="true"
-    role="dialog"
-  >
-    <div class="modal-background"></div>
-    <div class="modal-card" style={{ width: '90vw', height: '90vh' }}>
-      <header class="modal-card-head">
-        <p class="modal-card-title">{ LL().DatasetCatalog.title() }</p>
-      </header>
-      <section class="modal-card-body" style={{ display: 'flex' }}>
-        <div style={{
-          width: '60%',
-          padding: '1em',
-          margin: '1em',
-          border: 'solid 1px silver',
-          'border-radius': '1em',
-          overflow: 'auto',
-        }}>
-          <div class="is-flex">
-            <div class="field has-addons" style={{ margin: '1em' }}>
-              <div class="control">
-                <input
-                  class="input"
-                  type="text"
-                  value={selectedSearchTerms()}
-                  style={{ width: '300px' }}
-                  onChange={(e) => setSelectedSearchTerms(e.currentTarget.value)}
-                  placeholder={ LL().DatasetCatalog.placeholderSearchBar() }
-                />
-              </div>
-              <div class="control">
-                <button
-                  class="button is-info"
-                  onClick={() => {
-                    setCurrentPage(1);
-                    setFilteredDatasets(filterDs());
-                  }}
-                >
-                  { LL().DatasetCatalog.searchButton() }
-                </button>
-              </div>
-              <div class="control">
-                <button
-                  class="button"
-                  onClick={() => {
-                    setSelectedSearchTerms('');
-                    setCurrentPage(1);
-                    setFilteredDatasets(filterDs());
-                  }}
-                >
-                  X
-                </button>
-              </div>
-            </div>
-            <div class="field" style={{ margin: '1em', 'justify-content': 'start' }}>
-              <ImFilter
-                style={{
-                  height: '1.5em', width: '1.5em', 'margin-right': '1em', opacity: filteredDatasets().length === datasets.length ? 0 : 1,
-                }}
-              />
-              <span>{ LL().DatasetCatalog.datasets(filteredDatasets().length) }</span>
-            </div>
+  onMount(() => {
+    // TODO: we should override the confirmCallback
+    setModalStore({
+      confirmCallback: () => {
+        // TODO: do something with the selected dataset...
+      },
+    });
+  });
+
+  return <div class="is-flex">
+    <div style={{
+      width: '60%',
+      padding: '1em',
+      margin: '1em',
+      border: 'solid 1px silver',
+      'border-radius': '1em',
+      overflow: 'auto',
+    }}>
+      <div class="is-flex">
+        <div class="field has-addons" style={{ margin: '1em' }}>
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              value={selectedSearchTerms()}
+              style={{ width: '300px' }}
+              onChange={(e) => setSelectedSearchTerms(e.currentTarget.value)}
+              placeholder={ LL().DatasetCatalog.placeholderSearchBar() }
+            />
           </div>
-          <Show
-            when={filteredDatasets().length > 0}
-            fallback={<p>{ LL().DatasetCatalog.noSearchResult() }</p>}
-          >
-            <DatasetPage
-              setSelectedDataset={setSelectedDataset}
-              offset={offset()}
-              maxEntryPerPage={maxEntryPerPage}
-              datasetEntries={filteredDatasets()}
-            />
-            <Pagination
-              totalPages={totalPages()}
-              onClick={(pageNumber) => setCurrentPage(pageNumber)}
-              currentPage={currentPage()}
-            />
-          </Show>
-        </div>
-        <div style={{
-          width: '40%',
-          padding: '1em',
-          margin: '1em',
-          border: 'solid 1px silver',
-          'border-radius': '1em',
-          overflow: 'auto',
-        }}>
-          <div>
-            <Show
-              when={selectedDataset() !== null}
-              fallback={<p>{ LL().DatasetCatalog.placeholderDatasetDetail() }</p>}
+          <div class="control">
+            <button
+              class="button is-info"
+              onClick={() => {
+                setCurrentPage(1);
+                setFilteredDatasets(filterDs());
+              }}
             >
-              <CardDatasetDetail {...selectedDataset() as DatasetEntry} />
-            </Show>
+              { LL().DatasetCatalog.searchButton() }
+            </button>
+          </div>
+          <div class="control">
+            <button
+              class="button"
+              onClick={() => {
+                setSelectedSearchTerms('');
+                setCurrentPage(1);
+                setFilteredDatasets(filterDs());
+              }}
+            >
+              X
+            </button>
           </div>
         </div>
-      </section>
-      <footer class="modal-card-foot">
-        <button
-          class="button is-success confirm-button"
-          disabled={selectedDataset() === null}
-          onClick={() => setDatasetCatalogStore({ show: false })}
+        <div class="field" style={{ margin: '1em', 'justify-content': 'start' }}>
+          <ImFilter
+            style={{
+              height: '1.5em', width: '1.5em', 'margin-right': '1em', opacity: filteredDatasets().length === datasets.length ? 0 : 1,
+            }}
+          />
+          <span>{ LL().DatasetCatalog.datasets(filteredDatasets().length) }</span>
+        </div>
+      </div>
+      <Show
+        when={filteredDatasets().length > 0}
+        fallback={<p>{ LL().DatasetCatalog.noSearchResult() }</p>}
+      >
+        <DatasetPage
+          setSelectedDataset={setSelectedDataset}
+          offset={offset()}
+          maxEntryPerPage={maxEntryPerPage}
+          datasetEntries={filteredDatasets()}
+        />
+        <Pagination
+          totalPages={totalPages()}
+          onClick={(pageNumber) => setCurrentPage(pageNumber)}
+          currentPage={currentPage()}
+        />
+      </Show>
+    </div>
+    <div style={{
+      width: '40%',
+      padding: '1em',
+      margin: '1em',
+      border: 'solid 1px silver',
+      'border-radius': '1em',
+      overflow: 'auto',
+    }}>
+      <div>
+        <Show
+          when={selectedDataset() !== null}
+          fallback={<p>{ LL().DatasetCatalog.placeholderDatasetDetail() }</p>}
         >
-          { LL().DatasetCatalog.confirmButton() }
-        </button>
-        <button
-          class="button cancel-button"
-          onClick={() => setDatasetCatalogStore({ show: false })}
-        >
-          { LL().DatasetCatalog.cancelButton() }
-        </button>
-      </footer>
+          <CardDatasetDetail {...selectedDataset() as DatasetEntry} />
+        </Show>
+      </div>
     </div>
   </div>;
 }

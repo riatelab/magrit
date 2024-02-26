@@ -1,5 +1,5 @@
 // Imports from solid-js
-import { JSX } from 'solid-js';
+import { JSX, onCleanup, onMount } from 'solid-js';
 import { autofocus } from '@solid-primitives/autofocus';
 
 // Imports from other packages
@@ -51,10 +51,27 @@ export default function NiceAlert(): JSX.Element {
 
   let refParentNode: HTMLDivElement;
 
+  const listenerEscapeKey = (event: KeyboardEvent) => {
+    const isEscape = event.key
+      ? (event.key === 'Escape' || event.key === 'Esc')
+      : (event.keyCode === 27);
+    if (isEscape) {
+      (refParentNode.querySelector('.cancel-button') as HTMLElement).click();
+    }
+  };
+
   const o = {
     ref: autofocus,
     autofocus: true,
   };
+
+  onMount(() => {
+    document.addEventListener('keydown', listenerEscapeKey);
+  });
+
+  onCleanup(() => {
+    document.removeEventListener('keydown', listenerEscapeKey);
+  });
 
   return <div
     class="modal nice-alert"
@@ -73,7 +90,7 @@ export default function NiceAlert(): JSX.Element {
       </section>
       <footer class="modal-card-foot">
         <button
-          class="button is-success"
+          class="button is-success confirm-button"
           { ...(niceAlertStore.focusOn === 'confirm' ? o : {}) }
           onClick={() => {
             confirmCallback();
@@ -81,7 +98,7 @@ export default function NiceAlert(): JSX.Element {
           }}
         >{ successButton }</button>
         <button
-          class="button"
+          class="button cancel-button"
           { ...(niceAlertStore.focusOn === 'cancel' ? o : {}) }
           onClick={() => {
             cancelCallback();

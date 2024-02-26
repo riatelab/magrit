@@ -4,9 +4,6 @@ import { type JSX, Show } from 'solid-js';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 
-// Stores
-import { setDatasetCatalogStore } from '../../store/DatasetCatalogStore';
-
 /*
 * In this Wizard the user will be able to:
 * - Choose the name of the dataset
@@ -30,13 +27,13 @@ export default function TabularImportWizardModal(): JSX.Element {
       <footer class="modal-card-foot">
         <button
           class="button is-success confirm-button"
-          onClick={() => setDatasetCatalogStore({ show: false })}
+          onClick={() => {}}
         >
           { LL().DatasetCatalog.confirmButton() }
         </button>
         <button
           class="button cancel-button"
-          onClick={() => setDatasetCatalogStore({ show: false })}
+          onClick={() => {}}
         >
           { LL().DatasetCatalog.cancelButton() }
         </button>

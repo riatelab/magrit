@@ -1,6 +1,5 @@
 // Imports from solid-js
 import { JSX, onCleanup, onMount } from 'solid-js';
-import { autofocus } from '@solid-primitives/autofocus';
 
 // Imports from other packages
 import { LocalizedString } from 'typesafe-i18n';

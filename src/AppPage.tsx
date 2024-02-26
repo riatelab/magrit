@@ -36,7 +36,7 @@ import NiceAlert from './components/Modals/NiceAlert.tsx';
 import TableWindow from './components/Modals/TableWindow.tsx';
 import ClassificationPanel from './components/Modals/ClassificationPanel.tsx';
 import { HeaderBarApp } from './components/Headers.tsx';
-import ExampleDataModal from './components/Modals/ExampleDatasetModal.tsx';
+import ExampleDatasetModal from './components/Modals/ExampleDatasetModal.tsx';
 import ContextMenu from './components/ContextMenu.tsx';
 import ImportWindow from './components/ImportWindow.tsx';
 // import ReloadPrompt from './components/ReloadPrompt.tsx';
@@ -60,7 +60,6 @@ import { niceAlertStore, setNiceAlertStore } from './store/NiceAlertStore';
 import { fileDropStore, setFileDropStore } from './store/FileDropStore';
 import { tableWindowStore } from './store/TableWindowStore';
 import { applicationSettingsStore, ResizeBehavior } from './store/ApplicationSettingsStore';
-import { datasetCatalogStore } from './store/DatasetCatalogStore';
 import { contextMenuStore, resetContextMenuStore } from './store/ContextMenuStore';
 import { resetUndoRedoStackStore } from './store/stateStackStore';
 import { undo, redo } from './store/undo-redo';
@@ -500,9 +499,6 @@ const AppPage: () => JSX.Element = () => {
         </Show>
         <Show when={tableWindowStore.show}>
           <TableWindow />
-        </Show>
-        <Show when={datasetCatalogStore.show}>
-          <ExampleDataModal />
         </Show>
         <Show when={modalStore.show}>
           <DefaultModal />
