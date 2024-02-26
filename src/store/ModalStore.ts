@@ -1,14 +1,15 @@
 import { createStore } from 'solid-js/store';
 import { JSX } from 'solid-js';
+import { LocalizedString } from 'typesafe-i18n';
 
 type ModalStoreType = {
   show: boolean,
-  title: string | null,
+  title: LocalizedString | string | null,
   content: JSX.Element | (() => JSX.Element) | string | null,
   confirmCallback: (() => void) | null,
   cancelCallback: (() => void) | null,
-  successButton: string | null,
-  cancelButton: string | null,
+  successButton: LocalizedString | string | null,
+  cancelButton: LocalizedString | string | null,
   escapeKey: 'confirm' | 'cancel' | null,
   width?: string,
 };

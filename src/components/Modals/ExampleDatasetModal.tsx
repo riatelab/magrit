@@ -1,9 +1,11 @@
 // Imports from solid-js
 import {
+  createEffect,
   createMemo,
   createSignal,
   For,
   JSX,
+  on,
   onMount,
   Setter,
   Show,
@@ -132,7 +134,7 @@ function DatasetPage(props: {
 function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
   const { locale, LL } = useI18nContext();
   return <div>
-    <h3>{ ds.name[locale()] }</h3>
+    <h3>{ ds.name[locale()] || ds.name.en }</h3>
     <h4>{ LL().DatasetCatalog.about() }</h4>
     <div>
       <table>
@@ -176,7 +178,7 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
     <br />
     <h4>{ LL().DatasetCatalog.description() }</h4>
     <div>
-      <p> { ds.description[locale()] }</p>
+      <p> { ds.description[locale()] || ds.description.en }</p>
     </div>
     <br />
     <h4>{ LL().DatasetCatalog.preview() }</h4>
@@ -252,13 +254,26 @@ export default function ExampleDatasetModal(): JSX.Element {
   };
 
   onMount(() => {
-    // TODO: we should override the confirmCallback
     setModalStore({
       confirmCallback: () => {
-        // TODO: do something with the selected dataset...
+        // TODO: Add the selected dataset to the map...
+        console.log(selectedDataset());
       },
     });
   });
+
+  createEffect(
+    on(
+      () => selectedDataset(),
+      () => {
+        if (selectedDataset() !== null) {
+          document.querySelector('.modal .button.confirm-button')!.removeAttribute('disabled');
+        } else {
+          document.querySelector('.modal .button.confirm-button')!.setAttribute('disabled', 'true');
+        }
+      },
+    ),
+  );
 
   return <div class="is-flex">
     <div style={{
@@ -294,7 +309,7 @@ export default function ExampleDatasetModal(): JSX.Element {
           </div>
           <div class="control">
             <button
-              class="button"
+              class="button is-warning"
               onClick={() => {
                 setSelectedSearchTerms('');
                 setCurrentPage(1);

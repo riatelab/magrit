@@ -10,10 +10,6 @@ import { produce } from 'solid-js/store';
 // Imports from other packages
 import { getColors } from 'dicopal';
 import { yieldOrContinue } from 'main-thread-scheduling';
-import * as Plot from '@observablehq/plot';
-import { BsThreeDotsVertical } from 'solid-icons/bs';
-import { FaSolidArrowRight } from 'solid-icons/fa';
-import Sortable from 'solid-sortablejs';
 
 // Helpers
 import { generateIdLayer } from '../../helpers/layers';
@@ -41,11 +37,18 @@ import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 import CollapsibleSection from '../CollapsibleSection.tsx';
+import {
+  CategoriesSummary,
+  CategoriesPlot,
+  CategoriesCustomisation,
+} from './CategoricalChoroplethComponents.tsx';
 
 // Types / Interfaces / Enums
 import {
+  type CategoricalChoroplethMapping,
   type CategoricalChoroplethParameters,
-  type ChoroplethLegendParameters, GeoJSONFeature,
+  type ChoroplethLegendParameters,
+  type GeoJSONFeature,
   type LayerDescriptionCategoricalChoropleth,
   type LegendTextElement,
   LegendType,
@@ -54,13 +57,6 @@ import {
 } from '../../global.d';
 
 const defaultNoDataColor = '#ffffff';
-
-type CategoricalChoroplethMapping = {
-  value: string | number | null,
-  categoryName: string | null,
-  color: string,
-  count: number,
-};
 
 const selectDefaultColors = (n: number): string[] => {
   let colors;
@@ -201,133 +197,6 @@ function onClickValidate(
   );
 }
 
-function CategoriesSummary(props: { mapping: CategoricalChoroplethMapping[] }): JSX.Element {
-  const { LL } = useI18nContext();
-  const hasNull = createMemo(() => props.mapping.some((m) => m[0] === null));
-  const nCategories = createMemo(() => props.mapping.length - (hasNull() ? 1 : 0));
-  return <div style={{ 'margin-top': '-1em', 'margin-bottom': '1em' }}>
-    <div>
-      <FaSolidArrowRight />&nbsp;
-      <span>{ LL().PortrayalSection.CategoricalChoroplethOptions.Categories(nCategories()) }</span>
-      <br />
-      <FaSolidArrowRight/>&nbsp;
-      <span>
-        {
-          hasNull()
-            ? LL().PortrayalSection.CategoricalChoroplethOptions.HasNull()
-            : LL().PortrayalSection.CategoricalChoroplethOptions.NoNull()
-        }
-      </span>
-    </div>
-  </div>;
-}
-
-function CategoriesPlot(props: { mapping: CategoricalChoroplethMapping[] }): JSX.Element {
-  const { LL } = useI18nContext();
-  const domain = createMemo(() => props.mapping.map((m) => m.categoryName));
-  const range = createMemo(() => props.mapping.map((m) => m.color));
-  const data = createMemo(() => props.mapping.map((m, i) => ({
-    position: i,
-    category: m.categoryName,
-    color: m.color,
-    frequency: m.count,
-  })));
-  return <div>
-    {
-      Plot.plot({
-        height: 200,
-        color: {
-          domain: domain(),
-          range: range(),
-          legend: true,
-        },
-        x: {
-          type: 'band',
-          tickFormat: null,
-          ticks: 0,
-          label: LL().PortrayalSection.CategoricalChoroplethOptions.XAxisCategories(),
-        },
-        y: {
-          label: LL().PortrayalSection.CategoricalChoroplethOptions.YAxisCount(),
-        },
-        marks: [
-          Plot.barY(
-            data(),
-            {
-              x: 'category',
-              y: 'frequency',
-              fill: 'color',
-              channels: {
-                position: (d) => d.position,
-              },
-              sort: {
-                y: 'position',
-                order: 'ascending',
-              },
-            },
-          ),
-          Plot.ruleY([0]),
-        ],
-      })
-    }
-  </div>;
-}
-
-function CategoriesCustomisation(
-  props: {
-    mapping: () => CategoricalChoroplethMapping[],
-    setMapping: (m: CategoricalChoroplethMapping[]) => void,
-  },
-): JSX.Element {
-  const { LL } = useI18nContext();
-  return <div>
-    <Sortable
-      items={props.mapping()}
-      setItems={props.setMapping}
-      idField={'value'}
-    >
-      {
-        (item) => <div>
-          <div
-            style={{ width: '100%', border: 'solid 0.5px currentColor' }}
-          >
-            <BsThreeDotsVertical />
-            <input
-              type="color"
-              style={{ height: '2em', 'vertical-align': 'bottom' }}
-              value={item.color}
-              onChange={(e) => {
-                props.setMapping(
-                  props.mapping()
-                    .map((m) => (m.value === item.value ? { ...m, color: e.target.value } : m)),
-                );
-              }}
-            />
-            <input
-              type="text"
-              style={{ height: '2em', width: '400px' }}
-              value={item.categoryName || ''}
-              onChange={(e) => {
-                props.setMapping(
-                  props.mapping()
-                    .map((m) => (
-                      m.value === item.value ? { ...m, categoryName: e.target.value } : m)),
-                );
-              }}
-            />
-            <span>
-              ({ LL().PortrayalSection.CategoricalChoroplethOptions.Value() }
-              &nbsp;{item.value} -
-              &nbsp;{ LL().PortrayalSection.CategoricalChoroplethOptions.Count() }
-              &nbsp;{item.count})
-            </span>
-          </div>
-        </div>
-      }
-    </Sortable>
-  </div>;
-}
-
 export default function CategoricalChoroplethSettings(props: PortrayalSettingsProps): JSX.Element {
   const { LL } = useI18nContext();
 
@@ -414,7 +283,11 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
       <CategoriesPlot mapping={categoriesMapping()} />
     </CollapsibleSection>
     <CollapsibleSection title={LL().PortrayalSection.CategoricalChoroplethOptions.Customize()}>
-      <CategoriesCustomisation mapping={categoriesMapping} setMapping={setCategoriesMapping} />
+      <CategoriesCustomisation
+        mapping={categoriesMapping}
+        setMapping={setCategoriesMapping}
+        detailed={true}
+      />
     </CollapsibleSection>
     <InputFieldCheckbox
       label={LL().PortrayalSection.CategoricalChoroplethOptions.DisplayChartOnMap()}

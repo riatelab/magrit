@@ -16,8 +16,8 @@ import { globalStore } from '../../store/GlobalStore';
 
 export default function DefaultModal(): JSX.Element {
   const { LL } = useI18nContext();
-  const successButton: LocalizedString = LL()[modalStore.successButton || 'SuccessButton']();
-  const cancelButton: LocalizedString = LL()[modalStore.cancelButton || 'CancelButton']();
+  const successButton: LocalizedString = modalStore.successButton || LL().SuccessButton();
+  const cancelButton: LocalizedString = modalStore.cancelButton || LL().CancelButton();
 
   let refParentNode: HTMLDivElement;
 
@@ -37,14 +37,28 @@ export default function DefaultModal(): JSX.Element {
   const listenerEscKey = makeListenerEscKey(modalStore.escapeKey);
 
   // Listener for when the browser window is resized
-  const resizeListener = () => {
+  const windowResizeListener = () => {
     const modal = refParentNode.querySelector('.modal-card') as HTMLElement;
     const modalRect = modal.getBoundingClientRect();
+
     // Reset the position of the modal to the center
     // when the window is resized
     modal.style.top = `${(globalStore.windowDimensions.height - modalRect.height) / 2}px`;
     modal.style.left = `${(globalStore.windowDimensions.width - modalRect.width) / 2}px`;
   };
+
+  // Resize Observer for the modal (because it can grow in height depending on its content)
+  const modalResizeObserver = new ResizeObserver((entries) => {
+    entries.forEach((e) => {
+      // If the modal overflow the window, we want to move it up a bit
+      // so that it doesn't overflow the window anymore
+      const modal = e.target as HTMLElement;
+      const modalRect = modal.getBoundingClientRect();
+      if (modalRect.bottom > globalStore.windowDimensions.height) {
+        modal.style.top = `${modal.offsetTop - (modalRect.bottom - globalStore.windowDimensions.height)}px`;
+      }
+    });
+  });
 
   onMount(() => {
     // Bind the escape key to the chosen behavior
@@ -84,14 +98,17 @@ export default function DefaultModal(): JSX.Element {
     });
     // Move the modal to the center when the window is resized
     // (to do this we need to listen to the resize event on the window)
-    window.addEventListener('resize', resizeListener);
+    window.addEventListener('resize', windowResizeListener);
+
+    // Also observe the modal for resize
+    modalResizeObserver.observe(modal);
   });
 
   onCleanup(() => {
     // Unbind the escape key
     document.removeEventListener('keydown', listenerEscKey);
     // Unbind the resize listener
-    window.removeEventListener('resize', resizeListener);
+    window.removeEventListener('resize', windowResizeListener);
   });
 
   return <div

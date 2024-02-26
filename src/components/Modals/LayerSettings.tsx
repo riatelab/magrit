@@ -39,11 +39,12 @@ import {
   LabelsParameters,
   ClassificationParameters,
   SmoothedLayerParameters,
-  ProportionalSymbolsSymbolType,
+  ProportionalSymbolsSymbolType, CategoricalChoroplethParameters,
 } from '../../global.d';
 
 // Styles
 import '../../styles/LayerAndLegendSettings.css';
+import { CategoriesCustomisation } from '../PortrayalOption/CategoricalChoroplethComponents.tsx';
 
 const updateProp = (
   layerId: string,
@@ -286,6 +287,13 @@ function makeSettingsDefaultPoint(
         >{ LL().LayerSettings.ChangeClassification() }</button>
       </div>
     </Show>
+    <Show when={props.renderer === 'categoricalChoropleth'}>
+      <CategoriesCustomisation
+        mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
+        setMapping={() => {}}
+        detailed={false}
+      />
+    </Show>
     <Show when={props.renderer === 'proportionalSymbols'}>
       <InputFieldSelect
         label={LL().PortrayalSection.ProportionalSymbolsOptions.SymbolType()}
@@ -448,6 +456,13 @@ function makeSettingsDefaultLine(
         >{ LL().LayerSettings.ChangeClassification() }</button>
       </div>
     </Show>
+    <Show when={props.renderer === 'categoricalChoropleth'}>
+      <CategoriesCustomisation
+        mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
+        setMapping={() => {}}
+        detailed={false}
+      />
+    </Show>
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeOpacity() }
       value={ props.strokeOpacity! }
@@ -533,6 +548,13 @@ function makeSettingsDefaultPolygon(
           }}
         >{ LL().LayerSettings.ChangeClassification() }</button>
       </div>
+    </Show>
+    <Show when={props.renderer === 'categoricalChoropleth'}>
+      <CategoriesCustomisation
+        mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
+        setMapping={() => {}}
+        detailed={false}
+      />
     </Show>
     <Show when={props.renderer === 'smoothed'}>
       <InputFieldSelect

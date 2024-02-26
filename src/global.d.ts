@@ -304,14 +304,16 @@ export interface CategoricalChoroplethParameters {
   // stored as an array of
   // [category, categoryName, color, number of values] tuples,
   // one per category.
-  mapping: {
-    value: string | null | number,
-    categoryName: string | null,
-    color: string,
-    count: number,
-  }[],
+  mapping: CategoricalChoroplethMapping[],
   // The color to use for features with no data
   noDataColor: string,
+}
+
+export interface CategoricalChoroplethMapping {
+  value: string | number | null,
+  categoryName: string | null,
+  color: string,
+  count: number,
 }
 
 export interface GraticuleParameters {
