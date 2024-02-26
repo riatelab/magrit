@@ -125,7 +125,7 @@ type RootTranslation = {
 	}
 	DatasetCatalog: {
 		/**
-		 * D​a​t​a​s​e​t​ ​c​a​t​a​l​o​g
+		 * E​x​a​m​p​l​e​ ​d​a​t​a​s​e​t​ ​c​a​t​a​l​o​g
 		 */
 		title: string
 		/**
@@ -1031,6 +1031,10 @@ type RootTranslation = {
 			 * G​a​s​t​n​e​r​,​ ​S​e​g​u​y​ ​&​ ​M​o​r​e​ ​(​2​0​1​8​)
 			 */
 			GastnerSeguyMore: string
+			/**
+			 * T​h​e​ ​c​u​r​r​e​n​t​ ​m​a​p​ ​p​r​o​j​e​c​t​i​o​n​ ​i​s​ ​g​e​o​g​r​a​p​h​i​c​ ​(​o​r​ ​i​t​s​ ​u​n​i​t​ ​i​s​ ​d​e​g​r​e​e​s​)​.​ ​T​h​e​ ​c​a​r​t​o​g​r​a​m​ ​w​i​l​l​ ​b​e​ ​c​a​l​c​u​l​a​t​e​d​ ​i​n​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​p​r​o​j​e​c​t​i​o​n​.​ ​W​h​e​n​e​v​e​r​ ​p​o​s​s​i​b​l​e​,​ ​y​o​u​ ​s​h​o​u​l​d​ ​u​s​e​ ​p​r​o​j​e​c​t​e​d​ ​d​a​t​a​ ​(​w​i​t​h​ ​a​ ​d​i​s​t​a​n​c​e​ ​u​n​i​t​ ​i​n​ ​m​e​t​r​e​s​,​ ​f​o​r​ ​e​x​a​m​p​l​e​)​ ​f​o​r​ ​g​r​e​a​t​e​r​ ​a​c​c​u​r​a​c​y​.
+			 */
+			WarningGeo: string
 		}
 		GridOptions: {
 			/**
@@ -2152,7 +2156,7 @@ export type TranslationFunctions = {
 	}
 	DatasetCatalog: {
 		/**
-		 * Dataset catalog
+		 * Example dataset catalog
 		 */
 		title: () => LocalizedString
 		/**
@@ -3055,6 +3059,10 @@ export type TranslationFunctions = {
 			 * Gastner, Seguy & More (2018)
 			 */
 			GastnerSeguyMore: () => LocalizedString
+			/**
+			 * The current map projection is geographic (or its unit is degrees). The cartogram will be calculated in the current projection. Whenever possible, you should use projected data (with a distance unit in metres, for example) for greater accuracy.
+			 */
+			WarningGeo: () => LocalizedString
 		}
 		GridOptions: {
 			/**

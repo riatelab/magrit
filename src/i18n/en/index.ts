@@ -35,7 +35,7 @@ const en = {
     Previous: 'Previous',
   },
   DatasetCatalog: {
-    title: 'Dataset catalog',
+    title: 'Example dataset catalog',
     placeholderSearchBar: 'Search a dataset...',
     searchButton: 'Search',
     datasets: '{{One dataset | ?? datasets}}',
@@ -293,6 +293,7 @@ const en = {
       Dougenik: 'Dougenik et al. (1985)',
       Olson: 'Olson (2005)',
       GastnerSeguyMore: 'Gastner, Seguy & More (2018)',
+      WarningGeo: 'The current map projection is geographic (or its unit is degrees). The cartogram will be calculated in the current projection. Whenever possible, you should use projected data (with a distance unit in metres, for example) for greater accuracy.',
     },
     GridOptions: {
       Resolution: 'Grid resolution (km)',

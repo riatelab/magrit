@@ -6,7 +6,7 @@ import {
   type JSX,
   Show,
 } from 'solid-js';
-import { produce } from 'solid-js/store';
+import { produce, unwrap } from 'solid-js/store';
 
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
@@ -14,17 +14,19 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { computeCartogramGastnerSeguyMore, computeCartogramOlson } from '../../helpers/cartograms';
-import { findSuitableName, unproxify } from '../../helpers/common';
+import { findSuitableName } from '../../helpers/common';
 import { generateIdLayer } from '../../helpers/layers';
 import { DataType, type Variable, VariableType } from '../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 import rewindLayer from '../../helpers/rewind';
+import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Subcomponents
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import WarningBanner from '../WarningBanner.tsx';
 
 // Stores
 import { setLoading } from '../../store/GlobalStore';
@@ -33,6 +35,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
+import { mapStore } from '../../store/MapStore';
 import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
 
 // Types / Interfaces / Enums
@@ -43,7 +46,7 @@ import {
   type LayerDescriptionCartogram,
   RepresentationType,
 } from '../../global.d';
-import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
+import { getProjectionUnit } from '../../helpers/projection';
 
 async function onClickValidate(
   referenceLayerId: string,
@@ -58,26 +61,26 @@ async function onClickValidate(
     throw new Error('Unexpected Error: Reference layer not found');
   }
 
+  const inputData = unwrap(referenceLayerDescription.data as never);
   let newData;
   if (cartogramMethod === CartogramMethod.Olson) {
     newData = computeCartogramOlson(
-      referenceLayerDescription.data,
+      inputData,
       targetVariable,
+      mapStore.projection,
     );
   } else if (cartogramMethod === CartogramMethod.GastnerSeguyMore) {
     newData = await computeCartogramGastnerSeguyMore(
-      referenceLayerDescription.data,
+      inputData,
       targetVariable,
+      mapStore.projection,
     );
   } else {
     throw new Error('Unexpected Error: Unknown or unimplemented cartogram method');
   }
 
-  newData = rewindLayer(newData);
+  const newFields = unwrap(referenceLayerDescription.fields as never) as Variable[];
 
-  console.log(unproxify(referenceLayerDescription.data as never), newData);
-
-  const newFields = unproxify(referenceLayerDescription.fields as never) as Variable[];
   if (cartogramMethod === CartogramMethod.GastnerSeguyMore) {
     // There is a new "area-error" field
     newFields.push({
@@ -135,6 +138,15 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
   // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = createMemo(() => layerDescription()
     .fields?.filter((variable) => variable.type === VariableType.stock));
+
+  // The description of the current projection
+  const currentProjection = unwrap(mapStore.projection);
+  const {
+    isGeo,
+    unit: distanceUnit,
+  } = getProjectionUnit(currentProjection);
+
+  console.log(isGeo, distanceUnit);
 
   // Signals for the current component:
   // the target variable, the target layer name, the method to use
@@ -213,6 +225,11 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
         max={100}
         step={1}
       />
+    </Show>
+    <Show when={isGeo}>
+      <WarningBanner expanded={true}>
+        { LL().PortrayalSection.CartogramOptions.WarningGeo() }
+      </WarningBanner>
     </Show>
     <InputResultName
       onKeyUp={ (value) => { setNewLayerName(value); }}

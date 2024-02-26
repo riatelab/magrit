@@ -35,7 +35,7 @@ const fr = {
     Previous: 'Précédent',
   },
   DatasetCatalog: {
-    title: 'Catalogue de données',
+    title: 'Catalogue de données d\'exemple',
     placeholderSearchBar: 'Rechercher un jeu de données...',
     searchButton: 'Rechercher',
     datasets: '{{Un jeu de données | ?? jeux de données}}',
@@ -294,6 +294,7 @@ const fr = {
       Dougenik: 'Dougenik et al. (1985)',
       Olson: 'Olson (2005)',
       GastnerSeguyMore: 'Gastner, Seguy & More (2018)',
+      WarningGeo: 'La projection cartographique actuelle est géographique (ou son unité est en degrés). Le cartogramme va être calculé dans la projection actuelle. Privilégiez, lorsque que c\'est possible, l\'utilisation de données projetées (avec une unité de distance en mètres par exemple) pour une meilleure précision.',
     },
     GridOptions: {
       Resolution: 'Résolution de la grille (km)',

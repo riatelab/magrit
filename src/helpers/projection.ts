@@ -1,5 +1,6 @@
 import proj4, { InterfaceProjection } from 'proj4';
 import * as projModule from 'mproj/dist/mproj';
+import wkt from 'wkt-parser';
 import d3, { type GeoProjection, type GeoRawProjection } from './d3-custom';
 
 import epsg from '../assets/epsg.json';
@@ -33,7 +34,19 @@ export interface EpsgDbType {
 //   directly in the source file to avoid loading a lot of useless data
 export const epsgDb: EpsgDbType = Object.fromEntries(
   Object.entries(epsg)
-    .filter(([k, v]) => ['CRS-GEOGCRS', 'CRS-PROJCRS'].includes(v.kind) && (v.proj4 || v.wkt)),
+    .filter(([k, v]) => ['CRS-GEOGCRS', 'CRS-PROJCRS'].includes(v.kind) && (v.proj4 || v.wkt))
+    .map(([k, v]) => {
+      if (v.unit !== null) {
+        return [k, v];
+      }
+      if (v.wkt) {
+        const o = wkt(v.wkt);
+        if (o.units) {
+          return [k, { ...v, unit: o.units as string }];
+        }
+      }
+      return [k, v];
+    }) as [string, EpsgDbEntryType][],
 ) as EpsgDbType;
 
 /**
@@ -65,24 +78,86 @@ const proj4stringToObj = (projString: string): { [key: string]: string | boolean
   return o;
 };
 
-export const getUnitFromProjectionString = (projString: string) => {
+export const getUnitFromProjectionString = (projString: string): string | null => {
   // The projection can be either a proj4 string or a wkt string
   const isProj4 = projString.trim().startsWith('+');
   if (isProj4) {
     const p = proj4stringToObj(projString);
     if (p.units) {
-      return p.units;
+      return p.units as string;
     }
   } else {
     // We have a WKT1 string, so the unit, if any,
     // is written like UNIT["name of the unit",value]
     // We can use a regex to extract the name of the unit
-    const match = projString.match(/UNIT\["([^"]+)",([^]]+)]/);
-    if (match) {
-      return match[1].toLowerCase();
+    const o = wkt(projString);
+    if (o.units) {
+      return o.units as string;
     }
   }
   return null;
+};
+
+// Those are all the possible distance units that we can encounter
+// in a proj4 string or a WKT1 string...
+const allPossibleDistanceUnits = [
+  'meter', //
+  "clarke's link",
+  'gold coast foot',
+  'us survey foot',
+  'foot', //
+  "clarke's foot",
+  'link',
+  'british chain (sears 1922 truncated)',
+  'degree',
+  'grad',
+  "clarke's yard",
+  'indian yard',
+  'british yard (sears 1922)',
+  'german legal metre',
+  'british chain (sears 1922)',
+  'british foot (sears 1922)',
+  'indian yard (1937)',
+  '50_kilometers',
+  '150_kilometers',
+  'chain',
+  'm',
+  'us-ft',
+  'ft',
+  'ind-yd',
+  'ch',
+];
+
+export const getProjectionUnit = (projection: any): { unit: string, isGeo: boolean } => {
+  let isGeo;
+  let distanceUnit;
+  if (projection.type === 'd3') {
+    isGeo = true;
+    distanceUnit = 'degrees';
+  } else { // currentProjection.type === 'proj4'
+    let desc;
+    if (
+      projection.code
+      // eslint-disable-next-line no-cond-assign
+      && (desc = epsgDb[projection.code.replace('EPSG:', '')])
+    ) {
+      // We have a code so we can use the EPSG database
+      isGeo = (desc as EpsgDbEntryType).unit
+        ? (desc as EpsgDbEntryType).unit === 'degrees'
+        : true;
+      distanceUnit = desc.unit || 'degrees';
+    } else {
+      // We dont have a code so we need to see in the proj4 string or in the WKT1 string
+      distanceUnit = getUnitFromProjectionString(projection.value);
+      // TODO: we need to harmonise the units returned by getUnitFromProjectionString
+      isGeo = !distanceUnit || distanceUnit === 'degrees';
+    }
+  }
+
+  return {
+    unit: distanceUnit,
+    isGeo,
+  };
 };
 
 /**

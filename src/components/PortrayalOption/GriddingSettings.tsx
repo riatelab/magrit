@@ -6,7 +6,7 @@ import {
   For,
   Show,
 } from 'solid-js';
-import { produce } from 'solid-js/store';
+import { produce, unwrap } from 'solid-js/store';
 
 // Imports from other packages
 import { getPalette } from 'dicopal';
@@ -27,11 +27,11 @@ import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore'
 
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { findSuitableName, unproxify } from '../../helpers/common';
+import { findSuitableName } from '../../helpers/common';
 import { computeAppropriateResolution } from '../../helpers/geo';
 import { computeGriddedLayer } from '../../helpers/gridding';
 import { generateIdLayer } from '../../helpers/layers';
-import { epsgDb, EpsgDbEntryType, getUnitFromProjectionString } from '../../helpers/projection';
+import { getProjectionUnit } from '../../helpers/projection';
 import { VariableType } from '../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
@@ -84,7 +84,7 @@ async function onClickValidate(
   } as GriddedLayerParameters;
 
   const newData = await computeGriddedLayer(
-    unproxify(referenceLayerDescription.data as never) as GeoJSONFeatureCollection,
+    unwrap(referenceLayerDescription.data as never) as GeoJSONFeatureCollection,
     params,
   );
 
@@ -187,31 +187,11 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
     .fields?.filter((variable) => variable.type === VariableType.stock));
 
   // The description of the current projection
-  const currentProjection = unproxify(mapStore.projection);
-  let isGeo;
-  let distanceUnit;
-  if (currentProjection.type === 'd3') {
-    isGeo = true;
-    distanceUnit = 'degrees';
-  } else { // currentProjection.type === 'proj4'
-    let desc;
-    if (
-      currentProjection.code
-      // eslint-disable-next-line no-cond-assign
-      && (desc = epsgDb[currentProjection.code.replace('EPSG:', '')])
-    ) {
-      // We have a code so we can use the EPSG database
-      isGeo = (desc as EpsgDbEntryType).unit
-        ? (desc as EpsgDbEntryType).unit === 'degrees'
-        : true;
-      distanceUnit = desc.unit || 'degrees';
-    } else {
-      // We dont have a code so we need to see in the proj4 string or in the WKT1 string
-      distanceUnit = getUnitFromProjectionString(currentProjection.value);
-      // TODO: we need to harmonise the units returned by getUnitFromProjectionString
-      isGeo = !distanceUnit || distanceUnit === 'degrees';
-    }
-  }
+  const currentProjection = unwrap(mapStore.projection);
+  const {
+    isGeo,
+    unit: distanceUnit,
+  } = getProjectionUnit(currentProjection);
 
   console.log(isGeo, distanceUnit);
 
