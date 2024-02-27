@@ -17,7 +17,7 @@ import d3 from '../../helpers/d3-custom';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { cleanGeometry, countCoordinates } from '../../helpers/geo';
+import { cleanGeometry, cleanGeometryGeos, countCoordinates } from '../../helpers/geo';
 import { round } from '../../helpers/math';
 
 // Other components
@@ -53,30 +53,28 @@ interface SimplificationInfo {
  * @param topo
  * @param layerName
  */
-const getSimplificationInfo = (
+const getSimplificationInfo = async (
   topo: any,
   layerName: string,
-): Partial<SimplificationInfo> => {
+): Promise<Partial<SimplificationInfo>> => {
   const topoLayer = topo.objects[layerName];
-  console.time('topojson.feature');
   const geoLayer = topojson.feature(topo, topoLayer) as GeoJSONFeatureCollection;
-  console.timeEnd('topojson.feature');
   let nbGeometries = 0;
   let vertices = 0;
   // let vertices2 = 0;
   console.time('clean, filter and count points');
-  geoLayer.features.forEach((feature) => {
-    // eslint-disable-next-line no-param-reassign
-    feature.geometry = cleanGeometry(feature.geometry);
+  for (let i = 0; i < geoLayer.features.length; i += 1) {
+    const feature = geoLayer.features[i];
+    // eslint-disable-next-line no-param-reassign, no-await-in-loop
+    feature.geometry = await cleanGeometryGeos(feature.geometry);
     if (feature.geometry) {
       // We can count the number of points (cleanGeometry removes duplicate points and
       // ensured that polygons still have more than 3 points)
       const c = countCoordinates(feature.geometry);
       nbGeometries += 1;
       vertices += c;
-      // vertices2 += feature.geometry.coordinates.flat(Infinity).length / 2;
     }
-  });
+  }
   const features = geoLayer.features.filter((f) => f.geometry);
   console.timeEnd('clean, filter and count points');
   return {
@@ -301,7 +299,7 @@ export default function SimplificationModal(
           draw();
         }));
 
-    function simplify() {
+    async function simplify() {
       // When the simplification factor changes, we update the simplified topology
       const sf = simplificationFactor();
       if (sf === 0) {
@@ -324,13 +322,18 @@ export default function SimplificationModal(
       draw();
 
       // Also update the stats
-      setStats(
-        layerNames.map((layerName, i) => ({
-          name: layerName,
-          color: colors[i % colors.length],
-          ...getSimplificationInfo(simplified, layerName),
-        }) as SimplificationInfo),
+      const s = await Promise.all(
+        layerNames.map(async (layerName, i) => {
+          const simplificationInfo = await getSimplificationInfo(simplified, layerName);
+          return {
+            name: layerName,
+            color: colors[i % colors.length],
+            ...simplificationInfo,
+          } as SimplificationInfo;
+        }),
       );
+
+      setStats(s);
       console.log(stats());
     }
 

@@ -31,6 +31,7 @@ import {
   isNumber,
   unproxify,
 } from './common';
+import { makeValid } from './geos';
 
 // Stores
 import { globalStore } from '../store/GlobalStore';
@@ -631,6 +632,21 @@ const cleanConsecutiveIdenticalPoints = (
     .filter((d) => !Number.isNaN(d[0]) || !Number.isNaN(d[1])) as GeoJSONPosition[];
 };
 
+const cleanRing = (
+  ring: GeoJSONPosition[] | number[][],
+): GeoJSONPosition[] | null => {
+  const newRing = cleanConsecutiveIdenticalPoints(ring);
+  if (newRing.length > 2) {
+    if (equalPoints(newRing[0], newRing[newRing.length - 1])) {
+      return newRing;
+    }
+    // Close the ring
+    newRing.push(newRing[0]);
+    return newRing;
+  }
+  return null;
+};
+
 /**
  * Clean a GeoJSON geometry by removing (consecutive, excepted for MultiPoints) identical points.
  * If a geometry is empty after cleaning (less than 2 points for a line,
@@ -706,12 +722,30 @@ export const cleanGeometry = (geometry: GeoJSONGeometryType): GeoJSONGeometryTyp
   if (geometry.type === 'Polygon') {
     if (geometry.coordinates.length > 0) {
       // Remove consecutive identical points
+      // console.log('Points before (exterior ring)', geometry.coordinates[0].length);
       const newCoords = geometry.coordinates
-        .map((coords) => cleanConsecutiveIdenticalPoints(coords));
-      if (newCoords[0].length > 2) {
+        .map((ring) => cleanRing(ring));
+      const [externalRing, ...internalRings] = newCoords;
+      // console.log('Points after (exterior ring)', externalRing.length);
+      if (geometry.coordinates[0].length !== externalRing.length) {
+        console.log('Cleaning did something..');
+      }
+      if (externalRing) {
+        if (internalRings.length > 0) {
+          if (internalRings.some((c) => c.length > 2)) {
+            return {
+              type: 'Polygon',
+              coordinates: [externalRing, ...internalRings.filter((c) => c && c.length > 2)],
+            };
+          }
+          return {
+            type: 'Polygon',
+            coordinates: [externalRing],
+          };
+        }
         return {
           type: 'Polygon',
-          coordinates: newCoords,
+          coordinates: [externalRing],
         };
       }
       return null;
@@ -722,7 +756,9 @@ export const cleanGeometry = (geometry: GeoJSONGeometryType): GeoJSONGeometryTyp
     if (geometry.coordinates.length > 0) {
       // Remove consecutive identical points
       const newCoords = geometry.coordinates
-        .map((coords) => coords.map((c) => cleanConsecutiveIdenticalPoints(c)));
+        .map((poly) => poly
+          .map((ring) => cleanRing(ring)));
+
       if (newCoords.some((c) => c[0].length > 2)) {
         return {
           type: 'MultiPolygon',
@@ -746,6 +782,65 @@ export const cleanGeometry = (geometry: GeoJSONGeometryType): GeoJSONGeometryTyp
     return null;
   }
   return null;
+};
+
+export const cleanGeometryGeos = async (
+  geometry: GeoJSONGeometryType,
+): Promise<GeoJSONGeometryType | null> => {
+  // We use geos make valid to clean the geometry
+  // but we have to be careful with the result...
+  const geom = await makeValid(geometry as any);
+
+  // Count the number of vertices before and after cleaning
+  const count = {
+    before: countCoordinates(geometry),
+    after: countCoordinates(geom),
+  };
+  if (count.before !== count.after) {
+    console.log('Cleaning geometry with geos-wasm -> Changed the number of vertices', count, geom);
+    if (count.after < 4 && geom.type.includes('Polygon')) {
+      console.log('Cleaning failed -> not enough points');
+      console.log(geometry, geom);
+      return null;
+    }
+  }
+
+  // Sometimes the type of the geometry is changed
+  // (e.g. from Polygon to LineString, which we don't want)
+  if (
+    (geometry.type.includes('Polygon') && !geom.type.includes('Polygon'))
+    || (geometry.type.includes('Line') && !geom.type.includes('Line'))
+  ) {
+    console.log('Cleaning failed -> changed the type of geometry');
+    console.log(geometry, geom);
+    // Sometimes we also get a GeometryCollection
+    // containing the wanted polygon + some other geometries such as MultiPoint for example.
+    // If so, we try to extract the wanted (multi)polygon or the wanted (multi)linestring
+    if (geom.type === 'GeometryCollection') {
+      const targetType = geometry.type.includes('Polygon')
+        ? 'Polygon'
+        : 'LineString';
+      // If it generated a GeometryCollection, try to extract the
+      // appropriate geoms
+      const geoms = geom.geometries.filter((g) => g.type.includes(targetType));
+      console.log('Geoms', geoms);
+      // In the end, we want to avoid GeometryCollections
+      // in the dataset we are constructing...
+      if (geoms.length > 1) {
+        return geoms[0];
+        // return {
+        //   type: 'GeometryCollection',
+        //   geometries: geoms,
+        // };
+      }
+      if (geoms.length === 1) {
+        return geoms[0];
+      }
+      return null;
+    }
+    return null;
+  }
+  return geom;
 };
 
 export const sphericalLawOfCosine = (

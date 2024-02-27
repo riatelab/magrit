@@ -1,7 +1,7 @@
 import initGeosJs from 'geos-wasm';
 import { geojsonToGeosGeom, geosGeomToGeojson } from 'geos-wasm/helpers';
 
-import type { GeoJSONFeature, GeoJSONFeatureCollection } from '../global';
+import type { GeoJSONFeature, GeoJSONFeatureCollection, GeoJSONGeometry } from '../global';
 
 /**
  * Get the geos instance, using the singleton pattern.
@@ -118,9 +118,20 @@ async function intersectionLayer(
   };
 }
 
+async function makeValid(feature: GeoJSONGeometry) {
+  const geos = await getGeos();
+  const geomPtr = geojsonToGeosGeom(feature, geos);
+  const validGeomPtr = geos.GEOSMakeValid(geomPtr);
+  const validGeom = geosGeomToGeojson(validGeomPtr, geos);
+  geos.GEOSGeom_destroy(geomPtr);
+  geos.GEOSGeom_destroy(validGeomPtr);
+  return validGeom;
+}
+
 export {
   intersectionFeature,
   intersectionLayer,
+  makeValid,
 };
 
 export default getGeos();
