@@ -40,9 +40,9 @@ export default function LeftMenu(): JSX.Element {
         <TbFileImport style={{ height: '1.1em' }} />
         <span>{ LL().LeftMenu.Import() }</span>
       </div>
-      <span class={`chevron-button ${expandedSection() === 1 ? 'is-active' : ''}`}>
+      <button class={`chevron-button ${expandedSection() === 1 ? 'is-active' : ''}`}>
         <ChevronIcon />
-      </span>
+      </button>
     </div>
     <Collapse value={expandedSection() === 1} >
       <div class="left-menu__section-container">
@@ -55,9 +55,9 @@ export default function LeftMenu(): JSX.Element {
         <AiOutlineLayout />
         <span>{ LL().LeftMenu.MapConfiguration() }</span>
       </div>
-      <span class={`chevron-button ${expandedSection() === 2 ? 'is-active' : ''}`}>
+      <button class={`chevron-button ${expandedSection() === 2 ? 'is-active' : ''}`}>
         <ChevronIcon />
-      </span>
+      </button>
     </div>
     <Collapse value={expandedSection() === 2} >
       <div class="left-menu__section-container">
@@ -70,9 +70,9 @@ export default function LeftMenu(): JSX.Element {
         <FiLayers />
         <span>{ LL().LeftMenu.LayerManager() }</span>
       </div>
-      <span class={`chevron-button ${expandedSection() === 3 ? 'is-active' : ''}`}>
+      <button class={`chevron-button ${expandedSection() === 3 ? 'is-active' : ''}`}>
         <ChevronIcon />
-      </span>
+      </button>
     </div>
     <Collapse value={expandedSection() === 3} >
       <div class="left-menu__section-container">
@@ -85,9 +85,9 @@ export default function LeftMenu(): JSX.Element {
         <AiOutlineBarChart />
         <span>{ LL().LeftMenu.RepresentationChoice() }</span>
       </div>
-      <span class={`chevron-button ${expandedSection() === 4 ? 'is-active' : ''}`}>
+      <button class={`chevron-button ${expandedSection() === 4 ? 'is-active' : ''}`}>
         <ChevronIcon />
-      </span>
+      </button>
     </div>
     <Collapse value={expandedSection() === 4} >
       <div class="left-menu__section-container">
@@ -103,9 +103,9 @@ export default function LeftMenu(): JSX.Element {
         <RiDocumentPagesLine />
         <span>{ LL().LeftMenu.LayoutFeatures() }</span>
       </div>
-      <span class={`chevron-button ${expandedSection() === 5 ? 'is-active' : ''}`}>
+      <button class={`chevron-button ${expandedSection() === 5 ? 'is-active' : ''}`}>
         <ChevronIcon />
-      </span>
+      </button>
     </div>
     <Collapse value={expandedSection() === 5} >
       <div class="left-menu__section-container">
@@ -118,9 +118,9 @@ export default function LeftMenu(): JSX.Element {
         <TiExportOutline />
         <span>{ LL().LeftMenu.ExportSection() }</span>
       </div>
-      <span class={`chevron-button ${expandedSection() === 6 ? 'is-active' : ''}`}>
+      <button class={`chevron-button ${expandedSection() === 6 ? 'is-active' : ''}`}>
         <ChevronIcon />
-      </span>
+      </button>
     </div>
     <Collapse value={expandedSection() === 6} >
       <div class="left-menu__section-container">
