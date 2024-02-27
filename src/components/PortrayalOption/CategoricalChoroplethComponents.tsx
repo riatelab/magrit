@@ -96,7 +96,7 @@ export function CategoriesCustomisation(
   return <div>
     <Sortable
       items={props.mapping()}
-      setItems={props.setMapping}
+      setItems={props.setMapping as any}
       idField={'value'}
     >
       {

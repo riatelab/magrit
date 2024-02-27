@@ -23,6 +23,8 @@ import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
 import InputFieldButton from '../Inputs/InputButton.tsx';
+import CollapsibleSection from '../CollapsibleSection.tsx';
+import { CategoriesCustomisation } from '../PortrayalOption/CategoricalChoroplethComponents.tsx';
 
 // Stores
 import {
@@ -33,18 +35,19 @@ import { setClassificationPanelStore } from '../../store/ClassificationPanelStor
 
 // Types / Interfaces
 import {
-  LayerDescription,
-  LayerDescriptionLabels,
-  ProportionalSymbolsParameters,
-  LabelsParameters,
-  ClassificationParameters,
-  SmoothedLayerParameters,
-  ProportionalSymbolsSymbolType, CategoricalChoroplethParameters,
+  type LayerDescription,
+  type LayerDescriptionLabels,
+  type ProportionalSymbolsParameters,
+  type LabelsParameters,
+  type ClassificationParameters,
+  type SmoothedLayerParameters,
+  ProportionalSymbolsSymbolType,
+  type CategoricalChoroplethParameters,
+  type GriddedLayerParameters,
 } from '../../global.d';
 
 // Styles
 import '../../styles/LayerAndLegendSettings.css';
-import { CategoriesCustomisation } from '../PortrayalOption/CategoricalChoroplethComponents.tsx';
 
 const updateProp = (
   layerId: string,
@@ -288,11 +291,15 @@ function makeSettingsDefaultPoint(
       </div>
     </Show>
     <Show when={props.renderer === 'categoricalChoropleth'}>
-      <CategoriesCustomisation
-        mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
-        setMapping={() => {}}
-        detailed={false}
-      />
+      <CollapsibleSection title={LL().PortrayalSection.CategoricalChoroplethOptions.Customize()}>
+        <CategoriesCustomisation
+          mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
+          setMapping={(m) => {
+            updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
+          }}
+          detailed={false}
+        />
+      </CollapsibleSection>
     </Show>
     <Show when={props.renderer === 'proportionalSymbols'}>
       <InputFieldSelect
@@ -457,11 +464,15 @@ function makeSettingsDefaultLine(
       </div>
     </Show>
     <Show when={props.renderer === 'categoricalChoropleth'}>
-      <CategoriesCustomisation
-        mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
-        setMapping={() => {}}
-        detailed={false}
-      />
+      <CollapsibleSection title={LL().PortrayalSection.CategoricalChoroplethOptions.Customize()}>
+        <CategoriesCustomisation
+          mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
+          setMapping={(m) => {
+            updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
+          }}
+          detailed={false}
+        />
+      </CollapsibleSection>
     </Show>
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeOpacity() }
@@ -550,13 +561,17 @@ function makeSettingsDefaultPolygon(
       </div>
     </Show>
     <Show when={props.renderer === 'categoricalChoropleth'}>
-      <CategoriesCustomisation
-        mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
-        setMapping={() => {}}
-        detailed={false}
-      />
+      <CollapsibleSection title={LL().PortrayalSection.CategoricalChoroplethOptions.Customize()}>
+        <CategoriesCustomisation
+          mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
+          setMapping={(m) => {
+            updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
+          }}
+          detailed={false}
+        />
+      </CollapsibleSection>
     </Show>
-    <Show when={props.renderer === 'smoothed'}>
+    <Show when={props.renderer === 'smoothed' || props.renderer === 'grid'}>
       <InputFieldSelect
         label={LL().LayerSettings.Palette()}
         onChange={(palName) => {
@@ -573,6 +588,17 @@ function makeSettingsDefaultPolygon(
           }
         </For>
       </InputFieldSelect>
+      <InputFieldCheckbox
+        label={ 'Reverse palette' }
+        checked={
+          (
+            props.rendererParameters as SmoothedLayerParameters | GriddedLayerParameters
+          ).reversePalette
+        }
+        onChange={(value) => {
+          updateProp(props.id, ['rendererParameters', 'reversePalette'], value);
+        }}
+      />
     </Show>
     <InputFieldColor
       label={ LL().LayerSettings.StrokeColor() }

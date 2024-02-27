@@ -135,6 +135,7 @@ function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Eleme
         legendParameters.roundDecimals,
         legendParameters.boxSpacing,
         legendParameters.boxSpacingNoData,
+        (layer.rendererParameters as CategoricalChoroplethParameters).mapping,
       );
     }
   });
@@ -329,6 +330,7 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
         legendParameters.roundDecimals,
         legendParameters.boxSpacing,
         legendParameters.boxSpacingNoData,
+        (layer.rendererParameters as CategoricalChoroplethParameters).mapping,
       );
     }
   });
