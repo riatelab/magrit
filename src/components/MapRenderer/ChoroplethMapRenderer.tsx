@@ -59,7 +59,11 @@ export function choroplethPolygonRenderer(
     stroke-linejoin="round"
     clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
-    shape-rendering={layerDescription.shapeRendering}
+    shape-rendering={
+      (layerDescription.strokeWidth === 0 || layerDescription.strokeOpacity === 0)
+        ? 'crispEdges'
+        : layerDescription.shapeRendering
+    }
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.renderer}
     >
