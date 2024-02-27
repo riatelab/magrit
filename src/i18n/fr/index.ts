@@ -422,6 +422,9 @@ const fr = {
   },
   SimplificationModal: {
     title: 'Simplification des géométries',
+    QuantizationFactor: 'Facteur de quantification',
+    SimplificationFactor: 'Facteur de simplification',
+    CountGeometries: '{geom} géométries non nulles, {pts} points',
   },
   DataTable: {
     titleGeo: 'Table attributaire',

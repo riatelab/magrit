@@ -1471,7 +1471,21 @@ type RootTranslation = {
 		/**
 		 * S​i​m​p​l​i​f​i​c​a​t​i​o​n​ ​o​f​ ​g​e​o​m​e​t​r​i​e​s
 		 */
-		title: string
+		Title: string
+		/**
+		 * Q​u​a​n​t​i​z​a​t​i​o​n​ ​f​a​c​t​o​r
+		 */
+		QuantizationFactor: string
+		/**
+		 * S​i​m​p​l​i​f​i​c​a​t​i​o​n​ ​f​a​c​t​o​r
+		 */
+		SimplificationFactor: string
+		/**
+		 * {​g​e​o​m​}​ ​n​o​n​-​e​m​p​t​y​ ​g​e​o​m​e​t​r​i​e​s​,​ ​{​p​t​s​}​ ​p​o​i​n​t​s
+		 * @param {unknown} geom
+		 * @param {unknown} pts
+		 */
+		CountGeometries: RequiredParams<'geom' | 'pts'>
 	}
 	DataTable: {
 		/**
@@ -3498,7 +3512,19 @@ export type TranslationFunctions = {
 		/**
 		 * Simplification of geometries
 		 */
-		title: () => LocalizedString
+		Title: () => LocalizedString
+		/**
+		 * Quantization factor
+		 */
+		QuantizationFactor: () => LocalizedString
+		/**
+		 * Simplification factor
+		 */
+		SimplificationFactor: () => LocalizedString
+		/**
+		 * {geom} non-empty geometries, {pts} points
+		 */
+		CountGeometries: (arg: { geom: unknown, pts: unknown }) => LocalizedString
 	}
 	DataTable: {
 		/**

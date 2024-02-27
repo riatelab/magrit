@@ -420,7 +420,10 @@ const en = {
     SelectedImage: 'Selected image:',
   },
   SimplificationModal: {
-    title: 'Simplification of geometries',
+    Title: 'Simplification of geometries',
+    QuantizationFactor: 'Quantization factor',
+    SimplificationFactor: 'Simplification factor',
+    CountGeometries: '{geom} non-empty geometries, {pts} points',
   },
   DataTable: {
     titleGeo: 'Attribute table',

@@ -356,17 +356,17 @@ export default function SimplificationModal(
     <div class="is-flex">
       <div class="simplification-modal__parameters-container">
         <InputFieldNumber
-          label={'Quantization factor'}
+          label={LL().SimplificationModal.QuantizationFactor()}
           value={quantizationFactor()}
           onChange={(v) => setQuantizationFactor(v)}
-          min={1e1}
+          min={100}
           max={1e7}
           step={1e1}
         />
         <InputFieldRange
-          label={'Simplification factor'}
+          label={LL().SimplificationModal.SimplificationFactor()}
           value={simplificationFactor()}
-          formater={(v) => `${round((1 - v * 4) * 100, 2)}%`}
+          formater={(v) => `${round(v * 100, 2)}%`}
           onChange={(v) => setSimplificationFactor(v)}
           min={0}
           max={1}
@@ -386,8 +386,12 @@ export default function SimplificationModal(
                     style={{ background: si.color }}
                   ></div>
                   <span>
-                    ({si.polygons} non-empty geometries,
-                    &nbsp;{si.vertices} points)
+                    {
+                      LL().SimplificationModal.CountGeometries({
+                        geom: si.polygons,
+                        pts: si.vertices,
+                      })
+                    }
                   </span>
                 </li>
               }
