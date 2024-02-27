@@ -5,6 +5,17 @@ import { area, transformScale } from '@turf/turf';
 
 // Helpers
 import { isNumber } from './common';
+import d3 from './d3-custom';
+import {
+  getProjection,
+  getProjectionUnit,
+  reprojWithD3,
+  reprojWithProj4,
+} from './projection';
+import rewindLayer from './rewind';
+
+// Stores
+import { mapStore } from '../store/MapStore';
 
 // Types
 import type { GeoJSONFeatureCollection } from '../global';
@@ -30,7 +41,35 @@ export async function computeCartogramGastnerSeguyMore(
   data: GeoJSONFeatureCollection,
   variableName: string,
 ): Promise<GeoJSONFeatureCollection> {
-  return (await getGoCart()).makeCartogram(data, variableName);
+  let proj;
+  let isGeo;
+  let reprojFunc;
+  if (mapStore.projection.type === 'd3') {
+    isGeo = true;
+    proj = d3[mapStore.projection.value]()
+      .center([0, 0])
+      .translate([0, 0])
+      .scale(1);
+    reprojFunc = reprojWithD3;
+  } else { // mapStore.projection.type === 'proj4'
+    const t = getProjectionUnit(mapStore.projection);
+    isGeo = t.isGeo;
+    proj = getProjection(mapStore.projection.value);
+    reprojFunc = reprojWithProj4;
+  }
+
+  // If data is geo we keep it in WGS84, otherwise we reproject it to the current map projection
+  const projectedData = isGeo ? data : reprojFunc(proj, data);
+
+  const goCartInstance = await getGoCart();
+
+  const resultProj = goCartInstance.makeCartogram(projectedData, variableName);
+
+  return rewindLayer(
+    isGeo
+      ? resultProj
+      : reprojFunc(proj, resultProj, true),
+  );
 }
 
 export function computeCartogramOlson(

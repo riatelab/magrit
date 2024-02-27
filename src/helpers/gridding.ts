@@ -14,7 +14,12 @@ import {
   Msin,
   SQRT3,
 } from './math';
-import { getD3ProjectionFromProj4, getProjection, reprojWithD3 } from './projection';
+import {
+  getProjection,
+  getProjectionUnit,
+  reprojWithD3,
+  reprojWithProj4,
+} from './projection';
 import rewindLayer from './rewind';
 
 // Stores
@@ -26,26 +31,32 @@ import {
   GeoJSONFeatureCollection,
   GridCellShape,
   GriddedLayerParameters,
-  GridParameters,
 } from '../global.d';
 
+// const transformResolution = (
+//   resolution: number,
+//   cellType: GridCellShape,
+//   isGeo: boolean,
+// ): number => {
+//   if (isGeo) {
+//     // The distance was given in km but we want it in degrees
+//     const newResolution = resolution / 110;
+//     if (cellType === 'hexagon') return newResolution / SQRT3;
+//     // For all other types of cells, we can keep the resolution as is
+//     return newResolution;
+//   }
+//   // The distance was given in km but we want it in meters
+//   const newResolution = resolution * 1000;
+//   if (cellType === 'hexagon') return newResolution / SQRT3;
+//   // For all other types of cells, we can keep the resolution as is
+//   return newResolution;
+// };
 const transformResolution = (
   resolution: number,
   cellType: GridCellShape,
-  isGeo: boolean,
 ): number => {
-  if (isGeo) {
-    // The distance was given in km but we want it in degrees
-    const newResolution = resolution / 110;
-    if (cellType === 'hexagon') return newResolution / SQRT3;
-    // For all other types of cells, we can keep the resolution as is
-    return newResolution;
-  }
-  // The distance was given in km but we want it in meters
-  const newResolution = resolution * 1000;
-  if (cellType === 'hexagon') return newResolution / SQRT3;
-  // For all other types of cells, we can keep the resolution as is
-  return newResolution;
+  if (cellType === 'hexagon') return resolution / SQRT3;
+  return resolution;
 };
 
 const generateSquareGrid = (
@@ -294,7 +305,6 @@ const getBbox = (feature: GeoJSONFeature, ix: number | undefined) => {
       maxX: feature.bbox[2],
       maxY: feature.bbox[3],
       ix,
-
     };
   }
   // If not we compute it
@@ -314,6 +324,7 @@ export const computeGriddedLayer = async (
 ): Promise<GeoJSONFeatureCollection> => {
   // We want to determine if the current map projection is a "geographic" projection (i.e. lat/lon)
   // or a "projected" projection (with meters or feet as units).
+  let reprojFunc;
   let proj;
   let isGeo;
   if (mapStore.projection.type === 'd3') {
@@ -322,20 +333,22 @@ export const computeGriddedLayer = async (
       .center([0, 0])
       .translate([0, 0])
       .scale(1);
+    reprojFunc = reprojWithD3;
   } else { // mapStore.projection.type === 'proj4'
-    isGeo = false;
-    proj = getD3ProjectionFromProj4(getProjection(mapStore.projection.value))
-      .translate([0, 0])
-      .scale(1);
+    const t = getProjectionUnit(mapStore.projection);
+    isGeo = t.isGeo;
+    proj = getProjection(mapStore.projection.value);
+    reprojFunc = reprojWithProj4;
   }
+
   const resolution = transformResolution(
     params.gridParameters.resolution,
     params.cellType,
-    isGeo,
+    // isGeo,
   );
   console.log('computeGriddedLayer: isGeo', isGeo, '; resolution', resolution, isGeo ? 'degrees' : 'meters');
   // If data is geo we keep it in WGS84, otherwise we reproject it to the current map projection
-  const projectedData = isGeo ? data : reprojWithD3(proj, data);
+  const projectedData = isGeo ? data : reprojFunc(proj, data);
 
   // We want to compute the bounding box of the data (in the current map projection if it's not geo)
   const extent = bbox(projectedData as AllGeoJSON) as [number, number, number, number];
@@ -390,7 +403,7 @@ export const computeGriddedLayer = async (
 
   const resultGrid = isGeo
     ? rewindLayer(clippedGrid)
-    : rewindLayer(reprojWithD3(proj, clippedGrid, true));
+    : rewindLayer(reprojFunc(proj, clippedGrid, true));
 
   return resultGrid;
 };

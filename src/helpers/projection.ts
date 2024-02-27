@@ -226,11 +226,10 @@ export const getProjection = (projString: string): InterfaceProjection => {
   }
 };
 
-const reprojGeom = (geom: GeoJSONGeometryType, proj: GeoProjection, invert: boolean = false) => {
-  const projFunc = invert
-    ? (coord) => proj.invert(coord)
-    : (coord) => proj(coord);
-
+const reprojGeom = (
+  geom: GeoJSONGeometryType,
+  projFunc: (a0: [number, number]) => [number, number],
+) => {
   if (geom.type === 'Point') {
     // eslint-disable-next-line no-param-reassign
     geom.coordinates = projFunc([geom.coordinates[0], geom.coordinates[1]]) as GeoJSONPosition;
@@ -263,7 +262,7 @@ const reprojGeom = (geom: GeoJSONGeometryType, proj: GeoProjection, invert: bool
   } else if (geom.type === 'GeometryCollection') {
     // eslint-disable-next-line no-param-reassign
     geom.geometries = geom.geometries
-      .map((g) => reprojGeom(g as GeoJSONGeometryType, proj, invert));
+      .map((g) => reprojGeom(g as GeoJSONGeometryType, projFunc));
   }
 };
 
@@ -273,8 +272,26 @@ export const reprojWithD3 = (
   invert: boolean = false,
 ): GeoJSONFeatureCollection => {
   const newData = JSON.parse(JSON.stringify(data));
+  const projFunc = invert
+    ? (coord) => proj.invert(coord)
+    : (coord) => proj(coord);
   newData.features.forEach((f: GeoJSONFeature) => {
-    reprojGeom(f.geometry, proj, invert);
+    reprojGeom(f.geometry, projFunc);
+  });
+  return newData;
+};
+
+export const reprojWithProj4 = (
+  proj: InterfaceProjection,
+  data: GeoJSONFeatureCollection,
+  invert: boolean = false,
+): GeoJSONFeatureCollection => {
+  const newData = JSON.parse(JSON.stringify(data));
+  const projFunc = invert
+    ? (coord) => proj.inverse(coord)
+    : (coord) => proj.forward(coord);
+  newData.features.forEach((f: GeoJSONFeature) => {
+    reprojGeom(f.geometry, projFunc);
   });
   return newData;
 };
