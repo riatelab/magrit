@@ -98,7 +98,7 @@ export default function ImageSymbolSelection(
             }}
             onClick={() => {
               setImageType(ImageType.SVG);
-              setImageContent(svgContent);
+              setImageContent(sanitizeSVG(svgContent));
             }}
           ></div>
         }

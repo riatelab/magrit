@@ -30,8 +30,10 @@ const sanitizeSVG = (svg: string) => {
   const width = svgDom.getAttribute('width');
   const height = svgDom.getAttribute('height');
   const viewBox = svgDom.getAttribute('viewBox');
-  if (width && height && !viewBox) {
-    svgDom.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  if (width && height) {
+    if (!viewBox) {
+      svgDom.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    }
     svgDom.removeAttribute('width');
     svgDom.removeAttribute('height');
   }
