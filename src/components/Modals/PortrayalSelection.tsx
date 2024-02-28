@@ -4,6 +4,7 @@ import {
   For,
   type JSX,
   Match,
+  onCleanup,
   onMount,
   Show,
   Switch,
@@ -193,8 +194,29 @@ export default function PortrayalSelection(): JSX.Element {
     }
   });
 
+  const listenerEscKey = (event: KeyboardEvent) => {
+    const isEscape = event.key
+      ? (event.key === 'Escape' || event.key === 'Esc')
+      : (event.keyCode === 27);
+    if (isEscape) {
+      // We want a different behavior if a portrayal is selected or not
+      if (selectedPortrayal()) {
+        // Reset selected portrayal so we go back to the list of portrayal types
+        setSelectedPortrayal(null);
+      } else {
+        // Close the modal
+        (refParentNode.querySelector('.cancel-button') as HTMLElement).click();
+      }
+    }
+  };
+
   onMount(() => {
     (refParentNode.querySelector('.modal-card-body')! as HTMLDivElement).focus();
+    document.addEventListener('keydown', listenerEscKey);
+  });
+
+  onCleanup(() => {
+    document.removeEventListener('keydown', listenerEscKey);
   });
 
   return <div
