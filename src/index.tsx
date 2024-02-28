@@ -41,14 +41,23 @@ loadLocale('en');
 // to update the mode accordingly)
 initializeLightDarkMode();
 
+// render(
+//   () => (
+//   <TypesafeI18n locale={'en'}>
+//     <Router>
+//       <Route path="/" component={ WelcomePage } />
+//       <Route path="/app" component={ AppPage } />
+//     </Router>
+//   </TypesafeI18n>
+//   ) as JSX.Element,
+//   root,
+// );
+
 render(
   () => (
-  <TypesafeI18n locale={'en'}>
-    <Router>
-      <Route path="/" component={ WelcomePage } />
-      <Route path="/app" component={ AppPage } />
-    </Router>
-  </TypesafeI18n>
+    <TypesafeI18n locale={'en'}>
+      <AppPage />
+    </TypesafeI18n>
   ) as JSX.Element,
   root,
 );

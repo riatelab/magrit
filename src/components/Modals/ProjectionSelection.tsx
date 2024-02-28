@@ -1,6 +1,5 @@
 // Imports for solid-js
 import {
-  type Accessor,
   createSignal,
   For,
   type JSX,
@@ -11,7 +10,7 @@ import {
 import { FiExternalLink } from 'solid-icons/fi';
 
 // Helpers
-import { type TranslationFunctions } from '../../i18n/i18n-types';
+import { useI18nContext } from '../../i18n/i18n-solid';
 import { epsgDb, type EpsgDbEntryType } from '../../helpers/projection';
 import { isNumber } from '../../helpers/common';
 import { round } from '../../helpers/math';
@@ -78,11 +77,9 @@ const findMatchingProjections = (search: string): ScoredResult<EpsgDbEntryType>[
     .sort((a, b) => b.score - a.score);
 };
 
-export default function ProjectionSelection(
-  props: {
-    LL: Accessor<TranslationFunctions>;
-  },
-) : JSX.Element {
+export default function ProjectionSelection() : JSX.Element {
+  const { LL } = useI18nContext();
+
   const [
     matchingProjections,
     setMatchingProjections,
@@ -91,10 +88,11 @@ export default function ProjectionSelection(
     selectedProjection,
     setSelectedProjection,
   ] = createSignal<EpsgDbEntryType | null>(null);
+
   return <div class="projection-selection">
     <InputFieldText
       width={ 400 }
-      label={ props.LL().ProjectionSelection.SearchProjection() }
+      label={ LL().ProjectionSelection.SearchProjection() }
       placeholder={'e.g. EPSG:3035, Lambert-93, Martinique 1938 / UTM zone 20N, ...'}
       onKeyUp={(value) => {
         setMatchingProjections(findMatchingProjections(value));
@@ -108,11 +106,11 @@ export default function ProjectionSelection(
       >
         <Show when={matchingProjections() !== null}>
           <div class="projection-selection-list__header" style={{ 'margin-block-end': '1em' }}>
-            { props.LL().ProjectionSelection.NMatchingProjections(matchingProjections()!.length) }
+            { LL().ProjectionSelection.NMatchingProjections(matchingProjections()!.length) }
           </div>
           <Show when={matchingProjections()!.length > 80}>
             <div class="projection-selection-list__warning">
-              { props.LL().ProjectionSelection.TooManyResults() }
+              { LL().ProjectionSelection.TooManyResults() }
             </div>
           </Show>
           <Show when={matchingProjections()!.length <= 80}>
@@ -148,20 +146,20 @@ export default function ProjectionSelection(
                 \ ({ selectedProjection()!.code })
               </p>
               <p>
-                <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.Kind() }</span> {
+                <span style={{ 'font-weight': 500 }}>{ LL().ProjectionSelection.Kind() }</span> {
                 {
-                  'CRS-PROJCRS': props.LL().ProjectionSelection.ProjCRS(),
-                  'CRS-GEOGCRS': props.LL().ProjectionSelection.GeogCRS(),
+                  'CRS-PROJCRS': LL().ProjectionSelection.ProjCRS(),
+                  'CRS-GEOGCRS': LL().ProjectionSelection.GeogCRS(),
                 }[selectedProjection()!.kind]
               }</p>
               <p>
-                <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.BboxGeo() }</span>
+                <span style={{ 'font-weight': 500 }}>{ LL().ProjectionSelection.BboxGeo() }</span>
                 \ { selectedProjection()!.bbox.join(', ') }</p>
               <p>
-                <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.Area() }</span>
+                <span style={{ 'font-weight': 500 }}>{ LL().ProjectionSelection.Area() }</span>
                 \ { selectedProjection()!.area }</p>
               <p>
-                <span style={{ 'font-weight': 500 }}>{ props.LL().ProjectionSelection.Unit() }</span>
+                <span style={{ 'font-weight': 500 }}>{ LL().ProjectionSelection.Unit() }</span>
                 \ { selectedProjection()!.unit }</p>
               <p>
                 <a
@@ -170,7 +168,7 @@ export default function ProjectionSelection(
                   rel="noopener noreferrer"
                 >
                   <FiExternalLink style={{ height: '1em', width: '1em', 'vertical-align': 'text-top' }}/>
-                  { props.LL().ProjectionSelection.MoreInformation() }
+                  { LL().ProjectionSelection.MoreInformation() }
                 </a>
               </p>
             </div>

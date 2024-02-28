@@ -1,8 +1,9 @@
 // Imports from solid-js
-import { JSX } from 'solid-js';
+import { Accessor, JSX } from 'solid-js';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import type { TranslationFunctions } from '../../i18n/i18n-types';
 import { unproxify } from '../../helpers/common';
 
 // Stores
@@ -105,7 +106,10 @@ const projectionEntries = availableProjections.map((projection) => ({
   value: projection,
 }));
 
-function onChangeProjectionEntry(value: string) {
+function onChangeProjectionEntry(
+  value: string,
+  LL: Accessor<TranslationFunctions>,
+) {
   // Value is either the name of the projection (to be used in the projection function for d3)
   // or "other"
   if (value === 'other') {
@@ -114,8 +118,8 @@ function onChangeProjectionEntry(value: string) {
     // Open the modal that will allow the user to select a projection
     setModalStore({
       show: true,
-      content: () => <ProjectionSelection LL={useI18nContext().LL} />,
-      title: 'Select a projection',
+      content: () => <ProjectionSelection />,
+      title: LL().ProjectionSelection.title(),
       confirmCallback: () => {
         // Nothing to do on confirm
         // because the projection is already changed
@@ -125,6 +129,7 @@ function onChangeProjectionEntry(value: string) {
         setMapStore('projection', currentProjection);
       },
       width: '900px',
+      escapeKey: 'cancel',
     });
   } else {
     // The projection function name in d3 is 'geo' + the value
@@ -204,7 +209,7 @@ export default function MapConfiguration(): JSX.Element {
         id={ 'map-configuration__projection-dropdown' }
         entries={projectionEntries}
         defaultEntry={mapStore.projection}
-        onChange={ onChangeProjectionEntry }
+        onChange={(value) => { onChangeProjectionEntry(value, LL); }}
       />
     </div>
     <div class="field">

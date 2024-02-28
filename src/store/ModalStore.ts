@@ -4,12 +4,12 @@ import { LocalizedString } from 'typesafe-i18n';
 
 type ModalStoreType = {
   show: boolean,
-  title: LocalizedString | string | null,
-  content: JSX.Element | (() => JSX.Element) | string | null,
+  title: LocalizedString | null,
+  content: JSX.Element | (() => JSX.Element) | null,
   confirmCallback: (() => void) | null,
   cancelCallback: (() => void) | null,
-  successButton: LocalizedString | string | null,
-  cancelButton: LocalizedString | string | null,
+  successButton: LocalizedString | null,
+  cancelButton: LocalizedString | null,
   escapeKey: 'confirm' | 'cancel' | null,
   width?: string,
 };

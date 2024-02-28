@@ -9,10 +9,10 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 
 // Stores
 import { modalStore, resetModalStore } from '../../store/ModalStore';
+import { globalStore } from '../../store/GlobalStore';
 
 // Styles
 import '../../styles/ModalWindow.css';
-import { globalStore } from '../../store/GlobalStore';
 
 export default function DefaultModal(): JSX.Element {
   const { LL } = useI18nContext();

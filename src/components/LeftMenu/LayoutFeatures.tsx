@@ -323,7 +323,7 @@ const createScaleBar = (/* LL: Accessor<TranslationFunctions>,  */) => {
     label: 'km',
     tickValues: [0, 50, 100, 250, 500],
     tickPadding: 10,
-    style: ScaleBarStyle.blackAndWhiteBar,
+    style: ScaleBarStyle.lineWithTicksOnTop,
     backgroundRect: { visible: false } as BackgroundRect,
     behavior: 'absoluteSize' as ScaleBarBehavior,
   } as ScaleBar;
