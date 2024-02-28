@@ -4,12 +4,14 @@ import {
   createSignal,
   For,
   JSX,
+  onCleanup,
+  onMount,
   Show,
 } from 'solid-js';
 import { createMutable } from 'solid-js/store';
 
 // Import from other packages
-import { FaSolidCircleInfo, FaSolidTrashCan } from 'solid-icons/fa';
+import { FaSolidTrashCan } from 'solid-icons/fa';
 import { VsTriangleDown, VsTriangleRight } from 'solid-icons/vs';
 import toast from 'solid-toast';
 
@@ -148,61 +150,6 @@ const formatCrsTitle = (
   }
   return 'Unknown';
 };
-
-// const analyseDatasetGeoJSON = (
-//   content: string,
-//   name: string,
-// ): DatasetInformation | InvalidDataset => {
-//   const obj = JSON.parse(content);
-//   return {
-//     type: 'geo',
-//     name,
-//     detailedType: SupportedGeoFileTypes.GeoJSON,
-//     complete: true,
-//     layers: [
-//       {
-//         name,
-//         features: obj.features.length,
-//         geometryType: obj.features[0]?.geometry?.type || 'unknown',
-//         crs: { // TODO: read layer with gdal and detect CRS if any
-//           name: 'WGS 84',
-//           code: 'ESPG:4326',
-//         },
-//         addToProject: true,
-//         useCRS: false,
-//         simplify: false,
-//         fitMap: false,
-//       },
-//     ],
-//   };
-// };
-// const analyseDatasetShapefile = async (
-//   files: FileEntry[],
-// ): Promise<DatasetInformation | InvalidDataset> => {
-//   const result = await getDatasetInfo(files.map((f) => f.file));
-//
-//   const name = splitLastOccurrence(files[0].name, '.')[0];
-//
-//   return {
-//     type: 'geo',
-//     name,
-//     detailedType: SupportedGeoFileTypes.Shapefile,
-//     complete: true,
-//     layers: [
-//       {
-//         name: result.layers[0].name,
-//         features: result.layers[0].featureCount,
-//         geometryType: result.layers[0].geometryFields[0]
-//           ? result.layers[0].geometryFields[0].type : 'unknown',
-//         crs: readCrs(result.layers[0].geometryFields[0]),
-//         addToProject: true,
-//         useCRS: false,
-//         simplify: false,
-//         fitMap: false,
-//       },
-//     ],
-//   };
-// };
 
 const analyseTabularDatasetGDAL = async (
   fileOrFiles: FileEntry | FileEntry[],
@@ -632,6 +579,24 @@ export default function ImportWindow(): JSX.Element {
     layer[prop] = newCheckedState;
   };
 
+  const listenerEscKey = (event: KeyboardEvent) => {
+    const isEscape = event.key
+      ? (event.key === 'Escape' || event.key === 'Esc')
+      : (event.keyCode === 27);
+    // We block the escape key if the loading is active
+    if (isEscape && !fileDescriptions.loading) {
+      (refParentNode.querySelector('.cancel-button') as HTMLElement).click();
+    }
+  };
+
+  onMount(() => {
+    document.addEventListener('keydown', listenerEscKey);
+  });
+
+  onCleanup(() => {
+    document.removeEventListener('keydown', listenerEscKey);
+  });
+
   return <div class="modal-window modal overlay-drop" style={{ display: 'flex' }} ref={refParentNode!}>
     <div class="modal-background"></div>
     <div
@@ -942,7 +907,7 @@ export default function ImportWindow(): JSX.Element {
             if (dsToSimplify.length > 0) {
               setModalStore({
                 show: true,
-                title: LL().SimplificationModal.title(),
+                title: LL().SimplificationModal.Title(),
                 content: () => <SimplificationModal ids={dsToSimplify} />,
                 width: '60vw',
               });
