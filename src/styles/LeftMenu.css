@@ -90,7 +90,6 @@ The left menu is:
     transform: scale(0.9);
     -webkit-filter: grayscale(0.7);
     -webkit-transform: scale(0.9);
-    cursor: pointer;
 }
 
 .layout-features-section__icon-element.disabled {

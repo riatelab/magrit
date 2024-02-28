@@ -145,6 +145,14 @@ but just store them in css variables)
   box-shadow: unset !important;
 }
 
+button.unstyled {
+  background-color: unset;
+  border: unset;
+  box-shadow: unset;
+  color: unset;
+  padding: unset;
+}
+
 /* Somehow large outline to make visible which button is focused */
 button.button:focus {
   outline: -webkit-focus-ring-color auto thin;
