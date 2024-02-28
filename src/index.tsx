@@ -8,6 +8,7 @@ import { JSX } from 'solid-js';
 
 import TypesafeI18n from './i18n/i18n-solid';
 import { loadLocale } from './i18n/i18n-util.sync';
+import { resetContextMenuStore } from './store/ContextMenuStore';
 import { initializeLightDarkMode } from './helpers/darkmode';
 import './helpers/array.extension';
 
@@ -29,6 +30,8 @@ import AppPage from './AppPage.tsx';
 
 const root = document.getElementById('root') as HTMLElement;
 root.classList.add('content');
+root.addEventListener('click', resetContextMenuStore);
+root.addEventListener('contextmenu', resetContextMenuStore);
 
 loadLocale('en');
 

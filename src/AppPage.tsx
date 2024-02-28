@@ -36,7 +36,6 @@ import NiceAlert from './components/Modals/NiceAlert.tsx';
 import TableWindow from './components/Modals/TableWindow.tsx';
 import ClassificationPanel from './components/Modals/ClassificationPanel.tsx';
 import { HeaderBarApp } from './components/Headers.tsx';
-import ExampleDatasetModal from './components/Modals/ExampleDatasetModal.tsx';
 import ContextMenu from './components/ContextMenu.tsx';
 import ImportWindow from './components/ImportWindow.tsx';
 // import ReloadPrompt from './components/ReloadPrompt.tsx';
@@ -477,10 +476,7 @@ const AppPage: () => JSX.Element = () => {
     db.projects.clear();
   });
 
-  return <div
-      onClick={ () => { resetContextMenuStore(); } }
-      onContextMenu={ () => { resetContextMenuStore(); } }
-    >
+  return <>
     <HeaderBarApp />
     <main>
       <LeftMenu />
@@ -527,7 +523,7 @@ const AppPage: () => JSX.Element = () => {
       position={'bottom-center'}
     />
     {/* <ReloadPrompt /> */}
-  </div>;
+  </>;
 };
 
 export default AppPage;
