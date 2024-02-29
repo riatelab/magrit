@@ -92,7 +92,6 @@ export const getUnitFromProjectionString = (
   }
   // We have a WKT1 string, so the unit, if any,
   // is written like UNIT["name of the unit",value]
-  // We can use a regex to extract the name of the unit
   const o = wkt(projString);
   const r = {};
   r.unit = o.units ? o.units as string : null;

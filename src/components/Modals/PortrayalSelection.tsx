@@ -24,6 +24,7 @@ import {
 
 // Stores
 import { portrayalSelectionStore, setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Subcomponents
 import CartogramSettings from '../PortrayalOption/CartogramSettings.tsx';
@@ -34,6 +35,7 @@ import CategoricalChoroplethSettings from '../PortrayalOption/CategoricalChoropl
 import LabelsSettings from '../PortrayalOption/LabelsSettings.tsx';
 import SmoothingSettings from '../PortrayalOption/SmoothingSettings.tsx';
 import GriddingSettings from '../PortrayalOption/GriddingSettings.tsx';
+import LinksSettings from '../PortrayalOption/LinksSettings.tsx';
 import InformationBanner from '../InformationBanner.tsx';
 
 // Type / interfaces / enums
@@ -81,6 +83,10 @@ const portrayalDescriptions: PortrayalDescription[] = [
     name: 'Grid',
     type: RepresentationType.grid,
   },
+  {
+    name: 'Links',
+    type: RepresentationType.links,
+  },
 ].map((p) => ({ ...p, enabled: false }));
 
 function CardPortrayal(
@@ -118,14 +124,13 @@ function CardPortrayal(
   >
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
       <p class="card-header-title">
-        { LL().PortrayalSection.PortrayalTypes[pDesc.name] }
+        { LL().PortrayalSection.PortrayalTypes[pDesc.name]() }
       </p>
     </header>
     <section class="card-content">
       <div class="content">
-        { LL().PortrayalSelection.ShortDescriptions[pDesc.name] }
+        { LL().PortrayalSelection.ShortDescriptions[pDesc.name]() }
       </div>
-
     </section>
   </div>;
 }
@@ -151,6 +156,9 @@ export default function PortrayalSelection(): JSX.Element {
   const vars = layerAvailableVariables(portrayalSelectionStore.layerId);
   // What is the geometry type for the selected layer ?
   const geomType = layerGeometryType(portrayalSelectionStore.layerId);
+
+  // Is there any tabular datasets that may contain information for links ?
+  const projectHasTabularDataset = layersDescriptionStore.tables.length > 0;
 
   // Set the enable flag for the various portrayal types
   portrayals.forEach((p) => {
@@ -186,6 +194,14 @@ export default function PortrayalSelection(): JSX.Element {
       case RepresentationType.cartogram:
         // eslint-disable-next-line no-param-reassign
         p.enabled = vars.hasStock;
+        break;
+      case RepresentationType.links:
+        // eslint-disable-next-line no-param-reassign
+        p.enabled = (
+          projectHasTabularDataset
+          && vars.hasIdentifier
+          && (geomType === 'polygon' || geomType === 'point')
+        );
         break;
       default:
         // eslint-disable-next-line no-param-reassign
@@ -297,6 +313,9 @@ export default function PortrayalSelection(): JSX.Element {
             </Match>
             <Match when={selectedPortrayal()!.type === RepresentationType.grid}>
               <GriddingSettings layerId={portrayalSelectionStore.layerId!}/>
+            </Match>
+            <Match when={selectedPortrayal()!.type === RepresentationType.links}>
+              <LinksSettings layerId={portrayalSelectionStore.layerId!}/>
             </Match>
           </Switch>
         </Show>

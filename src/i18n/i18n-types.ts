@@ -810,6 +810,10 @@ type RootTranslation = {
 			 */
 			Grid: string
 			/**
+			 * L​i​n​k​s
+			 */
+			Links: string
+			/**
 			 * N​o​ ​p​o​r​t​r​a​y​a​l​ ​f​o​r​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​l​a​y​e​r​ ​-​ ​P​l​e​a​s​e​ ​v​e​r​i​f​y​ ​t​h​e​ ​t​y​p​i​n​g​ ​o​f​ ​t​h​e​ ​f​i​e​l​d​s​ ​o​r​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​l​a​y​e​r
 			 */
 			NoPortrayal: string
@@ -1113,6 +1117,96 @@ type RootTranslation = {
 			 */
 			Count: string
 		}
+		LinksOptions: {
+			/**
+			 * I​d​e​n​t​i​f​i​e​r​ ​f​i​e​l​d
+			 */
+			IdentifierField: string
+			/**
+			 * S​e​l​e​c​t​ ​a​ ​d​a​t​a​s​e​t
+			 */
+			SelectDataset: string
+			/**
+			 * D​a​t​a​s​e​t​ ​c​o​n​t​a​i​n​i​n​g​ ​l​i​n​k​s​ ​i​n​f​o​r​m​a​t​i​o​n
+			 */
+			Dataset: string
+			/**
+			 * O​r​i​g​i​n​ ​i​d​e​n​t​i​f​i​e​r​s
+			 */
+			OriginId: string
+			/**
+			 * D​e​s​t​i​n​a​t​i​o​n​ ​i​d​e​n​t​i​f​i​e​r​s
+			 */
+			DestinationId: string
+			/**
+			 * I​n​t​e​n​s​i​t​y
+			 */
+			Intensity: string
+			/**
+			 * L​i​n​k​ ​t​y​p​e
+			 */
+			LinkType: string
+			/**
+			 * E​x​c​h​a​n​g​e
+			 */
+			LinkTypeExchange: string
+			/**
+			 * L​i​n​k
+			 */
+			LinkTypeLink: string
+			/**
+			 * B​i​l​a​t​e​r​a​l​ ​v​o​l​u​m​e
+			 */
+			LinkTypeBilateralVolume: string
+			/**
+			 * H​e​a​d​ ​t​y​p​e
+			 */
+			LinkHeadType: string
+			/**
+			 * A​r​r​o​w
+			 */
+			LinkHeadTypeArrow: string
+			/**
+			 * N​o​n​e
+			 */
+			LinkHeadTypeNone: string
+			/**
+			 * A​r​r​o​w​ ​(​p​o​s​i​t​i​o​n​e​d​ ​o​n​ ​s​y​m​b​o​l​ ​b​o​r​d​e​r​)
+			 */
+			LinkHeadTypeArrowOnSymbol: string
+			/**
+			 * N​o​n​e​ ​(​p​o​s​i​t​i​o​n​e​d​ ​o​n​ ​s​y​m​b​o​l​ ​b​o​r​d​e​r​)
+			 */
+			LinkHeadTypeNoneOnSymbol: string
+			/**
+			 * C​u​r​v​a​t​u​r​e
+			 */
+			LinkCurvature: string
+			/**
+			 * S​t​r​a​i​g​h​t
+			 */
+			LinkCurvatureStraight: string
+			/**
+			 * C​u​r​v​e​d
+			 */
+			LinkCurvatureCurved: string
+			/**
+			 * L​i​n​k​ ​p​o​s​i​t​i​o​n
+			 */
+			LinkPosition: string
+			/**
+			 * I​n​i​t​i​a​l
+			 */
+			LinkPositionInitial: string
+			/**
+			 * S​h​i​f​t​e​d
+			 */
+			LinkPositionShifted: string
+			/**
+			 * S​h​a​r​e​d
+			 */
+			LinkPositionShared: string
+		}
 	}
 	ExportSection: {
 		/**
@@ -1390,6 +1484,10 @@ type RootTranslation = {
 			 * A​ ​g​r​i​d​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​a​r​e​a​s​ ​a​r​e​ ​s​h​a​d​e​d​ ​o​r​ ​p​a​t​t​e​r​n​e​d​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​,​ ​b​u​t​ ​w​i​t​h​ ​a​ ​g​r​i​d​ ​l​a​y​o​u​t​.
 			 */
 			Grid: string
+			/**
+			 * A​ ​l​i​n​k​s​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​l​i​n​k​s​ ​a​r​e​ ​d​r​a​w​n​ ​b​e​t​w​e​e​n​ ​p​o​i​n​t​s​ ​o​r​ ​a​r​e​a​s​,​ ​o​p​t​i​o​n​a​l​l​y​ ​w​i​t​h​ ​a​ ​w​i​d​t​h​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​.
+			 */
+			Links: string
 		}
 		LongDescriptions: {
 			Choropleth: string
@@ -2852,6 +2950,10 @@ export type TranslationFunctions = {
 			 */
 			Grid: () => LocalizedString
 			/**
+			 * Links
+			 */
+			Links: () => LocalizedString
+			/**
 			 * No portrayal for the selected layer - Please verify the typing of the fields or select another layer
 			 */
 			NoPortrayal: () => LocalizedString
@@ -3154,6 +3256,96 @@ export type TranslationFunctions = {
 			 */
 			Count: () => LocalizedString
 		}
+		LinksOptions: {
+			/**
+			 * Identifier field
+			 */
+			IdentifierField: () => LocalizedString
+			/**
+			 * Select a dataset
+			 */
+			SelectDataset: () => LocalizedString
+			/**
+			 * Dataset containing links information
+			 */
+			Dataset: () => LocalizedString
+			/**
+			 * Origin identifiers
+			 */
+			OriginId: () => LocalizedString
+			/**
+			 * Destination identifiers
+			 */
+			DestinationId: () => LocalizedString
+			/**
+			 * Intensity
+			 */
+			Intensity: () => LocalizedString
+			/**
+			 * Link type
+			 */
+			LinkType: () => LocalizedString
+			/**
+			 * Exchange
+			 */
+			LinkTypeExchange: () => LocalizedString
+			/**
+			 * Link
+			 */
+			LinkTypeLink: () => LocalizedString
+			/**
+			 * Bilateral volume
+			 */
+			LinkTypeBilateralVolume: () => LocalizedString
+			/**
+			 * Head type
+			 */
+			LinkHeadType: () => LocalizedString
+			/**
+			 * Arrow
+			 */
+			LinkHeadTypeArrow: () => LocalizedString
+			/**
+			 * None
+			 */
+			LinkHeadTypeNone: () => LocalizedString
+			/**
+			 * Arrow (positioned on symbol border)
+			 */
+			LinkHeadTypeArrowOnSymbol: () => LocalizedString
+			/**
+			 * None (positioned on symbol border)
+			 */
+			LinkHeadTypeNoneOnSymbol: () => LocalizedString
+			/**
+			 * Curvature
+			 */
+			LinkCurvature: () => LocalizedString
+			/**
+			 * Straight
+			 */
+			LinkCurvatureStraight: () => LocalizedString
+			/**
+			 * Curved
+			 */
+			LinkCurvatureCurved: () => LocalizedString
+			/**
+			 * Link position
+			 */
+			LinkPosition: () => LocalizedString
+			/**
+			 * Initial
+			 */
+			LinkPositionInitial: () => LocalizedString
+			/**
+			 * Shifted
+			 */
+			LinkPositionShifted: () => LocalizedString
+			/**
+			 * Shared
+			 */
+			LinkPositionShared: () => LocalizedString
+		}
 	}
 	ExportSection: {
 		/**
@@ -3431,6 +3623,10 @@ export type TranslationFunctions = {
 			 * A grid map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable, but with a grid layout.
 			 */
 			Grid: () => LocalizedString
+			/**
+			 * A links map is a thematic map in which links are drawn between points or areas, optionally with a width in proportion to the value of a variable.
+			 */
+			Links: () => LocalizedString
 		}
 		LongDescriptions: {
 			Choropleth: () => LocalizedString

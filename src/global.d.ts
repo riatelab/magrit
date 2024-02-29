@@ -24,6 +24,8 @@ type DexieDb = Dexie
   tables: TableDescription[],
 } }, number> };
 
+type VectorType = 'point' | 'linestring' | 'polygon';
+
 // The description of a layer
 // (it contains all the necessary elements to display the layer and its legend if any)
 type LayerDescription = {
@@ -32,7 +34,7 @@ type LayerDescription = {
   // The name of the layer (as displayed in the UI, can be changed by the user)
   name: string,
   // Type of the layer
-  type: 'point' | 'linestring' | 'polygon' | 'raster',
+  type: VectorType | 'raster',
   // The type of representation of the layer
   renderer: RepresentationType,
   // The data for the layer
@@ -176,7 +178,7 @@ type LayerDescriptionCategoricalPictogram = LayerDescription & {
 type LayerDescriptionLinks = LayerDescription & {
   renderer: RepresentationType.links,
   rendererParameters: LinksParameters,
-  legend: null,
+  legend: undefined,
 };
 
 type LayerDescriptionSmoothedLayer = LayerDescription & {
@@ -424,6 +426,8 @@ interface CategoricalPictogramParameters {
 }
 
 interface LinksParameters {
+  // The name of the variable that contains intensity / volume information
+  variable: string,
   // Classification parameters (if not specified, the links are not classified
   // and their width is computed as a direct proportion of the value of the variable)
   classification?: {
@@ -432,10 +436,46 @@ interface LinksParameters {
     // The number of classes
     classes: number,
   },
-  // TODO: add other parameters, notably about the appearance of the links
-  //  (arrow head or not, etc.),
-  //  about shifting the links to show both directions
-  //  if necessary, about the curvature of the links, etc.
+  // Sizes parameter (when no classification is specified)
+  sizes?: {
+    min: number,
+    max: number,
+  },
+  type: LinkType,
+  head: LinkHeadType,
+  curvature: LinkCurvature,
+  position: LinkPosition,
+}
+
+export enum LinkType {
+  Exchange = 'exchange',
+  Link = 'link',
+  BilateralVolume = 'bilateralVolume',
+}
+
+export enum LinkHeadType {
+  None = 'none',
+  Arrow = 'arrow',
+  NoneOnSymbol = 'noneOnSymbol',
+  ArrowOnSymbol = 'arrowOnSymbol',
+}
+
+export enum LinkCurvature {
+  Straight = 'straight',
+  Curved = 'curved',
+}
+
+export enum LinkPosition {
+  // Initial link position:
+  // the link goes from origin to destination
+  Initial = 'initial',
+  // Shifted link position:
+  // I<->J is represented by two links I->J and J->I
+  Shifted = 'shifted',
+  // Shared link position:
+  // I<->J is represented by a half link (+ half arrow head) I->J
+  // and a half link (+ half arrow head) J->I
+  Shared = 'shared',
 }
 
 type AllowChoroplethLegend = Pick<ClassificationParameters, 'variable' | 'palette' | 'breaks' | 'reversePalette' | 'noDataColor'>;

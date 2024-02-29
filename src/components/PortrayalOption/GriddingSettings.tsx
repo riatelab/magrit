@@ -194,8 +194,6 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
     toMeter,
   } = getProjectionUnit(currentProjection);
 
-  console.log(isGeo, distanceUnit);
-
   // Appropriate resolution for the grid
   const appropriateResolution = (
     1000 * +(

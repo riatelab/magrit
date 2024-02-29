@@ -42,6 +42,8 @@ import discontinuityRenderer from './MapRenderer/DiscontinuityMapRenderer.tsx';
 import { defaultLabelsRenderer } from './MapRenderer/LabelsMapRenderer.tsx';
 import graticuleRenderer from './MapRenderer/GraticuleRenderer.tsx';
 import smoothedMapRenderer from './MapRenderer/SmoothedMapRenderer.tsx';
+import gridRenderer from './MapRenderer/GridRenderer.tsx';
+import linksRenderer from './MapRenderer/LinksMapRenderer.tsx';
 
 // - for rendering the layout features
 import FreeDrawingRenderer from './LayoutFeatureRenderer/FreeDrawingRenderer.tsx';
@@ -71,23 +73,22 @@ import {
   LayoutFeatureType,
   Rectangle,
   ScaleBar,
+  type LayerDescriptionCategoricalChoropleth,
   type LayerDescriptionChoropleth,
   type LayerDescriptionDiscontinuity,
-  type LayerDescriptionProportionalSymbols,
+  type LayerDescriptionGriddedLayer,
   type LayerDescriptionLabels,
-  type ID3Element,
-  type LayerDescriptionCategoricalChoropleth,
+  type LayerDescriptionLinks,
+  type LayerDescriptionProportionalSymbols,
   type LayerDescriptionSmoothedLayer,
+  type ID3Element,
   LayerDescription,
   Text,
   Line,
-  GriddedLayerParameters,
-  LayerDescriptionGriddedLayer,
 } from '../global.d';
 
 // Styles
 import '../styles/MapZone.css';
-import gridRenderer from './MapRenderer/GridRenderer.tsx';
 
 const layoutFeaturesFns = {
   [LayoutFeatureType.Line]: LineRenderer,
@@ -153,6 +154,8 @@ const dispatchMapRenderer = (layer: LayerDescription) => {
     return smoothedMapRenderer(layer as LayerDescriptionSmoothedLayer);
   } else if (layer.renderer === 'grid') {
     return gridRenderer(layer as LayerDescriptionGriddedLayer);
+  } else if (layer.renderer === 'links') {
+    return linksRenderer(layer as LayerDescriptionLinks);
   }
   return null;
 };
