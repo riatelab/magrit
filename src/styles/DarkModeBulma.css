@@ -1,489 +1,489 @@
-html.is-dark-mode {
+html.theme-dark {
     background-color: #242424;
 }
-html.is-dark-mode .modal .modal-background {
+html.theme-dark .modal .modal-background {
     background-color: rgba(10, 10, 10, 0.85);
 }
-html.is-dark-mode .modal .modal-card-title {
+html.theme-dark .modal .modal-card-title {
     color: whitesmoke;
 }
-html.is-dark-mode .modal .modal-card-head, html.is-dark-mode .modal .modal-card-body, html.is-dark-mode .modal .modal-card-foot {
+html.theme-dark .modal .modal-card-head, html.theme-dark .modal .modal-card-body, html.theme-dark .modal .modal-card-foot {
     background-color: #242424;
     border-color: #363636;
 }
-html.is-dark-mode .modal-close:before, html.is-dark-mode .modal-close:after {
+html.theme-dark .modal-close:before, html.theme-dark .modal-close:after {
     background-color: whitesmoke;
 }
-html.is-dark-mode .card .card-header .button {
+html.theme-dark .card .card-header .button {
     border-color: #7a7a7a !important;
     color: #7a7a7a;
 }
-html.is-dark-mode .card .card-header .button:hover {
+html.theme-dark .card .card-header .button:hover {
     background-color: #7a7a7a;
     color: #242424;
 }
-html.is-dark-mode .progress::-webkit-progress-bar {
+html.theme-dark .progress::-webkit-progress-bar {
     background-color: #4a4a4a;
 }
-html.is-dark-mode .button {
+html.theme-dark .button {
     background-color: transparent;
     border-color: whitesmoke !important;
     color: whitesmoke !important;
 }
-html.is-dark-mode .button:hover:not([disabled]) {
+html.theme-dark .button:hover:not([disabled]) {
     background-color: whitesmoke;
     color: #242424 !important;
 }
-html.is-dark-mode .button.is-primary {
+html.theme-dark .button.is-primary {
     border-color: #a8b6ee !important;
     color: #a8b6ee !important;
 }
-html.is-dark-mode .button.is-primary:hover {
+html.theme-dark .button.is-primary:hover {
     background-color: #a8b6ee;
     color: white;
 }
-html.is-dark-mode .button.is-info {
+html.theme-dark .button.is-info {
     border-color: #485fc7 !important;
     color: #485fc7 !important;
 }
-html.is-dark-mode .button.is-info:hover {
+html.theme-dark .button.is-info:hover {
     background-color: #485fc7;
     color: white;
 }
-html.is-dark-mode .button.is-success {
+html.theme-dark .button.is-success {
     border-color: #48c78e !important;
     color: #48c78e !important;
 }
-html.is-dark-mode .button.is-success:hover {
+html.theme-dark .button.is-success:hover {
     background-color: #48c78e;
     color: white;
 }
-html.is-dark-mode .button.is-warning {
+html.theme-dark .button.is-warning {
     border-color: #ffe08a !important;
     color: #ffe08a !important;
 }
-html.is-dark-mode .button.is-warning:hover {
+html.theme-dark .button.is-warning:hover {
     background-color: #ffe08a;
     color: #363636;
 }
-html.is-dark-mode .button.is-danger {
+html.theme-dark .button.is-danger {
     border-color: #f14668 !important;
     color: #f14668 !important;
 }
-html.is-dark-mode .button.is-danger:hover {
+html.theme-dark .button.is-danger:hover {
     background-color: #f14668;
     color: white;
 }
-html.is-dark-mode .button.is-dark {
+html.theme-dark .button.is-dark {
     border-color: #363636 !important;
     color: #363636 !important;
 }
-html.is-dark-mode .button.is-dark:hover {
+html.theme-dark .button.is-dark:hover {
     background-color: #363636;
     color: white;
 }
-html.is-dark-mode .button.is-white {
+html.theme-dark .button.is-white {
     border-color: white !important;
     color: white !important;
 }
-html.is-dark-mode .button.is-white:hover {
+html.theme-dark .button.is-white:hover {
     background-color: white;
     color: #242424;
 }
-html.is-dark-mode .select select:focus, html.is-dark-mode .textarea:focus, html.is-dark-mode .input:focus, html.is-dark-mode .taginput .taginput-container.is-focusable:focus, html.is-dark-mode .select select.is-focused, html.is-dark-mode .is-focused.textarea, html.is-dark-mode .is-focused.input, html.is-dark-mode .taginput .is-focused.taginput-container.is-focusable, html.is-dark-mode .select select:active, html.is-dark-mode .textarea:active, html.is-dark-mode .input:active, html.is-dark-mode .taginput .taginput-container.is-focusable:active, html.is-dark-mode .select select.is-active, html.is-dark-mode .is-active.textarea, html.is-dark-mode .is-active.input, html.is-dark-mode .taginput .is-active.taginput-container.is-focusable {
+html.theme-dark .select select:focus, html.theme-dark .textarea:focus, html.theme-dark .input:focus, html.theme-dark .taginput .taginput-container.is-focusable:focus, html.theme-dark .select select.is-focused, html.theme-dark .is-focused.textarea, html.theme-dark .is-focused.input, html.theme-dark .taginput .is-focused.taginput-container.is-focusable, html.theme-dark .select select:active, html.theme-dark .textarea:active, html.theme-dark .input:active, html.theme-dark .taginput .taginput-container.is-focusable:active, html.theme-dark .select select.is-active, html.theme-dark .is-active.textarea, html.theme-dark .is-active.input, html.theme-dark .taginput .is-active.taginput-container.is-focusable {
     border-color: #a8b6ee;
 }
-html.is-dark-mode .radio:hover, html.is-dark-mode .checkbox:hover {
+html.theme-dark .radio:hover, html.theme-dark .checkbox:hover {
     color: whitesmoke;
 }
-html.is-dark-mode .label {
+html.theme-dark .label {
     color: #dbdbdb;
 }
-html.is-dark-mode .input, html.is-dark-mode .textarea, html.is-dark-mode .select select {
+html.theme-dark .input, html.theme-dark .textarea, html.theme-dark .select select {
     color: whitesmoke;
     background-color: transparent;
 }
-html.is-dark-mode .input::placeholder, html.is-dark-mode .textarea::placeholder, html.is-dark-mode .select select::placeholder {
+html.theme-dark .input::placeholder, html.theme-dark .textarea::placeholder, html.theme-dark .select select::placeholder {
     color: #b5b5b5;
 }
-html.is-dark-mode .select:not(.is-multiple):not(.is-loading)::after {
+html.theme-dark .select:not(.is-multiple):not(.is-loading)::after {
     border-color: whitesmoke;
 }
-html.is-dark-mode .select select {
+html.theme-dark .select select {
     color: whitesmoke;
 }
-html.is-dark-mode .switch input[type=checkbox] + .check {
+html.theme-dark .switch input[type=checkbox] + .check {
     border: 1px solid whitesmoke;
 }
-html.is-dark-mode .switch input[type=checkbox] + .check:before {
+html.theme-dark .switch input[type=checkbox] + .check:before {
     border-color: white;
 }
-html.is-dark-mode .b-checkbox.checkbox input[type=checkbox] + .check, html.is-dark-mode .b-radio.radio input[type=radio] + .check {
+html.theme-dark .b-checkbox.checkbox input[type=checkbox] + .check, html.theme-dark .b-radio.radio input[type=radio] + .check {
     border: 1px solid whitesmoke !important;
 }
-html.is-dark-mode .b-slider .b-slider-thumb-wrapper .b-slider-thumb {
+html.theme-dark .b-slider .b-slider-thumb-wrapper .b-slider-thumb {
     background: #242424;
 }
-html.is-dark-mode .notification.is-primary {
+html.theme-dark .notification.is-primary {
     background-color: transparent;
     border: 1px solid #a8b6ee;
     color: #a8b6ee;
 }
-html.is-dark-mode .notification.is-primary .button {
+html.theme-dark .notification.is-primary .button {
     border-color: #a8b6ee !important;
     color: #a8b6ee !important;
 }
-html.is-dark-mode .notification.is-primary .button:hover {
+html.theme-dark .notification.is-primary .button:hover {
     background-color: #a8b6ee;
     color: white !important;
 }
-html.is-dark-mode .notification.is-info {
+html.theme-dark .notification.is-info {
     background-color: transparent;
     border: 1px solid #485fc7;
     color: #485fc7;
 }
-html.is-dark-mode .notification.is-info .button {
+html.theme-dark .notification.is-info .button {
     border-color: #485fc7 !important;
     color: #485fc7 !important;
 }
-html.is-dark-mode .notification.is-info .button:hover {
+html.theme-dark .notification.is-info .button:hover {
     background-color: #485fc7;
     color: white !important;
 }
-html.is-dark-mode .notification.is-success {
+html.theme-dark .notification.is-success {
     background-color: transparent;
     border: 1px solid #48c78e;
     color: #48c78e;
 }
-html.is-dark-mode .notification.is-success .button {
+html.theme-dark .notification.is-success .button {
     border-color: #48c78e !important;
     color: #48c78e !important;
 }
-html.is-dark-mode .notification.is-success .button:hover {
+html.theme-dark .notification.is-success .button:hover {
     background-color: #48c78e;
     color: white !important;
 }
-html.is-dark-mode .notification.is-warning {
+html.theme-dark .notification.is-warning {
     background-color: transparent;
     border: 1px solid #ffe08a;
     color: #ffe08a;
 }
-html.is-dark-mode .notification.is-warning .button {
+html.theme-dark .notification.is-warning .button {
     border-color: #ffe08a !important;
     color: #ffe08a !important;
 }
-html.is-dark-mode .notification.is-warning .button:hover {
+html.theme-dark .notification.is-warning .button:hover {
     background-color: #ffe08a;
     color: #363636 !important;
 }
-html.is-dark-mode .notification.is-danger {
+html.theme-dark .notification.is-danger {
     background-color: transparent;
     border: 1px solid #f14668;
     color: #f14668;
 }
-html.is-dark-mode .notification.is-danger .button {
+html.theme-dark .notification.is-danger .button {
     border-color: #f14668 !important;
     color: #f14668 !important;
 }
-html.is-dark-mode .notification.is-danger .button:hover {
+html.theme-dark .notification.is-danger .button:hover {
     background-color: #f14668;
     color: white !important;
 }
-html.is-dark-mode .notification.is-dark {
+html.theme-dark .notification.is-dark {
     background-color: transparent;
     border: 1px solid #363636;
     color: #363636;
 }
-html.is-dark-mode .notification.is-dark .button {
+html.theme-dark .notification.is-dark .button {
     border-color: #363636 !important;
     color: #363636 !important;
 }
-html.is-dark-mode .notification.is-dark .button:hover {
+html.theme-dark .notification.is-dark .button:hover {
     background-color: #363636;
     color: white !important;
 }
-html.is-dark-mode .notification.is-white {
+html.theme-dark .notification.is-white {
     background-color: transparent;
     border: 1px solid white;
     color: white;
 }
-html.is-dark-mode .notification.is-white .button {
+html.theme-dark .notification.is-white .button {
     border-color: white !important;
     color: white !important;
 }
-html.is-dark-mode .notification.is-white .button:hover {
+html.theme-dark .notification.is-white .button:hover {
     background-color: white;
     color: #242424 !important;
 }
-html.is-dark-mode .tag.is-delete {
+html.theme-dark .tag.is-delete {
     background-color: #4a4a4a;
 }
-html.is-dark-mode .tag.is-primary {
+html.theme-dark .tag.is-primary {
     background-color: transparent;
     border: 1px solid #a8b6ee;
     color: #a8b6ee;
 }
-html.is-dark-mode .tag.is-info {
+html.theme-dark .tag.is-info {
     background-color: transparent;
     border: 1px solid #485fc7;
     color: #485fc7;
 }
-html.is-dark-mode .tag.is-success {
+html.theme-dark .tag.is-success {
     background-color: transparent;
     border: 1px solid #48c78e;
     color: #48c78e;
 }
-html.is-dark-mode .tag.is-warning {
+html.theme-dark .tag.is-warning {
     background-color: transparent;
     border: 1px solid #ffe08a;
     color: #ffe08a;
 }
-html.is-dark-mode .tag.is-danger {
+html.theme-dark .tag.is-danger {
     background-color: transparent;
     border: 1px solid #f14668;
     color: #f14668;
 }
-html.is-dark-mode .tag.is-dark {
+html.theme-dark .tag.is-dark {
     background-color: transparent;
     border: 1px solid #363636;
     color: #363636;
 }
-html.is-dark-mode .tag.is-white {
+html.theme-dark .tag.is-white {
     background-color: transparent;
     border: 1px solid white;
     color: white;
 }
-html.is-dark-mode .table {
+html.theme-dark .table {
     background-color: transparent;
     color: whitesmoke;
 }
-html.is-dark-mode .table thead td, html.is-dark-mode .table thead th {
+html.theme-dark .table thead td, html.theme-dark .table thead th {
     color: whitesmoke;
 }
-html.is-dark-mode .table td, html.is-dark-mode .table th {
+html.theme-dark .table td, html.theme-dark .table th {
     border-color: #363636;
 }
-html.is-dark-mode .table.is-hoverable.is-striped tbody tr:not(.is-selected):hover {
+html.theme-dark .table.is-hoverable.is-striped tbody tr:not(.is-selected):hover {
     background-color: #363636;
 }
-html.is-dark-mode .table.is-hoverable.is-striped tbody tr:not(.is-selected):hover:nth-child(even) {
+html.theme-dark .table.is-hoverable.is-striped tbody tr:not(.is-selected):hover:nth-child(even) {
     background-color: #4a4a4a;
 }
-html.is-dark-mode .table.is-striped tbody tr:not(.is-selected):nth-child(even) {
+html.theme-dark .table.is-striped tbody tr:not(.is-selected):nth-child(even) {
     background-color: #363636;
 }
-html.is-dark-mode .b-table .table-wrapper + .level {
+html.theme-dark .b-table .table-wrapper + .level {
     background-color: transparent;
 }
-html.is-dark-mode .b-table .table-wrapper + .level .pagination-link {
+html.theme-dark .b-table .table-wrapper + .level .pagination-link {
     background-color: transparent;
     color: #7a7a7a;
     border-color: #7a7a7a;
 }
-html.is-dark-mode .b-table .table-wrapper + .level .pagination-link:hover:not(.is-current):not([disabled]) {
+html.theme-dark .b-table .table-wrapper + .level .pagination-link:hover:not(.is-current):not([disabled]) {
     color: #dbdbdb;
     border-color: #dbdbdb;
 }
-html.is-dark-mode .b-table .table-wrapper + .level .pagination-link.is-current {
+html.theme-dark .b-table .table-wrapper + .level .pagination-link.is-current {
     color: whitesmoke;
     border-color: whitesmoke;
 }
-html.is-dark-mode .title {
+html.theme-dark .title {
     color: #dbdbdb;
 }
-html.is-dark-mode .subtitle {
+html.theme-dark .subtitle {
     color: #dbdbdb;
 }
-html.is-dark-mode body {
+html.theme-dark body {
     color: #dbdbdb;
 }
-html.is-dark-mode strong {
+html.theme-dark strong {
     color: whitesmoke;
 }
-html.is-dark-mode hr {
+html.theme-dark hr {
     background-color: #363636;
 }
-html.is-dark-mode a {
+html.theme-dark a {
     color: #a8b6ee;
 }
-html.is-dark-mode .media {
+html.theme-dark .media {
     border-color: #363636;
 }
-html.is-dark-mode nav.navbar {
+html.theme-dark nav.navbar {
     background-color: #242424;
     box-shadow: 0 1px #363636;
 }
-html.is-dark-mode nav.navbar .navbar-item {
+html.theme-dark nav.navbar .navbar-item {
     color: #a8b6ee;
 }
-html.is-dark-mode nav.navbar .navbar-item .navbar-link {
+html.theme-dark nav.navbar .navbar-item .navbar-link {
     color: #a8b6ee;
 }
-html.is-dark-mode nav.navbar .navbar-item .input {
+html.theme-dark nav.navbar .navbar-item .input {
     color: whitesmoke;
 }
-html.is-dark-mode nav.navbar .navbar-item .input::placeholder {
+html.theme-dark nav.navbar .navbar-item .input::placeholder {
     color: #b5b5b5;
 }
-html.is-dark-mode nav.navbar .navbar-item.has-divider {
+html.theme-dark nav.navbar .navbar-item.has-divider {
     border-color: #363636;
 }
-html.is-dark-mode nav.navbar .navbar-item.is-active {
+html.theme-dark nav.navbar .navbar-item.is-active {
     color: whitesmoke;
 }
-html.is-dark-mode .navbar-dropdown {
+html.theme-dark .navbar-dropdown {
     background-color: #242424;
 }
-html.is-dark-mode .navbar-dropdown .navbar-item:hover {
+html.theme-dark .navbar-dropdown .navbar-item:hover {
     color: whitesmoke;
 }
-html.is-dark-mode aside.aside {
+html.theme-dark aside.aside {
     background-color: #242424;
     box-shadow: 1px 0 #363636;
 }
-html.is-dark-mode aside.aside .aside-tools {
+html.theme-dark aside.aside .aside-tools {
     color: whitesmoke;
     box-shadow: 0 1px #363636;
 }
-html.is-dark-mode aside.aside .aside-tools .aside-close {
+html.theme-dark aside.aside .aside-tools .aside-close {
     color: whitesmoke;
 }
-html.is-dark-mode aside.aside .menu-list li.is-active {
+html.theme-dark aside.aside .menu-list li.is-active {
     box-shadow: 0 1px #363636;
 }
-html.is-dark-mode aside.aside .menu-list li.is-active > a {
+html.theme-dark aside.aside .menu-list li.is-active > a {
     box-shadow: 0 1px #363636;
 }
-html.is-dark-mode .menu-list a.is-active {
+html.theme-dark .menu-list a.is-active {
     color: whitesmoke;
 }
-html.is-dark-mode .menu-list a:hover {
+html.theme-dark .menu-list a:hover {
     color: #fafafa;
 }
-html.is-dark-mode .card {
+html.theme-dark .card {
     border-color: #363636;
     color: #dbdbdb;
 }
-html.is-dark-mode .card .card-header {
+html.theme-dark .card .card-header {
     border-color: #363636;
 }
-html.is-dark-mode .card .card-header-title {
+html.theme-dark .card .card-header-title {
     color: #dbdbdb;
 }
-html.is-dark-mode .card .card-footer {
+html.theme-dark .card .card-footer {
     border-color: #363636;
 }
-html.is-dark-mode .card .is-widget-label .subtitle {
+html.theme-dark .card .is-widget-label .subtitle {
     color: #b5b5b5;
 }
-html.is-dark-mode .card .notification {
+html.theme-dark .card .notification {
     background-color: #363636;
     color: #dbdbdb;
 }
-html.is-dark-mode section.section.is-title-bar, html.is-dark-mode section.hero.is-hero-bar {
+html.theme-dark section.section.is-title-bar, html.theme-dark section.hero.is-hero-bar {
     border-color: #363636;
 }
-html.is-dark-mode section.section.is-title-bar ul li {
+html.theme-dark section.section.is-title-bar ul li {
     color: #b5b5b5;
 }
-html.is-dark-mode section.section.is-title-bar ul li:last-child {
+html.theme-dark section.section.is-title-bar ul li:last-child {
     color: #dbdbdb;
 }
-html.is-dark-mode footer.footer {
+html.theme-dark footer.footer {
     border-color: #363636;
 }
-html.is-dark-mode footer.footer .logo svg path {
+html.theme-dark footer.footer .logo svg path {
     fill: whitesmoke;
 }
 
 @media screen and (max-width: 1023px) {
-    html.is-dark-mode .table-wrapper.has-mobile-cards tr:not(.detail):not(.is-empty):not(.table-footer) td {
+    html.theme-dark .table-wrapper.has-mobile-cards tr:not(.detail):not(.is-empty):not(.table-footer) td {
         border-bottom-color: #363636;
     }
-    html.is-dark-mode aside.aside.is-secondary {
+    html.theme-dark aside.aside.is-secondary {
         border-color: #363636 !important;
     }
-    html.is-dark-mode .navbar-menu {
+    html.theme-dark .navbar-menu {
         background-color: #242424;
         box-shadow: 0 8px 16px rgba(10, 10, 10, 0.25);
     }
-    html.is-dark-mode .navbar-menu .navbar-item.has-dropdown > .navbar-link {
+    html.theme-dark .navbar-menu .navbar-item.has-dropdown > .navbar-link {
         border-color: #363636;
     }
 }
 @media screen and (min-width: 1024px) {
-    html.is-dark-mode .navbar-dropdown {
+    html.theme-dark .navbar-dropdown {
         border-color: #363636;
         box-shadow: 0 8px 8px rgba(10, 10, 10, 0.25);
     }
 }
 @media screen and (max-width: 1215px) {
-    html.is-dark-mode aside.aside .aside-tools {
+    html.theme-dark aside.aside .aside-tools {
         box-shadow: 0 1px #363636;
     }
 }
 
 /* Some more Bulma overrides */
-html.is-dark-mode .button.is-primary.is-active,
-html.is-dark-mode .button.is-primary:active {
+html.theme-dark .button.is-primary.is-active,
+html.theme-dark .button.is-primary:active {
     background-color: #1c415e;
     color: white;
 }
 
-html.is-dark-mode .button:hover:not([disabled]) {
+html.theme-dark .button:hover:not([disabled]) {
     background-color: #000;
     color: #ffffff !important;
 }
-html.is-dark-mode .content h1,
-html.is-dark-mode .content h2,
-html.is-dark-mode .content h3,
-html.is-dark-mode .content h4,
-html.is-dark-mode .content h5,
-html.is-dark-mode .content h6 {
+html.theme-dark .content h1,
+html.theme-dark .content h2,
+html.theme-dark .content h3,
+html.theme-dark .content h4,
+html.theme-dark .content h5,
+html.theme-dark .content h6 {
     color: whitesmoke;
 }
 
-html.is-dark-mode .dropdown-content {
+html.theme-dark .dropdown-content {
     background-color: #242424;
     border-color: #818181;
 }
 
-html.is-dark-mode .field .control .number,
-html.is-dark-mode .field-block .control .number,
-html.is-dark-mode input[type="text"],
-html.is-dark-mode input[type="color"] {
+html.theme-dark .field .control .number,
+html.theme-dark .field-block .control .number,
+html.theme-dark input[type="text"],
+html.theme-dark input[type="color"] {
     background-color: black;
     border-color: #818181;
     color: white;
 }
 
-html.is-dark-mode a {
+html.theme-dark a {
     color: #ccdaf7; /* Otherwise it doesn't meet WCAG AAA standards for accessible text */
 }
 
-html.is-dark-mode .tabs.is-boxed li.is-active a {
+html.theme-dark .tabs.is-boxed li.is-active a {
     background-color: #141415;
     color: #fff;
 }
 
-html.is-dark-mode .tabs.is-boxed a:hover {
+html.theme-dark .tabs.is-boxed a:hover {
     background-color: #141415;
     color: #fff;
 }
 
-html.is-dark-mode .card {
+html.theme-dark .card {
     background-color: #000;
     border-color: #363636;
     box-shadow: 0 0.5em 1em -0.125em rgba(238, 238, 238, 0.2), 0 0 0 1px rgba(238, 238, 238, 0.2);
 }
 
-html.is-dark-mode .button.is-success[disabled] {
+html.theme-dark .button.is-success[disabled] {
     background-color: #363636;
     color: #818181;
 }
 
-html.is-dark-mode .content table thead td,
-html.is-dark-mode .content table thead th,
-html.is-dark-mode .content table th {
+html.theme-dark .content table thead td,
+html.theme-dark .content table thead th,
+html.theme-dark .content table th {
     color: #dbdbdb;
 }

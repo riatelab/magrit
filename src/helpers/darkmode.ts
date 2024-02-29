@@ -1,25 +1,25 @@
 export const isDarkMode = () => document
   .querySelector('html')
-  ?.classList.contains('is-dark-mode') ?? false;
+  ?.classList.contains('theme-dark') ?? false;
 
 export const enableDarkMode = () => {
   const body = document.querySelector('html');
   if (body) {
-    body.classList.add('is-dark-mode');
+    body.classList.add('theme-dark');
   }
 };
 
 export const enableLightMode = () => {
   const body = document.querySelector('html');
   if (body) {
-    body.classList.remove('is-dark-mode');
+    body.classList.remove('theme-dark');
   }
 };
 
 export const toggleDarkMode = () => {
   const body = document.querySelector('html');
   if (body) {
-    body.classList.toggle('is-dark-mode');
+    body.classList.toggle('theme-dark');
   }
 };
 
