@@ -191,14 +191,16 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
   const {
     isGeo,
     unit: distanceUnit,
+    toMeter,
   } = getProjectionUnit(currentProjection);
 
   console.log(isGeo, distanceUnit);
 
   // Appropriate resolution for the grid
-  // FIXME: this is a temporary solution, and we should account for the distance unit
-  const appropriateResolution = +(
-    computeAppropriateResolution(bboxLayer(), 0.1).toPrecision(2));
+  const appropriateResolution = (
+    1000 * +(
+      computeAppropriateResolution(bboxLayer(), 0.1).toPrecision(2))
+  ) * toMeter;
 
   // Signals for options
   const [

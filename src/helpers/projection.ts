@@ -78,24 +78,26 @@ const proj4stringToObj = (projString: string): { [key: string]: string | boolean
   return o;
 };
 
-export const getUnitFromProjectionString = (projString: string): string | null => {
+export const getUnitFromProjectionString = (
+  projString: string,
+): { unit: string | null, toMeter: number | null } => {
   // The projection can be either a proj4 string or a wkt string
   const isProj4 = projString.trim().startsWith('+');
   if (isProj4) {
     const p = proj4stringToObj(projString);
-    if (p.units) {
-      return p.units as string;
-    }
-  } else {
-    // We have a WKT1 string, so the unit, if any,
-    // is written like UNIT["name of the unit",value]
-    // We can use a regex to extract the name of the unit
-    const o = wkt(projString);
-    if (o.units) {
-      return o.units as string;
-    }
+    const r = {};
+    r.unit = p.units ? p.units as string : null;
+    r.toMeter = p.to_meter ? parseFloat(p.to_meter as string) : null;
+    return r;
   }
-  return null;
+  // We have a WKT1 string, so the unit, if any,
+  // is written like UNIT["name of the unit",value]
+  // We can use a regex to extract the name of the unit
+  const o = wkt(projString);
+  const r = {};
+  r.unit = o.units ? o.units as string : null;
+  r.toMeter = o.UNIT?.convert ? parseFloat(o.UNIT.convert as string) : null;
+  return r;
 };
 
 // Those are all the possible distance units that we can encounter
@@ -128,12 +130,21 @@ const allPossibleDistanceUnits = [
   'ch',
 ];
 
-export const getProjectionUnit = (projection: any): { unit: string, isGeo: boolean } => {
+export const getProjectionUnit = (
+  projection: any,
+): { unit: string | null, isGeo: boolean, toMeter: number } => {
+  // TODO: the whole logic of this function is a bit convoluted
+  //   we should either simplify it or add comments to explain
+  //   (notably because "unit" can be retrieved from the EPSG database
+  //    but also from the proj4 string or the WKT1 string - while
+  //    the toMeter value can only be retrieved from the proj4/WKT1 string).
   let isGeo;
   let distanceUnit;
+  let toMeter;
   if (projection.type === 'd3') {
     isGeo = true;
-    distanceUnit = 'degrees';
+    distanceUnit = 'degree';
+    toMeter = 0.000008983;
   } else { // currentProjection.type === 'proj4'
     let desc;
     if (
@@ -143,20 +154,35 @@ export const getProjectionUnit = (projection: any): { unit: string, isGeo: boole
     ) {
       // We have a code so we can use the EPSG database
       isGeo = (desc as EpsgDbEntryType).unit
-        ? (desc as EpsgDbEntryType).unit === 'degrees'
+        ? (desc as EpsgDbEntryType).unit?.startsWith('degree')
         : true;
-      distanceUnit = desc.unit || 'degrees';
+      distanceUnit = isGeo ? 'degree' : (desc as EpsgDbEntryType).unit;
+
+      if (distanceUnit === 'degree') {
+        toMeter = 0.000008983;
+      } else {
+        const r = getUnitFromProjectionString(
+          (desc as EpsgDbEntryType).wkt || (desc as EpsgDbEntryType).proj4,
+        );
+        toMeter = r.toMeter ? (1 / r.toMeter) : 1;
+      }
     } else {
       // We dont have a code so we need to see in the proj4 string or in the WKT1 string
-      distanceUnit = getUnitFromProjectionString(projection.value);
-      // TODO: we need to harmonise the units returned by getUnitFromProjectionString
-      isGeo = !distanceUnit || distanceUnit === 'degrees';
+      const r = getUnitFromProjectionString(projection.value);
+      distanceUnit = r.unit;
+      isGeo = !distanceUnit || distanceUnit === 'degree';
+      toMeter = isGeo // eslint-disable-line no-nested-ternary
+        ? 0.000008983
+        : r.toMeter
+          ? (1 / r.toMeter)
+          : 1;
     }
   }
 
   return {
     unit: distanceUnit,
     isGeo,
+    toMeter,
   };
 };
 
@@ -212,7 +238,7 @@ export const getProjection = (projString: string): InterfaceProjection => {
     try {
       return proj4(projString);
     } catch (errProjJs) {
-      // TODO: diagnose why mproj failed to parse the string
+      // TODO: diagnose why proj4js failed to parse the string
       //   and throw the appropriate error message
       console.log(errProjJs);
       // Error messages from proj4js are not very helpful
