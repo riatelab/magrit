@@ -3,9 +3,6 @@ import { Route, Router } from '@solidjs/router';
 import { JSX } from 'solid-js';
 // import { WebR } from '@r-wasm/webr';
 
-// import { useRegisterSW } from 'virtual:pwa-register/solid';
-// import { registerSW } from 'virtual:pwa-register';
-
 import TypesafeI18n from './i18n/i18n-solid';
 import { loadLocale } from './i18n/i18n-util.sync';
 import { resetContextMenuStore } from './store/ContextMenuStore';
@@ -13,7 +10,6 @@ import { initializeLightDarkMode } from './helpers/darkmode';
 import './helpers/array.extension';
 
 import 'bulma/css/bulma.min.css';
-import '@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css';
 import './styles/DarkModeBulma.css';
 import './styles/Main.css';
 
