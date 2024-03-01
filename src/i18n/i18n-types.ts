@@ -1183,9 +1183,13 @@ type RootTranslation = {
 			 */
 			LinkCurvature: string
 			/**
-			 * S​t​r​a​i​g​h​t
+			 * S​t​r​a​i​g​h​t​ ​(​o​n​ ​t​h​e​ ​m​a​p​)
 			 */
-			LinkCurvatureStraight: string
+			LinkCurvatureStraightOnPlane: string
+			/**
+			 * S​t​r​a​i​g​h​t​ ​(​a​l​o​n​g​ ​g​r​e​a​t​ ​c​i​r​c​l​e​)
+			 */
+			LinkCurvatureStraightOnSphere: string
 			/**
 			 * C​u​r​v​e​d
 			 */
@@ -1222,6 +1226,14 @@ type RootTranslation = {
 			 * F​i​x​e​d
 			 */
 			LinkSizeFixed: string
+			/**
+			 * M​a​x​i​m​a​l​ ​S​i​z​e
+			 */
+			LinkSizeProportionalReferenceSize: string
+			/**
+			 * O​n​ ​v​a​l​u​e
+			 */
+			LinkSizeProportionalReferenceValue: string
 		}
 	}
 	ExportSection: {
@@ -3338,9 +3350,13 @@ export type TranslationFunctions = {
 			 */
 			LinkCurvature: () => LocalizedString
 			/**
-			 * Straight
+			 * Straight (on the map)
 			 */
-			LinkCurvatureStraight: () => LocalizedString
+			LinkCurvatureStraightOnPlane: () => LocalizedString
+			/**
+			 * Straight (along great circle)
+			 */
+			LinkCurvatureStraightOnSphere: () => LocalizedString
 			/**
 			 * Curved
 			 */
@@ -3377,6 +3393,14 @@ export type TranslationFunctions = {
 			 * Fixed
 			 */
 			LinkSizeFixed: () => LocalizedString
+			/**
+			 * Maximal Size
+			 */
+			LinkSizeProportionalReferenceSize: () => LocalizedString
+			/**
+			 * On value
+			 */
+			LinkSizeProportionalReferenceValue: () => LocalizedString
 		}
 	}
 	ExportSection: {

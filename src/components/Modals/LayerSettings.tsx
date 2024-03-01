@@ -44,6 +44,9 @@ import {
   ProportionalSymbolsSymbolType,
   type CategoricalChoroplethParameters,
   type GriddedLayerParameters,
+  type LinksParameters,
+  LinkCurvature,
+  LinkHeadType,
 } from '../../global.d';
 
 // Styles
@@ -413,10 +416,10 @@ function makeSettingsDefaultLine(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  // TODO: we have layer of proportionnal symbols with geometry type "linestring"
+  // TODO: we have layer of proportional symbols with geometry type "linestring"
   //  so we should handle this case here
   return <>
-    <Show when={ props.renderer === 'default' || props.renderer === 'discontinuity' }>
+    <Show when={props.renderer === 'default' || props.renderer === 'discontinuity' }>
       <InputFieldColor
         label={ LL().LayerSettings.StrokeColor() }
         value={ props.strokeColor! }
@@ -482,7 +485,11 @@ function makeSettingsDefaultLine(
       max={1}
       step={0.1}
     />
-    <Show when={props.renderer !== 'discontinuity'}>
+    <Show when={
+      props.renderer !== 'discontinuity'
+      && !(props.renderer === 'links'
+        && ['Exchange', 'BilateralVolume'].includes((props.rendererParameters as LinksParameters).type))
+    }>
       <InputFieldNumber
         label={ LL().LayerSettings.StrokeWidth() }
         value={props.strokeWidth!}
@@ -491,6 +498,63 @@ function makeSettingsDefaultLine(
         max={10}
         step={0.1}
       />
+    </Show>
+    <Show when={
+      props.renderer === 'links'
+      && ['Exchange', 'BilateralVolume'].includes((props.rendererParameters as LinksParameters).type)
+      && (props.rendererParameters as LinksParameters).proportional
+    }>
+      <InputFieldNumber
+        label={ LL().PortrayalSection.LinksOptions.LinkSizeProportionalReferenceSize() }
+        value={ (props.rendererParameters as LinksParameters).proportional!.referenceSize }
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'proportional', 'referenceSize'], v)}
+        min={1}
+        max={50}
+        step={0.5}
+      />
+      <InputFieldNumber
+        label={ LL().PortrayalSection.LinksOptions.LinkSizeProportionalReferenceValue() }
+        value={ (props.rendererParameters as LinksParameters).proportional!.referenceValue }
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'proportional', 'referenceValue'], v)}
+        min={1}
+        max={1e12}
+        step={0.5}
+      />
+    </Show>
+    <Show when={
+      props.renderer === 'links'
+      && ['Exchange', 'BilateralVolume'].includes((props.rendererParameters as LinksParameters).type)
+      && (props.rendererParameters as LinksParameters).classification
+    }>
+      <></>
+    </Show>
+    <Show when={props.renderer === 'links'}>
+      <InputFieldSelect
+        label={ LL().PortrayalSection.LinksOptions.LinkCurvature() }
+        value={ (props.rendererParameters as LinksParameters).curvature }
+        onChange={(v) => updateProp(props.id, ['rendererParameters', 'curvature'], v)}
+      >
+        <For each={Object.entries(LinkCurvature)}>
+          {
+            ([key, value]) => <option value={value}>
+              {LL().PortrayalSection.LinksOptions[`LinkCurvature${key}`]()}
+            </option>
+          }
+        </For>
+      </InputFieldSelect>
+      <InputFieldSelect
+        label={ LL().PortrayalSection.LinksOptions.LinkHeadType() }
+        value={ (props.rendererParameters as LinksParameters).head }
+        onChange={(v) => updateProp(props.id, ['rendererParameters', 'head'], v)}
+      >
+        <For each={Object.entries(LinkHeadType)}>
+          {
+            ([key, value]) => <option value={value}>
+              {LL().PortrayalSection.LinksOptions[`LinkHeadType${key}`]()}
+            </option>
+          }
+        </For>
+      </InputFieldSelect>
     </Show>
   </>;
 }

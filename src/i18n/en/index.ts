@@ -335,7 +335,8 @@ const en = {
       LinkHeadTypeArrowOnSymbol: 'Arrow (positioned on symbol border)',
       LinkHeadTypeNoneOnSymbol: 'None (positioned on symbol border)',
       LinkCurvature: 'Curvature',
-      LinkCurvatureStraight: 'Straight',
+      LinkCurvatureStraightOnPlane: 'Straight (on the map)',
+      LinkCurvatureStraightOnSphere: 'Straight (along great circle)',
       LinkCurvatureCurved: 'Curved',
       LinkPosition: 'Link position',
       LinkPositionInitial: 'Initial',
@@ -345,6 +346,8 @@ const en = {
       LinkSizeClassification: 'Link size classification',
       LinkSizeProportional: 'Proportional',
       LinkSizeFixed: 'Fixed',
+      LinkSizeProportionalReferenceSize: 'Maximal Size',
+      LinkSizeProportionalReferenceValue: 'On value',
     },
   },
   ExportSection: {

@@ -336,7 +336,8 @@ const fr = {
       LinkHeadTypeArrowOnSymbol: 'Tête de flèche (positionnée sur la bordure du symbole)',
       LinkHeadTypeNoneOnSymbol: 'Aucune (positionnée sur la bordure du symbole)',
       LinkCurvature: 'Courbure des liens',
-      LinkCurvatureStraight: 'Aucune',
+      LinkCurvatureStraightOnPlane: 'Droit (sur la carte)',
+      LinkCurvatureStraightOnSphere: 'Droit (sur la sphère)',
       LinkCurvatureCurved: 'Courbée',
       LinkPosition: 'Position des liens',
       LinkPositionInitial: 'Initiale',
@@ -346,6 +347,8 @@ const fr = {
       LinkSizeClassification: 'Discrétisation des tailles',
       LinkSizeProportional: 'Proportionnelle',
       LinkSizeFixed: 'Fixe',
+      LinkSizeProportionalReferenceSize: 'Taille maximale',
+      LinkSizeProportionalReferenceValue: 'Sur la valeur',
     },
   },
   ExportSection: {

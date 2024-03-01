@@ -1,6 +1,10 @@
 import d3 from './d3-custom';
 import { globalStore } from '../store/GlobalStore';
-import type { IZoomable } from '../global';
+import {
+  type GeoJSONFeature,
+  type IZoomable,
+  LinkCurvature,
+} from '../global.d';
 
 /**
  * Get the SVG map element.
@@ -16,6 +20,44 @@ export const getTargetSvg = (): SVGSVGElement & IZoomable => {
   return targetSvg as SVGSVGElement & IZoomable;
 };
 
+export const linkPath = (
+  feature: GeoJSONFeature,
+  pathGenerator: ((feature: GeoJSONFeature) => string),
+  projection: ((coordinates: [number, number]) => [number, number]),
+  linkCurvature: LinkCurvature,
+): string => {
+  switch (linkCurvature) {
+    case LinkCurvature.StraightOnSphere:
+      return pathGenerator(feature);
+    case LinkCurvature.StraightOnPlane: {
+      const pt1 = projection(feature.geometry.coordinates[0]);
+      const pt2 = projection(feature.geometry.coordinates[1]);
+      return `M ${pt1[0]},${pt1[1]} L ${pt2[0]},${pt2[1]}`;
+    }
+    case LinkCurvature.Curved: {
+      const pt1 = projection(feature.geometry.coordinates[0]);
+      const pt2 = projection(feature.geometry.coordinates[1]);
+      // Compute a point on the bisector of the segment [pt1, pt2]
+      const bisector = [
+        (pt1[0] + pt2[0]) / 2,
+        (pt1[1] + pt2[1]) / 2,
+      ];
+      // Compute the distance between the two points
+      const distance = Math.sqrt(
+        (pt2[0] - pt1[0]) ** 2 + (pt2[1] - pt1[1]) ** 2,
+      );
+      // Compute the control point
+      const controlPoint = [
+        bisector[0] + distance / 4,
+        bisector[1],
+      ];
+      return `M ${pt1[0]},${pt1[1]} Q ${controlPoint[0]},${controlPoint[1]} ${pt2[0]},${pt2[1]}`;
+    }
+    default:
+      return pathGenerator(feature);
+  }
+};
+
 const simpleRedrawRenderers = new Set(
   [
     'default',
@@ -26,7 +68,6 @@ const simpleRedrawRenderers = new Set(
     'sphere',
     'categoricalChoropleth',
     'cartogram',
-    'links',
     'grid',
   ],
 );
@@ -83,6 +124,16 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
         const projectedCoords = globalStore.projection(t.__data__.geometry.coordinates);
         t.setAttribute('x', `${projectedCoords[0]}`);
         t.setAttribute('y', `${projectedCoords[1]}`);
+      });
+    } else if (typePortrayal === 'links') {
+      const linkCurvature = g.getAttribute('mgt:link-curvature')!;
+      g.querySelectorAll('path').forEach((p) => {
+        p.setAttribute('d', linkPath(
+          p.__data__, // eslint-disable-line no-underscore-dangle
+          globalStore.pathGenerator,
+          globalStore.projection,
+          linkCurvature as LinkCurvature,
+        ));
       });
     }
   });

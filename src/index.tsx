@@ -10,6 +10,7 @@ import { initializeLightDarkMode } from './helpers/darkmode';
 import './helpers/array.extension';
 
 import 'bulma/css/bulma.min.css';
+// import './styles/bulma.css';
 import './styles/DarkModeBulma.css';
 import './styles/Main.css';
 

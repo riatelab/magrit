@@ -82,6 +82,7 @@ type LayerDescription = {
     | LabelsParameters
     | GraticuleParameters
     | SmoothedLayerParameters
+    | LinksParameters
     // | DefaultRendererParameters
   ),
   // Parameters of the legend associated to the layer
@@ -448,21 +449,22 @@ interface LinksParameters {
 }
 
 export enum LinkType {
-  Exchange = 'exchange',
-  Link = 'link',
-  BilateralVolume = 'bilateralVolume',
+  Exchange = 'Exchange',
+  Link = 'Link',
+  BilateralVolume = 'BilateralVolume',
 }
 
 export enum LinkHeadType {
-  None = 'none',
-  Arrow = 'arrow',
-  NoneOnSymbol = 'noneOnSymbol',
-  ArrowOnSymbol = 'arrowOnSymbol',
+  None = 'None',
+  Arrow = 'Arrow',
+  NoneOnSymbol = 'NoneOnSymbol',
+  ArrowOnSymbol = 'ArrowOnSymbol',
 }
 
 export enum LinkCurvature {
-  Straight = 'straight',
-  Curved = 'curved',
+  StraightOnPlane = 'StraightOnPlane',
+  StraightOnSphere = 'StraightOnSphere',
+  Curved = 'Curved',
 }
 
 export enum LinkPosition {

@@ -217,6 +217,7 @@ export default function MapZone(): JSX.Element {
         g.setAttribute('transform', t);
       });
     } else {
+      const lastTransform = svgElem.__zoom; // eslint-disable-line no-underscore-dangle
       // We need the previous projection scale, rotate and translate values
       // to compute the new ones
       const previousProjectionScale = mapStore.scale;
@@ -225,11 +226,11 @@ export default function MapZone(): JSX.Element {
 
       // Compute new values for scale and translate from
       // the last zoom event
-      const lastScale = e.transform.k;
+      const lastScale = lastTransform.k;
       const scaleValue = lastScale * previousProjectionScale;
       const translateValue = [
-        e.transform.x + previousProjectionTranslate[0] * lastScale,
-        e.transform.y + previousProjectionTranslate[1] * lastScale,
+        lastTransform.x + previousProjectionTranslate[0] * lastScale,
+        lastTransform.y + previousProjectionTranslate[1] * lastScale,
       ];
       // Keep rotation value unchanged for now
       const rotateValue = initialRotate;

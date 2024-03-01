@@ -21,7 +21,7 @@ import { PortrayalSettingsProps } from './common';
 import { findSuitableName } from '../../helpers/common';
 import { makeCentroidLayer } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
-import createLinksData from '../../helpers/links';
+import { createLinksData, createSimpleLinksData } from '../../helpers/links';
 import { VariableType } from '../../helpers/typeDetection';
 
 // Stores
@@ -59,6 +59,9 @@ function onClickValidate(
   tableOriginVariable: string,
   tableDestinationVariable: string,
   tableIntensityVariable: string,
+  linkType: LinkType,
+  linkHeadType: LinkHeadType,
+  linkCurveType: LinkCurvature,
   newName: string,
 ): void {
   // The layer description of the reference layer
@@ -82,14 +85,23 @@ function onClickValidate(
       referenceLayerDescription.type as VectorType,
     );
 
-  const newData = createLinksData(
-    inputData,
-    unwrap(tableDescription.data),
-    layerIdentifierVariable,
-    tableOriginVariable,
-    tableDestinationVariable,
-    tableIntensityVariable,
-  );
+  const newData = linkType === LinkType.Exchange
+    ? createLinksData(
+      inputData,
+      unwrap(tableDescription.data),
+      layerIdentifierVariable,
+      tableOriginVariable,
+      tableDestinationVariable,
+      tableIntensityVariable,
+    )
+    : createSimpleLinksData(
+      inputData,
+      unwrap(tableDescription.data),
+      layerIdentifierVariable,
+      tableOriginVariable,
+      tableDestinationVariable,
+      tableIntensityVariable,
+    );
 
   const maxData = newData.features.reduce(
     (acc, f) => Math.max(acc, f.properties[tableIntensityVariable]),
@@ -129,9 +141,9 @@ function onClickValidate(
         referenceSize: 10,
         referenceValue: maxData,
       },
-      type: LinkType.Exchange,
-      head: LinkHeadType.Arrow,
-      curvature: LinkCurvature.Straight,
+      type: linkType,
+      head: linkHeadType,
+      curvature: linkCurveType,
       position: LinkPosition.Initial,
     } as LinksParameters,
     legend: undefined,
@@ -260,17 +272,17 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
   const [
     linkType,
     setLinkType,
-  ] = createSignal<string>(LinkType.Link);
+  ] = createSignal<LinkType>(LinkType.Link);
 
   const [
     linkHeadType,
     setLinkHeadType,
-  ] = createSignal<string>(LinkHeadType.Arrow);
+  ] = createSignal<LinkHeadType>(LinkHeadType.Arrow);
 
   const [
     linkCurveType,
     setLinkCurveType,
-  ] = createSignal<string>(LinkCurvature.Straight);
+  ] = createSignal<LinkCurvature>(LinkCurvature.StraightOnSphere);
 
   createEffect(
     () => {
@@ -317,6 +329,9 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
         originVariable(),
         destinationVariable(),
         intensityVariable(),
+        linkType(),
+        linkHeadType(),
+        linkCurveType(),
         layerName,
       );
       // Hide loading overlay
@@ -415,42 +430,48 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
       <InputFieldSelect
         label={ LL().PortrayalSection.LinksOptions.LinkType() }
         onChange={(value) => {
-          setLinkType(value);
+          setLinkType(value as LinkType);
         }}
         value={ linkType() }
         width={200}
         >
         <For each={Object.entries(LinkType)}>
           {
-            ([key, value]) => <option value={key}>{ value }</option>
+            ([key, value]) => <option value={value}>
+              { LL().PortrayalSection.LinksOptions[`LinkType${key}`]() }
+            </option>
           }
         </For>
       </InputFieldSelect>
       <InputFieldSelect
         label={ LL().PortrayalSection.LinksOptions.LinkHeadType() }
         onChange={(value) => {
-          setLinkHeadType(value);
+          setLinkHeadType(value as LinkHeadType);
         }}
         value={ linkHeadType() }
         width={200}
       >
         <For each={Object.entries(LinkHeadType)}>
           {
-            ([key, value]) => <option value={key}>{ value }</option>
+            ([key, value]) => <option value={value}>
+              { LL().PortrayalSection.LinksOptions[`LinkHeadType${key}`]() }
+            </option>
           }
         </For>
       </InputFieldSelect>
       <InputFieldSelect
         label={ LL().PortrayalSection.LinksOptions.LinkCurvature() }
         onChange={(value) => {
-          setLinkCurveType(value);
+          setLinkCurveType(value as LinkCurvature);
         }}
         value={ linkCurveType() }
         width={200}
       >
         <For each={Object.entries(LinkCurvature)}>
           {
-            ([key, value]) => <option value={key}>{ value }</option>
+            ([key, value]) => <option value={value}>
+              { LL().PortrayalSection.LinksOptions[`LinkCurvature${key}`]() }
+            </option>
           }
         </For>
       </InputFieldSelect>

@@ -7,8 +7,8 @@ import {
 
 // Helpers
 import { mergeFilterIds } from './common.tsx';
-import { getClassifier } from '../../helpers/classification';
 import { PropSizer } from '../../helpers/geo';
+import { linkPath } from '../../helpers/svg';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -18,7 +18,9 @@ import bindData from '../../directives/bind-data';
 
 // Types / Interfaces / Enums
 import {
+  type GeoJSONFeature,
   type LayerDescriptionLinks,
+  LinkCurvature,
   type LinksParameters,
   ProportionalSymbolsSymbolType,
 } from '../../global';
@@ -56,17 +58,34 @@ export default function linksRenderer(
       filter={mergeFilterIds(layerDescription)}
       mgt:geometry-type={layerDescription.type}
       mgt:portrayal-type={layerDescription.renderer}
+      mgt:link-curvature={rendererParameters().curvature}
     >
       <For each={layerDescription.data.features}>
         {
           (feature) => <path
-            d={globalStore.pathGenerator(feature)}
+            d={
+              linkPath(
+                feature,
+                globalStore.pathGenerator,
+                globalStore.projection,
+                rendererParameters().curvature,
+              )
+            }
             vector-effect="non-scaling-stroke"
             stroke-width={
               propSize().scale(feature.properties[rendererParameters().variable])
             }
+            marker-start={
+              (
+                rendererParameters().type !== 'Exchange'
+                && (rendererParameters().head === 'Arrow'
+                  || rendererParameters().head === 'ArrowOnSymbol')
+              )
+                ? 'url(#arrow-head)'
+                : undefined
+            }
             marker-end={
-              (rendererParameters().head === 'arrow' || rendererParameters().head === 'arrowOnSymbol')
+              (rendererParameters().head === 'Arrow' || rendererParameters().head === 'ArrowOnSymbol')
                 ? 'url(#arrow-head)'
                 : undefined
             }
@@ -90,15 +109,32 @@ export default function linksRenderer(
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.renderer}
+    mgt:link-curvature={rendererParameters().curvature}
   >
     <For each={layerDescription.data.features}>
       {
         (feature) => <path
-          d={globalStore.pathGenerator(feature)}
+          d={
+            linkPath(
+              feature,
+              globalStore.pathGenerator,
+              globalStore.projection,
+              rendererParameters().curvature,
+            )
+          }
           vector-effect="non-scaling-stroke"
           stroke-width={layerDescription.strokeWidth}
+          marker-start={
+            (
+              rendererParameters().type !== 'Exchange'
+              && (rendererParameters().head === 'Arrow'
+              || rendererParameters().head === 'ArrowOnSymbol')
+            )
+              ? 'url(#arrow-head)'
+              : undefined
+          }
           marker-end={
-            (rendererParameters().head === 'arrow' || rendererParameters().head === 'arrowOnSymbol')
+            (rendererParameters().head === 'Arrow' || rendererParameters().head === 'ArrowOnSymbol')
               ? 'url(#arrow-head)'
               : undefined
           }
