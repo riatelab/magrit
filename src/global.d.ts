@@ -437,9 +437,9 @@ interface LinksParameters {
     classes: number,
   },
   // Sizes parameter (when no classification is specified)
-  sizes?: {
-    min: number,
-    max: number,
+  proportional?: {
+    referenceSize: number,
+    referenceValue: number,
   },
   type: LinkType,
   head: LinkHeadType,

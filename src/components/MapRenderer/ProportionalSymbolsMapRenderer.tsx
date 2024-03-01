@@ -41,7 +41,7 @@ export default function proportionalSymbolsRenderer(
   onMount(() => {
     refElement.querySelectorAll('circle, rect')
       .forEach((symbolElement, i) => {
-        bindDragBehavior(symbolElement, layerDescription, i);
+        bindDragBehavior(symbolElement as SVGGElement, layerDescription, i);
       });
   });
 

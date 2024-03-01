@@ -1206,6 +1206,22 @@ type RootTranslation = {
 			 * S​h​a​r​e​d
 			 */
 			LinkPositionShared: string
+			/**
+			 * L​i​n​k​ ​s​i​z​e​ ​t​y​p​e
+			 */
+			LinkSizeType: string
+			/**
+			 * L​i​n​k​ ​s​i​z​e​ ​c​l​a​s​s​i​f​i​c​a​t​i​o​n
+			 */
+			LinkSizeClassification: string
+			/**
+			 * P​r​o​p​o​r​t​i​o​n​a​l
+			 */
+			LinkSizeProportional: string
+			/**
+			 * F​i​x​e​d
+			 */
+			LinkSizeFixed: string
 		}
 	}
 	ExportSection: {
@@ -3345,6 +3361,22 @@ export type TranslationFunctions = {
 			 * Shared
 			 */
 			LinkPositionShared: () => LocalizedString
+			/**
+			 * Link size type
+			 */
+			LinkSizeType: () => LocalizedString
+			/**
+			 * Link size classification
+			 */
+			LinkSizeClassification: () => LocalizedString
+			/**
+			 * Proportional
+			 */
+			LinkSizeProportional: () => LocalizedString
+			/**
+			 * Fixed
+			 */
+			LinkSizeFixed: () => LocalizedString
 		}
 	}
 	ExportSection: {

@@ -341,6 +341,10 @@ const en = {
       LinkPositionInitial: 'Initial',
       LinkPositionShifted: 'Shifted',
       LinkPositionShared: 'Shared',
+      LinkSizeType: 'Link size type',
+      LinkSizeClassification: 'Link size classification',
+      LinkSizeProportional: 'Proportional',
+      LinkSizeFixed: 'Fixed',
     },
   },
   ExportSection: {

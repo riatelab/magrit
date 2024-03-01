@@ -1,3 +1,4 @@
+import { distance } from '@turf/turf';
 import { GeoJSONFeature, GeoJSONFeatureCollection } from '../global';
 
 export default function createLinksData(
@@ -25,9 +26,14 @@ export default function createLinksData(
       linksData.features.push({
         type: 'Feature',
         properties: {
-          [tableIntensityVariable]: d[tableIntensityVariable],
+          // We copy all the properties of the table
+          // (maybe it contains some useful information)
+          ...d,
           Origin: d[tableOriginVariable],
           Destination: d[tableDestinationVariable],
+          Intensity: d[tableIntensityVariable],
+          // And we add distance between origin and destination
+          DistanceKm: distance(origin, destination, { units: 'kilometers' }),
         },
         geometry: {
           type: 'LineString',

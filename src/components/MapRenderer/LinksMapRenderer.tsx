@@ -7,8 +7,8 @@ import {
 
 // Helpers
 import { mergeFilterIds } from './common.tsx';
-import { unproxify } from '../../helpers/common';
 import { getClassifier } from '../../helpers/classification';
+import { PropSizer } from '../../helpers/geo';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -17,9 +17,10 @@ import { globalStore } from '../../store/GlobalStore';
 import bindData from '../../directives/bind-data';
 
 // Types / Interfaces / Enums
-import type {
-  LayerDescriptionLinks,
-  LinksParameters,
+import {
+  type LayerDescriptionLinks,
+  type LinksParameters,
+  ProportionalSymbolsSymbolType,
 } from '../../global';
 
 // For now we keep an array of directives
@@ -34,9 +35,51 @@ export default function linksRenderer(
   const rendererParameters = createMemo(
     () => layerDescription.rendererParameters as LinksParameters,
   );
+
+  if (rendererParameters().proportional) {
+    const propSize = createMemo(() => new PropSizer(
+      rendererParameters().proportional!.referenceValue,
+      rendererParameters().proportional!.referenceSize,
+      'line' as ProportionalSymbolsSymbolType,
+    ));
+
+    return <g
+      id={layerDescription.id}
+      class="layer links"
+      visibility={layerDescription.visible ? undefined : 'hidden'}
+      fill="none"
+      stroke={layerDescription.strokeColor}
+      stroke-opacity={layerDescription.strokeOpacity}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      clip-path="url(#clip-sphere)"
+      filter={mergeFilterIds(layerDescription)}
+      mgt:geometry-type={layerDescription.type}
+      mgt:portrayal-type={layerDescription.renderer}
+    >
+      <For each={layerDescription.data.features}>
+        {
+          (feature) => <path
+            d={globalStore.pathGenerator(feature)}
+            vector-effect="non-scaling-stroke"
+            stroke-width={
+              propSize().scale(feature.properties[rendererParameters().variable])
+            }
+            marker-end={
+              (rendererParameters().head === 'arrow' || rendererParameters().head === 'arrowOnSymbol')
+                ? 'url(#arrow-head)'
+                : undefined
+            }
+            use:bindData={feature}
+          />
+        }
+      </For>
+    </g>;
+  }
+
   return <g
     id={layerDescription.id}
-    class="layer discontinuity"
+    class="layer links"
     visibility={layerDescription.visible ? undefined : 'hidden'}
     fill="none"
     stroke={layerDescription.strokeColor}
@@ -53,7 +96,12 @@ export default function linksRenderer(
         (feature) => <path
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
-          stroke-width={1}
+          stroke-width={layerDescription.strokeWidth}
+          marker-end={
+            (rendererParameters().head === 'arrow' || rendererParameters().head === 'arrowOnSymbol')
+              ? 'url(#arrow-head)'
+              : undefined
+          }
           use:bindData={feature}
         />
       }

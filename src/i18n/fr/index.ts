@@ -342,6 +342,10 @@ const fr = {
       LinkPositionInitial: 'Initiale',
       LinkPositionShifted: 'Décalée',
       LinkPositionShared: 'Partagée',
+      LinkSizeType: 'Type de taille des liens',
+      LinkSizeClassification: 'Discrétisation des tailles',
+      LinkSizeProportional: 'Proportionnelle',
+      LinkSizeFixed: 'Fixe',
     },
   },
   ExportSection: {

@@ -1,5 +1,6 @@
 // Import from solid-js
 import {
+  createEffect,
   createMemo,
   createSignal,
   For,
@@ -10,19 +11,20 @@ import { produce, unwrap } from 'solid-js/store';
 
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
+import { FaSolidCheck } from 'solid-icons/fa';
+import { VsWarning } from 'solid-icons/vs';
 
 // Helpers
-import { generateIdLayer } from '../../helpers/layers';
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { findSuitableName, isNonNull } from '../../helpers/common';
-import { VariableType } from '../../helpers/typeDetection';
+import { zip } from '../../helpers/array';
 import { PortrayalSettingsProps } from './common';
+import { findSuitableName } from '../../helpers/common';
 import { makeCentroidLayer } from '../../helpers/geo';
+import { generateIdLayer } from '../../helpers/layers';
 import createLinksData from '../../helpers/links';
-import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
+import { VariableType } from '../../helpers/typeDetection';
 
 // Stores
-import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { setLoading } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
@@ -39,16 +41,14 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Types / Interfaces / Enums
 import {
-  type GeoJSONFeature,
+  LayerDescription,
   type LayerDescriptionLinks,
-  type LegendTextElement,
-  LegendType,
   LinkCurvature,
   LinkHeadType,
+  LinkPosition,
   type LinksParameters,
   LinkType,
-  Orientation,
-  RepresentationType,
+  RepresentationType, TableDescription,
   VectorType,
 } from '../../global.d';
 
@@ -91,7 +91,10 @@ function onClickValidate(
     tableIntensityVariable,
   );
 
-  console.log(newData);
+  const maxData = newData.features.reduce(
+    (acc, f) => Math.max(acc, f.properties[tableIntensityVariable]),
+    0,
+  );
 
   const newLayerDescription = {
     id: generateIdLayer(),
@@ -114,6 +117,7 @@ function onClickValidate(
     ],
     renderer: 'links' as RepresentationType,
     visible: true,
+    strokeWidth: 1,
     strokeColor: '#000000',
     strokeOpacity: 1,
     dropShadow: false,
@@ -121,6 +125,14 @@ function onClickValidate(
     shapeRendering: 'auto',
     rendererParameters: {
       variable: tableIntensityVariable,
+      proportional: {
+        referenceSize: 10,
+        referenceValue: maxData,
+      },
+      type: LinkType.Exchange,
+      head: LinkHeadType.Arrow,
+      curvature: LinkCurvature.Straight,
+      position: LinkPosition.Initial,
     } as LinksParameters,
     legend: undefined,
   } as LayerDescriptionLinks;
@@ -132,6 +144,54 @@ function onClickValidate(
       },
     ),
   );
+}
+
+function extractIdLayers(
+  layer: LayerDescription,
+  field: string,
+): string[] {
+  return layer.data.features
+    .map((f) => `${f.properties[field]}`);
+}
+
+function extractIdTables(
+  table: TableDescription,
+  field: string,
+): string[] {
+  return table.data
+    .map((f) => `${f[field]}`);
+}
+
+function hasMatchingIds(
+  layer: LayerDescription,
+  table: TableDescription,
+  idField: string,
+  origin: string,
+  destination: string,
+): { allMatch: boolean, someMatch: boolean } {
+  const layerIds = new Set(extractIdLayers(layer, idField));
+  const origins = extractIdTables(table, origin);
+  const destinations = extractIdTables(table, destination);
+
+  // We want to know if some of the ids in origins and destinations
+  // are in the layerIds array (i.e. if there are links to be created)
+  // which is OK, and if all of the ids in origins and destinations are
+  // in the layerIds array (i.e. if all the links can be created)
+  // which is also OK.
+  const allMatch = (
+    origins.every((id) => layerIds.has(id))
+    && destinations.every((id) => layerIds.has(id))
+  );
+
+  const someMatch = allMatch || (
+    zip(origins, destinations)
+      .some(([o, d]) => layerIds.has(o) && layerIds.has(d))
+  );
+
+  return {
+    allMatch,
+    someMatch,
+  };
 }
 
 export default function LinksSettings(props: PortrayalSettingsProps): JSX.Element {
@@ -193,6 +253,11 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
   });
 
   const [
+    matchingState,
+    setMatchingState,
+  ] = createSignal<{ allMatch: boolean, someMatch: boolean } | null>(null);
+
+  const [
     linkType,
     setLinkType,
   ] = createSignal<string>(LinkType.Link);
@@ -206,6 +271,28 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
     linkCurveType,
     setLinkCurveType,
   ] = createSignal<string>(LinkCurvature.Straight);
+
+  createEffect(
+    () => {
+      if (
+        targetDataset() !== ''
+        && targetVariable() !== ''
+        && originVariable() !== ''
+        && destinationVariable() !== ''
+      ) {
+        const matching = hasMatchingIds(
+          layerDescription(),
+          layersDescriptionStore.tables.find((t) => t.id === targetDataset())!,
+          targetVariable(),
+          originVariable(),
+          destinationVariable(),
+        );
+        setMatchingState(matching);
+      } else {
+        setMatchingState(null);
+      }
+    },
+  );
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
@@ -293,6 +380,26 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
           { (variable) => <option value={variable.name}>{variable.name}</option> }
         </For>
       </InputFieldSelect>
+      <Show when={matchingState() !== null}>
+        <Show when={matchingState()?.allMatch}>
+          <div class="field is-justify-content-flex-start">
+            <FaSolidCheck />
+            { 'All origins and destinations match IDs of features in the geographic layer' }
+          </div>
+        </Show>
+        <Show when={matchingState()?.someMatch}>
+          <div class="field is-justify-content-flex-start">
+            <VsWarning />
+            { 'Some origins and destinations (but not all) match IDs of features in the geographic layer' }
+          </div>
+        </Show>
+        <Show when={!matchingState()?.allMatch && !matchingState()?.someMatch}>
+          <div class="field is-justify-content-flex-start">
+            <VsWarning />
+            { 'No origins and destinations match IDs of features in the geographic layer' }
+          </div>
+        </Show>
+      </Show>
       <InputFieldSelect
         label={ LL().PortrayalSection.LinksOptions.Intensity() }
         onChange={(value) => {
@@ -322,9 +429,9 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
       <InputFieldSelect
         label={ LL().PortrayalSection.LinksOptions.LinkHeadType() }
         onChange={(value) => {
-          setLinkType(value);
+          setLinkHeadType(value);
         }}
-        value={ linkType() }
+        value={ linkHeadType() }
         width={200}
       >
         <For each={Object.entries(LinkHeadType)}>
@@ -336,9 +443,9 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
       <InputFieldSelect
         label={ LL().PortrayalSection.LinksOptions.LinkCurvature() }
         onChange={(value) => {
-          setLinkType(value);
+          setLinkCurveType(value);
         }}
-        value={ linkType() }
+        value={ linkCurveType() }
         width={200}
       >
         <For each={Object.entries(LinkCurvature)}>
@@ -352,6 +459,10 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
       onKeyUp={(value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />
-    <ButtonValidation label={ LL().PortrayalSection.CreateLayer() } onClick={makePortrayal} />
+    <ButtonValidation
+      label={ LL().PortrayalSection.CreateLayer() }
+      onClick={makePortrayal}
+      disabled={matchingState() === null || !matchingState()?.someMatch}
+    />
   </div>;
 }
