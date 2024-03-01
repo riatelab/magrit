@@ -77,7 +77,7 @@ export function choroplethPolygonRenderer(
           }
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
-          use:bindData={unproxify(feature)}
+          use:bindData={feature}
         />
       }
     </For>
@@ -127,7 +127,7 @@ export function choroplethPointRenderer(
           }
           d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
           vector-effect="non-scaling-stroke"
-          use:bindData={unproxify(feature)}
+          use:bindData={feature}
         />
       }
     </For>
@@ -176,7 +176,7 @@ export function choroplethLineRenderer(
           }
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
-          use:bindData={unproxify(feature)}
+          use:bindData={feature}
         />
       }
     </For>

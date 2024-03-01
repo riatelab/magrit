@@ -75,7 +75,7 @@ export default function gridRenderer(
           }
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
-          use:bindData={unproxify(feature)}
+          use:bindData={feature}
         />
       }
     </For>

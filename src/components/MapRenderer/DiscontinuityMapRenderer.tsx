@@ -60,7 +60,7 @@ export default function discontinuityRenderer(
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
           stroke-width={sizes()[classifier().getClass(feature.properties.value)]}
-          use:bindData={unproxify(feature as never)}
+          use:bindData={feature}
         />
       }
     </For>

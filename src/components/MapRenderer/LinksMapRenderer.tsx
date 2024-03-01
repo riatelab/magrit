@@ -54,7 +54,7 @@ export default function linksRenderer(
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
           stroke-width={1}
-          use:bindData={unproxify(feature as never)}
+          use:bindData={feature}
         />
       }
     </For>

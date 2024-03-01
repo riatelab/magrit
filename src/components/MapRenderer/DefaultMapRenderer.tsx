@@ -48,7 +48,7 @@ export function defaultPolygonRendererOld(
         (feature) => <path
             d={globalStore.pathGenerator(feature)}
             vector-effect="non-scaling-stroke"
-            use:bindData={unproxify(feature)}
+            use:bindData={feature}
           />
       }
     </For>
@@ -119,7 +119,7 @@ export function defaultPointRenderer(
         (feature) => <path
           d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
           vector-effect="non-scaling-stroke"
-          use:bindData={unproxify(feature)}
+          use:bindData={feature}
         />
       }
     </For>
@@ -149,7 +149,7 @@ export function defaultLineRenderer(
         (feature) => <path
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
-          use:bindData={unproxify(feature)}
+          use:bindData={feature}
         />
       }
     </For>
@@ -175,7 +175,7 @@ export function sphereRenderer(layerDescription: LayerDescription): JSX.Element 
       <path
         vector-effect="non-scaling-stroke"
         d={globalStore.pathGenerator(layerDescription.data)}
-        use:bindData={unproxify(layerDescription.data)}
+        use:bindData={layerDescription.data}
       />
     </g>;
 }

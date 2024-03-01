@@ -73,7 +73,7 @@ export function categoricalChoroplethPolygonRenderer(
           fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
-          use:bindData={unproxify(feature)}
+          use:bindData={feature}
         />
       }
     </For>
@@ -121,7 +121,7 @@ export function categoricalChoroplethPointRenderer(
           fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
           d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
           vector-effect="non-scaling-stroke"
-          use:bindData={unproxify(feature)}
+          use:bindData={feature}
         />
       }
     </For>
@@ -170,7 +170,7 @@ export function categoricalChoroplethLineRenderer(
           }
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
-          use:bindData={unproxify(feature)}
+          use:bindData={feature}
         />
       }
     </For>

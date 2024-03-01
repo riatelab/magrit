@@ -41,7 +41,7 @@ export default function graticuleRenderer(layerDescription: LayerDescription): J
         (feature) => <path
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
-          use:bindData={unproxify(feature)}
+          use:bindData={feature}
         />
       }
     </For>
