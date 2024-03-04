@@ -242,6 +242,7 @@ const fr = {
     NewLayer: 'Nouvelle_couche',
     CommonOptions: {
       Variable: 'Variable',
+      SelectVariable: 'Sélectionner une variable',
       Color: 'Couleur',
     },
     ChoroplethOptions: {
@@ -349,6 +350,10 @@ const fr = {
       LinkSizeFixed: 'Fixe',
       LinkSizeProportionalReferenceSize: 'Taille maximale',
       LinkSizeProportionalReferenceValue: 'Sur la valeur',
+      AllMatch: 'Toutes les couples d\'origine / destination ont une correspondance avec des entités de la couche géographique',
+      SomeMatch: 'Plusieurs couples origines / destination (mais pas tous) ont une correspondance avec des entités de la couche géographique',
+      NoMatch: 'Aucun couple origine / destination n\'a de correspondance avec des entités de la couche géographique',
+      Selection: 'Sélection des liens à afficher',
     },
   },
   ExportSection: {
@@ -454,7 +459,7 @@ const fr = {
     SelectedImage: 'Image sélectionnée :',
   },
   SimplificationModal: {
-    title: 'Simplification des géométries',
+    Title: 'Simplification des géométries',
     QuantizationFactor: 'Facteur de quantification',
     SimplificationFactor: 'Facteur de simplification',
     CountGeometries: '{geom} géométries non nulles, {pts} points',

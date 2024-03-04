@@ -638,6 +638,10 @@ type RootTranslation = {
 			 */
 			FontSize: string
 			/**
+			 * F​o​n​t​ ​c​o​l​o​r
+			 */
+			FontColor: string
+			/**
 			 * F​o​n​t​ ​f​a​m​i​l​y
 			 */
 			FontFamily: string
@@ -859,6 +863,10 @@ type RootTranslation = {
 			 * V​a​r​i​a​b​l​e
 			 */
 			Variable: string
+			/**
+			 * S​e​l​e​c​t​ ​a​ ​v​a​r​i​a​b​l​e
+			 */
+			SelectVariable: string
 			/**
 			 * C​o​l​o​r
 			 */
@@ -1234,6 +1242,22 @@ type RootTranslation = {
 			 * O​n​ ​v​a​l​u​e
 			 */
 			LinkSizeProportionalReferenceValue: string
+			/**
+			 * A​l​l​ ​o​r​i​g​i​n​s​ ​a​n​d​ ​d​e​s​t​i​n​a​t​i​o​n​s​ ​m​a​t​c​h​ ​I​D​s​ ​o​f​ ​f​e​a​t​u​r​e​s​ ​i​n​ ​t​h​e​ ​g​e​o​g​r​a​p​h​i​c​ ​l​a​y​e​r
+			 */
+			AllMatch: string
+			/**
+			 * S​o​m​e​ ​o​r​i​g​i​n​s​ ​a​n​d​ ​d​e​s​t​i​n​a​t​i​o​n​s​ ​(​b​u​t​ ​n​o​t​ ​a​l​l​)​ ​m​a​t​c​h​ ​I​D​s​ ​o​f​ ​f​e​a​t​u​r​e​s​ ​i​n​ ​t​h​e​ ​g​e​o​g​r​a​p​h​i​c​ ​l​a​y​e​r
+			 */
+			SomeMatch: string
+			/**
+			 * N​o​ ​o​r​i​g​i​n​s​ ​a​n​d​ ​d​e​s​t​i​n​a​t​i​o​n​s​ ​m​a​t​c​h​ ​I​D​s​ ​o​f​ ​f​e​a​t​u​r​e​s​ ​i​n​ ​t​h​e​ ​g​e​o​g​r​a​p​h​i​c​ ​l​a​y​e​r
+			 */
+			NoMatch: string
+			/**
+			 * S​e​l​e​c​t​ ​l​i​n​k​s​ ​t​o​ ​d​i​s​p​l​a​y
+			 */
+			Selection: string
 		}
 	}
 	ExportSection: {
@@ -2806,6 +2830,10 @@ export type TranslationFunctions = {
 			 */
 			FontSize: () => LocalizedString
 			/**
+			 * Font color
+			 */
+			FontColor: () => LocalizedString
+			/**
 			 * Font family
 			 */
 			FontFamily: () => LocalizedString
@@ -3027,6 +3055,10 @@ export type TranslationFunctions = {
 			 * Variable
 			 */
 			Variable: () => LocalizedString
+			/**
+			 * Select a variable
+			 */
+			SelectVariable: () => LocalizedString
 			/**
 			 * Color
 			 */
@@ -3401,6 +3433,22 @@ export type TranslationFunctions = {
 			 * On value
 			 */
 			LinkSizeProportionalReferenceValue: () => LocalizedString
+			/**
+			 * All origins and destinations match IDs of features in the geographic layer
+			 */
+			AllMatch: () => LocalizedString
+			/**
+			 * Some origins and destinations (but not all) match IDs of features in the geographic layer
+			 */
+			SomeMatch: () => LocalizedString
+			/**
+			 * No origins and destinations match IDs of features in the geographic layer
+			 */
+			NoMatch: () => LocalizedString
+			/**
+			 * Select links to display
+			 */
+			Selection: () => LocalizedString
 		}
 	}
 	ExportSection: {

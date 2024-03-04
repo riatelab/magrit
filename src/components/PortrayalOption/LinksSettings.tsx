@@ -41,6 +41,7 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Types / Interfaces / Enums
 import {
+  Filter,
   LayerDescription,
   type LayerDescriptionLinks,
   LinkCurvature,
@@ -108,6 +109,36 @@ function onClickValidate(
     0,
   );
 
+  const params = {
+    variable: tableIntensityVariable,
+    type: linkType,
+    head: linkHeadType,
+    curvature: linkCurveType,
+    position: LinkPosition.Initial,
+    filters: [
+      // {
+      //   variable: 'DistanceKm',
+      //   operator: '>',
+      //   value: 3000,
+      // } as Filter,
+      // {
+      //   variable: 'Intensity',
+      //   operator: '==',
+      //   value: '2',
+      // } as Filter,
+    ],
+  } as Partial<LinksParameters>;
+
+  if (linkType !== LinkType.Link) {
+    // If the link type is not 'link', we want to use the intensity to
+    // determine the width of the links.
+    // Otherwise, links have a fixed width.
+    params.proportional = {
+      referenceSize: 10,
+      referenceValue: maxData,
+    };
+  }
+
   const newLayerDescription = {
     id: generateIdLayer(),
     name: newName,
@@ -135,17 +166,7 @@ function onClickValidate(
     dropShadow: false,
     blurFilter: false,
     shapeRendering: 'auto',
-    rendererParameters: {
-      variable: tableIntensityVariable,
-      proportional: {
-        referenceSize: 10,
-        referenceValue: maxData,
-      },
-      type: linkType,
-      head: linkHeadType,
-      curvature: linkCurveType,
-      position: LinkPosition.Initial,
-    } as LinksParameters,
+    rendererParameters: params as LinksParameters,
     legend: undefined,
   } as LayerDescriptionLinks;
 
@@ -399,19 +420,19 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
         <Show when={matchingState()?.allMatch}>
           <div class="field is-justify-content-flex-start">
             <FaSolidCheck />
-            { 'All origins and destinations match IDs of features in the geographic layer' }
+            { LL().PortrayalSection.LinksOptions.AllMatch() }
           </div>
         </Show>
         <Show when={matchingState()?.someMatch}>
           <div class="field is-justify-content-flex-start">
             <VsWarning />
-            { 'Some origins and destinations (but not all) match IDs of features in the geographic layer' }
+            { LL().PortrayalSection.LinksOptions.SomeMatch() }
           </div>
         </Show>
         <Show when={!matchingState()?.allMatch && !matchingState()?.someMatch}>
           <div class="field is-justify-content-flex-start">
             <VsWarning />
-            { 'No origins and destinations match IDs of features in the geographic layer' }
+            { LL().PortrayalSection.LinksOptions.NoMatch() }
           </div>
         </Show>
       </Show>

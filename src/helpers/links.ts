@@ -76,8 +76,10 @@ function createSimpleLinksData(
         const key = `${d[tableOriginVariable]}_${d[tableDestinationVariable]}`;
         const keyReversed = `${d[tableDestinationVariable]}_${d[tableOriginVariable]}`;
         if (+d[tableIntensityVariable] > 0) {
-          if (links.has(key) || links.has(keyReversed)) {
+          if (links.has(key)) {
             links.set(key, links.get(key) + +d[tableIntensityVariable]);
+          } else if (links.has(keyReversed)) {
+            links.set(keyReversed, links.get(keyReversed) + +d[tableIntensityVariable]);
           } else {
             links.set(key, +d[tableIntensityVariable]);
           }

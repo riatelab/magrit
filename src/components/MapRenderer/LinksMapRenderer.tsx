@@ -9,6 +9,7 @@ import {
 import { mergeFilterIds } from './common.tsx';
 import { PropSizer } from '../../helpers/geo';
 import { linkPath } from '../../helpers/svg';
+import applyFilters from '../../helpers/filtering';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -60,7 +61,9 @@ export default function linksRenderer(
       mgt:portrayal-type={layerDescription.renderer}
       mgt:link-curvature={rendererParameters().curvature}
     >
-      <For each={layerDescription.data.features}>
+      <For each={
+        applyFilters(layerDescription.data.features, layerDescription.rendererParameters.filters)
+      }>
         {
           (feature) => <path
             d={
@@ -102,6 +105,7 @@ export default function linksRenderer(
     visibility={layerDescription.visible ? undefined : 'hidden'}
     fill="none"
     stroke={layerDescription.strokeColor}
+    stroke-width={layerDescription.strokeWidth}
     stroke-opacity={layerDescription.strokeOpacity}
     stroke-linecap="round"
     stroke-linejoin="round"

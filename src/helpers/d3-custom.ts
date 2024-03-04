@@ -153,6 +153,11 @@ import {
 import {
   interpolateString,
 } from 'd3-interpolate';
+import {
+  brush,
+  brushX,
+  brushY,
+} from 'd3-brush';
 
 import hatanoRaw from './projection-hatano';
 import winkel1Raw from './projection-winkel1';
@@ -432,6 +437,10 @@ export default {
   easeSinOut,
   // Stuff from d3-interpolate
   interpolateString,
+  // Stuff from d3-brush
+  brush,
+  brushX,
+  brushY,
 };
 
 export type {

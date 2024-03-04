@@ -412,7 +412,11 @@ function makeSettingsDefaultLine(
   // TODO: we have layer of proportional symbols with geometry type "linestring"
   //  so we should handle this case here
   return <>
-    <Show when={props.renderer === 'default' || props.renderer === 'discontinuity' }>
+    <Show when={
+      props.renderer === 'default'
+      || props.renderer === 'discontinuity'
+      || props.renderer === 'links'
+    }>
       <InputFieldColor
         label={ LL().LayerSettings.StrokeColor() }
         value={ props.strokeColor! }

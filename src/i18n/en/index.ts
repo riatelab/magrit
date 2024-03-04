@@ -178,6 +178,7 @@ const en = {
       TextContent: 'Text content',
       TextProperties: 'Text properties',
       FontSize: 'Font size',
+      FontColor: 'Font color',
       FontFamily: 'Font family',
       FontWeight: 'Font weight',
       FontStyle: 'Font style',
@@ -241,6 +242,7 @@ const en = {
     NewLayer: 'New_layer',
     CommonOptions: {
       Variable: 'Variable',
+      SelectVariable: 'Select a variable',
       Color: 'Color',
     },
     ChoroplethOptions: {
@@ -348,6 +350,10 @@ const en = {
       LinkSizeFixed: 'Fixed',
       LinkSizeProportionalReferenceSize: 'Maximal Size',
       LinkSizeProportionalReferenceValue: 'On value',
+      AllMatch: 'All origins and destinations match IDs of features in the geographic layer',
+      SomeMatch: 'Some origins and destinations (but not all) match IDs of features in the geographic layer',
+      NoMatch: 'No origins and destinations match IDs of features in the geographic layer',
+      Selection: 'Select links to display',
     },
   },
   ExportSection: {
