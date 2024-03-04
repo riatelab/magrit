@@ -36,6 +36,7 @@ import { GeoJSONFeature, GeoJSONFeatureCollection } from '../../global';
 // Style
 import '../../styles/SimplificationModal.css';
 import '../../styles/RangeSlider.css';
+import InputFieldRangeSlider from '../Inputs/InputRangeSlider.tsx';
 
 interface SimplificationInfo {
   name: string;
@@ -366,7 +367,7 @@ export default function SimplificationModal(
           max={1e7}
           step={1e1}
         />
-        <InputFieldRange
+        <InputFieldRangeSlider
           label={LL().SimplificationModal.SimplificationFactor()}
           value={simplificationFactor()}
           formater={(v) => `${round(v * 100, 2)}%`}

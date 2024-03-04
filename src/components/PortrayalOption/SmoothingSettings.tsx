@@ -55,6 +55,7 @@ import {
   SmoothingMethod,
   type StewartParameters,
 } from '../../global.d';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
 
 async function onClickValidate(
   referenceLayerId: string,
@@ -355,22 +356,15 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       <option value="Stewart">{LL().PortrayalSection.SmoothingOptions.Stewart()}</option>
       <option value="Kde">{LL().PortrayalSection.SmoothingOptions.KDE()}</option>
     </InputFieldSelect>
-    <div class="field">
-      <label class="label">
-        {LL().PortrayalSection.SmoothingOptions.Resolution() }
-      </label>
-      <div class="control">
-        <input
-          type="number"
-          class="input"
-          value={targetResolution()}
-          min={0}
-          step={0.1}
-          onChange={(e) => setTargetResolution(+e.currentTarget.value)}
-          style={{ width: '200px' }}
-        />
-      </div>
-    </div>
+    <InputFieldNumber
+      label={LL().PortrayalSection.SmoothingOptions.Resolution()}
+      value={targetResolution()}
+      onChange={(v) => setTargetResolution(v)}
+      min={0}
+      max={1e5}
+      step={0.1}
+      width={200}
+    />
     <Show when={targetSmoothingMethod() === SmoothingMethod.Kde}>
       <InputFieldSelect
         label={LL().PortrayalSection.SmoothingOptions.KernelType()}
@@ -389,22 +383,15 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         <option value="uniform">{LL().PortrayalSection.SmoothingOptions.Uniform()}</option>
         <option value="biweight">{LL().PortrayalSection.SmoothingOptions.Biweight()}</option>
       </InputFieldSelect>
-      <div class="field">
-        <label class="label">
-          {LL().PortrayalSection.SmoothingOptions.Bandwidth() }
-        </label>
-        <div class="control">
-          <input
-            type="number"
-            class="input"
-            value={targetBandwidth()}
-            step={1}
-            min={0}
-            onChange={(e) => setTargetBandwidth(+e.currentTarget.value)}
-            style={{ width: '200px' }}
-          />
-        </div>
-      </div>
+      <InputFieldNumber
+        label={LL().PortrayalSection.SmoothingOptions.Bandwidth()}
+        value={targetBandwidth()}
+        onChange={(v) => setTargetBandwidth(v)}
+        min={0}
+        max={1e5}
+        step={1}
+        width={200}
+      />
     </Show>
     <Show when={targetSmoothingMethod() === SmoothingMethod.Stewart}>
       <InputFieldSelect
@@ -418,37 +405,24 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         <option value="gaussian">{LL().PortrayalSection.SmoothingOptions.Gaussian()}</option>
         <option value="pareto">{LL().PortrayalSection.SmoothingOptions.Pareto()}</option>
       </InputFieldSelect>
-      <div class="field">
-        <label class="label">
-          { LL().PortrayalSection.SmoothingOptions.Span() }
-        </label>
-        <div class="control">
-          <input
-            type="number"
-            class="input"
-            value={targetSpan()}
-            min={0}
-            step={1}
-            onChange={(e) => setTargetSpan(+e.currentTarget.value)}
-            style={{ width: '200px' }}
-          />
-        </div>
-      </div>
-      <div class="field">
-        <label class="label">
-          { LL().PortrayalSection.SmoothingOptions.Beta() }
-        </label>
-        <div class="control">
-          <input
-            type="number"
-            class="input"
-            value={targetBeta()}
-            step={1}
-            onChange={(e) => setTargetBeta(+e.currentTarget.value)}
-            style={{ width: '200px' }}
-          />
-        </div>
-      </div>
+      <InputFieldNumber
+        label={ LL().PortrayalSection.SmoothingOptions.Span() }
+        value={targetSpan()}
+        onChange={(v) => setTargetSpan(v)}
+        min={0}
+        max={1e5}
+        step={1}
+        width={200}
+      />
+      <InputFieldNumber
+        label={LL().PortrayalSection.SmoothingOptions.Beta()}
+        value={targetBeta()}
+        onChange={(v) => setTargetBeta(v)}
+        min={0}
+        max={10}
+        step={1}
+        width={200}
+      />
     </Show>
     <InputResultName
       onKeyUp={ (value) => { setNewLayerName(value); }}

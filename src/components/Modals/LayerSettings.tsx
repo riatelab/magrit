@@ -4,14 +4,17 @@ import {
   createSignal,
   For,
   JSX,
+  Match,
   Show,
+  Switch,
 } from 'solid-js';
 
 // Imports from other libs
-import { FaSolidPlus } from 'solid-icons/fa';
+import { VsTriangleDown, VsTriangleRight } from 'solid-icons/vs';
 import { getPalette, getPalettes } from 'dicopal';
 
 // Helpers
+import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { debounce, unproxify } from '../../helpers/common';
 import { webSafeFonts } from '../../helpers/font';
@@ -25,6 +28,7 @@ import InputFieldText from '../Inputs/InputText.tsx';
 import InputFieldButton from '../Inputs/InputButton.tsx';
 import CollapsibleSection from '../CollapsibleSection.tsx';
 import { CategoriesCustomisation } from '../PortrayalOption/CategoricalChoroplethComponents.tsx';
+import { LinksSelectionOnExistingLayer } from '../PortrayalOption/LinksComponents.tsx';
 
 // Stores
 import {
@@ -80,35 +84,24 @@ const updateProp = (
 
 const debouncedUpdateProp = debounce(updateProp, 250);
 
-function aestheticsSection(
-  props: LayerDescription,
-  LL: Accessor<TranslationFunctions>,
-): JSX.Element {
-  const [displayAesthetics, setDisplayAesthetics] = createSignal(false);
-  return <>
-    <div
-      style={{ cursor: 'pointer' }}
-      onClick={() => setDisplayAesthetics(!displayAesthetics())}
-    >
-      <p class="label">
-        { LL().LayerSettings.AestheticFilter() }
-        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }} />
-      </p>
-    </div>
-    <br />
-    <Show when={displayAesthetics()}>
+function AestheticsSection(props: LayerDescription): JSX.Element {
+  const { LL } = useI18nContext();
+
+  return <details>
+    <summary>{ LL().LayerSettings.AestheticFilter() }</summary>
+    <div>
       <InputFieldCheckbox
-        label={ LL().LayerSettings.DropShadow() }
-        checked={ props.dropShadow }
+        label={LL().LayerSettings.DropShadow()}
+        checked={props.dropShadow}
         onChange={(checked) => updateProp(props.id, 'dropShadow', checked)}
       />
       <InputFieldCheckbox
-        label={ LL().LayerSettings.Blur() }
-        checked={ props.blurFilter }
+        label={LL().LayerSettings.Blur()}
+        checked={props.blurFilter}
         onChange={(checked) => updateProp(props.id, 'blurFilter', checked)}
       />
-    </Show>
-  </>;
+    </div>
+  </details>;
 }
 
 function makeSettingsLabels(
@@ -408,7 +401,7 @@ function makeSettingsDefaultPoint(
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}
       />
     </Show>
-    { aestheticsSection(props, LL) }
+    <AestheticsSection {...props} />
   </>;
 }
 
@@ -530,8 +523,8 @@ function makeSettingsDefaultLine(
     </Show>
     <Show when={props.renderer === 'links'}>
       <InputFieldSelect
-        label={ LL().PortrayalSection.LinksOptions.LinkCurvature() }
-        value={ (props.rendererParameters as LinksParameters).curvature }
+        label={LL().PortrayalSection.LinksOptions.LinkCurvature()}
+        value={(props.rendererParameters as LinksParameters).curvature}
         onChange={(v) => updateProp(props.id, ['rendererParameters', 'curvature'], v)}
       >
         <For each={Object.entries(LinkCurvature)}>
@@ -543,8 +536,8 @@ function makeSettingsDefaultLine(
         </For>
       </InputFieldSelect>
       <InputFieldSelect
-        label={ LL().PortrayalSection.LinksOptions.LinkHeadType() }
-        value={ (props.rendererParameters as LinksParameters).head }
+        label={LL().PortrayalSection.LinksOptions.LinkHeadType()}
+        value={(props.rendererParameters as LinksParameters).head}
         onChange={(v) => updateProp(props.id, ['rendererParameters', 'head'], v)}
       >
         <For each={Object.entries(LinkHeadType)}>
@@ -555,7 +548,12 @@ function makeSettingsDefaultLine(
           }
         </For>
       </InputFieldSelect>
+      <details>
+        <summary>{ LL().PortrayalSection.LinksOptions.Selection() }</summary>
+        <LinksSelectionOnExistingLayer layerId={props.id}/>
+      </details>
     </Show>
+    <AestheticsSection {...props} />
   </>;
 }
 
@@ -693,7 +691,7 @@ function makeSettingsDefaultPolygon(
       max={10}
       step={0.1}
     />
-    { aestheticsSection(props, LL) }
+    <AestheticsSection {...props} />
   </>;
 }
 

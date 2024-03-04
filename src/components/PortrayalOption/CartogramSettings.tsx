@@ -224,6 +224,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
         min={1}
         max={100}
         step={1}
+        width={200}
       />
     </Show>
     <Show when={isGeo}>

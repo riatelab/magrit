@@ -1,4 +1,4 @@
-import { type JSX } from 'solid-js';
+import { type JSX, mergeProps } from 'solid-js';
 import { type LocalizedString } from 'typesafe-i18n';
 
 interface InputFieldNumberProps {
@@ -8,19 +8,25 @@ interface InputFieldNumberProps {
   min: number;
   max: number;
   step: number;
+  rounded?: boolean;
+  width?: number;
 }
 export default function InputFieldNumber(props: InputFieldNumberProps): JSX.Element {
+  const mergedProps = mergeProps({ width: 133 }, props);
   return <div class="field">
-    <label class="label">{props.label}</label>
+    <label class="label">{mergedProps.label}</label>
     <div class="control">
       <input
-        class="number"
+        class={ mergedProps.rounded ? 'number' : 'input' }
         type="number"
-        onChange={(e) => { props.onChange(+e.currentTarget.value); }}
-        value={props.value}
-        min={props.min}
-        max={props.max}
-        step={props.step}
+        onChange={(e) => { mergedProps.onChange(+e.currentTarget.value); }}
+        value={mergedProps.value}
+        min={mergedProps.min}
+        max={mergedProps.max}
+        step={mergedProps.step}
+        style={{
+          width: `${mergedProps.width}px`,
+        }}
       />
     </div>
   </div>;

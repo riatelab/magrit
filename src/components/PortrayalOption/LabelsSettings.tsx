@@ -42,6 +42,7 @@ import {
 } from '../../global.d';
 import type { PortrayalSettingsProps } from './common';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -187,18 +188,16 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
   };
 
   return <div class="portrayal-section__portrayal-options-labels">
-    <div class="field">
-      <label class="label"> { LL().PortrayalSection.CommonOptions.Variable() } </label>
-      <div class="select" style={{ 'max-width': '60%' }}>
-        <select
-          onChange={(e) => setTargetVariable(e.currentTarget.value)}
-        >
-          <For each={targetFields()}>
-            { (variable) => <option value={ variable.name }>{ variable.name }</option> }
-          </For>
-        </select>
-      </div>
-    </div>
+    <InputFieldSelect
+      label={LL().PortrayalSection.CommonOptions.Variable()}
+      onChange={(v) => setTargetVariable(v)}
+      value={targetVariable()}
+      width={200}
+    >
+      <For each={targetFields()}>
+        { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+      </For>
+    </InputFieldSelect>
     <InputResultName
       onKeyUp={(value) => setNewLayerName(value)}
       onEnter={makePortrayal}

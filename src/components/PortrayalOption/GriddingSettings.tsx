@@ -280,11 +280,6 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       <option value="diamond">{LL().PortrayalSection.GridOptions.CellDiamond()}</option>
       <option value="triangle">{LL().PortrayalSection.GridOptions.CellTriangle()}</option>
     </InputFieldSelect>
-    <Show when={isGeo}>
-      <WarningBanner expanded={true}>
-        { LL().PortrayalSection.GridOptions.WarningGeo() }
-      </WarningBanner>
-    </Show>
     <InputFieldNumber
       label={LL().PortrayalSection.GridOptions.ResolutionWithUnit({ unit: distanceUnit })}
       value={targetResolution()}
@@ -292,7 +287,13 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       min={0}
       max={500}
       step={0.1}
+      width={200}
     />
+    <Show when={isGeo}>
+      <WarningBanner expanded={true}>
+        { LL().PortrayalSection.GridOptions.WarningGeo() }
+      </WarningBanner>
+    </Show>
     <InputResultName
       onKeyUp={(value) => {
         setNewLayerName(value);

@@ -363,6 +363,7 @@ export default function ProportionalSymbolsSettings(
       min={ 1 }
       max={ 200 }
       step={ 1 }
+      width={200}
     />
     <InputFieldNumber
       label={ LL().PortrayalSection.ProportionalSymbolsOptions.OnValue() }
@@ -371,6 +372,7 @@ export default function ProportionalSymbolsSettings(
       min={ 1 }
       max={ 999 }
       step={ 0.1 }
+      width={200}
     />
     <InputFieldColor
       label={ LL().PortrayalSection.CommonOptions.Color() }

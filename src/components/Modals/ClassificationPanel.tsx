@@ -36,6 +36,7 @@ import { ClassificationMethod, type ClassificationParameters, CustomPalette } fr
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldRange from '../Inputs/InputRange.tsx';
 import InputFieldRangeNumber from '../Inputs/InputRangeNumber.tsx';
+import InputFieldRangeSlider from '../Inputs/InputRangeSlider.tsx';
 
 enum OptionsClassification {
   numberOfClasses,
@@ -681,7 +682,7 @@ export default function ClassificationPanel(): JSX.Element {
                 </Show>
                 <br />
                 <Show when={typeScheme() === 'diverging'}>
-                  <InputFieldRangeNumber
+                  <InputFieldRangeSlider
                     label={LL().ClassificationPanel.centralClass()}
                     min={1}
                     max={numberOfClasses() - 2}

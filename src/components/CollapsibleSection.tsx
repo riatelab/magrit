@@ -8,10 +8,7 @@ import {
   Switch,
 } from 'solid-js';
 
-import {
-  FaSolidChevronDown,
-  FaSolidChevronUp,
-} from 'solid-icons/fa';
+import { VsTriangleDown, VsTriangleRight } from 'solid-icons/vs';
 
 interface CollapsibleSectionProps {
   id?: string,
@@ -49,19 +46,15 @@ export default function CollapsibleSection(
         ...collapsed() ? {} : { 'border-bottom': 'none' },
       }}
     >
-      <span>{ props.title }</span>
       <Switch>
         <Match when={collapsed()}>
-          <FaSolidChevronDown
-            style={{ 'margin-left': '1em' }}
-          />
+          <VsTriangleRight style={{ 'margin-right': '0.5em' }} />
         </Match>
         <Match when={!collapsed()}>
-          <FaSolidChevronUp
-            style={{ 'margin-left': '1em' }}
-          />
+          <VsTriangleDown style={{ 'margin-right': '0.5em' }} />
         </Match>
       </Switch>
+      <span>{ props.title }</span>
     </button>
     <Show when={!collapsed()}>
       <section

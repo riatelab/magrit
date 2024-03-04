@@ -81,11 +81,6 @@ html.theme-dark .sortable-chosen .layer-manager-item {
     background-color: #262626;
 }
 
-html.theme-dark select > option {
-    background-color: #262626;
-    color: #f5f5f5;
-}
-
 html.theme-dark .information-banner {
     background-color: #045933 !important; /* Or maybe #0e2a10 ? */
 }
@@ -179,3 +174,16 @@ input[type=checkbox], input[type=radio] {
 .is-cursor-pointer {
   cursor: pointer;
 }
+
+.content details summary {
+  cursor: pointer;
+  font-weight: 800;
+  height: 2em;
+  margin-bottom: 1em;
+}
+
+/*
+.content details summary:hover {
+  color: var(--primary-color);
+}
+*/
