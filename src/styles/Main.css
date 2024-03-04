@@ -47,8 +47,8 @@ html.theme-dark {
     --success-color: hsl(141, 53%, 53%);
     --warning-color: hsl(48, 100%, 67%);
     --danger-color: hsl(348, 100%, 61%);
-    scrollbar-color: #626262 #000000;
-    /* color-scheme: dark; */
+    scrollbar-color: dark;
+    color-scheme: dark;
 }
 
 @media screen and (max-width: 1023px) {
@@ -92,6 +92,18 @@ html.theme-dark .warning-banner {
 html.theme-dark .portrayal-selection .mini-button.selected {
     border: solid 2px darkgreen;
 }
+
+
+html.theme-dark select option {
+  background-color: #2e2e2e;
+  color: #f5f5f5;
+}
+
+html.theme-dark select[multiple] option:checked {
+    background-color: #12546e;
+    color: unset !important;
+}
+
 
 /*
 Overwrite Bulma's default to help
@@ -162,6 +174,7 @@ button.button:active, button.button:focus {
 svg[class*='plot'] {
   margin: auto;
 }
+
 input[type=checkbox], input[type=radio] {
   vertical-align: baseline;
   margin-right: 0.4em;
