@@ -446,6 +446,16 @@ interface LinksParameters {
   head: LinkHeadType,
   curvature: LinkCurvature,
   position: LinkPosition,
+  filters: Filter[],
+}
+
+interface Filter {
+  // The name of the variable to filter
+  variable: string,
+  // The operator to use for the filter
+  operator: '==' | '!=' | '<' | '<=' | '>' | '>=',
+  // The value to compare with
+  value: string | number,
 }
 
 export enum LinkType {
