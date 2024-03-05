@@ -678,6 +678,7 @@ export default function ImportWindow(): JSX.Element {
                     <td>
                       <FaSolidTrashCan
                         class="is-clickable"
+                        aria-label={ LL().ImportWindow.Delete() }
                         onClick={() => {
                           setFileDropStore(
                             'files',
@@ -701,6 +702,7 @@ export default function ImportWindow(): JSX.Element {
                                 <input
                                   type="checkbox"
                                   checked={layer.addToProject}
+                                  aria-label={ LL().ImportWindow.AddToProject() }
                                   onClick={() => {
                                     // eslint-disable-next-line no-param-reassign
                                     layer.addToProject = !layer.addToProject;
@@ -723,6 +725,7 @@ export default function ImportWindow(): JSX.Element {
                                 <input
                                   type="checkbox"
                                   checked={layer.useCRS}
+                                  aria-label={ LL().ImportWindow.UseProjection() }
                                   onClick={() => handleCheckUnique(layer, 'useCRS')}
                                 /></td>
                               <td>
@@ -735,6 +738,7 @@ export default function ImportWindow(): JSX.Element {
                                       ? LL().ImportWindow.SimplifyDisabledTooltip()
                                       : LL().ImportWindow.SimplifyTooltip()
                                   }
+                                  aria-label={ LL().ImportWindow.Simplify() }
                                   onClick={() => {
                                     // eslint-disable-next-line no-param-reassign
                                     layer.simplify = !layer.simplify;
@@ -745,6 +749,7 @@ export default function ImportWindow(): JSX.Element {
                                   type="checkbox"
                                   class="fit-map"
                                   checked={layer.fitMap}
+                                  aria-label={ LL().ImportWindow.FitExtent() }
                                   onClick={() => handleCheckUnique(layer, 'fitMap')}
                                 />
                               </td>
@@ -756,6 +761,7 @@ export default function ImportWindow(): JSX.Element {
                               <input
                                 type="checkbox"
                                 checked={layer.addToProject}
+                                aria-label={ LL().ImportWindow.AddToProject() }
                                 onClick={() => {
                                   // eslint-disable-next-line no-param-reassign
                                   layer.addToProject = !layer.addToProject;

@@ -77,6 +77,7 @@ const en = {
     SimplifyDisabledTooltip: 'Simplification is only available for (Multi)LineString and (Multi)Polygon vector layers.',
     SimplifyTooltip: 'Simplify the geometries of the layer to reduce the size of the dataset and improve performance. A new window will open to allow you to choose the simplification options.',
     FitExtent: 'Fit extent',
+    AddToProject: 'Add to project',
     Delete: 'Delete ?',
     Incomplete: 'Incomplete',
     IncompleteMessage: 'The dataset is incomplete and cannot be imported. Please add the other mandatory files.',

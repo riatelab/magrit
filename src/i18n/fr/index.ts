@@ -77,6 +77,7 @@ const fr = {
     SimplifyDisabledTooltip: 'La simplification n\'est proposée que pour les jeux de données vectoriels (Multi)LineString et (Multi)Polygon.',
     SimplifyTooltip: 'Simplifier (généraliser) les géométries. Une fenêtre permettant de choisir le niveau de simplification s\'ouvrira.',
     FitExtent: 'Zoomer sur la couche',
+    AddToProject: 'Ajouter au projet',
     Delete: 'Supprimer ?',
     Incomplete: 'Incomplet',
     IncompleteMessage: 'Le jeu de données n\'est pas complet. Merci d\'ajouter les autres fichiers nécessaires',

@@ -281,6 +281,10 @@ type RootTranslation = {
 		 */
 		FitExtent: string
 		/**
+		 * A​d​d​ ​t​o​ ​p​r​o​j​e​c​t
+		 */
+		AddToProject: string
+		/**
 		 * D​e​l​e​t​e​ ​?
 		 */
 		Delete: string
@@ -2475,6 +2479,10 @@ export type TranslationFunctions = {
 		 * Fit extent
 		 */
 		FitExtent: () => LocalizedString
+		/**
+		 * Add to project
+		 */
+		AddToProject: () => LocalizedString
 		/**
 		 * Delete ?
 		 */
