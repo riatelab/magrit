@@ -206,7 +206,6 @@ function makeSettingsScaleBar(
         value,
       )}
       value={ ft.style }
-      width={ 200 }
     >
       <For each={Object.keys(ScaleBarStyle)}>
         {

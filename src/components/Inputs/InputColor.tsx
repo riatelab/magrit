@@ -5,15 +5,16 @@ interface InputFieldColorProps {
   label: LocalizedString | string;
   value: string;
   onChange: (color: string) => void;
+  rounded?: boolean;
   width?: number;
 }
 export default function InputFieldColor(props: InputFieldColorProps): JSX.Element {
-  const mergedProps = mergeProps({ width: 133 }, props);
+  const mergedProps = mergeProps({ width: 200 }, props);
   return <div class="field">
     <label class="label">{ mergedProps.label }</label>
     <div class="control">
       <input
-        class="color"
+        classList={{ color: mergedProps.rounded }}
         type="color"
         onChange={(e) => {
           mergedProps.onChange(e.currentTarget.value);

@@ -250,7 +250,6 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
         } as ClassificationParameters);
       }}
       value={ targetVariable() }
-      width={200}
     >
       <For each={targetFields()}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }

@@ -175,7 +175,6 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
             min={0}
             max={1e12}
             step={1}
-            width={133}
           />
         </div>
         <div style={{ width: '25%' }}>
@@ -188,7 +187,6 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
             min={0}
             max={1e12}
             step={1}
-            width={133}
           />
         </div>
       </div>

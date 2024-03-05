@@ -198,7 +198,6 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
       label={ LL().PortrayalSection.CommonOptions.Variable() }
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
-      width={200}
     >
       <For each={targetFields()}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
@@ -208,7 +207,6 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
       label={LL().PortrayalSection.CartogramOptions.Algorithm()}
       onChange={(v) => setCartogramMethod(v as CartogramMethod)}
       value={cartogramMethod()}
-      width={200}
     >
       <For each={Object.values(CartogramMethod)}>
         {
@@ -224,7 +222,6 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
         min={1}
         max={100}
         step={1}
-        width={200}
       />
     </Show>
     <Show when={isGeo}>

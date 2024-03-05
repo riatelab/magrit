@@ -1,16 +1,12 @@
 // Imports from solid-js
 import {
   Accessor,
-  createSignal,
   For,
   JSX,
-  Match,
   Show,
-  Switch,
 } from 'solid-js';
 
 // Imports from other libs
-import { VsTriangleDown, VsTriangleRight } from 'solid-icons/vs';
 import { getPalette, getPalettes } from 'dicopal';
 
 // Helpers
@@ -646,7 +642,7 @@ function makeSettingsDefaultPolygon(
           debouncedUpdateProp(props.id, ['rendererParameters', 'palette'], palette);
         }}
         value={(props.rendererParameters as SmoothedLayerParameters).palette.name}
-        width={220}
+        width={300}
       >
         <For each={availableSequentialPalettes}>
           {

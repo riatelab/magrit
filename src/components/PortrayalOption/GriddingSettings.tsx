@@ -263,7 +263,6 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       label={ LL().PortrayalSection.CommonOptions.Variable() }
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
-      width={200}
     >
       <For each={targetFields()}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
@@ -273,7 +272,6 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       label={LL().PortrayalSection.GridOptions.CellShape()}
       onChange={(v) => { setCellType(v as GridCellShape); }}
       value={cellType()}
-      width={200}
     >
       <option value="square">{LL().PortrayalSection.GridOptions.CellSquare()}</option>
       <option value="hexagon">{LL().PortrayalSection.GridOptions.CellHexagon()}</option>
@@ -287,7 +285,6 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       min={0}
       max={500}
       step={0.1}
-      width={200}
     />
     <Show when={isGeo}>
       <WarningBanner expanded={true}>

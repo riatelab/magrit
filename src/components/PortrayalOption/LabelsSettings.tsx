@@ -192,7 +192,6 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
       label={LL().PortrayalSection.CommonOptions.Variable()}
       onChange={(v) => setTargetVariable(v)}
       value={targetVariable()}
-      width={200}
     >
       <For each={targetFields()}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }

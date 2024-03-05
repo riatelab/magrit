@@ -370,7 +370,6 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
         setTargetVariable(value);
       }}
       value={ targetVariable() }
-      width={200}
     >
       <For each={targetFields()}>
         { (variable) => <option value={variable.name}>{variable.name}</option> }
@@ -382,7 +381,6 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
         setTargetDataset(value);
       }}
       value={ targetDataset() }
-      width={200}
     >
       <option value="">{ LL().PortrayalSection.LinksOptions.SelectDataset() }</option>
       <For each={layersDescriptionStore.tables}>
@@ -398,7 +396,6 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
           setOriginVariable(value);
         }}
         value={ originVariable() }
-        width={200}
       >
         <For each={targetFieldsOD()}>
           { (variable) => <option value={variable.name}>{variable.name}</option> }
@@ -410,7 +407,6 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
           setDestinationVariable(value);
         }}
         value={ destinationVariable() }
-        width={200}
       >
         <For each={targetFieldsOD()}>
           { (variable) => <option value={variable.name}>{variable.name}</option> }
@@ -442,7 +438,6 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
           setIntensityVariable(value);
         }}
         value={ intensityVariable() }
-        width={200}
       >
         <For each={targetFieldsIntensity()}>
           { (variable) => <option value={variable.name}>{variable.name}</option> }
@@ -454,7 +449,6 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
           setLinkType(value as LinkType);
         }}
         value={ linkType() }
-        width={200}
         >
         <For each={Object.entries(LinkType)}>
           {
@@ -470,7 +464,6 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
           setLinkHeadType(value as LinkHeadType);
         }}
         value={ linkHeadType() }
-        width={200}
       >
         <For each={Object.entries(LinkHeadType)}>
           {
@@ -486,7 +479,6 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
           setLinkCurveType(value as LinkCurvature);
         }}
         value={ linkCurveType() }
-        width={200}
       >
         <For each={Object.entries(LinkCurvature)}>
           {

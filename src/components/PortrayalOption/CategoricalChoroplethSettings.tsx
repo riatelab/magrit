@@ -272,7 +272,6 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
         );
       }}
       value={ targetVariable() }
-      width={200}
     >
       <For each={targetFields()}>
         { (variable) => <option value={variable.name}>{variable.name}</option> }

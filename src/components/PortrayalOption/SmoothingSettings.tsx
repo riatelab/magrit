@@ -339,7 +339,6 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       label={ LL().PortrayalSection.CommonOptions.Variable() }
       onChange={(v) => { setTargetVariable(v); }}
       value={targetVariable()}
-      width={200}
     >
       <For each={targetFields()}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
@@ -351,7 +350,6 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         setTargetSmoothingMethod(v as SmoothingMethod);
       }}
       value={targetSmoothingMethod()}
-      width={200}
     >
       <option value="Stewart">{LL().PortrayalSection.SmoothingOptions.Stewart()}</option>
       <option value="Kde">{LL().PortrayalSection.SmoothingOptions.KDE()}</option>
@@ -363,7 +361,6 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       min={0}
       max={1e5}
       step={0.1}
-      width={200}
     />
     <Show when={targetSmoothingMethod() === SmoothingMethod.Kde}>
       <InputFieldSelect
@@ -374,7 +371,6 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
           );
         }}
         value={targetKdeKernelType()}
-        width={200}
       >
         <option value="gaussian">{LL().PortrayalSection.SmoothingOptions.Gaussian()}</option>
         <option value="epanechnikov">{LL().PortrayalSection.SmoothingOptions.Epanechnikov()}</option>
@@ -390,7 +386,6 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         min={0}
         max={1e5}
         step={1}
-        width={200}
       />
     </Show>
     <Show when={targetSmoothingMethod() === SmoothingMethod.Stewart}>
@@ -400,7 +395,6 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
           setTargetStewartKernelType(v as 'gaussian' | 'pareto');
         }}
         value={targetStewartKernelType()}
-        width={200}
       >
         <option value="gaussian">{LL().PortrayalSection.SmoothingOptions.Gaussian()}</option>
         <option value="pareto">{LL().PortrayalSection.SmoothingOptions.Pareto()}</option>
@@ -412,7 +406,6 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         min={0}
         max={1e5}
         step={1}
-        width={200}
       />
       <InputFieldNumber
         label={LL().PortrayalSection.SmoothingOptions.Beta()}
@@ -421,7 +414,6 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         min={0}
         max={10}
         step={1}
-        width={200}
       />
     </Show>
     <InputResultName

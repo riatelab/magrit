@@ -14,7 +14,7 @@ interface InputFieldSelectProps {
 }
 
 export default function InputFieldSelect(props: ParentProps<InputFieldSelectProps>): JSX.Element {
-  const mergedProps = mergeProps({ width: 133 }, props);
+  const mergedProps = mergeProps({ width: 200 }, props);
   const c = children(() => mergedProps.children);
   return <div class="field">
     <label class="label">{ mergedProps.label }</label>

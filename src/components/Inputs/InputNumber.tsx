@@ -11,8 +11,9 @@ interface InputFieldNumberProps {
   rounded?: boolean;
   width?: number;
 }
+
 export default function InputFieldNumber(props: InputFieldNumberProps): JSX.Element {
-  const mergedProps = mergeProps({ width: 133 }, props);
+  const mergedProps = mergeProps({ width: 200 }, props);
   return <div class="field">
     <label class="label">{mergedProps.label}</label>
     <div class="control">
