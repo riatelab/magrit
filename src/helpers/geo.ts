@@ -2,6 +2,7 @@
 import {
   area,
   booleanPointInPolygon,
+  lineIntersect,
   nearestPoint,
   pointOnFeature,
 } from '@turf/turf';
@@ -9,7 +10,6 @@ import polylabel from 'polylabel';
 
 // Helpers
 import d3 from './d3-custom';
-import topojson from './topojson';
 import {
   degToRadConstant,
   Mabs,
@@ -29,13 +29,12 @@ import {
   descending,
   getNumberOfDecimals,
   isNumber,
-  unproxify,
 } from './common';
 import { makeValid } from './geos';
+import topojson from './topojson';
 
 // Stores
 import { globalStore } from '../store/GlobalStore';
-import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 
 // Types / Interfaces / Enums
 import {
@@ -461,124 +460,6 @@ export const makeDorlingDemersSimulation = (
   return features;
 };
 
-export const computeDiscontinuity = (
-  referenceLayerId: string,
-  referenceVariableName: string,
-  discontinuityType: 'relative' | 'absolute',
-): GeoJSONFeatureCollection => {
-  // Get the reference layer data
-  const refLayer = unproxify(
-    layersDescriptionStore.layers
-      .find((l) => l.id === referenceLayerId)
-      ?.data as never,
-  ) as GeoJSONFeatureCollection;
-
-  // Add a unique id to each feature
-  refLayer.features.forEach((f, i) => {
-    if (!f.id) f.id = i; // eslint-disable-line no-param-reassign
-  });
-
-  // Convert to topojson
-  const topology = topojson.topology({ layer: refLayer }, 1e5);
-
-  // Functions to get the id of a pair of features
-  const getPairIds = (a: GeoJSONFeature, b: GeoJSONFeature): [string, string] => [`${a.id}__${b.id}`, `${b.id}__${a.id}`];
-  const getIds = (a: GeoJSONFeature, b: GeoJSONFeature): [string, string] => [`${a.id}`, `${b.id}`];
-
-  // Compute the discontinuity values between each pair of features
-  const resultValue = new Map<string, number>();
-
-  if (discontinuityType === 'relative') {
-    topojson.mesh(
-      topology,
-      topology.objects.layer,
-      (a: GeoJSONFeature, b: GeoJSONFeature) => {
-        if (a !== b) {
-          const valA = a.properties[referenceVariableName];
-          const valB = b.properties[referenceVariableName];
-          if (!isNumber(valA) || !isNumber(valB)) {
-            return false;
-          }
-          const [newId, newIdRev] = getPairIds(a, b);
-          if (!(resultValue.get(newId) || resultValue.get(newIdRev))) {
-            const value = Mmax(+valA! / +valB!, +valB! / +valA!);
-            resultValue.set(newId, value);
-          }
-        }
-        return false;
-      },
-    );
-  } else { // discontinuityType === 'absolute'
-    topojson.mesh(
-      topology,
-      topology.objects.layer,
-      (a: GeoJSONFeature, b: GeoJSONFeature) => {
-        if (a !== b) {
-          const valA = a.properties[referenceVariableName];
-          const valB = b.properties[referenceVariableName];
-          if (!isNumber(valA) || !isNumber(valB)) {
-            return false;
-          }
-          const [newId, newIdRev] = getPairIds(a, b);
-          if (!(resultValue.get(newId) || resultValue.get(newIdRev))) {
-            const value = Mmax(+valA! - +valB!, +valB! - +valA!);
-            resultValue.set(newId, value);
-          }
-        }
-        return false;
-      },
-    );
-  }
-
-  const arrDisc = [];
-  const entries = Array.from(resultValue.entries());
-  for (let i = 0, n = entries.length; i < n; i += 1) {
-    const kv = entries[i];
-    if (!Number.isNaN(kv[1])) {
-      arrDisc.push(kv);
-    }
-  }
-
-  const nbFt = arrDisc.length;
-  const dRes = [];
-  for (let i = 0; i < nbFt; i += 1) {
-    const idFt = arrDisc[i][0];
-    const [aId, bId] = idFt.split('__');
-    const val = arrDisc[i][1];
-    const geom = topojson.mesh(
-      topology,
-      topology.objects.layer,
-      (a: GeoJSONFeature, b: GeoJSONFeature) => {
-        if (a === b) return false;
-        const [refAId, refBId] = getIds(a, b);
-        // eslint-disable-next-line no-mixed-operators
-        return (refAId === aId && refBId === bId || refAId === bId && refBId === aId);
-      },
-    );
-
-    // For each feature, we store the discontinuity value
-    // and the ids of the two features involved
-    dRes.push({
-      type: 'Feature',
-      geometry: geom,
-      properties: {
-        'ID-feature1': aId,
-        'ID-feature2': bId,
-        value: val,
-      },
-    });
-  }
-
-  // Sort (descending) the features by the computed value
-  dRes.sort((a, b) => b.properties.value - a.properties.value);
-
-  // Return the result as a GeoJSONFeatureCollection
-  return {
-    type: 'FeatureCollection',
-    features: dRes,
-  };
-};
-
 export const countCoordinates = (geometry: GeoJSONGeometryType): number => {
   if (geometry.type === 'Point') {
     return 1;
@@ -904,3 +785,101 @@ export function planarArea(feature: GeoJSONFeature) {
   }
   return areaValue;
 }
+
+const decodeArc = (
+  arc: [number, number][],
+  transformParams?: { scale: [number, number], translate: [number, number] },
+) => {
+  if (!transformParams) return arc;
+  const ring = [];
+  let x = 0;
+  let y = 0;
+  for (let i = 0; i < arc.length; i += 1) {
+    x += arc[i][0];
+    y += arc[i][1];
+    ring.push([
+      x * transformParams.scale[0] + transformParams.translate[0],
+      y * transformParams.scale[1] + transformParams.translate[1],
+    ]);
+  }
+
+  return ring;
+};
+
+/**
+ * Find intersections between arcs of an object of the given Topology.
+ *
+ * @param {object} topo - The topology object to use.
+ * @param {string} layerName - The name of the layer in the topology object.
+ */
+export const findIntersections = (
+  topo: any,
+  layerName: string,
+): GeoJSONFeature[] => {
+  console.log(topo);
+  const layer = topo.objects[layerName];
+  // We need to take the arcs from the topology object and check if arcs from one feature
+  // intersect with arcs from another feature.
+  // Note that we are not interested in the arcs that are shared by two features.
+  const features = layer.geometries;
+  const intersections: GeoJSONFeature[] = [];
+  for (let i = 0; i < features.length; i += 1) {
+    const feature1 = features[i];
+    for (let j = i + 1; j < features.length; j += 1) {
+      if (i === j) continue; // eslint-disable-line no-continue
+      const feature2 = features[j];
+      // We need to exclude all shared arcs between the two features
+      // (i.e. the arcs that are part of both features).
+      // Note that arcs is an array of arrays of indices.
+      // Then we take the other arcs and check if they intersect
+      // with each other.
+      const flatArcs1 = feature1.arcs.flat(Infinity) // eslint-disable-next-line no-bitwise
+        .map((arcIx: number) => (arcIx < 0 ? ~arcIx : arcIx));
+      const flatArcs2 = feature2.arcs.flat(Infinity) // eslint-disable-next-line no-bitwise
+        .map((arcIx: number) => (arcIx < 0 ? ~arcIx : arcIx));
+
+      // Remove indexes that are part of both features
+      const uniqueArcs1 = flatArcs1.filter((arcIx: number) => !flatArcs2.includes(arcIx));
+      const uniqueArcs2 = flatArcs2.filter((arcIx: number) => !flatArcs1.includes(arcIx));
+
+      // Now we have to check for intersections between the arcs
+      // of the two features.
+      for (let k = 0; k < uniqueArcs1.length; k += 1) {
+        const arc1 = topo.arcs[uniqueArcs1[k]];
+        const pts1 = decodeArc(arc1, topo.transform);
+        for (let l = 0; l < uniqueArcs2.length; l += 1) {
+          if (k === l) continue; // eslint-disable-line no-continue
+          const arc2 = topo.arcs[uniqueArcs2[l]];
+          const pts2 = decodeArc(arc2, topo.transform);
+          // console.log(pts1, pts2);
+          // We have to check for intersections between the two arcs
+          // and store the result if there is an intersection.
+          // We use the intersection function from the topojson library.
+          const intersection = lineIntersect(
+            { type: 'LineString', coordinates: pts1 },
+            { type: 'LineString', coordinates: pts2 },
+          );
+          if (intersection.features.length > 0) {
+            intersection.features.forEach((ft) => {
+              // eslint-disable-next-line no-param-reassign
+              if (!ft.properties) ft.properties = {};
+              // eslint-disable-next-line no-param-reassign
+              ft.properties['ID-feature1'] = i;
+              // eslint-disable-next-line no-param-reassign
+              ft.properties['ID-feature2'] = j;
+              if (!(
+                equalPoints(ft.geometry.coordinates, pts1[0])
+                || equalPoints(ft.geometry.coordinates, pts1[pts1.length - 1])
+                || equalPoints(ft.geometry.coordinates, pts2[0])
+                || equalPoints(ft.geometry.coordinates, pts2[pts2.length - 1])
+              )) {
+                intersections.push(ft as GeoJSONFeature);
+              }
+            });
+          }
+        }
+      }
+    }
+  }
+  return intersections;
+};

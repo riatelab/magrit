@@ -17,7 +17,7 @@ import d3 from '../../helpers/d3-custom';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { cleanGeometry, cleanGeometryGeos, countCoordinates } from '../../helpers/geo';
+import { cleanGeometryGeos, countCoordinates, findIntersections } from '../../helpers/geo';
 import { round } from '../../helpers/math';
 
 // Other components
@@ -44,7 +44,7 @@ interface SimplificationInfo {
   polygons: number;
   edges: number;
   vertices: number;
-  selfIntersections: number;
+  selfIntersections: GeoJSONFeature[];
   features: GeoJSONFeature[],
 }
 
@@ -78,11 +78,12 @@ const getSimplificationInfo = async (
   }
   const features = geoLayer.features.filter((f) => f.geometry);
   console.timeEnd('clean, filter and count points');
+  const intersections = findIntersections(topo, layerName);
   return {
     polygons: nbGeometries,
     edges: 0,
     vertices,
-    selfIntersections: 0,
+    selfIntersections: intersections,
     features,
   };
 };
@@ -279,7 +280,7 @@ export default function SimplificationModal(
       context.translate(transform.x, transform.y);
       context.scale(transform.k, transform.k);
 
-      context.lineWidth = 1 / transform.k;
+      context.lineWidth = 0.5 / transform.k;
 
       // For each layer, draw the mesh
       layerNames.forEach((layerName, i) => {
@@ -291,6 +292,21 @@ export default function SimplificationModal(
       context.restore();
     }
 
+    function drawPoints(points: GeoJSONFeature[]) {
+      context.save();
+      context.translate(transform.x, transform.y);
+      context.scale(transform.k, transform.k);
+      context.lineWidth = 0.5 / transform.k;
+      context.fillStyle = 'red';
+      points.forEach((point) => {
+        context.beginPath();
+        path.pointRadius(2 / transform.k);
+        path(point as never);
+        context.fill();
+      });
+      context.restore();
+    }
+
     // Update transform variable and redraw
     // when the user zooms in/out
     d3.select(canvas)
@@ -298,6 +314,7 @@ export default function SimplificationModal(
         .on('zoom', (e: any) => {
           transform = e.transform;
           draw();
+          stats().forEach((si) => { drawPoints(si.selfIntersections); });
         }));
 
     async function simplify() {
@@ -333,6 +350,11 @@ export default function SimplificationModal(
           } as SimplificationInfo;
         }),
       );
+
+      // Also draw self intersections as a red dot on the canvas
+      s.forEach((si) => {
+        drawPoints(si.selfIntersections);
+      });
 
       setStats(s);
       console.log(stats());
