@@ -12,15 +12,15 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 import { getClassificationFunction } from '../../helpers/classification';
 import { findSuitableName } from '../../helpers/common';
-import { computeDiscontinuity } from '../../helpers/geo';
+import computeDiscontinuity from '../../helpers/discontinuity';
 import { generateIdLayer } from '../../helpers/layers';
+import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
-import { setGlobalStore, setLoading } from '../../store/GlobalStore';
+import { setLoading } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
@@ -32,6 +32,7 @@ import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore'
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputResultName from './InputResultName.tsx';
+import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Types / Interfaces / Enums
 import type { PortrayalSettingsProps } from './common';
@@ -44,7 +45,6 @@ import {
   LegendType,
   RepresentationType,
 } from '../../global.d';
-import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 const subsetClassificationMethodsForDiscontinuity = [
   'quantiles',
