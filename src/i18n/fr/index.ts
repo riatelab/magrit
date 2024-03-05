@@ -464,6 +464,9 @@ const fr = {
     QuantizationFactor: 'Facteur de quantification',
     SimplificationFactor: 'Facteur de simplification',
     CountGeometries: '{geom} géométries non nulles, {pts} points',
+    CheckSelfIntersection: 'Vérifier les auto-intersections',
+    CountSelfIntersections: '{count} auto-intersections détectées',
+    PreventShapeRemoval: 'Empêcher la suppression d\'entités',
   },
   DataTable: {
     titleGeo: 'Table attributaire',

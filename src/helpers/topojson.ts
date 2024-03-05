@@ -32,7 +32,7 @@ export const convertToTopojsonQuantizeAndBackToGeojson = (
  * @param {number} tolerance
  */
 export const simplifyTopojson = (topology: object, tolerance: number) => {
-  const presimplified = topojson.presimplify(topology);
+  const presimplified = topojson.presimplify(topology, topojson.sphericalTriangleArea);
   const minWeight = topojson.quantile(presimplified, tolerance);
   return topojson.simplify(presimplified, minWeight);
 };

@@ -31,7 +31,6 @@ import {
   isNumber,
 } from './common';
 import { makeValid } from './geos';
-import topojson from './topojson';
 
 // Stores
 import { globalStore } from '../store/GlobalStore';
@@ -816,31 +815,44 @@ export const findIntersections = (
   topo: any,
   layerName: string,
 ): GeoJSONFeature[] => {
-  console.log(topo);
   const layer = topo.objects[layerName];
   // We need to take the arcs from the topology object and check if arcs from one feature
   // intersect with arcs from another feature.
   // Note that we are not interested in the arcs that are shared by two features.
   const features = layer.geometries;
   const intersections: GeoJSONFeature[] = [];
-  for (let i = 0; i < features.length; i += 1) {
-    const feature1 = features[i];
-    for (let j = i + 1; j < features.length; j += 1) {
+  const flatArcsFeature = features
+    .map((ft: any) => ft.arcs.flat(Infinity) // eslint-disable-next-line no-bitwise
+      .map((arcIx: number) => (arcIx < 0 ? ~arcIx : arcIx)));
+  for (let i = 0; i < flatArcsFeature.length; i += 1) {
+    const flatArcs1 = flatArcsFeature[i];
+    for (let j = i + 1; j < flatArcsFeature.length; j += 1) {
       if (i === j) continue; // eslint-disable-line no-continue
-      const feature2 = features[j];
+      const flatArcs2 = flatArcsFeature[j];
       // We need to exclude all shared arcs between the two features
       // (i.e. the arcs that are part of both features).
       // Note that arcs is an array of arrays of indices.
       // Then we take the other arcs and check if they intersect
       // with each other.
-      const flatArcs1 = feature1.arcs.flat(Infinity) // eslint-disable-next-line no-bitwise
-        .map((arcIx: number) => (arcIx < 0 ? ~arcIx : arcIx));
-      const flatArcs2 = feature2.arcs.flat(Infinity) // eslint-disable-next-line no-bitwise
-        .map((arcIx: number) => (arcIx < 0 ? ~arcIx : arcIx));
-
-      // Remove indexes that are part of both features
+      // First, we remove indexes that are part of both features
       const uniqueArcs1 = flatArcs1.filter((arcIx: number) => !flatArcs2.includes(arcIx));
       const uniqueArcs2 = flatArcs2.filter((arcIx: number) => !flatArcs1.includes(arcIx));
+
+      // If they do not share any arc, they are probably not neighbor features
+      // so we don't go further to check for intersections.
+      // This saves a lot of time but this might be wrong (a dataset with a poor
+      // topology might have features that don't share any arc but still intersect -
+      // or with island that are close to the coastline).
+      if (
+        (
+          uniqueArcs1.length === flatArcs1.length
+          && uniqueArcs2.length === flatArcs2.length
+        )
+        || uniqueArcs1.length === 0
+        || uniqueArcs2.length === 0
+      ) {
+        continue; // eslint-disable-line no-continue
+      }
 
       // Now we have to check for intersections between the arcs
       // of the two features.
@@ -861,18 +873,18 @@ export const findIntersections = (
           );
           if (intersection.features.length > 0) {
             intersection.features.forEach((ft) => {
-              // eslint-disable-next-line no-param-reassign
-              if (!ft.properties) ft.properties = {};
-              // eslint-disable-next-line no-param-reassign
-              ft.properties['ID-feature1'] = i;
-              // eslint-disable-next-line no-param-reassign
-              ft.properties['ID-feature2'] = j;
               if (!(
                 equalPoints(ft.geometry.coordinates, pts1[0])
                 || equalPoints(ft.geometry.coordinates, pts1[pts1.length - 1])
                 || equalPoints(ft.geometry.coordinates, pts2[0])
                 || equalPoints(ft.geometry.coordinates, pts2[pts2.length - 1])
               )) {
+                // eslint-disable-next-line no-param-reassign
+                if (!ft.properties) ft.properties = {};
+                // eslint-disable-next-line no-param-reassign
+                ft.properties['ID-feature1'] = i;
+                // eslint-disable-next-line no-param-reassign
+                ft.properties['ID-feature2'] = j;
                 intersections.push(ft as GeoJSONFeature);
               }
             });

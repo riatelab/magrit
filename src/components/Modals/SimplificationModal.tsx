@@ -21,7 +21,9 @@ import { cleanGeometryGeos, countCoordinates, findIntersections } from '../../he
 import { round } from '../../helpers/math';
 
 // Other components
-import InputFieldRange from '../Inputs/InputRange.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import InputFieldRangeSlider from '../Inputs/InputRangeSlider.tsx';
 
 // Stores
 import {
@@ -30,13 +32,13 @@ import {
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
 import { setModalStore } from '../../store/ModalStore';
-import InputFieldNumber from '../Inputs/InputNumber.tsx';
+
+// Types / Interfaces / Enums
 import { GeoJSONFeature, GeoJSONFeatureCollection } from '../../global';
 
 // Style
 import '../../styles/SimplificationModal.css';
 import '../../styles/RangeSlider.css';
-import InputFieldRangeSlider from '../Inputs/InputRangeSlider.tsx';
 
 interface SimplificationInfo {
   name: string;
@@ -44,7 +46,7 @@ interface SimplificationInfo {
   polygons: number;
   edges: number;
   vertices: number;
-  selfIntersections: GeoJSONFeature[];
+  selfIntersections: GeoJSONFeature[] | null;
   features: GeoJSONFeature[],
 }
 
@@ -57,6 +59,7 @@ interface SimplificationInfo {
 const getSimplificationInfo = async (
   topo: any,
   layerName: string,
+  checkIntersections: boolean,
 ): Promise<Partial<SimplificationInfo>> => {
   const topoLayer = topo.objects[layerName];
   const geoLayer = topojson.feature(topo, topoLayer) as GeoJSONFeatureCollection;
@@ -78,12 +81,18 @@ const getSimplificationInfo = async (
   }
   const features = geoLayer.features.filter((f) => f.geometry);
   console.timeEnd('clean, filter and count points');
-  const intersections = findIntersections(topo, layerName);
+
+  console.time('check for intersections');
+  const selfIntersections = checkIntersections
+    ? findIntersections(topo, layerName)
+    : null;
+  console.timeEnd('check for intersections');
+
   return {
     polygons: nbGeometries,
     edges: 0,
     vertices,
-    selfIntersections: intersections,
+    selfIntersections,
     features,
   };
 };
@@ -211,6 +220,10 @@ export default function SimplificationModal(
     quantizationFactor,
     setQuantizationFactor,
   ] = createSignal(1e7);
+  const [
+    checkIntersections,
+    setCheckIntersections,
+  ] = createSignal(false);
 
   onMount(() => {
     // Set the behavior for when the user clicks on "Confirm"
@@ -292,7 +305,8 @@ export default function SimplificationModal(
       context.restore();
     }
 
-    function drawPoints(points: GeoJSONFeature[]) {
+    function drawPoints(points: GeoJSONFeature[] | null) {
+      if (!points) return;
       context.save();
       context.translate(transform.x, transform.y);
       context.scale(transform.k, transform.k);
@@ -342,7 +356,11 @@ export default function SimplificationModal(
       // Also update the stats
       const s = await Promise.all(
         layerNames.map(async (layerName, i) => {
-          const simplificationInfo = await getSimplificationInfo(simplified, layerName);
+          const simplificationInfo = await getSimplificationInfo(
+            simplified,
+            layerName,
+            checkIntersections(),
+          );
           return {
             name: layerName,
             color: colors[i % colors.length],
@@ -356,8 +374,8 @@ export default function SimplificationModal(
         drawPoints(si.selfIntersections);
       });
 
+      // Store the stats in the signal
       setStats(s);
-      console.log(stats());
     }
 
     function convertToQuantizedTopojson() {
@@ -369,12 +387,16 @@ export default function SimplificationModal(
     }
 
     // We create effects to automatically simplify and redraw when the simplification
-    // or quantization factors change
+    // or quantization factors change.
+    // We also update the stats if the user wants to check for self intersections.
     createEffect(
       on(simplificationFactor, simplify),
     );
     createEffect(
       on(quantizationFactor, convertToQuantizedTopojson),
+    );
+    createEffect(
+      on(checkIntersections, simplify),
     );
   });
 
@@ -398,6 +420,11 @@ export default function SimplificationModal(
           max={1}
           step={0.0005}
         />
+        <InputFieldCheckbox
+          label={ LL().SimplificationModal.CheckSelfIntersection() }
+          checked={ checkIntersections() }
+          onChange={(v) => { setCheckIntersections(v); }}
+        />
       </div>
       <div class="simplification-modal__layer-list-container">
         <Show when={stats()}>
@@ -419,6 +446,15 @@ export default function SimplificationModal(
                       })
                     }
                   </span>
+                  <Show when={si.selfIntersections}>
+                    <span>
+                      {
+                        LL().SimplificationModal.CountSelfIntersections({
+                          count: si.selfIntersections!.length,
+                        })
+                      }
+                    </span>
+                  </Show>
                 </li>
               }
             </For>

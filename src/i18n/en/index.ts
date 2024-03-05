@@ -464,6 +464,9 @@ const en = {
     QuantizationFactor: 'Quantization factor',
     SimplificationFactor: 'Simplification factor',
     CountGeometries: '{geom} non-empty geometries, {pts} points',
+    CheckSelfIntersection: 'Check self-intersection',
+    CountSelfIntersections: '{count} self-intersections detected',
+    PreventShapeRemoval: 'Prevent feature removal',
   },
   DataTable: {
     titleGeo: 'Attribute table',

@@ -1640,6 +1640,19 @@ type RootTranslation = {
 		 * @param {unknown} pts
 		 */
 		CountGeometries: RequiredParams<'geom' | 'pts'>
+		/**
+		 * C​h​e​c​k​ ​s​e​l​f​-​i​n​t​e​r​s​e​c​t​i​o​n
+		 */
+		CheckSelfIntersection: string
+		/**
+		 * {​c​o​u​n​t​}​ ​s​e​l​f​-​i​n​t​e​r​s​e​c​t​i​o​n​s​ ​d​e​t​e​c​t​e​d
+		 * @param {unknown} count
+		 */
+		CountSelfIntersections: RequiredParams<'count'>
+		/**
+		 * P​r​e​v​e​n​t​ ​f​e​a​t​u​r​e​ ​r​e​m​o​v​a​l
+		 */
+		PreventShapeRemoval: string
 	}
 	DataTable: {
 		/**
@@ -3833,6 +3846,18 @@ export type TranslationFunctions = {
 		 * {geom} non-empty geometries, {pts} points
 		 */
 		CountGeometries: (arg: { geom: unknown, pts: unknown }) => LocalizedString
+		/**
+		 * Check self-intersection
+		 */
+		CheckSelfIntersection: () => LocalizedString
+		/**
+		 * {count} self-intersections detected
+		 */
+		CountSelfIntersections: (arg: { count: unknown }) => LocalizedString
+		/**
+		 * Prevent feature removal
+		 */
+		PreventShapeRemoval: () => LocalizedString
 	}
 	DataTable: {
 		/**
