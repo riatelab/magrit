@@ -38,16 +38,16 @@
     "@types/topojson-server": "^3.0.4",
     "@types/topojson-simplify": "^3.0.3",
     "@types/uuid": "^9.0.8",
-    "@typescript-eslint/eslint-plugin": "^7.0.2",
-    "electron": "^29.0.1",
-    "electron-builder": "^24.12.0",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "electron": "^29.1.0",
+    "electron-builder": "^24.13.3",
     "eslint": "^8.57.0",
-    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-plugin-solid": "^0.13.1",
     "jsdom": "^24.0.0",
     "npm-run-all": "^4.1.5",
     "typescript": "^5.3.3",
-    "vite": "^5.1.4",
+    "vite": "^5.1.5",
     "vite-plugin-electron": "^0.28.2",
     "vite-plugin-electron-renderer": "^0.14.5",
     "vite-plugin-eslint": "^1.8.1",
@@ -60,8 +60,8 @@
   "dependencies": {
     "@observablehq/plot": "^0.6.13",
     "@r-wasm/webr": "^0.1.1",
-    "@solid-primitives/autofocus": "^0.0.109",
-    "@solidjs/router": "^0.12.4",
+    "@solid-primitives/autofocus": "^0.0.110",
+    "@solidjs/router": "^0.12.5",
     "@turf/turf": "7.0.0-alpha.113",
     "ag-grid-community": "^31.1.1",
     "ag-grid-solid": "^31.1.1",
@@ -81,7 +81,7 @@
     "d3-selection": "^3.0.0",
     "d3-transition": "^3.0.1",
     "d3-zoom": "^3.0.0",
-    "dexie": "^3.2.5",
+    "dexie": "^3.2.6",
     "dicopal": "^0.7.0",
     "dompurify": "^3.0.9",
     "font-gis": "^1.0.5",
@@ -90,7 +90,7 @@
     "go-cart-wasm": "^0.3.0",
     "gpu.js": "^2.16.0",
     "jszip": "^3.10.1",
-    "main-thread-scheduling": "^13.0.0",
+    "main-thread-scheduling": "^14.0.0",
     "mproj": "^0.0.37",
     "nouislider": "^15.7.1",
     "pako": "^2.1.0",
@@ -111,12 +111,8 @@
     "wkt-parser": "^1.3.3"
   },
   "overrides": {
-    "eslint-config-airbnb-typescript": {
-      "@typescript-eslint/eslint-plugin": "^7.0.1",
-      "@typescript-eslint/parser": "^7.0.1"
-    },
     "vite-plugin-electron": {
-      "electron": "^29.0.1"
+      "electron": "^29.1.0"
     }
   },
   "main": "dist-electron/main.js"
