@@ -43,6 +43,7 @@ import { RepresentationType } from '../../global.d';
 
 // Styles
 import '../../styles/PortrayalSelection.css';
+import MushroomsSettings from '../PortrayalOption/MushroomsSettings.tsx';
 
 interface PortrayalDescription {
   name: string;
@@ -86,6 +87,10 @@ const portrayalDescriptions: PortrayalDescription[] = [
   {
     name: 'Links',
     type: RepresentationType.links,
+  },
+  {
+    name: 'Mushrooms',
+    type: RepresentationType.mushrooms,
   },
 ].map((p) => ({ ...p, enabled: false }));
 
@@ -165,11 +170,11 @@ export default function PortrayalSelection(): JSX.Element {
     switch (p.type) {
       case RepresentationType.choropleth:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = vars.hasRatio;
+        p.enabled = vars.nRatio > 0;
         break;
       case RepresentationType.proportionalSymbols:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = vars.hasStock;
+        p.enabled = vars.nStock > 0;
         break;
       case RepresentationType.labels:
         // eslint-disable-next-line no-param-reassign
@@ -177,31 +182,35 @@ export default function PortrayalSelection(): JSX.Element {
         break;
       case RepresentationType.discontinuity:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = (vars.hasRatio || vars.hasStock) && geomType === 'polygon';
+        p.enabled = (vars.nRatio > 0 || vars.nStock > 0) && geomType === 'polygon';
         break;
       case RepresentationType.categoricalChoropleth:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = vars.hasCategorical;
+        p.enabled = vars.nCategorical > 0;
         break;
       case RepresentationType.grid:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = vars.hasStock && geomType === 'polygon';
+        p.enabled = vars.nStock > 0 && geomType === 'polygon';
         break;
       case RepresentationType.smoothed:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = vars.hasStock && (geomType === 'polygon' || geomType === 'point');
+        p.enabled = vars.nStock > 0 && (geomType === 'polygon' || geomType === 'point');
         break;
       case RepresentationType.cartogram:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = vars.hasStock;
+        p.enabled = vars.nStock > 0;
         break;
       case RepresentationType.links:
         // eslint-disable-next-line no-param-reassign
         p.enabled = (
           projectHasTabularDataset
-          && vars.hasIdentifier
+          && vars.nIdentifier > 0
           && (geomType === 'polygon' || geomType === 'point')
         );
+        break;
+      case RepresentationType.mushrooms:
+        // eslint-disable-next-line no-param-reassign
+        p.enabled = vars.nStock >= 2 && (geomType === 'polygon' || geomType === 'point');
         break;
       default:
         // eslint-disable-next-line no-param-reassign
@@ -316,6 +325,9 @@ export default function PortrayalSelection(): JSX.Element {
             </Match>
             <Match when={selectedPortrayal()!.type === RepresentationType.links}>
               <LinksSettings layerId={portrayalSelectionStore.layerId!}/>
+            </Match>
+            <Match when={selectedPortrayal()!.type === RepresentationType.mushrooms}>
+              <MushroomsSettings layerId={portrayalSelectionStore.layerId!}/>
             </Match>
           </Switch>
         </Show>

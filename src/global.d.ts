@@ -189,9 +189,9 @@ type LayerDescriptionSmoothedLayer = LayerDescription & {
 };
 
 type LayerDescriptionMushroomLayer = LayerDescription & {
-  renderer: RepresentationType.mushroom,
-  rendererParameters: null,
-  legend: MushroomLegendParameters,
+  renderer: RepresentationType.mushrooms,
+  rendererParameters: MushroomsParameters,
+  legend: MushroomsLegendParameters,
 };
 
 export enum ProportionalSymbolsSymbolType {
@@ -298,6 +298,23 @@ export interface ProportionalSymbolsParameters {
   movable: boolean,
   // The color mode of the proportional symbols
   // colorMode: ProportionalSymbolsColorMode,
+}
+
+export interface HalfProportionalMarkParameters {
+  variable: string,
+  color: string,
+  symbolType: ProportionalSymbolsSymbolType.circle | ProportionalSymbolsSymbolType.square,
+  referenceSize: number,
+  referenceValue: number,
+}
+
+export interface MushroomsParameters {
+  // The properties for the upper part of the mushroom
+  top: HalfProportionalMarkParameters,
+  // The properties for the lower part of the mushroom
+  bottom: HalfProportionalMarkParameters,
+  // Whether the mushroom can be moved by the user or not
+  movable: boolean,
 }
 
 export interface CategoricalChoroplethParameters {
@@ -518,7 +535,7 @@ export enum RepresentationType {
   links = 'links',
   grid = 'grid',
   waffle = 'waffle',
-  mushroom = 'mushroom',
+  mushrooms = 'mushrooms',
   sphere = 'sphere',
   graticule = 'graticule',
   labels = 'labels',
@@ -682,8 +699,8 @@ interface WaffleLegendParameters extends LegendParametersBase {
   type: LegendType.waffle,
 }
 
-interface MushroomLegendParameters extends LegendParametersBase {
-  type: LegendType.mushroom,
+interface MushroomsLegendParameters extends LegendParametersBase {
+  type: LegendType.mushrooms,
 }
 
 export type LegendParameters = (
@@ -717,7 +734,7 @@ export enum LegendType {
   discontinuity = 'discontinuity',
   labels = 'labels',
   waffle = 'waffle',
-  mushroom = 'mushroom',
+  mushrooms = 'mushrooms',
 }
 
 export enum Orientation {

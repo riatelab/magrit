@@ -32,6 +32,7 @@ import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
+import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -57,7 +58,6 @@ import {
   ProportionalSymbolsSymbolType,
 } from '../../global.d';
 import type { PortrayalSettingsProps } from './common';
-import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 function onClickValidate(
   referenceLayerId: string,

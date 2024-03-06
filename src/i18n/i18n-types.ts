@@ -822,6 +822,10 @@ type RootTranslation = {
 			 */
 			Links: string
 			/**
+			 * M​u​s​h​r​o​o​m​s
+			 */
+			Mushrooms: string
+			/**
 			 * N​o​ ​p​o​r​t​r​a​y​a​l​ ​f​o​r​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​l​a​y​e​r​ ​-​ ​P​l​e​a​s​e​ ​v​e​r​i​f​y​ ​t​h​e​ ​t​y​p​i​n​g​ ​o​f​ ​t​h​e​ ​f​i​e​l​d​s​ ​o​r​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​l​a​y​e​r
 			 */
 			NoPortrayal: string
@@ -1263,6 +1267,16 @@ type RootTranslation = {
 			 */
 			Selection: string
 		}
+		MushroomsOptions: {
+			/**
+			 * P​r​o​p​e​r​t​i​e​s​ ​o​f​ ​t​h​e​ ​u​p​p​e​r​ ​p​a​r​t
+			 */
+			TopProperties: string
+			/**
+			 * P​r​o​p​e​r​t​i​e​s​ ​o​f​ ​t​h​e​ ​l​o​w​e​r​ ​p​a​r​t
+			 */
+			BottomProperties: string
+		}
 	}
 	ExportSection: {
 		/**
@@ -1544,6 +1558,10 @@ type RootTranslation = {
 			 * A​ ​l​i​n​k​s​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​l​i​n​k​s​ ​a​r​e​ ​d​r​a​w​n​ ​b​e​t​w​e​e​n​ ​p​o​i​n​t​s​ ​o​r​ ​a​r​e​a​s​,​ ​o​p​t​i​o​n​a​l​l​y​ ​w​i​t​h​ ​a​ ​w​i​d​t​h​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​.
 			 */
 			Links: string
+			/**
+			 * A​ ​m​u​s​h​r​o​o​m​s​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​v​a​l​u​e​s​ ​o​f​ ​t​w​o​ ​v​a​r​i​a​b​l​e​s​ ​a​r​e​ ​r​e​p​r​e​s​e​n​t​e​d​ ​b​y​ ​t​w​o​ ​h​a​l​f​-​c​i​r​c​l​e​s​ ​o​r​ ​t​w​o​ ​h​a​l​f​-​s​q​u​a​r​e​s​,​ ​f​o​r​m​i​n​g​ ​a​ ​m​u​s​h​r​o​o​m​-​s​h​a​p​e​d​ ​s​y​m​b​o​l​.
+			 */
+			Mushrooms: string
 		}
 		LongDescriptions: {
 			Choropleth: string
@@ -3031,6 +3049,10 @@ export type TranslationFunctions = {
 			 */
 			Links: () => LocalizedString
 			/**
+			 * Mushrooms
+			 */
+			Mushrooms: () => LocalizedString
+			/**
 			 * No portrayal for the selected layer - Please verify the typing of the fields or select another layer
 			 */
 			NoPortrayal: () => LocalizedString
@@ -3471,6 +3493,16 @@ export type TranslationFunctions = {
 			 */
 			Selection: () => LocalizedString
 		}
+		MushroomsOptions: {
+			/**
+			 * Properties of the upper part
+			 */
+			TopProperties: () => LocalizedString
+			/**
+			 * Properties of the lower part
+			 */
+			BottomProperties: () => LocalizedString
+		}
 	}
 	ExportSection: {
 		/**
@@ -3752,6 +3784,10 @@ export type TranslationFunctions = {
 			 * A links map is a thematic map in which links are drawn between points or areas, optionally with a width in proportion to the value of a variable.
 			 */
 			Links: () => LocalizedString
+			/**
+			 * A mushrooms map is a thematic map in which the values of two variables are represented by two half-circles or two half-squares, forming a mushroom-shaped symbol.
+			 */
+			Mushrooms: () => LocalizedString
 		}
 		LongDescriptions: {
 			Choropleth: () => LocalizedString

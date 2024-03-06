@@ -44,6 +44,7 @@ import graticuleRenderer from './MapRenderer/GraticuleRenderer.tsx';
 import smoothedMapRenderer from './MapRenderer/SmoothedMapRenderer.tsx';
 import gridRenderer from './MapRenderer/GridRenderer.tsx';
 import linksRenderer from './MapRenderer/LinksMapRenderer.tsx';
+import mushroomRenderer from './MapRenderer/MushroomsMapRenderer.tsx';
 
 // - for rendering the layout features
 import FreeDrawingRenderer from './LayoutFeatureRenderer/FreeDrawingRenderer.tsx';
@@ -68,23 +69,24 @@ import legendLabels from './LegendRenderer/LabelsLegendRenderer.tsx';
 
 // Types and enums
 import {
-  FreeDrawing,
   type IZoomable,
-  LayoutFeatureType,
-  Rectangle,
-  ScaleBar,
+  type ID3Element,
+  type LayerDescription,
   type LayerDescriptionCategoricalChoropleth,
   type LayerDescriptionChoropleth,
   type LayerDescriptionDiscontinuity,
   type LayerDescriptionGriddedLayer,
   type LayerDescriptionLabels,
   type LayerDescriptionLinks,
+  type LayerDescriptionMushroomLayer,
   type LayerDescriptionProportionalSymbols,
   type LayerDescriptionSmoothedLayer,
-  type ID3Element,
-  LayerDescription,
-  Text,
-  Line,
+  LayoutFeatureType,
+  type FreeDrawing,
+  type Line,
+  type Rectangle,
+  type ScaleBar,
+  type Text,
 } from '../global.d';
 
 // Styles
@@ -156,6 +158,8 @@ const dispatchMapRenderer = (layer: LayerDescription) => {
     return gridRenderer(layer as LayerDescriptionGriddedLayer);
   } else if (layer.renderer === 'links') {
     return linksRenderer(layer as LayerDescriptionLinks);
+  } else if (layer.renderer === 'mushrooms') {
+    return mushroomRenderer(layer as LayerDescriptionMushroomLayer);
   }
   return null;
 };

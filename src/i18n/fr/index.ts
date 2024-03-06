@@ -230,6 +230,7 @@ const fr = {
       Cartogram: 'Cartogramme',
       Grid: 'Carroyage',
       Links: 'Liens',
+      Mushrooms: 'Champignons',
       NoPortrayal: 'Aucune représentation pour la couche choisie - Veuillez vérifier le types des champs de la couche ou sélectionner une autre couche',
     },
     OpenModal: 'Ouvrir la fenêtre de paramétrage de la représentation',
@@ -356,6 +357,10 @@ const fr = {
       NoMatch: 'Aucun couple origine / destination n\'a de correspondance avec des entités de la couche géographique',
       Selection: 'Sélection des liens à afficher',
     },
+    MushroomsOptions: {
+      TopProperties: 'Propriétés de la partie supérieure',
+      BottomProperties: 'Propriétés de la partie inférieure',
+    },
   },
   ExportSection: {
     Description: 'Sélection du type d\'export et du format de fichier à exporter.',
@@ -433,6 +438,7 @@ const fr = {
       Cartogram: 'Un cartogramme est une carte thématique dans laquelle les zones sont redimensionnées en fonction de la valeur d\'une variable statistique.',
       Grid: 'Un carroyage est une carte thématique dans laquelle les zones sont redimensionnées en fonction de la valeur d\'une variable statistique.',
       Links: 'Une carte de lien permet de tracer des liens entre des points ou des zones, optionnellement avec une largeur proportionnelle à un phénomène.',
+      Mushrooms: 'Une carte en champignon est une carte thématique dans laquelle les valeurs de deux variables sont représentées par deux demi-cercles ou deux demi-carrés, formant un symbole ressemblant à un champignon.',
     },
     LongDescriptions: {
       Choropleth: '',

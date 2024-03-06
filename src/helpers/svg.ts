@@ -58,6 +58,20 @@ export const linkPath = (
   }
 };
 
+export const semiCirclePath = (
+  radius: number,
+  cx: number,
+  cy: number,
+  position: 'top' | 'bottom',
+): string => {
+  const startX = cx - radius;
+  const startY = cy;
+  const endX = cx + radius;
+  const endY = cy;
+  const sweepFlag = position === 'top' ? 1 : 0;
+  return `M ${startX} ${startY} A ${radius} ${radius} 0 0 ${sweepFlag} ${endX} ${endY} L ${startX} ${startY}`;
+};
+
 const simpleRedrawRenderers = new Set(
   [
     'default',
@@ -117,6 +131,25 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
         const size = +r.getAttribute('width')!;
         r.setAttribute('x', `${projectedCoords[0] - size / 2}`);
         r.setAttribute('y', `${projectedCoords[1] - size / 2}`);
+      });
+    } else if (typePortrayal === 'mushrooms') {
+      const pos = ['top', 'bottom'];
+      // Redraw the symbols (circles)
+      g.querySelectorAll('g').forEach((gg) => {
+        // eslint-disable-next-line no-underscore-dangle
+        const projectedCoords = globalStore.projection(gg.__data__.geometry.coordinates);
+        gg.querySelectorAll('path').forEach((p, i) => {
+          const sizeValue = p.getAttribute('mgt:size-value')!;
+          p.setAttribute(
+            'd',
+            semiCirclePath(
+              +sizeValue,
+              projectedCoords[0],
+              projectedCoords[1],
+              pos[i] as 'top' | 'bottom',
+            ),
+          );
+        });
       });
     } else if (typePortrayal === 'labels') {
       g.querySelectorAll('text').forEach((t) => {

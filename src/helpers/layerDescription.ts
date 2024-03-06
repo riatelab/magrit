@@ -17,24 +17,24 @@ function layerAvailableVariables(layerId: string) {
 
   if (!layer || !layer.fields) {
     return {
-      hasCategorical: false,
-      hasStock: false,
-      hasRatio: false,
-      hasIdentifier: false,
+      nCategorical: 0,
+      nStock: 0,
+      nRatio: 0,
+      nIdentifier: 0,
     };
   }
 
-  const hasCategorical = layer.fields.some((f) => f.type === 'categorical');
-  const hasStock = layer.fields.some((f) => f.type === 'stock');
-  const hasRatio = layer.fields.some((f) => f.type === 'ratio');
-  const hasIdentifier = layer.fields.some((f) => f.type === 'identifier');
+  const nCategorical = layer.fields.filter((f) => f.type === 'categorical').length;
+  const nStock = layer.fields.filter((f) => f.type === 'stock').length;
+  const nRatio = layer.fields.filter((f) => f.type === 'ratio').length;
+  const nIdentifier = layer.fields.filter((f) => f.type === 'identifier').length;
   // const hasUnknown = layer.fields.some((f) => f.type === 'unknown');
 
   return {
-    hasCategorical,
-    hasStock,
-    hasRatio,
-    hasIdentifier,
+    nCategorical,
+    nStock,
+    nRatio,
+    nIdentifier,
     // hasUnknown,
   };
 }

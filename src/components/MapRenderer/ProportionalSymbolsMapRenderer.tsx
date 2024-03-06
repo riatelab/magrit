@@ -2,7 +2,8 @@
 import {
   createMemo,
   For,
-  JSX, onMount,
+  JSX,
+  onMount,
 } from 'solid-js';
 
 // Helpers
@@ -46,7 +47,7 @@ export default function proportionalSymbolsRenderer(
   });
 
   return <g
-    ref={refElement}
+    ref={refElement!}
     id={layerDescription.id}
     class="layer proportionalSymbols"
     visibility={layerDescription.visible ? undefined : 'hidden'}
