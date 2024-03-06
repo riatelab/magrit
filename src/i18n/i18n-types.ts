@@ -1269,11 +1269,11 @@ type RootTranslation = {
 		}
 		MushroomsOptions: {
 			/**
-			 * P​r​o​p​e​r​t​i​e​s​ ​o​f​ ​t​h​e​ ​u​p​p​e​r​ ​p​a​r​t
+			 * P​r​o​p​e​r​t​i​e​s​ ​o​f​ ​t​h​e​ ​u​p​p​e​r​ ​p​a​r​t​:
 			 */
 			TopProperties: string
 			/**
-			 * P​r​o​p​e​r​t​i​e​s​ ​o​f​ ​t​h​e​ ​l​o​w​e​r​ ​p​a​r​t
+			 * P​r​o​p​e​r​t​i​e​s​ ​o​f​ ​t​h​e​ ​l​o​w​e​r​ ​p​a​r​t​:
 			 */
 			BottomProperties: string
 		}
@@ -3495,11 +3495,11 @@ export type TranslationFunctions = {
 		}
 		MushroomsOptions: {
 			/**
-			 * Properties of the upper part
+			 * Properties of the upper part:
 			 */
 			TopProperties: () => LocalizedString
 			/**
-			 * Properties of the lower part
+			 * Properties of the lower part:
 			 */
 			BottomProperties: () => LocalizedString
 		}

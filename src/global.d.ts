@@ -83,6 +83,7 @@ type LayerDescription = {
     | GraticuleParameters
     | SmoothedLayerParameters
     | LinksParameters
+    | MushroomsParameters
     // | DefaultRendererParameters
   ),
   // Parameters of the legend associated to the layer
@@ -701,6 +702,11 @@ interface WaffleLegendParameters extends LegendParametersBase {
 
 interface MushroomsLegendParameters extends LegendParametersBase {
   type: LegendType.mushrooms,
+  // Values of the symbols in the legend, for both top and bottom
+  // part of the mushroom / of the legend
+  values: { top: number[], bottom: number[] },
+  // The text properties of the labels
+  labels: LegendTextElement,
 }
 
 export type LegendParameters = (
@@ -709,6 +715,7 @@ export type LegendParameters = (
   | LabelsLegendParameters
   | DiscontinuityLegendParameters
   | WaffleLegendParameters
+  | MushroomsLegendParameters
 );
 
 export enum NumberFormatting {

@@ -66,6 +66,7 @@ import {
 } from './MapRenderer/CategoricalChoroplethMapRenderer.tsx';
 import legendCategoricalChoropleth from './LegendRenderer/CategoricalChoroplethLegend.tsx';
 import legendLabels from './LegendRenderer/LabelsLegendRenderer.tsx';
+import legendMushrooms from './LegendRenderer/MushroomsLegendRenderer.tsx';
 
 // Types and enums
 import {
@@ -123,6 +124,9 @@ const dispatchLegendRenderer = (layer: LayerDescription) => {
   }
   if (layer.renderer === 'grid') {
     return legendChoropleth(layer as LayerDescriptionGriddedLayer);
+  }
+  if (layer.renderer === 'mushrooms') {
+    return legendMushrooms(layer as LayerDescriptionMushroomLayer);
   }
   return null;
 };

@@ -358,8 +358,8 @@ const fr = {
       Selection: 'Sélection des liens à afficher',
     },
     MushroomsOptions: {
-      TopProperties: 'Propriétés de la partie supérieure',
-      BottomProperties: 'Propriétés de la partie inférieure',
+      TopProperties: 'Propriétés de la partie supérieure :',
+      BottomProperties: 'Propriétés de la partie inférieure :',
     },
   },
   ExportSection: {

@@ -654,7 +654,7 @@ function verticalCircleLegend(
   });
 
   return <g
-    ref={refElement}
+    ref={refElement!}
     class="legend proportionalSymbols"
     for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
@@ -794,7 +794,7 @@ function horizontalCircleLegend(
   });
 
   return <g
-    ref={refElement}
+    ref={refElement!}
     class="legend proportionalSymbols"
     for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}

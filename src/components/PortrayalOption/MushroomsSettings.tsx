@@ -15,7 +15,7 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { randomColorFromCategoricalPalette } from '../../helpers/color';
 import { findSuitableName, isNumber } from '../../helpers/common';
-import { coordsPointOnFeature } from '../../helpers/geo';
+import { computeCandidateValuesForSymbolsLegend, coordsPointOnFeature, PropSizer } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
 import { max, min } from '../../helpers/math';
 
@@ -28,6 +28,7 @@ import InputResultName from './InputResultName.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Stores
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { setLoading } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
@@ -41,7 +42,10 @@ import {
   type GeoJSONFeatureCollection,
   type HalfProportionalMarkParameters,
   type LayerDescriptionMushroomLayer,
+  type LegendTextElement,
+  type MushroomsLegendParameters,
   type MushroomsParameters,
+  LegendType,
   ProportionalSymbolsSymbolType,
   RepresentationType,
 } from '../../global.d';
@@ -51,6 +55,8 @@ function onClickValidate(
   referenceLayerId: string,
   top: HalfProportionalMarkParameters,
   bottom: HalfProportionalMarkParameters,
+  extentTop: [number, number],
+  extentBottom: [number, number],
   newLayerName: string,
 ) {
   const referenceLayerDescription = layersDescriptionStore.layers
@@ -97,6 +103,31 @@ function onClickValidate(
     feature.geometry.originalCoordinates = feature.geometry.coordinates;
   });
 
+  const propSizeTop = new PropSizer(
+    params.top.referenceValue,
+    params.top.referenceSize,
+    params.top.symbolType,
+  );
+  const propSizeBottom = new PropSizer(
+    params.bottom.referenceValue,
+    params.bottom.referenceSize,
+    params.bottom.symbolType,
+  );
+
+  const legendValuesTop = computeCandidateValuesForSymbolsLegend(
+    extentTop[0],
+    extentTop[1],
+    propSizeTop.scale,
+    propSizeTop.getValue,
+  );
+
+  const legendValuesBottom = computeCandidateValuesForSymbolsLegend(
+    extentBottom[0],
+    extentBottom[1],
+    propSizeBottom.scale,
+    propSizeBottom.getValue,
+  );
+
   const newLayerDescription = {
     id: generateIdLayer(),
     name: newLayerName,
@@ -113,10 +144,39 @@ function onClickValidate(
     blurFilter: false,
     shapeRendering: 'auto',
     rendererParameters: params,
-    legend: undefined,
+    legend: {
+      // Legend common part
+      title: {
+        text: 'Mushroom',
+        ...applicationSettingsStore.defaultLegendSettings.title,
+      } as LegendTextElement,
+      subtitle: {
+        text: 'This is a subtitle',
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      } as LegendTextElement,
+      note: {
+        text: 'This is a bottom note',
+        ...applicationSettingsStore.defaultLegendSettings.note,
+      } as LegendTextElement,
+      position: [10, 10],
+      visible: true,
+      roundDecimals: 0,
+      backgroundRect: {
+        visible: false,
+      },
+      // Part specific to proportional symbols
+      type: LegendType.mushrooms,
+      layout: 'stacked',
+      values: {
+        top: legendValuesTop,
+        bottom: legendValuesBottom,
+      },
+      spacing: 5,
+      labels: {
+        ...applicationSettingsStore.defaultLegendSettings.labels,
+      } as LegendTextElement,
+    } as MushroomsLegendParameters,
   } as LayerDescriptionMushroomLayer;
-
-  console.log(params);
 
   setLayersDescriptionStore(
     produce(
@@ -245,6 +305,8 @@ export default function MushroomsSettings(
           referenceValue: refValueBottom(),
           color: colorBottom(),
         } as HalfProportionalMarkParameters,
+        extentTop(),
+        extentBottom(),
         layerName,
       );
 

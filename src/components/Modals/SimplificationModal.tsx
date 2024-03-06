@@ -59,7 +59,6 @@ interface SimplificationInfo {
 const getSimplificationInfo = async (
   topo: any,
   layerName: string,
-  checkIntersections: boolean,
 ): Promise<Partial<SimplificationInfo>> => {
   const topoLayer = topo.objects[layerName];
   const geoLayer = topojson.feature(topo, topoLayer) as GeoJSONFeatureCollection;
@@ -82,17 +81,11 @@ const getSimplificationInfo = async (
   const features = geoLayer.features.filter((f) => f.geometry);
   console.timeEnd('clean, filter and count points');
 
-  console.time('check for intersections');
-  const selfIntersections = checkIntersections
-    ? findIntersections(topo, layerName)
-    : null;
-  console.timeEnd('check for intersections');
-
   return {
     polygons: nbGeometries,
     edges: 0,
     vertices,
-    selfIntersections,
+    selfIntersections: null,
     features,
   };
 };
@@ -342,6 +335,22 @@ export default function SimplificationModal(
         const tolerance = (1 - simplificationFactor()) / 2;
         simplified = simplifyTopojson(topo, tolerance);
       }
+
+      // Also update the stats
+      const s = await Promise.all(
+        layerNames.map(async (layerName, i) => {
+          const simplificationInfo = await getSimplificationInfo(
+            simplified,
+            layerName,
+          );
+          return {
+            name: layerName,
+            color: colors[i % colors.length],
+            ...simplificationInfo,
+          } as SimplificationInfo;
+        }),
+      );
+
       // We update the meshes
       layerNames.forEach((layerName, i) => {
         meshes[layerName] = topojson.mesh(
@@ -352,22 +361,6 @@ export default function SimplificationModal(
 
       // And redraw on the canvas
       draw();
-
-      // Also update the stats
-      const s = await Promise.all(
-        layerNames.map(async (layerName, i) => {
-          const simplificationInfo = await getSimplificationInfo(
-            simplified,
-            layerName,
-            checkIntersections(),
-          );
-          return {
-            name: layerName,
-            color: colors[i % colors.length],
-            ...simplificationInfo,
-          } as SimplificationInfo;
-        }),
-      );
 
       // Also draw self intersections as a red dot on the canvas
       s.forEach((si) => {

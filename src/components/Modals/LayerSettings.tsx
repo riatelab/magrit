@@ -35,18 +35,19 @@ import { setClassificationPanelStore } from '../../store/ClassificationPanelStor
 
 // Types / Interfaces
 import {
+  type CategoricalChoroplethParameters,
+  type ClassificationParameters,
+  type GriddedLayerParameters,
+  type LabelsParameters,
   type LayerDescription,
   type LayerDescriptionLabels,
-  type ProportionalSymbolsParameters,
-  type LabelsParameters,
-  type ClassificationParameters,
-  type SmoothedLayerParameters,
-  ProportionalSymbolsSymbolType,
-  type CategoricalChoroplethParameters,
-  type GriddedLayerParameters,
   type LinksParameters,
+  type MushroomsParameters,
+  type ProportionalSymbolsParameters,
+  type SmoothedLayerParameters,
   LinkCurvature,
   LinkHeadType,
+  ProportionalSymbolsSymbolType,
 } from '../../global.d';
 
 // Styles
@@ -357,7 +358,7 @@ function makeSettingsDefaultPoint(
       max={10}
       step={0.1}
     />
-    <Show when={ props.renderer !== 'proportionalSymbols' }>
+    <Show when={ props.renderer !== 'proportionalSymbols' && props.renderer !== 'mushrooms' }>
       <InputFieldNumber
         label={ LL().LayerSettings.PointRadius() }
         value={ props.pointRadius! }
@@ -367,7 +368,57 @@ function makeSettingsDefaultPoint(
         step={1}
       />
     </Show>
-    <Show when={ props.renderer === 'proportionalSymbols' }>
+    <Show when={props.renderer === 'mushrooms'}>
+      <div class="mt-4 mb-5 has-text-weight-bold">
+        {LL().PortrayalSection.MushroomsOptions.TopProperties()}
+      </div>
+      <InputFieldNumber
+        label={LL().PortrayalSection.ProportionalSymbolsOptions.ReferenceSize()}
+        value={(props.rendererParameters as MushroomsParameters).top.referenceSize}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'top', 'referenceSize'], v)}
+        min={1}
+        max={200}
+        step={0.1}
+      />
+      <InputFieldNumber
+        label={LL().PortrayalSection.ProportionalSymbolsOptions.OnValue()}
+        value={(props.rendererParameters as MushroomsParameters).top.referenceValue}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'top', 'referenceValue'], v)}
+        min={1}
+        max={99999999999}
+        step={0.1}
+      />
+      <InputFieldColor
+        label={LL().LayerSettings.FillColor()}
+        value={(props.rendererParameters as MushroomsParameters).top.color as string}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'top', 'color'], v)}
+      />
+      <div class="mt-4 mb-5 has-text-weight-bold">
+        {LL().PortrayalSection.MushroomsOptions.BottomProperties()}
+      </div>
+      <InputFieldNumber
+        label={LL().PortrayalSection.ProportionalSymbolsOptions.ReferenceSize()}
+        value={(props.rendererParameters as MushroomsParameters).bottom.referenceSize}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'referenceSize'], v)}
+        min={1}
+        max={200}
+        step={0.1}
+      />
+      <InputFieldNumber
+        label={LL().PortrayalSection.ProportionalSymbolsOptions.OnValue()}
+        value={(props.rendererParameters as MushroomsParameters).bottom.referenceValue}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'referenceValue'], v)}
+        min={1}
+        max={99999999999}
+        step={0.1}
+      />
+      <InputFieldColor
+        label={LL().LayerSettings.FillColor()}
+        value={(props.rendererParameters as MushroomsParameters).bottom.color as string}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'color'], v)}
+      />
+    </Show>
+    <Show when={props.renderer === 'proportionalSymbols'}>
       <InputFieldCheckbox
         label={ LL().PortrayalSection.ProportionalSymbolsOptions.AvoidOverlapping() }
         checked={ (props.rendererParameters as ProportionalSymbolsParameters).avoidOverlapping }
