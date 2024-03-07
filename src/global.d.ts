@@ -471,7 +471,7 @@ interface Filter {
   // The name of the variable to filter
   variable: string,
   // The operator to use for the filter
-  operator: '==' | '!=' | '<' | '<=' | '>' | '>=',
+  operator: '==' | '!=' | '<' | '<=' | '>' | '>=' | 'in',
   // The value to compare with
   value: string | number,
 }

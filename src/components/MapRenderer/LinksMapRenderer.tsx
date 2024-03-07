@@ -19,7 +19,6 @@ import bindData from '../../directives/bind-data';
 
 // Types / Interfaces / Enums
 import {
-  type GeoJSONFeature,
   type LayerDescriptionLinks,
   LinkCurvature,
   type LinksParameters,
@@ -38,6 +37,11 @@ export default function linksRenderer(
   const rendererParameters = createMemo(
     () => layerDescription.rendererParameters as LinksParameters,
   );
+
+  const filteredFeatures = createMemo(() => applyFilters(
+    layerDescription.data.features,
+    layerDescription.rendererParameters.filters,
+  ));
 
   if (rendererParameters().proportional) {
     const propSize = createMemo(() => new PropSizer(
@@ -61,9 +65,7 @@ export default function linksRenderer(
       mgt:portrayal-type={layerDescription.renderer}
       mgt:link-curvature={rendererParameters().curvature}
     >
-      <For each={
-        applyFilters(layerDescription.data.features, layerDescription.rendererParameters.filters)
-      }>
+      <For each={filteredFeatures()}>
         {
           (feature) => <path
             d={

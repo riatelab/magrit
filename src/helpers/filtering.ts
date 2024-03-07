@@ -26,6 +26,10 @@ function applyFilters(
         return value > filter.value;
       case '>=':
         return value >= filter.value;
+      case 'in':
+        // eslint-disable-next-line no-case-declarations
+        const array = JSON.parse(filter.value as string);
+        return array.includes(value);
       default:
         return false;
     }

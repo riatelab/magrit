@@ -101,8 +101,9 @@ const onClickTrashLayer = (id: string, LL: Accessor<TranslationFunctions>) => {
 const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
   console.log('click settings on item ', id);
   // Create a new modal window with the settings of the layer
-  const layerDescription = layersDescriptionStore.layers.find((l) => l.id === id);
-  const initialLayerDescription = { ...layerDescription };
+  const layerDescription = layersDescriptionStore.layers.find((l) => l.id === id)!;
+  const initialLayerDescription = JSON.parse(JSON.stringify(layerDescription));
+
   setModalStore({
     show: true,
     content: () => <LayerSettings id={ id } LL={ LL } />,

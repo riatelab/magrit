@@ -1,9 +1,12 @@
 import {
+  createEffect,
   createSignal,
   For,
   type JSX,
+  on,
   onMount,
 } from 'solid-js';
+import { produce } from 'solid-js/store';
 
 // Imports from other packages
 import * as Plot from '@observablehq/plot';
@@ -18,14 +21,21 @@ import { Mmin } from '../../helpers/math';
 import InputFieldMultiSelect from '../Inputs/InputMultiSelect.tsx';
 
 // Stores
-import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+import {
+  layersDescriptionStore,
+  LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../../store/LayersDescriptionStore';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import { Filter, LayerDescriptionLinks } from '../../global';
 
 interface LinksSelectionProps {
   origins: string[];
   destinations: string[];
   intensity: number[];
   distance: number[];
+  existingFilters?: Filter[];
+  setFiltersFunction: (filters: Filter[]) => void;
 }
 
 interface BrushableHistogramProps {
@@ -36,6 +46,8 @@ interface BrushableHistogramProps {
 
 function BrushableHistogram(props: BrushableHistogramProps): JSX.Element {
   let containerNode: HTMLDivElement;
+  let brush: d3.BrushBehavior<SVGSVGElement> | undefined;
+  let selectedRange;
 
   const chart = Plot.plot({
     height: 200,
@@ -59,15 +71,16 @@ function BrushableHistogram(props: BrushableHistogramProps): JSX.Element {
     ],
   });
 
-  const xScale = chart.scale('x');
-  const yScale = chart.scale('y');
+  const xScale = chart.scale('x')!;
+  const yScale = chart.scale('y')!;
 
   onMount(() => {
-    const brush = d3.brushX()
+    brush = d3.brushX()
+      .extent([[xScale.range[0], yScale.range[1]], [xScale.range[1], yScale.range[0]]])
       .on('end', (event) => {
         if (event.selection) {
           // There is a selection
-          const selectedRange = [
+          selectedRange = [
             xScale.invert(event.selection[0]),
             xScale.invert(event.selection[1]),
           ];
@@ -77,16 +90,45 @@ function BrushableHistogram(props: BrushableHistogramProps): JSX.Element {
           props.onBrush(null);
         }
       });
+    // Add the brush to the chart
     const svg = d3.select(containerNode).select('svg');
-    svg.call(
-      brush.extent([[xScale.range[0], yScale.range[1]], [xScale.range[1], yScale.range[0]]]),
-    );
+    svg.call(brush);
+
+    // Set the initial selection (existing selection or full range)
+    if (props.selection) {
+      svg.call(brush.move, [xScale.apply(props.selection[0]), xScale.apply(props.selection[1])]);
+    } else {
+      const initialSelection = [xScale.invert(xScale.range[0]), xScale.invert(xScale.range[1])];
+      svg.call(brush.move, initialSelection);
+      props.onBrush(initialSelection);
+    }
+
+    // Style the chart (currentColor is the color of the parent element,
+    // so it works for light/dark mode)
     svg.select('[aria-label="y-axis tick label"]').attr('fill', 'currentColor');
     svg.select('[aria-label="x-axis tick label"]').attr('fill', 'currentColor');
     svg.select('[aria-label="rect"]').attr('fill', 'steelblue');
-
-    console.log(brush, svg);
   });
+
+  createEffect(
+    on(
+      () => props.selection,
+      () => {
+        if (
+          props.selection
+          && selectedRange
+          && (props.selection[0] !== selectedRange[0]
+            || props.selection[1] !== selectedRange[1])
+        ) {
+          // Move the brush to the selected range
+          const x0 = xScale.apply(props.selection[0]);
+          const x1 = xScale.apply(props.selection[1]);
+          const svg = d3.select(containerNode).select('svg');
+          svg.call(brush.move, [x0, x1]);
+        }
+      },
+    ),
+  );
 
   return <div ref={containerNode!}>{ chart }</div>;
 }
@@ -105,18 +147,69 @@ function BrushableHistogram(props: BrushableHistogramProps): JSX.Element {
  */
 function LinksSelection(props: LinksSelectionProps): JSX.Element {
   const { LL } = useI18nContext();
+
+  const initialValueOrigins = props.existingFilters
+    ? JSON.parse(props.existingFilters.find((f) => f.variable === 'Origin')?.value || '[]')
+    : [];
+  const initialValueDestinations = props.existingFilters
+    ? JSON.parse(props.existingFilters.find((f) => f.variable === 'Destination')?.value || '[]')
+    : [];
+  const initialValueIntensity = props.existingFilters
+    ? props.existingFilters
+      .filter((f) => f.variable === 'Intensity')
+      .map((f) => +f.value) as [number, number]
+    : null;
+
   const [
     selectedOrigins,
     setSelectedOrigins,
-  ] = createSignal<string[]>([]);
+  ] = createSignal<string[]>(initialValueOrigins);
   const [
     selectedDestinations,
     setSelectedDestinations,
-  ] = createSignal<string[]>([]);
+  ] = createSignal<string[]>(initialValueDestinations);
   const [
     currentSelectionIntensity,
     setCurrentSelectionIntensity,
-  ] = createSignal<[number, number] | null>(null);
+  ] = createSignal<[number, number] | null>(initialValueIntensity);
+
+  // When the selection changes, we update the filters
+  createEffect(
+    on(
+      () => [selectedOrigins(), selectedDestinations(), currentSelectionIntensity()],
+      () => {
+        // Create the corresponding filters and send them to the parent component
+        const filters: Filter[] = [];
+        if (selectedOrigins().length > 0) {
+          filters.push({
+            variable: 'Origin',
+            operator: 'in',
+            value: JSON.stringify(selectedOrigins()),
+          });
+        }
+        if (selectedDestinations().length > 0) {
+          filters.push({
+            variable: 'Destination',
+            operator: 'in',
+            value: JSON.stringify(selectedDestinations()),
+          });
+        }
+        if (currentSelectionIntensity()) {
+          filters.push({
+            variable: 'Intensity',
+            operator: '>=',
+            value: currentSelectionIntensity()![0],
+          });
+          filters.push({
+            variable: 'Intensity',
+            operator: '<=',
+            value: currentSelectionIntensity()![1],
+          });
+        }
+        props.setFiltersFunction(filters);
+      },
+    ),
+  );
 
   return <div class="links-selection">
     <div class="is-flex">
@@ -125,7 +218,6 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
           label={ LL().PortrayalSection.LinksOptions.OriginId() }
           onChange={(values) => {
             setSelectedOrigins(values);
-            console.log(selectedOrigins());
           }}
           size={Mmin(5, props.origins.length) as number}
           values={selectedOrigins()}
@@ -205,12 +297,26 @@ function LinksSelectionOnExistingLayer(props: { layerId: string }): JSX.Element 
   const intensities = layerDescription.data.features.map((f) => f.properties.Intensity) as number[];
   const distances = layerDescription.data.features.map((f) => f.properties.DistanceKm) as number[];
 
+  const setFiltersFunction = (filters: Filter[]) => {
+    setLayersDescriptionStore(
+      produce(
+        (draft: LayersDescriptionStoreType) => {
+          const layer = draft.layers.find((l) => l.id === props.layerId);
+          if (layer) {
+            (layer as LayerDescriptionLinks).rendererParameters.filters = filters;
+          }
+        },
+      ),
+    );
+  };
   return <>
     <LinksSelection
       origins={origins}
       destinations={destinations}
       intensity={intensities}
       distance={distances}
+      existingFilters={(layerDescription as LayerDescriptionLinks).rendererParameters.filters}
+      setFiltersFunction={setFiltersFunction}
     />
   </>;
 }

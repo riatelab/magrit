@@ -157,6 +157,7 @@ import {
   brush,
   brushX,
   brushY,
+  type BrushBehavior,
 } from 'd3-brush';
 
 import hatanoRaw from './projection-hatano';
@@ -447,4 +448,5 @@ export type {
   D3ZoomEvent,
   GeoProjection,
   GeoRawProjection,
+  BrushBehavior,
 };
