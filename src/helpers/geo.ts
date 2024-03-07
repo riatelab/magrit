@@ -198,6 +198,7 @@ export const computeCandidateValuesForSymbolsLegend = (
   maxValue: number,
   scaleFn: (arg0: number) => number,
   unScaleFn: (arg0: number) => number,
+  n: 3 | 4 | 5 = 4,
 ): number[] => {
   const minSize = scaleFn(minValue);
   const maxSize = scaleFn(maxValue);
@@ -205,10 +206,27 @@ export const computeCandidateValuesForSymbolsLegend = (
   const diffSize = Msqrt(maxSize) - Msqrt(minSize);
   const sizeInterm1 = Mpow(Msqrt(minSize) + diffSize * (2.5 / 5), 2);
   const sizeInterm2 = Mpow(Msqrt(minSize) + diffSize * (4 / 5), 2);
+  if (n === 3) {
+    return [
+      minValue,
+      round(unScaleFn((sizeInterm1 + sizeInterm2) / 2), r),
+      maxValue,
+    ];
+  }
+  if (n === 4) {
+    return [
+      minValue,
+      round(unScaleFn(sizeInterm1), r),
+      round(unScaleFn(sizeInterm2), r),
+      maxValue,
+    ];
+  }
+  const sizeInterm3 = Mpow(Msqrt(minSize) + diffSize * (3 / 5), 2);
   return [
     minValue,
     round(unScaleFn(sizeInterm1), r),
     round(unScaleFn(sizeInterm2), r),
+    round(unScaleFn(sizeInterm3), r),
     maxValue,
   ];
 };

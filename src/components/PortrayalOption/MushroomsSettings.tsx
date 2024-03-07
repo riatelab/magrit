@@ -119,6 +119,7 @@ function onClickValidate(
     extentTop[1],
     propSizeTop.scale,
     propSizeTop.getValue,
+    3,
   );
 
   const legendValuesBottom = computeCandidateValuesForSymbolsLegend(
@@ -126,6 +127,7 @@ function onClickValidate(
     extentBottom[1],
     propSizeBottom.scale,
     propSizeBottom.getValue,
+    3,
   );
 
   const newLayerDescription = {
@@ -164,16 +166,24 @@ function onClickValidate(
       backgroundRect: {
         visible: false,
       },
-      // Part specific to proportional symbols
+      // Part specific to mushrooms legends
       type: LegendType.mushrooms,
-      layout: 'stacked',
       values: {
         top: legendValuesTop,
         bottom: legendValuesBottom,
       },
-      spacing: 5,
       labels: {
         ...applicationSettingsStore.defaultLegendSettings.labels,
+      } as LegendTextElement,
+      topTitle: {
+        text: top.variable,
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+        fontColor: top.color,
+      } as LegendTextElement,
+      bottomTitle: {
+        text: bottom.variable,
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+        fontColor: bottom.color,
       } as LegendTextElement,
     } as MushroomsLegendParameters,
   } as LayerDescriptionMushroomLayer;

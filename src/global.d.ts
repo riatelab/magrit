@@ -707,6 +707,10 @@ interface MushroomsLegendParameters extends LegendParametersBase {
   values: { top: number[], bottom: number[] },
   // The text properties of the labels
   labels: LegendTextElement,
+  // The title for the top variable
+  topTitle: LegendTextElement,
+  // The title for the bottom variable
+  bottomTitle: LegendTextElement,
 }
 
 export type LegendParameters = (

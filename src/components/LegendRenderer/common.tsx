@@ -28,7 +28,8 @@ import type { TranslationFunctions } from '../../i18n/i18n-types';
 export function makeLegendText(
   props: LegendTextElement,
   position: [number, number],
-  role: 'title' | 'subtitle' | 'note',
+  role: 'title' | 'subtitle' | 'note' | 'top-title' | 'bottom-title',
+  otherProps?: Record<string, unknown>,
 ): JSX.Element {
   if (!props || !props.text) return <></>;
   return <g class={`legend-${role}`}>
@@ -41,6 +42,7 @@ export function makeLegendText(
       fill={props.fontColor}
       pointer-events={'none'}
       dominant-baseline="hanging"
+      {...otherProps}
     >
       <For each={props.text!.split('\\n')}>
         {(line, i) => <tspan

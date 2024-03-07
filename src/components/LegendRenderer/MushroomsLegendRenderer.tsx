@@ -55,9 +55,13 @@ export default function legendMushrooms(
     layer.rendererParameters.bottom.symbolType,
   ));
 
-  // TODO: compute the max radius instead of using the reference size
-  const maxRadiusTop = createMemo(() => layer.rendererParameters.top.referenceSize);
-  const maxRadiusBottom = createMemo(() => layer.rendererParameters.bottom.referenceSize);
+  const maxRadiusTop = createMemo(
+    () => propSizeTop().scale(layer.legend.values.top[layer.legend.values.top.length - 1]),
+  );
+  const maxRadiusBottom = createMemo(
+    () => propSizeBottom().scale(layer.legend.values.bottom[layer.legend.values.bottom.length - 1]),
+  );
+  const maxRadius = createMemo(() => Mmax(maxRadiusTop(), maxRadiusBottom()));
 
   const heightTitle = createMemo(
     () => getTextSize(
@@ -68,7 +72,7 @@ export default function legendMushrooms(
   );
 
   const heightTitleSubtitle = createMemo(() => {
-    if (!layer.legend?.subtitle || layer.legend?.subtitle.text) {
+    if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
       return heightTitle();
     }
     return heightTitle() + getTextSize(
@@ -78,11 +82,35 @@ export default function legendMushrooms(
     ).height + defaultSpacing;
   });
 
+  const sizeTopTitle = createMemo(() => {
+    if (!layer.legend.topTitle || !layer.legend.topTitle.text) {
+      return 0;
+    }
+    return getTextSize(
+      layer.legend.topTitle.text,
+      layer.legend.topTitle.fontSize,
+      layer.legend.topTitle.fontFamily,
+    ).height;
+  });
+
+  const sizeBottomTitle = createMemo(() => {
+    if (!layer.legend.bottomTitle || !layer.legend.bottomTitle.text) {
+      return 0;
+    }
+    return getTextSize(
+      layer.legend.bottomTitle.text,
+      layer.legend.bottomTitle.fontSize,
+      layer.legend.bottomTitle.fontFamily,
+    ).height;
+  });
+
   const positionNote = createMemo(() => (
     heightTitleSubtitle()
     + maxRadiusTop()
+    + sizeTopTitle()
+    + sizeBottomTitle()
     + maxRadiusBottom()
-    + defaultSpacing * 2
+    + defaultSpacing * 3
   ));
 
   onMount(() => {
@@ -125,38 +153,148 @@ export default function legendMushrooms(
         {
           (value) => {
             const symbolSize = propSizeTop().scale(value);
-            return <path
-              fill={layer.rendererParameters.top.color}
-              fill-opacity={layer.fillOpacity}
-              stroke={layer.strokeColor}
-              stroke-width={layer.strokeWidth}
-              d={semiCirclePath(
-                symbolSize,
-                maxRadiusTop(),
-                heightTitleSubtitle() + maxRadiusTop(),
-                'top',
-              )}
-            >
-            </path>;
+            return <>
+              <path
+                fill={layer.rendererParameters.top.color}
+                fill-opacity={layer.fillOpacity}
+                stroke={layer.strokeColor}
+                stroke-width={layer.strokeWidth}
+                d={semiCirclePath(
+                  symbolSize,
+                  maxRadius(),
+                  heightTitleSubtitle() + maxRadiusTop(),
+                  'top',
+                )}
+              >
+              </path>
+              <text
+                font-size={layer.legend.labels.fontSize}
+                font-family={layer.legend.labels.fontFamily}
+                font-style={layer.legend.labels.fontStyle}
+                font-weight={layer.legend.labels.fontWeight}
+                fill={layer.legend.labels.fontColor}
+                text-anchor="start"
+                dominant-baseline="middle"
+                style={{ 'user-select': 'none' }}
+                x={maxRadius() * 2 + defaultSpacing * 2}
+                y={heightTitleSubtitle() + maxRadiusTop() - symbolSize}
+              >{
+                round(value, layer.legend!.roundDecimals)
+                  .toLocaleString(
+                    applicationSettingsStore.userLocale,
+                    {
+                      minimumFractionDigits: precisionToMinimumFractionDigits(
+                        layer.legend!.roundDecimals,
+                      ),
+                    },
+                  )
+              }</text>
+              <line
+                stroke-width={0.8}
+                stroke-dasharray="2"
+                stroke="black"
+                x1={maxRadius()}
+                y1={heightTitleSubtitle() + maxRadiusTop() - symbolSize}
+                x2={maxRadius() * 2 + defaultSpacing * 2}
+                y2={heightTitleSubtitle() + maxRadiusTop() - symbolSize}
+              ></line>
+            </>;
           }
         }
       </For>
+      {
+        makeLegendText(
+          layer.legend.topTitle,
+          [maxRadius(), heightTitleSubtitle() + maxRadiusTop() + defaultSpacing],
+          'top-title',
+          { 'text-anchor': 'middle' },
+        )
+      }
+      {
+        makeLegendText(
+          layer.legend.bottomTitle,
+          [maxRadius(), heightTitleSubtitle() + maxRadiusTop() + defaultSpacing + sizeTopTitle()],
+          'bottom-title',
+          { 'text-anchor': 'middle' },
+        )
+      }
       <For each={layer.legend.values.bottom.toReversed()}>
         {
           (value) => {
             const symbolSize = propSizeBottom().scale(value);
-            return <path
-              fill={layer.rendererParameters.bottom.color}
-              fill-opacity={layer.fillOpacity}
-              stroke={layer.strokeColor}
-              stroke-width={layer.strokeWidth}
-              d={semiCirclePath(
-                symbolSize,
-                maxRadiusTop(),
-                heightTitleSubtitle() + maxRadiusTop(),
-                'bottom',
-              )}
-            ></path>;
+            return <>
+              <path
+                fill={layer.rendererParameters.bottom.color}
+                fill-opacity={layer.fillOpacity}
+                stroke={layer.strokeColor}
+                stroke-width={layer.strokeWidth}
+                d={semiCirclePath(
+                  symbolSize,
+                  maxRadius(),
+                  (heightTitleSubtitle()
+                    + maxRadiusTop()
+                    + sizeTopTitle()
+                    + sizeBottomTitle()
+                    + defaultSpacing),
+                  'bottom',
+                )}
+              ></path>
+              <text
+                font-size={layer.legend.labels.fontSize}
+                font-family={layer.legend.labels.fontFamily}
+                font-style={layer.legend.labels.fontStyle}
+                font-weight={layer.legend.labels.fontWeight}
+                fill={layer.legend.labels.fontColor}
+                text-anchor="start"
+                dominant-baseline="middle"
+                style={{ 'user-select': 'none' }}
+                x={maxRadius() * 2 + defaultSpacing * 2}
+                y={
+                  heightTitleSubtitle()
+                  + maxRadiusTop()
+                  + sizeTopTitle()
+                  + sizeBottomTitle()
+                  + defaultSpacing
+                  + maxRadiusBottom()
+                  - (maxRadiusBottom() - symbolSize)
+                }
+              >{
+                round(value, layer.legend!.roundDecimals)
+                  .toLocaleString(
+                    applicationSettingsStore.userLocale,
+                    {
+                      minimumFractionDigits: precisionToMinimumFractionDigits(
+                        layer.legend!.roundDecimals,
+                      ),
+                    },
+                  )
+              }</text>
+              <line
+                stroke-width={0.8}
+                stroke-dasharray="2"
+                stroke="black"
+                x1={maxRadius()}
+                y1={
+                  heightTitleSubtitle()
+                  + maxRadiusTop()
+                  + sizeTopTitle()
+                  + sizeBottomTitle()
+                  + defaultSpacing
+                  + maxRadiusBottom()
+                  - (maxRadiusBottom() - symbolSize)
+                }
+                x2={maxRadius() * 2 + defaultSpacing * 2}
+                y2={
+                  heightTitleSubtitle()
+                  + maxRadiusTop()
+                  + sizeTopTitle()
+                  + sizeBottomTitle()
+                  + defaultSpacing
+                  + maxRadiusBottom()
+                  - (maxRadiusBottom() - symbolSize)
+                }
+              ></line>
+            </>;
           }
         }
       </For>
