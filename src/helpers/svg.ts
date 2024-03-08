@@ -46,11 +46,12 @@ export const linkPath = (
       const distance = Math.sqrt(
         (pt2[0] - pt1[0]) ** 2 + (pt2[1] - pt1[1]) ** 2,
       );
-      // Compute the control point
+      // Compute the control point for the quadratic Bezier curve
       const controlPoint = [
-        bisector[0] + distance / 4,
-        bisector[1],
+        bisector[0] + ((distance) * (pt2[1] - pt1[1])) / distance,
+        bisector[1] + ((distance) * (pt1[0] - pt2[0])) / distance,
       ];
+
       return `M ${pt1[0]},${pt1[1]} Q ${controlPoint[0]},${controlPoint[1]} ${pt2[0]},${pt2[1]}`;
     }
     default:

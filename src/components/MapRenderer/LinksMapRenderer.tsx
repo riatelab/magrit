@@ -117,7 +117,7 @@ export default function linksRenderer(
     mgt:portrayal-type={layerDescription.renderer}
     mgt:link-curvature={rendererParameters().curvature}
   >
-    <For each={layerDescription.data.features}>
+    <For each={filteredFeatures()}>
       {
         (feature) => <path
           d={

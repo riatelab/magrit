@@ -89,16 +89,19 @@ function createSimpleLinksData(
 
     links.forEach((value, key) => {
       const [origin, destination] = key.split('_');
+      const ptOrigin = pts.get(origin);
+      const ptDest = pts.get(destination);
       linksData.features.push({
         type: 'Feature',
         properties: {
           Origin: origin,
           Destination: destination,
           Intensity: value,
+          DistanceKm: distance(ptOrigin, ptDest, { units: 'kilometers' }),
         },
         geometry: {
           type: 'LineString',
-          coordinates: [pts.get(origin), pts.get(destination)],
+          coordinates: [ptOrigin, ptDest],
         },
       } as GeoJSONFeature);
     });
@@ -120,6 +123,7 @@ function createSimpleLinksData(
             properties: {
               Origin: d[tableOriginVariable],
               Destination: d[tableDestinationVariable],
+              DistanceKm: distance(origin, destination, { units: 'kilometers' }),
             },
             geometry: {
               type: 'LineString',

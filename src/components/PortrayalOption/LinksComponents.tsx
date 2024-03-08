@@ -154,9 +154,14 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
   const initialValueDestinations = props.existingFilters
     ? JSON.parse(props.existingFilters.find((f) => f.variable === 'Destination')?.value || '[]')
     : [];
-  const initialValueIntensity = props.existingFilters
+  const initialValueIntensity = props.existingFilters && props.existingFilters.some((f) => f.variable === 'Intensity')
     ? props.existingFilters
       .filter((f) => f.variable === 'Intensity')
+      .map((f) => +f.value) as [number, number]
+    : null;
+  const initialValueDistance = props.existingFilters && props.existingFilters.some((f) => f.variable === 'DistanceKm')
+    ? props.existingFilters
+      .filter((f) => f.variable === 'DistanceKm')
       .map((f) => +f.value) as [number, number]
     : null;
 
@@ -172,11 +177,20 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
     currentSelectionIntensity,
     setCurrentSelectionIntensity,
   ] = createSignal<[number, number] | null>(initialValueIntensity);
+  const [
+    currentSelectionDistance,
+    setCurrentSelectionDistance,
+  ] = createSignal<[number, number] | null>(initialValueDistance);
 
   // When the selection changes, we update the filters
   createEffect(
     on(
-      () => [selectedOrigins(), selectedDestinations(), currentSelectionIntensity()],
+      () => [
+        selectedOrigins(),
+        selectedDestinations(),
+        currentSelectionIntensity(),
+        currentSelectionDistance(),
+      ],
       () => {
         // Create the corresponding filters and send them to the parent component
         const filters: Filter[] = [];
@@ -206,6 +220,18 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
             value: currentSelectionIntensity()![1],
           });
         }
+        if (currentSelectionDistance()) {
+          filters.push({
+            variable: 'DistanceKm',
+            operator: '>=',
+            value: currentSelectionDistance()![0],
+          });
+          filters.push({
+            variable: 'DistanceKm',
+            operator: '<=',
+            value: currentSelectionDistance()![1],
+          });
+        }
         props.setFiltersFunction(filters);
       },
     ),
@@ -215,7 +241,7 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
     <div class="is-flex">
       <div style={{ width: '33%' }}>
         <InputFieldMultiSelect
-          label={ LL().PortrayalSection.LinksOptions.OriginId() }
+          label={LL().PortrayalSection.LinksOptions.OriginId()}
           onChange={(values) => {
             setSelectedOrigins(values);
           }}
@@ -230,7 +256,7 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
       <div style={{ width: '33%' }}></div>
       <div style={{ width: '33%' }}>
         <InputFieldMultiSelect
-          label={ LL().PortrayalSection.LinksOptions.DestinationId() }
+          label={LL().PortrayalSection.LinksOptions.DestinationId()}
           onChange={(values) => {
             setSelectedDestinations(values);
           }}
@@ -275,6 +301,46 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
             value={currentSelectionIntensity() ? currentSelectionIntensity()[1] : ''}
             onChange={(v) => {
               setCurrentSelectionIntensity([currentSelectionIntensity()![0], v]);
+            }}
+            min={0}
+            max={1e12}
+            step={1}
+          />
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label class="label">Filtrage selon la valeur <i>DistanceKm</i></label>
+      <BrushableHistogram
+        values={props.distance}
+        onBrush={(range) => {
+          setCurrentSelectionDistance(range);
+        }}
+        selection={currentSelectionDistance()}
+      />
+      <div style={{
+        display: 'flex',
+        'justify-content': 'space-evenly',
+      }}>
+        <div style={{ width: '25%' }}>
+          <InputFieldNumber
+            label={'Min'}
+            value={currentSelectionDistance() ? currentSelectionDistance()[0] : ''}
+            onChange={(v) => {
+              setCurrentSelectionDistance([v, currentSelectionDistance()![1]]);
+            }}
+            min={0}
+            max={1e12}
+            step={1}
+          />
+        </div>
+        <div style={{ width: '25%' }}>
+          <InputFieldNumber
+            label={'Max'}
+            value={currentSelectionDistance() ? currentSelectionDistance()[1] : ''}
+            onChange={(v) => {
+              setCurrentSelectionDistance([currentSelectionDistance()![0], v]);
             }}
             min={0}
             max={1e12}
