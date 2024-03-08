@@ -11,7 +11,13 @@ import {
 import { FaSolidPlus } from 'solid-icons/fa';
 
 // Stores
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+import {
+  layersDescriptionStore,
+  // In this component we use the base version of the store to avoid pushing
+  // the changes to the undo/redo stack (because there is a
+  // cancel button in the LayerSettings modal)
+  setLayersDescriptionStoreBase,
+} from '../../store/LayersDescriptionStore';
 
 // Helpers
 import { webSafeFonts } from '../../helpers/font';
@@ -27,9 +33,12 @@ import type { TranslationFunctions } from '../../i18n/i18n-types';
 // Types / Interfaces / Enums
 import {
   type LayerDescription,
-  type LayerDescriptionChoropleth, LayerDescriptionDiscontinuity, LayerDescriptionLabels,
+  type LayerDescriptionChoropleth,
+  type LayerDescriptionDiscontinuity,
+  type LayerDescriptionLabels,
   type LayerDescriptionProportionalSymbols,
   LegendType,
+  RepresentationType,
 } from '../../global.d';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
@@ -59,10 +68,10 @@ const updateProps = (
       [lastProp]: value,
     },
   ];
-  setLayersDescriptionStore(...args);
+  setLayersDescriptionStoreBase(...args);
 };
 
-const debouncedUpdateProps = debounce(updateProps, 250);
+const debouncedUpdateProps = debounce(updateProps, 200);
 
 function TextOptionTable(
   props: { layer: LayerDescription, LL: Accessor<TranslationFunctions> },
@@ -419,6 +428,10 @@ function makeSettingsChoroplethLegend(
     setDisplayMoreOptions,
   ] = createSignal<boolean>(false);
 
+  const isChoroplethLegend = (
+    representationType: RepresentationType,
+  ) => ['choropleth', 'smoothed', 'grid'].includes(representationType);
+
   const hasNoData = layer.data.features.filter(
     (feature) => !isNumber(feature.properties[layer.rendererParameters!.variable]),
   ).length > 0;
@@ -510,7 +523,11 @@ function makeSettingsChoroplethLegend(
         />
       </div>
     </div>
-    <Show when={layer.renderer === 'choropleth' && layer.legend?.boxSpacing === 0 && layer.legend?.boxCornerRadius === 0}>
+    <Show when={
+      isChoroplethLegend(layer.renderer)
+      && layer.legend?.boxSpacing === 0
+      && layer.legend?.boxCornerRadius === 0
+    }>
       <div class="field">
         <label class="label">
           { 'Display tick between each box' }

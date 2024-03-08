@@ -17,17 +17,24 @@ import toast from 'solid-toast';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
+import { unproxify } from '../../helpers/common';
 
 // Stores
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+import {
+  layersDescriptionStore,
+  setLayersDescriptionStore,
+  setLayersDescriptionStoreBase,
+} from '../../store/LayersDescriptionStore';
 import { setModalStore } from '../../store/ModalStore';
 import { setNiceAlertStore } from '../../store/NiceAlertStore';
 import { setTableWindowStore } from '../../store/TableWindowStore';
 import { fitExtent, mapStore } from '../../store/MapStore';
+import { pushUndoStackStore } from '../../store/stateStackStore';
 
 // Other components / subcomponents
 import LayerSettings from '../Modals/LayerSettings.tsx';
 import JoinPanel from '../Modals/JoinModal.tsx';
+import FieldTypingModal from '../Modals/FieldTypingModal.tsx';
 
 // Types / Interfaces / Enums
 import type { LayerDescription, TableDescription } from '../../global';
@@ -35,7 +42,6 @@ import type { LayerDescription, TableDescription } from '../../global';
 // Styles
 import 'font-gis/css/font-gis.css';
 import '../../styles/LayerManagerItem.css';
-import FieldTypingModal from '../Modals/FieldTypingModal.tsx';
 
 const typeIcons: { polygon: string; linestring: string; raster: string; point: string } = {
   point: 'fg-point',
@@ -109,11 +115,26 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
     content: () => <LayerSettings id={ id } LL={ LL } />,
     title: LL().LayerSettings.LayerSettings(),
     confirmCallback: (): void => {
-      // Do nothing for now (because the layerDescription is updated directly in the modal)
+      // The properties of the layer was updated directly in the panel,
+      // skipping the undo/redo stack. So on confirm we
+      // push the whole previous state to the undo stack
+      // (in case the user wants to cancel the all the changes
+      // made in the panel after closing it)
+      // 0. Unproxify the whole layersDescriptionStore
+      const lds = unproxify(layersDescriptionStore);
+      // 1. Find the layer in the layersDescriptionStore
+      //    and replace its properties by the old one
+      lds.layers.forEach((l: LayerDescription) => {
+        if (l.id === id) {
+          Object.assign(l, initialLayerDescription);
+        }
+      });
+      // 2. Push the whole layersDescriptionStore to the undo stack
+      pushUndoStackStore('layersDescription', lds);
     },
     cancelCallback: (): void => {
       // Reset the layerDescription for this layer
-      setLayersDescriptionStore(
+      setLayersDescriptionStoreBase(
         'layers',
         (l: LayerDescription) => l.id === id,
         initialLayerDescription,
@@ -136,14 +157,17 @@ const onClickTyping = (id: string, type: 'table' | 'layer', LL: Accessor<Transla
 
 const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
   console.log('click legend on item ', id);
-  // TODO: we want to handle various cases, mostly as in Magrit v1:
+  // We want to handle various cases, mostly as in Magrit v1:
   //  - no legend for this kind of layer (the legend icon should not be displayed at all so
-  //    we shouldn't reach the present code in this case)
-  //  - legend available but not visible (we should toggle the visibility of the legend)
-  //  - legend available and visible (we should toggle the visibility of the legend)
+  //    we shouldn't reach the present code in this case) - OK
+  //  - legend available but not visible (we should toggle the visibility of the legend) - OK
+  //  - legend available and visible (we should toggle the visibility of the legend) - OK
+  //  - legend available but not visible because it is out of the visibility zone (after
+  //    the map was resized for example), so we should move it to the closest position within
+  //    the visibility zone - OK
   //  - no legend for now, but we can create one for the layer, such as for layer
   //    that use 'default' renderer (in this cas we should create it and add it
-  //    to the LayerDescription / to the map)
+  //    to the LayerDescription / to the map) - TODO
   const ld = layersDescriptionStore.layers.find((l) => l.id === id)!;
   if (ld.legend === undefined || ld.legend === null) {
     setNiceAlertStore({

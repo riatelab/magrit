@@ -9,9 +9,14 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Stores
 import { setContextMenuStore } from '../../store/ContextMenuStore';
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
-import { setModalStore } from '../../store/ModalStore';
+import {
+  layersDescriptionStore,
+  setLayersDescriptionStore,
+  setLayersDescriptionStoreBase,
+} from '../../store/LayersDescriptionStore';
 import { mapStore } from '../../store/MapStore';
+import { setModalStore } from '../../store/ModalStore';
+import { pushUndoStackStore } from '../../store/stateStackStore';
 
 // Helpers
 import { unproxify } from '../../helpers/common';
@@ -266,10 +271,26 @@ export function makeLegendSettingsModal(layerId: string, LL: Accessor<Translatio
     show: true,
     content: () => <LegendSettings layerId={layerId} LL={LL} />,
     title: LL().Legend.Modal.Title(),
-    confirmCallback: () => {}, // Do nothing on confirm
+    confirmCallback: () => {
+      // The legend was updated directly in the panel,
+      // skipping the undo/redo stack. So on confirm we
+      // push the whole previous state to the undo stack
+      // (in case the user wants to cancel the all the changes
+      // made in the panel after closing it)
+      // 0. Unproxify the whole layersDescriptionStore
+      const lds = unproxify(layersDescriptionStore);
+      // 1. Find the layer in the layersDescriptionStore
+      //    and replace the new legend with the previous one
+      const layer = lds.layers.find((l: LayerDescription) => l.id === layerId);
+      if (layer) {
+        layer.legend = legendProperties;
+      }
+      // 2. Push the whole layersDescriptionStore to the undo stack
+      pushUndoStackStore('layersDescription', lds);
+    },
     cancelCallback: () => {
       // Reset the legend of the layer on cancel
-      setLayersDescriptionStore(
+      setLayersDescriptionStoreBase(
         'layers',
         (l: LayerDescription) => l.id === layerId,
         { legend: legendProperties },

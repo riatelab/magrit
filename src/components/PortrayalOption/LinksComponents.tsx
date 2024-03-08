@@ -148,6 +148,7 @@ function BrushableHistogram(props: BrushableHistogramProps): JSX.Element {
 function LinksSelection(props: LinksSelectionProps): JSX.Element {
   const { LL } = useI18nContext();
 
+  /* eslint-disable solid/reactivity */
   const initialValueOrigins = props.existingFilters
     ? JSON.parse(props.existingFilters.find((f) => f.variable === 'Origin')?.value || '[]')
     : [];
@@ -164,6 +165,7 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
       .filter((f) => f.variable === 'DistanceKm')
       .map((f) => +f.value) as [number, number]
     : null;
+  /* eslint-enable solid/reactivity */
 
   const [
     selectedOrigins,

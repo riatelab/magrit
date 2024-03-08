@@ -29,7 +29,10 @@ import { LinksSelectionOnExistingLayer } from '../PortrayalOption/LinksComponent
 // Stores
 import {
   layersDescriptionStore,
-  setLayersDescriptionStore,
+  // In this component we use the base version of the store to avoid pushing
+  // the changes to the undo/redo stack (because there is a
+  // cancel button in the LayerSettings modal)
+  setLayersDescriptionStoreBase,
 } from '../../store/LayersDescriptionStore';
 import { setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 
@@ -69,9 +72,9 @@ const updateProp = (
         [lastProp]: value,
       },
     ];
-    setLayersDescriptionStore(...args);
+    setLayersDescriptionStoreBase(...args);
   } else {
-    setLayersDescriptionStore(
+    setLayersDescriptionStoreBase(
       'layers',
       (l: LayerDescription) => l.id === layerId,
       { [propOrProps]: value },
@@ -79,7 +82,7 @@ const updateProp = (
   }
 };
 
-const debouncedUpdateProp = debounce(updateProp, 250);
+const debouncedUpdateProp = debounce(updateProp, 200);
 
 function AestheticsSection(props: LayerDescription): JSX.Element {
   const { LL } = useI18nContext();
@@ -264,7 +267,7 @@ function makeSettingsDefaultPoint(
                 props.rendererParameters as ClassificationParameters).reversePalette,
               noDataColor: (props.rendererParameters as ClassificationParameters).noDataColor,
               onCancel: () => {
-                setLayersDescriptionStore(
+                setLayersDescriptionStoreBase(
                   'layers',
                   (l: LayerDescription) => l.id === props.id,
                   { rendererParameters: params },
@@ -272,7 +275,7 @@ function makeSettingsDefaultPoint(
               },
               onConfirm: (newParams) => {
                 console.log(newParams);
-                setLayersDescriptionStore(
+                setLayersDescriptionStoreBase(
                   'layers',
                   (l: LayerDescription) => l.id === props.id,
                   { rendererParameters: newParams },
@@ -423,7 +426,7 @@ function makeSettingsDefaultPoint(
         label={ LL().PortrayalSection.ProportionalSymbolsOptions.AvoidOverlapping() }
         checked={ (props.rendererParameters as ProportionalSymbolsParameters).avoidOverlapping }
         onChange={(checked) => {
-          setLayersDescriptionStore(
+          setLayersDescriptionStoreBase(
             'layers',
             (l: LayerDescription) => l.id === props.id,
             'rendererParameters',
@@ -491,7 +494,7 @@ function makeSettingsDefaultLine(
                 props.rendererParameters as ClassificationParameters).reversePalette,
               noDataColor: (props.rendererParameters as ClassificationParameters).noDataColor,
               onCancel: () => {
-                setLayersDescriptionStore(
+                setLayersDescriptionStoreBase(
                   'layers',
                   (l: LayerDescription) => l.id === props.id,
                   { rendererParameters: params },
@@ -499,7 +502,7 @@ function makeSettingsDefaultLine(
               },
               onConfirm: (newParams) => {
                 console.log(newParams);
-                setLayersDescriptionStore(
+                setLayersDescriptionStoreBase(
                   'layers',
                   (l: LayerDescription) => l.id === props.id,
                   { rendererParameters: newParams },
@@ -655,14 +658,14 @@ function makeSettingsDefaultPolygon(
                 props.rendererParameters as ClassificationParameters).reversePalette,
               noDataColor: (props.rendererParameters as ClassificationParameters).noDataColor,
               onCancel: () => {
-                setLayersDescriptionStore(
+                setLayersDescriptionStoreBase(
                   'layers',
                   (l: LayerDescription) => l.id === props.id,
                   { rendererParameters: params },
                 );
               },
               onConfirm: (newParams) => {
-                setLayersDescriptionStore(
+                setLayersDescriptionStoreBase(
                   'layers',
                   (l: LayerDescription) => l.id === props.id,
                   { rendererParameters: newParams },
