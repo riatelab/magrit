@@ -39,7 +39,7 @@ export default function LineRenderer(props: Line): JSX.Element {
       stroke-width={props.strokeWidth}
       stroke-dasharray={props.strokeDasharray}
       fill="none"
-      marker-end={props.arrow ? 'url(#arrow-head)' : undefined}
+      marker-end={props.arrow ? `url(#arrow-head-${props.strokeColor.replace('#', '')})` : undefined}
       d={`M ${props.points.map((p) => `${p[0]},${p[1]}`).join(' L ')}`}
     ></path>
   </g>;

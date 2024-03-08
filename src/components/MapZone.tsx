@@ -84,6 +84,7 @@ import {
   type LayerDescriptionSmoothedLayer,
   LayoutFeatureType,
   type FreeDrawing,
+  type LayoutFeature,
   type Line,
   type Rectangle,
   type ScaleBar,
@@ -101,6 +102,33 @@ const layoutFeaturesFns = {
   [LayoutFeatureType.Text]: TextRenderer,
   [LayoutFeatureType.NorthArrow]: NorthArrowRenderer,
   [LayoutFeatureType.Image]: ImageRenderer,
+};
+
+const gatherArrowColors = (
+  layers: LayerDescription[],
+  layoutFeatures: LayoutFeature[],
+): string[] => {
+  // We need to go through all the layout features of type Line
+  // and through all the layers of type links
+  // to gather the color of all the lines with arrow heads
+  const arrowColors = new Set<string>();
+  layers.forEach((layer) => {
+    if (layer.renderer === 'links') {
+      const linksParams = (layer as LayerDescriptionLinks).rendererParameters;
+      if (linksParams.head === 'Arrow' || linksParams.head === 'ArrowOnSymbol') {
+        arrowColors.add(layer.strokeColor!);
+      }
+    }
+  });
+  layoutFeatures.forEach((feature) => {
+    if (feature.type === LayoutFeatureType.Line) {
+      const line = feature as Line;
+      if (line.arrow) {
+        arrowColors.add(line.strokeColor);
+      }
+    }
+  });
+  return Array.from(arrowColors);
 };
 
 const dispatchLegendRenderer = (layer: LayerDescription) => {
@@ -323,34 +351,24 @@ export default function MapZone(): JSX.Element {
         aria-label="map zone"
       >
         <defs>
-          <marker
-            id="arrow-head"
-            viewBox="0 -5 10 10"
-            refX="5"
-            refY="0"
-            orient="auto"
-            markerWidth="4"
-            markerHeight="4"
-            stroke="context-stroke"
-            fill="context-stroke"
-            // The two previous lines are used to
-            // make the arrow head the same color as the line
-            // but it only works in Firefox for now.
-            // TODO: use reusable arrow path but clone the marker for each needed color
-            //     <path id="markerPath" d="M0,-5L10,0L0,5" />
-            //     <marker
-            //        id="arrow-head-123" viewBox="0 -5 10 10"
-            //        refX="5" refY="0" markerWidth="4" markerHeight="4" orient="auto"
-            //        fill="the color of the arrow stroke"
-            //        stroke="the color of the arrow stroke"
-            //      >
-            //       <use href="#markerPath" />
-            //     </marker>
-            //     // etc...
-            style={{ 'stroke-width': '1px' }}
-          >
-            <path d="M0,-5L10,0L0,5" class="arrowHead"></path>
-          </marker>
+          <path id="arrow-head-marker-path" d="M0,-5L10,0L0,5"/>
+          <For each={
+            gatherArrowColors(layersDescriptionStore.layers, layersDescriptionStore.layoutFeatures)
+          }>
+            {
+              (color) => <marker
+                id={`arrow-head-${color.replace('#', '')}`} viewBox="0 -5 10 10"
+                refX="5" refY="0"
+                markerWidth="4"
+                markerHeight="4"
+                orient="auto-start-reverse"
+                fill={color}
+                stroke={color}
+              >
+                <use href="#arrow-head-marker-path"/>
+              </marker>
+            }
+          </For>
           <For each={layersDescriptionStore.layers}>
             {(layer) => <>
               <Show when={layer.dropShadow}>
@@ -360,14 +378,14 @@ export default function MapZone(): JSX.Element {
                     {/* <feOffset result="offOut" in="SourceAlpha" dx="5" dy="5" /> */}
                     {/* <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" /> */}
                     {/* <feBlend in="SourceGraphic" in2="blurOut" mode="normal" /> */}
-                  </filter>
-                </Show>
-                <Show when={layer.blurFilter}>
-                  <filter id={`filter-blur-${layer.id}`}>
-                    <feGaussianBlur stdDeviation="5" />
-                  </filter>
-                </Show>
-              </>
+                </filter>
+              </Show>
+              <Show when={layer.blurFilter}>
+                <filter id={`filter-blur-${layer.id}`}>
+                  <feGaussianBlur stdDeviation="5"/>
+                </filter>
+              </Show>
+            </>
             }
           </For>
           { getClipSphere() }

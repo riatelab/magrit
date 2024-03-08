@@ -86,12 +86,12 @@ export default function linksRenderer(
                 && (rendererParameters().head === 'Arrow'
                   || rendererParameters().head === 'ArrowOnSymbol')
               )
-                ? 'url(#arrow-head)'
+                ? `url(#arrow-head-${layerDescription.strokeColor!.replace('#', '')})`
                 : undefined
             }
             marker-end={
               (rendererParameters().head === 'Arrow' || rendererParameters().head === 'ArrowOnSymbol')
-                ? 'url(#arrow-head)'
+                ? `url(#arrow-head-${layerDescription.strokeColor!.replace('#', '')})`
                 : undefined
             }
             use:bindData={feature}
@@ -136,12 +136,12 @@ export default function linksRenderer(
               && (rendererParameters().head === 'Arrow'
               || rendererParameters().head === 'ArrowOnSymbol')
             )
-              ? 'url(#arrow-head)'
+              ? `url(#arrow-head-${layerDescription.strokeColor!.replace('#', '')})`
               : undefined
           }
           marker-end={
             (rendererParameters().head === 'Arrow' || rendererParameters().head === 'ArrowOnSymbol')
-              ? 'url(#arrow-head)'
+              ? `url(#arrow-head-${layerDescription.strokeColor!.replace('#', '')})`
               : undefined
           }
           use:bindData={feature}
