@@ -837,6 +837,10 @@ type RootTranslation = {
 			 */
 			Aggregation: string
 			/**
+			 * S​e​l​e​c​t​i​o​n
+			 */
+			Selection: string
+			/**
 			 * N​o​ ​p​o​r​t​r​a​y​a​l​ ​f​o​r​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​l​a​y​e​r​ ​-​ ​P​l​e​a​s​e​ ​v​e​r​i​f​y​ ​t​h​e​ ​t​y​p​i​n​g​ ​o​f​ ​t​h​e​ ​f​i​e​l​d​s​ ​o​r​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​l​a​y​e​r
 			 */
 			NoPortrayal: string
@@ -1306,6 +1310,13 @@ type RootTranslation = {
 			 */
 			Information: string
 		}
+		SelectionOptions: {
+			/**
+			 * F​o​r​m​u​l​a
+			 */
+			Formula: string
+			Information: string
+		}
 	}
 	ExportSection: {
 		/**
@@ -1595,6 +1606,10 @@ type RootTranslation = {
 			 * L​o​r​e​m​ ​I​p​s​u​m
 			 */
 			Aggregation: string
+			/**
+			 * L​o​r​e​m​ ​I​p​s​u​m
+			 */
+			Selection: string
 		}
 		LongDescriptions: {
 			Choropleth: string
@@ -3090,6 +3105,10 @@ export type TranslationFunctions = {
 			 */
 			Aggregation: () => LocalizedString
 			/**
+			 * Selection
+			 */
+			Selection: () => LocalizedString
+			/**
 			 * No portrayal for the selected layer - Please verify the typing of the fields or select another layer
 			 */
 			NoPortrayal: () => LocalizedString
@@ -3558,6 +3577,13 @@ export type TranslationFunctions = {
 			 */
 			Information: () => LocalizedString
 		}
+		SelectionOptions: {
+			/**
+			 * Formula
+			 */
+			Formula: () => LocalizedString
+			Information: () => LocalizedString
+		}
 	}
 	ExportSection: {
 		/**
@@ -3847,6 +3873,10 @@ export type TranslationFunctions = {
 			 * Lorem Ipsum
 			 */
 			Aggregation: () => LocalizedString
+			/**
+			 * Lorem Ipsum
+			 */
+			Selection: () => LocalizedString
 		}
 		LongDescriptions: {
 			Choropleth: () => LocalizedString

@@ -36,19 +36,20 @@ import LabelsSettings from '../PortrayalOption/LabelsSettings.tsx';
 import SmoothingSettings from '../PortrayalOption/SmoothingSettings.tsx';
 import GriddingSettings from '../PortrayalOption/GriddingSettings.tsx';
 import LinksSettings from '../PortrayalOption/LinksSettings.tsx';
+import MushroomsSettings from '../PortrayalOption/MushroomsSettings.tsx';
+import AggregationSettings from '../PortrayalOption/AggregationSettings.tsx';
+import SelectionSettings from '../PortrayalOption/SelectionSettings.tsx';
 import InformationBanner from '../InformationBanner.tsx';
 
 // Type / interfaces / enums
-import { RepresentationType } from '../../global.d';
+import { ProcessingOperationType, RepresentationType } from '../../global.d';
 
 // Styles
 import '../../styles/PortrayalSelection.css';
-import MushroomsSettings from '../PortrayalOption/MushroomsSettings.tsx';
-import AggregationSettings from '../PortrayalOption/AggregationSettings.tsx';
 
 interface PortrayalDescription {
   name: string;
-  type: RepresentationType | null;
+  type: RepresentationType | ProcessingOperationType;
   enabled: boolean;
 }
 
@@ -95,7 +96,11 @@ const portrayalDescriptions: PortrayalDescription[] = [
   },
   {
     name: 'Aggregation',
-    type: null,
+    type: ProcessingOperationType.aggregation,
+  },
+  {
+    name: 'Selection',
+    type: ProcessingOperationType.selection,
   },
 ].map((p) => ({ ...p, enabled: false }));
 
@@ -217,9 +222,13 @@ export default function PortrayalSelection(): JSX.Element {
         // eslint-disable-next-line no-param-reassign
         p.enabled = vars.nStock >= 2 && (geomType === 'polygon' || geomType === 'point');
         break;
-      case null:
+      case ProcessingOperationType.aggregation:
         // eslint-disable-next-line no-param-reassign
         p.enabled = vars.nCategorical > 0 && geomType === 'polygon';
+        break;
+      case ProcessingOperationType.selection:
+        // eslint-disable-next-line no-param-reassign
+        p.enabled = hasAnyVariable;
         break;
       default:
         // eslint-disable-next-line no-param-reassign
@@ -338,8 +347,11 @@ export default function PortrayalSelection(): JSX.Element {
             <Match when={selectedPortrayal()!.type === RepresentationType.mushrooms}>
               <MushroomsSettings layerId={portrayalSelectionStore.layerId!}/>
             </Match>
-            <Match when={selectedPortrayal()!.type === null}>
+            <Match when={selectedPortrayal()!.type === ProcessingOperationType.aggregation}>
               <AggregationSettings layerId={portrayalSelectionStore.layerId!} />
+            </Match>
+            <Match when={selectedPortrayal()!.type === ProcessingOperationType.selection}>
+              <SelectionSettings layerId={portrayalSelectionStore.layerId!} />
             </Match>
           </Switch>
         </Show>

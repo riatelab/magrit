@@ -120,7 +120,7 @@ export default function AggregationSettings(
     // Close the current modal
     setPortrayalSelectionStore({ show: false, layerId: '' });
 
-    // Display loading overlaye
+    // Display loading overlay
     setLoading(true);
 
     await yieldOrContinue('smooth');

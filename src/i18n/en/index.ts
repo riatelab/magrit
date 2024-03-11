@@ -232,6 +232,7 @@ const en = {
       Links: 'Links',
       Mushrooms: 'Mushrooms',
       Aggregation: 'Aggregation',
+      Selection: 'Selection',
       NoPortrayal: 'No portrayal for the selected layer - Please verify the typing of the fields or select another layer',
     },
     OpenModal: 'Open portrayal selection modal...',
@@ -368,6 +369,10 @@ const en = {
       None: 'None',
       Information: 'If no field is selected, the aggregation will be done on the whole layer.',
     },
+    SelectionOptions: {
+      Formula: 'Formula',
+      Information: '',
+    },
   },
   ExportSection: {
     Description: 'Selection of the type of export and the format of the file to be generated.',
@@ -447,6 +452,7 @@ const en = {
       Links: 'A links map is a thematic map in which links are drawn between points or areas, optionally with a width in proportion to the value of a variable.',
       Mushrooms: 'A mushrooms map is a thematic map in which the values of two variables are represented by two half-circles or two half-squares, forming a mushroom-shaped symbol.',
       Aggregation: 'Lorem Ipsum',
+      Selection: 'Lorem Ipsum',
     },
     LongDescriptions: {
       Choropleth: '',

@@ -555,6 +555,11 @@ export enum RepresentationType {
   default = 'default',
 }
 
+export enum ProcessingOperationType {
+  aggregation = 'aggregation',
+  selection = 'selection',
+}
+
 export enum CartogramMethod {
   Dougenik = 'Dougenik',
   Olson = 'Olson',

@@ -232,6 +232,7 @@ const fr = {
       Links: 'Liens',
       Mushrooms: 'Champignons',
       Aggregation: 'Aggrégation',
+      Selection: 'Sélection',
       NoPortrayal: 'Aucune représentation pour la couche choisie - Veuillez vérifier le types des champs de la couche ou sélectionner une autre couche',
     },
     OpenModal: 'Ouvrir la fenêtre de paramétrage de la représentation',
@@ -368,6 +369,10 @@ const fr = {
       None: 'Aucun champ',
       Information: 'Si aucun champ n\'est choisi, l\'aggrégation se fera sur l\'ensemble des entités de la couche.',
     },
+    SelectionOptions: {
+      Formula: 'Formule',
+      Information: '',
+    },
   },
   ExportSection: {
     Description: 'Sélection du type d\'export et du format de fichier à exporter.',
@@ -446,7 +451,8 @@ const fr = {
       Grid: 'Un carroyage est une carte thématique dans laquelle les zones sont redimensionnées en fonction de la valeur d\'une variable statistique.',
       Links: 'Une carte de lien permet de tracer des liens entre des points ou des zones, optionnellement avec une largeur proportionnelle à un phénomène.',
       Mushrooms: 'Une carte en champignon est une carte thématique dans laquelle les valeurs de deux variables sont représentées par deux demi-cercles ou deux demi-carrés, formant un symbole ressemblant à un champignon.',
-      Aggregation: 'Lorem ipsum',
+      Aggregation: 'Lorem Ipsum',
+      Selection: 'Lorem Ipsum',
     },
     LongDescriptions: {
       Choropleth: '',
