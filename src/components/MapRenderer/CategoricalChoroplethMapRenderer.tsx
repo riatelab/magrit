@@ -114,6 +114,7 @@ export function categoricalChoroplethPointRenderer(
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.renderer}
+    mgt:point-radius={layerDescription.pointRadius}
   >
     <For each={layerDescription.data.features}>
       {
