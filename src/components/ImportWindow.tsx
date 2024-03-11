@@ -8,7 +8,7 @@ import {
   onMount,
   Show,
 } from 'solid-js';
-import { createMutable } from 'solid-js/store';
+import { createMutable, produce } from 'solid-js/store';
 
 // Import from other packages
 import { FaSolidTrashCan } from 'solid-icons/fa';
@@ -36,7 +36,8 @@ import { findCsvDelimiter, getDatasetInfo } from '../helpers/formatConversion';
 
 // Stores
 import { fileDropStore, setFileDropStore } from '../store/FileDropStore';
-import { setGlobalStore } from '../store/GlobalStore';
+import { globalStore, setGlobalStore } from '../store/GlobalStore';
+import { type LayersDescriptionStoreType, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
 import { setMapStore } from '../store/MapStore';
 import { setModalStore } from '../store/ModalStore';
 
@@ -818,6 +819,20 @@ export default function ImportWindow(): JSX.Element {
             setFileDropStore({ show: false, files: [] });
             // Add the "loading" overlay
             setGlobalStore({ isLoading: true });
+
+            // Does the user already added a layer to the project?
+            if (!globalStore.userHasAddedLayer) {
+              setLayersDescriptionStore(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    // eslint-disable-next-line no-param-reassign
+                    draft.layers = [];
+                  },
+                ),
+              );
+              setGlobalStore({ userHasAddedLayer: true });
+            }
+
             // Do we have to use a specific CRS ?
             let crsToUse: GdalCrs | undefined;
             fileDescriptions()
@@ -884,7 +899,7 @@ export default function ImportWindow(): JSX.Element {
                 // If there are empty features, we display a toast to
                 // inform the user about it.
                 if (nRemoved > 0) {
-                  toast.error(LL().ImportWindow.RemovedEmptyFeatures(nRemoved));
+                  toast.error(LL().ImportWindow.RemovedEmptyFeatures({ nRemoved, name }));
                 }
                 // We push the id of the layer(s) to simplify to an array,
                 // and when all the layers are imported, we will simplify

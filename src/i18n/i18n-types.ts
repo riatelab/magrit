@@ -308,9 +308,10 @@ type RootTranslation = {
 		 */
 		ErrorReadingFile: RequiredParams<'file' | 'message'>
 		/**
-		 * R​e​m​o​v​e​d​ ​{​{​0​ ​f​e​a​t​u​r​e​|​a​ ​f​e​a​t​u​r​e​|​?​?​ ​f​e​a​t​u​r​e​s​}​}​ ​w​i​t​h​o​u​t​ ​g​e​o​m​e​t​r​y
+		 * R​e​m​o​v​e​d​ ​{​{​0​ ​f​e​a​t​u​r​e​|​a​ ​f​e​a​t​u​r​e​|​?​?​ ​f​e​a​t​u​r​e​s​}​}​ ​w​i​t​h​o​u​t​ ​g​e​o​m​e​t​r​y​ ​f​r​o​m​ ​d​a​t​a​s​e​t​ ​{​n​a​m​e​}​.
+		 * @param {unknown} name
 		 */
-		RemovedEmptyFeatures: string
+		RemovedEmptyFeatures: RequiredParams<'name'>
 	}
 	MapZone: {
 		/**
@@ -727,17 +728,23 @@ type RootTranslation = {
 	}
 	LayerManager: {
 		/**
-		 * P​o​i​n​t​ ​l​a​y​e​r
+		 * P​o​i​n​t​ ​l​a​y​e​r​ ​-​ ​{​n​F​t​}​ ​{​{​f​e​a​t​u​r​e​|​f​e​a​t​u​r​e​s​}​}​ ​-​ ​{​n​C​o​l​}​ ​{​{​c​o​l​u​m​n​|​c​o​l​u​m​n​s​}​}
+		 * @param {string | number | boolean} nCol
+		 * @param {string | number | boolean} nFt
 		 */
-		point: string
+		point: RequiredParams<'nCol' | 'nFt'>
 		/**
-		 * L​i​n​e​ ​l​a​y​e​r
+		 * L​i​n​e​ ​l​a​y​e​r​ ​-​ ​{​n​F​t​}​ ​{​{​f​e​a​t​u​r​e​|​f​e​a​t​u​r​e​s​}​}​ ​-​ ​{​n​C​o​l​}​ ​{​{​c​o​l​u​m​n​|​c​o​l​u​m​n​s​}​}
+		 * @param {string | number | boolean} nCol
+		 * @param {string | number | boolean} nFt
 		 */
-		linestring: string
+		linestring: RequiredParams<'nCol' | 'nFt'>
 		/**
-		 * P​o​l​y​g​o​n​ ​l​a​y​e​r
+		 * P​o​l​y​g​o​n​ ​l​a​y​e​r​ ​-​ ​{​n​F​t​}​ ​{​{​f​e​a​t​u​r​e​|​f​e​a​t​u​r​e​s​}​}​ ​-​ ​{​n​C​o​l​}​ ​{​{​c​o​l​u​m​n​|​c​o​l​u​m​n​s​}​}
+		 * @param {string | number | boolean} nCol
+		 * @param {string | number | boolean} nFt
 		 */
-		polygon: string
+		polygon: RequiredParams<'nCol' | 'nFt'>
 		/**
 		 * R​a​s​t​e​r​ ​l​a​y​e​r
 		 */
@@ -826,6 +833,10 @@ type RootTranslation = {
 			 */
 			Mushrooms: string
 			/**
+			 * A​g​g​r​e​g​a​t​i​o​n
+			 */
+			Aggregation: string
+			/**
 			 * N​o​ ​p​o​r​t​r​a​y​a​l​ ​f​o​r​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​l​a​y​e​r​ ​-​ ​P​l​e​a​s​e​ ​v​e​r​i​f​y​ ​t​h​e​ ​t​y​p​i​n​g​ ​o​f​ ​t​h​e​ ​f​i​e​l​d​s​ ​o​r​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​l​a​y​e​r
 			 */
 			NoPortrayal: string
@@ -871,6 +882,10 @@ type RootTranslation = {
 			 * V​a​r​i​a​b​l​e
 			 */
 			Variable: string
+			/**
+			 * V​a​r​i​a​b​l​e​ ​t​o​ ​u​s​e
+			 */
+			VariablePlaceholder: string
 			/**
 			 * S​e​l​e​c​t​ ​a​ ​v​a​r​i​a​b​l​e
 			 */
@@ -1277,6 +1292,20 @@ type RootTranslation = {
 			 */
 			BottomProperties: string
 		}
+		AggregationOptions: {
+			/**
+			 * A​g​g​r​e​g​a​t​i​o​n​ ​m​e​t​h​o​d
+			 */
+			Method: string
+			/**
+			 * N​o​n​e
+			 */
+			None: string
+			/**
+			 * I​f​ ​n​o​ ​f​i​e​l​d​ ​i​s​ ​s​e​l​e​c​t​e​d​,​ ​t​h​e​ ​a​g​g​r​e​g​a​t​i​o​n​ ​w​i​l​l​ ​b​e​ ​d​o​n​e​ ​o​n​ ​t​h​e​ ​w​h​o​l​e​ ​l​a​y​e​r​.
+			 */
+			Information: string
+		}
 	}
 	ExportSection: {
 		/**
@@ -1562,6 +1591,10 @@ type RootTranslation = {
 			 * A​ ​m​u​s​h​r​o​o​m​s​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​v​a​l​u​e​s​ ​o​f​ ​t​w​o​ ​v​a​r​i​a​b​l​e​s​ ​a​r​e​ ​r​e​p​r​e​s​e​n​t​e​d​ ​b​y​ ​t​w​o​ ​h​a​l​f​-​c​i​r​c​l​e​s​ ​o​r​ ​t​w​o​ ​h​a​l​f​-​s​q​u​a​r​e​s​,​ ​f​o​r​m​i​n​g​ ​a​ ​m​u​s​h​r​o​o​m​-​s​h​a​p​e​d​ ​s​y​m​b​o​l​.
 			 */
 			Mushrooms: string
+			/**
+			 * L​o​r​e​m​ ​I​p​s​u​m
+			 */
+			Aggregation: string
 		}
 		LongDescriptions: {
 			Choropleth: string
@@ -2535,9 +2568,9 @@ export type TranslationFunctions = {
 		 */
 		ErrorReadingFile: (arg: { file: unknown, message: unknown }) => LocalizedString
 		/**
-		 * Removed {{0 feature|a feature|?? features}} without geometry
+		 * Removed {{0 feature|a feature|?? features}} without geometry from dataset {name}.
 		 */
-		RemovedEmptyFeatures: (arg0: number | string | boolean) => LocalizedString
+		RemovedEmptyFeatures: (arg: { name: unknown, nRemoved: number | string | boolean }) => LocalizedString
 	}
 	MapZone: {
 		/**
@@ -2954,17 +2987,17 @@ export type TranslationFunctions = {
 	}
 	LayerManager: {
 		/**
-		 * Point layer
+		 * Point layer - {nFt} {{feature|features}} - {nCol} {{column|columns}}
 		 */
-		point: () => LocalizedString
+		point: (arg: { nCol: string | number | boolean, nFt: string | number | boolean }) => LocalizedString
 		/**
-		 * Line layer
+		 * Line layer - {nFt} {{feature|features}} - {nCol} {{column|columns}}
 		 */
-		linestring: () => LocalizedString
+		linestring: (arg: { nCol: string | number | boolean, nFt: string | number | boolean }) => LocalizedString
 		/**
-		 * Polygon layer
+		 * Polygon layer - {nFt} {{feature|features}} - {nCol} {{column|columns}}
 		 */
-		polygon: () => LocalizedString
+		polygon: (arg: { nCol: string | number | boolean, nFt: string | number | boolean }) => LocalizedString
 		/**
 		 * Raster layer
 		 */
@@ -3053,6 +3086,10 @@ export type TranslationFunctions = {
 			 */
 			Mushrooms: () => LocalizedString
 			/**
+			 * Aggregation
+			 */
+			Aggregation: () => LocalizedString
+			/**
 			 * No portrayal for the selected layer - Please verify the typing of the fields or select another layer
 			 */
 			NoPortrayal: () => LocalizedString
@@ -3098,6 +3135,10 @@ export type TranslationFunctions = {
 			 * Variable
 			 */
 			Variable: () => LocalizedString
+			/**
+			 * Variable to use
+			 */
+			VariablePlaceholder: () => LocalizedString
 			/**
 			 * Select a variable
 			 */
@@ -3503,6 +3544,20 @@ export type TranslationFunctions = {
 			 */
 			BottomProperties: () => LocalizedString
 		}
+		AggregationOptions: {
+			/**
+			 * Aggregation method
+			 */
+			Method: () => LocalizedString
+			/**
+			 * None
+			 */
+			None: () => LocalizedString
+			/**
+			 * If no field is selected, the aggregation will be done on the whole layer.
+			 */
+			Information: () => LocalizedString
+		}
 	}
 	ExportSection: {
 		/**
@@ -3788,6 +3843,10 @@ export type TranslationFunctions = {
 			 * A mushrooms map is a thematic map in which the values of two variables are represented by two half-circles or two half-squares, forming a mushroom-shaped symbol.
 			 */
 			Mushrooms: () => LocalizedString
+			/**
+			 * Lorem Ipsum
+			 */
+			Aggregation: () => LocalizedString
 		}
 		LongDescriptions: {
 			Choropleth: () => LocalizedString

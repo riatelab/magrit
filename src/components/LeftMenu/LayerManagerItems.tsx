@@ -226,7 +226,7 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
   }
 };
 
-export function LayerManagerLayerItem(props: { 'layer': LayerDescription }): JSX.Element {
+export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.Element {
   const { LL } = useI18nContext();
 
   return <div class="layer-manager-item" onDblClick={() => { onClickSettings(props.layer.id, LL); }}>
@@ -235,7 +235,15 @@ export function LayerManagerLayerItem(props: { 'layer': LayerDescription }): JSX
     </div>
     <div class="layer-manager-item__icons">
       <div class="layer-manager-item__icons-left">
-        <div title={ LL().LayerManager[props.layer.type]() } style={{ cursor: 'help' }}>
+        <div
+          title={
+            LL().LayerManager[props.layer.type]({
+              nFt: props.layer.data.features?.length || 1,
+              nCol: props.layer.fields?.length,
+            })
+          }
+          style={{ cursor: 'help' }}
+        >
           <i
             class={ typeIcons[props.layer.type as ('point' | 'linestring' | 'polygon' | 'raster')] }
           />

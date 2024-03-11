@@ -26,7 +26,6 @@ import { detectTypeField, Variable } from './typeDetection';
 import rewindLayer from './rewind';
 
 // Stores
-import { globalStore, setGlobalStore } from '../store/GlobalStore';
 import { type LayersDescriptionStoreType, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
 import { fitExtent } from '../store/MapStore';
 
@@ -192,11 +191,11 @@ function addLayer(
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
-        if (!globalStore.userHasAddedLayer) {
-          // eslint-disable-next-line no-param-reassign
-          draft.layers = [];
-          setGlobalStore({ userHasAddedLayer: true });
-        }
+        // if (!globalStore.userHasAddedLayer) {
+        //   // eslint-disable-next-line no-param-reassign
+        //   draft.layers = [];
+        //   setGlobalStore({ userHasAddedLayer: true });
+        // }
         draft.layers.push(newLayerDescription as LayerDescription);
       },
     ),

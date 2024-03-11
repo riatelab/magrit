@@ -83,7 +83,7 @@ const en = {
     IncompleteMessage: 'The dataset is incomplete and cannot be imported. Please add the other mandatory files.',
     UnsupportedFileFormat: 'Unsupported file format for {file}',
     ErrorReadingFile: 'Error while reading file {file}: {message}',
-    RemovedEmptyFeatures: 'Removed {{ 0 feature | a feature | ?? features }} without geometry',
+    RemovedEmptyFeatures: 'Removed {{ nRemoved:0 feature | a feature | ?? features }} without geometry from dataset {name}.',
   },
   MapZone: {
     DropFilesHere: 'Drag and drop your file(s) here ! (or use the import menu)',
@@ -204,9 +204,9 @@ const en = {
     documentation: 'Documentation',
   },
   LayerManager: {
-    point: 'Point layer',
-    linestring: 'Line layer',
-    polygon: 'Polygon layer',
+    point: 'Point layer - {nFt} {{nFt: feature | features}} - {nCol} {{nCol: column | columns}}',
+    linestring: 'Line layer - {nFt} {{nFt: feature | features}} - {nCol} {{nCol: column | columns}}',
+    polygon: 'Polygon layer - {nFt} {{nFt: feature | features}} - {nCol} {{nCol: column | columns}}',
     raster: 'Raster layer',
     table: 'Data table',
     Delete: 'Remove layer',
@@ -231,6 +231,7 @@ const en = {
       Grid: 'Grid',
       Links: 'Links',
       Mushrooms: 'Mushrooms',
+      Aggregation: 'Aggregation',
       NoPortrayal: 'No portrayal for the selected layer - Please verify the typing of the fields or select another layer',
     },
     OpenModal: 'Open portrayal selection modal...',
@@ -244,6 +245,7 @@ const en = {
     NewLayer: 'New_layer',
     CommonOptions: {
       Variable: 'Variable',
+      VariablePlaceholder: 'Variable to use',
       SelectVariable: 'Select a variable',
       Color: 'Color',
     },
@@ -361,6 +363,11 @@ const en = {
       TopProperties: 'Properties of the upper part:',
       BottomProperties: 'Properties of the lower part:',
     },
+    AggregationOptions: {
+      Method: 'Aggregation method',
+      None: 'None',
+      Information: 'If no field is selected, the aggregation will be done on the whole layer.',
+    },
   },
   ExportSection: {
     Description: 'Selection of the type of export and the format of the file to be generated.',
@@ -439,6 +446,7 @@ const en = {
       Grid: 'A grid map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable, but with a grid layout.',
       Links: 'A links map is a thematic map in which links are drawn between points or areas, optionally with a width in proportion to the value of a variable.',
       Mushrooms: 'A mushrooms map is a thematic map in which the values of two variables are represented by two half-circles or two half-squares, forming a mushroom-shaped symbol.',
+      Aggregation: 'Lorem Ipsum',
     },
     LongDescriptions: {
       Choropleth: '',

@@ -83,7 +83,7 @@ const fr = {
     IncompleteMessage: 'Le jeu de données n\'est pas complet. Merci d\'ajouter les autres fichiers nécessaires',
     UnsupportedFileFormat: 'Format de fichier non supporté pour {file}',
     ErrorReadingFile: 'Erreur lors de la lecture du fichier {file} : {message}',
-    RemovedEmptyFeatures: '{{ Aucune entité | Une entité | ?? entités }} avec une géométrie vide retirée(s) du jeu de données.',
+    RemovedEmptyFeatures: '{{ nRemoved:Aucune entité | Une entité | ?? entités }} avec une géométrie vide retirée{{nRemoved:s}} du jeu de données {name}.',
   },
   MapZone: {
     DropFilesHere: 'Glisser-déposer vos jeux de données ici ! (ou utiliser le menu d\'import des données)',
@@ -204,9 +204,9 @@ const fr = {
     documentation: 'Documentation',
   },
   LayerManager: {
-    point: 'Couche de points',
-    linestring: 'Couche de lignes',
-    polygon: 'Couche de polygones',
+    point: 'Couche de points - {nFt} {{nFt: entité | entités }} - {nCol} {{nCol: colonne | colonnes }}',
+    linestring: 'Couche de lignes - {nFt} {{nFt: entité | entités }} - {nCol} {{nCol: colonne | colonnes }}',
+    polygon: 'Couche de polygones - {nFt} {{nFt: entité | entités }} - {nCol} {{nCol: colonne | colonnes }}',
     raster: 'Couche raster',
     table: 'Tableau de données',
     Delete: 'Suppression de la couche',
@@ -231,6 +231,7 @@ const fr = {
       Grid: 'Carroyage',
       Links: 'Liens',
       Mushrooms: 'Champignons',
+      Aggregation: 'Aggrégation',
       NoPortrayal: 'Aucune représentation pour la couche choisie - Veuillez vérifier le types des champs de la couche ou sélectionner une autre couche',
     },
     OpenModal: 'Ouvrir la fenêtre de paramétrage de la représentation',
@@ -244,6 +245,7 @@ const fr = {
     NewLayer: 'Nouvelle_couche',
     CommonOptions: {
       Variable: 'Variable',
+      VariablePlaceholder: 'Variable à utiliser',
       SelectVariable: 'Sélectionner une variable',
       Color: 'Couleur',
     },
@@ -361,6 +363,11 @@ const fr = {
       TopProperties: 'Propriétés de la partie supérieure :',
       BottomProperties: 'Propriétés de la partie inférieure :',
     },
+    AggregationOptions: {
+      Method: 'Méthode d\'aggrégation',
+      None: 'Aucun champ',
+      Information: 'Si aucun champ n\'est choisi, l\'aggrégation se fera sur l\'ensemble des entités de la couche.',
+    },
   },
   ExportSection: {
     Description: 'Sélection du type d\'export et du format de fichier à exporter.',
@@ -439,6 +446,7 @@ const fr = {
       Grid: 'Un carroyage est une carte thématique dans laquelle les zones sont redimensionnées en fonction de la valeur d\'une variable statistique.',
       Links: 'Une carte de lien permet de tracer des liens entre des points ou des zones, optionnellement avec une largeur proportionnelle à un phénomène.',
       Mushrooms: 'Une carte en champignon est une carte thématique dans laquelle les valeurs de deux variables sont représentées par deux demi-cercles ou deux demi-carrés, formant un symbole ressemblant à un champignon.',
+      Aggregation: 'Lorem ipsum',
     },
     LongDescriptions: {
       Choropleth: '',
