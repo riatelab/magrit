@@ -87,7 +87,7 @@ type LayerDescription = {
     // | DefaultRendererParameters
   ),
   // Parameters of the legend associated to the layer
-  legend?: LegendParameters,
+  legend?: LegendParameters | LegendParameters[],
 };
 
 type TableDescription = {
@@ -193,6 +193,18 @@ type LayerDescriptionMushroomLayer = LayerDescription & {
   renderer: RepresentationType.mushrooms,
   rendererParameters: MushroomsParameters,
   legend: MushroomsLegendParameters,
+};
+
+type LayerDescriptionCategoricalProportionalSymbols = LayerDescription & {
+  renderer: RepresentationType.proportionalSymbolsAndCategories,
+  rendererParameters: ProportionalSymbolsParameters & CategoricalChoroplethParameters,
+  legend: [ChoroplethLegendParameters, ProportionalSymbolsLegendParameters],
+};
+
+type LayerDescriptionChoroplethProportionalSymbols = LayerDescription & {
+  renderer: RepresentationType.proportionalSymbolsAndRatio,
+  rendererParameters: ProportionalSymbolsParameters & ClassificationParameters,
+  legend: [ChoroplethLegendParameters, ProportionalSymbolsLegendParameters],
 };
 
 export enum ProportionalSymbolsSymbolType {

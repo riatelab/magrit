@@ -44,10 +44,11 @@ import { RepresentationType } from '../../global.d';
 // Styles
 import '../../styles/PortrayalSelection.css';
 import MushroomsSettings from '../PortrayalOption/MushroomsSettings.tsx';
+import AggregationSettings from '../PortrayalOption/AggregationSettings.tsx';
 
 interface PortrayalDescription {
   name: string;
-  type: RepresentationType;
+  type: RepresentationType | null;
   enabled: boolean;
 }
 
@@ -91,6 +92,10 @@ const portrayalDescriptions: PortrayalDescription[] = [
   {
     name: 'Mushrooms',
     type: RepresentationType.mushrooms,
+  },
+  {
+    name: 'Aggregation',
+    type: null,
   },
 ].map((p) => ({ ...p, enabled: false }));
 
@@ -212,6 +217,10 @@ export default function PortrayalSelection(): JSX.Element {
         // eslint-disable-next-line no-param-reassign
         p.enabled = vars.nStock >= 2 && (geomType === 'polygon' || geomType === 'point');
         break;
+      case null:
+        // eslint-disable-next-line no-param-reassign
+        p.enabled = vars.nCategorical > 0 && geomType === 'polygon';
+        break;
       default:
         // eslint-disable-next-line no-param-reassign
         p.enabled = false;
@@ -328,6 +337,9 @@ export default function PortrayalSelection(): JSX.Element {
             </Match>
             <Match when={selectedPortrayal()!.type === RepresentationType.mushrooms}>
               <MushroomsSettings layerId={portrayalSelectionStore.layerId!}/>
+            </Match>
+            <Match when={selectedPortrayal()!.type === null}>
+              <AggregationSettings layerId={portrayalSelectionStore.layerId!} />
             </Match>
           </Switch>
         </Show>

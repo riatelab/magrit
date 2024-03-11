@@ -134,4 +134,4 @@ export {
   makeValid,
 };
 
-export default getGeos();
+export default getGeos;
