@@ -1,10 +1,12 @@
 // Import from solid-js
 import {
   Accessor,
+  createEffect,
   createMemo,
   createSignal,
   For,
   JSX,
+  on,
   onMount,
   Show,
 } from 'solid-js';
@@ -205,6 +207,15 @@ function NewFieldPanel(
     props.updateData(variableName, newColumn.map((d: { newValue: never }) => d.newValue));
   };
 
+  createEffect(
+    on(
+      () => currentFormula(),
+      () => {
+        computeSampleOutput();
+      },
+    ),
+  );
+
   return <div>
     <h3>{ LL().DataTable.NewColumnModal.title() }</h3>
     <div style={{ display: 'block' }}>
@@ -264,8 +275,6 @@ function NewFieldPanel(
                       insertInFormula(currentFormula(), fieldValue);
                       // Focus on the input field to help the UX
                       refInputFormula.focus();
-                      // Compute the sample output
-                      computeSampleOutput();
                     }}
                   >{ field.field }</span>
                 )
@@ -282,8 +291,6 @@ function NewFieldPanel(
                       insertInFormula(currentFormula(), specialField);
                       // Focus on the input field to help the UX
                       refInputFormula.focus();
-                      // Compute the sample output
-                      computeSampleOutput();
                     }}
                   >{ specialField }</span>
                 )
@@ -302,8 +309,6 @@ function NewFieldPanel(
                       insertInFormula(currentFormula(), func);
                       // Focus on the input field to help the UX
                       refInputFormula.focus();
-                      // Compute the sample output
-                      computeSampleOutput();
                     }}
                   >{ func }</span>
                 )
@@ -320,8 +325,6 @@ function NewFieldPanel(
                       insertInFormula(currentFormula(), op);
                       // Focus on the input field to help the UX
                       refInputFormula.focus();
-                      // Compute the sample output
-                      computeSampleOutput();
                     }}
                   >{ op }</span>
                 )
@@ -340,7 +343,6 @@ function NewFieldPanel(
             onKeyUp={ (e) => {
               const element = e.target as EventTarget & HTMLInputElement;
               setCurrentFormula(element.value);
-              computeSampleOutput();
             }}
           />
         </div>
