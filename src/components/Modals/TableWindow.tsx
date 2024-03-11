@@ -62,7 +62,7 @@ function NewFieldPanel(
   const { LL } = useI18nContext();
 
   // Reference to the input field for the formula
-  let refInputFormula: HTMLInputElement;
+  let refInputFormula: HTMLTextAreaElement;
 
   // Signals for the new column form
   const [
@@ -331,10 +331,11 @@ function NewFieldPanel(
         </div>
         <br />
         <div class="control" style={{ width: '100%', display: 'inline-block' }}>
-          <input
+          <textarea
+            rows={3}
             ref={(el) => { refInputFormula = el; }}
             class="input"
-            type="text"
+            style={{ height: 'unset' }}
             value={currentFormula()}
             onKeyUp={ (e) => {
               const element = e.target as EventTarget & HTMLInputElement;
