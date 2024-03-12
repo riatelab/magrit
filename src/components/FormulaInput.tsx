@@ -7,6 +7,7 @@ import {
   on,
   Setter,
 } from 'solid-js';
+import { unwrap } from 'solid-js/store';
 
 // Imports from other packages
 import { area } from '@turf/turf';
@@ -93,8 +94,8 @@ export default function FormulaInput(
   const { LL } = useI18nContext();
 
   const records = props.typeDataset === 'layer'
-    ? (props.dsDescription as LayerDescription).data.features.map((d) => d.properties)
-    : (props.dsDescription as TableDescription).data;
+    ? (props.dsDescription as LayerDescription).data.features.map((d) => unwrap(d.properties))
+    : (props.dsDescription as TableDescription).data.map((d) => unwrap(d));
 
   const lengthDataset = records.length;
 
