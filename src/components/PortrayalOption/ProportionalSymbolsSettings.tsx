@@ -236,7 +236,7 @@ export default function ProportionalSymbolsSettings(
   // The fields of the layer that are of type 'stock'.
   // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = createMemo(() => layerDescription()
-    .fields?.filter((variable) => variable.type === 'stock'));
+    .fields.filter((variable) => variable.type === 'stock'));
 
   // if (!targetFields || targetFields.length === 0) {
   //   throw Error('Unexpected Error: No stock field found');

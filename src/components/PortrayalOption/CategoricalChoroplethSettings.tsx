@@ -208,7 +208,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
   // (i.e. the fields that can be used for the choropleth).
   // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = createMemo(() => layerDescription()
-    .fields?.filter((variable) => variable.type === VariableType.categorical));
+    .fields.filter((variable) => variable.type === VariableType.categorical));
 
   // Signals for the current component:
   // the target variable, the target layer name and the classification parameters

@@ -208,7 +208,7 @@ export default function MushroomsSettings(
   // The fields of the layer that are of type 'stock'.
   // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = createMemo(() => layerDescription()
-    .fields?.filter((variable) => variable.type === 'stock'));
+    .fields.filter((variable) => variable.type === 'stock'));
 
   const [
     targetVariableTop,

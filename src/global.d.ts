@@ -41,7 +41,7 @@ type LayerDescription = {
   // (this is either a GeoJSONFeatureCollection or a Sphere, as a special case)
   data: GeoJSONFeatureCollection,
   // Description of the fields of the layer - undefined if no fields
-  fields: Variable[] | undefined,
+  fields: Variable[],
   // Whether the layer is visible or not
   visible: boolean,
   // The color of the stroke (not used for Choropleth on linestring layers)

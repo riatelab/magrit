@@ -239,7 +239,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
   // and destination of the links to be created)
   // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = createMemo(() => layerDescription()
-    .fields?.filter((variable) => variable.type === VariableType.identifier));
+    .fields.filter((variable) => variable.type === VariableType.identifier));
 
   // Signals for the current component:
   const [

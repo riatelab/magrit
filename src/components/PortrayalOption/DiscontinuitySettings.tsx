@@ -154,7 +154,7 @@ export default function DiscontinuitySettings(
   // The fields that can be used for computing the discontinuity.
   // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = createMemo(() => layerDescription()
-    .fields?.filter((variable) => variable.type === 'stock' || variable.type === 'ratio'));
+    .fields.filter((variable) => variable.type === 'stock' || variable.type === 'ratio'));
 
   const [
     newLayerName,

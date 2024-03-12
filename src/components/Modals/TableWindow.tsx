@@ -263,7 +263,7 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
         (l: LayerDescription) => l.id === dsDescription.id,
         {
           data: newData,
-          fields: dsDescription.fields!.concat(newVariables),
+          fields: dsDescription.fields.concat(newVariables),
         },
       );
     };
@@ -279,7 +279,7 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
         (t: TableDescription) => t.id === dsDescription.id,
         {
           data: newData,
-          fields: dsDescription.fields!.concat(newVariables),
+          fields: dsDescription.fields.concat(newVariables),
         },
       );
     };

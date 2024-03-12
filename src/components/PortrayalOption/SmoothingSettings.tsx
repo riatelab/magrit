@@ -235,7 +235,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   // The fields of the layer to be smoothed.
   // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = createMemo(() => layerDescription()
-    .fields?.filter((variable) => (
+    .fields.filter((variable) => (
       variable.type === VariableType.ratio || variable.type === VariableType.stock)));
 
   // Appropriate resolution for the grid

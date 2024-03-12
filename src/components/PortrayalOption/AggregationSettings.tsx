@@ -93,7 +93,7 @@ export default function AggregationSettings(
     .find((layer) => layer.id === props.layerId) as LayerDescription);
 
   const targetFields = createMemo(() => layerDescription()
-    .fields?.filter((variable) => variable.type === 'categorical'));
+    .fields.filter((variable) => variable.type === 'categorical'));
 
   const [
     newLayerName,

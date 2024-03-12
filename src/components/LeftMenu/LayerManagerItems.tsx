@@ -239,7 +239,7 @@ export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.E
           title={
             LL().LayerManager[props.layer.type]({
               nFt: props.layer.data.features?.length || 1,
-              nCol: props.layer.fields?.length,
+              nCol: props.layer.fields.length,
             })
           }
           style={{ cursor: 'help' }}

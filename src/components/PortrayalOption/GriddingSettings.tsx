@@ -184,7 +184,7 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
 
   // The fields of interest on the selected layer
   const targetFields = createMemo(() => layerDescription()
-    .fields?.filter((variable) => variable.type === VariableType.stock));
+    .fields.filter((variable) => variable.type === VariableType.stock));
 
   // The description of the current projection
   const currentProjection = unwrap(mapStore.projection);

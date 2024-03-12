@@ -235,9 +235,9 @@ const doJoin = async (
     (l: LayerDescription) => l.id === layerId,
     'fields',
     [
-      ...layerDescription.fields!,
+      ...layerDescription.fields,
       ...newFieldsDescription
-        .filter((f) => !layerDescription.fields!.map((l) => l.name).includes(f.name)),
+        .filter((f) => !layerDescription.fields.map((l) => l.name).includes(f.name)),
     ],
   );
 
