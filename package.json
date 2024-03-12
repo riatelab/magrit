@@ -38,7 +38,7 @@
     "@types/topojson-server": "^3.0.4",
     "@types/topojson-simplify": "^3.0.3",
     "@types/uuid": "^9.0.8",
-    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
     "electron": "^29.1.1",
     "electron-builder": "^24.13.3",
     "eslint": "^8.57.0",
@@ -112,7 +112,7 @@
   },
   "overrides": {
     "vite-plugin-electron": {
-      "electron": "^29.1.0"
+      "electron": "^29.1.1"
     }
   },
   "main": "dist-electron/main.js"
