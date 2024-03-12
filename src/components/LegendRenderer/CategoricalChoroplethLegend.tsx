@@ -141,7 +141,7 @@ function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Eleme
   });
 
   return <g
-    ref={refElement}
+    ref={refElement!}
     class="legend categoricalChoropleth"
     for={layer.id}
     transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
@@ -336,7 +336,7 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
   });
 
   return <g
-    ref={refElement}
+    ref={refElement!}
     class="legend categoricalChoropleth"
     for={layer.id}
     transform={`translate(${legendParameters.position[0]}, ${legendParameters.position[1]})`}

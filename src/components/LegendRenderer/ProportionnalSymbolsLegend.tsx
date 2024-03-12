@@ -96,7 +96,7 @@ function stackedSquareLegend(
   });
 
   return <g
-    ref={refElement}
+    ref={refElement!}
     class="legend proportionalSymbols"
     for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
@@ -249,7 +249,7 @@ function horizontalSquareLegend(
   });
 
   return <g
-    ref={refElement}
+    ref={refElement!}
     class="legend proportionalSymbols"
     for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
@@ -389,7 +389,7 @@ function verticalSquareLegend(
   });
 
   return <g
-    ref={refElement}
+    ref={refElement!}
     class="legend proportionalSymbols"
     for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
@@ -509,7 +509,7 @@ function stackedCircleLegend(
   });
 
   return <g
-    ref={refElement}
+    ref={refElement!}
     class="legend proportionalSymbols"
     for={layer.id}
     transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
