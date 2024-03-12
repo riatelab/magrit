@@ -1,7 +1,7 @@
 // Imports from solid-js
 import {
-  Accessor, createEffect,
-  createSignal,
+  Accessor,
+  createEffect,
   For,
   JSX,
   on,
@@ -45,12 +45,48 @@ const insertInFormula = (
   }
 };
 
+export type SampleOutputFormat = {
+  type: 'Error' | 'Valid';
+  value: any;
+};
+
+export type ErrorSampleOutput = SampleOutputFormat & { type: 'Error', value: 'ParsingFormula' | 'EmptyResult' };
+export type ValidSampleOutput = SampleOutputFormat & { type: 'Valid', value: { [key: number]: boolean | string | number } };
+
+export const specialFields = {
+  layer: ['$length', '$id', '$area'],
+  table: ['$length', '$id'],
+};
+
+export const hasSpecialFieldId = (formula: string) => formula.includes('@@uuid');
+
+export const hasSpecialFieldArea = (formula: string) => formula.includes('@@area');
+
+export const replaceSpecialFields = (formula: string, lengthDataset: number): string => formula
+  .replaceAll(/\$length/gi, lengthDataset.toString())
+  .replaceAll(/\$id/gi, '[@@uuid]')
+  .replaceAll(/\$area/gi, '[@@area]');
+
+export const formatValidSampleOutput = (
+  value: { [key: number]: number | string | boolean },
+): string => {
+  const strArray = [];
+  for (let i = 0; i < 3; i += 1) {
+    if (value[i] !== undefined) {
+      strArray.push(`[${i}] ${value[i]}`);
+    }
+  }
+  return strArray.join('\n');
+};
+
 export default function FormulaInput(
   props: {
     typeDataset: 'layer' | 'table',
     dsDescription: LayerDescription | TableDescription,
     currentFormula: Accessor<string>,
     setCurrentFormula: Setter<string>,
+    sampleOutput: Accessor<SampleOutputFormat | undefined>,
+    setSampleOutput: Setter<SampleOutputFormat | undefined>,
   },
 ): JSX.Element {
   let refInputFormula: HTMLTextAreaElement;
@@ -69,27 +105,8 @@ export default function FormulaInput(
     'row-gap': '0.4em',
   };
 
-  const specialFields = {
-    layer: ['$length', '$id', '$area'],
-    table: ['$length', '$id'],
-  };
-
-  const [
-    sampleOutput,
-    setSampleOutput,
-  ] = createSignal<string>('');
-
-  const hasSpecialFieldId = (formula: string) => formula.includes('@@uuid');
-
-  const hasSpecialFieldArea = (formula: string) => formula.includes('@@area');
-
-  const replaceSpecialFields = (formula: string): string => formula
-    .replaceAll(/\$length/gi, lengthDataset.toString())
-    .replaceAll(/\$id/gi, '[@@uuid]')
-    .replaceAll(/\$area/gi, '[@@area]');
-
   const computeSampleOutput = () => {
-    const formula = replaceSpecialFields(props.currentFormula());
+    const formula = replaceSpecialFields(props.currentFormula(), lengthDataset);
     const query = `SELECT ${formula} as newValue FROM ?`;
     const data = records.slice(0, 3);
 
@@ -108,17 +125,24 @@ export default function FormulaInput(
     try {
       const newColumn = alasql(query, [data]);
       if (newColumn[0].newValue === undefined) {
-        setSampleOutput(LL().DataTable.NewColumnModal.errorEmptyResult());
+        props.setSampleOutput({ type: 'Error', value: 'EmptyResult' });
         // TODO: we may try to parse the query here (as it is syntactically correct
         //   since no error was thrown by alasql)
         //   and detect why the output is empty (e.g. a column name is wrong, etc.)
       } else {
-        setSampleOutput(
-          `[0] ${newColumn[0].newValue}\n[1] ${newColumn[1].newValue}\n[2] ${newColumn[2].newValue}`,
-        );
+        const resultObj: { [key: number]: number | string | boolean } = {};
+        for (let i = 0; i < 3; i += 1) {
+          if (newColumn[i]) {
+            resultObj[i] = newColumn[i].newValue;
+          }
+        }
+        props.setSampleOutput({
+          type: 'Valid',
+          value: resultObj,
+        });
       }
     } catch (e) {
-      setSampleOutput(LL().DataTable.NewColumnModal.errorParsingFormula());
+      props.setSampleOutput({ type: 'Error', value: 'ParsingFormula' });
     }
   };
 
@@ -132,7 +156,7 @@ export default function FormulaInput(
   );
 
   return <div class="field-block">
-    <label class="label">{LL().DataTable.NewColumnModal.formula()}</label>
+    <label class="label">{LL().FormulaInput.formula()}</label>
     <div class="control is-flex">
       <div class="is-flex" style={{ width: '75%', ...styleBadges }}>
         <For each={props.dsDescription.fields.map((d) => d.name)}>
@@ -142,7 +166,7 @@ export default function FormulaInput(
                 class="tag is-warning is-cursor-pointer"
                 title={
                   /[àâäéèêëîïôöùûüç -]/i.test(field)
-                    ? `${field} - ${LL().DataTable.NewColumnModal.noteSpecialCharacters()}`
+                    ? `${field} - ${LL().FormulaInput.noteSpecialCharacters()}`
                     : field
                 }
                 onClick={() => {
@@ -171,7 +195,7 @@ export default function FormulaInput(
             (specialField) => (
               <span
                 class="tag is-success is-cursor-pointer"
-                title={LL().DataTable.NewColumnModal[specialField.replace('$', 'specialField')]()}
+                title={LL().FormulaInput[specialField.replace('$', 'specialField')]()}
                 onClick={() => {
                   // Insert the field in the formula
                   insertInFormula(
@@ -194,7 +218,7 @@ export default function FormulaInput(
             (func) => (
               <span
                 class="tag is-info is-cursor-pointer"
-                title={LL().DataTable.NewColumnModal[func]()}
+                title={LL().FormulaInput[func]()}
                 onClick={() => {
                   // Insert the field in the formula
                   insertInFormula(
@@ -215,7 +239,7 @@ export default function FormulaInput(
             (op) => (
               <span
                 class="tag is-link is-cursor-pointer"
-                title={LL().DataTable.NewColumnModal[op]()}
+                title={LL().FormulaInput[op]()}
                 onClick={() => {
                   // Insert the field in the formula
                   insertInFormula(
@@ -248,18 +272,6 @@ export default function FormulaInput(
           props.setCurrentFormula(element.value);
         }}
       />
-    </div>
-    <div class="control" style={{ display: 'flex', height: '7em' }}>
-      <div style={{ display: 'flex', 'align-items': 'center', width: '12%' }}>
-        <label class="label">{LL().DataTable.NewColumnModal.sampleOutput()}</label>
-      </div>
-      <pre
-        style={{ display: 'flex', 'align-items': 'center', width: '120%' }}
-        classList={{ 'has-text-danger': sampleOutput().startsWith('Error') }}
-        id="sample-output"
-      >
-        {sampleOutput()}
-      </pre>
     </div>
   </div>;
 }

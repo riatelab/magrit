@@ -1315,8 +1315,81 @@ type RootTranslation = {
 			 * F​o​r​m​u​l​a
 			 */
 			Formula: string
+			/**
+			 * S​e​l​e​c​t​i​o​n​ ​b​y​ ​e​x​p​r​e​s​s​i​o​n​ ​i​s​ ​u​s​e​d​ ​t​o​ ​c​r​e​a​t​e​ ​a​ ​s​u​b​s​e​t​ ​o​f​ ​d​a​t​a​ ​f​r​o​m​ ​a​ ​g​e​o​g​r​a​p​h​i​c​ ​l​a​y​e​r​.​ ​T​h​e​ ​f​e​a​t​u​r​e​s​ ​i​n​ ​t​h​e​ ​l​a​y​e​r​ ​t​h​a​t​ ​s​a​t​i​s​f​y​ ​t​h​e​ ​e​x​p​r​e​s​s​i​o​n​ ​a​r​e​ ​s​e​l​e​c​t​e​d​.
+			 */
 			Information: string
+			/**
+			 * T​h​e​ ​s​y​n​t​a​x​ ​t​o​ ​b​e​ ​u​s​e​d​ ​f​o​r​ ​e​x​p​r​e​s​s​i​o​n​s​ ​i​s​ ​t​h​a​t​ ​o​f​ ​t​h​e​ ​S​Q​L​ ​l​a​n​g​u​a​g​e​.​ ​T​h​e​ ​u​s​u​a​l​ ​l​o​g​i​c​a​l​ ​a​n​d​ ​a​r​i​t​h​m​e​t​i​c​ ​o​p​e​r​a​t​o​r​s​ ​a​r​e​ ​a​v​a​i​l​a​b​l​e​.
+			 */
+			InformationSyntax: string
+			/**
+			 * I​n​v​a​l​i​d​ ​f​o​r​m​u​l​a​ ​-​ ​t​h​e​ ​e​x​p​r​e​s​s​i​o​n​ ​m​u​s​t​ ​r​e​t​u​r​n​ ​t​r​u​e​ ​o​r​ ​f​a​l​s​e​ ​f​o​r​ ​e​a​c​h​ ​f​e​a​t​u​r​e
+			 */
+			InvalidFormula: string
 		}
+	}
+	FormulaInput: {
+		/**
+		 * F​o​r​m​u​l​a
+		 */
+		formula: string
+		/**
+		 * S​a​m​p​l​e​ ​o​u​t​p​u​t
+		 */
+		sampleOutput: string
+		/**
+		 * E​r​r​o​r​ ​w​h​i​l​e​ ​p​a​r​s​i​n​g​ ​t​h​e​ ​f​o​r​m​u​l​a
+		 */
+		ErrorParsingFormula: string
+		/**
+		 * E​r​r​o​r​ ​-​ ​e​m​p​t​y​ ​r​e​s​u​l​t
+		 */
+		ErrorEmptyResult: string
+		/**
+		 * N​o​t​e​ ​t​h​a​t​ ​c​o​l​u​m​n​ ​n​a​m​e​s​ ​c​o​n​t​a​i​n​i​n​g​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r​s​ ​o​r​ ​s​p​a​c​e​s​ ​m​u​s​t​ ​b​e​ ​e​n​c​l​o​s​e​d​ ​i​n​ ​b​a​c​k​t​i​c​k​s​ ​o​r​ ​i​n​ ​b​r​a​c​k​e​t​s​.
+		 */
+		noteSpecialCharacters: string
+		/**
+		 * D​i​v​i​s​i​o​n
+		 */
+		'/': string
+		/**
+		 * A​d​d​i​t​i​o​n
+		 */
+		'+': string
+		/**
+		 * S​u​b​t​r​a​c​t​i​o​n
+		 */
+		'-': string
+		/**
+		 * M​u​l​t​i​p​l​i​c​a​t​i​o​n
+		 */
+		'*': string
+		/**
+		 * P​o​w​e​r​ ​o​p​e​r​a​t​o​r
+		 */
+		'POWER()': string
+		/**
+		 * C​o​n​c​a​t​e​n​a​t​e​ ​2​ ​o​r​ ​m​o​r​e​ ​s​t​r​i​n​g​s
+		 */
+		'CONCAT()': string
+		/**
+		 * E​x​t​r​a​c​t​ ​a​ ​s​u​b​s​t​r​i​n​g
+		 */
+		'SUBSTRING()': string
+		/**
+		 * S​p​e​c​i​a​l​ ​f​i​e​l​d​ ​-​ ​T​h​e​ ​l​e​n​g​t​h​ ​o​f​ ​t​h​e​ ​d​a​t​a​s​e​t​ ​(​n​u​m​b​e​r​ ​o​f​ ​f​e​a​t​u​r​e​s​)
+		 */
+		specialFieldLength: string
+		/**
+		 * S​p​e​c​i​a​l​ ​f​i​e​l​d​ ​-​ ​T​h​e​ ​a​r​e​a​ ​o​f​ ​t​h​e​ ​f​e​a​t​u​r​e​,​ ​i​n​ ​s​q​u​a​r​e​ ​m​e​t​e​r​s​ ​(​o​n​l​y​ ​f​o​r​ ​p​o​l​y​g​o​n​ ​l​a​y​e​r​s​)​.​ ​N​o​t​e​ ​t​h​a​t​ ​t​h​i​s​ ​c​a​l​c​u​l​a​t​i​o​n​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​g​e​o​g​r​a​p​h​i​c​a​l​ ​c​o​o​r​d​i​n​a​t​e​s​ ​a​n​d​ ​i​s​ ​m​a​d​e​ ​o​n​ ​t​h​e​ ​s​p​h​e​r​o​i​d​.​ ​T​h​i​s​ ​r​e​s​u​l​t​ ​m​a​y​ ​b​e​ ​l​e​s​s​ ​a​c​c​u​r​a​t​e​ ​t​h​a​n​ ​i​f​ ​t​h​e​ ​c​a​l​c​u​l​a​t​i​o​n​ ​h​a​d​ ​b​e​e​n​ ​c​a​r​r​i​e​d​ ​o​u​t​ ​i​n​ ​a​ ​l​o​c​a​l​ ​p​r​o​j​e​c​t​i​o​n​ ​b​a​s​e​d​ ​o​n​ ​a​n​ ​a​d​a​p​t​e​d​ ​e​l​l​i​p​s​o​i​d​.
+		 */
+		specialFieldArea: string
+		/**
+		 * S​p​e​c​i​a​l​ ​f​i​e​l​d​ ​-​ ​T​h​e​ ​(​i​n​t​e​r​n​a​l​)​ ​r​o​w​ ​i​d​ ​o​f​ ​t​h​e​ ​f​e​a​t​u​r​e
+		 */
+		specialFieldId: string
 	}
 	ExportSection: {
 		/**
@@ -1771,69 +1844,13 @@ type RootTranslation = {
 			 */
 			newColumnType: string
 			/**
-			 * F​o​r​m​u​l​a
-			 */
-			formula: string
-			/**
 			 * C​o​m​p​u​t​e
 			 */
 			compute: string
 			/**
-			 * S​a​m​p​l​e​ ​o​u​t​p​u​t
+			 * F​o​r​m​u​l​a
 			 */
-			sampleOutput: string
-			/**
-			 * E​r​r​o​r​ ​w​h​i​l​e​ ​p​a​r​s​i​n​g​ ​t​h​e​ ​f​o​r​m​u​l​a
-			 */
-			errorParsingFormula: string
-			/**
-			 * E​r​r​o​r​ ​-​ ​e​m​p​t​y​ ​r​e​s​u​l​t
-			 */
-			errorEmptyResult: string
-			/**
-			 * N​o​t​e​ ​t​h​a​t​ ​c​o​l​u​m​n​ ​n​a​m​e​s​ ​c​o​n​t​a​i​n​i​n​g​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r​s​ ​o​r​ ​s​p​a​c​e​s​ ​m​u​s​t​ ​b​e​ ​e​n​c​l​o​s​e​d​ ​i​n​ ​b​a​c​k​t​i​c​k​s​ ​o​r​ ​i​n​ ​b​r​a​c​k​e​t​s​.
-			 */
-			noteSpecialCharacters: string
-			/**
-			 * D​i​v​i​s​i​o​n
-			 */
-			'/': string
-			/**
-			 * A​d​d​i​t​i​o​n
-			 */
-			'+': string
-			/**
-			 * S​u​b​t​r​a​c​t​i​o​n
-			 */
-			'-': string
-			/**
-			 * M​u​l​t​i​p​l​i​c​a​t​i​o​n
-			 */
-			'*': string
-			/**
-			 * P​o​w​e​r​ ​o​p​e​r​a​t​o​r
-			 */
-			'POWER()': string
-			/**
-			 * C​o​n​c​a​t​e​n​a​t​e​ ​2​ ​o​r​ ​m​o​r​e​ ​s​t​r​i​n​g​s
-			 */
-			'CONCAT()': string
-			/**
-			 * E​x​t​r​a​c​t​ ​a​ ​s​u​b​s​t​r​i​n​g
-			 */
-			'SUBSTRING()': string
-			/**
-			 * S​p​e​c​i​a​l​ ​f​i​e​l​d​ ​-​ ​T​h​e​ ​l​e​n​g​t​h​ ​o​f​ ​t​h​e​ ​d​a​t​a​s​e​t​ ​(​n​u​m​b​e​r​ ​o​f​ ​f​e​a​t​u​r​e​s​)
-			 */
-			specialFieldLength: string
-			/**
-			 * S​p​e​c​i​a​l​ ​f​i​e​l​d​ ​-​ ​T​h​e​ ​a​r​e​a​ ​o​f​ ​t​h​e​ ​f​e​a​t​u​r​e​,​ ​i​n​ ​s​q​u​a​r​e​ ​m​e​t​e​r​s​ ​(​o​n​l​y​ ​f​o​r​ ​p​o​l​y​g​o​n​ ​l​a​y​e​r​s​)​.​ ​N​o​t​e​ ​t​h​a​t​ ​t​h​i​s​ ​c​a​l​c​u​l​a​t​i​o​n​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​g​e​o​g​r​a​p​h​i​c​a​l​ ​c​o​o​r​d​i​n​a​t​e​s​ ​a​n​d​ ​i​s​ ​m​a​d​e​ ​o​n​ ​t​h​e​ ​s​p​h​e​r​o​i​d​.​ ​T​h​i​s​ ​r​e​s​u​l​t​ ​m​a​y​ ​b​e​ ​l​e​s​s​ ​a​c​c​u​r​a​t​e​ ​t​h​a​n​ ​i​f​ ​t​h​e​ ​c​a​l​c​u​l​a​t​i​o​n​ ​h​a​d​ ​b​e​e​n​ ​c​a​r​r​i​e​d​ ​o​u​t​ ​i​n​ ​a​ ​l​o​c​a​l​ ​p​r​o​j​e​c​t​i​o​n​ ​b​a​s​e​d​ ​o​n​ ​a​n​ ​a​d​a​p​t​e​d​ ​e​l​l​i​p​s​o​i​d​.
-			 */
-			specialFieldArea: string
-			/**
-			 * S​p​e​c​i​a​l​ ​f​i​e​l​d​ ​-​ ​T​h​e​ ​(​i​n​t​e​r​n​a​l​)​ ​r​o​w​ ​i​d​ ​o​f​ ​t​h​e​ ​f​e​a​t​u​r​e
-			 */
-			specialFieldId: string
+			formula: string
 		}
 	}
 	FieldsTyping: {
@@ -3582,8 +3599,81 @@ export type TranslationFunctions = {
 			 * Formula
 			 */
 			Formula: () => LocalizedString
+			/**
+			 * Selection by expression is used to create a subset of data from a geographic layer. The features in the layer that satisfy the expression are selected.
+			 */
 			Information: () => LocalizedString
+			/**
+			 * The syntax to be used for expressions is that of the SQL language. The usual logical and arithmetic operators are available.
+			 */
+			InformationSyntax: () => LocalizedString
+			/**
+			 * Invalid formula - the expression must return true or false for each feature
+			 */
+			InvalidFormula: () => LocalizedString
 		}
+	}
+	FormulaInput: {
+		/**
+		 * Formula
+		 */
+		formula: () => LocalizedString
+		/**
+		 * Sample output
+		 */
+		sampleOutput: () => LocalizedString
+		/**
+		 * Error while parsing the formula
+		 */
+		ErrorParsingFormula: () => LocalizedString
+		/**
+		 * Error - empty result
+		 */
+		ErrorEmptyResult: () => LocalizedString
+		/**
+		 * Note that column names containing special characters or spaces must be enclosed in backticks or in brackets.
+		 */
+		noteSpecialCharacters: () => LocalizedString
+		/**
+		 * Division
+		 */
+		'/': () => LocalizedString
+		/**
+		 * Addition
+		 */
+		'+': () => LocalizedString
+		/**
+		 * Subtraction
+		 */
+		'-': () => LocalizedString
+		/**
+		 * Multiplication
+		 */
+		'*': () => LocalizedString
+		/**
+		 * Power operator
+		 */
+		'POWER()': () => LocalizedString
+		/**
+		 * Concatenate 2 or more strings
+		 */
+		'CONCAT()': () => LocalizedString
+		/**
+		 * Extract a substring
+		 */
+		'SUBSTRING()': () => LocalizedString
+		/**
+		 * Special field - The length of the dataset (number of features)
+		 */
+		specialFieldLength: () => LocalizedString
+		/**
+		 * Special field - The area of the feature, in square meters (only for polygon layers). Note that this calculation is based on the geographical coordinates and is made on the spheroid. This result may be less accurate than if the calculation had been carried out in a local projection based on an adapted ellipsoid.
+		 */
+		specialFieldArea: () => LocalizedString
+		/**
+		 * Special field - The (internal) row id of the feature
+		 */
+		specialFieldId: () => LocalizedString
 	}
 	ExportSection: {
 		/**
@@ -4035,69 +4125,13 @@ export type TranslationFunctions = {
 			 */
 			newColumnType: () => LocalizedString
 			/**
-			 * Formula
-			 */
-			formula: () => LocalizedString
-			/**
 			 * Compute
 			 */
 			compute: () => LocalizedString
 			/**
-			 * Sample output
+			 * Formula
 			 */
-			sampleOutput: () => LocalizedString
-			/**
-			 * Error while parsing the formula
-			 */
-			errorParsingFormula: () => LocalizedString
-			/**
-			 * Error - empty result
-			 */
-			errorEmptyResult: () => LocalizedString
-			/**
-			 * Note that column names containing special characters or spaces must be enclosed in backticks or in brackets.
-			 */
-			noteSpecialCharacters: () => LocalizedString
-			/**
-			 * Division
-			 */
-			'/': () => LocalizedString
-			/**
-			 * Addition
-			 */
-			'+': () => LocalizedString
-			/**
-			 * Subtraction
-			 */
-			'-': () => LocalizedString
-			/**
-			 * Multiplication
-			 */
-			'*': () => LocalizedString
-			/**
-			 * Power operator
-			 */
-			'POWER()': () => LocalizedString
-			/**
-			 * Concatenate 2 or more strings
-			 */
-			'CONCAT()': () => LocalizedString
-			/**
-			 * Extract a substring
-			 */
-			'SUBSTRING()': () => LocalizedString
-			/**
-			 * Special field - The length of the dataset (number of features)
-			 */
-			specialFieldLength: () => LocalizedString
-			/**
-			 * Special field - The area of the feature, in square meters (only for polygon layers). Note that this calculation is based on the geographical coordinates and is made on the spheroid. This result may be less accurate than if the calculation had been carried out in a local projection based on an adapted ellipsoid.
-			 */
-			specialFieldArea: () => LocalizedString
-			/**
-			 * Special field - The (internal) row id of the feature
-			 */
-			specialFieldId: () => LocalizedString
+			formula: () => LocalizedString
 		}
 	}
 	FieldsTyping: {

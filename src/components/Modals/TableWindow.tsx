@@ -19,9 +19,11 @@ import 'ag-grid-community/styles/ag-theme-quartz.min.css'; // theme
 // Imports from other packages
 import alasql from 'alasql';
 import { area } from '@turf/turf';
+import type { LocalizedString } from 'typesafe-i18n';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import type { TranslationFunctions } from '../../i18n/i18n-types';
 import { unproxify } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
 import { isDarkMode } from '../../helpers/darkmode';
@@ -34,6 +36,14 @@ import {
 
 // Subcomponents
 import InputFieldButton from '../Inputs/InputButton.tsx';
+import FormulaInput, {
+  hasSpecialFieldArea,
+  hasSpecialFieldId,
+  replaceSpecialFields,
+  type SampleOutputFormat,
+  type ErrorSampleOutput,
+  type ValidSampleOutput, formatValidSampleOutput,
+} from '../FormulaInput.tsx';
 
 // Stores
 import { setContextMenuStore } from '../../store/ContextMenuStore';
@@ -52,6 +62,17 @@ import type {
 // Styles
 import '../../styles/TableWindow.css';
 
+function formatSampleOutput(
+  s: SampleOutputFormat | undefined,
+  LL: Accessor<TranslationFunctions>,
+): string | LocalizedString {
+  if (!s) return '';
+  if (s.type === 'Error') {
+    return LL().FormulaInput[`Error${s.value as 'ParsingFormula' | 'EmptyResult'}`]();
+  }
+  return formatValidSampleOutput(s.value);
+}
+
 function NewFieldPanel(
   props: {
     typeDs: 'layer' | 'table';
@@ -62,9 +83,6 @@ function NewFieldPanel(
   },
 ): JSX.Element {
   const { LL } = useI18nContext();
-
-  // Reference to the input field for the formula
-  let refInputFormula: HTMLTextAreaElement;
 
   // Signals for the new column form
   const [
@@ -82,97 +100,19 @@ function NewFieldPanel(
   const [
     sampleOutput,
     setSampleOutput,
-  ] = createSignal<string>('');
-
-  // Common style for the badges
-  const styleBadges = {
-    'column-gap': '0.4em',
-    'flex-wrap': 'wrap',
-    'font-size': '0.85rem !important',
-    'row-gap': '0.4em',
-  };
-
-  // Special fields that can be used in the formula
-  const specialFields = {
-    layer: ['$length', '$id', '$area'],
-    table: ['$length', '$id'],
-  };
+  ] = createSignal<SampleOutputFormat | undefined>(undefined);
 
   const isEnabledCompute = createMemo(() => newColumnName() !== ''
     && newColumnType() !== VariableType.unknown
     && currentFormula() !== ''
-    && sampleOutput() !== ''
-    && !sampleOutput().startsWith('Err'));
-
-  const replaceSpecialFields = (formula: string): string => formula
-    .replaceAll(/\$length/gi, props.rowData().length.toString())
-    .replaceAll(/\$id/gi, '[@@uuid]')
-    .replaceAll(/\$area/gi, '[@@area]');
-
-  const hasSpecialFieldId = (formula: string) => formula.includes('@@uuid');
-
-  const hasSpecialFieldArea = (formula: string) => formula.includes('@@area');
-
-  // Insert a value (chosen from the list of fields / special fields / operator)
-  // in the formula at the caret position (taking care of the selection if needed)
-  const insertInFormula = (formula: string, value: string) => {
-    if (formula === '') {
-      setCurrentFormula(`${value} `);
-    } else {
-      // We need to take care of the caret position
-      const caretPosStart = refInputFormula.selectionStart as number;
-      const caretPosEnd = refInputFormula.selectionEnd as number;
-
-      // If the user has selected some text, we replace it
-      if (caretPosStart !== caretPosEnd) {
-        setCurrentFormula(
-          `${formula.slice(0, caretPosStart)}${value}${formula.slice(caretPosEnd)}`,
-        );
-      } else {
-        // Otherwise we insert the field at the caret position
-        setCurrentFormula(
-          `${formula.slice(0, caretPosStart)}${value} ${formula.slice(caretPosStart)}`,
-        );
-      }
-    }
-  };
-
-  const computeSampleOutput = () => {
-    const formula = replaceSpecialFields(currentFormula());
-    const query = `SELECT ${formula} as newValue FROM ?`;
-    const data = props.rowData().slice(0, 3);
-
-    if (hasSpecialFieldId(formula)) {
-      data.forEach((d, i) => {
-        d['@@uuid'] = i; // eslint-disable-line no-param-reassign
-      });
-    }
-    if (hasSpecialFieldArea(formula)) {
-      data.forEach((d, i) => {
-        d['@@area'] = area(props.dsDescription.data.features[i].geometry); // eslint-disable-line no-param-reassign
-      });
-    }
-
-    try {
-      const newColumn = alasql(query, [data]);
-      if (newColumn[0].newValue === undefined) {
-        setSampleOutput(LL().DataTable.NewColumnModal.errorEmptyResult());
-        // TODO: we may try to parse the query here (as it is syntactically correct
-        //   since no error was thrown by alasql)
-        //   and detect why the output is empty (e.g. a column name is wrong, etc.)
-      } else {
-        setSampleOutput(
-          `[0] ${newColumn[0].newValue}\n[1] ${newColumn[1].newValue}\n[2] ${newColumn[2].newValue}`,
-        );
-      }
-    } catch (e) {
-      setSampleOutput(LL().DataTable.NewColumnModal.errorParsingFormula());
-    }
-  };
+    && sampleOutput() !== undefined
+    && sampleOutput()!.value !== ''
+    && sampleOutput()!.type !== 'Error');
 
   const onClickCompute = () => {
     const variableName = newColumnName();
-    const formula = replaceSpecialFields(currentFormula());
+    const lengthDataset = props.rowData().length;
+    const formula = replaceSpecialFields(currentFormula(), lengthDataset);
     const query = `SELECT ${formula} as newValue FROM ?`;
     const data = props.rowData().slice();
 
@@ -207,161 +147,65 @@ function NewFieldPanel(
     props.updateData(variableName, newColumn.map((d: { newValue: never }) => d.newValue));
   };
 
-  createEffect(
-    on(
-      () => currentFormula(),
-      () => {
-        computeSampleOutput();
-      },
-    ),
-  );
-
   return <div>
     <h3>{ LL().DataTable.NewColumnModal.title() }</h3>
     <div style={{ display: 'block' }}>
       <div class="field-block">
-        <label class="label">{ LL().DataTable.NewColumnModal.name() }</label>
+        <label class="label">{LL().DataTable.NewColumnModal.name()}</label>
         <div class="control">
           <input
             class="input"
             type="text"
-            placeholder={ LL().DataTable.NewColumnModal.namePlaceholder() }
-            value={ newColumnName() }
-            onChange={ (e) => { setNewColumnName(e.target.value); } }
+            placeholder={LL().DataTable.NewColumnModal.namePlaceholder()}
+            value={newColumnName()}
+            onChange={(e) => {
+              setNewColumnName(e.target.value);
+            }}
           />
         </div>
       </div>
       <div class="field-block">
-        <label class="label">{ LL().DataTable.NewColumnModal.newColumnType() }</label>
+        <label class="label">{LL().DataTable.NewColumnModal.newColumnType()}</label>
         <div class="select" style={{ width: '100%' }}>
           <select
             style={{ width: '100%' }}
-            onChange={ (e) => {
+            onChange={(e) => {
               setNewColumnType(e.target.value as VariableType);
-            } }
-            value={ newColumnType() }
+            }}
+            value={newColumnType()}
           >
             <For each={Object.keys(VariableType).toReversed()}>
               {
                 (type) => (
-                  <option value={ type }>{ LL().FieldsTyping.VariableTypes[type]() }</option>)
+                  <option value={type}>{LL().FieldsTyping.VariableTypes[type]()}</option>)
               }
             </For>
           </select>
         </div>
       </div>
-      <div class="field-block">
-        <label class="label">{ LL().DataTable.NewColumnModal.formula() }</label>
-        <div class="control is-flex">
-          <div class="is-flex" style={{ width: '75%', ...styleBadges }}>
-            <For each={props.columnDefs()}>
-              {
-                (field) => (
-                  <span
-                    class="tag is-warning is-cursor-pointer"
-                    title={
-                      /[àâäéèêëîïôöùûüç -]/i.test(field.field)
-                        ? `${field.field} - ${LL().DataTable.NewColumnModal.noteSpecialCharacters()}`
-                        : field.field
-                    }
-                    onClick={() => {
-                      // If the field name contains spaces or special characters,
-                      // we need to put it between brackets
-                      let fieldValue = field.field;
-                      if (/[àâäéèêëîïôöùûüç -]/i.test(fieldValue)) {
-                        fieldValue = `[${fieldValue}]`;
-                      }
-                      // Insert the field in the formula
-                      insertInFormula(currentFormula(), fieldValue);
-                      // Focus on the input field to help the UX
-                      refInputFormula.focus();
-                    }}
-                  >{ field.field }</span>
-                )
-              }
-            </For>
-            <For each={specialFields[props.typeDs]}>
-              {
-                (specialField) => (
-                  <span
-                    class="tag is-success is-cursor-pointer"
-                    title={ LL().DataTable.NewColumnModal[specialField.replace('$', 'specialField')]() }
-                    onClick={() => {
-                      // Insert the field in the formula
-                      insertInFormula(currentFormula(), specialField);
-                      // Focus on the input field to help the UX
-                      refInputFormula.focus();
-                    }}
-                  >{ specialField }</span>
-                )
-              }
-            </For>
-          </div>
-          <div class="is-flex" style={{ width: '25%', 'flex-flow': 'row-reverse', ...styleBadges }}>
-            <For each={['POWER()', 'SUBSTRING()', 'CONCAT()']}>
-              {
-                (func) => (
-                  <span
-                    class="tag is-info is-cursor-pointer"
-                    title={ LL().DataTable.NewColumnModal[func]() }
-                    onClick={() => {
-                      // Insert the field in the formula
-                      insertInFormula(currentFormula(), func);
-                      // Focus on the input field to help the UX
-                      refInputFormula.focus();
-                    }}
-                  >{ func }</span>
-                )
-              }
-            </For>
-            <For each={['*', '+', '-', '/']}>
-              {
-                (op) => (
-                  <span
-                    class="tag is-link is-cursor-pointer"
-                    title={ LL().DataTable.NewColumnModal[op]() }
-                    onClick={() => {
-                      // Insert the field in the formula
-                      insertInFormula(currentFormula(), op);
-                      // Focus on the input field to help the UX
-                      refInputFormula.focus();
-                    }}
-                  >{ op }</span>
-                )
-              }
-            </For>
-          </div>
+      <FormulaInput
+        typeDataset={props.typeDs}
+        dsDescription={props.dsDescription}
+        currentFormula={currentFormula}
+        setCurrentFormula={setCurrentFormula}
+        sampleOutput={sampleOutput}
+        setSampleOutput={setSampleOutput}
+      />
+      <div class="control" style={{ display: 'flex', height: '7em' }}>
+        <div style={{ display: 'flex', 'align-items': 'center', width: '12%' }}>
+          <label class="label">{LL().FormulaInput.sampleOutput()}</label>
         </div>
-        <br />
-        <div class="control" style={{ width: '100%', display: 'inline-block' }}>
-          <textarea
-            rows={3}
-            ref={(el) => { refInputFormula = el; }}
-            class="input"
-            style={{ height: 'unset' }}
-            value={currentFormula()}
-            onKeyUp={ (e) => {
-              const element = e.target as EventTarget & HTMLInputElement;
-              setCurrentFormula(element.value);
-            }}
-          />
-        </div>
-        <div class="control" style={{ display: 'flex', height: '7em' }}>
-          <div style={{ display: 'flex', 'align-items': 'center', width: '12%' }}>
-            <label class="label">{ LL().DataTable.NewColumnModal.sampleOutput() }</label>
-          </div>
-          <pre
-            style={{ display: 'flex', 'align-items': 'center', width: '120%' }}
-            classList={{ 'has-text-danger': sampleOutput().startsWith('Error') }}
-            id="sample-output"
-          >
-            { sampleOutput() }
+        <pre
+          style={{ display: 'flex', 'align-items': 'center', width: '120%' }}
+          classList={{ 'has-text-danger': sampleOutput() && sampleOutput()!.type === 'Error' }}
+          id="sample-output"
+        >
+            {formatSampleOutput(sampleOutput(), LL)}
           </pre>
-        </div>
       </div>
-      <br />
+      <br/>
       <InputFieldButton
-        label={ LL().DataTable.NewColumnModal.compute() }
+        label={LL().DataTable.NewColumnModal.compute()}
         disabled={!isEnabledCompute()}
         onClick={onClickCompute}
       />
