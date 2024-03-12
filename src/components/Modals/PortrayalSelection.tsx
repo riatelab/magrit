@@ -41,7 +41,7 @@ import MushroomsSettings from '../PortrayalOption/MushroomsSettings.tsx';
 import AggregationSettings from '../PortrayalOption/AggregationSettings.tsx';
 import SelectionSettings from '../PortrayalOption/SelectionSettings.tsx';
 import InformationBanner from '../InformationBanner.tsx';
-import SimplificationModal from './SimplificationModal.tsx';
+import SimplificationSettings from '../PortrayalOption/SimplificationSettings.tsx';
 
 // Type / interfaces / enums
 import { ProcessingOperationType, RepresentationType } from '../../global.d';
@@ -371,7 +371,7 @@ export default function PortrayalSelection(): JSX.Element {
               <SelectionSettings layerId={portrayalSelectionStore.layerId!} />
             </Match>
             <Match when={selectedPortrayal()!.type === ProcessingOperationType.simplification}>
-              <SimplificationModal ids={[portrayalSelectionStore.layerId!]} />
+              <SimplificationSettings layerId={portrayalSelectionStore.layerId!} />
             </Match>
           </Switch>
         </Show>

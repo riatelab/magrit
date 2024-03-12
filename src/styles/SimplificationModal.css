@@ -1,39 +1,40 @@
-.simplification-modal canvas {
+.simplification-inner canvas {
     width: 100%;
-    height: 55vh;
+    height: 60%;
     z-index: 1;
     border: solid 1px #000;
 }
 
-.simplification-modal__map-container {
+.simplification-inner__map-container {
     text-align: center;
+    height: 100%;
 }
 
-.simplification-modal__parameters-container {
+.simplification-inner__parameters-container {
     width: 36%;
     padding: 0 2em;
 }
 
-.simplification-modal__layer-list-container {
+.simplification-inner__layer-list-container {
     width: 64%;
     padding: 0 0 0 2em;
 }
 
-.simplification-modal__layer-list {
+.simplification-inner__layer-list {
     list-style: none !important;
     padding: 0 !important;
     margin: 0 !important;
 }
 
-.simplification-modal__layer-list > li {
+.simplification-inner__layer-list > li {
     margin: 1em 0;
 }
 
-.simplification-modal__layer-list > li > * {
+.simplification-inner__layer-list > li > * {
     margin: 0 1em;
 }
 
-.simplification-modal__color-box {
+.simplification-inner__color-box {
     display: inline-block;
     width: 1em;
     height: 1em;
