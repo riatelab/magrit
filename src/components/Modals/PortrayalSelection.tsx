@@ -11,7 +11,8 @@ import {
 } from 'solid-js';
 
 // Imports from other libraries
-import { FaSolidArrowLeftLong } from 'solid-icons/fa';
+import { FaSolidArrowLeftLong, FaSolidMapLocationDot } from 'solid-icons/fa';
+import { VsServerProcess } from 'solid-icons/vs';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -40,6 +41,7 @@ import MushroomsSettings from '../PortrayalOption/MushroomsSettings.tsx';
 import AggregationSettings from '../PortrayalOption/AggregationSettings.tsx';
 import SelectionSettings from '../PortrayalOption/SelectionSettings.tsx';
 import InformationBanner from '../InformationBanner.tsx';
+import SimplificationModal from './SimplificationModal.tsx';
 
 // Type / interfaces / enums
 import { ProcessingOperationType, RepresentationType } from '../../global.d';
@@ -102,6 +104,10 @@ const portrayalDescriptions: PortrayalDescription[] = [
     name: 'Selection',
     type: ProcessingOperationType.selection,
   },
+  {
+    name: 'Simplification',
+    type: ProcessingOperationType.simplification,
+  },
 ].map((p) => ({ ...p, enabled: false }));
 
 function CardPortrayal(
@@ -116,7 +122,6 @@ function CardPortrayal(
       'is-clickable': pDesc.enabled,
       'is-disabled': !pDesc.enabled,
     }}
-    style={{ 'min-height': '11em' }}
     onClick={
       // We don't care about pDesc reactivity here
       // eslint-disable-next-line solid/reactivity
@@ -139,10 +144,18 @@ function CardPortrayal(
   >
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
       <p class="card-header-title">
+        <Switch>
+          <Match when={Object.values(RepresentationType).includes(pDesc.type)}>
+            <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+          </Match>
+          <Match when={Object.values(ProcessingOperationType).includes(pDesc.type)}>
+            <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+          </Match>
+        </Switch>
         { LL().PortrayalSection.PortrayalTypes[pDesc.name]() }
       </p>
     </header>
-    <section class="card-content">
+    <section class="card-content" style={{ padding: '1em' }}>
       <div class="content">
         { LL().PortrayalSelection.ShortDescriptions[pDesc.name]() }
       </div>
@@ -224,11 +237,15 @@ export default function PortrayalSelection(): JSX.Element {
         break;
       case ProcessingOperationType.aggregation:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = vars.nCategorical > 0 && geomType === 'polygon';
+        p.enabled = geomType === 'polygon';
         break;
       case ProcessingOperationType.selection:
         // eslint-disable-next-line no-param-reassign
         p.enabled = hasAnyVariable;
+        break;
+      case ProcessingOperationType.simplification:
+        // eslint-disable-next-line no-param-reassign
+        p.enabled = geomType === 'polygon';
         break;
       default:
         // eslint-disable-next-line no-param-reassign
@@ -352,6 +369,9 @@ export default function PortrayalSelection(): JSX.Element {
             </Match>
             <Match when={selectedPortrayal()!.type === ProcessingOperationType.selection}>
               <SelectionSettings layerId={portrayalSelectionStore.layerId!} />
+            </Match>
+            <Match when={selectedPortrayal()!.type === ProcessingOperationType.simplification}>
+              <SimplificationModal ids={[portrayalSelectionStore.layerId!]} />
             </Match>
           </Switch>
         </Show>

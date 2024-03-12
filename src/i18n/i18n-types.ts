@@ -841,6 +841,10 @@ type RootTranslation = {
 			 */
 			Selection: string
 			/**
+			 * S​i​m​p​l​i​f​i​c​a​t​i​o​n
+			 */
+			Simplification: string
+			/**
 			 * N​o​ ​p​o​r​t​r​a​y​a​l​ ​f​o​r​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​l​a​y​e​r​ ​-​ ​P​l​e​a​s​e​ ​v​e​r​i​f​y​ ​t​h​e​ ​t​y​p​i​n​g​ ​o​f​ ​t​h​e​ ​f​i​e​l​d​s​ ​o​r​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​l​a​y​e​r
 			 */
 			NoPortrayal: string
@@ -1676,13 +1680,17 @@ type RootTranslation = {
 			 */
 			Mushrooms: string
 			/**
-			 * L​o​r​e​m​ ​I​p​s​u​m
+			 * T​h​i​s​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​e​n​a​b​l​e​s​ ​p​o​l​y​g​o​n​a​l​ ​e​n​t​i​t​i​e​s​ ​t​o​ ​b​e​ ​a​g​g​r​e​g​a​t​e​d​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​f​i​e​l​d​ ​(​o​r​ ​a​l​l​ ​e​n​t​i​t​i​e​s​ ​i​f​ ​n​o​ ​f​i​e​l​d​ ​i​s​ ​s​e​l​e​c​t​e​d​)​.
 			 */
 			Aggregation: string
 			/**
-			 * L​o​r​e​m​ ​I​p​s​u​m
+			 * T​h​i​s​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​c​a​n​ ​b​e​ ​u​s​e​d​ ​t​o​ ​c​r​e​a​t​e​ ​a​ ​n​e​w​ ​l​a​y​e​r​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​s​e​l​e​c​t​i​o​n​ ​o​f​ ​i​n​i​t​i​a​l​ ​g​e​o​g​r​a​p​h​i​c​a​l​ ​f​e​a​t​u​r​e​s​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​a​n​ ​e​x​p​r​e​s​s​i​o​n
 			 */
 			Selection: string
+			/**
+			 * T​h​i​s​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​s​i​m​p​l​i​f​i​e​s​ ​t​h​e​ ​d​r​a​w​i​n​g​ ​o​f​ ​l​i​n​e​a​r​ ​o​r​ ​p​o​l​y​g​o​n​a​l​ ​e​n​t​i​t​i​e​s​.​ ​T​h​i​s​ ​o​p​e​r​a​t​i​o​n​,​ ​a​l​s​o​ ​k​n​o​w​n​ ​a​s​ ​'​g​e​n​e​r​a​l​i​s​a​t​i​o​n​'​ ​i​n​ ​c​a​r​t​o​g​r​a​p​h​y​,​ ​r​e​s​u​l​t​s​ ​i​n​ ​a​ ​l​e​s​s​ ​d​e​t​a​i​l​e​d​ ​a​n​d​ ​l​i​g​h​t​e​r​ ​d​a​t​a​s​e​t​.
+			 */
+			Simplification: string
 		}
 		LongDescriptions: {
 			Choropleth: string
@@ -3126,6 +3134,10 @@ export type TranslationFunctions = {
 			 */
 			Selection: () => LocalizedString
 			/**
+			 * Simplification
+			 */
+			Simplification: () => LocalizedString
+			/**
 			 * No portrayal for the selected layer - Please verify the typing of the fields or select another layer
 			 */
 			NoPortrayal: () => LocalizedString
@@ -3960,13 +3972,17 @@ export type TranslationFunctions = {
 			 */
 			Mushrooms: () => LocalizedString
 			/**
-			 * Lorem Ipsum
+			 * This functionality enables polygonal entities to be aggregated according to the value of a field (or all entities if no field is selected).
 			 */
 			Aggregation: () => LocalizedString
 			/**
-			 * Lorem Ipsum
+			 * This functionality can be used to create a new layer based on the selection of initial geographical features according to an expression
 			 */
 			Selection: () => LocalizedString
+			/**
+			 * This functionality simplifies the drawing of linear or polygonal entities. This operation, also known as 'generalisation' in cartography, results in a less detailed and lighter dataset.
+			 */
+			Simplification: () => LocalizedString
 		}
 		LongDescriptions: {
 			Choropleth: () => LocalizedString

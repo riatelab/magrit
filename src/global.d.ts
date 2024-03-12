@@ -558,6 +558,7 @@ export enum RepresentationType {
 export enum ProcessingOperationType {
   aggregation = 'aggregation',
   selection = 'selection',
+  simplification = 'simplification',
 }
 
 export enum CartogramMethod {
