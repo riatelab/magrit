@@ -118,7 +118,7 @@ export default function FormulaInput(
     if (hasSpecialFieldArea(formula)) {
       data.forEach((d, i) => {
         // eslint-disable-next-line no-param-reassign
-        d['@@area'] = area((props.dsDescription as LayerDescription).data.features[i].geometry);
+        d['@@area'] = area((props.dsDescription as LayerDescription).data.features[i].geometry as never);
       });
     }
 

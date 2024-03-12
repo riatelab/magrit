@@ -17,6 +17,8 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { findSuitableName } from '../../helpers/common';
 import { generateIdLayer } from '../../helpers/layers';
+import aggregateLayer from '../../helpers/aggregationLayer';
+import { DataType, type Variable } from '../../helpers/typeDetection';
 
 // Stores
 import { setLoading } from '../../store/GlobalStore';
@@ -32,13 +34,11 @@ import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputResultName from './InputResultName.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
+import WarningBanner from '../WarningBanner.tsx';
 
 // Types / Interfaces / Enums
 import type { PortrayalSettingsProps } from './common';
-import { DataType, type Variable } from '../../helpers/typeDetection';
 import { type LayerDescription } from '../../global.d';
-import aggregateLayer from '../../helpers/aggregationLayer';
-import WarningBanner from '../WarningBanner.tsx';
 
 async function onClickValidate(
   referenceLayerId: string,

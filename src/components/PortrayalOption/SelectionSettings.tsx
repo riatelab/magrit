@@ -1,26 +1,29 @@
 import {
   Accessor,
-  createEffect,
   createMemo,
   createSignal,
-  For,
   type JSX,
-  on,
-  Show,
 } from 'solid-js';
-import { produce } from 'solid-js/store';
+import { produce, unwrap } from 'solid-js/store';
 
 // Imports from other packages
+import alasql from 'alasql';
 import { yieldOrContinue } from 'main-thread-scheduling';
+import { area } from '@turf/turf';
 import { LocalizedString } from 'typesafe-i18n';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { findSuitableName } from '../../helpers/common';
+import { generateIdLayer } from '../../helpers/layers';
 
 // Stores
-import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+import {
+  layersDescriptionStore,
+  LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../../store/LayersDescriptionStore';
 import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
 import { setLoading } from '../../store/GlobalStore';
 
@@ -29,19 +32,77 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 import { PortrayalSettingsProps } from './common';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputResultName from './InputResultName.tsx';
+import FormulaInput, {
+  formatValidSampleOutput, hasSpecialFieldArea,
+  hasSpecialFieldId,
+  replaceSpecialFields,
+  SampleOutputFormat,
+} from '../FormulaInput.tsx';
+import InformationBanner from '../InformationBanner.tsx';
 
 // Types / Interfaces / Enums
 import { LayerDescription } from '../../global';
-import FormulaInput, { formatValidSampleOutput, SampleOutputFormat } from '../FormulaInput.tsx';
-import InformationBanner from '../InformationBanner.tsx';
 
 async function onClickValidate(
   referenceLayerId: string,
   formula: string,
   newLayerName: string,
 ) {
-  return 1;
+  const layerDescription = layersDescriptionStore.layers
+    .find((layer) => layer.id === referenceLayerId)! as LayerDescription;
+  const data = layerDescription.data.features
+    .map((d) => unwrap(d.properties) as Record<string, any>);
+  const lengthDataset = data.length;
+  const formulaClean = replaceSpecialFields(formula, lengthDataset);
+  const query = `SELECT ${formulaClean} as newValue FROM ?`;
+
+  // Add special fields if needed
+  if (hasSpecialFieldId(formulaClean)) {
+    data.forEach((d, i) => {
+      d['@@uuid'] = i; // eslint-disable-line no-param-reassign
+    });
+  }
+  if (hasSpecialFieldArea(formulaClean)) {
+    data.forEach((d, i) => {
+      d['@@area'] = area(layerDescription.data.features[i].geometry as never); // eslint-disable-line no-param-reassign
+    });
+  }
+
+  // Compute new column
+  const newColumn = alasql(query, [data]);
+  const predicateArray = newColumn.map((d: any) => d.newValue);
+
+  // Select the data based on the predicate array
+  const features = layerDescription.data.features.filter((_, i) => predicateArray[i]);
+
+  const newLayerDescription = {
+    id: generateIdLayer(),
+    name: newLayerName,
+    data: { type: 'FeatureCollection', features },
+    type: 'polygon',
+    fields: unwrap(layerDescription.fields),
+    renderer: 'default',
+    visible: true,
+    fillOpacity: 1,
+    fillColor: '#395446',
+    strokeColor: '#000000',
+    strokeWidth: 1,
+    strokeOpacity: 1,
+    dropShadow: false,
+    blurFilter: false,
+    shapeRendering: 'auto',
+  } as LayerDescription;
+
+  setLayersDescriptionStore(
+    produce((draft: LayersDescriptionStoreType) => {
+      draft.layers.push(newLayerDescription);
+    }),
+  );
 }
+
+const allValuesAreBoolean = (
+  values: any[],
+) => Object.values(values).every((v) => v === true || v === false);
 
 function formatSampleOutput(
   s: SampleOutputFormat | undefined,
@@ -56,10 +117,10 @@ function formatSampleOutput(
   if (values.length === 0) {
     return LL().FormulaInput.ErrorEmptyResult();
   }
-  if (values.every((v) => v === true || v === false)) {
-    return formatValidSampleOutput(s.value);
+  if (!allValuesAreBoolean(values)) {
+    return LL().PortrayalSection.SelectionOptions.InvalidFormula();
   }
-  return LL().PortrayalSection.SelectionOptions.InvalidFormula();
+  return formatValidSampleOutput(s.value);
 }
 
 export default function SelectionSettings(
@@ -116,6 +177,11 @@ export default function SelectionSettings(
     }, 0);
   };
 
+  const isConfirmationEnabled = createMemo(() => formula() !== ''
+    && sampleOutput()
+    && sampleOutput()!.type !== 'Error'
+    && allValuesAreBoolean(Object.values(sampleOutput()!.value)));
+
   return <div class="portrayal-section__portrayal-options-selection">
     <InformationBanner expanded={true}>
       <p>{LL().PortrayalSection.SelectionOptions.Information()}</p>
@@ -155,6 +221,7 @@ export default function SelectionSettings(
     <ButtonValidation
       label={LL().PortrayalSection.CreateLayer()}
       onClick={makePortrayal}
+      disabled={!isConfirmationEnabled()}
     />
   </div>;
 }
