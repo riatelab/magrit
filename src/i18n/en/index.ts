@@ -412,6 +412,7 @@ const en = {
     FillOpacity: 'Fill opacity',
     StrokeOpacity: 'Stroke opacity',
     StrokeWidth: 'Stroke width',
+    StrokeDashed: 'Dashed stroke',
     PointRadius: 'Point radius',
     AestheticFilter: 'Aesthetic filter',
     DropShadow: 'Add a shadow',

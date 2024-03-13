@@ -412,6 +412,7 @@ const fr = {
     FillOpacity: 'Opacité du remplissage',
     StrokeOpacity: 'Opacité de la ligne',
     StrokeWidth: 'Épaisseur de la ligne',
+    StrokeDashed: 'Ligne en pointillés',
     PointRadius: 'Rayon du point',
     AestheticFilter: 'Filtre esthétique',
     DropShadow: 'Ajouter une ombre',

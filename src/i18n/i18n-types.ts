@@ -1459,6 +1459,10 @@ type RootTranslation = {
 		 */
 		StrokeWidth: string
 		/**
+		 * D​a​s​h​e​d​ ​s​t​r​o​k​e
+		 */
+		StrokeDashed: string
+		/**
 		 * P​o​i​n​t​ ​r​a​d​i​u​s
 		 */
 		PointRadius: string
@@ -3734,6 +3738,10 @@ export type TranslationFunctions = {
 		 * Stroke width
 		 */
 		StrokeWidth: () => LocalizedString
+		/**
+		 * Dashed stroke
+		 */
+		StrokeDashed: () => LocalizedString
 		/**
 		 * Point radius
 		 */

@@ -546,6 +546,14 @@ function makeSettingsDefaultLine(
         step={0.1}
       />
     </Show>
+    <InputFieldCheckbox
+      label={ LL().LayerSettings.StrokeDashed() }
+      checked={!!props.strokeDasharray}
+      onChange={(checked) => {
+        const v = checked ? '5 5' : undefined;
+        debouncedUpdateProp(props.id, 'strokeDasharray', v);
+      }}
+    />
     <Show when={
       props.renderer === 'links'
       && ['Exchange', 'BilateralVolume'].includes((props.rendererParameters as LinksParameters).type)
