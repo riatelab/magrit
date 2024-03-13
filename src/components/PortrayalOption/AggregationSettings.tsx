@@ -46,6 +46,7 @@ async function onClickValidate(
   aggregationMethod: 'geos' | 'topojson',
   newLayerName: string,
 ): Promise<void> {
+  const aggregateAllFeatures = targetVariable === '';
   const dataToAggregate = (layersDescriptionStore.layers
     .find((layer) => layer.id === referenceLayerId) as LayerDescription).data;
   const newData = await aggregateLayer(
@@ -58,7 +59,7 @@ async function onClickValidate(
     name: newLayerName,
     data: newData,
     type: 'polygon',
-    fields: [
+    fields: aggregateAllFeatures ? [] : [
       {
         name: targetVariable,
         dataType: DataType.string,

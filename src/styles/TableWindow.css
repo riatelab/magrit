@@ -15,3 +15,7 @@ div.ag-new-cell-highlight[col-id][role="columnheader"],
 div.ag-new-cell-highlight[col-id][role="gridcell"] {
     background-color: #ffff0080;
 }
+
+.ag-dnd-ghost {
+    position: relative !important;
+}

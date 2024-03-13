@@ -1799,7 +1799,7 @@ type RootTranslation = {
 		 */
 		Features: string
 		/**
-		 * {​{​O​n​e​ ​c​o​l​u​m​n​|​?​?​ ​c​o​l​u​m​n​s​}​}
+		 * {​{​N​o​n​ ​c​o​l​u​m​n​|​O​n​e​ ​c​o​l​u​m​n​|​?​?​ ​c​o​l​u​m​n​s​}​}
 		 */
 		Columns: string
 		/**
@@ -4072,7 +4072,7 @@ export type TranslationFunctions = {
 		 */
 		Features: (arg0: number | string | boolean) => LocalizedString
 		/**
-		 * {{One column|?? columns}}
+		 * {{Non column|One column|?? columns}}
 		 */
 		Columns: (arg0: number | string | boolean) => LocalizedString
 		/**

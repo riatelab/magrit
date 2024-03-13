@@ -534,6 +534,8 @@ export default function TableWindow(): JSX.Element {
               columnDefs={ columnDefs() }
               defaultColDef={ defaultColDef }
               onCellValueChanged={ () => { setDataEdited(true); } }
+              suppressDragLeaveHidesColumns={ true }
+              suppressColumnMoveAnimation={ true }
             />
           </div>
         </Show>

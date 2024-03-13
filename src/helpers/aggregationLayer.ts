@@ -31,13 +31,17 @@ export default async function aggregateLayer(
       );
       const unionPtr = geos.GEOSUnaryUnion(geomPtr);
       const unionGeom = geosGeomToGeojson(unionPtr, geos);
-      newFeatures.push({
+      const ft = {
         type: 'Feature',
-        properties: {
-          [variable]: group[0].properties[variable],
-        },
+        properties: {},
         geometry: unionGeom,
-      } as GeoJSONFeature);
+      } as GeoJSONFeature;
+
+      if (variable !== '') {
+        ft.properties[variable] = group[0].properties[variable];
+      }
+
+      newFeatures.push(ft);
       geos.GEOSGeom_destroy(geomPtr);
       geos.GEOSGeom_destroy(unionPtr);
     });
@@ -55,13 +59,17 @@ export default async function aggregateLayer(
       topo,
       topo.objects.collection.geometries,
     );
-    newFeatures.push({
+    const ft = {
       type: 'Feature',
-      properties: {
-        [variable]: group[0].properties[variable],
-      },
+      properties: {},
       geometry: mergedPolygon,
-    } as GeoJSONFeature);
+    } as GeoJSONFeature;
+
+    if (variable !== '') {
+      ft.properties[variable] = group[0].properties[variable];
+    }
+
+    newFeatures.push(ft);
   });
   return {
     type: 'FeatureCollection',

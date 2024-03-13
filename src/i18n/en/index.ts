@@ -509,7 +509,7 @@ const en = {
     titleGeo: 'Attribute table',
     titleTabular: 'Data table',
     Features: '{{One feature | ?? features}}',
-    Columns: '{{One column | ?? columns}}',
+    Columns: '{{Non column | One column | ?? columns}}',
     ExportCsv: 'Export as CSV...',
     NewColumn: 'New column...',
     DeleteColumn: 'Delete column',

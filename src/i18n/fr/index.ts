@@ -509,7 +509,7 @@ const fr = {
     titleGeo: 'Table attributaire',
     titleTabular: 'Tableau de données',
     Features: '{{Une entité | ?? entités}}',
-    Columns: '{{Une colonne | ?? colonnes}}',
+    Columns: '{{Pas de colonne | Une colonne | ?? colonnes}}',
     ExportCsv: 'Exporter en CSV...',
     NewColumn: 'Nouveau champ...',
     DeleteColumn: 'Supprimer la colonne',

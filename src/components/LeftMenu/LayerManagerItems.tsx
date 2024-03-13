@@ -305,7 +305,7 @@ export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.E
           >
             <FaSolidMagnifyingGlass />
           </button>
-          <Show when={props.layer.fields && props.layer.fields.length > 0}>
+          <Show when={props.layer.renderer !== 'sphere'}>
             <button
               aria-label={ LL().LayerManager.AttributeTable() }
               class="unstyled"
