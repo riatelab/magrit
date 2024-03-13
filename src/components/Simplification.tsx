@@ -17,7 +17,7 @@ import d3 from '../helpers/d3-custom';
 
 // Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
-import { cleanGeometryGeos, countCoordinates } from '../helpers/geo';
+import { cleanGeometryGeos, countCoordinates, findIntersections } from '../helpers/geo';
 import { round } from '../helpers/math';
 
 // Other components
@@ -50,19 +50,21 @@ interface SimplificationInfo {
 /**
  * Compute the simplification info of a layer (given its name) in a TopoJSON topology.
  *
- * @param topo
- * @param layerName
+ * @param {any} topo
+ * @param {string} layerName
+ * @param {boolean} checkSelfIntersections
  */
 const getSimplificationInfo = async (
   topo: any,
   layerName: string,
+  checkSelfIntersections: boolean,
 ): Promise<Partial<SimplificationInfo>> => {
   const topoLayer = topo.objects[layerName];
   const geoLayer = topojson.feature(topo, topoLayer) as GeoJSONFeatureCollection;
   let nbGeometries = 0;
   let vertices = 0;
   // let vertices2 = 0;
-  console.time('clean, filter and count points');
+  console.time(`clean, filter and count points ${layerName}`);
   for (let i = 0; i < geoLayer.features.length; i += 1) {
     const feature = geoLayer.features[i];
     // eslint-disable-next-line no-param-reassign, no-await-in-loop
@@ -76,13 +78,20 @@ const getSimplificationInfo = async (
     }
   }
   const features = geoLayer.features.filter((f) => f.geometry);
-  console.timeEnd('clean, filter and count points');
+  console.timeEnd(`clean, filter and count points ${layerName}`);
+
+  let selfIntersections = null;
+  if (checkSelfIntersections) {
+    console.time(`check self intersections ${layerName}`);
+    selfIntersections = findIntersections(topo, layerName);
+    console.timeEnd(`check self intersections ${layerName}`);
+  }
 
   return {
     polygons: nbGeometries,
     edges: 0,
     vertices,
-    selfIntersections: null,
+    selfIntersections,
     features,
   };
 };
@@ -291,6 +300,7 @@ export default function Simplification(
           const simplificationInfo = await getSimplificationInfo(
             simplified,
             layerName,
+            checkIntersections(),
           );
           return {
             name: layerName,
@@ -301,7 +311,7 @@ export default function Simplification(
       );
 
       // We update the meshes
-      layerNames.forEach((layerName, i) => {
+      layerNames.forEach((layerName) => {
         meshes[layerName] = topojson.mesh(
           simplified,
           simplified.objects[layerName],
