@@ -48,7 +48,7 @@ async function onClickValidate(
     id: generateIdLayer(),
     name: newLayerName,
     data: newData,
-    type: 'polygon',
+    type: referenceDescription.type,
     fields: unwrap(referenceDescription.fields),
     renderer: 'default',
     visible: true,
