@@ -11,72 +11,66 @@ const isCandidateForRepresentation = (layerDescription: LayerDescription) => (
   && layerDescription.fields && layerDescription.fields.length > 0
 );
 
-function layerAvailableVariables(layerId: string) {
-  const layer = layersDescriptionStore.layers
-    .find((l) => l.id === layerId);
-
-  if (!layer || !layer.fields) {
+function layerAvailableVariables(layer: LayerDescription) {
+  if (!layer.fields) {
     return {
       nCategorical: 0,
       nStock: 0,
       nRatio: 0,
       nIdentifier: 0,
+      nUnknown: 0,
     };
   }
 
-  const nCategorical = layer.fields.filter((f) => f.type === 'categorical').length;
-  const nStock = layer.fields.filter((f) => f.type === 'stock').length;
-  const nRatio = layer.fields.filter((f) => f.type === 'ratio').length;
-  const nIdentifier = layer.fields.filter((f) => f.type === 'identifier').length;
-  // const hasUnknown = layer.fields.some((f) => f.type === 'unknown');
-
   return {
-    nCategorical,
-    nStock,
-    nRatio,
-    nIdentifier,
-    // hasUnknown,
+    nCategorical: layer.fields.filter((f) => f.type === 'categorical').length,
+    nStock: layer.fields.filter((f) => f.type === 'stock').length,
+    nRatio: layer.fields.filter((f) => f.type === 'ratio').length,
+    nIdentifier: layer.fields.filter((f) => f.type === 'identifier').length,
+    nUnknown: layer.fields.filter((f) => f.type === 'unknown').length,
   };
 }
 
-function layerGeometryType(layerId: string) {
-  const layer = layersDescriptionStore.layers
-    .find((l) => l.id === layerId);
-
-  if (!layer) {
-    return null;
-  }
-
+function layerGeometryType(layer: LayerDescription) {
   return layer.type;
 }
 
-function layerAnyAvailableVariable(layerId: string) {
-  const layer = layersDescriptionStore.layers
-    .find((l) => l.id === layerId);
-
-  if (!layer || !layer.fields) {
+function layerAnyAvailableVariable(layer: LayerDescription) {
+  if (!layer.fields) {
     return false;
   }
 
   return layer.fields.length > 0;
 }
 
-function getLayerName(layerIr: string) {
-  const layer = layersDescriptionStore.layers
-    .find((l) => l.id === layerIr);
-
-  if (!layer) {
-    return null;
-  }
-
+function layerName(layer: LayerDescription) {
   return layer.name;
 }
 
+function summaryForChoosingPortrayal(layerId: string) {
+  const layer = layersDescriptionStore.layers
+    .find((l) => l.id === layerId)!;
+
+  const hasAnyVariable = layerAnyAvailableVariable(layer);
+  const availableVariables = layerAvailableVariables(layer);
+  const geomType = layerGeometryType(layer);
+  const nFeatures = layer.data.features.length;
+
+  return {
+    availableVariables,
+    geomType,
+    hasAnyVariable,
+    name: layerName(layer),
+    nFeatures,
+  };
+}
+
 export {
-  getLayerName,
+  summaryForChoosingPortrayal,
   isExportableLayer,
   isCandidateForRepresentation,
+  layerAnyAvailableVariable,
   layerAvailableVariables,
   layerGeometryType,
-  layerAnyAvailableVariable,
+  layerName,
 };

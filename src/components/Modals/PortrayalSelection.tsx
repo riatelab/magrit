@@ -16,12 +16,7 @@ import { VsServerProcess } from 'solid-icons/vs';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import {
-  getLayerName,
-  layerAnyAvailableVariable,
-  layerAvailableVariables,
-  layerGeometryType,
-} from '../../helpers/layerDescription';
+import { summaryForChoosingPortrayal } from '../../helpers/layerDescription';
 
 // Stores
 import { portrayalSelectionStore, setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
@@ -179,13 +174,17 @@ export default function PortrayalSelection(): JSX.Element {
   // Clone the portrayalDescriptions array
   const portrayals = portrayalDescriptions.slice();
 
-  // What are the available variable for the selected layer?
-  const hasAnyVariable = layerAnyAvailableVariable(portrayalSelectionStore.layerId);
-  const vars = layerAvailableVariables(portrayalSelectionStore.layerId);
-  // What is the geometry type for the selected layer ?
-  const geomType = layerGeometryType(portrayalSelectionStore.layerId);
-
-  // Is there any tabular datasets that may contain information for links ?
+  // - What are the available variable for the selected layer?
+  // - What is the geometry type for the selected layer ?
+  // - How many features are there in the selected layer ?
+  const {
+    hasAnyVariable,
+    availableVariables: vars,
+    geomType,
+    name: layerName,
+    nFeatures,
+  } = summaryForChoosingPortrayal(portrayalSelectionStore.layerId);
+  // - Is there any tabular datasets that may contain information for links ?
   const projectHasTabularDataset = layersDescriptionStore.tables.length > 0;
 
   // Set the enable flag for the various portrayal types
@@ -193,7 +192,7 @@ export default function PortrayalSelection(): JSX.Element {
     switch (p.type) {
       case RepresentationType.choropleth:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = vars.nRatio > 0;
+        p.enabled = nFeatures > 1 && vars.nRatio > 0;
         break;
       case RepresentationType.proportionalSymbols:
         // eslint-disable-next-line no-param-reassign
@@ -205,28 +204,29 @@ export default function PortrayalSelection(): JSX.Element {
         break;
       case RepresentationType.discontinuity:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = (vars.nRatio > 0 || vars.nStock > 0) && geomType === 'polygon';
+        p.enabled = nFeatures > 1 && (vars.nRatio > 0 || vars.nStock > 0) && geomType === 'polygon';
         break;
       case RepresentationType.categoricalChoropleth:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = vars.nCategorical > 0;
+        p.enabled = nFeatures > 1 && vars.nCategorical > 0;
         break;
       case RepresentationType.grid:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = vars.nStock > 0 && geomType === 'polygon';
+        p.enabled = nFeatures > 1 && vars.nStock > 0 && geomType === 'polygon';
         break;
       case RepresentationType.smoothed:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = vars.nStock > 0 && (geomType === 'polygon' || geomType === 'point');
+        p.enabled = nFeatures > 1 && vars.nStock > 0 && (geomType === 'polygon' || geomType === 'point');
         break;
       case RepresentationType.cartogram:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = vars.nStock > 0;
+        p.enabled = nFeatures > 1 && vars.nStock > 0;
         break;
       case RepresentationType.links:
         // eslint-disable-next-line no-param-reassign
         p.enabled = (
-          projectHasTabularDataset
+          nFeatures > 1
+          && projectHasTabularDataset
           && vars.nIdentifier > 0
           && (geomType === 'polygon' || geomType === 'point')
         );
@@ -237,15 +237,15 @@ export default function PortrayalSelection(): JSX.Element {
         break;
       case ProcessingOperationType.aggregation:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = geomType === 'polygon';
+        p.enabled = nFeatures > 1 && geomType === 'polygon';
         break;
       case ProcessingOperationType.selection:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = hasAnyVariable;
+        p.enabled = nFeatures > 1 && hasAnyVariable;
         break;
       case ProcessingOperationType.simplification:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = geomType === 'polygon';
+        p.enabled = geomType === 'polygon' || geomType === 'linestring';
         break;
       default:
         // eslint-disable-next-line no-param-reassign
@@ -305,7 +305,7 @@ export default function PortrayalSelection(): JSX.Element {
           </InformationBanner>
           <div class="has-text-centered mb-4">
             {LL().PortrayalSelection.Layer()}
-            &nbsp;<b>{ getLayerName(portrayalSelectionStore.layerId) }</b>
+            &nbsp;<b>{ layerName }</b>
           </div>
           <section style={{ height: '100%', overflow: 'auto', padding: '1em' }}>
             <div
@@ -331,7 +331,7 @@ export default function PortrayalSelection(): JSX.Element {
         <Show when={selectedPortrayal()}>
           <div class="mb-4 is-size-5">
             {LL().PortrayalSelection.Layer()}
-            &nbsp;<b>{getLayerName(portrayalSelectionStore.layerId)}</b>
+            &nbsp;<b>{ layerName }</b>
           </div>
           <Switch>
             <Match when={selectedPortrayal()!.type === RepresentationType.choropleth}>
