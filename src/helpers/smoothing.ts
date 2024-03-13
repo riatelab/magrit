@@ -30,6 +30,46 @@ async function getContourWasm() {
   return contourModule;
 }
 
+function isLargerThanHemisphere(
+  xMin: number,
+  yMin: number,
+  xMax: number,
+  yMax: number,
+): boolean {
+  return (xMax - xMin) > 180 || (yMax - yMin) > 90;
+}
+
+function kmToDeg(km: number): number {
+  return km / 111;
+}
+
+function customPointGrid(bbox: number[], resolution: number): GeoJSONFeatureCollection {
+  const [xMin, yMin, xMax, yMax] = bbox;
+  // Turf isn't able to make grid larger than a hemisphere
+  // so we handle this case manually (matching the output of turf's pointGrid function)
+  if (isLargerThanHemisphere(xMin, yMin, xMax, yMax)) {
+    const res = kmToDeg(resolution);
+    const features = [];
+    for (let x = xMin; x < xMax; x += res) {
+      for (let y = yMin; y < yMax; y += res) {
+        features.push({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [x, y],
+          },
+          properties: {},
+        });
+      }
+    }
+    return {
+      type: 'FeatureCollection',
+      features,
+    } as GeoJSONFeatureCollection;
+  }
+  return pointGrid(bbox as BBox, resolution) as GeoJSONFeatureCollection;
+}
+
 function makePointGrid(
   gridParameters: GridParameters,
   useOffset: boolean,
@@ -63,12 +103,7 @@ function makePointGrid(
   if (bb[3] > 90) {
     bb[3] = 90;
   }
-  // FIXME: it seems that turf pointGrid return an empty grid when the bbox
-  //  describe the whole world (i.e. when the bbox is [-180, -90, 180, 90]).
-  //  This is legit but we should handle creating grid larger than an hemisphere
-  //  and grid over the whole world (possibly grids that are not regular / rectangular -
-  //  and so relying on a different contouring algorithm for these cases).
-  return pointGrid(bb as BBox, gridParameters.resolution) as GeoJSONFeatureCollection;
+  return customPointGrid(bb, gridParameters.resolution) as GeoJSONFeatureCollection;
 }
 
 const computeStep = (
