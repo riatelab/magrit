@@ -260,12 +260,11 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
       <div style={{
         width: '30vh', display: 'flex', 'justify-content': 'space-between', margin: 'auto',
       }}>
-        <img
-          class={`mini-button${targetClassification().method === ClassificationMethod.quantiles ? ' selected' : ''}`}
-          src={imgQuantiles}
-          alt={ LL().ClassificationPanel.classificationMethods.quantiles() }
-          title={ LL().ClassificationPanel.classificationMethods.quantiles() }
-          onClick={ () => {
+        <button
+          aria-label={LL().ClassificationPanel.classificationMethods.quantiles()}
+          class="unstyled"
+          title={LL().ClassificationPanel.classificationMethods.quantiles()}
+          onClick={() => {
             setTargetClassification({
               variable: targetVariable(), // eslint-disable-line solid/reactivity
               method: ClassificationMethod.quantiles,
@@ -277,13 +276,18 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
               reversePalette: false,
             } as ClassificationParameters);
           }}
-        />
-        <img
-          class={`mini-button${targetClassification().method === ClassificationMethod.equalIntervals ? ' selected' : ''}`}
-          src={imgEqualIntervals}
-          alt={ LL().ClassificationPanel.classificationMethods.equalIntervals() }
-          title={ LL().ClassificationPanel.classificationMethods.equalIntervals() }
-          onClick={ () => {
+        >
+          <img
+            class={`mini-button${targetClassification().method === ClassificationMethod.quantiles ? ' selected' : ''}`}
+            src={imgQuantiles}
+            alt={LL().ClassificationPanel.classificationMethods.quantiles()}
+          />
+        </button>
+        <button
+          aria-label={LL().ClassificationPanel.classificationMethods.equalIntervals()}
+          class="unstyled"
+          title={LL().ClassificationPanel.classificationMethods.equalIntervals()}
+          onClick={() => {
             setTargetClassification({
               variable: targetVariable(), // eslint-disable-line solid/reactivity
               method: ClassificationMethod.equalIntervals,
@@ -295,13 +299,18 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
               reversePalette: false,
             } as ClassificationParameters);
           }}
-        />
-        <img
-          class={`mini-button${targetClassification().method === ClassificationMethod.q6 ? ' selected' : ''}`}
-          src={imgQ6}
-          alt={ LL().ClassificationPanel.classificationMethods.q6() }
-          title={ LL().ClassificationPanel.classificationMethods.q6() }
-          onClick={ () => {
+        >
+          <img
+            class={`mini-button${targetClassification().method === ClassificationMethod.equalIntervals ? ' selected' : ''}`}
+            src={imgEqualIntervals}
+            alt={LL().ClassificationPanel.classificationMethods.equalIntervals()}
+          />
+        </button>
+        <button
+          aria-label={LL().ClassificationPanel.classificationMethods.q6()}
+          class="unstyled"
+          title={LL().ClassificationPanel.classificationMethods.q6()}
+          onClick={() => {
             setTargetClassification({
               variable: targetVariable(), // eslint-disable-line solid/reactivity
               method: ClassificationMethod.q6,
@@ -313,13 +322,18 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
               reversePalette: false,
             } as ClassificationParameters);
           }}
-        />
-        <img
-          class={`mini-button${targetClassification().method === ClassificationMethod.jenks ? ' selected' : ''}`}
-          src={imgJenks}
-          alt={ LL().ClassificationPanel.classificationMethods.jenks() }
-          title={ LL().ClassificationPanel.classificationMethods.jenks() }
-          onClick={ () => {
+        >
+          <img
+            class={`mini-button${targetClassification().method === ClassificationMethod.q6 ? ' selected' : ''}`}
+            src={imgQ6}
+            alt={LL().ClassificationPanel.classificationMethods.q6()}
+          />
+        </button>
+        <button
+          aria-label={LL().ClassificationPanel.classificationMethods.jenks()}
+          class="unstyled"
+          title={LL().ClassificationPanel.classificationMethods.jenks()}
+          onClick={() => {
             setTargetClassification({
               variable: targetVariable(), // eslint-disable-line solid/reactivity
               method: ClassificationMethod.jenks,
@@ -331,13 +345,18 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
               reversePalette: false,
             } as ClassificationParameters);
           }}
-        />
-        <img
-          class={`mini-button${targetClassification().method === ClassificationMethod.manual ? ' selected' : ''}`}
-          src={imgMoreOption}
-          alt={ LL().ClassificationPanel.classificationMethods.manual() }
-          title={ LL().ClassificationPanel.classificationMethods.manual() }
-          onClick={ () => {
+        >
+          <img
+            class={`mini-button${targetClassification().method === ClassificationMethod.jenks ? ' selected' : ''}`}
+            src={imgJenks}
+            alt={LL().ClassificationPanel.classificationMethods.jenks()}
+          />
+        </button>
+        <button
+          aria-label={LL().ClassificationPanel.classificationMethods.manual()}
+          class="unstyled"
+          title={LL().ClassificationPanel.classificationMethods.manual()}
+          onClick={() => {
             setClassificationPanelStore({
               show: true,
               layerName: newLayerName(),
@@ -353,16 +372,22 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
               },
             });
           }}
-        />
+        >
+          <img
+            class={`mini-button${targetClassification().method === ClassificationMethod.manual ? ' selected' : ''}`}
+            src={imgMoreOption}
+            alt={LL().ClassificationPanel.classificationMethods.manual()}
+          />
+        </button>
       </div>
       <div style={{
         display: 'flex', 'align-items': 'center', margin: '10px auto auto auto', 'justify-content': 'center',
       }}>
-        <FaSolidCircleCheck fill={'green'} style={{ 'margin-right': '10px' }} />
-        { LL().ClassificationPanel.classificationMethods[targetClassification().method]() }
+        <FaSolidCircleCheck fill={'green'} style={{ 'margin-right': '10px' }}/>
+        {LL().ClassificationPanel.classificationMethods[targetClassification().method]()}
         , {
-          // eslint-disable-next-line max-len
-          LL().PortrayalSection.ChoroplethOptions.CurrentNumberOfClasses(targetClassification().classes) }
+        // eslint-disable-next-line max-len
+        LL().PortrayalSection.ChoroplethOptions.CurrentNumberOfClasses(targetClassification().classes)}
       </div>
     </div>
     <InputFieldCheckbox

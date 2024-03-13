@@ -4,8 +4,7 @@
 
 .portrayal-selection .mini-button {
     border: solid 1px transparent;
-    width: 19px;
-    height: 100%;
+    width: 1.75rem;
     cursor: pointer;
 }
 
