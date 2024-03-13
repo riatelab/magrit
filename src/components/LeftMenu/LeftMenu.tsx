@@ -80,24 +80,6 @@ export default function LeftMenu(): JSX.Element {
       </div>
     </Collapse>
 
-    <div class="left-menu__title" onClick={() => setExpandedSection(4)}>
-      <div class="left-menu__title-inner">
-        <AiOutlineBarChart />
-        <span>{ LL().LeftMenu.RepresentationChoice() }</span>
-      </div>
-      <button class={`chevron-button ${expandedSection() === 4 ? 'is-active' : ''}`}>
-        <ChevronIcon />
-      </button>
-    </div>
-    <Collapse value={expandedSection() === 4} >
-      <div class="left-menu__section-container">
-        <Show when={ expandedSection() === 4}>
-          {/* For now, we unmount this component when the menu is collapsed */}
-          <PortrayalSection />
-        </Show>
-      </div>
-    </Collapse>
-
     <div class="left-menu__title" onClick={() => setExpandedSection(5)}>
       <div class="left-menu__title-inner">
         <RiDocumentPagesLine />
