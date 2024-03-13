@@ -79,7 +79,7 @@ function NewFieldPanel(
     dsDescription: LayerDescription | TableDescription;
     rowData: () => any[];
     columnDefs: () => any[];
-    updateData: (variableName: string, newColumn: any[]) => void;
+    updateData: (variableName: string, newColumn: any[], newColumnType: VariableType) => void;
   },
 ): JSX.Element {
   const { LL } = useI18nContext();
@@ -144,7 +144,11 @@ function NewFieldPanel(
     }
 
     // Update the data
-    props.updateData(variableName, newColumn.map((d: { newValue: never }) => d.newValue));
+    props.updateData(
+      variableName,
+      newColumn.map((d: { newValue: never }) => d.newValue),
+      newColumnType(),
+    );
   };
 
   return <div>
@@ -386,7 +390,11 @@ export default function TableWindow(): JSX.Element {
   };
 
   // Function that is called from the NewFieldPanel to update the data...
-  const updateData = (variableName: string, newColumn: any[]) => {
+  const updateData = (
+    variableName: string,
+    newColumn: any[],
+    newColumnType: VariableType,
+  ) => {
     // We need to update the data for the table
     setRowData(
       rowData().map((row, i) => ({
@@ -403,7 +411,7 @@ export default function TableWindow(): JSX.Element {
     // Remember that the data has been edited (to ask for confirmation when closing the modal)
     setDataEdited(true);
 
-    // Detect the type of the new variable
+    // Detect the type of the new variable and count the number of missing values
     const t = detectTypeField(newColumn as never[], variableName);
 
     // Add the new variable to the list of new variables
@@ -411,7 +419,9 @@ export default function TableWindow(): JSX.Element {
     newVariables.push({
       name: variableName,
       hasMissingValues: t.hasMissingValues,
-      type: t.variableType,
+      // TODO: check 'newColumnType' it is compatible with the content
+      //  of the new column (and if not, use the one detected and stored in 't.variableType')
+      type: newColumnType,
       dataType: t.dataType,
     } as Variable);
 
