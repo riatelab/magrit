@@ -130,7 +130,7 @@ const computeStep = (
 async function makeContourLayer(
   grid: GeoJSONFeatureCollection,
   thresholds: number[],
-): GeoJSONFeatureCollection {
+): Promise<GeoJSONFeatureCollection> {
   console.time('gridPreparationForContours');
   const xCoords = new Set(grid.features.map((d) => d.geometry.coordinates[0]));
   const yCoords = new Set(grid.features.map((d) => d.geometry.coordinates[1]));

@@ -60,7 +60,7 @@ const getSimplificationInfo = async (
   checkSelfIntersections: boolean,
 ): Promise<Partial<SimplificationInfo>> => {
   const topoLayer = topo.objects[layerName];
-  const geoLayer = topojson.feature(topo, topoLayer) as GeoJSONFeatureCollection;
+  const geoLayer = topojson.feature(topo, topoLayer) as unknown as GeoJSONFeatureCollection;
   let nbGeometries = 0;
   let vertices = 0;
   // let vertices2 = 0;
@@ -188,7 +188,7 @@ export default function Simplification(
 
   // Object that stores the meshes of the layers
   // (that's what we will draw on the canvas, this is faster than drawing the polygons)
-  const meshes = {};
+  const meshes: { [key: string]: any } = {};
 
   // We also count various stuff for each layer: the number of polygons,
   // the number of edges, etc.

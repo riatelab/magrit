@@ -1,12 +1,10 @@
 // Import from solid-js
 import {
   Accessor,
-  createEffect,
   createMemo,
   createSignal,
   For,
   JSX,
-  on,
   onMount,
   Show,
 } from 'solid-js';
@@ -18,7 +16,7 @@ import 'ag-grid-community/styles/ag-theme-quartz.min.css'; // theme
 
 // Imports from other packages
 import alasql from 'alasql';
-import { area } from '@turf/turf';
+import { type AllGeoJSON, area } from '@turf/turf';
 import type { LocalizedString } from 'typesafe-i18n';
 
 // Helpers
@@ -37,12 +35,11 @@ import {
 // Subcomponents
 import InputFieldButton from '../Inputs/InputButton.tsx';
 import FormulaInput, {
+  formatValidSampleOutput,
   hasSpecialFieldArea,
   hasSpecialFieldId,
   replaceSpecialFields,
   type SampleOutputFormat,
-  type ErrorSampleOutput,
-  type ValidSampleOutput, formatValidSampleOutput,
 } from '../FormulaInput.tsx';
 
 // Stores
@@ -124,7 +121,10 @@ function NewFieldPanel(
     }
     if (hasSpecialFieldArea(formula)) {
       data.forEach((d, i) => {
-        d['@@area'] = area(props.dsDescription.data.features[i].geometry); // eslint-disable-line no-param-reassign
+        // eslint-disable-next-line no-param-reassign
+        d['@@area'] = area(
+          (props.dsDescription as LayerDescription).data.features[i].geometry as AllGeoJSON,
+        );
       });
     }
 
@@ -181,7 +181,9 @@ function NewFieldPanel(
             <For each={Object.keys(VariableType).toReversed()}>
               {
                 (type) => (
-                  <option value={type}>{LL().FieldsTyping.VariableTypes[type]()}</option>)
+                  <option value={type}>
+                    {LL().FieldsTyping.VariableTypes[type as keyof typeof VariableType]()}
+                  </option>)
               }
             </For>
           </select>

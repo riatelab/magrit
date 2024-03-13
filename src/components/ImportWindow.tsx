@@ -498,7 +498,9 @@ export default function ImportWindow(): JSX.Element {
           if (isAuthorizedFile(theFiles[i])) {
             filteredFiles.push(theFiles[i]);
           } else {
-            toast.error(LL().ImportWindow.UnsupportedFileFormat(`${theFiles[i].name}.${theFiles[i].ext}`));
+            toast.error(LL().ImportWindow.UnsupportedFileFormat({
+              file: `${theFiles[i].name}.${theFiles[i].ext}`,
+            }));
           }
         }
         // Add the dropped files to the existing file list
@@ -510,7 +512,6 @@ export default function ImportWindow(): JSX.Element {
     input.click();
   }
 
-  // const groupedFiles = createMemo(() => groupFiles(overlayDropStore.files));
   const droppedFiles = createMemo(() => fileDropStore.files);
 
   const [fileDescriptions] = createResource<any, any>(
@@ -529,7 +530,7 @@ export default function ImportWindow(): JSX.Element {
             }
 
             const dsInfo = await analyzeDataset({ [fileName]: groupedFiles[fileName] });
-            if ('valid' in dsInfo && dsInfo.valid === false) {
+            if ('valid' in dsInfo && !dsInfo.valid) {
               // We have an invalid dataset that we don't wan't to add to the list
               toast.error(LL().ImportWindow.ErrorReadingFile({
                 file: fileName,
@@ -565,7 +566,7 @@ export default function ImportWindow(): JSX.Element {
    * @param {'fitMap' | 'useCRS'} prop
    * @returns {void}
    */
-  const handleCheckUnique = (layer: LayerOrTableDescription, prop: 'fitMap' | 'useCRS') => {
+  const handleCheckUnique = (layer: LayerOrTableDescription, prop: 'fitMap' | 'useCRS'): void => {
     const newCheckedState = !layer[prop];
     if (newCheckedState) {
       // Remove the checked state of the other datasets
