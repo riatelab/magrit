@@ -50,7 +50,7 @@ The left menu is:
 
 .chevron-button {
     padding: 5px;
-    background-color: #c7c7c7;
+    background-color: var(--chevron-color);
     display: flex;
     cursor: pointer;
     border: 1px solid #888888;

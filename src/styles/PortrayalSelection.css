@@ -12,3 +12,7 @@
 .portrayal-selection .mini-button.selected {
     border: solid 2px green;
 }
+
+.portrayal-selection .card.is-disabled {
+    cursor: not-allowed;
+}

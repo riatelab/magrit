@@ -1,9 +1,13 @@
 .layer-manager-item {
     /*background-color: var(--background-color);*/
     border: 1px solid #e5e5e5;
-    padding: 10px;
     width: 100%;
     cursor: grab;
+}
+
+.layer-manager-item__container {
+    padding: 0.75em;
+    width: 90%;
 }
 
 .layer-manager-item__name {
@@ -19,18 +23,38 @@
     justify-content: space-between;
 }
 
-.layer-manager-item__icons-right > div,
-.layer-manager-item__icons-left > div {
+.layer-manager-item__icons-right > *,
+.layer-manager-item__icons-left > * {
     margin-left: 3px;
     display: inline-block;
 }
 
-.layer-manager-item__icons-right > div {
+.layer-manager-item__icons-right > button {
     cursor: pointer;
+}
+
+.layer-manager-item__action {
+    width: 10%;
+}
+
+.layer-manager-item__action > button {
+    background-color: transparent;
+    border: currentColor;
+    border-left: 1px solid #e5e5e5;
+    border-radius: 0;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.layer-manager-item__action > button:active {
+    border: 1px solid #e8e8e8;
 }
 
 /* Style for the item that is currently being dragged */
 .sortable-chosen .layer-manager-item {
-    background-color: #d2d2d2;
+    background-color: var(--sortable-chosen-background);
     transition: background-color 0.15s ease-in-out;
 }

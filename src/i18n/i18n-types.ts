@@ -333,9 +333,9 @@ type RootTranslation = {
 		 */
 		LayerManager: string
 		/**
-		 * R​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​c​h​o​i​c​e
+		 * C​h​o​i​c​e​ ​o​f​ ​f​u​n​c​t​i​o​n​a​l​i​t​y
 		 */
-		RepresentationChoice: string
+		FunctionalityChoice: string
 		/**
 		 * M​a​p​ ​a​n​d​ ​d​a​t​a​ ​e​x​p​o​r​t
 		 */
@@ -849,22 +849,6 @@ type RootTranslation = {
 			 */
 			NoPortrayal: string
 		}
-		/**
-		 * O​p​e​n​ ​p​o​r​t​r​a​y​a​l​ ​s​e​l​e​c​t​i​o​n​ ​m​o​d​a​l​.​.​.
-		 */
-		OpenModal: string
-		/**
-		 * R​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​c​h​o​i​c​e
-		 */
-		RepresentationChoice: string
-		/**
-		 * C​h​o​o​s​e​ ​a​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n
-		 */
-		ChooseARepresentation: string
-		/**
-		 * L​a​y​e​r​:​ 
-		 */
-		DropdownPrefixLayer: string
 		/**
 		 * T​a​r​g​e​t​ ​l​a​y​e​r
 		 */
@@ -1619,11 +1603,11 @@ type RootTranslation = {
 	}
 	PortrayalSelection: {
 		/**
-		 * P​o​r​t​r​a​y​a​l​ ​s​e​l​e​c​t​i​o​n
+		 * F​u​n​c​t​i​o​n​a​l​i​t​y​ ​s​e​l​e​c​t​i​o​n
 		 */
 		Title: string
 		/**
-		 * O​p​t​i​o​n​s​ ​f​o​r​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​p​o​r​t​r​a​y​a​l
+		 * O​p​t​i​o​n​s
 		 */
 		Title2: string
 		/**
@@ -1631,11 +1615,11 @@ type RootTranslation = {
 		 */
 		Layer: string
 		/**
-		 * B​a​c​k​ ​t​o​ ​p​o​r​t​r​a​y​a​l​ ​s​e​l​e​c​t​i​o​n
+		 * B​a​c​k​ ​t​o​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​s​e​l​e​c​t​i​o​n
 		 */
 		Back: string
 		/**
-		 * S​e​l​e​c​t​ ​t​h​e​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​a​p​p​l​y​ ​t​o​ ​y​o​u​r​ ​d​a​t​a​ ​l​a​y​e​r​.​ ​G​r​e​y​e​d​-​o​u​t​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​s​ ​i​n​d​i​c​a​t​e​ ​t​h​a​t​ ​y​o​u​r​ ​d​a​t​a​s​e​t​ ​d​o​e​s​ ​n​o​t​ ​c​o​n​t​a​i​n​ ​a​n​y​ ​d​a​t​a​ ​a​l​l​o​w​i​n​g​ ​y​o​u​ ​t​o​ ​p​e​r​f​o​r​m​ ​t​h​i​s​ ​t​y​p​e​ ​o​f​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​.​ ​I​f​ ​y​o​u​ ​s​u​s​p​e​c​t​ ​t​h​i​s​ ​i​s​ ​a​n​ ​e​r​r​o​r​,​ ​y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​t​h​e​ ​f​i​e​l​d​ ​t​y​p​e​ ​i​n​ ​t​h​e​ ​L​a​y​e​r​ ​M​a​n​a​g​e​r​.
+		 * S​e​l​e​c​t​ ​t​h​e​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​a​p​p​l​y​ ​t​o​ ​y​o​u​r​ ​d​a​t​a​ ​l​a​y​e​r​.​ ​G​r​e​y​e​d​-​o​u​t​ ​f​u​n​c​t​i​o​n​a​l​i​t​i​e​s​ ​i​n​d​i​c​a​t​e​ ​t​h​a​t​ ​y​o​u​r​ ​d​a​t​a​s​e​t​ ​d​o​e​s​ ​n​o​t​ ​c​o​n​t​a​i​n​ ​a​n​y​ ​d​a​t​a​ ​a​l​l​o​w​i​n​g​ ​y​o​u​ ​t​o​ ​u​s​e​ ​i​t​.​ ​I​f​ ​y​o​u​ ​s​u​s​p​e​c​t​ ​t​h​i​s​ ​i​s​ ​a​n​ ​e​r​r​o​r​,​ ​y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​t​h​e​ ​f​i​e​l​d​ ​t​y​p​e​ ​i​n​ ​t​h​e​ ​L​a​y​e​r​ ​M​a​n​a​g​e​r​.
 		 */
 		Information: string
 		ShortDescriptions: {
@@ -2632,9 +2616,9 @@ export type TranslationFunctions = {
 		 */
 		LayerManager: () => LocalizedString
 		/**
-		 * Representation choice
+		 * Choice of functionality
 		 */
-		RepresentationChoice: () => LocalizedString
+		FunctionalityChoice: () => LocalizedString
 		/**
 		 * Map and data export
 		 */
@@ -3142,22 +3126,6 @@ export type TranslationFunctions = {
 			 */
 			NoPortrayal: () => LocalizedString
 		}
-		/**
-		 * Open portrayal selection modal...
-		 */
-		OpenModal: () => LocalizedString
-		/**
-		 * Representation choice
-		 */
-		RepresentationChoice: () => LocalizedString
-		/**
-		 * Choose a representation
-		 */
-		ChooseARepresentation: () => LocalizedString
-		/**
-		 * Layer: 
-		 */
-		DropdownPrefixLayer: () => LocalizedString
 		/**
 		 * Target layer
 		 */
@@ -3911,11 +3879,11 @@ export type TranslationFunctions = {
 	}
 	PortrayalSelection: {
 		/**
-		 * Portrayal selection
+		 * Functionality selection
 		 */
 		Title: () => LocalizedString
 		/**
-		 * Options for the selected portrayal
+		 * Options
 		 */
 		Title2: () => LocalizedString
 		/**
@@ -3923,11 +3891,11 @@ export type TranslationFunctions = {
 		 */
 		Layer: () => LocalizedString
 		/**
-		 * Back to portrayal selection
+		 * Back to functionality selection
 		 */
 		Back: () => LocalizedString
 		/**
-		 * Select the representation you wish to apply to your data layer. Greyed-out representations indicate that your dataset does not contain any data allowing you to perform this type of representation. If you suspect this is an error, you can change the field type in the Layer Manager.
+		 * Select the functionality you wish to apply to your data layer. Greyed-out functionalities indicate that your dataset does not contain any data allowing you to use it. If you suspect this is an error, you can change the field type in the Layer Manager.
 		 */
 		Information: () => LocalizedString
 		ShortDescriptions: {

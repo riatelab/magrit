@@ -9,6 +9,7 @@ html {
   box-sizing: border-box;
   --background-color: #f5f5f5;  /* rgb(236, 235, 240); */
   --border-color: #e5e5e5; /* rgb(220, 220, 220); */
+  --chevron-color: #c7c7c7;
   /*--background-color-tab-active: #fff;*/
   /*--text-color: #4a4a4a;*/
   /*--text-color-deep: #363636;*/
@@ -23,6 +24,7 @@ html {
   --danger-color: hsl(348, 100%, 61%);
   --left-menu-width: 380px;
   --header-height: 56px;
+  --sortable-chosen-background: #d2d2d2;
   transition: background-color 400ms ease-out, border 400ms ease-out, color 400ms ease-out;
 }
 
@@ -35,6 +37,7 @@ html.theme-dark {
     --map-container-background: #4c4c4c; /* #2e2e2e; */
     /*--background-color: #121212;*/
     --border-color: #424242; /* #333333; */
+    --chevron-color: #6c6a6a;
     /*--background-color-tab-active: #242424;*/
     /*--text-color: #e0e0e0;*/
     /*--text-color-deep: #ffffff;*/
@@ -47,6 +50,7 @@ html.theme-dark {
     --success-color: hsl(141, 53%, 53%);
     --warning-color: hsl(48, 100%, 67%);
     --danger-color: hsl(348, 100%, 61%);
+    --sortable-chosen-background: #262626;
     scrollbar-color: dark;
     color-scheme: dark;
 }
@@ -65,20 +69,13 @@ in a cleaner way in the future)
 img.magrit-logo {
   transition: 400ms ease-out;
 }
+
 html.theme-dark img.magrit-logo {
   filter:invert(1);
 }
 
-html.theme-dark .chevron-button {
-  background-color: #6c6a6a;
-}
-
 html.theme-dark .file-import-table tr.entry-detail {
     background: #373737;
-}
-
-html.theme-dark .sortable-chosen .layer-manager-item {
-    background-color: #262626;
 }
 
 html.theme-dark .information-banner {
@@ -92,7 +89,6 @@ html.theme-dark .warning-banner {
 html.theme-dark .portrayal-selection .mini-button.selected {
     border: solid 2px darkgreen;
 }
-
 
 html.theme-dark select option {
   background-color: #2e2e2e;

@@ -8,6 +8,7 @@ import {
   FaSolidEyeSlash,
   FaSolidGears,
   FaSolidMagnifyingGlass,
+  FaSolidPlay,
   FaSolidTrash,
   FaSolidTableCells,
 } from 'solid-icons/fa';
@@ -25,11 +26,12 @@ import {
   setLayersDescriptionStore,
   setLayersDescriptionStoreBase,
 } from '../../store/LayersDescriptionStore';
+import { fitExtent, mapStore } from '../../store/MapStore';
 import { setModalStore } from '../../store/ModalStore';
 import { setNiceAlertStore } from '../../store/NiceAlertStore';
-import { setTableWindowStore } from '../../store/TableWindowStore';
-import { fitExtent, mapStore } from '../../store/MapStore';
+import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
 import { pushUndoStackStore } from '../../store/stateStackStore';
+import { setTableWindowStore } from '../../store/TableWindowStore';
 
 // Other components / subcomponents
 import LayerSettings from '../Modals/LayerSettings.tsx';
@@ -229,70 +231,125 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
 export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.Element {
   const { LL } = useI18nContext();
 
-  return <div class="layer-manager-item" onDblClick={() => { onClickSettings(props.layer.id, LL); }}>
-    <div class="layer-manager-item__name" title={ props.layer.name }>
-      <span>{ props.layer.name }</span>
-    </div>
-    <div class="layer-manager-item__icons">
-      <div class="layer-manager-item__icons-left">
-        <div
-          title={
-            LL().LayerManager[props.layer.type]({
-              nFt: props.layer.data.features?.length || 1,
-              nCol: props.layer.fields.length,
-            })
-          }
-          style={{ cursor: 'help' }}
-        >
-          <i
-            class={ typeIcons[props.layer.type as ('point' | 'linestring' | 'polygon' | 'raster')] }
-          />
-        </div>
-        <Show when={props.layer.legend !== undefined}>
-          <div title={ LL().LayerManager.Legend() } style={{ cursor: 'pointer' }}>
+  return <div class="layer-manager-item is-flex" onDblClick={() => { onClickSettings(props.layer.id, LL); }}>
+    <div class="layer-manager-item__container">
+      <div class="layer-manager-item__name" title={ props.layer.name }>
+        <span>{ props.layer.name }</span>
+      </div>
+      <div class="layer-manager-item__icons">
+        <div class="layer-manager-item__icons-left">
+          <div
+            title={
+              LL().LayerManager[props.layer.type]({
+                nFt: props.layer.data.features?.length || 1,
+                nCol: props.layer.fields.length,
+              })
+            }
+            style={{ cursor: 'help' }}
+          >
             <i
-              class="fg-map-legend"
-              style={{
-                color: props.layer.legend?.visible ? 'currentColor' : 'grey',
-                transform: props.layer.legend?.visible ? '' : 'rotate(3deg)',
-              }}
-              onClick={() => { onClickLegend(props.layer.id, LL); }}
+              class={ typeIcons[props.layer.type as ('point' | 'linestring' | 'polygon' | 'raster')] }
             />
           </div>
-        </Show>
-      </div>
-      <div class="layer-manager-item__icons-right">
-        <div title={ LL().LayerManager.Settings() }>
-          <FaSolidGears
+          <Show when={props.layer.legend !== undefined}>
+            <button
+              class="unstyled"
+              onClick={() => { onClickLegend(props.layer.id, LL); }}
+              title={ LL().LayerManager.Legend() }
+              style={{ cursor: 'pointer' }}
+            >
+              <i
+                class="fg-map-legend"
+                style={{
+                  color: props.layer.legend?.visible ? 'currentColor' : 'grey',
+                  transform: props.layer.legend?.visible ? '' : 'rotate(3deg)',
+                }}
+              />
+            </button>
+          </Show>
+        </div>
+        <div class="layer-manager-item__icons-right">
+          <button
+            aria-label={ LL().LayerManager.Settings() }
+            class="unstyled"
             onClick={(e) => { onClickSettings(props.layer.id, LL); }}
-          />
-        </div>
-        <Show when={props.layer.visible}>
-          <div title={ LL().LayerManager.ToggleVisibility() }>
-            <FaSolidEye onClick={() => { onClickEye(props.layer.id); }} />
-          </div>
-        </Show>
-        <Show when={!props.layer.visible}>
-          <div title={ LL().LayerManager.ToggleVisibility() }>
-            <FaSolidEyeSlash onClick={() => { onClickEye(props.layer.id); }} />
-          </div>
-        </Show>
-        <div title={ LL().LayerManager.FitZoom() }>
-          {/* <i class="fg-extent" onClick={() => { onClickFitExtent(props.layer.id); }} /> */}
-          <FaSolidMagnifyingGlass onClick={() => { onClickFitExtent(props.layer.id); }} />
-        </div>
-        <Show when={props.layer.fields && props.layer.fields.length > 0}>
-          <div title={ LL().LayerManager.AttributeTable() }>
-            <FaSolidTable onClick={() => { onClickTable(props.layer.id, 'layer'); }} />
-          </div>
-          <div title={ LL().LayerManager.Typing() }>
-            <FiType onClick={() => { onClickTyping(props.layer.id, 'layer', LL); }}/>
-          </div>
-        </Show>
-        <div title={ LL().LayerManager.Delete() }>
-          <FaSolidTrash onClick={() => { onClickTrashLayer(props.layer.id, LL); }} />
+            title={ LL().LayerManager.Settings() }
+          >
+            <FaSolidGears />
+          </button>
+          <Show when={props.layer.visible}>
+            <button
+              aria-label={ LL().LayerManager.ToggleVisibility() }
+              class="unstyled"
+              onClick={() => { onClickEye(props.layer.id); }}
+              title={ LL().LayerManager.ToggleVisibility() }
+            >
+              <FaSolidEye />
+            </button>
+          </Show>
+          <Show when={!props.layer.visible}>
+            <button
+              aria-label={ LL().LayerManager.ToggleVisibility() }
+              class="unstyled"
+              onClick={() => { onClickEye(props.layer.id); }}
+              title={ LL().LayerManager.ToggleVisibility() }
+            >
+              <FaSolidEyeSlash />
+            </button>
+          </Show>
+          <button
+            aria-label={ LL().LayerManager.FitZoom() }
+            class="unstyled"
+            onClick={() => { onClickFitExtent(props.layer.id); }}
+            title={ LL().LayerManager.FitZoom() }
+          >
+            <FaSolidMagnifyingGlass />
+          </button>
+          <Show when={props.layer.fields && props.layer.fields.length > 0}>
+            <button
+              aria-label={ LL().LayerManager.AttributeTable() }
+              class="unstyled"
+              onClick={() => { onClickTable(props.layer.id, 'layer'); }}
+              title={ LL().LayerManager.AttributeTable() }
+            >
+              <FaSolidTable />
+            </button>
+            <button
+              aria-label={ LL().LayerManager.Typing() }
+              class="unstyled"
+              onClick={() => { onClickTyping(props.layer.id, 'layer', LL); }}
+              title={ LL().LayerManager.Typing() }
+            >
+              <FiType />
+            </button>
+          </Show>
+          <button
+            aria-label={ LL().LayerManager.Delete() }
+            class="unstyled"
+            onClick={() => { onClickTrashLayer(props.layer.id, LL); }}
+            title={ LL().LayerManager.Delete() }
+          >
+            <FaSolidTrash />
+          </button>
         </div>
       </div>
+    </div>
+    <div class="layer-manager-item__action">
+      <button
+        aria-label={ LL().LeftMenu.FunctionalityChoice() }
+        onClick={() => {
+          setPortrayalSelectionStore({
+            show: true,
+            layerId: props.layer.id,
+          });
+        }}
+        title={ LL().LeftMenu.FunctionalityChoice() }
+      >
+        <FaSolidPlay style={{
+          filter: 'drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5))',
+          height: '2em',
+        }} />
+      </button>
     </div>
   </div>;
 }
@@ -344,36 +401,78 @@ const onClickTrashTable = (id: string, LL: Accessor<TranslationFunctions>) => {
 export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX.Element {
   const { LL } = useI18nContext();
 
-  return <div class="layer-manager-item" onDblClick={() => { onClickSettings(props.table.id, LL); }}>
-    <div class="layer-manager-item__name" title={ props.table.name }>
-      <span>{ props.table.name }</span>
+  return <div class="layer-manager-item is-flex" onDblClick={() => {
+    onClickSettings(props.table.id, LL);
+  }}>
+    <div class="layer-manager-item__container">
+      <div class="layer-manager-item__name" title={props.table.name}>
+        <span>{props.table.name}</span>
+      </div>
+      <div class="layer-manager-item__icons">
+        <div class="layer-manager-item__icons-left">
+          <div title={LL().LayerManager.table()} style={{ cursor: 'help' }}>
+            <FaSolidTableCells/>
+          </div>
+        </div>
+        <div class="layer-manager-item__icons-right">
+          <Show when={props.table.fields && props.table.fields.length > 0}>
+            <button
+              aria-label={LL().LayerManager.Join()}
+              class="unstyled"
+              onClick={() => onClickJoin(props.table.id, LL)}
+              title={LL().LayerManager.Join()}
+            >
+              <FiLink/>
+            </button>
+            <button
+              aria-label={LL().LayerManager.AttributeTable()}
+              class="unstyled"
+              onClick={() => {
+                onClickTable(props.table.id, 'table');
+              }}
+              title={LL().LayerManager.AttributeTable()}
+            >
+              <FaSolidTable/>
+            </button>
+            <button
+              aria-label={LL().LayerManager.Typing()}
+              class="unstyled"
+              onClick={() => {
+                onClickTyping(props.table.id, 'table', LL);
+              }}
+              title={LL().LayerManager.Typing()}
+            >
+              <FiType/>
+            </button>
+          </Show>
+          <button
+            aria-label={LL().LayerManager.Delete()}
+            class="unstyled"
+            onClick={() => {
+              onClickTrashTable(props.table.id, LL);
+            }}
+            title={LL().LayerManager.Delete()}>
+            <FaSolidTrash/>
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="layer-manager-item__icons">
-      <div class="layer-manager-item__icons-left">
-        <div title={LL().LayerManager.table()} style={{ cursor: 'help' }}>
-          <FaSolidTableCells/>
-        </div>
-      </div>
-      <div class="layer-manager-item__icons-right">
-        <Show when={props.table.fields && props.table.fields.length > 0}>
-          <div title={LL().LayerManager.Join()}>
-            <FiLink onClick={() => onClickJoin(props.table.id, LL)}/>
-          </div>
-          <div title={LL().LayerManager.AttributeTable()}>
-            <FaSolidTable onClick={() => {
-              onClickTable(props.table.id, 'table');
-            }}/>
-          </div>
-          <div title={LL().LayerManager.Typing()}>
-            <FiType onClick={() => {
-              onClickTyping(props.table.id, 'table', LL);
-            }}/>
-          </div>
-        </Show>
-        <div title={LL().LayerManager.Delete()}>
-          <FaSolidTrash onClick={() => { onClickTrashTable(props.table.id, LL); }} />
-        </div>
-      </div>
+    <div class="layer-manager-item__action">
+      <button
+        aria-label={LL().LeftMenu.FunctionalityChoice()}
+        onClick={() => {
+          setPortrayalSelectionStore({
+            show: true,
+            layerId: props.table.id,
+          });
+        }}
+        title={LL().LeftMenu.FunctionalityChoice()}
+      >
+        <FaSolidPlay style={{
+          filter: 'drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5))',
+          height: '2em',
+        }}/>
+      </button>
     </div>
   </div>;
 }
