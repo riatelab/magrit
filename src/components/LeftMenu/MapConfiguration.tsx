@@ -13,6 +13,7 @@ import { setModalStore } from '../../store/ModalStore';
 
 // Sub-components
 import DropdownMenu from '../DropdownMenu.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import ProjectionSelection from '../Modals/ProjectionSelection.tsx';
 
 const availableProjections = [
@@ -157,52 +158,42 @@ export default function MapConfiguration(): JSX.Element {
   });
 
   return <div class="map-configuration">
-    <div class="field">
-      <label class="label">{ LL().MapConfiguration.Width() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          min={10}
-          step={1}
-          max={ globalStore.windowDimensions.width }
-          value={ mapStore.mapDimensions.width }
-          onChange={(e) => {
-            setMapStore({
-              mapDimensions: {
-                width: +e.target.value,
-                height: mapStore.mapDimensions.height,
-              },
-            });
-            // Note that the clipExtent is automatically updated (in MapStore)
-            // and that the path are automatically updated (triggered from MapStore too)
-          }}
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().MapConfiguration.Height() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          min={10}
-          step={1}
-          max={ globalStore.windowDimensions.height }
-          value={ mapStore.mapDimensions.height }
-          onChange={(e) => {
-            setMapStore({
-              mapDimensions: {
-                width: mapStore.mapDimensions.width,
-                height: +e.target.value,
-              },
-            });
-            // Note that the clipExtent is automatically updated (in MapStore)
-            // and that the path are automatically updated (triggered from MapStore too)
-          }}
-        />
-      </div>
-    </div>
+    <InputFieldNumber
+      label={LL().MapConfiguration.Width()}
+      value={mapStore.mapDimensions.width}
+      onChange={(v) => {
+        // Note that clip extent (if used) is automatically updated (in MapStore)
+        // and that the path are automatically updated (triggered from MapStore too)
+        setMapStore({
+          mapDimensions: {
+            width: v,
+            height: mapStore.mapDimensions.height,
+          },
+        });
+      }}
+      min={10}
+      max={globalStore.windowDimensions.width}
+      step={1}
+      width={100}
+    />
+    <InputFieldNumber
+      label={LL().MapConfiguration.Height()}
+      value={mapStore.mapDimensions.height}
+      onChange={(v) => {
+        // Note that clip extent (if used) is automatically updated (in MapStore)
+        // and that the path are automatically updated (triggered from MapStore too)
+        setMapStore({
+          mapDimensions: {
+            width: mapStore.mapDimensions.width,
+            height: v,
+          },
+        });
+      }}
+      min={10}
+      max={globalStore.windowDimensions.height}
+      step={1}
+      width={100}
+    />
     <div class="field-block">
       <label class="label">{ LL().MapConfiguration.Projection() }</label>
       <DropdownMenu
