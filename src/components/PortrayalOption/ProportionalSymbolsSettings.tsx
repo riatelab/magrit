@@ -4,7 +4,9 @@ import {
   createMemo,
   createSignal,
   For,
-  JSX,
+  type JSX,
+  Match,
+  Switch,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
@@ -13,6 +15,7 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { makeCategoriesMap, makeCategoriesMapping } from '../../helpers/categorical-choropleth';
 import { randomColorFromCategoricalPalette } from '../../helpers/color';
 import { descendingKeyAccessor, findSuitableName, isNumber } from '../../helpers/common';
 import {
@@ -28,12 +31,14 @@ import { generateIdLegend } from '../../helpers/legends';
 
 // Sub-components
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
+import CollapsibleSection from '../CollapsibleSection.tsx';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
+import { CategoriesCustomisation, CategoriesPlot, CategoriesSummary } from './CategoricalChoroplethComponents.tsx';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -46,17 +51,17 @@ import {
 import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
 
 // Types / Interfaces / Enums
-import type {
+import {
+  CategoricalChoroplethMapping,
   GeoJSONFeatureCollection,
   LayerDescription,
-  ProportionalSymbolsLegend,
-  ProportionalSymbolsParameters,
-  RepresentationType,
-} from '../../global';
-import {
   LegendTextElement,
   LegendType,
+  ProportionalSymbolsColorMode,
+  ProportionalSymbolSingleColorParameters,
+  ProportionalSymbolsLegend,
   ProportionalSymbolsSymbolType,
+  RepresentationType,
 } from '../../global.d';
 import type { PortrayalSettingsProps } from './common';
 
@@ -88,7 +93,8 @@ function onClickValidate(
     avoidOverlapping,
     iterations: 100,
     movable: false,
-  } as ProportionalSymbolsParameters;
+    colorMode: 'singleColor',
+  } as ProportionalSymbolSingleColorParameters;
 
   // Copy dataset
   const newData = JSON.parse(
@@ -246,6 +252,11 @@ export default function ProportionalSymbolsSettings(
   const targetFields = createMemo(() => layerDescription()
     .fields.filter((variable) => variable.type === 'stock'));
 
+  const targetFieldsRatio = createMemo(() => layerDescription()
+    .fields.filter((variable) => variable.type === 'ratio'));
+
+  const targetFieldsCategory = createMemo(() => layerDescription()
+    .fields.filter((variable) => variable.type === 'categorical'));
   // if (!targetFields || targetFields.length === 0) {
   //   throw Error('Unexpected Error: No stock field found');
   // }
@@ -254,6 +265,20 @@ export default function ProportionalSymbolsSettings(
     targetVariable,
     setTargetVariable,
   ] = createSignal<string>(targetFields()![0].name);
+
+  const [
+    targetRatioVariable,
+    setTargetRatioVariable,
+  ] = createSignal<string | null>(
+    targetFieldsRatio().length > 0 ? targetFieldsRatio()![0].name : null,
+  );
+
+  const [
+    targetCategoryVariable,
+    setTargetCategoryVariable,
+  ] = createSignal<string | null>(
+    targetFieldsCategory().length > 0 ? targetFieldsCategory()![0].name : null,
+  );
 
   // Reactive variable that contains the values of the target variable
   const values = createMemo(() => layerDescription().data.features
@@ -283,12 +308,35 @@ export default function ProportionalSymbolsSettings(
     setRefValueForSymbolSize,
   ] = createSignal<number>(maxValues());
   const [
+    colorMode,
+    setColorMode,
+  ] = createSignal<ProportionalSymbolsColorMode>(ProportionalSymbolsColorMode.singleColor);
+  // Option for singleColor mode
+  const [
     color,
     setColor,
   ] = createSignal<string>(randomColorFromCategoricalPalette('Vivid'));
+  // Options for ratioVariable mode
+  // TODO: ...
+  // Options for categoricalVariable mode
+  const [
+    categoriesMapping,
+    setCategoriesMapping,
+  ] = createSignal<CategoricalChoroplethMapping[]>(
+    targetFieldsCategory()
+      ? makeCategoriesMapping(
+        makeCategoriesMap(layerDescription().data.features, targetCategoryVariable()),
+      )
+      : [],
+  );
   const [
     avoidOverlapping,
     setAvoidOverlapping,
+  ] = createSignal<boolean>(false);
+  // Options for ratioVariable and categoricalVariable mode
+  const [
+    displayChartOnMap,
+    setDisplayChartOnMap,
   ] = createSignal<boolean>(false);
 
   // We need to update the value of refValueForSymbolSize when
@@ -378,11 +426,46 @@ export default function ProportionalSymbolsSettings(
       max={ 999 }
       step={ 0.1 }
     />
-    <InputFieldColor
-      label={ LL().PortrayalSection.CommonOptions.Color() }
-      value={ color() }
-      onChange={(value) => { setColor(value); }}
-    />
+    <InputFieldSelect
+      label={'Color mode'}
+      onChange={(v) => { setColorMode(v as ProportionalSymbolsColorMode); }}
+      value={colorMode()}
+    >
+      <For each={Object.values(ProportionalSymbolsColorMode)}>
+        {
+          (cm) => (
+            <option value={cm}>
+              {LL().PortrayalSection.ProportionalSymbolsOptions.ColorModes[cm]()}
+            </option>
+          )
+        }
+      </For>
+    </InputFieldSelect>
+    <Switch>
+      <Match when={colorMode() === 'singleColor'}>
+        <InputFieldColor
+          label={ LL().PortrayalSection.CommonOptions.Color() }
+          value={ color() }
+          onChange={(value) => { setColor(value); }}
+        />
+      </Match>
+      <Match when={colorMode() === 'ratioVariable'}>
+        <p>TODO</p>
+      </Match>
+      <Match when={colorMode() === 'categoricalVariable'}>
+        <CategoriesSummary mapping={categoriesMapping()} />
+        <CollapsibleSection title={LL().PortrayalSection.CategoricalChoroplethOptions.ShowChart()}>
+          <CategoriesPlot mapping={categoriesMapping()} />
+        </CollapsibleSection>
+        <CollapsibleSection title={LL().PortrayalSection.CategoricalChoroplethOptions.Customize()}>
+          <CategoriesCustomisation
+            mapping={categoriesMapping}
+            setMapping={setCategoriesMapping}
+            detailed={true}
+          />
+        </CollapsibleSection>
+      </Match>
+    </Switch>
     <InputFieldCheckbox
       label={ LL().PortrayalSection.ProportionalSymbolsOptions.AvoidOverlapping() }
       checked={ avoidOverlapping() }

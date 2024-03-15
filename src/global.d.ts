@@ -287,11 +287,15 @@ interface ClassificationParameters {
   reversePalette: boolean,
 }
 
+export enum ProportionalSymbolsColorMode {
+  singleColor = 'singleColor',
+  ratioVariable = 'ratioVariable',
+  categoricalVariable = 'categoricalVariable',
+}
+
 export interface ProportionalSymbolsParameters {
   // The name of the variable used to compute the radius of the symbols
   variable: string,
-  // The color to use for the symbols
-  color: string,
   // The type of symbol to use
   symbolType: ProportionalSymbolsSymbolType,
   // The reference radius size (in pixels)
@@ -310,8 +314,20 @@ export interface ProportionalSymbolsParameters {
   // Whether the symbols can be moved by the user or not
   movable: boolean,
   // The color mode of the proportional symbols
-  // colorMode: ProportionalSymbolsColorMode,
+  colorMode: ProportionalSymbolsColorMode,
 }
+
+type ProportionalSymbolSingleColorParameters = ProportionalSymbolsParameters & {
+  colorMode: ProportionalSymbolsColorMode.singleColor,
+} & { color: string };
+
+type ProportionalSymbolsRatioParameters = ProportionalSymbolsParameters & {
+  colorMode: ProportionalSymbolsColorMode.ratioVariable,
+} & ClassificationParameters;
+
+type ProportionalSymbolCategoryParameters = ProportionalSymbolsParameters & {
+  colorMode: ProportionalSymbolsColorMode.categoryVariable,
+} & CategoricalChoroplethParameters;
 
 export interface HalfProportionalMarkParameters {
   variable: string,

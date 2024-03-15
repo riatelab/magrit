@@ -940,6 +940,20 @@ type RootTranslation = {
 				 */
 				line: string
 			}
+			ColorModes: {
+				/**
+				 * S​i​n​g​l​e​ ​c​o​l​o​r
+				 */
+				singleColor: string
+				/**
+				 * R​a​t​i​o​ ​v​a​r​i​a​b​l​e
+				 */
+				ratioVariable: string
+				/**
+				 * C​a​t​e​g​o​r​i​c​a​l​ ​v​a​r​i​a​b​l​e
+				 */
+				categoricalVariable: string
+			}
 			/**
 			 * A​v​o​i​d​ ​o​v​e​r​l​a​p​p​i​n​g​ ​s​y​m​b​o​l​s
 			 */
@@ -3220,6 +3234,20 @@ export type TranslationFunctions = {
 				 * Line
 				 */
 				line: () => LocalizedString
+			}
+			ColorModes: {
+				/**
+				 * Single color
+				 */
+				singleColor: () => LocalizedString
+				/**
+				 * Ratio variable
+				 */
+				ratioVariable: () => LocalizedString
+				/**
+				 * Categorical variable
+				 */
+				categoricalVariable: () => LocalizedString
 			}
 			/**
 			 * Avoid overlapping symbols

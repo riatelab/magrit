@@ -264,6 +264,11 @@ const en = {
         square: 'Square',
         line: 'Line',
       },
+      ColorModes: {
+        singleColor: 'Single color',
+        ratioVariable: 'Ratio variable',
+        categoricalVariable: 'Categorical variable',
+      },
       AvoidOverlapping: 'Avoid overlapping symbols',
       LimitValue: 'Limit value',
     },

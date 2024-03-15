@@ -264,6 +264,11 @@ const fr = {
         square: 'Carré',
         line: 'Ligne',
       },
+      ColorModes: {
+        singleColor: 'Couleur unique',
+        ratioVariable: 'Variable de ratio',
+        categoricalVariable: 'Variable catégorielle',
+      },
       AvoidOverlapping: 'Éviter le chevauchement des symboles',
       LimitValue: 'Valeur limite',
     },
