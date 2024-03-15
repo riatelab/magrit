@@ -5,6 +5,7 @@ export const isDarkMode = () => document
 export const enableDarkMode = () => {
   const body = document.querySelector('html');
   if (body) {
+    body.classList.remove('theme-light');
     body.classList.add('theme-dark');
   }
 };
@@ -13,13 +14,15 @@ export const enableLightMode = () => {
   const body = document.querySelector('html');
   if (body) {
     body.classList.remove('theme-dark');
+    body.classList.add('theme-light');
   }
 };
 
 export const toggleDarkMode = () => {
-  const body = document.querySelector('html');
-  if (body) {
-    body.classList.toggle('theme-dark');
+  if (isDarkMode()) {
+    enableLightMode();
+  } else {
+    enableDarkMode();
   }
 };
 
