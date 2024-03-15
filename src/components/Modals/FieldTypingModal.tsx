@@ -31,7 +31,7 @@ export default function FieldTypingModal(
   const { id: targetId, type: targetType } = props;
 
   // Do we need to search for the dataset in the "layers" or "tables" array?
-  const key = `${targetType}s` as Exclude<keyof LayersDescriptionStoreType, 'layoutFeatures'>;
+  const key = `${targetType}s` as Exclude<keyof LayersDescriptionStoreType, 'layoutFeaturesAndLegends'>;
 
   const dataset = layersDescriptionStore[key].find((l) => l.id === targetId);
 

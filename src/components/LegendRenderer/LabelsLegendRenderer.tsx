@@ -7,6 +7,7 @@ import {
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { findLayerById } from '../../helpers/layers';
 import { Mmax } from '../../helpers/math';
 
 // Sub-components and helpers for legend rendering
@@ -22,32 +23,37 @@ import {
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
-import type { LayerDescriptionLabels, LabelsLegendParameters } from '../../global';
+import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+
+import type { LayerDescriptionLabels, LabelsLegend } from '../../global';
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
 export default function legendLabels(
-  layer: LayerDescriptionLabels,
+  legend: LabelsLegend,
 ): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
-
+  const layer = findLayerById(
+    layersDescriptionStore.layers,
+    legend.layerId,
+  )! as LayerDescriptionLabels;
   const heightTitle = createMemo(
     () => getTextSize(
-      layer.legend.title.text,
-      layer.legend.title.fontSize,
-      layer.legend.title.fontFamily,
+      legend.title.text,
+      legend.title.fontSize,
+      legend.title.fontFamily,
     ).height + defaultSpacing,
   );
 
   const heightTitleSubtitle = createMemo(() => {
-    if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
+    if (!legend.subtitle || !legend.subtitle.text) {
       return heightTitle();
     }
     return heightTitle() + getTextSize(
-      layer.legend.subtitle.text,
-      layer.legend.subtitle.fontSize,
-      layer.legend.subtitle.fontFamily,
+      legend.subtitle.text,
+      legend.subtitle.fontSize,
+      legend.subtitle.fontFamily,
     ).height + defaultSpacing;
   });
   const sizeDisplayedEntry = createMemo(() => getTextSize(
@@ -61,9 +67,9 @@ export default function legendLabels(
     Mmax(
       sizeDisplayedEntry().height,
       getTextSize(
-        layer.legend.labels.text,
-        layer.legend.labels.fontSize,
-        layer.legend.labels.fontFamily,
+        legend.labels.text,
+        legend.labels.fontSize,
+        legend.labels.fontFamily,
       ).height,
     )
     + heightTitleSubtitle()
@@ -71,7 +77,7 @@ export default function legendLabels(
   ));
 
   onMount(() => {
-    bindElementsLegend(refElement, layer);
+    bindElementsLegend(refElement, legend);
   });
 
   createEffect(() => {
@@ -88,18 +94,18 @@ export default function legendLabels(
     ref={refElement!}
     class="legend labels"
     for={layer.id}
-    transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
-    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+    transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
+    visibility={layer.visible && legend.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      triggerContextMenuLegend(e, layer.id, LL);
+      triggerContextMenuLegend(e, legend.id, LL);
     }}
-    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={() => { makeLegendSettingsModal(legend.id, LL); }}
   >
-    <RectangleBox backgroundRect={layer.legend.backgroundRect} />
-    { makeLegendText(layer.legend.title, [0, 0], 'title') }
-    { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
+    <RectangleBox backgroundRect={legend.backgroundRect} />
+    { makeLegendText(legend.title, [0, 0], 'title') }
+    { makeLegendText(legend.subtitle, [0, heightTitle()], 'subtitle') }
     <g class="legend-content">
       <text
         x={0}
@@ -124,12 +130,12 @@ export default function legendLabels(
         <tspan
           text-anchor="start"
           x={sizeDisplayedEntry().width}
-        >{ `: ${layer.legend.labels.text}` }</tspan>
+        >{ `: ${legend.labels.text}` }</tspan>
       </text>
     </g>
     {
       makeLegendText(
-        layer.legend.note,
+        legend.note,
         [0, positionNote()],
         'note',
       )

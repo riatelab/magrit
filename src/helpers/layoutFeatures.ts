@@ -5,6 +5,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { getTargetSvg } from './svg';
 import { Mabs, Msqrt } from './math';
 
+import { type LayoutFeature, type Legend, LayoutFeatureType } from '../global.d';
+
+export const isLayoutFeature = (obj: LayoutFeature | Legend): boolean => Object
+  .values(LayoutFeatureType)
+  .includes((obj as LayoutFeature).type);
+
 const makeTemporaryPoint = (x: number, y: number) => {
   const widthPoint = 5;
   const elem = document.createElementNS('http://www.w3.org/2000/svg', 'rect');

@@ -16,6 +16,7 @@ import { getClassificationFunction } from '../../helpers/classification';
 import { findSuitableName } from '../../helpers/common';
 import computeDiscontinuity from '../../helpers/discontinuity';
 import { generateIdLayer } from '../../helpers/layers';
+import { generateIdLegend } from '../../helpers/legends';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Stores
@@ -39,6 +40,7 @@ import type { PortrayalSettingsProps } from './common';
 import { DataType, type Variable, VariableType } from '../../helpers/typeDetection';
 import {
   ClassificationMethod,
+  type DiscontinuityLegend,
   type DiscontinuityParameters,
   type LayerDescription,
   type LegendTextElement,
@@ -86,8 +88,10 @@ function onClickValidate(
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(250, 110);
 
+  const newId = generateIdLayer();
+
   const newLayerDescription = {
-    id: generateIdLayer(),
+    id: newId,
     name: newLayerName,
     data: newData,
     type: 'linestring',
@@ -108,36 +112,40 @@ function onClickValidate(
       breaks,
       sizes: [2, 5, 9, 14],
     } as DiscontinuityParameters,
-    legend: {
-      title: {
-        text: targetVariable,
-        ...applicationSettingsStore.defaultLegendSettings.title,
-      } as LegendTextElement,
-      subtitle: {
-        ...applicationSettingsStore.defaultLegendSettings.subtitle,
-      } as LegendTextElement,
-      note: {
-        ...applicationSettingsStore.defaultLegendSettings.note,
-      } as LegendTextElement,
-      position: legendPosition,
-      visible: true,
-      roundDecimals: 2,
-      backgroundRect: {
-        visible: false,
-      },
-      type: LegendType.discontinuity,
-      orientation: 'horizontal',
-      lineLength: 45,
-      labels: {
-        ...applicationSettingsStore.defaultLegendSettings.labels,
-      } as LegendTextElement,
-    },
   } as LayerDescription;
+
+  const legend = {
+    id: generateIdLegend(),
+    layerId: newId,
+    title: {
+      text: targetVariable,
+      ...applicationSettingsStore.defaultLegendSettings.title,
+    } as LegendTextElement,
+    subtitle: {
+      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+    } as LegendTextElement,
+    note: {
+      ...applicationSettingsStore.defaultLegendSettings.note,
+    } as LegendTextElement,
+    position: legendPosition,
+    visible: true,
+    roundDecimals: 2,
+    backgroundRect: {
+      visible: false,
+    },
+    type: LegendType.discontinuity,
+    orientation: 'horizontal',
+    lineLength: 45,
+    labels: {
+      ...applicationSettingsStore.defaultLegendSettings.labels,
+    } as LegendTextElement,
+  } as DiscontinuityLegend;
 
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
+        draft.layoutFeaturesAndLegends.push(legend);
       },
     ),
   );

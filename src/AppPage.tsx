@@ -69,6 +69,7 @@ import type {
   DexieDb,
   LayerDescription,
   LayoutFeature,
+  Legend,
   TableDescription,
 } from './global';
 import type { TranslationFunctions } from './i18n/i18n-types';
@@ -80,7 +81,7 @@ import PortrayalSelection from './components/Modals/PortrayalSelection.tsx';
 interface ProjectDescription {
   version: string,
   layers: LayerDescription[],
-  layoutFeatures: LayoutFeature[],
+  layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
   map: MapStoreType,
   tables: TableDescription[],
 }
@@ -102,13 +103,13 @@ const prepareExportProject = (): ProjectDescription => {
   // The current version of the application
   const { version } = globalStore;
   // The state of the current project (layers, tables and layout features)
-  const { layers, layoutFeatures, tables } = layersDescriptionStore;
+  const { layers, layoutFeaturesAndLegends, tables } = layersDescriptionStore;
   // The state of the map
   const map = { ...mapStore };
   return {
     version,
     layers,
-    layoutFeatures,
+    layoutFeaturesAndLegends,
     map,
     tables,
   };
@@ -237,15 +238,15 @@ const reloadFromProjectObject = async (
   const {
     version,
     layers,
-    layoutFeatures,
+    layoutFeaturesAndLegends,
     map,
     tables,
   } = obj;
   // Reset the layers description store before changing the map store
   // (this avoid redrawing the map for the potential current layers)
-  setLayersDescriptionStore({ layers: [], layoutFeatures: [], tables: [] });
+  setLayersDescriptionStore({ layers: [], layoutFeaturesAndLegends: [], tables: [] });
   // Update the layer description store with the layers and layout features
-  setLayersDescriptionStore({ layers, layoutFeatures, tables });
+  setLayersDescriptionStore({ layers, layoutFeaturesAndLegends, tables });
   // Update the map store
   // (this updates the projection and pathGenerator in the global store)
   setMapStore(map);

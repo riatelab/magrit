@@ -27,7 +27,12 @@ import { getTargetSvg } from '../../helpers/svg';
 import LegendSettings from '../Modals/LegendSettings.tsx';
 
 // Types / interfaces / enums
-import type { BackgroundRect, LayerDescription, LegendTextElement } from '../../global';
+import type {
+  BackgroundRect,
+  LayoutFeature,
+  Legend,
+  LegendTextElement,
+} from '../../global';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
 
 export function makeLegendText(
@@ -118,7 +123,7 @@ export function bindMouseEnterLeave(refElement: SVGGElement): void {
 // TODO: Some of this code is duplicated in the LayoutFeatureRenderer/common.tsx file.
 //   Once we finished implementing the legends and the layout features,
 //   we should try refactor this to avoid duplication.
-export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescription): void {
+export function bindDragBehavior(refElement: SVGGElement, legend: Legend): void {
   // Allow the user to move the refElement group
   // by dragging it on the screen.
   // To do this we change the transform attribute of the refElement group.
@@ -142,7 +147,7 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
   }
 
   // Get the initial position of the legend
-  let [positionX, positionY] = layer.legend!.position;
+  let [positionX, positionY] = legend.position;
   let i = 0;
   const moveElement = async (e: MouseEvent) => {
     if (((i++) % 2) === 0) { // eslint-disable-line no-plusplus
@@ -189,15 +194,10 @@ export function bindDragBehavior(refElement: SVGGElement, layer: LayerDescriptio
     // Update the position in the layersDescriptionStore
     // once the user has released the mouse button
     setLayersDescriptionStore(
-      'layers',
-      (l: LayerDescription) => l.id === layer.id,
-      'legend',
-      {
-        position: [
-          positionX,
-          positionY,
-        ],
-      },
+      'layoutFeaturesAndLegends',
+      (l: LayoutFeature | Legend) => l.id === legend.id,
+      'position',
+      [positionX, positionY],
     );
   };
 
@@ -259,17 +259,20 @@ export function getTextSize(
   return { width: bb.width, height: bb.height };
 }
 
-export function makeLegendSettingsModal(layerId: string, LL: Accessor<TranslationFunctions>): void {
+export function makeLegendSettingsModal(
+  legendId: string,
+  LL: Accessor<TranslationFunctions>,
+): void {
   // Store the state of the legend before the user opens the modal
   // (in case he/she wants to cancel the changes)
   const legendProperties = unproxify(
-    layersDescriptionStore.layers
-      .find((l) => l.id === layerId)?.legend as never,
+    layersDescriptionStore.layoutFeaturesAndLegends
+      .find((l) => l.id === legendId)! as never,
   );
   // Open the modal
   setModalStore({
     show: true,
-    content: () => <LegendSettings layerId={layerId} LL={LL} />,
+    content: () => <LegendSettings legendId={legendId} LL={LL} />,
     title: LL().Legend.Modal.Title(),
     confirmCallback: () => {
       // The legend was updated directly in the panel,
@@ -281,19 +284,22 @@ export function makeLegendSettingsModal(layerId: string, LL: Accessor<Translatio
       const lds = unproxify(layersDescriptionStore);
       // 1. Find the layer in the layersDescriptionStore
       //    and replace the new legend with the previous one
-      const layer = lds.layers.find((l: LayerDescription) => l.id === layerId);
-      if (layer) {
-        layer.legend = legendProperties;
-      }
+      lds.layoutFeaturesAndLegends
+        .forEach((elem: LayoutFeature | Legend) => {
+          if (elem.id === legendId) {
+            // eslint-disable-next-line no-param-reassign
+            elem = legendProperties;
+          }
+        });
       // 2. Push the whole layersDescriptionStore to the undo stack
       pushUndoStackStore('layersDescription', lds);
     },
     cancelCallback: () => {
       // Reset the legend of the layer on cancel
       setLayersDescriptionStoreBase(
-        'layers',
-        (l: LayerDescription) => l.id === layerId,
-        { legend: legendProperties },
+        'layoutFeaturesAndLegends',
+        (l: LayoutFeature | Legend) => l.id === legendId,
+        legendProperties,
       );
     },
     escapeKey: 'cancel',
@@ -303,7 +309,7 @@ export function makeLegendSettingsModal(layerId: string, LL: Accessor<Translatio
 
 export function triggerContextMenuLegend(
   event: MouseEvent,
-  layerId: string,
+  legendId: string,
   LL: Accessor<TranslationFunctions>,
 ): void {
   console.log('context menu legend');
@@ -314,16 +320,15 @@ export function triggerContextMenuLegend(
       {
         label: LL().Legend.ContextMenu.EditSettings(),
         callback: () => {
-          makeLegendSettingsModal(layerId, LL);
+          makeLegendSettingsModal(legendId, LL);
         },
       },
       {
         label: LL().Legend.ContextMenu.Hide(),
         callback: () => {
           setLayersDescriptionStore(
-            'layers',
-            (l: LayerDescription) => l.id === layerId,
-            'legend',
+            'layoutFeaturesAndLegends',
+            (l: LayoutFeature | Legend) => l.id === legendId,
             { visible: false },
           );
         },
@@ -343,10 +348,10 @@ export function triggerContextMenuLegend(
   });
 }
 
-export const bindElementsLegend = (refElement: SVGGElement, layer: LayerDescription) => {
+export const bindElementsLegend = (refElement: SVGGElement, legend: Legend) => {
   computeRectangleBox(refElement);
   bindMouseEnterLeave(refElement);
-  bindDragBehavior(refElement, layer);
+  bindDragBehavior(refElement, legend);
 };
 
 export const getAllLegendNodes = (): NodeListOf<SVGGElement> => document.querySelectorAll('g.legend');

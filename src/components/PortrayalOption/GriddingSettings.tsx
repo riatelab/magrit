@@ -31,6 +31,7 @@ import { findSuitableName } from '../../helpers/common';
 import { computeAppropriateResolution } from '../../helpers/geo';
 import { computeGriddedLayer } from '../../helpers/gridding';
 import { generateIdLayer } from '../../helpers/layers';
+import { generateIdLegend } from '../../helpers/legends';
 import { getProjectionUnit } from '../../helpers/projection';
 import { VariableType } from '../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
@@ -46,7 +47,7 @@ import WarningBanner from '../WarningBanner.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
-  type ChoroplethLegendParameters,
+  type ChoroplethLegend,
   CustomPalette,
   GeoJSONFeatureCollection,
   GridCellShape,
@@ -97,8 +98,10 @@ async function onClickValidate(
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(120, 340);
 
+  const newId = generateIdLayer();
+
   const newLayerDescription = {
-    id: generateIdLayer(),
+    id: newId,
     name: newLayerName,
     type: 'polygon',
     renderer: RepresentationType.grid,
@@ -127,46 +130,50 @@ async function onClickValidate(
     blurFilter: false,
     shapeRendering: 'auto',
     rendererParameters: params,
-    legend: {
-      // Part common to all legends
-      title: {
-        text: targetVariable,
-        ...applicationSettingsStore.defaultLegendSettings.title,
-      } as LegendTextElement,
-      subtitle: {
-        ...applicationSettingsStore.defaultLegendSettings.subtitle,
-        text: '(unit / km²)',
-      } as LegendTextElement,
-      note: {
-        ...applicationSettingsStore.defaultLegendSettings.note,
-      } as LegendTextElement,
-      position: legendPosition,
-      visible: true,
-      roundDecimals: 1,
-      backgroundRect: {
-        visible: false,
-      },
-      // Part specific to choropleth
-      type: LegendType.choropleth,
-      orientation: Orientation.vertical,
-      boxWidth: 50,
-      boxHeight: 30,
-      boxSpacing: 0,
-      boxSpacingNoData: 10,
-      boxCornerRadius: 0,
-      labels: {
-        ...applicationSettingsStore.defaultLegendSettings.labels,
-      } as LegendTextElement,
-      noDataLabel: 'No data',
-      stroke: false,
-      tick: false,
-    } as ChoroplethLegendParameters,
   } as LayerDescription;
+
+  const legend = {
+    // Part common to all legends
+    id: generateIdLegend(),
+    layerId: newId,
+    title: {
+      text: targetVariable,
+      ...applicationSettingsStore.defaultLegendSettings.title,
+    } as LegendTextElement,
+    subtitle: {
+      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      text: '(unit / km²)',
+    } as LegendTextElement,
+    note: {
+      ...applicationSettingsStore.defaultLegendSettings.note,
+    } as LegendTextElement,
+    position: legendPosition,
+    visible: true,
+    roundDecimals: 1,
+    backgroundRect: {
+      visible: false,
+    },
+    // Part specific to choropleth
+    type: LegendType.choropleth,
+    orientation: Orientation.vertical,
+    boxWidth: 50,
+    boxHeight: 30,
+    boxSpacing: 0,
+    boxSpacingNoData: 10,
+    boxCornerRadius: 0,
+    labels: {
+      ...applicationSettingsStore.defaultLegendSettings.labels,
+    } as LegendTextElement,
+    noDataLabel: 'No data',
+    stroke: false,
+    tick: false,
+  } as ChoroplethLegend;
 
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
+        draft.layoutFeaturesAndLegends.push(legend);
       },
     ),
   );

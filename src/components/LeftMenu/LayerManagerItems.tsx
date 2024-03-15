@@ -1,5 +1,10 @@
 // Imports from solid-js
-import { Accessor, JSX, Show } from 'solid-js';
+import {
+  Accessor,
+  createMemo,
+  type JSX,
+  Show,
+} from 'solid-js';
 
 // Imports from other packages
 import {
@@ -39,7 +44,12 @@ import JoinPanel from '../Modals/JoinModal.tsx';
 import FieldTypingModal from '../Modals/FieldTypingModal.tsx';
 
 // Types / Interfaces / Enums
-import type { LayerDescription, TableDescription } from '../../global';
+import type {
+  LayerDescription,
+  LayoutFeature,
+  Legend,
+  TableDescription,
+} from '../../global';
 
 // Styles
 import 'font-gis/css/font-gis.css';
@@ -91,9 +101,14 @@ const onClickTrashLayer = (id: string, LL: Accessor<TranslationFunctions>) => {
   </>;
 
   const onDeleteConfirmed = (): void => {
+    // Remove the layer from layersDescriptionStore.layers
     const layers = layersDescriptionStore.layers
       .filter((layerDescription) => layerDescription.id !== id);
-    setLayersDescriptionStore({ layers });
+    // Remove the corresponding legend from layersDescriptionStore.layoutFeaturesAndLegends
+    const layoutFeaturesAndLegends = layersDescriptionStore.layoutFeaturesAndLegends
+      .filter((layoutFeatureOrLegend) => layoutFeatureOrLegend.layerId !== id);
+    // Update the store
+    setLayersDescriptionStore({ layers, layoutFeaturesAndLegends });
   };
 
   setNiceAlertStore({
@@ -171,7 +186,10 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
   //    that use 'default' renderer (in this cas we should create it and add it
   //    to the LayerDescription / to the map) - TODO
   const ld = layersDescriptionStore.layers.find((l) => l.id === id)!;
-  if (ld.legend === undefined || ld.legend === null) {
+  const legends = layersDescriptionStore.layoutFeaturesAndLegends
+    .filter((layoutFeatureOrLegend) => layoutFeatureOrLegend.layerId === id) as Legend[];
+
+  if (legends.length === 0) {
     setNiceAlertStore({
       show: true,
       type: 'warning',
@@ -180,35 +198,36 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
       cancelCallback: (): void => undefined,
       focusOn: 'confirm',
     });
-  } else {
-    // Toggle the visibility of the legend
+  } else if (legends.length === 1) {
+    const legend = legends[0];
+
+    // Toggle the visibility of the unique legend element
     setLayersDescriptionStore(
-      'layers',
-      (l: LayerDescription) => l.id === id,
-      'legend',
+      'layoutFeaturesAndLegends',
+      (l: LayoutFeature | Legend) => l.id === legend.id,
       'visible',
       (v: boolean) => !v,
     );
-    // We check that the legend is still within the visibility zone.
+    // We also check that the legend is still within the visibility zone.
     // If it is no longer in the visibility zone (because the user has shrunk the map area),
     // we replace it a the closer position within the visibility zone.
     if (
-      ld.legend.visible
-      && (ld.legend.position[0] > mapStore.mapDimensions.width
-        || ld.legend.position[1] > mapStore.mapDimensions.height)
+      legend.visible
+      && (legend.position[0] > mapStore.mapDimensions.width
+        || legend.position[1] > mapStore.mapDimensions.height)
     ) {
       const legendNode = document.querySelector(`g.legend[for="${id}"]`) as SVGGElement;
       const { width, height } = legendNode.getBBox();
-      const newPosition = [ld.legend.position[0], ld.legend.position[1]];
-      if (ld.legend.position[0] > mapStore.mapDimensions.width) {
+      const newPosition = [legend.position[0], legend.position[1]];
+      if (legend.position[0] > mapStore.mapDimensions.width) {
         newPosition[0] = mapStore.mapDimensions.width - width;
       }
-      if (ld.legend.position[1] > mapStore.mapDimensions.height) {
+      if (legend.position[1] > mapStore.mapDimensions.height) {
         newPosition[1] = mapStore.mapDimensions.height - height;
       }
       setLayersDescriptionStore(
-        'layers',
-        (l: LayerDescription) => l.id === id,
+        'layoutFeaturesAndLegends',
+        (l: LayoutFeature | Legend) => l.id === legend.id,
         'legend',
         'position',
         newPosition,
@@ -225,11 +244,75 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
         },
       });
     }
+  } else if (legends.length > 1) {
+    const anyVisible = legends.some((l) => l.visible);
+    const allVisible = legends.every((l) => l.visible);
+    if (anyVisible && allVisible) {
+      // All the legends are visible, we hide them all
+      legends.forEach((legend) => {
+        setLayersDescriptionStore(
+          'layoutFeaturesAndLegends',
+          (l: LayoutFeature | Legend) => l.id === legend.id,
+          'visible',
+          false,
+        );
+      });
+    } else {
+      // At least one legend is not visible, we show them all
+      legends.forEach((legend) => {
+        setLayersDescriptionStore(
+          'layoutFeaturesAndLegends',
+          (l: LayoutFeature | Legend) => l.id === legend.id,
+          'visible',
+          true,
+        );
+        // We also check that the legend is still within the visibility zone.
+        // If it is no longer in the visibility zone (because the user has shrunk the map area),
+        // we replace it a the closer position within the visibility zone.
+        if (
+          legend.position[0] > mapStore.mapDimensions.width
+          || legend.position[1] > mapStore.mapDimensions.height
+        ) {
+          const legendNode = document.querySelector(`g.legend[for="${id}"]`) as SVGGElement;
+          const { width, height } = legendNode.getBBox();
+          const newPosition = [legend.position[0], legend.position[1]];
+          if (legend.position[0] > mapStore.mapDimensions.width) {
+            newPosition[0] = mapStore.mapDimensions.width - width;
+          }
+          if (legend.position[1] > mapStore.mapDimensions.height) {
+            newPosition[1] = mapStore.mapDimensions.height - height;
+          }
+          setLayersDescriptionStore(
+            'layoutFeaturesAndLegends',
+            (l: LayoutFeature | Legend) => l.id === legend.id,
+            'legend',
+            'position',
+            newPosition,
+          );
+          toast.success(LL().LayerManager.LegendDisplacement(), {
+            duration: 5000,
+            style: {
+              background: '#1f2937',
+              color: '#f3f4f6',
+            },
+            iconTheme: {
+              primary: '#38bdf8',
+              secondary: '#1f2937',
+            },
+          });
+        }
+      });
+    }
   }
 };
 
 export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.Element {
   const { LL } = useI18nContext();
+
+  const legends = createMemo(() => layersDescriptionStore.layoutFeaturesAndLegends
+    .filter(
+      (layoutFeatureOrLegend) => layoutFeatureOrLegend.layerId === props.layer.id,
+    ) as Legend[]);
 
   return <div class="layer-manager-item is-flex" onDblClick={() => { onClickSettings(props.layer.id, LL); }}>
     <div class="layer-manager-item__container">
@@ -251,7 +334,7 @@ export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.E
               class={ typeIcons[props.layer.type as ('point' | 'linestring' | 'polygon' | 'raster')] }
             />
           </div>
-          <Show when={props.layer.legend !== undefined}>
+          <Show when={legends().length > 0}>
             <button
               class="unstyled"
               onClick={() => { onClickLegend(props.layer.id, LL); }}
@@ -261,8 +344,8 @@ export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.E
               <i
                 class="fg-map-legend"
                 style={{
-                  color: props.layer.legend?.visible ? 'currentColor' : 'grey',
-                  transform: props.layer.legend?.visible ? '' : 'rotate(3deg)',
+                  color: legends().every((l) => l.visible) ? 'currentColor' : 'grey',
+                  transform: legends().every((l) => l.visible) ? '' : 'rotate(3deg)',
                 }}
               />
             </button>
@@ -346,8 +429,11 @@ export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.E
         title={ LL().LeftMenu.FunctionalityChoice() }
       >
         <FaSolidPlay style={{
-          filter: 'drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5))',
+          filter: 'drop-shadow(3px 3px 6px grey)',
+          fill: 'var(--primary-color)',
           height: '2em',
+          stroke: 'currentColor',
+          'stroke-width': '55px',
         }} />
       </button>
     </div>
@@ -469,8 +555,11 @@ export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX
         title={LL().LeftMenu.FunctionalityChoice()}
       >
         <FaSolidPlay style={{
-          filter: 'drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5))',
+          filter: 'drop-shadow(3px 3px 6px grey)',
+          fill: 'var(--primary-color)',
           height: '2em',
+          stroke: 'currentColor',
+          'stroke-width': '55px',
         }}/>
       </button>
     </div>

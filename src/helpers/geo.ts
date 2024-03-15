@@ -345,14 +345,14 @@ interface SimulationNode {
 function squareForceCollide() {
   let nodes: SimulationNode[];
 
-  function force(alpha) {
+  function force(alpha: number) {
     const quad = d3.quadtree(
       nodes,
       (d) => d.x,
       (d) => d.y,
     );
     nodes.forEach((d) => {
-      quad.visit((q, x1, y1, x2, y2) => {
+      quad.visit((q: any & { data: SimulationNode }, x1, y1, x2, y2) => {
         let updated = false;
         if (q.data && q.data !== d) {
           let x = d.x - q.data.x;

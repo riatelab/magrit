@@ -12,7 +12,7 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
-import { setGlobalStore, setLoading } from '../../store/GlobalStore';
+import { setLoading } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
@@ -25,6 +25,7 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 import { findSuitableName } from '../../helpers/common';
 import { makeCentroidLayer } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
+import { generateIdLegend } from '../../helpers/legends';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Subcomponents
@@ -33,7 +34,7 @@ import InputResultName from './InputResultName.tsx';
 
 // Types / Interfaces / Enums
 import {
-  type LabelsLegendParameters,
+  type LabelsLegend,
   type LabelsParameters,
   type LayerDescriptionLabels,
   type LegendTextElement,
@@ -74,8 +75,10 @@ function onClickValidate(
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(100, 100);
 
+  const newId = generateIdLayer();
+
   const newLayerDescription = {
-    id: generateIdLayer(),
+    id: newId,
     name: newLayerName,
     data: newData,
     type: 'point',
@@ -106,37 +109,41 @@ function onClickValidate(
       },
       movable: false,
     } as LabelsParameters,
-    legend: {
-      // Part common to all legends
-      title: {
-        text: targetVariable,
-        ...applicationSettingsStore.defaultLegendSettings.title,
-      } as LegendTextElement,
-      subtitle: {
-        text: 'This is a subtitle',
-        ...applicationSettingsStore.defaultLegendSettings.subtitle,
-      },
-      note: {
-        text: 'This is a bottom note',
-        ...applicationSettingsStore.defaultLegendSettings.note,
-      },
-      position: legendPosition,
-      visible: true,
-      backgroundRect: {
-        visible: false,
-      },
-      type: LegendType.labels,
-      labels: {
-        text: `${referenceLayerDescription.name} (${targetVariable})`,
-        ...applicationSettingsStore.defaultLegendSettings.labels,
-      } as LegendTextElement,
-    } as LabelsLegendParameters,
   } as LayerDescriptionLabels;
+
+  const legend = {
+    // Part common to all legends
+    id: generateIdLegend(),
+    layerId: newId,
+    title: {
+      text: targetVariable,
+      ...applicationSettingsStore.defaultLegendSettings.title,
+    } as LegendTextElement,
+    subtitle: {
+      text: 'This is a subtitle',
+      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+    },
+    note: {
+      text: 'This is a bottom note',
+      ...applicationSettingsStore.defaultLegendSettings.note,
+    },
+    position: legendPosition,
+    visible: true,
+    backgroundRect: {
+      visible: false,
+    },
+    type: LegendType.labels,
+    labels: {
+      text: `${referenceLayerDescription.name} (${targetVariable})`,
+      ...applicationSettingsStore.defaultLegendSettings.labels,
+    } as LegendTextElement,
+  } as LabelsLegend;
 
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
+        draft.layoutFeaturesAndLegends.push(legend);
       },
     ),
   );

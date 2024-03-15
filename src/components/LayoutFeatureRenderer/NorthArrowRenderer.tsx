@@ -24,7 +24,7 @@ import { debounce } from '../../helpers/common';
 import { Matan2, radToDegConstant } from '../../helpers/math';
 
 // Types / Interfaces / Enums
-import type { LayoutFeature, NorthArrow } from '../../global';
+import type { LayoutFeature, Legend, NorthArrow } from '../../global';
 
 const simpleNorthArrow = (props: NorthArrow) => <g
   transform={`rotate(${props.rotation} ${props.size / 2} ${props.size / 2})`}
@@ -389,9 +389,8 @@ const fancyNorthArrow = (props: NorthArrow) => <g
 /**
  * Compute the angle to north for the the north arrow
  *
- * @param position - The current position of the north arrow (in pixels)
- * @param size - The size of the north arrow (in pixels)
- * @param projection - The current projection
+ * @param {[number, number]} position - The current position of the north arrow (in pixels)
+ * @param {any} projection - The current projection
  * @return {number} - Angle to use as rotation value for the north arrow
  */
 const computeAngleToNorth = (
@@ -399,6 +398,9 @@ const computeAngleToNorth = (
   projection: any,
 ): number => {
   const geoPosition = projection.invert(position);
+  if (!geoPosition) {
+    return 0;
+  }
   const positionSymbolTop = projection([geoPosition[0], geoPosition[1] + 1]);
   const positionSymbolBottom = projection([geoPosition[0], geoPosition[1] - 1]);
   const angle = Matan2(
@@ -435,8 +437,8 @@ export default function NorthArrowRenderer(props: NorthArrow): JSX.Element {
       globalStore.projection,
     );
     setLayersDescriptionStore(
-      'layoutFeatures',
-      (f: LayoutFeature) => f.id === props.id,
+      'layoutFeaturesAndLegends',
+      (f: LayoutFeature | Legend) => f.id === props.id,
       'rotation',
       angleToNorth,
     );

@@ -114,7 +114,6 @@ async function onClickValidate(
       variable: targetVariable,
       method: cartogramMethod,
     } as CartogramParameters,
-    legend: undefined,
   } as LayerDescriptionCartogram;
 
   setLayersDescriptionStore(

@@ -13,9 +13,11 @@ import {
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { isNonNull } from '../../helpers/common';
+import { findLayerById } from '../../helpers/layers';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Sub-components and helpers for legend rendering
 import {
@@ -29,34 +31,32 @@ import {
 } from './common.tsx';
 
 // Import some type descriptions
-import type {
+import {
+  CategoricalChoroplethLegend,
   CategoricalChoroplethParameters,
-  ChoroplethLegendParameters,
+  ChoroplethLegend,
   LayerDescriptionCategoricalChoropleth,
-} from '../../global';
-
-import { Orientation } from '../../global.d';
+  Orientation,
+} from '../../global.d';
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
-function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Element {
+function verticalLegend(legendParameters: CategoricalChoroplethLegend): JSX.Element {
   // Check that the layer has all the required attributes
   // Since this is done during layer creation, this should not happen in practice,
   // and the following checks are here:
   // - to make Typescript happy
   // - to make sure the layer is correctly defined.
   // In the future, we might want to remove these checks.
+  const layer = findLayerById(
+    layersDescriptionStore.layers,
+    legendParameters.layerId,
+  )!;
+
   if (!layer.rendererParameters) {
     throw new Error('Classification attribute is not defined - this should not happen');
   }
   const rendererParameters = layer.rendererParameters as CategoricalChoroplethParameters;
-
-  if (!layer.legend) {
-    throw new Error('Legend attribute is not defined - this should not happen');
-  }
-
-  // const legendParameters = createMemo(() => layer.legend as ChoroplethLegendParameters);
-  const legendParameters = layer.legend as ChoroplethLegendParameters;
 
   const { LL } = useI18nContext();
 
@@ -116,7 +116,7 @@ function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Eleme
   onMount(() => {
     // We need to wait for the legend to be rendered before we can compute its size
     // and bind the drag behavior and the mouse enter / leave behavior.
-    bindElementsLegend(refElement, layer);
+    bindElementsLegend(refElement, legendParameters);
   });
 
   createEffect(() => {
@@ -144,13 +144,13 @@ function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Eleme
     ref={refElement!}
     class="legend categoricalChoropleth"
     for={layer.id}
-    transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
-    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
-    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
+    transform={`translate(${legendParameters.position[0]}, ${legendParameters.position[1]})`}
+    visibility={layer.visible && legendParameters.visible ? undefined : 'hidden'}
+    onDblClick={() => { makeLegendSettingsModal(legendParameters.id, LL); }}
     onContextMenu={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      triggerContextMenuLegend(e, layer.id, LL);
+      triggerContextMenuLegend(e, legendParameters.id, LL);
     } }
     style={{ cursor: 'grab' }}
   >
@@ -236,23 +236,22 @@ function verticalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Eleme
   </g>;
 }
 
-function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Element {
+function horizontalLegend(legendParameters: CategoricalChoroplethLegend): JSX.Element {
   // Check that the layer has all the required attributes
   // Since this is done during layer creation, this should not happen in practice
   // and the following checks are here:
   // - to make Typescript happy
   // - to make sure that the layer is correctly defined.
   // In the future, we might want to remove these checks.
+  const layer = findLayerById(
+    layersDescriptionStore.layers,
+    legendParameters.layerId,
+  )!;
+
   if (!layer.rendererParameters) {
     throw new Error('Classification attribute is not defined - this should not happen');
   }
   const rendererParameters = layer.rendererParameters as CategoricalChoroplethParameters;
-
-  if (!layer.legend) {
-    throw new Error('Legend attribute is not defined - this should not happen');
-  }
-
-  const legendParameters = layer.legend as ChoroplethLegendParameters;
 
   const { LL } = useI18nContext();
 
@@ -312,11 +311,11 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
   onMount(() => {
     // We need to wait for the legend to be rendered before we can compute its size
     // and bind the drag behavior and the mouse enter / leave behavior.
-    bindElementsLegend(refElement, layer);
+    bindElementsLegend(refElement, legendParameters);
   });
 
   createEffect(() => {
-    if (refElement && layer.visible && layer.legend?.visible) {
+    if (refElement && layer.visible && legendParameters.visible) {
       computeRectangleBox(
         refElement,
         heightBox(),
@@ -344,9 +343,9 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
     onContextMenu={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      triggerContextMenuLegend(e, layer.id, LL);
+      triggerContextMenuLegend(e, legendParameters.id, LL);
     } }
-    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={() => { makeLegendSettingsModal(legendParameters.id, LL); }}
     style={{ cursor: 'grab' }}
   >
     <RectangleBox backgroundRect={legendParameters.backgroundRect} />
@@ -427,14 +426,14 @@ function horizontalLegend(layer: LayerDescriptionCategoricalChoropleth): JSX.Ele
 }
 
 export default function legendCategoricalChoropleth(
-  layer: LayerDescriptionCategoricalChoropleth,
+  legend: CategoricalChoroplethLegend,
 ): JSX.Element {
   return <>
     {
       ({
         [Orientation.vertical]: verticalLegend,
         [Orientation.horizontal]: horizontalLegend,
-      })[(layer.legend as ChoroplethLegendParameters).orientation](layer)
+      })[legend.orientation](legend)
     }
   </>;
 }

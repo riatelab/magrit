@@ -11,10 +11,12 @@ import { range } from 'd3-array';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { isNumber, precisionToMinimumFractionDigits } from '../../helpers/common';
+import { findLayerById } from '../../helpers/layers';
 import { round } from '../../helpers/math';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Sub-components and helpers for legend rendering
 import {
@@ -30,8 +32,9 @@ import {
 // Import some type descriptions
 import {
   AllowChoroplethLegend,
-  type ChoroplethLegendParameters,
-  type LayerDescriptionChoropleth, LayerDescriptionGriddedLayer,
+  type ChoroplethLegend,
+  type LayerDescriptionChoropleth,
+  type LayerDescriptionGriddedLayer,
   type LayerDescriptionSmoothedLayer,
   Orientation,
 } from '../../global.d';
@@ -39,10 +42,13 @@ import {
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
 function verticalLegend(
-  layer: LayerDescriptionChoropleth | LayerDescriptionSmoothedLayer,
+  legendParameters: ChoroplethLegend,
 ): JSX.Element {
+  const layer = findLayerById(
+    layersDescriptionStore.layers,
+    legendParameters.layerId,
+  )!;
   const rendererParameters = layer.rendererParameters as AllowChoroplethLegend;
-  const legendParameters = layer.legend as ChoroplethLegendParameters;
 
   const { LL } = useI18nContext();
 
@@ -117,7 +123,7 @@ function verticalLegend(
   onMount(() => {
     // We need to wait for the legend to be rendered before we can compute its size
     // and bind the drag behavior and the mouse enter / leave behavior.
-    bindElementsLegend(refElement, layer);
+    bindElementsLegend(refElement, legendParameters);
   });
 
   createEffect(() => {
@@ -145,13 +151,13 @@ function verticalLegend(
     ref={refElement!}
     class="legend choropleth"
     for={layer.id}
-    transform={`translate(${layer.legend.position[0]}, ${layer.legend.position[1]})`}
-    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
-    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
+    transform={`translate(${legendParameters.position[0]}, ${legendParameters.position[1]})`}
+    visibility={layer.visible && legendParameters.visible ? undefined : 'hidden'}
+    onDblClick={() => { makeLegendSettingsModal(legendParameters.id, LL); }}
     onContextMenu={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      triggerContextMenuLegend(e, layer.id, LL);
+      triggerContextMenuLegend(e, legendParameters.id, LL);
     } }
     style={{ cursor: 'grab' }}
   >
@@ -266,10 +272,13 @@ function verticalLegend(
 }
 
 function horizontalLegend(
-  layer: LayerDescriptionChoropleth | LayerDescriptionSmoothedLayer,
+  legendParameters: ChoroplethLegend,
 ): JSX.Element {
+  const layer = findLayerById(
+    layersDescriptionStore.layers,
+    legendParameters.layerId,
+  )!;
   const rendererParameters = layer.rendererParameters as AllowChoroplethLegend;
-  const legendParameters = layer.legend as ChoroplethLegendParameters;
 
   const { LL } = useI18nContext();
   const colors = getColors(
@@ -334,11 +343,11 @@ function horizontalLegend(
   onMount(() => {
     // We need to wait for the legend to be rendered before we can compute its size
     // and bind the drag behavior and the mouse enter / leave behavior.
-    bindElementsLegend(refElement, layer);
+    bindElementsLegend(refElement, legendParameters);
   });
 
   createEffect(() => {
-    if (refElement && layer.visible && layer.legend?.visible) {
+    if (refElement && layer.visible && legendParameters.visible) {
       computeRectangleBox(
         refElement,
         heightBox(),
@@ -367,9 +376,9 @@ function horizontalLegend(
     onContextMenu={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      triggerContextMenuLegend(e, layer.id, LL);
+      triggerContextMenuLegend(e, legendParameters.id, LL);
     } }
-    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={() => { makeLegendSettingsModal(legendParameters.id, LL); }}
     style={{ cursor: 'grab' }}
   >
     <RectangleBox backgroundRect={legendParameters.backgroundRect} />
@@ -480,19 +489,19 @@ function horizontalLegend(
   </g>;
 }
 
-type HasChoroplethLegend = LayerDescriptionChoropleth
-| LayerDescriptionSmoothedLayer
-| LayerDescriptionGriddedLayer;
+// type HasChoroplethLegend = LayerDescriptionChoropleth
+// | LayerDescriptionSmoothedLayer
+// | LayerDescriptionGriddedLayer;
 
 export default function legendChoropleth(
-  layer: HasChoroplethLegend,
+  legend: ChoroplethLegend,
 ): JSX.Element {
   return <>
     {
       ({
         [Orientation.vertical]: verticalLegend,
         [Orientation.horizontal]: horizontalLegend,
-      })[(layer.legend as ChoroplethLegendParameters).orientation](layer)
+      })[legend.orientation](legend)
     }
   </>;
 }

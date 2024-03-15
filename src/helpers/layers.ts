@@ -17,6 +17,11 @@ export const generateIdLayer = () => `Layer-${uuidv4()}`;
 
 export const generateIdTable = () => `Table-${uuidv4()}`;
 
+export const findLayerById = (
+  layersDescription: LayerDescription[],
+  id: string,
+): LayerDescription | undefined => layersDescription.find((layer) => layer.id === id);
+
 /**
  * Whether the map already has a sphere layer.
  *

@@ -9,9 +9,10 @@ import {
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { PropSizer } from '../../helpers/geo';
-import { Mmax, round, sum } from '../../helpers/math';
 import { precisionToMinimumFractionDigits } from '../../helpers/common';
+import { PropSizer } from '../../helpers/geo';
+import { findLayerById } from '../../helpers/layers';
+import { Mmax, round } from '../../helpers/math';
 import { semiCirclePath } from '../../helpers/svg';
 
 // Sub-components
@@ -27,21 +28,25 @@ import {
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Types / Interfaces / Enums
 import type {
   LayerDescriptionMushroomLayer,
-  MushroomsLegendParameters,
-  MushroomsParameters,
+  MushroomsLegend,
 } from '../../global';
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
 export default function legendMushrooms(
-  layer: LayerDescriptionMushroomLayer,
+  legend: MushroomsLegend,
 ): JSX.Element {
   let refElement: SVGGElement;
   const { LL } = useI18nContext();
+  const layer = findLayerById(
+    layersDescriptionStore.layers,
+    legend.layerId,
+  )! as LayerDescriptionMushroomLayer;
 
   const propSizeTop = createMemo(() => new PropSizer(
     layer.rendererParameters.top.referenceValue,
@@ -56,51 +61,51 @@ export default function legendMushrooms(
   ));
 
   const maxRadiusTop = createMemo(
-    () => propSizeTop().scale(layer.legend.values.top[layer.legend.values.top.length - 1]),
+    () => propSizeTop().scale(legend.values.top[legend.values.top.length - 1]),
   );
   const maxRadiusBottom = createMemo(
-    () => propSizeBottom().scale(layer.legend.values.bottom[layer.legend.values.bottom.length - 1]),
+    () => propSizeBottom().scale(legend.values.bottom[legend.values.bottom.length - 1]),
   );
   const maxRadius = createMemo(() => Mmax(maxRadiusTop(), maxRadiusBottom()));
 
   const heightTitle = createMemo(
     () => getTextSize(
-      layer.legend.title.text,
-      layer.legend.title.fontSize,
-      layer.legend.title.fontFamily,
+      legend.title.text,
+      legend.title.fontSize,
+      legend.title.fontFamily,
     ).height + defaultSpacing,
   );
 
   const heightTitleSubtitle = createMemo(() => {
-    if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
+    if (!legend.subtitle || !legend.subtitle.text) {
       return heightTitle();
     }
     return heightTitle() + getTextSize(
-      layer.legend.subtitle.text,
-      layer.legend.subtitle.fontSize,
-      layer.legend.subtitle.fontFamily,
+      legend.subtitle.text,
+      legend.subtitle.fontSize,
+      legend.subtitle.fontFamily,
     ).height + defaultSpacing;
   });
 
   const sizeTopTitle = createMemo(() => {
-    if (!layer.legend.topTitle || !layer.legend.topTitle.text) {
+    if (!legend.topTitle || !legend.topTitle.text) {
       return 0;
     }
     return getTextSize(
-      layer.legend.topTitle.text,
-      layer.legend.topTitle.fontSize,
-      layer.legend.topTitle.fontFamily,
+      legend.topTitle.text,
+      legend.topTitle.fontSize,
+      legend.topTitle.fontFamily,
     ).height;
   });
 
   const sizeBottomTitle = createMemo(() => {
-    if (!layer.legend.bottomTitle || !layer.legend.bottomTitle.text) {
+    if (!legend.bottomTitle || !legend.bottomTitle.text) {
       return 0;
     }
     return getTextSize(
-      layer.legend.bottomTitle.text,
-      layer.legend.bottomTitle.fontSize,
-      layer.legend.bottomTitle.fontFamily,
+      legend.bottomTitle.text,
+      legend.bottomTitle.fontSize,
+      legend.bottomTitle.fontFamily,
     ).height;
   });
 
@@ -114,20 +119,20 @@ export default function legendMushrooms(
   ));
 
   onMount(() => {
-    bindElementsLegend(refElement, layer);
+    bindElementsLegend(refElement, legend);
   });
 
   createEffect(() => {
-    if (refElement && layer.visible && layer.legend.visible) {
+    if (refElement && layer.visible && legend.visible) {
       computeRectangleBox(
         refElement,
         heightTitle(),
         heightTitleSubtitle(),
         positionNote(),
-        layer.legend.title.text,
-        layer.legend?.subtitle?.text,
-        layer.legend?.note?.text,
-        layer.legend.roundDecimals,
+        legend.title.text,
+        legend.subtitle?.text,
+        legend.note?.text,
+        legend.roundDecimals,
       );
     }
   });
@@ -136,20 +141,20 @@ export default function legendMushrooms(
     ref={refElement!}
     class="legend mushrooms"
     for={layer.id}
-    transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
-    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+    transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
+    visibility={layer.visible && legend.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      triggerContextMenuLegend(e, layer.id, LL);
+      triggerContextMenuLegend(e, legend.id, LL);
     }}
-    onDblClick={(e) => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={(e) => { makeLegendSettingsModal(legend.id, LL); }}
   >
-    <RectangleBox backgroundRect={layer.legend.backgroundRect} />
-    { makeLegendText(layer.legend.title, [0, 0], 'title') }
-    { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
+    <RectangleBox backgroundRect={legend.backgroundRect} />
+    { makeLegendText(legend.title, [0, 0], 'title') }
+    { makeLegendText(legend.subtitle, [0, heightTitle()], 'subtitle') }
     <g class="legend-content">
-      <For each={layer.legend.values.top.toReversed()}>
+      <For each={legend.values.top.toReversed()}>
         {
           (value) => {
             const symbolSize = propSizeTop().scale(value);
@@ -168,23 +173,23 @@ export default function legendMushrooms(
               >
               </path>
               <text
-                font-size={layer.legend.labels.fontSize}
-                font-family={layer.legend.labels.fontFamily}
-                font-style={layer.legend.labels.fontStyle}
-                font-weight={layer.legend.labels.fontWeight}
-                fill={layer.legend.labels.fontColor}
+                font-size={legend.labels.fontSize}
+                font-family={legend.labels.fontFamily}
+                font-style={legend.labels.fontStyle}
+                font-weight={legend.labels.fontWeight}
+                fill={legend.labels.fontColor}
                 text-anchor="start"
                 dominant-baseline="middle"
                 style={{ 'user-select': 'none' }}
                 x={maxRadius() * 2 + defaultSpacing * 2}
                 y={heightTitleSubtitle() + maxRadiusTop() - symbolSize}
               >{
-                round(value, layer.legend!.roundDecimals)
+                round(value, legend.roundDecimals)
                   .toLocaleString(
                     applicationSettingsStore.userLocale,
                     {
                       minimumFractionDigits: precisionToMinimumFractionDigits(
-                        layer.legend!.roundDecimals,
+                        legend.roundDecimals,
                       ),
                     },
                   )
@@ -204,7 +209,7 @@ export default function legendMushrooms(
       </For>
       {
         makeLegendText(
-          layer.legend.topTitle,
+          legend.topTitle,
           [maxRadius(), heightTitleSubtitle() + maxRadiusTop() + defaultSpacing],
           'top-title',
           { 'text-anchor': 'middle' },
@@ -212,13 +217,13 @@ export default function legendMushrooms(
       }
       {
         makeLegendText(
-          layer.legend.bottomTitle,
+          legend.bottomTitle,
           [maxRadius(), heightTitleSubtitle() + maxRadiusTop() + defaultSpacing + sizeTopTitle()],
           'bottom-title',
           { 'text-anchor': 'middle' },
         )
       }
-      <For each={layer.legend.values.bottom.toReversed()}>
+      <For each={legend.values.bottom.toReversed()}>
         {
           (value) => {
             const symbolSize = propSizeBottom().scale(value);
@@ -240,11 +245,11 @@ export default function legendMushrooms(
                 )}
               ></path>
               <text
-                font-size={layer.legend.labels.fontSize}
-                font-family={layer.legend.labels.fontFamily}
-                font-style={layer.legend.labels.fontStyle}
-                font-weight={layer.legend.labels.fontWeight}
-                fill={layer.legend.labels.fontColor}
+                font-size={legend.labels.fontSize}
+                font-family={legend.labels.fontFamily}
+                font-style={legend.labels.fontStyle}
+                font-weight={legend.labels.fontWeight}
+                fill={legend.labels.fontColor}
                 text-anchor="start"
                 dominant-baseline="middle"
                 style={{ 'user-select': 'none' }}
@@ -259,12 +264,12 @@ export default function legendMushrooms(
                   - (maxRadiusBottom() - symbolSize)
                 }
               >{
-                round(value, layer.legend!.roundDecimals)
+                round(value, legend.roundDecimals)
                   .toLocaleString(
                     applicationSettingsStore.userLocale,
                     {
                       minimumFractionDigits: precisionToMinimumFractionDigits(
-                        layer.legend!.roundDecimals,
+                        legend.roundDecimals,
                       ),
                     },
                   )
@@ -299,6 +304,6 @@ export default function legendMushrooms(
         }
       </For>
     </g>
-    {makeLegendText(layer.legend.note, [0, positionNote()], 'note')}
+    {makeLegendText(legend.note, [0, positionNote()], 'note')}
   </g>;
 }

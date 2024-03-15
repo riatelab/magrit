@@ -116,7 +116,7 @@ const createRectangle = (LL: Accessor<TranslationFunctions>) => {
       setLayersDescriptionStore(
         produce(
           (draft: LayersDescriptionStoreType) => {
-            draft.layoutFeatures.push(rectangleDescription);
+            draft.layoutFeaturesAndLegends.push(rectangleDescription);
           },
         ),
       );
@@ -273,7 +273,7 @@ const createLine = (LL: Accessor<TranslationFunctions>) => {
     setLayersDescriptionStore(
       produce(
         (draft: LayersDescriptionStoreType) => {
-          draft.layoutFeatures.push(lineDescription);
+          draft.layoutFeaturesAndLegends.push(lineDescription);
         },
       ),
     );
@@ -303,7 +303,7 @@ const createNorthArrow = (/* LL: Accessor<TranslationFunctions>,  */) => {
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
-        draft.layoutFeatures.push(northArrowDescription);
+        draft.layoutFeaturesAndLegends.push(northArrowDescription);
       },
     ),
   );
@@ -331,7 +331,7 @@ const createScaleBar = (/* LL: Accessor<TranslationFunctions>,  */) => {
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
-        draft.layoutFeatures.push(scaleBarDescription);
+        draft.layoutFeaturesAndLegends.push(scaleBarDescription);
       },
     ),
   );
@@ -378,7 +378,7 @@ const createText = (LL: Accessor<TranslationFunctions>) => {
     setLayersDescriptionStore(
       produce(
         (draft: LayersDescriptionStoreType) => {
-          draft.layoutFeatures.push(textDescription);
+          draft.layoutFeaturesAndLegends.push(textDescription);
         },
       ),
     );
@@ -464,7 +464,7 @@ const createFreeDraw = (LL: Accessor<TranslationFunctions>) => {
       setLayersDescriptionStore(
         produce(
           (draft: LayersDescriptionStoreType) => {
-            draft.layoutFeatures.push(freeDrawingDescription);
+            draft.layoutFeaturesAndLegends.push(freeDrawingDescription);
           },
         ),
       );

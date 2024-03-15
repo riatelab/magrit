@@ -17,6 +17,7 @@ import { randomColorFromCategoricalPalette } from '../../helpers/color';
 import { findSuitableName, isNumber } from '../../helpers/common';
 import { computeCandidateValuesForSymbolsLegend, coordsPointOnFeature, PropSizer } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
+import { generateIdLegend } from '../../helpers/legends';
 import { max, min } from '../../helpers/math';
 
 // Sub-components
@@ -43,7 +44,7 @@ import {
   type HalfProportionalMarkParameters,
   type LayerDescriptionMushroomLayer,
   type LegendTextElement,
-  type MushroomsLegendParameters,
+  type MushroomsLegend,
   type MushroomsParameters,
   LegendType,
   ProportionalSymbolsSymbolType,
@@ -130,8 +131,10 @@ function onClickValidate(
     3,
   );
 
+  const newId = generateIdLayer();
+
   const newLayerDescription = {
-    id: generateIdLayer(),
+    id: newId,
     name: newLayerName,
     data: newData,
     type: 'point',
@@ -146,52 +149,56 @@ function onClickValidate(
     blurFilter: false,
     shapeRendering: 'auto',
     rendererParameters: params,
-    legend: {
-      // Legend common part
-      title: {
-        text: 'Mushroom',
-        ...applicationSettingsStore.defaultLegendSettings.title,
-      } as LegendTextElement,
-      subtitle: {
-        text: 'This is a subtitle',
-        ...applicationSettingsStore.defaultLegendSettings.subtitle,
-      } as LegendTextElement,
-      note: {
-        text: 'This is a bottom note',
-        ...applicationSettingsStore.defaultLegendSettings.note,
-      } as LegendTextElement,
-      position: [10, 10],
-      visible: true,
-      roundDecimals: 0,
-      backgroundRect: {
-        visible: false,
-      },
-      // Part specific to mushrooms legends
-      type: LegendType.mushrooms,
-      values: {
-        top: legendValuesTop,
-        bottom: legendValuesBottom,
-      },
-      labels: {
-        ...applicationSettingsStore.defaultLegendSettings.labels,
-      } as LegendTextElement,
-      topTitle: {
-        text: top.variable,
-        ...applicationSettingsStore.defaultLegendSettings.subtitle,
-        fontColor: top.color,
-      } as LegendTextElement,
-      bottomTitle: {
-        text: bottom.variable,
-        ...applicationSettingsStore.defaultLegendSettings.subtitle,
-        fontColor: bottom.color,
-      } as LegendTextElement,
-    } as MushroomsLegendParameters,
   } as LayerDescriptionMushroomLayer;
+
+  const legend = {
+    // Legend common part
+    id: generateIdLegend(),
+    layerId: newId,
+    title: {
+      text: 'Mushroom',
+      ...applicationSettingsStore.defaultLegendSettings.title,
+    } as LegendTextElement,
+    subtitle: {
+      text: 'This is a subtitle',
+      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+    } as LegendTextElement,
+    note: {
+      text: 'This is a bottom note',
+      ...applicationSettingsStore.defaultLegendSettings.note,
+    } as LegendTextElement,
+    position: [10, 10],
+    visible: true,
+    roundDecimals: 0,
+    backgroundRect: {
+      visible: false,
+    },
+    // Part specific to mushrooms legends
+    type: LegendType.mushrooms,
+    values: {
+      top: legendValuesTop,
+      bottom: legendValuesBottom,
+    },
+    labels: {
+      ...applicationSettingsStore.defaultLegendSettings.labels,
+    } as LegendTextElement,
+    topTitle: {
+      text: top.variable,
+      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      fontColor: top.color,
+    } as LegendTextElement,
+    bottomTitle: {
+      text: bottom.variable,
+      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      fontColor: bottom.color,
+    } as LegendTextElement,
+  } as MushroomsLegend;
 
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
+        draft.layoutFeaturesAndLegends.push(legend);
       },
     ),
   );

@@ -300,7 +300,12 @@ function makeSettingsDefaultPoint(
     <Show when={props.renderer === 'proportionalSymbols'}>
       <InputFieldSelect
         label={LL().PortrayalSection.ProportionalSymbolsOptions.SymbolType()}
-        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'symbolType'], v)}
+        onChange={(v) => {
+          debouncedUpdateProp(props.id, ['rendererParameters', 'symbolType'], v);
+          const legendId = layersDescriptionStore.layoutFeaturesAndLegends
+            .find((l) => l.layerId === props.id)!.id;
+          debouncedUpdateProp(legendId, 'symbolType', v);
+        }}
         value={(props.rendererParameters as ProportionalSymbolsParameters).symbolType}
       >
         <option value={ProportionalSymbolsSymbolType.circle}>

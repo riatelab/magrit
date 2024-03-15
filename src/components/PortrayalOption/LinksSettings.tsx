@@ -139,8 +139,10 @@ function onClickValidate(
     };
   }
 
+  const newId = generateIdLayer();
+
   const newLayerDescription = {
-    id: generateIdLayer(),
+    id: newId,
     name: newName,
     data: newData,
     type: 'linestring',
@@ -167,7 +169,6 @@ function onClickValidate(
     blurFilter: false,
     shapeRendering: 'auto',
     rendererParameters: params as LinksParameters,
-    legend: undefined,
   } as LayerDescriptionLinks;
 
   setLayersDescriptionStore(

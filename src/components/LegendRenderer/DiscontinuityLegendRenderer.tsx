@@ -9,6 +9,7 @@ import {
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { precisionToMinimumFractionDigits } from '../../helpers/common';
+import { findLayerById } from '../../helpers/layers';
 import { round } from '../../helpers/math';
 
 // Sub-components and helpers for legend rendering
@@ -24,40 +25,46 @@ import {
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
-import type { DiscontinuityLegendParameters, LayerDescriptionDiscontinuity } from '../../global';
+import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+
+// Types / Interfaces / Enums
+import type { DiscontinuityLegend, LayerDescriptionDiscontinuity } from '../../global';
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
 function verticalDiscontinuityLegend(
-  layer: LayerDescriptionDiscontinuity,
+  legend: DiscontinuityLegend,
 ): JSX.Element {
   const { LL } = useI18nContext();
   let refElement: SVGGElement;
-
+  const layer = findLayerById(
+    layersDescriptionStore.layers,
+    legend.layerId,
+  )! as LayerDescriptionDiscontinuity;
   const heightTitle = createMemo(
     () => getTextSize(
-      layer.legend.title.text,
-      layer.legend.title.fontSize,
-      layer.legend.title.fontFamily,
+      legend.title.text,
+      legend.title.fontSize,
+      legend.title.fontFamily,
     ).height + defaultSpacing,
   );
 
   const heightTitleSubtitle = createMemo(() => {
-    if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
+    if (!legend.subtitle || !legend.subtitle.text) {
       return heightTitle();
     }
     return heightTitle() + getTextSize(
-      layer.legend.subtitle.text,
-      layer.legend.subtitle.fontSize,
-      layer.legend.subtitle.fontFamily,
+      legend.subtitle.text,
+      legend.subtitle.fontSize,
+      legend.subtitle.fontFamily,
     ).height + defaultSpacing;
   });
 
   const distanceToTop = createMemo(
     () => heightTitleSubtitle() + getTextSize(
       '1234567890',
-      layer.legend.labels.fontSize,
-      layer.legend.labels.fontFamily,
+      legend.labels.fontSize,
+      legend.labels.fontFamily,
     ).height / 2 + defaultSpacing,
   );
 
@@ -93,18 +100,18 @@ function verticalDiscontinuityLegend(
   const positionNote = createMemo(() => (
     positionsLabel()[positionsLabel().length - 1].y
     + getTextSize(
-      layer.legend.note.text,
-      layer.legend.note.fontSize,
-      layer.legend.note.fontFamily,
+      legend.note.text,
+      legend.note.fontSize,
+      legend.note.fontFamily,
     ).height + defaultSpacing
   ));
 
   onMount(() => {
-    bindElementsLegend(refElement, layer);
+    bindElementsLegend(refElement, legend);
   });
 
   createEffect(() => {
-    if (refElement && layer.visible && layer.legend?.visible) {
+    if (refElement && layer.visible && legend.visible) {
       computeRectangleBox(
         refElement,
         heightTitle(),
@@ -112,11 +119,11 @@ function verticalDiscontinuityLegend(
         positionNote(),
         positionsLabel(),
         sizesAndPositions(),
-        layer.legend.title.text,
-        layer.legend.subtitle?.text,
-        layer.legend.note?.text,
-        layer.legend.roundDecimals,
-        layer.legend.lineLength,
+        legend.title.text,
+        legend.subtitle?.text,
+        legend.note?.text,
+        legend.roundDecimals,
+        legend.lineLength,
       );
     }
   });
@@ -125,25 +132,25 @@ function verticalDiscontinuityLegend(
     ref={refElement!}
     class="legend discontinuity"
     for={layer.id}
-    transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
-    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+    transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
+    visibility={layer.visible && legend.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      triggerContextMenuLegend(e, layer.id, LL);
+      triggerContextMenuLegend(e, legend.id, LL);
     }}
-    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={() => { makeLegendSettingsModal(legend.id, LL); }}
     style={{ cursor: 'grab' }}
   >
-    <RectangleBox backgroundRect={layer.legend.backgroundRect} />
-    { makeLegendText(layer.legend.title, [0, 0], 'title') }
-    { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
+    <RectangleBox backgroundRect={legend.backgroundRect} />
+    { makeLegendText(legend.title, [0, 0], 'title') }
+    { makeLegendText(legend.subtitle, [0, heightTitle()], 'subtitle') }
     <g class="legend-content">
       <For each={sizesAndPositions()}>
         {
           ({ size, y }) => <line
             x1={0}
-            x2={layer.legend.lineLength}
+            x2={legend.lineLength}
             y1={y}
             y2={y}
             stroke={layer.strokeColor}
@@ -155,22 +162,22 @@ function verticalDiscontinuityLegend(
       <For each={positionsLabel()}>
         {
           ({ y, breakValue }) => <text
-            x={layer.legend.lineLength + defaultSpacing}
+            x={legend.lineLength + defaultSpacing}
             y={y}
-            font-size={layer.legend.labels.fontSize}
-            font-family={layer.legend.labels.fontFamily}
-            font-style={layer.legend.labels.fontStyle}
-            font-weight={layer.legend.labels.fontWeight}
+            font-size={legend.labels.fontSize}
+            font-family={legend.labels.fontFamily}
+            font-style={legend.labels.fontStyle}
+            font-weight={legend.labels.fontWeight}
             style={{ 'user-select': 'none' }}
             text-anchor="start"
             dominant-baseline="hanging"
           >{
-            round(breakValue, layer.legend.roundDecimals)
+            round(breakValue, legend.roundDecimals)
               .toLocaleString(
                 applicationSettingsStore.userLocale,
                 {
                   minimumFractionDigits: precisionToMinimumFractionDigits(
-                    layer.legend.roundDecimals,
+                    legend.roundDecimals,
                   ),
                 },
               )
@@ -180,7 +187,7 @@ function verticalDiscontinuityLegend(
     </g>
     {
       makeLegendText(
-        layer.legend.note,
+        legend.note,
         [0, positionNote()],
         'note',
       )
@@ -189,27 +196,30 @@ function verticalDiscontinuityLegend(
 }
 
 function horizontalDiscontinuityLegend(
-  layer: LayerDescriptionDiscontinuity,
+  legend: DiscontinuityLegend,
 ): JSX.Element {
   const { LL } = useI18nContext();
   let refElement: SVGGElement;
-
+  const layer = findLayerById(
+    layersDescriptionStore.layers,
+    legend.layerId,
+  )! as LayerDescriptionDiscontinuity;
   const heightTitle = createMemo(
     () => getTextSize(
-      layer.legend.title.text,
-      layer.legend.title.fontSize,
-      layer.legend.title.fontFamily,
+      legend.title.text,
+      legend.title.fontSize,
+      legend.title.fontFamily,
     ).height + defaultSpacing,
   );
 
   const heightTitleSubtitle = createMemo(() => {
-    if (!layer.legend?.subtitle || !layer.legend?.subtitle.text) {
+    if (!legend.subtitle || !legend.subtitle.text) {
       return heightTitle();
     }
     return heightTitle() + getTextSize(
-      layer.legend.subtitle.text,
-      layer.legend.subtitle.fontSize,
-      layer.legend.subtitle.fontFamily,
+      legend.subtitle.text,
+      legend.subtitle.fontSize,
+      legend.subtitle.fontFamily,
     ).height + defaultSpacing;
   });
 
@@ -222,26 +232,26 @@ function horizontalDiscontinuityLegend(
     + defaultSpacing);
 
   const positionNote = createMemo(() => (
-    distanceLabelsToTop() + defaultSpacing + layer.legend.labels.fontSize
+    distanceLabelsToTop() + defaultSpacing + legend.labels.fontSize
   ));
 
   onMount(() => {
-    bindElementsLegend(refElement, layer);
+    bindElementsLegend(refElement, legend);
   });
 
   createEffect(() => {
-    if (refElement && layer.visible && layer.legend?.visible) {
+    if (refElement && layer.visible && legend.visible) {
       computeRectangleBox(
         refElement,
         heightTitle(),
         heightTitleSubtitle(),
         positionNote(),
         maxSize(),
-        layer.legend.title.text,
-        layer.legend.subtitle?.text,
-        layer.legend.note?.text,
-        layer.legend.roundDecimals,
-        layer.legend.lineLength,
+        legend.title.text,
+        legend.subtitle?.text,
+        legend.note?.text,
+        legend.roundDecimals,
+        legend.lineLength,
       );
     }
   });
@@ -250,25 +260,25 @@ function horizontalDiscontinuityLegend(
     ref={refElement!}
     class="legend discontinuity"
     for={layer.id}
-    transform={`translate(${layer.legend?.position[0]}, ${layer.legend?.position[1]})`}
-    visibility={layer.visible && layer.legend.visible ? undefined : 'hidden'}
+    transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
+    visibility={layer.visible && legend.visible ? undefined : 'hidden'}
     onContextMenu={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      triggerContextMenuLegend(e, layer.id, LL);
+      triggerContextMenuLegend(e, legend.id, LL);
     }}
-    onDblClick={() => { makeLegendSettingsModal(layer.id, LL); }}
+    onDblClick={() => { makeLegendSettingsModal(legend.id, LL); }}
     style={{ cursor: 'grab' }}
   >
-    <RectangleBox backgroundRect={layer.legend.backgroundRect} />
-    { makeLegendText(layer.legend.title, [0, 0], 'title') }
-    { makeLegendText(layer.legend?.subtitle, [0, heightTitle()], 'subtitle') }
+    <RectangleBox backgroundRect={legend.backgroundRect} />
+    { makeLegendText(legend.title, [0, 0], 'title') }
+    { makeLegendText(legend.subtitle, [0, heightTitle()], 'subtitle') }
     <g class="legend-content">
       <For each={layer.rendererParameters.sizes}>
         {
           (size, i) => <line
-            x1={i() * layer.legend.lineLength}
-            x2={(i() + 1) * layer.legend.lineLength}
+            x1={i() * legend.lineLength}
+            x2={(i() + 1) * legend.lineLength}
             y1={heightTitleSubtitle() + defaultSpacing}
             y2={heightTitleSubtitle() + defaultSpacing}
             stroke={layer.strokeColor}
@@ -280,22 +290,22 @@ function horizontalDiscontinuityLegend(
       <For each={layer.rendererParameters.breaks}>
         {
           (breakValue, i) => <text
-            x={i() * layer.legend.lineLength}
+            x={i() * legend.lineLength}
             y={distanceLabelsToTop()}
-            font-size={layer.legend.labels.fontSize}
-            font-family={layer.legend.labels.fontFamily}
-            font-style={layer.legend.labels.fontStyle}
-            font-weight={layer.legend.labels.fontWeight}
+            font-size={legend.labels.fontSize}
+            font-family={legend.labels.fontFamily}
+            font-style={legend.labels.fontStyle}
+            font-weight={legend.labels.fontWeight}
             style={{ 'user-select': 'none' }}
             text-anchor="middle"
             dominant-baseline="hanging"
           >{
-            round(breakValue, layer.legend.roundDecimals)
+            round(breakValue, legend.roundDecimals)
               .toLocaleString(
                 applicationSettingsStore.userLocale,
                 {
                   minimumFractionDigits: precisionToMinimumFractionDigits(
-                    layer.legend.roundDecimals,
+                    legend.roundDecimals,
                   ),
                 },
               )
@@ -305,7 +315,7 @@ function horizontalDiscontinuityLegend(
     </g>
     {
       makeLegendText(
-        layer.legend.note,
+        legend.note,
         [0, positionNote()],
         'note',
       )
@@ -313,14 +323,14 @@ function horizontalDiscontinuityLegend(
   </g>;
 }
 export default function legendDiscontinuity(
-  layer: LayerDescriptionDiscontinuity,
+  legend: DiscontinuityLegend,
 ): JSX.Element {
   return <>
     {
       ({
         vertical: verticalDiscontinuityLegend,
         horizontal: horizontalDiscontinuityLegend,
-      })[layer.legend.orientation](layer)
+      })[legend.orientation](legend)
     }
   </>;
 }

@@ -3,7 +3,7 @@ import {
   Accessor,
   createSignal,
   For,
-  JSX,
+  type JSX,
   Show,
 } from 'solid-js';
 
@@ -11,13 +11,7 @@ import {
 import { FaSolidPlus } from 'solid-icons/fa';
 
 // Stores
-import {
-  layersDescriptionStore,
-  // In this component we use the base version of the store to avoid pushing
-  // the changes to the undo/redo stack (because there is a
-  // cancel button in the LayerSettings modal)
-  setLayersDescriptionStoreBase,
-} from '../../store/LayersDescriptionStore';
+import { layersDescriptionStore, setLayersDescriptionStoreBase } from '../../store/LayersDescriptionStore';
 
 // Helpers
 import { webSafeFonts } from '../../helpers/font';
@@ -28,41 +22,51 @@ import {
   isNumber,
   unproxify,
 } from '../../helpers/common';
+import { findLayerById } from '../../helpers/layers';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
 
-// Types / Interfaces / Enums
-import {
-  type LayerDescription,
-  type LayerDescriptionChoropleth,
-  type LayerDescriptionDiscontinuity,
-  type LayerDescriptionLabels,
-  type LayerDescriptionProportionalSymbols,
-  LegendType,
-  RepresentationType,
-} from '../../global.d';
+// Subcomponents
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 
+// Types / Interfaces / Enums
+import {
+  type CategoricalChoroplethLegend,
+  type ChoroplethLegend,
+  type DiscontinuityLegend,
+  type LabelsLegend,
+  type LayerDescriptionCategoricalChoropleth,
+  type LayerDescriptionChoropleth,
+  type LayerDescriptionGriddedLayer,
+  type LayerDescriptionSmoothedLayer,
+  type LayoutFeature,
+  type Legend,
+  LegendType,
+  type MushroomsLegend,
+  type ProportionalSymbolsLegend,
+  RepresentationType,
+} from '../../global.d';
+
 /**
- * Update a single property of a layer in the layersDescriptionStore,
+ * Update a single property of a legend in the layersDescriptionStore,
  * given its id and the path to the property.
  *
- * @param {string} layerId - The id of the layer to update.
+ * @param {string} legendId - The id of the legend to update.
  * @param {string[]} props - The path to the property to update.
- * @param {string | number} value - The new value of the property.
+ * @param {string | number | boolean} value - The new value of the property.
  * @return {void}
  */
 const updateProps = (
-  layerId: string,
+  legendId: string,
   props: string[],
   value: string | number | boolean,
-) => {
+): void => {
   const allPropsExceptLast = props.slice(0, props.length - 1);
   const lastProp = props[props.length - 1];
   const args = [
-    'layers',
-    (l: LayerDescription) => l.id === layerId,
+    'layoutFeaturesAndLegends',
+    (l: LayoutFeature | Legend) => l.id === legendId,
     ...allPropsExceptLast,
     {
       [lastProp]: value,
@@ -74,7 +78,7 @@ const updateProps = (
 const debouncedUpdateProps = debounce(updateProps, 200);
 
 function TextOptionTable(
-  props: { layer: LayerDescription, LL: Accessor<TranslationFunctions> },
+  props: { legend: Legend, LL: Accessor<TranslationFunctions> },
 ): JSX.Element {
   return <table style={{ 'text-align': 'center' }}>
     <thead>
@@ -95,14 +99,14 @@ function TextOptionTable(
             <input
               class="input"
               type="number"
-              value={ props.layer.legend![textElement].fontSize }
+              value={ props.legend[textElement].fontSize }
               min={0}
               max={100}
               step={1}
               onChange={
                 (ev) => debouncedUpdateProps(
-                  props.layer.id,
-                  ['legend', textElement, 'fontSize'],
+                  props.legend.id,
+                  [textElement, 'fontSize'],
                   +ev.target.value,
                 )
               }
@@ -118,10 +122,10 @@ function TextOptionTable(
           <input
             class="color"
             type="color"
-            value={ props.layer.legend![textElement].fontColor }
+            value={ props.legend[textElement].fontColor }
             onChange={(e) => debouncedUpdateProps(
-              props.layer.id,
-              ['legend', textElement, 'fontColor'],
+              props.legend.id,
+              [textElement, 'fontColor'],
               e.target.value,
             )}
           />
@@ -133,10 +137,10 @@ function TextOptionTable(
       <For each={['title', 'subtitle', 'labels', 'note']}>
         {(textElement) => <td>
           <select
-            value={ props.layer.legend![textElement].fontStyle }
+            value={ props.legend[textElement].fontStyle }
             onChange={(ev) => debouncedUpdateProps(
-              props.layer.id,
-              ['legend', textElement, 'fontStyle'],
+              props.legend.id,
+              [textElement, 'fontStyle'],
               ev.target.value,
             )}
           >
@@ -151,10 +155,10 @@ function TextOptionTable(
       <For each={['title', 'subtitle', 'labels', 'note']}>
         {(textElement) => <td>
           <select
-            value={ props.layer.legend![textElement].fontWeight }
+            value={ props.legend[textElement].fontWeight }
             onChange={(ev) => debouncedUpdateProps(
-              props.layer.id,
-              ['legend', textElement, 'fontWeight'],
+              props.legend.id,
+              [textElement, 'fontWeight'],
               ev.target.value,
             )}
           >
@@ -169,10 +173,10 @@ function TextOptionTable(
       <For each={['title', 'subtitle', 'labels', 'note']}>
         {(textElement) => <td>
           <select
-            value={ props.layer.legend![textElement].fontFamily }
+            value={ props.legend[textElement].fontFamily }
             onChange={(ev) => debouncedUpdateProps(
-              props.layer.id,
-              ['legend', textElement, 'fontFamily'],
+              props.legend.id,
+              [textElement, 'fontFamily'],
               ev.target.value,
             )}
           >
@@ -188,7 +192,7 @@ function TextOptionTable(
 }
 
 function FieldText(
-  props: { layer: LayerDescription, LL: Accessor<TranslationFunctions>, role: string },
+  props: { legend: Legend, LL: Accessor<TranslationFunctions>, role: string },
 ): JSX.Element {
   return <div class="field">
     <label class="label">{ props.LL().Legend.Modal[`Legend${capitalizeFirstLetter(props.role)}`]() }</label>
@@ -196,15 +200,15 @@ function FieldText(
       <input
         class="input"
         type="text"
-        value={ props.layer.legend![props.role].text || '' }
-        onChange={(ev) => debouncedUpdateProps(props.layer.id, ['legend', props.role, 'text'], ev.target.value)}
+        value={ props.legend[props.role].text || '' }
+        onChange={(ev) => debouncedUpdateProps(props.legend.id, [props.role, 'text'], ev.target.value)}
       />
     </div>
   </div>;
 }
 
 function FieldRoundDecimals(
-  props: { layer: LayerDescription, LL: Accessor<TranslationFunctions> },
+  props: { legend: Legend, LL: Accessor<TranslationFunctions> },
 ): JSX.Element {
   return <div class="field">
     <label class="label">{ props.LL().Legend.Modal.RoundDecimals() }</label>
@@ -215,12 +219,12 @@ function FieldRoundDecimals(
         min={-3}
         max={30}
         step={1}
-        value={ props.layer.legend?.roundDecimals as number }
+        value={ props.legend.roundDecimals as number }
         onChange={(ev) => {
           const value = ev.target.value.length > 0
             ? +ev.target.value
             : 0;
-          debouncedUpdateProps(props.layer.id, ['legend', 'roundDecimals'], value);
+          debouncedUpdateProps(props.legend.id, ['roundDecimals'], value);
         }}
       />
     </div>
@@ -229,64 +233,64 @@ function FieldRoundDecimals(
 
 function OptionBackgroundRectangle(
   props: {
-    layer: LayerDescription,
+    legend: Legend,
     LL: Accessor<TranslationFunctions>,
   },
 ): JSX.Element {
   return <>
     <InputFieldCheckbox
       label={ props.LL().Legend.Modal.DisplayBackgroundRectangle() }
-      checked={props.layer.legend!.backgroundRect.visible}
+      checked={props.legend.backgroundRect.visible}
       onChange={(v) => {
-        if (v && !props.layer.legend!.backgroundRect.fill) {
-          updateProps(props.layer.id, ['legend', 'backgroundRect', 'fill'], '#ffffff');
+        if (v && !props.legend.backgroundRect.fill) {
+          updateProps(props.legend.id, ['backgroundRect', 'fill'], '#ffffff');
         }
-        if (v && !props.layer.legend!.backgroundRect.fillOpacity) {
-          updateProps(props.layer.id, ['legend', 'backgroundRect', 'fillOpacity'], 1);
+        if (v && !props.legend.backgroundRect.fillOpacity) {
+          updateProps(props.legend.id, ['backgroundRect', 'fillOpacity'], 1);
         }
-        if (v && !props.layer.legend!.backgroundRect.stroke) {
-          updateProps(props.layer.id, ['legend', 'backgroundRect', 'stroke'], '#000000');
+        if (v && !props.legend.backgroundRect.stroke) {
+          updateProps(props.legend.id, ['backgroundRect', 'stroke'], '#000000');
         }
-        if (v && !props.layer.legend!.backgroundRect.strokeWidth) {
-          updateProps(props.layer.id, ['legend', 'backgroundRect', 'strokeWidth'], 1);
+        if (v && !props.legend.backgroundRect.strokeWidth) {
+          updateProps(props.legend.id, ['backgroundRect', 'strokeWidth'], 1);
         }
-        if (v && !props.layer.legend!.backgroundRect.strokeOpacity) {
-          updateProps(props.layer.id, ['legend', 'backgroundRect', 'strokeOpacity'], 1);
+        if (v && !props.legend.backgroundRect.strokeOpacity) {
+          updateProps(props.legend.id, ['backgroundRect', 'strokeOpacity'], 1);
         }
-        debouncedUpdateProps(props.layer.id, ['legend', 'backgroundRect', 'visible'], v);
+        debouncedUpdateProps(props.legend.id, ['backgroundRect', 'visible'], v);
       }}
     />
-    <Show when={props.layer.legend!.backgroundRect.visible}>
+    <Show when={props.legend.backgroundRect.visible}>
       <InputFieldColor
         label={ props.LL().Legend.Modal.BackgroundRectangleColor() }
-        value={ props.layer.legend!.backgroundRect.fill! }
-        onChange={(v) => debouncedUpdateProps(props.layer.id, ['legend', 'backgroundRect', 'fill'], v)}
+        value={ props.legend.backgroundRect.fill! }
+        onChange={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'fill'], v)}
       />
       <InputFieldNumber
         label={ props.LL().Legend.Modal.BackgroundRectangleOpacity() }
-        value={ props.layer.legend!.backgroundRect.fillOpacity! }
-        onChange={(v) => debouncedUpdateProps(props.layer.id, ['legend', 'backgroundRect', 'fillOpacity'], v)}
+        value={ props.legend.backgroundRect.fillOpacity! }
+        onChange={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'fillOpacity'], v)}
         min={0}
         max={1}
         step={0.1}
       />
       <InputFieldColor
         label={ props.LL().Legend.Modal.BackgroundRectangleStrokeColor() }
-        value={ props.layer.legend!.backgroundRect.stroke! }
-        onChange={(v) => debouncedUpdateProps(props.layer.id, ['legend', 'backgroundRect', 'stroke'], v)}
+        value={ props.legend.backgroundRect.stroke! }
+        onChange={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'stroke'], v)}
       />
       <InputFieldNumber
         label={ props.LL().Legend.Modal.BackgroundRectangleStrokeOpacity() }
-        value={ props.layer.legend!.backgroundRect.strokeOpacity! }
-        onChange={(v) => debouncedUpdateProps(props.layer.id, ['legend', 'backgroundRect', 'strokeOpacity'], v)}
+        value={ props.legend.backgroundRect.strokeOpacity! }
+        onChange={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'strokeOpacity'], v)}
         min={0}
         max={1}
         step={0.1}
       />
       <InputFieldNumber
         label={ props.LL().Legend.Modal.BackgroundRectangleStrokeWidth() }
-        value={ props.layer.legend!.backgroundRect.strokeWidth! }
-        onChange={(v) => debouncedUpdateProps(props.layer.id, ['legend', 'backgroundRect', 'strokeWidth'], v)}
+        value={ props.legend.backgroundRect.strokeWidth! }
+        onChange={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'strokeWidth'], v)}
         min={0}
         max={10}
         step={1}
@@ -296,7 +300,7 @@ function OptionBackgroundRectangle(
 }
 
 function FieldChangeValues(
-  props: { layer: LayerDescriptionProportionalSymbols, LL: Accessor<TranslationFunctions> },
+  props: { legend: ProportionalSymbolsLegend, LL: Accessor<TranslationFunctions> },
 ): JSX.Element {
   const styleInputElement = { width: '8.5em !important', 'font-size': '0.9rem' };
   return <div class="field">
@@ -305,12 +309,12 @@ function FieldChangeValues(
       <FaSolidPlus
         style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}
         onClick={() => {
-          const values = unproxify(props.layer.legend.values.slice()) as number[];
+          const values = unproxify(props.legend.values.slice()) as number[];
           values.unshift(1);
-          debouncedUpdateProps(props.layer.id, ['legend', 'values'], values);
+          debouncedUpdateProps(props.legend.id, ['values'], values);
         }}
       />
-      <For each={props.layer.legend.values}>
+      <For each={props.legend.values}>
         {
           (value, i) => <input
             style={styleInputElement}
@@ -320,10 +324,10 @@ function FieldChangeValues(
             value={value}
             onChange={(ev) => {
               const newValue = +ev.target.value;
-              const values = unproxify(props.layer.legend.values.slice()) as number[];
+              const values = unproxify(props.legend.values.slice()) as number[];
               values[i()] = newValue;
               values.sort(ascending);
-              debouncedUpdateProps(props.layer.id, ['legend', 'values'], values.filter((v) => v !== 0));
+              debouncedUpdateProps(props.legend.id, ['values'], values.filter((v) => v !== 0));
             }}
           />
         }
@@ -333,7 +337,7 @@ function FieldChangeValues(
 }
 
 function makeSettingsProportionalSymbolsLegend(
-  layer: LayerDescriptionProportionalSymbols,
+  legend: ProportionalSymbolsLegend,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
   const [
@@ -342,11 +346,11 @@ function makeSettingsProportionalSymbolsLegend(
   ] = createSignal<boolean>(false);
 
   return <>
-    <FieldText layer={layer} LL={LL} role={'title'} />
-    <FieldText layer={layer} LL={LL} role={'subtitle'} />
-    <FieldText layer={layer} LL={LL} role={'note'} />
-    <FieldRoundDecimals layer={layer} LL={LL} />
-    <FieldChangeValues layer={layer} LL={LL} />
+    <FieldText legend={legend} LL={LL} role={'title'} />
+    <FieldText legend={legend} LL={LL} role={'subtitle'} />
+    <FieldText legend={legend} LL={LL} role={'note'} />
+    <FieldRoundDecimals legend={legend} LL={LL} />
+    <FieldChangeValues legend={legend} LL={LL} />
     <div class="field">
       <label class="label">{ LL().Legend.Modal.LegendSymbolLayout() }</label>
       <div class="control">
@@ -354,9 +358,9 @@ function makeSettingsProportionalSymbolsLegend(
           <input
             type="radio"
             name="legend-layout"
-            {...(layer.legend?.layout === 'stacked' ? { checked: true } : {}) }
+            {...(legend.layout === 'stacked' ? { checked: true } : {}) }
             onChange={() => {
-              updateProps(layer.id, ['legend', 'layout'], 'stacked');
+              updateProps(legend.id, ['layout'], 'stacked');
             }}
           />
           { LL().Legend.Modal.LegendSymbolLayoutStacked() }
@@ -365,9 +369,9 @@ function makeSettingsProportionalSymbolsLegend(
           <input
             type="radio"
             name="legend-layout"
-            {...(layer.legend?.layout === 'horizontal' ? { checked: true } : {}) }
+            {...(legend.layout === 'horizontal' ? { checked: true } : {}) }
             onChange={() => {
-              updateProps(layer.id, ['legend', 'layout'], 'horizontal');
+              updateProps(legend.id, ['layout'], 'horizontal');
             }}
           />
           { LL().Legend.Modal.LegendSymbolLayoutHorizontal() }
@@ -376,16 +380,16 @@ function makeSettingsProportionalSymbolsLegend(
           <input
             type="radio"
             name="legend-layout"
-            {...(layer.legend?.layout === 'vertical' ? { checked: true } : {}) }
+            {...(legend.layout === 'vertical' ? { checked: true } : {}) }
             onChange={() => {
-              updateProps(layer.id, ['legend', 'layout'], 'vertical');
+              updateProps(legend.id, ['layout'], 'vertical');
             }}
           />
           { LL().Legend.Modal.LegendSymbolLayoutVertical() }
         </label>
       </div>
     </div>
-    <Show when={['horizontal', 'vertical'].includes(layer.legend?.layout)}>
+    <Show when={['horizontal', 'vertical'].includes(legend.layout)}>
       <div class="field">
         <label class="label">{ LL().Legend.Modal.SymbolsSpacing() }</label>
         <div class="control">
@@ -395,8 +399,8 @@ function makeSettingsProportionalSymbolsLegend(
             min={0}
             max={100}
             step={1}
-            value={ layer.legend?.spacing }
-            onChange={(ev) => debouncedUpdateProps(layer.id, ['legend', 'spacing'], +ev.target.value)}
+            value={ legend.spacing }
+            onChange={(ev) => debouncedUpdateProps(legend.id, ['spacing'], +ev.target.value)}
           />
         </div>
       </div>
@@ -412,21 +416,29 @@ function makeSettingsProportionalSymbolsLegend(
       </p>
     </div>
     <Show when={displayMoreOptions()}>
-      <TextOptionTable layer={layer} LL={LL} />
+      <TextOptionTable legend={legend} LL={LL} />
       <hr />
-      <OptionBackgroundRectangle layer={layer} LL={LL} />
+      <OptionBackgroundRectangle legend={legend} LL={LL} />
     </Show>
   </>;
 }
 
 function makeSettingsChoroplethLegend(
-  layer: LayerDescriptionChoropleth,
+  legend: CategoricalChoroplethLegend | ChoroplethLegend,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
   const [
     displayMoreOptions,
     setDisplayMoreOptions,
   ] = createSignal<boolean>(false);
+
+  const layer = findLayerById(
+    layersDescriptionStore.layers,
+    legend.layerId,
+  )! as LayerDescriptionChoropleth
+  | LayerDescriptionSmoothedLayer
+  | LayerDescriptionCategoricalChoropleth
+  | LayerDescriptionGriddedLayer;
 
   const isChoroplethLegend = (
     representationType: RepresentationType,
@@ -437,21 +449,21 @@ function makeSettingsChoroplethLegend(
   ).length > 0;
 
   return <>
-    <FieldText layer={layer} LL={LL} role={'title'} />
-    <FieldText layer={layer} LL={LL} role={'subtitle'} />
-    <FieldText layer={layer} LL={LL} role={'note'} />
-    <FieldRoundDecimals layer={layer} LL={LL} />
+    <FieldText legend={legend} LL={LL} role={'title'} />
+    <FieldText legend={legend} LL={LL} role={'subtitle'} />
+    <FieldText legend={legend} LL={LL} role={'note'} />
+    <FieldRoundDecimals legend={legend} LL={LL} />
     <div class="field">
       <label class="label">{ LL().Legend.Modal.BoxWidth() }</label>
       <div class="control">
         <input
           class="input"
           type="number"
-          value={ layer.legend?.boxWidth }
+          value={ legend.boxWidth }
           min={0}
           max={100}
           step={1}
-          onChange={(ev) => debouncedUpdateProps(layer.id, ['legend', 'boxWidth'], +ev.target.value)}
+          onChange={(ev) => debouncedUpdateProps(legend.id, ['boxWidth'], +ev.target.value)}
         />
       </div>
     </div>
@@ -461,11 +473,11 @@ function makeSettingsChoroplethLegend(
         <input
           class="input"
           type="number"
-          value={ layer.legend?.boxHeight }
+          value={ legend.boxHeight }
           min={0}
           max={100}
           step={1}
-          onChange={(ev) => debouncedUpdateProps(layer.id, ['legend', 'boxHeight'], +ev.target.value)}
+          onChange={(ev) => debouncedUpdateProps(legend.id, ['boxHeight'], +ev.target.value)}
         />
       </div>
     </div>
@@ -478,15 +490,15 @@ function makeSettingsChoroplethLegend(
           min={0}
           max={100}
           step={1}
-          value={ layer.legend?.boxCornerRadius }
+          value={ legend.boxCornerRadius }
           onChange={(ev) => {
             const radiusValue = +ev.target.value;
             // Remove the tick if the radius is > 0
             // (because the tick is interesting only for square / rectangular boxes)
-            if (radiusValue > 0 && layer.legend!.tick) {
-              updateProps(layer.id, ['legend', 'tick'], false);
+            if (radiusValue > 0 && legend.tick) {
+              updateProps(legend.id, ['tick'], false);
             }
-            debouncedUpdateProps(layer.id, ['legend', 'boxCornerRadius'], radiusValue);
+            debouncedUpdateProps(legend.id, ['boxCornerRadius'], radiusValue);
           }}
         />
       </div>
@@ -500,15 +512,15 @@ function makeSettingsChoroplethLegend(
           min={0}
           max={100}
           step={1}
-          value={ layer.legend?.boxSpacing }
+          value={ legend.boxSpacing }
           onChange={(ev) => {
             const spacingValue = +ev.target.value;
             // Remove the tick if the spacing is > 0
             // (because the tick is interesting only if boxes are adjacent)
-            if (spacingValue > 0 && layer.legend!.tick) {
-              updateProps(layer.id, ['legend', 'tick'], false);
+            if (spacingValue > 0 && legend.tick) {
+              updateProps(legend.id, ['tick'], false);
             }
-            debouncedUpdateProps(layer.id, ['legend', 'boxSpacing'], spacingValue);
+            debouncedUpdateProps(legend.id, ['boxSpacing'], spacingValue);
           }}
         />
       </div>
@@ -518,15 +530,15 @@ function makeSettingsChoroplethLegend(
       <div class="control">
         <input
           type="checkbox"
-          checked={layer.legend!.stroke}
-          onChange={(ev) => updateProps(layer.id, ['legend', 'stroke'], ev.target.checked)}
+          checked={legend.stroke}
+          onChange={(ev) => updateProps(legend.id, ['stroke'], ev.target.checked)}
         />
       </div>
     </div>
     <Show when={
       isChoroplethLegend(layer.renderer)
-      && layer.legend?.boxSpacing === 0
-      && layer.legend?.boxCornerRadius === 0
+      && legend.boxSpacing === 0
+      && legend.boxCornerRadius === 0
     }>
       <div class="field">
         <label class="label">
@@ -535,8 +547,8 @@ function makeSettingsChoroplethLegend(
         <div class="control">
           <input
             type="checkbox"
-            checked={layer.legend!.tick}
-            onChange={(ev) => updateProps(layer.id, ['legend', 'tick'], ev.target.checked)}
+            checked={legend.tick}
+            onChange={(ev) => updateProps(legend.id, ['tick'], ev.target.checked)}
           />
         </div>
       </div>
@@ -551,8 +563,8 @@ function makeSettingsChoroplethLegend(
             min={0}
             max={100}
             step={1}
-            value={ layer.legend?.boxSpacingNoData }
-            onChange={(ev) => debouncedUpdateProps(layer.id, ['legend', 'boxSpacingNoData'], +ev.target.value)}
+            value={ legend.boxSpacingNoData }
+            onChange={(ev) => debouncedUpdateProps(legend.id, ['boxSpacingNoData'], +ev.target.value)}
           />
         </div>
       </div>
@@ -562,8 +574,8 @@ function makeSettingsChoroplethLegend(
           <input
             class="input"
             type="text"
-            value={ layer.legend?.noDataLabel }
-            onChange={(ev) => debouncedUpdateProps(layer.id, ['legend', 'noDataLabel'], ev.target.value)}
+            value={ legend.noDataLabel }
+            onChange={(ev) => debouncedUpdateProps(legend.id, ['noDataLabel'], ev.target.value)}
           />
         </div>
       </div>
@@ -575,10 +587,10 @@ function makeSettingsChoroplethLegend(
           <input
             type="radio"
             name="legend-orientation"
-            {...(layer.legend?.orientation === 'horizontal' ? { checked: true } : {}) }
+            {...(legend.orientation === 'horizontal' ? { checked: true } : {}) }
             onChange={(ev) => {
               const value = ev.target.checked ? 'horizontal' : 'vertical';
-              updateProps(layer.id, ['legend', 'orientation'], value);
+              updateProps(legend.id, ['orientation'], value);
             }}
           />
           { LL().Legend.Modal.LegendOrientationHorizontal() }
@@ -587,10 +599,10 @@ function makeSettingsChoroplethLegend(
           <input
             type="radio"
             name="legend-orientation"
-            {...(layer.legend?.orientation === 'vertical' ? { checked: true } : {}) }
+            {...(legend.orientation === 'vertical' ? { checked: true } : {}) }
             onChange={(ev) => {
               const value = ev.target.checked ? 'vertical' : 'horizontal';
-              updateProps(layer.id, ['legend', 'orientation'], value);
+              updateProps(legend.id, ['orientation'], value);
             }}
           />
           { LL().Legend.Modal.LegendOrientationVertical() }
@@ -608,15 +620,15 @@ function makeSettingsChoroplethLegend(
       </p>
     </div>
     <Show when={displayMoreOptions()}>
-      <TextOptionTable layer={layer} LL={LL} />
+      <TextOptionTable legend={legend} LL={LL} />
       <hr />
-      <OptionBackgroundRectangle layer={layer} LL={LL} />
+      <OptionBackgroundRectangle legend={legend} LL={LL} />
     </Show>
   </>;
 }
 
 function makeSettingsDiscontinuityLegend(
-  layer: LayerDescriptionDiscontinuity,
+  legend: DiscontinuityLegend,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
   const [
@@ -625,21 +637,21 @@ function makeSettingsDiscontinuityLegend(
   ] = createSignal<boolean>(false);
 
   return <>
-   <FieldText layer={layer} LL={LL} role={'title'} />
-   <FieldText layer={layer} LL={LL} role={'subtitle'} />
-   <FieldText layer={layer} LL={LL} role={'note'} />
-   <FieldRoundDecimals layer={layer} LL={LL} />
+   <FieldText legend={legend} LL={LL} role={'title'} />
+   <FieldText legend={legend} LL={LL} role={'subtitle'} />
+   <FieldText legend={legend} LL={LL} role={'note'} />
+   <FieldRoundDecimals legend={legend} LL={LL} />
    <div class="field">
      <label class="label">{ LL().Legend.Modal.LineLength() }</label>
      <div class="control">
        <input
          class="input"
          type="number"
-         value={ layer.legend.lineLength }
+         value={ legend.lineLength }
          min={0}
          max={100}
          step={1}
-         onChange={(ev) => debouncedUpdateProps(layer.id, ['legend', 'lineLength'], +ev.target.value)}
+         onChange={(ev) => debouncedUpdateProps(legend.id, ['lineLength'], +ev.target.value)}
        />
      </div>
    </div>
@@ -650,10 +662,10 @@ function makeSettingsDiscontinuityLegend(
           <input
             type="radio"
             name="legend-orientation"
-            {...(layer.legend?.orientation === 'horizontal' ? { checked: true } : {}) }
+            {...(legend.orientation === 'horizontal' ? { checked: true } : {}) }
             onChange={(ev) => {
               const value = ev.target.checked ? 'horizontal' : 'vertical';
-              updateProps(layer.id, ['legend', 'orientation'], value);
+              updateProps(legend.id, ['orientation'], value);
             }}
           />
           { LL().Legend.Modal.LegendOrientationHorizontal() }
@@ -662,10 +674,10 @@ function makeSettingsDiscontinuityLegend(
           <input
             type="radio"
             name="legend-orientation"
-            {...(layer.legend?.orientation === 'vertical' ? { checked: true } : {}) }
+            {...(legend?.orientation === 'vertical' ? { checked: true } : {}) }
             onChange={(ev) => {
               const value = ev.target.checked ? 'vertical' : 'horizontal';
-              updateProps(layer.id, ['legend', 'orientation'], value);
+              updateProps(legend.id, ['orientation'], value);
             }}
           />
           { LL().Legend.Modal.LegendOrientationVertical() }
@@ -683,15 +695,15 @@ function makeSettingsDiscontinuityLegend(
       </p>
     </div>
     <Show when={displayMoreOptions()}>
-      <TextOptionTable layer={layer} LL={LL} />
+      <TextOptionTable legend={legend} LL={LL} />
       <hr />
-      <OptionBackgroundRectangle layer={layer} LL={LL} />
+      <OptionBackgroundRectangle legend={legend} LL={LL} />
     </Show>
  </>;
 }
 
 function makeSettingsLabels(
-  layer: LayerDescriptionLabels,
+  legend: LabelsLegend,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
   const [
@@ -702,45 +714,57 @@ function makeSettingsLabels(
   return <></>;
 }
 
-function getInnerPanel(ld: LayerDescription, LL: Accessor<TranslationFunctions>): JSX.Element {
-  if (ld.legend?.type === LegendType.choropleth) {
-    return makeSettingsChoroplethLegend(ld as LayerDescriptionChoropleth, LL);
+function makeSettingsMushrooms(
+  legend: MushroomsLegend,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <></>;
+}
+
+function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.Element {
+  if (legend.type === LegendType.choropleth) {
+    return makeSettingsChoroplethLegend(legend as ChoroplethLegend, LL);
   }
-  if (ld.legend?.type === LegendType.proportional) {
-    return makeSettingsProportionalSymbolsLegend(ld as LayerDescriptionProportionalSymbols, LL);
+  if (legend.type === LegendType.categoricalChoropleth) {
+    return makeSettingsChoroplethLegend(legend as CategoricalChoroplethLegend, LL);
   }
-  if (ld.legend?.type === LegendType.discontinuity) {
-    return makeSettingsDiscontinuityLegend(ld as LayerDescriptionDiscontinuity, LL);
+  if (legend.type === LegendType.proportional) {
+    return makeSettingsProportionalSymbolsLegend(legend as ProportionalSymbolsLegend, LL);
   }
-  if (ld.legend?.type === LegendType.labels) {
-    return makeSettingsLabels(ld as LayerDescriptionLabels, LL);
+  if (legend.type === LegendType.discontinuity) {
+    return makeSettingsDiscontinuityLegend(legend as DiscontinuityLegend, LL);
+  }
+  if (legend.type === LegendType.labels) {
+    return makeSettingsLabels(legend as LabelsLegend, LL);
+  }
+  if (legend.type === LegendType.mushrooms) {
+    return makeSettingsMushrooms(legend as MushroomsLegend, LL);
   }
   return <></>;
 }
 
 export default function LegendSettings(
   props: {
-    layerId: string,
+    legendId: string,
     LL: Accessor<TranslationFunctions>,
   },
 ): JSX.Element {
   // We can use destructuring here because we know that the props
   // won't change during the lifetime of the component
-  const { LL, layerId } = props; // eslint-disable-line solid/reactivity
-  const layerDescription = layersDescriptionStore.layers
-    .find((layer) => layer.id === layerId) as LayerDescription;
-
-  if (!layerDescription.legend) {
-    // Due to the way the legend settings modal is triggered,
-    // this should never happen...
-    throw new Error('LegendSettings: layerDescription.legend is undefined');
-  }
+  const { LL, legendId } = props; // eslint-disable-line solid/reactivity
+  const legendDescription = layersDescriptionStore.layoutFeaturesAndLegends
+    .find((el) => el.id === legendId) as Legend;
 
   return <div class="legend-settings">
     <br />
     <div class="legend-settings__content">
       {
-        getInnerPanel(layerDescription, LL)
+        getInnerPanel(legendDescription, LL)
       }
     </div>
   </div>;

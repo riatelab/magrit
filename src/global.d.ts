@@ -19,7 +19,7 @@ type DexieDb = Dexie
 & { projects: Dexie.Table<
 { date: Date, data: {
   layers: LayerDescription[],
-  layoutFeatures: LayoutFeature[],
+  layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
   map: MapStoreType,
   tables: TableDescription[],
 } }, number> };
@@ -87,7 +87,7 @@ type LayerDescription = {
     // | DefaultRendererParameters
   ),
   // Parameters of the legend associated to the layer
-  legend?: LegendParameters | LegendParameters[],
+  // legend?: LegendParameters | LegendParameters[],
 };
 
 type TableDescription = {
@@ -126,85 +126,85 @@ interface DefaultRendererParameters {
 type LayerDescriptionChoropleth = LayerDescription & {
   renderer: RepresentationType.choropleth,
   rendererParameters: ClassificationParameters,
-  legend: ChoroplethLegendParameters,
+  // legend: ChoroplethLegendParameters,
 };
 
 type LayerDescriptionProportionalSymbols = LayerDescription & {
   renderer: RepresentationType.proportionalSymbols,
   rendererParameters: ProportionalSymbolsParameters,
-  legend: ProportionalSymbolsLegendParameters,
+  // legend: ProportionalSymbolsLegendParameters,
 };
 
 type LayerDescriptionLabels = LayerDescription & {
   renderer: RepresentationType.labels,
   rendererParameters: LabelsParameters,
-  legend: LabelsLegendParameters,
+  // legend: LabelsLegendParameters,
 };
 
 type LayerDescriptionCategoricalChoropleth = LayerDescription & {
   renderer: RepresentationType.categoricalChoropleth,
   rendererParameters: CategoricalChoroplethParameters,
-  legend: ChoroplethLegendParameters,
+  // legend: ChoroplethLegendParameters,
 };
 
 type LayerDescriptionDiscontinuity = LayerDescription & {
   renderer: RepresentationType.discontinuity,
   rendererParameters: DiscontinuityParameters,
-  legend: DiscontinuityLegendParameters,
+  // legend: DiscontinuityLegendParameters,
 };
 
 type LayerDescriptionCartogram = LayerDescription & {
   renderer: RepresentationType.cartogram,
   rendererParameters: CartogramParameters,
-  legend: null,
+  // legend: null,
 };
 
 type LayerDescriptionGriddedLayer = LayerDescription & {
   renderer: RepresentationType.grid,
   rendererParameters: GriddedLayerParameters,
-  legend: ChoroplethLegendParameters,
+  // legend: ChoroplethLegendParameters,
 };
 
 type LayerDescriptionWaffle = LayerDescription & {
   renderer: RepresentationType.waffle,
   rendererParameters: GriddedLayerParameters,
-  legend: WaffleLegendParameters,
+  // legend: WaffleLegendParameters,
 };
 
 type LayerDescriptionCategoricalPictogram = LayerDescription & {
   renderer: RepresentationType.categoricalPictogram,
   rendererParameters: CategoricalPictogramParameters,
-  legend: null,
+  // legend: null,
 };
 
 type LayerDescriptionLinks = LayerDescription & {
   renderer: RepresentationType.links,
   rendererParameters: LinksParameters,
-  legend: undefined,
+  // legend: undefined,
 };
 
 type LayerDescriptionSmoothedLayer = LayerDescription & {
   renderer: RepresentationType.smoothed
   rendererParameters: SmoothedLayerParameters,
-  legend: ChoroplethLegendParameters,
+  // legend: ChoroplethLegendParameters,
 };
 
 type LayerDescriptionMushroomLayer = LayerDescription & {
   renderer: RepresentationType.mushrooms,
   rendererParameters: MushroomsParameters,
-  legend: MushroomsLegendParameters,
+  // legend: MushroomsLegendParameters,
 };
 
 type LayerDescriptionCategoricalProportionalSymbols = LayerDescription & {
   renderer: RepresentationType.proportionalSymbolsAndCategories,
   rendererParameters: ProportionalSymbolsParameters & CategoricalChoroplethParameters,
-  legend: [ChoroplethLegendParameters, ProportionalSymbolsLegendParameters],
+  // legend: [ChoroplethLegendParameters, ProportionalSymbolsLegendParameters],
 };
 
 type LayerDescriptionChoroplethProportionalSymbols = LayerDescription & {
   renderer: RepresentationType.proportionalSymbolsAndRatio,
   rendererParameters: ProportionalSymbolsParameters & ClassificationParameters,
-  legend: [ChoroplethLegendParameters, ProportionalSymbolsLegendParameters],
+  // legend: [ChoroplethLegendParameters, ProportionalSymbolsLegendParameters],
 };
 
 export enum ProportionalSymbolsSymbolType {
@@ -599,7 +599,11 @@ export enum GridCellShape {
   triangle = 'triangle',
 }
 
-interface LegendParametersBase {
+type LegendTextElements = 'title' | 'subtitle' | 'labels' | 'note';
+
+interface LegendBase {
+  // The id of the legend
+  id: string,
   // The title of the legend
   title: LegendTextElement,
   // The subtitle of the legend
@@ -616,6 +620,8 @@ interface LegendParametersBase {
   roundDecimals: number | null,
   // Rectangle behind the legend
   backgroundRect: BackgroundRect,
+  // The id of the layer the legend is associated with
+  layerId: string,
 }
 
 export interface BackgroundRect {
@@ -653,8 +659,33 @@ interface LegendTextElement {
 /**
  * The parameters of the legend for choropleth and categorical choropleth maps
  */
-interface ChoroplethLegendParameters extends LegendParametersBase {
+interface ChoroplethLegend extends LegendBase {
   type: LegendType.choropleth,
+  // Whether the legend is horizontal or vertical
+  orientation: Orientation,
+  // The width of each box
+  boxWidth: number,
+  // The height of each box
+  boxHeight: number,
+  // The (horizontal or vertical, wrt. 'orientation') spacing between boxes
+  boxSpacing: number,
+  // The (horizontal or vertical, wrt. 'orientation') spacing between the last box
+  // and the no-data box if any
+  boxSpacingNoData: number,
+  // The corner radius of each box (rx and ry of each rect)
+  boxCornerRadius: number,
+  // The text properties of the labels (and no-data label if any)
+  labels: LegendTextElement,
+  // The label of the no-data box
+  noDataLabel: string,
+  // Whether to display the stroke of the boxes
+  stroke: boolean,
+  // Whether to display a tick between each box
+  tick: boolean,
+}
+
+interface CategoricalChoroplethLegend extends LegendBase {
+  type: LegendType.categoricalChoropleth,
   // Whether the legend is horizontal or vertical
   orientation: Orientation,
   // The width of each box
@@ -681,7 +712,7 @@ interface ChoroplethLegendParameters extends LegendParametersBase {
 /**
  * The parameters of the legend for proportional symbols
  */
-interface ProportionalSymbolsLegendParameters extends LegendParametersBase {
+interface ProportionalSymbolsLegend extends LegendBase {
   type: LegendType.proportional,
   // Whether the legend is stacked or not
   layout: 'horizontal' | 'vertical' | 'stacked',
@@ -694,15 +725,17 @@ interface ProportionalSymbolsLegendParameters extends LegendParametersBase {
   spacing: number,
   // The text properties of the labels
   labels: LegendTextElement,
+  // The symbol type
+  symbolType: ProportionalSymbolsSymbolType,
 }
 
-interface LabelsLegendParameters extends LegendParametersBase {
+interface LabelsLegend extends LegendBase {
   type: LegendType.labels,
   // The text properties of the labels
   labels: LegendTextElement,
 }
 
-interface DiscontinuityLegendParameters extends LegendParametersBase {
+interface DiscontinuityLegend extends LegendBase {
   type: LegendType.discontinuity,
   // Whether the legend is horizontal or vertical
   orientation: Orientation,
@@ -714,11 +747,11 @@ interface DiscontinuityLegendParameters extends LegendParametersBase {
   lineLength: number,
 }
 
-interface WaffleLegendParameters extends LegendParametersBase {
+interface WaffleLegend extends LegendBase {
   type: LegendType.waffle,
 }
 
-interface MushroomsLegendParameters extends LegendParametersBase {
+interface MushroomsLegend extends LegendBase {
   type: LegendType.mushrooms,
   // Values of the symbols in the legend, for both top and bottom
   // part of the mushroom / of the legend
@@ -731,13 +764,14 @@ interface MushroomsLegendParameters extends LegendParametersBase {
   bottomTitle: LegendTextElement,
 }
 
-export type LegendParameters = (
-  ChoroplethLegendParameters
-  | ProportionalSymbolsLegendParameters
-  | LabelsLegendParameters
-  | DiscontinuityLegendParameters
-  | WaffleLegendParameters
-  | MushroomsLegendParameters
+export type Legend = (
+  ChoroplethLegend
+  | CategoricalChoroplethLegend
+  | ProportionalSymbolsLegend
+  | LabelsLegend
+  | DiscontinuityLegend
+  | WaffleLegend
+  | MushroomsLegend
 );
 
 export enum NumberFormatting {
@@ -759,6 +793,7 @@ export interface IZoomable {
 export enum LegendType {
   choropleth = 'choropleth',
   proportional = 'proportional',
+  categoricalChoropleth = 'categoricalChoropleth',
   categorical = 'categorical',
   discontinuity = 'discontinuity',
   labels = 'labels',

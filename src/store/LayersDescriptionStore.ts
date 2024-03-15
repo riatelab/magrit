@@ -1,12 +1,17 @@
 import { createStore } from 'solid-js/store';
 import { makeDefaultGraticule, makeDefaultSphere, makeDefaultWorldLand } from '../helpers/layers';
 import { unproxify } from '../helpers/common';
-import type { LayerDescription, LayoutFeature, TableDescription } from '../global';
+import type {
+  LayerDescription,
+  LayoutFeature,
+  Legend,
+  TableDescription,
+} from '../global';
 import { debouncedPushUndoStack, resetRedoStackStore } from './stateStackStore';
 
 export type LayersDescriptionStoreType = {
   layers: LayerDescription[],
-  layoutFeatures: LayoutFeature[],
+  layoutFeaturesAndLegends: Array<LayoutFeature | Legend>,
   tables: TableDescription[],
 };
 
@@ -16,7 +21,7 @@ const defaultLayersDescription = (): LayersDescriptionStoreType => ({
     makeDefaultWorldLand(),
     makeDefaultGraticule(),
   ],
-  layoutFeatures: [],
+  layoutFeaturesAndLegends: [],
   tables: [],
 });
 

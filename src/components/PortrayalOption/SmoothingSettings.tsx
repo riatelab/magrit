@@ -26,23 +26,25 @@ import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore'
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { findSuitableName } from '../../helpers/common';
-import { generateIdLayer } from '../../helpers/layers';
-import { Variable, VariableType } from '../../helpers/typeDetection';
-import { computeKde, computeStewart } from '../../helpers/smoothing';
-import { Mpow } from '../../helpers/math';
-import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 import { computeAppropriateResolution } from '../../helpers/geo';
+import { generateIdLayer } from '../../helpers/layers';
+import { generateIdLegend } from '../../helpers/legends';
+import { Mpow } from '../../helpers/math';
+import { computeKde, computeStewart } from '../../helpers/smoothing';
+import { Variable, VariableType } from '../../helpers/typeDetection';
+import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Subcomponents
+import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
-import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
-  type ChoroplethLegendParameters,
+  type ChoroplethLegend,
   CustomPalette,
   type GridParameters,
   type KdeParameters,
@@ -55,7 +57,6 @@ import {
   SmoothingMethod,
   type StewartParameters,
 } from '../../global.d';
-import InputFieldNumber from '../Inputs/InputNumber.tsx';
 
 async function onClickValidate(
   referenceLayerId: string,
@@ -136,8 +137,12 @@ async function onClickValidate(
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(120, 340);
 
+  // Create a new layer
+  const newId = generateIdLayer();
+
   const newLayerDescription = {
-    id: generateIdLayer(),
+    id: newId,
+    layerId: referenceLayerId,
     name: newName,
     type: 'polygon',
     renderer: 'smoothed' as RepresentationType,
@@ -177,46 +182,50 @@ async function onClickValidate(
     dropShadow: false,
     blurFilter: false,
     shapeRendering: 'auto',
-    legend: {
-      // Part common to all legends
-      title: {
-        text: targetVariable,
-        ...applicationSettingsStore.defaultLegendSettings.title,
-      } as LegendTextElement,
-      subtitle: {
-        ...applicationSettingsStore.defaultLegendSettings.subtitle,
-      } as LegendTextElement,
-      note: {
-        ...applicationSettingsStore.defaultLegendSettings.note,
-      } as LegendTextElement,
-      position: legendPosition,
-      visible: true,
-      roundDecimals: 1,
-      backgroundRect: {
-        visible: false,
-      },
-      // Part specific to choropleth
-      type: LegendType.choropleth,
-      orientation: Orientation.vertical,
-      boxWidth: 50,
-      boxHeight: 30,
-      boxSpacing: 0,
-      boxSpacingNoData: 10,
-      boxCornerRadius: 0,
-      labels: {
-        ...applicationSettingsStore.defaultLegendSettings.labels,
-      } as LegendTextElement,
-      noDataLabel: 'No data',
-      stroke: false,
-      tick: false,
-    } as ChoroplethLegendParameters,
     rendererParameters,
   } as LayerDescriptionSmoothedLayer;
+
+  const legend = {
+    // Part common to all legends
+    id: generateIdLegend(),
+    layerId: newId,
+    title: {
+      text: targetVariable,
+      ...applicationSettingsStore.defaultLegendSettings.title,
+    } as LegendTextElement,
+    subtitle: {
+      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+    } as LegendTextElement,
+    note: {
+      ...applicationSettingsStore.defaultLegendSettings.note,
+    } as LegendTextElement,
+    position: legendPosition,
+    visible: true,
+    roundDecimals: 1,
+    backgroundRect: {
+      visible: false,
+    },
+    // Part specific to choropleth
+    type: LegendType.choropleth,
+    orientation: Orientation.vertical,
+    boxWidth: 50,
+    boxHeight: 30,
+    boxSpacing: 0,
+    boxSpacingNoData: 10,
+    boxCornerRadius: 0,
+    labels: {
+      ...applicationSettingsStore.defaultLegendSettings.labels,
+    } as LegendTextElement,
+    noDataLabel: 'No data',
+    stroke: false,
+    tick: false,
+  } as ChoroplethLegend;
 
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
+        draft.layoutFeaturesAndLegends.push(legend);
       },
     ),
   );

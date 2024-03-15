@@ -65,7 +65,7 @@ export default function ImageSymbolSelection(
         setLayersDescriptionStore(
           produce(
             (draft: LayersDescriptionStoreType) => {
-              draft.layoutFeatures.push(imageDescription);
+              draft.layoutFeaturesAndLegends.push(imageDescription);
             },
           ),
         );

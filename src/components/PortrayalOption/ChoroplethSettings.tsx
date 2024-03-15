@@ -32,6 +32,7 @@ import { noop } from '../../helpers/classification';
 import { findSuitableName, getMinimumPrecision, isNumber } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
 import { generateIdLayer } from '../../helpers/layers';
+import { generateIdLegend } from '../../helpers/legends';
 import { Mmin } from '../../helpers/math';
 import { VariableType } from '../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
@@ -50,7 +51,7 @@ import imgMoreOption from '../../assets/buttons2.svg?url';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
-  type ChoroplethLegendParameters,
+  type ChoroplethLegend,
   type ClassificationParameters,
   type LayerDescription,
   type LegendTextElement,
@@ -89,9 +90,12 @@ function onClickValidate(
   // How many decimals to display in the legend
   const minPrecision = getMinimumPrecision(classification.breaks);
 
+  // Generate ID of new layer
+  const newId = generateIdLayer();
+
   // Prepare the layer description for the new layer
   const newLayerDescription = {
-    id: generateIdLayer(),
+    id: newId,
     name: newName,
     data: referenceLayerDescription.data,
     type: referenceLayerDescription.type,
@@ -106,40 +110,6 @@ function onClickValidate(
     blurFilter: false,
     shapeRendering: referenceLayerDescription.shapeRendering,
     rendererParameters: classification,
-    legend: {
-      // Part common to all legends
-      title: {
-        text: targetVariable,
-        ...applicationSettingsStore.defaultLegendSettings.title,
-      } as LegendTextElement,
-      subtitle: {
-        ...applicationSettingsStore.defaultLegendSettings.subtitle,
-      } as LegendTextElement,
-      note: {
-        text: noteContent,
-        ...applicationSettingsStore.defaultLegendSettings.note,
-      } as LegendTextElement,
-      position: legendPosition,
-      visible: true,
-      roundDecimals: minPrecision < 0 ? 0 : minPrecision,
-      backgroundRect: {
-        visible: false,
-      },
-      // Part specific to choropleth
-      type: LegendType.choropleth,
-      orientation: Orientation.vertical,
-      boxWidth: 50,
-      boxHeight: 30,
-      boxSpacing: 0,
-      boxSpacingNoData: 10,
-      boxCornerRadius: 0,
-      labels: {
-        ...applicationSettingsStore.defaultLegendSettings.labels,
-      } as LegendTextElement,
-      noDataLabel: 'No data',
-      stroke: false,
-      tick: false,
-    } as ChoroplethLegendParameters,
   } as LayerDescription;
 
   if (newLayerDescription.type === 'point') {
@@ -147,10 +117,48 @@ function onClickValidate(
     newLayerDescription.pointRadius = referenceLayerDescription.pointRadius || 5;
   }
 
+  const legend = {
+    // Part common to all legends
+    id: generateIdLegend(),
+    layerId: newId,
+    title: {
+      text: targetVariable,
+      ...applicationSettingsStore.defaultLegendSettings.title,
+    } as LegendTextElement,
+    subtitle: {
+      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+    } as LegendTextElement,
+    note: {
+      text: noteContent,
+      ...applicationSettingsStore.defaultLegendSettings.note,
+    } as LegendTextElement,
+    position: legendPosition,
+    visible: true,
+    roundDecimals: minPrecision < 0 ? 0 : minPrecision,
+    backgroundRect: {
+      visible: false,
+    },
+    // Part specific to choropleth
+    type: LegendType.choropleth,
+    orientation: Orientation.vertical,
+    boxWidth: 50,
+    boxHeight: 30,
+    boxSpacing: 0,
+    boxSpacingNoData: 10,
+    boxCornerRadius: 0,
+    labels: {
+      ...applicationSettingsStore.defaultLegendSettings.labels,
+    } as LegendTextElement,
+    noDataLabel: 'No data',
+    stroke: false,
+    tick: false,
+  } as ChoroplethLegend;
+
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
+        draft.layoutFeaturesAndLegends.push(legend);
       },
     ),
   );

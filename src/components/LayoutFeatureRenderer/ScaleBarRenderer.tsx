@@ -31,6 +31,7 @@ import { Mceil, Mround } from '../../helpers/math';
 import {
   DistanceUnit,
   type LayoutFeature,
+  type Legend,
   type ScaleBar,
   ScaleBarStyle,
 } from '../../global.d';
@@ -203,8 +204,8 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
     const dist = sphericalLawOfCosine(left, right);
     console.log(dist);
     setLayersDescriptionStore(
-      'layoutFeatures',
-      (f: LayoutFeature) => f.id === props.id,
+      'layoutFeaturesAndLegends',
+      (f: LayoutFeature | Legend) => f.id === props.id,
       'distance',
       dist / 1000,
     );
@@ -235,8 +236,8 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
           const distance = sphericalLawOfCosine(left, right);
           const tickValues = getTickValues(convertToUnit(distance, props.unit));
           setLayersDescriptionStore(
-            'layoutFeatures',
-            (f: LayoutFeature) => f.id === props.id,
+            'layoutFeaturesAndLegends',
+            (f: LayoutFeature | Legend) => f.id === props.id,
             {
               distance,
               tickValues,

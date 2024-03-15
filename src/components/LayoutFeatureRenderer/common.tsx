@@ -19,7 +19,7 @@ import { setModalStore } from '../../store/ModalStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Types
-import type { BackgroundRect, LayoutFeature } from '../../global';
+import type { BackgroundRect, LayoutFeature, Legend } from '../../global';
 
 // TODO: Some of this code is duplicated in the LegendRenderer/common.tsx file.
 //   Once we finished implementing the legends and the layout features,
@@ -58,7 +58,7 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
     const dy = e.clientY - y;
 
     // setLayersDescriptionStore(
-    //   'layoutFeatures',
+    //   'layoutFeaturesAndLegends',
     //   (l: LayoutFeature) => l.id === props.id,
     //   {
     //     position: [
@@ -91,8 +91,8 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
     // Update the position in the layersDescriptionStore
     // once the user has released the mouse button
     setLayersDescriptionStore(
-      'layoutFeatures',
-      (l: LayoutFeature) => l.id === props.id,
+      'layoutFeaturesAndLegends',
+      (l: LayoutFeature | Legend) => l.id === props.id,
       {
         position: [
           positionX,
@@ -143,7 +143,7 @@ export function makeLayoutFeaturesSettingsModal(
 ): void {
   // State before opening the modal, in case cancel is clicked
   const layoutFeatureState = unproxify(
-    layersDescriptionStore.layoutFeatures
+    layersDescriptionStore.layoutFeaturesAndLegends
       .find((l) => l.id === layoutFeatureId) as never,
   );
   setModalStore({
@@ -155,8 +155,8 @@ export function makeLayoutFeaturesSettingsModal(
     // Reset the layout feature to its previous state if cancel is clicked
     cancelCallback: () => {
       setLayersDescriptionStore(
-        'layoutFeatures',
-        (l: LayoutFeature) => l.id === layoutFeatureId,
+        'layoutFeaturesAndLegends',
+        (l: LayoutFeature | Legend) => l.id === layoutFeatureId,
         layoutFeatureState,
       );
     },
@@ -201,13 +201,13 @@ export function triggerContextMenuLayoutFeature(
         // We change the place of the layout feature in the layoutFeatures array
         // so that it changes 1 place down on the svg element
         // (and so that it is rendered after the previous layout feature)
-        const layoutFeatures = layersDescriptionStore.layoutFeatures.slice();
-        const index = layoutFeatures.findIndex((l) => l.id === layoutFeatureId);
-        if (index < layoutFeatures.length - 1) {
-          const tmp = layoutFeatures[index + 1];
-          layoutFeatures[index + 1] = layoutFeatures[index];
-          layoutFeatures[index] = tmp;
-          setLayersDescriptionStore({ layoutFeatures });
+        const layoutFeaturesAndLegends = layersDescriptionStore.layoutFeaturesAndLegends.slice();
+        const index = layoutFeaturesAndLegends.findIndex((l) => l.id === layoutFeatureId);
+        if (index < layoutFeaturesAndLegends.length - 1) {
+          const tmp = layoutFeaturesAndLegends[index + 1];
+          layoutFeaturesAndLegends[index + 1] = layoutFeaturesAndLegends[index];
+          layoutFeaturesAndLegends[index] = tmp;
+          setLayersDescriptionStore({ layoutFeaturesAndLegends });
         }
       },
     },
@@ -217,13 +217,13 @@ export function triggerContextMenuLayoutFeature(
         // We change the place of the layout feature in the layoutFeatures array
         // so that it changes 1 place up on the svg element
         // (and so that it is rendered before the previous layout feature)
-        const layoutFeatures = layersDescriptionStore.layoutFeatures.slice();
-        const index = layoutFeatures.findIndex((l) => l.id === layoutFeatureId);
+        const layoutFeaturesAndLegends = layersDescriptionStore.layoutFeaturesAndLegends.slice();
+        const index = layoutFeaturesAndLegends.findIndex((l) => l.id === layoutFeatureId);
         if (index > 0) {
-          const tmp = layoutFeatures[index - 1];
-          layoutFeatures[index - 1] = layoutFeatures[index];
-          layoutFeatures[index] = tmp;
-          setLayersDescriptionStore({ layoutFeatures });
+          const tmp = layoutFeaturesAndLegends[index - 1];
+          layoutFeaturesAndLegends[index - 1] = layoutFeaturesAndLegends[index];
+          layoutFeaturesAndLegends[index] = tmp;
+          setLayersDescriptionStore({ layoutFeaturesAndLegends });
         }
       },
     },
@@ -236,7 +236,7 @@ export function triggerContextMenuLayoutFeature(
     contextMenuEntries.push({
       label: LL().LayoutFeatures.ContextMenu.Clone(),
       callback: () => {
-        const layoutFeature = layersDescriptionStore.layoutFeatures
+        const layoutFeature = layersDescriptionStore.layoutFeaturesAndLegends
           .find((l) => l.id === layoutFeatureId);
         if (layoutFeature) {
           // Compute new position, taking care of the map size,
@@ -255,7 +255,7 @@ export function triggerContextMenuLayoutFeature(
           // }
           setLayersDescriptionStore({
             layoutFeatures: [
-              ...layersDescriptionStore.layoutFeatures,
+              ...layersDescriptionStore.layoutFeaturesAndLegends,
               {
                 ...layoutFeature,
                 id: generateIdLayoutFeature(),
@@ -271,9 +271,9 @@ export function triggerContextMenuLayoutFeature(
   contextMenuEntries.push({
     label: LL().LayoutFeatures.ContextMenu.Delete(),
     callback: () => {
-      const layoutFeatures = layersDescriptionStore.layoutFeatures
+      const layoutFeaturesAndLegends = layersDescriptionStore.layoutFeaturesAndLegends
         .filter((l) => l.id !== layoutFeatureId);
-      setLayersDescriptionStore({ layoutFeatures });
+      setLayersDescriptionStore({ layoutFeaturesAndLegends });
     },
   });
 

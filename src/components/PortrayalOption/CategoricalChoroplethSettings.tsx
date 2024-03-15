@@ -12,11 +12,12 @@ import { getColors } from 'dicopal';
 import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
-import { generateIdLayer } from '../../helpers/layers';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { findSuitableName, isNonNull } from '../../helpers/common';
-import { VariableType } from '../../helpers/typeDetection';
 import { randomColor } from '../../helpers/color';
+import { generateIdLayer } from '../../helpers/layers';
+import { generateIdLegend } from '../../helpers/legends';
+import { VariableType } from '../../helpers/typeDetection';
 import { PortrayalSettingsProps } from './common';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
@@ -45,9 +46,9 @@ import {
 
 // Types / Interfaces / Enums
 import {
+  type CategoricalChoroplethLegend,
   type CategoricalChoroplethMapping,
   type CategoricalChoroplethParameters,
-  type ChoroplethLegendParameters,
   type GeoJSONFeature,
   type LayerDescriptionCategoricalChoropleth,
   type LegendTextElement,
@@ -126,8 +127,11 @@ function onClickValidate(
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(120, 340);
 
+  // Generate ID for the new layer
+  const newId = generateIdLayer();
+
   const newLayerDescription = {
-    id: generateIdLayer(),
+    id: newId,
     name: newName,
     data: referenceLayerDescription.data,
     type: referenceLayerDescription.type,
@@ -146,41 +150,6 @@ function onClickValidate(
       noDataColor: defaultNoDataColor,
       mapping: categoriesMapping,
     } as CategoricalChoroplethParameters,
-    legend: {
-      // Part common to all legends
-      title: {
-        text: targetVariable,
-        ...applicationSettingsStore.defaultLegendSettings.title,
-      } as LegendTextElement,
-      subtitle: {
-        text: undefined,
-        ...applicationSettingsStore.defaultLegendSettings.subtitle,
-      },
-      note: {
-        text: undefined,
-        ...applicationSettingsStore.defaultLegendSettings.note,
-      },
-      position: legendPosition,
-      visible: true,
-      roundDecimals: 1,
-      backgroundRect: {
-        visible: false,
-      },
-      // Part specific to choropleth
-      type: LegendType.choropleth,
-      orientation: Orientation.vertical,
-      boxWidth: 45,
-      boxHeight: 30,
-      boxSpacing: 5,
-      boxSpacingNoData: 5,
-      boxCornerRadius: 0,
-      labels: {
-        ...applicationSettingsStore.defaultLegendSettings.labels,
-      } as LegendTextElement,
-      noDataLabel: 'No data',
-      stroke: false,
-      tick: false,
-    } as ChoroplethLegendParameters,
   } as LayerDescriptionCategoricalChoropleth;
 
   if (newLayerDescription.type === 'point') {
@@ -188,10 +157,49 @@ function onClickValidate(
     newLayerDescription.pointRadius = referenceLayerDescription.pointRadius || 5;
   }
 
+  const legend = {
+    // Part common to all legends
+    id: generateIdLegend(),
+    layerId: newId,
+    title: {
+      text: targetVariable,
+      ...applicationSettingsStore.defaultLegendSettings.title,
+    } as LegendTextElement,
+    subtitle: {
+      text: undefined,
+      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+    },
+    note: {
+      text: undefined,
+      ...applicationSettingsStore.defaultLegendSettings.note,
+    },
+    position: legendPosition,
+    visible: true,
+    roundDecimals: 1,
+    backgroundRect: {
+      visible: false,
+    },
+    // Part specific to choropleth
+    type: LegendType.categoricalChoropleth,
+    orientation: Orientation.vertical,
+    boxWidth: 45,
+    boxHeight: 30,
+    boxSpacing: 5,
+    boxSpacingNoData: 5,
+    boxCornerRadius: 0,
+    labels: {
+      ...applicationSettingsStore.defaultLegendSettings.labels,
+    } as LegendTextElement,
+    noDataLabel: 'No data',
+    stroke: false,
+    tick: false,
+  } as CategoricalChoroplethLegend;
+
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
+        draft.layoutFeaturesAndLegends.push(legend);
       },
     ),
   );

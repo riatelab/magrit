@@ -24,6 +24,7 @@ import {
 import { generateIdLayer } from '../../helpers/layers';
 import { max, min } from '../../helpers/math';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
+import { generateIdLegend } from '../../helpers/legends';
 
 // Sub-components
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
@@ -48,7 +49,7 @@ import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore'
 import type {
   GeoJSONFeatureCollection,
   LayerDescription,
-  ProportionalSymbolsLegendParameters,
+  ProportionalSymbolsLegend,
   ProportionalSymbolsParameters,
   RepresentationType,
 } from '../../global';
@@ -162,8 +163,10 @@ function onClickValidate(
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(150, 150);
 
+  const newId = generateIdLayer();
+
   const newLayerDescription = {
-    id: generateIdLayer(),
+    id: newId,
     name: newLayerName,
     data: newData,
     type: symbolType === ProportionalSymbolsSymbolType.line ? 'linestring' : 'point',
@@ -179,41 +182,46 @@ function onClickValidate(
     blurFilter: false,
     shapeRendering: 'auto',
     rendererParameters: propSymbolsParameters,
-    legend: {
-      // Legend common part
-      title: {
-        text: targetVariable,
-        ...applicationSettingsStore.defaultLegendSettings.title,
-      } as LegendTextElement,
-      subtitle: {
-        text: 'This is a subtitle',
-        ...applicationSettingsStore.defaultLegendSettings.subtitle,
-      } as LegendTextElement,
-      note: {
-        text: 'This is a bottom note',
-        ...applicationSettingsStore.defaultLegendSettings.note,
-      } as LegendTextElement,
-      position: legendPosition,
-      visible: true,
-      roundDecimals: 0,
-      backgroundRect: {
-        visible: false,
-      },
-      // Part specific to proportional symbols
-      type: LegendType.proportional,
-      layout: 'stacked',
-      values: legendValues,
-      spacing: 5,
-      labels: {
-        ...applicationSettingsStore.defaultLegendSettings.labels,
-      } as LegendTextElement,
-    } as ProportionalSymbolsLegendParameters,
   } as LayerDescription;
+
+  const legend = {
+    // Legend common part
+    id: generateIdLegend(),
+    layerId: newId,
+    title: {
+      text: targetVariable,
+      ...applicationSettingsStore.defaultLegendSettings.title,
+    } as LegendTextElement,
+    subtitle: {
+      text: 'This is a subtitle',
+      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+    } as LegendTextElement,
+    note: {
+      text: 'This is a bottom note',
+      ...applicationSettingsStore.defaultLegendSettings.note,
+    } as LegendTextElement,
+    position: legendPosition,
+    visible: true,
+    roundDecimals: 0,
+    backgroundRect: {
+      visible: false,
+    },
+    // Part specific to proportional symbols
+    type: LegendType.proportional,
+    layout: 'stacked',
+    values: legendValues,
+    spacing: 5,
+    labels: {
+      ...applicationSettingsStore.defaultLegendSettings.labels,
+    } as LegendTextElement,
+    symbolType: propSymbolsParameters.symbolType,
+  } as ProportionalSymbolsLegend;
 
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
+        draft.layoutFeaturesAndLegends.push(legend);
       },
     ),
   );

@@ -13,6 +13,8 @@ import d3 from '../helpers/d3-custom';
 import { makeHexColorWithAlpha } from '../helpers/color';
 import { debounce } from '../helpers/common';
 import { useI18nContext } from '../i18n/i18n-solid';
+import { isLayoutFeature } from '../helpers/layoutFeatures';
+import { findLayerById } from '../helpers/layers';
 
 // Stores
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
@@ -89,6 +91,12 @@ import {
   type Rectangle,
   type ScaleBar,
   type Text,
+  Legend,
+  ChoroplethLegend,
+  ProportionalSymbolsLegend,
+  CategoricalChoroplethLegend,
+  DiscontinuityLegend,
+  LabelsLegend, MushroomsLegend,
 } from '../global.d';
 
 // Styles
@@ -131,30 +139,24 @@ const gatherArrowColors = (
   return Array.from(arrowColors);
 };
 
-const dispatchLegendRenderer = (layer: LayerDescription) => {
-  if (layer.renderer === 'choropleth') {
-    return legendChoropleth(layer as LayerDescriptionChoropleth);
+const dispatchLegendRenderer = (legend: Legend) => {
+  if (legend.type === 'choropleth') {
+    return legendChoropleth(legend as ChoroplethLegend);
   }
-  if (layer.renderer === 'categoricalChoropleth') {
-    return legendCategoricalChoropleth(layer as LayerDescriptionCategoricalChoropleth);
+  if (legend.type === 'categoricalChoropleth') {
+    return legendCategoricalChoropleth(legend as CategoricalChoroplethLegend);
   }
-  if (layer.renderer === 'proportionalSymbols') {
-    return legendProportionalSymbols(layer as LayerDescriptionProportionalSymbols);
+  if (legend.type === 'proportional') {
+    return legendProportionalSymbols(legend as ProportionalSymbolsLegend);
   }
-  if (layer.renderer === 'discontinuity') {
-    return legendDiscontinuity(layer as LayerDescriptionDiscontinuity);
+  if (legend.type === 'discontinuity') {
+    return legendDiscontinuity(legend as DiscontinuityLegend);
   }
-  if (layer.renderer === 'labels') {
-    return legendLabels(layer as LayerDescriptionLabels);
+  if (legend.type === 'labels') {
+    return legendLabels(legend as LabelsLegend);
   }
-  if (layer.renderer === 'smoothed') {
-    return legendChoropleth(layer as LayerDescriptionSmoothedLayer);
-  }
-  if (layer.renderer === 'grid') {
-    return legendChoropleth(layer as LayerDescriptionGriddedLayer);
-  }
-  if (layer.renderer === 'mushrooms') {
-    return legendMushrooms(layer as LayerDescriptionMushroomLayer);
+  if (legend.type === 'mushrooms') {
+    return legendMushrooms(legend as MushroomsLegend);
   }
   return null;
 };
@@ -353,7 +355,11 @@ export default function MapZone(): JSX.Element {
         <defs>
           <path id="arrow-head-marker-path" d="M0,-5L10,0L0,5"/>
           <For each={
-            gatherArrowColors(layersDescriptionStore.layers, layersDescriptionStore.layoutFeatures)
+            gatherArrowColors(
+              layersDescriptionStore.layers,
+              layersDescriptionStore.layoutFeaturesAndLegends
+                .filter(isLayoutFeature) as LayoutFeature[],
+            )
           }>
             {
               (color) => <marker
@@ -399,18 +405,23 @@ export default function MapZone(): JSX.Element {
             }>{ dispatchMapRenderer(layer) }</Show>
           }
         </For>
-        {/* Generate legend group for each layer */}
-        <For each={ layersDescriptionStore.layers }>
-          {(layer) => <Show when={
-            applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-            || (layer.visible && layer.legend?.visible)
-            }>{ dispatchLegendRenderer(layer) }</Show>
-          }
-        </For>
-        <For each={ layersDescriptionStore.layoutFeatures }>
-          {(feature) => layoutFeaturesFns[feature.type](
-            feature as Rectangle & FreeDrawing & ScaleBar & Text & Line,
-          )}
+        <For each={ layersDescriptionStore.layoutFeaturesAndLegends }>
+          {
+            (elem) => {
+              if (isLayoutFeature(elem)) {
+                return layoutFeaturesFns[(elem as LayoutFeature).type](
+                  elem as Rectangle & FreeDrawing & ScaleBar & Text & Line,
+                );
+              }
+              // If the element is a legend, we dispatch the legend renderer
+              return <Show when={
+                applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
+                || (
+                  (elem as Legend).visible
+                  && findLayerById(layersDescriptionStore.layers, (elem as Legend).layerId)!.visible
+                )
+              }>{ dispatchLegendRenderer(elem) }</Show>;
+            }}
         </For>
         <Show when={!globalStore.userHasAddedLayer}>
           <foreignObject

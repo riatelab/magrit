@@ -27,6 +27,7 @@ import {
   type Image,
   type LayoutFeature,
   LayoutFeatureType,
+  type Legend,
   type Line,
   type NorthArrow,
   type Rectangle,
@@ -53,8 +54,8 @@ const updateLayoutFeatureProperty = (
   const allPropsExceptLast = props.slice(0, props.length - 1);
   const lastProp = props[props.length - 1];
   const args = [
-    'layoutFeatures',
-    (f: LayoutFeature) => f.id === layoutFeatureId,
+    'layoutFeaturesAndLegends',
+    (f: LayoutFeature | Legend) => f.id === layoutFeatureId,
     ...allPropsExceptLast,
     {
       [lastProp]: value,
@@ -67,7 +68,7 @@ function makeSettingsRectangle(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  const ft = layersDescriptionStore.layoutFeatures
+  const ft = layersDescriptionStore.layoutFeaturesAndLegends
     .find((f) => f.id === layoutFeatureId) as Rectangle;
   return <>
     <InputFieldNumber
@@ -179,7 +180,7 @@ function makeSettingsScaleBar(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  const ft = layersDescriptionStore.layoutFeatures
+  const ft = layersDescriptionStore.layoutFeaturesAndLegends
     .find((f) => f.id === layoutFeatureId) as ScaleBar;
   return <>
     <InputFieldSelect
@@ -310,7 +311,7 @@ function makeSettingsText(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  const ft = layersDescriptionStore.layoutFeatures
+  const ft = layersDescriptionStore.layoutFeaturesAndLegends
     .find((f) => f.id === layoutFeatureId) as Text;
 
   return <>
@@ -449,7 +450,7 @@ function makeSettingsLine(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  const ft = layersDescriptionStore.layoutFeatures
+  const ft = layersDescriptionStore.layoutFeaturesAndLegends
     .find((f) => f.id === layoutFeatureId) as Line;
 
   return <>
@@ -512,7 +513,7 @@ function makeSettingsImage(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  const ft = layersDescriptionStore.layoutFeatures
+  const ft = layersDescriptionStore.layoutFeaturesAndLegends
     .find((f) => f.id === layoutFeatureId) as Image;
 
   return <>
@@ -610,7 +611,7 @@ function makeSettingsNorthArrow(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  const ft = layersDescriptionStore.layoutFeatures
+  const ft = layersDescriptionStore.layoutFeaturesAndLegends
     .find((f) => f.id === layoutFeatureId) as NorthArrow;
 
   return <>
@@ -668,7 +669,7 @@ function makeSettingsFreeDrawing(
   layoutFeatureId: string,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  const ft = layersDescriptionStore.layoutFeatures
+  const ft = layersDescriptionStore.layoutFeaturesAndLegends
     .find((f) => f.id === layoutFeatureId) as FreeDrawing;
   return <>
     <InputFieldColor
@@ -720,7 +721,7 @@ export default function LayoutFeatureSettings(
     LL,
   } = props; // eslint-disable-line solid/reactivity
 
-  const layoutFeature = layersDescriptionStore.layoutFeatures
+  const layoutFeature = layersDescriptionStore.layoutFeaturesAndLegends
     .find((f) => f.id === layoutFeatureId);
 
   if (!layoutFeature) {
