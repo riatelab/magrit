@@ -1,5 +1,10 @@
 // Imports from solid-js
-import { createMemo, JSX, Show } from 'solid-js';
+import {
+  createMemo,
+  JSX,
+  mergeProps,
+  Show,
+} from 'solid-js';
 
 // Import from other libraries
 import { FaSolidArrowRight } from 'solid-icons/fa';
@@ -34,11 +39,21 @@ export function CategoriesSummary(props: { mapping: CategoricalChoroplethMapping
   </div>;
 }
 
-export function CategoriesPlot(props: { mapping: CategoricalChoroplethMapping[] }): JSX.Element {
+export function CategoriesPlot(
+  props: {
+    mapping: CategoricalChoroplethMapping[],
+    height?: number,
+    width?: number,
+  },
+): JSX.Element {
   const { LL } = useI18nContext();
-  const domain = createMemo(() => props.mapping.map((m) => m.categoryName));
-  const range = createMemo(() => props.mapping.map((m) => m.color));
-  const data = createMemo(() => props.mapping.map((m, i) => ({
+  const mergedProps = mergeProps(
+    { height: 200, width: undefined },
+    props,
+  );
+  const domain = createMemo(() => mergedProps.mapping.map((m) => m.categoryName));
+  const range = createMemo(() => mergedProps.mapping.map((m) => m.color));
+  const data = createMemo(() => mergedProps.mapping.map((m, i) => ({
     position: i,
     category: m.categoryName,
     color: m.color,
@@ -47,7 +62,8 @@ export function CategoriesPlot(props: { mapping: CategoricalChoroplethMapping[] 
   return <div>
     {
       Plot.plot({
-        height: 200,
+        height: mergedProps.height,
+        width: mergedProps.width,
         color: {
           domain: domain(),
           range: range(),
@@ -73,7 +89,7 @@ export function CategoriesPlot(props: { mapping: CategoricalChoroplethMapping[] 
                 position: (d) => d.position,
               },
               sort: {
-                y: 'position',
+                x: 'position',
                 order: 'ascending',
               },
             },

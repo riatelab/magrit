@@ -45,6 +45,7 @@ import {
 
 // Types / Interfaces / Enums
 import {
+  CategoricalChoroplethBarchartLegend,
   type CategoricalChoroplethLegend,
   type CategoricalChoroplethMapping,
   type CategoricalChoroplethParameters,
@@ -62,6 +63,7 @@ function onClickValidate(
   targetVariable: string,
   newName: string,
   categoriesMapping: CategoricalChoroplethMapping[],
+  displayChartOnMap: boolean,
 ): void {
   // The layer description of the reference layer
   const referenceLayerDescription = layersDescriptionStore.layers
@@ -150,6 +152,42 @@ function onClickValidate(
       },
     ),
   );
+
+  if (displayChartOnMap) {
+    // Add the chart to the layout
+    setLayersDescriptionStore(
+      produce(
+        (draft: LayersDescriptionStoreType) => {
+          draft.layoutFeaturesAndLegends.push({
+            id: generateIdLegend(),
+            layerId: newId,
+            type: LegendType.categoricalChoroplethBarchart,
+            position: [legendPosition[0] + 200, legendPosition[1]],
+            width: 300,
+            height: 250,
+            orientation: 'horizontal',
+            fontColor: '#000000',
+            visible: true,
+            title: {
+              text: targetVariable,
+              ...applicationSettingsStore.defaultLegendSettings.title,
+            } as LegendTextElement,
+            subtitle: {
+              text: undefined,
+              ...applicationSettingsStore.defaultLegendSettings.subtitle,
+            },
+            note: {
+              text: undefined,
+              ...applicationSettingsStore.defaultLegendSettings.note,
+            },
+            backgroundRect: {
+              visible: false,
+            },
+          } as CategoricalChoroplethBarchartLegend);
+        },
+      ),
+    );
+  }
 }
 
 export default function CategoricalChoroplethSettings(props: PortrayalSettingsProps): JSX.Element {
@@ -206,6 +244,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
         targetVariable(),
         layerName,
         categoriesMapping(),
+        displayChartOnMap(),
       );
       // Hide loading overlay
       setLoading(false);

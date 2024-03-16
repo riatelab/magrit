@@ -36,7 +36,7 @@ import type {
 import type { TranslationFunctions } from '../../i18n/i18n-types';
 
 export function makeLegendText(
-  props: LegendTextElement,
+  props: LegendTextElement | undefined,
   position: [number, number],
   role: 'title' | 'subtitle' | 'note' | 'top-title' | 'bottom-title',
   otherProps?: Record<string, unknown>,

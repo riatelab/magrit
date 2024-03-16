@@ -495,10 +495,6 @@ function horizontalLegend(
   </g>;
 }
 
-// type HasChoroplethLegend = LayerDescriptionChoropleth
-// | LayerDescriptionSmoothedLayer
-// | LayerDescriptionGriddedLayer;
-
 export default function legendChoropleth(
   legend: ChoroplethLegend,
 ): JSX.Element {

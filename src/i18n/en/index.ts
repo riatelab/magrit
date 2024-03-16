@@ -316,7 +316,7 @@ const en = {
       WarningGeo: 'The current map projection is geographic (or its unit is degrees). The grid resolution is therefore expressed in degrees. Whenever possible, you should use projected data (with a distance unit in metres, for example) for greater accuracy.',
     },
     CategoricalChoroplethOptions: {
-      DisplayChartOnMap: 'Display the frequency histogram by category on the map',
+      DisplayChartOnMap: 'Display the frequency bar chart by category on the map',
       Categories: '{{One category | ?? categories}}',
       HasNull: 'Contains null or empty values',
       NoNull: 'No null or empty values',

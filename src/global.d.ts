@@ -763,6 +763,28 @@ interface MushroomsLegend extends LegendBase {
   bottomTitle: LegendTextElement,
 }
 
+interface ChoroplethHistogramLegend extends LegendBase {
+  type: LegendType.choroplethHistogram,
+  // The width of the histogram
+  width: number,
+  // The height of the histogram
+  height: number,
+  // The font color of the chart elements
+  fontColor: string,
+}
+
+interface CategoricalChoroplethBarchartLegend extends LegendBase {
+  type: LegendType.categoricalChoroplethBarchart,
+  // The width of the histogram
+  width: number,
+  // The height of the histogram
+  height: number,
+  // The font color of the chart elements
+  fontColor: string,
+  // The orientation of the histogram
+  orientation: Orientation,
+}
+
 export type Legend = (
   ChoroplethLegend
   | CategoricalChoroplethLegend
@@ -771,6 +793,8 @@ export type Legend = (
   | DiscontinuityLegend
   | WaffleLegend
   | MushroomsLegend
+  | CategoricalChoroplethBarchartLegend
+  | ChoroplethHistogramLegend
 );
 
 export enum NumberFormatting {
@@ -798,6 +822,8 @@ export enum LegendType {
   labels = 'labels',
   waffle = 'waffle',
   mushrooms = 'mushrooms',
+  choroplethHistogram = 'choroplethHistogram',
+  categoricalChoroplethBarchart = 'categoricalChoroplethBarchart',
 }
 
 export enum Orientation {

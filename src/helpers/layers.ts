@@ -7,7 +7,7 @@ import topojson from './topojson';
 
 // Types
 import {
-  GeoJSONFeatureCollection,
+  type GeoJSONFeatureCollection,
   type LayerDescription,
   type MultiLineString,
   RepresentationType,

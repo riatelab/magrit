@@ -316,7 +316,7 @@ const fr = {
       WarningGeo: 'La projection cartographique actuelle est géographique (ou son unité est en degrés). La résolution de la grille est donc exprimée en degrés. Privilégiez, lorsque que c\'est possible, l\'utilisation de données projetées (avec une unité de distance en mètres par exemple) pour une meilleure précision.',
     },
     CategoricalChoroplethOptions: {
-      DisplayChartOnMap: 'Afficher l\'histogramme de fréquence par catégorie sur la carte',
+      DisplayChartOnMap: 'Afficher le diagramme en barre par catégorie sur la carte',
       Categories: '{{Une catégories | ?? catégories}}',
       HasNull: 'Contient des valeurs nulles ou non renseignées',
       NoNull: 'Pas de valeurs nulles ou non renseignées',

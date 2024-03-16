@@ -1114,7 +1114,7 @@ type RootTranslation = {
 		}
 		CategoricalChoroplethOptions: {
 			/**
-			 * D​i​s​p​l​a​y​ ​t​h​e​ ​f​r​e​q​u​e​n​c​y​ ​h​i​s​t​o​g​r​a​m​ ​b​y​ ​c​a​t​e​g​o​r​y​ ​o​n​ ​t​h​e​ ​m​a​p
+			 * D​i​s​p​l​a​y​ ​t​h​e​ ​f​r​e​q​u​e​n​c​y​ ​b​a​r​ ​c​h​a​r​t​ ​b​y​ ​c​a​t​e​g​o​r​y​ ​o​n​ ​t​h​e​ ​m​a​p
 			 */
 			DisplayChartOnMap: string
 			/**
@@ -3408,7 +3408,7 @@ export type TranslationFunctions = {
 		}
 		CategoricalChoroplethOptions: {
 			/**
-			 * Display the frequency histogram by category on the map
+			 * Display the frequency bar chart by category on the map
 			 */
 			DisplayChartOnMap: () => LocalizedString
 			/**

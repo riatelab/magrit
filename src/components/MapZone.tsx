@@ -92,15 +92,18 @@ import {
   type ScaleBar,
   type Text,
   Legend,
-  ChoroplethLegend,
-  ProportionalSymbolsLegend,
-  CategoricalChoroplethLegend,
-  DiscontinuityLegend,
-  LabelsLegend, MushroomsLegend,
+  type CategoricalChoroplethBarchartLegend,
+  type ChoroplethLegend,
+  type ProportionalSymbolsLegend,
+  type CategoricalChoroplethLegend,
+  type DiscontinuityLegend,
+  type LabelsLegend,
+  type MushroomsLegend,
 } from '../global.d';
 
 // Styles
 import '../styles/MapZone.css';
+import legendCategoricalChoroplethBarchart from './LegendRenderer/CategoricalChoroplethBarchartLegend.tsx';
 
 const layoutFeaturesFns = {
   [LayoutFeatureType.Line]: LineRenderer,
@@ -157,6 +160,9 @@ const dispatchLegendRenderer = (legend: Legend) => {
   }
   if (legend.type === 'mushrooms') {
     return legendMushrooms(legend as MushroomsLegend);
+  }
+  if (legend.type === 'categoricalChoroplethBarchart') {
+    return legendCategoricalChoroplethBarchart(legend as CategoricalChoroplethBarchartLegend);
   }
   return null;
 };
