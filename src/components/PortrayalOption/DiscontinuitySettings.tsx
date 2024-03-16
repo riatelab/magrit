@@ -156,18 +156,18 @@ export default function DiscontinuitySettings(
 ): JSX.Element {
   const { LL } = useI18nContext();
 
-  const layerDescription = createMemo(() => layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!);
+  const layerDescription = layersDescriptionStore.layers
+    .find((l) => l.id === props.layerId)!;
 
   // The fields that can be used for computing the discontinuity.
   // We know that we have such fields because otherwise this component would not be rendered.
-  const targetFields = createMemo(() => layerDescription()
-    .fields.filter((variable) => variable.type === 'stock' || variable.type === 'ratio'));
+  const targetFields = layerDescription
+    .fields.filter((variable) => variable.type === 'stock' || variable.type === 'ratio');
 
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>(`Discontinuity_${layerDescription().name}`);
+  ] = createSignal<string>(`Discontinuity_${layerDescription.name}`);
   const [
     classificationMethod,
     setClassificationMethod,
@@ -175,7 +175,7 @@ export default function DiscontinuitySettings(
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal(targetFields()![0].name);
+  ] = createSignal(targetFields![0].name);
   const [
     discontinuityType,
     setDiscontinuityType,
@@ -198,7 +198,7 @@ export default function DiscontinuitySettings(
     // Create the portrayal
     setTimeout(() => {
       onClickValidate(
-        layerDescription().id,
+        layerDescription.id,
         targetVariable(),
         discontinuityType(),
         classificationMethod(),
@@ -218,7 +218,7 @@ export default function DiscontinuitySettings(
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
     >
-      <For each={targetFields()}>
+      <For each={targetFields}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
       </For>
     </InputFieldSelect>

@@ -128,8 +128,8 @@ export default function SelectionSettings(
 ): JSX.Element {
   const { LL } = useI18nContext();
 
-  const layerDescription = createMemo(() => layersDescriptionStore.layers
-    .find((layer) => layer.id === props.layerId) as LayerDescription);
+  const layerDescription = layersDescriptionStore.layers
+    .find((layer) => layer.id === props.layerId)!;
 
   const [
     newLayerName,
@@ -164,7 +164,7 @@ export default function SelectionSettings(
     // Actually create the layer
     setTimeout(async () => {
       await onClickValidate(
-        layerDescription().id,
+        layerDescription.id,
         formula(),
         layerName,
       );
@@ -190,7 +190,7 @@ export default function SelectionSettings(
     <br />
     <FormulaInput
       typeDataset={'layer'}
-      dsDescription={layerDescription()}
+      dsDescription={layerDescription}
       currentFormula={formula}
       setCurrentFormula={setFormula}
       sampleOutput={sampleOutput}

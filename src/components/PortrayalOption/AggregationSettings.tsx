@@ -90,11 +90,11 @@ export default function AggregationSettings(
 ): JSX.Element {
   const { LL } = useI18nContext();
 
-  const layerDescription = createMemo(() => layersDescriptionStore.layers
-    .find((layer) => layer.id === props.layerId) as LayerDescription);
+  const layerDescription = layersDescriptionStore.layers
+    .find((layer) => layer.id === props.layerId) as LayerDescription;
 
-  const targetFields = createMemo(() => layerDescription()
-    .fields.filter((variable) => variable.type === 'categorical'));
+  const targetFields = layerDescription
+    .fields.filter((variable) => variable.type === 'categorical');
 
   const [
     newLayerName,
@@ -129,7 +129,7 @@ export default function AggregationSettings(
     // Actually create the new layer
     setTimeout(async () => {
       await onClickValidate(
-        layerDescription().id,
+        layerDescription.id,
         targetVariable(),
         aggregationMethod(),
         layerName,
@@ -160,7 +160,7 @@ export default function AggregationSettings(
       value={ targetVariable() }
     >
       <option value=""> { LL().PortrayalSection.AggregationOptions.None() } </option>
-      <For each={targetFields()}>
+      <For each={targetFields}>
         {
           (variable) => <option value={ variable.name }>{ variable.name }</option>
         }

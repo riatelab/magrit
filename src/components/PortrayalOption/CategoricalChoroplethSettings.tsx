@@ -159,30 +159,30 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
   const { LL } = useI18nContext();
 
   // The description of the layer for which we are creating the settings menu
-  const layerDescription = createMemo(() => layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!);
+  const layerDescription = layersDescriptionStore.layers
+    .find((l) => l.id === props.layerId)!;
 
   // The fields of the layer that are of type 'ratio'
   // (i.e. the fields that can be used for the choropleth).
   // We know that we have such fields because otherwise this component would not be rendered.
-  const targetFields = createMemo(() => layerDescription()
-    .fields.filter((variable) => variable.type === VariableType.categorical));
+  const targetFields = layerDescription
+    .fields.filter((variable) => variable.type === VariableType.categorical);
 
   // Signals for the current component:
   // the target variable, the target layer name and the classification parameters
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal<string>(targetFields()![0].name);
+  ] = createSignal<string>(targetFields![0].name);
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>(`Categorical_${layerDescription().name}`);
+  ] = createSignal<string>(`Categorical_${layerDescription.name}`);
   const [
     categoriesMapping,
     setCategoriesMapping,
   ] = createSignal<CategoricalChoroplethMapping[]>(
-    makeCategoriesMapping(makeCategoriesMap(layerDescription().data.features, targetVariable())),
+    makeCategoriesMapping(makeCategoriesMap(layerDescription.data.features, targetVariable())),
   );
   const [
     displayChartOnMap,
@@ -205,7 +205,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
     // Create the portrayal
     setTimeout(() => {
       onClickValidate(
-        layerDescription().id,
+        layerDescription.id,
         targetVariable(),
         layerName,
         categoriesMapping(),
@@ -225,13 +225,13 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
         setTargetVariable(value);
         setCategoriesMapping(
           makeCategoriesMapping(
-            makeCategoriesMap(layerDescription().data.features, value),
+            makeCategoriesMap(layerDescription.data.features, value),
           ),
         );
       }}
       value={ targetVariable() }
     >
-      <For each={targetFields()}>
+      <For each={targetFields}>
         { (variable) => <option value={variable.name}>{variable.name}</option> }
       </For>
     </InputFieldSelect>

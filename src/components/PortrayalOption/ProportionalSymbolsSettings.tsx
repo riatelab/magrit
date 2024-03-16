@@ -6,6 +6,7 @@ import {
   For,
   type JSX,
   Match,
+  Show,
   Switch,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
@@ -39,6 +40,7 @@ import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 import { CategoriesCustomisation, CategoriesPlot, CategoriesSummary } from './CategoricalChoroplethComponents.tsx';
+import { ChoroplethClassificationSelector } from './ChoroplethComponents.tsx';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -53,15 +55,17 @@ import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore'
 // Types / Interfaces / Enums
 import {
   CategoricalChoroplethMapping,
+  CategoricalChoroplethParameters,
+  type ClassificationParameters,
   GeoJSONFeatureCollection,
-  LayerDescription,
+  LayerDescription, LayerDescriptionProportionalSymbols,
   LegendTextElement,
   LegendType,
   ProportionalSymbolsColorMode,
-  ProportionalSymbolSingleColorParameters,
   ProportionalSymbolsLegend,
   ProportionalSymbolsSymbolType,
   RepresentationType,
+  VectorType,
 } from '../../global.d';
 import type { PortrayalSettingsProps } from './common';
 
@@ -70,7 +74,10 @@ function onClickValidate(
   targetVariable: string,
   refSymbolSize: number,
   refValueForSymbolSize: number,
-  color: string,
+  colorProperties: {
+    mode: ProportionalSymbolsColorMode,
+    value: string | ClassificationParameters | CategoricalChoroplethParameters,
+  },
   newLayerName: string,
   symbolType: ProportionalSymbolsSymbolType,
   extent: [number, number],
@@ -86,15 +93,17 @@ function onClickValidate(
 
   const propSymbolsParameters = {
     variable: targetVariable,
-    color,
     symbolType,
     referenceRadius: refSymbolSize,
     referenceValue: refValueForSymbolSize,
     avoidOverlapping,
     iterations: 100,
     movable: false,
-    colorMode: 'singleColor',
-  } as ProportionalSymbolSingleColorParameters;
+    colorMode: colorProperties.mode,
+    color: colorProperties.value,
+  };
+
+  console.log(propSymbolsParameters);
 
   // Copy dataset
   const newData = JSON.parse(
@@ -182,13 +191,15 @@ function onClickValidate(
     strokeColor: '#000000',
     strokeWidth: 1,
     strokeOpacity: 1,
-    fillColor: propSymbolsParameters.color,
+    fillColor: colorProperties.mode === 'singleColor'
+      ? propSymbolsParameters.color
+      : undefined,
     fillOpacity: 1,
     dropShadow: false,
     blurFilter: false,
     shapeRendering: 'auto',
     rendererParameters: propSymbolsParameters,
-  } as LayerDescription;
+  } as LayerDescriptionProportionalSymbols;
 
   const legend = {
     // Legend common part
@@ -238,50 +249,54 @@ export default function ProportionalSymbolsSettings(
 ): JSX.Element {
   const { LL } = useI18nContext();
 
-  const layerDescription = createMemo(() => layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!);
+  const layerDescription = layersDescriptionStore.layers
+    .find((l) => l.id === props.layerId)!;
 
-  // if (!layerDescription) {
-  //   throw Error('Unexpected Error: Layer not found');
-  // }
-
-  const geometryType = createMemo(() => layerDescription().type);
+  const geometryType = layerDescription.type as VectorType;
 
   // The fields of the layer that are of type 'stock'.
   // We know that we have such fields because otherwise this component would not be rendered.
-  const targetFields = createMemo(() => layerDescription()
-    .fields.filter((variable) => variable.type === 'stock'));
+  const targetFields = layerDescription
+    .fields.filter((variable) => variable.type === 'stock');
 
-  const targetFieldsRatio = createMemo(() => layerDescription()
-    .fields.filter((variable) => variable.type === 'ratio'));
+  const targetFieldsRatio = layerDescription
+    .fields.filter((variable) => variable.type === 'ratio');
 
-  const targetFieldsCategory = createMemo(() => layerDescription()
-    .fields.filter((variable) => variable.type === 'categorical'));
+  const targetFieldsCategory = layerDescription
+    .fields.filter((variable) => variable.type === 'categorical');
   // if (!targetFields || targetFields.length === 0) {
   //   throw Error('Unexpected Error: No stock field found');
   // }
 
+  const availableColorModes = [ProportionalSymbolsColorMode.singleColor];
+  if (targetFieldsCategory.length > 0) {
+    availableColorModes.push(ProportionalSymbolsColorMode.categoricalVariable);
+  }
+  if (targetFieldsRatio.length > 0) {
+    availableColorModes.push(ProportionalSymbolsColorMode.ratioVariable);
+  }
+
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal<string>(targetFields()![0].name);
+  ] = createSignal<string>(targetFields![0].name);
 
   const [
     targetRatioVariable,
     setTargetRatioVariable,
   ] = createSignal<string | null>(
-    targetFieldsRatio().length > 0 ? targetFieldsRatio()![0].name : null,
+    targetFieldsRatio.length > 0 ? targetFieldsRatio![0].name : null,
   );
 
   const [
     targetCategoryVariable,
     setTargetCategoryVariable,
   ] = createSignal<string | null>(
-    targetFieldsCategory().length > 0 ? targetFieldsCategory()![0].name : null,
+    targetFieldsCategory.length > 0 ? targetFieldsCategory![0].name : null,
   );
 
   // Reactive variable that contains the values of the target variable
-  const values = createMemo(() => layerDescription().data.features
+  const values = createMemo(() => layerDescription.data.features
     .map((feature) => feature.properties[targetVariable()])
     .filter((value) => isNumber(value))
     .map((value: any) => +value) as number[]);
@@ -294,7 +309,7 @@ export default function ProportionalSymbolsSettings(
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>(`ProportionalSymbols_${layerDescription().name}`);
+  ] = createSignal<string>(`ProportionalSymbols_${layerDescription.name}`);
   const [
     symbolType,
     setSymbolType,
@@ -317,15 +332,18 @@ export default function ProportionalSymbolsSettings(
     setColor,
   ] = createSignal<string>(randomColorFromCategoricalPalette('Vivid'));
   // Options for ratioVariable mode
-  // TODO: ...
+  const [
+    targetClassification,
+    setTargetClassification,
+  ] = createSignal<ClassificationParameters>();
   // Options for categoricalVariable mode
   const [
     categoriesMapping,
     setCategoriesMapping,
   ] = createSignal<CategoricalChoroplethMapping[]>(
-    targetFieldsCategory()
+    targetFieldsCategory
       ? makeCategoriesMapping(
-        makeCategoriesMap(layerDescription().data.features, targetCategoryVariable()),
+        makeCategoriesMap(layerDescription.data.features, targetCategoryVariable()!),
       )
       : [],
   );
@@ -353,6 +371,33 @@ export default function ProportionalSymbolsSettings(
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
+    const colorProperties: {
+      mode: ProportionalSymbolsColorMode,
+      value: string | ClassificationParameters | CategoricalChoroplethParameters,
+    } = {
+      mode: colorMode(),
+      value: undefined,
+    };
+
+    switch (colorMode()) {
+      case ProportionalSymbolsColorMode.singleColor:
+        colorProperties.value = color();
+        break;
+      case ProportionalSymbolsColorMode.ratioVariable:
+        colorProperties.value = targetClassification()!;
+        break;
+      case ProportionalSymbolsColorMode.categoricalVariable:
+        colorProperties.value = {
+          variable: targetCategoryVariable(),
+          noDataColor: '#ffffff',
+          mapping: categoriesMapping(),
+        } as CategoricalChoroplethParameters;
+        break;
+      default:
+        throw Error('This should not happen');
+        break;
+    }
+
     // Close the current modal
     setPortrayalSelectionStore({ show: false, layerId: '' });
 
@@ -364,11 +409,11 @@ export default function ProportionalSymbolsSettings(
     // Actually make the new layer
     setTimeout(() => {
       onClickValidate(
-        layerDescription().id,
+        layerDescription.id,
         targetVariable(),
         refSymbolSize(),
         refValueForSymbolSize(),
-        color(),
+        colorProperties,
         layerName,
         symbolType(),
         [minValues(), maxValues()],
@@ -388,7 +433,7 @@ export default function ProportionalSymbolsSettings(
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
     >
-      <For each={targetFields()}>
+      <For each={targetFields}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
       </For>
     </InputFieldSelect>
@@ -401,7 +446,7 @@ export default function ProportionalSymbolsSettings(
         // For points and polygons we allow circle and square
         // For linestrings we allow circle, square and line
         Object.values(ProportionalSymbolsSymbolType)
-          .filter((st) => (geometryType() === 'linestring' ? true : st !== ProportionalSymbolsSymbolType.line))
+          .filter((st) => (geometryType === 'linestring' ? true : st !== ProportionalSymbolsSymbolType.line))
       }>
         {
           (st) => <option
@@ -426,21 +471,23 @@ export default function ProportionalSymbolsSettings(
       max={ 999 }
       step={ 0.1 }
     />
-    <InputFieldSelect
-      label={'Color mode'}
-      onChange={(v) => { setColorMode(v as ProportionalSymbolsColorMode); }}
-      value={colorMode()}
-    >
-      <For each={Object.values(ProportionalSymbolsColorMode)}>
-        {
-          (cm) => (
-            <option value={cm}>
-              {LL().PortrayalSection.ProportionalSymbolsOptions.ColorModes[cm]()}
-            </option>
-          )
-        }
-      </For>
-    </InputFieldSelect>
+    <Show when={availableColorModes.length > 1}>
+      <InputFieldSelect
+        label={'Color mode'}
+        onChange={(v) => { setColorMode(v as ProportionalSymbolsColorMode); }}
+        value={colorMode()}
+      >
+        <For each={availableColorModes}>
+          {
+            (cm) => (
+              <option value={cm}>
+                {LL().PortrayalSection.ProportionalSymbolsOptions.ColorModes[cm]()}
+              </option>
+            )
+          }
+        </For>
+      </InputFieldSelect>
+    </Show>
     <Switch>
       <Match when={colorMode() === 'singleColor'}>
         <InputFieldColor
@@ -450,20 +497,58 @@ export default function ProportionalSymbolsSettings(
         />
       </Match>
       <Match when={colorMode() === 'ratioVariable'}>
-        <p>TODO</p>
+        <InputFieldSelect
+          label={''}
+          onChange={(value) => { setTargetRatioVariable(value); }}
+          value={ targetRatioVariable()! }
+        >
+          <For each={targetFieldsRatio}>
+            { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+          </For>
+        </InputFieldSelect>
+        <Show when={targetRatioVariable()}>
+          <ChoroplethClassificationSelector
+            values={values}
+            targetVariable={() => targetRatioVariable()!}
+            targetClassification={targetClassification}
+            setTargetClassification={setTargetClassification}
+          />
+        </Show>
       </Match>
       <Match when={colorMode() === 'categoricalVariable'}>
-        <CategoriesSummary mapping={categoriesMapping()} />
-        <CollapsibleSection title={LL().PortrayalSection.CategoricalChoroplethOptions.ShowChart()}>
-          <CategoriesPlot mapping={categoriesMapping()} />
-        </CollapsibleSection>
-        <CollapsibleSection title={LL().PortrayalSection.CategoricalChoroplethOptions.Customize()}>
-          <CategoriesCustomisation
-            mapping={categoriesMapping}
-            setMapping={setCategoriesMapping}
-            detailed={true}
-          />
-        </CollapsibleSection>
+        <InputFieldSelect
+          label={''}
+          onChange={(value) => {
+            setTargetCategoryVariable(value);
+            setCategoriesMapping(
+              makeCategoriesMapping(
+                makeCategoriesMap(layerDescription.data.features, value),
+              ),
+            );
+          }}
+          value={ targetCategoryVariable()! }
+        >
+          <For each={targetFieldsCategory}>
+            { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+          </For>
+        </InputFieldSelect>
+        <Show when={targetCategoryVariable()}>
+          <CategoriesSummary mapping={categoriesMapping()} />
+          <CollapsibleSection
+            title={LL().PortrayalSection.CategoricalChoroplethOptions.ShowChart()}
+          >
+            <CategoriesPlot mapping={categoriesMapping()} />
+          </CollapsibleSection>
+          <CollapsibleSection
+            title={LL().PortrayalSection.CategoricalChoroplethOptions.Customize()}
+          >
+            <CategoriesCustomisation
+              mapping={categoriesMapping}
+              setMapping={setCategoriesMapping}
+              detailed={true}
+            />
+          </CollapsibleSection>
+        </Show>
       </Match>
     </Switch>
     <InputFieldCheckbox

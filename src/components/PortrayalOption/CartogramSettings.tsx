@@ -129,14 +129,14 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
   const { LL } = useI18nContext();
 
   // The description of the layer for which we are creating the settings menu
-  const layerDescription = createMemo(() => layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!);
+  const layerDescription = layersDescriptionStore.layers
+    .find((l) => l.id === props.layerId)!;
 
   // The fields of the layer that are of type 'ratio'
   // (i.e. the fields that can be used for the choropleth).
   // We know that we have such fields because otherwise this component would not be rendered.
-  const targetFields = createMemo(() => layerDescription()
-    .fields.filter((variable) => variable.type === VariableType.stock));
+  const targetFields = layerDescription
+    .fields.filter((variable) => variable.type === VariableType.stock);
 
   // The description of the current projection
   const currentProjection = unwrap(mapStore.projection);
@@ -150,8 +150,8 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
   // Signals for the current component:
   // the target variable, the target layer name, the method to use
   // (and the number of iterations for some algorithms)
-  const [targetVariable, setTargetVariable] = createSignal<string>(targetFields()[0].name);
-  const [newLayerName, setNewLayerName] = createSignal<string>(`Cartogram_${layerDescription().name}`);
+  const [targetVariable, setTargetVariable] = createSignal<string>(targetFields[0].name);
+  const [newLayerName, setNewLayerName] = createSignal<string>(`Cartogram_${layerDescription.name}`);
   const [
     cartogramMethod,
     setCartogramMethod,
@@ -178,7 +178,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
     // Create the portrayal
     setTimeout(() => {
       onClickValidate(
-        layerDescription().id,
+        layerDescription.id,
         targetVariable(),
         cartogramMethod(),
         layerName,
@@ -198,7 +198,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
     >
-      <For each={targetFields()}>
+      <For each={targetFields}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
       </For>
     </InputFieldSelect>

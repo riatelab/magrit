@@ -153,16 +153,16 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
   const { LL } = useI18nContext();
 
   // The description of the layer for which we are creating the settings menu
-  const layerDescription = createMemo(() => layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!);
+  const layerDescription = layersDescriptionStore.layers
+    .find((l) => l.id === props.layerId)!;
 
   // The fields of the layer that can be used as a target variable for this portrayal
   // (i.e. all the fields).
   // We know that we have such fields because otherwise this component would not be rendered.
-  const targetFields = createMemo(() => layerDescription().fields);
+  const targetFields = layerDescription.fields;
 
-  const [targetVariable, setTargetVariable] = createSignal<string>(targetFields()![0].name);
-  const [newLayerName, setNewLayerName] = createSignal<string>(`Labels_${layerDescription().name}`);
+  const [targetVariable, setTargetVariable] = createSignal<string>(targetFields![0].name);
+  const [newLayerName, setNewLayerName] = createSignal<string>(`Labels_${layerDescription.name}`);
 
   const makePortrayal = async () => {
     // Find a suitable name for the new layer
@@ -182,7 +182,7 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
     // Create the portrayal
     setTimeout(() => {
       onClickValidate(
-        layerDescription().id,
+        layerDescription.id,
         targetVariable(),
         layerName,
       );
@@ -200,7 +200,7 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
       onChange={(v) => setTargetVariable(v)}
       value={targetVariable()}
     >
-      <For each={targetFields()}>
+      <For each={targetFields}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
       </For>
     </InputFieldSelect>

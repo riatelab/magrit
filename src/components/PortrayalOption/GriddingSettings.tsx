@@ -183,15 +183,15 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
   const { LL } = useI18nContext();
 
   // The description of the layer of which we want to create a gridded representation
-  const layerDescription = createMemo(() => layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!);
+  const layerDescription = layersDescriptionStore.layers
+    .find((l) => l.id === props.layerId)!;
 
   // The bbox of the layer
-  const bboxLayer = createMemo(() => bbox(layerDescription().data));
+  const bboxLayer = bbox(layerDescription.data);
 
   // The fields of interest on the selected layer
-  const targetFields = createMemo(() => layerDescription()
-    .fields.filter((variable) => variable.type === VariableType.stock));
+  const targetFields = layerDescription
+    .fields.filter((variable) => variable.type === VariableType.stock);
 
   // The description of the current projection
   const currentProjection = unwrap(mapStore.projection);
@@ -204,14 +204,14 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
   // Appropriate resolution for the grid
   const appropriateResolution = (
     1000 * +(
-      computeAppropriateResolution(bboxLayer(), 0.1).toPrecision(2))
+      computeAppropriateResolution(bboxLayer, 0.1).toPrecision(2))
   ) * toMeter;
 
   // Signals for options
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal<string>(targetFields()![0].name);
+  ] = createSignal<string>(targetFields![0].name);
   const [
     cellType,
     setCellType,
@@ -223,7 +223,7 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal(`Gridded_${layerDescription().name}`);
+  ] = createSignal(`Gridded_${layerDescription.name}`);
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
@@ -232,10 +232,10 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
     );
 
     const gridParams = {
-      xMin: bboxLayer()[0],
-      yMin: bboxLayer()[1],
-      xMax: bboxLayer()[2],
-      yMax: bboxLayer()[3],
+      xMin: bboxLayer[0],
+      yMin: bboxLayer[1],
+      xMax: bboxLayer[2],
+      yMax: bboxLayer[3],
       resolution: targetResolution(),
     } as GridParameters;
 
@@ -250,7 +250,7 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
     // Create the portrayal
     setTimeout(() => {
       onClickValidate(
-        layerDescription().id,
+        layerDescription.id,
         targetVariable(),
         layerName,
         gridParams,
@@ -271,7 +271,7 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
     >
-      <For each={targetFields()}>
+      <For each={targetFields}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
       </For>
     </InputFieldSelect>

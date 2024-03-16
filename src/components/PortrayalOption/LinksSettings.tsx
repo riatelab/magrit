@@ -232,21 +232,21 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
   const { LL } = useI18nContext();
 
   // The description of the layer for which we are creating the settings menu
-  const layerDescription = createMemo(() => layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!);
+  const layerDescription = layersDescriptionStore.layers
+    .find((l) => l.id === props.layerId)!;
 
   // The fields of the layer that are of type 'identified'
   // (i.e. the fields that can be used to identify the origin
   // and destination of the links to be created)
   // We know that we have such fields because otherwise this component would not be rendered.
-  const targetFields = createMemo(() => layerDescription()
-    .fields.filter((variable) => variable.type === VariableType.identifier));
+  const targetFields = layerDescription
+    .fields.filter((variable) => variable.type === VariableType.identifier);
 
   // Signals for the current component:
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal<string>(targetFields()![0].name);
+  ] = createSignal<string>(targetFields![0].name);
   const [
     targetDataset,
     setTargetDataset,
@@ -266,7 +266,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>(`Links_${layerDescription().name}`);
+  ] = createSignal<string>(`Links_${layerDescription.name}`);
 
   const targetFieldsOD = createMemo(() => {
     if (targetDataset() === '') {
@@ -315,7 +315,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
         && destinationVariable() !== ''
       ) {
         const matching = hasMatchingIds(
-          layerDescription(),
+          layerDescription,
           layersDescriptionStore.tables.find((t) => t.id === targetDataset())!,
           targetVariable(),
           originVariable(),
@@ -345,7 +345,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
     // Create the portrayal
     setTimeout(() => {
       onClickValidate(
-        layerDescription().id,
+        layerDescription.id,
         targetDataset(),
         targetVariable(),
         originVariable(),
@@ -372,7 +372,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
       }}
       value={ targetVariable() }
     >
-      <For each={targetFields()}>
+      <For each={targetFields}>
         { (variable) => <option value={variable.name}>{variable.name}</option> }
       </For>
     </InputFieldSelect>

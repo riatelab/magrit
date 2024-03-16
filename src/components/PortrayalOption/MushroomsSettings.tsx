@@ -209,48 +209,48 @@ export default function MushroomsSettings(
 ): JSX.Element {
   const { LL } = useI18nContext();
 
-  const layerDescription = createMemo(() => layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!);
+  const layerDescription = layersDescriptionStore.layers
+    .find((l) => l.id === props.layerId)!;
 
   // The fields of the layer that are of type 'stock'.
   // We know that we have such fields because otherwise this component would not be rendered.
-  const targetFields = createMemo(() => layerDescription()
-    .fields.filter((variable) => variable.type === 'stock'));
+  const targetFields = layerDescription
+    .fields.filter((variable) => variable.type === 'stock');
 
   const [
     targetVariableTop,
     setTargetVariableTop,
-  ] = createSignal<string>(targetFields()![0].name);
+  ] = createSignal<string>(targetFields![0].name);
 
   const [
     targetVariableBottom,
     setTargetVariableBottom,
-  ] = createSignal<string>(targetFields()![1].name);
+  ] = createSignal<string>(targetFields![1].name);
 
   // Reactive variable that contains the values of the target variable
   // for the top part of the mushroom.
-  const valuesTop = createMemo(() => layerDescription().data.features
+  const valuesTop = createMemo(() => layerDescription.data.features
     .map((feature) => feature.properties[targetVariableTop()])
     .filter((value) => isNumber(value))
     .map((value: any) => +value) as number[]);
 
-  const valuesBottom = createMemo(() => layerDescription().data.features
+  const valuesBottom = createMemo(() => layerDescription.data.features
     .map((feature) => feature.properties[targetVariableBottom()])
     .filter((value) => isNumber(value))
     .map((value: any) => +value) as number[]);
 
   // Reactive variables that contains the extent (min and max) of the target variables
-  const extentTop = createMemo(
+  const extentTop = createMemo<[number, number]>(
     () => [min(valuesTop() as number[]), max(valuesTop() as number[])],
   );
-  const extentBottom = createMemo(
+  const extentBottom = createMemo<[number, number]>(
     () => [min(valuesBottom() as number[]), max(valuesBottom() as number[])],
   );
 
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>(`Mushroom_${layerDescription().name}`);
+  ] = createSignal<string>(`Mushroom_${layerDescription.name}`);
   // const [
   //   symbolType,
   //   setSymbolType,
@@ -307,7 +307,7 @@ export default function MushroomsSettings(
     // Actually create the portrayal
     setTimeout(() => {
       onClickValidate(
-        layerDescription().id,
+        layerDescription.id,
         {
           variable: targetVariableTop(),
           symbolType: ProportionalSymbolsSymbolType.circle,
@@ -346,7 +346,7 @@ export default function MushroomsSettings(
       }}
       value={targetVariableTop()}
     >
-      <For each={targetFields()}>
+      <For each={targetFields}>
         {(variable) => <option value={variable.name}>{variable.name}</option>}
       </For>
     </InputFieldSelect>
@@ -387,7 +387,7 @@ export default function MushroomsSettings(
       }}
       value={targetVariableBottom()}
     >
-      <For each={targetFields()}>
+      <For each={targetFields}>
         {(variable) => <option value={variable.name}>{variable.name}</option>}
       </For>
     </InputFieldSelect>

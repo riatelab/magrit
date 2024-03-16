@@ -74,8 +74,8 @@ export default function SimplificationSettings(
 ): JSX.Element {
   const { LL } = useI18nContext();
 
-  const layerDescription = createMemo(() => layersDescriptionStore.layers
-    .find((layer) => layer.id === props.layerId) as LayerDescription);
+  const layerDescription = layersDescriptionStore.layers
+    .find((layer) => layer.id === props.layerId)!;
 
   const [
     simplifiedLayers,
@@ -105,7 +105,7 @@ export default function SimplificationSettings(
     // Actually create the new layer
     setTimeout(async () => {
       await onClickValidate(
-        layerDescription().id,
+        layerDescription.id,
         simplifiedLayers()[0],
         layerName,
       );

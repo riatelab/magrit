@@ -235,26 +235,26 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   const { LL } = useI18nContext();
 
   // The description of the layer to be smoothed
-  const layerDescription = createMemo(() => layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!);
+  const layerDescription = layersDescriptionStore.layers
+    .find((l) => l.id === props.layerId)!;
 
   // The bbox of the layer to be smoothed
-  const bboxLayer = createMemo(() => bbox(layerDescription().data));
+  const bboxLayer = bbox(layerDescription.data);
 
   // The fields of the layer to be smoothed.
   // We know that we have such fields because otherwise this component would not be rendered.
-  const targetFields = createMemo(() => layerDescription()
+  const targetFields = layerDescription
     .fields.filter((variable) => (
-      variable.type === VariableType.ratio || variable.type === VariableType.stock)));
+      variable.type === VariableType.ratio || variable.type === VariableType.stock));
 
   // Appropriate resolution for the grid
-  const appropriateResolution = +(computeAppropriateResolution(bboxLayer(), 1).toPrecision(2));
+  const appropriateResolution = +(computeAppropriateResolution(bboxLayer, 1).toPrecision(2));
 
   // Signals for common options
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal<string>(targetFields()![0].name);
+  ] = createSignal<string>(targetFields![0].name);
   const [
     targetSmoothingMethod,
     setTargetSmoothingMethod,
@@ -266,7 +266,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal(`Smoothed_${layerDescription().name}`);
+  ] = createSignal(`Smoothed_${layerDescription.name}`);
 
   // Signals for KDE options
   const [
@@ -309,10 +309,10 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       } as Partial<StewartParameters>;
 
     const gridParams = {
-      xMin: bboxLayer()[0],
-      yMin: bboxLayer()[1],
-      xMax: bboxLayer()[2],
-      yMax: bboxLayer()[3],
+      xMin: bboxLayer[0],
+      yMin: bboxLayer[1],
+      xMax: bboxLayer[2],
+      yMax: bboxLayer[3],
       resolution: targetResolution(),
     } as GridParameters;
 
@@ -327,7 +327,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     // Actually make the new layer
     setTimeout(() => {
       onClickValidate(
-        layerDescription().id,
+        layerDescription.id,
         layerName,
         targetVariable(),
         gridParams,
@@ -349,7 +349,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       onChange={(v) => { setTargetVariable(v); }}
       value={targetVariable()}
     >
-      <For each={targetFields()}>
+      <For each={targetFields}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
       </For>
     </InputFieldSelect>

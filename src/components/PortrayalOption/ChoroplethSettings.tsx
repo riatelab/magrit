@@ -9,15 +9,11 @@ import { produce } from 'solid-js/store';
 
 // Imports from other packages
 import { getPalette, Palette } from 'dicopal';
-import {
-  quantile, equal, jenks, q6,
-} from 'statsbreaks';
-import { FaSolidCircleCheck } from 'solid-icons/fa';
+import { quantile } from 'statsbreaks';
 import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
-import { setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 import { setLoading } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
@@ -28,7 +24,6 @@ import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore'
 
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { noop } from '../../helpers/classification';
 import { findSuitableName, getMinimumPrecision, isNumber } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
 import { generateIdLayer } from '../../helpers/layers';
@@ -38,15 +33,12 @@ import { VariableType } from '../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Subcomponents
-import InputResultName from './InputResultName.tsx';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
-
-// Assets
-import imgQuantiles from '../../assets/quantiles.png';
-import imgEqualIntervals from '../../assets/equal_intervals.png';
-import imgQ6 from '../../assets/q6.png';
-import imgJenks from '../../assets/jenks.png';
-import imgMoreOption from '../../assets/buttons2.svg?url';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import InputResultName from './InputResultName.tsx';
+import { ChoroplethClassificationSelector } from './ChoroplethComponents.tsx';
+import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Types
 import type { PortrayalSettingsProps } from './common';
@@ -58,11 +50,8 @@ import {
   ClassificationMethod,
   LegendType,
   Orientation,
-  RepresentationType,
+  RepresentationType, CustomPalette,
 } from '../../global.d';
-import InputFieldSelect from '../Inputs/InputSelect.tsx';
-import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
-import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 // eslint-disable-next-line prefer-destructuring
 const defaultColorScheme = applicationSettingsStore.defaultColorScheme;
@@ -167,47 +156,31 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
   const { LL } = useI18nContext();
 
   // The description of the layer for which we are creating the settings menu
-  const layerDescription = createMemo(() => layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!);
+  const layerDescription = layersDescriptionStore.layers
+    .find((l) => l.id === props.layerId)!;
 
   // The fields of the layer that are of type 'ratio'
   // (i.e. the fields that can be used for the choropleth).
   // We know that we have such fields because otherwise this component would not be rendered.
-  const targetFields = createMemo(() => layerDescription()
-    .fields.filter((variable) => variable.type === VariableType.ratio));
+  const targetFields = layerDescription
+    .fields.filter((variable) => variable.type === VariableType.ratio);
 
   // Signals for the current component:
   // the target variable, the target layer name and the classification parameters
-  const [targetVariable, setTargetVariable] = createSignal<string>(targetFields()[0].name);
-  const [newLayerName, setNewLayerName] = createSignal<string>(`Choropleth_${layerDescription().name}`);
+  const [targetVariable, setTargetVariable] = createSignal<string>(targetFields[0].name);
+  const [newLayerName, setNewLayerName] = createSignal<string>(`Choropleth_${layerDescription.name}`);
   const [displayChartOnMap, setDisplayChartOnMap] = createSignal<boolean>(false);
+
   // Collect the values of the target variable (only those that are numbers)
-  const values = createMemo(() => layerDescription().data.features
+  const values = createMemo(() => layerDescription.data.features
     .map((f) => f.properties[targetVariable()])
     .filter((d) => isNumber(d))
     .map((d: any) => +d) as number[]);
 
   const [
-    noDataColor,
-    setNoDataColor,
-  ] = createSignal<string>(defaultNoDataColor);
-  const numberOfClasses = createMemo(() => Mmin(d3.thresholdSturges(values()), 9));
-
-  const pal = createMemo(() => getPalette(defaultColorScheme, numberOfClasses()) as Palette);
-
-  const [
     targetClassification,
     setTargetClassification,
-  ] = createSignal<ClassificationParameters>({
-    variable: targetVariable(), // eslint-disable-line solid/reactivity
-    method: ClassificationMethod.quantiles,
-    classes: numberOfClasses(),
-    breaks: quantile(values(), { nb: numberOfClasses(), precision: null }),
-    palette: pal(),
-    noDataColor: noDataColor(),
-    entitiesByClass: [],
-    reversePalette: false,
-  } as ClassificationParameters);
+  ] = createSignal<ClassificationParameters>();
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
@@ -226,12 +199,12 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
     // Actually create the layer
     setTimeout(() => {
       onClickValidate(
-        layerDescription().id,
+        layerDescription.id,
         targetVariable(),
-        targetClassification(),
+        targetClassification()!,
         layerName,
         LL().ClassificationPanel
-          .classificationMethodLegendDescriptions[targetClassification().method](),
+          .classificationMethodLegendDescriptions[targetClassification()!.method](),
       );
       // Hide loading overlay
       setLoading(false);
@@ -246,158 +219,19 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
       label={ LL().PortrayalSection.CommonOptions.Variable() }
       onChange={(value) => {
         setTargetVariable(value);
-        setTargetClassification({
-          variable: targetVariable(), // eslint-disable-line solid/reactivity
-          method: ClassificationMethod.quantiles,
-          classes: numberOfClasses(),
-          breaks: quantile(values(), { nb: numberOfClasses(), precision: null }),
-          palette: pal(),
-          noDataColor: defaultNoDataColor,
-          entitiesByClass: [],
-          reversePalette: false,
-        } as ClassificationParameters);
       }}
       value={ targetVariable() }
     >
-      <For each={targetFields()}>
+      <For each={targetFields}>
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
       </For>
     </InputFieldSelect>
-    <div class="field-block">
-      <label class="label">{ LL().PortrayalSection.ChoroplethOptions.Classification() }</label>
-      <div style={{
-        width: '30vh', display: 'flex', 'justify-content': 'space-between', margin: 'auto',
-      }}>
-        <button
-          aria-label={LL().ClassificationPanel.classificationMethods.quantiles()}
-          class="unstyled"
-          title={LL().ClassificationPanel.classificationMethods.quantiles()}
-          onClick={() => {
-            setTargetClassification({
-              variable: targetVariable(), // eslint-disable-line solid/reactivity
-              method: ClassificationMethod.quantiles,
-              classes: numberOfClasses(),
-              breaks: quantile(values(), { nb: numberOfClasses(), precision: null }),
-              palette: pal(),
-              noDataColor: defaultNoDataColor,
-              entitiesByClass: [],
-              reversePalette: false,
-            } as ClassificationParameters);
-          }}
-        >
-          <img
-            class={`mini-button${targetClassification().method === ClassificationMethod.quantiles ? ' selected' : ''}`}
-            src={imgQuantiles}
-            alt={LL().ClassificationPanel.classificationMethods.quantiles()}
-          />
-        </button>
-        <button
-          aria-label={LL().ClassificationPanel.classificationMethods.equalIntervals()}
-          class="unstyled"
-          title={LL().ClassificationPanel.classificationMethods.equalIntervals()}
-          onClick={() => {
-            setTargetClassification({
-              variable: targetVariable(), // eslint-disable-line solid/reactivity
-              method: ClassificationMethod.equalIntervals,
-              classes: numberOfClasses(),
-              breaks: equal(values(), { nb: numberOfClasses(), precision: null }),
-              palette: pal(),
-              noDataColor: defaultNoDataColor,
-              entitiesByClass: [],
-              reversePalette: false,
-            } as ClassificationParameters);
-          }}
-        >
-          <img
-            class={`mini-button${targetClassification().method === ClassificationMethod.equalIntervals ? ' selected' : ''}`}
-            src={imgEqualIntervals}
-            alt={LL().ClassificationPanel.classificationMethods.equalIntervals()}
-          />
-        </button>
-        <button
-          aria-label={LL().ClassificationPanel.classificationMethods.q6()}
-          class="unstyled"
-          title={LL().ClassificationPanel.classificationMethods.q6()}
-          onClick={() => {
-            setTargetClassification({
-              variable: targetVariable(), // eslint-disable-line solid/reactivity
-              method: ClassificationMethod.q6,
-              classes: 6,
-              breaks: q6(values(), { precision: null }),
-              palette: getPalette(defaultColorScheme, 6) as Palette,
-              noDataColor: defaultNoDataColor,
-              entitiesByClass: [],
-              reversePalette: false,
-            } as ClassificationParameters);
-          }}
-        >
-          <img
-            class={`mini-button${targetClassification().method === ClassificationMethod.q6 ? ' selected' : ''}`}
-            src={imgQ6}
-            alt={LL().ClassificationPanel.classificationMethods.q6()}
-          />
-        </button>
-        <button
-          aria-label={LL().ClassificationPanel.classificationMethods.jenks()}
-          class="unstyled"
-          title={LL().ClassificationPanel.classificationMethods.jenks()}
-          onClick={() => {
-            setTargetClassification({
-              variable: targetVariable(), // eslint-disable-line solid/reactivity
-              method: ClassificationMethod.jenks,
-              classes: numberOfClasses(),
-              breaks: jenks(values(), { nb: numberOfClasses(), precision: null }),
-              palette: pal(),
-              noDataColor: defaultNoDataColor,
-              entitiesByClass: [],
-              reversePalette: false,
-            } as ClassificationParameters);
-          }}
-        >
-          <img
-            class={`mini-button${targetClassification().method === ClassificationMethod.jenks ? ' selected' : ''}`}
-            src={imgJenks}
-            alt={LL().ClassificationPanel.classificationMethods.jenks()}
-          />
-        </button>
-        <button
-          aria-label={LL().ClassificationPanel.classificationMethods.manual()}
-          class="unstyled"
-          title={LL().ClassificationPanel.classificationMethods.manual()}
-          onClick={() => {
-            setClassificationPanelStore({
-              show: true,
-              layerName: newLayerName(),
-              variableName: targetVariable(),
-              series: layerDescription().data.features.map((f) => f.properties[targetVariable()]),
-              nClasses: numberOfClasses(),
-              colorScheme: defaultColorScheme,
-              invertColorScheme: false,
-              noDataColor: targetClassification().noDataColor,
-              onCancel: noop,
-              onConfirm: (classification: ClassificationParameters) => {
-                setTargetClassification(classification);
-              },
-            });
-          }}
-        >
-          <img
-            class={`mini-button${targetClassification().method === ClassificationMethod.manual ? ' selected' : ''}`}
-            src={imgMoreOption}
-            alt={LL().ClassificationPanel.classificationMethods.manual()}
-          />
-        </button>
-      </div>
-      <div style={{
-        display: 'flex', 'align-items': 'center', margin: '10px auto auto auto', 'justify-content': 'center',
-      }}>
-        <FaSolidCircleCheck fill={'green'} style={{ 'margin-right': '10px' }}/>
-        {LL().ClassificationPanel.classificationMethods[targetClassification().method]()}
-        , {
-        // eslint-disable-next-line max-len
-        LL().PortrayalSection.ChoroplethOptions.CurrentNumberOfClasses(targetClassification().classes)}
-      </div>
-    </div>
+    <ChoroplethClassificationSelector
+      values={values}
+      targetVariable={targetVariable}
+      targetClassification={targetClassification}
+      setTargetClassification={setTargetClassification}
+    />
     <InputFieldCheckbox
       label={LL().PortrayalSection.ChoroplethOptions.DisplayChartOnMap()}
       checked={displayChartOnMap()}
@@ -407,6 +241,10 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
       onKeyUp={ (value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />
-    <ButtonValidation label={ LL().PortrayalSection.CreateLayer() } onClick={ makePortrayal } />
+    <ButtonValidation
+      disabled={targetClassification() === undefined}
+      label={ LL().PortrayalSection.CreateLayer() }
+      onClick={ makePortrayal }
+    />
   </div>;
 }

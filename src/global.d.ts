@@ -74,8 +74,6 @@ type LayerDescription = {
     ProportionalSymbolsParameters
     | ClassificationParameters
     | CategoricalChoroplethParameters
-    | ProportionalSymbolsParameters & ClassificationParameters
-    | ProportionalSymbolsParameters & CategoricalChoroplethParameters
     | DiscontinuityParameters
     | CartogramParameters
     | GriddedLayerParameters
@@ -86,8 +84,6 @@ type LayerDescription = {
     | MushroomsParameters
     // | DefaultRendererParameters
   ),
-  // Parameters of the legend associated to the layer
-  // legend?: LegendParameters | LegendParameters[],
 };
 
 type TableDescription = {
@@ -293,7 +289,7 @@ export enum ProportionalSymbolsColorMode {
   categoricalVariable = 'categoricalVariable',
 }
 
-export interface ProportionalSymbolsParameters {
+export interface ProportionalSymbolsParametersBase {
   // The name of the variable used to compute the radius of the symbols
   variable: string,
   // The type of symbol to use
@@ -317,17 +313,25 @@ export interface ProportionalSymbolsParameters {
   colorMode: ProportionalSymbolsColorMode,
 }
 
-type ProportionalSymbolSingleColorParameters = ProportionalSymbolsParameters & {
+type ProportionalSymbolSingleColorParameters = ProportionalSymbolsParametersBase & {
   colorMode: ProportionalSymbolsColorMode.singleColor,
-} & { color: string };
+  color: string,
+};
 
-type ProportionalSymbolsRatioParameters = ProportionalSymbolsParameters & {
+type ProportionalSymbolsRatioParameters = ProportionalSymbolsParametersBase & {
   colorMode: ProportionalSymbolsColorMode.ratioVariable,
-} & ClassificationParameters;
+  color: ClassificationParameters,
+};
 
-type ProportionalSymbolCategoryParameters = ProportionalSymbolsParameters & {
-  colorMode: ProportionalSymbolsColorMode.categoryVariable,
-} & CategoricalChoroplethParameters;
+type ProportionalSymbolCategoryParameters = ProportionalSymbolsParametersBase & {
+  colorMode: ProportionalSymbolsColorMode.categoricalVariable,
+  color: CategoricalChoroplethParameters,
+};
+
+type ProportionalSymbolsParameters =
+ProportionalSymbolSingleColorParameters
+| ProportionalSymbolsRatioParameters
+| ProportionalSymbolCategoryParameters;
 
 export interface HalfProportionalMarkParameters {
   variable: string,
