@@ -1,10 +1,16 @@
 import { createStore } from 'solid-js/store';
 
-type ContextMenuEntry = {
-  type?: 'entry' | 'divider',
-  label?: string,
-  callback?: () => void,
+type ItemEntry = {
+  type?: 'entry' | 'item',
+  label: string,
+  callback: () => void,
 };
+
+type DividerEntry = {
+  type: 'divider',
+};
+
+export type ContextMenuEntry = ItemEntry | DividerEntry;
 
 type ContextMenuStoreType = {
   show: boolean,

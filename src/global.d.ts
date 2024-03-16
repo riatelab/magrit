@@ -50,7 +50,7 @@ type LayerDescription = {
   strokeWidth?: number,
   // The opacity of the stroke
   strokeOpacity?: number,
-  // ...
+  // The dash array value of the stroke
   strokeDasharray?: string,
   // The fill color (not used for Choropleth on point / polygon layers nor for linestring layers)
   fillColor?: string,
@@ -104,7 +104,7 @@ interface DefaultRendererParameters {
   strokeWidth?: number,
   // The opacity of the stroke
   strokeOpacity?: number,
-  // ...
+  // The dash array value of the stroke
   strokeDasharray?: string,
   // The fill color (not used for Choropleth on point / polygon layers nor for linestring layers)
   fillColor?: string,
@@ -122,86 +122,62 @@ interface DefaultRendererParameters {
 type LayerDescriptionChoropleth = LayerDescription & {
   renderer: RepresentationType.choropleth,
   rendererParameters: ClassificationParameters,
-  // legend: ChoroplethLegendParameters,
 };
 
 type LayerDescriptionProportionalSymbols = LayerDescription & {
   renderer: RepresentationType.proportionalSymbols,
   rendererParameters: ProportionalSymbolsParameters,
-  // legend: ProportionalSymbolsLegendParameters,
 };
 
 type LayerDescriptionLabels = LayerDescription & {
   renderer: RepresentationType.labels,
   rendererParameters: LabelsParameters,
-  // legend: LabelsLegendParameters,
 };
 
 type LayerDescriptionCategoricalChoropleth = LayerDescription & {
   renderer: RepresentationType.categoricalChoropleth,
   rendererParameters: CategoricalChoroplethParameters,
-  // legend: ChoroplethLegendParameters,
 };
 
 type LayerDescriptionDiscontinuity = LayerDescription & {
   renderer: RepresentationType.discontinuity,
   rendererParameters: DiscontinuityParameters,
-  // legend: DiscontinuityLegendParameters,
 };
 
 type LayerDescriptionCartogram = LayerDescription & {
   renderer: RepresentationType.cartogram,
   rendererParameters: CartogramParameters,
-  // legend: null,
 };
 
 type LayerDescriptionGriddedLayer = LayerDescription & {
   renderer: RepresentationType.grid,
   rendererParameters: GriddedLayerParameters,
-  // legend: ChoroplethLegendParameters,
-};
-
-type LayerDescriptionWaffle = LayerDescription & {
-  renderer: RepresentationType.waffle,
-  rendererParameters: GriddedLayerParameters,
-  // legend: WaffleLegendParameters,
-};
-
-type LayerDescriptionCategoricalPictogram = LayerDescription & {
-  renderer: RepresentationType.categoricalPictogram,
-  rendererParameters: CategoricalPictogramParameters,
-  // legend: null,
 };
 
 type LayerDescriptionLinks = LayerDescription & {
   renderer: RepresentationType.links,
   rendererParameters: LinksParameters,
-  // legend: undefined,
 };
 
 type LayerDescriptionSmoothedLayer = LayerDescription & {
   renderer: RepresentationType.smoothed
   rendererParameters: SmoothedLayerParameters,
-  // legend: ChoroplethLegendParameters,
 };
 
 type LayerDescriptionMushroomLayer = LayerDescription & {
   renderer: RepresentationType.mushrooms,
   rendererParameters: MushroomsParameters,
-  // legend: MushroomsLegendParameters,
 };
 
-type LayerDescriptionCategoricalProportionalSymbols = LayerDescription & {
-  renderer: RepresentationType.proportionalSymbolsAndCategories,
-  rendererParameters: ProportionalSymbolsParameters & CategoricalChoroplethParameters,
-  // legend: [ChoroplethLegendParameters, ProportionalSymbolsLegendParameters],
-};
-
-type LayerDescriptionChoroplethProportionalSymbols = LayerDescription & {
-  renderer: RepresentationType.proportionalSymbolsAndRatio,
-  rendererParameters: ProportionalSymbolsParameters & ClassificationParameters,
-  // legend: [ChoroplethLegendParameters, ProportionalSymbolsLegendParameters],
-};
+// type LayerDescriptionWaffle = LayerDescription & {
+//   renderer: RepresentationType.waffle,
+//   rendererParameters: GriddedLayerParameters,
+// };
+//
+// type LayerDescriptionCategoricalPictogram = LayerDescription & {
+//   renderer: RepresentationType.categoricalPictogram,
+//   rendererParameters: CategoricalPictogramParameters,
+// };
 
 export enum ProportionalSymbolsSymbolType {
   circle = 'circle',

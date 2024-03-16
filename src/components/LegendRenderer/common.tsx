@@ -45,7 +45,7 @@ export function makeLegendText(
   return <g class={`legend-${role}`}>
     <text
       style={{ 'user-select': 'none' }}
-      font-size={props.fontSize}
+      font-size={`${props.fontSize}px`}
       font-weight={props.fontWeight}
       font-style={props.fontStyle}
       font-family={props.fontFamily}

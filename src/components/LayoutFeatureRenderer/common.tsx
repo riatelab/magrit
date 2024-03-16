@@ -13,7 +13,7 @@ import { generateIdLayoutFeature } from '../../helpers/layoutFeatures';
 import LayoutFeatureSettings from '../Modals/LayoutFeatureSetting.tsx';
 
 // Stores
-import { setContextMenuStore } from '../../store/ContextMenuStore';
+import { type ContextMenuEntry, setContextMenuStore } from '../../store/ContextMenuStore';
 import { mapStore } from '../../store/MapStore';
 import { setModalStore } from '../../store/ModalStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
@@ -173,7 +173,7 @@ export function triggerContextMenuLayoutFeature(
   allowEdit: boolean,
   LL: Accessor<TranslationFunctions>,
 ): void {
-  const contextMenuEntries = [
+  const contextMenuEntries: ContextMenuEntry[] = [
     {
       label: LL().LayoutFeatures.ContextMenu.EditSettings(),
       callback: () => {
