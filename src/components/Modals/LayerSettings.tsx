@@ -50,7 +50,7 @@ import {
   type SmoothedLayerParameters,
   LinkCurvature,
   LinkHeadType,
-  ProportionalSymbolsSymbolType,
+  ProportionalSymbolsSymbolType, ProportionalSymbolsParametersBase,
 } from '../../global.d';
 
 // Styles
@@ -331,45 +331,116 @@ function makeSettingsDefaultPoint(
         max={99999999999}
         step={0.1}
       />
+    </Show>
+    <Show when={
+      props.renderer === 'proportionalSymbols'
+      && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'singleColor'
+    }>
       <InputFieldColor
         label={ LL().LayerSettings.FillColor() }
         value={ (props.rendererParameters as ProportionalSymbolsParameters).color as string }
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'color'], v)}
       />
     </Show>
+    <Show when={
+      props.renderer === 'proportionalSymbols'
+      && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'ratioVariable'
+    }>
+      <div class="field" style={{ 'text-align': 'center' }}>
+        <button
+          class="button"
+          style={{ margin: 'auto' }}
+          onClick={() => {
+            // Save current state of classification parameters
+            const params = unproxify(props.rendererParameters!.color as never);
+            setClassificationPanelStore({
+              show: true,
+              layerName: props.name,
+              variableName: (
+                props.rendererParameters!.color as ClassificationParameters).variable,
+              series: props.data.features
+                .map((f) => f.properties[(
+                  props.rendererParameters!.color as ClassificationParameters).variable]),
+              nClasses: (props.rendererParameters!.color as ClassificationParameters).classes,
+              colorScheme: (
+                props.rendererParameters!.color as ClassificationParameters).palette.name,
+              invertColorScheme: (
+                props.rendererParameters!.color as ClassificationParameters).reversePalette,
+              noDataColor: (
+                props.rendererParameters!.color as ClassificationParameters).noDataColor,
+              onCancel: () => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  'rendererParameters',
+                  { color: params },
+                );
+              },
+              onConfirm: (newParams) => {
+                console.log(newParams);
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  'rendererParameters',
+                  { color: newParams },
+                );
+              },
+            });
+          }}
+        >{LL().LayerSettings.ChangeClassification()}</button>
+      </div>
+    </Show>
+    <Show when={
+      props.renderer === 'proportionalSymbols'
+      && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'categoricalVariable'
+    }>
+      <CollapsibleSection
+        title={LL().PortrayalSection.CategoricalChoroplethOptions.Customize()}
+      >
+        <CategoriesCustomisation
+          mapping={() => (
+            props.rendererParameters!.color as CategoricalChoroplethParameters).mapping
+          }
+          setMapping={(m) => {
+            updateProp(props.id, ['rendererParameters', 'color', 'mapping'], m as never);
+          }}
+          detailed={false}
+        />
+      </CollapsibleSection>
+    </Show>
     <InputFieldColor
-      label={ LL().LayerSettings.StrokeColor() }
-      value={ props.strokeColor! }
+      label={LL().LayerSettings.StrokeColor()}
+      value={props.strokeColor!}
       onChange={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
     />
     <InputFieldNumber
-      label={ LL().LayerSettings.FillOpacity() }
-      value={ props.fillOpacity! }
+      label={LL().LayerSettings.FillOpacity()}
+      value={props.fillOpacity!}
       onChange={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
       min={0}
       max={1}
       step={0.1}
     />
     <InputFieldNumber
-      label={ LL().LayerSettings.StrokeOpacity() }
-      value={ props.strokeOpacity! }
+      label={LL().LayerSettings.StrokeOpacity()}
+      value={props.strokeOpacity!}
       onChange={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
       min={0}
       max={1}
       step={0.1}
     />
     <InputFieldNumber
-      label={ LL().LayerSettings.StrokeWidth() }
+      label={LL().LayerSettings.StrokeWidth()}
       value={props.strokeWidth!}
       onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
       min={0}
       max={10}
       step={0.1}
     />
-    <Show when={ props.renderer !== 'proportionalSymbols' && props.renderer !== 'mushrooms' }>
+    <Show when={props.renderer !== 'proportionalSymbols' && props.renderer !== 'mushrooms'}>
       <InputFieldNumber
-        label={ LL().LayerSettings.PointRadius() }
-        value={ props.pointRadius! }
+        label={LL().LayerSettings.PointRadius()}
+        value={props.pointRadius!}
         onChange={(v) => debouncedUpdateProp(props.id, 'pointRadius', v)}
         min={1}
         max={20}

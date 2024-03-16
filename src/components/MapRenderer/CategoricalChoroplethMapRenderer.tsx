@@ -6,7 +6,6 @@ import {
 } from 'solid-js';
 
 // Helpers
-import { unproxify } from '../../helpers/common';
 import { mergeFilterIds } from './common.tsx';
 
 // Stores

@@ -536,8 +536,8 @@ export enum RepresentationType {
   proportionalSymbols = 'proportionalSymbols',
   categoricalChoropleth = 'categoricalChoropleth',
   categoricalPictogram = 'categoricalPictogram',
-  proportionalSymbolsAndCategories = 'proportionalSymbolsAndCategories',
-  proportionalSymbolsAndRatio = 'proportionalSymbolsAndRatio',
+  // proportionalSymbolsAndCategories = 'proportionalSymbolsAndCategories',
+  // proportionalSymbolsAndRatio = 'proportionalSymbolsAndRatio',
   discontinuity = 'discontinuity',
   smoothed = 'smoothed',
   cartogram = 'cartogram',
@@ -653,7 +653,7 @@ interface LegendTextElement {
 }
 
 /**
- * The parameters of the legend for choropleth and categorical choropleth maps
+ * The parameters of the legend for choropleth maps
  */
 interface ChoroplethLegend extends LegendBase {
   type: LegendType.choropleth,
@@ -680,6 +680,9 @@ interface ChoroplethLegend extends LegendBase {
   tick: boolean,
 }
 
+/**
+ * The parameters of the legend for categorical choropleth maps
+ */
 interface CategoricalChoroplethLegend extends LegendBase {
   type: LegendType.categoricalChoropleth,
   // Whether the legend is horizontal or vertical

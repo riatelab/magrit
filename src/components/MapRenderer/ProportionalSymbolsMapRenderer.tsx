@@ -7,8 +7,10 @@ import {
 } from 'solid-js';
 
 // Helpers
-import { PropSizer } from '../../helpers/geo';
 import { bindDragBehavior, mergeFilterIds } from './common.tsx';
+import { getClassifier } from '../../helpers/classification';
+import { isNumber } from '../../helpers/common';
+import { PropSizer } from '../../helpers/geo';
 
 // Directives
 import bindData from '../../directives/bind-data';
@@ -18,6 +20,7 @@ import { globalStore } from '../../store/GlobalStore';
 
 // Types / Interfaces / Enums
 import {
+  ClassificationMethod,
   LayerDescriptionProportionalSymbols,
   ProportionalSymbolsSymbolType,
 } from '../../global.d';
@@ -45,6 +48,34 @@ export default function proportionalSymbolsRenderer(
         bindDragBehavior(symbolElement as SVGGElement, layerDescription, i);
       });
   });
+
+  // eslint-disable-next-line no-nested-ternary
+  const getColor = layerDescription.rendererParameters.colorMode === 'singleColor'
+    ? createMemo(() => () => layerDescription.rendererParameters.color)
+    : layerDescription.rendererParameters.colorMode === 'ratioVariable'
+      ? createMemo(() => {
+        const Cls = getClassifier(ClassificationMethod.manual);
+        const classifier = new Cls(null, null, layerDescription.rendererParameters.color.breaks);
+
+        const colors = layerDescription.rendererParameters.color.reversePalette
+          ? layerDescription.rendererParameters.color.palette.colors.toReversed()
+          : layerDescription.rendererParameters.color.palette.colors;
+
+        return (value: any) => (isNumber(value)
+          ? colors[classifier.getClass(value)]
+          : layerDescription.rendererParameters.color.noDataColor);
+      })
+      : createMemo(() => {
+        const map = new Map<string | number | null | undefined, string>(
+          layerDescription.rendererParameters.color
+            .mapping.map(({ value, color }) => [value, color]),
+        );
+        map.set('', layerDescription.rendererParameters.color.noDataColor);
+        map.set(null, layerDescription.rendererParameters.color.noDataColor);
+        map.set(undefined, layerDescription.rendererParameters.color.noDataColor);
+
+        return (value: string | number | null | undefined) => map.get(value);
+      });
 
   return <g
     ref={refElement!}
@@ -77,7 +108,11 @@ export default function proportionalSymbolsRenderer(
               )}
               cx={projectedCoords()[0]}
               cy={projectedCoords()[1]}
-              fill={layerDescription.rendererParameters.color as string}
+              fill={
+                getColor()(
+                  feature.properties[layerDescription.rendererParameters.color?.variable],
+                )
+              }
               use:bindData={feature}
             ></circle>;
           }
@@ -93,7 +128,11 @@ export default function proportionalSymbolsRenderer(
               height={symbolSize()}
               x={projectedCoords()[0] - symbolSize() / 2}
               y={projectedCoords()[1] - symbolSize() / 2}
-              fill={layerDescription.rendererParameters.color as string}
+              fill={
+                getColor()(
+                  feature.properties[layerDescription.rendererParameters.color?.variable],
+                )
+              }
               use:bindData={feature}
             ></rect>;
           }

@@ -54,6 +54,12 @@ function stackedSquareLegend(
     layer.rendererParameters.symbolType,
   );
 
+  const color = createMemo(() => (
+    layer.rendererParameters.colorMode === 'singleColor'
+      ? layer.rendererParameters.color
+      : 'white'
+  ));
+
   const maxHeight = createMemo(
     () => propSize.scale(legend.values[legend.values.length - 1]),
   );
@@ -126,7 +132,7 @@ function stackedSquareLegend(
             const symbolSize = propSize.scale(value);
             return <>
               <rect
-                fill={layer.rendererParameters.color}
+                fill={color()}
                 fill-opacity={layer.fillOpacity}
                 stroke={layer.strokeColor}
                 stroke-width={layer.strokeWidth}
@@ -136,7 +142,7 @@ function stackedSquareLegend(
                 y={heightTitleSubtitle() - symbolSize + maxHeight()}
               ></rect>
               <text
-                font-size={legend.labels.fontSize}
+                font-size={`${legend.labels.fontSize}px`}
                 font-family={legend.labels.fontFamily}
                 font-style={legend.labels.fontStyle}
                 font-weight={legend.labels.fontWeight}
@@ -191,6 +197,12 @@ function horizontalSquareLegend(
     layer.rendererParameters.referenceRadius,
     layer.rendererParameters.symbolType,
   );
+
+  const color = createMemo(() => (
+    layer.rendererParameters.colorMode === 'singleColor'
+      ? layer.rendererParameters.color
+      : 'white'
+  ));
 
   const maxHeight = createMemo(
     () => propSize.scale(legend.values[legend.values.length - 1]),
@@ -282,7 +294,7 @@ function horizontalSquareLegend(
         {
           (d) => <>
             <rect
-              fill={layer.rendererParameters.color}
+              fill={color()}
               fill-opacity={layer.fillOpacity}
               stroke={layer.strokeColor}
               stroke-width={layer.strokeWidth}
@@ -292,7 +304,7 @@ function horizontalSquareLegend(
               y={d.y}
             ></rect>
             <text
-              font-size={legend.labels.fontSize}
+              font-size={`${legend.labels.fontSize}px`}
               font-family={legend.labels.fontFamily}
               font-style={legend.labels.fontStyle}
               font-weight={legend.labels.fontWeight}
@@ -335,6 +347,12 @@ function verticalSquareLegend(
     layer.rendererParameters.referenceRadius,
     layer.rendererParameters.symbolType,
   );
+
+  const color = createMemo(() => (
+    layer.rendererParameters.colorMode === 'singleColor'
+      ? layer.rendererParameters.color
+      : 'white'
+  ));
 
   const maxHeight = createMemo(
     () => propSize.scale(legend.values[legend.values.length - 1]),
@@ -426,7 +444,7 @@ function verticalSquareLegend(
         {
           (d) => <>
               <rect
-                fill={layer.rendererParameters.color}
+                fill={color()}
                 fill-opacity={layer.fillOpacity}
                 stroke={layer.strokeColor}
                 stroke-width={layer.strokeWidth}
@@ -436,7 +454,7 @@ function verticalSquareLegend(
                 y={d.y}
               ></rect>
               <text
-                font-size={legend.labels.fontSize}
+                font-size={`${legend.labels.fontSize}px`}
                 font-family={legend.labels.fontFamily}
                 font-style={legend.labels.fontStyle}
                 font-weight={legend.labels.fontWeight}
@@ -479,6 +497,12 @@ function stackedCircleLegend(
     layer.rendererParameters.referenceRadius,
     layer.rendererParameters.symbolType,
   );
+
+  const color = createMemo(() => (
+    layer.rendererParameters.colorMode === 'singleColor'
+      ? layer.rendererParameters.color
+      : 'white'
+  ));
 
   const maxRadius = createMemo(
     () => propSize.scale(legend.values[legend.values.length - 1]),
@@ -552,7 +576,7 @@ function stackedCircleLegend(
             const symbolSize = propSize.scale(value);
             return <>
               <circle
-                fill={layer.rendererParameters.color}
+                fill={color()}
                 fill-opacity={layer.fillOpacity}
                 stroke={layer.strokeColor}
                 stroke-width={layer.strokeWidth}
@@ -561,7 +585,7 @@ function stackedCircleLegend(
                 cy={heightTitleSubtitle() - symbolSize + maxRadius() * 2}
               ></circle>
               <text
-                font-size={legend.labels.fontSize}
+                font-size={`${legend.labels.fontSize}px`}
                 font-family={legend.labels.fontFamily}
                 font-style={legend.labels.fontStyle}
                 font-weight={legend.labels.fontWeight}
@@ -615,6 +639,12 @@ function verticalCircleLegend(
     layer.rendererParameters.referenceRadius,
     layer.rendererParameters.symbolType,
   );
+
+  const color = createMemo(() => (
+    layer.rendererParameters.colorMode === 'singleColor'
+      ? layer.rendererParameters.color
+      : 'white'
+  ));
 
   const maxRadius = createMemo(
     () => propSize.scale(legend.values[legend.values.length - 1]),
@@ -698,7 +728,7 @@ function verticalCircleLegend(
         {
           (d) => <>
             <circle
-              fill={layer.rendererParameters.color}
+              fill={color()}
               fill-opacity={layer.fillOpacity}
               stroke={layer.strokeColor}
               stroke-width={layer.strokeWidth}
@@ -707,7 +737,7 @@ function verticalCircleLegend(
               cy={d.y}
             ></circle>
             <text
-              font-size={legend.labels.fontSize}
+              font-size={`${legend.labels.fontSize}px`}
               font-family={legend.labels.fontFamily}
               font-style={legend.labels.fontStyle}
               font-weight={legend.labels.fontWeight}
@@ -757,6 +787,12 @@ function horizontalCircleLegend(
     layer.rendererParameters.referenceRadius,
     layer.rendererParameters.symbolType,
   );
+
+  const color = createMemo(() => (
+    layer.rendererParameters.colorMode === 'singleColor'
+      ? layer.rendererParameters.color
+      : 'white'
+  ));
 
   const maxRadius = createMemo(
     () => propSize.scale(legend.values[legend.values.length - 1]),
@@ -842,7 +878,7 @@ function horizontalCircleLegend(
         {
           (d) => <>
             <circle
-              fill={layer.rendererParameters.color}
+              fill={color()}
               fill-opacity={layer.fillOpacity}
               stroke={layer.strokeColor}
               stroke-width={layer.strokeWidth}
@@ -851,7 +887,7 @@ function horizontalCircleLegend(
               cy={d.y}
             ></circle>
             <text
-              font-size={legend.labels.fontSize}
+              font-size={`${legend.labels.fontSize}px`}
               font-family={legend.labels.fontFamily}
               font-style={legend.labels.fontStyle}
               font-weight={legend.labels.fontWeight}

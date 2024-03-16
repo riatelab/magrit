@@ -71,12 +71,6 @@ function onClickValidate(
     throw new Error('Unexpected Error: Reference layer not found');
   }
 
-  // const categories = makeCategoriesMap(referenceLayerDescription.data.features, targetVariable);
-  // const mapping = makeCategoriesMapping(categories);
-
-  // Find a position for the legend
-  const legendPosition = getPossibleLegendPosition(120, 340);
-
   // Generate ID for the new layer
   const newId = generateIdLayer();
 
@@ -107,6 +101,9 @@ function onClickValidate(
     newLayerDescription.pointRadius = referenceLayerDescription.pointRadius || 5;
   }
 
+  // Find a position for the legend
+  const legendPosition = getPossibleLegendPosition(120, 340);
+
   const legend = {
     // Part common to all legends
     id: generateIdLegend(),
@@ -125,7 +122,7 @@ function onClickValidate(
     },
     position: legendPosition,
     visible: true,
-    roundDecimals: 1,
+    roundDecimals: null,
     backgroundRect: {
       visible: false,
     },

@@ -32,7 +32,7 @@ import {
 // Import some type descriptions
 import {
   AllowChoroplethLegend,
-  type ChoroplethLegend,
+  type ChoroplethLegend, ClassificationParameters,
   type LayerDescriptionChoropleth,
   type LayerDescriptionGriddedLayer,
   type LayerDescriptionSmoothedLayer,
@@ -48,7 +48,10 @@ function verticalLegend(
     layersDescriptionStore.layers,
     legendParameters.layerId,
   )!;
-  const rendererParameters = layer.rendererParameters as AllowChoroplethLegend;
+
+  const rendererParameters = layer.renderer === 'proportionalSymbols'
+    ? layer.rendererParameters!.color as ClassificationParameters
+    : layer.rendererParameters as AllowChoroplethLegend;
 
   const { LL } = useI18nContext();
 
@@ -278,7 +281,10 @@ function horizontalLegend(
     layersDescriptionStore.layers,
     legendParameters.layerId,
   )!;
-  const rendererParameters = layer.rendererParameters as AllowChoroplethLegend;
+
+  const rendererParameters = layer.renderer === 'proportionalSymbols'
+    ? layer.rendererParameters!.color as ClassificationParameters
+    : layer.rendererParameters as AllowChoroplethLegend;
 
   const { LL } = useI18nContext();
   const colors = getColors(

@@ -18,7 +18,12 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { makeCategoriesMap, makeCategoriesMapping } from '../../helpers/categorical-choropleth';
 import { randomColorFromCategoricalPalette } from '../../helpers/color';
-import { descendingKeyAccessor, findSuitableName, isNumber } from '../../helpers/common';
+import {
+  descendingKeyAccessor,
+  findSuitableName,
+  getMinimumPrecision,
+  isNumber,
+} from '../../helpers/common';
 import {
   computeCandidateValuesForSymbolsLegend,
   coordsPointOnFeature,
@@ -54,18 +59,21 @@ import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore'
 
 // Types / Interfaces / Enums
 import {
-  CategoricalChoroplethMapping,
-  CategoricalChoroplethParameters,
+  type CategoricalChoroplethLegend,
+  type CategoricalChoroplethMapping,
+  type CategoricalChoroplethParameters,
+  type ChoroplethLegend,
   type ClassificationParameters,
-  GeoJSONFeatureCollection,
-  LayerDescription, LayerDescriptionProportionalSymbols,
-  LegendTextElement,
+  type GeoJSONFeatureCollection,
+  type LayerDescriptionProportionalSymbols,
+  type LegendTextElement,
   LegendType,
+  Orientation,
   ProportionalSymbolsColorMode,
-  ProportionalSymbolsLegend,
+  type ProportionalSymbolsLegend,
   ProportionalSymbolsSymbolType,
   RepresentationType,
-  VectorType,
+  type VectorType,
 } from '../../global.d';
 import type { PortrayalSettingsProps } from './common';
 
@@ -242,6 +250,107 @@ function onClickValidate(
       },
     ),
   );
+
+  if (propSymbolsParameters.colorMode === 'ratioVariable') {
+    // How many decimals to display in the legend
+    const minPrecision = getMinimumPrecision(propSymbolsParameters.color.breaks);
+
+    // Find a position for the legend
+    const legendChoroRatioPosition = getPossibleLegendPosition(120, 340);
+
+    const legendChoroRatio = {
+      // Part common to all legends
+      id: generateIdLegend(),
+      layerId: newId,
+      title: {
+        text: propSymbolsParameters.color.variable,
+        ...applicationSettingsStore.defaultLegendSettings.title,
+      } as LegendTextElement,
+      subtitle: {
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      } as LegendTextElement,
+      note: {
+        ...applicationSettingsStore.defaultLegendSettings.note,
+      } as LegendTextElement,
+      position: legendChoroRatioPosition,
+      visible: true,
+      roundDecimals: minPrecision < 0 ? 0 : minPrecision,
+      backgroundRect: {
+        visible: false,
+      },
+      // Part specific to choropleth
+      type: LegendType.choropleth,
+      orientation: Orientation.vertical,
+      boxWidth: 50,
+      boxHeight: 30,
+      boxSpacing: 0,
+      boxSpacingNoData: 10,
+      boxCornerRadius: 0,
+      labels: {
+        ...applicationSettingsStore.defaultLegendSettings.labels,
+      } as LegendTextElement,
+      noDataLabel: 'No data',
+      stroke: false,
+      tick: false,
+    } as ChoroplethLegend;
+
+    setLayersDescriptionStore(
+      produce(
+        (draft: LayersDescriptionStoreType) => {
+          draft.layoutFeaturesAndLegends.push(legendChoroRatio);
+        },
+      ),
+    );
+  } else if (propSymbolsParameters.colorMode === 'categoricalVariable') {
+    // Find a position for the legend
+    const legendChoroCategoryPosition = getPossibleLegendPosition(120, 340);
+
+    const legendChoroCategory = {
+      // Part common to all legends
+      id: generateIdLegend(),
+      layerId: newId,
+      title: {
+        text: propSymbolsParameters.color.variable,
+        ...applicationSettingsStore.defaultLegendSettings.title,
+      } as LegendTextElement,
+      subtitle: {
+        text: undefined,
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      },
+      note: {
+        text: undefined,
+        ...applicationSettingsStore.defaultLegendSettings.note,
+      },
+      position: legendChoroCategoryPosition,
+      visible: true,
+      roundDecimals: null,
+      backgroundRect: {
+        visible: false,
+      },
+      // Part specific to choropleth
+      type: LegendType.categoricalChoropleth,
+      orientation: Orientation.vertical,
+      boxWidth: 45,
+      boxHeight: 30,
+      boxSpacing: 5,
+      boxSpacingNoData: 5,
+      boxCornerRadius: 0,
+      labels: {
+        ...applicationSettingsStore.defaultLegendSettings.labels,
+      } as LegendTextElement,
+      noDataLabel: 'No data',
+      stroke: false,
+      tick: false,
+    } as CategoricalChoroplethLegend;
+
+    setLayersDescriptionStore(
+      produce(
+        (draft: LayersDescriptionStoreType) => {
+          draft.layoutFeaturesAndLegends.push(legendChoroCategory);
+        },
+      ),
+    );
+  }
 }
 
 export default function ProportionalSymbolsSettings(
@@ -306,6 +415,15 @@ export default function ProportionalSymbolsSettings(
   const minValues = createMemo(() => min(values()));
   const maxValues = createMemo(() => max(values()));
 
+  // Reactive variable that contains the values of the target ratio variable
+  // if any
+  const valuesRatio = createMemo(() => (targetRatioVariable()
+    ? layerDescription.data.features
+      .map((feature) => feature.properties[targetRatioVariable()!])
+      .filter((value) => isNumber(value))
+      .map((value: any) => +value) as number[]
+    : []));
+
   const [
     newLayerName,
     setNewLayerName,
@@ -343,6 +461,7 @@ export default function ProportionalSymbolsSettings(
   ] = createSignal<CategoricalChoroplethMapping[]>(
     targetFieldsCategory
       ? makeCategoriesMapping(
+        // eslint-disable-next-line solid/reactivity
         makeCategoriesMap(layerDescription.data.features, targetCategoryVariable()!),
       )
       : [],
@@ -376,7 +495,7 @@ export default function ProportionalSymbolsSettings(
       value: string | ClassificationParameters | CategoricalChoroplethParameters,
     } = {
       mode: colorMode(),
-      value: undefined,
+      value: '',
     };
 
     switch (colorMode()) {
@@ -395,7 +514,6 @@ export default function ProportionalSymbolsSettings(
         break;
       default:
         throw Error('This should not happen');
-        break;
     }
 
     // Close the current modal
@@ -508,7 +626,7 @@ export default function ProportionalSymbolsSettings(
         </InputFieldSelect>
         <Show when={targetRatioVariable()}>
           <ChoroplethClassificationSelector
-            values={values}
+            values={valuesRatio}
             targetVariable={() => targetRatioVariable()!}
             targetClassification={targetClassification}
             setTargetClassification={setTargetClassification}
