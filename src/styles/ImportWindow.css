@@ -4,6 +4,10 @@
     text-align: center;
 }
 
+.file-import-table {
+    width: 100%;
+}
+
 .file-import-table tr.entry-detail {
     background: #fafafa;
 }

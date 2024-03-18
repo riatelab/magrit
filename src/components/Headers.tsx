@@ -75,7 +75,7 @@ export function HeaderBarWelcome(): JSX.Element {
             aria-label={LL().HeaderApp.NightDayMode()}
             title={LL().HeaderApp.NightDayMode()}
           >
-            <CgDarkMode/>
+            <CgDarkMode size={'1.5em'} />
           </button>
           <DropdownLanguage/>
           &nbsp;&nbsp;
@@ -116,7 +116,7 @@ export function HeaderBarApp(): JSX.Element {
             title={ LL().HeaderApp.Undo() }
             disabled={ stateStackStore.undoStack.length === 0}
           >
-            <ImUndo />
+            <ImUndo size={'1.5em'} />
           </button>
           <button
             class="button button-header-bar"
@@ -125,7 +125,7 @@ export function HeaderBarApp(): JSX.Element {
             title={ LL().HeaderApp.Redo() }
             disabled={ stateStackStore.redoStack.length === 0 }
           >
-            <ImRedo />
+            <ImRedo size={'1.5em'} />
           </button>
           <p style={{ margin: '2em' }}></p>
           <button
@@ -134,7 +134,7 @@ export function HeaderBarApp(): JSX.Element {
             aria-label={ LL().HeaderApp.NightDayMode() }
             title={ LL().HeaderApp.NightDayMode() }
           >
-            <CgDarkMode />
+            <CgDarkMode size={'1.5em'} />
           </button>
           <button
             class="button button-header-bar"
@@ -142,7 +142,7 @@ export function HeaderBarApp(): JSX.Element {
             aria-label={ LL().HeaderApp.NewProject() }
             title={ LL().HeaderApp.NewProject() }
           >
-            <FaSolidFile />
+            <FaSolidFile size={'1.5em'} />
           </button>
           <button
             class="button button-header-bar"
@@ -150,7 +150,7 @@ export function HeaderBarApp(): JSX.Element {
             aria-label={ LL().HeaderApp.ImportProjet() }
             title={ LL().HeaderApp.ImportProjet() }
           >
-            <FaSolidFolderOpen />
+            <FaSolidFolderOpen size={'1.5em'} />
           </button>
           <button
             class="button button-header-bar"
@@ -158,7 +158,7 @@ export function HeaderBarApp(): JSX.Element {
             aria-label={ LL().HeaderApp.SaveProject() }
             title={ LL().HeaderApp.SaveProject() }
           >
-            <FaSolidFloppyDisk />
+            <FaSolidFloppyDisk size={'1.5em'} />
           </button>
           <button
             class="button button-header-bar"
@@ -166,7 +166,7 @@ export function HeaderBarApp(): JSX.Element {
             aria-label={ LL().HeaderApp.About() }
             title={ LL().HeaderApp.About() }
           >
-            <FaSolidCircleQuestion />
+            <FaSolidCircleQuestion size={'1.5em'} />
           </button>
           <DropdownLanguage />
           <div class="buttons" />

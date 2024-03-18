@@ -8,11 +8,6 @@
     height: 22em;
 }
 
-.nice-alert .modal-card-foot,
-.nice-alert .modal-card-head {
-    background-color: white;
-}
-
 .nice-alert .modal-card-foot {
     justify-content: center;
 }
