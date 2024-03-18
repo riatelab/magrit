@@ -59,9 +59,10 @@ import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore'
 
 // Types / Interfaces / Enums
 import {
+  type CategoricalChoroplethBarchartLegend,
   type CategoricalChoroplethLegend,
   type CategoricalChoroplethMapping,
-  type CategoricalChoroplethParameters,
+  type CategoricalChoroplethParameters, ChoroplethHistogramLegend,
   type ChoroplethLegend,
   type ClassificationParameters,
   type GeoJSONFeatureCollection,
@@ -90,6 +91,7 @@ function onClickValidate(
   symbolType: ProportionalSymbolsSymbolType,
   extent: [number, number],
   avoidOverlapping: boolean,
+  displayChartOnMap: boolean,
 ) {
   // The layer description of the reference layer
   const referenceLayerDescription = layersDescriptionStore.layers
@@ -301,6 +303,42 @@ function onClickValidate(
         },
       ),
     );
+
+    if (displayChartOnMap) {
+      // Add the chart to the layout
+      setLayersDescriptionStore(
+        produce(
+          (draft: LayersDescriptionStoreType) => {
+            draft.layoutFeaturesAndLegends.push({
+              id: generateIdLegend(),
+              layerId: newId,
+              type: LegendType.choroplethHistogram,
+              position: [legendPosition[0] + 200, legendPosition[1]],
+              width: 300,
+              height: 250,
+              orientation: 'horizontal',
+              fontColor: '#000000',
+              visible: true,
+              title: {
+                text: propSymbolsParameters.color.variable,
+                ...applicationSettingsStore.defaultLegendSettings.title,
+              } as LegendTextElement,
+              subtitle: {
+                text: undefined,
+                ...applicationSettingsStore.defaultLegendSettings.subtitle,
+              },
+              note: {
+                text: undefined,
+                ...applicationSettingsStore.defaultLegendSettings.note,
+              },
+              backgroundRect: {
+                visible: false,
+              },
+            } as ChoroplethHistogramLegend);
+          },
+        ),
+      );
+    }
   } else if (propSymbolsParameters.colorMode === 'categoricalVariable') {
     // Find a position for the legend
     const legendChoroCategoryPosition = getPossibleLegendPosition(120, 340);
@@ -350,6 +388,42 @@ function onClickValidate(
         },
       ),
     );
+
+    if (displayChartOnMap) {
+      // Add the chart to the layout
+      setLayersDescriptionStore(
+        produce(
+          (draft: LayersDescriptionStoreType) => {
+            draft.layoutFeaturesAndLegends.push({
+              id: generateIdLegend(),
+              layerId: newId,
+              type: LegendType.categoricalChoroplethBarchart,
+              position: [legendPosition[0] + 200, legendPosition[1]],
+              width: 300,
+              height: 250,
+              orientation: 'horizontal',
+              fontColor: '#000000',
+              visible: true,
+              title: {
+                text: propSymbolsParameters.color.variable,
+                ...applicationSettingsStore.defaultLegendSettings.title,
+              } as LegendTextElement,
+              subtitle: {
+                text: undefined,
+                ...applicationSettingsStore.defaultLegendSettings.subtitle,
+              },
+              note: {
+                text: undefined,
+                ...applicationSettingsStore.defaultLegendSettings.note,
+              },
+              backgroundRect: {
+                visible: false,
+              },
+            } as CategoricalChoroplethBarchartLegend);
+          },
+        ),
+      );
+    }
   }
 }
 
@@ -536,6 +610,7 @@ export default function ProportionalSymbolsSettings(
         symbolType(),
         [minValues(), maxValues()],
         avoidOverlapping(),
+        displayChartOnMap(),
       );
       // Remove overlay
       setLoading(false);
@@ -631,6 +706,11 @@ export default function ProportionalSymbolsSettings(
             targetClassification={targetClassification}
             setTargetClassification={setTargetClassification}
           />
+          <InputFieldCheckbox
+            label={LL().PortrayalSection.ChoroplethOptions.DisplayChartOnMap()}
+            checked={displayChartOnMap()}
+            onChange={(v) => { setDisplayChartOnMap(v); }}
+          />
         </Show>
       </Match>
       <Match when={colorMode() === 'categoricalVariable'}>
@@ -666,6 +746,11 @@ export default function ProportionalSymbolsSettings(
               detailed={true}
             />
           </CollapsibleSection>
+          <InputFieldCheckbox
+            label={LL().PortrayalSection.CategoricalChoroplethOptions.DisplayChartOnMap()}
+            checked={displayChartOnMap()}
+            onChange={(v) => { setDisplayChartOnMap(v); }}
+          />
         </Show>
       </Match>
     </Switch>

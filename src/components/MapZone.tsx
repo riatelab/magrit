@@ -99,11 +99,13 @@ import {
   type DiscontinuityLegend,
   type LabelsLegend,
   type MushroomsLegend,
+  type ChoroplethHistogramLegend,
 } from '../global.d';
 
 // Styles
 import '../styles/MapZone.css';
 import legendCategoricalChoroplethBarchart from './LegendRenderer/CategoricalChoroplethBarchartLegend.tsx';
+import legendChoroplethHistogram from './LegendRenderer/ChoroplethHistogramLegend.tsx';
 
 const layoutFeaturesFns = {
   [LayoutFeatureType.Line]: LineRenderer,
@@ -163,6 +165,9 @@ const dispatchLegendRenderer = (legend: Legend) => {
   }
   if (legend.type === 'categoricalChoroplethBarchart') {
     return legendCategoricalChoroplethBarchart(legend as CategoricalChoroplethBarchartLegend);
+  }
+  if (legend.type === 'choroplethHistogram') {
+    return legendChoroplethHistogram(legend as ChoroplethHistogramLegend);
   }
   return null;
 };

@@ -82,7 +82,7 @@ export default function mushroomRenderer(
           ));
           return <g use:bindData={feature}>
             <path
-              fill={layerDescription.rendererParameters.top.color}y
+              fill={layerDescription.rendererParameters.top.color}
               mgt:size-value={sizeTop()}
               d={
                 semiCirclePath(

@@ -317,7 +317,7 @@ export default function MushroomsSettings(
         } as HalfProportionalMarkParameters,
         {
           variable: targetVariableBottom(),
-          symbolType: ProportionalSymbolsSymbolType.square,
+          symbolType: ProportionalSymbolsSymbolType.circle,
           referenceSize: refSymbolSizeBottom(),
           referenceValue: refValueBottom(),
           color: colorBottom(),

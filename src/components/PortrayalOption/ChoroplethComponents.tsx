@@ -18,7 +18,7 @@ import {
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import d3 from '../../helpers/d3-custom';
-import { noop } from '../../helpers/classification';
+import { getClassifier, noop } from '../../helpers/classification';
 import { Mmin } from '../../helpers/math';
 
 // Stores
@@ -40,6 +40,15 @@ const defaultColorScheme = applicationSettingsStore.defaultColorScheme;
 // eslint-disable-next-line prefer-destructuring
 const defaultNoDataColor = applicationSettingsStore.defaultNoDataColor;
 
+function getEntitiesByClass(
+  values: number[],
+  breaks: number[],
+) {
+  const Cls = getClassifier(ClassificationMethod.manual);
+  const classifier = new Cls(values, null, breaks);
+  return classifier.countByClass();
+}
+
 // eslint-disable-next-line import/prefer-default-export
 export function ChoroplethClassificationSelector(
   props: {
@@ -59,14 +68,16 @@ export function ChoroplethClassificationSelector(
     on(
       () => props.values(),
       () => {
+        const breaks = quantile(props.values(), { nb: numberOfClasses(), precision: null });
+
         props.setTargetClassification({
           variable: props.targetVariable(),
           method: ClassificationMethod.quantiles,
           classes: numberOfClasses(),
-          breaks: quantile(props.values(), { nb: numberOfClasses(), precision: null }),
+          breaks,
           palette: palette() as unknown as CustomPalette,
           noDataColor: defaultNoDataColor,
-          entitiesByClass: [],
+          entitiesByClass: getEntitiesByClass(props.values(), breaks),
           reversePalette: false,
         } as ClassificationParameters);
       },
@@ -81,7 +92,10 @@ export function ChoroplethClassificationSelector(
     breaks: quantile(props.values(), { nb: numberOfClasses(), precision: null }),
     palette: palette() as unknown as CustomPalette, // eslint-disable-line solid/reactivity
     noDataColor: defaultNoDataColor,
-    entitiesByClass: [],
+    entitiesByClass: getEntitiesByClass(
+      props.values(),
+      quantile(props.values(), { nb: numberOfClasses(), precision: null }),
+    ),
     reversePalette: false,
   } as ClassificationParameters);
 
@@ -95,14 +109,15 @@ export function ChoroplethClassificationSelector(
         class="unstyled"
         title={LL().ClassificationPanel.classificationMethods.quantiles()}
         onClick={() => {
+          const breaks = quantile(props.values(), { nb: numberOfClasses(), precision: null });
           props.setTargetClassification({
             variable: props.targetVariable(), // eslint-disable-line solid/reactivity
             method: ClassificationMethod.quantiles,
             classes: numberOfClasses(),
-            breaks: quantile(props.values(), { nb: numberOfClasses(), precision: null }),
+            breaks,
             palette: palette() as unknown as CustomPalette,
             noDataColor: defaultNoDataColor,
-            entitiesByClass: [],
+            entitiesByClass: getEntitiesByClass(props.values(), breaks),
             reversePalette: false,
           } as ClassificationParameters);
         }}
@@ -118,14 +133,15 @@ export function ChoroplethClassificationSelector(
         class="unstyled"
         title={LL().ClassificationPanel.classificationMethods.equalIntervals()}
         onClick={() => {
+          const breaks = equal(props.values(), { nb: numberOfClasses(), precision: null });
           props.setTargetClassification({
             variable: props.targetVariable(), // eslint-disable-line solid/reactivity
             method: ClassificationMethod.equalIntervals,
             classes: numberOfClasses(),
-            breaks: equal(props.values(), { nb: numberOfClasses(), precision: null }),
+            breaks,
             palette: palette() as unknown as CustomPalette,
             noDataColor: defaultNoDataColor,
-            entitiesByClass: [],
+            entitiesByClass: getEntitiesByClass(props.values(), breaks),
             reversePalette: false,
           } as ClassificationParameters);
         }}
@@ -141,14 +157,15 @@ export function ChoroplethClassificationSelector(
         class="unstyled"
         title={LL().ClassificationPanel.classificationMethods.q6()}
         onClick={() => {
+          const breaks = q6(props.values(), { precision: null });
           props.setTargetClassification({
             variable: props.targetVariable(), // eslint-disable-line solid/reactivity
             method: ClassificationMethod.q6,
             classes: 6,
-            breaks: q6(props.values(), { precision: null }),
+            breaks,
             palette: getPalette(defaultColorScheme, 6) as unknown as CustomPalette,
             noDataColor: defaultNoDataColor,
-            entitiesByClass: [],
+            entitiesByClass: getEntitiesByClass(props.values(), breaks),
             reversePalette: false,
           } as ClassificationParameters);
         }}
@@ -164,14 +181,15 @@ export function ChoroplethClassificationSelector(
         class="unstyled"
         title={LL().ClassificationPanel.classificationMethods.jenks()}
         onClick={() => {
+          const breaks = jenks(props.values(), { nb: numberOfClasses(), precision: null });
           props.setTargetClassification({
             variable: props.targetVariable(), // eslint-disable-line solid/reactivity
             method: ClassificationMethod.jenks,
             classes: numberOfClasses(),
-            breaks: jenks(props.values(), { nb: numberOfClasses(), precision: null }),
+            breaks,
             palette: palette() as unknown as CustomPalette,
             noDataColor: defaultNoDataColor,
-            entitiesByClass: [],
+            entitiesByClass: getEntitiesByClass(props.values(), breaks),
             reversePalette: false,
           } as ClassificationParameters);
         }}

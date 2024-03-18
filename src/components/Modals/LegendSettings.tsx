@@ -29,10 +29,12 @@ import type { TranslationFunctions } from '../../i18n/i18n-types';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import InputFieldText from '../Inputs/InputText.tsx';
 
 // Types / Interfaces / Enums
 import {
-  type CategoricalChoroplethLegend,
+  CategoricalChoroplethBarchartLegend,
+  type CategoricalChoroplethLegend, ChoroplethHistogramLegend,
   type ChoroplethLegend,
   type DiscontinuityLegend,
   type LabelsLegend,
@@ -78,22 +80,27 @@ const updateProps = (
 const debouncedUpdateProps = debounce(updateProps, 200);
 
 function TextOptionTable(
-  props: { legend: Legend, LL: Accessor<TranslationFunctions> },
+  props: {
+    legend: Legend,
+    textProperties: ('title' | 'subtitle' | 'labels' | 'note')[],
+    LL: Accessor<TranslationFunctions>,
+  },
 ): JSX.Element {
   return <table style={{ 'text-align': 'center' }}>
     <thead>
     <tr>
       <th></th>
-      <th>Title</th>
-      <th>Subtitle</th>
-      <th>Value labels</th>
-      <th>Note</th>
+      <For each={props.textProperties}>
+        {(textElement) => <th>
+          {props.LL().Legend.Modal[`${textElement}TextElement`]()}
+        </th>}
+      </For>
     </tr>
     </thead>
     <tbody>
     <tr>
       <td>{ props.LL().CommonTextElement.FontSize() }</td>
-      <For each={['title', 'subtitle', 'labels', 'note']}>
+      <For each={props.textProperties}>
         {(textElement) => <td>
           <div class="control">
             <input
@@ -117,7 +124,7 @@ function TextOptionTable(
     </tr>
     <tr>
       <td>{ props.LL().CommonTextElement.FontColor() }</td>
-      <For each={['title', 'subtitle', 'labels', 'note']}>
+      <For each={props.textProperties}>
         {(textElement) => <td>
           <input
             class="color"
@@ -134,7 +141,7 @@ function TextOptionTable(
     </tr>
     <tr>
       <td>{ props.LL().CommonTextElement.FontStyle() }</td>
-      <For each={['title', 'subtitle', 'labels', 'note']}>
+      <For each={props.textProperties}>
         {(textElement) => <td>
           <select
             value={ props.legend[textElement].fontStyle }
@@ -152,7 +159,7 @@ function TextOptionTable(
     </tr>
     <tr>
       <td>{ props.LL().CommonTextElement.FontWeight() }</td>
-      <For each={['title', 'subtitle', 'labels', 'note']}>
+      <For each={props.textProperties}>
         {(textElement) => <td>
           <select
             value={ props.legend[textElement].fontWeight }
@@ -170,7 +177,7 @@ function TextOptionTable(
     </tr>
     <tr>
       <td>{ props.LL().CommonTextElement.FontFamily() }</td>
-      <For each={['title', 'subtitle', 'labels', 'note']}>
+      <For each={props.textProperties}>
         {(textElement) => <td>
           <select
             value={ props.legend[textElement].fontFamily }
@@ -416,7 +423,11 @@ function makeSettingsProportionalSymbolsLegend(
       </p>
     </div>
     <Show when={displayMoreOptions()}>
-      <TextOptionTable legend={legend} LL={LL} />
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'labels', 'note']}
+      />
       <hr />
       <OptionBackgroundRectangle legend={legend} LL={LL} />
     </Show>
@@ -620,7 +631,11 @@ function makeSettingsChoroplethLegend(
       </p>
     </div>
     <Show when={displayMoreOptions()}>
-      <TextOptionTable legend={legend} LL={LL} />
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'labels', 'note']}
+      />
       <hr />
       <OptionBackgroundRectangle legend={legend} LL={LL} />
     </Show>
@@ -695,7 +710,11 @@ function makeSettingsDiscontinuityLegend(
       </p>
     </div>
     <Show when={displayMoreOptions()}>
-      <TextOptionTable legend={legend} LL={LL} />
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'labels', 'note']}
+      />
       <hr />
       <OptionBackgroundRectangle legend={legend} LL={LL} />
     </Show>
@@ -711,7 +730,30 @@ function makeSettingsLabels(
     setDisplayMoreOptions,
   ] = createSignal<boolean>(false);
 
-  return <></>;
+  return <>
+    <FieldText legend={legend} LL={LL} role={'title'}/>
+    <FieldText legend={legend} LL={LL} role={'subtitle'}/>
+    <FieldText legend={legend} LL={LL} role={'note'}/>
+    <hr/>
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        {LL().Legend.Modal.MoreOptions()}
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
+      </p>
+    </div>
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'labels', 'note']}
+      />
+      <hr/>
+      <OptionBackgroundRectangle legend={legend} LL={LL}/>
+    </Show>
+  </>;
 }
 
 function makeSettingsMushrooms(
@@ -723,7 +765,200 @@ function makeSettingsMushrooms(
     setDisplayMoreOptions,
   ] = createSignal<boolean>(false);
 
-  return <></>;
+  return <>
+    <FieldText legend={legend} LL={LL} role={'title'}/>
+    <FieldText legend={legend} LL={LL} role={'subtitle'}/>
+    <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldText
+      label={LL().Legend.Modal.MushroomsTopTitle()}
+      value={legend.topTitle.text}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['topTitle', 'text'], v)}
+    />
+    <InputFieldText
+      label={LL().Legend.Modal.MushroomsBottomTitle()}
+      value={legend.bottomTitle.text}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['bottomTitle', 'text'], v)}
+    />
+    <hr/>
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        {LL().Legend.Modal.MoreOptions()}
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
+      </p>
+    </div>
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'labels', 'note']}
+      />
+      <hr/>
+      <OptionBackgroundRectangle legend={legend} LL={LL}/>
+    </Show>
+  </>;
+}
+
+function makeSettingsChoroplethHistogram(
+  legend: ChoroplethHistogramLegend,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <>
+    <FieldText legend={legend} LL={LL} role={'title'}/>
+    <FieldText legend={legend} LL={LL} role={'subtitle'}/>
+    <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldNumber
+      label={LL().Legend.Modal.Width()}
+      value={legend.width}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['width'], v)}
+      min={10}
+      max={800}
+      step={1}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.Height()}
+      value={legend.height}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['height'], v)}
+      min={10}
+      max={800}
+      step={1}
+    />
+    <div class="field">
+      <label class="label">{LL().Legend.Modal.LegendOrientation()}</label>
+      <div class="control">
+        <label class="radio" style={{ 'margin-right': '2em' }}>
+          <input
+            type="radio"
+            name="legend-orientation"
+            {...(legend.orientation === 'horizontal' ? { checked: true } : {})}
+            onChange={(ev) => {
+              const value = ev.target.checked ? 'horizontal' : 'vertical';
+              updateProps(legend.id, ['orientation'], value);
+            }}
+          />
+          {LL().Legend.Modal.LegendOrientationHorizontal()}
+        </label>
+        <label class="radio">
+          <input
+            type="radio"
+            name="legend-orientation"
+            {...(legend.orientation === 'vertical' ? { checked: true } : {})}
+            onChange={(ev) => {
+              const value = ev.target.checked ? 'vertical' : 'horizontal';
+              updateProps(legend.id, ['orientation'], value);
+            }}
+          />
+          {LL().Legend.Modal.LegendOrientationVertical()}
+        </label>
+      </div>
+    </div>
+    <hr/>
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        {LL().Legend.Modal.MoreOptions()}
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
+      </p>
+    </div>
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'note']}
+      />
+      <hr/>
+      <OptionBackgroundRectangle legend={legend} LL={LL}/>
+    </Show>
+  </>;
+}
+
+function makeSettginsCategoricalChoroplethBarchart(
+  legend: CategoricalChoroplethBarchartLegend,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <>
+    <FieldText legend={legend} LL={LL} role={'title'}/>
+    <FieldText legend={legend} LL={LL} role={'subtitle'}/>
+    <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldNumber
+      label={LL().Legend.Modal.Width()}
+      value={legend.width}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['width'], v)}
+      min={10}
+      max={800}
+      step={1}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.Height()}
+      value={legend.height}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['height'], v)}
+      min={10}
+      max={800}
+      step={1}
+    />
+    <div class="field">
+      <label class="label">{LL().Legend.Modal.LegendOrientation()}</label>
+      <div class="control">
+        <label class="radio" style={{ 'margin-right': '2em' }}>
+          <input
+            type="radio"
+            name="legend-orientation"
+            {...(legend.orientation === 'horizontal' ? { checked: true } : {})}
+            onChange={(ev) => {
+              const value = ev.target.checked ? 'horizontal' : 'vertical';
+              updateProps(legend.id, ['orientation'], value);
+            }}
+          />
+          {LL().Legend.Modal.LegendOrientationHorizontal()}
+        </label>
+        <label class="radio">
+          <input
+            type="radio"
+            name="legend-orientation"
+            {...(legend.orientation === 'vertical' ? { checked: true } : {})}
+            onChange={(ev) => {
+              const value = ev.target.checked ? 'vertical' : 'horizontal';
+              updateProps(legend.id, ['orientation'], value);
+            }}
+          />
+          {LL().Legend.Modal.LegendOrientationVertical()}
+        </label>
+      </div>
+    </div>
+    <hr/>
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        {LL().Legend.Modal.MoreOptions()}
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
+      </p>
+    </div>
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'note']}
+      />
+      <hr/>
+      <OptionBackgroundRectangle legend={legend} LL={LL}/>
+    </Show>
+  </>;
 }
 
 function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.Element {
@@ -744,6 +979,18 @@ function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.
   }
   if (legend.type === LegendType.mushrooms) {
     return makeSettingsMushrooms(legend as MushroomsLegend, LL);
+  }
+  if (legend.type === LegendType.categoricalChoroplethBarchart) {
+    return makeSettginsCategoricalChoroplethBarchart(
+      legend as CategoricalChoroplethBarchartLegend,
+      LL,
+    );
+  }
+  if (legend.type === LegendType.choroplethHistogram) {
+    return makeSettingsChoroplethHistogram(
+      legend as ChoroplethHistogramLegend,
+      LL,
+    );
   }
   return <></>;
 }

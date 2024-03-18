@@ -39,6 +39,7 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
+  type CategoricalChoroplethBarchartLegend, ChoroplethHistogramLegend,
   type ChoroplethLegend,
   type ClassificationParameters,
   type LayerDescription,
@@ -54,6 +55,7 @@ function onClickValidate(
   classification: ClassificationParameters,
   newName: string,
   noteContent: string,
+  displayChartOnMap: boolean,
 ) {
   // The layer description of the reference layer
   const referenceLayerDescription = layersDescriptionStore.layers
@@ -141,6 +143,42 @@ function onClickValidate(
       },
     ),
   );
+
+  if (displayChartOnMap) {
+    // Add the chart to the layout
+    setLayersDescriptionStore(
+      produce(
+        (draft: LayersDescriptionStoreType) => {
+          draft.layoutFeaturesAndLegends.push({
+            id: generateIdLegend(),
+            layerId: newId,
+            type: LegendType.choroplethHistogram,
+            position: [legendPosition[0] + 200, legendPosition[1]],
+            width: 300,
+            height: 250,
+            orientation: 'horizontal',
+            fontColor: '#000000',
+            visible: true,
+            title: {
+              text: targetVariable,
+              ...applicationSettingsStore.defaultLegendSettings.title,
+            } as LegendTextElement,
+            subtitle: {
+              text: undefined,
+              ...applicationSettingsStore.defaultLegendSettings.subtitle,
+            },
+            note: {
+              text: undefined,
+              ...applicationSettingsStore.defaultLegendSettings.note,
+            },
+            backgroundRect: {
+              visible: false,
+            },
+          } as ChoroplethHistogramLegend);
+        },
+      ),
+    );
+  }
 }
 export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.Element {
   const { LL } = useI18nContext();
@@ -195,6 +233,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
         layerName,
         LL().ClassificationPanel
           .classificationMethodLegendDescriptions[targetClassification()!.method](),
+        displayChartOnMap(),
       );
       // Hide loading overlay
       setLoading(false);

@@ -771,17 +771,19 @@ interface ChoroplethHistogramLegend extends LegendBase {
   height: number,
   // The font color of the chart elements
   fontColor: string,
+  // The orientation of the histogram
+  orientation: Orientation,
 }
 
 interface CategoricalChoroplethBarchartLegend extends LegendBase {
   type: LegendType.categoricalChoroplethBarchart,
-  // The width of the histogram
+  // The width of the bar chart
   width: number,
-  // The height of the histogram
+  // The height of the bar chart
   height: number,
   // The font color of the chart elements
   fontColor: string,
-  // The orientation of the histogram
+  // The orientation of the bar chart
   orientation: Orientation,
 }
 

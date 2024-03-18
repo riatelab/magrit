@@ -15,7 +15,7 @@ export default function InputFieldText(props: InputFieldTextProps): JSX.Element 
     <label class="label">{ props.label }</label>
     <div class="control">
       <input
-        class="text"
+        class="input"
         type="text"
         onChange={(e) => { if (props.onChange) props.onChange(e.currentTarget.value); }}
         onKeyUp={(e) => { if (props.onKeyUp) props.onKeyUp(e.currentTarget.value); }}

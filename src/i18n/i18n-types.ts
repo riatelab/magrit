@@ -2178,6 +2178,22 @@ type RootTranslation = {
 			 */
 			LegendNote: string
 			/**
+			 * T​i​t​l​e
+			 */
+			titleTextElement: string
+			/**
+			 * S​u​b​t​i​t​l​e
+			 */
+			subtitleTextElement: string
+			/**
+			 * V​a​l​u​e​ ​l​a​b​e​l​s
+			 */
+			labelsTextElement: string
+			/**
+			 * N​o​t​e
+			 */
+			noteTextElement: string
+			/**
 			 * D​i​s​p​l​a​y​ ​a​ ​r​e​c​t​a​n​g​l​e​ ​u​n​d​e​r​ ​t​h​e​ ​l​e​g​e​n​d
 			 */
 			DisplayBackgroundRectangle: string
@@ -2277,6 +2293,22 @@ type RootTranslation = {
 			 * L​i​n​e​ ​l​e​n​g​t​h
 			 */
 			LineLength: string
+			/**
+			 * W​i​d​t​h
+			 */
+			Width: string
+			/**
+			 * H​e​i​g​h​t
+			 */
+			Height: string
+			/**
+			 * T​o​p​ ​p​a​r​t​ ​v​a​r​i​a​b​l​e​ ​t​i​t​l​e
+			 */
+			MushroomsTopTitle: string
+			/**
+			 * B​o​t​t​o​m​ ​p​a​r​t​ ​v​a​r​i​a​b​l​e​ ​t​i​t​l​e
+			 */
+			MushroomsBottomTitle: string
 		}
 	}
 	CommonTextElement: {
@@ -4469,6 +4501,22 @@ export type TranslationFunctions = {
 			 */
 			LegendNote: () => LocalizedString
 			/**
+			 * Title
+			 */
+			titleTextElement: () => LocalizedString
+			/**
+			 * Subtitle
+			 */
+			subtitleTextElement: () => LocalizedString
+			/**
+			 * Value labels
+			 */
+			labelsTextElement: () => LocalizedString
+			/**
+			 * Note
+			 */
+			noteTextElement: () => LocalizedString
+			/**
 			 * Display a rectangle under the legend
 			 */
 			DisplayBackgroundRectangle: () => LocalizedString
@@ -4568,6 +4616,22 @@ export type TranslationFunctions = {
 			 * Line length
 			 */
 			LineLength: () => LocalizedString
+			/**
+			 * Width
+			 */
+			Width: () => LocalizedString
+			/**
+			 * Height
+			 */
+			Height: () => LocalizedString
+			/**
+			 * Top part variable title
+			 */
+			MushroomsTopTitle: () => LocalizedString
+			/**
+			 * Bottom part variable title
+			 */
+			MushroomsBottomTitle: () => LocalizedString
 		}
 	}
 	CommonTextElement: {

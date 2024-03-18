@@ -1,8 +1,7 @@
 import {
   createEffect,
   createMemo,
-  JSX,
-  on,
+  JSX, on,
   onMount,
 } from 'solid-js';
 
@@ -27,113 +26,76 @@ import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Type
 import {
-  type CategoricalChoroplethBarchartLegend,
-  type CategoricalChoroplethMapping,
-  type CategoricalChoroplethParameters,
+  type ChoroplethHistogramLegend,
+  type ClassificationParameters,
   type LayerDescription,
   type LayerDescriptionProportionalSymbols,
   Orientation,
-  type ProportionalSymbolCategoryParameters,
+  type ProportionalSymbolsRatioParameters,
 } from '../../global.d';
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
-function CategoriesPlot(
+function ChoroplethHistogram(
   props: {
-    mapping: CategoricalChoroplethMapping[],
+    classification: ClassificationParameters,
     orientation: Orientation,
     color: string,
     height: number,
     width: number,
   },
 ): JSX.Element {
-  const domain = createMemo(() => props.mapping.map((m) => m.categoryName));
-  const range = createMemo(() => props.mapping.map((m) => m.color));
-  const data = createMemo(() => props.mapping.map((m, i) => ({
-    position: i,
-    category: m.categoryName,
-    color: m.color,
-    frequency: m.count,
-  })));
-  const sizeLargestLabel = createMemo(() => Math.max(
-    ...props.mapping.map((m) => getTextSize(
-      m.categoryName || '',
-      10,
-      'sans-serif',
-    ).width),
-  ));
+  const minmax = [
+    props.classification.breaks[0],
+    props.classification.breaks[props.classification.breaks.length - 1],
+  ];
+  const colors = props.classification.reversePalette
+    ? props.classification.palette.colors.slice().reverse()
+    : props.classification.palette.colors;
+  const breaksData = [];
 
-  return <>
-  {
-    props.orientation === 'vertical'
-      ? Plot.plot({
-        style: { color: props.color },
-        height: props.height,
-        width: props.width,
-        marginTop: 10,
-        marginLeft: sizeLargestLabel() + 10,
-        color: { domain: domain(), range: range() },
-        x: { label: null },
-        y: {
-          type: 'band',
-          label: null,
-        },
-        marks: [
-          Plot.gridX(),
-          Plot.barX(
-            data(),
-            {
-              y: 'category',
-              x: 'frequency',
-              fill: 'color',
-              channels: { position: (d) => d.position },
-              sort: {
-                y: 'position',
-                order: 'ascending',
-              },
-            },
-          ),
-          Plot.ruleX([0]),
-        ],
-      }) as SVGSVGElement
-      : Plot.plot({
-        height: props.height,
-        width: props.width,
-        style: { color: props.color },
-        marginTop: 10,
-        marginBottom: Math.max(sizeLargestLabel() * 0.6, 25),
-        marginLeft: 30,
-        color: { domain: domain(), range: range() },
-        x: {
-          type: 'band',
-          tickRotate: -30,
-          label: null,
-        },
-        y: { label: null, nice: true },
-        marks: [
-          Plot.gridY(),
-          Plot.barY(
-            data(),
-            {
-              x: 'category',
-              y: 'frequency',
-              fill: 'color',
-              channels: { position: (d) => d.position },
-              sort: {
-                x: 'position',
-                order: 'ascending',
-              },
-            },
-          ),
-          Plot.ruleY([0]),
-        ],
-      }) as SVGSVGElement
+  for (let i = 0; i < props.classification.breaks.length - 1; i += 1) {
+    breaksData.push({
+      x1: props.classification.breaks[i],
+      x2: props.classification.breaks[i + 1],
+      y: props.classification.entitiesByClass[i] / (
+        props.classification.breaks[i + 1] - props.classification.breaks[i]),
+      count: props.classification.entitiesByClass[i],
+      color: colors[i],
+    });
   }
-  </>;
+
+  return <>{
+    Plot.plot({
+      height: props.height,
+      width: props.width,
+      style: { color: props.color },
+      marginBottom: 20,
+      x: {
+        domain: minmax,
+        tickFormat: (d) => d.toLocaleString(),
+      },
+      y: {
+        nice: false,
+        grid: true,
+        ticks: false,
+      },
+      marks: [
+        Plot.rectY(breaksData, {
+          x1: (d) => d.x1,
+          x2: (d) => d.x2,
+          y: (d) => d.y,
+          fill: (d) => d.color,
+        }),
+        Plot.ruleY([0]),
+        Plot.ruleX([minmax[0]]),
+      ],
+    }) as SVGSVGElement
+  }</>;
 }
 
-export default function legendCategoricalChoroplethBarchart(
-  legend: CategoricalChoroplethBarchartLegend,
+export default function legendChoroplethHistogram(
+  legend: ChoroplethHistogramLegend,
 ): JSX.Element {
   const { LL } = useI18nContext();
   let refElement: SVGGElement;
@@ -143,15 +105,15 @@ export default function legendCategoricalChoroplethBarchart(
     legend.layerId,
   )!;
 
-  function getCategoricalParameters(layerDescription: LayerDescription) {
-    if (layerDescription.renderer === 'categoricalChoropleth') {
-      return layerDescription.rendererParameters as CategoricalChoroplethParameters;
+  function getClassificationParameters(layerDescription: LayerDescription) {
+    if (layerDescription.renderer === 'choropleth') {
+      return layerDescription.rendererParameters as ClassificationParameters;
     }
     if (
       layerDescription.renderer === 'proportionalSymbols'
-      && (layerDescription as LayerDescriptionProportionalSymbols).rendererParameters.colorMode === 'categoricalVariable'
+      && (layerDescription as LayerDescriptionProportionalSymbols).rendererParameters.colorMode === 'ratioVariable'
     ) {
-      return (layerDescription.rendererParameters as ProportionalSymbolCategoryParameters).color;
+      return (layerDescription.rendererParameters as ProportionalSymbolsRatioParameters).color;
     }
     throw new Error('Invalid reference layer');
   }
@@ -188,7 +150,7 @@ export default function legendCategoricalChoroplethBarchart(
 
   return <g
     ref={refElement!}
-    class="legend categorical-choropleth-barchart"
+    class="legend choropleth-histogram"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
     visibility={layer.visible && legend.visible ? undefined : 'hidden'}
@@ -206,8 +168,8 @@ export default function legendCategoricalChoroplethBarchart(
     <g
       transform={`translate(0, ${heightTitle() + heightSubtitle()})`}
     >
-      <CategoriesPlot
-        mapping={getCategoricalParameters(layer).mapping}
+      <ChoroplethHistogram
+        classification={getClassificationParameters(layer)}
         orientation={legend.orientation}
         color={legend.fontColor}
         width={legend.width}
