@@ -21,7 +21,7 @@ import { globalStore } from '../../store/GlobalStore';
 // Types / Interfaces / Enums
 import {
   ClassificationMethod,
-  LayerDescriptionProportionalSymbols,
+  type LayerDescriptionProportionalSymbols,
   ProportionalSymbolsSymbolType,
 } from '../../global.d';
 

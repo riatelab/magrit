@@ -1,6 +1,5 @@
 // Import from solid-js
 import {
-  createMemo,
   createSignal,
   For,
   Show,
@@ -45,7 +44,7 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 import type { PortrayalSettingsProps } from './common';
 import {
   type ChoroplethLegend,
-  CustomPalette,
+  type CustomPalette,
   type GridParameters,
   type KdeParameters,
   type LayerDescriptionSmoothedLayer,

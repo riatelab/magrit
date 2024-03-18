@@ -1,10 +1,9 @@
-import { For, JSX, Show } from 'solid-js';
+import { For, JSX } from 'solid-js';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
 
 // Helpers
-import { unproxify } from '../../helpers/common';
 import { mergeFilterIds } from './common.tsx';
 
 // Directives

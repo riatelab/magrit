@@ -24,6 +24,7 @@ import { makeClassificationPlot, makeColoredBucketPlot, makeDistributionPlot } f
 
 // Sub-components
 import DropdownMenu from '../DropdownMenu.tsx';
+import InputFieldRangeSlider from '../Inputs/InputRangeSlider.tsx';
 
 // Store
 import { classificationPanelStore, setClassificationPanelStore } from '../../store/ClassificationPanelStore';
@@ -33,10 +34,6 @@ import '../../styles/ClassificationPanel.css';
 
 // Types, interfaces and enums
 import { ClassificationMethod, type ClassificationParameters, CustomPalette } from '../../global.d';
-import InputFieldNumber from '../Inputs/InputNumber.tsx';
-import InputFieldRange from '../Inputs/InputRange.tsx';
-import InputFieldRangeNumber from '../Inputs/InputRangeNumber.tsx';
-import InputFieldRangeSlider from '../Inputs/InputRangeSlider.tsx';
 
 enum OptionsClassification {
   numberOfClasses,

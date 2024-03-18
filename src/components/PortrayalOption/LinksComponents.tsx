@@ -10,7 +10,6 @@ import { produce } from 'solid-js/store';
 
 // Imports from other packages
 import * as Plot from '@observablehq/plot';
-import type { Plot as PlotType } from '@observablehq/plot';
 
 // Helpers
 import d3 from '../../helpers/d3-custom';

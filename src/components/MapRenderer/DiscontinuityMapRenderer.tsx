@@ -7,7 +7,6 @@ import {
 
 // Helpers
 import { mergeFilterIds } from './common.tsx';
-import { unproxify } from '../../helpers/common';
 import { getClassifier } from '../../helpers/classification';
 
 // Stores

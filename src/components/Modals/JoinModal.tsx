@@ -16,7 +16,6 @@ import {
 
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
-import { FaSolidCircleInfo } from 'solid-icons/fa';
 
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';

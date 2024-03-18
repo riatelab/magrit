@@ -7,7 +7,6 @@ import {
 
 // Helpers
 import { getClassifier } from '../../helpers/classification';
-import { unproxify } from '../../helpers/common';
 import { mergeFilterIds } from './common.tsx';
 
 // Stores
@@ -18,9 +17,9 @@ import bindData from '../../directives/bind-data';
 
 // Types / Interfaces / Enums
 import {
-  ClassificationMethod, GriddedLayerParameters, LayerDescriptionGriddedLayer,
-  LayerDescriptionSmoothedLayer,
-  SmoothedLayerParameters,
+  ClassificationMethod,
+  type GriddedLayerParameters,
+  type LayerDescriptionGriddedLayer,
 } from '../../global.d';
 
 // For now we keep an array of directives

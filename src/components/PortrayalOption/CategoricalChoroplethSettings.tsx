@@ -1,6 +1,5 @@
 // Import from solid-js
 import {
-  createMemo,
   createSignal,
   For,
   type JSX,
@@ -45,7 +44,7 @@ import {
 
 // Types / Interfaces / Enums
 import {
-  CategoricalChoroplethBarchartLegend,
+  type CategoricalChoroplethBarchartLegend,
   type CategoricalChoroplethLegend,
   type CategoricalChoroplethMapping,
   type CategoricalChoroplethParameters,

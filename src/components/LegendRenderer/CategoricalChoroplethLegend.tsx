@@ -32,10 +32,8 @@ import {
 
 // Import some type descriptions
 import {
-  CategoricalChoroplethLegend,
-  CategoricalChoroplethParameters,
-  ChoroplethLegend,
-  LayerDescriptionCategoricalChoropleth,
+  type CategoricalChoroplethLegend,
+  type CategoricalChoroplethParameters,
   Orientation,
 } from '../../global.d';
 

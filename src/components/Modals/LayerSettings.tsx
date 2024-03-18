@@ -50,7 +50,8 @@ import {
   type SmoothedLayerParameters,
   LinkCurvature,
   LinkHeadType,
-  ProportionalSymbolsSymbolType, ProportionalSymbolsParametersBase,
+  ProportionalSymbolsSymbolType,
+  type ProportionalSymbolsParametersBase,
 } from '../../global.d';
 
 // Styles

@@ -33,7 +33,6 @@ import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 import type {
   LayerDescriptionProportionalSymbols,
   ProportionalSymbolsLegend,
-  ProportionalSymbolsParameters,
 } from '../../global';
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;

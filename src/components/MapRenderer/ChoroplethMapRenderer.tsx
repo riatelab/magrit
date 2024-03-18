@@ -7,7 +7,7 @@ import {
 
 // Helpers
 import { getClassifier } from '../../helpers/classification';
-import { isNumber, unproxify } from '../../helpers/common';
+import { isNumber } from '../../helpers/common';
 import { mergeFilterIds } from './common.tsx';
 
 // Stores
@@ -19,8 +19,8 @@ import bindData from '../../directives/bind-data';
 // Types / Interfaces / Enums
 import {
   ClassificationMethod,
-  ClassificationParameters,
-  LayerDescriptionChoropleth,
+  type ClassificationParameters,
+  type LayerDescriptionChoropleth,
 } from '../../global.d';
 
 // For now we keep an array of directives

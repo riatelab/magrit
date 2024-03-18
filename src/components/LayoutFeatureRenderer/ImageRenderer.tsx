@@ -17,7 +17,7 @@ import {
 } from './common.tsx';
 
 // Types / Interfaces / Enums
-import type { LayoutFeature, Image } from '../../global';
+import type { Image } from '../../global';
 
 const createCustomViewBox = (content: string): string | undefined => {
   const width = content.match(/width="(\d+(\.\d+)?)"/)?.[1];

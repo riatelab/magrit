@@ -20,7 +20,6 @@ import { globalStore } from '../../store/GlobalStore';
 // Types / Interfaces / Enums
 import {
   type LayerDescriptionMushroomLayer,
-  ProportionalSymbolsSymbolType,
 } from '../../global.d';
 
 // For now we keep an array of directives

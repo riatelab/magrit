@@ -31,11 +31,9 @@ import {
 
 // Import some type descriptions
 import {
-  AllowChoroplethLegend,
-  type ChoroplethLegend, ClassificationParameters,
-  type LayerDescriptionChoropleth,
-  type LayerDescriptionGriddedLayer,
-  type LayerDescriptionSmoothedLayer,
+  type AllowChoroplethLegend,
+  type ChoroplethLegend,
+  type ClassificationParameters,
   Orientation,
 } from '../../global.d';
 

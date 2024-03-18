@@ -42,12 +42,12 @@ import { setMapStore } from '../store/MapStore';
 import { setModalStore } from '../store/ModalStore';
 
 // Other components
+import InformationBanner from './InformationBanner.tsx';
 import SimplificationModal from './Modals/SimplificationModal.tsx';
+import { openLayerManager } from './LeftMenu/LeftMenu.tsx';
 
 // Styles
 import '../styles/ImportWindow.css';
-import { openLayerManager } from './LeftMenu/LeftMenu.tsx';
-import InformationBanner from './InformationBanner.tsx';
 
 interface LayerOrTableDescription {
   name: string,

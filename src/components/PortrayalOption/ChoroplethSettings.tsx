@@ -8,8 +8,6 @@ import {
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
-import { getPalette, Palette } from 'dicopal';
-import { quantile } from 'statsbreaks';
 import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Stores
@@ -25,10 +23,8 @@ import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore'
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { findSuitableName, getMinimumPrecision, isNumber } from '../../helpers/common';
-import d3 from '../../helpers/d3-custom';
 import { generateIdLayer } from '../../helpers/layers';
 import { generateIdLegend } from '../../helpers/legends';
-import { Mmin } from '../../helpers/math';
 import { VariableType } from '../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
@@ -47,16 +43,10 @@ import {
   type ClassificationParameters,
   type LayerDescription,
   type LegendTextElement,
-  ClassificationMethod,
   LegendType,
   Orientation,
-  RepresentationType, CustomPalette,
+  RepresentationType,
 } from '../../global.d';
-
-// eslint-disable-next-line prefer-destructuring
-const defaultColorScheme = applicationSettingsStore.defaultColorScheme;
-// eslint-disable-next-line prefer-destructuring
-const defaultNoDataColor = applicationSettingsStore.defaultNoDataColor;
 
 function onClickValidate(
   referenceLayerId: string,

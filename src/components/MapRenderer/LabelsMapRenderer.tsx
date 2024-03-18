@@ -17,7 +17,7 @@ import { globalStore } from '../../store/GlobalStore';
 
 // Types / Interfaces / Enums
 import {
-  LabelsParameters,
+  type LabelsParameters,
   type LayerDescriptionLabels,
 } from '../../global.d';
 
