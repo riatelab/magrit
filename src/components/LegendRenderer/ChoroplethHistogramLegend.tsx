@@ -1,7 +1,8 @@
 import {
   createEffect,
   createMemo,
-  JSX, on,
+  type JSX,
+  on,
   onMount,
 } from 'solid-js';
 

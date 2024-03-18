@@ -39,7 +39,7 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
-  type CategoricalChoroplethBarchartLegend, ChoroplethHistogramLegend,
+  type ChoroplethHistogramLegend,
   type ChoroplethLegend,
   type ClassificationParameters,
   type LayerDescription,

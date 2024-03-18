@@ -557,6 +557,23 @@ export enum ProcessingOperationType {
   simplification = 'simplification',
 }
 
+export enum PointAnalysisMeshType {
+  grid = 'grid',
+  polygonLayer = 'polygonLayer',
+}
+
+export enum PointAnalysisStockType {
+  count = 'count',
+  weightedCount = 'weightedCount',
+}
+
+export enum PointAnalysisRatioType {
+  density = 'density',
+  mean = 'mean',
+  standardDeviation = 'standardDeviation',
+  weightedDensity = 'weightedDensity',
+}
+
 export enum CartogramMethod {
   Dougenik = 'Dougenik',
   Olson = 'Olson',

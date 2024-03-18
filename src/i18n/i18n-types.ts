@@ -833,6 +833,10 @@ type RootTranslation = {
 			 */
 			Mushrooms: string
 			/**
+			 * P​o​i​n​t​ ​l​a​y​e​r​ ​a​n​a​l​y​s​i​s
+			 */
+			PointAnalysis: string
+			/**
 			 * A​g​g​r​e​g​a​t​i​o​n
 			 */
 			Aggregation: string
@@ -1330,6 +1334,8 @@ type RootTranslation = {
 			 */
 			InvalidFormula: string
 		}
+		PointAnalysisOptions: {
+		}
 	}
 	FormulaInput: {
 		/**
@@ -1677,6 +1683,10 @@ type RootTranslation = {
 			 * A​ ​l​i​n​k​s​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​l​i​n​k​s​ ​a​r​e​ ​d​r​a​w​n​ ​b​e​t​w​e​e​n​ ​p​o​i​n​t​s​ ​o​r​ ​a​r​e​a​s​,​ ​o​p​t​i​o​n​a​l​l​y​ ​w​i​t​h​ ​a​ ​w​i​d​t​h​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​.
 			 */
 			Links: string
+			/**
+			 * P​o​i​n​t​ ​a​n​a​l​y​s​i​s​ ​i​s​ ​a​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​t​h​a​t​ ​a​l​l​o​w​s​ ​y​o​u​ ​t​o​ ​d​i​s​p​l​a​y​ ​a​ ​s​u​m​m​a​r​y​ ​o​f​ ​t​h​e​ ​v​a​l​u​e​s​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​ ​f​o​r​ ​a​ ​p​o​i​n​t​ ​l​a​y​e​r​.
+			 */
+			PointAnalysis: string
 			/**
 			 * A​ ​m​u​s​h​r​o​o​m​s​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​v​a​l​u​e​s​ ​o​f​ ​t​w​o​ ​v​a​r​i​a​b​l​e​s​ ​a​r​e​ ​r​e​p​r​e​s​e​n​t​e​d​ ​b​y​ ​t​w​o​ ​h​a​l​f​-​c​i​r​c​l​e​s​ ​o​r​ ​t​w​o​ ​h​a​l​f​-​s​q​u​a​r​e​s​,​ ​f​o​r​m​i​n​g​ ​a​ ​m​u​s​h​r​o​o​m​-​s​h​a​p​e​d​ ​s​y​m​b​o​l​.
 			 */
@@ -3160,6 +3170,10 @@ export type TranslationFunctions = {
 			 */
 			Mushrooms: () => LocalizedString
 			/**
+			 * Point layer analysis
+			 */
+			PointAnalysis: () => LocalizedString
+			/**
 			 * Aggregation
 			 */
 			Aggregation: () => LocalizedString
@@ -3656,6 +3670,8 @@ export type TranslationFunctions = {
 			 */
 			InvalidFormula: () => LocalizedString
 		}
+		PointAnalysisOptions: {
+		}
 	}
 	FormulaInput: {
 		/**
@@ -4003,6 +4019,10 @@ export type TranslationFunctions = {
 			 * A links map is a thematic map in which links are drawn between points or areas, optionally with a width in proportion to the value of a variable.
 			 */
 			Links: () => LocalizedString
+			/**
+			 * Point analysis is a functionality that allows you to display a summary of the values of a variable for a point layer.
+			 */
+			PointAnalysis: () => LocalizedString
 			/**
 			 * A mushrooms map is a thematic map in which the values of two variables are represented by two half-circles or two half-squares, forming a mushroom-shaped symbol.
 			 */

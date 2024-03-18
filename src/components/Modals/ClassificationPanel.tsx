@@ -5,7 +5,6 @@ import {
 
 // Imports from other packages
 import {
-  getPalette,
   getPalettes,
   PaletteType,
   getSequentialColors,
