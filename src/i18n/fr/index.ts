@@ -394,6 +394,7 @@ const fr = {
       ComputationTypeMean: 'Moyenne',
       ComputationTypeStandardDeviation: 'Écart-type',
       LayerToUse: 'Couche à utiliser',
+      VariableToUse: 'Variable numérique à utiliser',
     },
   },
   FormulaInput: {

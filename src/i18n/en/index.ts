@@ -394,6 +394,7 @@ const en = {
       ComputationTypeMean: 'Mean',
       ComputationTypeStandardDeviation: 'Standard deviation',
       LayerToUse: 'Layer to use',
+      VariableToUse: 'Numerical variable to use',
     },
   },
   FormulaInput: {

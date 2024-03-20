@@ -1395,6 +1395,10 @@ type RootTranslation = {
 			 * L​a​y​e​r​ ​t​o​ ​u​s​e
 			 */
 			LayerToUse: string
+			/**
+			 * N​u​m​e​r​i​c​a​l​ ​v​a​r​i​a​b​l​e​ ​t​o​ ​u​s​e
+			 */
+			VariableToUse: string
 		}
 	}
 	FormulaInput: {
@@ -3792,6 +3796,10 @@ export type TranslationFunctions = {
 			 * Layer to use
 			 */
 			LayerToUse: () => LocalizedString
+			/**
+			 * Numerical variable to use
+			 */
+			VariableToUse: () => LocalizedString
 		}
 	}
 	FormulaInput: {
