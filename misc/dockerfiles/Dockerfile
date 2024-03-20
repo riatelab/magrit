@@ -56,7 +56,7 @@ RUN cd /home/app/magrit/ \
     && python3.11 setup.py build_ext --inplace
 
 RUN cd /home/app/magrit/client \
-    && npm install \
+    && npm ci --no-audit --maxsockets 1 \
     && NODE_OPTIONS=--openssl-legacy-provider node node_modules/webpack/bin/webpack.js
 
 RUN mv /home/mdbook /home/app/magrit/documentation/mdbook \
