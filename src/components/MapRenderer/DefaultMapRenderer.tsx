@@ -45,10 +45,11 @@ export function defaultPolygonRendererOld(
     <For each={layerDescription.data.features}>
       {
         (feature) => <path
-            d={globalStore.pathGenerator(feature)}
-            vector-effect="non-scaling-stroke"
-            use:bindData={feature}
-          />
+          d={globalStore.pathGenerator(feature)}
+          vector-effect="non-scaling-stroke"
+          // @ts-expect-error because use:bind-data isn't a property of this elemen
+          use:bindData={feature}
+        />
       }
     </For>
   </g>;
@@ -80,11 +81,13 @@ export function defaultPolygonRenderer(
     mgt:portrayal-type={layerDescription.renderer}
   >
     <path
+      // @ts-expect-error because use:bind-data isn't a property of this element
       use:bindData={meshAndPolygons().polygons}
       d={globalStore.pathGenerator(meshAndPolygons().polygons)}
       vector-effect="non-scaling-stroke"
     />
     <path
+      // @ts-expect-error because use:bind-data isn't a property of this element
       use:bindData={meshAndPolygons().mesh}
       d={globalStore.pathGenerator(meshAndPolygons().mesh)}
       vector-effect="non-scaling-stroke"
@@ -118,6 +121,7 @@ export function defaultPointRenderer(
         (feature) => <path
           d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
           vector-effect="non-scaling-stroke"
+          // @ts-expect-error because use:bind-data isn't a property of this element
           use:bindData={feature}
         />
       }
@@ -148,6 +152,7 @@ export function defaultLineRenderer(
         (feature) => <path
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
+          // @ts-expect-error because use:bind-data isn't a property of this element
           use:bindData={feature}
         />
       }
@@ -174,6 +179,7 @@ export function sphereRenderer(layerDescription: LayerDescription): JSX.Element 
       <path
         vector-effect="non-scaling-stroke"
         d={globalStore.pathGenerator(layerDescription.data)}
+        // @ts-expect-error because use:bind-data isn't a property of this element
         use:bindData={layerDescription.data}
       />
     </g>;

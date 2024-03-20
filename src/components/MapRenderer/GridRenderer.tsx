@@ -74,6 +74,7 @@ export default function gridRenderer(
           }
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
+          // @ts-expect-error because use:bind-data isn't a property of this element
           use:bindData={feature}
         />
       }

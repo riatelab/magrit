@@ -72,6 +72,7 @@ export function categoricalChoroplethPolygonRenderer(
           fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
+          // @ts-expect-error because use:bind-data isn't a property of this element
           use:bindData={feature}
         />
       }
@@ -121,6 +122,7 @@ export function categoricalChoroplethPointRenderer(
           fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
           d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
           vector-effect="non-scaling-stroke"
+          // @ts-expect-error because use:bind-data isn't a property of this element
           use:bindData={feature}
         />
       }
@@ -170,6 +172,7 @@ export function categoricalChoroplethLineRenderer(
           }
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
+          // @ts-expect-error because use:bind-data isn't a property of this element
           use:bindData={feature}
         />
       }

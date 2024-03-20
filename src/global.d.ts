@@ -830,7 +830,7 @@ export enum NumberFormatting {
 }
 
 export interface ID3Element {
-  __data__: GeoJSONFeature | { type: 'Sphere' },
+  __data__: GeoJSONFeature,
 }
 
 export interface IZoomable {

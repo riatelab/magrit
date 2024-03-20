@@ -2,6 +2,7 @@ import d3 from './d3-custom';
 import { globalStore } from '../store/GlobalStore';
 import {
   type GeoJSONFeature,
+  type ID3Element,
   type IZoomable,
   LinkCurvature,
 } from '../global.d';
@@ -30,13 +31,13 @@ export const linkPath = (
     case LinkCurvature.StraightOnSphere:
       return pathGenerator(feature);
     case LinkCurvature.StraightOnPlane: {
-      const pt1 = projection(feature.geometry.coordinates[0]);
-      const pt2 = projection(feature.geometry.coordinates[1]);
+      const pt1 = projection((feature.geometry.coordinates as [number, number][])[0]);
+      const pt2 = projection((feature.geometry.coordinates as [number, number][])[1]);
       return `M ${pt1[0]},${pt1[1]} L ${pt2[0]},${pt2[1]}`;
     }
     case LinkCurvature.Curved: {
-      const pt1 = projection(feature.geometry.coordinates[0]);
-      const pt2 = projection(feature.geometry.coordinates[1]);
+      const pt1 = projection((feature.geometry.coordinates as [number, number][])[0]);
+      const pt2 = projection((feature.geometry.coordinates as [number, number][])[1]);
       // Compute a point on the bisector of the segment [pt1, pt2]
       const bisector = [
         (pt1[0] + pt2[0]) / 2,
@@ -115,20 +116,27 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
       }
 
       g.querySelectorAll('path').forEach((p) => {
-        p.setAttribute('d', globalStore.pathGenerator(p.__data__)); // eslint-disable-line no-underscore-dangle
+        p.setAttribute(
+          'd', // eslint-disable-next-line no-underscore-dangle
+          globalStore.pathGenerator((p as SVGPathElement & ID3Element).__data__),
+        );
       });
     } else if (typePortrayal === 'proportionalSymbols') {
       // Redraw the symbols (circles)
       g.querySelectorAll('circle').forEach((c) => {
-        // eslint-disable-next-line no-underscore-dangle
-        const projectedCoords = globalStore.projection(c.__data__.geometry.coordinates);
+        const projectedCoords = globalStore.projection(
+          // eslint-disable-next-line no-underscore-dangle
+          (c as SVGCircleElement & ID3Element).__data__.geometry.coordinates,
+        );
         c.setAttribute('cx', `${projectedCoords[0]}`);
         c.setAttribute('cy', `${projectedCoords[1]}`);
       });
       // Redraw the symbols (squares)
       g.querySelectorAll('rect').forEach((r) => {
-        // eslint-disable-next-line no-underscore-dangle
-        const projectedCoords = globalStore.projection(r.__data__.geometry.coordinates);
+        const projectedCoords = globalStore.projection(
+          // eslint-disable-next-line no-underscore-dangle
+          (r as SVGRectElement & ID3Element).__data__.geometry.coordinates,
+        );
         const size = +r.getAttribute('width')!;
         r.setAttribute('x', `${projectedCoords[0] - size / 2}`);
         r.setAttribute('y', `${projectedCoords[1] - size / 2}`);
@@ -137,8 +145,10 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
       const pos = ['top', 'bottom'];
       // Redraw the symbols (circles)
       g.querySelectorAll('g').forEach((gg) => {
-        // eslint-disable-next-line no-underscore-dangle
-        const projectedCoords = globalStore.projection(gg.__data__.geometry.coordinates);
+        const projectedCoords = globalStore.projection(
+          // eslint-disable-next-line no-underscore-dangle
+          (gg as SVGGElement & ID3Element).__data__.geometry.coordinates,
+        );
         gg.querySelectorAll('path').forEach((p, i) => {
           const sizeValue = p.getAttribute('mgt:size-value')!;
           p.setAttribute(
@@ -154,8 +164,10 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
       });
     } else if (typePortrayal === 'labels') {
       g.querySelectorAll('text').forEach((t) => {
-        // eslint-disable-next-line no-underscore-dangle
-        const projectedCoords = globalStore.projection(t.__data__.geometry.coordinates);
+        const projectedCoords = globalStore.projection(
+          // eslint-disable-next-line no-underscore-dangle
+          (t as SVGTextElement & ID3Element).__data__.geometry.coordinates,
+        );
         t.setAttribute('x', `${projectedCoords[0]}`);
         t.setAttribute('y', `${projectedCoords[1]}`);
       });
@@ -163,7 +175,7 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
       const linkCurvature = g.getAttribute('mgt:link-curvature')!;
       g.querySelectorAll('path').forEach((p) => {
         p.setAttribute('d', linkPath(
-          p.__data__, // eslint-disable-line no-underscore-dangle
+          (p as SVGPathElement & ID3Element).__data__, // eslint-disable-line no-underscore-dangle
           globalStore.pathGenerator,
           globalStore.projection,
           linkCurvature as LinkCurvature,
@@ -173,7 +185,10 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
   });
   // Also redraw the path elements in the defs
   svgElement.querySelectorAll('defs clipPath > path').forEach((p) => {
-    // eslint-disable-next-line no-underscore-dangle
-    p.setAttribute('d', globalStore.pathGenerator(p.__data__));
+    p.setAttribute(
+      'd',
+      // eslint-disable-next-line no-underscore-dangle
+      globalStore.pathGenerator((p as SVGPathElement & ID3Element).__data__),
+    );
   });
 };

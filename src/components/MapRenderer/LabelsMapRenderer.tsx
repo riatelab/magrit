@@ -60,7 +60,6 @@ export function defaultLabelsRenderer(
             () => globalStore.projection(feature.geometry.coordinates),
           );
           return <text
-            use:bindData={feature}
             x={projectedCoords()[0] + rendererParameters.textOffset[0]}
             y={projectedCoords()[1] + rendererParameters.textOffset[1]}
             alignment-baseline={rendererParameters.textAlignment}
@@ -75,6 +74,8 @@ export function defaultLabelsRenderer(
                 ? { stroke: rendererParameters.halo.color, 'stroke-width': rendererParameters.halo.width }
                 : {}
             )}
+            // @ts-expect-error because use:bind-data isn't a property of this element
+            use:bindData={feature}
           >{ feature.properties[rendererParameters.variable] }</text>;
         }
       }
@@ -93,6 +94,7 @@ export function graticuleLabelsRenderer(
     <For each={layerDescription.data.features}>
       {
         (feature) => <text
+          // @ts-expect-error because use:bind-data isn't a property of this element
           use:bindData={feature}
           alignment-baseline={rendererParameters.textAlignment}
           text-anchor={rendererParameters.textAnchor}

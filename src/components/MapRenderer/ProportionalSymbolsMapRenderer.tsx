@@ -113,6 +113,7 @@ export default function proportionalSymbolsRenderer(
                   feature.properties[layerDescription.rendererParameters.color?.variable],
                 )
               }
+              // @ts-expect-error because use:bind-data isn't a property of this element
               use:bindData={feature}
             ></circle>;
           }
@@ -133,6 +134,7 @@ export default function proportionalSymbolsRenderer(
                   feature.properties[layerDescription.rendererParameters.color?.variable],
                 )
               }
+              // @ts-expect-error because use:bind-data isn't a property of this element
               use:bindData={feature}
             ></rect>;
           }

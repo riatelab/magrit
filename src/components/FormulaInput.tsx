@@ -104,7 +104,7 @@ export default function FormulaInput(
     'flex-wrap': 'wrap',
     'font-size': '0.85rem !important',
     'row-gap': '0.4em',
-  };
+  } as JSX.CSSProperties;
 
   const computeSampleOutput = () => {
     const formula = replaceSpecialFields(props.currentFormula(), lengthDataset);
@@ -196,7 +196,11 @@ export default function FormulaInput(
             (specialField) => (
               <span
                 class="tag is-success is-cursor-pointer"
-                title={LL().FormulaInput[specialField.replace('$', 'specialField')]()}
+                title={
+                  LL().FormulaInput[
+                    specialField.replace('$', 'specialField') as 'specialFieldId' | 'specialFieldLength' | 'specialFieldArea'
+                  ]()
+                }
                 onClick={() => {
                   // Insert the field in the formula
                   insertInFormula(
@@ -219,7 +223,7 @@ export default function FormulaInput(
             (func) => (
               <span
                 class="tag is-info is-cursor-pointer"
-                title={LL().FormulaInput[func]()}
+                title={LL().FormulaInput[func as 'POWER()' | 'SUBSTRING()' | 'CONCAT()']()}
                 onClick={() => {
                   // Insert the field in the formula
                   insertInFormula(
@@ -240,7 +244,7 @@ export default function FormulaInput(
             (op) => (
               <span
                 class="tag is-link is-cursor-pointer"
-                title={LL().FormulaInput[op]()}
+                title={LL().FormulaInput[op as '*' | '+' | '-' | '/']()}
                 onClick={() => {
                   // Insert the field in the formula
                   insertInFormula(

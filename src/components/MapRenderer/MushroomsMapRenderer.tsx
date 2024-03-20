@@ -80,7 +80,10 @@ export default function mushroomRenderer(
           const sizeBottom = createMemo(() => propSizeBottom().scale(
             feature.properties[layerDescription.rendererParameters.bottom.variable],
           ));
-          return <g use:bindData={feature}>
+          return <g
+            // @ts-expect-error because use:bind-data isn't a property of this element
+            use:bindData={feature}
+          >
             <path
               fill={layerDescription.rendererParameters.top.color}
               mgt:size-value={sizeTop()}

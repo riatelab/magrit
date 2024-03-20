@@ -59,6 +59,7 @@ export default function discontinuityRenderer(
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
           stroke-width={sizes()[classifier().getClass(feature.properties.value)]}
+          // @ts-expect-error because use:bind-data isn't a property of this element
           use:bindData={feature}
         />
       }

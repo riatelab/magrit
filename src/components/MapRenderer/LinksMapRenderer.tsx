@@ -94,6 +94,7 @@ export default function linksRenderer(
                 ? `url(#arrow-head-${layerDescription.strokeColor!.replace('#', '')})`
                 : undefined
             }
+            // @ts-expect-error because use:bind-data isn't a property of this element
             use:bindData={feature}
           />
         }
@@ -144,6 +145,7 @@ export default function linksRenderer(
               ? `url(#arrow-head-${layerDescription.strokeColor!.replace('#', '')})`
               : undefined
           }
+          // @ts-expect-error because use:bind-data isn't a property of this element
           use:bindData={feature}
         />
       }
