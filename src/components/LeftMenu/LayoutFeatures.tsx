@@ -67,6 +67,8 @@ import {
   ScaleBarBehavior,
   ScaleBarStyle,
 } from '../../global.d';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import InputFieldColor from '../Inputs/InputColor.tsx';
 
 const createRectangle = (LL: Accessor<TranslationFunctions>) => {
   toast.success(LL().LayoutFeatures.DrawingInstructions.Rectangle(), {
@@ -488,43 +490,21 @@ export default function LayoutFeatures(): JSX.Element {
   const { LL } = useI18nContext();
 
   return <div class="layout-features-section">
-    <div class="field">
-      <label class="label">{ LL().LayoutFeatures.BackgroundColor() }</label>
-      <div class="control">
-        <input
-          class="color"
-          type="color"
-          value={mapStore.backgroundColor}
-          onChange={
-            (e) => {
-              setMapStore({
-                backgroundColor: e.target.value,
-              });
-            }
-          }
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().LayoutFeatures.Opacity() }</label>
-      <div class="control">
-        <input
-          class="number"
-          type="number"
-          value={mapStore.backgroundColorOpacity}
-          onChange={
-            (e) => {
-              setMapStore({
-                backgroundColorOpacity: +e.target.value,
-              });
-            }
-          }
-          min="0"
-          max="1"
-          step="0.1"
-        />
-      </div>
-    </div>
+    <InputFieldColor
+      label={LL().LayoutFeatures.BackgroundColor()}
+      value={mapStore.backgroundColor}
+      onChange={(v) => { setMapStore({ backgroundColor: v }); }}
+      width={100}
+    />
+    <InputFieldNumber
+      label={LL().LayoutFeatures.Opacity()}
+      value={mapStore.backgroundColorOpacity}
+      onChange={(v) => { setMapStore({ backgroundColorOpacity: v }); }}
+      min={0}
+      max={1}
+      step={0.1}
+      width={100}
+    />
     <div class="field-block">
       <label class="label">{ LL().LayoutFeatures.MapSkinElements() }</label>
       <div class="is-flex is-justify-content-space-evenly">

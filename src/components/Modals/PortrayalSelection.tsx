@@ -1,17 +1,11 @@
 // Imports from solid-js
 import {
-  createSignal,
-  For,
-  type JSX,
-  Match,
-  onCleanup,
-  onMount,
-  Show,
-  Switch,
+  createSignal, For, type JSX, Match, onCleanup, onMount, Show, Switch,
 } from 'solid-js';
 
 // Imports from other libraries
 import { FaSolidArrowLeftLong, FaSolidMapLocationDot } from 'solid-icons/fa';
+import { ImStatsBars } from 'solid-icons/im';
 import { VsServerProcess } from 'solid-icons/vs';
 
 // Helpers
@@ -39,14 +33,19 @@ import InformationBanner from '../InformationBanner.tsx';
 import SimplificationSettings from '../PortrayalOption/SimplificationSettings.tsx';
 
 // Type / interfaces / enums
-import { ProcessingOperationType, RepresentationType } from '../../global.d';
+import {
+  AnalysisOperationType,
+  ProcessingOperationType,
+  RepresentationType,
+} from '../../global.d';
 
 // Styles
 import '../../styles/PortrayalSelection.css';
+import PointAnalysisSettings from '../PortrayalOption/PointAnalysisSettings.tsx';
 
 interface PortrayalDescription {
   name: string;
-  type: RepresentationType | ProcessingOperationType;
+  type: RepresentationType | ProcessingOperationType | AnalysisOperationType;
   enabled: boolean;
 }
 
@@ -90,6 +89,14 @@ const portrayalDescriptions: PortrayalDescription[] = [
   {
     name: 'Mushrooms',
     type: RepresentationType.mushrooms,
+  },
+  {
+    name: 'PointAnalysis',
+    type: AnalysisOperationType.pointAnalysis,
+  },
+  {
+    name: 'SimpleLinearRegression',
+    type: AnalysisOperationType.simpleLinearRegression,
   },
   {
     name: 'Aggregation',
@@ -145,6 +152,9 @@ function CardPortrayal(
           </Match>
           <Match when={Object.values(ProcessingOperationType).includes(pDesc.type)}>
             <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+          </Match>
+          <Match when={Object.values(AnalysisOperationType).includes(pDesc.type)}>
+            <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
           </Match>
         </Switch>
         { LL().PortrayalSection.PortrayalTypes[pDesc.name]() }
@@ -246,6 +256,10 @@ export default function PortrayalSelection(): JSX.Element {
       case ProcessingOperationType.simplification:
         // eslint-disable-next-line no-param-reassign
         p.enabled = geomType === 'polygon' || geomType === 'linestring';
+        break;
+      case AnalysisOperationType.pointAnalysis:
+        // eslint-disable-next-line no-param-reassign
+        p.enabled = geomType === 'point';
         break;
       default:
         // eslint-disable-next-line no-param-reassign
@@ -372,6 +386,9 @@ export default function PortrayalSelection(): JSX.Element {
             </Match>
             <Match when={selectedPortrayal()!.type === ProcessingOperationType.simplification}>
               <SimplificationSettings layerId={portrayalSelectionStore.layerId!} />
+            </Match>
+            <Match when={selectedPortrayal()!.type === AnalysisOperationType.pointAnalysis}>
+              <PointAnalysisSettings layerId={portrayalSelectionStore.layerId!} />
             </Match>
           </Switch>
         </Show>

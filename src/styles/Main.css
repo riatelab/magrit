@@ -100,6 +100,10 @@ html.theme-dark select[multiple] option:checked {
     color: unset !important;
 }
 
+html.theme-dark select > option[disabled] {
+    color: grey;
+}
+
 
 /*
 Overwrite Bulma's default to help
@@ -146,6 +150,10 @@ but just store them in css variables)
 
 .dropdown-trigger > .button {
   box-shadow: unset !important;
+}
+
+.modal-card-foot .button:not(:last-child) {
+  margin-right: 0.5em;
 }
 
 button.unstyled {

@@ -232,6 +232,7 @@ const fr = {
       Links: 'Liens',
       Mushrooms: 'Champignons',
       PointAnalysis: 'Analyse d\'un semi de points',
+      SimpleLinearRegression: 'Régression linéaire simple',
       Aggregation: 'Aggrégation',
       Selection: 'Sélection',
       Simplification: 'Simplification',
@@ -379,7 +380,20 @@ const fr = {
       InvalidFormula: 'Formula invalide - l\'expression saisie doit retourner vrai (true) ou faux (false) pour chaque entité de la couche.',
     },
     PointAnalysisOptions: {
-
+      MapType: 'Type de carte',
+      MapTypeRatio: 'Carte choroplèthe (ratio)',
+      MapTypeStock: 'Carte en symbols proportionnels (stock)',
+      MeshType: 'Type de maillage',
+      MeshTypeGrid: 'Grille régulière',
+      MeshTypePolygonLayer: 'Couche existante',
+      ComputationType: 'Type de calcul',
+      ComputationTypeCount: 'Comptage simple',
+      ComputationTypeWeightedCount: 'Comptage pondéré',
+      ComputationTypeDensity: 'Densité (comptage simple)',
+      ComputationTypeWeightedDensity: 'Densité pondérée',
+      ComputationTypeMean: 'Moyenne',
+      ComputationTypeStandardDeviation: 'Écart-type',
+      LayerToUse: 'Couche à utiliser',
     },
   },
   FormulaInput: {
@@ -478,12 +492,10 @@ const fr = {
       Links: 'Une carte de lien permet de tracer des liens entre des points ou des zones, optionnellement avec une largeur proportionnelle à un phénomène.',
       Mushrooms: 'Une carte en champignon est une carte thématique dans laquelle les valeurs de deux variables sont représentées par deux demi-cercles ou deux demi-carrés, formant un symbole ressemblant à un champignon.',
       PointAnalysis: 'Une analyse de points permet de réaliser des calculs sur un semi de points, pour obtenir une couche de stock (symboles proportionnels) ou de ratio (choroplèthe).',
+      SimpleLinearRegression: 'Une régression linéaire simple permet de réaliser une régression linéaire et d\'afficher le résultat sur une couche géographique.',
       Aggregation: 'Cette fonctionnalité permet d\'agréger des entités polygonales selon la valeur d\'un champ (ou toutes les entités si aucun champ n\'est choisi).',
       Selection: 'Cette fonctionnalité permet de créer une nouvelle couche basée sur la sélection des entités géographiques d\'origine en fonction d\'une expression.',
       Simplification: 'Cette fonctionnalité permet de simplifier le tracé des entités linéaires ou polygonales. Cette opération, également appelée "généralisation" en cartographie, permet d\'obtenir un jeu de données moins détaillé et plus léger.',
-    },
-    LongDescriptions: {
-      Choropleth: '',
     },
   },
   ProjectionSelection: {

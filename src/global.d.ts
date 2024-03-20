@@ -557,21 +557,28 @@ export enum ProcessingOperationType {
   simplification = 'simplification',
 }
 
+export enum AnalysisOperationType {
+  pointAnalysis = 'pointAnalysis',
+  simpleLinearRegression = 'simpleLinearRegression',
+  multipleLinearRegression = 'multipleLinearRegression',
+  principalComponentAnalysis = 'principalComponentAnalysis',
+}
+
 export enum PointAnalysisMeshType {
-  grid = 'grid',
-  polygonLayer = 'polygonLayer',
+  Grid = 'Grid',
+  PolygonLayer = 'PolygonLayer',
 }
 
 export enum PointAnalysisStockType {
-  count = 'count',
-  weightedCount = 'weightedCount',
+  Count = 'Count',
+  WeightedCount = 'WeightedCount',
 }
 
 export enum PointAnalysisRatioType {
-  density = 'density',
-  mean = 'mean',
-  standardDeviation = 'standardDeviation',
-  weightedDensity = 'weightedDensity',
+  Density = 'Density',
+  Mean = 'Mean',
+  StandardDeviation = 'StandardDeviation',
+  WeightedDensity = 'WeightedDensity',
 }
 
 export enum CartogramMethod {

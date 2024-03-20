@@ -837,6 +837,10 @@ type RootTranslation = {
 			 */
 			PointAnalysis: string
 			/**
+			 * S​i​m​p​l​e​ ​l​i​n​e​a​r​ ​r​e​g​r​e​s​s​i​o​n
+			 */
+			SimpleLinearRegression: string
+			/**
 			 * A​g​g​r​e​g​a​t​i​o​n
 			 */
 			Aggregation: string
@@ -1335,6 +1339,62 @@ type RootTranslation = {
 			InvalidFormula: string
 		}
 		PointAnalysisOptions: {
+			/**
+			 * M​a​p​ ​t​y​p​e
+			 */
+			MapType: string
+			/**
+			 * C​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​(​r​a​t​i​o​ ​v​a​l​u​e​s​)
+			 */
+			MapTypeRatio: string
+			/**
+			 * P​r​o​p​o​r​t​i​o​n​a​l​ ​s​y​m​b​o​l​s​ ​m​a​p​ ​(​s​t​o​c​k​ ​v​a​l​u​e​s​)
+			 */
+			MapTypeStock: string
+			/**
+			 * M​e​s​h​ ​t​y​p​e
+			 */
+			MeshType: string
+			/**
+			 * R​e​g​u​l​a​r​ ​g​r​i​d
+			 */
+			MeshTypeGrid: string
+			/**
+			 * E​x​i​s​t​i​n​g​ ​p​o​l​y​g​o​n​ ​l​a​y​e​r
+			 */
+			MeshTypePolygonLayer: string
+			/**
+			 * C​o​m​p​u​t​a​t​i​o​n​ ​t​y​p​e
+			 */
+			ComputationType: string
+			/**
+			 * S​i​m​p​l​e​ ​c​o​u​n​t
+			 */
+			ComputationTypeCount: string
+			/**
+			 * W​e​i​g​h​t​e​d​ ​c​o​u​n​t
+			 */
+			ComputationTypeWeightedCount: string
+			/**
+			 * D​e​n​s​i​t​y​ ​(​s​i​m​p​l​e​ ​c​o​u​n​t​)
+			 */
+			ComputationTypeDensity: string
+			/**
+			 * D​e​n​s​i​t​y​ ​(​w​e​i​g​h​t​e​d​ ​c​o​u​n​t​)
+			 */
+			ComputationTypeWeightedDensity: string
+			/**
+			 * M​e​a​n
+			 */
+			ComputationTypeMean: string
+			/**
+			 * S​t​a​n​d​a​r​d​ ​d​e​v​i​a​t​i​o​n
+			 */
+			ComputationTypeStandardDeviation: string
+			/**
+			 * L​a​y​e​r​ ​t​o​ ​u​s​e
+			 */
+			LayerToUse: string
 		}
 	}
 	FormulaInput: {
@@ -1688,6 +1748,10 @@ type RootTranslation = {
 			 */
 			PointAnalysis: string
 			/**
+			 * S​i​m​p​l​e​ ​l​i​n​e​a​r​ ​r​e​g​r​e​s​s​i​o​n​ ​i​s​ ​a​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​t​h​a​t​ ​a​l​l​o​w​s​ ​y​o​u​ ​t​o​ ​d​i​s​p​l​a​y​ ​t​h​e​ ​r​e​s​u​l​t​ ​o​f​ ​a​ ​s​i​m​p​l​e​ ​l​i​n​e​a​r​ ​r​e​g​r​e​s​s​i​o​n​ ​o​n​ ​a​ ​l​a​y​e​r​.
+			 */
+			SimpleLinearRegression: string
+			/**
 			 * A​ ​m​u​s​h​r​o​o​m​s​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​v​a​l​u​e​s​ ​o​f​ ​t​w​o​ ​v​a​r​i​a​b​l​e​s​ ​a​r​e​ ​r​e​p​r​e​s​e​n​t​e​d​ ​b​y​ ​t​w​o​ ​h​a​l​f​-​c​i​r​c​l​e​s​ ​o​r​ ​t​w​o​ ​h​a​l​f​-​s​q​u​a​r​e​s​,​ ​f​o​r​m​i​n​g​ ​a​ ​m​u​s​h​r​o​o​m​-​s​h​a​p​e​d​ ​s​y​m​b​o​l​.
 			 */
 			Mushrooms: string
@@ -1703,9 +1767,6 @@ type RootTranslation = {
 			 * T​h​i​s​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​s​i​m​p​l​i​f​i​e​s​ ​t​h​e​ ​d​r​a​w​i​n​g​ ​o​f​ ​l​i​n​e​a​r​ ​o​r​ ​p​o​l​y​g​o​n​a​l​ ​e​n​t​i​t​i​e​s​.​ ​T​h​i​s​ ​o​p​e​r​a​t​i​o​n​,​ ​a​l​s​o​ ​k​n​o​w​n​ ​a​s​ ​'​g​e​n​e​r​a​l​i​s​a​t​i​o​n​'​ ​i​n​ ​c​a​r​t​o​g​r​a​p​h​y​,​ ​r​e​s​u​l​t​s​ ​i​n​ ​a​ ​l​e​s​s​ ​d​e​t​a​i​l​e​d​ ​a​n​d​ ​l​i​g​h​t​e​r​ ​d​a​t​a​s​e​t​.
 			 */
 			Simplification: string
-		}
-		LongDescriptions: {
-			Choropleth: string
 		}
 	}
 	ProjectionSelection: {
@@ -3174,6 +3235,10 @@ export type TranslationFunctions = {
 			 */
 			PointAnalysis: () => LocalizedString
 			/**
+			 * Simple linear regression
+			 */
+			SimpleLinearRegression: () => LocalizedString
+			/**
 			 * Aggregation
 			 */
 			Aggregation: () => LocalizedString
@@ -3671,6 +3736,62 @@ export type TranslationFunctions = {
 			InvalidFormula: () => LocalizedString
 		}
 		PointAnalysisOptions: {
+			/**
+			 * Map type
+			 */
+			MapType: () => LocalizedString
+			/**
+			 * Choropleth map (ratio values)
+			 */
+			MapTypeRatio: () => LocalizedString
+			/**
+			 * Proportional symbols map (stock values)
+			 */
+			MapTypeStock: () => LocalizedString
+			/**
+			 * Mesh type
+			 */
+			MeshType: () => LocalizedString
+			/**
+			 * Regular grid
+			 */
+			MeshTypeGrid: () => LocalizedString
+			/**
+			 * Existing polygon layer
+			 */
+			MeshTypePolygonLayer: () => LocalizedString
+			/**
+			 * Computation type
+			 */
+			ComputationType: () => LocalizedString
+			/**
+			 * Simple count
+			 */
+			ComputationTypeCount: () => LocalizedString
+			/**
+			 * Weighted count
+			 */
+			ComputationTypeWeightedCount: () => LocalizedString
+			/**
+			 * Density (simple count)
+			 */
+			ComputationTypeDensity: () => LocalizedString
+			/**
+			 * Density (weighted count)
+			 */
+			ComputationTypeWeightedDensity: () => LocalizedString
+			/**
+			 * Mean
+			 */
+			ComputationTypeMean: () => LocalizedString
+			/**
+			 * Standard deviation
+			 */
+			ComputationTypeStandardDeviation: () => LocalizedString
+			/**
+			 * Layer to use
+			 */
+			LayerToUse: () => LocalizedString
 		}
 	}
 	FormulaInput: {
@@ -4024,6 +4145,10 @@ export type TranslationFunctions = {
 			 */
 			PointAnalysis: () => LocalizedString
 			/**
+			 * Simple linear regression is a functionality that allows you to display the result of a simple linear regression on a layer.
+			 */
+			SimpleLinearRegression: () => LocalizedString
+			/**
 			 * A mushrooms map is a thematic map in which the values of two variables are represented by two half-circles or two half-squares, forming a mushroom-shaped symbol.
 			 */
 			Mushrooms: () => LocalizedString
@@ -4039,9 +4164,6 @@ export type TranslationFunctions = {
 			 * This functionality simplifies the drawing of linear or polygonal entities. This operation, also known as 'generalisation' in cartography, results in a less detailed and lighter dataset.
 			 */
 			Simplification: () => LocalizedString
-		}
-		LongDescriptions: {
-			Choropleth: () => LocalizedString
 		}
 	}
 	ProjectionSelection: {
