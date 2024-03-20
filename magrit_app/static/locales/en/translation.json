@@ -847,7 +847,7 @@
             "realized_by1": "Made by UAR RIATE",
             "realized_by2": "Magrit is developed and maintained by members of <a href=\"http://riate.cnrs.fr\">UAR RIATE</a>.",
             "user_manual1": "Documented",
-            "user_manual2": "A full description of each method is available in the <a href=\"/docs/index.html\">user manual</a>.",
+            "user_manual2": "A full description of each method is available in the <a href=\"/static/book/index.html\">user manual</a>.",
             "box1_title": "Free and Open-Source",
             "box2_title": "Open to contributions",
             "box3_title": "Multilingual",

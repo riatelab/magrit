@@ -848,7 +848,7 @@
             "realized_by1": "Réalisé par l'UAR RIATE",
             "realized_by2": "Le projet est développé et maintenu par des membres de l'<a href=\"http://riate.cnrs.fr\">UAR RIATE</a>.",
             "user_manual1": "Documenté",
-            "user_manual2": "Une description complète de chacune des méthodes utilisées est disponible dans le <a href=\"/docs/index.html\">manuel de l'utilisateur</a>.",
+            "user_manual2": "Une description complète de chacune des méthodes utilisées est disponible dans le <a href=\"/static/book/index.html\">manuel de l'utilisateur</a>.",
             "box1_title": "Libre et gratuit",
             "box2_title": "Ouvert aux contributions",
             "box3_title": "Multilingue",
