@@ -438,7 +438,7 @@
             "ask_diff_nb_features": "The geometrie layer and the joined dataset doesn't have the same number of features.<br>Continue anyway ?",
             "ask_forget_join": "A successful join is already selected. Forget and select a new one ?",
             "unable_join": "Unable to join geometries and dataset.",
-            "error_not_uniques": "The values on which operate have to be uniques.",
+            "error_not_uniques": "The values on which to operate have to be unique.",
             "state_not_joined": "Data not joined",
             "ext_dataset_field": "External dataset field :",
             "geom_layer_field": "Geometrie layer field :",
