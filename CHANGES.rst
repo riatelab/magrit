@@ -1,6 +1,15 @@
 Changes
 =======
 
+0.16.4 (2024-03-20)
+-------------------
+
+- Fix some links to documentation for when used in docker (cf. discussion in #115).
+
+- Better wording for error message in join modal (fix #123).
+
+- Fix alignment of items (within each row) in color selection panel for categories.
+
 0.16.3 (2023-07-12)
 -------------------
 

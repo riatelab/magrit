@@ -1,5 +1,13 @@
 # Historique des versions et des changements effectués
 
+#### 0.16.4 (2024-03-20)
+
+- Correction de certains liens vers la documentation pour l'utilisation dans docker (cf. discussion dans <a href="https://github.com/riatelab/magrit/issues/115">115</a>).
+
+- Meilleure formulation du message d'erreur dans la fenêtre modale de jointure (corrige <a href="https://github.com/riatelab/magrit/issues/123">123</a>).
+
+- Correction de l'alignement des éléments (dans chaque ligne) dans le panneau de sélection des couleurs pour les catégories.
+
 #### 0.16.3 (2023-07-12) 
 
 - Correction de la sauvegarde de la palette personnalisée lors du clic sur confirmer dans le popup dédié du panneau de discrétisation (<a href="https://github.com/riatelab/magrit/issues/117">cf. issue #117</a>)
