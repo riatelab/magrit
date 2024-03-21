@@ -429,7 +429,7 @@ export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.E
       >
         <OcGoal2 style={{
           filter: 'drop-shadow(3px 3px 6px grey)',
-          fill: 'var(--primary-color)',
+          fill: 'var(--bulma-primary)',
           height: '1.5em',
           width: '1.5em',
           stroke: 'currentColor',
@@ -557,7 +557,7 @@ export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX
       >
         <OcGoal2 style={{
           filter: 'drop-shadow(3px 3px 6px grey)',
-          fill: 'var(--primary-color)',
+          fill: 'var(--bulma-primary)',
           height: '1.5em',
           width: '1.5em',
           stroke: 'currentColor',

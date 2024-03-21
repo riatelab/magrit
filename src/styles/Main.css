@@ -9,10 +9,6 @@ html {
   --chevron-color: #c7c7c7;
   --map-container-background: #fff; /* rgb(244, 246, 244); */
   --button-shadow: hsla(208,7%,46%,.3);
-  --primary-color: hsl(171, 100%, 41%);
-  --success-color: hsl(141, 53%, 53%);
-  --warning-color: hsl(48, 100%, 67%);
-  --danger-color: hsl(348, 100%, 61%);
   --left-menu-width: 380px;
   --header-height: 56px;
   --sortable-chosen-background: #d2d2d2;
@@ -30,7 +26,6 @@ html.theme-dark {
     --modal-card-body-background: #2e2e2e;
     --modal-card-title-color: #f5f5f5;
     --button-shadow: hsla(207, 53%, 88%, 0.3);
-    --primary-color: #3e8ed0;
     --sortable-chosen-background: #262626;
     scrollbar-color: auto;
     color-scheme: dark;
@@ -85,39 +80,9 @@ html.theme-dark select > option[disabled] {
     color: grey;
 }
 
-
-/*
-Overwrite Bulma's default to help
-with the dark mode (in the non dark mode version, we keep the defaults
-but just store them in css variables)
-*/
-/*body {
-  color: var(--text-color) !important;
+.modal .modal-card-foot .button:not(:last-child) {
+  margin-right: 0.5em;
 }
-
-.label {
-  color: var(--text-color-deep) !important;
-}
-
-.tabs a {
-  color: var(--text-color) !important;
-}
-
-.tabs.is-boxed li.is-active a {
-  border-bottom-color: var(--background-color-tab-active) !important;
-}
-
-.modal-card-head, .modal-card-foot {
-  background-color: var(--modal-header-footer-background) !important;
-}
-
-.modal-card-body {
-  background-color: var(--modal-card-body-background) !important;
-}
-
-.modal-card-title {
-  color: var(--modal-card-title-color) !important;
-}*/
 
 .dropdown-content {
   border-left: solid 1px var(--border-color);

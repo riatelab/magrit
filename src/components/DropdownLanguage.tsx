@@ -42,7 +42,7 @@ export default function DropdownLanguage(): JSX.Element {
       <div
         class="dropdown-content"
         style={{
-          'background-color': 'var(--primary-color)',
+          'background-color': 'var(--bulma-primary)',
           color: 'white !important',
           padding: 0,
         }}
