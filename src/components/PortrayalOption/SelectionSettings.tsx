@@ -38,7 +38,7 @@ import FormulaInput, {
   replaceSpecialFields,
   SampleOutputFormat,
 } from '../FormulaInput.tsx';
-import InformationBanner from '../InformationBanner.tsx';
+import InformationBanner from '../Modals/Banners/InformationBanner.tsx';
 
 // Types / Interfaces / Enums
 import { LayerDescription } from '../../global';

@@ -26,7 +26,7 @@ import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
-import WarningBanner from '../WarningBanner.tsx';
+import WarningBanner from '../Modals/Banners/WarningBanner.tsx';
 
 // Stores
 import { setLoading } from '../../store/GlobalStore';

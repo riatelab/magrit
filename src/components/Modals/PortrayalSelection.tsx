@@ -29,7 +29,7 @@ import LinksSettings from '../PortrayalOption/LinksSettings.tsx';
 import MushroomsSettings from '../PortrayalOption/MushroomsSettings.tsx';
 import AggregationSettings from '../PortrayalOption/AggregationSettings.tsx';
 import SelectionSettings from '../PortrayalOption/SelectionSettings.tsx';
-import InformationBanner from '../InformationBanner.tsx';
+import InformationBanner from './Banners/InformationBanner.tsx';
 import SimplificationSettings from '../PortrayalOption/SimplificationSettings.tsx';
 
 // Type / interfaces / enums

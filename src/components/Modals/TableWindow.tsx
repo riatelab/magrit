@@ -253,7 +253,8 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
   // A function to update the data
   if (type === 'layer') {
     res.updateReferenceData = (dsDescription, newVariables, rowData) => {
-      // Prepare the new data in case cell values have been changed or new columns have been added
+      // Prepare the new data in case cell values have been
+      // changed or new columns have been added/deleted
       const newData = {
         type: 'FeatureCollection',
         features: (unproxify(dsDescription.data as never) as GeoJSONFeatureCollection).features
@@ -263,21 +264,32 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
           }),
       };
 
+      // If fields have been removed, we need to remove them from the layer description
+      const fieldsToRemove = dsDescription.fields
+        .filter((f) => !newData.features[0].properties[f.name]);
+
       // Update the description of the layer fields
       setLayersDescriptionStore(
         'layers',
         (l: LayerDescription) => l.id === dsDescription.id,
         {
           data: newData,
-          fields: dsDescription.fields.concat(newVariables),
+          fields: dsDescription.fields
+            .concat(newVariables)
+            .filter((v) => !fieldsToRemove.includes(v)),
         },
       );
     };
   } else {
     res.updateReferenceData = (dsDescription, newVariables, rowData) => {
-      // Prepare the new data in case cell values have been changed or new columns have been added
+      // Prepare the new data in case cell values have been
+      // changed or new columns have been added/deleted
       const newData = (unproxify(dsDescription.data as never) as any[])
         .map((feature, i) => rowData()[i]);
+
+      // If fields have been removed, we need to remove them from the layer description
+      const fieldsToRemove = dsDescription.fields
+        .filter((f) => !newData[0][f.name]);
 
       // Update the description of the layer fields
       setLayersDescriptionStore(
@@ -285,7 +297,9 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
         (t: TableDescription) => t.id === dsDescription.id,
         {
           data: newData,
-          fields: dsDescription.fields.concat(newVariables),
+          fields: dsDescription.fields
+            .concat(newVariables)
+            .filter((v) => !fieldsToRemove.includes(v)),
         },
       );
     };

@@ -34,7 +34,7 @@ import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputResultName from './InputResultName.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
-import WarningBanner from '../WarningBanner.tsx';
+import WarningBanner from '../Modals/Banners/WarningBanner.tsx';
 
 // Types / Interfaces / Enums
 import type { PortrayalSettingsProps } from './common';

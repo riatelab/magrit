@@ -26,7 +26,7 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/L
 import { setLoading } from '../../store/GlobalStore';
 
 // Sub-components
-import InformationBanner from '../InformationBanner.tsx';
+import InformationBanner from './Banners/InformationBanner.tsx';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
@@ -34,7 +34,8 @@ import MultipleSelect from '../MultipleSelect.tsx';
 
 // Types / Interfaces / Enums
 import type { GeoJSONFeature, LayerDescription, TableDescription } from '../../global';
-import ErrorBanner from '../ErrorBanner.tsx';
+import ErrorBanner from './Banners/ErrorBanner.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 
 interface JoinResult {
   nFeaturesTable: number,
@@ -466,11 +467,9 @@ export default function JoinPanel(
         </p>
         <hr/>
         <Show when={joinResult()!.nMatchLayer === 0}>
-          <article class="message is-danger">
-            <div class="message-body">
-              <p>{LL().JoinPanel.ImpossibleJoin()}</p>
-            </div>
-          </article>
+          <MessageBlock type='danger'>
+            <p>{LL().JoinPanel.ImpossibleJoin()}</p>
+          </MessageBlock>
         </Show>
         <Show when={joinResult()!.nMatchLayer > 0}>
           <InputFieldCheckbox

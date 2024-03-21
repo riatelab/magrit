@@ -42,7 +42,7 @@ import { setMapStore } from '../store/MapStore';
 import { setModalStore } from '../store/ModalStore';
 
 // Other components
-import InformationBanner from './InformationBanner.tsx';
+import InformationBanner from './Modals/Banners/InformationBanner.tsx';
 import SimplificationModal from './Modals/SimplificationModal.tsx';
 import { openLayerManager } from './LeftMenu/LeftMenu.tsx';
 
