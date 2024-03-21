@@ -26,6 +26,7 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/L
 import { setLoading } from '../../store/GlobalStore';
 
 // Sub-components
+import InformationBanner from '../InformationBanner.tsx';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
@@ -33,7 +34,7 @@ import MultipleSelect from '../MultipleSelect.tsx';
 
 // Types / Interfaces / Enums
 import type { GeoJSONFeature, LayerDescription, TableDescription } from '../../global';
-import InformationBanner from '../InformationBanner.tsx';
+import ErrorBanner from '../ErrorBanner.tsx';
 
 interface JoinResult {
   nFeaturesTable: number,
@@ -125,7 +126,7 @@ const checkJoin = async (
   return result;
 };
 
-const doJoin = async (
+interface JoinParameters {
   tableId: string,
   tableField: string,
   layerId: string,
@@ -134,7 +135,22 @@ const doJoin = async (
   prefixValue: string,
   selectFields: boolean,
   selectedFields: string[],
-): Promise<void> => {
+  removeNotMatching: boolean,
+}
+
+const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
+  const {
+    tableId,
+    tableField,
+    layerId,
+    layerField,
+    usePrefix,
+    prefixValue,
+    selectFields,
+    selectedFields,
+    removeNotMatching,
+  } = joinParameters;
+
   if (tableId === '' || tableField === '' || layerId === '' || layerField === '') {
     return;
   }
@@ -151,12 +167,26 @@ const doJoin = async (
     tableDescription.data.map((item) => [String(item[tableField]), item]),
   );
 
+  const newFields = selectFields
+    ? tableDescription.fields.filter((f) => selectedFields.includes(f.name)).map((f) => f.name)
+    : tableDescription.fields.map((f) => f.name);
+
   // The joined data as an array of GeoJSON features
   const jointData = layerDescription.data.features.map((ft: GeoJSONFeature) => {
     const feature = unproxify(ft as never) as GeoJSONFeature;
     const jsonItem = tableIndex.get(String(feature.properties[layerField]));
     if (!jsonItem) {
-      return feature;
+      if (removeNotMatching) {
+        return null;
+      }
+      return {
+        ...feature,
+        properties: {
+          ...feature.properties,
+          ...Object.fromEntries(newFields.map((f) => [f, null])),
+          [layerField]: feature.properties[layerField],
+        },
+      };
     }
     if (!usePrefix && !selectFields) {
       return {
@@ -205,7 +235,7 @@ const doJoin = async (
         // [layerField]: feature.properties[layerField],
       },
     };
-  }) as GeoJSONFeature[];
+  }).filter((d) => d !== null) as GeoJSONFeature[];
 
   const newFieldsDescription = selectFields
     ? tableDescription.fields.filter((f) => selectedFields.includes(f.name))
@@ -284,6 +314,9 @@ export default function JoinPanel(
     ),
   );
 
+  // Do we want to remove features from the geometry layer that do not match?
+  const [removeNoMatch, setRemoveNoMatch] = createSignal(false);
+
   // Do we want to use a prefix for the joined field names?
   const [usePrefix, setUsePrefix] = createSignal(false);
   const [prefixValue, setPrefixValue] = createSignal(`${tableDescription.name}_`);
@@ -301,16 +334,33 @@ export default function JoinPanel(
     refSuccessButton
       .addEventListener('click', async () => {
         setLoading(true);
-        await doJoin(
-          id,
-          targetFieldTable(),
-          targetLayerId(),
-          targetFieldLayer(),
-          usePrefix(),
-          prefixValue(),
-          selectFields(),
-          selectedFields(),
-        );
+        await yieldOrContinue('smooth');
+        await doJoin({
+          tableId: id,
+          tableField: targetFieldTable(),
+          layerId: targetLayerId(),
+          layerField: targetFieldLayer(),
+          usePrefix: usePrefix(),
+          prefixValue: prefixValue(),
+          selectFields: selectFields(),
+          selectedFields: selectedFields(),
+          removeNotMatching: removeNoMatch(),
+        });
+        if (removeNoMatch()) {
+          // We need to rerender the layer to remove the features that do not match
+          setLayersDescriptionStore(
+            'layers',
+            (l: LayerDescription) => l.id === targetLayerId(),
+            'visible',
+            false,
+          );
+          setLayersDescriptionStore(
+            'layers',
+            (l: LayerDescription) => l.id === targetLayerId(),
+            'visible',
+            true,
+          );
+        }
         setLoading(false);
       });
 
@@ -326,6 +376,17 @@ export default function JoinPanel(
             // Refetch the resource to check the join
             refetchJoinResult();
           }
+        },
+      ),
+    );
+
+    createEffect(
+      on(
+        () => joinResult(),
+        () => {
+          refSuccessButton.disabled = !allSelected()
+            || !joinResult()
+            || joinResult()?.nMatchLayer === 0;
         },
       ),
     );
@@ -391,50 +452,67 @@ export default function JoinPanel(
         <h3>{LL().JoinPanel.ResultInformation()}</h3>
         <p>
           <strong>{LL().JoinPanel.MatchedGeometry()}</strong>
-          &nbsp;{joinResult()?.nMatchLayer}/{joinResult()?.nFeaturesLayer}
+          &nbsp;{joinResult()!.nMatchLayer}/{joinResult()?.nFeaturesLayer}
           <Show when={joinResult()!.nNoDataLayer > 0}>
-            &nbsp;&nbsp;({joinResult()?.nNoDataLayer}&nbsp;{LL().JoinPanel.NoData()})
+            &nbsp;&nbsp;({joinResult()!.nNoDataLayer}&nbsp;{LL().JoinPanel.NoData()})
           </Show>
         </p>
         <p>
           <strong>{LL().JoinPanel.MatchedData()}</strong>
           &nbsp;{joinResult()?.nMatchTable}/{joinResult()?.nFeaturesTable}
           <Show when={joinResult()!.nNoDataTable > 0}>
-            &nbsp;&nbsp;({joinResult()?.nNoDataTable}&nbsp;{LL().JoinPanel.NoData()})
+            &nbsp;&nbsp;({joinResult()!.nNoDataTable}&nbsp;{LL().JoinPanel.NoData()})
           </Show>
         </p>
         <hr/>
-        <InputFieldCheckbox
-          label={LL().JoinPanel.Prefix()}
-          checked={usePrefix()}
-          onChange={(v) => setUsePrefix(v)}
-        />
-        <Show when={usePrefix()}>
-          <InputFieldText
-            label={LL().JoinPanel.PrefixValue()}
-            value={prefixValue()}
-            onChange={(v) => {
-              setPrefixValue(v);
-            }}
-          />
+        <Show when={joinResult()!.nMatchLayer === 0}>
+          <article class="message is-danger">
+            <div class="message-body">
+              <p>{LL().JoinPanel.ImpossibleJoin()}</p>
+            </div>
+          </article>
         </Show>
-        <InputFieldCheckbox
-          label={LL().JoinPanel.SelectFields()}
-          checked={selectFields()}
-          onChange={(v) => setSelectFields(v)}
-        />
-        <Show when={selectFields()}>
-          <MultipleSelect
-            onChange={(e) => {
-              setSelectedFields(Array.from(e.target.selectedOptions).map((d: any) => d.value));
-            }}
-            size={tableDescription.fields.length}
-            values={selectedFields()}
-          >
-            <For each={tableDescription.fields}>
-              {(field) => <option value={field.name}>{field.name}</option>}
-            </For>
-          </MultipleSelect>
+        <Show when={joinResult()!.nMatchLayer > 0}>
+          <InputFieldCheckbox
+            label={LL().JoinPanel.RemoveNotMatching()}
+            checked={removeNoMatch()}
+            onChange={(v) => { setRemoveNoMatch(v); }}
+          />
+          <InputFieldCheckbox
+            label={LL().JoinPanel.Prefix()}
+            checked={usePrefix()}
+            onChange={(v) => setUsePrefix(v)}
+          />
+          <Show when={usePrefix()}>
+            <InputFieldText
+              label={LL().JoinPanel.PrefixValue()}
+              value={prefixValue()}
+              onChange={(v) => {
+                setPrefixValue(v);
+              }}
+            />
+          </Show>
+          <InputFieldCheckbox
+            label={LL().JoinPanel.SelectFields()}
+            checked={selectFields()}
+            onChange={(v) => setSelectFields(v)}
+          />
+          <Show when={selectFields()}>
+            <div class="has-text-centered">
+              <MultipleSelect
+                onChange={(e) => {
+                  setSelectedFields(Array.from(e.target.selectedOptions).map((d: any) => d.value));
+                }}
+                size={tableDescription.fields.length}
+                values={selectedFields()}
+                style={{ 'min-width': '300px' }}
+              >
+                <For each={tableDescription.fields}>
+                  {(field) => <option value={field.name}>{field.name}</option>}
+                </For>
+              </MultipleSelect>
+            </div>
+          </Show>
         </Show>
       </Match>
     </Switch>

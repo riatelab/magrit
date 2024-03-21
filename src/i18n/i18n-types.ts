@@ -1669,11 +1669,15 @@ type RootTranslation = {
 		 */
 		MatchedData: string
 		/**
+		 * T​h​e​ ​c​h​o​i​c​e​s​ ​m​a​d​e​ ​d​o​ ​n​o​t​ ​a​l​l​o​w​ ​a​ ​j​o​i​n​ ​t​o​ ​b​e​ ​m​a​d​e​.
+		 */
+		ImpossibleJoin: string
+		/**
 		 * n​o​ ​d​a​t​a
 		 */
 		NoData: string
 		/**
-		 * U​s​e​ ​a​ ​p​r​e​f​i​x​ ​f​o​r​ ​t​h​e​ ​j​o​i​n​e​d​ ​f​i​e​l​d​s​ ​?
+		 * U​s​e​ ​a​ ​p​r​e​f​i​x​ ​f​o​r​ ​t​h​e​ ​j​o​i​n​e​d​ ​f​i​e​l​d​s​?
 		 */
 		Prefix: string
 		/**
@@ -1681,13 +1685,17 @@ type RootTranslation = {
 		 */
 		PrefixValue: string
 		/**
-		 * S​e​l​e​c​t​ ​t​h​e​ ​f​i​e​l​d​s​ ​t​o​ ​j​o​i​n​ ​?
+		 * S​e​l​e​c​t​ ​t​h​e​ ​f​i​e​l​d​s​ ​t​o​ ​j​o​i​n​?
 		 */
 		SelectFields: string
 		/**
 		 * A​d​d​ ​f​i​e​l​d​s​ ​t​o​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​l​a​y​e​r
 		 */
 		Confirm: string
+		/**
+		 * R​e​m​o​v​e​ ​f​e​a​t​u​r​e​s​ ​o​f​ ​t​h​e​ ​l​a​y​e​r​ ​t​h​a​t​ ​d​o​ ​n​o​t​ ​m​a​t​c​h​?
+		 */
+		RemoveNotMatching: string
 	}
 	PortrayalSelection: {
 		/**
@@ -4070,11 +4078,15 @@ export type TranslationFunctions = {
 		 */
 		MatchedData: () => LocalizedString
 		/**
+		 * The choices made do not allow a join to be made.
+		 */
+		ImpossibleJoin: () => LocalizedString
+		/**
 		 * no data
 		 */
 		NoData: () => LocalizedString
 		/**
-		 * Use a prefix for the joined fields ?
+		 * Use a prefix for the joined fields?
 		 */
 		Prefix: () => LocalizedString
 		/**
@@ -4082,13 +4094,17 @@ export type TranslationFunctions = {
 		 */
 		PrefixValue: () => LocalizedString
 		/**
-		 * Select the fields to join ?
+		 * Select the fields to join?
 		 */
 		SelectFields: () => LocalizedString
 		/**
 		 * Add fields to the selected layer
 		 */
 		Confirm: () => LocalizedString
+		/**
+		 * Remove features of the layer that do not match?
+		 */
+		RemoveNotMatching: () => LocalizedString
 	}
 	PortrayalSelection: {
 		/**

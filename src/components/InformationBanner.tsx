@@ -27,7 +27,7 @@ export default function InformationBanner(props: ParentProps<InformationBannerPr
     class="banner information-banner has-text-centered"
     style={{
       padding: '20px',
-      margin: expanded() ? '0 -20px 20px' : '0',
+      margin: expanded() ? '0 -2em 20px' : '0',
       background: '#cafbe5',
       'border-top': '1px solid var(--border-color)',
     }}

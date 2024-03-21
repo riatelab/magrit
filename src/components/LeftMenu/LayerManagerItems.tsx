@@ -448,6 +448,7 @@ const onClickJoin = (id: string, LL: Accessor<TranslationFunctions>) => {
   setModalStore({
     show: true,
     content: () => <JoinPanel id={ id } LL={ LL } />,
+    width: 'min(96vw, 700px)',
     title: LL().JoinPanel.Title(),
     confirmCallback: (): void => {
       // ...
