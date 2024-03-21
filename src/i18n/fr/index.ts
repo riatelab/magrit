@@ -140,7 +140,7 @@ const fr = {
       FreeDrawing: 'Cliquez pour commencer à dessiner puis relâchez le bouton de la souris pour terminer.',
       Text: 'Cliquez pour localiser l\'emplacement du texte à ajouter.',
       TextPlaceholder: 'Saisir le texte à ajouter...',
-      PressEscToCancel: 'Appuyez sur "Esc" pour annuler.',
+      PressEscToCancel: 'Appuyez sur "Echap" pour annuler.',
     },
     Modal: {
       Title: 'Propriétés', // 'Propriétés pour {{ type d'objet }}'

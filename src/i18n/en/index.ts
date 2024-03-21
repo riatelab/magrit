@@ -140,7 +140,7 @@ const en = {
       FreeDrawing: 'Click to start drawing the desired shape and release to finish.',
       Text: 'Click to locate the text.',
       TextPlaceholder: 'Type your text here...',
-      PressEscToCancel: 'Press Esc to cancel.',
+      PressEscToCancel: 'Press "Esc" to cancel.',
     },
     Modal: {
       Title: 'Settings', // 'Settings for {{ type }}',

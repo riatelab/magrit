@@ -493,7 +493,7 @@ type RootTranslation = {
 			 */
 			TextPlaceholder: string
 			/**
-			 * P​r​e​s​s​ ​E​s​c​ ​t​o​ ​c​a​n​c​e​l​.
+			 * P​r​e​s​s​ ​"​E​s​c​"​ ​t​o​ ​c​a​n​c​e​l​.
 			 */
 			PressEscToCancel: string
 		}
@@ -2901,7 +2901,7 @@ export type TranslationFunctions = {
 			 */
 			TextPlaceholder: () => LocalizedString
 			/**
-			 * Press Esc to cancel.
+			 * Press "Esc" to cancel.
 			 */
 			PressEscToCancel: () => LocalizedString
 		}

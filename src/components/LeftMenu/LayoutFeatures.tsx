@@ -48,6 +48,8 @@ import {
 
 // Other components
 import ImageSymbolSelection from '../Modals/ImageSymbolSelection.tsx';
+import InputFieldColor from '../Inputs/InputColor.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
 
 // Types / Interfaces
 import type {
@@ -67,12 +69,15 @@ import {
   ScaleBarBehavior,
   ScaleBarStyle,
 } from '../../global.d';
-import InputFieldNumber from '../Inputs/InputNumber.tsx';
-import InputFieldColor from '../Inputs/InputColor.tsx';
+
+const makeDrawingInstructions = (
+  LL: Accessor<TranslationFunctions>,
+  object: 'Rectangle' | 'Line' | 'FreeDrawing' | 'Text',
+): string => `${LL().LayoutFeatures.DrawingInstructions[object]()}\n${LL().LayoutFeatures.DrawingInstructions.PressEscToCancel()}`;
 
 const createRectangle = (LL: Accessor<TranslationFunctions>) => {
-  toast.success(LL().LayoutFeatures.DrawingInstructions.Rectangle(), {
-    duration: 5000,
+  toast.success(makeDrawingInstructions(LL, 'Rectangle'), {
+    duration: Infinity,
     style: {
       background: '#1f2937',
       color: '#f3f4f6',
@@ -99,6 +104,9 @@ const createRectangle = (LL: Accessor<TranslationFunctions>) => {
       svgElement.style.cursor = 'default';
       svgElement.querySelectorAll('.temporary-point').forEach((elem) => elem.remove());
 
+      // Remove toast
+      toast.dismiss();
+
       // Create the rectangle
       const rectangleDescription = {
         id: generateIdLayoutFeature(),
@@ -124,8 +132,22 @@ const createRectangle = (LL: Accessor<TranslationFunctions>) => {
       );
     }
   };
+  const onEscape = (ev: KeyboardEvent) => {
+    if (ev.key === 'Escape') {
+      // Remove toast
+      toast.dismiss();
+      // Remove event listeners
+      svgElement.removeEventListener('click', onClick);
+      document.body.removeEventListener('keydown', onEscape);
+      // Reset cursor
+      svgElement.style.cursor = 'default';
+      // Remove temporary points
+      svgElement.querySelectorAll('.temporary-point').forEach((elem) => elem.remove());
+    }
+  };
   svgElement.style.cursor = 'crosshair';
   svgElement.addEventListener('click', onClick);
+  document.body.addEventListener('keydown', onEscape);
 };
 
 const createGraticule = (LL: Accessor<TranslationFunctions>) => {
@@ -177,8 +199,8 @@ const createSphere = (LL: Accessor<TranslationFunctions>) => {
 };
 
 const createLine = (LL: Accessor<TranslationFunctions>) => {
-  toast.success(LL().LayoutFeatures.DrawingInstructions.Line(), {
-    duration: 5000,
+  toast.success(makeDrawingInstructions(LL, 'Line'), {
+    duration: Infinity,
     style: {
       background: '#1f2937',
       color: '#f3f4f6',
@@ -248,6 +270,8 @@ const createLine = (LL: Accessor<TranslationFunctions>) => {
         pts.pop();
       }
     }
+    // Remove toast
+    toast.dismiss();
     // Remove event listeners
     svgElement.removeEventListener('click', onClick);
     svgElement.removeEventListener('dblclick', onDblClick);
@@ -255,7 +279,8 @@ const createLine = (LL: Accessor<TranslationFunctions>) => {
     // Reset cursor
     svgElement.style.cursor = 'default';
     // Remove temporary points
-    svgElement.querySelectorAll('.temporary-point').forEach((elem) => elem.remove());
+    svgElement.querySelectorAll('.temporary-point')
+      .forEach((elem) => elem.remove());
     // Remove the temporary line
     removeTemporaryLines();
     // Create the layout feature
@@ -280,10 +305,29 @@ const createLine = (LL: Accessor<TranslationFunctions>) => {
       ),
     );
   };
+  const onEscape = (ev: KeyboardEvent) => {
+    if (ev.key === 'Escape') {
+      // Remove toast
+      toast.dismiss();
+      // Remove event listeners
+      svgElement.removeEventListener('click', onClick);
+      svgElement.removeEventListener('dblclick', onDblClick);
+      svgElement.removeEventListener('mousemove', onMove);
+      document.body.removeEventListener('keydown', onEscape);
+      // Reset cursor
+      svgElement.style.cursor = 'default';
+      // Remove temporary points
+      svgElement.querySelectorAll('.temporary-point')
+        .forEach((elem) => elem.remove());
+      // Remove the temporary line
+      removeTemporaryLines();
+    }
+  };
   svgElement.style.cursor = 'crosshair';
   svgElement.addEventListener('click', onClick);
   svgElement.addEventListener('dblclick', onDblClick);
   svgElement.addEventListener('mousemove', onMove);
+  document.body.addEventListener('keydown', onEscape);
 };
 
 const createNorthArrow = (/* LL: Accessor<TranslationFunctions>,  */) => {
@@ -340,8 +384,8 @@ const createScaleBar = (/* LL: Accessor<TranslationFunctions>,  */) => {
 };
 
 const createText = (LL: Accessor<TranslationFunctions>) => {
-  toast.success(LL().LayoutFeatures.DrawingInstructions.Text(), {
-    duration: 5000,
+  toast.success(makeDrawingInstructions(LL, 'Text'), {
+    duration: Infinity,
     style: {
       background: '#1f2937',
       color: '#f3f4f6',
@@ -359,6 +403,9 @@ const createText = (LL: Accessor<TranslationFunctions>) => {
 
     // Add a temporary point
     addTemporaryPoint(cursorPt.x, cursorPt.y);
+
+    // Remove toast
+    toast.dismiss();
 
     // Create the text
     const textDescription = {
@@ -391,13 +438,28 @@ const createText = (LL: Accessor<TranslationFunctions>) => {
     svgElement.querySelectorAll('.temporary-point')
       .forEach((elem) => elem.remove());
   };
+  const onEscape = (ev: KeyboardEvent) => {
+    if (ev.key === 'Escape') {
+      // Remove toast
+      toast.dismiss();
+      // Remove event listeners
+      svgElement.removeEventListener('click', onClick);
+      document.body.removeEventListener('keydown', onEscape);
+      // Reset cursor
+      svgElement.style.cursor = 'default';
+      // Remove temporary points
+      svgElement.querySelectorAll('.temporary-point')
+        .forEach((elem) => elem.remove());
+    }
+  };
   svgElement.style.cursor = 'crosshair';
   svgElement.addEventListener('click', onClick);
+  document.body.addEventListener('keydown', onEscape);
 };
 
 const createFreeDraw = (LL: Accessor<TranslationFunctions>) => {
-  toast.success(LL().LayoutFeatures.DrawingInstructions.FreeDrawing(), {
-    duration: 5000,
+  toast.success(makeDrawingInstructions(LL, 'FreeDrawing'), {
+    duration: Infinity,
     style: {
       background: '#1f2937',
       color: '#f3f4f6',
@@ -428,7 +490,7 @@ const createFreeDraw = (LL: Accessor<TranslationFunctions>) => {
 
   let started = false;
 
-  function startDrag(ev: MouseEvent) {
+  function startDrag(/* ev: MouseEvent */) {
     started = true;
   }
 
@@ -442,7 +504,7 @@ const createFreeDraw = (LL: Accessor<TranslationFunctions>) => {
     }
   }
 
-  function endDrag(ev: MouseEvent) {
+  function endDrag(/* ev: MouseEvent */) {
     if (started) {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       rectElement.removeEventListener('mousedown', startDrag);
@@ -452,6 +514,9 @@ const createFreeDraw = (LL: Accessor<TranslationFunctions>) => {
       rectElement.remove();
       started = false;
       svgElement.style.cursor = 'default';
+
+      // Remove toast
+      toast.dismiss();
 
       const freeDrawingDescription = {
         id: generateIdLayoutFeature(),
