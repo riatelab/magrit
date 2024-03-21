@@ -13,11 +13,11 @@ import {
   FaSolidEyeSlash,
   FaSolidGears,
   FaSolidMagnifyingGlass,
-  FaSolidPlay,
   FaSolidTrash,
   FaSolidTableCells,
 } from 'solid-icons/fa';
 import { FiType, FiLink } from 'solid-icons/fi';
+import { OcGoal2 } from 'solid-icons/oc';
 import toast from 'solid-toast';
 
 // Helpers
@@ -185,7 +185,6 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
   //  - no legend for now, but we can create one for the layer, such as for layer
   //    that use 'default' renderer (in this cas we should create it and add it
   //    to the LayerDescription / to the map) - TODO
-  const ld = layersDescriptionStore.layers.find((l) => l.id === id)!;
   const legends = layersDescriptionStore.layoutFeaturesAndLegends
     .filter((layoutFeatureOrLegend) => layoutFeatureOrLegend.layerId === id) as Legend[];
 
@@ -428,12 +427,13 @@ export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.E
         }}
         title={ LL().LeftMenu.FunctionalityChoice() }
       >
-        <FaSolidPlay style={{
+        <OcGoal2 style={{
           filter: 'drop-shadow(3px 3px 6px grey)',
           fill: 'var(--primary-color)',
-          height: '2em',
+          height: '1.5em',
+          width: '1.5em',
           stroke: 'currentColor',
-          'stroke-width': '55px',
+          // 'stroke-width': '55px',
         }} />
       </button>
     </div>
@@ -554,12 +554,13 @@ export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX
         }}
         title={LL().LeftMenu.FunctionalityChoice()}
       >
-        <FaSolidPlay style={{
+        <OcGoal2 style={{
           filter: 'drop-shadow(3px 3px 6px grey)',
           fill: 'var(--primary-color)',
-          height: '2em',
+          height: '1.5em',
+          width: '1.5em',
           stroke: 'currentColor',
-          'stroke-width': '55px',
+          // 'stroke-width': '55px',
         }}/>
       </button>
     </div>
