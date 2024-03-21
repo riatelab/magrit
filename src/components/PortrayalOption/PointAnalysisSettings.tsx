@@ -1,11 +1,18 @@
 // Import from solid-js
 import {
-  createEffect, createSignal, For, type JSX, on, Show,
+  createEffect,
+  createSignal,
+  For,
+  type JSX,
+  on,
+  Show,
 } from 'solid-js';
 import { produce, unwrap } from 'solid-js/store';
 
 // Imports from other packages
 import { bbox } from '@turf/turf';
+import { quantile } from 'statsbreaks';
+import { getPalette } from 'dicopal';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -20,7 +27,8 @@ import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore'
 
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { descendingKeyAccessor, findSuitableName } from '../../helpers/common';
+import d3 from '../../helpers/d3-custom';
+import { descendingKeyAccessor, findSuitableName, getMinimumPrecision } from '../../helpers/common';
 import {
   computeAppropriateResolution,
   computeCandidateValuesForSymbolsLegend,
@@ -30,7 +38,7 @@ import {
 import { generateIdLayer } from '../../helpers/layers';
 import { generateIdLegend } from '../../helpers/legends';
 import { Mmax, Mmin } from '../../helpers/math';
-import { pointAnalysisOnLayer } from '../../helpers/point-analysis';
+import { pointAnalysisOnGrid, pointAnalysisOnLayer } from '../../helpers/point-analysis';
 import { getProjectionUnit } from '../../helpers/projection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
@@ -44,14 +52,19 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
+  type ChoroplethLegend,
+  ClassificationMethod,
+  ClassificationParameters, CustomPalette,
   type GeoJSONFeatureCollection,
   GridCellShape,
   type GridParameters,
   type LayerDescription,
+  LayerDescriptionChoropleth,
   type LayerDescriptionProportionalSymbols,
   type Legend,
   type LegendTextElement,
   LegendType,
+  Orientation,
   PointAnalysisMeshType,
   PointAnalysisRatioType,
   PointAnalysisStockType,
@@ -75,8 +88,12 @@ function onClickValidate(
     throw new Error('Unexpected Error: Reference layer not found');
   }
 
-  // Id of the layer to create
-  const newId = generateIdLayer();
+  // FeatureCollection that will store the result
+  let resultLayer;
+  // Description of fields of the new layer
+  let fields;
+  // Type of the new field
+  const typeField = typeLayerToCreate === 'choropleth' ? 'ratio' : 'stock';
 
   if (typeof meshParams === 'string') {
     // The user want to analyze the data using an existing polygon layer
@@ -84,152 +101,241 @@ function onClickValidate(
     const maskLayer = layersDescriptionStore.layers
       .find((l) => l.id === maskLayerId)!.data;
 
-    const layer = pointAnalysisOnLayer(
+    resultLayer = pointAnalysisOnLayer(
       referenceLayerDescription.data,
       maskLayer,
       computationType,
       targetVariable,
     );
 
-    let newLayerDescription: LayerDescription;
-    let legend: Legend;
-
-    if (Object.values(PointAnalysisStockType).includes(computationType as never)) {
-      // The user want to create a proportional symbol layer,
-      // so we need to:
-      // - 0. Convert the current polygon layer to a point layer
-      let minValue = Infinity;
-      let maxValue = -Infinity;
-      const newData = JSON.parse(JSON.stringify(layer)) as GeoJSONFeatureCollection;
-
-      newData.features.forEach((feature) => {
-        // eslint-disable-next-line no-param-reassign
-        feature.geometry = {
-          type: 'Point',
-          coordinates: coordsPointOnFeature(feature.geometry as never),
-        };
-        // While we are iterating on the features, we also compute the min and max values
-        minValue = Mmin(feature.properties[computationType], minValue);
-        maxValue = Mmax(feature.properties[computationType], maxValue);
-      });
-
-      // Store the original position of the features (we will need it
-      // later if the avoid overlapping option is set
-      // to recompute the new position if the user changes the
-      // settings of proportional symbols or zoom in/out
-      // and also if the user wants to change the position of the
-      // symbols manually)
-      newData.features.forEach((feature) => {
-        // eslint-disable-next-line no-param-reassign
-        feature.geometry.originalCoordinates = feature.geometry.coordinates;
-      });
-
-      newData.features
-        .sort(descendingKeyAccessor((d) => d.properties[computationType]));
-
-      // 1. Prepare the parameters for the proportional symbol layer
-      const propSymbolsParameters = {
-        variable: computationType,
-        symbolType: 'circle' as ProportionalSymbolsSymbolType,
-        referenceRadius: 50,
-        referenceValue: maxValue,
-        avoidOverlapping: false,
-        iterations: 100,
-        movable: false,
-        colorMode: 'singleColor',
-        color: '#0aa15d',
-      };
-
-      const propSize = new PropSizer(
-        propSymbolsParameters.referenceValue,
-        propSymbolsParameters.referenceRadius,
-        propSymbolsParameters.symbolType,
-      );
-
-      const legendValues = computeCandidateValuesForSymbolsLegend(
-        minValue,
-        maxValue,
-        propSize.scale,
-        propSize.getValue,
-      );
-
-      // Find a position for the legend
-      const legendPosition = getPossibleLegendPosition(150, 150);
-
-      newLayerDescription = {
-        id: newId,
-        name: newName,
-        data: newData,
-        type: 'point',
-        fields: referenceLayerDescription.fields.concat([{
-          name: computationType,
-          type: 'stock',
-        }]),
-        renderer: 'proportionalSymbols' as RepresentationType,
-        visible: true,
-        strokeColor: '#000000',
-        strokeWidth: 1,
-        strokeOpacity: 1,
-        fillColor: propSymbolsParameters.color,
-        fillOpacity: 1,
-        dropShadow: false,
-        blurFilter: false,
-        shapeRendering: 'auto',
-        rendererParameters: propSymbolsParameters,
-      } as LayerDescriptionProportionalSymbols;
-
-      legend = {
-        // Legend common part
-        id: generateIdLegend(),
-        layerId: newId,
-        title: {
-          text: computationType,
-          ...applicationSettingsStore.defaultLegendSettings.title,
-        } as LegendTextElement,
-        subtitle: {
-          text: 'This is a subtitle',
-          ...applicationSettingsStore.defaultLegendSettings.subtitle,
-        } as LegendTextElement,
-        note: {
-          text: 'This is a bottom note',
-          ...applicationSettingsStore.defaultLegendSettings.note,
-        } as LegendTextElement,
-        position: legendPosition,
-        visible: true,
-        roundDecimals: 0,
-        backgroundRect: {
-          visible: false,
-        },
-        // Part specific to proportional symbols
-        type: LegendType.proportional,
-        layout: 'stacked',
-        values: legendValues,
-        spacing: 5,
-        labels: {
-          ...applicationSettingsStore.defaultLegendSettings.labels,
-        } as LegendTextElement,
-        symbolType: propSymbolsParameters.symbolType,
-      } as ProportionalSymbolsLegend;
-    } else {
-      // The user want to create a choropleth layer
-      newLayerDescription = {
-        id: newId,
-        name: newName,
-        type: 'polygon',
-      } as LayerDescription;
-    }
-
-    setLayersDescriptionStore(
-      produce(
-        (draft: LayersDescriptionStoreType) => {
-          draft.layers.push(newLayerDescription);
-          draft.layoutFeaturesAndLegends.push(legend);
-        },
-      ),
-    );
+    fields = referenceLayerDescription.fields.concat([{
+      name: computationType,
+      type: typeField,
+    }]);
   } else {
-    // The user want to analyze the data using a grid
+  // The user want to analyze the data using a grid
+    resultLayer = pointAnalysisOnGrid(
+      referenceLayerDescription.data,
+      meshParams,
+      computationType,
+      targetVariable,
+    );
+
+    fields = [{
+      name: computationType,
+      type: typeField,
+    }];
   }
+
+  // New layer description
+  let newLayerDescription: LayerDescription;
+  // Corresponding legend description
+  let legend: Legend;
+  // Id of the layer to create
+  const newId = generateIdLayer();
+
+  if (Object.values(PointAnalysisStockType).includes(computationType as never)) {
+    // The user want to create a proportional symbol layer,
+    // so we need to:
+    // - 0. Convert the current polygon layer to a point layer
+    let minValue = Infinity;
+    let maxValue = -Infinity;
+    const newData = JSON.parse(JSON.stringify(resultLayer)) as GeoJSONFeatureCollection;
+
+    newData.features.forEach((feature) => {
+      // eslint-disable-next-line no-param-reassign
+      feature.geometry = {
+        type: 'Point',
+        coordinates: coordsPointOnFeature(feature.geometry as never),
+      };
+      // While we are iterating on the features, we also compute the min and max values
+      minValue = Mmin(feature.properties[computationType], minValue);
+      maxValue = Mmax(feature.properties[computationType], maxValue);
+    });
+
+    // Store the original position of the features (we will need it
+    // later if the avoid overlapping option is set
+    // to recompute the new position if the user changes the
+    // settings of proportional symbols or zoom in/out
+    // and also if the user wants to change the position of the
+    // symbols manually)
+    newData.features.forEach((feature) => {
+      // eslint-disable-next-line no-param-reassign
+      feature.geometry.originalCoordinates = feature.geometry.coordinates;
+    });
+
+    newData.features
+      .sort(descendingKeyAccessor((d) => d.properties[computationType]));
+
+    // 1. Prepare the parameters for the proportional symbol layer
+    const propSymbolsParameters = {
+      variable: computationType,
+      symbolType: 'circle' as ProportionalSymbolsSymbolType,
+      referenceRadius: 50,
+      referenceValue: maxValue,
+      avoidOverlapping: false,
+      iterations: 100,
+      movable: false,
+      colorMode: 'singleColor',
+      color: '#0aa15d',
+    };
+
+    const propSize = new PropSizer(
+      propSymbolsParameters.referenceValue,
+      propSymbolsParameters.referenceRadius,
+      propSymbolsParameters.symbolType,
+    );
+
+    const legendValues = computeCandidateValuesForSymbolsLegend(
+      minValue,
+      maxValue,
+      propSize.scale,
+      propSize.getValue,
+    );
+
+    // Find a position for the legend
+    const legendPosition = getPossibleLegendPosition(150, 150);
+
+    newLayerDescription = {
+      id: newId,
+      name: newName,
+      data: newData,
+      type: 'point',
+      fields,
+      renderer: 'proportionalSymbols' as RepresentationType,
+      visible: true,
+      strokeColor: '#000000',
+      strokeWidth: 1,
+      strokeOpacity: 1,
+      fillColor: propSymbolsParameters.color,
+      fillOpacity: 1,
+      dropShadow: false,
+      blurFilter: false,
+      shapeRendering: 'auto',
+      rendererParameters: propSymbolsParameters,
+    } as LayerDescriptionProportionalSymbols;
+
+    legend = {
+      // Legend common part
+      id: generateIdLegend(),
+      layerId: newId,
+      title: {
+        text: computationType,
+        ...applicationSettingsStore.defaultLegendSettings.title,
+      } as LegendTextElement,
+      subtitle: {
+        text: 'This is a subtitle',
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      } as LegendTextElement,
+      note: {
+        text: 'This is a bottom note',
+        ...applicationSettingsStore.defaultLegendSettings.note,
+      } as LegendTextElement,
+      position: legendPosition,
+      visible: true,
+      roundDecimals: 0,
+      backgroundRect: {
+        visible: false,
+      },
+      // Part specific to proportional symbols
+      type: LegendType.proportional,
+      layout: 'stacked',
+      values: legendValues,
+      spacing: 5,
+      labels: {
+        ...applicationSettingsStore.defaultLegendSettings.labels,
+      } as LegendTextElement,
+      symbolType: propSymbolsParameters.symbolType,
+    } as ProportionalSymbolsLegend;
+  } else {
+    // The user want to create a choropleth layer
+    const values = resultLayer.features.map((f) => f.properties[computationType]) as number[];
+    console.log(values);
+    const nClasses = Mmin(d3.thresholdSturges(values), 9);
+    const breaks = quantile(values, { nb: nClasses, precision: null });
+    const classification = {
+      variable: computationType,
+      method: ClassificationMethod.quantiles,
+      classes: Mmin(d3.thresholdSturges(values), 9),
+      breaks,
+      palette: getPalette(
+        applicationSettingsStore.defaultColorScheme,
+        nClasses,
+      ) as unknown as CustomPalette,
+      noDataColor: applicationSettingsStore.defaultNoDataColor,
+      entitiesByClass: [], // TODO
+      reversePalette: false,
+    } as ClassificationParameters;
+
+    newLayerDescription = {
+      id: newId,
+      name: newName,
+      type: 'polygon',
+      data: resultLayer,
+      fields,
+      renderer: 'choropleth' as RepresentationType,
+      visible: true,
+      strokeColor: '#000000',
+      strokeWidth: 0.4,
+      strokeOpacity: 1,
+      fillOpacity: 1,
+      dropShadow: false,
+      blurFilter: false,
+      shapeRendering: referenceLayerDescription.shapeRendering,
+      rendererParameters: classification,
+    } as LayerDescriptionChoropleth;
+
+    // Find a position for the legend
+    const legendPosition = getPossibleLegendPosition(120, 340);
+
+    // How many decimals to display in the legend
+    const minPrecision = getMinimumPrecision(classification.breaks);
+
+    legend = {
+      // Part common to all legends
+      id: generateIdLegend(),
+      layerId: newId,
+      title: {
+        text: computationType,
+        ...applicationSettingsStore.defaultLegendSettings.title,
+      } as LegendTextElement,
+      subtitle: {
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      } as LegendTextElement,
+      note: {
+        ...applicationSettingsStore.defaultLegendSettings.note,
+      } as LegendTextElement,
+      position: legendPosition,
+      visible: true,
+      roundDecimals: minPrecision < 0 ? 0 : minPrecision,
+      backgroundRect: {
+        visible: false,
+      },
+      // Part specific to choropleth
+      type: LegendType.choropleth,
+      orientation: Orientation.vertical,
+      boxWidth: 50,
+      boxHeight: 30,
+      boxSpacing: 0,
+      boxSpacingNoData: 10,
+      boxCornerRadius: 0,
+      labels: {
+        ...applicationSettingsStore.defaultLegendSettings.labels,
+      } as LegendTextElement,
+      noDataLabel: 'No data',
+      stroke: false,
+      tick: false,
+    } as ChoroplethLegend;
+  }
+
+  setLayersDescriptionStore(
+    produce(
+      (draft: LayersDescriptionStoreType) => {
+        draft.layers.push(newLayerDescription);
+        draft.layoutFeaturesAndLegends.push(legend);
+      },
+    ),
+  );
 }
 
 export default function PointAnalysisSettings(props: PortrayalSettingsProps): JSX.Element {

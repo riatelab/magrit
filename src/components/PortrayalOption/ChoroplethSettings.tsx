@@ -42,7 +42,7 @@ import {
   type ChoroplethHistogramLegend,
   type ChoroplethLegend,
   type ClassificationParameters,
-  type LayerDescription,
+  type LayerDescriptionChoropleth,
   type LegendTextElement,
   LegendType,
   Orientation,
@@ -91,7 +91,7 @@ function onClickValidate(
     blurFilter: false,
     shapeRendering: referenceLayerDescription.shapeRendering,
     rendererParameters: classification,
-  } as LayerDescription;
+  } as LayerDescriptionChoropleth;
 
   if (newLayerDescription.type === 'point') {
     // We also need to transfert the pointRadius parameter
