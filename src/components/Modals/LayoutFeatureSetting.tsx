@@ -333,24 +333,23 @@ function makeSettingsText(
         {LL().LayoutFeatures.Modal.TextProperties()}
       </label>
     </div>
-    <div
-      class="is-flex is-justify-content-space-around mb-5"
-      // style={{ 'margin-bottom': '1.5em !important' }}
-    >
-      <select
-        class="select"
-        value={ft.fontFamily}
-        style={{ width: '100px' }}
-        onChange={(e) => updateLayoutFeatureProperty(
-          layoutFeatureId,
-          ['fontFamily'],
-          e.currentTarget.value,
-        )}
-      >
-        <For each={webSafeFonts}>
-          {(font) => <option value={font}>{font}</option>}
-        </For>
-      </select>
+    <div class="is-flex is-justify-content-space-around mb-5 pr-3 pl-3">
+      <div class="select">
+        <select
+          class="select"
+          value={ft.fontFamily}
+          style={{ width: '100px' }}
+          onChange={(e) => updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['fontFamily'],
+            e.currentTarget.value,
+          )}
+        >
+          <For each={webSafeFonts}>
+            {(font) => <option value={font}>{font}</option>}
+          </For>
+        </select>
+      </div>
       <div>
         <input
           class="input"
@@ -378,6 +377,76 @@ function makeSettingsText(
           e.currentTarget.value,
         )}
       />
+    </div>
+    <div class="is-flex is-justify-content-center">
+      <div class="buttons">
+        <button
+          classList={{
+            button: true,
+            'is-warning': ft.fontWeight === 'bold',
+            'is-outlined': ft.fontWeight === 'bold',
+          }}
+          aria-label={LL().LayoutFeatures.Modal.Bold()}
+          title={LL().LayoutFeatures.Modal.Bold()}
+          onClick={(e) => {
+            updateLayoutFeatureProperty(
+              layoutFeatureId,
+              ['fontWeight'],
+              ft.fontWeight === 'bold' ? 'normal' : 'bold',
+            );
+          }}
+        ><b>B</b></button>
+        <button
+          classList={{
+            button: true,
+            'is-warning': ft.fontStyle === 'italic',
+            'is-outlined': ft.fontStyle === 'italic',
+          }}
+          aria-label={LL().LayoutFeatures.Modal.Italic()}
+          title={LL().LayoutFeatures.Modal.Italic()}
+          onClick={(e) => {
+            updateLayoutFeatureProperty(
+              layoutFeatureId,
+              ['fontStyle'],
+              ft.fontStyle === 'italic' ? 'normal' : 'italic',
+            );
+          }}
+        ><i>I</i>
+        </button>
+        <button
+          classList={{
+            button: true,
+            'is-warning': ft.textDecoration === 'underline',
+            'is-outlined': ft.textDecoration === 'underline',
+          }}
+          aria-label={LL().LayoutFeatures.Modal.Underline()}
+          title={LL().LayoutFeatures.Modal.Underline()}
+          onClick={(e) => {
+            updateLayoutFeatureProperty(
+              layoutFeatureId,
+              ['textDecoration'],
+              ft.textDecoration === 'underline' ? 'none' : 'underline',
+            );
+          }}
+        ><u>U</u></button>
+        <button
+          classList={{
+            button: true,
+            'is-warning': ft.textDecoration === 'line-through',
+            'is-outlined': ft.textDecoration === 'line-through',
+          }}
+          aria-label={LL().LayoutFeatures.Modal.LineThrough()}
+          title={LL().LayoutFeatures.Modal.LineThrough()}
+          onClick={(e) => {
+            updateLayoutFeatureProperty(
+              layoutFeatureId,
+              ['textDecoration'],
+              ft.textDecoration === 'line-through' ? 'none' : 'line-through',
+            );
+          }}
+        ><span style={{ 'text-decoration': 'line-through' }}>B</span>
+        </button>
+      </div>
     </div>
     <div>
       <label
@@ -437,7 +506,7 @@ function makeSettingsText(
       onChange={(v) => updateLayoutFeatureProperty(
         layoutFeatureId,
         ['rotation'],
-        v,
+        v % 360,
       )}
       min={0}
       max={360}

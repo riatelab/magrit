@@ -61,6 +61,7 @@ export default function TextRenderer(props: Text): JSX.Element {
       font-style={props.fontStyle}
       font-weight={props.fontWeight}
       text-anchor={props.textAnchor}
+      text-decoration={props.textDecoration}
       pointer-events={'none'}
       transform={props.rotation !== 0 ? `rotate(${props.rotation})` : undefined}
       dominant-baseline={'hanging'}

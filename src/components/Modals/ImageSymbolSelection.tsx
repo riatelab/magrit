@@ -1,9 +1,11 @@
 // Imports from solid-js
 import {
   type Accessor,
+  createEffect,
   createSignal,
   For,
   type JSX,
+  on,
   onMount,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
@@ -41,6 +43,9 @@ export default function ImageSymbolSelection(
     setImageContent,
   ] = createSignal('');
 
+  let imageSelectionModal: HTMLDivElement;
+  let refSuccessButton: HTMLButtonElement;
+
   const backgroundValue = (content: string) => {
     if (imageType() === ImageType.SVG) {
       return `url(data:image/svg+xml;base64,${btoa(content)})`;
@@ -49,6 +54,13 @@ export default function ImageSymbolSelection(
   };
 
   onMount(() => {
+    // State of the confirm button
+    refSuccessButton = imageSelectionModal.parentElement!.parentElement!.parentElement!
+      .querySelector('.button.is-success')! as HTMLButtonElement;
+
+    refSuccessButton.disabled = true;
+
+    // Define what happens when the user confirms the selection
     setModalStore({
       confirmCallback: () => {
         const imageDescription = {
@@ -73,7 +85,20 @@ export default function ImageSymbolSelection(
     });
   });
 
-  return <div class="image-symbol-selection">
+  createEffect(
+    on(
+      () => imageContent(),
+      () => {
+        if (imageContent()) {
+          refSuccessButton.disabled = false;
+        } else {
+          refSuccessButton.disabled = true;
+        }
+      },
+    ),
+  );
+
+  return <div class="image-symbol-selection" ref={imageSelectionModal!}>
     <p><strong>{ LL().ImageSymbolSelection.SelectedImage() }</strong></p>
     <div
       class="image-symbol-selection__symbol-library"
@@ -108,6 +133,7 @@ export default function ImageSymbolSelection(
     <p><strong>{ LL().ImageSymbolSelection.UploadImage() }</strong></p>
     <div>
       <button
+        class="button"
         onClick={() => {
           const input = document.createElement('input');
           input.setAttribute('type', 'file');

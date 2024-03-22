@@ -338,11 +338,35 @@ export function triggerContextMenuLegend(
       },
       {
         label: LL().Legend.ContextMenu.Up(),
-        callback: () => { console.log('Up'); },
+        callback: () => {
+          // We change the place of the layout feature in the layoutFeatures array
+          // so that it changes 1 place down on the svg element
+          // (and so that it is rendered after the previous layout feature)
+          const layoutFeaturesAndLegends = layersDescriptionStore.layoutFeaturesAndLegends.slice();
+          const index = layoutFeaturesAndLegends.findIndex((l) => l.id === legendId);
+          if (index < layoutFeaturesAndLegends.length - 1) {
+            const tmp = layoutFeaturesAndLegends[index + 1];
+            layoutFeaturesAndLegends[index + 1] = layoutFeaturesAndLegends[index];
+            layoutFeaturesAndLegends[index] = tmp;
+            setLayersDescriptionStore({ layoutFeaturesAndLegends });
+          }
+        },
       },
       {
         label: LL().Legend.ContextMenu.Down(),
-        callback: () => { console.log('Down'); },
+        callback: () => {
+          // We change the place of the layout feature in the layoutFeatures array
+          // so that it changes 1 place up on the svg element
+          // (and so that it is rendered before the previous layout feature)
+          const layoutFeaturesAndLegends = layersDescriptionStore.layoutFeaturesAndLegends.slice();
+          const index = layoutFeaturesAndLegends.findIndex((l) => l.id === legendId);
+          if (index > 0) {
+            const tmp = layoutFeaturesAndLegends[index - 1];
+            layoutFeaturesAndLegends[index - 1] = layoutFeaturesAndLegends[index];
+            layoutFeaturesAndLegends[index] = tmp;
+            setLayersDescriptionStore({ layoutFeaturesAndLegends });
+          }
+        },
       },
     ],
   });

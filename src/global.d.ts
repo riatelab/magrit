@@ -1024,6 +1024,8 @@ export interface Text extends LayoutFeatureBase {
   fontWeight: 'normal' | 'bold',
   // The text anchor of the text
   textAnchor: 'start' | 'middle' | 'end',
+  // The text decoration of the text
+  textDecoration: 'none' | 'underline' | 'line-through',
   // The angle of rotation of the text
   rotation: number,
   // Whether to display a rectangle behind the text

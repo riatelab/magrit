@@ -675,6 +675,10 @@ type RootTranslation = {
 			 */
 			Underline: string
 			/**
+			 * L​i​n​e​ ​t​h​r​o​u​g​h
+			 */
+			LineThrough: string
+			/**
 			 * T​e​x​t​ ​a​n​c​h​o​r
 			 */
 			TextAnchor: string
@@ -3090,6 +3094,10 @@ export type TranslationFunctions = {
 			 * Underline
 			 */
 			Underline: () => LocalizedString
+			/**
+			 * Line through
+			 */
+			LineThrough: () => LocalizedString
 			/**
 			 * Text anchor
 			 */

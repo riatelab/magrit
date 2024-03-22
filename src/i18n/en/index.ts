@@ -187,6 +187,7 @@ const en = {
       Bold: 'Bold',
       Italic: 'Italic',
       Underline: 'Underline',
+      LineThrough: 'Line through',
       TextAnchor: 'Text anchor',
       Start: 'Start',
       Middle: 'Middle',

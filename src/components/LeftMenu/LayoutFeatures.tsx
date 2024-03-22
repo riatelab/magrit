@@ -420,6 +420,7 @@ const createText = (LL: Accessor<TranslationFunctions>) => {
       fontStyle: 'normal',
       fontWeight: 'normal',
       textAnchor: 'start',
+      textDecoration: 'none',
       rotation: 0,
       backgroundRect: { visible: false } as BackgroundRect,
     } as Text;
