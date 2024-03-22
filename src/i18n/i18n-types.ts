@@ -79,6 +79,24 @@ type RootTranslation = {
 		 */
 		SmoothingIntersections: string
 	}
+	Messages: {
+		/**
+		 * I​n​f​o​r​m​a​t​i​o​n
+		 */
+		Information: string
+		/**
+		 * W​a​r​n​i​n​g
+		 */
+		Warning: string
+		/**
+		 * E​r​r​o​r
+		 */
+		Error: string
+		/**
+		 * C​l​i​c​k​ ​t​o​ ​s​h​o​w​/​h​i​d​e
+		 */
+		ChevronTitle: string
+	}
 	HeaderApp: {
 		/**
 		 * N​i​g​h​t​ ​/​ ​D​a​y​ ​m​o​d​e
@@ -1983,6 +2001,14 @@ type RootTranslation = {
 		 * F​i​e​l​d​ ​t​y​p​e
 		 */
 		FieldType: string
+		/**
+		 * V​a​r​i​a​b​l​e​ ​t​y​p​e​ ​d​e​f​i​n​e​s​ ​t​h​e​ ​a​n​a​l​y​s​i​s​ ​a​n​d​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​f​u​n​c​t​i​o​n​a​l​i​t​i​e​s​ ​o​f​f​e​r​e​d​ ​b​y​ ​t​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​.
+		 */
+		Information1: string
+		/**
+		 * F​i​v​e​ ​t​y​p​e​s​ ​o​f​ ​v​a​r​i​a​b​l​e​ ​a​r​e​ ​a​v​a​i​l​a​b​l​e​:​ ​i​d​e​n​t​i​f​i​e​r​ ​(​a​ ​u​n​i​q​u​e​ ​v​a​l​u​e​ ​u​s​e​d​ ​t​o​ ​i​d​e​n​t​i​f​y​ ​a​n​ ​e​n​t​i​t​y​,​ ​s​u​c​h​ ​a​s​ ​a​ ​c​o​d​e​,​ ​o​r​ ​i​t​s​ ​n​a​m​e​)​,​ ​c​a​t​e​g​o​r​i​c​a​l​ ​(​a​ ​n​o​m​i​n​a​l​ ​q​u​a​l​i​t​a​t​i​v​e​ ​v​a​l​u​e​)​,​ ​r​a​t​i​o​ ​(​a​ ​r​e​l​a​t​i​v​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​l​u​e​,​ ​s​u​c​h​ ​a​s​ ​a​n​ ​u​n​e​m​p​l​o​y​m​e​n​t​ ​r​a​t​e​ ​o​r​ ​p​o​p​u​l​a​t​i​o​n​ ​d​e​n​s​i​t​y​)​,​ ​s​t​o​c​k​ ​(​a​n​ ​a​b​s​o​l​u​t​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​l​u​e​,​ ​s​u​c​h​ ​a​s​ ​a​ ​p​o​p​u​l​a​t​i​o​n​ ​s​t​o​c​k​ ​o​r​ ​t​o​t​a​l​ ​w​h​e​a​t​ ​p​r​o​d​u​c​t​i​o​n​)​,​ ​a​n​d​ ​u​n​k​n​o​w​n​ ​(​f​o​r​ ​v​a​r​i​a​b​l​e​s​ ​y​o​u​ ​d​o​n​'​t​ ​w​i​s​h​ ​t​o​ ​u​s​e​)​.
+		 */
+		Information2: string
 		VariableTypes: {
 			/**
 			 * I​d​e​n​t​i​f​i​e​r
@@ -2522,6 +2548,24 @@ export type TranslationFunctions = {
 		 * Clipping contours with mask layer...
 		 */
 		SmoothingIntersections: () => LocalizedString
+	}
+	Messages: {
+		/**
+		 * Information
+		 */
+		Information: () => LocalizedString
+		/**
+		 * Warning
+		 */
+		Warning: () => LocalizedString
+		/**
+		 * Error
+		 */
+		Error: () => LocalizedString
+		/**
+		 * Click to show/hide
+		 */
+		ChevronTitle: () => LocalizedString
 	}
 	HeaderApp: {
 		/**
@@ -4413,6 +4457,14 @@ export type TranslationFunctions = {
 		 * Field type
 		 */
 		FieldType: () => LocalizedString
+		/**
+		 * Variable type defines the analysis and representation functionalities offered by the application.
+		 */
+		Information1: () => LocalizedString
+		/**
+		 * Five types of variable are available: identifier (a unique value used to identify an entity, such as a code, or its name), categorical (a nominal qualitative value), ratio (a relative quantitative value, such as an unemployment rate or population density), stock (an absolute quantitative value, such as a population stock or total wheat production), and unknown (for variables you don't wish to use).
+		 */
+		Information2: () => LocalizedString
 		VariableTypes: {
 			/**
 			 * Identifier

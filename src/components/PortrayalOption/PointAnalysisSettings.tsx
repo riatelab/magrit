@@ -72,6 +72,7 @@ import {
   ProportionalSymbolsSymbolType,
   RepresentationType,
 } from '../../global.d';
+import MessageBlock from '../MessageBlock.tsx';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -358,7 +359,11 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
 
   // The description of the current projection
   const currentProjection = unwrap(mapStore.projection);
-  const { unit: distanceUnit, toMeter } = getProjectionUnit(currentProjection);
+  const {
+    isGeo,
+    unit: distanceUnit,
+    toMeter,
+  } = getProjectionUnit(currentProjection);
 
   // Appropriate resolution for the grid in case grid is chosen
   const appropriateResolution = (
@@ -398,7 +403,7 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
   const [
     cellType,
     setCellType,
-  ] = createSignal<GridCellShape>('square');
+  ] = createSignal<GridCellShape>(GridCellShape.square);
   const [
     targetResolution,
     setTargetResolution,
@@ -575,6 +580,11 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
         max={500}
         step={0.1}
       />
+      <Show when={isGeo}>
+        <MessageBlock type={'warning'} useIcon={true}>
+          { LL().PortrayalSection.GridOptions.WarningGeo() }
+        </MessageBlock>
+      </Show>
     </Show>
     <InputResultName
       onKeyUp={(value) => {

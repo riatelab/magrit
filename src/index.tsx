@@ -10,6 +10,7 @@ import { initializeLightDarkMode } from './helpers/darkmode';
 import './helpers/array.extension';
 
 import 'bulma/css/bulma.min.css';
+import '@fontsource-variable/work-sans/wght.css';
 import './styles/Main.css';
 
 import WelcomePage from './WelcomePage.tsx';

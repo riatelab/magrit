@@ -4,7 +4,7 @@ import {
   createMemo,
   createSignal,
   For,
-  JSX,
+  JSX, onCleanup,
   onMount,
   Show,
 } from 'solid-js';
@@ -337,6 +337,8 @@ export default function TableWindow(): JSX.Element {
   let agGridRef: AgGridSolidRef;
   // And a ref to its parent element
   let parentGridRef: HTMLDivElement;
+  // Ref to the parent node of the modal
+  let refParentNode: HTMLDivElement;
 
   // The data to be displayed
   // (we use a signal because we may add new columns)
@@ -497,6 +499,15 @@ export default function TableWindow(): JSX.Element {
     });
   };
 
+  const listenerEscapeKey = (event: KeyboardEvent) => {
+    const isEscape = event.key
+      ? (event.key === 'Escape' || event.key === 'Esc')
+      : (event.keyCode === 27);
+    if (isEscape) {
+      (refParentNode.querySelector('.cancel-button') as HTMLElement).click();
+    }
+  };
+
   onMount(() => {
     // Let some time for the table to be rendered
     setTimeout(() => {
@@ -525,13 +536,22 @@ export default function TableWindow(): JSX.Element {
           const colId = elem.getAttribute('col-id')!;
           triggerContextMenu(e as MouseEvent, colId);
         });
+
+      // Bind the escape key to the cancel button
+      document.addEventListener('keydown', listenerEscapeKey);
     }, 125);
   });
+
+  onCleanup(() => {
+    document.removeEventListener('keydown', listenerEscapeKey);
+  });
+
   return <div
     class="table-window modal"
     style={{ display: 'flex' }}
     aria-modal="true"
     role="dialog"
+    ref={refParentNode!}
   >
     <div class="modal-background" />
     <div class="modal-card">
@@ -609,7 +629,7 @@ export default function TableWindow(): JSX.Element {
             onClick={ () => { confirmCallback(); } }
           >{ LL().SuccessButton() }</button>
           <button
-            class="button"
+            class="button cancel-button"
             onClick={ () => { closeModal(); } }
           >{ LL().CancelButton() }</button>
         </div>

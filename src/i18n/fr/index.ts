@@ -20,6 +20,12 @@ const fr = {
     SmoothingContours: 'Calcul des contours...',
     SmoothingIntersection: 'Calcul de l\'intersection entre les contours et la couche de maskage...',
   },
+  Messages: {
+    Information: 'Information',
+    Warning: 'Attention',
+    Error: 'Erreur',
+    ChevronTitle: 'Cliquer pour afficher / masquer',
+  },
   HeaderApp: {
     NightDayMode: 'Night / Day mode',
     ImportProjet: 'Importer un projet Magrit',
@@ -559,6 +565,8 @@ const fr = {
     ModalTitle: 'Typage des champs',
     FieldName: 'Nom du champ',
     FieldType: 'Type du champ',
+    Information1: 'Le type des variables définit les fonctionnalités d\'analyse et de représentation qui sont proposées dans l\'application.',
+    Information2: 'Cinq types de variables sont proposées : identifiant (une valeur unique permettant d\'identifier une entité, comme un code, ou son nom), catégoriel (une valeur qualitative nominale), ratio (une valeur quantitative relative, comme un taux de chômage ou une densité de population), stock (une valeur quantitative absolue, comme un stock de population ou la production totale de blé), et inconnu (pour les variables que vous ne souhaitez pas utiliser).',
     VariableTypes: {
       identifier: 'Identifiant',
       ratio: 'Ratio',

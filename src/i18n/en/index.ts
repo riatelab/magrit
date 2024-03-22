@@ -20,6 +20,12 @@ const en = {
     SmoothingContours: 'Computing contours...',
     SmoothingIntersections: 'Clipping contours with mask layer...',
   },
+  Messages: {
+    Information: 'Information',
+    Warning: 'Warning',
+    Error: 'Error',
+    ChevronTitle: 'Click to show/hide',
+  },
   HeaderApp: {
     NightDayMode: 'Night / Day mode',
     ImportProjet: 'Import a Magrit project',
@@ -559,6 +565,8 @@ const en = {
     ModalTitle: 'Fields typing',
     FieldName: 'Field name',
     FieldType: 'Field type',
+    Information1: 'Variable type defines the analysis and representation functionalities offered by the application.',
+    Information2: 'Five types of variable are available: identifier (a unique value used to identify an entity, such as a code, or its name), categorical (a nominal qualitative value), ratio (a relative quantitative value, such as an unemployment rate or population density), stock (an absolute quantitative value, such as a population stock or total wheat production), and unknown (for variables you don\'t wish to use).',
     VariableTypes: {
       identifier: 'Identifier',
       ratio: 'Ratio',

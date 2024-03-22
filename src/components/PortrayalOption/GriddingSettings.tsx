@@ -59,6 +59,7 @@ import {
   Orientation,
   RepresentationType,
 } from '../../global.d';
+import MessageBlock from '../MessageBlock.tsx';
 
 async function onClickValidate(
   referenceLayerId: string,
@@ -294,9 +295,9 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       step={0.1}
     />
     <Show when={isGeo}>
-      <WarningBanner expanded={true}>
+      <MessageBlock type={'warning'} useIcon={true}>
         { LL().PortrayalSection.GridOptions.WarningGeo() }
-      </WarningBanner>
+      </MessageBlock>
     </Show>
     <InputResultName
       onKeyUp={(value) => {

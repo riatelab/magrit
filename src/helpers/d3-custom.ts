@@ -159,6 +159,7 @@ import {
   brushY,
   type BrushBehavior,
 } from 'd3-brush';
+import { tile } from 'd3-tile';
 
 import hatanoRaw from './projection-hatano';
 import winkel1Raw from './projection-winkel1';
@@ -442,6 +443,8 @@ export default {
   brush,
   brushX,
   brushY,
+  // Stuff from d3-tile
+  tile,
 };
 
 export type {

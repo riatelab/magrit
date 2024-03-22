@@ -1,18 +1,18 @@
 html {
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  font-size: 13px;
-  box-sizing: border-box;
-  --background-color: #f5f5f5;  /* rgb(236, 235, 240); */
-  --border-color: #e5e5e5; /* rgb(220, 220, 220); */
-  --chevron-color: #c7c7c7;
-  --map-container-background: #fff; /* rgb(244, 246, 244); */
-  --button-shadow: hsla(208,7%,46%,.3);
-  --left-menu-width: 380px;
-  --header-height: 56px;
-  --sortable-chosen-background: #d2d2d2;
-  transition: background-color 400ms ease-out, border 400ms ease-out, color 400ms ease-out;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    font-size: 13px;
+    box-sizing: border-box;
+    --background-color: #f5f5f5;  /* rgb(236, 235, 240); */
+    --border-color: #e5e5e5; /* rgb(220, 220, 220); */
+    --chevron-color: #c7c7c7;
+    --map-container-background: #fff; /* rgb(244, 246, 244); */
+    --button-shadow: hsla(208,7%,46%,.3);
+    --left-menu-width: 380px;
+    --header-height: 56px;
+    --sortable-chosen-background: #d2d2d2;
+    transition: background-color 400ms ease-out, border 400ms ease-out, color 400ms ease-out;
 }
 
 html.theme-dark {
@@ -38,6 +38,9 @@ html.theme-dark {
     }
 }
 
+body {
+    font-family: 'Work Sans Variable', sans-serif;
+}
 /*
 Overwrite some of our values (we will handle that
 in a cleaner way in the future)
@@ -112,7 +115,8 @@ button.unstyled {
 
 /* Somehow large outline to make visible which button is focused */
 button.button:focus {
-  outline: -webkit-focus-ring-color auto thin;
+  /* -webkit-focus-ring-color auto thin; */
+  outline: hsl(var(--bulma-input-focus-h),var(--bulma-input-focus-s),var(--bulma-input-focus-l)) auto thin;
   outline: Highlight auto thin;
   outline: revert;
 }

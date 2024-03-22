@@ -48,6 +48,7 @@ import { openLayerManager } from './LeftMenu/LeftMenu.tsx';
 
 // Styles
 import '../styles/ImportWindow.css';
+import CollapsibleMessageBanner from './CollapsibleMessageBanner.tsx';
 
 interface LayerOrTableDescription {
   name: string,
@@ -803,10 +804,19 @@ export default function ImportWindow(): JSX.Element {
           </tbody>
         </table>
       </section>
-      <InformationBanner>
+{/*      <InformationBanner>
         <p>{LL().ImportWindow.SupportedVectorFormats()}</p>
         <p>{LL().ImportWindow.SupportedTabularFormats()}</p>
-      </InformationBanner>
+      </InformationBanner> */}
+      <CollapsibleMessageBanner
+        expanded={false}
+        title={LL().Messages.Information()}
+        type={'info'}
+        useIcon={true}
+      >
+        <p>{LL().ImportWindow.SupportedVectorFormats()}</p>
+        <p>{LL().ImportWindow.SupportedTabularFormats()}</p>
+      </CollapsibleMessageBanner>
       <footer class="modal-card-foot">
         <button
           disabled={
@@ -930,12 +940,12 @@ export default function ImportWindow(): JSX.Element {
               setModalStore({
                 show: true,
                 title: LL().SimplificationModal.Title(),
-                content: () => <SimplificationModal ids={dsToSimplify} />,
+                content: () => <SimplificationModal ids={dsToSimplify}/>,
                 width: '60vw',
               });
             }
           }}
-        > { LL().ImportWindow.ImportButton(countLayerToImport(fileDescriptions())) }
+        > {LL().ImportWindow.ImportButton(countLayerToImport(fileDescriptions()))}
         </button>
         <button
           class="button cancel-button"
@@ -943,7 +953,7 @@ export default function ImportWindow(): JSX.Element {
             // Remove the "drop" overlay
             setFileDropStore({ show: false, files: [] });
           }}
-        > { LL().ImportWindow.CancelButton() }
+        > {LL().ImportWindow.CancelButton()}
         </button>
       </footer>
     </div>

@@ -16,6 +16,9 @@ import { VariableType, Variable } from '../../helpers/typeDetection';
 
 // Types / Interfaces / Enums
 import type { LayerDescription, TableDescription } from '../../global';
+import InformationBanner from './Banners/InformationBanner.tsx';
+import MessageBlock from '../MessageBlock.tsx';
+import CollapsibleMessageBanner from '../CollapsibleMessageBanner.tsx';
 
 export default function FieldTypingModal(
   props: {
@@ -118,5 +121,15 @@ export default function FieldTypingModal(
         )
       }
     </For>
+    <CollapsibleMessageBanner
+      expanded={true}
+      title={LL().Messages.Information()}
+      type={'info'}
+      useIcon={true}
+      style={{ 'margin-bottom': '-2em' }}
+    >
+      <p>{LL().FieldsTyping.Information1()}</p>
+      <p>{LL().FieldsTyping.Information2()}</p>
+    </CollapsibleMessageBanner>
   </div>;
 }

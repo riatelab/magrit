@@ -467,7 +467,7 @@ export default function JoinPanel(
         </p>
         <hr/>
         <Show when={joinResult()!.nMatchLayer === 0}>
-          <MessageBlock type='danger'>
+          <MessageBlock type={'danger'} useIcon={true}>
             <p>{LL().JoinPanel.ImpossibleJoin()}</p>
           </MessageBlock>
         </Show>

@@ -17,6 +17,8 @@ interface DropdownMenuProps {
   onChange: (value: string) => void;
   prefix?: string;
   style?: { [key: string]: string };
+  classList?: { [key: string]: boolean };
+  triggerTitle?: string;
 }
 
 function onClickOutsideDropdown(): void {
@@ -117,8 +119,9 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
         });
       });
   });
+
   return <div
-    class="dropdown"
+    classList={{ dropdown: true, ...props.classList }}
     style={{ ...defaultStyleDropdown, ...props.style }}
     id={props.id}
     ref={refParentNode!}
@@ -129,7 +132,14 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
       onClick={ onClickDropdown }
       onKeyDown={ onKeyDownDropdown }
     >
-      <button class="button" aria-haspopup="true" aria-controls={ props.id } style={{ width: '100%' }}>
+      <button
+        class="button"
+        aria-haspopup="true"
+        aria-controls={ props.id }
+        style={{ width: '100%' }}
+        title={ props.triggerTitle }
+        aria-label={ props.triggerTitle }
+      >
         <span
           class="dropdown-item-target"
           style={{
