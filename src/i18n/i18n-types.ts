@@ -384,6 +384,26 @@ type RootTranslation = {
 		 * L​o​c​k​ ​z​o​o​m​ ​/​ ​p​o​s​i​t​i​o​n
 		 */
 		LockZoom: string
+		/**
+		 * P​r​o​j​e​c​t​i​o​n​ ​c​e​n​t​e​r
+		 */
+		ProjectionCenter: string
+		/**
+		 * P​r​o​j​e​c​t​i​o​n​ ​c​e​n​t​e​r​ ​(​φ​-​a​x​i​s​ ​r​o​t​a​t​i​o​n​)
+		 */
+		ProjectionCenterPhi: string
+		/**
+		 * P​r​o​j​e​c​t​i​o​n​ ​c​e​n​t​e​r​ ​(​γ​-​a​x​i​s​ ​r​o​t​a​t​i​o​n​)
+		 */
+		ProjectionCenterGamma: string
+		/**
+		 * S​t​a​n​d​a​r​d​ ​p​a​r​a​l​l​e​l
+		 */
+		StandardParallel: string
+		/**
+		 * S​t​a​n​d​a​r​d​ ​p​a​r​a​l​l​e​l​s
+		 */
+		StandardParallels: string
 	}
 	LayoutFeatures: {
 		/**
@@ -2804,6 +2824,26 @@ export type TranslationFunctions = {
 		 * Lock zoom / position
 		 */
 		LockZoom: () => LocalizedString
+		/**
+		 * Projection center
+		 */
+		ProjectionCenter: () => LocalizedString
+		/**
+		 * Projection center (φ-axis rotation)
+		 */
+		ProjectionCenterPhi: () => LocalizedString
+		/**
+		 * Projection center (γ-axis rotation)
+		 */
+		ProjectionCenterGamma: () => LocalizedString
+		/**
+		 * Standard parallel
+		 */
+		StandardParallel: () => LocalizedString
+		/**
+		 * Standard parallels
+		 */
+		StandardParallels: () => LocalizedString
 	}
 	LayoutFeatures: {
 		/**

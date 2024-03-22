@@ -174,6 +174,7 @@ export default function ProjectionSelection() : JSX.Element {
             </div>
             <div style={{ 'text-align': 'center' }}>
               <button
+                class="button"
                 onClick={() => {
                   setMapStore(
                     'projection',

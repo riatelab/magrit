@@ -49,7 +49,7 @@ export default function InputFieldRangeDoubleSlider(
   });
 
   onCleanup(() => {
-    slider.destroy();
+    if (slider) slider.destroy();
   });
 
   return <div class="field">
@@ -62,7 +62,7 @@ export default function InputFieldRangeDoubleSlider(
       }
     </div>
     <div class="control" style={{ width: '220px' }}>
-      <div class="slider" ref={refSliderNode!}>
+      <div class="slider slider-styled is-info" ref={refSliderNode!}>
       </div>
     </div>
   </div>;

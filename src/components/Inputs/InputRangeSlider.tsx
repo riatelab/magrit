@@ -7,6 +7,7 @@ import {
 import noUiSlider from 'nouislider';
 import { type API as NoUiSliderApi } from 'nouislider';
 import 'nouislider/dist/nouislider.css';
+import '../../styles/NoUiSliderBulma.css';
 
 interface InputFieldRangeNumberProps {
   label: string;
@@ -46,10 +47,10 @@ export default function InputFieldRangeSlider(props: InputFieldRangeNumberProps)
   });
 
   onCleanup(() => {
-    slider.destroy();
+    if (slider) slider.destroy();
   });
 
-  return <div class="field">
+  return <div class="field pr-2">
     <label class="label">{props.label}</label>
     <div class="output mr-6 ml-6">
       {
@@ -58,8 +59,8 @@ export default function InputFieldRangeSlider(props: InputFieldRangeNumberProps)
           : currentValue()
       }
     </div>
-    <div class="control" style={{ width: '220px' }}>
-      <div class="slider" ref={refSliderNode!}>
+    <div class="control">
+      <div class="slider slider-styled is-info" ref={refSliderNode!} style={{ width: '120px' }}>
       </div>
     </div>
   </div>;

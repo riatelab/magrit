@@ -1,5 +1,7 @@
 // Imports from solid-js
-import { Accessor, JSX } from 'solid-js';
+import {
+  Accessor, createMemo, JSX, Show,
+} from 'solid-js';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -15,6 +17,7 @@ import { setModalStore } from '../../store/ModalStore';
 import DropdownMenu from '../DropdownMenu.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import ProjectionSelection from '../Modals/ProjectionSelection.tsx';
+import InputFieldRangeSlider from '../Inputs/InputRangeSlider.tsx';
 
 const availableProjections = [
   'Airy',
@@ -157,6 +160,10 @@ export default function MapConfiguration(): JSX.Element {
     value: 'other',
   });
 
+  const hasParallel = createMemo(() => !!globalStore.projection?.parallel);
+
+  const hasParallels = createMemo(() => !!globalStore.projection?.parallels);
+
   return <div class="map-configuration">
     <InputFieldNumber
       label={LL().MapConfiguration.Width()}
@@ -216,5 +223,61 @@ export default function MapConfiguration(): JSX.Element {
         />
       </div>
     </div>
+    <Show when={globalStore.projection && mapStore.projection.type === 'd3'}>
+      <InputFieldRangeSlider
+        label={LL().MapConfiguration.ProjectionCenter()}
+        value={mapStore.rotate[0]}
+        onChange={(v) => {
+          setMapStore('rotate', [v, mapStore.rotate[1], mapStore.rotate[2]]);
+        }}
+        min={-180}
+        max={180}
+        step={1}
+      />
+      <InputFieldRangeSlider
+        label={LL().MapConfiguration.ProjectionCenterPhi()}
+        value={mapStore.rotate[1]}
+        onChange={(v) => {
+          setMapStore('rotate', [mapStore.rotate[0], v, mapStore.rotate[2]]);
+        }}
+        min={-180}
+        max={180}
+        step={1}
+      />
+      <InputFieldRangeSlider
+        label={LL().MapConfiguration.ProjectionCenterGamma()}
+        value={mapStore.rotate[2]}
+        onChange={(v) => {
+          setMapStore('rotate', [mapStore.rotate[0], mapStore.rotate[1], v]);
+        }}
+        min={-180}
+        max={180}
+        step={1}
+      />
+      <Show when={hasParallel()}>
+        <InputFieldRangeSlider
+          label={LL().MapConfiguration.StandardParallel()}
+          value={mapStore.parallel || globalStore.projection.parallel()}
+          onChange={(v) => {
+            setMapStore('parallel', v);
+          }}
+          min={-90}
+          max={90}
+          step={1}
+        />
+      </Show>
+      <Show when={hasParallels()}>
+        <InputFieldRangeSlider
+          label={LL().MapConfiguration.StandardParallels()}
+          value={mapStore.parallels || globalStore.projection.parallels()}
+          onChange={(v) => {
+            setMapStore('parallels', v);
+          }}
+          min={-90}
+          max={90}
+          step={1}
+        />
+      </Show>
+    </Show>
   </div>;
 }

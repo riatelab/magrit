@@ -108,6 +108,11 @@ const en = {
     MoreProjection: 'More projections',
     CustomProjection: 'Custom projection...',
     LockZoom: 'Lock zoom / position',
+    ProjectionCenter: 'Projection center',
+    ProjectionCenterPhi: 'Projection center (φ-axis rotation)',
+    ProjectionCenterGamma: 'Projection center (γ-axis rotation)',
+    StandardParallel: 'Standard parallel',
+    StandardParallels: 'Standard parallels',
   },
   LayoutFeatures: {
     BackgroundColor: 'Background color',
