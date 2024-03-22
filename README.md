@@ -1,6 +1,6 @@
 # Magrit - Thematic cartography
 
-[en] [Magrit](https://magrit.cnrs.fr) is an online mapping application developed by [UAR RIATE](https://riate.cnrs.fr/).  
+[en] [Magrit](https://magrit.cnrs.fr) is an online thematic mapping application developed by [UAR RIATE](https://riate.cnrs.fr/).  
 [fr]  [Magrit](https://magrit.cnrs.fr) est une application de cartographie thématique développée par l'[UAR RIATE](https://riate.cnrs.fr/).
 
 ## Basics
@@ -11,14 +11,18 @@
 - It's **designed for teaching and learning cartography**.
 - It lets you import **your own geometry dataset** (**Shapefile**, **GeoJSON**, **GML**, **GeoPackage**, etc.) and optionally your **tabular file** (CSV, XLS, XLSX, etc.).
 - We also provide many sample datasets to try out the various representations and become familiar with the application.
-- It allows to **render and combine a wide variety of maps**: choropleth, proportional symbols, cartogram, discontinuity, smoothed maps, etc.
+- It allows to **render and combine a wide variety of maps**: choropleth, proportional symbols, cartogram, discontinuity, smoothed maps, links, etc.
 - It supports all the most popular modern desktop browsers.
 - Magrit is written in modern JS and uses notably [solid.js](https://github.com/solidjs/solid) and [d3.js](https://github.com/d3/d3) libraries
-  as well as various WebAssembly modules ([GDAL](https://github.com/bugra9/gdal3.js), [GEOS](https://github.com/chrispahm/geos-wasm), etc.)
+  as well as various WebAssembly modules ([GDAL](https://github.com/bugra9/gdal3.js), [GEOS](https://github.com/chrispahm/geos-wasm), [Contour-wasm](https://github.com/mthh/contour-wasm), [go-cart-wasm](https://github.com/riatelab/go-cart-wasm)).
 
+## Try it out
 
-## Usage
+- Online version: [https://magrit.cnrs.fr](https://magrit.cnrs.fr)
+- Online documentation: [https://magrit.cnrs.fr/docs](https://magrit.cnrs.fr/docs)
+- Download the desktop version: [Windows]() / [MacOS]() / [Linux]()
 
+## Development
 
 Requirements:
 
