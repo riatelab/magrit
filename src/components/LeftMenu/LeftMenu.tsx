@@ -17,7 +17,6 @@ import LayerManager from './LayerManager.tsx';
 import ExportSection from './ExportSection.tsx';
 import MapConfiguration from './MapConfiguration.tsx';
 import ChevronIcon from '../Icons/ChevronIcon.tsx';
-import PortrayalSection from './PortrayalSection.tsx';
 
 // Styles
 import '../../styles/LeftMenu.css';
