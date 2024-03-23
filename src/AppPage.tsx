@@ -350,7 +350,7 @@ const AppPage: () => JSX.Element = () => {
       ?.addEventListener('click', redo);
 
     // Add event listener to handle the light / dark mode
-    document.getElementById('button-night-day')
+    document.getElementById('toggle-night-day')
       ?.addEventListener('click', toggleDarkMode);
 
     // Event listeners for the buttons of the header bar

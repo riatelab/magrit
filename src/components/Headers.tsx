@@ -3,7 +3,6 @@ import { JSX, onMount } from 'solid-js';
 import { A } from '@solidjs/router';
 
 // Imports from other packages
-import { CgDarkMode } from 'solid-icons/cg';
 import {
   FaSolidCircleQuestion,
   FaSolidFloppyDisk,
@@ -26,6 +25,7 @@ import img from '../assets/magrit.svg?url';
 
 // Styles
 import '../styles/Headers.css';
+import SwitchTheme from './SwitchTheme.tsx';
 
 const handleBurgerClick = () => {
   // Get all "navbar-burger" elements
@@ -69,15 +69,9 @@ export function HeaderBarWelcome(): JSX.Element {
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
-          <button
-            class="button button-header-bar"
-            id="button-night-day"
-            aria-label={LL().HeaderApp.NightDayMode()}
-            title={LL().HeaderApp.NightDayMode()}
-          >
-            <CgDarkMode size={'1.5em'} />
-          </button>
           <DropdownLanguage/>
+          &nbsp;&nbsp;
+          <SwitchTheme class="button-header-bar" id="toggle-night-day" />
           &nbsp;&nbsp;
           <div class="buttons">
             <A href="/app" class="button is-primary">{LL().StartApplication()}</A>
@@ -127,15 +121,7 @@ export function HeaderBarApp(): JSX.Element {
           >
             <ImRedo size={'1.5em'} />
           </button>
-          <p style={{ margin: '2em' }}></p>
-          <button
-            class="button button-header-bar"
-            id="button-night-day"
-            aria-label={ LL().HeaderApp.NightDayMode() }
-            title={ LL().HeaderApp.NightDayMode() }
-          >
-            <CgDarkMode size={'1.5em'} />
-          </button>
+          <p style={{ margin: '1em' }}></p>
           <button
             class="button button-header-bar"
             id="button-new-project"
@@ -168,8 +154,15 @@ export function HeaderBarApp(): JSX.Element {
           >
             <FaSolidCircleQuestion size={'1.5em'} />
           </button>
+          <div
+           style={{
+             width: '1px',
+             height: '2.4em',
+             background: 'var(--bulma-border)',
+           }}
+          ></div>
           <DropdownLanguage />
-          <div class="buttons" />
+          <SwitchTheme class="button-header-bar" id="toggle-night-day" />
         </div>
       </div>
     </div>

@@ -4,6 +4,6 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.button-header-bar {
+.navbar .navbar-item > * {
   margin-right: 0.5em;
 }
