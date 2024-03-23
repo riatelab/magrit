@@ -26,7 +26,7 @@
     "test": "vitest",
     "typesafe-i18n": "typesafe-i18n",
     "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs && cp -r docs/.vitepress/dist dist/docs",
+    "docs:build": "vitepress build docs && rm -rf dist/docs && cp -r docs/.vitepress/dist dist/docs",
     "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {

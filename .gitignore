@@ -39,6 +39,10 @@ dist/**/*
 dist-electron/**/*
 release/**/*
 
+# Vitepress
+docs/.vitepress/cache
+docs/.vitepress/dist
+
 # ignore yarn.lock
 yarn.lock
 

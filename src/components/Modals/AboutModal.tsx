@@ -45,7 +45,7 @@ export default function AboutModal(
         <a
           class={'button is-link'}
           style={{ width: '280px' }}
-          href="https://magrit.cnrs.fr/docs/"
+          href={ `${window.location.origin}/docs/` }
           target="_blank"
         >
           <b>{ LL().AboutPanel.documentation() }</b>
