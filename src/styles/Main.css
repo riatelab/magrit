@@ -38,9 +38,6 @@ html.theme-dark {
     }
 }
 
-body {
-    font-family: 'Work Sans Variable', sans-serif;
-}
 /*
 Overwrite some of our values (we will handle that
 in a cleaner way in the future)
@@ -87,11 +84,13 @@ html.theme-dark select > option[disabled] {
   margin-right: 0.5em;
 }
 
+/*
 .dropdown-content {
   border-left: solid 1px var(--border-color);
   border-bottom: solid 1px var(--border-color);
   border-right: solid 1px var(--border-color);
 }
+*/
 
 .button .has-shadow {
   box-shadow: 0 0.5rem 0.8rem var(--button-shadow) !important;
@@ -121,9 +120,11 @@ button.button:focus {
   outline: revert;
 }
 
+/*
 button.button:active, button.button:focus {
   border-color: unset !important;
 }
+*/
 
 svg[class*='plot'] {
   margin: auto;
@@ -136,10 +137,6 @@ input[type=checkbox], input[type=radio] {
 
 .modal-card-foot, .modal-card-head {
   padding: 1em !important;
-}
-
-.is-cursor-pointer {
-  cursor: pointer;
 }
 
 .content details summary {

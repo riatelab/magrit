@@ -18,6 +18,7 @@ declare namespace globalThis {
 type DexieDb = Dexie
 & { projects: Dexie.Table<
 { date: Date, data: {
+  version: string,
   layers: LayerDescription[],
   layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
   map: MapStoreType,

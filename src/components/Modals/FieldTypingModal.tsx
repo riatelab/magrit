@@ -124,7 +124,7 @@ export default function FieldTypingModal(
     <CollapsibleMessageBanner
       expanded={true}
       title={LL().Messages.Information()}
-      type={'info'}
+      type={'primary'}
       useIcon={true}
       style={{ 'margin-bottom': '-2em' }}
     >

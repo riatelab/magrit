@@ -4,7 +4,7 @@ import { DexieDb } from '../global';
 
 export const initDb = (): Dexie => {
   const db = new Dexie('MagritProjectDb');
-  db.version(3).stores({
+  db.version(4).stores({
     projects: '++id, date, data',
   });
   return db;

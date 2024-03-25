@@ -164,7 +164,7 @@ export default function FormulaInput(
           {
             (field) => (
               <span
-                class="tag is-warning is-cursor-pointer"
+                class="tag is-warning is-clickable"
                 title={
                   /[àâäéèêëîïôöùûüç -]/i.test(field)
                     ? `${field} - ${LL().FormulaInput.noteSpecialCharacters()}`
@@ -195,7 +195,7 @@ export default function FormulaInput(
           {
             (specialField) => (
               <span
-                class="tag is-success is-cursor-pointer"
+                class="tag is-success is-clickable"
                 title={
                   LL().FormulaInput[
                     specialField.replace('$', 'specialField') as 'specialFieldId' | 'specialFieldLength' | 'specialFieldArea'
@@ -222,7 +222,7 @@ export default function FormulaInput(
           {
             (func) => (
               <span
-                class="tag is-info is-cursor-pointer"
+                class="tag is-info is-clickable"
                 title={LL().FormulaInput[func as 'POWER()' | 'SUBSTRING()' | 'CONCAT()']()}
                 onClick={() => {
                   // Insert the field in the formula
@@ -243,7 +243,7 @@ export default function FormulaInput(
           {
             (op) => (
               <span
-                class="tag is-link is-cursor-pointer"
+                class="tag is-link is-clickable"
                 title={LL().FormulaInput[op as '*' | '+' | '-' | '/']()}
                 onClick={() => {
                   // Insert the field in the formula

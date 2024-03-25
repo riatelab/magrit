@@ -811,7 +811,7 @@ export default function ImportWindow(): JSX.Element {
       <CollapsibleMessageBanner
         expanded={false}
         title={LL().Messages.Information()}
-        type={'info'}
+        type={'primary'}
         useIcon={true}
       >
         <p>{LL().ImportWindow.SupportedVectorFormats()}</p>
