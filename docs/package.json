@@ -1,0 +1,20 @@
+{
+  "name": "magrit-documentation",
+  "private": true,
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Documentation for Magrit",
+  "license": "GPL-3.0-or-later",
+  "author": {
+    "name": "Matthieu Viry",
+    "email": "matthieu.viry@cnrs.fr"
+  },
+  "devDependencies": {
+    "vitepress": "^1.0.1"
+  },
+  "scripts": {
+      "dev": "vitepress dev",
+      "build": "vitepress build",
+      "serve": "vitepress preview"
+  }
+}
