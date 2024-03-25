@@ -61,16 +61,12 @@ type LayerDescription = {
   pointRadius?: number,
   // Whether there is a drop shadow or not (we may want to replace the boolean value
   // by an object describing the drop shadow parameters in the future)
-  dropShadow: boolean,
-  // Whether there is a blur filter or not (we may want to replace the boolean value
-  // by an object describing the blur filter parameters in the future)
-  blurFilter: boolean,
+  dropShadow: DropShadowOptions | null,
   // The value for the shape rendering property of the parent SVG group.
   // We use auto by default on all layers of less than 10000 features.
   // For Polygon layers of more than 10000 features, we use optimizeSpeed.
   shapeRendering: ('auto' | 'optimizeSpeed' | 'crispEdges' | 'geometricPrecision'),
   // Specific parameters for the current renderer (e.g. proportional symbols)
-  // Note: we may move away the 'classification' field to use this "rendererParameters" field
   rendererParameters?: (
     ProportionalSymbolsParameters
     | ClassificationParameters
@@ -115,6 +111,48 @@ interface DefaultRendererParameters {
   pointRadius?: number,
 }
 
+interface DefaultPointRendererParameters {
+  // The color of the stroke
+  strokeColor: string,
+  // The width of the stroke
+  strokeWidth: number,
+  // The opacity of the stroke
+  strokeOpacity: number,
+  // The dash array value of the stroke
+  strokeDasharray: string,
+  // The fill color
+  fillColor: string,
+  // The opacity of the fill
+  fillOpacity: number,
+  // The radius of the point
+  pointRadius: number,
+}
+
+interface DefaultLineRendererParameters {
+  // The color of the stroke
+  strokeColor: string,
+  // The width of the stroke
+  strokeWidth: number,
+  // The opacity of the stroke
+  strokeOpacity: number,
+  // The dash array value of the stroke
+  strokeDasharray: string,
+}
+
+interface DefaultPolygonRendererParameters {
+  // The color of the stroke
+  strokeColor: string,
+  // The width of the stroke
+  strokeWidth: number,
+  // The opacity of the stroke
+  strokeOpacity: number,
+  // The dash array value of the stroke
+  strokeDasharray: string,
+  // The fill color
+  fillColor: string,
+  // The opacity of the fill
+  fillOpacity: number,
+}
 // type LayerDescriptionDefault = LayerDescription & {
 //   renderer: RepresentationType.default,
 //   rendererParameters: DefaultRendererParameters
@@ -126,11 +164,13 @@ type LayerDescriptionChoropleth = LayerDescription & {
 };
 
 type LayerDescriptionProportionalSymbols = LayerDescription & {
+  type: 'point',
   renderer: RepresentationType.proportionalSymbols,
   rendererParameters: ProportionalSymbolsParameters,
 };
 
 type LayerDescriptionLabels = LayerDescription & {
+  type: 'point'
   renderer: RepresentationType.labels,
   rendererParameters: LabelsParameters,
 };
@@ -1177,6 +1217,7 @@ interface DropShadowOptions {
   dx: number,
   dy: number,
   stdDeviation: number,
+  color: string,
 }
 
 interface BlurOptions {

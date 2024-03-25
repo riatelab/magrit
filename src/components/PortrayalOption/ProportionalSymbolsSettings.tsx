@@ -205,8 +205,7 @@ function onClickValidate(
       ? propSymbolsParameters.color
       : undefined,
     fillOpacity: 1,
-    dropShadow: false,
-    blurFilter: false,
+    dropShadow: null,
     shapeRendering: 'auto',
     rendererParameters: propSymbolsParameters,
   } as LayerDescriptionProportionalSymbols;

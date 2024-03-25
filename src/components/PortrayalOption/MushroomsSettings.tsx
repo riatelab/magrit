@@ -145,8 +145,7 @@ function onClickValidate(
     strokeWidth: 1,
     strokeOpacity: 1,
     fillOpacity: 1,
-    dropShadow: false,
-    blurFilter: false,
+    dropShadow: null,
     shapeRendering: 'auto',
     rendererParameters: params,
   } as LayerDescriptionMushroomLayer;

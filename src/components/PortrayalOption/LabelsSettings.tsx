@@ -90,8 +90,7 @@ function onClickValidate(
     // strokeOpacity: 1,
     // fillColor: '#000000',
     // fillOpacity: 1,
-    dropShadow: false,
-    blurFilter: false,
+    dropShadow: null,
     shapeRendering: 'auto',
     rendererParameters: {
       variable: targetVariable,

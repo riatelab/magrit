@@ -119,8 +119,7 @@ const getDefaultRenderingParams = (geomType: string) => {
       fillColor: color,
       fillOpacity: 1,
       pointRadius: 5,
-      dropShadow: false,
-      blurFilter: false,
+      dropShadow: null,
     };
   }
   if (geomType === 'linestring') {
@@ -129,8 +128,7 @@ const getDefaultRenderingParams = (geomType: string) => {
       strokeColor: color,
       strokeWidth: 1.5,
       strokeOpacity: 1,
-      dropShadow: false,
-      blurFilter: false,
+      dropShadow: null,
     };
   }
   if (geomType === 'polygon') {
@@ -141,8 +139,7 @@ const getDefaultRenderingParams = (geomType: string) => {
       strokeOpacity: 1,
       fillColor: color,
       fillOpacity: 0.85,
-      dropShadow: false,
-      blurFilter: false,
+      dropShadow: null,
     };
   }
   return {};

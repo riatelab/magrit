@@ -101,8 +101,7 @@ function onClickValidate(
     strokeColor: '#960e47',
     // strokeWidth: 2,
     strokeOpacity: 1,
-    dropShadow: false,
-    blurFilter: false,
+    dropShadow: null,
     shapeRendering: 'auto',
     rendererParameters: {
       variable: targetVariable,

@@ -60,7 +60,7 @@ import '../../styles/LayerAndLegendSettings.css';
 const updateProp = (
   layerId: string,
   propOrProps: string | string[],
-  value: string | number | boolean,
+  value: string | number | boolean | object | null,
 ) => {
   if (Array.isArray(propOrProps)) {
     const allPropsExceptLast = propOrProps.slice(0, propOrProps.length - 1);
@@ -88,21 +88,54 @@ const debouncedUpdateProp = debounce(updateProp, 200);
 function AestheticsSection(props: LayerDescription): JSX.Element {
   const { LL } = useI18nContext();
 
-  return <details>
-    <summary>{ LL().LayerSettings.AestheticFilter() }</summary>
-    <div>
-      <InputFieldCheckbox
-        label={LL().LayerSettings.DropShadow()}
-        checked={props.dropShadow}
-        onChange={(checked) => updateProp(props.id, 'dropShadow', checked)}
+  return <div>
+    <InputFieldCheckbox
+      label={LL().LayerSettings.DropShadow()}
+      checked={!!props.dropShadow}
+      onChange={(checked) => {
+        const value = checked
+          ? {
+            dx: 5, dy: 5, stdDeviation: 7, color: '#000000',
+          } : null;
+        updateProp(
+          props.id,
+          'dropShadow',
+          value,
+        );
+      }}
+    />
+    <Show when={!!props.dropShadow}>
+      <InputFieldNumber
+        label={LL().LayerSettings.DropShadowDx()}
+        value={props.dropShadow!.dx}
+        onChange={(v) => debouncedUpdateProp(props.id, ['dropShadow', 'dx'], v)}
+        min={-20}
+        max={20}
+        step={1}
+      />
+      <InputFieldNumber
+        label={LL().LayerSettings.DropShadowDy()}
+        value={props.dropShadow!.dy}
+        onChange={(v) => debouncedUpdateProp(props.id, ['dropShadow', 'dy'], v)}
+        min={-20}
+        max={20}
+        step={1}
       />
       <InputFieldCheckbox
-        label={LL().LayerSettings.Blur()}
-        checked={props.blurFilter}
-        onChange={(checked) => updateProp(props.id, 'blurFilter', checked)}
+        label={LL().LayerSettings.DropShadowBlur()}
+        checked={props.dropShadow!.stdDeviation !== 0}
+        onChange={(checked) => {
+          const value = checked ? 7 : 0;
+          debouncedUpdateProp(props.id, ['dropShadow', 'stdDeviation'], value);
+        }}
       />
-    </div>
-  </details>;
+      <InputFieldColor
+        label={LL().LayerSettings.DropShadowColor()}
+        value={props.dropShadow!.color}
+        onChange={(v) => debouncedUpdateProp(props.id, ['dropShadow', 'color'], v)}
+      />
+    </Show>
+  </div>;
 }
 
 function makeSettingsLabels(

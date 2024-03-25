@@ -87,8 +87,7 @@ function onClickValidate(
     strokeWidth: 0.4,
     strokeOpacity: 1,
     fillOpacity: 1,
-    dropShadow: false,
-    blurFilter: false,
+    dropShadow: null,
     shapeRendering: referenceLayerDescription.shapeRendering,
     rendererParameters: classification,
   } as LayerDescriptionChoropleth;

@@ -1601,9 +1601,21 @@ type RootTranslation = {
 		 */
 		DropShadow: string
 		/**
-		 * B​l​u​r
+		 * S​h​a​d​o​w​ ​o​f​f​s​e​t​ ​o​n​ ​t​h​e​ ​x​-​a​x​i​s
 		 */
-		Blur: string
+		DropShadowDx: string
+		/**
+		 * S​h​a​d​o​w​ ​o​f​f​s​e​t​ ​o​n​ ​t​h​e​ ​y​-​a​x​i​s
+		 */
+		DropShadowDy: string
+		/**
+		 * S​h​a​d​o​w​ ​c​o​l​o​r
+		 */
+		DropShadowColor: string
+		/**
+		 * S​h​a​d​o​w​ ​b​l​u​r
+		 */
+		DropShadowBlur: string
 		/**
 		 * A​l​l​o​w​ ​m​o​v​i​n​g​ ​s​y​m​b​o​l​s
 		 */
@@ -4060,9 +4072,21 @@ export type TranslationFunctions = {
 		 */
 		DropShadow: () => LocalizedString
 		/**
-		 * Blur
+		 * Shadow offset on the x-axis
 		 */
-		Blur: () => LocalizedString
+		DropShadowDx: () => LocalizedString
+		/**
+		 * Shadow offset on the y-axis
+		 */
+		DropShadowDy: () => LocalizedString
+		/**
+		 * Shadow color
+		 */
+		DropShadowColor: () => LocalizedString
+		/**
+		 * Shadow blur
+		 */
+		DropShadowBlur: () => LocalizedString
 		/**
 		 * Allow moving symbols
 		 */

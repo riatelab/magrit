@@ -178,8 +178,7 @@ async function onClickValidate(
     strokeOpacity: 1,
     fillColor: '#abcdef',
     fillOpacity: 1,
-    dropShadow: false,
-    blurFilter: false,
+    dropShadow: null,
     shapeRendering: 'auto',
     rendererParameters,
   } as LayerDescriptionSmoothedLayer;

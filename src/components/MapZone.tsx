@@ -331,7 +331,7 @@ export default function MapZone(): JSX.Element {
   const getClipSphere = () => {
     const el = <path d={globalStore.pathGenerator({ type: 'Sphere' })} /> as JSX.Element & ID3Element;
     // eslint-disable-next-line no-underscore-dangle
-    el.__data__ = { type: 'Sphere' };
+    el.__data__ = { type: 'Sphere' } as never;
     return <clipPath id="clip-sphere">{ el }</clipPath>;
   };
 
@@ -388,29 +388,45 @@ export default function MapZone(): JSX.Element {
           </For>
           <For each={layersDescriptionStore.layers}>
             {(layer) => <>
-              <Show when={layer.dropShadow}>
+              {/*
+                For now we need a workaround issue https://github.com/solidjs/solid/issues/2110
+                regarding the stdDeviation attribute of the feDropShadow filter.
+              */}
+              <Show
+                when={layer.visible && !!layer.dropShadow && layer.dropShadow!.stdDeviation === 0}
+              >
                 <filter id={`filter-drop-shadow-${layer.id}`} width="200%" height="200%">
-                  <feDropShadow dx="5" dy="5" stdDeviation="0" />
-                    {/* TODO: investigate the various ways of drawing drop shadows */}
-                    {/* <feOffset result="offOut" in="SourceAlpha" dx="5" dy="5" /> */}
-                    {/* <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" /> */}
-                    {/* <feBlend in="SourceGraphic" in2="blurOut" mode="normal" /> */}
+                  <feDropShadow
+                    dx={layer.dropShadow!.dx}
+                    dy={layer.dropShadow!.dy}
+                    stdDeviation="0"
+                    flood-color={layer.dropShadow!.color}
+                    flood-opacity={1}
+                  />
                 </filter>
               </Show>
-              <Show when={layer.blurFilter}>
-                <filter id={`filter-blur-${layer.id}`}>
-                  <feGaussianBlur stdDeviation="5"/>
+              <Show
+                when={layer.visible && !!layer.dropShadow && layer.dropShadow!.stdDeviation > 0}
+              >
+                <filter id={`filter-drop-shadow-${layer.id}`} width="200%" height="200%">
+                  <feDropShadow
+                    dx={layer.dropShadow!.dx}
+                    dy={layer.dropShadow!.dy}
+                    stdDeviation="7"
+                    flood-color={layer.dropShadow!.color}
+                    flood-opacity={1}
+                  />
                 </filter>
               </Show>
             </>
             }
           </For>
-          { getClipSphere() }
+          {getClipSphere()}
         </defs>
 
         {/* Generate SVG group for each layer */}
-        <For each={ layersDescriptionStore.layers }>
-          {(layer) => <Show when={
+        <For each={layersDescriptionStore.layers}>
+        {(layer) => <Show when={
               applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
               || layer.visible
             }>{ dispatchMapRenderer(layer) }</Show>

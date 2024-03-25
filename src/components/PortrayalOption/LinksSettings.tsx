@@ -165,8 +165,7 @@ function onClickValidate(
     strokeWidth: 1,
     strokeColor: '#000000',
     strokeOpacity: 1,
-    dropShadow: false,
-    blurFilter: false,
+    dropShadow: null,
     shapeRendering: 'auto',
     rendererParameters: params as LinksParameters,
   } as LayerDescriptionLinks;

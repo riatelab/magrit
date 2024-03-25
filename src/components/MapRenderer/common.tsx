@@ -137,8 +137,5 @@ export function mergeFilterIds(layerDescription: LayerDescription): string | und
   if (layerDescription.dropShadow) {
     ids.push(`url(#filter-drop-shadow-${layerDescription.id})`);
   }
-  if (layerDescription.blurFilter) {
-    ids.push(`url(#filter-blur-${layerDescription.id})`);
-  }
   return ids.length > 0 ? ids.join(' ') : undefined;
 }

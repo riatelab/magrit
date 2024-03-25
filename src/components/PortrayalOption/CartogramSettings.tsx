@@ -107,8 +107,7 @@ async function onClickValidate(
     strokeOpacity: 1,
     fillColor: '#a12f2f',
     fillOpacity: 1,
-    dropShadow: false,
-    blurFilter: false,
+    dropShadow: null,
     shapeRendering: referenceLayerDescription.shapeRendering,
     rendererParameters: {
       variable: targetVariable,

@@ -210,8 +210,7 @@ function onClickValidate(
       strokeOpacity: 1,
       fillColor: propSymbolsParameters.color,
       fillOpacity: 1,
-      dropShadow: false,
-      blurFilter: false,
+      dropShadow: null,
       shapeRendering: 'auto',
       rendererParameters: propSymbolsParameters,
     } as LayerDescriptionProportionalSymbols;
@@ -280,8 +279,7 @@ function onClickValidate(
       strokeWidth: 0.4,
       strokeOpacity: 1,
       fillOpacity: 1,
-      dropShadow: false,
-      blurFilter: false,
+      dropShadow: null,
       shapeRendering: referenceLayerDescription.shapeRendering,
       rendererParameters: classification,
     } as LayerDescriptionChoropleth;

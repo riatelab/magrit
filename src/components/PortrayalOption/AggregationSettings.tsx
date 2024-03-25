@@ -73,8 +73,7 @@ async function onClickValidate(
     strokeColor: '#000000',
     strokeWidth: 1,
     strokeOpacity: 1,
-    dropShadow: false,
-    blurFilter: false,
+    dropShadow: null,
     shapeRendering: 'auto',
   } as LayerDescription;
 
