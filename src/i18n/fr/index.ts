@@ -427,6 +427,11 @@ const fr = {
       VariableToUse: 'Variable numérique à utiliser',
       NewLayerName: 'Points_agrégés_{layerName}',
     },
+    LayerFromTableOptions: {
+      FieldX: 'Champ contenant les coordonnées X',
+      FieldY: 'Champ contenant les coordonnées Y',
+      FieldWkt: 'Champ contenant les géométries au format WKT',
+    },
   },
   FormulaInput: {
     formula: 'Formule',

@@ -1520,6 +1520,20 @@ type RootTranslation = {
 			 */
 			NewLayerName: RequiredParams<'layerName'>
 		}
+		LayerFromTableOptions: {
+			/**
+			 * F​i​e​l​d​ ​c​o​n​t​a​i​n​i​n​g​ ​t​h​e​ ​X​ ​c​o​o​r​d​i​n​a​t​e
+			 */
+			FieldX: string
+			/**
+			 * F​i​e​l​d​ ​c​o​n​t​a​i​n​i​n​g​ ​t​h​e​ ​Y​ ​c​o​o​r​d​i​n​a​t​e
+			 */
+			FieldY: string
+			/**
+			 * F​i​e​l​d​ ​c​o​n​t​a​i​n​i​n​g​ ​t​h​e​ ​W​K​T​ ​g​e​o​m​e​t​r​y
+			 */
+			FieldWkt: string
+		}
 	}
 	FormulaInput: {
 		/**
@@ -4054,6 +4068,20 @@ export type TranslationFunctions = {
 			 * Aggregated_points_{layerName}
 			 */
 			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+		}
+		LayerFromTableOptions: {
+			/**
+			 * Field containing the X coordinate
+			 */
+			FieldX: () => LocalizedString
+			/**
+			 * Field containing the Y coordinate
+			 */
+			FieldY: () => LocalizedString
+			/**
+			 * Field containing the WKT geometry
+			 */
+			FieldWkt: () => LocalizedString
 		}
 	}
 	FormulaInput: {

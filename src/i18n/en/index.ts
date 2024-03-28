@@ -427,6 +427,11 @@ const en = {
       VariableToUse: 'Numerical variable to use',
       NewLayerName: 'Aggregated_points_{layerName}',
     },
+    LayerFromTableOptions: {
+      FieldX: 'Field containing the X coordinate',
+      FieldY: 'Field containing the Y coordinate',
+      FieldWkt: 'Field containing the WKT geometry',
+    },
   },
   FormulaInput: {
     formula: 'Formula',
