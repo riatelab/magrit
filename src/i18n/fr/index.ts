@@ -114,6 +114,7 @@ const fr = {
     MoreProjection: 'Plus de projections',
     CustomProjection: 'Projection personnalisée...',
     LockZoom: 'Verrouiller le zoom / la position',
+    ShowProjectionParameters: 'Afficher les paramètres de la projection',
     ProjectionCenter: 'Centre de la projection (longitude)',
     ProjectionCenterPhi: 'Centre de la projection (rotation de l\'axe φ)',
     ProjectionCenterGamma: 'Centre de la projection (rotation de l\'axe γ)',

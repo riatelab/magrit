@@ -114,6 +114,7 @@ const en = {
     MoreProjection: 'More projections',
     CustomProjection: 'Custom projection...',
     LockZoom: 'Lock zoom / position',
+    ShowProjectionParameters: 'Show projection parameters',
     ProjectionCenter: 'Projection center',
     ProjectionCenterPhi: 'Projection center (φ-axis rotation)',
     ProjectionCenterGamma: 'Projection center (γ-axis rotation)',

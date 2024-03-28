@@ -35,6 +35,8 @@ export type MapStoreType = {
   backgroundColor: string,
   backgroundColorOpacity: number,
   lockZoomPan: boolean,
+  parallel?: number,
+  parallels?: number[],
 };
 
 const [
@@ -150,6 +152,14 @@ createEffect(
         globalStore.projection.rotate(mapStore.rotate);
       }
 
+      if (globalStore.projection.parallel) {
+        globalStore.projection.parallel(mapStore.parallel || 0);
+      }
+
+      if (globalStore.projection.parallels) {
+        globalStore.projection.parallels(mapStore.parallels || [0, 0]);
+      }
+
       // Do we need to recompute positions for proportional symbols layers
       // with avoidOverlapping option?
       // (we need to do this if at least one layer has the avoidOverlapping option set to true)
@@ -261,12 +271,16 @@ createEffect(
         if (projection.center) {
           projection.center(mapStore.center);
         }
+        if (projection.rotate) {
+          projection.rotate(mapStore.rotate);
+        }
       } else { // mapStore.projection.type === 'proj4'
         console.log(mapStore.projection.value);
         projection = getD3ProjectionFromProj4(getProjection(mapStore.projection.value));
-        projection.center(mapStore.center)
+        projection.center([0, 0])
           .translate(mapStore.translate)
-          .scale(mapStore.scale);
+          .scale(mapStore.scale)
+          .rotate([0, 0, 0]);
         // 2. If the projection defines bounds, we want to apply a clipping polygon
         // to the projection to avoid the projection to be drawn outside of the bounds
         // (which is sometimes computationally very expensive)
@@ -353,10 +367,16 @@ createEffect(
         pathGenerator,
       });
 
-      // 6. Update the global store with the new scale and translate if they changed
+      // 6. Update the global store with the new
+      // scale, translate, rotate, center, parallel and parallels values
+      // if they changed
       setMapStore({
         scale: projection.scale(),
         translate: projection.translate(),
+        rotate: projection.rotate(),
+        center: projection.center(),
+        parallel: projection.parallel ? projection.parallel() : undefined,
+        parallels: projection.parallels ? projection.parallels() : undefined,
       });
     },
   ),

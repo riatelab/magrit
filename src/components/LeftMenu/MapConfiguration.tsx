@@ -14,10 +14,12 @@ import { mapStore, setMapStore } from '../../store/MapStore';
 import { setModalStore } from '../../store/ModalStore';
 
 // Sub-components
+import DetailsSummary from '../DetailsSummary.tsx';
 import DropdownMenu from '../DropdownMenu.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
-import ProjectionSelection from '../Modals/ProjectionSelection.tsx';
 import InputFieldRangeSlider from '../Inputs/InputRangeSlider.tsx';
+import ProjectionSelection from '../Modals/ProjectionSelection.tsx';
 
 const availableProjections = [
   'Airy',
@@ -105,9 +107,19 @@ const availableProjections = [
   'Winkel3',
 ];
 
+const projectionShortlist = [
+  'ETRS 89 / LAEA Europe (EPSG:3035)',
+  'RGF93 / Lambert-93 (EPSG:2154)',
+  'Mercator',
+  'Natural Earth II',
+  'Robinson',
+  'Equal Earth',
+];
+
 const projectionEntries = availableProjections.map((projection) => ({
   name: projection,
   value: projection,
+  type: 'd3',
 }));
 
 function onChangeProjectionEntry(
@@ -158,6 +170,7 @@ export default function MapConfiguration(): JSX.Element {
   projectionEntries.push({
     name: LL().MapConfiguration.CustomProjection(),
     value: 'other',
+    type: '',
   });
 
   const hasParallel = createMemo(() => !!globalStore.projection?.parallel);
@@ -201,83 +214,83 @@ export default function MapConfiguration(): JSX.Element {
       step={1}
       width={100}
     />
+    <InputFieldCheckbox
+      label={LL().MapConfiguration.LockZoom()}
+      checked={mapStore.lockZoomPan}
+      onChange={(v) => {
+        setMapStore({
+          lockZoomPan: v,
+        });
+      }}
+    />
     <div class="field-block">
-      <label class="label">{ LL().MapConfiguration.Projection() }</label>
+      <label class="label">{LL().MapConfiguration.Projection()}</label>
       <DropdownMenu
-        id={ 'map-configuration__projection-dropdown' }
+        id={'map-configuration__projection-dropdown'}
         entries={projectionEntries}
         defaultEntry={mapStore.projection}
-        onChange={(value) => { onChangeProjectionEntry(value, LL); }}
+        onChange={(value) => {
+          onChangeProjectionEntry(value, LL);
+        }}
       />
-    </div>
-    <div class="field">
-      <label class="label" for="map-configuration__lock-zoom-checkbox">{ LL().MapConfiguration.LockZoom() }</label>
-      <div class="control">
-        <input
-          id="map-configuration__lock-zoom-checkbox"
-          type="checkbox"
-          checked={ mapStore.lockZoomPan }
-          onChange={(e) => {
-            setMapStore({ lockZoomPan: e.target.checked });
-          }}
-        />
-      </div>
     </div>
     <Show when={globalStore.projection && mapStore.projection.type === 'd3'}>
-      <InputFieldRangeSlider
-        label={LL().MapConfiguration.ProjectionCenter()}
-        value={mapStore.rotate[0]}
-        onChange={(v) => {
-          setMapStore('rotate', [v, mapStore.rotate[1], mapStore.rotate[2]]);
-        }}
-        min={-180}
-        max={180}
-        step={1}
-      />
-      <InputFieldRangeSlider
-        label={LL().MapConfiguration.ProjectionCenterPhi()}
-        value={mapStore.rotate[1]}
-        onChange={(v) => {
-          setMapStore('rotate', [mapStore.rotate[0], v, mapStore.rotate[2]]);
-        }}
-        min={-180}
-        max={180}
-        step={1}
-      />
-      <InputFieldRangeSlider
-        label={LL().MapConfiguration.ProjectionCenterGamma()}
-        value={mapStore.rotate[2]}
-        onChange={(v) => {
-          setMapStore('rotate', [mapStore.rotate[0], mapStore.rotate[1], v]);
-        }}
-        min={-180}
-        max={180}
-        step={1}
-      />
-      <Show when={hasParallel()}>
+      <DetailsSummary summaryContent={LL().MapConfiguration.ShowProjectionParameters()}>
         <InputFieldRangeSlider
-          label={LL().MapConfiguration.StandardParallel()}
-          value={mapStore.parallel || globalStore.projection.parallel()}
+          label={LL().MapConfiguration.ProjectionCenter()}
+          value={mapStore.rotate[0]}
           onChange={(v) => {
-            setMapStore('parallel', v);
+            setMapStore('rotate', [v, mapStore.rotate[1], mapStore.rotate[2]]);
           }}
-          min={-90}
-          max={90}
+          min={-180}
+          max={180}
           step={1}
         />
-      </Show>
-      <Show when={hasParallels()}>
         <InputFieldRangeSlider
-          label={LL().MapConfiguration.StandardParallels()}
-          value={mapStore.parallels || globalStore.projection.parallels()}
+          label={LL().MapConfiguration.ProjectionCenterPhi()}
+          value={mapStore.rotate[1]}
           onChange={(v) => {
-            setMapStore('parallels', v);
+            setMapStore('rotate', [mapStore.rotate[0], v, mapStore.rotate[2]]);
           }}
-          min={-90}
-          max={90}
+          min={-180}
+          max={180}
           step={1}
         />
-      </Show>
+        <InputFieldRangeSlider
+          label={LL().MapConfiguration.ProjectionCenterGamma()}
+          value={mapStore.rotate[2]}
+          onChange={(v) => {
+            setMapStore('rotate', [mapStore.rotate[0], mapStore.rotate[1], v]);
+          }}
+          min={-180}
+          max={180}
+          step={1}
+        />
+        <Show when={hasParallel()}>
+          <InputFieldRangeSlider
+            label={LL().MapConfiguration.StandardParallel()}
+            value={mapStore.parallel || globalStore.projection.parallel()}
+            onChange={(v) => {
+              setMapStore('parallel', v);
+            }}
+            min={-90}
+            max={90}
+            step={1}
+          />
+        </Show>
+        <Show when={hasParallels()}>
+          <InputFieldRangeSlider
+            label={LL().MapConfiguration.StandardParallels()}
+            value={mapStore.parallels || globalStore.projection.parallels()}
+            onChange={(v) => {
+              setMapStore('parallels', v);
+            }}
+            min={-90}
+            max={90}
+            step={1}
+          />
+        </Show>
+      </DetailsSummary>
     </Show>
   </div>;
 }

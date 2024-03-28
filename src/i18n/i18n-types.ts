@@ -403,6 +403,10 @@ type RootTranslation = {
 		 */
 		LockZoom: string
 		/**
+		 * S​h​o​w​ ​p​r​o​j​e​c​t​i​o​n​ ​p​a​r​a​m​e​t​e​r​s
+		 */
+		ShowProjectionParameters: string
+		/**
 		 * P​r​o​j​e​c​t​i​o​n​ ​c​e​n​t​e​r
 		 */
 		ProjectionCenter: string
@@ -2954,6 +2958,10 @@ export type TranslationFunctions = {
 		 * Lock zoom / position
 		 */
 		LockZoom: () => LocalizedString
+		/**
+		 * Show projection parameters
+		 */
+		ShowProjectionParameters: () => LocalizedString
 		/**
 		 * Projection center
 		 */
