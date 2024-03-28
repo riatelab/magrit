@@ -373,7 +373,11 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>(`PointAnalysis_${layerDescription.name}`);
+  ] = createSignal<string>(
+    LL().PortrayalSection.PointAnalysisOptions.NewLayerName({
+      layerName: layerDescription.name,
+    }) as string,
+  );
   const [
     layerType,
     setLayerType,
@@ -585,6 +589,7 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
       </Show>
     </Show>
     <InputResultName
+      value={newLayerName()}
       onKeyUp={(value) => {
         setNewLayerName(value);
       }}

@@ -133,7 +133,11 @@ export default function SelectionSettings(
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>('');
+  ] = createSignal<string>(
+    LL().PortrayalSection.SelectionOptions.NewLayerName({
+      layerName: layerDescription.name,
+    }) as string,
+  );
 
   const [
     formula,
@@ -212,6 +216,7 @@ export default function SelectionSettings(
     </div>
     <br />
     <InputResultName
+      value={newLayerName()}
       onKeyUp={(value) => {
         setNewLayerName(value);
       }}

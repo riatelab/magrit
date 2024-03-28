@@ -962,6 +962,11 @@ type RootTranslation = {
 			 * D​i​s​p​l​a​y​ ​a​ ​c​l​a​s​s​ ​s​u​m​m​a​r​y​ ​c​h​a​r​t​ ​o​n​ ​t​h​e​ ​m​a​p
 			 */
 			DisplayChartOnMap: string
+			/**
+			 * C​h​o​r​o​p​l​e​t​h​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
 		}
 		ProportionalSymbolsOptions: {
 			/**
@@ -1012,6 +1017,11 @@ type RootTranslation = {
 			 * L​i​m​i​t​ ​v​a​l​u​e
 			 */
 			LimitValue: string
+			/**
+			 * P​r​o​p​o​r​t​i​o​n​a​l​_​S​y​m​b​o​l​s​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
 		}
 		DiscontinuityOptions: {
 			/**
@@ -1034,6 +1044,11 @@ type RootTranslation = {
 			 * T​h​r​e​s​h​o​l​d​ ​o​f​ ​d​i​s​c​o​n​t​i​n​u​i​t​y​ ​t​o​ ​d​i​s​p​l​a​y
 			 */
 			DiscontinuityThreshold: string
+			/**
+			 * D​i​s​c​o​n​t​i​n​u​i​t​y​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
 		}
 		SmoothingOptions: {
 			/**
@@ -1100,6 +1115,11 @@ type RootTranslation = {
 			 * B​e​t​a
 			 */
 			Beta: string
+			/**
+			 * S​m​o​o​t​h​i​n​g​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
 		}
 		CartogramOptions: {
 			/**
@@ -1126,6 +1146,11 @@ type RootTranslation = {
 			 * T​h​e​ ​c​u​r​r​e​n​t​ ​m​a​p​ ​p​r​o​j​e​c​t​i​o​n​ ​i​s​ ​g​e​o​g​r​a​p​h​i​c​ ​(​o​r​ ​i​t​s​ ​u​n​i​t​ ​i​s​ ​d​e​g​r​e​e​s​)​.​ ​T​h​e​ ​c​a​r​t​o​g​r​a​m​ ​w​i​l​l​ ​b​e​ ​c​a​l​c​u​l​a​t​e​d​ ​i​n​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​p​r​o​j​e​c​t​i​o​n​.​ ​W​h​e​n​e​v​e​r​ ​p​o​s​s​i​b​l​e​,​ ​y​o​u​ ​s​h​o​u​l​d​ ​u​s​e​ ​p​r​o​j​e​c​t​e​d​ ​d​a​t​a​ ​(​w​i​t​h​ ​a​ ​d​i​s​t​a​n​c​e​ ​u​n​i​t​ ​i​n​ ​m​e​t​r​e​s​,​ ​f​o​r​ ​e​x​a​m​p​l​e​)​ ​f​o​r​ ​g​r​e​a​t​e​r​ ​a​c​c​u​r​a​c​y​.
 			 */
 			WarningGeo: string
+			/**
+			 * C​a​r​t​o​g​r​a​m​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
 		}
 		GridOptions: {
 			/**
@@ -1161,6 +1186,11 @@ type RootTranslation = {
 			 * T​h​e​ ​c​u​r​r​e​n​t​ ​m​a​p​ ​p​r​o​j​e​c​t​i​o​n​ ​i​s​ ​g​e​o​g​r​a​p​h​i​c​ ​(​o​r​ ​i​t​s​ ​u​n​i​t​ ​i​s​ ​d​e​g​r​e​e​s​)​.​ ​T​h​e​ ​g​r​i​d​ ​r​e​s​o​l​u​t​i​o​n​ ​i​s​ ​t​h​e​r​e​f​o​r​e​ ​e​x​p​r​e​s​s​e​d​ ​i​n​ ​d​e​g​r​e​e​s​.​ ​W​h​e​n​e​v​e​r​ ​p​o​s​s​i​b​l​e​,​ ​y​o​u​ ​s​h​o​u​l​d​ ​u​s​e​ ​p​r​o​j​e​c​t​e​d​ ​d​a​t​a​ ​(​w​i​t​h​ ​a​ ​d​i​s​t​a​n​c​e​ ​u​n​i​t​ ​i​n​ ​m​e​t​r​e​s​,​ ​f​o​r​ ​e​x​a​m​p​l​e​)​ ​f​o​r​ ​g​r​e​a​t​e​r​ ​a​c​c​u​r​a​c​y​.
 			 */
 			WarningGeo: string
+			/**
+			 * G​r​i​d​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
 		}
 		CategoricalChoroplethOptions: {
 			/**
@@ -1203,6 +1233,18 @@ type RootTranslation = {
 			 * C​o​u​n​t​:
 			 */
 			Count: string
+			/**
+			 * C​a​t​e​g​o​r​i​c​a​l​_​C​h​o​r​o​p​l​e​t​h​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
+		}
+		LabelsOptions: {
+			/**
+			 * L​a​b​e​l​s​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
 		}
 		LinksOptions: {
 			/**
@@ -1337,6 +1379,11 @@ type RootTranslation = {
 			 * S​e​l​e​c​t​ ​l​i​n​k​s​ ​t​o​ ​d​i​s​p​l​a​y
 			 */
 			Selection: string
+			/**
+			 * L​i​n​k​s​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
 		}
 		MushroomsOptions: {
 			/**
@@ -1347,6 +1394,11 @@ type RootTranslation = {
 			 * P​r​o​p​e​r​t​i​e​s​ ​o​f​ ​t​h​e​ ​l​o​w​e​r​ ​p​a​r​t​:
 			 */
 			BottomProperties: string
+			/**
+			 * M​u​s​h​r​o​o​m​s​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
 		}
 		AggregationOptions: {
 			/**
@@ -1361,6 +1413,18 @@ type RootTranslation = {
 			 * I​f​ ​n​o​ ​f​i​e​l​d​ ​i​s​ ​s​e​l​e​c​t​e​d​,​ ​t​h​e​ ​a​g​g​r​e​g​a​t​i​o​n​ ​w​i​l​l​ ​b​e​ ​d​o​n​e​ ​o​n​ ​t​h​e​ ​w​h​o​l​e​ ​l​a​y​e​r​.
 			 */
 			Information: string
+			/**
+			 * A​g​g​r​e​g​a​t​e​d​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
+		}
+		SimplificationOptions: {
+			/**
+			 * S​i​m​p​l​i​f​i​e​d​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
 		}
 		SelectionOptions: {
 			/**
@@ -1379,6 +1443,11 @@ type RootTranslation = {
 			 * I​n​v​a​l​i​d​ ​f​o​r​m​u​l​a​ ​-​ ​t​h​e​ ​e​x​p​r​e​s​s​i​o​n​ ​m​u​s​t​ ​r​e​t​u​r​n​ ​t​r​u​e​ ​o​r​ ​f​a​l​s​e​ ​f​o​r​ ​e​a​c​h​ ​f​e​a​t​u​r​e
 			 */
 			InvalidFormula: string
+			/**
+			 * S​e​l​e​c​t​i​o​n​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
 		}
 		PointAnalysisOptions: {
 			/**
@@ -1441,6 +1510,11 @@ type RootTranslation = {
 			 * N​u​m​e​r​i​c​a​l​ ​v​a​r​i​a​b​l​e​ ​t​o​ ​u​s​e
 			 */
 			VariableToUse: string
+			/**
+			 * A​g​g​r​e​g​a​t​e​d​_​p​o​i​n​t​s​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
 		}
 	}
 	FormulaInput: {
@@ -3434,6 +3508,10 @@ export type TranslationFunctions = {
 			 * Display a class summary chart on the map
 			 */
 			DisplayChartOnMap: () => LocalizedString
+			/**
+			 * Choropleth_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 		ProportionalSymbolsOptions: {
 			/**
@@ -3484,6 +3562,10 @@ export type TranslationFunctions = {
 			 * Limit value
 			 */
 			LimitValue: () => LocalizedString
+			/**
+			 * Proportional_Symbols_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 		DiscontinuityOptions: {
 			/**
@@ -3506,6 +3588,10 @@ export type TranslationFunctions = {
 			 * Threshold of discontinuity to display
 			 */
 			DiscontinuityThreshold: () => LocalizedString
+			/**
+			 * Discontinuity_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 		SmoothingOptions: {
 			/**
@@ -3572,6 +3658,10 @@ export type TranslationFunctions = {
 			 * Beta
 			 */
 			Beta: () => LocalizedString
+			/**
+			 * Smoothing_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 		CartogramOptions: {
 			/**
@@ -3598,6 +3688,10 @@ export type TranslationFunctions = {
 			 * The current map projection is geographic (or its unit is degrees). The cartogram will be calculated in the current projection. Whenever possible, you should use projected data (with a distance unit in metres, for example) for greater accuracy.
 			 */
 			WarningGeo: () => LocalizedString
+			/**
+			 * Cartogram_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 		GridOptions: {
 			/**
@@ -3632,6 +3726,10 @@ export type TranslationFunctions = {
 			 * The current map projection is geographic (or its unit is degrees). The grid resolution is therefore expressed in degrees. Whenever possible, you should use projected data (with a distance unit in metres, for example) for greater accuracy.
 			 */
 			WarningGeo: () => LocalizedString
+			/**
+			 * Grid_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 		CategoricalChoroplethOptions: {
 			/**
@@ -3674,6 +3772,16 @@ export type TranslationFunctions = {
 			 * Count:
 			 */
 			Count: () => LocalizedString
+			/**
+			 * Categorical_Choropleth_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+		}
+		LabelsOptions: {
+			/**
+			 * Labels_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 		LinksOptions: {
 			/**
@@ -3808,6 +3916,10 @@ export type TranslationFunctions = {
 			 * Select links to display
 			 */
 			Selection: () => LocalizedString
+			/**
+			 * Links_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 		MushroomsOptions: {
 			/**
@@ -3818,6 +3930,10 @@ export type TranslationFunctions = {
 			 * Properties of the lower part:
 			 */
 			BottomProperties: () => LocalizedString
+			/**
+			 * Mushrooms_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 		AggregationOptions: {
 			/**
@@ -3832,6 +3948,16 @@ export type TranslationFunctions = {
 			 * If no field is selected, the aggregation will be done on the whole layer.
 			 */
 			Information: () => LocalizedString
+			/**
+			 * Aggregated_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+		}
+		SimplificationOptions: {
+			/**
+			 * Simplified_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 		SelectionOptions: {
 			/**
@@ -3850,6 +3976,10 @@ export type TranslationFunctions = {
 			 * Invalid formula - the expression must return true or false for each feature
 			 */
 			InvalidFormula: () => LocalizedString
+			/**
+			 * Selection_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 		PointAnalysisOptions: {
 			/**
@@ -3912,6 +4042,10 @@ export type TranslationFunctions = {
 			 * Numerical variable to use
 			 */
 			VariableToUse: () => LocalizedString
+			/**
+			 * Aggregated_points_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 	}
 	FormulaInput: {

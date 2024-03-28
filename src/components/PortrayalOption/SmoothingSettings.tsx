@@ -252,7 +252,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal<string>(targetFields![0].name);
+  ] = createSignal<string>(targetFields[0].name);
   const [
     targetSmoothingMethod,
     setTargetSmoothingMethod,
@@ -264,7 +264,11 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal(`Smoothed_${layerDescription.name}`);
+  ] = createSignal(
+    LL().PortrayalSection.SmoothingOptions.NewLayerName({
+      layerName: layerDescription.name,
+    }) as string,
+  );
 
   // Signals for KDE options
   const [
@@ -424,6 +428,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       />
     </Show>
     <InputResultName
+      value={newLayerName()}
       onKeyUp={ (value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />

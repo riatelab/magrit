@@ -206,11 +206,15 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal<string>(targetFields![0].name);
+  ] = createSignal<string>(targetFields[0].name);
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>(`Categorical_${layerDescription.name}`);
+  ] = createSignal<string>(
+    LL().PortrayalSection.CategoricalChoroplethOptions.NewLayerName({
+      layerName: layerDescription.name,
+    }) as string,
+  );
   const [
     categoriesMapping,
     setCategoriesMapping,
@@ -286,6 +290,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
       onChange={(v) => { setDisplayChartOnMap(v); }}
     />
     <InputResultName
+      value={newLayerName()}
       onKeyUp={(value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />

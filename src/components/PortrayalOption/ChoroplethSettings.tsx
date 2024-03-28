@@ -195,7 +195,14 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
   // Signals for the current component:
   // the target variable, the target layer name and the classification parameters
   const [targetVariable, setTargetVariable] = createSignal<string>(targetFields[0].name);
-  const [newLayerName, setNewLayerName] = createSignal<string>(`Choropleth_${layerDescription.name}`);
+  const [
+    newLayerName,
+    setNewLayerName,
+  ] = createSignal<string>(
+    LL().PortrayalSection.ChoroplethOptions.NewLayerName({
+      layerName: layerDescription.name,
+    }) as string,
+  );
   const [displayChartOnMap, setDisplayChartOnMap] = createSignal<boolean>(false);
 
   // Collect the values of the target variable (only those that are numbers)
@@ -266,6 +273,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
       onChange={(v) => { setDisplayChartOnMap(v); }}
     />
     <InputResultName
+      value={newLayerName()}
       onKeyUp={ (value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />

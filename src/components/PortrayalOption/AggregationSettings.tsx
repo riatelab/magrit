@@ -98,7 +98,11 @@ export default function AggregationSettings(
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>('');
+  ] = createSignal<string>(
+    LL().PortrayalSection.AggregationOptions.NewLayerName({
+      layerName: layerDescription.name,
+    }) as string,
+  );
 
   const [
     targetVariable,
@@ -179,6 +183,7 @@ export default function AggregationSettings(
       </WarningBanner>
     </Show>
     <InputResultName
+      value={newLayerName()}
       onKeyUp={(value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />

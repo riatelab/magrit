@@ -219,12 +219,12 @@ export default function MushroomsSettings(
   const [
     targetVariableTop,
     setTargetVariableTop,
-  ] = createSignal<string>(targetFields![0].name);
+  ] = createSignal<string>(targetFields[0].name);
 
   const [
     targetVariableBottom,
     setTargetVariableBottom,
-  ] = createSignal<string>(targetFields![1].name);
+  ] = createSignal<string>(targetFields[1].name);
 
   // Reactive variable that contains the values of the target variable
   // for the top part of the mushroom.
@@ -249,7 +249,11 @@ export default function MushroomsSettings(
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>(`Mushroom_${layerDescription.name}`);
+  ] = createSignal<string>(
+    LL().PortrayalSection.MushroomsOptions.NewLayerName({
+      layerName: layerDescription.name,
+    }) as string,
+  );
   // const [
   //   symbolType,
   //   setSymbolType,
@@ -418,6 +422,7 @@ export default function MushroomsSettings(
       }}
     />
     <InputResultName
+      value={newLayerName()}
       onKeyUp={ (value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />

@@ -160,8 +160,15 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
   // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = layerDescription.fields;
 
-  const [targetVariable, setTargetVariable] = createSignal<string>(targetFields![0].name);
-  const [newLayerName, setNewLayerName] = createSignal<string>(`Labels_${layerDescription.name}`);
+  const [targetVariable, setTargetVariable] = createSignal<string>(targetFields[0].name);
+  const [
+    newLayerName,
+    setNewLayerName,
+  ] = createSignal<string>(
+    LL().PortrayalSection.LabelsOptions.NewLayerName({
+      layerName: layerDescription.name,
+    }) as string,
+  );
 
   const makePortrayal = async () => {
     // Find a suitable name for the new layer
@@ -204,6 +211,7 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
       </For>
     </InputFieldSelect>
     <InputResultName
+      value={newLayerName()}
       onKeyUp={(value) => setNewLayerName(value)}
       onEnter={makePortrayal}
     />

@@ -211,7 +211,7 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal<string>(targetFields![0].name);
+  ] = createSignal<string>(targetFields[0].name);
   const [
     cellType,
     setCellType,
@@ -223,7 +223,11 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal(`Gridded_${layerDescription.name}`);
+  ] = createSignal(
+    LL().PortrayalSection.GridOptions.NewLayerName({
+      layerName: layerDescription.name,
+    }) as string,
+  );
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
@@ -299,6 +303,7 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       </MessageBlock>
     </Show>
     <InputResultName
+      value={newLayerName()}
       onKeyUp={(value) => {
         setNewLayerName(value);
       }}

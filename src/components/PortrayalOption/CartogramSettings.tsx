@@ -150,7 +150,14 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
   // the target variable, the target layer name, the method to use
   // (and the number of iterations for some algorithms)
   const [targetVariable, setTargetVariable] = createSignal<string>(targetFields[0].name);
-  const [newLayerName, setNewLayerName] = createSignal<string>(`Cartogram_${layerDescription.name}`);
+  const [
+    newLayerName,
+    setNewLayerName,
+  ] = createSignal<string>(
+    LL().PortrayalSection.CartogramOptions.NewLayerName({
+      layerName: layerDescription.name,
+    }) as string,
+  );
   const [
     cartogramMethod,
     setCartogramMethod,
@@ -228,9 +235,13 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
       </WarningBanner>
     </Show>
     <InputResultName
+      value={newLayerName()}
       onKeyUp={ (value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />
-    <ButtonValidation label={ LL().PortrayalSection.CreateLayer() } onClick={ makePortrayal } />
+    <ButtonValidation
+      label={ LL().PortrayalSection.CreateLayer() }
+      onClick={ makePortrayal }
+    />
   </div>;
 }

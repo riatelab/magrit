@@ -245,7 +245,7 @@ const fr = {
       Mushrooms: 'Champignons',
       PointAnalysis: 'Analyse d\'un semis de points',
       SimpleLinearRegression: 'Régression linéaire simple',
-      Aggregation: 'Aggrégation',
+      Aggregation: 'Agrégation',
       Selection: 'Sélection',
       Simplification: 'Simplification',
       NoPortrayal: 'Aucune représentation pour la couche choisie - Veuillez vérifier le types des champs de la couche ou sélectionner une autre couche',
@@ -268,6 +268,7 @@ const fr = {
       ColorSchemeInvert: 'Inverser la palette',
       CurrentNumberOfClasses: '{{ Une classe | ?? classes }}',
       DisplayChartOnMap: 'Afficher un graphique de résumé des classes sur la carte',
+      NewLayerName: 'Choroplèthe_{layerName}',
     },
     ProportionalSymbolsOptions: {
       ReferenceSize: 'Taille de référence (px)',
@@ -285,6 +286,7 @@ const fr = {
       },
       AvoidOverlapping: 'Éviter le chevauchement des symboles',
       LimitValue: 'Valeur limite',
+      NewLayerName: 'Symboles_proportionnels_{layerName}',
     },
     DiscontinuityOptions: {
       DiscontinuityType: 'Type de discontinuité',
@@ -292,6 +294,7 @@ const fr = {
       Absolute: 'Absolue',
       Classification: 'Type de discrétisation',
       DiscontinuityThreshold: 'Seuil des discontinuité à afficher',
+      NewLayerName: 'Discontinuité_{layerName}',
     },
     SmoothingOptions: {
       Type: 'Type de lissage',
@@ -310,6 +313,7 @@ const fr = {
       Span: 'Portée',
       Alpha: 'Alpha',
       Beta: 'Beta',
+      NewLayerName: 'Lissage_{layerName}',
     },
     CartogramOptions: {
       Algorithm: 'Algorithme à utiliser',
@@ -318,6 +322,7 @@ const fr = {
       Olson: 'Olson (2005)',
       GastnerSeguyMore: 'Gastner, Seguy & More (2018)',
       WarningGeo: 'La projection cartographique actuelle est géographique (ou son unité est en degrés). Le cartogramme va être calculé dans la projection actuelle. Privilégiez, lorsque que c\'est possible, l\'utilisation de données projetées (avec une unité de distance en mètres par exemple) pour une meilleure précision.',
+      NewLayerName: 'Cartogramme_{layerName}',
     },
     GridOptions: {
       Resolution: 'Résolution de la grille (km)',
@@ -328,6 +333,7 @@ const fr = {
       CellDiamond: 'Cellule en losange',
       CellTriangle: 'Cellule triangulaire',
       WarningGeo: 'La projection cartographique actuelle est géographique (ou son unité est en degrés). La résolution de la grille est donc exprimée en degrés. Privilégiez, lorsque que c\'est possible, l\'utilisation de données projetées (avec une unité de distance en mètres par exemple) pour une meilleure précision.',
+      NewLayerName: 'Carroyage_{layerName}',
     },
     CategoricalChoroplethOptions: {
       DisplayChartOnMap: 'Afficher le diagramme en barre par catégorie sur la carte',
@@ -340,6 +346,10 @@ const fr = {
       Customize: 'Personnaliser les couleurs et les noms de classes',
       Value: 'Valeur :',
       Count: 'Nombre : ',
+      NewLayerName: 'Choroplèthe_catégorielle_{layerName}',
+    },
+    LabelsOptions: {
+      NewLayerName: 'Étiquettes_{layerName}',
     },
     LinksOptions: {
       IdentifierField: 'Champ identifiant',
@@ -375,21 +385,28 @@ const fr = {
       SomeMatch: 'Plusieurs couples origines / destination (mais pas tous) ont une correspondance avec des entités de la couche géographique',
       NoMatch: 'Aucun couple origine / destination n\'a de correspondance avec des entités de la couche géographique',
       Selection: 'Sélection des liens à afficher',
+      NewLayerName: 'Liens_{layerName}',
     },
     MushroomsOptions: {
       TopProperties: 'Propriétés de la partie supérieure :',
       BottomProperties: 'Propriétés de la partie inférieure :',
+      NewLayerName: 'Champignons_{layerName}',
     },
     AggregationOptions: {
-      Method: 'Méthode d\'aggrégation',
+      Method: 'Méthode d\'agrégation',
       None: 'Aucun champ',
-      Information: 'Si aucun champ n\'est choisi, l\'aggrégation se fera sur l\'ensemble des entités de la couche.',
+      Information: 'Si aucun champ n\'est choisi, l\'agrégation se fera sur l\'ensemble des entités de la couche.',
+      NewLayerName: 'Agrégation_{layerName}',
+    },
+    SimplificationOptions: {
+      NewLayerName: 'Simplifié_{layerName}',
     },
     SelectionOptions: {
       Formula: 'Formule',
       Information: 'La sélection par expression permet de créer un sous-ensemble de données à partir d\'une couche géographique. Les entités de la couche qui satisfont l\'expression sont sélectionnées.',
       InformationSyntax: 'La syntaxe à utiliser pour les expressions est celle du langage SQL. Les opérateurs logiques et arithmétiques usuels sont disponibles.',
       InvalidFormula: 'Formula invalide - l\'expression saisie doit retourner vrai (true) ou faux (false) pour chaque entité de la couche.',
+      NewLayerName: 'Sélection_{layerName}',
     },
     PointAnalysisOptions: {
       MapType: 'Type de carte',
@@ -407,6 +424,7 @@ const fr = {
       ComputationTypeStandardDeviation: 'Écart-type',
       LayerToUse: 'Couche à utiliser',
       VariableToUse: 'Variable numérique à utiliser',
+      NewLayerName: 'Points_agrégés_{layerName}',
     },
   },
   FormulaInput: {

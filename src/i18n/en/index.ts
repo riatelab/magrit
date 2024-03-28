@@ -268,6 +268,7 @@ const en = {
       ColorSchemeInvert: 'Invert color scheme',
       CurrentNumberOfClasses: '{{ One class | ?? classes }}',
       DisplayChartOnMap: 'Display a class summary chart on the map',
+      NewLayerName: 'Choropleth_{layerName}',
     },
     ProportionalSymbolsOptions: {
       ReferenceSize: 'Reference size (px)',
@@ -285,6 +286,7 @@ const en = {
       },
       AvoidOverlapping: 'Avoid overlapping symbols',
       LimitValue: 'Limit value',
+      NewLayerName: 'Proportional_Symbols_{layerName}',
     },
     DiscontinuityOptions: {
       DiscontinuityType: 'Discontinuity type',
@@ -292,6 +294,7 @@ const en = {
       Absolute: 'Absolute',
       Classification: 'Classification type',
       DiscontinuityThreshold: 'Threshold of discontinuity to display',
+      NewLayerName: 'Discontinuity_{layerName}',
     },
     SmoothingOptions: {
       Type: 'Smoothing type',
@@ -310,6 +313,7 @@ const en = {
       Span: 'Span',
       Alpha: 'Alpha',
       Beta: 'Beta',
+      NewLayerName: 'Smoothing_{layerName}',
     },
     CartogramOptions: {
       Algorithm: 'Algorithm to use',
@@ -318,6 +322,7 @@ const en = {
       Olson: 'Olson (2005)',
       GastnerSeguyMore: 'Gastner, Seguy & More (2018)',
       WarningGeo: 'The current map projection is geographic (or its unit is degrees). The cartogram will be calculated in the current projection. Whenever possible, you should use projected data (with a distance unit in metres, for example) for greater accuracy.',
+      NewLayerName: 'Cartogram_{layerName}',
     },
     GridOptions: {
       Resolution: 'Grid resolution (km)',
@@ -328,6 +333,7 @@ const en = {
       CellTriangle: 'Triangle',
       CellDiamond: 'Diamond',
       WarningGeo: 'The current map projection is geographic (or its unit is degrees). The grid resolution is therefore expressed in degrees. Whenever possible, you should use projected data (with a distance unit in metres, for example) for greater accuracy.',
+      NewLayerName: 'Grid_{layerName}',
     },
     CategoricalChoroplethOptions: {
       DisplayChartOnMap: 'Display the frequency bar chart by category on the map',
@@ -340,6 +346,10 @@ const en = {
       Customize: 'Customize category names and colors',
       Value: 'Value:',
       Count: 'Count:',
+      NewLayerName: 'Categorical_Choropleth_{layerName}',
+    },
+    LabelsOptions: {
+      NewLayerName: 'Labels_{layerName}',
     },
     LinksOptions: {
       IdentifierField: 'Identifier field',
@@ -375,21 +385,28 @@ const en = {
       SomeMatch: 'Some origins and destinations (but not all) match IDs of features in the geographic layer',
       NoMatch: 'No origins and destinations match IDs of features in the geographic layer',
       Selection: 'Select links to display',
+      NewLayerName: 'Links_{layerName}',
     },
     MushroomsOptions: {
       TopProperties: 'Properties of the upper part:',
       BottomProperties: 'Properties of the lower part:',
+      NewLayerName: 'Mushrooms_{layerName}',
     },
     AggregationOptions: {
       Method: 'Aggregation method',
       None: 'None',
       Information: 'If no field is selected, the aggregation will be done on the whole layer.',
+      NewLayerName: 'Aggregated_{layerName}',
+    },
+    SimplificationOptions: {
+      NewLayerName: 'Simplified_{layerName}',
     },
     SelectionOptions: {
       Formula: 'Formula',
       Information: 'Selection by expression is used to create a subset of data from a geographic layer. The features in the layer that satisfy the expression are selected.',
       InformationSyntax: 'The syntax to be used for expressions is that of the SQL language. The usual logical and arithmetic operators are available.',
       InvalidFormula: 'Invalid formula - the expression must return true or false for each feature',
+      NewLayerName: 'Selection_{layerName}',
     },
     PointAnalysisOptions: {
       MapType: 'Map type',
@@ -407,6 +424,7 @@ const en = {
       ComputationTypeStandardDeviation: 'Standard deviation',
       LayerToUse: 'Layer to use',
       VariableToUse: 'Numerical variable to use',
+      NewLayerName: 'Aggregated_points_{layerName}',
     },
   },
   FormulaInput: {

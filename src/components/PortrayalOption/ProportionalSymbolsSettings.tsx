@@ -461,13 +461,13 @@ export default function ProportionalSymbolsSettings(
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal<string>(targetFields![0].name);
+  ] = createSignal<string>(targetFields[0].name);
 
   const [
     targetRatioVariable,
     setTargetRatioVariable,
   ] = createSignal<string | null>(
-    targetFieldsRatio.length > 0 ? targetFieldsRatio![0].name : null,
+    targetFieldsRatio.length > 0 ? targetFieldsRatio[0].name : null,
   );
 
   const [
@@ -500,7 +500,11 @@ export default function ProportionalSymbolsSettings(
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>(`ProportionalSymbols_${layerDescription.name}`);
+  ] = createSignal<string>(
+    LL().PortrayalSection.ProportionalSymbolsOptions.NewLayerName({
+      layerName: layerDescription.name,
+    }) as string,
+  );
   const [
     symbolType,
     setSymbolType,
@@ -759,6 +763,7 @@ export default function ProportionalSymbolsSettings(
       onChange={() => { setAvoidOverlapping(!avoidOverlapping()); }}
     />
     <InputResultName
+      value={newLayerName()}
       onKeyUp={ (value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />

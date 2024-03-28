@@ -84,7 +84,11 @@ export default function SimplificationSettings(
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>('');
+  ] = createSignal<string>(
+    LL().PortrayalSection.SimplificationOptions.NewLayerName({
+      layerName: layerDescription.name,
+    }) as string,
+  );
 
   const makePortrayal = async () => {
     // Check name of the new layer
@@ -124,6 +128,7 @@ export default function SimplificationSettings(
       style={{ height: '85%' }}
     />
     <InputResultName
+      value={newLayerName()}
       onKeyUp={(value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />

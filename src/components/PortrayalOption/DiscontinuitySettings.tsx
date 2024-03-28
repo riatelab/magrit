@@ -166,7 +166,11 @@ export default function DiscontinuitySettings(
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>(`Discontinuity_${layerDescription.name}`);
+  ] = createSignal<string>(
+    LL().PortrayalSection.DiscontinuityOptions.NewLayerName({
+      layerName: layerDescription.name,
+    }) as string,
+  );
   const [
     classificationMethod,
     setClassificationMethod,
@@ -174,7 +178,7 @@ export default function DiscontinuitySettings(
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal(targetFields![0].name);
+  ] = createSignal(targetFields[0].name);
   const [
     discontinuityType,
     setDiscontinuityType,
@@ -247,6 +251,7 @@ export default function DiscontinuitySettings(
       </For>
     </InputFieldSelect>
     <InputResultName
+      value={newLayerName()}
       onKeyUp={(value) => setNewLayerName(value)}
       onEnter={makePortrayal}
     />

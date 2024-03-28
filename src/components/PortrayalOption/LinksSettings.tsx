@@ -245,7 +245,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
   const [
     targetVariable,
     setTargetVariable,
-  ] = createSignal<string>(targetFields![0].name);
+  ] = createSignal<string>(targetFields[0].name);
   const [
     targetDataset,
     setTargetDataset,
@@ -265,7 +265,11 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
   const [
     newLayerName,
     setNewLayerName,
-  ] = createSignal<string>(`Links_${layerDescription.name}`);
+  ] = createSignal<string>(
+    LL().PortrayalSection.LinksOptions.NewLayerName({
+      layerName: layerDescription.name,
+    }) as string,
+  );
 
   const targetFieldsOD = createMemo(() => {
     if (targetDataset() === '') {
@@ -490,6 +494,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
       </InputFieldSelect>
     </Show>
     <InputResultName
+      value={newLayerName()}
       onKeyUp={(value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />
