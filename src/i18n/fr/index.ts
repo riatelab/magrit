@@ -249,7 +249,7 @@ const fr = {
       Aggregation: 'Agrégation',
       Selection: 'Sélection',
       Simplification: 'Simplification',
-      NoPortrayal: 'Aucune représentation pour la couche choisie - Veuillez vérifier le types des champs de la couche ou sélectionner une autre couche',
+      LayerCreationFromTable: 'Création d\'une couche géographique',
     },
     TargetLayer: 'Couche cible',
     CreateLayer: 'Créer la couche',
@@ -523,6 +523,7 @@ const fr = {
     Title: 'Choix d\'une fonctionnalité',
     Title2: 'Options',
     Layer: 'Couche :',
+    Table: 'Tableau :',
     Back: 'Retour au choix d\'une fonctionnalité',
     Information: 'Sélectionnez la fonctionnalité que vous souhaitez appliquer à votre couche de données. Les fonctionnalités grisées indiquent que votre jeu de données ne contient pas de données permettant de l\'utiliser. Si vous pensez qu\'il s\'agit d\'une erreur, vous pouvez modifier le type des champs dans le gestionnaire de couches.',
     ShortDescriptions: {
@@ -541,6 +542,7 @@ const fr = {
       Aggregation: 'Cette fonctionnalité permet d\'agréger des entités polygonales selon la valeur d\'un champ (ou toutes les entités si aucun champ n\'est choisi).',
       Selection: 'Cette fonctionnalité permet de créer une nouvelle couche basée sur la sélection des entités géographiques d\'origine en fonction d\'une expression.',
       Simplification: 'Cette fonctionnalité permet de simplifier le tracé des entités linéaires ou polygonales. Cette opération, également appelée "généralisation" en cartographie, permet d\'obtenir un jeu de données moins détaillé et plus léger.',
+      LayerCreationFromTable: 'Cette fonctionnalité permet de créer une couche géographique à partir d\'un tableau de données contenant des coordonnées',
     },
   },
   ProjectionSelection: {

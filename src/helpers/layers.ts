@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { getPalette } from 'dicopal';
 
 // Helpers
 import d3 from './d3-custom';
@@ -102,3 +103,42 @@ export const makeDefaultGraticule = (): LayerDescription => ({
   },
   fields: [],
 });
+
+export const getDefaultRenderingParams = (geomType: string) => {
+  const pal = getPalette('Vivid', 10)!.colors;
+  const color = pal[Math.floor(Math.random() * pal.length)];
+
+  if (geomType === 'point') {
+    return {
+      renderer: 'default',
+      strokeColor: '#212121',
+      strokeWidth: 1,
+      strokeOpacity: 1,
+      fillColor: color,
+      fillOpacity: 1,
+      pointRadius: 5,
+      dropShadow: null,
+    };
+  }
+  if (geomType === 'linestring') {
+    return {
+      renderer: 'default',
+      strokeColor: color,
+      strokeWidth: 1.5,
+      strokeOpacity: 1,
+      dropShadow: null,
+    };
+  }
+  if (geomType === 'polygon') {
+    return {
+      renderer: 'default',
+      strokeColor: '#212121',
+      strokeWidth: 0.4,
+      strokeOpacity: 1,
+      fillColor: color,
+      fillOpacity: 0.85,
+      dropShadow: null,
+    };
+  }
+  return {};
+};

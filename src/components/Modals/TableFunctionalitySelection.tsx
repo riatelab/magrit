@@ -155,7 +155,7 @@ export default function TableFunctionalitySelection(): JSX.Element {
       <section class="modal-card-body is-flex is-flex-direction-column">
         <Show when={!selectedFunctionality()}>
           <div class="has-text-centered mb-4">
-            {LL().PortrayalSelection.Layer()}
+            {LL().PortrayalSelection.Table()}
             &nbsp;<b>{tableDescription.name}</b>
           </div>
           <section style={{ height: '100%', overflow: 'auto', padding: '1em' }}>
@@ -181,7 +181,7 @@ export default function TableFunctionalitySelection(): JSX.Element {
         </Show>
         <Show when={selectedFunctionality()}>
           <div class="mb-4 is-size-5">
-            {LL().PortrayalSelection.Layer()}
+            {LL().PortrayalSelection.Table()}
             &nbsp;<b>{tableDescription.name}</b>
           </div>
           <Switch>

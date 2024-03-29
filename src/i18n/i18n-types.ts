@@ -899,9 +899,9 @@ type RootTranslation = {
 			 */
 			Simplification: string
 			/**
-			 * N​o​ ​p​o​r​t​r​a​y​a​l​ ​f​o​r​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​l​a​y​e​r​ ​-​ ​P​l​e​a​s​e​ ​v​e​r​i​f​y​ ​t​h​e​ ​t​y​p​i​n​g​ ​o​f​ ​t​h​e​ ​f​i​e​l​d​s​ ​o​r​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​l​a​y​e​r
+			 * G​e​o​s​p​a​t​i​a​l​ ​l​a​y​e​r​ ​c​r​e​a​t​i​o​n
 			 */
-			NoPortrayal: string
+			LayerCreationFromTable: string
 		}
 		/**
 		 * T​a​r​g​e​t​ ​l​a​y​e​r
@@ -1869,6 +1869,10 @@ type RootTranslation = {
 		 */
 		Layer: string
 		/**
+		 * T​a​b​l​e​:
+		 */
+		Table: string
+		/**
 		 * B​a​c​k​ ​t​o​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​s​e​l​e​c​t​i​o​n
 		 */
 		Back: string
@@ -1937,6 +1941,10 @@ type RootTranslation = {
 			 * T​h​i​s​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​s​i​m​p​l​i​f​i​e​s​ ​t​h​e​ ​d​r​a​w​i​n​g​ ​o​f​ ​l​i​n​e​a​r​ ​o​r​ ​p​o​l​y​g​o​n​a​l​ ​e​n​t​i​t​i​e​s​.​ ​T​h​i​s​ ​o​p​e​r​a​t​i​o​n​,​ ​a​l​s​o​ ​k​n​o​w​n​ ​a​s​ ​'​g​e​n​e​r​a​l​i​s​a​t​i​o​n​'​ ​i​n​ ​c​a​r​t​o​g​r​a​p​h​y​,​ ​r​e​s​u​l​t​s​ ​i​n​ ​a​ ​l​e​s​s​ ​d​e​t​a​i​l​e​d​ ​a​n​d​ ​l​i​g​h​t​e​r​ ​d​a​t​a​s​e​t​.
 			 */
 			Simplification: string
+			/**
+			 * T​h​i​s​ ​f​u​n​c​t​i​o​n​ ​c​r​e​a​t​e​s​ ​a​ ​g​e​o​s​p​a​t​i​a​l​ ​l​a​y​e​r​ ​f​r​o​m​ ​a​ ​d​a​t​a​ ​t​a​b​l​e​ ​c​o​n​t​a​i​n​i​n​g​ ​c​o​o​r​d​i​n​a​t​e​s​.
+			 */
+			LayerCreationFromTable: string
 		}
 	}
 	ProjectionSelection: {
@@ -3475,9 +3483,9 @@ export type TranslationFunctions = {
 			 */
 			Simplification: () => LocalizedString
 			/**
-			 * No portrayal for the selected layer - Please verify the typing of the fields or select another layer
+			 * Geospatial layer creation
 			 */
-			NoPortrayal: () => LocalizedString
+			LayerCreationFromTable: () => LocalizedString
 		}
 		/**
 		 * Target layer
@@ -4430,6 +4438,10 @@ export type TranslationFunctions = {
 		 */
 		Layer: () => LocalizedString
 		/**
+		 * Table:
+		 */
+		Table: () => LocalizedString
+		/**
 		 * Back to functionality selection
 		 */
 		Back: () => LocalizedString
@@ -4498,6 +4510,10 @@ export type TranslationFunctions = {
 			 * This functionality simplifies the drawing of linear or polygonal entities. This operation, also known as 'generalisation' in cartography, results in a less detailed and lighter dataset.
 			 */
 			Simplification: () => LocalizedString
+			/**
+			 * This function creates a geospatial layer from a data table containing coordinates.
+			 */
+			LayerCreationFromTable: () => LocalizedString
 		}
 	}
 	ProjectionSelection: {

@@ -1,9 +1,6 @@
 // Imports from solid-js
 import { produce } from 'solid-js/store';
 
-// Imports from external packages
-import { getPalette } from 'dicopal';
-
 // Helpers
 import {
   convertBinaryTabularDatasetToJSON,
@@ -12,7 +9,7 @@ import {
   getGeometryType,
   removeFeaturesWithEmptyGeometry,
 } from './formatConversion';
-import { generateIdLayer, generateIdTable } from './layers';
+import { generateIdLayer, generateIdTable, getDefaultRenderingParams } from './layers';
 import {
   allowedFileExtensions,
   allowedMimeTypes,
@@ -105,45 +102,6 @@ export const isTopojson = async (files: CustomFileList) => files.length === 1
 export const isGeojson = async (files: CustomFileList) => files.length === 1
   && (files[0].ext === 'geojson' || files[0].ext === 'json')
   && (await files[0].file.text()).includes('FeatureCollection');
-
-const getDefaultRenderingParams = (geomType: string) => {
-  const pal = getPalette('Vivid', 10)!.colors;
-  const color = pal[Math.floor(Math.random() * pal.length)];
-
-  if (geomType === 'point') {
-    return {
-      renderer: 'default',
-      strokeColor: '#212121',
-      strokeWidth: 1,
-      strokeOpacity: 1,
-      fillColor: color,
-      fillOpacity: 1,
-      pointRadius: 5,
-      dropShadow: null,
-    };
-  }
-  if (geomType === 'linestring') {
-    return {
-      renderer: 'default',
-      strokeColor: color,
-      strokeWidth: 1.5,
-      strokeOpacity: 1,
-      dropShadow: null,
-    };
-  }
-  if (geomType === 'polygon') {
-    return {
-      renderer: 'default',
-      strokeColor: '#212121',
-      strokeWidth: 0.4,
-      strokeOpacity: 1,
-      fillColor: color,
-      fillOpacity: 0.85,
-      dropShadow: null,
-    };
-  }
-  return {};
-};
 
 function addLayer(
   geojson: GeoJSONFeatureCollection,

@@ -128,10 +128,21 @@ async function makeValid(feature: GeoJSONGeometry) {
   return validGeom;
 }
 
+async function wktToGeojson(wkt: string) {
+  const geos = await getGeos();
+  const reader = geos.GEOSWKTReader_create();
+  const geomPtr = geos.GEOSWKTReader_read(reader, wkt);
+  const geometry = geosGeomToGeojson(geomPtr, geos);
+  geos.GEOSGeom_destroy(geomPtr);
+  geos.GEOSWKTReader_destroy(reader);
+  return geometry;
+}
+
 export {
   intersectionFeature,
   intersectionLayer,
   makeValid,
+  wktToGeojson,
 };
 
 export default getGeos;

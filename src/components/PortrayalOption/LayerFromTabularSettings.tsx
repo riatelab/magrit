@@ -3,28 +3,43 @@ import {
   createEffect,
   createSignal, For, type JSX, on, Show,
 } from 'solid-js';
+import { produce } from 'solid-js/store';
 
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { findSuitableName, isNonNull, isNumber } from '../../helpers/common';
+import { getGeometryType } from '../../helpers/formatConversion';
+import {
+  makeLayerFromTableAndWKT,
+  makeLayerFromTableAndXY,
+  wktSeemsValid,
+} from '../../helpers/layerFromTable';
+import { generateIdLayer, getDefaultRenderingParams } from '../../helpers/layers';
 
 // Stores
-import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
-import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
+import {
+  layersDescriptionStore,
+  LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../../store/LayersDescriptionStore';
+import {
+  setFunctionalitySelectionStore,
+} from '../../store/FunctionalitySelectionStore';
+import { setLoading } from '../../store/GlobalStore';
 
 // Other components
-import InputResultName from './InputResultName.tsx';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
-import { findSuitableName, isNonNull, isNumber } from '../../helpers/common';
-import { setLoading } from '../../store/GlobalStore';
-import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
+import InputResultName from './InputResultName.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
-import MessageBlock from '../MessageBlock.tsx';
 import InputFieldRadio from '../Inputs/InputRadio.tsx';
+import MessageBlock from '../MessageBlock.tsx';
+import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Types / Interfaces / Enums
+import { type LayerDescription } from '../../global.d';
 
 function validateFieldsXY(
   tableId: string,
@@ -55,14 +70,7 @@ function validateFieldWkt(
 
   const validWkt = valuesWkt.filter((v) => isNonNull(v)
     && typeof v === 'string'
-    && (
-      v.startsWith('POINT')
-      || v.startsWith('LINESTRING')
-      || v.startsWith('POLYGON')
-      || v.startsWith('MULTIPOINT')
-      || v.startsWith('MULTILINESTRING')
-      || v.startsWith('MULTIPOLYGON')
-    ));
+    && wktSeemsValid(v));
 
   return validWkt.length;
 }
@@ -70,8 +78,68 @@ function validateFieldWkt(
 async function onClickValidate(
   referenceTableId: string,
   newLayerName: string,
+  mode: 'coordinates' | 'wkt',
+  fieldOrFields: string | [string, string],
 ) {
-  console.log('onClickValidate', referenceTableId, newLayerName);
+  const tableDescription = layersDescriptionStore.tables
+    .find((table) => table.id === referenceTableId)!;
+
+  if (mode === 'coordinates') {
+    const newData = await makeLayerFromTableAndXY(
+      tableDescription.data,
+      fieldOrFields[0],
+      fieldOrFields[1],
+    );
+
+    const newFields = tableDescription.fields
+      .filter((f) => f.name !== fieldOrFields[0] && f.name !== fieldOrFields[1])
+      .map((f) => ({ ...f }));
+
+    const newLayerDescription = {
+      id: generateIdLayer(),
+      name: newLayerName,
+      data: newData,
+      type: 'point',
+      fields: newFields,
+      visible: true,
+      ...getDefaultRenderingParams('point'),
+      shapeRendering: 'auto',
+    } as LayerDescription;
+
+    setLayersDescriptionStore(
+      produce((draft: LayersDescriptionStoreType) => {
+        draft.layers.push(newLayerDescription);
+      }),
+    );
+  } else {
+    const newData = await makeLayerFromTableAndWKT(
+      tableDescription.data,
+      fieldOrFields as string,
+    );
+
+    const newFields = tableDescription.fields
+      .filter((f) => f.name !== fieldOrFields as string)
+      .map((f) => ({ ...f }));
+
+    const geometryType = getGeometryType(newData);
+
+    const newLayerDescription = {
+      id: generateIdLayer(),
+      name: newLayerName,
+      data: newData,
+      type: geometryType,
+      fields: newFields,
+      visible: true,
+      ...getDefaultRenderingParams(geometryType),
+      shapeRendering: 'auto',
+    } as LayerDescription;
+
+    setLayersDescriptionStore(
+      produce((draft: LayersDescriptionStoreType) => {
+        draft.layers.push(newLayerDescription);
+      }),
+    );
+  }
 }
 
 export default function LayerFromTabularSettings(
@@ -168,6 +236,10 @@ export default function LayerFromTabularSettings(
       await onClickValidate(
         tableDescription.id,
         layerName,
+        mode(),
+        mode() === 'coordinates'
+          ? [fieldX(), fieldY()]
+          : fieldWkt(),
       );
 
       // Hide loading overlay

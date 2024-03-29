@@ -249,7 +249,7 @@ const en = {
       Aggregation: 'Aggregation',
       Selection: 'Selection',
       Simplification: 'Simplification',
-      NoPortrayal: 'No portrayal for the selected layer - Please verify the typing of the fields or select another layer',
+      LayerCreationFromTable: 'Geospatial layer creation',
     },
     TargetLayer: 'Target layer',
     CreateLayer: 'Create layer',
@@ -523,6 +523,7 @@ const en = {
     Title: 'Functionality selection',
     Title2: 'Options',
     Layer: 'Layer:',
+    Table: 'Table:',
     Back: 'Back to functionality selection',
     Information: 'Select the functionality you wish to apply to your data layer. Greyed-out functionalities indicate that your dataset does not contain any data allowing you to use it. If you suspect this is an error, you can change the field type in the Layer Manager.',
     ShortDescriptions: {
@@ -541,6 +542,7 @@ const en = {
       Aggregation: 'This functionality enables polygonal entities to be aggregated according to the value of a field (or all entities if no field is selected).',
       Selection: 'This functionality can be used to create a new layer based on the selection of initial geographical features according to an expression',
       Simplification: 'This functionality simplifies the drawing of linear or polygonal entities. This operation, also known as \'generalisation\' in cartography, results in a less detailed and lighter dataset.',
+      LayerCreationFromTable: 'This function creates a geospatial layer from a data table containing coordinates.',
     },
   },
   ProjectionSelection: {
