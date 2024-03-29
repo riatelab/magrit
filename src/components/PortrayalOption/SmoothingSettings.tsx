@@ -20,7 +20,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -141,7 +141,7 @@ async function onClickValidate(
 
   const newLayerDescription = {
     id: newId,
-    layerId: referenceLayerId,
+    // layerId: referenceLayerId,
     name: newName,
     type: 'polygon',
     renderer: 'smoothed' as RepresentationType,
@@ -265,7 +265,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     newLayerName,
     setNewLayerName,
   ] = createSignal(
-    LL().PortrayalSection.SmoothingOptions.NewLayerName({
+    LL().FunctionalitiesSection.SmoothingOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
@@ -296,7 +296,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((l) => l.name),
     );
     const params = targetSmoothingMethod() === SmoothingMethod.Kde
@@ -319,7 +319,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     } as GridParameters;
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, id: '', type: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -347,7 +347,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
 
   return <div class="portrayal-section__portrayal-options-smoothed">
     <InputFieldSelect
-      label={ LL().PortrayalSection.CommonOptions.Variable() }
+      label={ LL().FunctionalitiesSection.CommonOptions.Variable() }
       onChange={(v) => { setTargetVariable(v); }}
       value={targetVariable()}
     >
@@ -356,17 +356,17 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       </For>
     </InputFieldSelect>
     <InputFieldSelect
-      label={LL().PortrayalSection.SmoothingOptions.Type()}
+      label={LL().FunctionalitiesSection.SmoothingOptions.Type()}
       onChange={(v) => {
         setTargetSmoothingMethod(v as SmoothingMethod);
       }}
       value={targetSmoothingMethod()}
     >
-      <option value="Stewart">{LL().PortrayalSection.SmoothingOptions.Stewart()}</option>
-      <option value="Kde">{LL().PortrayalSection.SmoothingOptions.KDE()}</option>
+      <option value="Stewart">{LL().FunctionalitiesSection.SmoothingOptions.Stewart()}</option>
+      <option value="Kde">{LL().FunctionalitiesSection.SmoothingOptions.KDE()}</option>
     </InputFieldSelect>
     <InputFieldNumber
-      label={LL().PortrayalSection.SmoothingOptions.Resolution()}
+      label={LL().FunctionalitiesSection.SmoothingOptions.Resolution()}
       value={targetResolution()}
       onChange={(v) => setTargetResolution(v)}
       min={0}
@@ -375,7 +375,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     />
     <Show when={targetSmoothingMethod() === SmoothingMethod.Kde}>
       <InputFieldSelect
-        label={LL().PortrayalSection.SmoothingOptions.KernelType()}
+        label={LL().FunctionalitiesSection.SmoothingOptions.KernelType()}
         onChange={(v) => {
           setTargetKdeKernelType(
             v as 'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform' | 'biweight',
@@ -383,15 +383,15 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         }}
         value={targetKdeKernelType()}
       >
-        <option value="gaussian">{LL().PortrayalSection.SmoothingOptions.Gaussian()}</option>
-        <option value="epanechnikov">{LL().PortrayalSection.SmoothingOptions.Epanechnikov()}</option>
-        <option value="quartic">{LL().PortrayalSection.SmoothingOptions.Quartic()}</option>
-        <option value="triangular">{LL().PortrayalSection.SmoothingOptions.Triangular()}</option>
-        <option value="uniform">{LL().PortrayalSection.SmoothingOptions.Uniform()}</option>
-        <option value="biweight">{LL().PortrayalSection.SmoothingOptions.Biweight()}</option>
+        <option value="gaussian">{LL().FunctionalitiesSection.SmoothingOptions.Gaussian()}</option>
+        <option value="epanechnikov">{LL().FunctionalitiesSection.SmoothingOptions.Epanechnikov()}</option>
+        <option value="quartic">{LL().FunctionalitiesSection.SmoothingOptions.Quartic()}</option>
+        <option value="triangular">{LL().FunctionalitiesSection.SmoothingOptions.Triangular()}</option>
+        <option value="uniform">{LL().FunctionalitiesSection.SmoothingOptions.Uniform()}</option>
+        <option value="biweight">{LL().FunctionalitiesSection.SmoothingOptions.Biweight()}</option>
       </InputFieldSelect>
       <InputFieldNumber
-        label={LL().PortrayalSection.SmoothingOptions.Bandwidth()}
+        label={LL().FunctionalitiesSection.SmoothingOptions.Bandwidth()}
         value={targetBandwidth()}
         onChange={(v) => setTargetBandwidth(v)}
         min={0}
@@ -401,17 +401,17 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     </Show>
     <Show when={targetSmoothingMethod() === SmoothingMethod.Stewart}>
       <InputFieldSelect
-        label={LL().PortrayalSection.SmoothingOptions.KernelType()}
+        label={LL().FunctionalitiesSection.SmoothingOptions.KernelType()}
         onChange={(v) => {
           setTargetStewartKernelType(v as 'gaussian' | 'pareto');
         }}
         value={targetStewartKernelType()}
       >
-        <option value="gaussian">{LL().PortrayalSection.SmoothingOptions.Gaussian()}</option>
-        <option value="pareto">{LL().PortrayalSection.SmoothingOptions.Pareto()}</option>
+        <option value="gaussian">{LL().FunctionalitiesSection.SmoothingOptions.Gaussian()}</option>
+        <option value="pareto">{LL().FunctionalitiesSection.SmoothingOptions.Pareto()}</option>
       </InputFieldSelect>
       <InputFieldNumber
-        label={ LL().PortrayalSection.SmoothingOptions.Span() }
+        label={ LL().FunctionalitiesSection.SmoothingOptions.Span() }
         value={targetSpan()}
         onChange={(v) => setTargetSpan(v)}
         min={0}
@@ -419,7 +419,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         step={1}
       />
       <InputFieldNumber
-        label={LL().PortrayalSection.SmoothingOptions.Beta()}
+        label={LL().FunctionalitiesSection.SmoothingOptions.Beta()}
         value={targetBeta()}
         onChange={(v) => setTargetBeta(v)}
         min={0}
@@ -433,7 +433,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       onEnter={makePortrayal}
     />
     <ButtonValidation
-      label={ LL().PortrayalSection.CreateLayer() }
+      label={ LL().FunctionalitiesSection.CreateLayer() }
       onClick={ makePortrayal }
       disabled={
         targetResolution() <= 0

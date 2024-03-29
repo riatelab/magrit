@@ -242,7 +242,7 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
     <div class="is-flex">
       <div style={{ width: '33%' }}>
         <InputFieldMultiSelect
-          label={LL().PortrayalSection.LinksOptions.OriginId()}
+          label={LL().FunctionalitiesSection.LinksOptions.OriginId()}
           onChange={(values) => {
             setSelectedOrigins(values);
           }}
@@ -257,7 +257,7 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
       <div style={{ width: '33%' }}></div>
       <div style={{ width: '33%' }}>
         <InputFieldMultiSelect
-          label={LL().PortrayalSection.LinksOptions.DestinationId()}
+          label={LL().FunctionalitiesSection.LinksOptions.DestinationId()}
           onChange={(values) => {
             setSelectedDestinations(values);
           }}

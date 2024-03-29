@@ -36,7 +36,7 @@ import {
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
 import { mapStore } from '../../store/MapStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Types / Interfaces / Enums
 import type { PortrayalSettingsProps } from './common';
@@ -154,7 +154,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
-    LL().PortrayalSection.CartogramOptions.NewLayerName({
+    LL().FunctionalitiesSection.CartogramOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
@@ -169,12 +169,12 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, id: '', type: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -200,7 +200,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
 
   return <div class="portrayal-section__portrayal-options-cartogram">
     <InputFieldSelect
-      label={ LL().PortrayalSection.CommonOptions.Variable() }
+      label={ LL().FunctionalitiesSection.CommonOptions.Variable() }
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
     >
@@ -209,19 +209,19 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
       </For>
     </InputFieldSelect>
     <InputFieldSelect
-      label={LL().PortrayalSection.CartogramOptions.Algorithm()}
+      label={LL().FunctionalitiesSection.CartogramOptions.Algorithm()}
       onChange={(v) => setCartogramMethod(v as CartogramMethod)}
       value={cartogramMethod()}
     >
       <For each={Object.values(CartogramMethod)}>
         {
-          (cm) => <option value={cm}>{LL().PortrayalSection.CartogramOptions[cm]()}</option>
+          (cm) => <option value={cm}>{LL().FunctionalitiesSection.CartogramOptions[cm]()}</option>
         }
       </For>
     </InputFieldSelect>
     <Show when={cartogramMethod() === CartogramMethod.Dougenik}>
       <InputFieldNumber
-        label={LL().PortrayalSection.CartogramOptions.Iterations()}
+        label={LL().FunctionalitiesSection.CartogramOptions.Iterations()}
         value={numberOfIterations()}
         onChange={(v) => setNumberOfIterations(v)}
         min={1}
@@ -231,7 +231,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
     </Show>
     <Show when={isGeo}>
       <WarningBanner expanded={true}>
-        { LL().PortrayalSection.CartogramOptions.WarningGeo() }
+        { LL().FunctionalitiesSection.CartogramOptions.WarningGeo() }
       </WarningBanner>
     </Show>
     <InputResultName
@@ -240,7 +240,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
       onEnter={makePortrayal}
     />
     <ButtonValidation
-      label={ LL().PortrayalSection.CreateLayer() }
+      label={ LL().FunctionalitiesSection.CreateLayer() }
       onClick={ makePortrayal }
     />
   </div>;

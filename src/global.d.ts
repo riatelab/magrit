@@ -598,6 +598,10 @@ export enum ProcessingOperationType {
   simplification = 'simplification',
 }
 
+export enum TableOperationType {
+  layerCreationFromTable = 'layerCreationFromTable',
+}
+
 export enum AnalysisOperationType {
   pointAnalysis = 'pointAnalysis',
   simpleLinearRegression = 'simpleLinearRegression',

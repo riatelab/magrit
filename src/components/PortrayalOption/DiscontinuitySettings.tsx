@@ -27,7 +27,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Subcomponents
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
@@ -167,7 +167,7 @@ export default function DiscontinuitySettings(
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
-    LL().PortrayalSection.DiscontinuityOptions.NewLayerName({
+    LL().FunctionalitiesSection.DiscontinuityOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
@@ -186,12 +186,12 @@ export default function DiscontinuitySettings(
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, id: '', type: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -217,7 +217,7 @@ export default function DiscontinuitySettings(
 
   return <div class="portrayal-section__portrayal-options-discontinuity">
     <InputFieldSelect
-      label={ LL().PortrayalSection.CommonOptions.Variable() }
+      label={ LL().FunctionalitiesSection.CommonOptions.Variable() }
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
     >
@@ -226,19 +226,19 @@ export default function DiscontinuitySettings(
       </For>
     </InputFieldSelect>
     <InputFieldSelect
-      label={ LL().PortrayalSection.DiscontinuityOptions.DiscontinuityType() }
+      label={ LL().FunctionalitiesSection.DiscontinuityOptions.DiscontinuityType() }
       onChange={(value) => setDiscontinuityType(value as 'absolute' | 'relative')}
       value={discontinuityType()}
     >
       <option value="absolute">
-        { LL().PortrayalSection.DiscontinuityOptions.Absolute() }
+        { LL().FunctionalitiesSection.DiscontinuityOptions.Absolute() }
       </option>
       <option value="relative">
-        { LL().PortrayalSection.DiscontinuityOptions.Relative() }
+        { LL().FunctionalitiesSection.DiscontinuityOptions.Relative() }
       </option>
     </InputFieldSelect>
     <InputFieldSelect
-      label={LL().PortrayalSection.DiscontinuityOptions.Classification()}
+      label={LL().FunctionalitiesSection.DiscontinuityOptions.Classification()}
       onChange={(value) => setClassificationMethod(value as ClassificationMethod)}
       value={classificationMethod()}
     >
@@ -255,6 +255,9 @@ export default function DiscontinuitySettings(
       onKeyUp={(value) => setNewLayerName(value)}
       onEnter={makePortrayal}
     />
-    <ButtonValidation label={ LL().PortrayalSection.CreateLayer() } onClick={ makePortrayal } />
+    <ButtonValidation
+      label={ LL().FunctionalitiesSection.CreateLayer() }
+      onClick={ makePortrayal }
+    />
   </div>;
 }

@@ -836,8 +836,8 @@ type RootTranslation = {
 		 */
 		LegendDisplacement: string
 	}
-	PortrayalSection: {
-		PortrayalTypes: {
+	FunctionalitiesSection: {
+		FunctionalityTypes: {
 			/**
 			 * C​h​o​r​o​p​l​e​t​h
 			 */
@@ -1521,6 +1521,18 @@ type RootTranslation = {
 			NewLayerName: RequiredParams<'layerName'>
 		}
 		LayerFromTableOptions: {
+			/**
+			 * M​o​d​e
+			 */
+			Mode: string
+			/**
+			 * F​i​e​l​d​s​ ​f​o​r​ ​X​ ​a​n​d​ ​Y​ ​c​o​o​r​d​i​n​a​t​e​s
+			 */
+			ModeXY: string
+			/**
+			 * F​i​e​l​d​ ​f​o​r​ ​W​K​T​ ​g​e​o​m​e​t​r​y
+			 */
+			ModeWKT: string
 			/**
 			 * F​i​e​l​d​ ​c​o​n​t​a​i​n​i​n​g​ ​t​h​e​ ​X​ ​c​o​o​r​d​i​n​a​t​e
 			 */
@@ -3400,8 +3412,8 @@ export type TranslationFunctions = {
 		 */
 		LegendDisplacement: () => LocalizedString
 	}
-	PortrayalSection: {
-		PortrayalTypes: {
+	FunctionalitiesSection: {
+		FunctionalityTypes: {
 			/**
 			 * Choropleth
 			 */
@@ -4070,6 +4082,18 @@ export type TranslationFunctions = {
 			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 		LayerFromTableOptions: {
+			/**
+			 * Mode
+			 */
+			Mode: () => LocalizedString
+			/**
+			 * Fields for X and Y coordinates
+			 */
+			ModeXY: () => LocalizedString
+			/**
+			 * Field for WKT geometry
+			 */
+			ModeWKT: () => LocalizedString
 			/**
 			 * Field containing the X coordinate
 			 */

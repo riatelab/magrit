@@ -27,7 +27,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Subcomponents
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
@@ -211,7 +211,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
-    LL().PortrayalSection.CategoricalChoroplethOptions.NewLayerName({
+    LL().FunctionalitiesSection.CategoricalChoroplethOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
@@ -227,12 +227,12 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
   ] = createSignal<boolean>(false);
   const makePortrayal = async () => {
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, id: '', type: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -258,7 +258,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
 
   return <div class="portrayal-section__portrayal-options-choropleth">
     <InputFieldSelect
-      label={ LL().PortrayalSection.CommonOptions.Variable() }
+      label={ LL().FunctionalitiesSection.CommonOptions.Variable() }
       onChange={(value) => {
         setTargetVariable(value);
         setCategoriesMapping(
@@ -274,10 +274,14 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
       </For>
     </InputFieldSelect>
     <CategoriesSummary mapping={categoriesMapping()} />
-    <CollapsibleSection title={LL().PortrayalSection.CategoricalChoroplethOptions.ShowChart()}>
+    <CollapsibleSection
+      title={LL().FunctionalitiesSection.CategoricalChoroplethOptions.ShowChart()}
+    >
       <CategoriesPlot mapping={categoriesMapping()} />
     </CollapsibleSection>
-    <CollapsibleSection title={LL().PortrayalSection.CategoricalChoroplethOptions.Customize()}>
+    <CollapsibleSection
+      title={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
+    >
       <CategoriesCustomisation
         mapping={categoriesMapping}
         setMapping={setCategoriesMapping}
@@ -285,7 +289,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
       />
     </CollapsibleSection>
     <InputFieldCheckbox
-      label={LL().PortrayalSection.CategoricalChoroplethOptions.DisplayChartOnMap()}
+      label={LL().FunctionalitiesSection.CategoricalChoroplethOptions.DisplayChartOnMap()}
       checked={displayChartOnMap()}
       onChange={(v) => { setDisplayChartOnMap(v); }}
     />
@@ -294,6 +298,6 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
       onKeyUp={(value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />
-    <ButtonValidation label={ LL().PortrayalSection.CreateLayer() } onClick={makePortrayal} />
+    <ButtonValidation label={ LL().FunctionalitiesSection.CreateLayer() } onClick={makePortrayal} />
   </div>;
 }

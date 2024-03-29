@@ -24,7 +24,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 import { setLoading } from '../../store/GlobalStore';
 
 // Subcomponents
@@ -117,7 +117,7 @@ function formatSampleOutput(
     return LL().FormulaInput.ErrorEmptyResult();
   }
   if (!allValuesAreBoolean(values)) {
-    return LL().PortrayalSection.SelectionOptions.InvalidFormula();
+    return LL().FunctionalitiesSection.SelectionOptions.InvalidFormula();
   }
   return formatValidSampleOutput(s.value);
 }
@@ -134,7 +134,7 @@ export default function SelectionSettings(
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
-    LL().PortrayalSection.SelectionOptions.NewLayerName({
+    LL().FunctionalitiesSection.SelectionOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
@@ -152,12 +152,12 @@ export default function SelectionSettings(
   const makePortrayal = async () => {
     // Check name of the new layer
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, layerId: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -187,8 +187,8 @@ export default function SelectionSettings(
 
   return <div class="portrayal-section__portrayal-options-selection">
     <InformationBanner expanded={true}>
-      <p>{LL().PortrayalSection.SelectionOptions.Information()}</p>
-      <p>{LL().PortrayalSection.SelectionOptions.InformationSyntax()}</p>
+      <p>{LL().FunctionalitiesSection.SelectionOptions.Information()}</p>
+      <p>{LL().FunctionalitiesSection.SelectionOptions.InformationSyntax()}</p>
     </InformationBanner>
     <br />
     <FormulaInput
@@ -223,7 +223,7 @@ export default function SelectionSettings(
       onEnter={makePortrayal}
     />
     <ButtonValidation
-      label={LL().PortrayalSection.CreateLayer()}
+      label={LL().FunctionalitiesSection.CreateLayer()}
       onClick={makePortrayal}
       disabled={!isConfirmationEnabled()}
     />

@@ -100,7 +100,7 @@ export function ChoroplethClassificationSelector(
   } as ClassificationParameters);
 
   return <div class="field-block">
-    <label class="label">{LL().PortrayalSection.ChoroplethOptions.Classification()}</label>
+    <label class="label">{LL().FunctionalitiesSection.ChoroplethOptions.Classification()}</label>
     <div style={{
       width: '30vh', display: 'flex', 'justify-content': 'space-between', margin: 'auto',
     }}>
@@ -235,7 +235,7 @@ export function ChoroplethClassificationSelector(
       {LL().ClassificationPanel.classificationMethods[props.targetClassification()!.method]()}
       , {
       // eslint-disable-next-line max-len
-      LL().PortrayalSection.ChoroplethOptions.CurrentNumberOfClasses(props.targetClassification()!.classes)}
+      LL().FunctionalitiesSection.ChoroplethOptions.CurrentNumberOfClasses(props.targetClassification()!.classes)}
     </div>
   </div>;
 }

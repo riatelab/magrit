@@ -321,7 +321,9 @@ function makeSettingsDefaultPoint(
       </div>
     </Show>
     <Show when={props.renderer === 'categoricalChoropleth'}>
-      <CollapsibleSection title={LL().PortrayalSection.CategoricalChoroplethOptions.Customize()}>
+      <CollapsibleSection
+        title={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
+      >
         <CategoriesCustomisation
           mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
           setMapping={(m) => {
@@ -333,7 +335,7 @@ function makeSettingsDefaultPoint(
     </Show>
     <Show when={props.renderer === 'proportionalSymbols'}>
       <InputFieldSelect
-        label={LL().PortrayalSection.ProportionalSymbolsOptions.SymbolType()}
+        label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.SymbolType()}
         onChange={(v) => {
           debouncedUpdateProp(props.id, ['rendererParameters', 'symbolType'], v);
           const legendId = layersDescriptionStore.layoutFeaturesAndLegends
@@ -343,14 +345,14 @@ function makeSettingsDefaultPoint(
         value={(props.rendererParameters as ProportionalSymbolsParameters).symbolType}
       >
         <option value={ProportionalSymbolsSymbolType.circle}>
-          { LL().PortrayalSection.ProportionalSymbolsOptions.SymbolTypes.circle() }
+          { LL().FunctionalitiesSection.ProportionalSymbolsOptions.SymbolTypes.circle() }
         </option>
         <option value={ProportionalSymbolsSymbolType.square}>
-          { LL().PortrayalSection.ProportionalSymbolsOptions.SymbolTypes.square() }
+          { LL().FunctionalitiesSection.ProportionalSymbolsOptions.SymbolTypes.square() }
         </option>
       </InputFieldSelect>
       <InputFieldNumber
-        label={LL().PortrayalSection.ProportionalSymbolsOptions.ReferenceSize()}
+        label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize()}
         value={(props.rendererParameters as ProportionalSymbolsParameters).referenceRadius}
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'referenceRadius'], v)}
         min={1}
@@ -358,7 +360,7 @@ function makeSettingsDefaultPoint(
         step={0.1}
       />
       <InputFieldNumber
-        label={ LL().PortrayalSection.ProportionalSymbolsOptions.OnValue() }
+        label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.OnValue() }
         value={(props.rendererParameters as ProportionalSymbolsParameters).referenceValue}
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'referenceValue'], v)}
         min={1}
@@ -429,7 +431,7 @@ function makeSettingsDefaultPoint(
       && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'categoricalVariable'
     }>
       <CollapsibleSection
-        title={LL().PortrayalSection.CategoricalChoroplethOptions.Customize()}
+        title={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
       >
         <CategoriesCustomisation
           mapping={() => (
@@ -483,10 +485,10 @@ function makeSettingsDefaultPoint(
     </Show>
     <Show when={props.renderer === 'mushrooms'}>
       <div class="mt-4 mb-5 has-text-weight-bold">
-        {LL().PortrayalSection.MushroomsOptions.TopProperties()}
+        {LL().FunctionalitiesSection.MushroomsOptions.TopProperties()}
       </div>
       <InputFieldNumber
-        label={LL().PortrayalSection.ProportionalSymbolsOptions.ReferenceSize()}
+        label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize()}
         value={(props.rendererParameters as MushroomsParameters).top.referenceSize}
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'top', 'referenceSize'], v)}
         min={1}
@@ -494,7 +496,7 @@ function makeSettingsDefaultPoint(
         step={0.1}
       />
       <InputFieldNumber
-        label={LL().PortrayalSection.ProportionalSymbolsOptions.OnValue()}
+        label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.OnValue()}
         value={(props.rendererParameters as MushroomsParameters).top.referenceValue}
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'top', 'referenceValue'], v)}
         min={1}
@@ -507,10 +509,10 @@ function makeSettingsDefaultPoint(
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'top', 'color'], v)}
       />
       <div class="mt-4 mb-5 has-text-weight-bold">
-        {LL().PortrayalSection.MushroomsOptions.BottomProperties()}
+        {LL().FunctionalitiesSection.MushroomsOptions.BottomProperties()}
       </div>
       <InputFieldNumber
-        label={LL().PortrayalSection.ProportionalSymbolsOptions.ReferenceSize()}
+        label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize()}
         value={(props.rendererParameters as MushroomsParameters).bottom.referenceSize}
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'referenceSize'], v)}
         min={1}
@@ -518,7 +520,7 @@ function makeSettingsDefaultPoint(
         step={0.1}
       />
       <InputFieldNumber
-        label={LL().PortrayalSection.ProportionalSymbolsOptions.OnValue()}
+        label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.OnValue()}
         value={(props.rendererParameters as MushroomsParameters).bottom.referenceValue}
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'referenceValue'], v)}
         min={1}
@@ -533,7 +535,7 @@ function makeSettingsDefaultPoint(
     </Show>
     <Show when={props.renderer === 'proportionalSymbols'}>
       <InputFieldCheckbox
-        label={ LL().PortrayalSection.ProportionalSymbolsOptions.AvoidOverlapping() }
+        label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.AvoidOverlapping() }
         checked={ (props.rendererParameters as ProportionalSymbolsParameters).avoidOverlapping }
         onChange={(checked) => {
           setLayersDescriptionStoreBase(
@@ -624,7 +626,9 @@ function makeSettingsDefaultLine(
       </div>
     </Show>
     <Show when={props.renderer === 'categoricalChoropleth'}>
-      <CollapsibleSection title={LL().PortrayalSection.CategoricalChoroplethOptions.Customize()}>
+      <CollapsibleSection
+        title={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
+      >
         <CategoriesCustomisation
           mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
           setMapping={(m) => {
@@ -670,7 +674,7 @@ function makeSettingsDefaultLine(
       && (props.rendererParameters as LinksParameters).proportional
     }>
       <InputFieldNumber
-        label={ LL().PortrayalSection.LinksOptions.LinkSizeProportionalReferenceSize() }
+        label={ LL().FunctionalitiesSection.LinksOptions.LinkSizeProportionalReferenceSize() }
         value={ (props.rendererParameters as LinksParameters).proportional!.referenceSize }
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'proportional', 'referenceSize'], v)}
         min={1}
@@ -678,7 +682,7 @@ function makeSettingsDefaultLine(
         step={0.5}
       />
       <InputFieldNumber
-        label={ LL().PortrayalSection.LinksOptions.LinkSizeProportionalReferenceValue() }
+        label={ LL().FunctionalitiesSection.LinksOptions.LinkSizeProportionalReferenceValue() }
         value={ (props.rendererParameters as LinksParameters).proportional!.referenceValue }
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'proportional', 'referenceValue'], v)}
         min={1}
@@ -695,33 +699,33 @@ function makeSettingsDefaultLine(
     </Show>
     <Show when={props.renderer === 'links'}>
       <InputFieldSelect
-        label={LL().PortrayalSection.LinksOptions.LinkCurvature()}
+        label={LL().FunctionalitiesSection.LinksOptions.LinkCurvature()}
         value={(props.rendererParameters as LinksParameters).curvature}
         onChange={(v) => updateProp(props.id, ['rendererParameters', 'curvature'], v)}
       >
         <For each={Object.entries(LinkCurvature)}>
           {
             ([key, value]) => <option value={value}>
-              {LL().PortrayalSection.LinksOptions[`LinkCurvature${key}`]()}
+              {LL().FunctionalitiesSection.LinksOptions[`LinkCurvature${key}`]()}
             </option>
           }
         </For>
       </InputFieldSelect>
       <InputFieldSelect
-        label={LL().PortrayalSection.LinksOptions.LinkHeadType()}
+        label={LL().FunctionalitiesSection.LinksOptions.LinkHeadType()}
         value={(props.rendererParameters as LinksParameters).head}
         onChange={(v) => updateProp(props.id, ['rendererParameters', 'head'], v)}
       >
         <For each={Object.entries(LinkHeadType)}>
           {
             ([key, value]) => <option value={value}>
-              {LL().PortrayalSection.LinksOptions[`LinkHeadType${key}`]()}
+              {LL().FunctionalitiesSection.LinksOptions[`LinkHeadType${key}`]()}
             </option>
           }
         </For>
       </InputFieldSelect>
       <details>
-        <summary>{ LL().PortrayalSection.LinksOptions.Selection() }</summary>
+        <summary>{ LL().FunctionalitiesSection.LinksOptions.Selection() }</summary>
         <LinksSelectionOnExistingLayer layerId={props.id}/>
       </details>
     </Show>
@@ -795,7 +799,9 @@ function makeSettingsDefaultPolygon(
       </div>
     </Show>
     <Show when={props.renderer === 'categoricalChoropleth'}>
-      <CollapsibleSection title={LL().PortrayalSection.CategoricalChoroplethOptions.Customize()}>
+      <CollapsibleSection
+        title={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
+      >
         <CategoriesCustomisation
           mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
           setMapping={(m) => {

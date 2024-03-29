@@ -25,14 +25,16 @@ export function CategoriesSummary(props: { mapping: CategoricalChoroplethMapping
   return <div style={{ 'margin-top': '-1em', 'margin-bottom': '1em' }}>
     <div>
       <FaSolidArrowRight />&nbsp;
-      <span>{ LL().PortrayalSection.CategoricalChoroplethOptions.Categories(nCategories()) }</span>
+      <span>
+        { LL().FunctionalitiesSection.CategoricalChoroplethOptions.Categories(nCategories()) }
+      </span>
       <br />
       <FaSolidArrowRight/>&nbsp;
       <span>
         {
           hasNull()
-            ? LL().PortrayalSection.CategoricalChoroplethOptions.HasNull()
-            : LL().PortrayalSection.CategoricalChoroplethOptions.NoNull()
+            ? LL().FunctionalitiesSection.CategoricalChoroplethOptions.HasNull()
+            : LL().FunctionalitiesSection.CategoricalChoroplethOptions.NoNull()
         }
       </span>
     </div>
@@ -73,10 +75,10 @@ export function CategoriesPlot(
           type: 'band',
           tickFormat: null,
           ticks: 0,
-          label: LL().PortrayalSection.CategoricalChoroplethOptions.XAxisCategories(),
+          label: LL().FunctionalitiesSection.CategoricalChoroplethOptions.XAxisCategories(),
         },
         y: {
-          label: LL().PortrayalSection.CategoricalChoroplethOptions.YAxisCount(),
+          label: LL().FunctionalitiesSection.CategoricalChoroplethOptions.YAxisCount(),
         },
         marks: [
           Plot.barY(
@@ -146,9 +148,9 @@ export function CategoriesCustomisation(
             />
             <Show when={props.detailed}>
               <span>
-                &nbsp;({ LL().PortrayalSection.CategoricalChoroplethOptions.Value() }
+                &nbsp;({ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Value() }
                 &nbsp;{item.value} -
-                &nbsp;{ LL().PortrayalSection.CategoricalChoroplethOptions.Count() }
+                &nbsp;{ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Count() }
                 &nbsp;{item.count})
               </span>
             </Show>

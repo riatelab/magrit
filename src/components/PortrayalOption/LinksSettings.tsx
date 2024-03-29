@@ -31,7 +31,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Subcomponents
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
@@ -266,7 +266,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
-    LL().PortrayalSection.LinksOptions.NewLayerName({
+    LL().FunctionalitiesSection.LinksOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
@@ -333,12 +333,12 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, layerId: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -369,7 +369,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
 
   return <div class="portrayal-section__portrayal-options-choropleth">
     <InputFieldSelect
-      label={ LL().PortrayalSection.LinksOptions.IdentifierField() }
+      label={ LL().FunctionalitiesSection.LinksOptions.IdentifierField() }
       onChange={(value) => {
         setTargetVariable(value);
       }}
@@ -380,13 +380,13 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
       </For>
     </InputFieldSelect>
     <InputFieldSelect
-      label={ LL().PortrayalSection.LinksOptions.Dataset() }
+      label={ LL().FunctionalitiesSection.LinksOptions.Dataset() }
       onChange={(value) => {
         setTargetDataset(value);
       }}
       value={ targetDataset() }
     >
-      <option value="">{ LL().PortrayalSection.LinksOptions.SelectDataset() }</option>
+      <option value="">{ LL().FunctionalitiesSection.LinksOptions.SelectDataset() }</option>
       <For each={layersDescriptionStore.tables}>
         {
           (table) => <option value={table.id}>{ table.name }</option>
@@ -395,7 +395,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
     </InputFieldSelect>
     <Show when={targetDataset() !== ''}>
       <InputFieldSelect
-        label={ LL().PortrayalSection.LinksOptions.OriginId() }
+        label={ LL().FunctionalitiesSection.LinksOptions.OriginId() }
         onChange={(value) => {
           setOriginVariable(value);
         }}
@@ -406,7 +406,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
         </For>
       </InputFieldSelect>
       <InputFieldSelect
-        label={ LL().PortrayalSection.LinksOptions.DestinationId() }
+        label={ LL().FunctionalitiesSection.LinksOptions.DestinationId() }
         onChange={(value) => {
           setDestinationVariable(value);
         }}
@@ -420,24 +420,24 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
         <Show when={matchingState()?.allMatch}>
           <div class="field is-justify-content-flex-start">
             <FaSolidCheck />
-            { LL().PortrayalSection.LinksOptions.AllMatch() }
+            { LL().FunctionalitiesSection.LinksOptions.AllMatch() }
           </div>
         </Show>
         <Show when={matchingState()?.someMatch}>
           <div class="field is-justify-content-flex-start">
             <VsWarning />
-            { LL().PortrayalSection.LinksOptions.SomeMatch() }
+            { LL().FunctionalitiesSection.LinksOptions.SomeMatch() }
           </div>
         </Show>
         <Show when={!matchingState()?.allMatch && !matchingState()?.someMatch}>
           <div class="field is-justify-content-flex-start">
             <VsWarning />
-            { LL().PortrayalSection.LinksOptions.NoMatch() }
+            { LL().FunctionalitiesSection.LinksOptions.NoMatch() }
           </div>
         </Show>
       </Show>
       <InputFieldSelect
-        label={ LL().PortrayalSection.LinksOptions.Intensity() }
+        label={ LL().FunctionalitiesSection.LinksOptions.Intensity() }
         onChange={(value) => {
           setIntensityVariable(value);
         }}
@@ -448,7 +448,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
         </For>
       </InputFieldSelect>
       <InputFieldSelect
-        label={ LL().PortrayalSection.LinksOptions.LinkType() }
+        label={ LL().FunctionalitiesSection.LinksOptions.LinkType() }
         onChange={(value) => {
           setLinkType(value as LinkType);
         }}
@@ -457,13 +457,13 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
         <For each={Object.entries(LinkType)}>
           {
             ([key, value]) => <option value={value}>
-              { LL().PortrayalSection.LinksOptions[`LinkType${key}`]() }
+              { LL().FunctionalitiesSection.LinksOptions[`LinkType${key}`]() }
             </option>
           }
         </For>
       </InputFieldSelect>
       <InputFieldSelect
-        label={ LL().PortrayalSection.LinksOptions.LinkHeadType() }
+        label={ LL().FunctionalitiesSection.LinksOptions.LinkHeadType() }
         onChange={(value) => {
           setLinkHeadType(value as LinkHeadType);
         }}
@@ -472,13 +472,13 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
         <For each={Object.entries(LinkHeadType)}>
           {
             ([key, value]) => <option value={value}>
-              { LL().PortrayalSection.LinksOptions[`LinkHeadType${key}`]() }
+              { LL().FunctionalitiesSection.LinksOptions[`LinkHeadType${key}`]() }
             </option>
           }
         </For>
       </InputFieldSelect>
       <InputFieldSelect
-        label={ LL().PortrayalSection.LinksOptions.LinkCurvature() }
+        label={ LL().FunctionalitiesSection.LinksOptions.LinkCurvature() }
         onChange={(value) => {
           setLinkCurveType(value as LinkCurvature);
         }}
@@ -487,7 +487,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
         <For each={Object.entries(LinkCurvature)}>
           {
             ([key, value]) => <option value={value}>
-              { LL().PortrayalSection.LinksOptions[`LinkCurvature${key}`]() }
+              { LL().FunctionalitiesSection.LinksOptions[`LinkCurvature${key}`]() }
             </option>
           }
         </For>
@@ -499,7 +499,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
       onEnter={makePortrayal}
     />
     <ButtonValidation
-      label={ LL().PortrayalSection.CreateLayer() }
+      label={ LL().FunctionalitiesSection.CreateLayer() }
       onClick={makePortrayal}
       disabled={matchingState() === null || !matchingState()?.someMatch}
     />

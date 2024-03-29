@@ -13,7 +13,7 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 import { summaryForChoosingPortrayal } from '../../helpers/layerDescription';
 
 // Stores
-import { portrayalSelectionStore, setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { functionalitySelectionStore, setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Subcomponents
@@ -31,6 +31,7 @@ import AggregationSettings from '../PortrayalOption/AggregationSettings.tsx';
 import SelectionSettings from '../PortrayalOption/SelectionSettings.tsx';
 import InformationBanner from './Banners/InformationBanner.tsx';
 import SimplificationSettings from '../PortrayalOption/SimplificationSettings.tsx';
+import PointAnalysisSettings from '../PortrayalOption/PointAnalysisSettings.tsx';
 
 // Type / interfaces / enums
 import {
@@ -40,16 +41,15 @@ import {
 } from '../../global.d';
 
 // Styles
-import '../../styles/PortrayalSelection.css';
-import PointAnalysisSettings from '../PortrayalOption/PointAnalysisSettings.tsx';
+import '../../styles/FunctionalitySelection.css';
 
-interface PortrayalDescription {
+interface FunctionalityDescription {
   name: string;
   type: RepresentationType | ProcessingOperationType | AnalysisOperationType;
   enabled: boolean;
 }
 
-const portrayalDescriptions: PortrayalDescription[] = [
+const functionalityDescriptions: FunctionalityDescription[] = [
   {
     name: 'Choropleth',
     type: RepresentationType.choropleth,
@@ -112,9 +112,9 @@ const portrayalDescriptions: PortrayalDescription[] = [
   },
 ].map((p) => ({ ...p, enabled: false }));
 
-function CardPortrayal(
-  pDesc: PortrayalDescription & {
-    onClick: ((arg0: MouseEvent | KeyboardEvent, arg1: PortrayalDescription) => void),
+function CardFunctionality(
+  pDesc: FunctionalityDescription & {
+    onClick: ((arg0: MouseEvent | KeyboardEvent, arg1: FunctionalityDescription) => void),
   },
 ): JSX.Element {
   const { LL } = useI18nContext();
@@ -157,7 +157,7 @@ function CardPortrayal(
             <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
           </Match>
         </Switch>
-        { LL().PortrayalSection.PortrayalTypes[pDesc.name]() }
+        { LL().FunctionalitiesSection.FunctionalityTypes[pDesc.name]() }
       </p>
     </header>
     <section class="card-content" style={{ padding: '1em' }}>
@@ -168,21 +168,21 @@ function CardPortrayal(
   </div>;
 }
 
-export default function PortrayalSelection(): JSX.Element {
+export default function FunctionalitySelection(): JSX.Element {
   // We need to have a layerId to display the portrayal selection
   // but we shouldn't be able to reach this component without a layerId
-  if (!portrayalSelectionStore.layerId) {
-    throw new Error('No layerId provided');
+  if (!functionalitySelectionStore.id) {
+    throw new Error('No layer or table id provided');
   }
   const { LL } = useI18nContext();
   const [
-    selectedPortrayal,
-    setSelectedPortrayal,
-  ] = createSignal<PortrayalDescription | null>(null);
+    selectedFunctionality,
+    setSelectedFunctionality,
+  ] = createSignal<FunctionalityDescription | null>(null);
   let refParentNode: HTMLDivElement;
 
-  // Clone the portrayalDescriptions array
-  const portrayals = portrayalDescriptions.slice();
+  // Clone the functionalityDescriptions array
+  const functionalities = functionalityDescriptions.slice();
 
   // - What are the available variable for the selected layer?
   // - What is the geometry type for the selected layer ?
@@ -193,12 +193,12 @@ export default function PortrayalSelection(): JSX.Element {
     geomType,
     name: layerName,
     nFeatures,
-  } = summaryForChoosingPortrayal(portrayalSelectionStore.layerId);
+  } = summaryForChoosingPortrayal(functionalitySelectionStore.id);
   // - Is there any tabular datasets that may contain information for links ?
   const projectHasTabularDataset = layersDescriptionStore.tables.length > 0;
 
-  // Set the enable flag for the various portrayal types
-  portrayals.forEach((p) => {
+  // Set the enable flag for the various functionality types
+  functionalities.forEach((p) => {
     switch (p.type) {
       case RepresentationType.choropleth:
         // eslint-disable-next-line no-param-reassign
@@ -274,9 +274,9 @@ export default function PortrayalSelection(): JSX.Element {
       : (event.keyCode === 27);
     if (isEscape) {
       // We want a different behavior if a portrayal is selected or not
-      if (selectedPortrayal()) {
-        // Reset selected portrayal so we go back to the list of portrayal types
-        setSelectedPortrayal(null);
+      if (selectedFunctionality()) {
+        // Reset selected functionality so we go back to the list of functionality types
+        setSelectedFunctionality(null);
       } else {
         // Close the modal
         (refParentNode.querySelector('.cancel-button') as HTMLElement).click();
@@ -294,7 +294,7 @@ export default function PortrayalSelection(): JSX.Element {
   });
 
   return <div
-    class="modal-window modal portrayal-selection"
+    class="modal-window modal functionality-selection"
     style={{ display: 'flex' }}
     ref={refParentNode!}
     aria-modal="true"
@@ -303,17 +303,18 @@ export default function PortrayalSelection(): JSX.Element {
     <div class="modal-background" />
     <div class="modal-card" style={{ width: '70vw', height: '90vh' }}>
       <header class="modal-card-head">
-        <Show when={!selectedPortrayal()}>
+        <Show when={!selectedFunctionality()}>
           <p class="modal-card-title">{ LL().PortrayalSelection.Title() }</p>
         </Show>
-        <Show when={selectedPortrayal()}>
+        <Show when={selectedFunctionality()}>
           <p class="modal-card-title">
             { LL().PortrayalSelection.Title2() }
-            &nbsp;- { LL().PortrayalSection.PortrayalTypes[selectedPortrayal()!.name] }</p>
+            &nbsp;-&nbsp;
+            { LL().FunctionalitiesSection.FunctionalityTypes[selectedFunctionality()!.name] }</p>
         </Show>
       </header>
       <section class="modal-card-body is-flex is-flex-direction-column">
-        <Show when={!selectedPortrayal()}>
+        <Show when={!selectedFunctionality()}>
           <InformationBanner expanded={true}>
             <p>{ LL().PortrayalSelection.Information() }</p>
           </InformationBanner>
@@ -329,12 +330,12 @@ export default function PortrayalSelection(): JSX.Element {
                 'grid-gap': '1rem',
               }}
             >
-              <For each={portrayalDescriptions}>
+              <For each={functionalityDescriptions}>
                 {
-                  (p) => <CardPortrayal
+                  (p) => <CardFunctionality
                     {...p}
                     onClick={(e, pDesc) => {
-                      setSelectedPortrayal(pDesc);
+                      setSelectedFunctionality(pDesc);
                     }}
                   />
                 }
@@ -342,63 +343,64 @@ export default function PortrayalSelection(): JSX.Element {
             </div>
           </section>
         </Show>
-        <Show when={selectedPortrayal()}>
+        <Show when={selectedFunctionality()}>
           <div class="mb-4 is-size-5">
             {LL().PortrayalSelection.Layer()}
             &nbsp;<b>{ layerName }</b>
           </div>
           <Switch>
-            <Match when={selectedPortrayal()!.type === RepresentationType.choropleth}>
-              <ChoroplethSettings layerId={portrayalSelectionStore.layerId!}/>
+            <Match when={selectedFunctionality()!.type === RepresentationType.choropleth}>
+              <ChoroplethSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
-            <Match when={selectedPortrayal()!.type === RepresentationType.proportionalSymbols}>
-              <ProportionalSymbolsSettings layerId={portrayalSelectionStore.layerId!}/>
+            <Match when={selectedFunctionality()!.type === RepresentationType.proportionalSymbols}>
+              <ProportionalSymbolsSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
-            <Match when={selectedPortrayal()!.type === RepresentationType.discontinuity}>
-              <DiscontinuitySettings layerId={portrayalSelectionStore.layerId!}/>
+            <Match when={selectedFunctionality()!.type === RepresentationType.discontinuity}>
+              <DiscontinuitySettings layerId={functionalitySelectionStore.id!}/>
             </Match>
-            <Match when={selectedPortrayal()!.type === RepresentationType.categoricalChoropleth}>
-              <CategoricalChoroplethSettings layerId={portrayalSelectionStore.layerId!}/>
+            {/* eslint-disable-next-line max-len */}
+            <Match when={selectedFunctionality()!.type === RepresentationType.categoricalChoropleth}>
+              <CategoricalChoroplethSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
-            <Match when={selectedPortrayal()!.type === RepresentationType.labels}>
-              <LabelsSettings layerId={portrayalSelectionStore.layerId!}/>
+            <Match when={selectedFunctionality()!.type === RepresentationType.labels}>
+              <LabelsSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
-            <Match when={selectedPortrayal()!.type === RepresentationType.smoothed}>
-              <SmoothingSettings layerId={portrayalSelectionStore.layerId!}/>
+            <Match when={selectedFunctionality()!.type === RepresentationType.smoothed}>
+              <SmoothingSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
-            <Match when={selectedPortrayal()!.type === RepresentationType.cartogram}>
-              <CartogramSettings layerId={portrayalSelectionStore.layerId!}/>
+            <Match when={selectedFunctionality()!.type === RepresentationType.cartogram}>
+              <CartogramSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
-            <Match when={selectedPortrayal()!.type === RepresentationType.grid}>
-              <GriddingSettings layerId={portrayalSelectionStore.layerId!}/>
+            <Match when={selectedFunctionality()!.type === RepresentationType.grid}>
+              <GriddingSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
-            <Match when={selectedPortrayal()!.type === RepresentationType.links}>
-              <LinksSettings layerId={portrayalSelectionStore.layerId!}/>
+            <Match when={selectedFunctionality()!.type === RepresentationType.links}>
+              <LinksSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
-            <Match when={selectedPortrayal()!.type === RepresentationType.mushrooms}>
-              <MushroomsSettings layerId={portrayalSelectionStore.layerId!}/>
+            <Match when={selectedFunctionality()!.type === RepresentationType.mushrooms}>
+              <MushroomsSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
-            <Match when={selectedPortrayal()!.type === ProcessingOperationType.aggregation}>
-              <AggregationSettings layerId={portrayalSelectionStore.layerId!} />
+            <Match when={selectedFunctionality()!.type === ProcessingOperationType.aggregation}>
+              <AggregationSettings layerId={functionalitySelectionStore.id!} />
             </Match>
-            <Match when={selectedPortrayal()!.type === ProcessingOperationType.selection}>
-              <SelectionSettings layerId={portrayalSelectionStore.layerId!} />
+            <Match when={selectedFunctionality()!.type === ProcessingOperationType.selection}>
+              <SelectionSettings layerId={functionalitySelectionStore.id!} />
             </Match>
-            <Match when={selectedPortrayal()!.type === ProcessingOperationType.simplification}>
-              <SimplificationSettings layerId={portrayalSelectionStore.layerId!} />
+            <Match when={selectedFunctionality()!.type === ProcessingOperationType.simplification}>
+              <SimplificationSettings layerId={functionalitySelectionStore.id!} />
             </Match>
-            <Match when={selectedPortrayal()!.type === AnalysisOperationType.pointAnalysis}>
-              <PointAnalysisSettings layerId={portrayalSelectionStore.layerId!} />
+            <Match when={selectedFunctionality()!.type === AnalysisOperationType.pointAnalysis}>
+              <PointAnalysisSettings layerId={functionalitySelectionStore.id!} />
             </Match>
           </Switch>
         </Show>
       </section>
       <footer class="modal-card-foot" style={{ 'justify-content': 'space-between' }}>
         <div>
-          <Show when={selectedPortrayal()}>
+          <Show when={selectedFunctionality()}>
             <button
               class="button"
-              onClick={() => setSelectedPortrayal(null)}
+              onClick={() => setSelectedFunctionality(null)}
             >
               <FaSolidArrowLeftLong />
               &nbsp;
@@ -409,7 +411,7 @@ export default function PortrayalSelection(): JSX.Element {
         <div>
           <button
             class="button cancel-button"
-            onClick={() => { setPortrayalSelectionStore({ show: false, layerId: '' }); }}
+            onClick={() => { setFunctionalitySelectionStore({ show: false, id: '', type: '' }); }}
           >
             { LL().CancelButton() }
           </button>

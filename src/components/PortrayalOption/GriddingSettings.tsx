@@ -23,7 +23,7 @@ import {
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
 import { mapStore } from '../../store/MapStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -224,14 +224,14 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
     newLayerName,
     setNewLayerName,
   ] = createSignal(
-    LL().PortrayalSection.GridOptions.NewLayerName({
+    LL().FunctionalitiesSection.GridOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((l) => l.name),
     );
 
@@ -244,7 +244,7 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
     } as GridParameters;
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, id: '', type: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -271,7 +271,7 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
 
   return <div class="portrayal-section__portrayal-options-gridded">
     <InputFieldSelect
-      label={ LL().PortrayalSection.CommonOptions.Variable() }
+      label={ LL().FunctionalitiesSection.CommonOptions.Variable() }
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
     >
@@ -280,17 +280,17 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       </For>
     </InputFieldSelect>
     <InputFieldSelect
-      label={LL().PortrayalSection.GridOptions.CellShape()}
+      label={LL().FunctionalitiesSection.GridOptions.CellShape()}
       onChange={(v) => { setCellType(v as GridCellShape); }}
       value={cellType()}
     >
-      <option value="square">{LL().PortrayalSection.GridOptions.CellSquare()}</option>
-      <option value="hexagon">{LL().PortrayalSection.GridOptions.CellHexagon()}</option>
-      <option value="diamond">{LL().PortrayalSection.GridOptions.CellDiamond()}</option>
-      <option value="triangle">{LL().PortrayalSection.GridOptions.CellTriangle()}</option>
+      <option value="square">{LL().FunctionalitiesSection.GridOptions.CellSquare()}</option>
+      <option value="hexagon">{LL().FunctionalitiesSection.GridOptions.CellHexagon()}</option>
+      <option value="diamond">{LL().FunctionalitiesSection.GridOptions.CellDiamond()}</option>
+      <option value="triangle">{LL().FunctionalitiesSection.GridOptions.CellTriangle()}</option>
     </InputFieldSelect>
     <InputFieldNumber
-      label={LL().PortrayalSection.GridOptions.ResolutionWithUnit({ unit: distanceUnit })}
+      label={LL().FunctionalitiesSection.GridOptions.ResolutionWithUnit({ unit: distanceUnit })}
       value={targetResolution()}
       onChange={(value) => setTargetResolution(value)}
       min={0}
@@ -299,7 +299,7 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
     />
     <Show when={isGeo}>
       <MessageBlock type={'warning'} useIcon={true}>
-        { LL().PortrayalSection.GridOptions.WarningGeo() }
+        { LL().FunctionalitiesSection.GridOptions.WarningGeo() }
       </MessageBlock>
     </Show>
     <InputResultName
@@ -310,7 +310,7 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       onEnter={makePortrayal}
     />
     <ButtonValidation
-      label={LL().PortrayalSection.CreateLayer()}
+      label={LL().FunctionalitiesSection.CreateLayer()}
       onClick={makePortrayal}
       disabled={targetResolution() <= 0}
     />

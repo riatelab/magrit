@@ -12,7 +12,7 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 
 // Stores
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Other components
 import InputResultName from './InputResultName.tsx';
@@ -22,6 +22,7 @@ import { setLoading } from '../../store/GlobalStore';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import MessageBlock from '../MessageBlock.tsx';
+import InputFieldRadio from '../Inputs/InputRadio.tsx';
 
 // Types / Interfaces / Enums
 
@@ -52,18 +53,16 @@ function validateFieldWkt(
   const table = layersDescriptionStore.tables.find((t) => t.id === tableId)!;
   const valuesWkt = table.data.map((d) => d[fieldWkt]);
 
-  const validWkt = valuesWkt.filter((v) => {
-    return isNonNull(v)
-      && typeof v === 'string'
-      && (
-        v.startsWith('POINT')
-        || v.startsWith('LINESTRING')
-        || v.startsWith('POLYGON')
-        || v.startsWith('MULTIPOINT')
-        || v.startsWith('MULTILINESTRING')
-        || v.startsWith('MULTIPOLYGON')
-      );
-  });
+  const validWkt = valuesWkt.filter((v) => isNonNull(v)
+    && typeof v === 'string'
+    && (
+      v.startsWith('POINT')
+      || v.startsWith('LINESTRING')
+      || v.startsWith('POLYGON')
+      || v.startsWith('MULTIPOINT')
+      || v.startsWith('MULTILINESTRING')
+      || v.startsWith('MULTIPOLYGON')
+    ));
 
   return validWkt.length;
 }
@@ -152,12 +151,12 @@ export default function LayerFromTabularSettings(
   const makePortrayal = async () => {
     // Check name of the new layer
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, layerId: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -180,23 +179,38 @@ export default function LayerFromTabularSettings(
   };
 
   return <div class="portrayal-section__portrayal-options-layer-from-tabular">
+    <InputFieldRadio
+      label={LL().FunctionalitiesSection.LayerFromTableOptions.Mode()}
+      value={mode()}
+      values={[
+        {
+          value: 'coordinates',
+          label: LL().FunctionalitiesSection.LayerFromTableOptions.ModeXY(),
+        },
+        {
+          value: 'wkt',
+          label: LL().FunctionalitiesSection.LayerFromTableOptions.ModeWKT(),
+        },
+      ]}
+      onChange={(value) => { setMode(value as 'coordinates' | 'wkt'); }}
+    />
     <Show when={mode() === 'coordinates'}>
       <InputFieldSelect
-        label={LL().PortrayalSection.LayerFromTableOptions.FieldX()}
+        label={LL().FunctionalitiesSection.LayerFromTableOptions.FieldX()}
         onChange={(value) => { setFieldX(value); }}
         value={fieldX()}
       >
-        <option value="">{ LL().PortrayalSection.LayerFromTableOptions.FieldX() }</option>
+        <option disabled value="">{ LL().FunctionalitiesSection.CommonOptions.VariablePlaceholder() }</option>
         <For each={tableDescription.fields}>
           {(field) => <option value={field.name}>{field.name}</option>}
         </For>
       </InputFieldSelect>
       <InputFieldSelect
-        label={LL().PortrayalSection.LayerFromTableOptions.FieldY()}
+        label={LL().FunctionalitiesSection.LayerFromTableOptions.FieldY()}
         onChange={(value) => { setFieldY(value); }}
         value={fieldY()}
       >
-        <option value="">{ LL().PortrayalSection.LayerFromTableOptions.FieldY() }</option>
+        <option disabled value="">{ LL().FunctionalitiesSection.CommonOptions.VariablePlaceholder() }</option>
         <For each={tableDescription.fields}>
           {(field) => <option value={field.name}>{field.name}</option>}
         </For>
@@ -204,11 +218,11 @@ export default function LayerFromTabularSettings(
     </Show>
     <Show when={mode() === 'wkt'}>
       <InputFieldSelect
-        label={LL().PortrayalSection.LayerFromTableOptions.FieldWkt()}
+        label={LL().FunctionalitiesSection.LayerFromTableOptions.FieldWkt()}
         onChange={(value) => { setFieldWkt(value); }}
         value={fieldWkt()}
       >
-        <option value="">{ LL().PortrayalSection.LayerFromTableOptions.FieldWkt() }</option>
+        <option disabled value="">{ LL().FunctionalitiesSection.CommonOptions.VariablePlaceholder() }</option>
         <For each={tableDescription.fields}>
           {(field) => <option value={field.name}>{field.name}</option>}
         </For>
@@ -240,7 +254,7 @@ export default function LayerFromTabularSettings(
       onEnter={makePortrayal}
     />
     <ButtonValidation
-      label={LL().PortrayalSection.CreateLayer()}
+      label={LL().FunctionalitiesSection.CreateLayer()}
       onClick={makePortrayal}
       disabled={!(validEntries() && validEntries()! > 0)}
     />

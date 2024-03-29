@@ -23,7 +23,7 @@ import {
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
 import { mapStore } from '../../store/MapStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -374,7 +374,7 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
-    LL().PortrayalSection.PointAnalysisOptions.NewLayerName({
+    LL().FunctionalitiesSection.PointAnalysisOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
@@ -413,7 +413,7 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
@@ -429,7 +429,7 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
       : meshLayerToUse()!;
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, layerId: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -477,7 +477,7 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
 
   return <div class="portrayal-section__portrayal-options-choropleth">
     <InputFieldSelect
-      label={LL().PortrayalSection.PointAnalysisOptions.MapType()}
+      label={LL().FunctionalitiesSection.PointAnalysisOptions.MapType()}
       onChange={(v) => {
         setLayerType(v as RepresentationType.choropleth | RepresentationType.proportionalSymbols);
       }}
@@ -485,15 +485,15 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
       width={300}
     >
       <option value={RepresentationType.choropleth}>
-        {LL().PortrayalSection.PointAnalysisOptions.MapTypeRatio()}
+        {LL().FunctionalitiesSection.PointAnalysisOptions.MapTypeRatio()}
       </option>
       <option value={RepresentationType.proportionalSymbols}>
-        {LL().PortrayalSection.PointAnalysisOptions.MapTypeStock()}
+        {LL().FunctionalitiesSection.PointAnalysisOptions.MapTypeStock()}
       </option>
     </InputFieldSelect>
     <Show when={layerType() === 'proportionalSymbols'}>
       <InputFieldSelect
-        label={LL().PortrayalSection.PointAnalysisOptions.ComputationType()}
+        label={LL().FunctionalitiesSection.PointAnalysisOptions.ComputationType()}
         onChange={(v) => {
           setComputationType(v as PointAnalysisStockType | PointAnalysisRatioType);
         }}
@@ -501,14 +501,14 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
       >
         <For each={Object.values(PointAnalysisStockType)}>
           {(v) => <option value={v}>
-            {LL().PortrayalSection.PointAnalysisOptions[`ComputationType${v}`]()}
+            {LL().FunctionalitiesSection.PointAnalysisOptions[`ComputationType${v}`]()}
           </option>}
         </For>
       </InputFieldSelect>
     </Show>
     <Show when={layerType() === 'choropleth'}>
       <InputFieldSelect
-        label={LL().PortrayalSection.PointAnalysisOptions.ComputationType()}
+        label={LL().FunctionalitiesSection.PointAnalysisOptions.ComputationType()}
         onChange={(v) => {
           setComputationType(v as PointAnalysisStockType | PointAnalysisRatioType);
         }}
@@ -516,7 +516,7 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
       >
         <For each={Object.values(PointAnalysisRatioType)}>
           {(v) => <option value={v}>
-            {LL().PortrayalSection.PointAnalysisOptions[`ComputationType${v}`]()}
+            {LL().FunctionalitiesSection.PointAnalysisOptions[`ComputationType${v}`]()}
           </option>}
         </For>
       </InputFieldSelect>
@@ -528,12 +528,12 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
       || computationType() === 'StandardDeviation'
     }>
       <InputFieldSelect
-        label={LL().PortrayalSection.PointAnalysisOptions.VariableToUse()}
+        label={LL().FunctionalitiesSection.PointAnalysisOptions.VariableToUse()}
         onChange={(v) => { setTargetVariable(v); }}
         value={targetVariable()}
       >
         <option value="" disabled={true}>
-          {LL().PortrayalSection.PointAnalysisOptions.VariableToUse()}
+          {LL().FunctionalitiesSection.PointAnalysisOptions.VariableToUse()}
         </option>
         <For each={targetFields}>
           {(variable) => <option value={variable.name}>{variable.name}</option>}
@@ -541,20 +541,20 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
       </InputFieldSelect>
     </Show>
     <InputFieldSelect
-      label={LL().PortrayalSection.PointAnalysisOptions.MeshType()}
+      label={LL().FunctionalitiesSection.PointAnalysisOptions.MeshType()}
       onChange={(v) => { setMeshType(v as PointAnalysisMeshType); }}
       value={meshType()}
     >
       <option value={PointAnalysisMeshType.Grid}>
-        {LL().PortrayalSection.PointAnalysisOptions.MeshTypeGrid()}
+        {LL().FunctionalitiesSection.PointAnalysisOptions.MeshTypeGrid()}
       </option>
       <option value={PointAnalysisMeshType.PolygonLayer} disabled={polygonLayers.length === 0}>
-        {LL().PortrayalSection.PointAnalysisOptions.MeshTypePolygonLayer()}
+        {LL().FunctionalitiesSection.PointAnalysisOptions.MeshTypePolygonLayer()}
       </option>
     </InputFieldSelect>
     <Show when={meshType() === PointAnalysisMeshType.PolygonLayer}>
       <InputFieldSelect
-        label={LL().PortrayalSection.PointAnalysisOptions.LayerToUse()}
+        label={LL().FunctionalitiesSection.PointAnalysisOptions.LayerToUse()}
         onChange={(v) => { setMeshLayerToUse(v); }}
         value={meshLayerToUse()}
       >
@@ -565,17 +565,17 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
     </Show>
     <Show when={meshType() === PointAnalysisMeshType.Grid}>
       <InputFieldSelect
-        label={LL().PortrayalSection.GridOptions.CellShape()}
+        label={LL().FunctionalitiesSection.GridOptions.CellShape()}
         onChange={(v) => { setCellType(v as GridCellShape); }}
         value={cellType()}
       >
-        <option value="square">{LL().PortrayalSection.GridOptions.CellSquare()}</option>
-        <option value="hexagon">{LL().PortrayalSection.GridOptions.CellHexagon()}</option>
-        <option value="diamond">{LL().PortrayalSection.GridOptions.CellDiamond()}</option>
-        <option value="triangle">{LL().PortrayalSection.GridOptions.CellTriangle()}</option>
+        <option value="square">{LL().FunctionalitiesSection.GridOptions.CellSquare()}</option>
+        <option value="hexagon">{LL().FunctionalitiesSection.GridOptions.CellHexagon()}</option>
+        <option value="diamond">{LL().FunctionalitiesSection.GridOptions.CellDiamond()}</option>
+        <option value="triangle">{LL().FunctionalitiesSection.GridOptions.CellTriangle()}</option>
       </InputFieldSelect>
       <InputFieldNumber
-        label={LL().PortrayalSection.GridOptions.ResolutionWithUnit({ unit: distanceUnit })}
+        label={LL().FunctionalitiesSection.GridOptions.ResolutionWithUnit({ unit: distanceUnit })}
         value={targetResolution()}
         onChange={(value) => setTargetResolution(value)}
         min={0}
@@ -584,7 +584,7 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
       />
       <Show when={isGeo}>
         <MessageBlock type={'warning'} useIcon={true}>
-          { LL().PortrayalSection.GridOptions.WarningGeo() }
+          { LL().FunctionalitiesSection.GridOptions.WarningGeo() }
         </MessageBlock>
       </Show>
     </Show>
@@ -597,7 +597,7 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
     />
     <ButtonValidation
       disabled={false}
-      label={ LL().PortrayalSection.CreateLayer() }
+      label={ LL().FunctionalitiesSection.CreateLayer() }
       onClick={ makePortrayal }
     />
   </div>;

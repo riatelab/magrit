@@ -21,7 +21,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Subcomponents
 import { PortrayalSettingsProps } from './common';
@@ -85,7 +85,7 @@ export default function SimplificationSettings(
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
-    LL().PortrayalSection.SimplificationOptions.NewLayerName({
+    LL().FunctionalitiesSection.SimplificationOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
@@ -93,12 +93,12 @@ export default function SimplificationSettings(
   const makePortrayal = async () => {
     // Check name of the new layer
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, layerId: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -133,7 +133,7 @@ export default function SimplificationSettings(
       onEnter={makePortrayal}
     />
     <ButtonValidation
-      label={ LL().PortrayalSection.CreateLayer() }
+      label={ LL().FunctionalitiesSection.CreateLayer() }
       onClick={ makePortrayal }
     />
   </div>;

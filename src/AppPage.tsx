@@ -38,6 +38,8 @@ import ClassificationPanel from './components/Modals/ClassificationPanel.tsx';
 import { HeaderBarApp } from './components/Headers.tsx';
 import ContextMenu from './components/ContextMenu.tsx';
 import ImportWindow from './components/ImportWindow.tsx';
+import FunctionalitySelection from './components/Modals/FunctionalitySelection.tsx';
+import TableFunctionalitySelection from './components/Modals/TableFunctionalitySelection.tsx';
 // import ReloadPrompt from './components/ReloadPrompt.tsx';
 
 // Stores
@@ -59,10 +61,10 @@ import { niceAlertStore, setNiceAlertStore } from './store/NiceAlertStore';
 import { fileDropStore, setFileDropStore } from './store/FileDropStore';
 import { tableWindowStore } from './store/TableWindowStore';
 import { applicationSettingsStore, ResizeBehavior } from './store/ApplicationSettingsStore';
-import { contextMenuStore, resetContextMenuStore } from './store/ContextMenuStore';
+import { contextMenuStore } from './store/ContextMenuStore';
 import { resetUndoRedoStackStore } from './store/stateStackStore';
 import { undo, redo } from './store/undo-redo';
-import { portrayalSelectionStore } from './store/PortrayalSelectionStore';
+import { functionalitySelectionStore } from './store/FunctionalitySelectionStore';
 
 // Types and enums
 import type {
@@ -76,7 +78,6 @@ import type { TranslationFunctions } from './i18n/i18n-types';
 
 // Styles
 import './styles/Transitions.css';
-import PortrayalSelection from './components/Modals/PortrayalSelection.tsx';
 
 interface ProjectDescription {
   version: string,
@@ -486,8 +487,11 @@ const AppPage: () => JSX.Element = () => {
         <LoadingOverlay />
       </Show>
       <Transition name="slide-fade">
-        <Show when={portrayalSelectionStore.show}>
-          <PortrayalSelection />
+        <Show when={functionalitySelectionStore.show && functionalitySelectionStore.type === 'layer'}>
+          <FunctionalitySelection />
+        </Show>
+        <Show when={functionalitySelectionStore.show && functionalitySelectionStore.type === 'table'}>
+          <TableFunctionalitySelection />
         </Show>
       </Transition>
       <Transition name="slide-fade">

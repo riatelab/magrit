@@ -232,8 +232,8 @@ const fr = {
     Legend: 'Afficher / masquer la légende',
     LegendDisplacement: 'La position de la légende a été modifiée afin de la repositionner dans la zone d\'affichage de la carte.',
   },
-  PortrayalSection: {
-    PortrayalTypes: {
+  FunctionalitiesSection: {
+    FunctionalityTypes: {
       Choropleth: 'Choropleth',
       ProportionalSymbols: 'Symboles proportionnels',
       Labels: 'Étiquettes',
@@ -428,6 +428,9 @@ const fr = {
       NewLayerName: 'Points_agrégés_{layerName}',
     },
     LayerFromTableOptions: {
+      Mode: 'Mode',
+      ModeXY: 'Champs contenant les coordonnées X et les coordonnées Y',
+      ModeWKT: 'Champ contenant les géométries au format WKT',
       FieldX: 'Champ contenant les coordonnées X',
       FieldY: 'Champ contenant les coordonnées Y',
       FieldWkt: 'Champ contenant les géométries au format WKT',

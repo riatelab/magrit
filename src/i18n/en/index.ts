@@ -232,8 +232,8 @@ const en = {
     Legend: 'Display / hide legend',
     LegendDisplacement: 'The position of the legend has been changed to reposition it in the map display area.',
   },
-  PortrayalSection: {
-    PortrayalTypes: {
+  FunctionalitiesSection: {
+    FunctionalityTypes: {
       Choropleth: 'Choropleth',
       ProportionalSymbols: 'Proportional symbols',
       Labels: 'Labels',
@@ -428,6 +428,9 @@ const en = {
       NewLayerName: 'Aggregated_points_{layerName}',
     },
     LayerFromTableOptions: {
+      Mode: 'Mode',
+      ModeXY: 'Fields for X and Y coordinates',
+      ModeWKT: 'Field for WKT geometry',
       FieldX: 'Field containing the X coordinate',
       FieldY: 'Field containing the Y coordinate',
       FieldWkt: 'Field containing the WKT geometry',

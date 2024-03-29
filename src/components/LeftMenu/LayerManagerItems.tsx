@@ -34,7 +34,7 @@ import {
 import { fitExtent, mapStore } from '../../store/MapStore';
 import { setModalStore } from '../../store/ModalStore';
 import { setNiceAlertStore } from '../../store/NiceAlertStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 import { pushUndoStackStore } from '../../store/stateStackStore';
 import { setTableWindowStore } from '../../store/TableWindowStore';
 
@@ -420,9 +420,10 @@ export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.E
       <button
         aria-label={ LL().LeftMenu.FunctionalityChoice() }
         onClick={() => {
-          setPortrayalSelectionStore({
+          setFunctionalitySelectionStore({
             show: true,
-            layerId: props.layer.id,
+            id: props.layer.id,
+            type: 'layer',
           });
         }}
         title={ LL().LeftMenu.FunctionalityChoice() }
@@ -548,9 +549,10 @@ export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX
       <button
         aria-label={LL().LeftMenu.FunctionalityChoice()}
         onClick={() => {
-          setPortrayalSelectionStore({
+          setFunctionalitySelectionStore({
             show: true,
-            layerId: props.table.id,
+            id: props.table.id,
+            type: 'table',
           });
         }}
         title={LL().LeftMenu.FunctionalityChoice()}

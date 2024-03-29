@@ -18,7 +18,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -165,7 +165,7 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
-    LL().PortrayalSection.LabelsOptions.NewLayerName({
+    LL().FunctionalitiesSection.LabelsOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
@@ -173,12 +173,12 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
   const makePortrayal = async () => {
     // Find a suitable name for the new layer
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((l) => l.name),
     );
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, id: '', type: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -202,7 +202,7 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
 
   return <div class="portrayal-section__portrayal-options-labels">
     <InputFieldSelect
-      label={LL().PortrayalSection.CommonOptions.Variable()}
+      label={LL().FunctionalitiesSection.CommonOptions.Variable()}
       onChange={(v) => setTargetVariable(v)}
       value={targetVariable()}
     >
@@ -215,6 +215,9 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
       onKeyUp={(value) => setNewLayerName(value)}
       onEnter={makePortrayal}
     />
-    <ButtonValidation label={ LL().PortrayalSection.CreateLayer() } onClick={ makePortrayal } />
+    <ButtonValidation
+      label={ LL().FunctionalitiesSection.CreateLayer() }
+      onClick={ makePortrayal }
+    />
   </div>;
 }

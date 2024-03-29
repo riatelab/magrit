@@ -55,7 +55,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Types / Interfaces / Enums
 import {
@@ -501,7 +501,7 @@ export default function ProportionalSymbolsSettings(
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
-    LL().PortrayalSection.ProportionalSymbolsOptions.NewLayerName({
+    LL().FunctionalitiesSection.ProportionalSymbolsOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
@@ -563,7 +563,7 @@ export default function ProportionalSymbolsSettings(
     console.log('makePortrayal');
     // Compute a suitable name for the new layer
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
@@ -594,7 +594,7 @@ export default function ProportionalSymbolsSettings(
     }
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, id: '', type: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -625,7 +625,7 @@ export default function ProportionalSymbolsSettings(
 
   return <div class="portrayal-section__portrayal-options-proportional-symbols">
     <InputFieldSelect
-      label={ LL().PortrayalSection.CommonOptions.Variable() }
+      label={ LL().FunctionalitiesSection.CommonOptions.Variable() }
       onChange={(value) => { setTargetVariable(value); }}
       value={ targetVariable() }
     >
@@ -634,7 +634,7 @@ export default function ProportionalSymbolsSettings(
       </For>
     </InputFieldSelect>
     <InputFieldSelect
-      label={ LL().PortrayalSection.ProportionalSymbolsOptions.SymbolType() }
+      label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.SymbolType() }
       onChange={(value) => { setSymbolType(value as ProportionalSymbolsSymbolType); }}
       value={ symbolType() }
     >
@@ -647,12 +647,12 @@ export default function ProportionalSymbolsSettings(
         {
           (st) => <option
             value={ st }
-          >{ LL().PortrayalSection.ProportionalSymbolsOptions.SymbolTypes[st]() }</option>
+          >{ LL().FunctionalitiesSection.ProportionalSymbolsOptions.SymbolTypes[st]() }</option>
         }
       </For>
     </InputFieldSelect>
     <InputFieldNumber
-      label={ LL().PortrayalSection.ProportionalSymbolsOptions.ReferenceSize() }
+      label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize() }
       value={ refSymbolSize() }
       onChange={(value) => { setRefSymbolSize(value); }}
       min={ 1 }
@@ -660,7 +660,7 @@ export default function ProportionalSymbolsSettings(
       step={ 1 }
     />
     <InputFieldNumber
-      label={ LL().PortrayalSection.ProportionalSymbolsOptions.OnValue() }
+      label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.OnValue() }
       value={ refValueForSymbolSize() }
       onChange={(value) => { setRefValueForSymbolSize(value); }}
       min={ 1 }
@@ -677,7 +677,7 @@ export default function ProportionalSymbolsSettings(
           {
             (cm) => (
               <option value={cm}>
-                {LL().PortrayalSection.ProportionalSymbolsOptions.ColorModes[cm]()}
+                {LL().FunctionalitiesSection.ProportionalSymbolsOptions.ColorModes[cm]()}
               </option>
             )
           }
@@ -687,7 +687,7 @@ export default function ProportionalSymbolsSettings(
     <Switch>
       <Match when={colorMode() === 'singleColor'}>
         <InputFieldColor
-          label={ LL().PortrayalSection.CommonOptions.Color() }
+          label={ LL().FunctionalitiesSection.CommonOptions.Color() }
           value={ color() }
           onChange={(value) => { setColor(value); }}
         />
@@ -710,7 +710,7 @@ export default function ProportionalSymbolsSettings(
             setTargetClassification={setTargetClassification}
           />
           <InputFieldCheckbox
-            label={LL().PortrayalSection.ChoroplethOptions.DisplayChartOnMap()}
+            label={LL().FunctionalitiesSection.ChoroplethOptions.DisplayChartOnMap()}
             checked={displayChartOnMap()}
             onChange={(v) => { setDisplayChartOnMap(v); }}
           />
@@ -736,12 +736,12 @@ export default function ProportionalSymbolsSettings(
         <Show when={targetCategoryVariable()}>
           <CategoriesSummary mapping={categoriesMapping()} />
           <CollapsibleSection
-            title={LL().PortrayalSection.CategoricalChoroplethOptions.ShowChart()}
+            title={LL().FunctionalitiesSection.CategoricalChoroplethOptions.ShowChart()}
           >
             <CategoriesPlot mapping={categoriesMapping()} />
           </CollapsibleSection>
           <CollapsibleSection
-            title={LL().PortrayalSection.CategoricalChoroplethOptions.Customize()}
+            title={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
           >
             <CategoriesCustomisation
               mapping={categoriesMapping}
@@ -750,7 +750,7 @@ export default function ProportionalSymbolsSettings(
             />
           </CollapsibleSection>
           <InputFieldCheckbox
-            label={LL().PortrayalSection.CategoricalChoroplethOptions.DisplayChartOnMap()}
+            label={LL().FunctionalitiesSection.CategoricalChoroplethOptions.DisplayChartOnMap()}
             checked={displayChartOnMap()}
             onChange={(v) => { setDisplayChartOnMap(v); }}
           />
@@ -758,7 +758,7 @@ export default function ProportionalSymbolsSettings(
       </Match>
     </Switch>
     <InputFieldCheckbox
-      label={ LL().PortrayalSection.ProportionalSymbolsOptions.AvoidOverlapping() }
+      label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.AvoidOverlapping() }
       checked={ avoidOverlapping() }
       onChange={() => { setAvoidOverlapping(!avoidOverlapping()); }}
     />
@@ -767,6 +767,6 @@ export default function ProportionalSymbolsSettings(
       onKeyUp={ (value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />
-    <ButtonValidation label={ LL().PortrayalSection.CreateLayer() } onClick={makePortrayal} />
+    <ButtonValidation label={ LL().FunctionalitiesSection.CreateLayer() } onClick={makePortrayal} />
   </div>;
 }

@@ -27,7 +27,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Subcomponents
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
@@ -99,7 +99,7 @@ export default function AggregationSettings(
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
-    LL().PortrayalSection.AggregationOptions.NewLayerName({
+    LL().FunctionalitiesSection.AggregationOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
@@ -117,12 +117,12 @@ export default function AggregationSettings(
   const makePortrayal = async () => {
     // Check name of the new layer
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, layerId: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -158,11 +158,11 @@ export default function AggregationSettings(
 
   return <div class="portrayal-section__portrayal-options-aggregation">
     <InputFieldSelect
-      label={ LL().PortrayalSection.CommonOptions.Variable() }
+      label={ LL().FunctionalitiesSection.CommonOptions.Variable() }
       onChange={(v) => { setTargetVariable(v); }}
       value={ targetVariable() }
     >
-      <option value=""> { LL().PortrayalSection.AggregationOptions.None() } </option>
+      <option value=""> { LL().FunctionalitiesSection.AggregationOptions.None() } </option>
       <For each={targetFields}>
         {
           (variable) => <option value={ variable.name }>{ variable.name }</option>
@@ -170,7 +170,7 @@ export default function AggregationSettings(
       </For>
     </InputFieldSelect>
     <InputFieldSelect
-      label={ LL().PortrayalSection.AggregationOptions.Method() }
+      label={ LL().FunctionalitiesSection.AggregationOptions.Method() }
       onChange={(v) => { setAggregationMethod(v as 'geos' | 'topojson'); }}
       value={ aggregationMethod() }
     >
@@ -179,7 +179,7 @@ export default function AggregationSettings(
     </InputFieldSelect>
     <Show when={targetVariable() === ''}>
       <WarningBanner expanded={true}>
-        { LL().PortrayalSection.AggregationOptions.Information() }
+        { LL().FunctionalitiesSection.AggregationOptions.Information() }
       </WarningBanner>
     </Show>
     <InputResultName
@@ -188,7 +188,7 @@ export default function AggregationSettings(
       onEnter={makePortrayal}
     />
     <ButtonValidation
-      label={ LL().PortrayalSection.CreateLayer() }
+      label={ LL().FunctionalitiesSection.CreateLayer() }
       onClick={ makePortrayal }
     />
   </div>;

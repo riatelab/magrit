@@ -18,7 +18,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -199,7 +199,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
-    LL().PortrayalSection.ChoroplethOptions.NewLayerName({
+    LL().FunctionalitiesSection.ChoroplethOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
@@ -218,12 +218,12 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, id: '', type: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -251,7 +251,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
 
   return <div class="portrayal-section__portrayal-options-choropleth">
     <InputFieldSelect
-      label={ LL().PortrayalSection.CommonOptions.Variable() }
+      label={ LL().FunctionalitiesSection.CommonOptions.Variable() }
       onChange={(value) => {
         setTargetVariable(value);
       }}
@@ -268,7 +268,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
       setTargetClassification={setTargetClassification}
     />
     <InputFieldCheckbox
-      label={LL().PortrayalSection.ChoroplethOptions.DisplayChartOnMap()}
+      label={LL().FunctionalitiesSection.ChoroplethOptions.DisplayChartOnMap()}
       checked={displayChartOnMap()}
       onChange={(v) => { setDisplayChartOnMap(v); }}
     />
@@ -279,7 +279,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
     />
     <ButtonValidation
       disabled={targetClassification() === undefined}
-      label={ LL().PortrayalSection.CreateLayer() }
+      label={ LL().FunctionalitiesSection.CreateLayer() }
       onClick={ makePortrayal }
     />
   </div>;

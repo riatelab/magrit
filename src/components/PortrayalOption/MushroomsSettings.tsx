@@ -36,7 +36,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
-import { setPortrayalSelectionStore } from '../../store/PortrayalSelectionStore';
+import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Types / Interfaces / Enums
 import {
@@ -250,7 +250,7 @@ export default function MushroomsSettings(
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
-    LL().PortrayalSection.MushroomsOptions.NewLayerName({
+    LL().FunctionalitiesSection.MushroomsOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
@@ -295,12 +295,12 @@ export default function MushroomsSettings(
   const makePortrayal = async () => {
     // Compute a suitable name for the new layer
     const layerName = findSuitableName(
-      newLayerName() || LL().PortrayalSection.NewLayer(),
+      newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
     // Close the current modal
-    setPortrayalSelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, id: '', type: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -340,10 +340,10 @@ export default function MushroomsSettings(
 
   return <div class="portrayal-section__portrayal-options-mushrooms">
     <div class="mt-4 mb-5 has-text-weight-bold">
-      {LL().PortrayalSection.MushroomsOptions.TopProperties()}
+      {LL().FunctionalitiesSection.MushroomsOptions.TopProperties()}
     </div>
     <InputFieldSelect
-      label={LL().PortrayalSection.CommonOptions.Variable()}
+      label={LL().FunctionalitiesSection.CommonOptions.Variable()}
       onChange={(value) => {
         setTargetVariableTop(value);
       }}
@@ -354,7 +354,7 @@ export default function MushroomsSettings(
       </For>
     </InputFieldSelect>
     <InputFieldNumber
-      label={LL().PortrayalSection.ProportionalSymbolsOptions.ReferenceSize()}
+      label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize()}
       value={refSymbolSizeTop()}
       onChange={(value) => {
         setRefSymbolSizeTop(value);
@@ -364,7 +364,7 @@ export default function MushroomsSettings(
       step={1}
     />
     <InputFieldNumber
-      label={LL().PortrayalSection.ProportionalSymbolsOptions.OnValue()}
+      label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.OnValue()}
       value={refValueTop()}
       onChange={(value) => {
         setRefValueTop(value);
@@ -374,17 +374,17 @@ export default function MushroomsSettings(
       step={0.1}
     />
     <InputFieldColor
-      label={LL().PortrayalSection.CommonOptions.Color()}
+      label={LL().FunctionalitiesSection.CommonOptions.Color()}
       value={colorTop()}
       onChange={(value) => {
         setColorTop(value);
       }}
     />
     <div class="mb-5 has-text-weight-bold">
-      {LL().PortrayalSection.MushroomsOptions.BottomProperties()}
+      {LL().FunctionalitiesSection.MushroomsOptions.BottomProperties()}
     </div>
     <InputFieldSelect
-      label={LL().PortrayalSection.CommonOptions.Variable()}
+      label={LL().FunctionalitiesSection.CommonOptions.Variable()}
       onChange={(value) => {
         setTargetVariableBottom(value);
       }}
@@ -395,7 +395,7 @@ export default function MushroomsSettings(
       </For>
     </InputFieldSelect>
     <InputFieldNumber
-      label={LL().PortrayalSection.ProportionalSymbolsOptions.ReferenceSize()}
+      label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize()}
       value={refSymbolSizeBottom()}
       onChange={(value) => {
         setRefSymbolSizeBottom(value);
@@ -405,7 +405,7 @@ export default function MushroomsSettings(
       step={1}
     />
     <InputFieldNumber
-      label={LL().PortrayalSection.ProportionalSymbolsOptions.OnValue()}
+      label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.OnValue()}
       value={refValueBottom()}
       onChange={(value) => {
         setRefValueBottom(value);
@@ -415,7 +415,7 @@ export default function MushroomsSettings(
       step={0.1}
     />
     <InputFieldColor
-      label={LL().PortrayalSection.CommonOptions.Color()}
+      label={LL().FunctionalitiesSection.CommonOptions.Color()}
       value={colorBottom()}
       onChange={(value) => {
         setColorBottom(value);
@@ -426,6 +426,6 @@ export default function MushroomsSettings(
       onKeyUp={ (value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />
-    <ButtonValidation label={ LL().PortrayalSection.CreateLayer() } onClick={makePortrayal} />
+    <ButtonValidation label={ LL().FunctionalitiesSection.CreateLayer() } onClick={makePortrayal} />
   </div>;
 }
