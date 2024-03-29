@@ -9,6 +9,7 @@ import topojson from './topojson';
 // Types
 import {
   type GeoJSONFeatureCollection,
+  type GraticuleParameters,
   type LayerDescription,
   type MultiLineString,
   RepresentationType,
@@ -102,6 +103,9 @@ export const makeDefaultGraticule = (): LayerDescription => ({
     ],
   },
   fields: [],
+  rendererParameters: {
+    step: [20, 20],
+  } as GraticuleParameters,
 });
 
 export const getDefaultRenderingParams = (geomType: string) => {
@@ -117,6 +121,7 @@ export const getDefaultRenderingParams = (geomType: string) => {
       fillColor: color,
       fillOpacity: 1,
       pointRadius: 5,
+      symbolType: 'circle',
       dropShadow: null,
     };
   }

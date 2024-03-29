@@ -497,6 +497,8 @@ const fr = {
     BufferWidth: 'Largeur du tampon',
     AllowMovingLabels: 'Autoriser le déplacement des étiquettes',
     Palette: 'Palette',
+    GraticuleStepX: 'Pas du graticule en X',
+    GraticuleStepY: 'Pas du graticule en Y',
   },
   JoinPanel: {
     Title: 'Joindre à une couche géospatiale',

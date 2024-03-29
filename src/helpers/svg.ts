@@ -100,6 +100,13 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
   // eslint-disable-next-line no-underscore-dangle, no-param-reassign
   svgElement.__zoom = d3.zoomIdentity;
 
+  const {
+    width,
+    height,
+  } = svgElement.getBoundingClientRect();
+
+  let currentClipExtent;
+
   // For each layer...
   svgElement.querySelectorAll('g.layer').forEach((g) => {
     // Remove the transform attribute from the elements on which it was defined
@@ -113,6 +120,12 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
       const type = g.getAttribute('mgt:geometry-type')!;
       if (type === 'point') {
         globalStore.pathGenerator.pointRadius(+g.getAttribute('mgt:point-radius')!);
+      } else if (typePortrayal === 'graticule') {
+        // We clip the graticule for performance reasons
+        // TODO: we should have a flag saying "we are exporting to svg"
+        //   and not clip the graticule (if user request a non-clipped svg export)
+        currentClipExtent = globalStore.projection.clipExtent();
+        globalStore.projection.clipExtent([[0, 0], [width, height]]);
       }
 
       g.querySelectorAll('path').forEach((p) => {
@@ -121,6 +134,11 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
           globalStore.pathGenerator((p as SVGPathElement & ID3Element).__data__),
         );
       });
+
+      // Reset the clipExtent to the default value
+      if (typePortrayal === 'graticule') {
+        globalStore.projection.clipExtent(currentClipExtent!);
+      }
     } else if (typePortrayal === 'proportionalSymbols') {
       // Redraw the symbols (circles)
       g.querySelectorAll('circle').forEach((c) => {

@@ -13,6 +13,7 @@ import { getPalette, getPalettes } from 'dicopal';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { debounce, unproxify } from '../../helpers/common';
+import d3 from '../../helpers/d3-custom';
 import { webSafeFonts } from '../../helpers/font';
 
 // Sub-components
@@ -52,6 +53,8 @@ import {
   LinkHeadType,
   ProportionalSymbolsSymbolType,
   type ProportionalSymbolsParametersBase,
+  type GraticuleParameters,
+  type MultiLineString,
 } from '../../global.d';
 
 // Styles
@@ -728,6 +731,58 @@ function makeSettingsDefaultLine(
         <summary>{ LL().FunctionalitiesSection.LinksOptions.Selection() }</summary>
         <LinksSelectionOnExistingLayer layerId={props.id}/>
       </details>
+    </Show>
+    <Show when={props.renderer === 'graticule'}>
+      <InputFieldNumber
+        label={ LL().LayerSettings.GraticuleStepX() }
+        value={(props.rendererParameters as GraticuleParameters).step[0]}
+        onChange={(v) => {
+          const newStep: [number, number] = [
+            v,
+            (props.rendererParameters as GraticuleParameters).step[1],
+          ];
+
+          updateProp(
+            props.id,
+            ['rendererParameters', 'step'],
+            newStep,
+          );
+
+          debouncedUpdateProp(
+            props.id,
+            ['data', 'features', 0, 'geometry'],
+            d3.geoGraticule().step(newStep)() as MultiLineString,
+          );
+        }}
+        min={1}
+        max={180}
+        step={1}
+      />
+      <InputFieldNumber
+        label={ LL().LayerSettings.GraticuleStepY() }
+        value={(props.rendererParameters as GraticuleParameters).step[1]}
+        onChange={(v) => {
+          const newStep: [number, number] = [
+            (props.rendererParameters as GraticuleParameters).step[0],
+            v,
+          ];
+
+          updateProp(
+            props.id,
+            ['rendererParameters', 'step'],
+            newStep,
+          );
+
+          debouncedUpdateProp(
+            props.id,
+            ['data', 'features', 0, 'geometry'],
+            d3.geoGraticule().step(newStep)() as MultiLineString,
+          );
+        }}
+        min={1}
+        max={180}
+        step={1}
+      />
     </Show>
     <AestheticsSection {...props} />
   </>;

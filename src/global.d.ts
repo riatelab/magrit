@@ -59,6 +59,8 @@ type LayerDescription = {
   fillOpacity?: number,
   // The radius of the point (not used for linestring / polygon layers)
   pointRadius?: number,
+  // The type of symbol (not used for linestring / polygon layers)
+  symbolType?: SymbolType,
   // Whether there is a drop shadow or not (we may want to replace the boolean value
   // by an object describing the drop shadow parameters in the future)
   dropShadow: DropShadowOptions | null,
@@ -219,6 +221,8 @@ type LayerDescriptionMushroomLayer = LayerDescription & {
 //   renderer: RepresentationType.categoricalPictogram,
 //   rendererParameters: CategoricalPictogramParameters,
 // };
+
+type SymbolType = 'circle' | 'square' | 'diamond' | 'cross' | 'triangle' | 'star';
 
 export enum ProportionalSymbolsSymbolType {
   circle = 'circle',
@@ -387,7 +391,7 @@ export interface CategoricalChoroplethMapping {
 }
 
 export interface GraticuleParameters {
-  step: number,
+  step: [number, number],
   extent?: [number, number, number, number],
 }
 

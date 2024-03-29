@@ -1776,6 +1776,14 @@ type RootTranslation = {
 		 * P​a​l​e​t​t​e
 		 */
 		Palette: string
+		/**
+		 * G​r​a​t​i​c​u​l​e​ ​s​t​e​p​ ​(​X​)
+		 */
+		GraticuleStepX: string
+		/**
+		 * G​r​a​t​i​c​u​l​e​ ​s​t​e​p​ ​(​Y​)
+		 */
+		GraticuleStepY: string
 	}
 	JoinPanel: {
 		/**
@@ -4345,6 +4353,14 @@ export type TranslationFunctions = {
 		 * Palette
 		 */
 		Palette: () => LocalizedString
+		/**
+		 * Graticule step (X)
+		 */
+		GraticuleStepX: () => LocalizedString
+		/**
+		 * Graticule step (Y)
+		 */
+		GraticuleStepY: () => LocalizedString
 	}
 	JoinPanel: {
 		/**

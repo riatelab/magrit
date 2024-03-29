@@ -497,6 +497,8 @@ const en = {
     BufferWidth: 'Buffer width',
     AllowMovingLabels: 'Allow moving labels',
     Palette: 'Palette',
+    GraticuleStepX: 'Graticule step (X)',
+    GraticuleStepY: 'Graticule step (Y)',
   },
   JoinPanel: {
     Title: 'Join to a geospatial layer',
