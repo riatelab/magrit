@@ -57,8 +57,8 @@ type LayerDescription = {
   fillColor?: string,
   // The opacity of the fill (not used for linestring layers)
   fillOpacity?: number,
-  // The radius of the point (not used for linestring / polygon layers)
-  pointRadius?: number,
+  // The size of the point symbol (not used for linestring / polygon layers)
+  symbolSize?: number,
   // The type of symbol (not used for linestring / polygon layers)
   symbolType?: SymbolType,
   // Whether there is a drop shadow or not (we may want to replace the boolean value
@@ -109,8 +109,10 @@ interface DefaultRendererParameters {
   fillColor?: string,
   // The opacity of the fill (not used for linestring layers)
   fillOpacity?: number,
-  // The radius of the point (not used for linestring / polygon layers)
-  pointRadius?: number,
+  // The size of the point symbol (not used for linestring / polygon layers)
+  symbolSize?: number,
+  // The type of symbol
+  symbolType?: SymbolType,
 }
 
 interface DefaultPointRendererParameters {
@@ -126,8 +128,10 @@ interface DefaultPointRendererParameters {
   fillColor: string,
   // The opacity of the fill
   fillOpacity: number,
-  // The radius of the point
-  pointRadius: number,
+  // The size of the point symbol
+  symbolSize: number,
+  // The type of symbol
+  symbolType: SymbolType,
 }
 
 interface DefaultLineRendererParameters {
@@ -222,7 +226,7 @@ type LayerDescriptionMushroomLayer = LayerDescription & {
 //   rendererParameters: CategoricalPictogramParameters,
 // };
 
-type SymbolType = 'circle' | 'square' | 'diamond' | 'cross' | 'triangle' | 'star';
+type SymbolType = 'circle' | 'square' | 'diamond' | 'diamond2' | 'cross' | 'triangle' | 'star' | 'wye';
 
 export enum ProportionalSymbolsSymbolType {
   circle = 'circle',

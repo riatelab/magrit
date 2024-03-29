@@ -478,13 +478,27 @@ function makeSettingsDefaultPoint(
     />
     <Show when={props.renderer !== 'proportionalSymbols' && props.renderer !== 'mushrooms'}>
       <InputFieldNumber
-        label={LL().LayerSettings.PointRadius()}
-        value={props.pointRadius!}
-        onChange={(v) => debouncedUpdateProp(props.id, 'pointRadius', v)}
+        label={LL().LayerSettings.SymbolSize()}
+        value={props.symbolSize!}
+        onChange={(v) => debouncedUpdateProp(props.id, 'symbolSize', v)}
         min={1}
         max={20}
         step={1}
       />
+      <InputFieldSelect
+        label={LL().LayerSettings.SymbolType()}
+        onChange={(v) => debouncedUpdateProp(props.id, 'symbolType', v)}
+        value={props.symbolType!}
+      >
+        <option value="circle">{LL().LayerSettings.SymbolTypes.circle()}</option>
+        <option value="square">{LL().LayerSettings.SymbolTypes.square()}</option>
+        <option value="cross">{LL().LayerSettings.SymbolTypes.cross()}</option>
+        <option value="star">{LL().LayerSettings.SymbolTypes.star()}</option>
+        <option value="wye">{LL().LayerSettings.SymbolTypes.wye()}</option>
+        <option value="diamond">{LL().LayerSettings.SymbolTypes.diamond()}</option>
+        <option value="diamond2">{LL().LayerSettings.SymbolTypes.diamond2()}</option>
+        <option value="triangle">{LL().LayerSettings.SymbolTypes.triangle()}</option>
+      </InputFieldSelect>
     </Show>
     <Show when={props.renderer === 'mushrooms'}>
       <div class="mt-4 mb-5 has-text-weight-bold">

@@ -1,10 +1,12 @@
 import d3 from './d3-custom';
 import { globalStore } from '../store/GlobalStore';
+import { degToRadConstant, Mcos, Msin } from './math';
 import {
   type GeoJSONFeature,
   type ID3Element,
   type IZoomable,
   LinkCurvature,
+  SymbolType,
 } from '../global.d';
 
 /**
@@ -19,6 +21,119 @@ export const getTargetSvg = (): SVGSVGElement & IZoomable => {
     throw new Error('Could not find SVG element');
   }
   return targetSvg as SVGSVGElement & IZoomable;
+};
+
+export const createTrianglePath = (x: number, y: number, size: number): string => {
+  // Height of an equilateral triangle
+  const height = (Math.sqrt(3) / 2) * size;
+
+  // Triangle vertices
+  const a = { x: x - size / 2, y: y + height / 3 };
+  const b = { x: x + size / 2, y: y + height / 3 };
+  const c = { x, y: y - (2 * height) / 3 };
+
+  return `M ${a.x} ${a.y} L ${b.x} ${b.y} L ${c.x} ${c.y} Z`;
+};
+
+export const createSquarePath = (x: number, y: number, size: number): string => {
+  const halfSize = size / 2;
+  return `M ${x - halfSize} ${y - halfSize} L ${x + halfSize} ${y - halfSize} L ${x + halfSize} ${y + halfSize} L ${x - halfSize} ${y + halfSize} Z`;
+};
+
+export const createDiamondPath = (x: number, y: number, size: number): string => {
+  const halfSize = size / 2;
+  return `M ${x} ${y - halfSize} L ${x + halfSize} ${y} L ${x} ${y + halfSize} L ${x - halfSize} ${y} Z`;
+};
+
+export const createDiamond2Path = (x: number, y: number, size: number): string => {
+  const width = size * 0.8;
+  const height = size * 1.2;
+  return `M ${x} ${y - height / 2} L ${x + width / 2} ${y} L ${x} ${y + height / 2} L ${x - width / 2} ${y} Z`;
+};
+
+export const createCrossPath = (x: number, y: number, size: number): string => {
+  const armWidth = size / 4; // Width of cross arms
+  return `M ${x - size / 2} ${y - armWidth / 2} H ${x + size / 2} V ${y + armWidth / 2} H ${x - size / 2} Z M ${x - armWidth / 2} ${y - size / 2} V ${y + size / 2} H ${x + armWidth / 2} V ${y - size / 2} Z`;
+};
+
+export const createStarPath = (x: number, y: number, size: number): string => {
+  let pathData = 'M ';
+  for (let i = 0; i < 5; i += 1) {
+    let angleDeg = 72 * i - 90;
+    let angleRad = degToRadConstant * angleDeg;
+    pathData += `${x + size * Mcos(angleRad)} ${y + size * Msin(angleRad)} `;
+    angleDeg += 36;
+    angleRad = degToRadConstant * angleDeg;
+    pathData += `${x + (size / 2) * Mcos(angleRad)} ${y + (size / 2) * Msin(angleRad)} `;
+  }
+  pathData += 'Z';
+  return pathData;
+};
+
+export const createCirclePath = (x: number, y: number, size: number): string => {
+  const r = size / 2;
+  return `M ${x + r} ${y} A ${r} ${r} 0 0 1 ${x - r} ${y} A ${r} ${r} 0 0 1 ${x + r} ${y}`;
+};
+
+export const createWyePath = (x: number, y: number, size: number): string => {
+  const sqrt3 = Math.sqrt(3);
+  const c = -0.5;
+  const s = sqrt3 / 2;
+  const k = 1 / Math.sqrt(12);
+  const a = (k / 2 + 1) * 3;
+  const r = Math.sqrt(size / a);
+
+  const points = [
+    { x: r / 2, y: r * k },
+    { x: r / 2, y: r * k + r },
+    { x: -r / 2, y: r * k + r },
+  ];
+
+  const transformedPoints = points.flatMap((p) => [
+    { x: c * p.x - s * p.y, y: s * p.x + c * p.y },
+    { x: c * p.x + s * p.y, y: c * p.y - s * p.x },
+  ]);
+
+  const allPoints = [...points, ...transformedPoints].map((p) => ({
+    x: p.x + x,
+    y: p.y + y,
+  }));
+
+  let pathData = `M ${allPoints[0].x} ${allPoints[0].y} `;
+  allPoints.slice(1).forEach((p) => {
+    pathData += `L ${p.x} ${p.y} `;
+  });
+  pathData += 'Z';
+
+  return pathData;
+};
+
+export const getSymbolPath = (
+  symbolType: SymbolType,
+  coordinates: [number, number],
+  size: number,
+): string => {
+  const [x, y] = coordinates;
+  switch (symbolType) {
+    case 'circle':
+      return createCirclePath(x, y, size);
+    case 'square':
+      return createSquarePath(x, y, size);
+    case 'diamond':
+      return createDiamondPath(x, y, size);
+    case 'diamond2':
+      return createDiamond2Path(x, y, size);
+    case 'triangle':
+      return createTrianglePath(x, y, size);
+    case 'cross':
+      return createCrossPath(x, y, size);
+    case 'star':
+      return createStarPath(x, y, size);
+    case 'wye':
+      return createWyePath(x, y, size);
+    default:
+      return '';
+  }
 };
 
 export const linkPath = (
@@ -114,13 +229,11 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
     // Get the type of portrayal stored in a custom attribute
     const typePortrayal = g.getAttribute('mgt:portrayal-type')!;
     // Redraw the paths according to the type of portrayal
-    if (simpleRedrawRenderers.has(typePortrayal)) {
-      // We need to read the type of geometry
-      // because we need to set the pointRadius for point geometries
-      const type = g.getAttribute('mgt:geometry-type')!;
-      if (type === 'point') {
-        globalStore.pathGenerator.pointRadius(+g.getAttribute('mgt:point-radius')!);
-      } else if (typePortrayal === 'graticule') {
+    if (
+      simpleRedrawRenderers.has(typePortrayal)
+      && g.getAttribute('mgt:geometry-type')! !== 'point'
+    ) {
+      if (typePortrayal === 'graticule') {
         // We clip the graticule for performance reasons
         // TODO: we should have a flag saying "we are exporting to svg"
         //   and not clip the graticule (if user request a non-clipped svg export)
@@ -139,6 +252,22 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
       if (typePortrayal === 'graticule') {
         globalStore.projection.clipExtent(currentClipExtent!);
       }
+    } else if (
+      simpleRedrawRenderers.has(typePortrayal)
+      && g.getAttribute('mgt:geometry-type')! === 'point'
+    ) {
+      const size = +g.getAttribute('mgt:symbol-size')!;
+      const symbol = g.getAttribute('mgt:symbol-type')!;
+      g.querySelectorAll('path').forEach((p) => {
+        const coords = globalStore.projection(
+          // eslint-disable-next-line no-underscore-dangle
+          (p as SVGPathElement & ID3Element).__data__.geometry.coordinates,
+        );
+        p.setAttribute(
+          'd', // eslint-disable-next-line no-underscore-dangle
+          getSymbolPath(symbol as SymbolType, coords, size),
+        );
+      });
     } else if (typePortrayal === 'proportionalSymbols') {
       // Redraw the symbols (circles)
       g.querySelectorAll('circle').forEach((c) => {

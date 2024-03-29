@@ -120,8 +120,8 @@ export const getDefaultRenderingParams = (geomType: string) => {
       strokeOpacity: 1,
       fillColor: color,
       fillOpacity: 1,
-      pointRadius: 5,
-      symbolType: 'circle',
+      symbolSize: 10,
+      symbolType: 'diamond',
       dropShadow: null,
     };
   }

@@ -7,6 +7,7 @@ import {
 
 // Helpers
 import { mergeFilterIds } from './common.tsx';
+import { getSymbolPath } from '../../helpers/svg';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -114,13 +115,20 @@ export function categoricalChoroplethPointRenderer(
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.renderer}
-    mgt:point-radius={layerDescription.pointRadius}
+    mgt:symbol-size={layerDescription.symbolSize}
+    mgt:symbol-type={layerDescription.symbolType}
   >
     <For each={layerDescription.data.features}>
       {
         (feature) => <path
           fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
-          d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
+          d={
+            getSymbolPath(
+              layerDescription.symbolType!,
+              globalStore.projection(feature.geometry.coordinates),
+              layerDescription.symbolSize!,
+            )
+          }
           vector-effect="non-scaling-stroke"
           // @ts-expect-error because use:bind-data isn't a property of this element
           use:bindData={feature}

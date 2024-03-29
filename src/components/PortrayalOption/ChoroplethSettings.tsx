@@ -93,8 +93,9 @@ function onClickValidate(
   } as LayerDescriptionChoropleth;
 
   if (newLayerDescription.type === 'point') {
-    // We also need to transfert the pointRadius parameter
-    newLayerDescription.pointRadius = referenceLayerDescription.pointRadius || 5;
+    // We also need to transfert the symbolSize and the symbolType parameters
+    newLayerDescription.symbolSize = referenceLayerDescription.symbolSize || 5;
+    newLayerDescription.symbolType = referenceLayerDescription.symbolType || 'circle';
   }
 
   const legend = {

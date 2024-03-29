@@ -1693,9 +1693,47 @@ type RootTranslation = {
 		 */
 		StrokeDashed: string
 		/**
-		 * P​o​i​n​t​ ​r​a​d​i​u​s
+		 * S​y​m​b​o​l​ ​s​i​z​e
 		 */
-		PointRadius: string
+		SymbolSize: string
+		/**
+		 * S​y​m​b​o​l​ ​t​y​p​e
+		 */
+		SymbolType: string
+		SymbolTypes: {
+			/**
+			 * C​i​r​c​l​e
+			 */
+			circle: string
+			/**
+			 * S​q​u​a​r​e
+			 */
+			square: string
+			/**
+			 * D​i​a​m​o​n​d
+			 */
+			diamond: string
+			/**
+			 * D​i​a​m​o​n​d​ ​(​s​t​r​e​t​c​h​e​d​)
+			 */
+			diamond2: string
+			/**
+			 * C​r​o​s​s
+			 */
+			cross: string
+			/**
+			 * T​r​i​a​n​g​l​e
+			 */
+			triangle: string
+			/**
+			 * S​t​a​r
+			 */
+			star: string
+			/**
+			 * W​y​e
+			 */
+			wye: string
+		}
 		/**
 		 * A​e​s​t​h​e​t​i​c​ ​f​i​l​t​e​r
 		 */
@@ -4270,9 +4308,47 @@ export type TranslationFunctions = {
 		 */
 		StrokeDashed: () => LocalizedString
 		/**
-		 * Point radius
+		 * Symbol size
 		 */
-		PointRadius: () => LocalizedString
+		SymbolSize: () => LocalizedString
+		/**
+		 * Symbol type
+		 */
+		SymbolType: () => LocalizedString
+		SymbolTypes: {
+			/**
+			 * Circle
+			 */
+			circle: () => LocalizedString
+			/**
+			 * Square
+			 */
+			square: () => LocalizedString
+			/**
+			 * Diamond
+			 */
+			diamond: () => LocalizedString
+			/**
+			 * Diamond (stretched)
+			 */
+			diamond2: () => LocalizedString
+			/**
+			 * Cross
+			 */
+			cross: () => LocalizedString
+			/**
+			 * Triangle
+			 */
+			triangle: () => LocalizedString
+			/**
+			 * Star
+			 */
+			star: () => LocalizedString
+			/**
+			 * Wye
+			 */
+			wye: () => LocalizedString
+		}
 		/**
 		 * Aesthetic filter
 		 */

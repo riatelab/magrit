@@ -8,6 +8,7 @@ import {
 // Helpers
 import { getClassifier } from '../../helpers/classification';
 import { isNumber } from '../../helpers/common';
+import { getSymbolPath } from '../../helpers/svg';
 import { mergeFilterIds } from './common.tsx';
 
 // Stores
@@ -117,7 +118,8 @@ export function choroplethPointRenderer(
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.renderer}
-    mgt:point-radius={layerDescription.pointRadius}
+    mgt:symbol-size={layerDescription.symbolSize}
+    mgt:symbol-type={layerDescription.symbolType}
   >
     <For each={layerDescription.data.features}>
       {
@@ -127,7 +129,13 @@ export function choroplethPointRenderer(
               ? colors()[classifier().getClass(feature.properties[rendererParameters().variable])]
               : rendererParameters().noDataColor
           }
-          d={globalStore.pathGenerator.pointRadius(layerDescription.pointRadius)(feature)}
+          d={
+            getSymbolPath(
+              layerDescription.symbolType!,
+              globalStore.projection(feature.geometry.coordinates),
+              layerDescription.symbolSize!,
+            )
+          }
           vector-effect="non-scaling-stroke"
           // @ts-expect-error because use:bind-data isn't a property of this element
           use:bindData={feature}
