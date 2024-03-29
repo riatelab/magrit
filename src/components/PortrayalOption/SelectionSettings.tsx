@@ -16,7 +16,7 @@ import { LocalizedString } from 'typesafe-i18n';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { findSuitableName } from '../../helpers/common';
-import { generateIdLayer } from '../../helpers/layers';
+import { generateIdLayer, getDefaultRenderingParams } from '../../helpers/layers';
 
 // Stores
 import {
@@ -79,16 +79,11 @@ async function onClickValidate(
     id: generateIdLayer(),
     name: newLayerName,
     data: { type: 'FeatureCollection', features },
-    type: 'polygon',
+    type: layerDescription.type,
     fields: unwrap(layerDescription.fields),
-    renderer: 'default',
     visible: true,
-    fillOpacity: 1,
-    fillColor: '#395446',
-    strokeColor: '#000000',
-    strokeWidth: 1,
-    strokeOpacity: 1,
-    dropShadow: null,
+    renderer: 'default',
+    ...getDefaultRenderingParams(layerDescription.type),
     shapeRendering: 'auto',
   } as LayerDescription;
 
