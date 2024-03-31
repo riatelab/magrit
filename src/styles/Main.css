@@ -16,9 +16,9 @@ html {
 }
 
 html.theme-dark {
-    --background-color: #232327; /* #363636; */
+    --background-color: #232327; /* ou #363636 ou  */
     /*--background-color: #121212;*/
-    --map-container-background: #4c4c4c; /* #2e2e2e; */
+    --map-container-background: #4c4c4c; /* ou #2e2e2e ou #494a53 */
     /*--map-container-background: #242424;*/
     --border-color: #424242; /* #333333; */
     --chevron-color: #6c6a6a;
@@ -52,14 +52,6 @@ html.theme-dark img.magrit-logo {
 
 html.theme-dark .file-import-table tr.entry-detail {
     background: #373737;
-}
-
-html.theme-dark .information-banner {
-    background-color: #045933 !important; /* Or maybe #0e2a10 ? */
-}
-
-html.theme-dark .warning-banner {
-    background-color: #a3a300 !important;
 }
 
 html.theme-dark .functionality-selection .mini-button.selected {

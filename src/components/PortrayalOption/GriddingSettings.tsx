@@ -42,7 +42,6 @@ import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
-import WarningBanner from '../Modals/Banners/WarningBanner.tsx';
 
 // Types
 import type { PortrayalSettingsProps } from './common';

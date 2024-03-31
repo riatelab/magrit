@@ -14,11 +14,11 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 import { unproxify } from '../../helpers/common';
 import { VariableType, Variable } from '../../helpers/typeDetection';
 
+// Subcomponents
+import CollapsibleMessageBanner from '../CollapsibleMessageBanner.tsx';
+
 // Types / Interfaces / Enums
 import type { LayerDescription, TableDescription } from '../../global';
-import InformationBanner from './Banners/InformationBanner.tsx';
-import MessageBlock from '../MessageBlock.tsx';
-import CollapsibleMessageBanner from '../CollapsibleMessageBanner.tsx';
 
 export default function FieldTypingModal(
   props: {
@@ -126,7 +126,7 @@ export default function FieldTypingModal(
       title={LL().Messages.Information()}
       type={'primary'}
       useIcon={true}
-      style={{ 'margin-bottom': '-2em' }}
+      style={{ 'margin-bottom': '-2em', 'margin-top': '4em' }}
     >
       <p>{LL().FieldsTyping.Information1()}</p>
       <p>{LL().FieldsTyping.Information2()}</p>

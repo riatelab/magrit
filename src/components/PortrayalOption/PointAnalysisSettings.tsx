@@ -48,6 +48,7 @@ import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 
 // Types
 import type { PortrayalSettingsProps } from './common';
@@ -72,7 +73,6 @@ import {
   ProportionalSymbolsSymbolType,
   RepresentationType,
 } from '../../global.d';
-import MessageBlock from '../MessageBlock.tsx';
 
 function onClickValidate(
   referenceLayerId: string,

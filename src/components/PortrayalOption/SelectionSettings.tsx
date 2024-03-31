@@ -38,7 +38,7 @@ import FormulaInput, {
   replaceSpecialFields,
   SampleOutputFormat,
 } from '../FormulaInput.tsx';
-import InformationBanner from '../Modals/Banners/InformationBanner.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
 import { LayerDescription } from '../../global';
@@ -181,10 +181,10 @@ export default function SelectionSettings(
     && allValuesAreBoolean(Object.values(sampleOutput()!.value)));
 
   return <div class="portrayal-section__portrayal-options-selection">
-    <InformationBanner expanded={true}>
+    <MessageBlock type={'primary'}>
       <p>{LL().FunctionalitiesSection.SelectionOptions.Information()}</p>
       <p>{LL().FunctionalitiesSection.SelectionOptions.InformationSyntax()}</p>
-    </InformationBanner>
+    </MessageBlock>
     <br />
     <FormulaInput
       typeDataset={'layer'}

@@ -26,16 +26,15 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/L
 import { setLoading } from '../../store/GlobalStore';
 
 // Sub-components
-import InformationBanner from './Banners/InformationBanner.tsx';
+import CollapsibleMessageBanner from '../CollapsibleMessageBanner.tsx';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
 import MultipleSelect from '../MultipleSelect.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
 import type { GeoJSONFeature, LayerDescription, TableDescription } from '../../global';
-import ErrorBanner from './Banners/ErrorBanner.tsx';
-import MessageBlock from '../MessageBlock.tsx';
 
 interface JoinResult {
   nFeaturesTable: number,
@@ -394,10 +393,6 @@ export default function JoinPanel(
   });
 
   return <div class="join-panel" ref={refJoinPanel!}>
-    <InformationBanner expanded={true}>
-      <p>{LL().JoinPanel.Information()}</p>
-      <p>{LL().JoinPanel.Information2()}</p>
-    </InformationBanner>
     <InputFieldSelect
       label={LL().JoinPanel.TargetLayer()}
       onChange={(v) => {
@@ -515,5 +510,15 @@ export default function JoinPanel(
         </Show>
       </Match>
     </Switch>
+    <CollapsibleMessageBanner
+      expanded={true}
+      title={LL().Messages.Information()}
+      type={'primary'}
+      useIcon={true}
+      style={{ 'margin-bottom': '-2em', 'margin-top': '4em' }}
+    >
+      <p>{LL().JoinPanel.Information()}</p>
+      <p>{LL().JoinPanel.Information2()}</p>
+    </CollapsibleMessageBanner>
   </div>;
 }

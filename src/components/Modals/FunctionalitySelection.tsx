@@ -29,7 +29,7 @@ import LinksSettings from '../PortrayalOption/LinksSettings.tsx';
 import MushroomsSettings from '../PortrayalOption/MushroomsSettings.tsx';
 import AggregationSettings from '../PortrayalOption/AggregationSettings.tsx';
 import SelectionSettings from '../PortrayalOption/SelectionSettings.tsx';
-import InformationBanner from './Banners/InformationBanner.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 import SimplificationSettings from '../PortrayalOption/SimplificationSettings.tsx';
 import PointAnalysisSettings from '../PortrayalOption/PointAnalysisSettings.tsx';
 
@@ -315,9 +315,9 @@ export default function FunctionalitySelection(): JSX.Element {
       </header>
       <section class="modal-card-body is-flex is-flex-direction-column">
         <Show when={!selectedFunctionality()}>
-          <InformationBanner expanded={true}>
+          <MessageBlock type={'primary'} useIcon={true}>
             <p>{ LL().PortrayalSelection.Information() }</p>
-          </InformationBanner>
+          </MessageBlock>
           <div class="has-text-centered mb-4">
             {LL().PortrayalSelection.Layer()}
             &nbsp;<b>{ layerName }</b>

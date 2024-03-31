@@ -30,11 +30,11 @@ import {
 import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Subcomponents
-import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
-import WarningBanner from '../Modals/Banners/WarningBanner.tsx';
 
 // Types / Interfaces / Enums
 import type { PortrayalSettingsProps } from './common';
@@ -178,9 +178,9 @@ export default function AggregationSettings(
       <option value="topojson">TopoJSON</option>
     </InputFieldSelect>
     <Show when={targetVariable() === ''}>
-      <WarningBanner expanded={true}>
+      <MessageBlock type={'warning'} useIcon={true}>
         { LL().FunctionalitiesSection.AggregationOptions.Information() }
-      </WarningBanner>
+      </MessageBlock>
     </Show>
     <InputResultName
       value={newLayerName()}

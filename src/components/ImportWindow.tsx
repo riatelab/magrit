@@ -42,13 +42,12 @@ import { setMapStore } from '../store/MapStore';
 import { setModalStore } from '../store/ModalStore';
 
 // Other components
-import InformationBanner from './Modals/Banners/InformationBanner.tsx';
+import CollapsibleMessageBanner from './CollapsibleMessageBanner.tsx';
 import SimplificationModal from './Modals/SimplificationModal.tsx';
 import { openLayerManager } from './LeftMenu/LeftMenu.tsx';
 
 // Styles
 import '../styles/ImportWindow.css';
-import CollapsibleMessageBanner from './CollapsibleMessageBanner.tsx';
 
 interface LayerOrTableDescription {
   name: string,
@@ -804,10 +803,6 @@ export default function ImportWindow(): JSX.Element {
           </tbody>
         </table>
       </section>
-{/*      <InformationBanner>
-        <p>{LL().ImportWindow.SupportedVectorFormats()}</p>
-        <p>{LL().ImportWindow.SupportedTabularFormats()}</p>
-      </InformationBanner> */}
       <CollapsibleMessageBanner
         expanded={false}
         title={LL().Messages.Information()}

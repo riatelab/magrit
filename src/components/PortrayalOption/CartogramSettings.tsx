@@ -18,15 +18,15 @@ import { findSuitableName } from '../../helpers/common';
 import { generateIdLayer } from '../../helpers/layers';
 import { DataType, type Variable, VariableType } from '../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
-import rewindLayer from '../../helpers/rewind';
+import { getProjectionUnit } from '../../helpers/projection';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Subcomponents
-import InputFieldSelect from '../Inputs/InputSelect.tsx';
-import InputResultName from './InputResultName.tsx';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
-import WarningBanner from '../Modals/Banners/WarningBanner.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import InputResultName from './InputResultName.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 
 // Stores
 import { setLoading } from '../../store/GlobalStore';
@@ -46,7 +46,6 @@ import {
   type LayerDescriptionCartogram,
   RepresentationType,
 } from '../../global.d';
-import { getProjectionUnit } from '../../helpers/projection';
 
 async function onClickValidate(
   referenceLayerId: string,
@@ -230,9 +229,9 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
       />
     </Show>
     <Show when={isGeo}>
-      <WarningBanner expanded={true}>
+      <MessageBlock type={'warning'} useIcon={true}>
         { LL().FunctionalitiesSection.CartogramOptions.WarningGeo() }
-      </WarningBanner>
+      </MessageBlock>
     </Show>
     <InputResultName
       value={newLayerName()}
