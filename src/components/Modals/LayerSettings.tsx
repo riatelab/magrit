@@ -257,7 +257,7 @@ function makeSettingsLabels(
       onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}
     />
     <InputFieldButton
-      label={'Reset label locations'}
+      label={LL().LayerSettings.ResetLabelLocations()}
       onClick={() => {
         // TODO...
       }}
@@ -566,7 +566,7 @@ function makeSettingsDefaultPoint(
       />
       <Show when={(props.rendererParameters as ProportionalSymbolsParameters).avoidOverlapping}>
         <InputFieldNumber
-          label={'Iterations'}
+          label={LL().LayerSettings.Iterations()}
           value={(props.rendererParameters as ProportionalSymbolsParameters).iterations}
           onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'iterations'], v)}
           min={1}
@@ -898,7 +898,7 @@ function makeSettingsDefaultPolygon(
         </For>
       </InputFieldSelect>
       <InputFieldCheckbox
-        label={ 'Reverse palette' }
+        label={ LL().ClassificationPanel.reversePalette() }
         checked={
           (
             props.rendererParameters as SmoothedLayerParameters | GriddedLayerParameters

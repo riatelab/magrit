@@ -669,7 +669,7 @@ export default function ProportionalSymbolsSettings(
     />
     <Show when={availableColorModes.length > 1}>
       <InputFieldSelect
-        label={'Color mode'}
+        label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ColorMode()}
         onChange={(v) => { setColorMode(v as ProportionalSymbolsColorMode); }}
         value={colorMode()}
       >

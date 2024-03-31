@@ -537,7 +537,7 @@ function makeSettingsChoroplethLegend(
       </div>
     </div>
     <div class="field">
-      <label class="label">{ 'Display stroke for each box' }</label>
+      <label class="label">{ LL().Legend.Modal.DisplayStroke() }</label>
       <div class="control">
         <input
           type="checkbox"
@@ -553,7 +553,7 @@ function makeSettingsChoroplethLegend(
     }>
       <div class="field">
         <label class="label">
-          { 'Display tick between each box' }
+          { LL().Legend.Modal.DisplayTick() }
         </label>
         <div class="control">
           <input

@@ -999,6 +999,10 @@ type RootTranslation = {
 				 */
 				line: string
 			}
+			/**
+			 * C​o​l​o​r​ ​m​o​d​e
+			 */
+			ColorMode: string
 			ColorModes: {
 				/**
 				 * S​i​n​g​l​e​ ​c​o​l​o​r
@@ -1762,6 +1766,14 @@ type RootTranslation = {
 		 * A​l​l​o​w​ ​m​o​v​i​n​g​ ​s​y​m​b​o​l​s
 		 */
 		AllowMovingSymbols: string
+		/**
+		 * I​t​e​r​a​t​i​o​n​s
+		 */
+		Iterations: string
+		/**
+		 * R​e​s​e​t​ ​l​a​b​e​l​ ​l​o​c​a​t​i​o​n​s
+		 */
+		ResetLabelLocations: string
 		/**
 		 * C​h​a​n​g​e​ ​c​l​a​s​s​i​f​i​c​a​t​i​o​n​ ​o​p​t​i​o​n​s
 		 */
@@ -2572,6 +2584,14 @@ type RootTranslation = {
 			 * B​o​x​ ​c​o​r​n​e​r​ ​r​a​d​i​u​s
 			 */
 			BoxCornerRadius: string
+			/**
+			 * D​i​s​p​l​a​y​ ​t​i​c​k​ ​b​e​t​w​e​e​n​ ​e​a​c​h​ ​b​o​x
+			 */
+			DisplayTick: string
+			/**
+			 * D​i​s​p​l​a​y​ ​s​t​r​o​k​e​ ​f​o​r​ ​e​a​c​h​ ​b​o​x
+			 */
+			DisplayStroke: string
 			/**
 			 * B​o​x​ ​s​t​r​o​k​e​ ​w​i​d​t​h
 			 */
@@ -3628,6 +3648,10 @@ export type TranslationFunctions = {
 				 */
 				line: () => LocalizedString
 			}
+			/**
+			 * Color mode
+			 */
+			ColorMode: () => LocalizedString
 			ColorModes: {
 				/**
 				 * Single color
@@ -4377,6 +4401,14 @@ export type TranslationFunctions = {
 		 * Allow moving symbols
 		 */
 		AllowMovingSymbols: () => LocalizedString
+		/**
+		 * Iterations
+		 */
+		Iterations: () => LocalizedString
+		/**
+		 * Reset label locations
+		 */
+		ResetLabelLocations: () => LocalizedString
 		/**
 		 * Change classification options
 		 */
@@ -5184,6 +5216,14 @@ export type TranslationFunctions = {
 			 * Box corner radius
 			 */
 			BoxCornerRadius: () => LocalizedString
+			/**
+			 * Display tick between each box
+			 */
+			DisplayTick: () => LocalizedString
+			/**
+			 * Display stroke for each box
+			 */
+			DisplayStroke: () => LocalizedString
 			/**
 			 * Box stroke width
 			 */
