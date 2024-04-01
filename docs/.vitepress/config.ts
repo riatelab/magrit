@@ -6,23 +6,26 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
       text: 'Introduction',
       collapsed: false,
       items: [
-        { text: 'Philosophie de l\'application', link: 'getting-started' },
-        { text: 'Exemples de cartes', link: 'examples' },
-        { text: 'Passer à Magrit v2', link: 'what-is-vitepress' },
-        { text: 'Accéder à l\'application / Installation', link: 'access' },
+        { text: 'Philosophie de l\'application', link: 'presentation' },
+        { text: 'Exemples de cartes', link: 'map-examples' },
+        { text: 'Passer à Magrit v2', link: 'upgrade-to-v2' },
+        { text: 'Accéder à l\'application / Installation', link: 'access-the-app' },
       ]
     },
     {
       text: 'Guide de l\'interface',
       collapsed: false,
       items: [
-        { text: 'Description de l\'interface', link: 'markdown' },
+        { text: 'Description de l\'interface', link: 'ui-description' },
         { text: 'Import des données', link: 'data-import' },
         { text: 'Paramètres de la carte', link: 'layer-manager' },
+        { text: 'Choix d\'une projection cartographique', link: 'projection' },
         { text: 'Gestionnaire de couches', link: 'layer-manager' },
-        { text: 'Typage des variables', link: 'layer-manager' },
-        { text: 'Tableau de données', link: 'layer-manager' },
-        { text: 'Propriétés de la couche', link: 'layer-manager' },
+        { text: 'Typage des variables', link: 'typing' },
+        { text: 'Tableau de données', link: 'data-table' },
+        { text: 'Propriétés de la couche', link: 'layer-properties' },
+        { text: 'Propriété de la légende', link: 'legend-properties' },
+        { text: 'Élément d\'habillage de la carte', link: 'en/layout-features' }
       ]
     },
     {
@@ -44,23 +47,26 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
       text: 'Introduction',
       collapsed: false,
       items: [
-        { text: 'Application philosophy', link: 'getting-started' },
-        { text: 'Map examples', link: 'examples' },
-        { text: 'Upgrade to Magrit v2', link: 'what-is-vitepress' },
-        { text: 'Access the application / Installation', link: 'access' },
+        { text: 'Application philosophy', link: 'en/presentation' },
+        { text: 'Map examples', link: 'en/map-examples' },
+        { text: 'Upgrading to Magrit v2', link: 'en/upgrade-to-v2' },
+        { text: 'Accessing the application / Installation', link: 'en/access-the-app' },
       ]
     },
     {
       text: 'Interface guide',
       collapsed: false,
       items: [
-        { text: 'User interface description', link: 'markdown' },
+        { text: 'User interface description', link: 'en/ui-description' },
         { text: 'Data import', link: 'en/data-import' },
         { text: 'Map settings', link: 'en/layer-manager' },
+        { text: 'Choosing a map projection', link: 'en/projection' },
         { text: 'Layer manager', link: 'en/layer-manager' },
-        { text: 'Variable typing', link: 'en/layer-manager' },
-        { text: 'Data table', link: 'en/layer-manager' },
-        { text: 'Layer properties', link: 'en/layer-manager' },
+        { text: 'Variable typing', link: 'en/typing' },
+        { text: 'Data table', link: 'en/data-table' },
+        { text: 'Layer properties', link: 'en/layer-properties' },
+        { text: 'Legend properties', link: 'en/legend-properties' },
+        { text: 'Map layout features', link: 'en/layout-features' }
       ]
     },
     {

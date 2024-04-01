@@ -3,26 +3,25 @@
 layout: home
 
 hero:
-  name: "Magrit Documentation"
+  name: "Magrit - User manual"
 #  text: "Magrit Documentation"
-  tagline: My great project tagline
+  tagline: Thematic cartography
   actions:
     - theme: brand
-      text: Data Import
+      text: Access the user manual
       link: en/data-import
-    - theme: brand
-      text: Layer manager
-      link: en/layer-manager
     - theme: alt
-      text: Access the app
+      text: Access the application
       link: https://magrit.cnrs.fr/
 
 features:
-  - title: Feature A
+  - title: Free and open-source
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
+  - title: Easy to use
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
+  - title: Actively developed
+    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Open to contributions
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
 

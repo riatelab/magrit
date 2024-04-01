@@ -25,7 +25,7 @@
     "serve": "vite preview",
     "test": "vitest",
     "typesafe-i18n": "typesafe-i18n",
-    "docs:build": "rm -rf dist/docs && pushd docs && npm run build && popd && cp -r docs/.vitepress/dist dist/docs",
+    "docs:build": "rm -rf dist/docs && cd docs && npm run build && cd .. && cp -r docs/.vitepress/dist dist/docs",
     "postinstall": "cd docs && npm install && cd .."
   },
   "devDependencies": {
