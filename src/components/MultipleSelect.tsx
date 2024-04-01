@@ -23,7 +23,6 @@ export default function MultipleSelect(props: ParentProps<MultipleSelectProps>):
     on(
       () => mergedProps.values,
       () => {
-        console.log('createEffect');
         for (let i = 0; i < selectNode.options.length; i += 1) {
           if (mergedProps.values.includes(selectNode.options[i].value)) {
             selectNode.options[i].selected = true;

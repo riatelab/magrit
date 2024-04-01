@@ -467,11 +467,13 @@ export default function JoinPanel(
           </MessageBlock>
         </Show>
         <Show when={joinResult()!.nMatchLayer > 0}>
-          <InputFieldCheckbox
-            label={LL().JoinPanel.RemoveNotMatching()}
-            checked={removeNoMatch()}
-            onChange={(v) => { setRemoveNoMatch(v); }}
-          />
+          <Show when={joinResult()!.nNoMatchLayer > 0}>
+            <InputFieldCheckbox
+              label={LL().JoinPanel.RemoveNotMatching()}
+              checked={removeNoMatch()}
+              onChange={(v) => { setRemoveNoMatch(v); }}
+            />
+          </Show>
           <InputFieldCheckbox
             label={LL().JoinPanel.Prefix()}
             checked={usePrefix()}
