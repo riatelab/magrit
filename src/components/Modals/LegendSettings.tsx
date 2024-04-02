@@ -19,6 +19,7 @@ import {
   ascending,
   capitalizeFirstLetter,
   debounce,
+  isNonNull,
   isNumber,
   unproxify,
 } from '../../helpers/common';
@@ -455,9 +456,13 @@ function makeSettingsChoroplethLegend(
     representationType: RepresentationType,
   ) => ['choropleth', 'smoothed', 'grid'].includes(representationType);
 
-  const hasNoData = layer.data.features.filter(
-    (feature) => !isNumber(feature.properties[layer.rendererParameters!.variable]),
-  ).length > 0;
+  const hasNoData = legend.type === 'categoricalChoropleth'
+    ? layer.data.features.filter(
+      (feature) => !isNonNull(feature.properties[layer.rendererParameters!.variable]),
+    ).length > 0
+    : layer.data.features.filter(
+      (feature) => !isNumber(feature.properties[layer.rendererParameters!.variable]),
+    ).length > 0;
 
   return <>
     <FieldText legend={legend} LL={LL} role={'title'} />
