@@ -18,8 +18,8 @@ export default function SwitchTheme(
   >
     <span class="check">
       <span class="icon">
-        <span class="switch-icon sun"><FaSolidSun width={'12px'} height={'12px'} /></span>
-        <span class="switch-icon moon"><FaSolidMoon width={'12px'} height={'12px'} /></span>
+        <span class="switch-icon sun"><FaSolidSun size={'0.9em'} /></span>
+        <span class="switch-icon moon"><FaSolidMoon size={'0.9em'} /></span>
       </span>
     </span>
   </button>;
