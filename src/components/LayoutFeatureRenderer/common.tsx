@@ -254,7 +254,7 @@ export function triggerContextMenuLayoutFeature(
           //   newPosition[1] = layoutFeature.position[1] + 100;
           // }
           setLayersDescriptionStore({
-            layoutFeatures: [
+            layoutFeaturesAndLegends: [
               ...layersDescriptionStore.layoutFeaturesAndLegends,
               {
                 ...layoutFeature,
