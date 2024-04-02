@@ -4,7 +4,7 @@ html {
     overflow-y: auto;
     font-size: 13px;
     box-sizing: border-box;
-    --background-color: #f5f5f5;  /* rgb(236, 235, 240); */
+    --background-color: var(--bulma-background); /* ou #f5f5f5 ou rgb(236, 235, 240); */
     --border-color: #e5e5e5; /* rgb(220, 220, 220); */
     --chevron-color: #c7c7c7;
     --map-container-background: #fff; /* rgb(244, 246, 244); */
@@ -16,7 +16,7 @@ html {
 }
 
 html.theme-dark {
-    --background-color: #232327; /* ou #363636 ou #1b1b1f */
+    --background-color: var(--bulma-background); /* ou #232327 ou #363636 ou #1b1b1f */
     /*--background-color: #121212;*/
     --map-container-background: #4c4c4c; /* ou #2e2e2e ou #494a53 */
     /*--map-container-background: #242424;*/

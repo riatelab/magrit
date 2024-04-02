@@ -1,11 +1,13 @@
 // Imports from solid-js
 import { type JSX } from 'solid-js';
 
+// Sub-components
+import DropdownMenu from './DropdownMenu.tsx';
+
 // Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
 import { loadLocale } from '../i18n/i18n-util.sync';
 import { Locales } from '../i18n/i18n-types';
-import DropdownMenu from './DropdownMenu.tsx';
 
 function loadAndSetLocal(locale: Locales, setter: (locale: Locales) => void): void {
   loadLocale(locale);
@@ -30,5 +32,6 @@ export default function DropdownLanguage(): JSX.Element {
     }
     onChange={(value) => loadAndSetLocal(value as Locales, setLocale)}
     triggerTitle={LL().HeaderApp.Language()}
+    style={{ width: 'unset' }}
   />;
 }

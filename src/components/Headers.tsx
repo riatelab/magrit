@@ -19,13 +19,13 @@ import { useI18nContext } from '../i18n/i18n-solid';
 
 // Sub-components
 import DropdownLanguage from './DropdownLanguage.tsx';
+import SwitchTheme from './SwitchTheme.tsx';
 
 // Assets
 import img from '../assets/magrit.svg?url';
 
 // Styles
 import '../styles/Headers.css';
-import SwitchTheme from './SwitchTheme.tsx';
 
 const handleBurgerClick = () => {
   // Get all "navbar-burger" elements
@@ -155,11 +155,12 @@ export function HeaderBarApp(): JSX.Element {
             <FaSolidCircleQuestion size={'1.5em'} />
           </button>
           <div
-           style={{
-             width: '1px',
-             height: '2.4em',
-             background: 'var(--bulma-border)',
-           }}
+            class="vertical-divider"
+            style={{
+              width: '1px',
+              height: '2.4em',
+              background: 'var(--bulma-border)',
+            }}
           ></div>
           <DropdownLanguage />
           <SwitchTheme class="button-header-bar" id="toggle-night-day" />
