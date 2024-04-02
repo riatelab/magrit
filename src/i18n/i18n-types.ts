@@ -429,15 +429,15 @@ type RootTranslation = {
 		 */
 		ShowProjectionParameters: string
 		/**
-		 * P​r​o​j​e​c​t​i​o​n​ ​c​e​n​t​e​r
+		 * λ​-​a​x​i​s​ ​r​o​t​a​t​i​o​n
 		 */
-		ProjectionCenter: string
+		ProjectionCenterLambda: string
 		/**
-		 * P​r​o​j​e​c​t​i​o​n​ ​c​e​n​t​e​r​ ​(​φ​-​a​x​i​s​ ​r​o​t​a​t​i​o​n​)
+		 * φ​-​a​x​i​s​ ​r​o​t​a​t​i​o​n
 		 */
 		ProjectionCenterPhi: string
 		/**
-		 * P​r​o​j​e​c​t​i​o​n​ ​c​e​n​t​e​r​ ​(​γ​-​a​x​i​s​ ​r​o​t​a​t​i​o​n​)
+		 * γ​-​a​x​i​s​ ​r​o​t​a​t​i​o​n
 		 */
 		ProjectionCenterGamma: string
 		/**
@@ -3135,15 +3135,15 @@ export type TranslationFunctions = {
 		 */
 		ShowProjectionParameters: () => LocalizedString
 		/**
-		 * Projection center
+		 * λ-axis rotation
 		 */
-		ProjectionCenter: () => LocalizedString
+		ProjectionCenterLambda: () => LocalizedString
 		/**
-		 * Projection center (φ-axis rotation)
+		 * φ-axis rotation
 		 */
 		ProjectionCenterPhi: () => LocalizedString
 		/**
-		 * Projection center (γ-axis rotation)
+		 * γ-axis rotation
 		 */
 		ProjectionCenterGamma: () => LocalizedString
 		/**

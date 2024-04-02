@@ -237,7 +237,7 @@ export default function MapConfiguration(): JSX.Element {
     <Show when={globalStore.projection && mapStore.projection.type === 'd3'}>
       <DetailsSummary summaryContent={LL().MapConfiguration.ShowProjectionParameters()}>
         <InputFieldRangeSlider
-          label={LL().MapConfiguration.ProjectionCenter()}
+          label={LL().MapConfiguration.ProjectionCenterLambda()}
           value={mapStore.rotate[0]}
           onChange={(v) => {
             setMapStore('rotate', [v, mapStore.rotate[1], mapStore.rotate[2]]);
