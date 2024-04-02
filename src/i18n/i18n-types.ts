@@ -1456,6 +1456,18 @@ type RootTranslation = {
 			 * @param {unknown} layerName
 			 */
 			NewLayerName: RequiredParams<'layerName'>
+			/**
+			 * N​o​ ​d​a​t​a​ ​s​e​l​e​c​t​e​d​ ​b​y​ ​t​h​e​ ​g​i​v​e​n​ ​e​x​p​r​e​s​s​i​o​n​.
+			 */
+			NoSelectedData: string
+			/**
+			 * {​{​O​n​e​ ​f​e​a​t​u​r​e​|​?​?​ ​f​e​a​t​u​r​e​s​}​}​ ​s​e​l​e​c​t​e​d​ ​b​y​ ​t​h​e​ ​g​i​v​e​n​ ​e​x​p​r​e​s​s​i​o​n​.
+			 */
+			NFeaturesSelected: string
+			/**
+			 * A​l​l​ ​f​e​a​t​u​r​e​s​ ​o​f​ ​t​h​e​ ​l​a​y​e​r​ ​a​r​e​ ​s​e​l​e​c​t​e​d​ ​b​y​ ​t​h​e​ ​g​i​v​e​n​ ​e​x​p​r​e​s​s​i​o​n​.
+			 */
+			AllDataSelected: string
 		}
 		PointAnalysisOptions: {
 			/**
@@ -4104,6 +4116,18 @@ export type TranslationFunctions = {
 			 * Selection_{layerName}
 			 */
 			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			/**
+			 * No data selected by the given expression.
+			 */
+			NoSelectedData: () => LocalizedString
+			/**
+			 * {{One feature|?? features}} selected by the given expression.
+			 */
+			NFeaturesSelected: (arg0: number | string | boolean) => LocalizedString
+			/**
+			 * All features of the layer are selected by the given expression.
+			 */
+			AllDataSelected: () => LocalizedString
 		}
 		PointAnalysisOptions: {
 			/**

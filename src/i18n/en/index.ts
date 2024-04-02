@@ -409,6 +409,9 @@ const en = {
       InformationSyntax: 'The syntax to be used for expressions is that of the SQL language. The usual logical and arithmetic operators are available.',
       InvalidFormula: 'Invalid formula - the expression must return true or false for each feature',
       NewLayerName: 'Selection_{layerName}',
+      NoSelectedData: 'No data selected by the given expression.',
+      NFeaturesSelected: '{{One feature | ?? features}} selected by the given expression.',
+      AllDataSelected: 'All features of the layer are selected by the given expression.',
     },
     PointAnalysisOptions: {
       MapType: 'Map type',

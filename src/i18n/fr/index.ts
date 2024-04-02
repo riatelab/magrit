@@ -409,6 +409,9 @@ const fr = {
       InformationSyntax: 'La syntaxe à utiliser pour les expressions est celle du langage SQL. Les opérateurs logiques et arithmétiques usuels sont disponibles.',
       InvalidFormula: 'Formula invalide - l\'expression saisie doit retourner vrai (true) ou faux (false) pour chaque entité de la couche.',
       NewLayerName: 'Sélection_{layerName}',
+      NoSelectedData: 'Aucune donnée sélectionnée par l\'expression saisie.',
+      NFeaturesSelected: '{{Une entité | ?? entités}} sélectionnée{{nSelected:s}} par l\'expression saisie.',
+      AllDataSelected: 'Toutes les entités de la couche sont sélectionnées par l\'expression saisie.',
     },
     PointAnalysisOptions: {
       MapType: 'Type de carte',

@@ -1,8 +1,7 @@
 import {
-  Accessor,
-  createMemo,
-  createSignal,
-  type JSX,
+  Accessor, createEffect,
+  createMemo, createSignal,
+  type JSX, Match, on, Show, Switch,
 } from 'solid-js';
 import { produce, unwrap } from 'solid-js/store';
 
@@ -41,13 +40,12 @@ import FormulaInput, {
 import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
-import { LayerDescription } from '../../global';
+import { GeoJSONFeature, LayerDescription } from '../../global';
 
-async function onClickValidate(
+function filterData(
   referenceLayerId: string,
   formula: string,
-  newLayerName: string,
-) {
+): GeoJSONFeature[] {
   const layerDescription = layersDescriptionStore.layers
     .find((layer) => layer.id === referenceLayerId)! as LayerDescription;
   const data = layerDescription.data.features
@@ -73,7 +71,19 @@ async function onClickValidate(
   const predicateArray = newColumn.map((d: any) => d.newValue);
 
   // Select the data based on the predicate array
-  const features = layerDescription.data.features.filter((_, i) => predicateArray[i]);
+  return layerDescription.data.features.filter((_, i) => predicateArray[i]);
+}
+
+async function onClickValidate(
+  referenceLayerId: string,
+  formula: string,
+  newLayerName: string,
+) {
+  const layerDescription = layersDescriptionStore.layers
+    .find((layer) => layer.id === referenceLayerId)! as LayerDescription;
+
+  // Select the data based on the predicate array
+  const features = filterData(referenceLayerId, formula);
 
   const newLayerDescription = {
     id: generateIdLayer(),
@@ -125,6 +135,8 @@ export default function SelectionSettings(
   const layerDescription = layersDescriptionStore.layers
     .find((layer) => layer.id === props.layerId)!;
 
+  const nFeaturesLayer = layerDescription.data.features.length;
+
   const [
     newLayerName,
     setNewLayerName,
@@ -143,6 +155,11 @@ export default function SelectionSettings(
     sampleOutput,
     setSampleOutput,
   ] = createSignal<SampleOutputFormat | undefined>(undefined);
+
+  const [
+    filteredData,
+    setFilteredData,
+  ] = createSignal<GeoJSONFeature[] | null>(null);
 
   const makePortrayal = async () => {
     // Check name of the new layer
@@ -175,10 +192,28 @@ export default function SelectionSettings(
     }, 0);
   };
 
+  createEffect(
+    on(
+      () => sampleOutput(),
+      () => {
+        if (
+          sampleOutput()
+          && sampleOutput()?.type === 'Valid'
+          && allValuesAreBoolean(Object.values(sampleOutput()!.value))
+        ) {
+          setFilteredData(filterData(props.layerId, formula()));
+        } else {
+          setFilteredData(null);
+        }
+      },
+    ),
+  );
+
   const isConfirmationEnabled = createMemo(() => formula() !== ''
     && sampleOutput()
     && sampleOutput()!.type !== 'Error'
-    && allValuesAreBoolean(Object.values(sampleOutput()!.value)));
+    && allValuesAreBoolean(Object.values(sampleOutput()!.value))
+    && (filteredData() !== null && filteredData()!.length > 0));
 
   return <div class="portrayal-section__portrayal-options-selection">
     <MessageBlock type={'primary'}>
@@ -210,6 +245,29 @@ export default function SelectionSettings(
     <div class="field-block">
     </div>
     <br />
+    <Show when={filteredData() !== null}>
+      <Switch>
+        <Match when={filteredData()!.length === 0}>
+          <MessageBlock type={'danger'} useIcon={true}>
+            <p>{ LL().FunctionalitiesSection.SelectionOptions.NoSelectedData() }</p>
+          </MessageBlock>
+        </Match>
+        <Match when={filteredData()!.length === nFeaturesLayer}>
+          <MessageBlock type={'success'} useIcon={true}>
+            <p>{
+              LL().FunctionalitiesSection.SelectionOptions.AllDataSelected()
+            }</p>
+          </MessageBlock>
+        </Match>
+        <Match when={filteredData()!.length > 0 && filteredData()!.length !== nFeaturesLayer}>
+          <MessageBlock type={'success'} useIcon={true}>
+            <p>{
+              LL().FunctionalitiesSection.SelectionOptions.NFeaturesSelected(filteredData()!.length)
+            }</p>
+          </MessageBlock>
+        </Match>
+      </Switch>
+    </Show>
     <InputResultName
       value={newLayerName()}
       onKeyUp={(value) => {
