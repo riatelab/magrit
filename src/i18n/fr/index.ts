@@ -93,6 +93,13 @@ const fr = {
   },
   MapZone: {
     DropFilesHere: 'Glisser-déposer vos jeux de données ici ! (ou utiliser le menu d\'import des données)',
+    Controls: {
+      Plus: 'Zoom avant',
+      Minus: 'Zoom arrière',
+      Lock: 'Verrouiller le zoom / la position',
+      Unlock: 'Déverrouiller le zoom / la position',
+      Info: 'Afficher les informations sur l\'entité survolée',
+    },
   },
   LeftMenu: {
     Import: 'Import des données',

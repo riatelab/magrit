@@ -16,7 +16,7 @@ html {
 }
 
 html.theme-dark {
-    --background-color: #232327; /* ou #363636 ou  */
+    --background-color: #232327; /* ou #363636 ou #1b1b1f */
     /*--background-color: #121212;*/
     --map-container-background: #4c4c4c; /* ou #2e2e2e ou #494a53 */
     /*--map-container-background: #242424;*/

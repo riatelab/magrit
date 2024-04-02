@@ -1,12 +1,19 @@
 // Imports from solid-js
 import {
   For,
-  JSX,
-  onMount,
-  Show,
+  type JSX,
+  Match, onMount,
+  Show, Switch,
 } from 'solid-js';
 
 // Imports from other packages
+import {
+  FiInfo,
+  FiLock,
+  FiMinusSquare,
+  FiPlusSquare,
+  FiUnlock,
+} from 'solid-icons/fi';
 import d3 from '../helpers/d3-custom';
 
 // Helpers
@@ -69,6 +76,8 @@ import {
 import legendCategoricalChoropleth from './LegendRenderer/CategoricalChoroplethLegend.tsx';
 import legendLabels from './LegendRenderer/LabelsLegendRenderer.tsx';
 import legendMushrooms from './LegendRenderer/MushroomsLegendRenderer.tsx';
+import legendCategoricalChoroplethBarchart from './LegendRenderer/CategoricalChoroplethBarchartLegend.tsx';
+import legendChoroplethHistogram from './LegendRenderer/ChoroplethHistogramLegend.tsx';
 
 // Types and enums
 import {
@@ -104,8 +113,6 @@ import {
 
 // Styles
 import '../styles/MapZone.css';
-import legendCategoricalChoroplethBarchart from './LegendRenderer/CategoricalChoroplethBarchartLegend.tsx';
-import legendChoroplethHistogram from './LegendRenderer/ChoroplethHistogramLegend.tsx';
 
 const layoutFeaturesFns = {
   [LayoutFeatureType.Line]: LineRenderer,
@@ -335,6 +342,51 @@ export default function MapZone(): JSX.Element {
     return <clipPath id="clip-sphere">{ el }</clipPath>;
   };
 
+  const handleClickZoom = (direction: number) => {
+    // How much we want to zoom in/out
+    const factor = 0.15;
+    // We zoom in/out on the axis of the centre of the map
+    // (i.e the center of the container, not the center of the data)
+    const center = [
+      mapStore.mapDimensions.width / 2,
+      mapStore.mapDimensions.height / 2,
+    ];
+
+    // The new transform object we are building
+    const view = {
+      x: mapStore.translate[0],
+      y: mapStore.translate[1],
+      k: mapStore.scale,
+    };
+    // Compute new k value
+    view.k = mapStore.scale * (1 + factor * direction);
+    // Compute new x and y values
+    const translate0 = [
+      (center[0] - mapStore.translate[0]) / mapStore.scale,
+      (center[1] - mapStore.translate[1]) / mapStore.scale,
+    ];
+    view.x += center[0] - (translate0[0] * view.k + view.x);
+    view.y += center[1] - (translate0[1] * view.k + view.y);
+
+    // Update mapstore with the new values
+    setMapStore({
+      scale: view.k,
+      translate: [view.x, view.y],
+    });
+  };
+  const handleClickZoomIn = () => {
+    if (mapStore.lockZoomPan) return;
+    handleClickZoom(1);
+  };
+  const handleClickZoomOut = () => {
+    if (mapStore.lockZoomPan) return;
+    handleClickZoom(-1);
+  };
+
+  const handleMouseInfo = () => {
+
+  };
+
   onMount(() => {
     // svg = d3.select(svgElem);
     // svg.call(zoom);
@@ -390,29 +442,15 @@ export default function MapZone(): JSX.Element {
             {(layer) => <>
               {/*
                 For now we need a workaround issue https://github.com/solidjs/solid/issues/2110
-                regarding the stdDeviation attribute of the feDropShadow filter.
+                regarding the stdDeviation attribute of the feDropShadow filter,
+                that's why we use spread operator to pass the stdDeviation attribute.
               */}
-              <Show
-                when={layer.visible && !!layer.dropShadow && layer.dropShadow!.stdDeviation === 0}
-              >
+              <Show when={layer.visible && !!layer.dropShadow}>
                 <filter id={`filter-drop-shadow-${layer.id}`} width="200%" height="200%">
                   <feDropShadow
                     dx={layer.dropShadow!.dx}
                     dy={layer.dropShadow!.dy}
-                    stdDeviation="0"
-                    flood-color={layer.dropShadow!.color}
-                    flood-opacity={1}
-                  />
-                </filter>
-              </Show>
-              <Show
-                when={layer.visible && !!layer.dropShadow && layer.dropShadow!.stdDeviation > 0}
-              >
-                <filter id={`filter-drop-shadow-${layer.id}`} width="200%" height="200%">
-                  <feDropShadow
-                    dx={layer.dropShadow!.dx}
-                    dy={layer.dropShadow!.dy}
-                    stdDeviation="7"
+                    {...{ stdDeviation: layer.dropShadow!.stdDeviation }}
                     flood-color={layer.dropShadow!.color}
                     flood-opacity={1}
                   />
@@ -447,7 +485,7 @@ export default function MapZone(): JSX.Element {
                   (elem as Legend).visible
                   && findLayerById(layersDescriptionStore.layers, (elem as Legend).layerId)!.visible
                 )
-              }>{ dispatchLegendRenderer(elem) }</Show>;
+              }>{ dispatchLegendRenderer(elem as Legend) }</Show>;
             }}
         </For>
         <Show when={!globalStore.userHasAddedLayer}>
@@ -464,6 +502,62 @@ export default function MapZone(): JSX.Element {
           </foreignObject>
         </Show>
       </svg>
+    </div>
+    <div class="field has-addons map-zone__controls">
+      <p class="control">
+        <button
+          class="button"
+          onClick={handleClickZoomIn}
+          aria-label={LL().MapZone.Controls.Plus()}
+          title={LL().MapZone.Controls.Plus()}
+        >
+          <FiPlusSquare size={'1.5em'} />
+        </button>
+      </p>
+      <p class="control">
+        <button
+          class="button"
+          onClick={handleClickZoomOut}
+          aria-label={LL().MapZone.Controls.Minus()}
+          title={LL().MapZone.Controls.Minus()}
+        >
+          <FiMinusSquare size={'1.5em'} />
+        </button>
+      </p>
+      <p class="control">
+        <Switch>
+          <Match when={!mapStore.lockZoomPan}>
+            <button
+              class="button"
+              onClick={() => { setMapStore({ lockZoomPan: true }); }}
+              aria-label={LL().MapZone.Controls.Lock()}
+              title={LL().MapZone.Controls.Lock()}
+            >
+              <FiUnlock size={'1.5em'} />
+            </button>
+          </Match>
+          <Match when={mapStore.lockZoomPan}>
+            <button
+              class="button"
+              onClick={() => { setMapStore({ lockZoomPan: false }); }}
+              aria-label={LL().MapZone.Controls.Unlock()}
+              title={LL().MapZone.Controls.Unlock()}
+            >
+              <FiLock size={'1.5em'} />
+            </button>
+          </Match>
+        </Switch>
+      </p>
+      <p class="control">
+        <button
+          class="button"
+          aria-label={LL().MapZone.Controls.Info()}
+          title={LL().MapZone.Controls.Info()}
+          onClick={handleMouseInfo}
+        >
+          <FiInfo size={'1.5em'} />
+        </button>
+      </p>
     </div>
   </div>;
 }

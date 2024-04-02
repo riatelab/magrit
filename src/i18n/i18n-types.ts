@@ -336,6 +336,28 @@ type RootTranslation = {
 		 * D​r​a​g​ ​a​n​d​ ​d​r​o​p​ ​y​o​u​r​ ​f​i​l​e​(​s​)​ ​h​e​r​e​ ​!​ ​(​o​r​ ​u​s​e​ ​t​h​e​ ​i​m​p​o​r​t​ ​m​e​n​u​)
 		 */
 		DropFilesHere: string
+		Controls: {
+			/**
+			 * Z​o​o​m​ ​i​n
+			 */
+			Plus: string
+			/**
+			 * Z​o​o​m​ ​o​u​t
+			 */
+			Minus: string
+			/**
+			 * L​o​c​k​ ​z​o​o​m​ ​/​ ​p​o​s​i​t​i​o​n
+			 */
+			Lock: string
+			/**
+			 * U​n​l​o​c​k​ ​z​o​o​m​ ​/​ ​p​o​s​i​t​i​o​n
+			 */
+			Unlock: string
+			/**
+			 * D​i​s​p​l​a​y​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​h​o​v​e​r​e​d​ ​f​e​a​t​u​r​e
+			 */
+			Info: string
+		}
 	}
 	LeftMenu: {
 		/**
@@ -3020,6 +3042,28 @@ export type TranslationFunctions = {
 		 * Drag and drop your file(s) here ! (or use the import menu)
 		 */
 		DropFilesHere: () => LocalizedString
+		Controls: {
+			/**
+			 * Zoom in
+			 */
+			Plus: () => LocalizedString
+			/**
+			 * Zoom out
+			 */
+			Minus: () => LocalizedString
+			/**
+			 * Lock zoom / position
+			 */
+			Lock: () => LocalizedString
+			/**
+			 * Unlock zoom / position
+			 */
+			Unlock: () => LocalizedString
+			/**
+			 * Display information on hovered feature
+			 */
+			Info: () => LocalizedString
+		}
 	}
 	LeftMenu: {
 		/**

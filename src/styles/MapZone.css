@@ -28,3 +28,21 @@
   opacity: 0.7;
   cursor: default;
 }
+
+.map-zone__controls {
+  width: 100%;
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  justify-content: center !important;
+  margin-bottom: 0 !important;
+}
+
+.map-zone__controls > p.control {
+  margin-bottom: 0 !important;
+}
+
+.map-zone__controls > p.control > button {
+  padding: 0.5em;
+  background: var(--bulma-background);
+}

@@ -93,6 +93,13 @@ const en = {
   },
   MapZone: {
     DropFilesHere: 'Drag and drop your file(s) here ! (or use the import menu)',
+    Controls: {
+      Plus: 'Zoom in',
+      Minus: 'Zoom out',
+      Lock: 'Lock zoom / position',
+      Unlock: 'Unlock zoom / position',
+      Info: 'Display information on hovered feature',
+    },
   },
   LeftMenu: {
     Import: 'Data import',
