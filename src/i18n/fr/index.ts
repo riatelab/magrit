@@ -435,6 +435,9 @@ const fr = {
       FieldX: 'Champ contenant les coordonnées X',
       FieldY: 'Champ contenant les coordonnées Y',
       FieldWkt: 'Champ contenant les géométries au format WKT',
+      NoFeatureToCreate: 'Aucune entité à créer - Veuillez vérifier le(s) champ(s) sélectionnés.',
+      NFeaturesToCreate: '{{Une entité | ?? entités}} à créer.',
+      CoordsNotInCRS: 'Les valeurs contenues dans les champs sélectionnés ne semblent pas être des coordonnées géographiques valides. Veuillez vérifier votre sélection.',
     },
   },
   FormulaInput: {

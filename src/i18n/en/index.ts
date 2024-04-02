@@ -435,6 +435,9 @@ const en = {
       FieldX: 'Field containing the X coordinate',
       FieldY: 'Field containing the Y coordinate',
       FieldWkt: 'Field containing the WKT geometry',
+      NoFeatureToCreate: 'No feature to create - Please check the field(s) selected.',
+      NFeaturesToCreate: '{{One feature | ?? features}} to create.',
+      CoordsNotInCRS: 'The values in the selected fields do not appear to be valid geographic coordinates. Please check your selection.',
     },
   },
   FormulaInput: {

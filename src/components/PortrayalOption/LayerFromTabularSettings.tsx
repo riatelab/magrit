@@ -1,12 +1,13 @@
 // Imports from solid-js
 import {
-  createEffect,
-  createSignal, For, type JSX, on, Show,
+  createEffect, createSignal, For,
+  type JSX, Match, on, Show, Switch,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
+import proj4 from 'proj4';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -18,6 +19,7 @@ import {
   wktSeemsValid,
 } from '../../helpers/layerFromTable';
 import { generateIdLayer, getDefaultRenderingParams } from '../../helpers/layers';
+import { epsgDb, type EpsgDbEntryType } from '../../helpers/projection';
 
 // Stores
 import {
@@ -57,6 +59,37 @@ function validateFieldsXY(
   ));
 
   return validBoth.length;
+}
+
+function validateExtentCoordinates(
+  tableId: string,
+  fieldX: string,
+  fieldY: string,
+  targetCrs: string = 'EPSG:4326',
+): number | null {
+  // We want to know if the coordinates are in the expected range for the target CRS
+  const table = layersDescriptionStore.tables.find((t) => t.id === tableId)!;
+  const valuesX = table.data.map((d) => d[fieldX]);
+  const valuesY = table.data.map((d) => d[fieldY]);
+
+  // Find the projection in the ESPG database
+  const projection = epsgDb[targetCrs.replace('EPSG:', '')];
+  if (!projection || !projection.bbox) return null;
+
+  // Instantiate a proj4 object for the target CRS
+  const p = proj4(projection.proj4 || projection.wkt);
+
+  // Transform the box coordinates to the target CRS
+  const [ymax0, xmin0, ymin0, xmax0] = projection.bbox;
+  const [xmin, ymin] = p.forward([xmin0, ymin0]);
+  const [xmax, ymax] = p.forward([xmax0, ymax0]);
+
+  // Check if the coordinates are in the expected range
+  const validExtent = valuesX.filter((v, i) => (
+    v >= xmin && v <= xmax && valuesY[i] >= ymin && valuesY[i] <= ymax
+  ));
+
+  return validExtent.length;
 }
 
 function validateFieldWkt(
@@ -183,23 +216,37 @@ export default function LayerFromTabularSettings(
   const [
     validEntries,
     setValidEntries,
-  ] = createSignal<number>();
+  ] = createSignal<number | null>(null);
+
+  const [
+    entriesInExtent,
+    setEntriesInExtent,
+  ] = createSignal<number | null>(null);
 
   createEffect(
     on(
       () => [fieldX(), fieldY(), fieldWkt()],
       () => {
         if (mode() === 'coordinates') {
+          if (fieldX() === '' || fieldY() === '') return;
           setValidEntries(validateFieldsXY(
             props.tableId,
             fieldX(),
             fieldY(),
           ));
+          setEntriesInExtent(validateExtentCoordinates(
+            props.tableId,
+            fieldX(),
+            fieldY(),
+            pointCrs(),
+          ));
         } else {
+          if (fieldWkt() === '') return;
           setValidEntries(validateFieldWkt(
             props.tableId,
             fieldWkt(),
           ));
+          setEntriesInExtent(null);
         }
       },
     ),
@@ -212,6 +259,8 @@ export default function LayerFromTabularSettings(
         setFieldX('');
         setFieldY('');
         setFieldWkt('');
+        setValidEntries(null);
+        setEntriesInExtent(null);
       },
     ),
   );
@@ -304,21 +353,34 @@ export default function LayerFromTabularSettings(
       (
         (mode() === 'coordinates' && fieldX() && fieldY())
         || (mode() === 'wkt' && fieldWkt())
-      ) && validEntries() && validEntries()! === 0
+      ) && validEntries() !== null && validEntries()! === 0
     }>
       <MessageBlock type={'danger'} useIcon={true}>
-        <p>No entry to create</p>
+        <p>{ LL().FunctionalitiesSection.LayerFromTableOptions.NoFeatureToCreate() }</p>
       </MessageBlock>
     </Show>
     <Show when={
       (
         (mode() === 'coordinates' && fieldX() && fieldY())
         || (mode() === 'wkt' && fieldWkt())
-      ) && validEntries() && validEntries()! > 0
+      ) && validEntries() !== null && validEntries()! > 0
     }>
-      <MessageBlock type={'success'} useIcon={true}>
-        <p>{ validEntries() } features to create</p>
-      </MessageBlock>
+      <Switch>
+        <Match when={entriesInExtent() === null || entriesInExtent()! > 0}>
+          <MessageBlock type={'success'} useIcon={true}>
+            <p>{
+              LL().FunctionalitiesSection.LayerFromTableOptions.NFeaturesToCreate(validEntries()!)
+            }</p>
+          </MessageBlock>
+        </Match>
+        <Match when={entriesInExtent() !== null && entriesInExtent() === 0}>
+          <MessageBlock type={'danger'} useIcon={true}>
+            <p>{
+              LL().FunctionalitiesSection.LayerFromTableOptions.CoordsNotInCRS()
+            }</p>
+          </MessageBlock>
+        </Match>
+      </Switch>
     </Show>
     <InputResultName
       value={newLayerName()}
@@ -328,7 +390,10 @@ export default function LayerFromTabularSettings(
     <ButtonValidation
       label={LL().FunctionalitiesSection.CreateLayer()}
       onClick={makePortrayal}
-      disabled={!(validEntries() && validEntries()! > 0)}
+      disabled={
+        !(validEntries() !== null && validEntries()! > 0)
+        || (entriesInExtent() !== null && entriesInExtent() === 0)
+      }
     />
   </div>;
 }

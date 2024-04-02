@@ -1549,6 +1549,18 @@ type RootTranslation = {
 			 * F​i​e​l​d​ ​c​o​n​t​a​i​n​i​n​g​ ​t​h​e​ ​W​K​T​ ​g​e​o​m​e​t​r​y
 			 */
 			FieldWkt: string
+			/**
+			 * N​o​ ​f​e​a​t​u​r​e​ ​t​o​ ​c​r​e​a​t​e​ ​-​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​t​h​e​ ​f​i​e​l​d​(​s​)​ ​s​e​l​e​c​t​e​d​.
+			 */
+			NoFeatureToCreate: string
+			/**
+			 * {​{​O​n​e​ ​f​e​a​t​u​r​e​|​?​?​ ​f​e​a​t​u​r​e​s​}​}​ ​t​o​ ​c​r​e​a​t​e​.
+			 */
+			NFeaturesToCreate: string
+			/**
+			 * T​h​e​ ​v​a​l​u​e​s​ ​i​n​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​f​i​e​l​d​s​ ​d​o​ ​n​o​t​ ​a​p​p​e​a​r​ ​t​o​ ​b​e​ ​v​a​l​i​d​ ​g​e​o​g​r​a​p​h​i​c​ ​c​o​o​r​d​i​n​a​t​e​s​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​s​e​l​e​c​t​i​o​n​.
+			 */
+			CoordsNotInCRS: string
 		}
 	}
 	FormulaInput: {
@@ -4184,6 +4196,18 @@ export type TranslationFunctions = {
 			 * Field containing the WKT geometry
 			 */
 			FieldWkt: () => LocalizedString
+			/**
+			 * No feature to create - Please check the field(s) selected.
+			 */
+			NoFeatureToCreate: () => LocalizedString
+			/**
+			 * {{One feature|?? features}} to create.
+			 */
+			NFeaturesToCreate: (arg0: number | string | boolean) => LocalizedString
+			/**
+			 * The values in the selected fields do not appear to be valid geographic coordinates. Please check your selection.
+			 */
+			CoordsNotInCRS: () => LocalizedString
 		}
 	}
 	FormulaInput: {
