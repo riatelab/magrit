@@ -351,6 +351,7 @@ const en = {
       NewLayerName: 'Categorical_Choropleth_{layerName}',
     },
     LabelsOptions: {
+      Filter: 'Filter the labels to create',
       NewLayerName: 'Labels_{layerName}',
     },
     LinksOptions: {

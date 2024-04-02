@@ -1249,6 +1249,10 @@ type RootTranslation = {
 		}
 		LabelsOptions: {
 			/**
+			 * F​i​l​t​e​r​ ​t​h​e​ ​l​a​b​e​l​s​ ​t​o​ ​c​r​e​a​t​e
+			 */
+			Filter: string
+			/**
 			 * L​a​b​e​l​s​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
 			 */
@@ -3914,6 +3918,10 @@ export type TranslationFunctions = {
 			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 		LabelsOptions: {
+			/**
+			 * Filter the labels to create
+			 */
+			Filter: () => LocalizedString
 			/**
 			 * Labels_{layerName}
 			 */

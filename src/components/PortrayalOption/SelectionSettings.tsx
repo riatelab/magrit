@@ -6,9 +6,7 @@ import {
 import { produce, unwrap } from 'solid-js/store';
 
 // Imports from other packages
-import alasql from 'alasql';
 import { yieldOrContinue } from 'main-thread-scheduling';
-import { area } from '@turf/turf';
 import { LocalizedString } from 'typesafe-i18n';
 
 // Helpers
@@ -32,47 +30,14 @@ import { PortrayalSettingsProps } from './common';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputResultName from './InputResultName.tsx';
 import FormulaInput, {
-  formatValidSampleOutput, hasSpecialFieldArea,
-  hasSpecialFieldId,
-  replaceSpecialFields,
+  filterData,
+  formatValidSampleOutput,
   SampleOutputFormat,
 } from '../FormulaInput.tsx';
 import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
 import { GeoJSONFeature, LayerDescription } from '../../global';
-
-function filterData(
-  referenceLayerId: string,
-  formula: string,
-): GeoJSONFeature[] {
-  const layerDescription = layersDescriptionStore.layers
-    .find((layer) => layer.id === referenceLayerId)! as LayerDescription;
-  const data = layerDescription.data.features
-    .map((d) => unwrap(d.properties) as Record<string, any>);
-  const lengthDataset = data.length;
-  const formulaClean = replaceSpecialFields(formula, lengthDataset);
-  const query = `SELECT ${formulaClean} as newValue FROM ?`;
-
-  // Add special fields if needed
-  if (hasSpecialFieldId(formulaClean)) {
-    data.forEach((d, i) => {
-      d['@@uuid'] = i; // eslint-disable-line no-param-reassign
-    });
-  }
-  if (hasSpecialFieldArea(formulaClean)) {
-    data.forEach((d, i) => {
-      d['@@area'] = area(layerDescription.data.features[i].geometry as never); // eslint-disable-line no-param-reassign
-    });
-  }
-
-  // Compute new column
-  const newColumn = alasql(query, [data]);
-  const predicateArray = newColumn.map((d: any) => d.newValue);
-
-  // Select the data based on the predicate array
-  return layerDescription.data.features.filter((_, i) => predicateArray[i]);
-}
 
 async function onClickValidate(
   referenceLayerId: string,
@@ -83,7 +48,7 @@ async function onClickValidate(
     .find((layer) => layer.id === referenceLayerId)! as LayerDescription;
 
   // Select the data based on the predicate array
-  const features = filterData(referenceLayerId, formula);
+  const features = filterData(layerDescription, formula);
 
   const newLayerDescription = {
     id: generateIdLayer(),
@@ -169,7 +134,7 @@ export default function SelectionSettings(
     );
 
     // Close the current modal
-    setFunctionalitySelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, id: '', type: '' });
 
     // Display loading overlay
     setLoading(true);
@@ -201,7 +166,7 @@ export default function SelectionSettings(
           && sampleOutput()?.type === 'Valid'
           && allValuesAreBoolean(Object.values(sampleOutput()!.value))
         ) {
-          setFilteredData(filterData(props.layerId, formula()));
+          setFilteredData(filterData(layerDescription, formula()));
         } else {
           setFilteredData(null);
         }
@@ -240,9 +205,6 @@ export default function SelectionSettings(
       >
         {formatSampleOutput(sampleOutput(), LL)}
       </pre>
-    </div>
-    <br />
-    <div class="field-block">
     </div>
     <br />
     <Show when={filteredData() !== null}>

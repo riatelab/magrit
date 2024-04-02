@@ -15,7 +15,9 @@ import alasql from 'alasql';
 
 // Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
-import { LayerDescription, TableDescription } from '../global';
+
+// Types
+import type { GeoJSONFeature, LayerDescription, TableDescription } from '../global';
 
 // Insert a value (chosen from the list of fields / special fields / operator)
 // in the formula at the caret position (taking care of the selection if needed)
@@ -78,6 +80,36 @@ export const formatValidSampleOutput = (
     }
   }
   return strArray.join('\n');
+};
+
+export const filterData = (
+  layerDescription: LayerDescription,
+  formula: string,
+): GeoJSONFeature[] => {
+  const data = layerDescription.data.features
+    .map((d) => unwrap(d.properties) as Record<string, any>);
+  const lengthDataset = data.length;
+  const formulaClean = replaceSpecialFields(formula, lengthDataset);
+  const query = `SELECT ${formulaClean} as newValue FROM ?`;
+
+  // Add special fields if needed
+  if (hasSpecialFieldId(formulaClean)) {
+    data.forEach((d, i) => {
+      d['@@uuid'] = i; // eslint-disable-line no-param-reassign
+    });
+  }
+  if (hasSpecialFieldArea(formulaClean)) {
+    data.forEach((d, i) => {
+      d['@@area'] = area(layerDescription.data.features[i].geometry as never); // eslint-disable-line no-param-reassign
+    });
+  }
+
+  // Compute new column
+  const newColumn = alasql(query, [data]);
+  const predicateArray = newColumn.map((d: any) => d.newValue);
+
+  // Select the data based on the predicate array
+  return layerDescription.data.features.filter((_, i) => predicateArray[i]);
 };
 
 export default function FormulaInput(

@@ -351,6 +351,7 @@ const fr = {
       NewLayerName: 'Choroplèthe_catégorielle_{layerName}',
     },
     LabelsOptions: {
+      Filter: 'Filtrer les étiquettes à créer',
       NewLayerName: 'Étiquettes_{layerName}',
     },
     LinksOptions: {
