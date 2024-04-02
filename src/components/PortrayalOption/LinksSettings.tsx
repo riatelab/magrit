@@ -338,7 +338,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
     );
 
     // Close the current modal
-    setFunctionalitySelectionStore({ show: false, layerId: '' });
+    setFunctionalitySelectionStore({ show: false, id: '', type: '' });
 
     // Display loading overlay
     setLoading(true);

@@ -310,7 +310,7 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
 
 export default function TableWindow(): JSX.Element {
   const { LL } = useI18nContext();
-  // Extract layerId and editable from tableWindowStore
+  // Extract identifier and editable value from tableWindowStore
   // and find the layer from layersDescriptionStore
   // to get the data (we know that this wont change during the lifetime of the component
   // so we can destructure it)
