@@ -18,6 +18,7 @@ import InputFieldTextarea from '../Inputs/InputTextarea.tsx';
 
 // Helpers
 import type { TranslationFunctions } from '../../i18n/i18n-types';
+import { convertFromUnit, convertToUnit } from '../../helpers/distances';
 import { webSafeFonts } from '../../helpers/font';
 
 // Types / Interfaces / Enums
@@ -208,7 +209,7 @@ function makeSettingsScaleBar(
       )}
       value={ ft.style }
     >
-      <For each={Object.keys(ScaleBarStyle)}>
+      <For each={Object.keys(ScaleBarStyle).filter((d) => d !== 'blackAndWhiteBar')}>
         {
           (style) => <option value={style}>
             { LL().LayoutFeatures.Modal[style as keyof typeof ScaleBarStyle]() }
@@ -216,30 +217,48 @@ function makeSettingsScaleBar(
         }
       </For>
     </InputFieldSelect>
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.Width() }
-      value={ ft.width }
-      onChange={(value) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['width'],
-        value,
-      )}
-      min={10}
-      max={1000}
-      step={1}
-    />
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.Height() }
-      value={ ft.height }
-      onChange={(value) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['height'],
-        value,
-      )}
-      min={1}
-      max={400}
-      step={1}
-    />
+    <Show when={ft.style !== ScaleBarStyle.simpleLine}>
+      <InputFieldNumber
+        label={ LL().LayoutFeatures.Modal.Height() }
+        value={ ft.height }
+        onChange={(value) => updateLayoutFeatureProperty(
+          layoutFeatureId,
+          ['height'],
+          value,
+        )}
+        min={1}
+        max={400}
+        step={1}
+      />
+    </Show>
+    <Show when={ft.behavior === 'absoluteSize'}>
+      <InputFieldNumber
+        label={ LL().LayoutFeatures.Modal.Width() }
+        value={ ft.width }
+        onChange={(value) => updateLayoutFeatureProperty(
+          layoutFeatureId,
+          ['width'],
+          value,
+        )}
+        min={10}
+        max={1000}
+        step={1}
+      />
+    </Show>
+    <Show when={ft.behavior === 'geographicSize'}>
+      <InputFieldNumber
+        label={ LL().LayoutFeatures.Modal.Distance() }
+        value={ convertToUnit(ft.distance, ft.unit) }
+        onChange={(value) => updateLayoutFeatureProperty(
+          layoutFeatureId,
+          ['distance'],
+          convertFromUnit(value, ft.unit),
+        )}
+        min={1}
+        max={100000}
+        step={1}
+      />
+    </Show>
     <InputFieldSelect
       label={ LL().LayoutFeatures.Modal.Units() }
       onChange={(value) => {

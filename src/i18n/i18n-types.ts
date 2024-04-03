@@ -615,7 +615,11 @@ type RootTranslation = {
 			 */
 			FancyNorthArrow: string
 			/**
-			 * W​i​d​t​h
+			 * D​i​s​t​a​n​c​e​ ​o​n​ ​t​h​e​ ​m​a​p​ ​(​u​n​i​t​ ​c​h​o​s​e​n​ ​b​e​l​o​w​)
+			 */
+			Distance: string
+			/**
+			 * W​i​d​t​h​ ​(​p​x​)
 			 */
 			Width: string
 			/**
@@ -3321,7 +3325,11 @@ export type TranslationFunctions = {
 			 */
 			FancyNorthArrow: () => LocalizedString
 			/**
-			 * Width
+			 * Distance on the map (unit chosen below)
+			 */
+			Distance: () => LocalizedString
+			/**
+			 * Width (px)
 			 */
 			Width: () => LocalizedString
 			/**

@@ -24,6 +24,7 @@ import {
   RectangleBox,
   triggerContextMenuLayoutFeature,
 } from './common.tsx';
+import { convertToUnit } from '../../helpers/distances';
 import { sphericalLawOfCosine } from '../../helpers/geo';
 import { Mceil, Mround } from '../../helpers/math';
 
@@ -39,25 +40,6 @@ import {
 // We only use it internally, this is the start of the coordinate system
 // for this layout feature
 const initialPosition = 0;
-
-const convertToUnit = (distance: number, unit: DistanceUnit): number => {
-  if (unit === DistanceUnit.km) {
-    return distance / 1000;
-  }
-  if (unit === DistanceUnit.mi) {
-    return distance / 1609.344;
-  }
-  if (unit === DistanceUnit.ft) {
-    return distance / 0.3048;
-  }
-  if (unit === DistanceUnit.yd) {
-    return distance / 0.9144;
-  }
-  if (unit === DistanceUnit.nmi) {
-    return distance / 1852;
-  }
-  return distance;
-};
 
 const formatDistance = (distance: number, displayUnit: DistanceUnit, label?: string): string => {
   // We store the distance in meters in the store
@@ -193,7 +175,14 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
     ),
   );
 
-  if (Number.isNaN(props.distance)) {
+  const handleNanDistance = () => {
+    // Set some default width
+    setLayersDescriptionStore(
+      'layoutFeaturesAndLegends',
+      (f: LayoutFeature | Legend) => f.id === props.id,
+      'width',
+      100,
+    );
     // We need to compute the distance for the given width.
     // Geo coordinates of pt1 and pt2:
     const left = globalStore.projection
@@ -202,13 +191,21 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
       .invert([props.position[0] + props.width, props.position[1]]);
     // Compute the distance between the two points
     const dist = sphericalLawOfCosine(left, right);
-    console.log(dist);
     setLayersDescriptionStore(
       'layoutFeaturesAndLegends',
       (f: LayoutFeature | Legend) => f.id === props.id,
       'distance',
-      dist / 1000,
+      dist,
     );
+  };
+
+  if (
+    Number.isNaN(props.distance)
+    || props.distance === 0
+    || Number.isNaN(props.width)
+    || props.width === 0
+  ) {
+    handleNanDistance();
   }
 
   createEffect(
@@ -216,14 +213,16 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
       () => [
         props.position,
         props.width,
-        // props.style,
         props.behavior,
         mapStore.scale,
         mapStore.translate,
         globalStore.projection,
       ],
       () => {
-        if (props.behavior === 'absoluteSize') {
+        if (props.behavior === 'geographicSize') {
+          return;
+        }
+        setTimeout(() => {
           // The scale bar is always the same size (in pixels) no matter the zoom level
           // but we need to recompute the displayed distance
           // We need to compute the distance for the given width.
@@ -243,11 +242,55 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
               tickValues,
             },
           );
-        } else { // 'geographicSize'
-          // The scale bar always represents the same distance on the map, no matter the zoom level
-          // but we need to recompute it's pixel size
+        }, 10);
+      },
+    ),
+  );
 
+  createEffect(
+    on(
+      () => [
+        props.position,
+        props.distance,
+        props.behavior,
+        mapStore.scale,
+        mapStore.translate,
+        globalStore.projection,
+      ],
+      () => {
+        if (props.behavior === 'absoluteSize') {
+          return;
         }
+        setTimeout(() => {
+          // The scale bar always represents the same distance on the map, no matter the zoom level
+          // but we need to recompute it's pixel size.
+          if (
+            Number.isNaN(props.distance) || props.distance <= 0
+            || Number.isNaN(props.width) || props.width <= 0
+          ) {
+            // As our calcultation of the new distance is based
+            // on the ratio between the current distance and the target distance,
+            // we need to set a default distance if the current distance is 0/NaN.
+            handleNanDistance();
+          }
+          // Geo coordinates of pt1 and pt2:
+          const left = globalStore.projection
+            .invert(props.position);
+          const right = globalStore.projection
+            .invert([props.position[0] + props.width, props.position[1]]);
+          // Compute the current distance between the two points
+          const currentDistance = sphericalLawOfCosine(left, right);
+          // Compute the ratio between the target distance and the current distance
+          const ratio = props.distance / currentDistance;
+          // Compute the new width
+          const newWidth = props.width * ratio;
+          setLayersDescriptionStore(
+            'layoutFeaturesAndLegends',
+            (f: LayoutFeature | Legend) => f.id === props.id,
+            'width',
+            newWidth,
+          );
+        }, 10);
       },
     ),
   );

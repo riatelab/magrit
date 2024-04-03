@@ -1003,7 +1003,7 @@ export enum ScaleBarBehavior {
 
 export interface ScaleBar extends LayoutFeatureBase {
   type: LayoutFeatureType.ScaleBar,
-  // The width of the scale bar
+  // The width of the scale bar (in px)
   width: number,
   // The height of the scale bar
   height: number,
@@ -1011,7 +1011,7 @@ export interface ScaleBar extends LayoutFeatureBase {
   rotation: number,
   // The unit of the scale bar
   unit: DistanceUnit,
-  // The length of the scale bar (in the given unit)
+  // The length of the scale bar on the map (in meters)
   distance: number,
   // The label of the scale bar (displayed on top of it)
   label?: string,

@@ -162,7 +162,7 @@ export function makeLayoutFeaturesSettingsModal(
     },
     escapeKey: 'cancel',
     // We can use a slightly smaller width for this modal
-    width: '500px',
+    width: '600px',
   });
 }
 
@@ -183,12 +183,13 @@ export function triggerContextMenuLayoutFeature(
   ];
 
   if (allowEdit) {
-    contextMenuEntries.push({
-      label: LL().LayoutFeatures.ContextMenu.Edit(),
-      callback: () => {
-        // TODO: Show markers on the map to allow the user to resize the layout feature
-      },
-    });
+    // TODO: Show markers on the map to allow the user to resize the layout feature
+    //       (as in a vector graphics editor)
+    // contextMenuEntries.push({
+    //   label: LL().LayoutFeatures.ContextMenu.Edit(),
+    //   callback: () => {
+    //   },
+    // });
   }
 
   contextMenuEntries.push(
