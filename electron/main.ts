@@ -1,11 +1,13 @@
-import { app, BrowserWindow, shell } from 'electron';
+import {
+  app, dialog, BrowserWindow, MessageBoxSyncOptions, shell,
+} from 'electron';
 
 function createWindow() {
   const win = new BrowserWindow({
     show: false,
     autoHideMenuBar: true,
     title: 'Magrit',
-    icon: 'dist/assets/magrit-logo-only-kzddNswe.png',
+    icon: 'dist/assets/magrit-logo-only-CTN102zB.png',
   });
 
   win.maximize();
@@ -15,6 +17,17 @@ function createWindow() {
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('https:')) shell.openExternal(url);
     return { action: 'deny' };
+  });
+
+  win.webContents.on('will-prevent-unload', (event) => {
+    const options = {
+      type: 'question',
+      buttons: ['Cancel', 'Leave'],
+      message: 'Leave Site?',
+      detail: 'Changes that you made may not be saved.',
+    } as MessageBoxSyncOptions;
+    const response = dialog.showMessageBoxSync(null, options);
+    if (response === 1) event.preventDefault();
   });
 
   if (process.env.VITE_DEV_SERVER_URL) {

@@ -2,16 +2,16 @@
  * @see https://www.electron.build/configuration/configuration
  */
 {
-  "appId": "YourAppID",
-  "asar": false,
+  "appId": "com.riatelab.magrit",
+  "asar": true,
   "productName": "Magrit",
   "copyright": "Copyright © 2024 ${author}",
   "directories": {
     "output": "release/${version}"
   },
   "files": [
-    "dist",
-    "dist-electron"
+    "dist/**/*",
+    "dist-electron/**/*"
   ],
   "win": {
     "target": [

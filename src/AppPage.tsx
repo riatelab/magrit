@@ -67,7 +67,7 @@ import { undo, redo } from './store/undo-redo';
 import { functionalitySelectionStore } from './store/FunctionalitySelectionStore';
 
 // Types and enums
-import type {
+import {
   DexieDb,
   LayerDescription,
   LayoutFeature,
@@ -87,10 +87,18 @@ interface ProjectDescription {
   tables: TableDescription[],
 }
 
+// Are we in electron ?
+// Currently we need this for:
+// - the path to the data and wasm files(gdal3.js)
+// - the beforeunload event
+const isElectron = navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
+
 const loadGdal = async (): Promise<Gdal> => initGdalJs({
   paths: {
-    wasm: wasmUrl,
-    data: dataUrl,
+    // We need a workaround to make it works the same way on electron
+    // and in the browser (otherwise we get a double 'file:///' in the URL)
+    wasm: isElectron ? wasmUrl.replace('file:///', '') : wasmUrl,
+    data: isElectron ? dataUrl.replace('file:///', '') : dataUrl,
     js: workerUrl,
   },
   useWorker: true,
@@ -126,7 +134,11 @@ const onBeforeUnloadWindow = (ev: Event) => {
 
   // This is to prevent the browser from closing the window (or tab)
   // by displaying a confirmation dialog.
-  ev.returnValue = true; // eslint-disable-line no-param-reassign
+  // Note that in electron, any non-undefined value will prevent the window from closing
+  // without showing any dialog.
+  if (!isElectron) {
+    ev.returnValue = false; // eslint-disable-line no-param-reassign
+  }
 
   // Otherwise we store the state of the current projet
   // in the local DB (indexedDB via Dexie)

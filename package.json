@@ -21,7 +21,7 @@
     "dev": "npm-run-all --parallel vite typesafe-i18n",
     "dev:electron": "MODE=electrondev npm-run-all --parallel vite typesafe-i18n",
     "build": "vite build && npm run docs:build",
-    "build:electron": "MODE=electronbuild vite build && electron-builder",
+    "build:electron": "MODE=electronbuild vite build && npm run docs:build && electron-builder",
     "serve": "vite preview",
     "test": "vitest",
     "typesafe-i18n": "typesafe-i18n",
@@ -29,7 +29,6 @@
     "postinstall": "electron-builder install-app-deps && cd docs && npm install && cd .."
   },
   "devDependencies": {
-    "@electron/rebuild": "^3.6.0",
     "@solidjs/testing-library": "^0.8.7",
     "@testing-library/jest-dom": "^6.4.2",
     "@types/d3": "^7.4.3",
