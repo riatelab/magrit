@@ -11,6 +11,7 @@ import electron from 'vite-plugin-electron/simple';
 
 const isDevElectron = process.env.MODE === 'electrondev';
 const isBuildElectron = process.env.MODE === 'electronbuild';
+const isElectron = isDevElectron || isBuildElectron;
 
 export default defineConfig({
   base: './',
@@ -27,12 +28,12 @@ export default defineConfig({
     // since mid-2021 (Chromium 89+, Safari 15+, Firefox 89+, Edge 89+, Opera 75+),
     // which represents more than 94% of the global market share.
     // However, if we are building for electron, no need to use topLevelAwait.
-    (isDevElectron || isBuildElectron) ? {} : topLevelAwait(),
+    isElectron ? {} : topLevelAwait(),
     // devtools(),
     solidPlugin({ ssr: false }),
     svgLoader(),
     eslint(),
-    isDevElectron ? electron({
+    isElectron ? electron({
       main: {
         // Shortcut of `build.lib.entry`
         entry: 'electron/main.ts',

@@ -2,9 +2,14 @@ import { app, BrowserWindow, shell } from 'electron';
 
 function createWindow() {
   const win = new BrowserWindow({
+    show: false,
+    autoHideMenuBar: true,
     title: 'Magrit',
     icon: 'dist/assets/magrit-logo-only-kzddNswe.png',
   });
+
+  win.maximize();
+  win.show();
 
   // Open links in the browser, not inside the application
   win.webContents.setWindowOpenHandler(({ url }) => {
@@ -12,11 +17,9 @@ function createWindow() {
     return { action: 'deny' };
   });
 
-  // You can use `process.env.VITE_DEV_SERVER_URL` when the vite command is called `serve`
   if (process.env.VITE_DEV_SERVER_URL) {
     win.loadURL(process.env.VITE_DEV_SERVER_URL);
   } else {
-    // Load your file
     win.loadFile('dist/index.html');
   }
 }

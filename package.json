@@ -26,7 +26,7 @@
     "test": "vitest",
     "typesafe-i18n": "typesafe-i18n",
     "docs:build": "rm -rf dist/docs && cd docs && npm run build && cd .. && cp -r docs/.vitepress/dist dist/docs",
-    "postinstall": "cd docs && npm install && cd .."
+    "postinstall": "electron-builder install-app-deps && cd docs && npm install && cd .."
   },
   "devDependencies": {
     "@electron/rebuild": "^3.6.0",
