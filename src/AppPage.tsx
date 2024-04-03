@@ -6,6 +6,7 @@ import {
   onMount,
   Show,
 } from 'solid-js';
+import { Portal } from 'solid-js/web';
 
 // Imports from other packages
 import initGdalJs from 'gdal3.js';
@@ -45,6 +46,7 @@ import TableFunctionalitySelection from './components/Modals/TableFunctionalityS
 // Stores
 import { classificationPanelStore } from './store/ClassificationPanelStore';
 import { globalStore, setGlobalStore, setReloadingProject } from './store/GlobalStore';
+import { infoFeatureStore } from './store/InfoFeatureStore';
 import {
   type MapStoreType,
   mapStore,
@@ -78,6 +80,7 @@ import type { TranslationFunctions } from './i18n/i18n-types';
 
 // Styles
 import './styles/Transitions.css';
+import InfoFeatureBox from './components/InfoFeatureBox.tsx';
 
 interface ProjectDescription {
   version: string,
@@ -536,6 +539,11 @@ const AppPage: () => JSX.Element = () => {
         <ContextMenu />
       </Show>
     </main>
+    <Show when={infoFeatureStore.show}>
+      <Portal>
+        <InfoFeatureBox />
+      </Portal>
+    </Show>
     <Toaster
       position={'bottom-center'}
     />

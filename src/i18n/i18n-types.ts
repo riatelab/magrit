@@ -354,9 +354,13 @@ type RootTranslation = {
 			 */
 			Unlock: string
 			/**
-			 * D​i​s​p​l​a​y​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​h​o​v​e​r​e​d​ ​f​e​a​t​u​r​e
+			 * D​i​s​p​l​a​y​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​s​e​l​e​c​t​e​d​ ​f​e​a​t​u​r​e
 			 */
 			Info: string
+			/**
+			 * C​l​i​c​k​ ​o​n​ ​a​ ​f​e​a​t​u​r​e​ ​t​o​ ​d​i​s​p​l​a​y​ ​i​n​f​o​r​m​a​t​i​o​n
+			 */
+			InfoInstruction: string
 		}
 	}
 	LeftMenu: {
@@ -3064,9 +3068,13 @@ export type TranslationFunctions = {
 			 */
 			Unlock: () => LocalizedString
 			/**
-			 * Display information on hovered feature
+			 * Display information on selected feature
 			 */
 			Info: () => LocalizedString
+			/**
+			 * Click on a feature to display information
+			 */
+			InfoInstruction: () => LocalizedString
 		}
 	}
 	LeftMenu: {

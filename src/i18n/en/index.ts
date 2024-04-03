@@ -98,7 +98,8 @@ const en = {
       Minus: 'Zoom out',
       Lock: 'Lock zoom / position',
       Unlock: 'Unlock zoom / position',
-      Info: 'Display information on hovered feature',
+      Info: 'Display information on selected feature',
+      InfoInstruction: 'Click on a feature to display information',
     },
   },
   LeftMenu: {

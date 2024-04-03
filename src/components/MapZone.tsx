@@ -1,7 +1,7 @@
 // Imports from solid-js
 import {
-  For,
-  type JSX,
+  createSignal,
+  For, type JSX,
   Match, onMount,
   Show, Switch,
 } from 'solid-js';
@@ -25,6 +25,7 @@ import { findLayerById } from '../helpers/layers';
 
 // Stores
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
+import { setInfoFeatureStore } from '../store/InfoFeatureStore';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import { applicationSettingsStore, RenderVisibility, ZoomBehavior } from '../store/ApplicationSettingsStore';
 import {
@@ -383,8 +384,56 @@ export default function MapZone(): JSX.Element {
     handleClickZoom(-1);
   };
 
-  const handleMouseInfo = () => {
+  const [
+    isMouseInfoVisible,
+    setIsMouseInfoVisible,
+  ] = createSignal<boolean>(false);
 
+  let layerInfo;
+
+  const onClickFeature = (e: MouseEvent & { target: SVGElement & ID3Element }) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setInfoFeatureStore({
+      show: true,
+      // eslint-disable-next-line no-underscore-dangle
+      featureProperties: e.target.__data__.properties || {},
+    });
+  };
+
+  const onEscapeKey = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setIsMouseInfoVisible(false);
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      cleanUpInfoFeature();
+    }
+  };
+
+  const cleanUpInfoFeature = () => {
+    svgElem.style.cursor = 'default';
+    layerInfo.querySelectorAll('*').forEach((el) => {
+      el.removeEventListener('click', onClickFeature);
+    });
+    setInfoFeatureStore({ show: false, featureProperties: {} });
+    window.removeEventListener('keydown', onEscapeKey);
+  };
+
+  const handleMouseInfo = () => {
+    setIsMouseInfoVisible(!isMouseInfoVisible());
+    if (isMouseInfoVisible()) {
+      setInfoFeatureStore({ show: true, featureProperties: {} });
+      svgElem.focus();
+      svgElem.style.cursor = 'help';
+      // The layer that is on top of the others
+      const layers = svgElem.querySelectorAll('g.layer');
+      layerInfo = layers[layers.length - 1];
+      layerInfo.querySelectorAll('*').forEach((el) => {
+        el.addEventListener('click', onClickFeature);
+      });
+      window.addEventListener('keydown', onEscapeKey);
+    } else {
+      cleanUpInfoFeature();
+    }
   };
 
   onMount(() => {
@@ -510,6 +559,7 @@ export default function MapZone(): JSX.Element {
           onClick={handleClickZoomIn}
           aria-label={LL().MapZone.Controls.Plus()}
           title={LL().MapZone.Controls.Plus()}
+          disabled={mapStore.lockZoomPan}
         >
           <FiPlusSquare size={'1.5em'} />
         </button>
@@ -520,6 +570,7 @@ export default function MapZone(): JSX.Element {
           onClick={handleClickZoomOut}
           aria-label={LL().MapZone.Controls.Minus()}
           title={LL().MapZone.Controls.Minus()}
+          disabled={mapStore.lockZoomPan}
         >
           <FiMinusSquare size={'1.5em'} />
         </button>
@@ -550,7 +601,11 @@ export default function MapZone(): JSX.Element {
       </p>
       <p class="control">
         <button
-          class="button"
+          classList={{
+            button: true,
+            'is-outlined': isMouseInfoVisible(),
+            'is-warning': isMouseInfoVisible(),
+          }}
           aria-label={LL().MapZone.Controls.Info()}
           title={LL().MapZone.Controls.Info()}
           onClick={handleMouseInfo}

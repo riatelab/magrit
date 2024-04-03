@@ -23,7 +23,7 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
   bindData,
 ];
 
-export function defaultPolygonRendererOld(
+export function defaultPolygonRenderer(
   layerDescription: LayerDescription,
 ): JSX.Element {
   return <g
@@ -48,7 +48,7 @@ export function defaultPolygonRendererOld(
         (feature) => <path
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
-          // @ts-expect-error because use:bind-data isn't a property of this elemen
+          // @ts-expect-error because use:bind-data isn't a property of this element
           use:bindData={feature}
         />
       }
@@ -56,7 +56,7 @@ export function defaultPolygonRendererOld(
   </g>;
 }
 
-export function defaultPolygonRenderer(
+export function defaultPolygonRendererMeshed(
   layerDescription: LayerDescription,
 ): JSX.Element {
   // We should not need to use a memo here because the geometry

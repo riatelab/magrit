@@ -98,7 +98,8 @@ const fr = {
       Minus: 'Zoom arrière',
       Lock: 'Verrouiller le zoom / la position',
       Unlock: 'Déverrouiller le zoom / la position',
-      Info: 'Afficher les informations sur l\'entité survolée',
+      Info: 'Afficher les informations de l\'entité sélectionnée',
+      InfoInstruction: 'Cliquez sur une entité pour afficher ses informations.',
     },
   },
   LeftMenu: {
