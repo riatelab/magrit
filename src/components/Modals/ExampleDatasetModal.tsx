@@ -27,7 +27,7 @@ import Pagination from '../Pagination.tsx';
 
 // Assets
 import imgParis from '../../assets/Mairie_de_Paris.jpg';
-import imgWorld from '../../assets/World_Time_Zones_Map.png';
+import imgWorld from '../../assets/World_Time_Zones_Map.jpg';
 
 interface DatasetEntry {
   // Name of the dataset, in the various languages of the application
