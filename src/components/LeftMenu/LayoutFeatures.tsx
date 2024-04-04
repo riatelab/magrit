@@ -1,5 +1,7 @@
 // Import from solid-js
-import { Accessor, JSX } from 'solid-js';
+import {
+  Accessor, createSignal, JSX, Setter,
+} from 'solid-js';
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
@@ -28,6 +30,7 @@ import { setModalStore } from '../../store/ModalStore';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
+import d3 from '../../helpers/d3-custom';
 import {
   alreadyHasGraticule,
   alreadyHasSphere,
@@ -72,7 +75,7 @@ import {
 
 const makeDrawingInstructions = (
   LL: Accessor<TranslationFunctions>,
-  object: 'Rectangle' | 'Line' | 'FreeDrawing' | 'Text',
+  object: 'Rectangle' | 'Line' | 'Text',
 ): string => `${LL().LayoutFeatures.DrawingInstructions[object]()}\n${LL().LayoutFeatures.DrawingInstructions.PressEscToCancel()}`;
 
 const createRectangle = (LL: Accessor<TranslationFunctions>) => {
@@ -458,8 +461,11 @@ const createText = (LL: Accessor<TranslationFunctions>) => {
   document.body.addEventListener('keydown', onEscape);
 };
 
-const createFreeDraw = (LL: Accessor<TranslationFunctions>) => {
-  toast.success(makeDrawingInstructions(LL, 'FreeDrawing'), {
+const createFreeDraw = (
+  LL: Accessor<TranslationFunctions>,
+  setIsFreeDrawing: Setter<boolean>,
+) => {
+  toast.success(LL().LayoutFeatures.DrawingInstructions.FreeDrawing(), {
     duration: Infinity,
     style: {
       background: '#1f2937',
@@ -478,47 +484,60 @@ const createFreeDraw = (LL: Accessor<TranslationFunctions>) => {
   rectElement.setAttribute('fill', 'transparent');
   svgElement.appendChild(rectElement);
 
+  const cleanUp = () => {
+    // Remove toast
+    toast.dismiss();
+    // Remove event listeners
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    document.body.removeEventListener('keydown', onEscape);
+    // Reset cursor
+    svgElement.style.cursor = 'default';
+    // Remove the rect that was receiving mouse events
+    rectElement.remove();
+    // Remove temporary line
+    removeTemporaryLines();
+    // Reset "is drawing" state
+    setIsFreeDrawing(false);
+  };
+
+  // Event listener for escape key
+  const onEscape = (ev: KeyboardEvent) => {
+    if (ev.key === 'Escape') {
+      cleanUp();
+    }
+  };
+
   // Store the current lockZoomPan value
   const lockZoomPanValue = mapStore.lockZoomPan;
 
   // Disable zoom and pan temporarily
-  setMapStore({
-    lockZoomPan: true,
-  });
+  setMapStore({ lockZoomPan: true });
 
   // The points of the free drawing
-  const pts: [number, number][] = [];
+  let pts: [number, number][] = [];
 
-  let started = false;
+  // Set the cursor to crosshair to indicate that we are in drawing mode
+  svgElement.style.cursor = 'crosshair';
 
-  function startDrag(/* ev: MouseEvent */) {
-    started = true;
-  }
+  const dragStarted = (ev: d3.DragEvent) => {
+    // Push the point to the array
+    pts.push([ev.x, ev.y]);
+    // Draw the temporary line
+    removeTemporaryLines();
+    drawTemporaryLine(pts);
+  };
 
-  function drag(ev: MouseEvent) {
-    ev.preventDefault();
-    ev.stopPropagation();
-    if (started) {
-      // Point coordinates in SVG space
-      const cursorPt = getSvgCoordinates(svgElement, ev);
-      pts.push([cursorPt.x, cursorPt.y]);
-    }
-  }
+  // The line element that will be drawn
+  // (we slightly smooth the path using d3.curveBasis)
+  const line = d3.line().curve(d3.curveBasis);
 
-  function endDrag(/* ev: MouseEvent */) {
-    if (started) {
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      rectElement.removeEventListener('mousedown', startDrag);
-      rectElement.removeEventListener('mousemove', drag);
-      rectElement.removeEventListener('mouseup', endDrag);
-      rectElement.removeEventListener('mouseleave', endDrag);
-      rectElement.remove();
-      started = false;
-      svgElement.style.cursor = 'default';
-
-      // Remove toast
-      toast.dismiss();
-
+  // @ts-expect-error because of complex typing requirements
+  // for d3 drag behavior
+  d3.select(rectElement).call(d3.drag()
+    .container(() => svgElement)
+    .subject((ev) => [[ev.x, ev.y]])
+    .on('start drag', dragStarted)
+    .on('end', () => {
       const freeDrawingDescription = {
         id: generateIdLayoutFeature(),
         type: LayoutFeatureType.FreeDrawing,
@@ -526,7 +545,7 @@ const createFreeDraw = (LL: Accessor<TranslationFunctions>) => {
         strokeColor: '#000000',
         strokeWidth: 4,
         strokeOpacity: 1,
-        path: `M ${pts.map((p) => `${p[0]},${p[1]}`).join(' L ')}`,
+        path: line(pts),
       } as FreeDrawing;
 
       setLayersDescriptionStore(
@@ -538,22 +557,22 @@ const createFreeDraw = (LL: Accessor<TranslationFunctions>) => {
       );
 
       // Restore the lockZoomPan value
-      setMapStore({
-        lockZoomPan: lockZoomPanValue,
-      });
-    }
-  }
+      setMapStore({ lockZoomPan: lockZoomPanValue });
 
-  rectElement.addEventListener('mousedown', startDrag);
-  rectElement.addEventListener('mousemove', drag);
-  rectElement.addEventListener('mouseup', endDrag);
-  rectElement.addEventListener('mouseleave', endDrag);
+      pts = [];
+      // cleanUp();
+    }));
 
-  svgElement.style.cursor = 'crosshair';
+  document.body.addEventListener('keydown', onEscape);
 };
 
 export default function LayoutFeatures(): JSX.Element {
   const { LL } = useI18nContext();
+
+  const [
+    isFreeDrawing,
+    setIsFreeDrawing,
+  ] = createSignal<boolean>(false);
 
   return <div class="layout-features-section">
     <InputFieldColor
@@ -685,13 +704,25 @@ export default function LayoutFeatures(): JSX.Element {
           />
         </button>
         <button
-          class="unstyled"
+          classList={{
+            unstyled: true,
+            'is-outlined': isFreeDrawing(),
+            'is-warning': isFreeDrawing(),
+          }}
           title={LL().LayoutFeatures.FreeDrawing()}
           aria-label={LL().LayoutFeatures.FreeDrawing()}
-          onClick={() => { createFreeDraw(LL); }}
+          onClick={() => {
+            setIsFreeDrawing(!isFreeDrawing());
+            if (isFreeDrawing()) {
+              createFreeDraw(LL, setIsFreeDrawing);
+            } else {
+              // Dispatch keyboard event (escape) to remove the free drawing behavior
+              document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+            }
+          }}
         >
           <img
-            class="layout-features-section__icon-element disabled"
+            class="layout-features-section__icon-element"
             src={layoutFeatureDraw}
             alt={LL().LayoutFeatures.FreeDrawing()}
           />

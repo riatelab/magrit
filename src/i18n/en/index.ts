@@ -99,7 +99,7 @@ const en = {
       Lock: 'Lock zoom / position',
       Unlock: 'Unlock zoom / position',
       Info: 'Display information on selected feature',
-      InfoInstruction: 'Click on a feature to display information',
+      InfoInstruction: 'Click on a feature to display information. Press "Esc" to close.',
     },
   },
   LeftMenu: {
@@ -157,7 +157,7 @@ const en = {
     DrawingInstructions: {
       Line: 'Click to start drawing a line. Click again to add a point. Double-click to finish.\nHold the Ctrl key to draw a straight line.',
       Rectangle: 'Click to locate the first corner of the rectangle. Click again to locate the opposite corner.',
-      FreeDrawing: 'Click to start drawing the desired shape and release to finish.',
+      FreeDrawing: 'Click to start drawing the desired shape and release to finish. Press "Esc" to close the drawing mode.',
       Text: 'Click to locate the text.',
       TextPlaceholder: 'Type your text here...',
       PressEscToCancel: 'Press "Esc" to cancel.',

@@ -5,6 +5,8 @@ import {
   dsvFormat,
   tsvParse,
 } from 'd3-dsv';
+import { drag } from 'd3-drag';
+import { curveBasis, line } from 'd3-shape';
 import {
   transition,
   interrupt,
@@ -146,6 +148,7 @@ import {
 import { quadtree } from 'd3-quadtree';
 import type { D3ZoomEvent } from 'd3-zoom';
 import type { GeoProjection, GeoRawProjection } from 'd3-geo';
+import type { DragEvent } from 'd3-drag';
 import {
   easeCubicOut,
   easeSinOut,
@@ -445,10 +448,16 @@ export default {
   brushY,
   // Stuff from d3-tile
   tile,
+  // Stuff from d3-drag
+  drag,
+  // Stuff from d3-shape
+  curveBasis,
+  line,
 };
 
 export type {
   D3ZoomEvent,
+  DragEvent,
   GeoProjection,
   GeoRawProjection,
   BrushBehavior,

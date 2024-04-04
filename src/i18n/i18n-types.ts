@@ -358,7 +358,7 @@ type RootTranslation = {
 			 */
 			Info: string
 			/**
-			 * C​l​i​c​k​ ​o​n​ ​a​ ​f​e​a​t​u​r​e​ ​t​o​ ​d​i​s​p​l​a​y​ ​i​n​f​o​r​m​a​t​i​o​n
+			 * C​l​i​c​k​ ​o​n​ ​a​ ​f​e​a​t​u​r​e​ ​t​o​ ​d​i​s​p​l​a​y​ ​i​n​f​o​r​m​a​t​i​o​n​.​ ​P​r​e​s​s​ ​"​E​s​c​"​ ​t​o​ ​c​l​o​s​e​.
 			 */
 			InfoInstruction: string
 		}
@@ -549,7 +549,7 @@ type RootTranslation = {
 			 */
 			Rectangle: string
 			/**
-			 * C​l​i​c​k​ ​t​o​ ​s​t​a​r​t​ ​d​r​a​w​i​n​g​ ​t​h​e​ ​d​e​s​i​r​e​d​ ​s​h​a​p​e​ ​a​n​d​ ​r​e​l​e​a​s​e​ ​t​o​ ​f​i​n​i​s​h​.
+			 * C​l​i​c​k​ ​t​o​ ​s​t​a​r​t​ ​d​r​a​w​i​n​g​ ​t​h​e​ ​d​e​s​i​r​e​d​ ​s​h​a​p​e​ ​a​n​d​ ​r​e​l​e​a​s​e​ ​t​o​ ​f​i​n​i​s​h​.​ ​P​r​e​s​s​ ​"​E​s​c​"​ ​t​o​ ​c​l​o​s​e​ ​t​h​e​ ​d​r​a​w​i​n​g​ ​m​o​d​e​.
 			 */
 			FreeDrawing: string
 			/**
@@ -3072,7 +3072,7 @@ export type TranslationFunctions = {
 			 */
 			Info: () => LocalizedString
 			/**
-			 * Click on a feature to display information
+			 * Click on a feature to display information. Press "Esc" to close.
 			 */
 			InfoInstruction: () => LocalizedString
 		}
@@ -3263,7 +3263,7 @@ export type TranslationFunctions = {
 			 */
 			Rectangle: () => LocalizedString
 			/**
-			 * Click to start drawing the desired shape and release to finish.
+			 * Click to start drawing the desired shape and release to finish. Press "Esc" to close the drawing mode.
 			 */
 			FreeDrawing: () => LocalizedString
 			/**

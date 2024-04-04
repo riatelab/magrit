@@ -99,7 +99,7 @@ const fr = {
       Lock: 'Verrouiller le zoom / la position',
       Unlock: 'Déverrouiller le zoom / la position',
       Info: 'Afficher les informations de l\'entité sélectionnée',
-      InfoInstruction: 'Cliquez sur une entité pour afficher ses informations.',
+      InfoInstruction: 'Cliquez sur une entité pour afficher ses informations. Appuyez sur "Échap" pour fermer la fenêtre d\'information.',
     },
   },
   LeftMenu: {
@@ -157,10 +157,10 @@ const fr = {
     DrawingInstructions: {
       Line: 'Cliquez pour commencer à dessiner une ligne. Cliquez à nouveau pour ajouter un point. Double-cliquez pour terminer.\nMaintenez la touche "Ctrl" enfoncée pour dessiner une ligne droite.',
       Rectangle: 'Cliquez une première fois pour localiser le premier coin du rectangle. Cliquez une seconde fois pour localiser le coin opposé.',
-      FreeDrawing: 'Cliquez pour commencer à dessiner puis relâchez le bouton de la souris pour terminer.',
+      FreeDrawing: 'Cliquez pour commencer à dessiner puis relâchez le bouton de la souris pour terminer. Appuyez sur "Échap" pour quitter le mode de dessin.',
       Text: 'Cliquez pour localiser l\'emplacement du texte à ajouter.',
       TextPlaceholder: 'Saisir le texte à ajouter...',
-      PressEscToCancel: 'Appuyez sur "Echap" pour annuler.',
+      PressEscToCancel: 'Appuyez sur "Échap" pour annuler.',
     },
     Modal: {
       Title: 'Propriétés', // 'Propriétés pour {{ type d'objet }}'
