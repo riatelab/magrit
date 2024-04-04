@@ -502,6 +502,10 @@ type RootTranslation = {
 		 * F​r​e​e​ ​d​r​a​w​i​n​g
 		 */
 		FreeDrawing: string
+		/**
+		 * A​u​t​o​m​a​t​i​c​a​l​l​y​ ​a​l​i​g​n​ ​i​t​e​m​s​ ​o​n​ ​a​ ​g​r​i​d
+		 */
+		SnapToGrid: string
 		ContextMenu: {
 			/**
 			 * E​d​i​t​ ​s​e​t​t​i​n​g​s​.​.​.
@@ -993,7 +997,7 @@ type RootTranslation = {
 			 */
 			CurrentNumberOfClasses: string
 			/**
-			 * D​i​s​p​l​a​y​ ​a​ ​c​l​a​s​s​ ​s​u​m​m​a​r​y​ ​c​h​a​r​t​ ​o​n​ ​t​h​e​ ​m​a​p
+			 * D​i​s​p​l​a​y​ ​a​ ​c​l​a​s​s​ ​s​u​m​m​a​r​y​ ​h​i​s​t​o​g​r​a​m​ ​o​n​ ​t​h​e​ ​m​a​p
 			 */
 			DisplayChartOnMap: string
 			/**
@@ -1892,6 +1896,14 @@ type RootTranslation = {
 		 * G​r​a​t​i​c​u​l​e​ ​s​t​e​p​ ​(​Y​)
 		 */
 		GraticuleStepY: string
+		/**
+		 * A​d​d​ ​a​ ​b​a​r​ ​c​h​a​r​t​ ​b​y​ ​c​a​t​e​g​o​r​y​.​.​.
+		 */
+		AddBarChartCategoricalChoropleth: string
+		/**
+		 * A​d​d​ ​a​ ​c​l​a​s​s​ ​s​u​m​m​a​r​y​ ​h​i​s​t​o​g​r​a​m​.​.​.
+		 */
+		AddHistogramChoropleth: string
 	}
 	JoinPanel: {
 		/**
@@ -2690,6 +2702,22 @@ type RootTranslation = {
 			 * B​o​t​t​o​m​ ​p​a​r​t​ ​v​a​r​i​a​b​l​e​ ​t​i​t​l​e
 			 */
 			MushroomsBottomTitle: string
+			/**
+			 * B​a​r​ ​o​r​d​e​r
+			 */
+			BarOrder: string
+			/**
+			 * A​s​c​e​n​d​i​n​g
+			 */
+			BarOrderAscending: string
+			/**
+			 * D​e​s​c​e​n​d​i​n​g
+			 */
+			BarOrderDescending: string
+			/**
+			 * S​a​m​e​ ​o​r​d​e​r​ ​a​s​ ​i​n​ ​t​h​e​ ​l​e​g​e​n​d
+			 */
+			BarOrderNone: string
 		}
 	}
 	CommonTextElement: {
@@ -3216,6 +3244,10 @@ export type TranslationFunctions = {
 		 * Free drawing
 		 */
 		FreeDrawing: () => LocalizedString
+		/**
+		 * Automatically align items on a grid
+		 */
+		SnapToGrid: () => LocalizedString
 		ContextMenu: {
 			/**
 			 * Edit settings...
@@ -3701,7 +3733,7 @@ export type TranslationFunctions = {
 			 */
 			CurrentNumberOfClasses: (arg0: number | string | boolean) => LocalizedString
 			/**
-			 * Display a class summary chart on the map
+			 * Display a class summary histogram on the map
 			 */
 			DisplayChartOnMap: () => LocalizedString
 			/**
@@ -4585,6 +4617,14 @@ export type TranslationFunctions = {
 		 * Graticule step (Y)
 		 */
 		GraticuleStepY: () => LocalizedString
+		/**
+		 * Add a bar chart by category...
+		 */
+		AddBarChartCategoricalChoropleth: () => LocalizedString
+		/**
+		 * Add a class summary histogram...
+		 */
+		AddHistogramChoropleth: () => LocalizedString
 	}
 	JoinPanel: {
 		/**
@@ -5380,6 +5420,22 @@ export type TranslationFunctions = {
 			 * Bottom part variable title
 			 */
 			MushroomsBottomTitle: () => LocalizedString
+			/**
+			 * Bar order
+			 */
+			BarOrder: () => LocalizedString
+			/**
+			 * Ascending
+			 */
+			BarOrderAscending: () => LocalizedString
+			/**
+			 * Descending
+			 */
+			BarOrderDescending: () => LocalizedString
+			/**
+			 * Same order as in the legend
+			 */
+			BarOrderNone: () => LocalizedString
 		}
 	}
 	CommonTextElement: {

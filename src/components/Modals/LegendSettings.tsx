@@ -34,9 +34,8 @@ import InputFieldText from '../Inputs/InputText.tsx';
 
 // Types / Interfaces / Enums
 import {
-  CategoricalChoroplethBarchartLegend,
-  type CategoricalChoroplethLegend, ChoroplethHistogramLegend,
-  type ChoroplethLegend,
+  type CategoricalChoroplethBarchartLegend, type CategoricalChoroplethLegend,
+  type ChoroplethHistogramLegend, type ChoroplethLegend,
   type DiscontinuityLegend,
   type LabelsLegend,
   type LayerDescriptionCategoricalChoropleth,
@@ -50,6 +49,7 @@ import {
   type ProportionalSymbolsLegend,
   RepresentationType,
 } from '../../global.d';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
 
 /**
  * Update a single property of a legend in the layersDescriptionStore,
@@ -944,6 +944,15 @@ function makeSettginsCategoricalChoroplethBarchart(
         </label>
       </div>
     </div>
+    <InputFieldSelect
+      label={LL().Legend.Modal.BarOrder()}
+      onChange={(v) => { debouncedUpdateProps(legend.id, ['order'], v); }}
+      value={legend.id}
+    >
+      <option value="ascending">{LL().Legend.Modal.BarOrderAscending()}</option>
+      <option value="descending">{LL().Legend.Modal.BarOrderDescending()}</option>
+      <option value="none">{LL().Legend.Modal.BarOrderNone()}</option>
+    </InputFieldSelect>
     <hr/>
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}

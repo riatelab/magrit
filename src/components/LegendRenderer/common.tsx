@@ -20,8 +20,12 @@ import { pushUndoStackStore } from '../../store/stateStackStore';
 
 // Helpers
 import { unproxify } from '../../helpers/common';
+import { roundToNearest10 } from '../../helpers/math';
 import getMaximalAvailableRectangle from '../../helpers/maximal-rectangle';
 import { getTargetSvg } from '../../helpers/svg';
+
+// Stores
+import { globalStore } from '../../store/GlobalStore';
 
 // Subcomponents
 import LegendSettings from '../Modals/LegendSettings.tsx';
@@ -123,7 +127,10 @@ export function bindMouseEnterLeave(refElement: SVGGElement): void {
 // TODO: Some of this code is duplicated in the LayoutFeatureRenderer/common.tsx file.
 //   Once we finished implementing the legends and the layout features,
 //   we should try refactor this to avoid duplication.
-export function bindDragBehavior(refElement: SVGGElement, legend: Legend): void {
+export function bindDragBehavior(
+  refElement: SVGGElement,
+  legend: Legend,
+): void {
   // Allow the user to move the refElement group
   // by dragging it on the screen.
   // To do this we change the transform attribute of the refElement group.
@@ -191,13 +198,19 @@ export function bindDragBehavior(refElement: SVGGElement, legend: Legend): void 
 
     await yieldOrContinue('smooth');
 
+    // Do we want to snap coordinates on a grid ?
+    // (if so we do so by rounding the coordinates to the nearest multiple of 10)
+    const adjustPosition = globalStore.snapToGridWhenDragging
+      ? roundToNearest10
+      : (v: number) => v;
+
     // Update the position in the layersDescriptionStore
     // once the user has released the mouse button
     setLayersDescriptionStore(
       'layoutFeaturesAndLegends',
       (l: LayoutFeature | Legend) => l.id === legend.id,
       'position',
-      [positionX, positionY],
+      [adjustPosition(positionX), adjustPosition(positionY)],
     );
   };
 
@@ -208,10 +221,6 @@ export function bindDragBehavior(refElement: SVGGElement, legend: Legend): void 
     if (e.button > 1) return;
     e.stopPropagation();
 
-    // isDragging = true;
-    x = e.clientX;
-    y = e.clientY;
-
     // Listen on events on the parent SVG element
     outerSvg.addEventListener('mousemove', moveElement);
     outerSvg.addEventListener('mouseup', deselectElement);
@@ -221,6 +230,9 @@ export function bindDragBehavior(refElement: SVGGElement, legend: Legend): void 
     // Then change the cursor of the parent SVG element to grabbing
     outerSvg.style.cursor = 'grabbing'; // eslint-disable-line no-param-reassign
 
+    // isDragging = true;
+    x = e.clientX;
+    y = e.clientY;
     // Maybe we should disable pointer events on the refElement group ?
     // For now we will keep them enabled (so that we can keep
     // the green color of the legend box when the mouse is over it when dragging)

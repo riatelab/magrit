@@ -19,6 +19,7 @@ import layoutFeatureDraw from '../../assets/layout-features/draw-01.png';
 import layoutFeatureSymbol from '../../assets/layout-features/symbols-01.png';
 
 // Stores
+import { globalStore, setGlobalStore } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
@@ -72,6 +73,7 @@ import {
   ScaleBarBehavior,
   ScaleBarStyle,
 } from '../../global.d';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 const makeDrawingInstructions = (
   LL: Accessor<TranslationFunctions>,
@@ -589,6 +591,11 @@ export default function LayoutFeatures(): JSX.Element {
       max={1}
       step={0.1}
       width={100}
+    />
+    <InputFieldCheckbox
+      label={LL().LayoutFeatures.SnapToGrid()}
+      checked={globalStore.snapToGridWhenDragging}
+      onChange={(v) => { setGlobalStore({ snapToGridWhenDragging: v }); }}
     />
     <div class="field-block">
       <label class="label">{ LL().LayoutFeatures.MapSkinElements() }</label>

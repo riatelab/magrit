@@ -11,6 +11,7 @@ interface InputFieldSelectProps {
   onChange: (value: string) => void;
   value: string;
   width?: number;
+  disabled?: boolean;
 }
 
 export default function InputFieldSelect(props: ParentProps<InputFieldSelectProps>): JSX.Element {
@@ -20,6 +21,7 @@ export default function InputFieldSelect(props: ParentProps<InputFieldSelectProp
     <label class="label">{ mergedProps.label }</label>
     <div class="select" style={{ width: `${mergedProps.width}px` }}>
       <select
+        disabled={mergedProps.disabled}
         onChange={(e) => { mergedProps.onChange(e.currentTarget.value); }}
         style={{ width: `${mergedProps.width}px` }}
         value={ mergedProps.value }

@@ -142,6 +142,7 @@ const en = {
     ScaleBar: 'Scale bar',
     NorthArrow: 'North arrow',
     FreeDrawing: 'Free drawing',
+    SnapToGrid: 'Automatically align items on a grid',
     ContextMenu: {
       EditSettings: 'Edit settings...',
       Edit: 'Edit',
@@ -277,7 +278,7 @@ const en = {
       ColorScheme: 'Color scheme',
       ColorSchemeInvert: 'Invert color scheme',
       CurrentNumberOfClasses: '{{ One class | ?? classes }}',
-      DisplayChartOnMap: 'Display a class summary chart on the map',
+      DisplayChartOnMap: 'Display a class summary histogram on the map',
       NewLayerName: 'Choropleth_{layerName}',
     },
     ProportionalSymbolsOptions: {
@@ -529,6 +530,8 @@ const en = {
     Palette: 'Palette',
     GraticuleStepX: 'Graticule step (X)',
     GraticuleStepY: 'Graticule step (Y)',
+    AddBarChartCategoricalChoropleth: 'Add a bar chart by category...',
+    AddHistogramChoropleth: 'Add a class summary histogram...',
   },
   JoinPanel: {
     Title: 'Join to a geospatial layer',
@@ -751,6 +754,10 @@ const en = {
       Height: 'Height',
       MushroomsTopTitle: 'Top part variable title',
       MushroomsBottomTitle: 'Bottom part variable title',
+      BarOrder: 'Bar order',
+      BarOrderAscending: 'Ascending',
+      BarOrderDescending: 'Descending',
+      BarOrderNone: 'Same order as in the legend',
     },
   },
   CommonTextElement: {

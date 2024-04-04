@@ -165,6 +165,7 @@ function onClickValidate(
             width: 300,
             height: 250,
             orientation: 'horizontal',
+            order: 'none',
             fontColor: '#000000',
             visible: true,
             title: {

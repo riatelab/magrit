@@ -8,6 +8,10 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { unproxify } from '../../helpers/common';
 import { generateIdLayoutFeature } from '../../helpers/layoutFeatures';
+import { roundToNearest10 } from '../../helpers/math';
+
+// Stores
+import { globalStore } from '../../store/GlobalStore';
 
 // Subcomponents
 import LayoutFeatureSettings from '../Modals/LayoutFeatureSetting.tsx';
@@ -24,7 +28,10 @@ import type { BackgroundRect, LayoutFeature, Legend } from '../../global';
 // TODO: Some of this code is duplicated in the LegendRenderer/common.tsx file.
 //   Once we finished implementing the legends and the layout features,
 //   we should try refactor this to avoid duplication.
-export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): void {
+export function bindDragBehavior(
+  refElement: SVGElement,
+  props: LayoutFeature,
+): void {
   // Allow the user to move the refElement group by dragging it on the screen.
   // To do this we change the position property of the corresponding
   // layout feature (which is reactive and so will trigger a re-render at the new position).
@@ -48,11 +55,13 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
 
   let [positionX, positionY] = props.position;
   let i = 0;
-  const moveElement = (e: MouseEvent) => {
+  const moveElement = async (e: MouseEvent) => {
     if (((i++) % 2) === 0) { // eslint-disable-line no-plusplus
       // We skip some mousemove events to improve performance
       return;
     }
+
+    await yieldOrContinue('smooth');
 
     const dx = e.clientX - x;
     const dy = e.clientY - y;
@@ -86,6 +95,12 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
     outerSvg.removeEventListener('mousemove', moveElement);
     outerSvg.removeEventListener('mouseup', deselectElement);
 
+    // Do we want to snap coordinates on a grid ?
+    // (if so we do so by rounding the coordinates to the nearest multiple of 10)
+    const adjustPosition = globalStore.snapToGridWhenDragging
+      ? roundToNearest10
+      : (v: number) => v;
+
     await yieldOrContinue('smooth');
 
     // Update the position in the layersDescriptionStore
@@ -95,8 +110,8 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
       (l: LayoutFeature | Legend) => l.id === props.id,
       {
         position: [
-          positionX,
-          positionY,
+          adjustPosition(positionX),
+          adjustPosition(positionY),
         ],
       },
     );
@@ -116,6 +131,7 @@ export function bindDragBehavior(refElement: SVGElement, props: LayoutFeature): 
     // If the mousedown is triggered by another button, we return immediately.
     if (e.button > 1) return;
     e.stopPropagation();
+
     // isDragging = true;
     x = e.clientX;
     y = e.clientY;

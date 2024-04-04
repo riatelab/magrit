@@ -142,6 +142,7 @@ const fr = {
     ScaleBar: 'Échelle',
     NorthArrow: 'Flèche Nord',
     FreeDrawing: 'Dessin libre',
+    SnapToGrid: 'Aligner automatiquement les éléments sur une grille',
     ContextMenu: {
       EditSettings: 'Modifier les paramètres...',
       Edit: 'Modifier',
@@ -529,6 +530,8 @@ const fr = {
     Palette: 'Palette',
     GraticuleStepX: 'Pas du graticule en X',
     GraticuleStepY: 'Pas du graticule en Y',
+    AddBarChartCategoricalChoropleth: 'Ajouter un diagramme en barre par catégories...',
+    AddHistogramChoropleth: 'Ajouter un histogramme de répartition des valeurs...',
   },
   JoinPanel: {
     Title: 'Joindre à une couche géospatiale',
@@ -751,6 +754,10 @@ const fr = {
       Height: 'Hauteur',
       MushroomsTopTitle: 'Titre de la variable de la partie supérieure',
       MushroomsBottomTitle: 'Titre de la variable de la partie inférieure',
+      BarOrder: 'Ordre des barres',
+      BarOrderAscending: 'Croissant',
+      BarOrderDescending: 'Décroissant',
+      BarOrderNone: 'Même ordre que dans la légende',
     },
   },
   CommonTextElement: {

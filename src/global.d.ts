@@ -862,6 +862,9 @@ interface CategoricalChoroplethBarchartLegend extends LegendBase {
   fontColor: string,
   // The orientation of the bar chart
   orientation: Orientation,
+  // Whether to order the bars by the number of occurrence
+  // or by the order of the categories
+  order: 'ascending' | 'descending' | 'none',
 }
 
 export type Legend = (

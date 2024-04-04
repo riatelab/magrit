@@ -68,6 +68,16 @@ export function min(arr: NumberArray): number { // TODO: rename as minUnchecked 
 }
 
 /**
+ * Round a value to the nearest multiple of a given number.
+ */
+export function roundToMultiple(value: number, multiple: number): number {
+  return Mround(value / multiple) * multiple;
+}
+
+export const roundToNearest5 = (value: number): number => roundToMultiple(value, 5);
+export const roundToNearest10 = (value: number): number => roundToMultiple(value, 10);
+
+/**
  * Returns the maximum value of an array of numbers.
  * @param {number[]} arr
  * @returns {number}

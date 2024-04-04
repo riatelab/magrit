@@ -38,10 +38,40 @@ import {
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
+function makeSortOptions(
+  orientation: Orientation,
+  order: 'ascending' | 'descending' | 'none',
+) {
+  const axisLetter = orientation === 'vertical' ? 'y' : 'x';
+  const axisLetterOpposite = orientation === 'vertical' ? 'x' : 'y';
+
+  if (order === 'ascending') {
+    // We want bars to be sorted by frequency in ascending order
+    return {
+      [axisLetter]: axisLetterOpposite,
+      order: 'ascending',
+    };
+  }
+  if (order === 'descending') {
+    // We want bars to be sorted by frequency in ascending order
+    return {
+      [axisLetter]: axisLetterOpposite,
+      order: 'descending',
+    };
+  }
+
+  // Otherwise want bars to be sorted in the order they were provided
+  return {
+    [axisLetter]: 'position',
+    order: 'ascending',
+  };
+}
+
 function CategoriesPlot(
   props: {
     mapping: CategoricalChoroplethMapping[],
     orientation: Orientation,
+    order: 'ascending' | 'descending' | 'none',
     color: string,
     height: number,
     width: number,
@@ -87,10 +117,7 @@ function CategoriesPlot(
               x: 'frequency',
               fill: 'color',
               channels: { position: (d) => d.position },
-              sort: {
-                y: 'position',
-                order: 'ascending',
-              },
+              sort: makeSortOptions(props.orientation, props.order),
             },
           ),
           Plot.ruleX([0]),
@@ -119,10 +146,7 @@ function CategoriesPlot(
               y: 'frequency',
               fill: 'color',
               channels: { position: (d) => d.position },
-              sort: {
-                x: 'position',
-                order: 'ascending',
-              },
+              sort: makeSortOptions(props.orientation, props.order),
             },
           ),
           Plot.ruleY([0]),
@@ -209,6 +233,7 @@ export default function legendCategoricalChoroplethBarchart(
       <CategoriesPlot
         mapping={getCategoricalParameters(layer).mapping}
         orientation={legend.orientation}
+        order={legend.order}
         color={legend.fontColor}
         width={legend.width}
         height={legend.height}

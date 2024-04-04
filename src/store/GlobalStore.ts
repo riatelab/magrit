@@ -13,6 +13,7 @@ type GlobalStoreType = {
   projection: any,
   pathGenerator: any,
   userHasAddedLayer: boolean,
+  snapToGridWhenDragging: boolean,
 };
 
 const [
@@ -28,6 +29,7 @@ const [
   projection: null,
   pathGenerator: null,
   userHasAddedLayer: false,
+  snapToGridWhenDragging: false,
 } as GlobalStoreType);
 
 const setLoading = (isLoading: boolean, message?: string) => {
