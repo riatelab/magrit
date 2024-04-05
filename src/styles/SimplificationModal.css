@@ -12,12 +12,12 @@
 
 .simplification-inner__parameters-container {
     width: 36%;
-    padding: 0 2em;
+    padding: 0 1em;
 }
 
 .simplification-inner__layer-list-container {
     width: 64%;
-    padding: 0 0 0 2em;
+    padding: 0 0 0 1em;
 }
 
 .simplification-inner__layer-list {
@@ -27,7 +27,7 @@
 }
 
 .simplification-inner__layer-list > li {
-    margin: 1em 0;
+    margin: 0.5em 0;
 }
 
 .simplification-inner__layer-list > li > * {
@@ -39,4 +39,5 @@
     width: 1em;
     height: 1em;
     vertical-align: middle;
+    border: solid 1px whitesmoke;
 }

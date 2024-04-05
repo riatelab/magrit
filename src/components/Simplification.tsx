@@ -275,6 +275,7 @@ export default function Simplification(
     // Update transform variable and redraw
     // when the user zooms in/out
     d3.select(canvas)
+      // @ts-expect-error because of complex typing requirements
       .call(d3.zoom()
         .on('zoom', (e: any) => {
           transform = e.transform;
@@ -404,16 +405,15 @@ export default function Simplification(
                         pts: si.vertices,
                       })
                     }
-                  </span>
-                  <Show when={si.selfIntersections}>
-                    <span>
+                    <Show when={si.selfIntersections}>
+                      ,&nbsp;
                       {
                         LL().SimplificationModal.CountSelfIntersections({
                           count: si.selfIntersections!.length,
                         })
                       }
+                    </Show>
                     </span>
-                  </Show>
                 </li>
               }
             </For>

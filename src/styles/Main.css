@@ -10,7 +10,7 @@ html {
     --map-container-background: #fff; /* rgb(244, 246, 244); */
     --button-shadow: hsla(208,7%,46%,.3);
     --left-menu-width: 380px;
-    --header-height: 56px;
+    --header-height: 54px;
     --sortable-chosen-background: #d2d2d2;
     transition: background-color 400ms ease-out, border 400ms ease-out, color 400ms ease-out;
 }

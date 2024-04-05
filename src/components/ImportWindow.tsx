@@ -936,7 +936,7 @@ export default function ImportWindow(): JSX.Element {
                 show: true,
                 title: LL().SimplificationModal.Title(),
                 content: () => <SimplificationModal ids={dsToSimplify}/>,
-                width: '60vw',
+                width: '65vw',
               });
             }
           }}
