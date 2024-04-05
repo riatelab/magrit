@@ -5,6 +5,7 @@ import {
   JSX,
   Show,
 } from 'solid-js';
+import { produce } from 'solid-js/store';
 
 // Imports from other libs
 import { getPalette, getPalettes } from 'dicopal';
@@ -15,6 +16,8 @@ import { TranslationFunctions } from '../../i18n/i18n-types';
 import { debounce, unproxify } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
 import { webSafeFonts } from '../../helpers/font';
+import { generateIdLegend } from '../../helpers/legends';
+import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Sub-components
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
@@ -30,12 +33,17 @@ import { LinksSelectionOnExistingLayer } from '../PortrayalOption/LinksComponent
 // Stores
 import {
   layersDescriptionStore,
+  type LayersDescriptionStoreType,
   // In this component we use the base version of the store to avoid pushing
   // the changes to the undo/redo stack (because there is a
   // cancel button in the LayerSettings modal)
   setLayersDescriptionStoreBase,
+  // Except for the layoutFeaturesAndLegends, where we want to push the changes
+  // through the undo/redo stack
+  setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
 import { setClassificationPanelStore } from '../../store/ClassificationPanelStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Types / Interfaces
 import {
@@ -55,6 +63,14 @@ import {
   type ProportionalSymbolsParametersBase,
   type GraticuleParameters,
   type MultiLineString,
+  type LayoutFeature,
+  type Legend,
+  LegendType,
+  type LegendTextElement,
+  type CategoricalChoroplethBarchartLegend,
+  type ProportionalSymbolCategoryParameters,
+  type ChoroplethHistogramLegend,
+  type ProportionalSymbolsRatioParameters,
 } from '../../global.d';
 
 // Styles
@@ -76,6 +92,7 @@ const updateProp = (
         [lastProp]: value,
       },
     ];
+    // @ts-expect-error because we use a spread argument
     setLayersDescriptionStoreBase(...args);
   } else {
     setLayersDescriptionStoreBase(
@@ -87,6 +104,16 @@ const updateProp = (
 };
 
 const debouncedUpdateProp = debounce(updateProp, 200);
+
+const layerLinkedToHistogramOrBarChart = (
+  layer: LayerDescription,
+  layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
+): boolean => {
+  const ids = layoutFeaturesAndLegends
+    .filter((l) => l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart')
+    .map((l) => (l as Legend).layerId);
+  return ids.includes(layer.id);
+};
 
 function AestheticsSection(props: LayerDescription): JSX.Element {
   const { LL } = useI18nContext();
@@ -320,8 +347,53 @@ function makeSettingsDefaultPoint(
               },
             });
           }}
-        >{ LL().LayerSettings.ChangeClassification() }</button>
+        >{LL().LayerSettings.ChangeClassification()}</button>
       </div>
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddHistogramChoropleth()}
+        checked={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        disabled={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          const legendPosition = getPossibleLegendPosition(300, 250);
+
+          setLayersDescriptionStore(
+            produce(
+              (draft: LayersDescriptionStoreType) => {
+                draft.layoutFeaturesAndLegends.push({
+                  id: generateIdLegend(),
+                  layerId: props.id,
+                  type: LegendType.choroplethHistogram,
+                  position: [legendPosition[0], legendPosition[1]],
+                  width: 300,
+                  height: 250,
+                  orientation: 'horizontal',
+                  fontColor: '#000000',
+                  visible: true,
+                  title: {
+                    text: (props.rendererParameters as ClassificationParameters).variable,
+                    ...applicationSettingsStore.defaultLegendSettings.title,
+                  } as LegendTextElement,
+                  subtitle: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  note: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.note,
+                  },
+                  backgroundRect: {
+                    visible: false,
+                  },
+                } as ChoroplethHistogramLegend);
+              },
+            ),
+          );
+        }}
+      />
     </Show>
     <Show when={props.renderer === 'categoricalChoropleth'}>
       <CollapsibleSection
@@ -335,16 +407,59 @@ function makeSettingsDefaultPoint(
           detailed={false}
         />
       </CollapsibleSection>
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddBarChartCategoricalChoropleth()}
+        checked={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        disabled={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          const legendPosition = getPossibleLegendPosition(300, 250);
+
+          setLayersDescriptionStore(
+            produce(
+              (draft: LayersDescriptionStoreType) => {
+                draft.layoutFeaturesAndLegends.push({
+                  id: generateIdLegend(),
+                  layerId: props.id,
+                  type: LegendType.categoricalChoroplethBarchart,
+                  position: [legendPosition[0], legendPosition[1]],
+                  width: 300,
+                  height: 250,
+                  orientation: 'horizontal',
+                  order: 'none',
+                  fontColor: '#000000',
+                  visible: true,
+                  title: {
+                    text: (
+                      props.rendererParameters as CategoricalChoroplethParameters).variable,
+                    ...applicationSettingsStore.defaultLegendSettings.title,
+                  } as LegendTextElement,
+                  subtitle: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  note: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.note,
+                  },
+                  backgroundRect: {
+                    visible: false,
+                  },
+                } as CategoricalChoroplethBarchartLegend);
+              },
+            ),
+          );
+        }}
+      />
     </Show>
     <Show when={props.renderer === 'proportionalSymbols'}>
       <InputFieldSelect
+        disabled={true}
         label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.SymbolType()}
-        onChange={(v) => {
-          debouncedUpdateProp(props.id, ['rendererParameters', 'symbolType'], v);
-          const legendId = layersDescriptionStore.layoutFeaturesAndLegends
-            .find((l) => l.layerId === props.id)!.id;
-          debouncedUpdateProp(legendId, 'symbolType', v);
-        }}
+        onChange={(v) => {}}
         value={(props.rendererParameters as ProportionalSymbolsParameters).symbolType}
       >
         <option value={ProportionalSymbolsSymbolType.circle}>
@@ -428,6 +543,53 @@ function makeSettingsDefaultPoint(
           }}
         >{LL().LayerSettings.ChangeClassification()}</button>
       </div>
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddHistogramChoropleth()}
+        checked={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        disabled={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          const legendPosition = getPossibleLegendPosition(300, 250);
+
+          setLayersDescriptionStore(
+            produce(
+              (draft: LayersDescriptionStoreType) => {
+                draft.layoutFeaturesAndLegends.push({
+                  id: generateIdLegend(),
+                  layerId: props.id,
+                  type: LegendType.choroplethHistogram,
+                  position: [legendPosition[0], legendPosition[1]],
+                  width: 300,
+                  height: 250,
+                  orientation: 'horizontal',
+                  fontColor: '#000000',
+                  visible: true,
+                  title: {
+                    text: (
+                      props.rendererParameters as ProportionalSymbolsRatioParameters)
+                      .color.variable,
+                    ...applicationSettingsStore.defaultLegendSettings.title,
+                  } as LegendTextElement,
+                  subtitle: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  note: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.note,
+                  },
+                  backgroundRect: {
+                    visible: false,
+                  },
+                } as ChoroplethHistogramLegend);
+              },
+            ),
+          );
+        }}
+      />
     </Show>
     <Show when={
       props.renderer === 'proportionalSymbols'
@@ -446,6 +608,54 @@ function makeSettingsDefaultPoint(
           detailed={false}
         />
       </CollapsibleSection>
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddBarChartCategoricalChoropleth()}
+        checked={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        disabled={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          const legendPosition = getPossibleLegendPosition(300, 250);
+
+          setLayersDescriptionStore(
+            produce(
+              (draft: LayersDescriptionStoreType) => {
+                draft.layoutFeaturesAndLegends.push({
+                  id: generateIdLegend(),
+                  layerId: props.id,
+                  type: LegendType.categoricalChoroplethBarchart,
+                  position: [legendPosition[0], legendPosition[1]],
+                  width: 300,
+                  height: 250,
+                  orientation: 'horizontal',
+                  order: 'none',
+                  fontColor: '#000000',
+                  visible: true,
+                  title: {
+                    text: (
+                      props.rendererParameters as ProportionalSymbolCategoryParameters)
+                      .color.variable,
+                    ...applicationSettingsStore.defaultLegendSettings.title,
+                  } as LegendTextElement,
+                  subtitle: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  note: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.note,
+                  },
+                  backgroundRect: {
+                    visible: false,
+                  },
+                } as CategoricalChoroplethBarchartLegend);
+              },
+            ),
+          );
+        }}
+      />
     </Show>
     <InputFieldColor
       label={LL().LayerSettings.StrokeColor()}
@@ -639,8 +849,53 @@ function makeSettingsDefaultLine(
               },
             });
           }}
-        >{ LL().LayerSettings.ChangeClassification() }</button>
+        >{LL().LayerSettings.ChangeClassification()}</button>
       </div>
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddHistogramChoropleth()}
+        checked={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        disabled={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          const legendPosition = getPossibleLegendPosition(300, 250);
+
+          setLayersDescriptionStore(
+            produce(
+              (draft: LayersDescriptionStoreType) => {
+                draft.layoutFeaturesAndLegends.push({
+                  id: generateIdLegend(),
+                  layerId: props.id,
+                  type: LegendType.choroplethHistogram,
+                  position: [legendPosition[0], legendPosition[1]],
+                  width: 300,
+                  height: 250,
+                  orientation: 'horizontal',
+                  fontColor: '#000000',
+                  visible: true,
+                  title: {
+                    text: (props.rendererParameters as ClassificationParameters).variable,
+                    ...applicationSettingsStore.defaultLegendSettings.title,
+                  } as LegendTextElement,
+                  subtitle: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  note: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.note,
+                  },
+                  backgroundRect: {
+                    visible: false,
+                  },
+                } as ChoroplethHistogramLegend);
+              },
+            ),
+          );
+        }}
+      />
     </Show>
     <Show when={props.renderer === 'categoricalChoropleth'}>
       <CollapsibleSection
@@ -654,10 +909,57 @@ function makeSettingsDefaultLine(
           detailed={false}
         />
       </CollapsibleSection>
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddBarChartCategoricalChoropleth()}
+        checked={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        disabled={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          const legendPosition = getPossibleLegendPosition(300, 250);
+
+          setLayersDescriptionStore(
+            produce(
+              (draft: LayersDescriptionStoreType) => {
+                draft.layoutFeaturesAndLegends.push({
+                  id: generateIdLegend(),
+                  layerId: props.id,
+                  type: LegendType.categoricalChoroplethBarchart,
+                  position: [legendPosition[0], legendPosition[1]],
+                  width: 300,
+                  height: 250,
+                  orientation: 'horizontal',
+                  order: 'none',
+                  fontColor: '#000000',
+                  visible: true,
+                  title: {
+                    text: (
+                      props.rendererParameters as CategoricalChoroplethParameters).variable,
+                    ...applicationSettingsStore.defaultLegendSettings.title,
+                  } as LegendTextElement,
+                  subtitle: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  note: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.note,
+                  },
+                  backgroundRect: {
+                    visible: false,
+                  },
+                } as CategoricalChoroplethBarchartLegend);
+              },
+            ),
+          );
+        }}
+      />
     </Show>
     <InputFieldNumber
-      label={ LL().LayerSettings.StrokeOpacity() }
-      value={ props.strokeOpacity! }
+      label={LL().LayerSettings.StrokeOpacity()}
+      value={props.strokeOpacity!}
       onChange={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
       min={0}
       max={1}
@@ -864,8 +1166,53 @@ function makeSettingsDefaultPolygon(
               },
             });
           }}
-        >{ LL().LayerSettings.ChangeClassification() }</button>
+        >{LL().LayerSettings.ChangeClassification()}</button>
       </div>
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddHistogramChoropleth()}
+        checked={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        disabled={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          const legendPosition = getPossibleLegendPosition(300, 250);
+
+          setLayersDescriptionStore(
+            produce(
+              (draft: LayersDescriptionStoreType) => {
+                draft.layoutFeaturesAndLegends.push({
+                  id: generateIdLegend(),
+                  layerId: props.id,
+                  type: LegendType.choroplethHistogram,
+                  position: [legendPosition[0], legendPosition[1]],
+                  width: 300,
+                  height: 250,
+                  orientation: 'horizontal',
+                  fontColor: '#000000',
+                  visible: true,
+                  title: {
+                    text: (props.rendererParameters as ClassificationParameters).variable,
+                    ...applicationSettingsStore.defaultLegendSettings.title,
+                  } as LegendTextElement,
+                  subtitle: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  note: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.note,
+                  },
+                  backgroundRect: {
+                    visible: false,
+                  },
+                } as ChoroplethHistogramLegend);
+              },
+            ),
+          );
+        }}
+      />
     </Show>
     <Show when={props.renderer === 'categoricalChoropleth'}>
       <CollapsibleSection
@@ -879,6 +1226,53 @@ function makeSettingsDefaultPolygon(
           detailed={false}
         />
       </CollapsibleSection>
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddBarChartCategoricalChoropleth()}
+        checked={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        disabled={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          const legendPosition = getPossibleLegendPosition(300, 250);
+
+          setLayersDescriptionStore(
+            produce(
+              (draft: LayersDescriptionStoreType) => {
+                draft.layoutFeaturesAndLegends.push({
+                  id: generateIdLegend(),
+                  layerId: props.id,
+                  type: LegendType.categoricalChoroplethBarchart,
+                  position: [legendPosition[0], legendPosition[1]],
+                  width: 300,
+                  height: 250,
+                  orientation: 'horizontal',
+                  order: 'none',
+                  fontColor: '#000000',
+                  visible: true,
+                  title: {
+                    text: (
+                      props.rendererParameters as CategoricalChoroplethParameters).variable,
+                    ...applicationSettingsStore.defaultLegendSettings.title,
+                  } as LegendTextElement,
+                  subtitle: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  note: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.note,
+                  },
+                  backgroundRect: {
+                    visible: false,
+                  },
+                } as CategoricalChoroplethBarchartLegend);
+              },
+            ),
+          );
+        }}
+      />
     </Show>
     <Show when={props.renderer === 'smoothed' || props.renderer === 'grid'}>
       <InputFieldSelect

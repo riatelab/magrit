@@ -6,6 +6,7 @@ interface InputFieldCheckboxProps {
   label: LocalizedString | string;
   checked: boolean;
   onChange: (checked: boolean) => void;
+  disabled?: boolean;
 }
 
 export default function InputFieldCheckbox(props: InputFieldCheckboxProps): JSX.Element {
@@ -19,6 +20,7 @@ export default function InputFieldCheckbox(props: InputFieldCheckboxProps): JSX.
       type="checkbox"
       checked={ props.checked }
       onChange={(e) => { props.onChange(e.currentTarget.checked); }}
+      disabled={ props.disabled }
     />
   </div>;
 }

@@ -106,7 +106,7 @@ const en = {
     Import: 'Data import',
     MapConfiguration: 'Map configuration',
     LayerManager: 'Layer manager',
-    FunctionalityChoice: 'Choice of functionality',
+    FunctionalityChoice: 'Choice of portrayal or analysis functionality',
     ExportSection: 'Map and data export',
     LayoutFeatures: 'Page layout and skin elements',
   },

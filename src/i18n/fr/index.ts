@@ -106,7 +106,7 @@ const fr = {
     Import: 'Import des données',
     MapConfiguration: 'Configuration de la carte',
     LayerManager: 'Gestion des couches',
-    FunctionalityChoice: 'Choix d\'une fonctionnalité',
+    FunctionalityChoice: 'Choix d\'une fonctionnalité de représentation ou d\'analyse',
     ExportSection: 'Export des données',
     LayoutFeatures: 'Mise en page et éléments d\'habillage',
   },

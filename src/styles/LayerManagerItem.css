@@ -53,6 +53,10 @@
     border: 1px solid #e8e8e8;
 }
 
+.layer-manager-item__action > button[disabled] {
+    cursor: not-allowed;
+}
+
 .layer-manager-item__action > button svg {
     filter: drop-shadow(3px 3px 6px grey);
     fill: var(--bulma-primary);

@@ -281,6 +281,9 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
           if (legend.position[1] > mapStore.mapDimensions.height) {
             newPosition[1] = mapStore.mapDimensions.height - height;
           }
+          // FIXME: there seems to be a bug here, when one of the two legend
+          //   (the histogram or the bar chart) is not visible anymore
+          //   because it is out of the visibility zone. Need to investigate.
           setLayersDescriptionStore(
             'layoutFeaturesAndLegends',
             (l: LayoutFeature | Legend) => l.id === legend.id,
@@ -442,8 +445,6 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
 const onClickJoin = (id: string, LL: Accessor<TranslationFunctions>) => {
   console.log('click join on item ', id);
 
-  // const td = layersDescriptionStore.tables.find((l) => l.id === id)!;
-
   setModalStore({
     show: true,
     content: () => <JoinPanel id={ id } LL={ LL } />,
@@ -555,14 +556,7 @@ export function LayerManagerTableItem(props: TableDescription): JSX.Element {
         }}
         title={LL().LeftMenu.FunctionalityChoice()}
       >
-        <OcGoal2 style={{
-          filter: 'drop-shadow(3px 3px 6px grey)',
-          fill: 'var(--bulma-primary)',
-          height: '1.5em',
-          width: '1.5em',
-          stroke: 'currentColor',
-          // 'stroke-width': '55px',
-        }}/>
+        <OcGoal2 />
       </button>
     </div>
   </div>;

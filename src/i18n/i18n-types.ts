@@ -377,7 +377,7 @@ type RootTranslation = {
 		 */
 		LayerManager: string
 		/**
-		 * C​h​o​i​c​e​ ​o​f​ ​f​u​n​c​t​i​o​n​a​l​i​t​y
+		 * C​h​o​i​c​e​ ​o​f​ ​p​o​r​t​r​a​y​a​l​ ​o​r​ ​a​n​a​l​y​s​i​s​ ​f​u​n​c​t​i​o​n​a​l​i​t​y
 		 */
 		FunctionalityChoice: string
 		/**
@@ -3119,7 +3119,7 @@ export type TranslationFunctions = {
 		 */
 		LayerManager: () => LocalizedString
 		/**
-		 * Choice of functionality
+		 * Choice of portrayal or analysis functionality
 		 */
 		FunctionalityChoice: () => LocalizedString
 		/**

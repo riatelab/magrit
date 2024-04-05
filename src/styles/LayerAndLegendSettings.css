@@ -52,13 +52,13 @@ We have two types of "field":
 }
 
 /* Styles for the LegendSettings component */
-.legend-settings__content .field input[type=number] {
+.legend-settings__content .field input[type=number],
+.legend-settings__content .field input[type=color] {
     width: 8em !important;
 }
 
-.legend-settings__content table input[type=number] {
-    width: 5em !important;
-    height: 2em;
+.legend-settings__content table {
+    margin: auto;
 }
 
 .legend-settings__content table tr {
@@ -67,4 +67,9 @@ We have two types of "field":
 
 .legend-settings__content table select {
     width: 100%;
+}
+
+.legend-settings__content table input[type=number] {
+    width: 5em !important;
+    height: 2em;
 }

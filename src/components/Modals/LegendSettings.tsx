@@ -947,7 +947,7 @@ function makeSettginsCategoricalChoroplethBarchart(
     <InputFieldSelect
       label={LL().Legend.Modal.BarOrder()}
       onChange={(v) => { debouncedUpdateProps(legend.id, ['order'], v); }}
-      value={legend.id}
+      value={legend.order}
     >
       <option value="ascending">{LL().Legend.Modal.BarOrderAscending()}</option>
       <option value="descending">{LL().Legend.Modal.BarOrderDescending()}</option>
