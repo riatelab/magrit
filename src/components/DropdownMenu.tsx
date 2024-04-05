@@ -48,7 +48,7 @@ function setDropdownItemTarget(event: Event, props: DropdownMenuProps): void {
   dropdownRoot.querySelector('.dropdown-menu')!.classList.toggle('is-block');
 }
 
-function onKeyDownDropdown(e: KeyboardEvent): void {
+export function onKeyDownDropdown(e: KeyboardEvent): void {
   const trigger = e.currentTarget as HTMLElement;
   const dropdown = trigger.parentElement!;
   const menu = dropdown.querySelector('.dropdown-menu')!;
@@ -71,7 +71,7 @@ function onKeyDownDropdown(e: KeyboardEvent): void {
   }
 }
 
-function onClickDropdown(event: Event): void {
+export function onClickDropdown(event: Event): void {
   // Collapse all other dropdown menus
   const dropdowns = document.querySelectorAll('.dropdown');
   for (let i = 0; i < dropdowns.length; i++) { // eslint-disable-line no-plusplus
@@ -123,7 +123,7 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
   return <div
     classList={{ dropdown: true, ...props.classList }}
     style={{ ...defaultStyleDropdown, ...props.style }}
-    id={props.id}
+    id={`${props.id}-container`}
     ref={refParentNode!}
   >
     <div
