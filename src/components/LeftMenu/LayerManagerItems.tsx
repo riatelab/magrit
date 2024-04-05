@@ -305,38 +305,38 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
   }
 };
 
-export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.Element {
+export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
   const { LL } = useI18nContext();
 
   const legends = createMemo(() => layersDescriptionStore.layoutFeaturesAndLegends
     .filter(
-      (layoutFeatureOrLegend) => layoutFeatureOrLegend.layerId === props.layer.id,
+      (layoutFeatureOrLegend) => layoutFeatureOrLegend.layerId === props.id,
     ) as Legend[]);
 
-  return <div class="layer-manager-item is-flex" onDblClick={() => { onClickSettings(props.layer.id, LL); }}>
+  return <div class="layer-manager-item is-flex" onDblClick={() => { onClickSettings(props.id, LL); }}>
     <div class="layer-manager-item__container">
-      <div class="layer-manager-item__name" title={ props.layer.name }>
-        <span>{ props.layer.name }</span>
+      <div class="layer-manager-item__name" title={ props.name }>
+        <span>{ props.name }</span>
       </div>
       <div class="layer-manager-item__icons">
         <div class="layer-manager-item__icons-left">
           <div
             title={
-              LL().LayerManager[props.layer.type]({
-                nFt: props.layer.data.features?.length || 1,
-                nCol: props.layer.fields.length,
+              LL().LayerManager[props.type]({
+                nFt: props.data.features?.length || 1,
+                nCol: props.fields.length,
               })
             }
             style={{ cursor: 'help' }}
           >
             <i
-              class={ typeIcons[props.layer.type as ('point' | 'linestring' | 'polygon' | 'raster')] }
+              class={ typeIcons[props.type as ('point' | 'linestring' | 'polygon' | 'raster')] }
             />
           </div>
           <Show when={legends().length > 0}>
             <button
               class="unstyled"
-              onClick={() => { onClickLegend(props.layer.id, LL); }}
+              onClick={() => { onClickLegend(props.id, LL); }}
               title={ LL().LayerManager.Legend() }
               style={{ cursor: 'pointer' }}
             >
@@ -354,26 +354,26 @@ export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.E
           <button
             aria-label={ LL().LayerManager.Settings() }
             class="unstyled"
-            onClick={(e) => { onClickSettings(props.layer.id, LL); }}
+            onClick={(e) => { onClickSettings(props.id, LL); }}
             title={ LL().LayerManager.Settings() }
           >
             <FaSolidGears />
           </button>
-          <Show when={props.layer.visible}>
+          <Show when={props.visible}>
             <button
               aria-label={ LL().LayerManager.ToggleVisibility() }
               class="unstyled"
-              onClick={() => { onClickEye(props.layer.id); }}
+              onClick={() => { onClickEye(props.id); }}
               title={ LL().LayerManager.ToggleVisibility() }
             >
               <FaSolidEye />
             </button>
           </Show>
-          <Show when={!props.layer.visible}>
+          <Show when={!props.visible}>
             <button
               aria-label={ LL().LayerManager.ToggleVisibility() }
               class="unstyled"
-              onClick={() => { onClickEye(props.layer.id); }}
+              onClick={() => { onClickEye(props.id); }}
               title={ LL().LayerManager.ToggleVisibility() }
             >
               <FaSolidEyeSlash />
@@ -382,16 +382,16 @@ export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.E
           <button
             aria-label={ LL().LayerManager.FitZoom() }
             class="unstyled"
-            onClick={() => { onClickFitExtent(props.layer.id); }}
+            onClick={() => { onClickFitExtent(props.id); }}
             title={ LL().LayerManager.FitZoom() }
           >
             <FaSolidMagnifyingGlass />
           </button>
-          <Show when={props.layer.renderer !== 'sphere'}>
+          <Show when={props.renderer !== 'sphere'}>
             <button
               aria-label={ LL().LayerManager.AttributeTable() }
               class="unstyled"
-              onClick={() => { onClickTable(props.layer.id, 'layer'); }}
+              onClick={() => { onClickTable(props.id, 'layer'); }}
               title={ LL().LayerManager.AttributeTable() }
             >
               <FaSolidTable />
@@ -399,7 +399,7 @@ export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.E
             <button
               aria-label={ LL().LayerManager.Typing() }
               class="unstyled"
-              onClick={() => { onClickTyping(props.layer.id, 'layer', LL); }}
+              onClick={() => { onClickTyping(props.id, 'layer', LL); }}
               title={ LL().LayerManager.Typing() }
             >
               <FiType />
@@ -408,7 +408,7 @@ export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.E
           <button
             aria-label={ LL().LayerManager.Delete() }
             class="unstyled"
-            onClick={() => { onClickTrashLayer(props.layer.id, LL); }}
+            onClick={() => { onClickTrashLayer(props.id, LL); }}
             title={ LL().LayerManager.Delete() }
           >
             <FaSolidTrash />
@@ -422,20 +422,18 @@ export function LayerManagerLayerItem(props: { layer: LayerDescription }): JSX.E
         onClick={() => {
           setFunctionalitySelectionStore({
             show: true,
-            id: props.layer.id,
+            id: props.id,
             type: 'layer',
           });
         }}
         title={ LL().LeftMenu.FunctionalityChoice() }
+        disabled={
+          props.renderer === 'sphere'
+          || props.renderer === 'graticule'
+          || props.id.startsWith('Layer-default-world-')
+        }
       >
-        <OcGoal2 style={{
-          filter: 'drop-shadow(3px 3px 6px grey)',
-          fill: 'var(--bulma-primary)',
-          height: '1.5em',
-          width: '1.5em',
-          stroke: 'currentColor',
-          // 'stroke-width': '55px',
-        }} />
+        <OcGoal2 />
       </button>
     </div>
   </div>;
@@ -486,15 +484,15 @@ const onClickTrashTable = (id: string, LL: Accessor<TranslationFunctions>) => {
   });
 };
 
-export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX.Element {
+export function LayerManagerTableItem(props: TableDescription): JSX.Element {
   const { LL } = useI18nContext();
 
   return <div class="layer-manager-item is-flex" onDblClick={() => {
-    onClickSettings(props.table.id, LL);
+    onClickSettings(props.id, LL);
   }}>
     <div class="layer-manager-item__container">
-      <div class="layer-manager-item__name" title={props.table.name}>
-        <span>{props.table.name}</span>
+      <div class="layer-manager-item__name" title={props.name}>
+        <span>{props.name}</span>
       </div>
       <div class="layer-manager-item__icons">
         <div class="layer-manager-item__icons-left">
@@ -503,11 +501,11 @@ export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX
           </div>
         </div>
         <div class="layer-manager-item__icons-right">
-          <Show when={props.table.fields && props.table.fields.length > 0}>
+          <Show when={props.fields && props.fields.length > 0}>
             <button
               aria-label={LL().LayerManager.Join()}
               class="unstyled"
-              onClick={() => onClickJoin(props.table.id, LL)}
+              onClick={() => onClickJoin(props.id, LL)}
               title={LL().LayerManager.Join()}
             >
               <FiLink/>
@@ -516,7 +514,7 @@ export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX
               aria-label={LL().LayerManager.AttributeTable()}
               class="unstyled"
               onClick={() => {
-                onClickTable(props.table.id, 'table');
+                onClickTable(props.id, 'table');
               }}
               title={LL().LayerManager.AttributeTable()}
             >
@@ -526,7 +524,7 @@ export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX
               aria-label={LL().LayerManager.Typing()}
               class="unstyled"
               onClick={() => {
-                onClickTyping(props.table.id, 'table', LL);
+                onClickTyping(props.id, 'table', LL);
               }}
               title={LL().LayerManager.Typing()}
             >
@@ -537,7 +535,7 @@ export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX
             aria-label={LL().LayerManager.Delete()}
             class="unstyled"
             onClick={() => {
-              onClickTrashTable(props.table.id, LL);
+              onClickTrashTable(props.id, LL);
             }}
             title={LL().LayerManager.Delete()}>
             <FaSolidTrash/>
@@ -551,7 +549,7 @@ export function LayerManagerTableItem(props: { 'table': TableDescription }): JSX
         onClick={() => {
           setFunctionalitySelectionStore({
             show: true,
-            id: props.table.id,
+            id: props.id,
             type: 'table',
           });
         }}

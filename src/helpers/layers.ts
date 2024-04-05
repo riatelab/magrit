@@ -46,7 +46,7 @@ export const alreadyHasGraticule = (
 
 export const makeDefaultWorldLand = (): LayerDescription => ({
   type: 'polygon',
-  id: generateIdLayer(),
+  id: generateIdLayer().replace('Layer-', 'Layer-default-world-'),
   name: 'World land',
   visible: true,
   strokeColor: '#d1d1d1',

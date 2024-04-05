@@ -26,8 +26,8 @@ const LayerManager = (): JSX.Element => <div class="layer-manager">
     setItems={setLayersDescriptionStoreWrapper as any}
   >
     {
-      (item) => <LayerManagerLayerItem
-        layer={item}
+      (layer) => <LayerManagerLayerItem
+        {...layer}
       />
     }
   </Sortable>
@@ -38,7 +38,7 @@ const LayerManager = (): JSX.Element => <div class="layer-manager">
     <For each={layersDescriptionStore.tables}>
       {
         (table) => <LayerManagerTableItem
-          table={table}
+          {...table}
         />
       }
     </For>
