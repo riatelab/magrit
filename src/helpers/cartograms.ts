@@ -6,6 +6,7 @@ import { area, transformScale } from '@turf/turf';
 // Helpers
 import { isNumber } from './common';
 import d3 from './d3-custom';
+import { Mmax, Mmin, Msqrt } from './math';
 import {
   getProjection,
   getProjectionUnit,
@@ -18,7 +19,10 @@ import rewindLayer from './rewind';
 import { mapStore } from '../store/MapStore';
 
 // Types
-import type { GeoJSONFeatureCollection } from '../global';
+import type {
+  GeoJSONFeatureCollection,
+  GeoJSONGeometry,
+} from '../global';
 
 let goCart: {
   makeCartogram: (
@@ -119,4 +123,178 @@ export function computeCartogramOlson(
   };
 }
 
-export function noop() {}
+interface DougInfo {
+  averageError: number,
+  forceReductionFactor: number,
+  infoByFeature: InfoFeature[],
+}
+
+interface InfoFeature {
+  id: number,
+  centerX: number,
+  centerY: number,
+  value: number,
+  area: number,
+  mass: number,
+  radius: number,
+  sizeError: number,
+}
+
+/**
+ * Gets the information required for computing transformation of each feature
+ * for the Dougenik et al. (1985) algorithm.
+ *
+ * @param data
+ * @param variableName
+ */
+const getDougenikInfo = (
+  data: GeoJSONFeatureCollection,
+  variableName: string,
+): DougInfo => {
+  const areas = data.features.map((f) => area(f.geometry as never));
+  const values = data.features.map((f) => +f.properties[variableName]);
+  console.log(areas, values);
+  const areaTotal = areas.reduce((a, b) => a + b, 0);
+  const valueTotal = values.reduce((a, b) => a + b, 0);
+  const fraction = areaTotal / valueTotal;
+  const infoByFeature = new Array(data.features.length);
+  let totalSizeError = 0;
+
+  data.features.forEach((f, i) => {
+    const centroid = d3.geoCentroid(f.geometry as never);
+    const value = values[i];
+    const areaFeature = areas[i];
+    const desired = value * fraction;
+    const radius = Msqrt(areaFeature / Math.PI);
+
+    const mass = desired / Math.PI > 0
+      ? Msqrt(desired / Math.PI) - radius
+      : 0;
+
+    const sizeError = Mmax(areaFeature, desired) / Mmin(areaFeature, desired);
+    totalSizeError += sizeError;
+
+    infoByFeature[i] = {
+      id: i,
+      value,
+      area: areaFeature,
+      mass,
+      radius,
+      centerX: centroid[0],
+      centerY: centroid[1],
+      sizeError,
+    } as InfoFeature;
+  });
+
+  const averageError = totalSizeError / data.features.length;
+  const forceReductionFactor = 1 / (1 + averageError);
+  return {
+    averageError,
+    forceReductionFactor,
+    infoByFeature,
+  };
+};
+
+/**
+ * Transforms a feature using the Dougenik et al. (1985) algorithm.
+ *
+ * @param geom
+ * @param info
+ * @param reductionFactor
+ * @param allInfo
+ */
+const transformFeatureDougenik = (
+  geom: GeoJSONGeometry,
+  info: InfoFeature,
+  reductionFactor: number,
+  allInfo: InfoFeature[],
+) => {
+  const geoms: [number, number][][][] = geom.type === 'MultiPolygon'
+    ? geom.coordinates
+    : [geom.coordinates];
+  const initialGeometryType = geom.type;
+  const nGeom = geoms.length;
+  const result = new Array(nGeom);
+
+  for (let i = 0; i < nGeom; i += 1) {
+    const poly = geoms[i];
+    const rings = poly.length;
+
+    for (let j = 0; j < rings; j += 1) {
+      const ring = poly[j];
+      const nPts = ring.length;
+      const newRing = new Array(nPts);
+
+      for (let k = 0; k < nPts; k += 1) {
+        let x = ring[k][0];
+        let y = ring[k][1];
+        const x0 = x;
+        const y0 = y;
+
+        for (let ix = 0; ix < allInfo.length; ix += 1) {
+          const infoOther = allInfo[ix];
+          const cx = x - infoOther.centerX;
+          const cy = y - infoOther.centerY;
+          const r2 = cx * cx + cy * cy;
+          const distance = Msqrt(r2);
+          let fij = (distance > infoOther.radius)
+            ? (infoOther.mass * infoOther.radius) / distance
+            : (infoOther.mass * (distance / infoOther.radius ** 2)
+            ) * (4 - ((3 * distance) / infoOther.radius));
+
+          fij = (fij * reductionFactor) / distance;
+
+          x = (x0 - cx) * fij + x;
+          y = (y0 - cy) * fij + y;
+        }
+        newRing[k] = [x, y];
+      }
+
+      result[j] = newRing;
+    }
+  }
+
+  if (initialGeometryType === 'MultiPolygon') {
+    return {
+      type: 'MultiPolygon',
+      coordinates: result,
+    };
+  } else { // eslint-disable-line no-else-return
+    return {
+      type: 'Polygon',
+      coordinates: result[0],
+    };
+  }
+};
+
+/**
+ * Compute a cartogram using the Dougenik et al. (1985) algorithm.
+ * Note that this is a translation of https://github.com/riatelab/magrit/blob/master/magrit_app/helpers/cartogram_doug.pyx.
+ *
+ * @param data
+ * @param variableName
+ * @param iterations
+ * @return {GeoJSONFeatureCollection}
+ */
+export function computeCartogramDougenik(
+  data: GeoJSONFeatureCollection,
+  variableName: string,
+  iterations: number,
+): GeoJSONFeatureCollection {
+  const resultData = JSON.parse(JSON.stringify(data)) as GeoJSONFeatureCollection;
+  for (let i = 0; i < iterations; i += 1) {
+    const dougInfo = getDougenikInfo(resultData, variableName);
+    for (let j = 0; j < resultData.features.length; j += 1) {
+      const feature = resultData.features[j];
+      const info = dougInfo.infoByFeature[j];
+      const transformed = transformFeatureDougenik(
+        feature.geometry as never,
+        info,
+        dougInfo.forceReductionFactor,
+        dougInfo.infoByFeature,
+      );
+      resultData.features[j].geometry = transformed as never;
+    }
+  }
+  return resultData;
+}

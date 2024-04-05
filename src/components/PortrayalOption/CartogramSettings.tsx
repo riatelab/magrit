@@ -13,7 +13,11 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { computeCartogramGastnerSeguyMore, computeCartogramOlson } from '../../helpers/cartograms';
+import {
+  computeCartogramDougenik,
+  computeCartogramGastnerSeguyMore,
+  computeCartogramOlson,
+} from '../../helpers/cartograms';
 import { findSuitableName } from '../../helpers/common';
 import { generateIdLayer } from '../../helpers/layers';
 import { DataType, type Variable, VariableType } from '../../helpers/typeDetection';
@@ -52,6 +56,7 @@ async function onClickValidate(
   targetVariable: string,
   cartogramMethod: CartogramMethod,
   newName: string,
+  iterations: number = 5,
 ) {
   const referenceLayerDescription = layersDescriptionStore.layers
     .find((l) => l.id === referenceLayerId)!;
@@ -75,7 +80,11 @@ async function onClickValidate(
       mapStore.projection,
     );
   } else {
-    throw new Error('Unexpected Error: Unknown or unimplemented cartogram method');
+    newData = computeCartogramDougenik(
+      inputData,
+      targetVariable,
+      1,
+    );
   }
 
   const newFields = unwrap(referenceLayerDescription.fields as never) as Variable[];
