@@ -16,18 +16,18 @@ export default function ImportSection(): JSX.Element {
 
   return <div class="import-section" style={{ 'text-align': 'center' }}>
     <div>
-      <a
+      <button
         class="button is-primary is-outlined"
-        style={{ width: '260px' }}
+        style={{ width: '280px' }}
         onClick={() => { setFileDropStore({ show: true }); }}
       >
         { LL().ImportSection.OpenImportWindow() }
-      </a>
+      </button>
     </div>
     <div>
-      <a
+      <button
         class="button is-primary is-outlined"
-        style={{ width: '260px' }}
+        style={{ width: '280px' }}
         onClick={() => {
           setModalStore({
             show: true,
@@ -41,7 +41,7 @@ export default function ImportSection(): JSX.Element {
         }}
       >
         { LL().ImportSection.ExampleDatasets() }
-      </a>
+      </button>
     </div>
   </div>;
 }

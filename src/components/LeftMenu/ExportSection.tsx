@@ -122,9 +122,6 @@ export default function ExportSection(): JSX.Element {
     setExportHeight(mapStore.mapDimensions.height);
   });
 
-  // TODO: handle focusing on the tab names to allow keyboard navigation between tabs
-  //  (currently the focus is inside the tab content, so the user can't
-  //  navigate between tabs using the keyboard)
   return <div class="export-section">
     <div class="export-section__tabs tabs is-centered is-boxed is-fullwidth">
       <ul class="ml-0" role="tablist" aria-label={LL().ExportSection.Description()}>
@@ -132,9 +129,13 @@ export default function ExportSection(): JSX.Element {
           <a
             id="export-section__content__svg-tab"
             onClick={(ev) => onClickTabButton(ev, 'svg')}
+            onKeyDown={(ev) => {
+              if (ev.key === 'Enter') onClickTabButton(ev, 'svg');
+            }}
             aria-controls="export-section__content__svg"
             aria-selected="true"
             role="tab"
+            tabindex={0}
           >
             SVG
           </a>
@@ -143,8 +144,12 @@ export default function ExportSection(): JSX.Element {
           <a
             id="export-section__content__png-tab"
             onClick={(ev) => onClickTabButton(ev, 'png')}
+            onKeyDown={(ev) => {
+              if (ev.key === 'Enter') onClickTabButton(ev, 'png');
+            }}
             aria-controls="export-section__content__png"
             role="tab"
+            tabindex={0}
           >
             PNG
           </a>
@@ -153,8 +158,12 @@ export default function ExportSection(): JSX.Element {
           <a
             id="export-section__content__geo-tab"
             onClick={(ev) => onClickTabButton(ev, 'geo')}
+            onKeyDown={(ev) => {
+              if (ev.key === 'Enter') onClickTabButton(ev, 'geo');
+            }}
             aria-controls="export-section__content__geo"
             role="tab"
+            tabindex={0}
           >
             { LL().ExportSection.Layers() }
           </a>
@@ -165,7 +174,7 @@ export default function ExportSection(): JSX.Element {
       <div
         id="export-section__content__svg"
         role="tabpanel"
-        tabindex="0"
+        tabindex="1"
         aria-labelledby="export-section__content__svg-tab"
       >
         <InputFieldCheckbox
@@ -186,7 +195,7 @@ export default function ExportSection(): JSX.Element {
       <div
         id="export-section__content__png"
         role="tabpanel"
-        tabindex="0"
+        tabindex="1"
         class="is-hidden"
         aria-labelledby="export-section__content__png-tab"
       >
@@ -233,7 +242,7 @@ export default function ExportSection(): JSX.Element {
       <div
         id="export-section__content__geo"
         role="tabpanel"
-        tabindex="0"
+        tabindex="1"
         class="is-hidden"
         aria-labelledby="export-section__content__geo-tab"
       >
