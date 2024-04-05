@@ -53,6 +53,19 @@
     border: 1px solid #e8e8e8;
 }
 
+.layer-manager-item__action > button svg {
+    filter: drop-shadow(3px 3px 6px grey);
+    fill: var(--bulma-primary);
+    height: 1.5em;
+    width: 1.5em;
+    stroke: currentColor;
+}
+
+.layer-manager-item__action > button[disabled] svg {
+    filter: none;
+    fill: var(--bulma-border-weak);
+}
+
 /* Style for the item that is currently being dragged */
 .sortable-chosen .layer-manager-item {
     background-color: var(--sortable-chosen-background);
