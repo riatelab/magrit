@@ -1,6 +1,5 @@
 // Imports from solid-js
 import {
-  createMemo,
   createSignal,
   For,
   type JSX,
@@ -56,7 +55,7 @@ async function onClickValidate(
   targetVariable: string,
   cartogramMethod: CartogramMethod,
   newName: string,
-  iterations: number = 5,
+  iterations: number,
 ) {
   const referenceLayerDescription = layersDescriptionStore.layers
     .find((l) => l.id === referenceLayerId)!;
@@ -83,7 +82,7 @@ async function onClickValidate(
     newData = computeCartogramDougenik(
       inputData,
       targetVariable,
-      1,
+      iterations,
     );
   }
 
@@ -196,6 +195,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
         targetVariable(),
         cartogramMethod(),
         layerName,
+        numberOfIterations(),
       ).then(() => {
         // Hide loading overlay
         setLoading(false);
