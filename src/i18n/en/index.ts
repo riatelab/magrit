@@ -706,6 +706,7 @@ const en = {
     validate: 'Validate',
     missingValues: '{{ One feature without data | ?? features without data }}',
     count: 'Features per class',
+    errorCustomBreaks: 'Error - The class limits entered are invalid. Please enter numerical values separated by dashes to form at least 2 classes.',
   },
   Legend: {
     ContextMenu: {

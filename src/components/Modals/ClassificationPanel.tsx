@@ -1,6 +1,7 @@
 // Imports from solid-js
 import {
-  createSignal, JSX, Match, onCleanup, onMount, Show, Switch,
+  createSignal, JSX, Match, onCleanup,
+  onMount, Show, Switch,
 } from 'solid-js';
 
 // Imports from other packages
@@ -10,6 +11,7 @@ import {
   getSequentialColors,
   getAsymmetricDivergingColors,
 } from 'dicopal';
+import toast from 'solid-toast';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -32,7 +34,11 @@ import { classificationPanelStore, setClassificationPanelStore } from '../../sto
 import '../../styles/ClassificationPanel.css';
 
 // Types, interfaces and enums
-import { ClassificationMethod, type ClassificationParameters, CustomPalette } from '../../global.d';
+import {
+  ClassificationMethod,
+  type ClassificationParameters,
+  type CustomPalette,
+} from '../../global.d';
 
 enum OptionsClassification {
   numberOfClasses,
@@ -69,12 +75,20 @@ function prepareStatisticalSummary(series: number[]) {
   };
 }
 
-function parseUserDefinedBreaks(series: number[], breaksString: string): number[] {
-  // FIXME: it seems there is a bug when parsing user-defined breaks
+function parseUserDefinedBreaks(
+  series: number[],
+  breaksString: string,
+  statSummary: ReturnType<typeof prepareStatisticalSummary>,
+): number[] {
   const separator = hasNegative(series) ? '- ' : '-';
-  const breaks = breaksString.split(separator).map((d) => +d);
-  if (breaks.length < 2) {
-    throw new Error('The number of breaks must be at least 2.');
+  let breaks = breaksString.split(separator).map((d) => +d);
+  // Filter / modify the breaks so that the first value is the minimum of the series
+  // and the last value is the maximum of the series
+  breaks = breaks.filter((d) => d > statSummary.minimum && d < statSummary.maximum);
+  breaks = [statSummary.minimum, ...breaks, statSummary.maximum];
+  breaks = [...new Set(breaks)].sort((a, b) => a - b);
+  if (breaks.length < 3) {
+    throw new Error('The number of classes must be at least 2.');
   }
   return breaks;
 }
@@ -115,7 +129,7 @@ export default function ClassificationPanel(): JSX.Element {
       breaks = classifier.classify(amplitude(), meanPositionRole() === 'center');
       classes = breaks.length - 1;
     } else if (classificationMethod() === ClassificationMethod.manual) {
-      breaks = parseUserDefinedBreaks(filteredSeries, customBreaks());
+      breaks = classifier.classify(customBreaks());
       classes = breaks.length - 1;
     } else {
       throw new Error('Classification method not found !');
@@ -271,6 +285,7 @@ export default function ClassificationPanel(): JSX.Element {
   });
 
   let refParentNode: HTMLDivElement;
+  let refTextArea: HTMLTextAreaElement;
 
   const entriesClassificationMethod = [
     {
@@ -502,10 +517,31 @@ export default function ClassificationPanel(): JSX.Element {
                 <textarea
                   class={'textarea'}
                   style={{ 'min-height': '3em', 'max-height': '6em' }}
+                  ref={refTextArea!}
+                  value={currentBreaksInfo().breaks.join(' - ')}
                 >
-                  { currentBreaksInfo().breaks.join(' - ') }
                 </textarea>
-                <button class="button" style={{ width: '100%', height: '2em' }}>
+                <button
+                  class="button"
+                  style={{ width: '100%', height: '2em' }}
+                  onClick={() => {
+                    try {
+                      const b = parseUserDefinedBreaks(
+                        filteredSeries,
+                        refTextArea.value,
+                        statSummary,
+                      );
+                      setCustomBreaks(b);
+                    } catch (e) {
+                      toast.error(LL().ClassificationPanel.errorCustomBreaks(), {
+                        duration: 10000,
+                      });
+                      refTextArea.value = currentBreaksInfo().breaks.join(' - ');
+                      return;
+                    }
+                    updateClassificationParameters();
+                  }}
+                >
                   { LL().ClassificationPanel.validate() }
                 </button>
               </div>
