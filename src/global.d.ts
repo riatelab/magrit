@@ -306,6 +306,8 @@ interface ClassificationParameters {
   entitiesByClass: number[],
   // Whether to reverse the palette or not
   reversePalette: boolean,
+  // The position of the central class for diverging palettes
+  centralClassPosition?: number,
 }
 
 export enum ProportionalSymbolsColorMode {

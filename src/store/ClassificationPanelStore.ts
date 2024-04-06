@@ -13,6 +13,7 @@ type ClassificationPanelStoreType = {
   onConfirm?: (classification: ClassificationParameters) => void,
   onCancel?: () => void,
   noDataColor?: string,
+  centralClassPosition?: number,
 };
 
 const [
@@ -30,6 +31,7 @@ const [
   onConfirm: undefined,
   onCancel: undefined,
   noDataColor: undefined,
+  centralClassPosition: undefined,
 } as ClassificationPanelStoreType);
 
 export {

@@ -330,6 +330,8 @@ function makeSettingsDefaultPoint(
               invertColorScheme: (
                 props.rendererParameters as ClassificationParameters).reversePalette,
               noDataColor: (props.rendererParameters as ClassificationParameters).noDataColor,
+              centralClassPosition: (
+                props.rendererParameters as ClassificationParameters).centralClassPosition,
               onCancel: () => {
                 setLayersDescriptionStoreBase(
                   'layers',
@@ -522,6 +524,8 @@ function makeSettingsDefaultPoint(
                 props.rendererParameters!.color as ClassificationParameters).reversePalette,
               noDataColor: (
                 props.rendererParameters!.color as ClassificationParameters).noDataColor,
+              centralClassPosition: (
+                props.rendererParameters!.color as ClassificationParameters).centralClassPosition,
               onCancel: () => {
                 setLayersDescriptionStoreBase(
                   'layers',
@@ -832,6 +836,8 @@ function makeSettingsDefaultLine(
               invertColorScheme: (
                 props.rendererParameters as ClassificationParameters).reversePalette,
               noDataColor: (props.rendererParameters as ClassificationParameters).noDataColor,
+              centralClassPosition: (
+                props.rendererParameters as ClassificationParameters).centralClassPosition,
               onCancel: () => {
                 setLayersDescriptionStoreBase(
                   'layers',
@@ -1150,6 +1156,8 @@ function makeSettingsDefaultPolygon(
               invertColorScheme: (
                 props.rendererParameters as ClassificationParameters).reversePalette,
               noDataColor: (props.rendererParameters as ClassificationParameters).noDataColor,
+              centralClassPosition: (
+                props.rendererParameters as ClassificationParameters).centralClassPosition,
               onCancel: () => {
                 setLayersDescriptionStoreBase(
                   'layers',

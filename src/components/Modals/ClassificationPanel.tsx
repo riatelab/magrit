@@ -19,7 +19,7 @@ import d3 from '../../helpers/d3-custom';
 import { getClassifier } from '../../helpers/classification';
 import { getMinimumPrecision, isNumber } from '../../helpers/common';
 import {
-  extent, hasNegative, Mmin, round,
+  extent, hasNegative, Mmin, Mround, round,
 } from '../../helpers/math';
 import { makeClassificationPlot, makeColoredBucketPlot, makeDistributionPlot } from '../DistributionPlots.tsx';
 
@@ -179,6 +179,10 @@ export default function ClassificationPanel(): JSX.Element {
       reversePalette,
     } as ClassificationParameters;
 
+    if (typeScheme() === 'diverging') {
+      classificationParameters.centralClassPosition = centralClass();
+    }
+
     return classificationParameters;
   }; /* eslint-enable @typescript-eslint/no-use-before-define */
 
@@ -206,6 +210,15 @@ export default function ClassificationPanel(): JSX.Element {
       value: d.name,
     }));
 
+  const getPaletteType = (name: string) => {
+    if (availableSequentialPalettes.find((d) => d.value === name)) {
+      return 'sequential';
+    }
+    if (availableDivergingPalettes.find((d) => d.value === name)) {
+      return 'diverging';
+    }
+    return 'custom';
+  };
   // Signals for the current component:
   // - the classification method chosen by the user
   const [
@@ -237,7 +250,9 @@ export default function ClassificationPanel(): JSX.Element {
   const [
     typeScheme,
     setTypeScheme,
-  ] = createSignal<'sequential' | 'diverging' | 'custom'>('sequential');
+  ] = createSignal<'sequential' | 'diverging' | 'custom'>(
+    classificationPanelStore.colorScheme ? getPaletteType(classificationPanelStore.colorScheme) : 'sequential',
+  );
   // - the color palette chosen by the user for the current classification method
   const [
     paletteName,
@@ -247,7 +262,7 @@ export default function ClassificationPanel(): JSX.Element {
   const [
     noDataColor,
     setNoDataColor,
-  ] = createSignal<string>('#bebebe');
+  ] = createSignal<string>(classificationPanelStore.noDataColor || '#bebebe');
   // - whether to reverse the color palette
   const [
     isPaletteReversed,
@@ -257,6 +272,12 @@ export default function ClassificationPanel(): JSX.Element {
       ? classificationPanelStore.invertColorScheme
       : false,
   );
+  // - the inflection point chosen by the user for the
+  //   current classification method (only if 'diverging' is chosen)
+  const [
+    centralClass,
+    setCentralClass,
+  ] = createSignal<number | undefined>(classificationPanelStore.centralClassPosition);
   // - the current breaks (given the last option that changed, or the default breaks)
   const [
     currentBreaksInfo,
@@ -268,12 +289,6 @@ export default function ClassificationPanel(): JSX.Element {
     customBreaks,
     setCustomBreaks,
   ] = createSignal<number[]>(currentBreaksInfo().breaks);
-  // - the inflection point chosen by the user for the
-  //   current classification method (only if 'diverging' is chosen)
-  const [
-    centralClass,
-    setCentralClass,
-  ] = createSignal<number | undefined>(undefined);
   // - display option for the classification plot
   const [
     classificationPlotOption,
@@ -623,8 +638,8 @@ export default function ClassificationPanel(): JSX.Element {
                       name={'type-scheme'}
                       id={'type-scheme-sequential'}
                       onChange={() => {
-                        setTypeScheme('sequential');
                         setPaletteName(availableSequentialPalettes[0].value);
+                        setTypeScheme('sequential');
                         updateClassificationParameters();
                       }}
                       checked
@@ -637,8 +652,8 @@ export default function ClassificationPanel(): JSX.Element {
                       name={'type-scheme'}
                       id={'type-scheme-diverging'}
                       onChange={() => {
-                        setTypeScheme('diverging');
                         setPaletteName(availableDivergingPalettes[0].value);
+                        setTypeScheme('diverging');
                         updateClassificationParameters();
                       }}
                     />
@@ -719,7 +734,7 @@ export default function ClassificationPanel(): JSX.Element {
                     min={1}
                     max={numberOfClasses() - 2}
                     step={1}
-                    value={1}
+                    value={Mround((numberOfClasses() - 1) / 2)}
                     onChange={(value) => {
                       setCentralClass(value);
                       updateClassificationParameters();
