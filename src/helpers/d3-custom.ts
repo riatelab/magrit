@@ -45,11 +45,12 @@ import {
   geoPath,
   geoProjection,
   geoIdentity,
-  // Projections that will be available in the application
-  geoNaturalEarth1,
-  geoEqualEarth,
   geoStream,
   geoTransform,
+  // Projections that will be available in the application
+  geoNaturalEarth1,
+  geoMercator,
+  geoEqualEarth,
 } from 'd3-geo';
 import {
   // Other projections that will be available in the application
@@ -148,7 +149,7 @@ import {
 import { quadtree } from 'd3-quadtree';
 import type { D3ZoomEvent } from 'd3-zoom';
 import type { GeoProjection, GeoRawProjection } from 'd3-geo';
-import type { DragEvent } from 'd3-drag';
+import type { D3DragEvent } from 'd3-drag';
 import {
   easeCubicOut,
   easeSinOut,
@@ -360,6 +361,7 @@ export default {
   geoLaskowski,
   geoLittrow,
   geoLoximuthal,
+  geoMercator,
   geoMiller,
   geoModifiedStereographic,
   geoMollweide,
@@ -457,7 +459,7 @@ export default {
 
 export type {
   D3ZoomEvent,
-  DragEvent,
+  D3DragEvent,
   GeoProjection,
   GeoRawProjection,
   BrushBehavior,

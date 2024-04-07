@@ -30,7 +30,10 @@ function onClickOutsideDropdown(): void {
   document.removeEventListener('click', onClickOutsideDropdown);
 }
 
-function setDropdownItemTarget(event: Event, props: DropdownMenuProps): void {
+export function setDropdownItemTarget(
+  event: Event,
+  props: Pick<DropdownMenuProps, 'prefix'>,
+): void {
   const target = event.currentTarget as HTMLElement;
 
   // Reference to the root of the dropdown component

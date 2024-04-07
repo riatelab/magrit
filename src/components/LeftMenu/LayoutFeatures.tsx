@@ -521,7 +521,7 @@ const createFreeDraw = (
   // Set the cursor to crosshair to indicate that we are in drawing mode
   svgElement.style.cursor = 'crosshair';
 
-  const dragStarted = (ev: d3.DragEvent) => {
+  const dragStarted = (ev: d3.D3DragEvent) => {
     // Push the point to the array
     pts.push([ev.x, ev.y]);
     // Draw the temporary line

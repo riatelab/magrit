@@ -417,13 +417,21 @@ type RootTranslation = {
 		 */
 		Projection: string
 		/**
-		 * M​o​r​e​ ​p​r​o​j​e​c​t​i​o​n​s
+		 * G​l​o​b​a​l​ ​p​r​o​j​e​c​t​i​o​n​s
+		 */
+		GlobalProjections: string
+		/**
+		 * L​o​c​a​l​ ​p​r​o​j​e​c​t​i​o​n​s
+		 */
+		LocalProjections: string
+		/**
+		 * R​e​c​e​n​t​l​y​ ​u​s​e​d​ ​p​r​o​j​e​c​t​i​o​n​s
+		 */
+		RecentlyUsedProjections: string
+		/**
+		 * M​o​r​e​ ​p​r​o​j​e​c​t​i​o​n​s​.​.​.
 		 */
 		MoreProjection: string
-		/**
-		 * C​u​s​t​o​m​ ​p​r​o​j​e​c​t​i​o​n​.​.​.
-		 */
-		CustomProjection: string
 		/**
 		 * L​o​c​k​ ​z​o​o​m​ ​/​ ​p​o​s​i​t​i​o​n
 		 */
@@ -3163,13 +3171,21 @@ export type TranslationFunctions = {
 		 */
 		Projection: () => LocalizedString
 		/**
-		 * More projections
+		 * Global projections
+		 */
+		GlobalProjections: () => LocalizedString
+		/**
+		 * Local projections
+		 */
+		LocalProjections: () => LocalizedString
+		/**
+		 * Recently used projections
+		 */
+		RecentlyUsedProjections: () => LocalizedString
+		/**
+		 * More projections...
 		 */
 		MoreProjection: () => LocalizedString
-		/**
-		 * Custom projection...
-		 */
-		CustomProjection: () => LocalizedString
 		/**
 		 * Lock zoom / position
 		 */

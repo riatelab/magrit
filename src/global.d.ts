@@ -247,7 +247,7 @@ interface ProjectionDefinition {
   bounds?: [number, number, number, number],
   // The code of the projection (optional, only used for proj4 projections that
   // were created from an EPSG code)
-  code?: number,
+  code?: string,
 }
 
 export enum ClassificationMethod {
