@@ -584,6 +584,10 @@ const fr = {
   },
   ProjectionSelection: {
     title: 'Sélection de la projection',
+    GlobalProjection: 'Projection globale',
+    InformationGlobalProjection: 'Sélectionnez une projection globale pour votre carte. Les projections globales sont des projections cartographiques qui déforment la forme des continents et des océans. Elles sont souvent utilisées pour des cartes du monde entier.',
+    LocalProjection: 'Projection locale',
+    InformationLocalProjection: 'Sélectionnez une projection locale pour votre carte. Les projections locales sont souvent utilisées pour des cartes de régions spécifiques, à grande échelle (c\'est à dire couvrant une petite portion du territoire).',
     SearchProjection: 'Entrer un code EPSG ou un nom de projection',
     NMatchingProjections: '{{Aucune projection correspondante | Une projection correspondante | ?? projections correspondantes}}',
     TooManyResults: 'Trop de résultats, veuillez affiner votre recherche.',

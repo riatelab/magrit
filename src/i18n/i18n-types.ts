@@ -2089,6 +2089,22 @@ type RootTranslation = {
 		 */
 		title: string
 		/**
+		 * G​l​o​b​a​l​ ​p​r​o​j​e​c​t​i​o​n
+		 */
+		GlobalProjection: string
+		/**
+		 * S​e​l​e​c​t​ ​a​ ​g​l​o​b​a​l​ ​p​r​o​j​e​c​t​i​o​n​ ​f​o​r​ ​y​o​u​r​ ​m​a​p​.​ ​G​l​o​b​a​l​ ​p​r​o​j​e​c​t​i​o​n​s​ ​a​r​e​ ​m​a​p​ ​p​r​o​j​e​c​t​i​o​n​s​ ​t​h​a​t​ ​d​i​s​t​o​r​t​ ​t​h​e​ ​s​h​a​p​e​ ​o​f​ ​c​o​n​t​i​n​e​n​t​s​ ​a​n​d​ ​o​c​e​a​n​s​.​ ​T​h​e​y​ ​a​r​e​ ​o​f​t​e​n​ ​u​s​e​d​ ​f​o​r​ ​m​a​p​s​ ​o​f​ ​t​h​e​ ​w​h​o​l​e​ ​w​o​r​l​d​.
+		 */
+		InformationGlobalProjection: string
+		/**
+		 * L​o​c​a​l​ ​p​r​o​j​e​c​t​i​o​n
+		 */
+		LocalProjection: string
+		/**
+		 * S​e​l​e​c​t​ ​a​ ​l​o​c​a​l​ ​p​r​o​j​e​c​t​i​o​n​ ​f​o​r​ ​y​o​u​r​ ​m​a​p​.​ ​L​o​c​a​l​ ​p​r​o​j​e​c​t​i​o​n​s​ ​a​r​e​ ​o​f​t​e​n​ ​u​s​e​d​ ​f​o​r​ ​l​a​r​g​e​-​s​c​a​l​e​ ​m​a​p​s​ ​o​f​ ​s​p​e​c​i​f​i​c​ ​r​e​g​i​o​n​s​ ​(​i​.​e​.​ ​c​o​v​e​r​i​n​g​ ​a​ ​s​m​a​l​l​ ​p​a​r​t​ ​o​f​ ​t​h​e​ ​t​e​r​r​i​t​o​r​y​)​.
+		 */
+		InformationLocalProjection: string
+		/**
 		 * E​n​t​e​r​ ​a​n​ ​E​P​S​G​ ​c​o​d​e​ ​o​r​ ​a​ ​p​r​o​j​e​c​t​i​o​n​ ​n​a​m​e
 		 */
 		SearchProjection: string
@@ -4821,6 +4837,22 @@ export type TranslationFunctions = {
 		 * Projection selection
 		 */
 		title: () => LocalizedString
+		/**
+		 * Global projection
+		 */
+		GlobalProjection: () => LocalizedString
+		/**
+		 * Select a global projection for your map. Global projections are map projections that distort the shape of continents and oceans. They are often used for maps of the whole world.
+		 */
+		InformationGlobalProjection: () => LocalizedString
+		/**
+		 * Local projection
+		 */
+		LocalProjection: () => LocalizedString
+		/**
+		 * Select a local projection for your map. Local projections are often used for large-scale maps of specific regions (i.e. covering a small part of the territory).
+		 */
+		InformationLocalProjection: () => LocalizedString
 		/**
 		 * Enter an EPSG code or a projection name
 		 */

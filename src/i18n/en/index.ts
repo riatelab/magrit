@@ -584,6 +584,10 @@ const en = {
   },
   ProjectionSelection: {
     title: 'Projection selection',
+    GlobalProjection: 'Global projection',
+    InformationGlobalProjection: 'Select a global projection for your map. Global projections are map projections that distort the shape of continents and oceans. They are often used for maps of the whole world.',
+    LocalProjection: 'Local projection',
+    InformationLocalProjection: 'Select a local projection for your map. Local projections are often used for large-scale maps of specific regions (i.e. covering a small part of the territory).',
     SearchProjection: 'Enter an EPSG code or a projection name',
     NMatchingProjections: '{{No matching projection | One projection found | ?? projections found}}',
     TooManyResults: 'Too many results, please refine your search.',
