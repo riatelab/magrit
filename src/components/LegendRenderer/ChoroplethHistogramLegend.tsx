@@ -50,21 +50,26 @@ function ChoroplethHistogram(
     props.classification.breaks[0],
     props.classification.breaks[props.classification.breaks.length - 1],
   ];
-  const colors = props.classification.reversePalette
+  const colors = createMemo(() => (props.classification.reversePalette
     ? props.classification.palette.colors.slice().reverse()
-    : props.classification.palette.colors;
-  const breaksData = [];
+    : props.classification.palette.colors));
 
-  for (let i = 0; i < props.classification.breaks.length - 1; i += 1) {
-    breaksData.push({
-      x1: props.classification.breaks[i],
-      x2: props.classification.breaks[i + 1],
-      y: props.classification.entitiesByClass[i] / (
-        props.classification.breaks[i + 1] - props.classification.breaks[i]),
-      count: props.classification.entitiesByClass[i],
-      color: colors[i],
-    });
-  }
+  const breaksData = createMemo(() => {
+    const bd = [];
+
+    for (let i = 0; i < props.classification.breaks.length - 1; i += 1) {
+      bd.push({
+        x1: props.classification.breaks[i],
+        x2: props.classification.breaks[i + 1],
+        y: props.classification.entitiesByClass[i] / (
+          props.classification.breaks[i + 1] - props.classification.breaks[i]),
+        count: props.classification.entitiesByClass[i],
+        color: colors()[i],
+      });
+    }
+
+    return bd;
+  });
 
   return <>{
     Plot.plot({
@@ -82,7 +87,7 @@ function ChoroplethHistogram(
         ticks: false,
       },
       marks: [
-        Plot.rectY(breaksData, {
+        Plot.rectY(breaksData(), {
           x1: (d) => d.x1,
           x2: (d) => d.x2,
           y: (d) => d.y,
