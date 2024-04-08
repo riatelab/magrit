@@ -2751,9 +2751,17 @@ type RootTranslation = {
 			 */
 			MushroomsTopTitle: string
 			/**
+			 * T​o​p​ ​p​a​r​t​ ​v​a​r​i​a​b​l​e​ ​t​i​t​l​e​ ​c​o​l​o​r
+			 */
+			MushroomsTopTitleColor: string
+			/**
 			 * B​o​t​t​o​m​ ​p​a​r​t​ ​v​a​r​i​a​b​l​e​ ​t​i​t​l​e
 			 */
 			MushroomsBottomTitle: string
+			/**
+			 * B​o​t​t​o​m​ ​p​a​r​t​ ​v​a​r​i​a​b​l​e​ ​t​i​t​l​e​ ​c​o​l​o​r
+			 */
+			MushroomsBottomTitleColor: string
 			/**
 			 * B​a​r​ ​o​r​d​e​r
 			 */
@@ -5521,9 +5529,17 @@ export type TranslationFunctions = {
 			 */
 			MushroomsTopTitle: () => LocalizedString
 			/**
+			 * Top part variable title color
+			 */
+			MushroomsTopTitleColor: () => LocalizedString
+			/**
 			 * Bottom part variable title
 			 */
 			MushroomsBottomTitle: () => LocalizedString
+			/**
+			 * Bottom part variable title color
+			 */
+			MushroomsBottomTitleColor: () => LocalizedString
 			/**
 			 * Bar order
 			 */

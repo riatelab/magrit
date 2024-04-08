@@ -344,6 +344,51 @@ function FieldChangeValues(
   </div>;
 }
 
+function FieldChangeMushroomValues(
+  props: {
+    legend: MushroomsLegend,
+    which: 'top' | 'bottom',
+    LL: Accessor<TranslationFunctions>,
+  },
+): JSX.Element {
+  const styleInputElement = { width: '8.5em !important', 'font-size': '0.9rem' };
+  return <div class="field">
+    <label class="label">{ props.LL().Legend.Modal.ChooseValues() }</label>
+    <div class="control">
+      <FaSolidPlus
+        style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}
+        onClick={() => {
+          const values = unproxify(props.legend.values[props.which].slice()) as number[];
+          values.unshift(1);
+          debouncedUpdateProps(props.legend.id, ['values', props.which], values);
+        }}
+      />
+      <For each={props.legend.values[props.which]}>
+        {
+          (value, i) => <input
+            style={styleInputElement}
+            type="number"
+            min={0}
+            step={1}
+            value={value}
+            onChange={(ev) => {
+              const newValue = +ev.target.value;
+              const values = unproxify(props.legend.values[props.which].slice()) as number[];
+              values[i()] = newValue;
+              values.sort(ascending);
+              debouncedUpdateProps(
+                props.legend.id,
+                ['values', props.which],
+                values.filter((v) => v !== 0),
+              );
+            }}
+          />
+        }
+      </For>
+    </div>
+  </div>;
+}
+
 function makeSettingsProportionalSymbolsLegend(
   legend: ProportionalSymbolsLegend,
   LL: Accessor<TranslationFunctions>,
@@ -774,16 +819,38 @@ function makeSettingsMushrooms(
     <FieldText legend={legend} LL={LL} role={'title'}/>
     <FieldText legend={legend} LL={LL} role={'subtitle'}/>
     <FieldText legend={legend} LL={LL} role={'note'}/>
+    <div class="mt-4 mb-5 has-text-weight-bold">
+      {LL().FunctionalitiesSection.MushroomsOptions.TopProperties()}
+    </div>
+    <InputFieldColor
+      label={LL().Legend.Modal.MushroomsTopTitleColor()}
+      value={legend.topTitle.fontColor}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['topTitle', 'fontColor'], v);
+      }}
+    />
     <InputFieldText
       label={LL().Legend.Modal.MushroomsTopTitle()}
       value={legend.topTitle.text}
       onChange={(v) => debouncedUpdateProps(legend.id, ['topTitle', 'text'], v)}
+    />
+    <FieldChangeMushroomValues legend={legend} which={'top'} LL={LL} />
+    <div class="mt-4 mb-5 has-text-weight-bold">
+      {LL().FunctionalitiesSection.MushroomsOptions.BottomProperties()}
+    </div>
+    <InputFieldColor
+      label={LL().Legend.Modal.MushroomsBottomTitleColor()}
+      value={legend.bottomTitle.fontColor}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['bottomTitle', 'fontColor'], v);
+      }}
     />
     <InputFieldText
       label={LL().Legend.Modal.MushroomsBottomTitle()}
       value={legend.bottomTitle.text}
       onChange={(v) => debouncedUpdateProps(legend.id, ['bottomTitle', 'text'], v)}
     />
+    <FieldChangeMushroomValues legend={legend} which={'bottom'} LL={LL} />
     <hr/>
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
