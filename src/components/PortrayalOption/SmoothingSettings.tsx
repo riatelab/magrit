@@ -1,10 +1,6 @@
 // Import from solid-js
-import {
-  createSignal,
-  For,
-  Show,
-} from 'solid-js';
 import type { JSX } from 'solid-js';
+import { createSignal, For, Show } from 'solid-js';
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
@@ -46,6 +42,7 @@ import {
   type ChoroplethLegend,
   type CustomPalette,
   type GridParameters,
+  KdeKernel,
   type KdeParameters,
   type LayerDescriptionSmoothedLayer,
   type LegendTextElement,
@@ -56,6 +53,9 @@ import {
   SmoothingMethod,
   type StewartParameters,
 } from '../../global.d';
+import InputFieldText from '../Inputs/InputText.tsx';
+import { parseUserDefinedBreaks, prepareStatisticalSummary } from '../../helpers/classification.ts';
+import toast from 'solid-toast';
 
 async function onClickValidate(
   referenceLayerId: string,
@@ -274,7 +274,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   const [
     targetKdeKernelType,
     setTargetKdeKernelType,
-  ] = createSignal<'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform' | 'biweight'>('gaussian');
+  ] = createSignal<KdeKernel>(KdeKernel.Gaussian);
   const [
     targetBandwidth,
     setTargetBandwidth,
@@ -284,7 +284,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   const [
     targetStewartKernelType,
     setTargetStewartKernelType,
-  ] = createSignal<'gaussian' | 'pareto'>('gaussian');
+  ] = createSignal<'Gaussian' | 'Pareto'>('Gaussian');
   const [
     targetSpan,
     setTargetSpan,
@@ -293,6 +293,24 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     targetBeta,
     setTargetBeta,
   ] = createSignal<number>(2);
+
+  // Signals for ....
+  const [
+    isLoading,
+    setIsLoading,
+  ] = createSignal<boolean>(false);
+  const [
+    seriesSummary,
+    setSeriesSummary,
+  ] = createSignal<ReturnType<typeof prepareStatisticalSummary> | null>(null);
+  const [
+    computedValues,
+    setComputedValues,
+  ] = createSignal<number[] | null>(null);
+  const [
+    thresholds,
+    setThresholds,
+  ] = createSignal<number[] | null>(null);
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
@@ -347,12 +365,14 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
 
   return <div class="portrayal-section__portrayal-options-smoothed">
     <InputFieldSelect
-      label={ LL().FunctionalitiesSection.CommonOptions.Variable() }
-      onChange={(v) => { setTargetVariable(v); }}
+      label={LL().FunctionalitiesSection.CommonOptions.Variable()}
+      onChange={(v) => {
+        setTargetVariable(v);
+      }}
       value={targetVariable()}
     >
       <For each={targetFields}>
-        { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+        {(variable) => <option value={variable.name}>{variable.name}</option>}
       </For>
     </InputFieldSelect>
     <InputFieldSelect
@@ -378,17 +398,18 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         label={LL().FunctionalitiesSection.SmoothingOptions.KernelType()}
         onChange={(v) => {
           setTargetKdeKernelType(
-            v as 'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform' | 'biweight',
+            v as KdeKernel,
           );
         }}
         value={targetKdeKernelType()}
       >
-        <option value="gaussian">{LL().FunctionalitiesSection.SmoothingOptions.Gaussian()}</option>
-        <option value="epanechnikov">{LL().FunctionalitiesSection.SmoothingOptions.Epanechnikov()}</option>
-        <option value="quartic">{LL().FunctionalitiesSection.SmoothingOptions.Quartic()}</option>
-        <option value="triangular">{LL().FunctionalitiesSection.SmoothingOptions.Triangular()}</option>
-        <option value="uniform">{LL().FunctionalitiesSection.SmoothingOptions.Uniform()}</option>
-        <option value="biweight">{LL().FunctionalitiesSection.SmoothingOptions.Biweight()}</option>
+        <For each={Object.values(KdeKernel)}>
+          {
+            (kernel) => <option value={kernel}>
+              {LL().FunctionalitiesSection.SmoothingOptions[kernel]()}
+            </option>
+          }
+        </For>
       </InputFieldSelect>
       <InputFieldNumber
         label={LL().FunctionalitiesSection.SmoothingOptions.Bandwidth()}
@@ -403,15 +424,15 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       <InputFieldSelect
         label={LL().FunctionalitiesSection.SmoothingOptions.KernelType()}
         onChange={(v) => {
-          setTargetStewartKernelType(v as 'gaussian' | 'pareto');
+          setTargetStewartKernelType(v as 'Gaussian' | 'Pareto');
         }}
         value={targetStewartKernelType()}
       >
-        <option value="gaussian">{LL().FunctionalitiesSection.SmoothingOptions.Gaussian()}</option>
-        <option value="pareto">{LL().FunctionalitiesSection.SmoothingOptions.Pareto()}</option>
+        <option value="Gaussian">{LL().FunctionalitiesSection.SmoothingOptions.Gaussian()}</option>
+        <option value="Pareto">{LL().FunctionalitiesSection.SmoothingOptions.Pareto()}</option>
       </InputFieldSelect>
       <InputFieldNumber
-        label={ LL().FunctionalitiesSection.SmoothingOptions.Span() }
+        label={LL().FunctionalitiesSection.SmoothingOptions.Span()}
         value={targetSpan()}
         onChange={(v) => setTargetSpan(v)}
         min={0}
@@ -427,19 +448,53 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         step={1}
       />
     </Show>
+    <Show when={!isLoading() && !computedValues()}>
+      <button
+        class="button is-primary"
+        disabled={
+          targetResolution() <= 0
+          || (targetSmoothingMethod() === SmoothingMethod.Kde && targetBandwidth() <= 0)
+          || (targetSmoothingMethod() === SmoothingMethod.Stewart && targetSpan() <= 0)
+        }
+      >
+        Compute values
+      </button>
+    </Show>
+    <Show when={isLoading()}>
+      <progress class="progress is-small is-warning" max="100"></progress>
+    </Show>
+    <Show when={computedValues()}>
+      <InputFieldText
+        label={'Thresholds'}
+        width={600}
+        value={thresholds()!.join(', ')}
+        onChange={(v) => {
+          try {
+            const b = parseUserDefinedBreaks(
+              computedValues()!,
+              v,
+              seriesSummary()!,
+            );
+            setThresholds(b);
+          } catch (e) {
+            toast.error('Error while parsing thresholds');
+            setThresholds(thresholds()!);
+          }
+        }}
+      />
+    </Show>
     <InputResultName
       value={newLayerName()}
-      onKeyUp={ (value) => { setNewLayerName(value); }}
+      onKeyUp={(value) => {
+        setNewLayerName(value);
+      }}
       onEnter={makePortrayal}
+      disabled={!computedValues()}
     />
     <ButtonValidation
-      label={ LL().FunctionalitiesSection.CreateLayer() }
-      onClick={ makePortrayal }
-      disabled={
-        targetResolution() <= 0
-        || (targetSmoothingMethod() === SmoothingMethod.Kde && targetBandwidth() <= 0)
-        || (targetSmoothingMethod() === SmoothingMethod.Stewart && targetSpan() <= 0)
-      }
+      label={LL().FunctionalitiesSection.CreateLayer()}
+      onClick={makePortrayal}
+      disabled={!computedValues() || !thresholds()}
     />
   </div>;
 }

@@ -16,11 +16,9 @@ import toast from 'solid-toast';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import d3 from '../../helpers/d3-custom';
-import { getClassifier } from '../../helpers/classification';
-import { getMinimumPrecision, isNumber } from '../../helpers/common';
-import {
-  extent, hasNegative, Mmin, Mround, round,
-} from '../../helpers/math';
+import { getClassifier, parseUserDefinedBreaks, prepareStatisticalSummary } from '../../helpers/classification';
+import { isNumber } from '../../helpers/common';
+import { Mmin, Mround, round } from '../../helpers/math';
 import { makeClassificationPlot, makeColoredBucketPlot, makeDistributionPlot } from '../DistributionPlots.tsx';
 
 // Sub-components
@@ -58,40 +56,6 @@ const classificationMethodHasOption = (
   }
   return t.options.includes(option);
 };
-
-function prepareStatisticalSummary(series: number[]) {
-  const [min, max] = extent(series);
-
-  return {
-    population: series.length,
-    minimum: min,
-    maximum: max,
-    mean: d3.mean(series) as number,
-    median: d3.median(series) as number,
-    standardDeviation: d3.deviation(series) as number,
-    precision: getMinimumPrecision(series),
-    // variance: d3.variance(series),
-    // varianceCoefficient: d3.deviation(series) / d3.mean(series),
-  };
-}
-
-function parseUserDefinedBreaks(
-  series: number[],
-  breaksString: string,
-  statSummary: ReturnType<typeof prepareStatisticalSummary>,
-): number[] {
-  const separator = hasNegative(series) ? '- ' : '-';
-  let breaks = breaksString.split(separator).map((d) => +d);
-  // Filter / modify the breaks so that the first value is the minimum of the series
-  // and the last value is the maximum of the series
-  breaks = breaks.filter((d) => d > statSummary.minimum && d < statSummary.maximum);
-  breaks = [statSummary.minimum, ...breaks, statSummary.maximum];
-  breaks = [...new Set(breaks)].sort((a, b) => a - b);
-  if (breaks.length < 3) {
-    throw new Error('The number of classes must be at least 2.');
-  }
-  return breaks;
-}
 
 export default function ClassificationPanel(): JSX.Element {
   // Function to recompute the classification given the current options.

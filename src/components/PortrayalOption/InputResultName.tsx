@@ -11,6 +11,8 @@ interface ResultNameInputProps {
   onEnter?: () => void;
   // The callback to call when the user releases a key
   onKeyUp?: (value: string) => void;
+  // Whether the input is disabled or not
+  disabled?: boolean;
 }
 
 export default function InputResultName(props: ResultNameInputProps): JSX.Element {
@@ -30,6 +32,7 @@ export default function InputResultName(props: ResultNameInputProps): JSX.Elemen
           if (props.onKeyUp) props.onKeyUp((e.target as EventTarget & HTMLInputElement).value);
           if (e.key === 'Enter' && props.onEnter) props.onEnter();
         }}
+        disabled={props.disabled}
       />
     </div>
   </div>;

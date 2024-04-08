@@ -649,7 +649,16 @@ export enum SmoothingMethod {
 
 export interface KdeParameters {
   bandwidth: number;
-  kernel: 'gaussian' | 'epanechnikov' | 'quartic' | 'triangular' | 'uniform' | 'biweight';
+  kernel: KdeKernel;
+}
+
+export enum KdeKernel {
+  Gaussian = 'Gaussian',
+  // Epanechnikov = 'Epanechnikov',
+  // Quartic = 'Quartic',
+  Triangular = 'Triangular',
+  Uniform = 'Uniform',
+  // Biweight = 'Biweight',
 }
 
 export interface GridParameters {
@@ -664,7 +673,7 @@ interface StewartParameters {
   alpha: number;
   beta: number;
   span: number;
-  function: 'gaussian' | 'pareto';
+  function: 'Gaussian' | 'Pareto';
 }
 
 export enum GridCellShape {

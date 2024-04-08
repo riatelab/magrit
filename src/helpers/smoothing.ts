@@ -429,7 +429,7 @@ export async function computeKde(
       },
     );
 
-  if (kdeParameters.kernel === 'gaussian') {
+  if (kdeParameters.kernel === 'Gaussian') {
     gpu
       .addFunction( // eslint-disable-next-line prefer-arrow-callback
         function k(dist: number, bandwidth: number): number {
@@ -443,44 +443,44 @@ export async function computeKde(
           returnType: 'Number',
         },
       );
-  } else if (kdeParameters.kernel === 'epanechnikov') {
-    gpu
-      .addFunction(
-        // eslint-disable-next-line prefer-arrow-callback
-        function k(dist: number, bandwidth: number): number {
-          const u = dist / bandwidth;
-          if (Math.abs(u) <= 1) {
-            return (3 / 4) * (1 - u * u) / bandwidth; // eslint-disable-line no-mixed-operators
-          }
-          return 0;
-        },
-        {
-          argumentTypes: {
-            dist: 'Number',
-          },
-          returnType: 'Number',
-        },
-      );
-  } else if (kdeParameters.kernel === 'quartic') {
-    gpu
-      .addFunction( // eslint-disable-next-line prefer-arrow-callback
-        function k(dist: number, bandwidth: number): number {
-          const u = dist / bandwidth;
-          if (Math.abs(u) <= 1) {
-            const t = (1 - u * u) * (1 - u * u);
-            // eslint-disable-next-line no-restricted-properties, prefer-exponentiation-operator
-            return ((15 / 16) * t) / bandwidth;
-          }
-          return 0;
-        },
-        {
-          argumentTypes: {
-            dist: 'Number',
-          },
-          returnType: 'Number',
-        },
-      );
-  } else if (kdeParameters.kernel === 'triangular') {
+  // } else if (kdeParameters.kernel === 'Epanechnikov') {
+  //   gpu
+  //     .addFunction(
+  //       // eslint-disable-next-line prefer-arrow-callback
+  //       function k(dist: number, bandwidth: number): number {
+  //         const u = dist / bandwidth;
+  //         if (Math.abs(u) <= 1) {
+  //           return (3 / 4) * (1 - u * u) / bandwidth; // eslint-disable-line no-mixed-operators
+  //         }
+  //         return 0;
+  //       },
+  //       {
+  //         argumentTypes: {
+  //           dist: 'Number',
+  //         },
+  //         returnType: 'Number',
+  //       },
+  //     );
+  // } else if (kdeParameters.kernel === 'Quartic') {
+  //   gpu
+  //     .addFunction( // eslint-disable-next-line prefer-arrow-callback
+  //       function k(dist: number, bandwidth: number): number {
+  //         const u = dist / bandwidth;
+  //         if (Math.abs(u) <= 1) {
+  //           const t = (1 - u * u) * (1 - u * u);
+  //           // eslint-disable-next-line no-restricted-properties, prefer-exponentiation-operator
+  //           return ((15 / 16) * t) / bandwidth;
+  //         }
+  //         return 0;
+  //       },
+  //       {
+  //         argumentTypes: {
+  //           dist: 'Number',
+  //         },
+  //         returnType: 'Number',
+  //       },
+  //     );
+  } else if (kdeParameters.kernel === 'Triangular') {
     gpu
       .addFunction(
         // eslint-disable-next-line prefer-arrow-callback
@@ -498,24 +498,24 @@ export async function computeKde(
           returnType: 'Number',
         },
       );
-  } else if (kdeParameters.kernel === 'biweight') {
-    gpu
-      .addFunction(
-        // eslint-disable-next-line prefer-arrow-callback
-        function k(dist: number, bandwidth: number): number {
-          const u = dist / bandwidth;
-          if (Math.abs(u) <= 1) {
-            return (1 - Math.abs(u)) * bandwidth;
-          }
-          return 0;
-        },
-        {
-          argumentTypes: {
-            dist: 'Number',
-          },
-          returnType: 'Number',
-        },
-      );
+  // } else if (kdeParameters.kernel === 'Biweight') {
+  //   gpu
+  //     .addFunction(
+  //       // eslint-disable-next-line prefer-arrow-callback
+  //       function k(dist: number, bandwidth: number): number {
+  //         const u = dist / bandwidth;
+  //         if (Math.abs(u) <= 1) {
+  //           return (1 - Math.abs(u)) * bandwidth;
+  //         }
+  //         return 0;
+  //       },
+  //       {
+  //         argumentTypes: {
+  //           dist: 'Number',
+  //         },
+  //         returnType: 'Number',
+  //       },
+  //     );
   } else { // (kdeParameters.kernel === 'uniform')
     gpu
       .addFunction(
