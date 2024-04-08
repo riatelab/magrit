@@ -34,6 +34,7 @@ import MultipleSelect from '../MultipleSelect.tsx';
 import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
+import type { Variable } from '../../helpers/typeDetection';
 import type { GeoJSONFeature, LayerDescription, TableDescription } from '../../global';
 
 interface JoinResult {
@@ -238,11 +239,11 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
   }).filter((d) => d !== null) as GeoJSONFeature[];
 
   const newFieldsDescription = selectFields
-    ? tableDescription.fields.filter((f) => selectedFields.includes(f.name))
-    : tableDescription.fields;
+    ? unproxify(tableDescription.fields.filter((f) => selectedFields.includes(f.name)))
+    : unproxify(tableDescription.fields);
 
   if (usePrefix) {
-    newFieldsDescription.forEach((variable) => {
+    newFieldsDescription.forEach((variable: Variable) => {
       // eslint-disable-next-line no-param-reassign
       variable.name = `${prefixValue}${variable.name}`;
     });
