@@ -50,7 +50,7 @@ import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 const updateLayoutFeatureProperty = (
   layoutFeatureId: string,
   props: string[],
-  value: string | number | number[] | boolean | undefined,
+  value: string | number | number[] | boolean | undefined | { color: string, width: number },
 ) => {
   const allPropsExceptLast = props.slice(0, props.length - 1);
   const lastProp = props[props.length - 1];
@@ -349,7 +349,7 @@ function makeSettingsText(
         class="label"
         style={{ 'margin-bottom': '0.5em' }}
       >
-        {LL().LayoutFeatures.Modal.TextProperties()}
+        {LL().LayoutFeatures.Modal.FontProperties()}
       </label>
     </div>
     <div class="is-flex is-justify-content-space-around mb-5 pr-3 pl-3">
@@ -397,7 +397,7 @@ function makeSettingsText(
         )}
       />
     </div>
-    <div class="is-flex is-justify-content-center">
+    <div class="is-flex is-justify-content-center mb-6">
       <div class="buttons">
         <button
           classList={{
@@ -467,56 +467,51 @@ function makeSettingsText(
         </button>
       </div>
     </div>
-    <div>
-      <label
-        class="label"
-        style={{ 'margin-bottom': '0.5em' }}
-      >
+    <div class="mb-5 is-flex is-justify-content-space-between">
+      <label class="label mr-6">
         {LL().LayoutFeatures.Modal.TextAnchor()}
       </label>
-    </div>
-    <div class="mb-5 is-flex is-justify-content-space-evenly">
       <label>
         <input
           type="radio"
           name="radio-text-anchor"
           value="start"
-          {...(ft.textAnchor === 'start' ? { checked: true } : {}) }
+          {...(ft.textAnchor === 'start' ? { checked: true } : {})}
           onChange={(e) => updateLayoutFeatureProperty(
             layoutFeatureId,
             ['textAnchor'],
             e.currentTarget.value,
           )}
         />
-        { LL().LayoutFeatures.Modal.Start() }
+        {LL().LayoutFeatures.Modal.Start()}
       </label>
       <label>
         <input
           type="radio"
           name="radio-text-anchor"
           value="middle"
-          {...(ft.textAnchor === 'middle' ? { checked: true } : {}) }
+          {...(ft.textAnchor === 'middle' ? { checked: true } : {})}
           onChange={(e) => updateLayoutFeatureProperty(
             layoutFeatureId,
             ['textAnchor'],
             e.currentTarget.value,
           )}
         />
-        { LL().LayoutFeatures.Modal.Middle() }
+        {LL().LayoutFeatures.Modal.Middle()}
       </label>
       <label>
         <input
           type="radio"
           name="radio-text-anchor"
           value="end"
-          {...(ft.textAnchor === 'end' ? { checked: true } : {}) }
+          {...(ft.textAnchor === 'end' ? { checked: true } : {})}
           onChange={(e) => updateLayoutFeatureProperty(
             layoutFeatureId,
             ['textAnchor'],
             e.currentTarget.value,
           )}
         />
-        { LL().LayoutFeatures.Modal.End() }
+        {LL().LayoutFeatures.Modal.End()}
       </label>
     </div>
     <InputFieldNumber
@@ -531,6 +526,57 @@ function makeSettingsText(
       max={360}
       step={1}
     />
+    <InputFieldCheckbox
+      label={LL().LayoutFeatures.Modal.BufferAroundText()}
+      checked={!!ft.halo}
+      onChange={(v) => {
+        if (v) {
+          updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['halo'],
+            {
+              color: '#ffffff',
+              width: 1,
+            },
+          );
+        } else {
+          updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['halo'],
+            undefined,
+          );
+        }
+      }}
+    />
+    <Show when={ft.halo !== undefined}>
+      <InputFieldColor
+        label={ LL().LayerSettings.BufferColor() }
+        value={ft.halo!.color}
+        onChange={(v) => {
+          const haloProps = {
+            color: v,
+            width: ft.halo!.width,
+          };
+          updateLayoutFeatureProperty(layoutFeatureId, ['halo'], haloProps);
+        }}
+      />
+      <InputFieldNumber
+        label={ LL().LayerSettings.BufferWidth() }
+        value={ft.halo!.width}
+        onChange={
+          (v) => {
+            const haloProps = {
+              color: ft.halo!.color,
+              width: v,
+            };
+            updateLayoutFeatureProperty(layoutFeatureId, ['halo'], haloProps);
+          }
+        }
+        min={0}
+        max={10}
+        step={1}
+      />
+    </Show>
   </>;
 }
 

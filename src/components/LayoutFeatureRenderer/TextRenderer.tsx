@@ -71,6 +71,12 @@ export default function TextRenderer(props: Text): JSX.Element {
             x={initialPosition}
             y={initialPosition + i() * 1.1 * props.fontSize}
             // dy={i() > 0 ? `${1.1 * props.fontSize}px` : undefined}
+            {...(
+              props.halo
+                ? { stroke: props.halo.color, 'stroke-width': props.halo.width }
+                : {}
+            )}
+            style={{ 'paint-order': 'stroke' }}
           >{line}</tspan>
         }
       </For>

@@ -719,9 +719,9 @@ type RootTranslation = {
 			 */
 			TextContent: string
 			/**
-			 * T​e​x​t​ ​p​r​o​p​e​r​t​i​e​s
+			 * F​o​n​t​ ​p​r​o​p​e​r​t​i​e​s
 			 */
-			TextProperties: string
+			FontProperties: string
 			/**
 			 * F​o​n​t​ ​s​i​z​e
 			 */
@@ -778,6 +778,18 @@ type RootTranslation = {
 			 * E​n​d
 			 */
 			End: string
+			/**
+			 * B​u​f​f​e​r​ ​a​r​o​u​n​d​ ​t​e​x​t
+			 */
+			BufferAroundText: string
+			/**
+			 * B​u​f​f​e​r​ ​c​o​l​o​r
+			 */
+			BufferColor: string
+			/**
+			 * B​u​f​f​e​r​ ​w​i​d​t​h
+			 */
+			BufferWidth: string
 			/**
 			 * A​l​l​o​w​ ​m​o​d​i​f​y​i​n​g​ ​f​i​l​l​ ​a​n​d​ ​s​t​r​o​k​e​ ​p​r​o​p​e​r​t​i​e​s
 			 */
@@ -3489,9 +3501,9 @@ export type TranslationFunctions = {
 			 */
 			TextContent: () => LocalizedString
 			/**
-			 * Text properties
+			 * Font properties
 			 */
-			TextProperties: () => LocalizedString
+			FontProperties: () => LocalizedString
 			/**
 			 * Font size
 			 */
@@ -3548,6 +3560,18 @@ export type TranslationFunctions = {
 			 * End
 			 */
 			End: () => LocalizedString
+			/**
+			 * Buffer around text
+			 */
+			BufferAroundText: () => LocalizedString
+			/**
+			 * Buffer color
+			 */
+			BufferColor: () => LocalizedString
+			/**
+			 * Buffer width
+			 */
+			BufferWidth: () => LocalizedString
 			/**
 			 * Allow modifying fill and stroke properties
 			 */
