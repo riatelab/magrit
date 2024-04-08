@@ -37,6 +37,7 @@ import {
   type Text,
 } from '../../global.d';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
+import InputFieldRadio from '../Inputs/InputRadio.tsx';
 
 /**
  * Update a single property of a layout feature in the layersDescriptionStore,
@@ -192,6 +193,7 @@ function makeSettingsScaleBar(
         value,
       )}
       value={ft.behavior}
+      width={250}
     >
       <option value={ScaleBarBehavior.absoluteSize}>
         { LL().LayoutFeatures.Modal.ScaleBarAbsoluteSize() }
@@ -208,6 +210,7 @@ function makeSettingsScaleBar(
         value,
       )}
       value={ ft.style }
+      width={250}
     >
       <For each={Object.keys(ScaleBarStyle).filter((d) => d !== 'blackAndWhiteBar')}>
         {
@@ -305,6 +308,7 @@ function makeSettingsScaleBar(
         value,
       )}
       value={ft.label}
+      width={200}
     />
     <Show when={ft.style === ScaleBarStyle.blackAndWhiteBar}>
       <InputFieldText
@@ -323,6 +327,19 @@ function makeSettingsScaleBar(
         value={ft.tickValues.join(', ')}
       />
     </Show>
+    <InputFieldRadio
+      label={ LL().LayoutFeatures.Modal.LabelPosition() }
+      values={[
+        { value: 'top', label: LL().LayoutFeatures.Modal.Top() },
+        { value: 'bottom', label: LL().LayoutFeatures.Modal.Bottom() },
+      ]}
+      value={ft.labelPosition}
+      onChange={(value) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['labelPosition'],
+        value,
+      )}
+    />
   </>;
 }
 

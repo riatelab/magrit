@@ -715,6 +715,18 @@ type RootTranslation = {
 			 */
 			TickValues: string
 			/**
+			 * L​a​b​e​l​ ​p​o​s​i​t​i​o​n
+			 */
+			LabelPosition: string
+			/**
+			 * T​o​p
+			 */
+			Top: string
+			/**
+			 * B​o​t​t​o​m
+			 */
+			Bottom: string
+			/**
 			 * T​e​x​t​ ​c​o​n​t​e​n​t
 			 */
 			TextContent: string
@@ -3496,6 +3508,18 @@ export type TranslationFunctions = {
 			 * Tick values (comma separated, starting from 0)
 			 */
 			TickValues: () => LocalizedString
+			/**
+			 * Label position
+			 */
+			LabelPosition: () => LocalizedString
+			/**
+			 * Top
+			 */
+			Top: () => LocalizedString
+			/**
+			 * Bottom
+			 */
+			Bottom: () => LocalizedString
 			/**
 			 * Text content
 			 */

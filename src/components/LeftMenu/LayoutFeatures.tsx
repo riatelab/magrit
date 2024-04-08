@@ -373,7 +373,7 @@ const createScaleBar = (/* LL: Accessor<TranslationFunctions>,  */) => {
     unit: DistanceUnit.km,
     label: 'km',
     tickValues: [0, 50, 100, 250, 500],
-    tickPadding: 10,
+    // tickPadding: 10,
     style: ScaleBarStyle.lineWithTicksOnTop,
     backgroundRect: { visible: false } as BackgroundRect,
     behavior: 'absoluteSize' as ScaleBarBehavior,

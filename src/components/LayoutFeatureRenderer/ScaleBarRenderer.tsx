@@ -74,9 +74,9 @@ function SimpleLineScaleBar(props: ScaleBar): JSX.Element {
     <g>
       <text
         x={initialPosition + props.width / 2}
-        y={initialPosition}
+        y={props.labelPosition === 'top' ? initialPosition : initialPosition + 40}
         text-anchor="middle"
-        dominant-baseline="hanging"
+        dominant-baseline={props.labelPosition === 'top' ? 'hanging' : 'auto'}
         style={{ 'user-select': 'none' }}
       >{formatDistance(props.distance, props.unit, props.label)}</text>
     </g>
@@ -109,9 +109,9 @@ function LineWithTicks(props: ScaleBar & { direction: 'top' | 'bottom' }): JSX.E
     <g>
       <text
         x={initialPosition + props.width / 2}
-        y={initialPosition}
+        y={props.labelPosition === 'top' ? initialPosition : initialPosition + 40}
         text-anchor="middle"
-        dominant-baseline="hanging"
+        dominant-baseline={props.labelPosition === 'top' ? 'hanging' : 'auto'}
         style={{ 'user-select': 'none' }}
       >{formatDistance(props.distance, props.unit, props.label)}</text>
     </g>
@@ -148,9 +148,9 @@ function BlackAndWhiteBar(props: ScaleBar): JSX.Element {
       <Show when={props.label}>
         <text
           x={initialPosition + props.width / 2}
-          y={initialPosition}
+          y={props.labelPosition === 'top' ? initialPosition : initialPosition + 40}
           text-anchor="middle"
-          dominant-baseline="hanging"
+          dominant-baseline={props.labelPosition === 'top' ? 'hanging' : 'auto'}
           style={{ 'user-select': 'none' }}
         >{props.label}</text>
       </Show>
@@ -168,7 +168,10 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
 
   createEffect(
     on( // We need to recompute rectangle box when the following properties change
-      () => [props.width, props.height, props.style, props.label, props.rotation, props.tickValues],
+      () => [
+        props.width, props.height, props.style, props.label,
+        props.rotation, props.tickValues, props.labelPosition,
+      ],
       () => {
         computeRectangleBox(refElement);
       },

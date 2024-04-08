@@ -1023,7 +1023,9 @@ export interface ScaleBar extends LayoutFeatureBase {
   // The tick values
   tickValues: number[],
   // The distance between the ticks and the scale bar
-  tickPadding: number,
+  // tickPadding: number,
+  // The position of the label (top or bottom)
+  labelPosition: 'top' | 'bottom',
   // The style of the scaleBar
   style: ScaleBarStyle,
   // Whether to display a rectangle behind the layout feature
