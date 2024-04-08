@@ -131,7 +131,13 @@ async function makeValid(feature: GeoJSONGeometry) {
 async function wktToGeojson(wkt: string) {
   const geos = await getGeos();
   const reader = geos.GEOSWKTReader_create();
-  const geomPtr = geos.GEOSWKTReader_read(reader, wkt);
+  const size = wkt.length + 1;
+  // eslint-disable-next-line no-underscore-dangle
+  const wktPtr = geos.Module._malloc(size);
+  geos.Module.stringToUTF8(wkt, wktPtr, size);
+  const geomPtr = geos.GEOSWKTReader_read(reader, wktPtr);
+  // eslint-disable-next-line no-underscore-dangle
+  geos.Module._free(wktPtr);
   const geometry = geosGeomToGeojson(geomPtr, geos);
   geos.GEOSGeom_destroy(geomPtr);
   geos.GEOSWKTReader_destroy(reader);
