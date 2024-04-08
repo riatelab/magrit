@@ -404,7 +404,7 @@ export default function MapZone(): JSX.Element {
 
   const cleanUpInfoFeature = () => {
     svgElem.style.cursor = 'default';
-    layerInfo.querySelectorAll('*').forEach((el) => {
+    layerInfo.querySelectorAll('path, rect, circle').forEach((el) => {
       el.removeEventListener('click', onClickFeature);
     });
     setGlobalStore({ infoTargetFeature: {} });
@@ -420,7 +420,7 @@ export default function MapZone(): JSX.Element {
       // The layer that is on top of the others
       const layers = svgElem.querySelectorAll('g.layer');
       layerInfo = layers[layers.length - 1] as SVGGElement & ID3Element;
-      layerInfo.querySelectorAll('*').forEach((el) => {
+      layerInfo.querySelectorAll('path, rect, circle').forEach((el) => {
         el.addEventListener('click', onClickFeature);
       });
       window.addEventListener('keydown', onEscapeKey);

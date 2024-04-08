@@ -95,6 +95,8 @@ export default function mushroomRenderer(
                   'top',
                 )
               }
+              // @ts-expect-error because use:bind-data isn't a property of this element
+              use:bindData={feature}
             ></path>
             <path
               fill={layerDescription.rendererParameters.bottom.color}
@@ -107,6 +109,8 @@ export default function mushroomRenderer(
                   'bottom',
                 )
               }
+              // @ts-expect-error because use:bind-data isn't a property of this element
+              use:bindData={feature}
             ></path>
           </g>;
         }

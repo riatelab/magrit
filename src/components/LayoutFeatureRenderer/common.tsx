@@ -118,14 +118,17 @@ export function bindDragBehavior(
   };
 
   refElement.addEventListener('mouseover', () => {
+    if (globalStore.isInfo) return;
     refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
   });
 
   refElement.addEventListener('mouseout', () => {
+    if (globalStore.isInfo) return;
     refElement.style.cursor = 'default'; // eslint-disable-line no-param-reassign
   });
 
   refElement.addEventListener('mousedown', (e) => {
+    if (globalStore.isInfo) return;
     // Dragging only occurs when the user
     // clicks with the main mouse button (usually the left one).
     // If the mousedown is triggered by another button, we return immediately.
@@ -349,11 +352,13 @@ function bindMouseEnterLeave(refElement: SVGGElement): void {
   // that's why we use the style attribute instead of the fill attribute here,
   // so that when the style attribute is used it overrides the fill and fill-opacity attributes).
   refElement.addEventListener('mouseover', () => {
+    if (globalStore.isInfo) return;
     const rectangleBoxLegend = refElement.querySelector('.layout-feature-box') as SVGRectElement;
     rectangleBoxLegend.setAttribute('style', 'fill: green; fill-opacity: 0.1');
   });
   // Remove the style attribute when the mouse leaves the refElement group.
   refElement.addEventListener('mouseleave', () => {
+    if (globalStore.isInfo) return;
     const rectangleBoxLegend = refElement.querySelector('.layout-feature-box') as SVGRectElement;
     rectangleBoxLegend.removeAttribute('style');
   });
