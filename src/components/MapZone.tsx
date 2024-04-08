@@ -25,7 +25,6 @@ import { findLayerById } from '../helpers/layers';
 
 // Stores
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
-import { setInfoFeatureStore } from '../store/InfoFeatureStore';
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 import { applicationSettingsStore, RenderVisibility, ZoomBehavior } from '../store/ApplicationSettingsStore';
 import {
@@ -384,26 +383,20 @@ export default function MapZone(): JSX.Element {
     handleClickZoom(-1);
   };
 
-  const [
-    isMouseInfoVisible,
-    setIsMouseInfoVisible,
-  ] = createSignal<boolean>(false);
-
-  let layerInfo;
+  let layerInfo: SVGGElement & ID3Element;
 
   const onClickFeature = (e: MouseEvent & { target: SVGElement & ID3Element }) => {
     e.preventDefault();
     e.stopPropagation();
-    setInfoFeatureStore({
-      show: true,
+    setGlobalStore({
       // eslint-disable-next-line no-underscore-dangle
-      featureProperties: e.target.__data__.properties || {},
+      infoTargetFeature: e.target.__data__.properties || {},
     });
   };
 
   const onEscapeKey = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
-      setIsMouseInfoVisible(false);
+      setGlobalStore({ isInfo: false });
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       cleanUpInfoFeature();
     }
@@ -414,19 +407,19 @@ export default function MapZone(): JSX.Element {
     layerInfo.querySelectorAll('*').forEach((el) => {
       el.removeEventListener('click', onClickFeature);
     });
-    setInfoFeatureStore({ show: false, featureProperties: {} });
+    setGlobalStore({ infoTargetFeature: {} });
     window.removeEventListener('keydown', onEscapeKey);
   };
 
   const handleMouseInfo = () => {
-    setIsMouseInfoVisible(!isMouseInfoVisible());
-    if (isMouseInfoVisible()) {
-      setInfoFeatureStore({ show: true, featureProperties: {} });
+    setGlobalStore({ isInfo: !globalStore.isInfo });
+    if (globalStore.isInfo) {
+      setGlobalStore({ infoTargetFeature: {} });
       svgElem.focus();
       svgElem.style.cursor = 'help';
       // The layer that is on top of the others
       const layers = svgElem.querySelectorAll('g.layer');
-      layerInfo = layers[layers.length - 1];
+      layerInfo = layers[layers.length - 1] as SVGGElement & ID3Element;
       layerInfo.querySelectorAll('*').forEach((el) => {
         el.addEventListener('click', onClickFeature);
       });
@@ -603,8 +596,8 @@ export default function MapZone(): JSX.Element {
         <button
           classList={{
             button: true,
-            'is-outlined': isMouseInfoVisible(),
-            'is-warning': isMouseInfoVisible(),
+            'is-outlined': globalStore.isInfo,
+            'is-warning': globalStore.isInfo,
           }}
           aria-label={LL().MapZone.Controls.Info()}
           title={LL().MapZone.Controls.Info()}

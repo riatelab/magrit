@@ -7,7 +7,7 @@ import { FiInfo } from 'solid-icons/fi';
 
 import { useI18nContext } from '../i18n/i18n-solid';
 
-import { infoFeatureStore } from '../store/InfoFeatureStore';
+import { globalStore } from '../store/GlobalStore';
 
 import '../styles/InfoFeatureBox.css';
 
@@ -20,7 +20,7 @@ export default function InfoFeatureBox(): JSX.Element {
   });
   createEffect(
     on(
-      () => infoFeatureStore.featureProperties,
+      () => globalStore.infoTargetFeature,
       () => {
         setTimeout(() => {
           const { height } = refElement.getBoundingClientRect();
@@ -34,12 +34,12 @@ export default function InfoFeatureBox(): JSX.Element {
       <FiInfo size={'1.4em'} style={{ 'margin-right': '0.5em', 'vertical-align': 'middle' }}/>
       { LL().MapZone.Controls.InfoInstruction() }
     </div>
-    <Show when={Object.keys(infoFeatureStore.featureProperties).length > 0}>
+    <Show when={Object.keys(globalStore.infoTargetFeature).length > 0}>
       <hr style={{ margin: '0.5em 0', color: 'var(--bulma-border)' }} />
     </Show>
     <div class="info-feature-box__content">
-    { infoFeatureStore.show && Object.keys(infoFeatureStore.featureProperties).map((key) => <div>
-        <b>{ key }</b>: { infoFeatureStore.featureProperties[key] }
+    { globalStore.isInfo && Object.keys(globalStore.infoTargetFeature).map((key) => <div>
+        <b>{ key }</b>: { globalStore.infoTargetFeature[key] }
       </div>) }
     </div>
   </div>;

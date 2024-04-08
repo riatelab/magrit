@@ -46,7 +46,6 @@ import TableFunctionalitySelection from './components/Modals/TableFunctionalityS
 // Stores
 import { classificationPanelStore } from './store/ClassificationPanelStore';
 import { globalStore, setGlobalStore, setReloadingProject } from './store/GlobalStore';
-import { infoFeatureStore } from './store/InfoFeatureStore';
 import {
   type MapStoreType,
   mapStore,
@@ -388,7 +387,7 @@ const AppPage: () => JSX.Element = () => {
           setLayersDescriptionStore(defaultLayersDescription());
 
           // Reset the "userHasAddedLayer" flag
-          setGlobalStore({ userHasAddedLayer: false });
+          setGlobalStore({ userHasAddedLayer: false, isInfo: false });
 
           // Reset the map store
           // (this will also reset the projection and pathGenerator in the global store)
@@ -539,7 +538,7 @@ const AppPage: () => JSX.Element = () => {
         <ContextMenu />
       </Show>
     </main>
-    <Show when={infoFeatureStore.show}>
+    <Show when={globalStore.isInfo}>
       <Portal>
         <InfoFeatureBox />
       </Portal>
