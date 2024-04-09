@@ -14,7 +14,11 @@
 
 .map-zone__map {
   margin: auto;
-  border: dashed 1px grey
+  outline: grey dashed 1px;
+}
+
+.map-zone__map:focus {
+  outline: orange solid 1px;
 }
 
 .map-zone__inner-placeholder {
