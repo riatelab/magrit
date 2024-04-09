@@ -286,6 +286,7 @@ const en = {
       ColorScheme: 'Color scheme',
       ColorSchemeInvert: 'Invert color scheme',
       CurrentNumberOfClasses: '{{ One class | ?? classes }}',
+      CurrentPalette: 'palette {p}',
       DisplayChartOnMap: 'Display a class summary histogram on the map',
       NewLayerName: 'Choropleth_{layerName}',
     },

@@ -1029,6 +1029,11 @@ type RootTranslation = {
 			 */
 			CurrentNumberOfClasses: string
 			/**
+			 * p​a​l​e​t​t​e​ ​{​p​}
+			 * @param {unknown} p
+			 */
+			CurrentPalette: RequiredParams<'p'>
+			/**
 			 * D​i​s​p​l​a​y​ ​a​ ​c​l​a​s​s​ ​s​u​m​m​a​r​y​ ​h​i​s​t​o​g​r​a​m​ ​o​n​ ​t​h​e​ ​m​a​p
 			 */
 			DisplayChartOnMap: string
@@ -3844,6 +3849,10 @@ export type TranslationFunctions = {
 			 * {{One class|?? classes}}
 			 */
 			CurrentNumberOfClasses: (arg0: number | string | boolean) => LocalizedString
+			/**
+			 * palette {p}
+			 */
+			CurrentPalette: (arg: { p: unknown }) => LocalizedString
 			/**
 			 * Display a class summary histogram on the map
 			 */

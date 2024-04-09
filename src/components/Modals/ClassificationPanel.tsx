@@ -315,24 +315,26 @@ export default function ClassificationPanel(): JSX.Element {
     },
   ];
 
-  const listenerEscKey = (event: KeyboardEvent) => {
-    const isEscape = event.key
-      ? (event.key === 'Escape' || event.key === 'Esc')
-      : (event.keyCode === 27);
-    if (isEscape) {
-      (refParentNode.querySelector('.classification-panel__cancel-button') as HTMLElement).click();
-    }
-  };
-
-  onMount(() => {
-    // We could set focus on the confirm button when the modal is shown
-    // as in some other modal, although it is not as important here...
-    document.body.addEventListener('keydown', listenerEscKey);
-  });
-
-  onCleanup(() => {
-    document.body.removeEventListener('keydown', listenerEscKey);
-  });
+  // const listenerEscKey = (event: KeyboardEvent) => {
+  //   const isEscape = event.key
+  //     ? (event.key === 'Escape' || event.key === 'Esc')
+  //     : (event.keyCode === 27);
+  //   if (isEscape) {
+  //     (refParentNode.querySelector(
+  //       '.classification-panel__cancel-button',
+  //     ) as HTMLElement).click();
+  //   }
+  // };
+  //
+  // onMount(() => {
+  //   // We could set focus on the confirm button when the modal is shown
+  //   // as in some other modal, although it is not as important here...
+  //   document.body.addEventListener('keydown', listenerEscKey);
+  // });
+  //
+  // onCleanup(() => {
+  //   document.body.removeEventListener('keydown', listenerEscKey);
+  // });
 
   return <div
     class="modal-window modal classification-panel"

@@ -286,6 +286,7 @@ const fr = {
       ColorScheme: 'Palette de couleurs',
       ColorSchemeInvert: 'Inverser la palette',
       CurrentNumberOfClasses: '{{ Une classe | ?? classes }}',
+      CurrentPalette: 'palette {p}',
       DisplayChartOnMap: 'Afficher un graphique de résumé des classes sur la carte',
       NewLayerName: 'Choroplèthe_{layerName}',
     },

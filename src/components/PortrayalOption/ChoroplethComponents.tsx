@@ -9,7 +9,7 @@ import {
 } from 'solid-js';
 
 // Import from other packages
-import { getPalette, getSequentialColors, Palette } from 'dicopal';
+import { getSequentialColors } from 'dicopal';
 import { FaSolidCircleCheck } from 'solid-icons/fa';
 import {
   quantile, equal, jenks, q6,
@@ -52,6 +52,14 @@ function getEntitiesByClass(
   return classifier.countByClass();
 }
 
+function getUniqueValues(values: number[]) {
+  return Array.from(new Set(values));
+}
+
+function countUniqueValues(values: number[]) {
+  return new Set(values).size;
+}
+
 // eslint-disable-next-line import/prefer-default-export
 export function ChoroplethClassificationSelector(
   props: {
@@ -63,7 +71,9 @@ export function ChoroplethClassificationSelector(
 ): JSX.Element {
   const { LL } = useI18nContext();
 
-  const numberOfClasses = createMemo(() => Mmin(d3.thresholdSturges(props.values()), 9));
+  const numberOfClasses = createMemo(
+    () => Mmin(d3.thresholdSturges(getUniqueValues(props.values())), 9),
+  );
 
   const palette = createMemo(() => ({
     id: `${defaultColorScheme}-${numberOfClasses()}`,
@@ -237,6 +247,9 @@ export function ChoroplethClassificationSelector(
       , {
       // eslint-disable-next-line max-len
       LL().FunctionalitiesSection.ChoroplethOptions.CurrentNumberOfClasses(props.targetClassification()!.classes)}
+      , {
+      // eslint-disable-next-line max-len
+      LL().FunctionalitiesSection.ChoroplethOptions.CurrentPalette({ p: props.targetClassification()?.palette.name })}
     </div>
   </div>;
 }
