@@ -21,6 +21,7 @@ import { mapStore } from '../store/MapStore';
 
 // Types
 import type {
+  GeoJSONFeature,
   GeoJSONFeatureCollection,
   GeoJSONGeometry,
 } from '../global';
@@ -147,12 +148,16 @@ interface InfoFeature {
  *
  * @param data
  * @param variableName
+ * @param areaFn
+ * @param centroidFn
  */
 const getDougenikInfo = (
   data: GeoJSONFeatureCollection,
   variableName: string,
+  areaFn: (geom: GeoJSONFeature) => number,
+  centroidFn: (geom: GeoJSONFeature) => [number, number],
 ): DougInfo => {
-  const areas = data.features.map((f) => planarArea(f as never));
+  const areas = data.features.map((f) => areaFn(f as never));
   const values = data.features.map((f) => +f.properties[variableName]);
   const areaTotal = areas.reduce((a, b) => a + b, 0);
   const valueTotal = values.reduce((a, b) => a + b, 0);
@@ -161,7 +166,7 @@ const getDougenikInfo = (
   let totalSizeError = 0;
 
   data.features.forEach((f, i) => {
-    const centroidPt = centroid(f.geometry as never).geometry.coordinates;
+    const centroidPt = centroidFn(f as never);
     const value = values[i];
     const areaFeature = areas[i];
     const desired = value * fraction;
@@ -234,7 +239,7 @@ const transformFeatureDougenik = (
           const infoOther = allInfo[ix];
           const cx = infoOther.centerX;
           const cy = infoOther.centerY;
-          const distance = Msqrt((x0 - cx) ** 2 + (y0 - cy) ** 2);
+          const distance = Math.sqrt((x0 - cx) ** 2 + (y0 - cy) ** 2);
           let fij = (distance > infoOther.radius)
             ? infoOther.mass * (infoOther.radius / distance)
             : infoOther.mass * (
@@ -264,6 +269,49 @@ const transformFeatureDougenik = (
     };
   }
 };
+
+function makeDougenikCartogram(
+  data: GeoJSONFeatureCollection,
+  variableName: string,
+  iterations: number,
+  areaFn: (geom: GeoJSONFeature) => number,
+  centroidFn: (geom: GeoJSONFeature) => [number, number],
+): GeoJSONFeatureCollection {
+  const resultData = JSON.parse(JSON.stringify(data)) as GeoJSONFeatureCollection;
+  for (let i = 0; i < iterations; i += 1) {
+    const dougInfo = getDougenikInfo(
+      resultData,
+      variableName,
+      areaFn,
+      centroidFn,
+    );
+    for (let j = 0; j < resultData.features.length; j += 1) {
+      const feature = resultData.features[j];
+      const info = dougInfo.infoByFeature[j];
+      const transformed = transformFeatureDougenik(
+        feature.geometry as never,
+        info,
+        dougInfo.forceReductionFactor,
+        dougInfo.infoByFeature,
+      );
+      resultData.features[j].geometry = transformed as never;
+    }
+  }
+
+  // Compute the information for the final cartogram
+  // and retrieve the size error for each feature
+  const areas = resultData.features.map((f) => areaFn(f as never));
+  const values = resultData.features.map((f) => +f.properties[variableName]);
+  const areaTotal = areas.reduce((a, b) => a + b, 0);
+  const valueTotal = values.reduce((a, b) => a + b, 0);
+
+  resultData.features.forEach((f, i) => {
+    // eslint-disable-next-line no-param-reassign
+    f.properties.area_error = areas[i] / areaTotal / (values[i] / valueTotal);
+  });
+
+  return resultData;
+}
 
 /**
  * Compute a cartogram using the Dougenik et al. (1985) algorithm.
@@ -300,23 +348,17 @@ export function computeCartogramDougenik(
   // before computing the cartogram
   const projectedData = reprojFunc(proj, data);
 
-  for (let i = 0; i < iterations; i += 1) {
-    const dougInfo = getDougenikInfo(projectedData, variableName);
-    for (let j = 0; j < projectedData.features.length; j += 1) {
-      const feature = projectedData.features[j];
-      const info = dougInfo.infoByFeature[j];
-      const transformed = transformFeatureDougenik(
-        feature.geometry as never,
-        info,
-        dougInfo.forceReductionFactor,
-        dougInfo.infoByFeature,
-      );
-      projectedData.features[j].geometry = transformed as never;
-    }
-  }
+  // Compute cartogram
+  const resultDataProjected = makeDougenikCartogram(
+    projectedData,
+    variableName,
+    iterations,
+    planarArea,
+    (f) => centroid(f as never).geometry.coordinates as [number, number],
+  );
 
   // Unproject the data back to WGS84
-  const resultData = reprojFunc(proj, projectedData, true);
+  const resultData = reprojFunc(proj, resultDataProjected, true);
 
   return resultData;
 }

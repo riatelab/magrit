@@ -88,7 +88,10 @@ async function onClickValidate(
 
   const newFields = unwrap(referenceLayerDescription.fields as never) as Variable[];
 
-  if (cartogramMethod === CartogramMethod.GastnerSeguyMore) {
+  if (
+    cartogramMethod === CartogramMethod.GastnerSeguyMore
+    || cartogramMethod === CartogramMethod.Dougenik
+  ) {
     // There is a new "area-error" field
     newFields.push({
       name: 'area_error',
