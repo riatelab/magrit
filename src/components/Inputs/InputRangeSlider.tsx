@@ -1,12 +1,19 @@
+// Imports from solid-js
 import {
+  createEffect,
   createSignal,
   type JSX,
+  on,
   onCleanup,
   onMount,
 } from 'solid-js';
+
+// Imports from NoUiSlider
 import noUiSlider from 'nouislider';
 import { type API as NoUiSliderApi } from 'nouislider';
 import 'nouislider/dist/nouislider.css';
+
+// Custom styles
 import '../../styles/NoUiSliderBulma.css';
 
 interface InputFieldRangeNumberProps {
@@ -30,7 +37,7 @@ export default function InputFieldRangeSlider(props: InputFieldRangeNumberProps)
     setCurrentValue,
   ] = createSignal(props.value);
 
-  onMount(() => {
+  const createSlider = () => {
     slider = noUiSlider.create(refSliderNode, {
       start: props.value,
       range: {
@@ -44,11 +51,44 @@ export default function InputFieldRangeSlider(props: InputFieldRangeNumberProps)
       props.onChange(+values[handle]);
       setCurrentValue(+values[handle]);
     });
+  };
+
+  onMount(() => {
+    createSlider();
   });
 
   onCleanup(() => {
     if (slider) slider.destroy();
   });
+
+  createEffect(
+    on(
+      () => [props.min, props.max],
+      () => {
+        if (slider) {
+          slider.updateOptions({
+            range: {
+              min: props.min,
+              max: props.max,
+            },
+          }, true);
+        }
+      },
+    ),
+  );
+
+  createEffect(
+    on(
+      () => [props.step],
+      () => {
+        if (slider) {
+          slider.updateOptions({
+            step: props.step,
+          }, true);
+        }
+      },
+    ),
+  );
 
   return <div class="field pr-2">
     <label class="label">{props.label}</label>

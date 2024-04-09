@@ -23,6 +23,7 @@ import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelecti
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { parseUserDefinedBreaks, prepareStatisticalSummary } from '../../helpers/classification';
+import { getPaletteWrapper } from '../../helpers/color';
 import { findSuitableName } from '../../helpers/common';
 import { intersectionLayer } from '../../helpers/geos';
 import { computeAppropriateResolution } from '../../helpers/geo';
@@ -46,7 +47,6 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 import type { PortrayalSettingsProps } from './common';
 import {
   type ChoroplethLegend,
-  type CustomPalette,
   type GeoJSONFeatureCollection,
   type GridParameters,
   KdeKernel,
@@ -92,9 +92,7 @@ async function onClickValidate(
     smoothingParameters: parameters,
     gridParameters: gridParams,
     breaks: thresholds,
-    // TODO: wrap 'getPalette' in a function that returns a CustomPalette
-    palette: getPalette('Carrots', thresholds.length - 1) as CustomPalette,
-    reversePalette: true,
+    palette: getPaletteWrapper('Carrots', thresholds.length - 1, true),
   } as SmoothedLayerParameters;
 
   // Find a position for the legend

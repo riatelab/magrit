@@ -27,6 +27,7 @@ import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelecti
 
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { getPaletteWrapper } from '../../helpers/color';
 import { findSuitableName } from '../../helpers/common';
 import { computeAppropriateResolution } from '../../helpers/geo';
 import { computeGriddedLayer } from '../../helpers/gridding';
@@ -42,12 +43,12 @@ import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
   type ChoroplethLegend,
-  CustomPalette,
   GeoJSONFeatureCollection,
   GridCellShape,
   type GriddedLayerParameters,
@@ -58,7 +59,6 @@ import {
   Orientation,
   RepresentationType,
 } from '../../global.d';
-import MessageBlock from '../MessageBlock.tsx';
 
 async function onClickValidate(
   referenceLayerId: string,
@@ -78,10 +78,9 @@ async function onClickValidate(
     variable: targetVariable,
     cellType,
     gridParameters,
-    noDataColor: '#cecece', // FIXME: use default setting no data color
-    palette: getPalette('Carrots', 7) as CustomPalette,
+    noDataColor: applicationSettingsStore.defaultNoDataColor,
+    palette: getPaletteWrapper('Carrots', 7, true),
     breaks: [],
-    reversePalette: true,
   } as GriddedLayerParameters;
 
   const newData = await computeGriddedLayer(

@@ -50,9 +50,6 @@ function ChoroplethHistogram(
     props.classification.breaks[0],
     props.classification.breaks[props.classification.breaks.length - 1],
   ];
-  const colors = createMemo(() => (props.classification.reversePalette
-    ? props.classification.palette.colors.slice().reverse()
-    : props.classification.palette.colors));
 
   const breaksData = createMemo(() => {
     const bd = [];
@@ -64,7 +61,7 @@ function ChoroplethHistogram(
         y: props.classification.entitiesByClass[i] / (
           props.classification.breaks[i + 1] - props.classification.breaks[i]),
         count: props.classification.entitiesByClass[i],
-        color: colors()[i],
+        color: props.classification.palette.colors[i],
       });
     }
 

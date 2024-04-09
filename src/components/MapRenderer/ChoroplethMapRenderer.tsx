@@ -42,12 +42,6 @@ export function choroplethPolygonRenderer(
     return new Cls(null, null, rendererParameters().breaks);
   });
 
-  const colors = createMemo(
-    () => (rendererParameters().reversePalette
-      ? rendererParameters().palette.colors.toReversed()
-      : rendererParameters().palette.colors),
-  );
-
   return <g
     id={layerDescription.id}
     class="layer choropleth"
@@ -73,7 +67,9 @@ export function choroplethPolygonRenderer(
         (feature) => <path
           fill={
             isNumber(feature.properties[rendererParameters().variable])
-              ? colors()[classifier().getClass(feature.properties[rendererParameters().variable])]
+              ? rendererParameters().palette.colors[
+                classifier().getClass(feature.properties[rendererParameters().variable])
+              ]
               : rendererParameters().noDataColor
           }
           d={globalStore.pathGenerator(feature)}
@@ -98,12 +94,6 @@ export function choroplethPointRenderer(
     return new Cls(null, null, rendererParameters().breaks);
   });
 
-  const colors = createMemo(
-    () => (rendererParameters().reversePalette
-      ? rendererParameters().palette.colors.toReversed()
-      : rendererParameters().palette.colors),
-  );
-
   return <g
     id={layerDescription.id}
     class="layer choropleth"
@@ -126,7 +116,9 @@ export function choroplethPointRenderer(
         (feature) => <path
           fill={
             isNumber(feature.properties[rendererParameters().variable])
-              ? colors()[classifier().getClass(feature.properties[rendererParameters().variable])]
+              ? rendererParameters().palette.colors[
+                classifier().getClass(feature.properties[rendererParameters().variable])
+              ]
               : rendererParameters().noDataColor
           }
           d={
@@ -157,12 +149,6 @@ export function choroplethLineRenderer(
     return new Cls(null, null, rendererParameters().breaks);
   });
 
-  const colors = createMemo(
-    () => (rendererParameters().reversePalette
-      ? rendererParameters().palette.colors.toReversed()
-      : rendererParameters().palette.colors),
-  );
-
   return <g
     id={layerDescription.id}
     class="layer choropleth"
@@ -182,7 +168,9 @@ export function choroplethLineRenderer(
         (feature) => <path
           stroke={
             isNumber(feature.properties[rendererParameters().variable])
-              ? colors()[classifier().getClass(feature.properties[rendererParameters().variable])]
+              ? rendererParameters().palette.colors[
+                classifier().getClass(feature.properties[rendererParameters().variable])
+              ]
               : rendererParameters().noDataColor
           }
           d={globalStore.pathGenerator(feature)}

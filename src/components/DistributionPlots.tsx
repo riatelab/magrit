@@ -22,12 +22,9 @@ import { type ClassificationParameters } from '../global';
 export function makeColoredBucketPlot(
   classifParam: ClassificationParameters,
 ): ((SVGSVGElement | HTMLElement) & PlotType) {
-  const colors = classifParam.reversePalette
-    ? classifParam.palette.colors.slice().reverse()
-    : classifParam.palette.colors;
   const colorNbIndiv = classifParam.entitiesByClass
     .map((n, i) => ({
-      color: colors[i],
+      color: classifParam.palette.colors[i],
       nb: n,
     }));
 
@@ -93,9 +90,6 @@ export function makeClassificationPlot(
     classifParam.breaks[0],
     classifParam.breaks[classifParam.breaks.length - 1],
   ];
-  const colors = classifParam.reversePalette
-    ? classifParam.palette.colors.slice().reverse()
-    : classifParam.palette.colors;
   const breaksData = [];
   for (let i = 0; i < classifParam.breaks.length - 1; i++) { // eslint-disable-line no-plusplus
     breaksData.push({
@@ -103,7 +97,7 @@ export function makeClassificationPlot(
       x2: classifParam.breaks[i + 1],
       y: classifParam.entitiesByClass[i] / (classifParam.breaks[i + 1] - classifParam.breaks[i]),
       count: classifParam.entitiesByClass[i],
-      color: colors[i],
+      color: classifParam.palette.colors[i],
     });
   }
 

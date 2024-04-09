@@ -40,12 +40,6 @@ export default function gridRenderer(
     return new Cls(null, null, rendererParameters().breaks);
   });
 
-  const colors = createMemo(
-    () => (rendererParameters().reversePalette
-      ? rendererParameters().palette.colors.toReversed()
-      : rendererParameters().palette.colors),
-  );
-
   return <g
     id={layerDescription.id}
     class="layer choropleth"
@@ -70,7 +64,9 @@ export default function gridRenderer(
       {
         (feature) => <path
           fill={
-            colors()[classifier().getClass(feature.properties[rendererParameters().variable])]
+            rendererParameters().palette.colors[
+              classifier().getClass(feature.properties[rendererParameters().variable])
+            ]
           }
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"

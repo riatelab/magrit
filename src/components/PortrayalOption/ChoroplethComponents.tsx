@@ -9,7 +9,7 @@ import {
 } from 'solid-js';
 
 // Import from other packages
-import { getPalette, Palette } from 'dicopal';
+import { getPalette, getSequentialColors, Palette } from 'dicopal';
 import { FaSolidCircleCheck } from 'solid-icons/fa';
 import {
   quantile, equal, jenks, q6,
@@ -17,8 +17,9 @@ import {
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { getPaletteWrapper } from '../../helpers/color';
 import d3 from '../../helpers/d3-custom';
-import { getClassifier, noop } from '../../helpers/classification';
+import { getClassifier } from '../../helpers/classification';
 import { Mmin } from '../../helpers/math';
 
 // Stores
@@ -33,7 +34,9 @@ import imgJenks from '../../assets/jenks.png';
 import imgMoreOption from '../../assets/buttons2.svg?url';
 
 // Types
-import { ClassificationMethod, ClassificationParameters, CustomPalette } from '../../global.d';
+import {
+  ClassificationMethod, type ClassificationParameters, type CustomPalette,
+} from '../../global.d';
 
 // eslint-disable-next-line prefer-destructuring
 const defaultColorScheme = applicationSettingsStore.defaultColorScheme;
@@ -62,7 +65,15 @@ export function ChoroplethClassificationSelector(
 
   const numberOfClasses = createMemo(() => Mmin(d3.thresholdSturges(props.values()), 9));
 
-  const palette = createMemo(() => getPalette(defaultColorScheme, numberOfClasses()) as Palette);
+  const palette = createMemo(() => ({
+    id: `${defaultColorScheme}-${numberOfClasses()}`,
+    name: defaultColorScheme,
+    number: numberOfClasses(),
+    type: 'sequential',
+    colors: getSequentialColors(defaultColorScheme, numberOfClasses(), false),
+    provenance: 'dicopal',
+    reversed: false,
+  } as CustomPalette));
 
   createEffect(
     on(
@@ -75,10 +86,9 @@ export function ChoroplethClassificationSelector(
           method: ClassificationMethod.quantiles,
           classes: numberOfClasses(),
           breaks,
-          palette: palette() as unknown as CustomPalette,
+          palette: palette(),
           noDataColor: defaultNoDataColor,
           entitiesByClass: getEntitiesByClass(props.values(), breaks),
-          reversePalette: false,
         } as ClassificationParameters);
       },
     ),
@@ -90,13 +100,12 @@ export function ChoroplethClassificationSelector(
     classes: numberOfClasses(), // eslint-disable-line solid/reactivity
     // eslint-disable-next-line solid/reactivity
     breaks: quantile(props.values(), { nb: numberOfClasses(), precision: null }),
-    palette: palette() as unknown as CustomPalette, // eslint-disable-line solid/reactivity
+    palette: palette(), // eslint-disable-line solid/reactivity
     noDataColor: defaultNoDataColor,
     entitiesByClass: getEntitiesByClass(
       props.values(),
       quantile(props.values(), { nb: numberOfClasses(), precision: null }),
     ),
-    reversePalette: false,
   } as ClassificationParameters);
 
   return <div class="field-block">
@@ -115,10 +124,9 @@ export function ChoroplethClassificationSelector(
             method: ClassificationMethod.quantiles,
             classes: numberOfClasses(),
             breaks,
-            palette: palette() as unknown as CustomPalette,
+            palette: palette(),
             noDataColor: defaultNoDataColor,
             entitiesByClass: getEntitiesByClass(props.values(), breaks),
-            reversePalette: false,
           } as ClassificationParameters);
         }}
       >
@@ -139,10 +147,9 @@ export function ChoroplethClassificationSelector(
             method: ClassificationMethod.equalIntervals,
             classes: numberOfClasses(),
             breaks,
-            palette: palette() as unknown as CustomPalette,
+            palette: palette(),
             noDataColor: defaultNoDataColor,
             entitiesByClass: getEntitiesByClass(props.values(), breaks),
-            reversePalette: false,
           } as ClassificationParameters);
         }}
       >
@@ -163,10 +170,9 @@ export function ChoroplethClassificationSelector(
             method: ClassificationMethod.q6,
             classes: 6,
             breaks,
-            palette: getPalette(defaultColorScheme, 6) as unknown as CustomPalette,
+            palette: getPaletteWrapper(defaultColorScheme, 6, false),
             noDataColor: defaultNoDataColor,
             entitiesByClass: getEntitiesByClass(props.values(), breaks),
-            reversePalette: false,
           } as ClassificationParameters);
         }}
       >
@@ -187,10 +193,9 @@ export function ChoroplethClassificationSelector(
             method: ClassificationMethod.jenks,
             classes: numberOfClasses(),
             breaks,
-            palette: palette() as unknown as CustomPalette,
+            palette: palette(),
             noDataColor: defaultNoDataColor,
             entitiesByClass: getEntitiesByClass(props.values(), breaks),
-            reversePalette: false,
           } as ClassificationParameters);
         }}
       >
@@ -208,12 +213,8 @@ export function ChoroplethClassificationSelector(
           setClassificationPanelStore({
             show: true,
             layerName: '',
-            variableName: props.targetVariable(),
             series: props.values(),
-            nClasses: numberOfClasses(),
-            colorScheme: defaultColorScheme,
-            invertColorScheme: false,
-            noDataColor: props.targetClassification()!.noDataColor,
+            classificationParameters: props.targetClassification(),
             onCancel: () => {},
             onConfirm: (classification: ClassificationParameters) => {
               props.setTargetClassification(classification);

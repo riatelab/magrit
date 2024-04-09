@@ -23,6 +23,7 @@ import { makeClassificationPlot, makeColoredBucketPlot, makeDistributionPlot } f
 
 // Sub-components
 import DropdownMenu from '../DropdownMenu.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldRangeSlider from '../Inputs/InputRangeSlider.tsx';
 
 // Store
@@ -106,48 +107,46 @@ export default function ClassificationPanel(): JSX.Element {
       number: classes,
       type: typeScheme() as PaletteType,
       provenance: 'dicopal',
+      reversed: isPaletteReversed(),
     } as CustomPalette;
 
     if (typeScheme() === 'sequential') {
-      customPalette.colors = getSequentialColors(palName, classes);
+      customPalette.colors = getSequentialColors(palName, classes, isPaletteReversed());
     } else if (typeScheme() === 'diverging') {
       const positionCentralClass = centralClass()!;
       customPalette.divergingOptions = {
         left: positionCentralClass,
-        right: classes - 1 - positionCentralClass,
-        centralClass: true,
+        right: classes - Number(hasNeutralCentralClass()) - positionCentralClass,
+        centralClass: hasNeutralCentralClass(),
         balanced: true,
       };
-      console.log(customPalette.divergingOptions);
       customPalette.colors = getAsymmetricDivergingColors(
         palName,
         customPalette.divergingOptions.left,
         customPalette.divergingOptions.right,
         customPalette.divergingOptions.centralClass,
         customPalette.divergingOptions.balanced,
+        isPaletteReversed(),
       );
-      console.log(customPalette.colors, customPalette.number);
     } else {
       throw new Error('Palette type not found !');
     }
-    const reversePalette = isPaletteReversed();
-
-    const classificationParameters = {
-      variable: classificationPanelStore.variableName,
+    const cp = {
+      variable: classificationPanelStore.classificationParameters!.variable,
       method: classificationMethod(),
       classes,
       breaks,
       palette: customPalette,
       noDataColor: noDataColor(),
       entitiesByClass,
-      reversePalette,
     } as ClassificationParameters;
 
-    if (typeScheme() === 'diverging') {
-      classificationParameters.centralClassPosition = centralClass();
+    if (classificationMethod() === 'standardDeviation') {
+      cp.amplitude = amplitude();
+      cp.meanPositionRole = meanPositionRole();
     }
 
-    return classificationParameters;
+    return cp;
   }; /* eslint-enable @typescript-eslint/no-use-before-define */
 
   const { LL } = useI18nContext();
@@ -174,74 +173,86 @@ export default function ClassificationPanel(): JSX.Element {
       value: d.name,
     }));
 
-  const getPaletteType = (name: string) => {
-    if (availableSequentialPalettes.find((d) => d.value === name)) {
-      return 'sequential';
-    }
-    if (availableDivergingPalettes.find((d) => d.value === name)) {
-      return 'diverging';
-    }
-    return 'custom';
-  };
   // Signals for the current component:
   // - the classification method chosen by the user
   const [
     classificationMethod,
     setClassificationMethod,
   ] = createSignal<ClassificationMethod>(
-    classificationPanelStore.classificationMethod || ClassificationMethod.quantiles,
+    classificationPanelStore.classificationParameters!.method
+    || ClassificationMethod.quantiles,
   );
   // - the number of classes chosen by the user for the current classification method
   const [
     numberOfClasses,
     setNumberOfClasses,
   ] = createSignal<number>(
-    classificationPanelStore.nClasses || Mmin(d3.thresholdSturges(filteredSeries), 9),
+    classificationPanelStore.classificationParameters!.classes
+    || Mmin(d3.thresholdSturges(filteredSeries), 9),
   );
   // - the amplitude chosen by the user for the
   //   current classification method (only if 'standard deviation' is chosen)
   const [
     amplitude,
     setAmplitude,
-  ] = createSignal<number>(1);
+  ] = createSignal<number>(
+    classificationPanelStore.classificationParameters!.amplitude || 1,
+  );
   // - whether the mean position is chosen by the user for the current classification
   //   method (only if 'standard deviation' is chosen)
   const [
     meanPositionRole,
     setMeanPositionRole,
-  ] = createSignal<'center' | 'boundary'>('center');
+  ] = createSignal<'center' | 'boundary'>(
+    classificationPanelStore.classificationParameters!.meanPositionRole || 'center',
+  );
   // - the type of color scheme chosen by the user (sequential or diverging)
   const [
     typeScheme,
     setTypeScheme,
   ] = createSignal<'sequential' | 'diverging' | 'custom'>(
-    classificationPanelStore.colorScheme ? getPaletteType(classificationPanelStore.colorScheme) : 'sequential',
+    classificationPanelStore.classificationParameters!.palette.type as 'sequential' | 'diverging'
+    || 'sequential',
   );
   // - the color palette chosen by the user for the current classification method
   const [
     paletteName,
     setPaletteName,
-  ] = createSignal<string>(classificationPanelStore.colorScheme || 'Algae');
+  ] = createSignal<string>(
+    classificationPanelStore.classificationParameters!.palette.name
+    || 'Algae',
+  );
   // - the color chosen by the user for the no data values
   const [
     noDataColor,
     setNoDataColor,
-  ] = createSignal<string>(classificationPanelStore.noDataColor || '#bebebe');
+  ] = createSignal<string>(
+    classificationPanelStore.classificationParameters!.noDataColor,
+  );
   // - whether to reverse the color palette
   const [
     isPaletteReversed,
     setIsPaletteReversed,
   ] = createSignal<boolean>(
-    classificationPanelStore.invertColorScheme !== undefined
-      ? classificationPanelStore.invertColorScheme
-      : false,
+    classificationPanelStore.classificationParameters!.palette.reversed,
   );
   // - the inflection point chosen by the user for the
   //   current classification method (only if 'diverging' is chosen)
   const [
     centralClass,
     setCentralClass,
-  ] = createSignal<number | undefined>(classificationPanelStore.centralClassPosition);
+  ] = createSignal<number | undefined>(
+    classificationPanelStore.classificationParameters!.palette.divergingOptions?.left
+    || 1,
+  );
+  // - wheter there is a neutral central class for the diverging palette
+  const [
+    hasNeutralCentralClass,
+    setHasNeutralCentralClass,
+  ] = createSignal<boolean>(
+    classificationPanelStore.classificationParameters!.palette.divergingOptions?.centralClass
+    || false,
+  );
   // - the current breaks (given the last option that changed, or the default breaks)
   const [
     currentBreaksInfo,
@@ -336,7 +347,7 @@ export default function ClassificationPanel(): JSX.Element {
         <p class="modal-card-title">
           { LL().ClassificationPanel.title() }&nbsp;
           - {classificationPanelStore.layerName}&nbsp;
-          - {classificationPanelStore.variableName}
+          - {classificationPanelStore.classificationParameters!.variable}
         </p>
       </header>
       <section class="modal-card-body">
@@ -375,7 +386,7 @@ export default function ClassificationPanel(): JSX.Element {
               </table>
             </div>
           </div>
-          <div style={{ width: '60%', 'text-align': 'center' }}>
+          <div style={{ width: '55%', 'text-align': 'center' }}>
             <h3> { LL().ClassificationPanel.distribution() } </h3>
             <div> { makeDistributionPlot(filteredSeries) } </div>
           </div>
@@ -434,7 +445,7 @@ export default function ClassificationPanel(): JSX.Element {
                 <input
                   class={'input'}
                   type={'number'}
-                  value={1}
+                  value={amplitude()}
                   min={0.1}
                   max={10}
                   step={0.1}
@@ -465,7 +476,7 @@ export default function ClassificationPanel(): JSX.Element {
                         setMeanPositionRole('center');
                         updateClassificationParameters();
                       }}
-                      checked
+                      checked={meanPositionRole() === 'center'}
                     />
                     { LL().ClassificationPanel.meanPositionCenter() }
                   </label>
@@ -478,6 +489,7 @@ export default function ClassificationPanel(): JSX.Element {
                         setMeanPositionRole('boundary');
                         updateClassificationParameters();
                       }}
+                      checked={meanPositionRole() === 'boundary'}
                     />
                     { LL().ClassificationPanel.meanPositionBoundary() }
                   </label>
@@ -593,90 +605,96 @@ export default function ClassificationPanel(): JSX.Element {
                   </div>
                 </div>
               </div>
-              <div style={{ width: '40%', 'text-align': 'left', padding: '2em' }}>
+              <div style={{ width: '45%', 'text-align': 'left', padding: '0 2em' }}>
                 <div style={{ 'flex-grow': 1 }}>
-                  <p class="label is-marginless">{LL().ClassificationPanel.typeScheme()}</p>
-                  <label class="radio" for="type-scheme-sequential">
-                    <input
-                      type={'radio'}
-                      name={'type-scheme'}
-                      id={'type-scheme-sequential'}
-                      onChange={() => {
-                        setPaletteName(availableSequentialPalettes[0].value);
-                        setTypeScheme('sequential');
-                        updateClassificationParameters();
-                      }}
-                      checked
-                    />
-                    {LL().ClassificationPanel.sequential()}
-                  </label>
-                  <label class="radio" for="type-scheme-diverging">
-                    <input
-                      type={'radio'}
-                      name={'type-scheme'}
-                      id={'type-scheme-diverging'}
-                      onChange={() => {
-                        setPaletteName(availableDivergingPalettes[0].value);
-                        setTypeScheme('diverging');
-                        updateClassificationParameters();
-                      }}
-                    />
-                    {LL().ClassificationPanel.diverging()}
-                  </label>
+                  <p class="label is-marginless has-text-centered mb-2">
+                    {LL().ClassificationPanel.typeScheme()}
+                  </p>
+                  <div class="is-flex is-justify-content-space-around mt-2">
+                    <label class="radio" for="type-scheme-sequential">
+                      <input
+                        type={'radio'}
+                        name={'type-scheme'}
+                        id={'type-scheme-sequential'}
+                        onChange={() => {
+                          setPaletteName(availableSequentialPalettes[0].value);
+                          setTypeScheme('sequential');
+                          updateClassificationParameters();
+                        }}
+                        checked={typeScheme() === 'sequential'}
+                      />
+                      {LL().ClassificationPanel.sequential()}
+                    </label>
+                    <label class="radio" for="type-scheme-diverging">
+                      <input
+                        type={'radio'}
+                        name={'type-scheme'}
+                        id={'type-scheme-diverging'}
+                        onChange={() => {
+                          setPaletteName(availableDivergingPalettes[0].value);
+                          setTypeScheme('diverging');
+                          updateClassificationParameters();
+                        }}
+                        checked={typeScheme() === 'diverging'}
+                      />
+                      {LL().ClassificationPanel.diverging()}
+                    </label>
+                  </div>
                 </div>
                 <br/>
-                <div style={{ 'flex-grow': 1 }}>
-                  <p class="label is-marginless">{LL().ClassificationPanel.palette()}</p>
-                  <Switch>
-                    <Match when={typeScheme() === 'sequential'}>
-                      <DropdownMenu
-                        id={'dropdown-palette-name'}
-                        style={{ width: '220px' }}
-                        entries={availableSequentialPalettes}
-                        defaultEntry={
-                          availableSequentialPalettes.find((d) => d.value === paletteName())
-                          || availableSequentialPalettes[0]
-                        }
-                        onChange={(value) => {
-                          setPaletteName(value);
+                <div class="is-flex is-justify-content-space-between">
+                  <div>
+                    <p class="label is-marginless">{LL().ClassificationPanel.palette()}</p>
+                    <Switch>
+                      <Match when={typeScheme() === 'sequential'}>
+                        <DropdownMenu
+                          id={'dropdown-palette-name'}
+                          style={{ width: '220px' }}
+                          entries={availableSequentialPalettes}
+                          defaultEntry={
+                            availableSequentialPalettes.find((d) => d.value === paletteName())
+                            || availableSequentialPalettes[0]
+                          }
+                          onChange={(value) => {
+                            setPaletteName(value);
+                            updateClassificationParameters();
+                          }}
+                        />
+                      </Match>
+                      <Match when={typeScheme() === 'diverging'}>
+                        <DropdownMenu
+                          id={'dropdown-palette-name'}
+                          style={{ width: '220px' }}
+                          entries={availableDivergingPalettes}
+                          defaultEntry={
+                            availableDivergingPalettes.find((d) => d.value === paletteName())
+                            || availableDivergingPalettes[0]
+                          }
+                          onChange={(value) => {
+                            setPaletteName(value);
+                            updateClassificationParameters();
+                          }}
+                        />
+                      </Match>
+                    </Switch>
+                  </div>
+                  <div class="control is-flex is-align-items-center mt-4">
+                    <label class="label">
+                      <input
+                        type="checkbox"
+                        checked={isPaletteReversed()}
+                        onChange={(e) => {
+                          setIsPaletteReversed(e.target.checked);
                           updateClassificationParameters();
                         }}
                       />
-                    </Match>
-                    <Match when={typeScheme() === 'diverging'}>
-                      <DropdownMenu
-                        id={'dropdown-palette-name'}
-                        style={{ width: '220px' }}
-                        entries={availableDivergingPalettes}
-                        defaultEntry={
-                          availableDivergingPalettes.find((d) => d.value === paletteName())
-                          || availableDivergingPalettes[0]
-                        }
-                        onChange={(value) => {
-                          setPaletteName(value);
-                          updateClassificationParameters();
-                        }}
-                      />
-                    </Match>
-                  </Switch>
+                      {LL().ClassificationPanel.reversePalette()}
+                    </label>
+                  </div>
                 </div>
-                <br/>
-                <div class="control">
-                  <label class="label">
-                    <input
-                      type="checkbox"
-                      checked={isPaletteReversed()}
-                      onChange={(e) => {
-                        setIsPaletteReversed(e.target.checked);
-                        updateClassificationParameters();
-                      }}
-                    />
-                    {LL().ClassificationPanel.reversePalette()}
-                  </label>
-                </div>
-                <br/>
                 <Show when={missingValues > 0}>
-                  <div class="control is-flex is-align-content-center">
+                  <br/>
+                  <div class="control is-flex is-align-content-center is-flex-wrap-wrap-reverse">
                     <input
                       class="color mr-5"
                       type="color"
@@ -691,12 +709,24 @@ export default function ClassificationPanel(): JSX.Element {
                     </p>
                   </div>
                 </Show>
-                <br />
+                <br/>
                 <Show when={typeScheme() === 'diverging'}>
+                  <InputFieldCheckbox
+                    label={LL().ClassificationPanel.neutralCentralClass()}
+                    checked={hasNeutralCentralClass()}
+                    onChange={(v) => {
+                      setHasNeutralCentralClass(v);
+                      updateClassificationParameters();
+                    }}
+                  />
                   <InputFieldRangeSlider
-                    label={LL().ClassificationPanel.centralClass()}
+                    label={
+                      hasNeutralCentralClass()
+                        ? LL().ClassificationPanel.centralClassPosition()
+                        : LL().ClassificationPanel.inflexionPointPosition()
+                    }
                     min={1}
-                    max={numberOfClasses() - 2}
+                    max={numberOfClasses() - 1 - Number(hasNeutralCentralClass())}
                     step={1}
                     value={Mround((numberOfClasses() - 1) / 2)}
                     onChange={(value) => {

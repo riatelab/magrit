@@ -8,11 +8,12 @@ import {
 import { produce } from 'solid-js/store';
 
 // Imports from other libs
-import { getPalette, getPalettes } from 'dicopal';
+import { getPalettes } from 'dicopal';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
+import { getPaletteWrapper } from '../../helpers/color';
 import { debounce, unproxify } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
 import { webSafeFonts } from '../../helpers/font';
@@ -70,7 +71,7 @@ import {
   type CategoricalChoroplethBarchartLegend,
   type ProportionalSymbolCategoryParameters,
   type ChoroplethHistogramLegend,
-  type ProportionalSymbolsRatioParameters,
+  type ProportionalSymbolsRatioParameters, CustomPalette,
 } from '../../global.d';
 
 // Styles
@@ -321,17 +322,10 @@ function makeSettingsDefaultPoint(
             setClassificationPanelStore({
               show: true,
               layerName: props.name,
-              variableName: (props.rendererParameters as ClassificationParameters).variable,
               series: props.data.features
                 .map((f) => f.properties[(
                   props.rendererParameters as ClassificationParameters).variable]),
-              nClasses: (props.rendererParameters as ClassificationParameters).classes,
-              colorScheme: (props.rendererParameters as ClassificationParameters).palette.name,
-              invertColorScheme: (
-                props.rendererParameters as ClassificationParameters).reversePalette,
-              noDataColor: (props.rendererParameters as ClassificationParameters).noDataColor,
-              centralClassPosition: (
-                props.rendererParameters as ClassificationParameters).centralClassPosition,
+              classificationParameters: params,
               onCancel: () => {
                 setLayersDescriptionStoreBase(
                   'layers',
@@ -340,7 +334,6 @@ function makeSettingsDefaultPoint(
                 );
               },
               onConfirm: (newParams) => {
-                console.log(newParams);
                 setLayersDescriptionStoreBase(
                   'layers',
                   (l: LayerDescription) => l.id === props.id,
@@ -512,20 +505,10 @@ function makeSettingsDefaultPoint(
             setClassificationPanelStore({
               show: true,
               layerName: props.name,
-              variableName: (
-                props.rendererParameters!.color as ClassificationParameters).variable,
               series: props.data.features
                 .map((f) => f.properties[(
                   props.rendererParameters!.color as ClassificationParameters).variable]),
-              nClasses: (props.rendererParameters!.color as ClassificationParameters).classes,
-              colorScheme: (
-                props.rendererParameters!.color as ClassificationParameters).palette.name,
-              invertColorScheme: (
-                props.rendererParameters!.color as ClassificationParameters).reversePalette,
-              noDataColor: (
-                props.rendererParameters!.color as ClassificationParameters).noDataColor,
-              centralClassPosition: (
-                props.rendererParameters!.color as ClassificationParameters).centralClassPosition,
+              classificationParameters: params,
               onCancel: () => {
                 setLayersDescriptionStoreBase(
                   'layers',
@@ -535,7 +518,6 @@ function makeSettingsDefaultPoint(
                 );
               },
               onConfirm: (newParams) => {
-                console.log(newParams);
                 setLayersDescriptionStoreBase(
                   'layers',
                   (l: LayerDescription) => l.id === props.id,
@@ -827,17 +809,10 @@ function makeSettingsDefaultLine(
             setClassificationPanelStore({
               show: true,
               layerName: props.name,
-              variableName: (props.rendererParameters as ClassificationParameters).variable,
               series: props.data.features
                 .map((f) => f.properties[(
                   props.rendererParameters as ClassificationParameters).variable]),
-              nClasses: (props.rendererParameters as ClassificationParameters).classes,
-              colorScheme: (props.rendererParameters as ClassificationParameters).palette.name,
-              invertColorScheme: (
-                props.rendererParameters as ClassificationParameters).reversePalette,
-              noDataColor: (props.rendererParameters as ClassificationParameters).noDataColor,
-              centralClassPosition: (
-                props.rendererParameters as ClassificationParameters).centralClassPosition,
+              classificationParameters: params,
               onCancel: () => {
                 setLayersDescriptionStoreBase(
                   'layers',
@@ -846,7 +821,6 @@ function makeSettingsDefaultLine(
                 );
               },
               onConfirm: (newParams) => {
-                console.log(newParams);
                 setLayersDescriptionStoreBase(
                   'layers',
                   (l: LayerDescription) => l.id === props.id,
@@ -1146,18 +1120,10 @@ function makeSettingsDefaultPolygon(
             setClassificationPanelStore({
               show: true,
               layerName: props.name,
-              variableName: (props.rendererParameters as ClassificationParameters).variable,
               series: props.data.features
                 .map((f) => f.properties[(
                   props.rendererParameters as ClassificationParameters).variable]),
-              classificationMethod: (props.rendererParameters as ClassificationParameters).method,
-              nClasses: (props.rendererParameters as ClassificationParameters).classes,
-              colorScheme: (props.rendererParameters as ClassificationParameters).palette.name,
-              invertColorScheme: (
-                props.rendererParameters as ClassificationParameters).reversePalette,
-              noDataColor: (props.rendererParameters as ClassificationParameters).noDataColor,
-              centralClassPosition: (
-                props.rendererParameters as ClassificationParameters).centralClassPosition,
+              classificationParameters: params,
               onCancel: () => {
                 setLayersDescriptionStoreBase(
                   'layers',
@@ -1287,7 +1253,11 @@ function makeSettingsDefaultPolygon(
         label={LL().LayerSettings.Palette()}
         onChange={(palName) => {
           const n = (props.rendererParameters as SmoothedLayerParameters).breaks.length - 1;
-          const palette = getPalette(palName, n);
+          const palette = getPaletteWrapper(
+            palName,
+            n,
+            (props.rendererParameters as SmoothedLayerParameters).palette.reversed,
+          );
           debouncedUpdateProp(props.id, ['rendererParameters', 'palette'], palette);
         }}
         value={(props.rendererParameters as SmoothedLayerParameters).palette.name}
@@ -1304,10 +1274,15 @@ function makeSettingsDefaultPolygon(
         checked={
           (
             props.rendererParameters as SmoothedLayerParameters | GriddedLayerParameters
-          ).reversePalette
+          ).palette.reversed
         }
         onChange={(value) => {
-          updateProp(props.id, ['rendererParameters', 'reversePalette'], value);
+          const p = unproxify(
+            (props.rendererParameters as SmoothedLayerParameters | GriddedLayerParameters).palette,
+          ) as CustomPalette;
+          p.colors = p.colors.toReversed();
+          p.reversed = value;
+          updateProp(props.id, ['rendererParameters', 'palette'], p);
         }}
       />
     </Show>

@@ -2550,9 +2550,17 @@ type RootTranslation = {
 		 */
 		reversePalette: string
 		/**
-		 * C​e​n​t​r​a​l​ ​c​l​a​s​s
+		 * N​e​u​t​r​a​l​ ​c​e​n​t​r​a​l​ ​c​l​a​s​s
 		 */
-		centralClass: string
+		neutralCentralClass: string
+		/**
+		 * C​e​n​t​r​a​l​ ​c​l​a​s​s​ ​p​o​s​i​t​i​o​n
+		 */
+		centralClassPosition: string
+		/**
+		 * I​n​f​l​e​x​i​o​n​ ​p​o​i​n​t​ ​p​o​s​i​t​i​o​n
+		 */
+		inflexionPointPosition: string
 		/**
 		 * D​i​s​p​l​a​y​ ​m​e​a​n
 		 */
@@ -5340,9 +5348,17 @@ export type TranslationFunctions = {
 		 */
 		reversePalette: () => LocalizedString
 		/**
-		 * Central class
+		 * Neutral central class
 		 */
-		centralClass: () => LocalizedString
+		neutralCentralClass: () => LocalizedString
+		/**
+		 * Central class position
+		 */
+		centralClassPosition: () => LocalizedString
+		/**
+		 * Inflexion point position
+		 */
+		inflexionPointPosition: () => LocalizedString
 		/**
 		 * Display mean
 		 */

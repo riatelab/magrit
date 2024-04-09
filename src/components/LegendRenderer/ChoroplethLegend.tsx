@@ -5,7 +5,6 @@ import {
 } from 'solid-js';
 
 // Import from other packages
-import { getColors } from 'dicopal';
 import { range } from 'd3-array';
 
 // Helpers
@@ -53,16 +52,6 @@ function verticalLegend(
 
   const { LL } = useI18nContext();
 
-  const colors = getColors(
-    rendererParameters.palette.name,
-    rendererParameters.breaks.length - 1,
-    rendererParameters.reversePalette,
-  ) as string[]; // this can't be undefined because we checked it above
-
-  if (!colors) {
-    throw new Error(`Could not get colors for scheme ${layer.rendererParameters.palette.name}`);
-  }
-
   const heightTitle = createMemo(() => (
     getTextSize(
       legendParameters.title.text,
@@ -103,14 +92,14 @@ function verticalLegend(
   const positionNote = createMemo(() => {
     if (hasNoData()) {
       return distanceToTop()
-        + colors.length * boxHeightAndSpacing()
+        + rendererParameters.palette.colors.length * boxHeightAndSpacing()
         - legendParameters.boxSpacing
         + legendParameters.boxSpacingNoData
         + legendParameters.boxHeight
         + defaultSpacing * 3;
     }
     return distanceToTop()
-      + (colors.length) * boxHeightAndSpacing()
+      + (rendererParameters.palette.colors.length) * boxHeightAndSpacing()
       + getTextSize(
         legendParameters.noDataLabel,
         legendParameters.labels.fontSize,
@@ -166,7 +155,7 @@ function verticalLegend(
     { makeLegendText(legendParameters.title, [0, 0], 'title') }
     { makeLegendText(legendParameters.subtitle, [0, heightTitle()], 'subtitle') }
     <g class="legend-content">
-      <For each={colors.toReversed()}>
+      <For each={rendererParameters.palette.colors.toReversed()}>
         {
           (color, i) => <rect
             fill={color}
@@ -186,7 +175,7 @@ function verticalLegend(
           x={0}
           y={
             distanceToTop()
-            + (colors.length - 1) * boxHeightAndSpacing()
+            + (rendererParameters.palette.colors.length - 1) * boxHeightAndSpacing()
             + legendParameters.boxHeight
             + legendParameters.boxSpacingNoData
           }
@@ -198,7 +187,7 @@ function verticalLegend(
         />
       </Show>
       <Show when={legendParameters.tick}>
-        <For each={range(1, colors.length, 1)}>
+        <For each={range(1, rendererParameters.palette.colors.length, 1)}>
           {
             (i) => <line
               x1={0}
@@ -246,7 +235,7 @@ function verticalLegend(
           x={legendParameters.boxWidth + defaultSpacing}
           y={
             distanceToTop()
-            + (colors.length - 1) * boxHeightAndSpacing()
+            + (rendererParameters.palette.colors.length - 1) * boxHeightAndSpacing()
             + legendParameters.boxSpacingNoData
             + legendParameters.boxHeight * 1.5
             + defaultSpacing / 3
@@ -285,15 +274,6 @@ function horizontalLegend(
     : layer.rendererParameters as AllowChoroplethLegend;
 
   const { LL } = useI18nContext();
-  const colors = getColors(
-    rendererParameters.palette.name,
-    rendererParameters.breaks.length - 1,
-    rendererParameters.reversePalette,
-  ) as string[]; // this can't be undefined because we checked it above
-
-  if (!colors) {
-    throw new Error(`Could not get colors for scheme ${rendererParameters.palette.name}`);
-  }
 
   // We need to compute the position of:
   // - the legend title
@@ -389,7 +369,7 @@ function horizontalLegend(
     { makeLegendText(legendParameters.title, [0, 0], 'title') }
     { makeLegendText(legendParameters.subtitle, [0, heightTitle()], 'subtitle') }
     <g class="legend-content">
-      <For each={colors}>
+      <For each={rendererParameters.palette.colors}>
         {
           (color, i) => <rect
             fill={color}
@@ -407,7 +387,9 @@ function horizontalLegend(
         <rect
           fill={rendererParameters.noDataColor}
           x={
-            colors.length * (legendParameters.boxWidth + legendParameters.boxSpacing)
+            rendererParameters.palette.colors.length * (
+              legendParameters.boxWidth + legendParameters.boxSpacing
+            )
             - legendParameters.boxSpacing
             + legendParameters.boxSpacingNoData
           }
@@ -420,7 +402,7 @@ function horizontalLegend(
         />
       </Show>
       <Show when={legendParameters.tick}>
-        <For each={range(1, colors.length, 1)}>
+        <For each={range(1, rendererParameters.palette.colors.length, 1)}>
           {
             (i) => <line
               x1={
@@ -472,7 +454,9 @@ function horizontalLegend(
       <Show when={hasNoData()}>
         <text
           x={
-            colors.length * (legendParameters.boxWidth + legendParameters.boxSpacing)
+            rendererParameters.palette.colors.length * (
+              legendParameters.boxWidth + legendParameters.boxSpacing
+            )
             - legendParameters.boxSpacing
             + legendParameters.boxSpacingNoData
             + legendParameters.boxWidth / 2

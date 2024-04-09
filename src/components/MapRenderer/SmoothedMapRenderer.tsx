@@ -40,12 +40,6 @@ export default function smoothedMapRenderer(
     return new Cls(null, null, rendererParameters().breaks);
   });
 
-  const colors = createMemo(
-    () => (rendererParameters().reversePalette
-      ? rendererParameters().palette.colors.toReversed()
-      : rendererParameters().palette.colors),
-  );
-
   return <g
     id={layerDescription.id}
     class="layer choropleth"
@@ -70,7 +64,7 @@ export default function smoothedMapRenderer(
       {
         (feature) => <path
           fill={
-            colors()[classifier().getClass(feature.properties.center)]
+            rendererParameters().palette.colors[classifier().getClass(feature.properties.center)]
           }
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"

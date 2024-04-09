@@ -1,4 +1,7 @@
-import { getPalette, getPaletteNumbers } from 'dicopal';
+import {
+  getAsymmetricDivergingColors, getPalette, getPaletteNumbers, getSequentialColors,
+} from 'dicopal';
+import { CustomPalette } from '../global';
 
 export function decimalToHex(d: number, padding = 0): string {
   let hex = d.toString(16);
@@ -27,4 +30,42 @@ export function randomColorFromCategoricalPalette(paletteName = 'Vivid'): string
   const maxNumber = numbers[numbers.length - 1];
   const pal = getPalette(paletteName, maxNumber)!.colors;
   return pal[Math.floor(Math.random() * pal.length)];
+}
+
+export function getPaletteWrapper(
+  paletteName: string,
+  n: number,
+  reversePalette: boolean,
+  divergingOptions?: any,
+): CustomPalette {
+  const numbers = getPaletteNumbers(paletteName);
+  if (numbers.length === 0) {
+    throw new Error('Palette does not exist');
+  }
+  const refPal = getPalette(paletteName, numbers[numbers.length - 1])!;
+  const type = refPal.type as 'sequential' | 'diverging' | 'qualitative';
+  // eslint-disable-next-line no-nested-ternary
+  const colors = type === 'sequential'
+    ? getSequentialColors(paletteName, n, reversePalette)
+    : type === 'qualitative'
+      ? getPalette(paletteName, n)!.colors
+      : getAsymmetricDivergingColors(
+        paletteName,
+        divergingOptions!.classLeft,
+        divergingOptions!.classRight,
+        divergingOptions!.centralClass,
+        divergingOptions!.balanced,
+        reversePalette,
+      );
+
+  return {
+    id: `${paletteName}-${n}`,
+    name: paletteName,
+    number: n,
+    type,
+    colors,
+    provenance: 'dicopal',
+    reversed: reversePalette,
+    divergingOptions,
+  };
 }

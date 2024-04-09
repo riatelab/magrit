@@ -277,15 +277,17 @@ interface CustomPalette {
   colors: string[],
   // The provenance of the palette
   provenance: 'dicopal' | 'user',
+  // Is the palette reversed?
+  reversed: boolean,
   // The provider of the palette (only if it comes from dicopal)
   // provider?: Provider,
   // Options for diverging palettes that comes from dicopal
-  divergingOptions: {
+  divergingOptions?: {
     left: number,
     right: number,
     centralClass: boolean,
     balanced: boolean,
-    customCentralClass?: string,
+    // customCentralClass?: string,
   }
 }
 
@@ -304,10 +306,10 @@ interface ClassificationParameters {
   noDataColor: string,
   // Entities by class
   entitiesByClass: number[],
-  // Whether to reverse the palette or not
-  reversePalette: boolean,
-  // The position of the central class for diverging palettes
-  centralClassPosition?: number,
+  // The mean position role (for mean-stddev classification only)
+  meanPositionRole?: 'center' | 'boundary',
+  // The amount of standard deviations to use (for mean-stddev classification)
+  amplitude?: number,
 }
 
 export enum ProportionalSymbolsColorMode {
@@ -472,8 +474,6 @@ interface GriddedLayerParameters {
   palette: CustomPalette,
   // The breaks used to compute the contour of the gridded layer from the grid
   breaks: number[],
-  // Whether to reverse the palette or not
-  reversePalette: boolean,
 }
 
 interface SmoothedLayerParameters {
@@ -490,8 +490,6 @@ interface SmoothedLayerParameters {
   // The thresholds used to compute the contour of the
   // smoothed layer from the grid
   breaks: number[],
-  // Whether to reverse the palette or not
-  reversePalette: boolean,
 }
 
 interface CategoricalPictogramParameters {
@@ -567,20 +565,7 @@ export enum LinkPosition {
   Shared = 'shared',
 }
 
-type AllowChoroplethLegend = Pick<ClassificationParameters, 'variable' | 'palette' | 'breaks' | 'reversePalette' | 'noDataColor'>;
-
-// interface AllowChoroplethLegend {
-//   variable: string,
-//   // The palette used to color the smoothed layer
-//   palette: CustomPalette,
-//   // The thresholds used to compute the contour of the
-//   // smoothed layer from the grid
-//   breaks: number[],
-//   // Whether to reverse the palette or not
-//   reversePalette: boolean,
-//   // The color to use for features with no data
-//   noDataColor: string,
-// }
+type AllowChoroplethLegend = Pick<ClassificationParameters, 'variable' | 'palette' | 'breaks' | 'noDataColor'>;
 
 export enum RepresentationType {
   choropleth = 'choropleth',

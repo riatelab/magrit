@@ -12,7 +12,6 @@ import { produce, unwrap } from 'solid-js/store';
 // Imports from other packages
 import { bbox } from '@turf/turf';
 import { quantile } from 'statsbreaks';
-import { getPalette } from 'dicopal';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -28,6 +27,7 @@ import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelecti
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
 import d3 from '../../helpers/d3-custom';
+import { getPaletteWrapper } from '../../helpers/color';
 import { descendingKeyAccessor, findSuitableName, getMinimumPrecision } from '../../helpers/common';
 import {
   computeAppropriateResolution,
@@ -55,7 +55,7 @@ import type { PortrayalSettingsProps } from './common';
 import {
   type ChoroplethLegend,
   ClassificationMethod,
-  ClassificationParameters, CustomPalette,
+  ClassificationParameters,
   type GeoJSONFeatureCollection,
   GridCellShape,
   type GridParameters,
@@ -258,13 +258,9 @@ function onClickValidate(
       method: ClassificationMethod.quantiles,
       classes: Mmin(d3.thresholdSturges(values), 9),
       breaks,
-      palette: getPalette(
-        applicationSettingsStore.defaultColorScheme,
-        nClasses,
-      ) as unknown as CustomPalette,
+      palette: getPaletteWrapper(applicationSettingsStore.defaultColorScheme, nClasses, true),
       noDataColor: applicationSettingsStore.defaultNoDataColor,
       entitiesByClass: [], // TODO
-      reversePalette: false,
     } as ClassificationParameters;
 
     newLayerDescription = {

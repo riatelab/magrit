@@ -57,12 +57,8 @@ export default function proportionalSymbolsRenderer(
         const Cls = getClassifier(ClassificationMethod.manual);
         const classifier = new Cls(null, null, layerDescription.rendererParameters.color.breaks);
 
-        const colors = layerDescription.rendererParameters.color.reversePalette
-          ? layerDescription.rendererParameters.color.palette.colors.toReversed()
-          : layerDescription.rendererParameters.color.palette.colors;
-
         return (value: any) => (isNumber(value)
-          ? colors[classifier.getClass(value)]
+          ? layerDescription.rendererParameters.color.palette.colors[classifier.getClass(value)]
           : layerDescription.rendererParameters.color.noDataColor);
       })
       : createMemo(() => {
