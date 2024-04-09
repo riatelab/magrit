@@ -7,7 +7,7 @@ function createWindow() {
     show: false,
     autoHideMenuBar: true,
     title: 'Magrit',
-    icon: 'dist/assets/magrit-logo-only-CTN102zB.png',
+    icon: 'dist/assets/favicon.ico',
   });
 
   win.maximize();
@@ -16,6 +16,18 @@ function createWindow() {
   // Open links in the browser, not inside the application
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('https:')) shell.openExternal(url);
+    if (url === 'file:///docs/') {
+      // Create a new BrowserWindow to display the documentation
+      const docWin = new BrowserWindow({
+        show: false,
+        autoHideMenuBar: true,
+        title: 'Magrit Documentation',
+        icon: 'dist/assets/favicon.ico',
+      });
+      docWin.maximize();
+      docWin.show();
+      docWin.loadURL('dist/docs/index.html');
+    }
     return { action: 'deny' };
   });
 
