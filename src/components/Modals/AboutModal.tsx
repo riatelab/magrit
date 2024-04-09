@@ -1,4 +1,5 @@
 import { type Accessor, type JSX } from 'solid-js';
+import { FiExternalLink } from 'solid-icons/fi';
 import { type TranslationFunctions } from '../../i18n/i18n-types';
 import magritLogo from '../../assets/magrit-logo-only.png';
 
@@ -29,8 +30,18 @@ export default function AboutModal(
     </div>
     <hr />
     <div style={{ 'text-align': 'center' }}>
-      <b>{ LL().AboutPanel.usefulLinks() }</b>
-      <br />
+      <b>{LL().AboutPanel.usefulLinks()}</b>
+      <br/>
+      <p>
+        <a
+          class={'button is-link'}
+          style={{ width: '280px' }}
+          href={`${window.location.origin}/docs/`}
+          target="_blank"
+        >
+          <b>{LL().AboutPanel.documentation()}</b>
+        </a>
+      </p>
       <p>
         <a
           class={'button is-link'}
@@ -38,17 +49,8 @@ export default function AboutModal(
           href="https://riate.cnrs.fr"
           target="_blank"
         >
-          <b>{ LL().AboutPanel.UarRiate() }</b>
-        </a>
-      </p>
-      <p>
-        <a
-          class={'button is-link'}
-          style={{ width: '280px' }}
-          href={ `${window.location.origin}/docs/` }
-          target="_blank"
-        >
-          <b>{ LL().AboutPanel.documentation() }</b>
+          <FiExternalLink size={'1em'} style={{ 'margin-right': '0.35em' }}/>
+          <b>{LL().AboutPanel.UarRiate()}</b>
         </a>
       </p>
       <p>
@@ -58,7 +60,8 @@ export default function AboutModal(
           href="https://github.com/riatelab/magrit"
           target="_blank"
         >
-          <b>{ LL().AboutPanel.linkGithub() }</b>
+          <FiExternalLink size={'1em'} style={{ 'margin-right': '0.35em' }}/>
+          <b>{LL().AboutPanel.linkGithub()}</b>
         </a>
       </p>
       <p>
@@ -68,7 +71,8 @@ export default function AboutModal(
           href="https://github.com/riatelab/magrit/issues"
           target="_blank"
         >
-          <b>{ LL().AboutPanel.linkGithubIssues() }</b>
+          <FiExternalLink size={'1em'} style={{ 'margin-right': '0.35em' }}/>
+          <b>{LL().AboutPanel.linkGithubIssues()}</b>
         </a>
       </p>
     </div>
