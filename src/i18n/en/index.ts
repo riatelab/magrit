@@ -333,6 +333,9 @@ const en = {
       Span: 'Span',
       Alpha: 'Alpha',
       Beta: 'Beta',
+      Count: 'Count',
+      ThresholdForContours: 'Threshold for contours',
+      ErrorParsingThreshold: 'Error while parsing the threshold. Please use values separated by dashes.',
       NewLayerName: 'Smoothing_{layerName}',
     },
     CartogramOptions: {

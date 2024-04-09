@@ -10,6 +10,7 @@ interface InputFieldNumberProps {
   step: number;
   rounded?: boolean;
   width?: number;
+  disabled?: boolean;
 }
 
 export default function InputFieldNumber(props: InputFieldNumberProps): JSX.Element {
@@ -28,6 +29,7 @@ export default function InputFieldNumber(props: InputFieldNumberProps): JSX.Elem
         style={{
           width: `${mergedProps.width}px`,
         }}
+        disabled={mergedProps.disabled}
       />
     </div>
   </div>;

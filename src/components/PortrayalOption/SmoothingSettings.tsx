@@ -6,6 +6,8 @@ import { produce } from 'solid-js/store';
 // Imports from other packages
 import { getPalette } from 'dicopal';
 import { yieldOrContinue } from 'main-thread-scheduling';
+import * as Plot from '@observablehq/plot';
+import toast from 'solid-toast';
 import { bbox } from '@turf/turf';
 
 // Stores
@@ -20,12 +22,16 @@ import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelecti
 
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { parseUserDefinedBreaks, prepareStatisticalSummary } from '../../helpers/classification';
 import { findSuitableName } from '../../helpers/common';
+import { intersectionLayer } from '../../helpers/geos';
 import { computeAppropriateResolution } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
 import { generateIdLegend } from '../../helpers/legends';
 import { Mpow } from '../../helpers/math';
-import { computeKde, computeStewart } from '../../helpers/smoothing';
+import {
+  computeKdeValues, computeStewartValues, makeContourLayer,
+} from '../../helpers/smoothing';
 import { Variable, VariableType } from '../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
@@ -41,6 +47,7 @@ import type { PortrayalSettingsProps } from './common';
 import {
   type ChoroplethLegend,
   type CustomPalette,
+  type GeoJSONFeatureCollection,
   type GridParameters,
   KdeKernel,
   type KdeParameters,
@@ -53,17 +60,16 @@ import {
   SmoothingMethod,
   type StewartParameters,
 } from '../../global.d';
-import InputFieldText from '../Inputs/InputText.tsx';
-import { parseUserDefinedBreaks, prepareStatisticalSummary } from '../../helpers/classification.ts';
-import toast from 'solid-toast';
 
 async function onClickValidate(
   referenceLayerId: string,
   newName: string,
   targetVariable: string,
-  gridParams: GridParameters,
   smoothingMethod: SmoothingMethod,
-  parameters: Partial<StewartParameters> | KdeParameters,
+  gridParams: GridParameters,
+  parameters: StewartParameters | KdeParameters,
+  thresholds: number[],
+  computedValues: { grid: GeoJSONFeatureCollection, values: number[] },
 ) {
   const referenceLayerDescription = layersDescriptionStore.layers
     .find((l) => l.id === referenceLayerId);
@@ -72,55 +78,13 @@ async function onClickValidate(
     throw new Error('Unexpected Error: Reference layer not found');
   }
 
-  let newData;
-  if (smoothingMethod === SmoothingMethod.Kde) {
-    const kdeParams = {
-      kernel: (parameters as KdeParameters).kernel,
-      bandwidth: (parameters as KdeParameters).bandwidth,
-    } as KdeParameters;
+  const contours = await makeContourLayer(
+    computedValues.grid,
+    thresholds,
+    targetVariable,
+  );
 
-    newData = await computeKde(
-      referenceLayerDescription.data,
-      referenceLayerDescription.type as 'point' | 'polygon',
-      targetVariable,
-      gridParams,
-      kdeParams,
-    );
-  } else { // smoothingMethod === SmoothingMethod.Stewart
-    const fn = (parameters as StewartParameters).function;
-
-    const alpha = fn === 'gaussian'
-      ? (
-        0.6931471805
-        / Mpow(
-          (parameters as StewartParameters).span,
-          (parameters as StewartParameters).beta,
-        )
-      ) : (
-        (Mpow(
-          2.0,
-          (1.0 / (parameters as StewartParameters).beta),
-        ) - 1.0) / (parameters as StewartParameters).span
-      );
-
-    const stewartParams = {
-      beta: (parameters as StewartParameters).beta,
-      span: (parameters as StewartParameters).span,
-      function: fn,
-      alpha,
-    } as StewartParameters;
-
-    newData = await computeStewart(
-      referenceLayerDescription.data,
-      referenceLayerDescription.type as 'point' | 'polygon',
-      targetVariable,
-      gridParams,
-      stewartParams,
-    );
-  }
-
-  const thresholds = newData.features.map((f) => f.properties.min_v)
-    .concat([newData.features[newData.features.length - 1].properties.max_v]);
+  const newData = await intersectionLayer(contours, referenceLayerDescription.data);
 
   const rendererParameters = {
     variable: targetVariable,
@@ -294,19 +258,29 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     setTargetBeta,
   ] = createSignal<number>(2);
 
-  // Signals for ....
+  // Signals for the intermediate results:
   const [
     isLoading,
     setIsLoading,
   ] = createSignal<boolean>(false);
+  // Parameters used to compute the intermediate results
+  const [
+    currentParameters,
+    setCurrentParameters,
+  ] = createSignal<{ grid: GridParameters, smoothing: KdeParameters | StewartParameters } | null>(
+    null,
+  );
+  // Statistical summary of the computed values
   const [
     seriesSummary,
     setSeriesSummary,
   ] = createSignal<ReturnType<typeof prepareStatisticalSummary> | null>(null);
+  // Computed values
   const [
     computedValues,
     setComputedValues,
-  ] = createSignal<number[] | null>(null);
+  ] = createSignal<{ grid: GeoJSONFeatureCollection, values: number[] } | null>(null);
+  // Thresholds, computed from the values first but maybe changed by the user
   const [
     thresholds,
     setThresholds,
@@ -317,24 +291,6 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       newLayerName() || LL().FunctionalitiesSection.NewLayer(),
       layersDescriptionStore.layers.map((l) => l.name),
     );
-    const params = targetSmoothingMethod() === SmoothingMethod.Kde
-      ? {
-        kernel: targetKdeKernelType(),
-        bandwidth: targetBandwidth(),
-      } as KdeParameters
-      : {
-        function: targetStewartKernelType(),
-        span: targetSpan(),
-        beta: targetBeta(),
-      } as Partial<StewartParameters>;
-
-    const gridParams = {
-      xMin: bboxLayer[0],
-      yMin: bboxLayer[1],
-      xMax: bboxLayer[2],
-      yMax: bboxLayer[3],
-      resolution: targetResolution(),
-    } as GridParameters;
 
     // Close the current modal
     setFunctionalitySelectionStore({ show: false, id: '', type: '' });
@@ -350,9 +306,11 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         layerDescription.id,
         layerName,
         targetVariable(),
-        gridParams,
         targetSmoothingMethod(),
-        params,
+        currentParameters()!.grid,
+        currentParameters()!.smoothing,
+        thresholds()!,
+        computedValues()!,
       ).then(() => {
         // Hide loading overlay
         setLoading(false);
@@ -370,6 +328,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         setTargetVariable(v);
       }}
       value={targetVariable()}
+      disabled={isLoading() || !!computedValues()}
     >
       <For each={targetFields}>
         {(variable) => <option value={variable.name}>{variable.name}</option>}
@@ -381,6 +340,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         setTargetSmoothingMethod(v as SmoothingMethod);
       }}
       value={targetSmoothingMethod()}
+      disabled={isLoading() || !!computedValues()}
     >
       <option value="Stewart">{LL().FunctionalitiesSection.SmoothingOptions.Stewart()}</option>
       <option value="Kde">{LL().FunctionalitiesSection.SmoothingOptions.KDE()}</option>
@@ -392,6 +352,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       min={0}
       max={1e5}
       step={0.1}
+      disabled={isLoading() || !!computedValues()}
     />
     <Show when={targetSmoothingMethod() === SmoothingMethod.Kde}>
       <InputFieldSelect
@@ -402,6 +363,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
           );
         }}
         value={targetKdeKernelType()}
+        disabled={isLoading() || !!computedValues()}
       >
         <For each={Object.values(KdeKernel)}>
           {
@@ -418,6 +380,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         min={0}
         max={1e5}
         step={1}
+        disabled={isLoading() || !!computedValues()}
       />
     </Show>
     <Show when={targetSmoothingMethod() === SmoothingMethod.Stewart}>
@@ -427,6 +390,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
           setTargetStewartKernelType(v as 'Gaussian' | 'Pareto');
         }}
         value={targetStewartKernelType()}
+        disabled={isLoading() || !!computedValues()}
       >
         <option value="Gaussian">{LL().FunctionalitiesSection.SmoothingOptions.Gaussian()}</option>
         <option value="Pareto">{LL().FunctionalitiesSection.SmoothingOptions.Pareto()}</option>
@@ -438,6 +402,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         min={0}
         max={1e5}
         step={1}
+        disabled={isLoading() || !!computedValues()}
       />
       <InputFieldNumber
         label={LL().FunctionalitiesSection.SmoothingOptions.Beta()}
@@ -446,42 +411,143 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         min={0}
         max={10}
         step={1}
+        disabled={isLoading() || !!computedValues()}
       />
     </Show>
     <Show when={!isLoading() && !computedValues()}>
-      <button
-        class="button is-primary"
-        disabled={
-          targetResolution() <= 0
-          || (targetSmoothingMethod() === SmoothingMethod.Kde && targetBandwidth() <= 0)
-          || (targetSmoothingMethod() === SmoothingMethod.Stewart && targetSpan() <= 0)
-        }
-      >
-        Compute values
-      </button>
+      <div class="has-text-centered">
+        <button
+          class="button is-success"
+          disabled={
+            targetResolution() <= 0
+            || (targetSmoothingMethod() === SmoothingMethod.Kde && targetBandwidth() <= 0)
+            || (targetSmoothingMethod() === SmoothingMethod.Stewart && targetSpan() <= 0)
+          }
+          onClick={async () => {
+            setIsLoading(true);
+            setLoading(true);
+            await yieldOrContinue('interactive');
+            // Parameters for creating the grid of points
+            const gp = {
+              xMin: bboxLayer[0],
+              yMin: bboxLayer[1],
+              xMax: bboxLayer[2],
+              yMax: bboxLayer[3],
+              resolution: targetResolution(),
+            } as GridParameters;
+
+            // Parameters for smoothing the values on the grid
+            const smoothingParams = targetSmoothingMethod() === SmoothingMethod.Kde
+              ? {
+                kernel: targetKdeKernelType(),
+                bandwidth: targetBandwidth(),
+              } as KdeParameters
+              : {
+                function: targetStewartKernelType(),
+                span: targetSpan(),
+                beta: targetBeta(),
+                alpha: targetStewartKernelType() === 'Gaussian'
+                  ? (
+                    0.6931471805
+                    / Mpow(targetSpan(), targetBeta())
+                  ) : (
+                    (Mpow(2.0, 1.0 / targetBeta()) - 1.0) / targetSpan()
+                  ),
+              } as StewartParameters;
+
+            // Return values from computeKdeValues or computeStewartValues
+            let grid;
+            let values;
+
+            if (targetSmoothingMethod() === SmoothingMethod.Kde) {
+              [grid, values] = await computeKdeValues(
+                layerDescription.data,
+                layerDescription.type as 'point' | 'polygon',
+                targetVariable(),
+                gp as GridParameters,
+                smoothingParams as KdeParameters,
+              );
+            } else {
+              [grid, values] = await computeStewartValues(
+                layerDescription.data,
+                layerDescription.type as 'point' | 'polygon',
+                targetVariable(),
+                gp as GridParameters,
+                smoothingParams as StewartParameters,
+              );
+            }
+
+            const summary = prepareStatisticalSummary(values);
+
+            // Predefined thresholds
+            const t = [0, 0.04, 0.1, 0.25, 0.4, 0.55, 0.785, 0.925]
+              .map((d) => Math.round(d * summary.maximum));
+            t.push(summary.maximum);
+
+            // Store all the computed values and the parameters used to compute the values
+            setCurrentParameters({
+              grid: gp,
+              smoothing: smoothingParams,
+            });
+            setSeriesSummary(summary);
+            setThresholds(t);
+            setComputedValues({ grid, values });
+            setIsLoading(false);
+            setLoading(false);
+          }}
+        >
+          Compute values
+        </button>
+      </div>
+      <div><br /></div>
     </Show>
     <Show when={isLoading()}>
       <progress class="progress is-small is-warning" max="100"></progress>
     </Show>
     <Show when={computedValues()}>
-      <InputFieldText
-        label={'Thresholds'}
-        width={600}
-        value={thresholds()!.join(', ')}
-        onChange={(v) => {
-          try {
-            const b = parseUserDefinedBreaks(
-              computedValues()!,
-              v,
-              seriesSummary()!,
-            );
-            setThresholds(b);
-          } catch (e) {
-            toast.error('Error while parsing thresholds');
-            setThresholds(thresholds()!);
-          }
-        }}
-      />
+      {
+        Plot.plot({
+          height: 200,
+          y: {
+            grid: true,
+            label: LL().FunctionalitiesSection.SmoothingOptions.Count(),
+          },
+          marks: [
+            Plot.rectY(
+              computedValues()!.values,
+              Plot.binX({ y: 'count' }, { x: (d) => d }),
+            ),
+            Plot.ruleY([0]),
+            ...thresholds()!.map((t) => Plot.ruleX([t], { stroke: 'red' })),
+          ],
+        })
+      }
+      <div class="field-block">
+        <label class="label">
+          {LL().FunctionalitiesSection.SmoothingOptions.ThresholdForContours()}
+        </label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            onChange={(v) => {
+              try {
+                const b = parseUserDefinedBreaks(
+                  computedValues()!.values,
+                  v.currentTarget.value,
+                  seriesSummary()!,
+                );
+                setThresholds(b);
+              } catch (e) {
+                toast.error(LL().FunctionalitiesSection.SmoothingOptions.ErrorParsingThreshold());
+                setThresholds(thresholds()!);
+              }
+            }}
+            value={thresholds()!.join(' - ')}
+            style={{ width: '100%' }}
+          />
+        </div>
+      </div>
     </Show>
     <InputResultName
       value={newLayerName()}

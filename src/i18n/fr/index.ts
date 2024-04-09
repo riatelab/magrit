@@ -333,6 +333,9 @@ const fr = {
       Span: 'Portée',
       Alpha: 'Alpha',
       Beta: 'Beta',
+      Count: 'Décompte',
+      ThresholdForContours: 'Valeurs limites des contours à créer',
+      ErrorParsingThresholds: 'Erreur lors de l\'analyse des valeurs limites des contours. Veuillez saisir des valeurs séparées par un tiret.',
       NewLayerName: 'Lissage_{layerName}',
     },
     CartogramOptions: {

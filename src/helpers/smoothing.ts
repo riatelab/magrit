@@ -2,7 +2,6 @@
 import { GPU } from 'gpu.js';
 import { pointGrid } from '@turf/turf';
 import type { isobands } from 'contour-wasm';
-import type { BBox } from '@turf/turf';
 
 // Stores
 import { setLoadingMessage } from '../store/GlobalStore';
@@ -43,7 +42,10 @@ function kmToDeg(km: number): number {
   return km / 111;
 }
 
-function customPointGrid(bbox: number[], resolution: number): GeoJSONFeatureCollection {
+function customPointGrid(
+  bbox: [number, number, number, number],
+  resolution: number,
+): GeoJSONFeatureCollection {
   const [xMin, yMin, xMax, yMax] = bbox;
   // Turf isn't able to make grid larger than a hemisphere
   // so we handle this case manually (matching the output of turf's pointGrid function)
@@ -67,14 +69,17 @@ function customPointGrid(bbox: number[], resolution: number): GeoJSONFeatureColl
       features,
     } as GeoJSONFeatureCollection;
   }
-  return pointGrid(bbox as BBox, resolution) as GeoJSONFeatureCollection;
+  return pointGrid(
+    bbox,
+    resolution,
+  ) as GeoJSONFeatureCollection;
 }
 
 function makePointGrid(
   gridParameters: GridParameters,
   useOffset: boolean,
 ): GeoJSONFeatureCollection {
-  const bb = [
+  const bb: [number, number, number, number] = [
     gridParameters.xMin,
     gridParameters.yMin,
     gridParameters.xMax,
@@ -127,9 +132,10 @@ const computeStep = (
   };
 };
 
-async function makeContourLayer(
+export async function makeContourLayer(
   grid: GeoJSONFeatureCollection,
   thresholds: number[],
+  variableName: string,
 ): Promise<GeoJSONFeatureCollection> {
   console.time('gridPreparationForContours');
   const xCoords = new Set(grid.features.map((d) => d.geometry.coordinates[0]));
@@ -145,7 +151,7 @@ async function makeContourLayer(
   const v = [];
   for (let i = 0; i < height; i += 1) {
     for (let j = 0; j < width; j += 1) {
-      v.push(grid.features[j * height + i].properties.z);
+      v.push(grid.features[j * height + i].properties.z as number);
     }
   }
   console.timeEnd('gridPreparationForContours');
@@ -166,6 +172,13 @@ async function makeContourLayer(
     intervals,
     options,
   );
+
+  contours.features.forEach((ft) => {
+    // eslint-disable-next-line no-param-reassign
+    ft.properties.center = (ft.properties.min_v + ft.properties.max_v) / 2;
+    // eslint-disable-next-line no-param-reassign
+    ft.properties[variableName] = ft.properties.center;
+  });
 
   // Convert the contour layer to TopoJSON, apply the quantization and convert back to GeoJSON
   return convertToTopojsonQuantizeAndBackToGeojson(contours) as GeoJSONFeatureCollection;
@@ -258,15 +271,13 @@ function computeKdeInner(
   return value;
 }
 
-export async function computeStewart(
+export async function computeStewartValues(
   data: GeoJSONFeatureCollection,
   inputType: 'point' | 'polygon',
   variableName: string,
   gridParameters: GridParameters,
   stewartParameters: StewartParameters,
-): Promise<GeoJSONFeatureCollection> {
-  console.group('computeStewart');
-  console.time('preparation');
+): Promise<[GeoJSONFeatureCollection, number[]]> {
   // Make a suitable grid of points
   const grid = makePointGrid(gridParameters, true);
 
@@ -301,9 +312,6 @@ export async function computeStewart(
     values[i] = inputLayer.features[i].properties[variableName] as number;
   }
 
-  console.timeEnd('preparation');
-  console.time('kernel');
-
   // Create the GPU instance and define the kernel
   const gpu = new GPU({ mode: 'webgl2' });
   const kernel = gpu
@@ -336,33 +344,12 @@ export async function computeStewart(
   // Actually compute the potential values
   const pots = kernel(xCells, yCells, xDots, yDots, values) as Float32Array;
 
-  console.timeEnd('kernel');
-  console.time('contours');
-
   // Add the potential values to the grid
   grid.features.forEach((cell, i) => {
     cell.properties.z = pots[i]; // eslint-disable-line no-param-reassign
   });
 
-  const maxPot = max(pots);
-
-  const thresholds = [0, 0.03, 0.06, 0.1, 0.25, 0.4, 0.55, 0.75, 0.85, 0.925, 1]
-    .map((d) => d * maxPot);
-
-  const contours = await makeContourLayer(grid, thresholds);
-  contours.features.forEach((ft) => {
-    // eslint-disable-next-line no-param-reassign
-    ft.properties.center = (ft.properties.min_v + ft.properties.max_v) / 2;
-    // eslint-disable-next-line no-param-reassign
-    ft.properties[variableName] = ft.properties.center;
-  });
-
-  console.timeEnd('contours');
-  console.time('intersection');
-  const clippedContours = await intersectionLayer(contours, data);
-  console.timeEnd('intersection');
-  console.groupEnd();
-  return clippedContours;
+  return [grid, Array.from(pots)];
 }
 
 const computeNormalizer = (values: number[]): number => {
@@ -373,13 +360,13 @@ const computeNormalizer = (values: number[]): number => {
   return 1 / sum;
 };
 
-export async function computeKde(
+export async function computeKdeValues(
   data: GeoJSONFeatureCollection,
   inputType: 'point' | 'polygon',
   variableName: string,
   gridParameters: GridParameters,
   kdeParameters: KdeParameters,
-): Promise<GeoJSONFeatureCollection> {
+): Promise<[GeoJSONFeatureCollection, number[]]> {
   await setLoadingMessage('SmoothingDataPreparation');
   // Make a suitable grid of points
   const grid = makePointGrid(gridParameters, true);
@@ -556,26 +543,9 @@ export async function computeKde(
 
   const resultValues = kernel(xCells, yCells, xDots, yDots, values) as Float32Array;
 
-  await setLoadingMessage('SmoothingContours');
-
   grid.features.forEach((cell, i) => {
     cell.properties.z = resultValues[i]; // eslint-disable-line no-param-reassign
   });
 
-  const maxPot = max(resultValues);
-
-  const thresholds = [0, 0.03, 0.06, 0.1, 0.25, 0.4, 0.55, 0.75, 0.85, 0.925, 1]
-    .map((d) => d * maxPot);
-
-  const contours = await makeContourLayer(grid, thresholds);
-
-  contours.features.forEach((ft) => {
-    // eslint-disable-next-line no-param-reassign
-    ft.properties.center = (ft.properties.min_v + ft.properties.max_v) / 2;
-    // eslint-disable-next-line no-param-reassign
-    ft.properties[variableName] = ft.properties.center;
-  });
-
-  await setLoadingMessage('SmoothingIntersection');
-  return intersectionLayer(contours, data);
+  return [grid, Array.from(resultValues)];
 }

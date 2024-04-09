@@ -1190,6 +1190,18 @@ type RootTranslation = {
 			 */
 			Beta: string
 			/**
+			 * C​o​u​n​t
+			 */
+			Count: string
+			/**
+			 * T​h​r​e​s​h​o​l​d​ ​f​o​r​ ​c​o​n​t​o​u​r​s
+			 */
+			ThresholdForContours: string
+			/**
+			 * E​r​r​o​r​ ​w​h​i​l​e​ ​p​a​r​s​i​n​g​ ​t​h​e​ ​t​h​r​e​s​h​o​l​d​.​ ​P​l​e​a​s​e​ ​u​s​e​ ​v​a​l​u​e​s​ ​s​e​p​a​r​a​t​e​d​ ​b​y​ ​d​a​s​h​e​s​.
+			 */
+			ErrorParsingThreshold: string
+			/**
 			 * S​m​o​o​t​h​i​n​g​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
 			 */
@@ -3982,6 +3994,18 @@ export type TranslationFunctions = {
 			 * Beta
 			 */
 			Beta: () => LocalizedString
+			/**
+			 * Count
+			 */
+			Count: () => LocalizedString
+			/**
+			 * Threshold for contours
+			 */
+			ThresholdForContours: () => LocalizedString
+			/**
+			 * Error while parsing the threshold. Please use values separated by dashes.
+			 */
+			ErrorParsingThreshold: () => LocalizedString
 			/**
 			 * Smoothing_{layerName}
 			 */

@@ -214,7 +214,7 @@ export function ChoroplethClassificationSelector(
             colorScheme: defaultColorScheme,
             invertColorScheme: false,
             noDataColor: props.targetClassification()!.noDataColor,
-            onCancel: noop,
+            onCancel: () => {},
             onConfirm: (classification: ClassificationParameters) => {
               props.setTargetClassification(classification);
             },
