@@ -598,23 +598,23 @@ export enum TableOperationType {
 }
 
 export enum AnalysisOperationType {
-  pointAnalysis = 'pointAnalysis',
+  pointAggregation = 'pointAggregation',
   simpleLinearRegression = 'simpleLinearRegression',
   multipleLinearRegression = 'multipleLinearRegression',
   principalComponentAnalysis = 'principalComponentAnalysis',
 }
 
-export enum PointAnalysisMeshType {
+export enum PointAggregationMeshType {
   Grid = 'Grid',
   PolygonLayer = 'PolygonLayer',
 }
 
-export enum PointAnalysisStockType {
+export enum PointAggregationStockType {
   Count = 'Count',
   WeightedCount = 'WeightedCount',
 }
 
-export enum PointAnalysisRatioType {
+export enum PointAggregationRatioType {
   Density = 'Density',
   Mean = 'Mean',
   StandardDeviation = 'StandardDeviation',

@@ -262,7 +262,7 @@ const fr = {
       Grid: 'Carroyage',
       Links: 'Liens',
       Mushrooms: 'Champignons',
-      PointAnalysis: 'Analyse d\'un semis de points',
+      PointAggregation: 'Agrégation d\'un semis de points',
       SimpleLinearRegression: 'Régression linéaire simple',
       Aggregation: 'Agrégation',
       Selection: 'Sélection',
@@ -436,7 +436,7 @@ const fr = {
       NFeaturesSelected: '{{Une entité | ?? entités}} sélectionnée{{nSelected:s}} par l\'expression saisie.',
       AllDataSelected: 'Toutes les entités de la couche sont sélectionnées par l\'expression saisie.',
     },
-    PointAnalysisOptions: {
+    PointAggregationOptions: {
       MapType: 'Type de carte',
       MapTypeRatio: 'Carte choroplèthe (ratio)',
       MapTypeStock: 'Carte en symbols proportionnels (stock)',
@@ -584,7 +584,7 @@ const fr = {
       Grid: 'Un carroyage est une carte thématique dans laquelle les zones sont redimensionnées en fonction de la valeur d\'une variable statistique.',
       Links: 'Une carte de lien permet de tracer des liens entre des points ou des zones, optionnellement avec une largeur proportionnelle à un phénomène.',
       Mushrooms: 'Une carte en champignon est une carte thématique dans laquelle les valeurs de deux variables sont représentées par deux demi-cercles ou deux demi-carrés, formant un symbole ressemblant à un champignon.',
-      PointAnalysis: 'Une analyse de points permet de réaliser des calculs sur un semis de points, pour obtenir une couche de stock (symboles proportionnels) ou de ratio (choroplèthe).',
+      PointAggregation: 'Une agrégation de points permet d\'agréger un semis de points dans différents types de maillages, pour obtenir une couche de stock (symboles proportionnels) ou de ratio (choroplèthe).',
       SimpleLinearRegression: 'Une régression linéaire simple permet de réaliser une régression linéaire et d\'afficher le résultat sur une couche géographique.',
       Aggregation: 'Cette fonctionnalité permet d\'agréger des entités polygonales selon la valeur d\'un champ (ou toutes les entités si aucun champ n\'est choisi).',
       Selection: 'Cette fonctionnalité permet de créer une nouvelle couche basée sur la sélection des entités géographiques d\'origine en fonction d\'une expression.',

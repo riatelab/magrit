@@ -262,7 +262,7 @@ const en = {
       Grid: 'Grid',
       Links: 'Links',
       Mushrooms: 'Mushrooms',
-      PointAnalysis: 'Point layer analysis',
+      PointAggregation: 'Point layer aggregation',
       SimpleLinearRegression: 'Simple linear regression',
       Aggregation: 'Aggregation',
       Selection: 'Selection',
@@ -436,7 +436,7 @@ const en = {
       NFeaturesSelected: '{{One feature | ?? features}} selected by the given expression.',
       AllDataSelected: 'All features of the layer are selected by the given expression.',
     },
-    PointAnalysisOptions: {
+    PointAggregationOptions: {
       MapType: 'Map type',
       MapTypeRatio: 'Choropleth map (ratio values)',
       MapTypeStock: 'Proportional symbols map (stock values)',
@@ -583,7 +583,7 @@ const en = {
       Cartogram: 'A cartogram is a thematic map in which the geometry of areas is distorted in proportion to the value of a variable.',
       Grid: 'A grid map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable, but with a grid layout.',
       Links: 'A links map is a thematic map in which links are drawn between points or areas, optionally with a width in proportion to the value of a variable.',
-      PointAnalysis: 'Point analysis is a functionality that allows you to display a summary of the values of a variable for a point layer.',
+      PointAggregation: 'Point aggregation is a functionality that allows you to aggregate point data into a grid or a polygonal layer.',
       SimpleLinearRegression: 'Simple linear regression is a functionality that allows you to display the result of a simple linear regression on a layer.',
       Mushrooms: 'A mushrooms map is a thematic map in which the values of two variables are represented by two half-circles or two half-squares, forming a mushroom-shaped symbol.',
       Aggregation: 'This functionality enables polygonal entities to be aggregated according to the value of a field (or all entities if no field is selected).',

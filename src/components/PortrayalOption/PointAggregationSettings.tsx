@@ -38,7 +38,7 @@ import {
 import { generateIdLayer } from '../../helpers/layers';
 import { generateIdLegend } from '../../helpers/legends';
 import { Mmax, Mmin } from '../../helpers/math';
-import { pointAnalysisOnGrid, pointAnalysisOnLayer } from '../../helpers/point-analysis';
+import { pointAggregationOnGrid, pointAggregationOnLayer } from '../../helpers/point-analysis';
 import { getProjectionUnit } from '../../helpers/projection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
@@ -66,9 +66,9 @@ import {
   type LegendTextElement,
   LegendType,
   Orientation,
-  PointAnalysisMeshType,
-  PointAnalysisRatioType,
-  PointAnalysisStockType,
+  PointAggregationMeshType,
+  PointAggregationRatioType,
+  PointAggregationStockType,
   type ProportionalSymbolsLegend,
   ProportionalSymbolsSymbolType,
   RepresentationType,
@@ -77,7 +77,7 @@ import {
 function onClickValidate(
   referenceLayerId: string,
   typeLayerToCreate: 'choropleth' | 'proportionalSymbols',
-  computationType: PointAnalysisStockType | PointAnalysisRatioType,
+  computationType: PointAggregationStockType | PointAggregationRatioType,
   meshParams: GridParameters & { cellType: GridCellShape } | string,
   targetVariable: string,
   newName: string,
@@ -102,7 +102,7 @@ function onClickValidate(
     const maskLayer = layersDescriptionStore.layers
       .find((l) => l.id === maskLayerId)!.data;
 
-    resultLayer = pointAnalysisOnLayer(
+    resultLayer = pointAggregationOnLayer(
       referenceLayerDescription.data,
       maskLayer,
       computationType,
@@ -115,7 +115,7 @@ function onClickValidate(
     }]);
   } else {
   // The user want to analyze the data using a grid
-    resultLayer = pointAnalysisOnGrid(
+    resultLayer = pointAggregationOnGrid(
       referenceLayerDescription.data,
       meshParams,
       computationType,
@@ -135,7 +135,7 @@ function onClickValidate(
   // Id of the layer to create
   const newId = generateIdLayer();
 
-  if (Object.values(PointAnalysisStockType).includes(computationType as never)) {
+  if (Object.values(PointAggregationStockType).includes(computationType as never)) {
     // The user want to create a proportional symbol layer,
     // so we need to:
     // - 0. Convert the current polygon layer to a point layer
@@ -333,7 +333,7 @@ function onClickValidate(
   );
 }
 
-export default function PointAnalysisSettings(props: PortrayalSettingsProps): JSX.Element {
+export default function pointAggregationSettings(props: PortrayalSettingsProps): JSX.Element {
   const { LL } = useI18nContext();
 
   // The description of the layer for which we are creating the settings menu
@@ -370,7 +370,7 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
-    LL().FunctionalitiesSection.PointAnalysisOptions.NewLayerName({
+    LL().FunctionalitiesSection.PointAggregationOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
@@ -383,11 +383,11 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
   const [
     meshType,
     setMeshType,
-  ] = createSignal<PointAnalysisMeshType>(PointAnalysisMeshType.Grid);
+  ] = createSignal<PointAggregationMeshType>(PointAggregationMeshType.Grid);
   const [
     computationType,
     setComputationType,
-  ] = createSignal<PointAnalysisStockType | PointAnalysisRatioType>();
+  ] = createSignal<PointAggregationStockType | PointAggregationRatioType>();
   const [
     targetVariable,
     setTargetVariable,
@@ -452,9 +452,9 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
       () => layerType(),
       () => {
         if (layerType() === RepresentationType.choropleth) {
-          setComputationType(PointAnalysisRatioType.Density);
+          setComputationType(PointAggregationRatioType.Density);
         } else { // layerType() === RepresentationType.proportionalSymbols
-          setComputationType(PointAnalysisStockType.Count);
+          setComputationType(PointAggregationStockType.Count);
         }
       },
     ),
@@ -473,7 +473,7 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
 
   return <div class="portrayal-section__portrayal-options-choropleth">
     <InputFieldSelect
-      label={LL().FunctionalitiesSection.PointAnalysisOptions.MapType()}
+      label={LL().FunctionalitiesSection.PointAggregationOptions.MapType()}
       onChange={(v) => {
         setLayerType(v as RepresentationType.choropleth | RepresentationType.proportionalSymbols);
       }}
@@ -481,38 +481,38 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
       width={300}
     >
       <option value={RepresentationType.choropleth}>
-        {LL().FunctionalitiesSection.PointAnalysisOptions.MapTypeRatio()}
+        {LL().FunctionalitiesSection.PointAggregationOptions.MapTypeRatio()}
       </option>
       <option value={RepresentationType.proportionalSymbols}>
-        {LL().FunctionalitiesSection.PointAnalysisOptions.MapTypeStock()}
+        {LL().FunctionalitiesSection.PointAggregationOptions.MapTypeStock()}
       </option>
     </InputFieldSelect>
     <Show when={layerType() === 'proportionalSymbols'}>
       <InputFieldSelect
-        label={LL().FunctionalitiesSection.PointAnalysisOptions.ComputationType()}
+        label={LL().FunctionalitiesSection.PointAggregationOptions.ComputationType()}
         onChange={(v) => {
-          setComputationType(v as PointAnalysisStockType | PointAnalysisRatioType);
+          setComputationType(v as PointAggregationStockType | PointAggregationRatioType);
         }}
         value={computationType()!}
       >
-        <For each={Object.values(PointAnalysisStockType)}>
+        <For each={Object.values(PointAggregationStockType)}>
           {(v) => <option value={v}>
-            {LL().FunctionalitiesSection.PointAnalysisOptions[`ComputationType${v}`]()}
+            {LL().FunctionalitiesSection.PointAggregationOptions[`ComputationType${v}`]()}
           </option>}
         </For>
       </InputFieldSelect>
     </Show>
     <Show when={layerType() === 'choropleth'}>
       <InputFieldSelect
-        label={LL().FunctionalitiesSection.PointAnalysisOptions.ComputationType()}
+        label={LL().FunctionalitiesSection.PointAggregationOptions.ComputationType()}
         onChange={(v) => {
-          setComputationType(v as PointAnalysisStockType | PointAnalysisRatioType);
+          setComputationType(v as PointAggregationStockType | PointAggregationRatioType);
         }}
         value={computationType()!}
       >
-        <For each={Object.values(PointAnalysisRatioType)}>
+        <For each={Object.values(PointAggregationRatioType)}>
           {(v) => <option value={v}>
-            {LL().FunctionalitiesSection.PointAnalysisOptions[`ComputationType${v}`]()}
+            {LL().FunctionalitiesSection.PointAggregationOptions[`ComputationType${v}`]()}
           </option>}
         </For>
       </InputFieldSelect>
@@ -524,12 +524,12 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
       || computationType() === 'StandardDeviation'
     }>
       <InputFieldSelect
-        label={LL().FunctionalitiesSection.PointAnalysisOptions.VariableToUse()}
+        label={LL().FunctionalitiesSection.PointAggregationOptions.VariableToUse()}
         onChange={(v) => { setTargetVariable(v); }}
         value={targetVariable()}
       >
         <option value="" disabled={true}>
-          {LL().FunctionalitiesSection.PointAnalysisOptions.VariableToUse()}
+          {LL().FunctionalitiesSection.PointAggregationOptions.VariableToUse()}
         </option>
         <For each={targetFields}>
           {(variable) => <option value={variable.name}>{variable.name}</option>}
@@ -537,20 +537,20 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
       </InputFieldSelect>
     </Show>
     <InputFieldSelect
-      label={LL().FunctionalitiesSection.PointAnalysisOptions.MeshType()}
-      onChange={(v) => { setMeshType(v as PointAnalysisMeshType); }}
+      label={LL().FunctionalitiesSection.PointAggregationOptions.MeshType()}
+      onChange={(v) => { setMeshType(v as PointAggregationMeshType); }}
       value={meshType()}
     >
-      <option value={PointAnalysisMeshType.Grid}>
-        {LL().FunctionalitiesSection.PointAnalysisOptions.MeshTypeGrid()}
+      <option value={PointAggregationMeshType.Grid}>
+        {LL().FunctionalitiesSection.PointAggregationOptions.MeshTypeGrid()}
       </option>
-      <option value={PointAnalysisMeshType.PolygonLayer} disabled={polygonLayers.length === 0}>
-        {LL().FunctionalitiesSection.PointAnalysisOptions.MeshTypePolygonLayer()}
+      <option value={PointAggregationMeshType.PolygonLayer} disabled={polygonLayers.length === 0}>
+        {LL().FunctionalitiesSection.PointAggregationOptions.MeshTypePolygonLayer()}
       </option>
     </InputFieldSelect>
-    <Show when={meshType() === PointAnalysisMeshType.PolygonLayer}>
+    <Show when={meshType() === PointAggregationMeshType.PolygonLayer}>
       <InputFieldSelect
-        label={LL().FunctionalitiesSection.PointAnalysisOptions.LayerToUse()}
+        label={LL().FunctionalitiesSection.PointAggregationOptions.LayerToUse()}
         onChange={(v) => { setMeshLayerToUse(v); }}
         value={meshLayerToUse()}
       >
@@ -559,7 +559,7 @@ export default function PointAnalysisSettings(props: PortrayalSettingsProps): JS
         </For>
       </InputFieldSelect>
     </Show>
-    <Show when={meshType() === PointAnalysisMeshType.Grid}>
+    <Show when={meshType() === PointAggregationMeshType.Grid}>
       <InputFieldSelect
         label={LL().FunctionalitiesSection.GridOptions.CellShape()}
         onChange={(v) => { setCellType(v as GridCellShape); }}

@@ -31,7 +31,7 @@ import AggregationSettings from '../PortrayalOption/AggregationSettings.tsx';
 import SelectionSettings from '../PortrayalOption/SelectionSettings.tsx';
 import MessageBlock from '../MessageBlock.tsx';
 import SimplificationSettings from '../PortrayalOption/SimplificationSettings.tsx';
-import PointAnalysisSettings from '../PortrayalOption/PointAnalysisSettings.tsx';
+import PointAggregationSettings from '../PortrayalOption/PointAggregationSettings.tsx';
 
 // Type / interfaces / enums
 import {
@@ -91,8 +91,8 @@ const functionalityDescriptions: FunctionalityDescription[] = [
     type: RepresentationType.mushrooms,
   },
   {
-    name: 'PointAnalysis',
-    type: AnalysisOperationType.pointAnalysis,
+    name: 'PointAggregation',
+    type: AnalysisOperationType.pointAggregation,
   },
   {
     name: 'SimpleLinearRegression',
@@ -257,7 +257,7 @@ export default function FunctionalitySelection(): JSX.Element {
         // eslint-disable-next-line no-param-reassign
         p.enabled = geomType === 'polygon' || geomType === 'linestring';
         break;
-      case AnalysisOperationType.pointAnalysis:
+      case AnalysisOperationType.pointAggregation:
         // eslint-disable-next-line no-param-reassign
         p.enabled = geomType === 'point';
         break;
@@ -389,8 +389,8 @@ export default function FunctionalitySelection(): JSX.Element {
             <Match when={selectedFunctionality()!.type === ProcessingOperationType.simplification}>
               <SimplificationSettings layerId={functionalitySelectionStore.id!} />
             </Match>
-            <Match when={selectedFunctionality()!.type === AnalysisOperationType.pointAnalysis}>
-              <PointAnalysisSettings layerId={functionalitySelectionStore.id!} />
+            <Match when={selectedFunctionality()!.type === AnalysisOperationType.pointAggregation}>
+              <PointAggregationSettings layerId={functionalitySelectionStore.id!} />
             </Match>
           </Switch>
         </Show>

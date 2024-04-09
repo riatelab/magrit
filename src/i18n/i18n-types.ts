@@ -945,9 +945,9 @@ type RootTranslation = {
 			 */
 			Mushrooms: string
 			/**
-			 * P​o​i​n​t​ ​l​a​y​e​r​ ​a​n​a​l​y​s​i​s
+			 * P​o​i​n​t​ ​l​a​y​e​r​ ​a​g​g​r​e​g​a​t​i​o​n
 			 */
-			PointAnalysis: string
+			PointAggregation: string
 			/**
 			 * S​i​m​p​l​e​ ​l​i​n​e​a​r​ ​r​e​g​r​e​s​s​i​o​n
 			 */
@@ -1556,7 +1556,7 @@ type RootTranslation = {
 			 */
 			AllDataSelected: string
 		}
-		PointAnalysisOptions: {
+		PointAggregationOptions: {
 			/**
 			 * M​a​p​ ​t​y​p​e
 			 */
@@ -2095,9 +2095,9 @@ type RootTranslation = {
 			 */
 			Links: string
 			/**
-			 * P​o​i​n​t​ ​a​n​a​l​y​s​i​s​ ​i​s​ ​a​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​t​h​a​t​ ​a​l​l​o​w​s​ ​y​o​u​ ​t​o​ ​d​i​s​p​l​a​y​ ​a​ ​s​u​m​m​a​r​y​ ​o​f​ ​t​h​e​ ​v​a​l​u​e​s​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​ ​f​o​r​ ​a​ ​p​o​i​n​t​ ​l​a​y​e​r​.
+			 * P​o​i​n​t​ ​a​g​g​r​e​g​a​t​i​o​n​ ​i​s​ ​a​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​t​h​a​t​ ​a​l​l​o​w​s​ ​y​o​u​ ​t​o​ ​a​g​g​r​e​g​a​t​e​ ​p​o​i​n​t​ ​d​a​t​a​ ​i​n​t​o​ ​a​ ​g​r​i​d​ ​o​r​ ​a​ ​p​o​l​y​g​o​n​a​l​ ​l​a​y​e​r​.
 			 */
-			PointAnalysis: string
+			PointAggregation: string
 			/**
 			 * S​i​m​p​l​e​ ​l​i​n​e​a​r​ ​r​e​g​r​e​s​s​i​o​n​ ​i​s​ ​a​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​t​h​a​t​ ​a​l​l​o​w​s​ ​y​o​u​ ​t​o​ ​d​i​s​p​l​a​y​ ​t​h​e​ ​r​e​s​u​l​t​ ​o​f​ ​a​ ​s​i​m​p​l​e​ ​l​i​n​e​a​r​ ​r​e​g​r​e​s​s​i​o​n​ ​o​n​ ​a​ ​l​a​y​e​r​.
 			 */
@@ -3766,9 +3766,9 @@ export type TranslationFunctions = {
 			 */
 			Mushrooms: () => LocalizedString
 			/**
-			 * Point layer analysis
+			 * Point layer aggregation
 			 */
-			PointAnalysis: () => LocalizedString
+			PointAggregation: () => LocalizedString
 			/**
 			 * Simple linear regression
 			 */
@@ -4362,7 +4362,7 @@ export type TranslationFunctions = {
 			 */
 			AllDataSelected: () => LocalizedString
 		}
-		PointAnalysisOptions: {
+		PointAggregationOptions: {
 			/**
 			 * Map type
 			 */
@@ -4900,9 +4900,9 @@ export type TranslationFunctions = {
 			 */
 			Links: () => LocalizedString
 			/**
-			 * Point analysis is a functionality that allows you to display a summary of the values of a variable for a point layer.
+			 * Point aggregation is a functionality that allows you to aggregate point data into a grid or a polygonal layer.
 			 */
-			PointAnalysis: () => LocalizedString
+			PointAggregation: () => LocalizedString
 			/**
 			 * Simple linear regression is a functionality that allows you to display the result of a simple linear regression on a layer.
 			 */

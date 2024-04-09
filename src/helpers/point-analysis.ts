@@ -27,8 +27,8 @@ import {
   GeoJSONFeatureCollection,
   GridCellShape,
   GridParameters,
-  PointAnalysisRatioType,
-  PointAnalysisStockType,
+  PointAggregationRatioType,
+  PointAggregationStockType,
 } from '../global.d';
 
 type CustomPoint = { x: number, y: number, ix: number };
@@ -48,7 +48,7 @@ class RbushPoint extends RBush<CustomPoint> {
   compareMinY(a: CustomPoint, b: CustomPoint) { return a.y - b.y; }
 }
 
-const pointAnalysisCount = (
+const pointAggregationCount = (
   pointLayer: GeoJSONFeatureCollection,
   maskLayer: GeoJSONFeatureCollection,
 ): GeoJSONFeatureCollection => {
@@ -91,7 +91,7 @@ const pointAnalysisCount = (
   } as GeoJSONFeatureCollection;
 };
 
-const pointAnalysisWeightedCount = (
+const pointAggregationWeightedCount = (
   pointLayer: GeoJSONFeatureCollection,
   maskLayer: GeoJSONFeatureCollection,
   variable: string,
@@ -140,7 +140,7 @@ const pointAnalysisWeightedCount = (
   } as GeoJSONFeatureCollection;
 };
 
-const pointAnalysisMean = (
+const pointAggregationMean = (
   pointLayer: GeoJSONFeatureCollection,
   maskLayer: GeoJSONFeatureCollection,
   variable: string,
@@ -191,7 +191,7 @@ const pointAnalysisMean = (
   } as GeoJSONFeatureCollection;
 };
 
-const pointAnalysisStandardDeviation = (
+const pointAggregationStandardDeviation = (
   pointLayer: GeoJSONFeatureCollection,
   maskLayer: GeoJSONFeatureCollection,
   variable: string,
@@ -246,9 +246,9 @@ const pointAnalysisStandardDeviation = (
 
 const applyDensity = (
   layer: GeoJSONFeatureCollection,
-  analysisType: PointAnalysisRatioType,
+  analysisType: PointAggregationRatioType,
 ): GeoJSONFeatureCollection => {
-  const varNameCount = analysisType === PointAnalysisRatioType.Density
+  const varNameCount = analysisType === PointAggregationRatioType.Density
     ? 'Count'
     : 'WeightedCount';
   layer.features.forEach((ft) => {
@@ -261,37 +261,37 @@ const applyDensity = (
   return layer;
 };
 
-export const pointAnalysisOnLayer = (
+export const pointAggregationOnLayer = (
   pointLayer: GeoJSONFeatureCollection,
   maskLayer: GeoJSONFeatureCollection,
-  analysisType: PointAnalysisRatioType | PointAnalysisStockType,
+  analysisType: PointAggregationRatioType | PointAggregationStockType,
   targetVariable: string,
 ): GeoJSONFeatureCollection => {
   let resultLayer;
 
-  if (analysisType === PointAnalysisStockType.Count) {
-    resultLayer = pointAnalysisCount(pointLayer, maskLayer);
-  } else if (analysisType === PointAnalysisStockType.WeightedCount) {
-    resultLayer = pointAnalysisWeightedCount(pointLayer, maskLayer, targetVariable);
-  } else if (analysisType === PointAnalysisRatioType.Density) {
+  if (analysisType === PointAggregationStockType.Count) {
+    resultLayer = pointAggregationCount(pointLayer, maskLayer);
+  } else if (analysisType === PointAggregationStockType.WeightedCount) {
+    resultLayer = pointAggregationWeightedCount(pointLayer, maskLayer, targetVariable);
+  } else if (analysisType === PointAggregationRatioType.Density) {
     // We treat density as a count for now
     // and will compute the count/area later
-    resultLayer = pointAnalysisCount(pointLayer, maskLayer);
-  } else if (analysisType === PointAnalysisRatioType.WeightedDensity) {
+    resultLayer = pointAggregationCount(pointLayer, maskLayer);
+  } else if (analysisType === PointAggregationRatioType.WeightedDensity) {
     // We treat weighted density as a weighted count for now
     // and will compute the count/area later
-    resultLayer = pointAnalysisWeightedCount(pointLayer, maskLayer, targetVariable);
-  } else if (analysisType === PointAnalysisRatioType.Mean) {
-    resultLayer = pointAnalysisMean(pointLayer, maskLayer, targetVariable);
-  } else if (analysisType === PointAnalysisRatioType.StandardDeviation) {
-    resultLayer = pointAnalysisStandardDeviation(pointLayer, maskLayer, targetVariable);
+    resultLayer = pointAggregationWeightedCount(pointLayer, maskLayer, targetVariable);
+  } else if (analysisType === PointAggregationRatioType.Mean) {
+    resultLayer = pointAggregationMean(pointLayer, maskLayer, targetVariable);
+  } else if (analysisType === PointAggregationRatioType.StandardDeviation) {
+    resultLayer = pointAggregationStandardDeviation(pointLayer, maskLayer, targetVariable);
   } else {
     throw new Error('Unreachable code');
   }
 
   if (
-    analysisType === PointAnalysisRatioType.Density
-    || analysisType === PointAnalysisRatioType.WeightedDensity
+    analysisType === PointAggregationRatioType.Density
+    || analysisType === PointAggregationRatioType.WeightedDensity
   ) {
     resultLayer = applyDensity(resultLayer, analysisType);
   }
@@ -299,10 +299,10 @@ export const pointAnalysisOnLayer = (
   return resultLayer;
 };
 
-export const pointAnalysisOnGrid = (
+export const pointAggregationOnGrid = (
   pointLayer: GeoJSONFeatureCollection,
   gridParameters: GridParameters & { cellType: GridCellShape },
-  analysisType: PointAnalysisRatioType | PointAnalysisStockType,
+  analysisType: PointAggregationRatioType | PointAggregationStockType,
   targetVariable: string,
 ): GeoJSONFeatureCollection => {
   let reprojFunc;
@@ -338,27 +338,27 @@ export const pointAnalysisOnGrid = (
   const gridLayer = gridFunctions[gridParameters.cellType](extent, resolution);
 
   let resultLayer;
-  if (analysisType === PointAnalysisStockType.Count) {
-    resultLayer = pointAnalysisCount(pointLayer, gridLayer);
+  if (analysisType === PointAggregationStockType.Count) {
+    resultLayer = pointAggregationCount(pointLayer, gridLayer);
   }
-  if (analysisType === PointAnalysisStockType.WeightedCount) {
-    resultLayer = pointAnalysisWeightedCount(pointLayer, gridLayer, targetVariable);
+  if (analysisType === PointAggregationStockType.WeightedCount) {
+    resultLayer = pointAggregationWeightedCount(pointLayer, gridLayer, targetVariable);
   }
-  if (analysisType === PointAnalysisRatioType.Density) {
+  if (analysisType === PointAggregationRatioType.Density) {
     // We treat density as a count for now
     // and will compute the count/area later
-    resultLayer = pointAnalysisCount(pointLayer, gridLayer);
+    resultLayer = pointAggregationCount(pointLayer, gridLayer);
   }
-  if (analysisType === PointAnalysisRatioType.WeightedDensity) {
+  if (analysisType === PointAggregationRatioType.WeightedDensity) {
     // We treat weighted density as a weighted count for now
     // and will compute the count/area later
-    resultLayer = pointAnalysisWeightedCount(pointLayer, gridLayer, targetVariable);
+    resultLayer = pointAggregationWeightedCount(pointLayer, gridLayer, targetVariable);
   }
-  if (analysisType === PointAnalysisRatioType.Mean) {
-    resultLayer = pointAnalysisMean(pointLayer, gridLayer, targetVariable);
+  if (analysisType === PointAggregationRatioType.Mean) {
+    resultLayer = pointAggregationMean(pointLayer, gridLayer, targetVariable);
   }
-  if (analysisType === PointAnalysisRatioType.StandardDeviation) {
-    resultLayer = pointAnalysisStandardDeviation(pointLayer, gridLayer, targetVariable);
+  if (analysisType === PointAggregationRatioType.StandardDeviation) {
+    resultLayer = pointAggregationStandardDeviation(pointLayer, gridLayer, targetVariable);
   }
 
   let resultGeoLayer = isGeo
@@ -366,8 +366,8 @@ export const pointAnalysisOnGrid = (
     : rewindLayer(reprojFunc(proj, resultLayer, true));
 
   if (
-    analysisType === PointAnalysisRatioType.Density
-    || analysisType === PointAnalysisRatioType.WeightedDensity
+    analysisType === PointAggregationRatioType.Density
+    || analysisType === PointAggregationRatioType.WeightedDensity
   ) {
     resultGeoLayer = applyDensity(resultGeoLayer, analysisType);
   }
