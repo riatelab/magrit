@@ -59,6 +59,7 @@ export default function CollapsibleMessageBanner(
         'border-start-start-radius': '0',
         'border-start-end-radius': '0',
       }}
+      onClick={() => setShowContent(!showContent())}
     >
       <div class="is-flex is-align-items-center is-gap-1">
         <Show when={props.useIcon}>
@@ -78,9 +79,12 @@ export default function CollapsibleMessageBanner(
         <p>{ props.title }</p>
       </div>
       <button
-        onClick={() => setShowContent(!showContent())}
         title={LL().Messages.ChevronTitle()}
         aria-label={LL().Messages.ChevronTitle()}
+        onClick={(ev) => {
+          ev.stopPropagation();
+          setShowContent(!showContent());
+        }}
       >
         <Switch>
           <Match when={showContent()}>
