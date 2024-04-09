@@ -195,8 +195,8 @@ export default function FormulaInput(
         <For each={props.dsDescription.fields.map((d) => d.name)}>
           {
             (field) => (
-              <span
-                class="tag is-warning is-clickable"
+              <button
+                class="tag is-warning"
                 title={
                   /[àâäéèêëîïôöùûüç -]/i.test(field)
                     ? `${field} - ${LL().FormulaInput.noteSpecialCharacters()}`
@@ -219,15 +219,15 @@ export default function FormulaInput(
                   // Focus on the input field to help the UX
                   refInputFormula.focus();
                 }}
-              >{field}</span>
+              >{field}</button>
             )
           }
         </For>
         <For each={specialFields[props.typeDataset]}>
           {
             (specialField) => (
-              <span
-                class="tag is-success is-clickable"
+              <button
+                class="tag is-success"
                 title={
                   LL().FormulaInput[
                     specialField.replace('$', 'specialField') as 'specialFieldId' | 'specialFieldLength' | 'specialFieldArea'
@@ -244,7 +244,7 @@ export default function FormulaInput(
                   // Focus on the input field to help the UX
                   refInputFormula.focus();
                 }}
-              >{specialField}</span>
+              >{specialField}</button>
             )
           }
         </For>
@@ -253,8 +253,8 @@ export default function FormulaInput(
         <For each={['POWER()', 'SUBSTRING()', 'CONCAT()']}>
           {
             (func) => (
-              <span
-                class="tag is-info is-clickable"
+              <button
+                class="tag is-info"
                 title={LL().FormulaInput[func as 'POWER()' | 'SUBSTRING()' | 'CONCAT()']()}
                 onClick={() => {
                   // Insert the field in the formula
@@ -267,15 +267,15 @@ export default function FormulaInput(
                   // Focus on the input field to help the UX
                   refInputFormula.focus();
                 }}
-              >{func}</span>
+              >{func}</button>
             )
           }
         </For>
         <For each={['*', '+', '-', '/']}>
           {
             (op) => (
-              <span
-                class="tag is-link is-clickable"
+              <button
+                class="tag is-link"
                 title={LL().FormulaInput[op as '*' | '+' | '-' | '/']()}
                 onClick={() => {
                   // Insert the field in the formula
@@ -288,7 +288,7 @@ export default function FormulaInput(
                   // Focus on the input field to help the UX
                   refInputFormula.focus();
                 }}
-              >{op}</span>
+              >{op}</button>
             )
           }
         </For>

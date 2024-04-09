@@ -503,7 +503,10 @@ export default function TableWindow(): JSX.Element {
     const isEscape = event.key
       ? (event.key === 'Escape' || event.key === 'Esc')
       : (event.keyCode === 27);
-    if (isEscape) {
+    if (!isEscape) return;
+    if (currentPanel() === 'newColumn') {
+      setCurrentPanel('table');
+    } else {
       (refParentNode.querySelector('.cancel-button') as HTMLElement).click();
     }
   };
@@ -623,16 +626,18 @@ export default function TableWindow(): JSX.Element {
             </button>
           </Show>
         </div>
-        <div>
-          <button
-            class="button is-success"
-            onClick={ () => { confirmCallback(); } }
-          >{ LL().SuccessButton() }</button>
-          <button
-            class="button cancel-button"
-            onClick={ () => { closeModal(); } }
-          >{ LL().CancelButton() }</button>
-        </div>
+        <Show when={ currentPanel() === 'table' }>
+          <div>
+            <button
+              class="button is-success"
+              onClick={ () => { confirmCallback(); } }
+            >{ LL().SuccessButton() }</button>
+            <button
+              class="button cancel-button"
+              onClick={ () => { closeModal(); } }
+            >{ LL().CancelButton() }</button>
+          </div>
+        </Show>
       </footer>
     </div>
   </div>;
