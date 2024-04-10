@@ -333,7 +333,7 @@ function onClickValidate(
   );
 }
 
-export default function pointAggregationSettings(props: PortrayalSettingsProps): JSX.Element {
+export default function PointAggregationSettings(props: PortrayalSettingsProps): JSX.Element {
   const { LL } = useI18nContext();
 
   // The description of the layer for which we are creating the settings menu
