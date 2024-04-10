@@ -122,7 +122,7 @@ export default function MapConfiguration(): JSX.Element {
       type: 'group',
     },
     {
-      name: 'ETRS 89 / LAEA Europe (EPSG:3035)',
+      name: 'ETRS89-extended / LAEA Europe (EPSG:3035)',
       value: '3035',
       type: 'proj4',
     },
@@ -131,6 +131,24 @@ export default function MapConfiguration(): JSX.Element {
       value: '2154',
       type: 'proj4',
     },
+    // TODO: handle Grid Based Datum Adjustments
+    //       (we need to download the grid files when the user selects
+    //       a projection that requires it)
+    // {
+    //   name: 'OSGB36 / British National Grid - United Kingdom Ordnance Survey (EPSG:27700)',
+    //   value: '27700',
+    //   type: 'proj4',
+    // },
+    // {
+    //   name: 'NAD27(CGQ77) / Quebec Lambert (EPSG:2138)',
+    //   value: '2138',
+    //   type: 'proj4',
+    // },
+    // {
+    //   name: 'NAD83 / Conus Albers (EPSG:5070)',
+    //   value: '5070',
+    //   type: 'proj4',
+    // },
     {
       type: 'divider',
     },
