@@ -2,6 +2,27 @@ import {
   app, dialog, BrowserWindow, MessageBoxSyncOptions, shell,
 } from 'electron';
 
+const translations = {
+  fr: {
+    'Close the application?': 'Fermer l\'application ?',
+    'All unsaved changes will be lost.': 'Toutes les modifications non enregistrées seront perdues.',
+    Warning: 'Attention',
+    Cancel: 'Annuler',
+    Exit: 'Quitter',
+    'Magrit documentation': 'Documentation de Magrit',
+  },
+};
+
+const localize = (
+  message: string,
+  locale: string,
+) => {
+  if (translations[locale] && translations[locale][message]) {
+    return translations[locale][message];
+  }
+  return message;
+};
+
 function createWindow() {
   const win = new BrowserWindow({
     show: false,
@@ -10,10 +31,12 @@ function createWindow() {
     icon: 'dist/assets/favicon.ico',
   });
 
+  const currentLocale = app.getLocale();
+
   win.maximize();
   win.show();
 
-  // Open links in the browser, not inside the application
+  // Open external links in the browser, not inside the application
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('https:')) shell.openExternal(url);
     if (url === 'file:///docs/') {
@@ -21,7 +44,7 @@ function createWindow() {
       const docWin = new BrowserWindow({
         show: false,
         autoHideMenuBar: true,
-        title: 'Magrit Documentation',
+        title: localize('Magrit Documentation', currentLocale),
         icon: 'dist/assets/favicon.ico',
       });
       docWin.maximize();
@@ -31,15 +54,24 @@ function createWindow() {
     return { action: 'deny' };
   });
 
-  win.webContents.on('will-prevent-unload', (event) => {
-    const options = {
-      type: 'question',
-      buttons: ['Cancel', 'Leave'],
-      message: 'Leave Site?',
-      detail: 'Changes that you made may not be saved.',
-    } as MessageBoxSyncOptions;
-    const response = dialog.showMessageBoxSync(null, options);
-    if (response === 1) event.preventDefault();
+  win.on('close', (event) => {
+    event.preventDefault();
+    dialog.showMessageBox({
+      title: localize('Warning', currentLocale),
+      message: localize('Close the application?', currentLocale),
+      detail: localize('All unsaved changes will be lost.', currentLocale),
+      type: 'warning',
+      buttons: [
+        localize('Cancel', currentLocale),
+        localize('Exit', currentLocale),
+      ],
+      cancelId: 1,
+      defaultId: 0,
+    }).then(({ response }) => {
+      if (response) {
+        win.destroy();
+      }
+    });
   });
 
   if (process.env.VITE_DEV_SERVER_URL) {

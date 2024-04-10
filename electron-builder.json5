@@ -35,6 +35,7 @@
   "linux": {
     "target": ["AppImage"],
     "artifactName": "${productName}-Linux-${version}.${ext}",
-    "category": "Education"
+    "category": "Education",
+    "icon": "dist/assets/magrit-logo-only-CTN102zB.png"
   }
 }
