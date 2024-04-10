@@ -735,6 +735,11 @@ export default function ClassificationPanel(): JSX.Element {
                       setCentralClass(value);
                       updateClassificationParameters();
                     }}
+                    formater={
+                      hasNeutralCentralClass()
+                        ? (v) => `${v + 1}`
+                        : (v) => `${v}`
+                    }
                   />
                 </Show>
               </div>

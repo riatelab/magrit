@@ -101,9 +101,18 @@ export function makeClassificationPlot(
     });
   }
 
+  const maxY = max(breaksData.map((d) => d.y));
+  const adjustHeight = (currentVal: number) => {
+    if (currentVal * (170 / maxY) < 1.5) {
+      return 1.5;
+    }
+    return currentVal * (170 / maxY);
+  };
+
   return Plot.plot({
     height: 200,
     marginBottom: 20,
+    marginTop: 10,
     x: {
       domain: minmax,
       tickFormat: (d) => d.toLocaleString(),
@@ -117,7 +126,7 @@ export function makeClassificationPlot(
       Plot.rectY(breaksData, {
         x1: (d) => d.x1,
         x2: (d) => d.x2,
-        y: (d) => d.y,
+        y: (d) => adjustHeight(d.y), //  +  maxY / 170,
         fill: (d) => d.color,
         channels: {
           [LL().ClassificationPanel.count()]: (d) => d.count,
