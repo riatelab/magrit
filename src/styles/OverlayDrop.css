@@ -12,36 +12,3 @@
 .overlay-drop.visible {
   display: block;
 }
-
-.overlay-drop__content {
-  margin: 10vh 10vw;
-  width: 80vw;
-  height: 80vh;
-  border: dashed 4px #fff;
-  border-radius: 10px;
-}
-
-.overlay-drop__content__title {
-  font-size: 2rem;
-  color: #fff;
-  text-align: center;
-  margin-top: 30px;
-  /*position: relative;*/
-  /*top: 40vh;*/
-}
-
-.overlay-drop__content ul {
-  list-style: none;
-  font-size: 1.5rem;
-}
-
-.overlay-drop__content li.authorized {
-  color: var(--success-color);
-  margin: 1rem 0;
-}
-
-
-.overlay-drop__content li {
-  color: var(--danger-color);
-  margin: 1rem 0;
-}
