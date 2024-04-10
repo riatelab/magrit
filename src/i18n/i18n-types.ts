@@ -239,9 +239,13 @@ type RootTranslation = {
 		 */
 		Title: string
 		/**
-		 * D​r​a​g​ ​a​n​d​ ​d​r​o​p​ ​o​n​e​ ​o​r​ ​m​o​r​e​ ​d​a​t​a​s​e​t​s​ ​h​e​r​e​ ​(​g​e​o​g​r​a​p​h​i​c​a​l​ ​o​r​ ​t​a​b​u​l​a​r​)​ ​o​r​ ​c​l​i​c​k​ ​h​e​r​e​ ​t​o​ ​s​e​l​e​c​t​ ​a​ ​f​i​l​e​.
+		 * D​r​a​g​ ​a​n​d​ ​d​r​o​p​ ​o​n​e​ ​o​r​ ​m​o​r​e​ ​d​a​t​a​s​e​t​s​ ​h​e​r​e​ ​(​g​e​o​g​r​a​p​h​i​c​a​l​ ​o​r​ ​t​a​b​u​l​a​r​)​ ​o​r​ ​c​l​i​c​k​ ​o​n​ ​t​h​e​ ​b​u​t​t​o​n​ ​b​e​l​o​w​ ​t​o​ ​s​e​l​e​c​t​ ​a​ ​f​i​l​e​.
 		 */
 		Instructions: string
+		/**
+		 * O​p​e​n​.​.​.
+		 */
+		Open: string
 		/**
 		 * S​u​p​p​o​r​t​e​d​ ​v​e​c​t​o​r​ ​f​o​r​m​a​t​s​ ​a​r​e​:​ ​E​S​R​I​ ​S​h​a​p​e​f​i​l​e​ ​(​.​s​h​p​,​ ​.​s​h​x​,​ ​.​d​b​f​,​ ​.​p​r​j​,​ ​.​c​p​g​)​,​ ​G​e​o​P​a​c​k​a​g​e​ ​(​.​g​p​k​g​)​,​ ​G​e​o​J​S​O​N​ ​(​.​g​e​o​j​s​o​n​ ​o​r​ ​.​j​s​o​n​)​,​ ​T​o​p​o​J​S​O​N​ ​(​.​t​o​p​o​j​s​o​n​ ​o​r​ ​.​j​s​o​n​)​,​ ​G​M​L​ ​(​.​g​m​l​)​ ​a​n​d​ ​K​M​L​ ​(​.​k​m​l​)​.
 		 */
@@ -3070,9 +3074,13 @@ export type TranslationFunctions = {
 		 */
 		Title: () => LocalizedString
 		/**
-		 * Drag and drop one or more datasets here (geographical or tabular) or click here to select a file.
+		 * Drag and drop one or more datasets here (geographical or tabular) or click on the button below to select a file.
 		 */
 		Instructions: () => LocalizedString
+		/**
+		 * Open...
+		 */
+		Open: () => LocalizedString
 		/**
 		 * Supported vector formats are: ESRI Shapefile (.shp, .shx, .dbf, .prj, .cpg), GeoPackage (.gpkg), GeoJSON (.geojson or .json), TopoJSON (.topojson or .json), GML (.gml) and KML (.kml).
 		 */

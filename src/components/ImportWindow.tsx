@@ -14,6 +14,7 @@ import { createMutable, produce } from 'solid-js/store';
 import { FaSolidTrashCan } from 'solid-icons/fa';
 import { VsTriangleDown, VsTriangleRight } from 'solid-icons/vs';
 import toast from 'solid-toast';
+import { v4 as uuidv4 } from 'uuid';
 
 // Helpers
 import d3 from '../helpers/d3-custom';
@@ -23,7 +24,7 @@ import {
   CustomFileList,
   FileEntry,
   isAuthorizedFile,
-  prepareFileExtensions,
+  prepareFileExtensions, prepareFilterAndStoreFiles,
 } from '../helpers/fileUpload';
 import {
   allowedFileExtensions,
@@ -48,6 +49,7 @@ import { openLayerManager } from './LeftMenu/LeftMenu.tsx';
 
 // Styles
 import '../styles/ImportWindow.css';
+import MessageBlock from './MessageBlock.tsx';
 
 interface LayerOrTableDescription {
   name: string,
@@ -488,26 +490,17 @@ export default function ImportWindow(): JSX.Element {
     input.setAttribute('accept', aft);
     input.setAttribute('multiple', '');
     input.onchange = async (event) => {
-      // TODO: the following code could be put in a function
-      //       as there is some code duplication with the drop handler in AppPage.tsx
-      const theFiles = prepareFileExtensions((event.target as HTMLInputElement).files!);
-      const filteredFiles = [];
+      // Store the supported files in the fileDropStore
+      // and display a toast message for the unsupported files
+      const unsupportedFiles = prepareFilterAndStoreFiles(
+        (event.target as HTMLInputElement).files!,
+        fileDropStore,
+        setFileDropStore,
+      );
 
-      if (theFiles) {
-        for (let i = 0; i < theFiles.length; i += 1) {
-          if (isAuthorizedFile(theFiles[i])) {
-            filteredFiles.push(theFiles[i]);
-          } else {
-            toast.error(LL().ImportWindow.UnsupportedFileFormat({
-              file: `${theFiles[i].name}.${theFiles[i].ext}`,
-            }));
-          }
-        }
-        // Add the dropped files to the existing file list
-        setFileDropStore(
-          { files: fileDropStore.files.concat(filteredFiles) },
-        );
-      }
+      unsupportedFiles.forEach((file) => {
+        toast.error(LL().ImportWindow.UnsupportedFileFormat({ file }));
+      });
     };
     input.click();
   }
@@ -518,7 +511,8 @@ export default function ImportWindow(): JSX.Element {
     droppedFiles,
     async () => {
       const groupedFiles = groupFiles(droppedFiles());
-      return createMutable((await Promise.all(
+      const invalidToBeRemoved: string[] = [];
+      const resultValue = createMutable((await Promise.all(
         Object.keys(groupedFiles)
           .map(async (fileName) => {
             // Use existing description if available
@@ -531,12 +525,14 @@ export default function ImportWindow(): JSX.Element {
 
             const dsInfo = await analyzeDataset({ [fileName]: groupedFiles[fileName] });
             if ('valid' in dsInfo && !dsInfo.valid) {
-              // We have an invalid dataset that we don't wan't to add to the list
+              // We have an invalid dataset that we don't wan't to add to the list.
+              // We display a toast message to inform the user and we remove the file
+              // from the fileDropStore (see below).
               toast.error(LL().ImportWindow.ErrorReadingFile({
                 file: fileName,
                 message: (dsInfo as InvalidDataset).reason,
               }));
-              // TODO: we should also remove it from the fileDropStore
+              invalidToBeRemoved.push(fileName);
               return null;
             }
             return {
@@ -545,6 +541,16 @@ export default function ImportWindow(): JSX.Element {
             } as DatasetDescription;
           }),
       )).filter((f) => f !== null));
+
+      // Remove invalid entries from the fileDropStore
+      if (invalidToBeRemoved.length > 0) {
+        setFileDropStore(
+          'files',
+          fileDropStore.files.filter((f) => !invalidToBeRemoved.includes(f.name)),
+        );
+      }
+
+      return resultValue;
     },
   );
 
@@ -603,20 +609,26 @@ export default function ImportWindow(): JSX.Element {
     <div class="modal-background"></div>
     <div
       class="modal-card"
-      style={{ width: '80vw', height: '80vh' }}
+      style={{ width: 'min(1400px, 95vw)', height: '80vh' }}
     >
       <section class="modal-card-body">
         <h2>{ LL().ImportWindow.Title() }</h2>
-        <p
-          class="is-clickable is-medium"
-          style={{ 'text-decoration': 'underline' }}
-          onClick={handleInputFiles} // eslint-disable-line no-empty-function
-        >
-          { LL().ImportWindow.Instructions() }
-        </p>
+        <MessageBlock type={'primary'}>
+          <p>{ LL().ImportWindow.Instructions() }</p>
+          <p>{LL().ImportWindow.SupportedVectorFormats()}</p>
+          <p>{LL().ImportWindow.SupportedTabularFormats()}</p>
+        </MessageBlock>
+        <div class="has-text-centered mb-4">
+          <button
+            class="button is-primary is-outlined"
+            onClick={handleInputFiles}
+          >
+            {LL().ImportWindow.Open()}
+          </button>
+        </div>
         <table class="table file-import-table">
           <thead>
-            <Show when={hidden().length > 0}>
+          <Show when={hidden().length > 0}>
               <tr>
                 <th></th>
                 <th>{ LL().ImportWindow.LayerName() }</th>
@@ -658,7 +670,7 @@ export default function ImportWindow(): JSX.Element {
                         <VsTriangleDown class="is-clickable" onClick={handleHidden(fileDescription.info.name)}/>
                       </Show>
                     </td>
-                    <td>
+                    <td onClick={handleHidden(fileDescription.info.name)}>
                       {fileDescription.info.name}
                       .{formatFileExtension(fileDescription.files.map((f: FileEntry) => f.ext))}
                       <Show when={!fileDescription.info.complete}>
@@ -698,6 +710,7 @@ export default function ImportWindow(): JSX.Element {
                     <For each={fileDescription.info.layers}>
                       {
                         (layer) => {
+                          const randomId = uuidv4();
                           if (fileDescription.info.type === 'geo') {
                             return <tr class="entry-detail">
                               <td>
@@ -709,8 +722,9 @@ export default function ImportWindow(): JSX.Element {
                                     // eslint-disable-next-line no-param-reassign
                                     layer.addToProject = !layer.addToProject;
                                   }}
+                                  id={randomId}
                                 /></td>
-                              <td>↳ {layer.name}</td>
+                              <td><label for={randomId}>↳ {layer.name}</label></td>
                               <td>{layer.features} features</td>
                               <td>{layer.geometryType || 'None'}</td>
                               <td
@@ -803,15 +817,6 @@ export default function ImportWindow(): JSX.Element {
           </tbody>
         </table>
       </section>
-      <CollapsibleMessageBanner
-        expanded={false}
-        title={LL().Messages.Information()}
-        type={'primary'}
-        useIcon={true}
-      >
-        <p>{LL().ImportWindow.SupportedVectorFormats()}</p>
-        <p>{LL().ImportWindow.SupportedTabularFormats()}</p>
-      </CollapsibleMessageBanner>
       <footer class="modal-card-foot">
         <button
           disabled={

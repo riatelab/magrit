@@ -1,5 +1,5 @@
 // Imports from solid-js
-import { produce } from 'solid-js/store';
+import { produce, SetStoreFunction } from 'solid-js/store';
 
 // Helpers
 import {
@@ -23,6 +23,7 @@ import { detectTypeField, Variable } from './typeDetection';
 import rewindLayer from './rewind';
 
 // Stores
+import { FileDropStoreType } from '../store/FileDropStore';
 import { type LayersDescriptionStoreType, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
 import { fitExtent } from '../store/MapStore';
 
@@ -102,6 +103,43 @@ export const isTopojson = async (files: CustomFileList) => files.length === 1
 export const isGeojson = async (files: CustomFileList) => files.length === 1
   && (files[0].ext === 'geojson' || files[0].ext === 'json')
   && (await files[0].file.text()).includes('FeatureCollection');
+
+/**
+ * Traverse the list of files dropped by the user and store the authorized files
+ * in the fileDropStore.
+ * Also return the list of names of the files that are not supported.
+ *
+ * @param {FileList} dataTransferFiles
+ * @param {FileDropStoreType} fileDropStore
+ * @param {SetStoreFunction<FileDropStoreType>} setFileDropStore
+ * @returns {string[]}
+ */
+export const prepareFilterAndStoreFiles = (
+  dataTransferFiles: FileList,
+  fileDropStore: FileDropStoreType,
+  setFileDropStore: SetStoreFunction<FileDropStoreType>,
+): string[] => {
+  // Store name and type of the files dropped in a new array (CustomFileList) of FileEntry.
+  const files = prepareFileExtensions(dataTransferFiles);
+  // Filter out the files that are not supported
+  const filteredFiles = [];
+  // Files that are not supported are not added to the fileDropStore
+  const unsupportedFiles: string[] = [];
+
+  for (let i = 0; i < files.length; i += 1) {
+    if (isAuthorizedFile(files[i])) {
+      filteredFiles.push(files[i]);
+    } else {
+      unsupportedFiles.push(`${files[i].name}.${files[i].ext}`);
+    }
+  }
+  // Add the dropped files to the existing file list
+  setFileDropStore(
+    { files: fileDropStore.files.concat(filteredFiles) },
+  );
+
+  return unsupportedFiles;
+};
 
 function addLayer(
   geojson: GeoJSONFeatureCollection,

@@ -23,7 +23,7 @@ import { isLocale } from './i18n/i18n-util';
 import { loadLocale } from './i18n/i18n-util.sync';
 import { toggleDarkMode } from './helpers/darkmode';
 import { clickLinkFromDataUrl } from './helpers/exports';
-import { draggedElementsAreFiles, isAuthorizedFile, prepareFileExtensions } from './helpers/fileUpload';
+import { draggedElementsAreFiles, prepareFilterAndStoreFiles } from './helpers/fileUpload';
 import { round } from './helpers/math';
 import { initDb, storeProject } from './helpers/storage';
 
@@ -208,26 +208,17 @@ const dropHandler = (e: Event, LL: Accessor<TranslationFunctions>): void => {
   // We dont want the user to be able to drop files while a project is reloading
   if (globalStore.isReloadingProject) return;
 
-  // Store name and type of the files dropped in a new array (CustomFileList) of FileEntry.
-  const files = prepareFileExtensions((e as DragEvent).dataTransfer!.files);
-  // Filter out the files that are not supported
-  const filteredFiles = [];
-  for (let i = 0; i < files.length; i += 1) {
-    if (isAuthorizedFile(files[i])) {
-      filteredFiles.push(files[i]);
-    } else {
-      // toast.error(`Unsupported file format for file : ${files[i].name}.${files[i].ext}`);
-      toast.error(LL().ImportWindow.UnsupportedFileFormat(
-        {
-          file: `${files[i].name}.${files[i].ext}`,
-        },
-      ));
-    }
-  }
-  // Add the dropped files to the existing file list
-  setFileDropStore(
-    { files: fileDropStore.files.concat(filteredFiles) },
+  // Store the supported files in the fileDropStore
+  // and display a toast message for the unsupported files
+  const unsupportedFiles = prepareFilterAndStoreFiles(
+    (e as DragEvent).dataTransfer!.files,
+    fileDropStore,
+    setFileDropStore,
   );
+
+  unsupportedFiles.forEach((file) => {
+    toast.error(LL().ImportWindow.UnsupportedFileFormat({ file }));
+  });
 
   if (timeout) {
     clearTimeout(timeout);

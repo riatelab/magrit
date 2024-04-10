@@ -68,7 +68,8 @@ const fr = {
   },
   ImportWindow: {
     Title: 'Import des données',
-    Instructions: 'Faites glisser un ou plusieurs jeux de données (géographiques ou tabulaires) pour les ajouter ou cliquez ici pour sélectionner un fichier.',
+    Instructions: 'Faites glisser un ou plusieurs jeux de données (géographiques ou tabulaires) pour les ajouter ou cliquez sur le bouton ci-dessous pour sélectionner un fichier.',
+    Open: 'Ouvrir...',
     SupportedVectorFormats: 'Les formats vectoriels supportés sont : ESRI Shapefile (.shp, .shx, .dbf, .prj, .cpg), GeoPackage (.gpkg), GeoJSON (.geojson ou .json), TopoJSON (.topojson ou .json), GML (.gml), KML (.kml).',
     SupportedTabularFormats: 'Les formats de fichiers tabulaires supportés sont : Excel (.xls, .xlsx), CSV (.csv), TSV (.tsv) et les feuilles de calculs OpenDocument (.ods).',
     AnalyzingDataset: 'Analyse du jeu de données...',
