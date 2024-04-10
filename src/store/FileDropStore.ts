@@ -2,7 +2,7 @@ import { createStore } from 'solid-js/store';
 
 import type { CustomFileList } from '../helpers/fileUpload';
 
-type FileDropStoreType = {
+export type FileDropStoreType = {
   show: boolean,
   files: CustomFileList,
 };

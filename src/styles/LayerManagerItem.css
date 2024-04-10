@@ -6,13 +6,13 @@
 }
 
 .layer-manager-item__container {
-    padding: 0.75em;
+    padding: 0.5em;
     width: 90%;
 }
 
 .layer-manager-item__name {
-    font-size: 0.9rem;
-    font-weight: 800;
+    font-size: 0.95rem;
+    font-weight: 600;
     white-space: nowrap; /* Layer name are only displayed on one line ... */
     text-overflow: ellipsis; /* ... and if they are too long, they are truncated with an ellipsis */
     overflow: hidden;
@@ -25,7 +25,7 @@
 
 .layer-manager-item__icons-right > *,
 .layer-manager-item__icons-left > * {
-    margin-left: 3px;
+    margin-left: 5px;
     display: inline-block;
 }
 

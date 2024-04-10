@@ -318,7 +318,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
 
   return <div class="layer-manager-item is-flex" onDblClick={() => { onClickSettings(props.id, LL); }}>
     <div class="layer-manager-item__container">
-      <div class="layer-manager-item__name" title={ props.name }>
+      <div class="layer-manager-item__name mb-2" title={ props.name }>
         <span>{ props.name }</span>
       </div>
       <div class="layer-manager-item__icons">
@@ -330,7 +330,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
                 nCol: props.fields.length,
               })
             }
-            style={{ cursor: 'help' }}
+            style={{ cursor: 'help', 'font-size': '1.1em' }}
           >
             <i
               class={ typeIcons[props.type as ('point' | 'linestring' | 'polygon' | 'raster')] }
@@ -341,7 +341,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
               class="unstyled"
               onClick={() => { onClickLegend(props.id, LL); }}
               title={ LL().LayerManager.Legend() }
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', 'font-size': '1.1em' }}
             >
               <i
                 class="fg-map-legend"
@@ -360,7 +360,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
             onClick={(e) => { onClickSettings(props.id, LL); }}
             title={ LL().LayerManager.Settings() }
           >
-            <FaSolidGears />
+            <FaSolidGears size={'1.1em'} />
           </button>
           <Show when={props.visible}>
             <button
@@ -369,7 +369,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
               onClick={() => { onClickEye(props.id); }}
               title={ LL().LayerManager.ToggleVisibility() }
             >
-              <FaSolidEye />
+              <FaSolidEye size={'1.1em'} />
             </button>
           </Show>
           <Show when={!props.visible}>
@@ -379,7 +379,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
               onClick={() => { onClickEye(props.id); }}
               title={ LL().LayerManager.ToggleVisibility() }
             >
-              <FaSolidEyeSlash />
+              <FaSolidEyeSlash size={'1.1em'} />
             </button>
           </Show>
           <button
@@ -388,7 +388,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
             onClick={() => { onClickFitExtent(props.id); }}
             title={ LL().LayerManager.FitZoom() }
           >
-            <FaSolidMagnifyingGlass />
+            <FaSolidMagnifyingGlass size={'1.1em'} />
           </button>
           <Show when={props.renderer !== 'sphere'}>
             <button
@@ -397,7 +397,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
               onClick={() => { onClickTable(props.id, 'layer'); }}
               title={ LL().LayerManager.AttributeTable() }
             >
-              <FaSolidTable />
+              <FaSolidTable size={'1.1em'} />
             </button>
             <button
               aria-label={ LL().LayerManager.Typing() }
@@ -405,7 +405,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
               onClick={() => { onClickTyping(props.id, 'layer', LL); }}
               title={ LL().LayerManager.Typing() }
             >
-              <FiType />
+              <FiType size={'1.1em'} />
             </button>
           </Show>
           <button
@@ -414,7 +414,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
             onClick={() => { onClickTrashLayer(props.id, LL); }}
             title={ LL().LayerManager.Delete() }
           >
-            <FaSolidTrash />
+            <FaSolidTrash size={'1.1em'} />
           </button>
         </div>
       </div>
@@ -498,7 +498,7 @@ export function LayerManagerTableItem(props: TableDescription): JSX.Element {
       <div class="layer-manager-item__icons">
         <div class="layer-manager-item__icons-left">
           <div title={LL().LayerManager.table()} style={{ cursor: 'help' }}>
-            <FaSolidTableCells/>
+            <FaSolidTableCells size={'1.1em'} />
           </div>
         </div>
         <div class="layer-manager-item__icons-right">
@@ -509,7 +509,7 @@ export function LayerManagerTableItem(props: TableDescription): JSX.Element {
               onClick={() => onClickJoin(props.id, LL)}
               title={LL().LayerManager.Join()}
             >
-              <FiLink/>
+              <FiLink size={'1.1em'} />
             </button>
             <button
               aria-label={LL().LayerManager.AttributeTable()}
@@ -519,7 +519,7 @@ export function LayerManagerTableItem(props: TableDescription): JSX.Element {
               }}
               title={LL().LayerManager.AttributeTable()}
             >
-              <FaSolidTable/>
+              <FaSolidTable size={'1.1em'} />
             </button>
             <button
               aria-label={LL().LayerManager.Typing()}
@@ -529,7 +529,7 @@ export function LayerManagerTableItem(props: TableDescription): JSX.Element {
               }}
               title={LL().LayerManager.Typing()}
             >
-              <FiType/>
+              <FiType size={'1.1em'} />
             </button>
           </Show>
           <button
@@ -539,7 +539,7 @@ export function LayerManagerTableItem(props: TableDescription): JSX.Element {
               onClickTrashTable(props.id, LL);
             }}
             title={LL().LayerManager.Delete()}>
-            <FaSolidTrash/>
+            <FaSolidTrash size={'1.1em'} />
           </button>
         </div>
       </div>
