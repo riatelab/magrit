@@ -1,6 +1,5 @@
 // Imports from solid-js
 import {
-  createSignal,
   For, type JSX,
   Match, onMount,
   Show, Switch,
@@ -102,7 +101,7 @@ import {
   type Rectangle,
   type ScaleBar,
   type Text,
-  Legend,
+  type Legend,
   type CategoricalChoroplethBarchartLegend,
   type ChoroplethLegend,
   type ProportionalSymbolsLegend,
@@ -218,44 +217,65 @@ const dispatchMapRenderer = (layer: LayerDescription) => {
   return null;
 };
 
-export default function MapZone(): JSX.Element {
-  let svgElem: SVGSVGElement & IZoomable;
-  let refMapShadow: HTMLDivElement;
-  const { LL } = useI18nContext();
-
-  // Set up the projection when the component is mounted
-  const projection = d3[mapStore.projection.value as keyof typeof d3]()
-    .translate([mapStore.mapDimensions.width / 2, mapStore.mapDimensions.height / 2])
-    .scale(160)
-    .clipExtent(getDefaultClipExtent());
-
-  // Zoom the map on the sphere when the component is mounted
-  projection.fitExtent(
-    [
-      [
-        mapStore.mapDimensions.width * 0.1,
-        mapStore.mapDimensions.height * 0.1,
+const makeMapResizable = (refMapShadow: HTMLDivElement) => {
+  let currentLock: boolean;
+  let initialShadowRect: DOMRect;
+  interact('.map-zone__inner')
+    .resizable({
+      // resize from all edges and corners
+      edges: {
+        left: true, right: true, bottom: true, top: true,
+      },
+      listeners: {
+        start() {
+          // eslint-disable-next-line no-param-reassign
+          refMapShadow.style.display = 'block';
+          initialShadowRect = refMapShadow.getBoundingClientRect();
+          currentLock = mapStore.lockZoomPan;
+          setMapStore('lockZoomPan', true);
+        },
+        move(event) {
+          // Since we are centering the map in its container, we need to
+          // compute the new position of the shadow div.
+          // By default, it looks like we are resizing two times slower
+          // than what the cursor does
+          const dw = initialShadowRect.width - event.rect.width;
+          const dh = initialShadowRect.height - event.rect.height;
+          const w = initialShadowRect.width - dw * 2;
+          const h = initialShadowRect.height - dh * 2;
+          // eslint-disable-next-line no-param-reassign
+          refMapShadow.style.top = `${(globalStore.windowDimensions.height - h - applicationSettingsStore.headerHeight) / 2}px`;
+          // eslint-disable-next-line no-param-reassign
+          refMapShadow.style.left = `${(globalStore.windowDimensions.width - w - applicationSettingsStore.leftMenuWidth) / 2}px`;
+          // eslint-disable-next-line no-param-reassign
+          refMapShadow.style.height = `${h}px`;
+          // eslint-disable-next-line no-param-reassign
+          refMapShadow.style.width = `${w}px`;
+        },
+        end() {
+          setMapStore('mapDimensions', {
+            width: Mround(refMapShadow.getBoundingClientRect().width),
+            height: Mround(refMapShadow.getBoundingClientRect().height),
+          });
+          // eslint-disable-next-line no-param-reassign
+          refMapShadow.style.display = 'none';
+          setMapStore('lockZoomPan', currentLock || false);
+        },
+      },
+      modifiers: [
+        // keep the edges inside the parent
+        interact.modifiers.restrictEdges({
+          outer: 'parent',
+        }),
+        // minimum size
+        interact.modifiers.restrictSize({
+          min: { width: 100, height: 50 },
+        }),
       ],
-      [
-        mapStore.mapDimensions.width - mapStore.mapDimensions.width * 0.1,
-        mapStore.mapDimensions.height - mapStore.mapDimensions.height * 0.1,
-      ],
-    ],
-    { type: 'Sphere' },
-  );
+    });
+};
 
-  // Store the projection and the pathGenerator in the global store
-  setGlobalStore({
-    projection,
-    pathGenerator: d3.geoPath(projection),
-  });
-
-  // Update the map store with the new scale and translate
-  setMapStore({
-    scale: globalStore.projection.scale(),
-    translate: globalStore.projection.translate(),
-  });
-
+const makeMapZoomable = (svgElem: SVGSVGElement & IZoomable) => {
   // When applyZoomPan is called with redraw = false,
   // the map is not redrawn, but we set the 'transform' attribute
   // of the layers to the current transform value.
@@ -318,7 +338,8 @@ export default function MapZone(): JSX.Element {
         // we just ensure that the __zoom property of the svg element
         // is set to the identity transform, so that the zoom/pan
         // does not change the map.
-        svgElem.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
+        // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+        svgElem.__zoom = d3.zoomIdentity;
       } else {
         // Otherwise we apply the zoom/pan
         applyZoomPan(e, false);
@@ -331,11 +352,57 @@ export default function MapZone(): JSX.Element {
         return;
       }
       if (mapStore.lockZoomPan) {
-        svgElem.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
+        // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+        svgElem.__zoom = d3.zoomIdentity;
       } else if (applicationSettingsStore.zoomBehavior === ZoomBehavior.Redraw) {
         redrawDebounced(e);
       }
     });
+
+  const sel = d3.select(svgElem);
+  // Apply the zoom behavior to the SVG element
+  zoom.apply(null, [sel]);
+  // Remove the default double-click zoom behavior
+  sel.on('dblclick.zoom', null);
+};
+
+export default function MapZone(): JSX.Element {
+  let svgElem: SVGSVGElement & IZoomable;
+  let refMapShadow: HTMLDivElement;
+  const { LL } = useI18nContext();
+
+  // Set up the projection when the component is mounted
+  const projection = d3[mapStore.projection.value as keyof typeof d3]()
+    .translate([mapStore.mapDimensions.width / 2, mapStore.mapDimensions.height / 2])
+    .scale(160)
+    .clipExtent(getDefaultClipExtent());
+
+  // Zoom the map on the sphere when the component is mounted
+  projection.fitExtent(
+    [
+      [
+        mapStore.mapDimensions.width * 0.1,
+        mapStore.mapDimensions.height * 0.1,
+      ],
+      [
+        mapStore.mapDimensions.width - mapStore.mapDimensions.width * 0.1,
+        mapStore.mapDimensions.height - mapStore.mapDimensions.height * 0.1,
+      ],
+    ],
+    { type: 'Sphere' },
+  );
+
+  // Store the projection and the pathGenerator in the global store
+  setGlobalStore({
+    projection,
+    pathGenerator: d3.geoPath(projection),
+  });
+
+  // Update the map store with the new scale and translate
+  setMapStore({
+    scale: globalStore.projection.scale(),
+    translate: globalStore.projection.translate(),
+  });
 
   const getClipSphere = () => {
     const el = <path d={globalStore.pathGenerator({ type: 'Sphere' })} /> as JSX.Element & ID3Element;
@@ -431,72 +498,9 @@ export default function MapZone(): JSX.Element {
     }
   };
 
-  // let timeOutResizers;
-  // let currentResizer;
-
   onMount(() => {
-    // svg = d3.select(svgElem);
-    // svg.call(zoom);
-    // The SVG element as a d3 selection
-    const sel = d3.select(svgElem);
-    // Apply the zoom behavior to the SVG element
-    zoom.apply(null, [sel]);
-    // Remove the default double-click zoom behavior
-    sel.on('dblclick.zoom', null);
-    // sel.on('click.zoom', (e) => { e.preventDefault(); e.stopPropagation(); });
-    // sel.on('click', (e) => { e.preventDefault(); e.stopPropagation(); });
-
-    let currentLock: boolean;
-    let initialShadowRect: DOMRect;
-    interact('.resizable')
-      .resizable({
-        // resize from all edges and corners
-        edges: {
-          left: true, right: true, bottom: true, top: true,
-        },
-
-        listeners: {
-          start() {
-            refMapShadow.style.display = 'block';
-            initialShadowRect = refMapShadow.getBoundingClientRect();
-            currentLock = mapStore.lockZoomPan;
-            setMapStore('lockZoomPan', true);
-          },
-          move(event) {
-            // Since we are centering the map in its container, we need to
-            // compute the new position of the shadow div.
-            // By default, it looks like we are resizing two times slower
-            // than what the cursor does
-            const dw = initialShadowRect.width - event.rect.width;
-            const dh = initialShadowRect.height - event.rect.height;
-            const w = initialShadowRect.width - dw * 2;
-            const h = initialShadowRect.height - dh * 2;
-            refMapShadow.style.top = `${(globalStore.windowDimensions.height - h - applicationSettingsStore.headerHeight) / 2}px`;
-            refMapShadow.style.left = `${(globalStore.windowDimensions.width - w - applicationSettingsStore.leftMenuWidth) / 2}px`;
-            refMapShadow.style.height = `${h}px`;
-            refMapShadow.style.width = `${w}px`;
-          },
-          end() {
-            setMapStore('mapDimensions', {
-              width: Mround(refMapShadow.getBoundingClientRect().width),
-              height: Mround(refMapShadow.getBoundingClientRect().height),
-            });
-            refMapShadow.style.display = 'none';
-            setMapStore('lockZoomPan', currentLock || false);
-          },
-        },
-        modifiers: [
-          // keep the edges inside the parent
-          interact.modifiers.restrictEdges({
-            outer: 'parent',
-          }),
-          // minimum size
-          interact.modifiers.restrictSize({
-            min: { width: 100, height: 50 },
-          }),
-        ],
-        inertia: true,
-      });
+    makeMapZoomable(svgElem);
+    makeMapResizable(refMapShadow);
   });
 
   return <div class="map-zone">
@@ -516,7 +520,7 @@ export default function MapZone(): JSX.Element {
       <div class='resizer bottom-right'></div>
     </div>
     <div
-      class="map-zone__inner resizable"
+      class="map-zone__inner"
       style={{
         width: `${mapStore.mapDimensions.width}px`,
         height: `${mapStore.mapDimensions.height}px`,
