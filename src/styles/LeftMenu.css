@@ -78,6 +78,19 @@ The left menu is:
     padding: 10px 5px;
 }
 
+/* Import section in the left menu */
+.import-section {
+    text-align: center;
+}
+
+.import-section button.button {
+    min-width: 85%;
+    max-width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
+}
+/* End of Import section in the left menu */
+
 /* MapConfiguration section of the left menu */
 #map-configuration__projection-dropdown .dropdown-content {
     max-height: 50vh;

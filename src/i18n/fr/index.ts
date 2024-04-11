@@ -113,7 +113,7 @@ const fr = {
   },
   ImportSection: {
     OpenImportWindow: 'Ouvrir la fenêtre d\'import des données ...',
-    ExampleDatasets: 'Jeu de données d\'exemples',
+    ExampleDatasets: 'Explorer les jeux de données d\'exemple...',
   },
   MapConfiguration: {
     Dimensions: 'Dimensions',

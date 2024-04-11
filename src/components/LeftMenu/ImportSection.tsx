@@ -11,14 +11,21 @@ import { setModalStore } from '../../store/ModalStore';
 // Subcomponents
 import ExampleDatasetModal from '../Modals/ExampleDatasetModal.tsx';
 
+// Styles
+import '../../styles/LeftMenu.css';
+
 export default function ImportSection(): JSX.Element {
   const { LL } = useI18nContext();
 
-  return <div class="import-section" style={{ 'text-align': 'center' }}>
+  return <div class="import-section">
     <div>
       <button
         class="button is-primary is-outlined"
-        style={{ width: '280px' }}
+        style={{
+          'border-bottom-left-radius': '0',
+          'border-bottom-right-radius': '0',
+          'border-bottom-width': '0',
+        }}
         onClick={() => { setFileDropStore({ show: true }); }}
       >
         { LL().ImportSection.OpenImportWindow() }
@@ -27,7 +34,10 @@ export default function ImportSection(): JSX.Element {
     <div>
       <button
         class="button is-primary is-outlined"
-        style={{ width: '280px' }}
+        style={{
+          'border-top-left-radius': '0',
+          'border-top-right-radius': '0',
+        }}
         onClick={() => {
           setModalStore({
             show: true,

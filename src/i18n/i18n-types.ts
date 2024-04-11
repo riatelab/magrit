@@ -399,7 +399,7 @@ type RootTranslation = {
 		 */
 		OpenImportWindow: string
 		/**
-		 * E​x​a​m​p​l​e​ ​d​a​t​a​s​e​t​s
+		 * B​r​o​w​s​e​ ​e​x​a​m​p​l​e​ ​d​a​t​a​s​e​t​s​.​.​.
 		 */
 		ExampleDatasets: string
 	}
@@ -3230,7 +3230,7 @@ export type TranslationFunctions = {
 		 */
 		OpenImportWindow: () => LocalizedString
 		/**
-		 * Example datasets
+		 * Browse example datasets...
 		 */
 		ExampleDatasets: () => LocalizedString
 	}
