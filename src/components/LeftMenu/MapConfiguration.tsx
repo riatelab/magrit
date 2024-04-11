@@ -13,6 +13,7 @@ import { unproxify } from '../../helpers/common';
 import { epsgDb } from '../../helpers/projection';
 
 // Stores
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
 import { mapStore, setMapStore } from '../../store/MapStore';
 import { setModalStore } from '../../store/ModalStore';
@@ -168,17 +169,21 @@ export default function MapConfiguration(): JSX.Element {
       label={LL().MapConfiguration.Width()}
       value={mapStore.mapDimensions.width}
       onChange={(v) => {
+        const maxSize = globalStore.windowDimensions.width - applicationSettingsStore.leftMenuWidth;
+        const width = v <= maxSize
+          ? v
+          : globalStore.windowDimensions.width - applicationSettingsStore.leftMenuWidth - 10;
         // Note that clip extent (if used) is automatically updated (in MapStore)
         // and that the path are automatically updated (triggered from MapStore too)
         setMapStore({
           mapDimensions: {
-            width: v,
+            width,
             height: mapStore.mapDimensions.height,
           },
         });
       }}
       min={10}
-      max={globalStore.windowDimensions.width}
+      max={globalStore.windowDimensions.width - applicationSettingsStore.leftMenuWidth - 10}
       step={1}
       width={100}
     />
@@ -186,17 +191,21 @@ export default function MapConfiguration(): JSX.Element {
       label={LL().MapConfiguration.Height()}
       value={mapStore.mapDimensions.height}
       onChange={(v) => {
+        const maxSize = globalStore.windowDimensions.height - applicationSettingsStore.headerHeight;
+        const height = v <= maxSize
+          ? v
+          : globalStore.windowDimensions.height - applicationSettingsStore.headerHeight - 10;
         // Note that clip extent (if used) is automatically updated (in MapStore)
         // and that the path are automatically updated (triggered from MapStore too)
         setMapStore({
           mapDimensions: {
             width: mapStore.mapDimensions.width,
-            height: v,
+            height,
           },
         });
       }}
       min={10}
-      max={globalStore.windowDimensions.height}
+      max={globalStore.windowDimensions.height - applicationSettingsStore.headerHeight - 10}
       step={1}
       width={100}
     />
