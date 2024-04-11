@@ -29,6 +29,7 @@
     "postinstall": "electron-builder install-app-deps && cd docs && npm install && cd .."
   },
   "devDependencies": {
+    "@interactjs/types": "^1.10.27",
     "@solidjs/testing-library": "^0.8.7",
     "@testing-library/jest-dom": "^6.4.2",
     "@types/d3": "^7.4.3",
@@ -72,8 +73,8 @@
     "contour-wasm": "^0.5.0",
     "d3-array": "^3.2.4",
     "d3-brush": "^3.0.0",
-    "d3-dsv": "^3.0.1",
     "d3-drag": "^3.0.0",
+    "d3-dsv": "^3.0.1",
     "d3-ease": "^3.0.1",
     "d3-force": "^3.0.0",
     "d3-geo": "^3.1.1",
@@ -94,6 +95,7 @@
     "geos-wasm": "^2.0.0",
     "go-cart-wasm": "^0.3.0",
     "gpu.js": "^2.16.0",
+    "interactjs": "^1.10.27",
     "jszip": "^3.10.1",
     "main-thread-scheduling": "^14.1.1",
     "mproj": "^0.0.38",

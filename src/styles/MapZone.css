@@ -1,19 +1,24 @@
 .map-zone {
-  width: calc(100vw - var(--left-menu-width));
+  width: calc(100vw - var(--left-menu-width) + 1px);
   position: fixed;
-  left: var(--left-menu-width);
+  left: calc(var(--left-menu-width) - 1px);
   height: calc(100vh - var(--header-height));
   background-color: var(--map-container-background);
-}
-
-.map-zone__inner {
-  width: 100%;
-  height: 100%;
   display: flex;
 }
 
-.map-zone__map {
+.map-zone__inner {
+  /* border: 1px solid orange; */
   margin: auto;
+}
+
+.map-zone__shadow {
+  position: absolute;
+  border: solid 2px #4286f4;
+  display: none;
+}
+
+.map-zone__map {
   outline: grey dashed 1px;
 }
 
@@ -49,4 +54,49 @@
 .map-zone__controls > p.control > button {
   padding: 0.5em;
   background: var(--bulma-background);
+}
+
+/*
+.resizable {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+}
+*/
+
+.map-zone__shadow .resizers {
+  width: 100%;
+  height: 100%;
+  box-sizing: content-box;
+  position: absolute;
+  display: none;
+}
+
+.map-zone__shadow .resizer {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid #4286f4;
+  position: absolute;
+}
+.map-zone__shadow .resizer.top-left {
+  left: -5px;
+  top: -5px;
+  cursor: nwse-resize;
+}
+.map-zone__shadow .resizer.top-right {
+  right: -5px;
+  top: -5px;
+  cursor: nesw-resize;
+}
+.map-zone__shadow .resizer.bottom-left {
+  left: -5px;
+  bottom: -5px;
+  cursor: nesw-resize;
+}
+.map-zone__shadow .resizer.bottom-right {
+  right: -5px;
+  bottom: -5px;
+  cursor: nwse-resize;
 }

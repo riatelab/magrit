@@ -7,6 +7,7 @@ import {
 } from 'solid-js';
 
 // Imports from other packages
+import interact from 'interactjs';
 import {
   FiInfo,
   FiLock,
@@ -22,6 +23,7 @@ import { debounce } from '../helpers/common';
 import { useI18nContext } from '../i18n/i18n-solid';
 import { isLayoutFeature } from '../helpers/layoutFeatures';
 import { findLayerById } from '../helpers/layers';
+import { Mround } from '../helpers/math';
 
 // Stores
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
@@ -218,7 +220,7 @@ const dispatchMapRenderer = (layer: LayerDescription) => {
 
 export default function MapZone(): JSX.Element {
   let svgElem: SVGSVGElement & IZoomable;
-
+  let refMapShadow: HTMLDivElement;
   const { LL } = useI18nContext();
 
   // Set up the projection when the component is mounted
@@ -429,6 +431,9 @@ export default function MapZone(): JSX.Element {
     }
   };
 
+  // let timeOutResizers;
+  // let currentResizer;
+
   onMount(() => {
     // svg = d3.select(svgElem);
     // svg.call(zoom);
@@ -440,11 +445,84 @@ export default function MapZone(): JSX.Element {
     sel.on('dblclick.zoom', null);
     // sel.on('click.zoom', (e) => { e.preventDefault(); e.stopPropagation(); });
     // sel.on('click', (e) => { e.preventDefault(); e.stopPropagation(); });
+
+    let currentLock: boolean;
+    let initialShadowRect: DOMRect;
+    interact('.resizable')
+      .resizable({
+        // resize from all edges and corners
+        edges: {
+          left: true, right: true, bottom: true, top: true,
+        },
+
+        listeners: {
+          start() {
+            refMapShadow.style.display = 'block';
+            initialShadowRect = refMapShadow.getBoundingClientRect();
+            currentLock = mapStore.lockZoomPan;
+            setMapStore('lockZoomPan', true);
+          },
+          move(event) {
+            // Since we are centering the map in its container, we need to
+            // compute the new position of the shadow div.
+            // By default, it looks like we are resizing two times slower
+            // than what the cursor does
+            const dw = initialShadowRect.width - event.rect.width;
+            const dh = initialShadowRect.height - event.rect.height;
+            const w = initialShadowRect.width - dw * 2;
+            const h = initialShadowRect.height - dh * 2;
+            refMapShadow.style.top = `${(globalStore.windowDimensions.height - h - applicationSettingsStore.headerHeight) / 2}px`;
+            refMapShadow.style.left = `${(globalStore.windowDimensions.width - w - applicationSettingsStore.leftMenuWidth) / 2}px`;
+            refMapShadow.style.height = `${h}px`;
+            refMapShadow.style.width = `${w}px`;
+          },
+          end() {
+            setMapStore('mapDimensions', {
+              width: Mround(refMapShadow.getBoundingClientRect().width),
+              height: Mround(refMapShadow.getBoundingClientRect().height),
+            });
+            refMapShadow.style.display = 'none';
+            setMapStore('lockZoomPan', currentLock || false);
+          },
+        },
+        modifiers: [
+          // keep the edges inside the parent
+          interact.modifiers.restrictEdges({
+            outer: 'parent',
+          }),
+          // minimum size
+          interact.modifiers.restrictSize({
+            min: { width: 100, height: 50 },
+          }),
+        ],
+        inertia: true,
+      });
   });
 
   return <div class="map-zone">
-    <div class="map-zone__inner">
-      <svg
+    <div
+      class="map-zone__shadow"
+      ref={refMapShadow!}
+      style={{
+        top: `${(globalStore.windowDimensions.height - mapStore.mapDimensions.height - applicationSettingsStore.headerHeight) / 2}px`,
+        left: `${(globalStore.windowDimensions.width - mapStore.mapDimensions.width - applicationSettingsStore.leftMenuWidth) / 2}px`,
+        height: `${mapStore.mapDimensions.height}px`,
+        width: `${mapStore.mapDimensions.width}px`,
+      }}
+    >
+      <div class='resizer top-left'></div>
+      <div class='resizer top-right'></div>
+      <div class='resizer bottom-left'></div>
+      <div class='resizer bottom-right'></div>
+    </div>
+    <div
+      class="map-zone__inner resizable"
+      style={{
+        width: `${mapStore.mapDimensions.width}px`,
+        height: `${mapStore.mapDimensions.height}px`,
+      }}
+    >
+    <svg
         ref={svgElem!}
         width={mapStore.mapDimensions.width}
         height={mapStore.mapDimensions.height}
@@ -506,13 +584,13 @@ export default function MapZone(): JSX.Element {
 
         {/* Generate SVG group for each layer */}
         <For each={layersDescriptionStore.layers}>
-        {(layer) => <Show when={
-              applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
-              || layer.visible
-            }>{ dispatchMapRenderer(layer) }</Show>
+          {(layer) => <Show when={
+            applicationSettingsStore.renderVisibility === RenderVisibility.RenderAsHidden
+            || layer.visible
+          }>{dispatchMapRenderer(layer)}</Show>
           }
         </For>
-        <For each={ layersDescriptionStore.layoutFeaturesAndLegends }>
+        <For each={layersDescriptionStore.layoutFeaturesAndLegends}>
           {
             (elem) => {
               if (isLayoutFeature(elem)) {
@@ -527,7 +605,7 @@ export default function MapZone(): JSX.Element {
                   (elem as Legend).visible
                   && findLayerById(layersDescriptionStore.layers, (elem as Legend).layerId)!.visible
                 )
-              }>{ dispatchLegendRenderer(elem as Legend) }</Show>;
+              }>{dispatchLegendRenderer(elem as Legend)}</Show>;
             }}
         </For>
         <Show when={!globalStore.userHasAddedLayer}>
@@ -539,7 +617,7 @@ export default function MapZone(): JSX.Element {
               class="map-zone__inner-placeholder is-flex is-justify-content-center is-align-content-center"
               style={{ 'flex-wrap': 'wrap', height: '100%' }}
             >
-              <p>{ LL().MapZone.DropFilesHere() }</p>
+              <p>{LL().MapZone.DropFilesHere()}</p>
             </div>
           </foreignObject>
         </Show>
