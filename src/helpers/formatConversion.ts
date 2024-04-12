@@ -94,7 +94,6 @@ export async function convertTextualTabularDatasetToJSON(
   file: File,
   ext: SupportedTabularFileTypes[keyof SupportedTabularFileTypes],
 ): Promise<object[]> {
-  console.log(file);
   if (ext === 'csv' || ext === 'tsv') {
     const text = await file.text();
     const delimiter = findCsvDelimiter(text);
@@ -109,8 +108,7 @@ export async function convertTextualTabularDatasetToJSON(
     // TODO: handle other textual formats ?
     return [];
   }
-  // TODO: we should throw an error if we don't know how to handle the file
-  return [];
+  throw new Error(`Unsupported tabular file extension: ${ext}`);
 }
 
 async function uintArrayToBase64(data: Uint8Array): Promise<string> {

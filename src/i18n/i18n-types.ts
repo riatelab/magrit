@@ -334,6 +334,10 @@ type RootTranslation = {
 		 * @param {unknown} name
 		 */
 		RemovedEmptyFeatures: RequiredParams<'name'>
+		/**
+		 * {​{​O​n​e​ ​f​e​a​t​u​r​e​|​?​?​ ​f​e​a​t​u​r​e​s​}​}
+		 */
+		NFeatures: string
 	}
 	MapZone: {
 		/**
@@ -3165,6 +3169,10 @@ export type TranslationFunctions = {
 		 * Removed {{0 feature|a feature|?? features}} without geometry from dataset {name}.
 		 */
 		RemovedEmptyFeatures: (arg: { name: unknown, nRemoved: number | string | boolean }) => LocalizedString
+		/**
+		 * {{One feature|?? features}}
+		 */
+		NFeatures: (arg0: number | string | boolean) => LocalizedString
 	}
 	MapZone: {
 		/**

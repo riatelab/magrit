@@ -116,13 +116,11 @@ const fitExtent = (id: string, margin = 0.03) => {
   );
 
   // Update the global store with the new scale and translate
+  // (paths will be redrawn automatically because of the createEffect below)
   setMapStore({
     scale: globalStore.projection.scale(),
     translate: globalStore.projection.translate(),
   });
-
-  // Redraw the paths
-  redrawPaths(svgElem);
 };
 
 // We want to redraw path automatically when the mapStore is updated

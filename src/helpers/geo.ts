@@ -15,6 +15,7 @@ import {
   Mabs,
   Macos,
   max,
+  min,
   Mcos,
   Mfloor,
   Mlog10,
@@ -912,4 +913,21 @@ export const findIntersections = (
     }
   }
   return intersections;
+};
+
+/**
+ * Merge bounding boxes to create a single bounding box that contains all the input bounding boxes.
+ * The input bounding boxes are an array of arrays of 4 numbers (xmin, ymin, xmax, ymax).
+ *
+ * @param {[number, number, number, number][]} bboxes - An array of bounding boxes.
+ * @returns {[number, number, number, number]} - The merged bounding box.
+ */
+export const mergeBboxes = (
+  bboxes: [number, number, number, number][],
+): [number, number, number, number] => {
+  const xmin = min(bboxes.map((b) => b[0]));
+  const ymin = min(bboxes.map((b) => b[1]));
+  const xmax = max(bboxes.map((b) => b[2]));
+  const ymax = max(bboxes.map((b) => b[3]));
+  return [xmin, ymin, xmax, ymax];
 };

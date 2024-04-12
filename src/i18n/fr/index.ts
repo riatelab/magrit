@@ -91,6 +91,7 @@ const fr = {
     UnsupportedFileFormat: 'Format de fichier non supporté pour {file}',
     ErrorReadingFile: 'Erreur lors de la lecture du fichier {file} : {message}',
     RemovedEmptyFeatures: '{{ nRemoved:Aucune entité | Une entité | ?? entités }} avec une géométrie vide retirée{{nRemoved:s}} du jeu de données {name}.',
+    NFeatures: '{{Une entité | ?? entités}}',
   },
   MapZone: {
     DropFilesHere: 'Glisser-déposer vos jeux de données ici ! (ou utiliser le menu d\'import des données)',

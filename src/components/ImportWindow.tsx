@@ -14,6 +14,7 @@ import { createMutable, produce } from 'solid-js/store';
 import { FaSolidTrashCan } from 'solid-icons/fa';
 import { VsTriangleDown, VsTriangleRight } from 'solid-icons/vs';
 import toast from 'solid-toast';
+import { AllGeoJSON, bbox as computeBbox } from '@turf/turf';
 import { v4 as uuidv4 } from 'uuid';
 
 // Helpers
@@ -23,9 +24,9 @@ import {
   convertAndAddFiles,
   CustomFileList,
   FileEntry,
-  isAuthorizedFile,
-  prepareFileExtensions, prepareFilterAndStoreFiles,
+  prepareFilterAndStoreFiles,
 } from '../helpers/fileUpload';
+import { mergeBboxes } from '../helpers/geo';
 import {
   allowedFileExtensions,
   shapefileExtensions,
@@ -38,18 +39,22 @@ import { findCsvDelimiter, getDatasetInfo } from '../helpers/formatConversion';
 // Stores
 import { fileDropStore, setFileDropStore } from '../store/FileDropStore';
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
-import { type LayersDescriptionStoreType, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
-import { setMapStore } from '../store/MapStore';
+import {
+  layersDescriptionStore,
+  type LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../store/LayersDescriptionStore';
+import { mapStore, setMapStore } from '../store/MapStore';
 import { setModalStore } from '../store/ModalStore';
 
 // Other components
 import CollapsibleMessageBanner from './CollapsibleMessageBanner.tsx';
+import MessageBlock from './MessageBlock.tsx';
 import SimplificationModal from './Modals/SimplificationModal.tsx';
 import { openLayerManager } from './LeftMenu/LeftMenu.tsx';
 
 // Styles
 import '../styles/ImportWindow.css';
-import MessageBlock from './MessageBlock.tsx';
 
 interface LayerOrTableDescription {
   name: string,
@@ -724,8 +729,15 @@ export default function ImportWindow(): JSX.Element {
                                   }}
                                   id={randomId}
                                 /></td>
-                              <td><label for={randomId}>↳ {layer.name}</label></td>
-                              <td>{layer.features} features</td>
+                              <td>
+                                <label
+                                  for={randomId}
+                                  style={{ display: 'inline-block', width: '100%' }}
+                                >
+                                  ↳ {layer.name}
+                                </label>
+                              </td>
+                              <td>{LL().ImportWindow.NFeatures(layer.features)}</td>
                               <td>{layer.geometryType || 'None'}</td>
                               <td
                                 title={formatCrsTitle(layer.crs)}
@@ -777,14 +789,22 @@ export default function ImportWindow(): JSX.Element {
                               <input
                                 type="checkbox"
                                 checked={layer.addToProject}
-                                aria-label={ LL().ImportWindow.AddToProject() }
+                                aria-label={LL().ImportWindow.AddToProject()}
                                 onClick={() => {
                                   // eslint-disable-next-line no-param-reassign
                                   layer.addToProject = !layer.addToProject;
                                 }}
+                                id={randomId}
                               /></td>
-                            <td>↳ {layer.name}</td>
-                            <td>{layer.features} features</td>
+                            <td>
+                              <label
+                                for={randomId}
+                                style={{ display: 'inline-block', width: '100%' }}
+                              >
+                                ↳ {layer.name}
+                              </label>
+                            </td>
+                            <td>{LL().ImportWindow.NFeatures(layer.features)}</td>
                             <td><i>NA</i></td>
                             <td><i>NA</i></td>
                             <td><i>NA</i></td>
@@ -831,6 +851,9 @@ export default function ImportWindow(): JSX.Element {
             // Add the "loading" overlay
             setGlobalStore({ isLoading: true });
 
+            let needToZoomOnTotalExtent;
+            const bboxes: [number, number, number, number][] = [];
+
             // Does the user already added a layer to the project?
             if (!globalStore.userHasAddedLayer) {
               setLayersDescriptionStore(
@@ -842,8 +865,24 @@ export default function ImportWindow(): JSX.Element {
                 ),
               );
               setGlobalStore({ userHasAddedLayer: true });
+              // Does the user want to zoom on a specific layer ?
+              // If no, and since there is no layer in the project, we will
+              // zoom on the combined extent of all the layers.
+              let wantToZoom = false;
+              fileDescriptions()
+                .forEach((ds: DatasetDescription) => {
+                  ds.info.layers.forEach((l: LayerOrTableDescription) => {
+                    if (l.fitMap) {
+                      wantToZoom = true;
+                    }
+                  });
+                });
+              if (!wantToZoom) {
+                needToZoomOnTotalExtent = true;
+              }
             }
 
+            console.log(needToZoomOnTotalExtent);
             // Do we have to use a specific CRS ?
             let crsToUse: GdalCrs | undefined;
             fileDescriptions()
@@ -884,10 +923,6 @@ export default function ImportWindow(): JSX.Element {
               }));
             }));
 
-            // TODO: if we only import one layer and if there wasn't any layer in the project,
-            //  we should probably still automatically fit the map to the extent of the layer...
-            //  (maybe we could also display a toast saying
-            //  "The map has been fitted to the extent of the layer")
             for (let i = 0; i < dsToImport.length; i += 1) {
               const [files, type, name, fitMap, simplify] = dsToImport[i];
               // Layers that will be simplified are not visible by default
@@ -906,6 +941,18 @@ export default function ImportWindow(): JSX.Element {
                   fitMap,
                   shouldBeVisible,
                 );
+
+                // If the user is adding its first layer(s)
+                // and didn't specify a layer to zoom on, we need to compute the bbox
+                // of the layer(s) to zoom on the total extent.
+                if (needToZoomOnTotalExtent) {
+                  const data = layersDescriptionStore.layers.find((d) => d.id === id)?.data;
+                  if (data) {
+                    bboxes.push(
+                      computeBbox(data as AllGeoJSON) as [number, number, number, number],
+                    );
+                  }
+                }
 
                 // If there are empty features, we display a toast to
                 // inform the user about it.
@@ -926,6 +973,44 @@ export default function ImportWindow(): JSX.Element {
                   message: e.message ? `${e.message}` : `${e}`,
                 }));
               }
+            }
+
+            if (needToZoomOnTotalExtent) {
+              // Fit the map on the extent of the layers
+              // (plus some margin around the layers).
+              const mergedBbox = mergeBboxes(bboxes);
+              globalStore.projection.fitExtent(
+                [
+                  [
+                    mapStore.mapDimensions.width * 0.03,
+                    mapStore.mapDimensions.height * 0.03,
+                  ],
+                  [
+                    mapStore.mapDimensions.width - mapStore.mapDimensions.width * 0.03,
+                    mapStore.mapDimensions.height - mapStore.mapDimensions.height * 0.03,
+                  ],
+                ],
+                {
+                  type: 'Feature',
+                  geometry: {
+                    type: 'Polygon',
+                    coordinates: [
+                      [
+                        [mergedBbox[0], mergedBbox[1]],
+                        [mergedBbox[0], mergedBbox[3]],
+                        [mergedBbox[2], mergedBbox[3]],
+                        [mergedBbox[2], mergedBbox[1]],
+                        [mergedBbox[0], mergedBbox[1]],
+                      ],
+                    ],
+                  },
+                },
+              );
+
+              setMapStore({
+                scale: globalStore.projection.scale(),
+                translate: globalStore.projection.translate(),
+              });
             }
 
             // Remove the "loading" overlay

@@ -91,6 +91,7 @@ const en = {
     UnsupportedFileFormat: 'Unsupported file format for {file}',
     ErrorReadingFile: 'Error while reading file {file}: {message}',
     RemovedEmptyFeatures: 'Removed {{ nRemoved:0 feature | a feature | ?? features }} without geometry from dataset {name}.',
+    NFeatures: '{{ One feature | ?? features }}',
   },
   MapZone: {
     DropFilesHere: 'Drag and drop your file(s) here ! (or use the import menu)',
