@@ -8,8 +8,9 @@
 }
 
 .map-zone__inner {
-  /* border: 1px solid orange; */
   margin: auto;
+  border: var(--border-color) solid 2px;
+  display: flex;
 }
 
 .map-zone__shadow {
@@ -19,11 +20,14 @@
 }
 
 .map-zone__map {
-  outline: grey dashed 1px;
+  /*outline: grey dashed 1px;*/
+  outline: none;
+  margin: auto;
 }
 
 .map-zone__map:focus {
-  outline: orange solid 1px;
+  outline: none;
+  /*outline: orange solid 1px;*/
 }
 
 .map-zone__inner-placeholder {

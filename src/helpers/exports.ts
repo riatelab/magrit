@@ -2,7 +2,7 @@
 import { topology } from 'topojson-server';
 
 // Stores
-import { getDefaultClipExtent } from '../store/MapStore';
+import { getDefaultClipExtent, mapStore } from '../store/MapStore';
 import { globalStore } from '../store/GlobalStore';
 
 // Helpers
@@ -18,10 +18,14 @@ import type { GeoJSONFeatureCollection } from '../global';
  * @param {SVGElement} map
  * @returns {{height: number, width: number}}
  */
-const getMapDimension = (map: SVGElement): { height: number, width: number } => {
-  const { width, height } = map.getBoundingClientRect();
-  return { width, height };
-};
+const getMapDimension = (): { height: number, width: number } => ({
+  width: mapStore.mapDimensions.width,
+  height: mapStore.mapDimensions.height,
+});
+// const getMapDimension = (map: SVGElement): { height: number, width: number } => {
+//   const { width, height } = map.getBoundingClientRect();
+//   return { width, height };
+// };
 
 /**
  * Clean the given output name to ensure it is a valid file name.

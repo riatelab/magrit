@@ -253,13 +253,22 @@ const makeMapResizable = (refMapShadow: HTMLDivElement) => {
           refMapShadow.style.width = `${w}px`;
         },
         end() {
+          // We need to compute the difference in size between the shadow div
+          // and the map div, we will shift the map content by half of this difference
+          const dw = initialShadowRect.width - refMapShadow.getBoundingClientRect().width + 3;
+          const dh = initialShadowRect.height - refMapShadow.getBoundingClientRect().height + 3;
+          // Update map dimensions
           setMapStore('mapDimensions', {
-            width: Mround(refMapShadow.getBoundingClientRect().width),
-            height: Mround(refMapShadow.getBoundingClientRect().height),
+            width: Mround(refMapShadow.getBoundingClientRect().width - 6),
+            height: Mround(refMapShadow.getBoundingClientRect().height - 6),
           });
+          setMapStore('lockZoomPan', currentLock || false);
+          setMapStore('translate', [
+            mapStore.translate[0] - dw / 2,
+            mapStore.translate[1] - dh / 2,
+          ]);
           // eslint-disable-next-line no-param-reassign
           refMapShadow.style.display = 'none';
-          setMapStore('lockZoomPan', currentLock || false);
         },
       },
       modifiers: [
@@ -508,10 +517,10 @@ export default function MapZone(): JSX.Element {
       class="map-zone__shadow"
       ref={refMapShadow!}
       style={{
-        top: `${(globalStore.windowDimensions.height - mapStore.mapDimensions.height - applicationSettingsStore.headerHeight) / 2}px`,
-        left: `${(globalStore.windowDimensions.width - mapStore.mapDimensions.width - applicationSettingsStore.leftMenuWidth) / 2}px`,
-        height: `${mapStore.mapDimensions.height}px`,
-        width: `${mapStore.mapDimensions.width}px`,
+        top: `${(globalStore.windowDimensions.height - mapStore.mapDimensions.height - applicationSettingsStore.headerHeight) / 2 - 2}px`,
+        left: `${(globalStore.windowDimensions.width - mapStore.mapDimensions.width - applicationSettingsStore.leftMenuWidth) / 2 - 2}px`,
+        height: `${mapStore.mapDimensions.height + 2}px`,
+        width: `${mapStore.mapDimensions.width + 2}px`,
       }}
     >
       <div class='resizer top-left'></div>
@@ -522,8 +531,8 @@ export default function MapZone(): JSX.Element {
     <div
       class="map-zone__inner"
       style={{
-        width: `${mapStore.mapDimensions.width}px`,
-        height: `${mapStore.mapDimensions.height}px`,
+        width: `${mapStore.mapDimensions.width + 4}px`,
+        height: `${mapStore.mapDimensions.height + 4}px`,
       }}
     >
     <svg
