@@ -1,9 +1,9 @@
+// Import from other packages
 import JSZip from 'jszip';
-
-import { SupportedTabularFileTypes } from './supportedFormats';
 
 // Helpers
 import d3 from './d3-custom';
+import { SupportedTabularFileTypes } from './supportedFormats';
 
 // Types
 import type { GeoJSONFeatureCollection, GeoJSONFeature } from '../global';
@@ -25,6 +25,7 @@ export async function convertToGeoJSON(
     '-t_srs', 'EPSG:4326',
     '-lco', 'RFC7946=NO',
     '-lco', 'WRITE_NON_FINITE_VALUES=YES',
+    '-lco', 'WRITE_BBOX=YES',
   ].concat(params.opts || []);
   const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
   const bytes = await globalThis.gdal.getFileBytes(output);
@@ -101,8 +102,14 @@ export async function convertTextualTabularDatasetToJSON(
   }
   if (ext === 'json') {
     const text = await file.text();
-    // TODO: we should check that we have an array of objects, with the same keys
-    return JSON.parse(text);
+    const parsed = JSON.parse(text);
+    if (
+      !Array.isArray(parsed)
+      || !parsed.every((d) => typeof d === 'object' && d !== null)
+    ) {
+      throw new Error('Expected and array of objects');
+    }
+    return parsed;
   }
   if (ext === 'txt') {
     // TODO: handle other textual formats ?
@@ -190,9 +197,7 @@ export async function convertFromGeoJSON(
     await globalThis.gdal.close(input);
     return uintArrayToBase64(bytes);
   }
-  // TODO: we should throw an error if we don't know how to handle the format
-  //  (which should probably not happen due to the format selection in the UI)
-  return '';
+  throw new Error('Unsupported vector file format');
 }
 
 export const getDatasetInfo = async (
