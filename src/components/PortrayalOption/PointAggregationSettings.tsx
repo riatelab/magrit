@@ -471,7 +471,7 @@ export default function PointAggregationSettings(props: PortrayalSettingsProps):
     ),
   );
 
-  return <div class="portrayal-section__portrayal-options-choropleth">
+  return <div class="portrayal-section__portrayal-options-point-aggregation">
     <InputFieldSelect
       label={LL().FunctionalitiesSection.PointAggregationOptions.MapType()}
       onChange={(v) => {

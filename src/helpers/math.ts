@@ -318,3 +318,26 @@ export const goodnessOfVarianceFit = (
   }
   return (sdam - sdcm) / sdam;
 };
+
+/**
+ * Returns a string representation of a number with a given precision
+ * after the decimal point (but without trailing zeros if any, trying
+ * to mimic the style of the numbers printed in R).
+ *
+ * @param n
+ * @param precision
+ */
+export function toPrecisionAfterDecimalPoint(
+  n: number | undefined,
+  precision: number = 4,
+): string {
+  if (!n) return '';
+  const s = n.toString();
+  const numberBeforeDecimalPoint = s.indexOf('.');
+  if (numberBeforeDecimalPoint === -1 || Number.isInteger(n)) {
+    return n.toFixed(1);
+  }
+  let p = numberBeforeDecimalPoint + precision;
+  if (s[0] === '0') p -= 1;
+  return n.toPrecision(p).replace(/(0)+$/, '');
+}

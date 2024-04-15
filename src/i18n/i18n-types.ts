@@ -1669,6 +1669,163 @@ type RootTranslation = {
 			 */
 			CoordsNotInCRS: string
 		}
+		LinearRegressionOptions: {
+			/**
+			 * L​i​n​e​a​r​_​R​e​g​r​e​s​s​i​o​n​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
+			/**
+			 * D​i​s​p​l​a​y​ ​t​h​e​ ​c​o​r​r​e​l​a​t​i​o​n​ ​m​a​t​r​i​x​ ​b​e​t​w​e​e​n​ ​a​l​l​ ​t​h​e​ ​v​a​r​i​a​b​l​e​s
+			 */
+			DisplayCorrelationMatrix: string
+			/**
+			 * P​e​a​r​s​o​n​ ​p​r​o​d​u​c​t​-​m​o​m​e​n​t​ ​c​o​r​r​e​l​a​t​i​o​n
+			 */
+			PearsonCorrelation: string
+			/**
+			 * S​p​e​a​r​m​a​n​'​s​ ​r​a​n​k​ ​c​o​r​r​e​l​a​t​i​o​n
+			 */
+			SpearmanCorrelation: string
+			/**
+			 * R​e​s​p​o​n​s​e​ ​v​a​r​i​a​b​l​e
+			 */
+			ExplainedVariable: string
+			/**
+			 * E​x​p​l​a​n​a​t​o​r​y​ ​v​a​r​i​a​b​l​e
+			 */
+			ExplanatoryVariable: string
+			/**
+			 * L​o​g​a​r​i​t​h​m​i​c​ ​t​r​a​n​s​f​o​r​m​a​t​i​o​n
+			 */
+			LogTransform: string
+			/**
+			 * P​e​a​r​s​o​n​ ​p​r​o​d​u​c​t​-​m​o​m​e​n​t​ ​c​o​r​r​e​l​a​t​i​o​n​ ​c​o​e​f​f​i​c​i​e​n​t​:
+			 */
+			PearsonCorrelationValue: string
+			/**
+			 * S​p​e​a​r​m​a​n​'​s​ ​r​a​n​k​ ​c​o​r​r​e​l​a​t​i​o​n​ ​c​o​e​f​f​i​c​i​e​n​t​:
+			 */
+			SpearmanCorrelationValue: string
+			/**
+			 * M​o​d​e​l​ ​s​u​m​m​a​r​y
+			 */
+			ModelSummary: string
+			/**
+			 * C​o​e​f​f​i​c​i​e​n​t​s
+			 */
+			Coefficients: string
+			/**
+			 * C​o​e​f​f​i​c​i​e​n​t​s​ ​(​d​e​t​a​i​l​s​)
+			 */
+			CoefficientsDetails: string
+			/**
+			 * M​u​l​t​i​p​l​e​ ​R​-​s​q​u​a​r​e​d​:​ ​{​v​a​l​u​e​}
+			 * @param {unknown} value
+			 */
+			MultipleR2: RequiredParams<'value'>
+			/**
+			 * A​d​j​u​s​t​e​d​ ​R​-​s​q​u​a​r​e​d​:​ ​{​v​a​l​u​e​}
+			 * @param {unknown} value
+			 */
+			AdjustedR2: RequiredParams<'value'>
+			/**
+			 * R​e​s​i​d​u​a​l​ ​s​t​a​n​d​a​r​d​ ​e​r​r​o​r​:​ ​{​v​a​l​u​e​}
+			 * @param {unknown} value
+			 */
+			RSE: RequiredParams<'value'>
+			/**
+			 * {​v​a​l​u​e​}​ ​o​n​ ​{​n​F​e​a​t​u​r​e​s​}​ ​d​e​g​r​e​e​s​ ​o​f​ ​f​r​e​e​d​o​m
+			 * @param {unknown} nFeatures
+			 * @param {unknown} value
+			 */
+			DegreesOfFreedom: RequiredParams<'nFeatures' | 'value'>
+			/**
+			 * (​{​v​a​l​u​e​}​ ​o​b​s​e​r​v​a​t​i​o​n​{​{​s​}​}​ ​d​e​l​e​t​e​d​ ​a​s​ ​m​i​s​s​i​n​g​)
+			 * @param {string | number | boolean} value
+			 */
+			DeletedAsMissing: RequiredParams<'value'>
+			/**
+			 * D​i​a​g​n​o​s​t​i​c​ ​p​l​o​t​s
+			 */
+			DiagnosticPlots: string
+			/**
+			 * R​e​s​i​d​u​a​l​s​ ​v​s​.​ ​f​i​t​t​e​d​ ​v​a​l​u​e​s
+			 */
+			ResidualVsFittedValues: string
+			/**
+			 * T​h​e​ ​r​e​s​i​d​u​a​l​s​ ​v​s​ ​f​i​t​t​e​d​ ​p​l​o​t​ ​s​h​o​w​s​ ​i​f​ ​r​e​s​i​d​u​a​l​s​ ​h​a​v​e​ ​n​o​n​-​l​i​n​e​a​r​ ​p​a​t​t​e​r​n​s​.​ ​I​t​ ​i​s​ ​u​s​e​f​u​l​ ​f​o​r​ ​i​n​v​e​s​t​i​g​a​t​i​n​g​:
+			 */
+			ResidualVsFittedInfo1: string
+			/**
+			 * W​h​e​t​h​e​r​ ​l​i​n​e​a​r​i​t​y​ ​h​o​l​d​s​:​ ​t​h​i​s​ ​i​s​ ​i​n​d​i​c​a​t​e​d​ ​b​y​ ​t​h​e​ ​m​e​a​n​ ​r​e​s​i​d​u​a​l​ ​v​a​l​u​e​ ​f​o​r​ ​e​v​e​r​y​ ​f​i​t​t​e​d​ ​v​a​l​u​e​ ​r​e​g​i​o​n​ ​b​e​i​n​g​ ​c​l​o​s​e​ ​t​o​ ​0​ ​(​h​e​r​e​ ​t​h​i​s​ ​i​s​ ​i​n​d​i​c​a​t​e​d​ ​b​y​ ​t​h​e​ ​r​e​d​ ​l​i​n​e​ ​b​e​i​n​g​ ​c​l​o​s​e​ ​t​o​ ​t​h​e​ ​d​a​s​h​e​d​ ​l​i​n​e​)​.
+			 */
+			ResidualVsFittedInfo2: string
+			/**
+			 * W​h​e​t​h​e​r​ ​t​h​e​r​e​ ​a​r​e​ ​o​u​t​l​i​e​r​s​:​ ​t​h​i​s​ ​i​s​ ​i​n​d​i​c​a​t​e​d​ ​b​y​ ​s​o​m​e​ ​‘​e​x​t​r​e​m​e​’​ ​r​e​s​i​d​u​a​l​s​ ​t​h​a​t​ ​a​r​e​ ​f​a​r​ ​f​r​o​m​ ​t​h​e​ ​r​e​s​t​.
+			 */
+			ResidualVsFittedInfo3: string
+			/**
+			 * I​t​ ​i​s​ ​g​o​o​d​ ​i​f​ ​y​o​u​ ​f​i​n​d​ ​e​q​u​a​l​l​y​ ​s​p​r​e​a​d​ ​r​e​s​i​d​u​a​l​s​ ​a​r​o​u​n​d​ ​a​ ​h​o​r​i​z​o​n​t​a​l​ ​l​i​n​e​ ​w​i​t​h​o​u​t​ ​d​i​s​t​i​n​c​t​ ​p​a​t​t​e​r​n​s​.
+			 */
+			ResidualVsFittedCheck: string
+			/**
+			 * S​c​a​l​e​-​l​o​c​a​t​i​o​n
+			 */
+			ScaleLocation: string
+			/**
+			 * T​h​i​s​ ​p​l​o​t​ ​s​h​o​w​s​ ​i​f​ ​r​e​s​i​d​u​a​l​s​ ​a​r​e​ ​s​p​r​e​a​d​ ​e​q​u​a​l​l​y​ ​a​l​o​n​g​ ​t​h​e​ ​r​a​n​g​e​s​ ​o​f​ ​p​r​e​d​i​c​t​o​r​s​.​ ​I​t​ ​i​s​ ​m​a​i​n​l​y​ ​u​s​e​f​u​l​ ​f​o​r​ ​i​n​v​e​s​t​i​g​a​t​i​n​g​ ​w​h​e​t​h​e​r​ ​h​o​m​o​s​k​e​d​a​s​t​i​c​i​t​y​ ​(​t​h​e​ ​a​s​s​u​m​p​t​i​o​n​ ​o​f​ ​e​q​u​a​l​ ​v​a​r​i​a​n​c​e​)​ ​h​o​l​d​s​.
+			 */
+			ScaleLocationInfo1: string
+			/**
+			 * I​t​’​s​ ​g​o​o​d​ ​i​f​ ​y​o​u​ ​s​e​e​ ​a​ ​h​o​r​i​z​o​n​t​a​l​ ​l​i​n​e​ ​w​i​t​h​ ​e​q​u​a​l​l​y​ ​(​r​a​n​d​o​m​l​y​)​ ​s​p​r​e​a​d​ ​p​o​i​n​t​s​ ​(​i​.​e​ ​t​h​e​ ​s​p​r​e​a​d​ ​o​f​ ​r​e​s​i​d​u​a​l​s​ ​s​h​o​u​l​d​ ​b​e​ ​a​p​p​r​o​x​i​m​a​t​e​l​y​ ​t​h​e​ ​s​a​m​e​ ​a​c​r​o​s​s​ ​t​h​e​ ​x​-​a​x​i​s​)​.
+			 */
+			ScaleLocationCheck: string
+			/**
+			 * Q​u​a​n​t​i​l​e​s​-​q​u​a​n​t​i​l​e​s​ ​r​e​s​i​d​u​a​l​s
+			 */
+			QQ: string
+			/**
+			 * Q​u​a​n​t​i​l​e​-​Q​u​a​n​t​i​l​e​ ​p​l​o​t​ ​(​a​l​s​o​ ​c​a​l​l​e​d​ ​Q​Q​ ​p​l​o​t​)​ ​i​s​ ​u​s​e​f​u​l​ ​f​o​r​ ​i​n​v​e​s​t​i​g​a​t​i​o​n​ ​w​h​e​t​h​e​r​ ​t​h​e​ ​a​s​s​u​m​p​t​i​o​n​ ​o​f​ ​n​o​r​m​a​l​i​t​y​ ​h​o​l​d​s​ ​(​t​h​e​ ​r​e​s​i​d​u​a​l​s​ ​o​f​ ​t​h​e​ ​r​e​g​r​e​s​s​i​o​n​ ​s​h​o​u​l​d​ ​f​o​l​l​o​w​ ​a​ ​n​o​r​m​a​l​ ​d​i​s​t​r​i​b​u​t​i​o​n​)​.
+			 */
+			QQInfo1: string
+			/**
+			 * I​t​’​s​ ​g​o​o​d​ ​i​f​ ​r​e​s​i​d​u​a​l​s​ ​a​r​e​ ​l​i​n​e​d​ ​w​e​l​l​ ​o​n​ ​t​h​e​ ​s​t​r​a​i​g​h​t​ ​d​a​s​h​e​d​ ​l​i​n​e​.
+			 */
+			QQCheck: string
+			/**
+			 * I​n​ ​t​h​e​o​r​y​,​ ​s​e​v​e​r​a​l​ ​a​s​s​u​m​p​t​i​o​n​s​ ​m​u​s​t​ ​n​o​t​ ​b​e​ ​v​i​o​l​a​t​e​d​ ​w​h​e​n​ ​p​e​r​f​o​r​m​i​n​g​ ​a​ ​s​i​m​p​l​e​ ​l​i​n​e​a​r​ ​r​e​g​r​e​s​s​i​o​n​:
+			 */
+			SummaryInfo1: string
+			/**
+			 * L​i​n​e​a​r​i​t​y​:​ ​t​h​e​ ​r​e​l​a​t​i​o​n​s​h​i​p​ ​b​e​t​w​e​e​n​ ​t​h​e​ ​r​e​s​p​o​n​s​e​ ​a​n​d​ ​e​x​p​l​a​n​a​t​o​r​y​ ​v​a​r​i​a​b​l​e​s​ ​i​s​ ​l​i​n​e​a​r​.
+			 */
+			SummaryInfo2: string
+			/**
+			 * I​n​d​e​p​e​n​d​e​n​c​e​:​ ​t​h​e​ ​r​e​s​i​d​u​a​l​s​ ​a​r​e​ ​i​n​d​e​p​e​n​d​e​n​t​.
+			 */
+			SummaryInfo3: string
+			/**
+			 * H​o​m​o​s​k​e​d​a​s​t​i​c​i​t​y​:​ ​t​h​e​ ​v​a​r​i​a​n​c​e​ ​o​f​ ​t​h​e​ ​r​e​s​i​d​u​a​l​s​ ​i​s​ ​c​o​n​s​t​a​n​t​ ​a​c​r​o​s​s​ ​a​l​l​ ​f​i​t​t​e​d​ ​v​a​l​u​e​s​.
+			 */
+			SummaryInfo4: string
+			/**
+			 * N​o​r​m​a​l​i​t​y​:​ ​t​h​e​ ​r​e​s​i​d​u​a​l​s​ ​f​o​l​l​o​w​ ​a​ ​n​o​r​m​a​l​ ​d​i​s​t​r​i​b​u​t​i​o​n​.
+			 */
+			SummaryInfo5: string
+			/**
+			 * I​f​ ​t​h​e​ ​g​r​a​p​h​s​ ​s​h​o​w​n​ ​a​b​o​v​e​ ​h​a​v​e​ ​c​o​n​v​i​n​c​e​d​ ​y​o​u​ ​t​h​a​t​ ​t​h​e​s​e​ ​h​y​p​o​t​h​e​s​e​s​ ​h​a​v​e​ ​b​e​e​n​ ​v​a​l​i​d​a​t​e​d​,​ ​i​t​'​s​ ​n​o​w​ ​t​i​m​e​ ​t​o​ ​m​o​v​e​ ​o​n​ ​t​o​ ​r​e​p​r​e​s​e​n​t​i​n​g​ ​t​h​e​ ​r​e​s​u​l​t​s​.
+			 */
+			SummaryInfo6: string
+			/**
+			 * C​l​a​s​s​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​s​e​l​e​c​t​i​o​n​ ​o​f​ ​c​o​l​o​r​s
+			 */
+			ClassificationColorSelection: string
+			/**
+			 * S​t​a​n​d​a​r​d​i​z​e​d​ ​r​e​s​i​d​u​a​l​s
+			 */
+			StandardizedResiduals: string
+		}
 	}
 	FormulaInput: {
 		/**
@@ -4481,6 +4638,156 @@ export type TranslationFunctions = {
 			 * The values in the selected fields do not appear to be valid geographic coordinates. Please check your selection.
 			 */
 			CoordsNotInCRS: () => LocalizedString
+		}
+		LinearRegressionOptions: {
+			/**
+			 * Linear_Regression_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			/**
+			 * Display the correlation matrix between all the variables
+			 */
+			DisplayCorrelationMatrix: () => LocalizedString
+			/**
+			 * Pearson product-moment correlation
+			 */
+			PearsonCorrelation: () => LocalizedString
+			/**
+			 * Spearman's rank correlation
+			 */
+			SpearmanCorrelation: () => LocalizedString
+			/**
+			 * Response variable
+			 */
+			ExplainedVariable: () => LocalizedString
+			/**
+			 * Explanatory variable
+			 */
+			ExplanatoryVariable: () => LocalizedString
+			/**
+			 * Logarithmic transformation
+			 */
+			LogTransform: () => LocalizedString
+			/**
+			 * Pearson product-moment correlation coefficient:
+			 */
+			PearsonCorrelationValue: () => LocalizedString
+			/**
+			 * Spearman's rank correlation coefficient:
+			 */
+			SpearmanCorrelationValue: () => LocalizedString
+			/**
+			 * Model summary
+			 */
+			ModelSummary: () => LocalizedString
+			/**
+			 * Coefficients
+			 */
+			Coefficients: () => LocalizedString
+			/**
+			 * Coefficients (details)
+			 */
+			CoefficientsDetails: () => LocalizedString
+			/**
+			 * Multiple R-squared: {value}
+			 */
+			MultipleR2: (arg: { value: unknown }) => LocalizedString
+			/**
+			 * Adjusted R-squared: {value}
+			 */
+			AdjustedR2: (arg: { value: unknown }) => LocalizedString
+			/**
+			 * Residual standard error: {value}
+			 */
+			RSE: (arg: { value: unknown }) => LocalizedString
+			/**
+			 * {value} on {nFeatures} degrees of freedom
+			 */
+			DegreesOfFreedom: (arg: { nFeatures: unknown, value: unknown }) => LocalizedString
+			/**
+			 * ({value} observation{{s}} deleted as missing)
+			 */
+			DeletedAsMissing: (arg: { value: string | number | boolean }) => LocalizedString
+			/**
+			 * Diagnostic plots
+			 */
+			DiagnosticPlots: () => LocalizedString
+			/**
+			 * Residuals vs. fitted values
+			 */
+			ResidualVsFittedValues: () => LocalizedString
+			/**
+			 * The residuals vs fitted plot shows if residuals have non-linear patterns. It is useful for investigating:
+			 */
+			ResidualVsFittedInfo1: () => LocalizedString
+			/**
+			 * Whether linearity holds: this is indicated by the mean residual value for every fitted value region being close to 0 (here this is indicated by the red line being close to the dashed line).
+			 */
+			ResidualVsFittedInfo2: () => LocalizedString
+			/**
+			 * Whether there are outliers: this is indicated by some ‘extreme’ residuals that are far from the rest.
+			 */
+			ResidualVsFittedInfo3: () => LocalizedString
+			/**
+			 * It is good if you find equally spread residuals around a horizontal line without distinct patterns.
+			 */
+			ResidualVsFittedCheck: () => LocalizedString
+			/**
+			 * Scale-location
+			 */
+			ScaleLocation: () => LocalizedString
+			/**
+			 * This plot shows if residuals are spread equally along the ranges of predictors. It is mainly useful for investigating whether homoskedasticity (the assumption of equal variance) holds.
+			 */
+			ScaleLocationInfo1: () => LocalizedString
+			/**
+			 * It’s good if you see a horizontal line with equally (randomly) spread points (i.e the spread of residuals should be approximately the same across the x-axis).
+			 */
+			ScaleLocationCheck: () => LocalizedString
+			/**
+			 * Quantiles-quantiles residuals
+			 */
+			QQ: () => LocalizedString
+			/**
+			 * Quantile-Quantile plot (also called QQ plot) is useful for investigation whether the assumption of normality holds (the residuals of the regression should follow a normal distribution).
+			 */
+			QQInfo1: () => LocalizedString
+			/**
+			 * It’s good if residuals are lined well on the straight dashed line.
+			 */
+			QQCheck: () => LocalizedString
+			/**
+			 * In theory, several assumptions must not be violated when performing a simple linear regression:
+			 */
+			SummaryInfo1: () => LocalizedString
+			/**
+			 * Linearity: the relationship between the response and explanatory variables is linear.
+			 */
+			SummaryInfo2: () => LocalizedString
+			/**
+			 * Independence: the residuals are independent.
+			 */
+			SummaryInfo3: () => LocalizedString
+			/**
+			 * Homoskedasticity: the variance of the residuals is constant across all fitted values.
+			 */
+			SummaryInfo4: () => LocalizedString
+			/**
+			 * Normality: the residuals follow a normal distribution.
+			 */
+			SummaryInfo5: () => LocalizedString
+			/**
+			 * If the graphs shown above have convinced you that these hypotheses have been validated, it's now time to move on to representing the results.
+			 */
+			SummaryInfo6: () => LocalizedString
+			/**
+			 * Classification and selection of colors
+			 */
+			ClassificationColorSelection: () => LocalizedString
+			/**
+			 * Standardized residuals
+			 */
+			StandardizedResiduals: () => LocalizedString
 		}
 	}
 	FormulaInput: {

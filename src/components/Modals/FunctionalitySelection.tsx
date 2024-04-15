@@ -1,6 +1,9 @@
 // Imports from solid-js
 import {
-  createSignal, For, type JSX, Match, onCleanup, onMount, Show, Switch,
+  createSignal, For,
+  type JSX, Match,
+  onCleanup, onMount,
+  Show, Switch,
 } from 'solid-js';
 
 // Imports from other libraries
@@ -32,6 +35,7 @@ import SelectionSettings from '../PortrayalOption/SelectionSettings.tsx';
 import MessageBlock from '../MessageBlock.tsx';
 import SimplificationSettings from '../PortrayalOption/SimplificationSettings.tsx';
 import PointAggregationSettings from '../PortrayalOption/PointAggregationSettings.tsx';
+import LinearRegressionSettings from '../PortrayalOption/LinearRegressionSettings.tsx';
 
 // Type / interfaces / enums
 import {
@@ -261,6 +265,10 @@ export default function FunctionalitySelection(): JSX.Element {
         // eslint-disable-next-line no-param-reassign
         p.enabled = geomType === 'point';
         break;
+      case AnalysisOperationType.simpleLinearRegression:
+        // eslint-disable-next-line no-param-reassign
+        p.enabled = (vars.nStock + vars.nRatio) >= 2;
+        break;
       default:
         // eslint-disable-next-line no-param-reassign
         p.enabled = false;
@@ -391,6 +399,10 @@ export default function FunctionalitySelection(): JSX.Element {
             </Match>
             <Match when={selectedFunctionality()!.type === AnalysisOperationType.pointAggregation}>
               <PointAggregationSettings layerId={functionalitySelectionStore.id!} />
+            </Match>
+            {/* eslint-disable-next-line max-len */}
+            <Match when={selectedFunctionality()!.type === AnalysisOperationType.simpleLinearRegression}>
+              <LinearRegressionSettings layerId={functionalitySelectionStore.id!} />
             </Match>
           </Switch>
         </Show>
