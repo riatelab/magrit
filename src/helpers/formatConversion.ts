@@ -83,7 +83,7 @@ export function getGeometryType(geojsonLayer: GeoJSONFeatureCollection): string 
 }
 
 export function findCsvDelimiter(rawText: string): string {
-  const delimiters = [',', ';', '\t'];
+  const delimiters = [',', ';', '\t', '|'];
   const lines = rawText.split('\n');
   const counts = delimiters.map((d) => lines[0].split(d).length);
   const maxCount = Math.max(...counts);
@@ -95,7 +95,7 @@ export async function convertTextualTabularDatasetToJSON(
   file: File,
   ext: SupportedTabularFileTypes[keyof SupportedTabularFileTypes],
 ): Promise<object[]> {
-  if (ext === 'csv' || ext === 'tsv') {
+  if (ext === 'csv' || ext === 'tsv' || ext === 'txt') {
     const text = await file.text();
     const delimiter = findCsvDelimiter(text);
     return d3.dsvFormat(delimiter).parse(text);
@@ -107,13 +107,9 @@ export async function convertTextualTabularDatasetToJSON(
       !Array.isArray(parsed)
       || !parsed.every((d) => typeof d === 'object' && d !== null)
     ) {
-      throw new Error('Expected and array of objects');
+      throw new Error('Expected an array of objects');
     }
     return parsed;
-  }
-  if (ext === 'txt') {
-    // TODO: handle other textual formats ?
-    return [];
   }
   throw new Error(`Unsupported tabular file extension: ${ext}`);
 }
