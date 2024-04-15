@@ -10,7 +10,7 @@ html {
     --chevron-color: #c7c7c7;
     --button-shadow: hsla(208,7%,46%,.3);
     --sortable-chosen-background: #d2d2d2;
-    --left-menu-width: 380px;
+    --left-menu-width: 380px; /* or 29.5em to keep it sync with font-size... */
     --header-height: 54px;
     transition: background-color 200ms ease-out, border 200ms ease-out, color 200ms ease-out;
 }
@@ -81,6 +81,10 @@ html.theme-dark select > option[disabled] {
 
 .modal-card-foot, .modal-card-head {
     padding: 1em !important;
+}
+
+article.message .message-body {
+    color: var(--bulma-text);
 }
 
 button.unstyled {
