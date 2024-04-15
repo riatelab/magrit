@@ -260,6 +260,8 @@ export enum ClassificationMethod {
   geometricProgression = 'geometricProgression',
   arithmeticProgression = 'arithmeticProgression',
   headTail = 'headTail',
+  nestedMeans = 'nestedMeans',
+  // ckmeans = 'ckmeans',
   manual = 'manual',
 }
 

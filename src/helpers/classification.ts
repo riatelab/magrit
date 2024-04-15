@@ -6,6 +6,7 @@ import {
   HeadTailClassifier,
   JenksClassifier,
   MsdClassifier,
+  NestedMeansClassifier,
   PrettyBreaksClassifier,
   QuantileClassifier,
   Q6Classifier,
@@ -49,6 +50,8 @@ export const getClassifier = (method: ClassificationMethod) => {
       return QuantileClassifier;
     case ClassificationMethod.q6:
       return Q6Classifier;
+    case ClassificationMethod.nestedMeans:
+      return NestedMeansClassifier;
     default:
       throw new Error(`Unknown classification method: ${method}`);
   }
@@ -74,6 +77,8 @@ export const getClassificationFunction = (method: ClassificationMethod) => {
       return quantile;
     case ClassificationMethod.q6:
       return q6;
+    case ClassificationMethod.nestedMeans:
+      return nestedMeans;
     default:
       throw new Error(`No classification function for method "${method}".`);
   }

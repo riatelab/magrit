@@ -728,6 +728,7 @@ const fr = {
       pretty: 'Pretty breaks',
       geometricProgression: 'Progression géométrique',
       arithmeticProgression: 'Progression arithmétique',
+      nestedMeans: 'Moyennes emboitées',
       headTail: 'Head/tail',
       manual: 'Manuelle',
     },

@@ -728,6 +728,7 @@ const en = {
       pretty: 'Pretty',
       geometricProgression: 'Geometric progression',
       arithmeticProgression: 'Arithmetic progression',
+      nestedMeans: 'Nested means',
       headTail: 'Head/tail',
       manual: 'Manual',
     },

@@ -1,7 +1,8 @@
 // Imports from solid-js
 import {
-  createSignal, JSX, Match, onCleanup,
-  onMount, Show, Switch,
+  createSignal, JSX, Match,
+  onCleanup, onMount,
+  Show, Switch,
 } from 'solid-js';
 
 // Imports from other packages
@@ -309,32 +310,40 @@ export default function ClassificationPanel(): JSX.Element {
       options: [OptionsClassification.numberOfClasses],
     },
     {
+      name: LL().ClassificationPanel.classificationMethods.nestedMeans(),
+      value: ClassificationMethod.nestedMeans,
+      options: [OptionsClassification.numberOfClasses],
+    },
+    {
       name: LL().ClassificationPanel.classificationMethods.manual(),
       value: ClassificationMethod.manual,
       options: [OptionsClassification.breaks],
     },
   ];
 
-  // const listenerEscKey = (event: KeyboardEvent) => {
-  //   const isEscape = event.key
-  //     ? (event.key === 'Escape' || event.key === 'Esc')
-  //     : (event.keyCode === 27);
-  //   if (isEscape) {
-  //     (refParentNode.querySelector(
-  //       '.classification-panel__cancel-button',
-  //     ) as HTMLElement).click();
-  //   }
-  // };
-  //
-  // onMount(() => {
-  //   // We could set focus on the confirm button when the modal is shown
-  //   // as in some other modal, although it is not as important here...
-  //   document.body.addEventListener('keydown', listenerEscKey);
-  // });
-  //
-  // onCleanup(() => {
-  //   document.body.removeEventListener('keydown', listenerEscKey);
-  // });
+  const listenerEscKey = (event: KeyboardEvent) => {
+    // TODO: in many cases this modal is opened on the top of another modal
+    //       we should take care to only close this one, not the other one
+    //       (currently they both get closed)
+    const isEscape = event.key
+      ? (event.key === 'Escape' || event.key === 'Esc')
+      : (event.keyCode === 27);
+    if (isEscape) {
+      (refParentNode.querySelector(
+        '.classification-panel__cancel-button',
+      ) as HTMLElement).click();
+    }
+  };
+
+  onMount(() => {
+    // We could set focus on the confirm button when the modal is shown
+    // as in some other modal, although it is not as important here...
+    document.body.addEventListener('keydown', listenerEscKey);
+  });
+
+  onCleanup(() => {
+    document.body.removeEventListener('keydown', listenerEscKey);
+  });
 
   return <div
     class="modal-window modal classification-panel"
@@ -409,6 +418,11 @@ export default function ClassificationPanel(): JSX.Element {
                 }
                 onChange={(value) => {
                   setClassificationMethod(value as ClassificationMethod);
+                  // If the classification method is nestedMeans, we need to force
+                  // the number of classes to be a power of 2.
+                  if (value === ClassificationMethod.nestedMeans) {
+                    setNumberOfClasses(2 ** Math.round(Math.log2(numberOfClasses())));
+                  }
                   updateClassificationParameters();
                 }}
               />
@@ -429,7 +443,13 @@ export default function ClassificationPanel(): JSX.Element {
                   min={3}
                   max={9}
                   onChange={(event) => {
-                    setNumberOfClasses(+event.target.value);
+                    // If the current method is 'nestedMeans', we need to force
+                    // the number of classes to be a power of 2.
+                    let v = +event.target.value;
+                    if (classificationMethod() === ClassificationMethod.nestedMeans) {
+                      v = 2 ** Math.round(Math.log2(v));
+                    }
+                    setNumberOfClasses(v);
                     updateClassificationParameters();
                   }}
                 />
@@ -541,7 +561,11 @@ export default function ClassificationPanel(): JSX.Element {
             </Show>
           </div>
           <div>
-            <p>{ currentBreaksInfo().breaks.join(' - ')}</p>
+            <p>{
+              currentBreaksInfo().breaks
+                .map((d) => round(d, statSummary.precision))
+                .join(' - ')
+            }</p>
             <div class="is-flex">
               <div style={{ width: '60%' }}>
                 <div>

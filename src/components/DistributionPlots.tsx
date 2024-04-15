@@ -141,13 +141,13 @@ export function makeClassificationPlot(
         },
       }),
       show.mean
-        ? Plot.ruleX([statSummary.mean], { stroke: 'red' })
+        ? Plot.ruleX([statSummary.mean], { stroke: 'red', strokeWidth: 2.5 })
         : null,
       show.median
-        ? Plot.ruleX([statSummary.median], { stroke: 'green' })
+        ? Plot.ruleX([statSummary.median], { stroke: 'green', strokeWidth: 2.5 })
         : null,
       show.sd
-        ? Plot.ruleX([statSummary.mean - statSummary.standardDeviation, statSummary.mean + statSummary.standardDeviation], { stroke: 'grey' })
+        ? Plot.ruleX([statSummary.mean - statSummary.standardDeviation, statSummary.mean + statSummary.standardDeviation], { stroke: 'grey', strokeWidth: 2.5 })
         : null,
       Plot.ruleY([0]),
       Plot.ruleX([minmax[0]]),
