@@ -292,10 +292,10 @@ createEffect(
           // First we will expand the bounds by 15 degree in each direction
           const [ymax0, xmin0, ymin0, xmax0] = mapStore.projection.bounds!;
 
-          const ymax = ymax0 + 15 > 90 ? 90 : ymax0 + 15;
-          const xmin = xmin0 - 15 < -180 ? -180 : xmin0 - 15;
-          const ymin = ymin0 - 15 < -90 ? -90 : ymin0 - 15;
-          const xmax = xmax0 + 15 > 180 ? 180 : xmax0 + 15;
+          const ymax = ymax0 + 30 > 90 ? 90 : ymax0 + 30;
+          const xmin = xmin0 - 30 < -180 ? -180 : xmin0 - 30;
+          const ymin = ymin0 - 30 < -90 ? -90 : ymin0 - 30;
+          const xmax = xmax0 + 30 > 180 ? 180 : xmax0 + 30;
 
           const clippingPolygon = {
             type: 'Polygon',

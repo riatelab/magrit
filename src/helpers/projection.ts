@@ -229,15 +229,15 @@ export const getProjection = (projString: string): InterfaceProjection => {
   // If it fails, we try with proj4js.
   // If it fails again, we throw an error.
   try {
-    return mproj(projString);
+    return proj4(projString);
   } catch (errMproj) {
-    // TODO: diagnose why mproj failed to parse the string
+    // TODO: diagnose why proj4js failed to parse the string
     //   and throw the appropriate error message
     console.log(errMproj);
     try {
-      return proj4(projString);
+      return mproj(projString);
     } catch (errProjJs) {
-      // TODO: diagnose why proj4js failed to parse the string
+      // TODO: diagnose why mproj failed to parse the string
       //   and throw the appropriate error message
       console.log(errProjJs);
       // Error messages from proj4js are not very helpful
