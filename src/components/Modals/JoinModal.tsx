@@ -394,6 +394,10 @@ export default function JoinPanel(
   });
 
   return <div class="join-panel" ref={refJoinPanel!}>
+    <MessageBlock type={'info'}>
+      <p>{LL().JoinPanel.Information()}</p>
+      <p>{LL().JoinPanel.Information2()}</p>
+    </MessageBlock>
     <InputFieldSelect
       label={LL().JoinPanel.TargetLayer()}
       onChange={(v) => {
@@ -513,15 +517,17 @@ export default function JoinPanel(
         </Show>
       </Match>
     </Switch>
+    {/*
     <CollapsibleMessageBanner
       expanded={true}
       title={LL().Messages.Information()}
-      type={'primary'}
+      type={'info'}
       useIcon={true}
       style={{ 'margin-bottom': '-2em', 'margin-top': '4em' }}
     >
       <p>{LL().JoinPanel.Information()}</p>
       <p>{LL().JoinPanel.Information2()}</p>
     </CollapsibleMessageBanner>
+    */}
   </div>;
 }

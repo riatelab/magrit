@@ -215,7 +215,7 @@ export default function ProjectionSelection() : JSX.Element {
     <div class="projection-selection__content">
       <div class="projection-selection__content-global">
         <Show when={currentTab() === 'd3'}>
-          <MessageBlock type={'primary'}>
+          <MessageBlock type={'info'}>
             {LL().ProjectionSelection.InformationGlobalProjection()}
           </MessageBlock>
           <DropdownMenu
@@ -247,7 +247,7 @@ export default function ProjectionSelection() : JSX.Element {
       </div>
       <div class="projection-selection__content-local">
         <Show when={currentTab() === 'custom'}>
-          <MessageBlock type={'primary'}>
+          <MessageBlock type={'info'}>
             {LL().ProjectionSelection.InformationLocalProjection()}
           </MessageBlock>
           <InputFieldText

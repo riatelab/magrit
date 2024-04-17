@@ -618,7 +618,7 @@ export default function ImportWindow(): JSX.Element {
     >
       <section class="modal-card-body">
         <h2>{ LL().ImportWindow.Title() }</h2>
-        <MessageBlock type={'primary'}>
+        <MessageBlock type={'info'}>
           <p>{ LL().ImportWindow.Instructions() }</p>
           <p>{LL().ImportWindow.SupportedVectorFormats()}</p>
           <p>{LL().ImportWindow.SupportedTabularFormats()}</p>
@@ -882,7 +882,6 @@ export default function ImportWindow(): JSX.Element {
               }
             }
 
-            console.log(needToZoomOnTotalExtent);
             // Do we have to use a specific CRS ?
             let crsToUse: GdalCrs | undefined;
             fileDescriptions()

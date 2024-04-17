@@ -323,7 +323,7 @@ export default function FunctionalitySelection(): JSX.Element {
       </header>
       <section class="modal-card-body is-flex is-flex-direction-column">
         <Show when={!selectedFunctionality()}>
-          <MessageBlock type={'primary'} useIcon={true}>
+          <MessageBlock type={'info'}>
             <p>{ LL().PortrayalSelection.Information() }</p>
           </MessageBlock>
           <div class="has-text-centered mb-4">

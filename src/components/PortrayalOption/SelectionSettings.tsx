@@ -181,7 +181,7 @@ export default function SelectionSettings(
     && (filteredData() !== null && filteredData()!.length > 0));
 
   return <div class="portrayal-section__portrayal-options-selection">
-    <MessageBlock type={'primary'}>
+    <MessageBlock type={'info'}>
       <p>{LL().FunctionalitiesSection.SelectionOptions.Information()}</p>
       <p>{LL().FunctionalitiesSection.SelectionOptions.InformationSyntax()}</p>
     </MessageBlock>

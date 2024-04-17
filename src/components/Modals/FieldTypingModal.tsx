@@ -16,6 +16,7 @@ import { VariableType, Variable } from '../../helpers/typeDetection';
 
 // Subcomponents
 import CollapsibleMessageBanner from '../CollapsibleMessageBanner.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
 import type { LayerDescription, TableDescription } from '../../global';
@@ -91,6 +92,10 @@ export default function FieldTypingModal(
   });
 
   return <div ref={refParentNode!}>
+    <MessageBlock type={'info'}>
+      <p>{LL().FieldsTyping.Information1()}</p>
+      <p>{LL().FieldsTyping.Information2()}</p>
+    </MessageBlock>
     <For each={descriptions}>
       {
         (field) => (
@@ -121,15 +126,17 @@ export default function FieldTypingModal(
         )
       }
     </For>
+    {/*
     <CollapsibleMessageBanner
       expanded={true}
       title={LL().Messages.Information()}
-      type={'primary'}
+      type={'info'}
       useIcon={true}
       style={{ 'margin-bottom': '-2em', 'margin-top': '4em' }}
     >
       <p>{LL().FieldsTyping.Information1()}</p>
       <p>{LL().FieldsTyping.Information2()}</p>
     </CollapsibleMessageBanner>
+    */}
   </div>;
 }
