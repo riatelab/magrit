@@ -7,15 +7,19 @@ import {
 } from 'solid-js';
 
 // Imports from other external libraries
+import * as Plot from '@observablehq/plot';
 import { BsMap } from 'solid-icons/bs';
 import { FiExternalLink } from 'solid-icons/fi';
 import { HiOutlineGlobeAlt } from 'solid-icons/hi';
 
 // Helpers
+import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { epsgDb, type EpsgDbEntryType } from '../../helpers/projection';
 import { isNumber } from '../../helpers/common';
 import { round } from '../../helpers/math';
+import { epsgDb, type EpsgDbEntryType } from '../../helpers/projection';
+import topojson from '../../helpers/topojson';
+import worldLand from '../../helpers/world-land';
 
 // Stores
 import { setMapStore } from '../../store/MapStore';
@@ -27,6 +31,8 @@ import InputFieldText from '../Inputs/InputText.tsx';
 import { ScoredResult } from '../../global.d';
 import MessageBlock from '../MessageBlock.tsx';
 import DropdownMenu from '../DropdownMenu.tsx';
+
+const worldLandGeo = topojson.feature(worldLand as never, worldLand.objects.world_country as never);
 
 const availableProjections = [
   'Airy',
@@ -227,6 +233,27 @@ export default function ProjectionSelection() : JSX.Element {
             }}
             style={{ 'max-height': '30vh' }}
           />
+          <div class="mt-4 mb-4" style={{ 'text-align': 'center' }}>
+            {
+              Plot.plot({
+                height: 260,
+                width: 360,
+                style: {
+                  background: 'white',
+                },
+                projection: d3[`geo${selectedGlobalProjection() || 'Airy'}`]()
+                  .fitExtent([[10, 10], [350, 250]], worldLandGeo),
+                marks: [
+                  Plot.graticule(),
+                  Plot.geo(
+                    worldLandGeo,
+                    { fill: 'black' },
+                  ),
+                  Plot.sphere(),
+                ],
+              })
+            }
+          </div>
           <div class="mt-4" style={{ 'text-align': 'center' }}>
             <button
               class="button"
