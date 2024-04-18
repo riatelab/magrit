@@ -87,7 +87,7 @@ function TextOptionTable(
     LL: Accessor<TranslationFunctions>,
   },
 ): JSX.Element {
-  return <table style={{ 'text-align': 'center' }}>
+  return <table class="table-font-properties" style={{ 'text-align': 'center' }}>
     <thead>
     <tr>
       <th></th>
@@ -458,13 +458,13 @@ function makeSettingsProportionalSymbolsLegend(
         </div>
       </div>
     </Show>
-    <hr />
+    <OptionBackgroundRectangle legend={legend} LL={LL} />
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
       style={{ cursor: 'pointer' }}
     >
       <p class="label">
-        { LL().Legend.Modal.MoreOptions() }
+        { LL().Legend.Modal.FontProperties() }
         <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }} />
       </p>
     </div>
@@ -474,8 +474,6 @@ function makeSettingsProportionalSymbolsLegend(
         LL={LL}
         textProperties={['title', 'subtitle', 'labels', 'note']}
       />
-      <hr />
-      <OptionBackgroundRectangle legend={legend} LL={LL} />
     </Show>
   </>;
 }
@@ -670,13 +668,13 @@ function makeSettingsChoroplethLegend(
         </label>
       </div>
     </div>
-    <hr />
+    <OptionBackgroundRectangle legend={legend} LL={LL} />
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
       style={{ cursor: 'pointer' }}
     >
       <p class="label">
-        { LL().Legend.Modal.MoreOptions() }
+        { LL().Legend.Modal.FontProperties() }
         <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }} />
       </p>
     </div>
@@ -686,8 +684,6 @@ function makeSettingsChoroplethLegend(
         LL={LL}
         textProperties={['title', 'subtitle', 'labels', 'note']}
       />
-      <hr />
-      <OptionBackgroundRectangle legend={legend} LL={LL} />
     </Show>
   </>;
 }
@@ -749,13 +745,13 @@ function makeSettingsDiscontinuityLegend(
         </label>
       </div>
     </div>
-    <hr />
+    <OptionBackgroundRectangle legend={legend} LL={LL} />
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
       style={{ cursor: 'pointer' }}
     >
       <p class="label">
-        { LL().Legend.Modal.MoreOptions() }
+        { LL().Legend.Modal.FontProperties() }
         <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }} />
       </p>
     </div>
@@ -765,8 +761,6 @@ function makeSettingsDiscontinuityLegend(
         LL={LL}
         textProperties={['title', 'subtitle', 'labels', 'note']}
       />
-      <hr />
-      <OptionBackgroundRectangle legend={legend} LL={LL} />
     </Show>
  </>;
 }
@@ -784,13 +778,13 @@ function makeSettingsLabels(
     <FieldText legend={legend} LL={LL} role={'title'}/>
     <FieldText legend={legend} LL={LL} role={'subtitle'}/>
     <FieldText legend={legend} LL={LL} role={'note'}/>
-    <hr/>
+    <OptionBackgroundRectangle legend={legend} LL={LL}/>
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
       style={{ cursor: 'pointer' }}
     >
       <p class="label">
-        {LL().Legend.Modal.MoreOptions()}
+        {LL().Legend.Modal.FontProperties()}
         <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
       </p>
     </div>
@@ -800,8 +794,6 @@ function makeSettingsLabels(
         LL={LL}
         textProperties={['title', 'subtitle', 'labels', 'note']}
       />
-      <hr/>
-      <OptionBackgroundRectangle legend={legend} LL={LL}/>
     </Show>
   </>;
 }
@@ -851,13 +843,13 @@ function makeSettingsMushrooms(
       onChange={(v) => debouncedUpdateProps(legend.id, ['bottomTitle', 'text'], v)}
     />
     <FieldChangeMushroomValues legend={legend} which={'bottom'} LL={LL} />
-    <hr/>
+    <OptionBackgroundRectangle legend={legend} LL={LL}/>
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
       style={{ cursor: 'pointer' }}
     >
       <p class="label">
-        {LL().Legend.Modal.MoreOptions()}
+        {LL().Legend.Modal.FontProperties()}
         <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
       </p>
     </div>
@@ -867,8 +859,6 @@ function makeSettingsMushrooms(
         LL={LL}
         textProperties={['title', 'subtitle', 'labels', 'note']}
       />
-      <hr/>
-      <OptionBackgroundRectangle legend={legend} LL={LL}/>
     </Show>
   </>;
 }
@@ -931,13 +921,13 @@ function makeSettingsChoroplethHistogram(
         </label>
       </div>
     </div>
-    <hr/>
+    <OptionBackgroundRectangle legend={legend} LL={LL}/>
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
       style={{ cursor: 'pointer' }}
     >
       <p class="label">
-        {LL().Legend.Modal.MoreOptions()}
+        {LL().Legend.Modal.FontProperties()}
         <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
       </p>
     </div>
@@ -947,8 +937,6 @@ function makeSettingsChoroplethHistogram(
         LL={LL}
         textProperties={['title', 'subtitle', 'note']}
       />
-      <hr/>
-      <OptionBackgroundRectangle legend={legend} LL={LL}/>
     </Show>
   </>;
 }
@@ -1020,13 +1008,13 @@ function makeSettginsCategoricalChoroplethBarchart(
       <option value="descending">{LL().Legend.Modal.BarOrderDescending()}</option>
       <option value="none">{LL().Legend.Modal.BarOrderNone()}</option>
     </InputFieldSelect>
-    <hr/>
+    <OptionBackgroundRectangle legend={legend} LL={LL}/>
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
       style={{ cursor: 'pointer' }}
     >
       <p class="label">
-        {LL().Legend.Modal.MoreOptions()}
+        {LL().Legend.Modal.FontProperties()}
         <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
       </p>
     </div>
@@ -1036,8 +1024,6 @@ function makeSettginsCategoricalChoroplethBarchart(
         LL={LL}
         textProperties={['title', 'subtitle', 'note']}
       />
-      <hr/>
-      <OptionBackgroundRectangle legend={legend} LL={LL}/>
     </Show>
   </>;
 }

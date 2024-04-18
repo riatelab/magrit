@@ -318,7 +318,7 @@ export function makeLegendSettingsModal(
       );
     },
     escapeKey: 'cancel',
-    width: '700px',
+    width: '620px',
   });
 }
 

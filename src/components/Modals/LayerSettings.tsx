@@ -17,17 +17,18 @@ import { getPaletteWrapper } from '../../helpers/color';
 import { debounce, unproxify } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
 import { webSafeFonts } from '../../helpers/font';
+import { makeDorlingDemersSimulation } from '../../helpers/geo';
 import { generateIdLegend } from '../../helpers/legends';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Sub-components
+import DetailsSummary from '../DetailsSummary.tsx';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
 import InputFieldButton from '../Inputs/InputButton.tsx';
-import CollapsibleSection from '../CollapsibleSection.tsx';
 import { CategoriesCustomisation } from '../PortrayalOption/CategoricalChoroplethComponents.tsx';
 import { LinksSelectionOnExistingLayer } from '../PortrayalOption/LinksComponents.tsx';
 
@@ -71,7 +72,7 @@ import {
   type CategoricalChoroplethBarchartLegend,
   type ProportionalSymbolCategoryParameters,
   type ChoroplethHistogramLegend,
-  type ProportionalSymbolsRatioParameters, CustomPalette,
+  type ProportionalSymbolsRatioParameters, CustomPalette, type GeoJSONFeature,
 } from '../../global.d';
 
 // Styles
@@ -390,66 +391,6 @@ function makeSettingsDefaultPoint(
         }}
       />
     </Show>
-    <Show when={props.renderer === 'categoricalChoropleth'}>
-      <CollapsibleSection
-        title={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
-      >
-        <CategoriesCustomisation
-          mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
-          setMapping={(m) => {
-            updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
-          }}
-          detailed={false}
-        />
-      </CollapsibleSection>
-      <InputFieldCheckbox
-        label={LL().LayerSettings.AddBarChartCategoricalChoropleth()}
-        checked={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
-        }
-        disabled={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
-        }
-        onChange={(v) => {
-          const legendPosition = getPossibleLegendPosition(300, 250);
-
-          setLayersDescriptionStore(
-            produce(
-              (draft: LayersDescriptionStoreType) => {
-                draft.layoutFeaturesAndLegends.push({
-                  id: generateIdLegend(),
-                  layerId: props.id,
-                  type: LegendType.categoricalChoroplethBarchart,
-                  position: [legendPosition[0], legendPosition[1]],
-                  width: 300,
-                  height: 250,
-                  orientation: 'horizontal',
-                  order: 'none',
-                  fontColor: '#000000',
-                  visible: true,
-                  title: {
-                    text: (
-                      props.rendererParameters as CategoricalChoroplethParameters).variable,
-                    ...applicationSettingsStore.defaultLegendSettings.title,
-                  } as LegendTextElement,
-                  subtitle: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
-                  },
-                  note: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.note,
-                  },
-                  backgroundRect: {
-                    visible: false,
-                  },
-                } as CategoricalChoroplethBarchartLegend);
-              },
-            ),
-          );
-        }}
-      />
-    </Show>
     <Show when={props.renderer === 'proportionalSymbols'}>
       <InputFieldSelect
         disabled={true}
@@ -581,8 +522,8 @@ function makeSettingsDefaultPoint(
       props.renderer === 'proportionalSymbols'
       && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'categoricalVariable'
     }>
-      <CollapsibleSection
-        title={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
+      <DetailsSummary
+        summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
       >
         <CategoriesCustomisation
           mapping={() => (
@@ -593,7 +534,7 @@ function makeSettingsDefaultPoint(
           }}
           detailed={false}
         />
-      </CollapsibleSection>
+      </DetailsSummary>
       <InputFieldCheckbox
         label={LL().LayerSettings.AddBarChartCategoricalChoropleth()}
         checked={
@@ -757,23 +698,141 @@ function makeSettingsDefaultPoint(
             'rendererParameters',
             { avoidOverlapping: checked },
           );
-          // TODO: update the map
+          if (checked) {
+            // Compute position of the symbols
+            setLayersDescriptionStoreBase(
+              produce((draft: LayersDescriptionStoreType) => {
+                draft.layers.filter((l) => l.id === props.id).forEach((layerDescription) => {
+                  const r = (layerDescription.rendererParameters as ProportionalSymbolsParameters);
+                  // eslint-disable-next-line no-param-reassign
+                  layerDescription.data.features = makeDorlingDemersSimulation(
+                    unproxify(layerDescription.data.features as never) as GeoJSONFeature[],
+                    r.variable,
+                    {
+                      referenceSize: r.referenceRadius,
+                      referenceValue: r.referenceValue,
+                      symbolType: r.symbolType,
+                    },
+                    r.iterations,
+                    layerDescription.strokeWidth as number,
+                  );
+                });
+              }),
+            );
+          } else {
+            // Restore position of the symbols
+            setLayersDescriptionStoreBase(
+              produce((draft: LayersDescriptionStoreType) => {
+                draft.layers.filter((l) => l.id === props.id).forEach((layerDescription) => {
+                  layerDescription.data.features.forEach((f) => {
+                    // eslint-disable-next-line no-param-reassign
+                    f.geometry.coordinates[0] = f.geometry.originalCoordinates[0] as number;
+                    // eslint-disable-next-line no-param-reassign
+                    f.geometry.coordinates[1] = f.geometry.originalCoordinates[1] as number;
+                  });
+                });
+              }),
+            );
+          }
         }}
       />
       <Show when={(props.rendererParameters as ProportionalSymbolsParameters).avoidOverlapping}>
         <InputFieldNumber
           label={LL().LayerSettings.Iterations()}
           value={(props.rendererParameters as ProportionalSymbolsParameters).iterations}
-          onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'iterations'], v)}
           min={1}
           max={1000}
           step={1}
+          onChange={(v) => {
+            debouncedUpdateProp(props.id, ['rendererParameters', 'iterations'], v);
+            // Compute position of the symbols with the new value
+            // for "iterations"
+            setLayersDescriptionStoreBase(
+              produce((draft: LayersDescriptionStoreType) => {
+                draft.layers.filter((l) => l.id === props.id).forEach((layerDescription) => {
+                  const r = (layerDescription.rendererParameters as ProportionalSymbolsParameters);
+                  // eslint-disable-next-line no-param-reassign
+                  layerDescription.data.features = makeDorlingDemersSimulation(
+                    unproxify(layerDescription.data.features as never) as GeoJSONFeature[],
+                    r.variable,
+                    {
+                      referenceSize: r.referenceRadius,
+                      referenceValue: r.referenceValue,
+                      symbolType: r.symbolType,
+                    },
+                    v,
+                    layerDescription.strokeWidth as number,
+                  );
+                });
+              }),
+            );
+          }}
         />
       </Show>
       <InputFieldCheckbox
         label={ LL().LayerSettings.AllowMovingSymbols() }
         checked={(props.rendererParameters as ProportionalSymbolsParameters).movable}
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}
+      />
+    </Show>
+    <Show when={props.renderer === 'categoricalChoropleth'}>
+      <DetailsSummary
+        summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
+      >
+        <CategoriesCustomisation
+          mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
+          setMapping={(m) => {
+            updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
+          }}
+          detailed={false}
+        />
+      </DetailsSummary>
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddBarChartCategoricalChoropleth()}
+        checked={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        disabled={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          const legendPosition = getPossibleLegendPosition(300, 250);
+
+          setLayersDescriptionStore(
+            produce(
+              (draft: LayersDescriptionStoreType) => {
+                draft.layoutFeaturesAndLegends.push({
+                  id: generateIdLegend(),
+                  layerId: props.id,
+                  type: LegendType.categoricalChoroplethBarchart,
+                  position: [legendPosition[0], legendPosition[1]],
+                  width: 300,
+                  height: 250,
+                  orientation: 'horizontal',
+                  order: 'none',
+                  fontColor: '#000000',
+                  visible: true,
+                  title: {
+                    text: (
+                      props.rendererParameters as CategoricalChoroplethParameters).variable,
+                    ...applicationSettingsStore.defaultLegendSettings.title,
+                  } as LegendTextElement,
+                  subtitle: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  note: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.note,
+                  },
+                  backgroundRect: {
+                    visible: false,
+                  },
+                } as CategoricalChoroplethBarchartLegend);
+              },
+            ),
+          );
+        }}
       />
     </Show>
     <AestheticsSection {...props} />
@@ -877,66 +936,6 @@ function makeSettingsDefaultLine(
         }}
       />
     </Show>
-    <Show when={props.renderer === 'categoricalChoropleth'}>
-      <CollapsibleSection
-        title={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
-      >
-        <CategoriesCustomisation
-          mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
-          setMapping={(m) => {
-            updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
-          }}
-          detailed={false}
-        />
-      </CollapsibleSection>
-      <InputFieldCheckbox
-        label={LL().LayerSettings.AddBarChartCategoricalChoropleth()}
-        checked={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
-        }
-        disabled={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
-        }
-        onChange={(v) => {
-          const legendPosition = getPossibleLegendPosition(300, 250);
-
-          setLayersDescriptionStore(
-            produce(
-              (draft: LayersDescriptionStoreType) => {
-                draft.layoutFeaturesAndLegends.push({
-                  id: generateIdLegend(),
-                  layerId: props.id,
-                  type: LegendType.categoricalChoroplethBarchart,
-                  position: [legendPosition[0], legendPosition[1]],
-                  width: 300,
-                  height: 250,
-                  orientation: 'horizontal',
-                  order: 'none',
-                  fontColor: '#000000',
-                  visible: true,
-                  title: {
-                    text: (
-                      props.rendererParameters as CategoricalChoroplethParameters).variable,
-                    ...applicationSettingsStore.defaultLegendSettings.title,
-                  } as LegendTextElement,
-                  subtitle: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
-                  },
-                  note: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.note,
-                  },
-                  backgroundRect: {
-                    visible: false,
-                  },
-                } as CategoricalChoroplethBarchartLegend);
-              },
-            ),
-          );
-        }}
-      />
-    </Show>
     <InputFieldNumber
       label={LL().LayerSettings.StrokeOpacity()}
       value={props.strokeOpacity!}
@@ -1023,10 +1022,9 @@ function makeSettingsDefaultLine(
           }
         </For>
       </InputFieldSelect>
-      <details>
-        <summary>{ LL().FunctionalitiesSection.LinksOptions.Selection() }</summary>
+      <DetailsSummary summaryContent={LL().FunctionalitiesSection.LinksOptions.Selection()}>
         <LinksSelectionOnExistingLayer layerId={props.id}/>
-      </details>
+      </DetailsSummary>
     </Show>
     <Show when={props.renderer === 'graticule'}>
       <InputFieldNumber
@@ -1078,6 +1076,66 @@ function makeSettingsDefaultLine(
         min={1}
         max={180}
         step={1}
+      />
+    </Show>
+    <Show when={props.renderer === 'categoricalChoropleth'}>
+      <DetailsSummary
+        summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
+      >
+        <CategoriesCustomisation
+          mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
+          setMapping={(m) => {
+            updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
+          }}
+          detailed={false}
+        />
+      </DetailsSummary>
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddBarChartCategoricalChoropleth()}
+        checked={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        disabled={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          const legendPosition = getPossibleLegendPosition(300, 250);
+
+          setLayersDescriptionStore(
+            produce(
+              (draft: LayersDescriptionStoreType) => {
+                draft.layoutFeaturesAndLegends.push({
+                  id: generateIdLegend(),
+                  layerId: props.id,
+                  type: LegendType.categoricalChoroplethBarchart,
+                  position: [legendPosition[0], legendPosition[1]],
+                  width: 300,
+                  height: 250,
+                  orientation: 'horizontal',
+                  order: 'none',
+                  fontColor: '#000000',
+                  visible: true,
+                  title: {
+                    text: (
+                      props.rendererParameters as CategoricalChoroplethParameters).variable,
+                    ...applicationSettingsStore.defaultLegendSettings.title,
+                  } as LegendTextElement,
+                  subtitle: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  note: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.note,
+                  },
+                  backgroundRect: {
+                    visible: false,
+                  },
+                } as CategoricalChoroplethBarchartLegend);
+              },
+            ),
+          );
+        }}
       />
     </Show>
     <AestheticsSection {...props} />
@@ -1188,66 +1246,6 @@ function makeSettingsDefaultPolygon(
         }}
       />
     </Show>
-    <Show when={props.renderer === 'categoricalChoropleth'}>
-      <CollapsibleSection
-        title={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
-      >
-        <CategoriesCustomisation
-          mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
-          setMapping={(m) => {
-            updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
-          }}
-          detailed={false}
-        />
-      </CollapsibleSection>
-      <InputFieldCheckbox
-        label={LL().LayerSettings.AddBarChartCategoricalChoropleth()}
-        checked={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
-        }
-        disabled={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
-        }
-        onChange={(v) => {
-          const legendPosition = getPossibleLegendPosition(300, 250);
-
-          setLayersDescriptionStore(
-            produce(
-              (draft: LayersDescriptionStoreType) => {
-                draft.layoutFeaturesAndLegends.push({
-                  id: generateIdLegend(),
-                  layerId: props.id,
-                  type: LegendType.categoricalChoroplethBarchart,
-                  position: [legendPosition[0], legendPosition[1]],
-                  width: 300,
-                  height: 250,
-                  orientation: 'horizontal',
-                  order: 'none',
-                  fontColor: '#000000',
-                  visible: true,
-                  title: {
-                    text: (
-                      props.rendererParameters as CategoricalChoroplethParameters).variable,
-                    ...applicationSettingsStore.defaultLegendSettings.title,
-                  } as LegendTextElement,
-                  subtitle: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
-                  },
-                  note: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.note,
-                  },
-                  backgroundRect: {
-                    visible: false,
-                  },
-                } as CategoricalChoroplethBarchartLegend);
-              },
-            ),
-          );
-        }}
-      />
-    </Show>
     <Show when={props.renderer === 'smoothed' || props.renderer === 'grid'}>
       <InputFieldSelect
         label={LL().LayerSettings.Palette()}
@@ -1315,6 +1313,66 @@ function makeSettingsDefaultPolygon(
       max={10}
       step={0.1}
     />
+    <Show when={props.renderer === 'categoricalChoropleth'}>
+      <DetailsSummary
+        summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
+      >
+        <CategoriesCustomisation
+          mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
+          setMapping={(m) => {
+            updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
+          }}
+          detailed={true}
+        />
+      </DetailsSummary>
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddBarChartCategoricalChoropleth()}
+        checked={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        disabled={
+          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          const legendPosition = getPossibleLegendPosition(300, 250);
+
+          setLayersDescriptionStore(
+            produce(
+              (draft: LayersDescriptionStoreType) => {
+                draft.layoutFeaturesAndLegends.push({
+                  id: generateIdLegend(),
+                  layerId: props.id,
+                  type: LegendType.categoricalChoroplethBarchart,
+                  position: [legendPosition[0], legendPosition[1]],
+                  width: 300,
+                  height: 250,
+                  orientation: 'horizontal',
+                  order: 'none',
+                  fontColor: '#000000',
+                  visible: true,
+                  title: {
+                    text: (
+                      props.rendererParameters as CategoricalChoroplethParameters).variable,
+                    ...applicationSettingsStore.defaultLegendSettings.title,
+                  } as LegendTextElement,
+                  subtitle: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  note: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.note,
+                  },
+                  backgroundRect: {
+                    visible: false,
+                  },
+                } as CategoricalChoroplethBarchartLegend);
+              },
+            ),
+          );
+        }}
+      />
+    </Show>
     <AestheticsSection {...props} />
   </>;
 }

@@ -2917,9 +2917,9 @@ type RootTranslation = {
 			 */
 			RoundDecimals: string
 			/**
-			 * M​o​r​e​ ​o​p​t​i​o​n​s​.​.​.
+			 * F​o​n​t​ ​p​r​o​p​e​r​t​i​e​s​.​.​.
 			 */
-			MoreOptions: string
+			FontProperties: string
 			/**
 			 * S​p​a​c​i​n​g​ ​b​e​t​w​e​e​n​ ​s​y​m​b​o​l​s
 			 */
@@ -5881,9 +5881,9 @@ export type TranslationFunctions = {
 			 */
 			RoundDecimals: () => LocalizedString
 			/**
-			 * More options...
+			 * Font properties...
 			 */
-			MoreOptions: () => LocalizedString
+			FontProperties: () => LocalizedString
 			/**
 			 * Spacing between symbols
 			 */

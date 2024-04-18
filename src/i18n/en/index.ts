@@ -807,7 +807,7 @@ const en = {
       DisplayStroke: 'Display stroke for each box',
       BoxStrokeWidth: 'Box stroke width',
       RoundDecimals: 'Round values',
-      MoreOptions: 'More options...',
+      FontProperties: 'Font properties...',
       SymbolsSpacing: 'Spacing between symbols',
       ChooseValues: 'Choice of values',
       LineLength: 'Line length',

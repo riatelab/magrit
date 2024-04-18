@@ -73,3 +73,13 @@ We have two types of "field":
     width: 5em !important;
     height: 2em;
 }
+
+.table-font-properties {
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.table-font-properties input[type=number],
+.table-font-properties select {
+    font-size: 0.9rem;
+}

@@ -807,7 +807,7 @@ const fr = {
       DisplayStroke: 'Afficher la bordure pour chaque boîte',
       BoxStrokeWidth: 'Épaisseur des lignes des boites',
       RoundDecimals: 'Arrondir les valeurs',
-      MoreOptions: 'Plus d\'options...',
+      FontProperties: 'Propriétés des polices d\'écriture...',
       SymbolsSpacing: 'Espace entre les symboles',
       ChooseValues: 'Choix des valeurs',
       LineLength: 'Longueur de la ligne',
