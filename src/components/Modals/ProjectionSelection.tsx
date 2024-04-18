@@ -1,13 +1,11 @@
 // Imports for solid-js
 import {
-  createSignal,
-  For,
-  type JSX,
-  Show,
+  createEffect, createSignal,
+  For, type JSX,
+  on, onMount, Show,
 } from 'solid-js';
 
 // Imports from other external libraries
-import * as Plot from '@observablehq/plot';
 import { BsMap } from 'solid-icons/bs';
 import { FiExternalLink } from 'solid-icons/fi';
 import { HiOutlineGlobeAlt } from 'solid-icons/hi';
@@ -15,9 +13,10 @@ import { HiOutlineGlobeAlt } from 'solid-icons/hi';
 // Helpers
 import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { isNumber } from '../../helpers/common';
+import { camelToFlat, isNumber } from '../../helpers/common';
 import { round } from '../../helpers/math';
 import { epsgDb, type EpsgDbEntryType } from '../../helpers/projection';
+import rewindLayer from '../../helpers/rewind';
 import topojson from '../../helpers/topojson';
 import worldLand from '../../helpers/world-land';
 
@@ -25,14 +24,20 @@ import worldLand from '../../helpers/world-land';
 import { setMapStore } from '../../store/MapStore';
 
 // Sub-components
+import DropdownMenu from '../DropdownMenu.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
-import { ScoredResult } from '../../global.d';
-import MessageBlock from '../MessageBlock.tsx';
-import DropdownMenu from '../DropdownMenu.tsx';
+import type { GeoJSONFeatureCollection, ScoredResult } from '../../global.d';
 
-const worldLandGeo = topojson.feature(worldLand as never, worldLand.objects.world_country as never);
+const worldLandGeo = rewindLayer(
+  topojson.feature(
+    worldLand as never,
+    worldLand.objects.world_country as never,
+  ) as GeoJSONFeatureCollection,
+  false,
+);
 
 const availableProjections = [
   'Airy',
@@ -46,14 +51,13 @@ const availableProjections = [
   'Bonne',
   'Bottomley',
   'Bromley',
-  'Chamberlin',
+  // 'Chamberlin',
   'ChamberlinAfrica',
   'Collignon',
   'Craig',
   'Craster',
   'CylindricalEqualArea',
   'CylindricalStereographic',
-  'NaturalEarth2',
   'Eckert1',
   'Eckert2',
   'Eckert3',
@@ -61,6 +65,7 @@ const availableProjections = [
   'Eckert5',
   'Eckert6',
   'Eisenlohr',
+  'EqualEarth',
   'Fahey',
   'Foucaut',
   'FoucautSinusoidal',
@@ -86,17 +91,20 @@ const availableProjections = [
   'Lagrange',
   'Larrivee',
   'Laskowski',
-  'Littrow',
+  // 'Littrow',
   'Loximuthal',
   'Miller',
-  'ModifiedSereographic',
+  'ModifiedStereographicLee',
+  'ModifiedStereographicMiller',
   'Mollweide',
+  'NaturalEarth1',
+  'NaturalEarth2',
   'NellHammer',
   'InterruptedQuarticAuthalic',
   'Nicolosi',
   'Patterson',
   'Polyconic',
-  'Polyhedral',
+  // 'Polyhedral',
   'PolyhedralButterfly',
   'PolyhedralCollignon',
   'PolyhedralWaterman',
@@ -107,7 +115,6 @@ const availableProjections = [
   'Satellite',
   'SinuMollweide',
   'Sinusoidal',
-  'Stitch',
   'Times',
   'VanDerGrinten',
   'VanDerGrinten2',
@@ -116,12 +123,12 @@ const availableProjections = [
   'Wagner',
   'Wagner4',
   'Wagner6',
-  'Wiechel',
+  // 'Wiechel',
   'Winkel3',
-];
+].sort();
 
 const projectionEntries = availableProjections.map((projection) => ({
-  name: projection,
+  name: camelToFlat(projection),
   value: projection,
   type: 'd3',
 }));
@@ -179,6 +186,54 @@ const findMatchingProjections = (search: string): ScoredResult<EpsgDbEntryType>[
     .sort((a, b) => b.score - a.score);
 };
 
+function DemoMap(
+  props: {
+    projectionName: string,
+    width: number,
+    height: number,
+  },
+): JSX.Element {
+  let refCanvasNode: HTMLCanvasElement;
+  const sphere = { type: 'Sphere' };
+  const graticule = d3.geoGraticule().step([20, 20])();
+
+  const makeMap = () => {
+    refCanvasNode.width = props.width;
+    refCanvasNode.height = props.height;
+    const context = refCanvasNode.getContext('2d')!;
+    const projection = d3[`geo${props.projectionName}`]()
+      .fitExtent([[10, 10], [350, 250]], sphere);
+    const path = d3.geoPath(projection, context);
+    context.beginPath();
+    path(sphere as never);
+    context.clip();
+    context.fillStyle = '#fff';
+    context.fillRect(0, 0, props.width, props.height);
+    context.beginPath();
+    path(graticule);
+    context.strokeStyle = '#ccc';
+    context.stroke();
+    context.beginPath();
+    path(worldLandGeo as never);
+    context.fillStyle = '#000';
+    context.fill();
+    context.restore();
+    context.beginPath();
+    path(sphere as never);
+    context.strokeStyle = '#000';
+    context.stroke();
+  };
+
+  onMount(makeMap);
+  createEffect(
+    on(
+      () => [props.projectionName, props.width, props.height],
+      makeMap,
+    ),
+  );
+  return <canvas ref={refCanvasNode!}></canvas>;
+}
+
 export default function ProjectionSelection() : JSX.Element {
   const { LL } = useI18nContext();
 
@@ -234,25 +289,7 @@ export default function ProjectionSelection() : JSX.Element {
             style={{ 'max-height': '30vh' }}
           />
           <div class="mt-4 mb-4" style={{ 'text-align': 'center' }}>
-            {
-              Plot.plot({
-                height: 260,
-                width: 360,
-                style: {
-                  background: 'white',
-                },
-                projection: d3[`geo${selectedGlobalProjection() || 'Airy'}`]()
-                  .fitExtent([[10, 10], [350, 250]], worldLandGeo),
-                marks: [
-                  Plot.graticule(),
-                  Plot.geo(
-                    worldLandGeo,
-                    { fill: 'black' },
-                  ),
-                  Plot.sphere(),
-                ],
-              })
-            }
+            <DemoMap projectionName={selectedGlobalProjection() || 'Airy'} width={360} height={260} />
           </div>
           <div class="mt-4" style={{ 'text-align': 'center' }}>
             <button

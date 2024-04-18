@@ -130,3 +130,8 @@ export const precisionToMinimumFractionDigits = (precision: number) => {
   }
   return precision;
 };
+
+/* eslint-disable no-return-assign, no-param-reassign, no-sequences */
+export const camelToFlat = (c: string) => (
+  c = c.replace(/[A-Z]|([0-9]+)/g, ' $&'), c[0].toUpperCase() + c.slice(1));
+/* eslint-enable no-return-assign, no-param-reassign, no-sequences */

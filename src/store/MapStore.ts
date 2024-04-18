@@ -273,7 +273,6 @@ createEffect(
           projection.rotate(mapStore.rotate);
         }
       } else { // mapStore.projection.type === 'proj4'
-        console.log(mapStore.projection.value);
         projection = getD3ProjectionFromProj4(getProjection(mapStore.projection.value));
         projection.center([0, 0])
           .translate(mapStore.translate)
@@ -306,17 +305,6 @@ createEffect(
 
           projection.preclip(d3.geoClipPolygon(clippingPolygon));
         }
-        // else {
-        //   const [ymax, xmin, ymin, xmax] = [90, -180, -90, 180];
-        //   const clippingPolygon = {
-        //     type: 'Polygon',
-        //     coordinates: [[
-        //       [xmin, ymax], [xmax, ymax], [xmax, ymin], [xmin, ymin], [xmin, ymax],
-        //     ]],
-        //   };
-        //
-        //   projection.preclip(d3.geoClipPolygon(clippingPolygon));
-        // }
       }
 
       projection.clipExtent(getDefaultClipExtent());

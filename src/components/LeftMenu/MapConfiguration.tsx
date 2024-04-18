@@ -9,7 +9,7 @@ import { FaSolidAngleDown } from 'solid-icons/fa';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
-import { unproxify } from '../../helpers/common';
+import { camelToFlat, unproxify } from '../../helpers/common';
 import { epsgDb } from '../../helpers/projection';
 
 // Stores
@@ -84,7 +84,7 @@ const formatCurrentProjection = (
   type: string,
   name: string,
   code: string | undefined,
-) => (type === 'd3' ? name : `${name} (${code})`);
+) => (type === 'd3' ? camelToFlat(name) : `${name} (${code})`);
 
 export default function MapConfiguration(): JSX.Element {
   const { LL } = useI18nContext();
@@ -96,7 +96,7 @@ export default function MapConfiguration(): JSX.Element {
       type: 'group',
     },
     {
-      name: 'Natural Earth II',
+      name: 'Natural Earth 2',
       value: 'NaturalEarth2',
       type: 'd3',
     },
