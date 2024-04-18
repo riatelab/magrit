@@ -557,7 +557,6 @@ const en = {
       cross: 'Cross',
       triangle: 'Triangle',
       star: 'Star',
-      wye: 'Wye',
     },
     AestheticFilter: 'Aesthetic filter',
     DropShadow: 'Add a shadow',

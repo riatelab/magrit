@@ -631,7 +631,6 @@ function makeSettingsDefaultPoint(
         <option value="square">{LL().LayerSettings.SymbolTypes.square()}</option>
         <option value="cross">{LL().LayerSettings.SymbolTypes.cross()}</option>
         <option value="star">{LL().LayerSettings.SymbolTypes.star()}</option>
-        <option value="wye">{LL().LayerSettings.SymbolTypes.wye()}</option>
         <option value="diamond">{LL().LayerSettings.SymbolTypes.diamond()}</option>
         <option value="diamond2">{LL().LayerSettings.SymbolTypes.diamond2()}</option>
         <option value="triangle">{LL().LayerSettings.SymbolTypes.triangle()}</option>

@@ -2009,10 +2009,6 @@ type RootTranslation = {
 			 * S​t​a​r
 			 */
 			star: string
-			/**
-			 * W​y​e
-			 */
-			wye: string
 		}
 		/**
 		 * A​e​s​t​h​e​t​i​c​ ​f​i​l​t​e​r
@@ -4976,10 +4972,6 @@ export type TranslationFunctions = {
 			 * Star
 			 */
 			star: () => LocalizedString
-			/**
-			 * Wye
-			 */
-			wye: () => LocalizedString
 		}
 		/**
 		 * Aesthetic filter

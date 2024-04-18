@@ -557,7 +557,6 @@ const fr = {
       cross: 'Croix',
       triangle: 'Triangle',
       star: 'Étoile',
-      wye: 'Y',
     },
     AestheticFilter: 'Filtre esthétique',
     DropShadow: 'Ajouter une ombre',

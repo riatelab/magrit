@@ -226,7 +226,7 @@ type LayerDescriptionMushroomLayer = LayerDescription & {
 //   rendererParameters: CategoricalPictogramParameters,
 // };
 
-type SymbolType = 'circle' | 'square' | 'diamond' | 'diamond2' | 'cross' | 'triangle' | 'star' | 'wye';
+type SymbolType = 'circle' | 'square' | 'diamond' | 'diamond2' | 'cross' | 'triangle' | 'star';
 
 export enum ProportionalSymbolsSymbolType {
   circle = 'circle',

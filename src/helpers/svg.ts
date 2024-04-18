@@ -1,6 +1,8 @@
 import d3 from './d3-custom';
 import { globalStore } from '../store/GlobalStore';
-import { degToRadConstant, Mcos, Msin } from './math';
+import {
+  degToRadConstant, Mcos, Msin, Msqrt,
+} from './math';
 import {
   type GeoJSONFeature,
   type ID3Element,
@@ -76,39 +78,6 @@ export const createCirclePath = (x: number, y: number, size: number): string => 
   return `M ${x + r} ${y} A ${r} ${r} 0 0 1 ${x - r} ${y} A ${r} ${r} 0 0 1 ${x + r} ${y}`;
 };
 
-export const createWyePath = (x: number, y: number, size: number): string => {
-  const sqrt3 = Math.sqrt(3);
-  const c = -0.5;
-  const s = sqrt3 / 2;
-  const k = 1 / Math.sqrt(12);
-  const a = (k / 2 + 1) * 3;
-  const r = Math.sqrt(size / a);
-
-  const points = [
-    { x: r / 2, y: r * k },
-    { x: r / 2, y: r * k + r },
-    { x: -r / 2, y: r * k + r },
-  ];
-
-  const transformedPoints = points.flatMap((p) => [
-    { x: c * p.x - s * p.y, y: s * p.x + c * p.y },
-    { x: c * p.x + s * p.y, y: c * p.y - s * p.x },
-  ]);
-
-  const allPoints = [...points, ...transformedPoints].map((p) => ({
-    x: p.x + x,
-    y: p.y + y,
-  }));
-
-  let pathData = `M ${allPoints[0].x} ${allPoints[0].y} `;
-  allPoints.slice(1).forEach((p) => {
-    pathData += `L ${p.x} ${p.y} `;
-  });
-  pathData += 'Z';
-
-  return pathData;
-};
-
 export const getSymbolPath = (
   symbolType: SymbolType,
   coordinates: [number, number],
@@ -130,8 +99,6 @@ export const getSymbolPath = (
       return createCrossPath(x, y, size);
     case 'star':
       return createStarPath(x, y, size);
-    case 'wye':
-      return createWyePath(x, y, size);
     default:
       return '';
   }
