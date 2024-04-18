@@ -52,8 +52,9 @@ export const createDiamond2Path = (x: number, y: number, size: number): string =
 };
 
 export const createCrossPath = (x: number, y: number, size: number): string => {
-  const armWidth = size / 4; // Width of cross arms
-  return `M ${x - size / 2} ${y - armWidth / 2} H ${x + size / 2} V ${y + armWidth / 2} H ${x - size / 2} Z M ${x - armWidth / 2} ${y - size / 2} V ${y + size / 2} H ${x + armWidth / 2} V ${y - size / 2} Z`;
+  const s = size / 2;
+  const a = s / 4;
+  return `M ${x + a} ${y - s} L ${x + a} ${y - a} L ${x + s} ${y - a} L ${x + s} ${y + a} L ${x + a} ${y + a} L ${x + a} ${y + s} L ${x - a} ${y + s} L ${x - a} ${y + a} L ${x - s} ${y + a} L ${x - s} ${y - a} L ${x - a} ${y - a} L ${x - a} ${y - s} Z`;
 };
 
 export const createStarPath = (x: number, y: number, size: number): string => {
