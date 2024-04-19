@@ -1700,6 +1700,14 @@ type RootTranslation = {
 			 */
 			LogTransform: string
 			/**
+			 * T​h​e​ ​t​w​o​ ​v​a​r​i​a​b​l​e​s​ ​m​u​s​t​ ​b​e​ ​d​i​f​f​e​r​e​n​t​.
+			 */
+			MessageSameVariable: string
+			/**
+			 * C​o​m​p​u​t​e
+			 */
+			Compute: string
+			/**
 			 * P​e​a​r​s​o​n​ ​p​r​o​d​u​c​t​-​m​o​m​e​n​t​ ​c​o​r​r​e​l​a​t​i​o​n​ ​c​o​e​f​f​i​c​i​e​n​t​:
 			 */
 			PearsonCorrelationValue: string
@@ -4668,6 +4676,14 @@ export type TranslationFunctions = {
 			 * Logarithmic transformation
 			 */
 			LogTransform: () => LocalizedString
+			/**
+			 * The two variables must be different.
+			 */
+			MessageSameVariable: () => LocalizedString
+			/**
+			 * Compute
+			 */
+			Compute: () => LocalizedString
 			/**
 			 * Pearson product-moment correlation coefficient:
 			 */

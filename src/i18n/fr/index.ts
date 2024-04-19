@@ -475,6 +475,8 @@ const fr = {
       ExplainedVariable: 'Variable expliquée',
       ExplanatoryVariable: 'Variable explicative',
       LogTransform: 'Transformation logarithmique',
+      MessageSameVariable: 'Les deux variables sélectionnées doivent être différentes.',
+      Compute: 'Calculer',
       PearsonCorrelationValue: 'Corrélation de Pearson :',
       SpearmanCorrelationValue: 'Corrélation de Spearman :',
       ModelSummary: 'Résumé du modèle',

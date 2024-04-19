@@ -475,6 +475,8 @@ const en = {
       ExplainedVariable: 'Response variable',
       ExplanatoryVariable: 'Explanatory variable',
       LogTransform: 'Logarithmic transformation',
+      MessageSameVariable: 'The two variables must be different.',
+      Compute: 'Compute',
       PearsonCorrelationValue: 'Pearson product-moment correlation coefficient:',
       SpearmanCorrelationValue: 'Spearman\'s rank correlation coefficient:',
       ModelSummary: 'Model summary',

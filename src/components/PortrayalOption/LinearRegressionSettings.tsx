@@ -5,7 +5,7 @@ import { createSignal, For, Show } from 'solid-js';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { PortrayalSettingsProps } from './common';
 import { findSuitableName } from '../../helpers/common';
-import { makeCorrelationMatrix } from '../../helpers/statistics';
+import { computeLinearRegression, LinearRegressionResult, makeCorrelationMatrix } from '../../helpers/statistics';
 
 // Stores
 import { setLoading } from '../../store/GlobalStore';
@@ -17,9 +17,10 @@ import InputResultName from './InputResultName.tsx';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
-import { CorrelationMatrix } from './LinearRegressionComponents.tsx';
+import { CorrelationMatrix, LmSummary, ScatterPlot } from './LinearRegressionComponents.tsx';
 import CollapsibleSection from '../CollapsibleSection.tsx';
 import InputFieldRadio from '../Inputs/InputRadio.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 
 function onClickValidate(layerId: string, layerName: string) {
   console.log('Layer ID:', layerId);
@@ -36,16 +37,19 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
   const targetFields = layerDescription
     .fields.filter((variable) => variable.type === 'stock' || variable.type === 'ratio');
 
+  // Extract properties from the layer description
+  const dataset = layerDescription.data.features.map((f) => f.properties) as Record<string, any>[];
+
   // The pearson correlation matrix between the variables
   const pearsonMatrix = makeCorrelationMatrix(
-    layerDescription.data.features.map((f) => f.properties),
+    dataset,
     targetFields.map((f) => f.name),
     'pearson',
   );
 
   // The spearman correlation matrix between the variables
   const spearmanMatrix = makeCorrelationMatrix(
-    layerDescription.data.features.map((f) => f.properties),
+    dataset,
     targetFields.map((f) => f.name),
     'spearman',
   );
@@ -76,6 +80,16 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
     selectedMatrix,
     setSelectedMatrix,
   ] = createSignal<'pearson' | 'spearman'>('pearson');
+
+  const [
+    drawRegressionLine,
+    setDrawRegressionLine,
+  ] = createSignal<boolean>(false);
+
+  const [
+    linearRegressionResult,
+    setLinearRegressionResult,
+  ] = createSignal<LinearRegressionResult | null>(null);
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
@@ -153,6 +167,50 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
         {(variable) => <option value={variable.name}>{variable.name}</option>}
       </For>
     </InputFieldSelect>
+    <Show when={
+      explainedVariable() && explanatoryVariable()
+      && explanatoryVariable() === explainedVariable()
+    }>
+      <MessageBlock type={'danger'}>
+        <p>{LL().FunctionalitiesSection.LinearRegressionOptions.MessageSameVariable()}</p>
+      </MessageBlock>
+    </Show>
+    <Show when={
+      explainedVariable() && explanatoryVariable()
+      && explanatoryVariable() !== explainedVariable()}
+    >
+      <ScatterPlot
+        dataset={dataset}
+        explainedVariable={explainedVariable()}
+        explanatoryVariable={explanatoryVariable()}
+        drawLine={drawRegressionLine()}
+      />
+      <div>
+        <button
+          class="button is-primary"
+          onClick={() => {
+            setDrawRegressionLine(!drawRegressionLine());
+            setLinearRegressionResult(
+              computeLinearRegression(
+                dataset,
+                {
+                  x: explanatoryVariable(),
+                  y: explainedVariable(),
+                  logX: false,
+                  logY: false,
+                },
+              ),
+            );
+            console.log(linearRegressionResult());
+          }}
+        >
+          {LL().FunctionalitiesSection.LinearRegressionOptions.Compute()}
+        </button>
+      </div>
+    </Show>
+    <Show when={linearRegressionResult() !== null}>
+      <LmSummary {...(linearRegressionResult() as LinearRegressionResult)} />
+    </Show>
     <InputResultName
       value={newLayerName()}
       onKeyUp={(value) => {
