@@ -931,3 +931,22 @@ export const mergeBboxes = (
   const ymax = max(bboxes.map((b) => b[3]));
   return [xmin, ymin, xmax, ymax];
 };
+
+/**
+ * Create a geojson polygon from a bounding box
+ * (defined as xmin, ymin, xmax, ymax).
+ *
+ * @param {[number, number, number, number]} bounds
+ * @returns {GeoJSONGeometry}
+ */
+export const makePolygonFromBbox = (
+  bounds: [number, number, number, number],
+): GeoJSONGeometry => {
+  const [xmin, ymin, xmax, ymax] = bounds;
+  return {
+    type: 'Polygon',
+    coordinates: [[
+      [xmin, ymax], [xmax, ymax], [xmax, ymin], [xmin, ymin], [xmin, ymax],
+    ]] as GeoJSONPosition[][],
+  };
+};

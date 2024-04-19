@@ -5,7 +5,7 @@ import { createStore, produce } from 'solid-js/store';
 // Helpers
 import { unproxify } from '../helpers/common';
 import d3 from '../helpers/d3-custom';
-import { makeDorlingDemersSimulation } from '../helpers/geo';
+import { makeDorlingDemersSimulation, makePolygonFromBbox } from '../helpers/geo';
 import { getD3ProjectionFromProj4, getProjection } from '../helpers/projection';
 import { getTargetSvg, redrawPaths } from '../helpers/svg';
 
@@ -280,30 +280,42 @@ createEffect(
           .rotate([0, 0, 0]);
         // 2. If the projection defines bounds, we want to apply a clipping polygon
         // to the projection to avoid the projection to be drawn outside of the bounds
-        // (which is sometimes computationally very expensive)
+        // (which is sometimes computationally very expensive or can cause errors)
         if (
           mapStore.projection.bounds
           && JSON.stringify(mapStore.projection.bounds) !== '[90,-180,-90,180]'
-          // && isConicalProjection(mapStore.projection.value)
         ) {
-          // We want to apply a clipping polygon to the projection
-          // if the bounds are not worldwide (i.e. [90,-180,-90,180]).
-          // First we will expand the bounds by 15 degree in each direction
-          const [ymax0, xmin0, ymin0, xmax0] = mapStore.projection.bounds!;
+          if (
+            mapStore.projection.code === 'EPSG:3035'
+            || mapStore.projection.value === '+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'
+          ) {
+            // Special case for EPSG:3035 (ETRS89 / LAEA Europe)
+            // where we substantially expand the bounds to avoid the drawn extent
+            // to be too narrow (which the user might find surprising)
+            // Original bounds are: 84.73, -35.58, 24.6, 44.83
+            const ymax = 90;
+            const xmin = -80;
+            const ymin = 0;
+            const xmax = 100;
 
-          const ymax = ymax0 + 30 > 90 ? 90 : ymax0 + 30;
-          const xmin = xmin0 - 30 < -180 ? -180 : xmin0 - 30;
-          const ymin = ymin0 - 30 < -90 ? -90 : ymin0 - 30;
-          const xmax = xmax0 + 30 > 180 ? 180 : xmax0 + 30;
+            const clippingPolygon = makePolygonFromBbox([xmin, ymin, xmax, ymax]);
 
-          const clippingPolygon = {
-            type: 'Polygon',
-            coordinates: [[
-              [xmin, ymax], [xmax, ymax], [xmax, ymin], [xmin, ymin], [xmin, ymax],
-            ]],
-          };
+            projection.preclip(d3.geoClipPolygon(clippingPolygon));
+          } else {
+            // We want to apply a clipping polygon to the projection
+            // if the bounds are not worldwide (i.e. [90,-180,-90,180]).
+            const [ymax0, xmin0, ymin0, xmax0] = mapStore.projection.bounds!;
 
-          projection.preclip(d3.geoClipPolygon(clippingPolygon));
+            // First we will expand the bounds in each direction
+            const ymax = ymax0 + 25 > 90 ? 90 : ymax0 + 25;
+            const xmin = xmin0 - 35 < -180 ? -180 : xmin0 - 35;
+            const ymin = ymin0 - 25 < -90 ? -90 : ymin0 - 25;
+            const xmax = xmax0 + 35 > 180 ? 180 : xmax0 + 35;
+
+            const clippingPolygon = makePolygonFromBbox([xmin, ymin, xmax, ymax]);
+
+            projection.preclip(d3.geoClipPolygon(clippingPolygon));
+          }
         }
       }
 
@@ -327,16 +339,13 @@ createEffect(
                 {
                   type: 'Feature',
                   properties: {},
-                  geometry: {
-                    type: 'Polygon',
-                    coordinates: [[
-                      [currentExtent[0][0], currentExtent[0][1]],
-                      [currentExtent[1][0], currentExtent[0][1]],
-                      [currentExtent[1][0], currentExtent[1][1]],
-                      [currentExtent[0][0], currentExtent[1][1]],
-                      [currentExtent[0][0], currentExtent[0][1]],
-                    ]],
-                  },
+                  // current extent is [[top left x, top left y], [bottom right x, bottom right y]]
+                  geometry: makePolygonFromBbox([
+                    currentExtent[0][0],
+                    currentExtent[1][1],
+                    currentExtent[1][0],
+                    currentExtent[0][1],
+                  ]),
                 },
               ],
             },
