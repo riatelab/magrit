@@ -142,6 +142,8 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
     <InputFieldSelect
       label={LL().FunctionalitiesSection.LinearRegressionOptions.ExplainedVariable()}
       onChange={(value) => {
+        setDrawRegressionLine(false);
+        setLinearRegressionResult(null);
         setExplainedVariable(value);
       }}
       value={explainedVariable()}
@@ -156,6 +158,8 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
     <InputFieldSelect
       label={LL().FunctionalitiesSection.LinearRegressionOptions.ExplanatoryVariable()}
       onChange={(value) => {
+        setDrawRegressionLine(false);
+        setLinearRegressionResult(null);
         setExplanatoryVariable(value);
       }}
       value={explanatoryVariable()}
@@ -185,28 +189,29 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
         explanatoryVariable={explanatoryVariable()}
         drawLine={drawRegressionLine()}
       />
-      <div>
-        <button
-          class="button is-primary"
-          onClick={() => {
-            setDrawRegressionLine(!drawRegressionLine());
-            setLinearRegressionResult(
-              computeLinearRegression(
-                dataset,
-                {
-                  x: explanatoryVariable(),
-                  y: explainedVariable(),
-                  logX: false,
-                  logY: false,
-                },
-              ),
-            );
-            console.log(linearRegressionResult());
-          }}
-        >
-          {LL().FunctionalitiesSection.LinearRegressionOptions.Compute()}
-        </button>
-      </div>
+      <Show when={linearRegressionResult() === null}>
+        <div class="has-text-centered m-4">
+          <button
+            class="button"
+            onClick={() => {
+              setDrawRegressionLine(!drawRegressionLine());
+              setLinearRegressionResult(
+                computeLinearRegression(
+                  dataset,
+                  {
+                    x: explanatoryVariable(),
+                    y: explainedVariable(),
+                    logX: false,
+                    logY: false,
+                  },
+                ),
+              );
+            }}
+          >
+            {LL().FunctionalitiesSection.LinearRegressionOptions.Compute()}
+          </button>
+        </div>
+      </Show>
     </Show>
     <Show when={linearRegressionResult() !== null}>
       <LmSummary {...(linearRegressionResult() as LinearRegressionResult)} />

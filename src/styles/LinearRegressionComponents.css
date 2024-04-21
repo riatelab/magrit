@@ -12,6 +12,10 @@
     line-height: 1.5;
 }
 
+.lm-summary table {
+    text-align: center;
+}
+
 .lm-summary .table-simple {
     width: 46%;
 }

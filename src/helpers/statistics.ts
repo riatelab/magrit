@@ -1,8 +1,9 @@
 import * as ss from 'simple-statistics';
 import lowess from '@stdlib/stats-lowess';
+import cdf from '@stdlib/stats-base-dists-t-cdf';
 
 import { isNumber } from './common';
-import { Mabs, Msqrt } from './math';
+import { Mabs, Mpow, Msqrt } from './math';
 
 export interface LinearRegressionOptions {
   x: string,
@@ -156,6 +157,17 @@ export function makeCorrelationMatrix(
   return matrix;
 }
 
+/**
+ * Compute the p-value for a t-value and a number of degrees of freedom.
+ *
+ * @param {number} t - The t-value
+ * @param {number} df - The number of degrees of freedom
+ * @returns {number} - The p-value
+ */
+function pValue(t: number, df: number): number {
+  return 2 * (1 - cdf(Mabs(t), df));
+}
+
 export function computeLinearRegression(
   dataset: Record<string, any>[],
   options: LinearRegressionOptions,
@@ -191,7 +203,7 @@ export function computeLinearRegression(
       ignored += 1;
     }
   }
-  // Get slope and intercept
+  // Get slope (m) and intercept (b)
   const lm = ss.linearRegression(d);
   const lmLine = ss.linearRegressionLine(lm);
 
@@ -211,7 +223,7 @@ export function computeLinearRegression(
   });
 
   const fittedValues = x.map((v, i) => {
-    if (v === null) {
+    if (v === null || y[i] === null) {
       return null;
     }
     return lmLine(v as number);
@@ -234,14 +246,14 @@ export function computeLinearRegression(
   // For the Fitted vs. Residuals plot, we need to compute
   // the lowess smoothed values
   const lowessFittedResiduals = lowess(
-    fittedValues.filter((v) => v !== null) as number[],
-    residuals.filter((v) => v !== null) as number[],
+    fittedValues.filter((v) => v !== null),
+    residuals.filter((v) => v !== null),
   );
 
   // For the Scale-Location plot we also need to compute the
   // lowess smoothed values
   const lowessStandardisedResiduals = lowess(
-    fittedValues.filter((v) => v !== null) as number[],
+    fittedValues.filter((v) => v !== null),
     standardisedResiduals.filter((v) => v !== null)
       .map((v) => Msqrt(Mabs(v as number))),
   );
@@ -265,16 +277,39 @@ export function computeLinearRegression(
     intercept: qqLineX[0] - qqLineY[0] * ((qqLineX[1] - qqLineX[0]) / (qqLineY[1] - qqLineY[0])),
   };
 
-  // const qqLine = ss.linearRegression(
-  //   qqPoints.map((p) => [p.x, p.y]),
-  // );
+  // We want to compute the coefficients, the standard errors, the t-values
+  // and the value Pr(>|t|)
+  // Compute sum of squared errors (SSE)
+  const SSE = d.reduce((sum, point) => {
+    const [px, py] = point;
+    const estimatedY = lm.m * px + lm.b;
+    return sum + Mpow(py - estimatedY, 2);
+  }, 0);
+
+  // Compute the variance of x
+  const meanX = ss.mean(d.map((point) => point[0]));
+  const varianceX = ss.sum(d.map((point) => Mpow(point[0] - meanX, 2)));
+
+  // Compute the standard error for slope and intercept
+  const n = d.length;
+  const stdErrorSlope = Msqrt(SSE / (n - 2) / varianceX);
+  const stdErrorIntercept = Msqrt((SSE / (n - 2)) * (1 / n + Mpow(meanX, 2) / varianceX));
+
+  // Compute t-values
+  const tValueSlope = lm.m / stdErrorSlope;
+  const tValueIntercept = lm.b / stdErrorIntercept;
+
+  // Compute p-values
+  const df = n - 2; // Degrees of freedom
+  const pValueSlope = pValue(tValueSlope, df);
+  const pValueIntercept = pValue(tValueIntercept, df);
 
   return {
     adjustedRSquared,
     rSquared,
     coefficients: {
-      'X.Intercept': [lm.m, 0, 0, 0],
-      [options.y]: [lm.b, 0, 0, 0],
+      'X.Intercept': [lm.b, stdErrorIntercept, tValueIntercept, pValueIntercept],
+      [options.y]: [lm.m, stdErrorSlope, tValueSlope, pValueSlope],
     },
     residuals,
     fittedValues,

@@ -65,6 +65,7 @@
     "@observablehq/plot": "^0.6.14",
     "@solid-primitives/autofocus": "^0.0.111",
     "@solidjs/router": "^0.13.2",
+    "@stdlib/stats-base-dists-t-cdf": "^0.2.1",
     "@stdlib/stats-lowess": "^0.2.1",
     "@turf/turf": "7.0.0-alpha.113",
     "ag-grid-community": "^31.1.1",
