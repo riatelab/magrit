@@ -26,7 +26,7 @@
 
 Requirements:
 
-- Node.js (>= v18) / NPM (>= 9).
+- Node.js (>= 20) / NPM (>= 10).
 
 ### Installation
 
