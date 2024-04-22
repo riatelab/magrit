@@ -415,7 +415,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     <Show when={!isLoading() && !computedValues()}>
       <div class="has-text-centered">
         <button
-          class="button is-success"
+          class="button"
           disabled={
             targetResolution() <= 0
             || (targetSmoothingMethod() === SmoothingMethod.Kde && targetBandwidth() <= 0)
