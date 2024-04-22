@@ -37,12 +37,13 @@ import {
   CorrelationMatrix,
   DiagnosticPlots,
   LmSummary,
-  RepresentationOptions,
-  ScatterPlot,
+  InformationBeforeValidation,
+  ScatterPlot, makeOptionsStandardisedResidualsColors,
 } from './LinearRegressionComponents.tsx';
 import CollapsibleSection from '../CollapsibleSection.tsx';
 import InputFieldRadio from '../Inputs/InputRadio.tsx';
 import MessageBlock from '../MessageBlock.tsx';
+import PlotFigure from '../PlotFigure.tsx';
 
 // Types / enums / interfaces
 import { DataType, Variable } from '../../helpers/typeDetection';
@@ -59,9 +60,11 @@ import {
   LegendType,
   Orientation,
   type ProportionalSymbolCategoryParameters,
-  type ProportionalSymbolsLegend,
+  type ProportionalSymbolsLegend, ProportionalSymbolsSymbolType,
   RepresentationType,
 } from '../../global.d';
+import InputFieldText from '../Inputs/InputText.tsx';
+import InputFieldColor from '../Inputs/InputColor.tsx';
 
 function onClickValidate(
   layerId: string,
@@ -283,7 +286,7 @@ function onClickValidate(
     const propSymbolsParameters = {
       variable: 'residual',
       symbolType,
-      referenceRadius: 40,
+      referenceRadius: 50,
       referenceValue: maxRes,
       avoidOverlapping: false,
       iterations: 100,
@@ -328,8 +331,6 @@ function onClickValidate(
       propSize.scale,
       propSize.getValue,
     );
-
-    console.log(minRes, maxRes, legendValues);
 
     const legend = {
       // Legend common part
@@ -400,7 +401,7 @@ function onClickValidate(
       // Part specific to choropleth
       type: LegendType.categoricalChoropleth,
       orientation: Orientation.vertical,
-      boxWidth: 45,
+      boxWidth: 50,
       boxHeight: 30,
       boxSpacing: 5,
       boxSpacingNoData: 5,
@@ -500,6 +501,16 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
     portrayalType,
     setPortrayalType,
   ] = createSignal<'choropleth' | 'proportionalSymbols'>('choropleth');
+
+  const [
+    paletteName,
+    setPaletteName,
+  ] = createSignal<string>('Geyser');
+
+  const [
+    symbolType,
+    setSymbolType,
+  ] = createSignal<'circle' | 'square' | 'line'>('circle');
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
@@ -632,11 +643,7 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
     <Show when={linearRegressionResult() !== null}>
       <LmSummary {...(linearRegressionResult() as LinearRegressionResult)} />
       <DiagnosticPlots {...(linearRegressionResult() as LinearRegressionResult)} />
-      <RepresentationOptions
-        summary={linearRegressionResult() as LinearRegressionResult}
-        dataset={dataset}
-        idVariable={identifierVariable}
-      />
+      <InformationBeforeValidation />
       <p class={'m-4'}></p>
       <hr/>
       <InputFieldSelect
@@ -654,8 +661,80 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
           {LL().FunctionalitiesSection.LinearRegressionOptions.PortrayalTypePropSymbol()}
         </option>
       </InputFieldSelect>
+      <Show when={portrayalType() === 'choropleth'}>
+        <div class="is-flex">
+          <PlotFigure
+            id="classification-color-selection"
+            options={
+              makeOptionsStandardisedResidualsColors(
+                dataset,
+                linearRegressionResult()!,
+                getAsymmetricDivergingColors(paletteName(), 2, 2, true, true, false),
+                [-1.5, -0.5, 0.5, 1.5],
+                identifierVariable,
+              )
+            }
+            style={{ width: '50%' }}
+          />
+          <div
+            class="is-flex is-justify-content-center is-align-items-center has-text-centered"
+            style={{ width: '50%' }}
+          >
+            <InputFieldSelect
+              label={'Palette'}
+              onChange={(v) => { setPaletteName(v); }}
+              value={paletteName()}
+              layout={'vertical'}
+            >
+              <option value="ArmyRose">ArmyRose</option>
+              <option value="Balance">Balance</option>
+              <option value="Berlin">Berlin</option>
+              <option value="Geyser">Geyser</option>
+              <option value="PuOr">PuOr</option>
+              <option value="PRGn">PRGn</option>
+              <option value="Spectral">Spectral</option>
+              <option value="Temps">Temps</option>
+            </InputFieldSelect>
+          </div>
+        </div>
+      </Show>
+      <Show when={portrayalType() === 'proportionalSymbols'}>
+        <InputFieldSelect
+          label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.SymbolType() }
+          onChange={(value) => { setSymbolType(value as ProportionalSymbolsSymbolType); }}
+          value={ symbolType() }
+        >
+          <For each={
+            Object.values(ProportionalSymbolsSymbolType)
+              .filter((st) => (layerDescription.type === 'linestring' ? true : st !== ProportionalSymbolsSymbolType.line))
+          }>
+            {
+              (st) => <option
+                value={ st }
+              >{ LL().FunctionalitiesSection.ProportionalSymbolsOptions.SymbolTypes[st]() }</option>
+            }
+          </For>
+        </InputFieldSelect>
+        <InputFieldText
+          label={'Label valeurs négatives'}
+          width={200}
+        />
+        <InputFieldColor
+          label={'Couleur valeurs négatives'}
+          // value={}
+          // onChange={}
+        />
+        <InputFieldText
+          label={'Label valeurs positives'}
+          width={200}
+        />
+        <InputFieldColor
+          label={'Couleur valeurs négatives'}
+          // value={}
+          // onChange={}
+        />
+      </Show>
     </Show>
-
     <InputResultName
       value={newLayerName()}
       onKeyUp={(value) => {

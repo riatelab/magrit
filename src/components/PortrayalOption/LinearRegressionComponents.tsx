@@ -176,6 +176,7 @@ export function makeOptionsStandardisedResidualsColors(
       fontSize: 30,
       domain,
     },
+    height: 200,
     color: {
       type: 'threshold',
       range: colors,
@@ -439,13 +440,7 @@ export function DiagnosticPlots(
   </>;
 }
 
-export function RepresentationOptions(
-  props: {
-    dataset: Record<string, any>[]
-    summary: LinearRegressionResult | MultipleLinearRegressionResult,
-    idVariable: string | undefined,
-  },
-): JSX.Element {
+export function InformationBeforeValidation(): JSX.Element {
   const { LL } = useI18nContext();
   return <>
     <h3 class="has-text-centered">{LL().FunctionalitiesSection.LinearRegressionOptions.RepresentationOptions()}</h3>
@@ -462,17 +457,5 @@ export function RepresentationOptions(
         {LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo6()}
       </p>
     </div>
-    <PlotFigure
-      id="classification-color-selection"
-      options={
-        makeOptionsStandardisedResidualsColors(
-          props.dataset,
-          props.summary,
-          getAsymmetricDivergingColors('Geyser', 2, 2, true, true, false),
-          [-1.5, -0.5, 0.5, 1.5],
-          props.idVariable,
-        )
-      }
-    />
   </>;
 }
