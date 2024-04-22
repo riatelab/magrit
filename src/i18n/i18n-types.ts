@@ -1738,16 +1738,11 @@ type RootTranslation = {
 			 */
 			AdjustedR2: RequiredParams<'value'>
 			/**
-			 * R​e​s​i​d​u​a​l​ ​s​t​a​n​d​a​r​d​ ​e​r​r​o​r​:​ ​{​v​a​l​u​e​}
+			 * R​e​s​i​d​u​a​l​ ​s​t​a​n​d​a​r​d​ ​e​r​r​o​r​:​ ​{​v​a​l​u​e​}​ ​o​n​ ​{​d​o​f​}​ ​d​e​g​r​e​e​s​ ​o​f​ ​f​r​e​e​d​o​m
+			 * @param {unknown} dof
 			 * @param {unknown} value
 			 */
-			RSE: RequiredParams<'value'>
-			/**
-			 * {​v​a​l​u​e​}​ ​o​n​ ​{​n​F​e​a​t​u​r​e​s​}​ ​d​e​g​r​e​e​s​ ​o​f​ ​f​r​e​e​d​o​m
-			 * @param {unknown} nFeatures
-			 * @param {unknown} value
-			 */
-			DegreesOfFreedom: RequiredParams<'nFeatures' | 'value'>
+			RSE: RequiredParams<'dof' | 'value'>
 			/**
 			 * (​{​v​a​l​u​e​}​ ​o​b​s​e​r​v​a​t​i​o​n​{​{​s​}​}​ ​d​e​l​e​t​e​d​ ​a​s​ ​m​i​s​s​i​n​g​)
 			 * @param {string | number | boolean} value
@@ -1801,6 +1796,10 @@ type RootTranslation = {
 			 * I​t​’​s​ ​g​o​o​d​ ​i​f​ ​r​e​s​i​d​u​a​l​s​ ​a​r​e​ ​l​i​n​e​d​ ​w​e​l​l​ ​o​n​ ​t​h​e​ ​s​t​r​a​i​g​h​t​ ​d​a​s​h​e​d​ ​l​i​n​e​.
 			 */
 			QQCheck: string
+			/**
+			 * O​p​t​i​o​n​s​ ​f​o​r​ ​d​i​s​p​l​a​y​i​n​g​ ​r​e​s​u​l​t​s
+			 */
+			RepresentationOptions: string
 			/**
 			 * I​n​ ​t​h​e​o​r​y​,​ ​s​e​v​e​r​a​l​ ​a​s​s​u​m​p​t​i​o​n​s​ ​m​u​s​t​ ​n​o​t​ ​b​e​ ​v​i​o​l​a​t​e​d​ ​w​h​e​n​ ​p​e​r​f​o​r​m​i​n​g​ ​a​ ​s​i​m​p​l​e​ ​l​i​n​e​a​r​ ​r​e​g​r​e​s​s​i​o​n​:
 			 */
@@ -4713,13 +4712,9 @@ export type TranslationFunctions = {
 			 */
 			AdjustedR2: (arg: { value: unknown }) => LocalizedString
 			/**
-			 * Residual standard error: {value}
+			 * Residual standard error: {value} on {dof} degrees of freedom
 			 */
-			RSE: (arg: { value: unknown }) => LocalizedString
-			/**
-			 * {value} on {nFeatures} degrees of freedom
-			 */
-			DegreesOfFreedom: (arg: { nFeatures: unknown, value: unknown }) => LocalizedString
+			RSE: (arg: { dof: unknown, value: unknown }) => LocalizedString
 			/**
 			 * ({value} observation{{s}} deleted as missing)
 			 */
@@ -4772,6 +4767,10 @@ export type TranslationFunctions = {
 			 * It’s good if residuals are lined well on the straight dashed line.
 			 */
 			QQCheck: () => LocalizedString
+			/**
+			 * Options for displaying results
+			 */
+			RepresentationOptions: () => LocalizedString
 			/**
 			 * In theory, several assumptions must not be violated when performing a simple linear regression:
 			 */

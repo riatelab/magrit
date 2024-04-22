@@ -4,7 +4,8 @@ import { createSignal, For, Show } from 'solid-js';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { PortrayalSettingsProps } from './common';
-import { findSuitableName } from '../../helpers/common';
+import { findSuitableName, unproxify } from '../../helpers/common';
+import { generateIdLayer } from '../../helpers/layers';
 import { computeLinearRegression, LinearRegressionResult, makeCorrelationMatrix } from '../../helpers/statistics';
 
 // Stores
@@ -17,13 +18,44 @@ import InputResultName from './InputResultName.tsx';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
-import { CorrelationMatrix, LmSummary, ScatterPlot } from './LinearRegressionComponents.tsx';
+import {
+  CorrelationMatrix, DiagnosticPlots,
+  LmSummary, RepresentationOptions, ScatterPlot,
+} from './LinearRegressionComponents.tsx';
 import CollapsibleSection from '../CollapsibleSection.tsx';
 import InputFieldRadio from '../Inputs/InputRadio.tsx';
 import MessageBlock from '../MessageBlock.tsx';
 
-function onClickValidate(layerId: string, layerName: string) {
+function onClickValidate(
+  layerId: string,
+  portrayalType: 'choropleth' | 'proportionalSymbols',
+  linearRegressionResult: LinearRegressionResult,
+  layerName: string,
+) {
   console.log('Layer ID:', layerId);
+  // The layer description of the reference layer
+  const referenceLayerDescription = layersDescriptionStore.layers
+    .find((l) => l.id === layerId)!;
+
+  // Copy the dataset and enrich it with the linear regression result
+  const newDataset = unproxify(referenceLayerDescription.data);
+  newDataset.features.forEach((f) => {
+    // eslint-disable-next-line no-param-reassign
+    f.properties.fitted = linearRegressionResult.fittedValues[i];
+    // eslint-disable-next-line no-param-reassign
+    f.properties.residual = linearRegressionResult.residuals[i];
+    // eslint-disable-next-line no-param-reassign
+    f.properties.standardizedResidual = linearRegressionResult.standardisedResiduals[i];
+  });
+
+  // Generate ID of new layer
+  const newId = generateIdLayer();
+
+  if (portrayalType === 'choropleth') {
+    // Prepare the classification parameters
+  } else {
+    // Prepare the proportional symbols parameters
+  }
 }
 
 export default function LinearRegressionSettings(props: PortrayalSettingsProps) {
@@ -39,6 +71,14 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
 
   // Extract properties from the layer description
   const dataset = layerDescription.data.features.map((f) => f.properties) as Record<string, any>[];
+
+  // Identifier variable (usefull for tooltip
+  // on the various chart that are displayed in this component)
+  // TODO: In the future we might ask the user to select the identifier variable...
+  const identifierVariable = layerDescription.fields.find((f) => f.type === 'identifier')?.name;
+  const identifiers = identifierVariable
+    ? dataset.map((d) => d[identifierVariable])
+    : undefined;
 
   // The pearson correlation matrix between the variables
   const pearsonMatrix = makeCorrelationMatrix(
@@ -91,6 +131,11 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
     setLinearRegressionResult,
   ] = createSignal<LinearRegressionResult | null>(null);
 
+  const [
+    portrayalType,
+    setPortrayalType,
+  ] = createSignal<'choropleth' | 'proportionalSymbols'>('choropleth');
+
   const makePortrayal = async () => {
     const layerName = findSuitableName(
       newLayerName() || LL().FunctionalitiesSection.NewLayer(),
@@ -107,6 +152,8 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
     setTimeout(() => {
       onClickValidate(
         layerDescription.id,
+        portrayalType(),
+        linearRegressionResult() as LinearRegressionResult,
         layerName,
       );
 
@@ -206,6 +253,7 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
                   },
                 ),
               );
+              console.log(linearRegressionResult());
             }}
           >
             {LL().FunctionalitiesSection.LinearRegressionOptions.Compute()}
@@ -215,6 +263,12 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
     </Show>
     <Show when={linearRegressionResult() !== null}>
       <LmSummary {...(linearRegressionResult() as LinearRegressionResult)} />
+      <DiagnosticPlots {...(linearRegressionResult() as LinearRegressionResult)} />
+      <RepresentationOptions
+        summary={linearRegressionResult() as LinearRegressionResult}
+        dataset={dataset}
+        idVariable={identifierVariable}
+      />
     </Show>
     <InputResultName
       value={newLayerName()}

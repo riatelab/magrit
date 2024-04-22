@@ -4,22 +4,23 @@ import {
 } from 'solid-js';
 
 // Imports from other packages
+import { getAsymmetricDivergingColors, getSequentialColors } from 'dicopal';
 import * as Plot from '@observablehq/plot';
 
 // Subcomponents
 import PlotFigure from '../PlotFigure.tsx';
 
 // Helpers
+import { useI18nContext } from '../../i18n/i18n-solid';
 import {
   Mfloor, extent, round,
-  toPrecisionAfterDecimalPoint, Mabs, Msqrt,
+  toPrecisionAfterDecimalPoint,
+  Mabs, Msqrt, Mceil,
 } from '../../helpers/math';
 
 // Types / Interfaces / Enums
 import {
-  LinearRegressionOptions,
   LinearRegressionResult,
-  MultipleLinearRegressionOptions,
   MultipleLinearRegressionResult,
 } from '../../helpers/statistics';
 
@@ -60,8 +61,8 @@ export function makeOptionsScaleLocationPlot(
       Plot.dot(d1, {
         x: 'Fitted',
         y: 'Residuals',
-        fill: 'lightgray',
-        stroke: 'black',
+        fill: 'black',
+        stroke: 'currentColor',
       }),
       Plot.line(d2, {
         x: 'x',
@@ -89,8 +90,8 @@ export function makeOptionsResidualsFittedPlot(
       Plot.dot(d1, {
         x: 'Fitted',
         y: 'Residuals',
-        fill: 'lightgray',
-        stroke: 'black',
+        fill: 'black',
+        stroke: 'currentColor',
       }),
       Plot.ruleY([0], { stroke: '#0c0c67', strokeDasharray: '3 5' }),
       Plot.line(d2, {
@@ -120,7 +121,7 @@ export function makeOptionsQQPlot(lm: LinearRegressionResult | MultipleLinearReg
       Plot.line(d2, {
         x: 'x',
         y: 'y',
-        stroke: 'black',
+        stroke: 'currentColor',
         strokeWidth: 0.5,
         curve: 'linear',
         strokeDasharray: '3 5',
@@ -128,8 +129,68 @@ export function makeOptionsQQPlot(lm: LinearRegressionResult | MultipleLinearReg
       Plot.dot(points, {
         x: 'x',
         y: 'y',
-        fill: 'lightgray',
-        stroke: 'black',
+        fill: 'black',
+        stroke: 'currentColor',
+      }),
+    ],
+  };
+}
+
+export function makeOptionsStandardisedResidualsColors(
+  dataset: Record<string, any>[],
+  lm: LinearRegressionResult | MultipleLinearRegressionResult,
+  colors: string[],
+  breaks: number[],
+  idVariable: string | undefined,
+) {
+  console.log(idVariable);
+  const filteredStandardisedResiduals = lm.standardisedResiduals
+    .filter((r: number | null) => r !== null) as number[];
+  const d = filteredStandardisedResiduals
+    .map((r: number, i: number) => {
+      const o = {
+        'Standardized residuals': r,
+        index: i,
+      };
+      if (idVariable) {
+        console.log(dataset[i][idVariable]);
+        o[idVariable] = dataset[i][idVariable];
+      }
+      return o;
+    });
+
+  const extt = extent(filteredStandardisedResiduals);
+  const domain = [
+    Mfloor(extt[0] - 0.5),
+    Mceil(extt[1] + 0.5),
+  ];
+
+  return {
+    y: {
+      grid: true,
+      fontSize: 30,
+      domain,
+    },
+    color: {
+      type: 'threshold',
+      range: colors,
+      legend: true,
+      domain: breaks,
+    },
+    marks: [
+      ...breaks.map((v) => Plot.ruleY([v], { stroke: '#783c74', strokeDasharray: '3 5' })),
+      Plot.dot(d, {
+        x: 'index',
+        y: 'Standardized residuals',
+        fill: 'Standardized residuals',
+        stroke: 'currentColor',
+        strokeWidth: 0.5,
+        r: 4,
+        tip: true,
+        title: (dt) => [
+          idVariable ? dt[idVariable] : '',
+          `Standardized residual: ${dt['Standardized residuals'].toFixed(2)}`,
+        ].join('\n'),
       }),
     ],
   };
@@ -234,10 +295,11 @@ function makeLabels(summary: LinearRegressionResult | MultipleLinearRegressionRe
 export function LmSummary(
   summary: LinearRegressionResult | MultipleLinearRegressionResult,
 ): JSX.Element {
+  const { LL } = useI18nContext();
   const [showDetails, setShowDetails] = createSignal(false);
 
   return <div class="lm-summary">
-    <h5>Coefficients</h5>
+    <h5>{ LL().FunctionalitiesSection.LinearRegressionOptions.Coefficients() }</h5>
     <table class="table-simple">
       <thead>
       <tr>
@@ -254,7 +316,7 @@ export function LmSummary(
       </tr>
       </tbody>
     </table>
-    <h5>Coefficients (details)</h5>
+    <h5>{ LL().FunctionalitiesSection.LinearRegressionOptions.CoefficientsDetails() }</h5>
     <table class="table-details">
       <thead>
       <tr>
@@ -287,12 +349,101 @@ export function LmSummary(
     </table>
     {/* <p>---<br />Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</p> */}
     <p>
-      Multiple R-squared: {round(summary.rSquared, 4)},
-      Adjusted R-squared: {round(summary.adjustedRSquared, 4)}
-      <br />
-      Residual standard error: {round(summary.residualStandardError, 4)}
-      &nbsp;on {summary.residuals.filter((d) => d !== null).length - 2} degrees of freedom
-      {summary.ignored !== null && summary.ignored > 0 ? <><br/>&nbsp;&nbsp;&nbsp;&nbsp;({summary.ignored} observations deleted as missing)</> : ''}
+      {
+        LL().FunctionalitiesSection.LinearRegressionOptions.RSE({
+          value: round(summary.residualStandardError, 4),
+          dof: summary.residuals.filter((d) => d !== null).length - 2,
+        })
+      }
+      {
+        summary.ignored !== null && summary.ignored === 0
+          ? ''
+          : <><br />&nbsp;&nbsp;&nbsp;&nbsp;{
+            LL().FunctionalitiesSection.LinearRegressionOptions
+              .DeletedAsMissing({ value: summary.ignored })
+          }</>
+      }
+      <br/>
+      {
+        LL().FunctionalitiesSection.LinearRegressionOptions.MultipleR2({
+          value: round(summary.rSquared, 4),
+        })
+      }, &nbsp;
+      {
+        LL().FunctionalitiesSection.LinearRegressionOptions.AdjustedR2({
+          value: round(summary.rSquared, 4),
+        })
+      }
     </p>
   </div>;
+}
+
+export function DiagnosticPlots(
+  summary: LinearRegressionResult | MultipleLinearRegressionResult,
+): JSX.Element {
+  const { LL } = useI18nContext();
+  return <>
+    <h3>{LL().FunctionalitiesSection.LinearRegressionOptions.DiagnosticPlots()}</h3>
+    <h4>{LL().FunctionalitiesSection.LinearRegressionOptions.ResidualVsFittedValues()}</h4>
+    <div style={{ display: 'flex' }}>
+      <PlotFigure id="residuals-vs-fitted" options={makeOptionsResidualsFittedPlot(summary)} style={{ width: '50%' }} />
+      <div style={{ width: '50%', 'text-align': 'left', margin: 'auto' }}>
+        <p>{LL().FunctionalitiesSection.LinearRegressionOptions.ResidualVsFittedInfo1()}</p>
+        <ul>
+          <li>{LL().FunctionalitiesSection.LinearRegressionOptions.ResidualVsFittedInfo2()}</li>
+          <li>{LL().FunctionalitiesSection.LinearRegressionOptions.ResidualVsFittedInfo3()}</li>
+        </ul>
+        <p>✅ {LL().FunctionalitiesSection.LinearRegressionOptions.ResidualVsFittedCheck()}</p>
+      </div>
+    </div>
+    <h4>{LL().FunctionalitiesSection.LinearRegressionOptions.ScaleLocation()}</h4>
+    <div style={{ display: 'flex' }}>
+      <PlotFigure id="scale-location" options={makeOptionsScaleLocationPlot(summary)} style={{ width: '50%' }} />
+      <div style={{ width: '50%', 'text-align': 'left', margin: 'auto' }}>
+        <p>{LL().FunctionalitiesSection.LinearRegressionOptions.ScaleLocationInfo1()}</p>
+        <p>✅ {LL().FunctionalitiesSection.LinearRegressionOptions.ScaleLocationCheck()}</p>
+      </div>
+    </div>
+    <h4>{LL().FunctionalitiesSection.LinearRegressionOptions.QQ()}</h4>
+    <div style={{ display: 'flex' }}>
+      <PlotFigure id="qq-plot" options={makeOptionsQQPlot(summary)} style={{ width: '50%' }} />
+      <div style={{ width: '50%', 'text-align': 'left', margin: 'auto' }}>
+        <p>{LL().FunctionalitiesSection.LinearRegressionOptions.QQInfo1()}</p>
+        <p>✅ {LL().FunctionalitiesSection.LinearRegressionOptions.QQCheck()}</p>
+      </div>
+    </div>
+  </>;
+}
+
+export function RepresentationOptions(
+  props: {
+    dataset: Record<string, any>[]
+    summary: LinearRegressionResult | MultipleLinearRegressionResult,
+    idVariable: string | undefined,
+  },
+): JSX.Element {
+  const { LL } = useI18nContext();
+  return <>
+    <h3>{LL().FunctionalitiesSection.LinearRegressionOptions.RepresentationOptions()}</h3>
+    <p>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo1()}</p>
+    <ul>
+      <li>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo2()}</li>
+      <li>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo3()}</li>
+      <li>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo4()}</li>
+      <li>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo5()}</li>
+    </ul>
+    <p>✅ {LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo6()}</p>
+    <PlotFigure
+      id="classification-color-selection"
+      options={
+        makeOptionsStandardisedResidualsColors(
+          props.dataset,
+          props.summary,
+          getAsymmetricDivergingColors('Balance', 2, 2, true, true, false),
+          [-1.5, -0.5, 0.5, 1.5],
+          props.idVariable,
+        )
+      }
+    />
+  </>;
 }

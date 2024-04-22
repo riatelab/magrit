@@ -3,7 +3,9 @@ import lowess from '@stdlib/stats-lowess';
 import cdf from '@stdlib/stats-base-dists-t-cdf';
 
 import { isNumber } from './common';
-import { Mabs, Mpow, Msqrt } from './math';
+import {
+  Mabs, Mceil, Mfloor, Mpow, Msqrt,
+} from './math';
 
 export interface LinearRegressionOptions {
   x: string,
@@ -158,6 +160,41 @@ export function makeCorrelationMatrix(
 }
 
 /**
+ * Implements the quantile function for type 7 (R quantile function)
+ * which is the default quantile function in R but gives different
+ * results than simplestatistics.quantile.
+ *
+ * @param data
+ * @param q
+ */
+function quantileType7(
+  data: number[],
+  q: number,
+) {
+  // Sort data
+  const sortedData = data.slice().sort((a, b) => a - b);
+  const n = sortedData.length;
+
+  // Compute the position of the quantile
+  const pos = (q * (n - 1)) + 1;
+
+  // Handle edge cases where the quantile is exactly the first of the last element
+  if (pos <= 1) {
+    return sortedData[0];
+  }
+  if (pos >= n) {
+    return sortedData[n - 1];
+  }
+
+  // Linear interpolation for non-integer positions
+  const lowerIndex = Mfloor(pos) - 1; // we use 0-based indexing
+  const upperIndex = Mceil(pos) - 1; // we use 0-based indexing
+  const fraction = pos - Mfloor(pos);
+
+  return sortedData[lowerIndex] + fraction * (sortedData[upperIndex] - sortedData[lowerIndex]);
+}
+
+/**
  * Compute the p-value for a t-value and a number of degrees of freedom.
  *
  * @param {number} t - The t-value
@@ -229,19 +266,23 @@ export function computeLinearRegression(
     return lmLine(v as number);
   });
 
-  // Compute the standardised residuals and the residual standard error
-  const standardisedResiduals = residuals.map((r, i) => {
-    if (r === null) {
-      return null;
-    }
-    return r / Msqrt(1 - rSquared);
-  });
-
   const rse = Msqrt(
     residuals
       .map((r) => (r === null ? 0 : r * r))
       .reduce((s, v) => s + v, 0) / (d.length - 2),
   );
+
+  const sd = ss.standardDeviation(residuals.filter((v) => v !== null) as number[]);
+
+  // Compute the standardised residuals and the residual standard error
+  const standardisedResiduals = residuals.map((v, i) => {
+    if (v === null) {
+      return null;
+    }
+    // Compute the standardised residual, as in R
+    return v / sd;
+  });
+  const filteredStandardisedResiduals = standardisedResiduals.filter((v) => v !== null) as number[];
 
   // For the Fitted vs. Residuals plot, we need to compute
   // the lowess smoothed values
@@ -254,24 +295,25 @@ export function computeLinearRegression(
   // lowess smoothed values
   const lowessStandardisedResiduals = lowess(
     fittedValues.filter((v) => v !== null),
-    standardisedResiduals.filter((v) => v !== null)
-      .map((v) => Msqrt(Mabs(v as number))),
+    filteredStandardisedResiduals.map((v) => Msqrt(Mabs(v as number))),
   );
 
   // The qqPoints is what we would get by calling qqnorm on the
   // standardised residuals in R.
   const qqPoints: { x: number[], y: number[] } = { x: [], y: [] };
-  standardisedResiduals
-    .filter((v) => v !== null)
+  filteredStandardisedResiduals
+    .slice()
     .sort((a, b) => <number>a - <number>b)
     .forEach((v, i) => {
       qqPoints.x.push(ss.probit((i + 1) / (standardisedResiduals.length + 1)));
       qqPoints.y.push(v as number);
     });
 
-  const qqLineX = ss.quantile(standardisedResiduals
-    .filter((v) => v !== null) as number[], [0.25, 0.75]);
-  const qqLineY = [-0.6744898, 0.6744898];
+  const qqLineX = [
+    quantileType7(filteredStandardisedResiduals, 0.25),
+    quantileType7(filteredStandardisedResiduals, 0.75),
+  ];
+  const qqLineY = [-0.6744898, 0.6744898]; // qnorm(c(0.25, 0.75)) in R
   const qqLine = {
     slope: (qqLineX[1] - qqLineX[0]) / (qqLineY[1] - qqLineY[0]),
     intercept: qqLineX[0] - qqLineY[0] * ((qqLineX[1] - qqLineX[0]) / (qqLineY[1] - qqLineY[0])),
