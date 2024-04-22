@@ -130,7 +130,7 @@ function onClickValidate(
     // Part specific to choropleth
     type: LegendType.categoricalChoropleth,
     orientation: Orientation.vertical,
-    boxWidth: 45,
+    boxWidth: 50,
     boxHeight: 30,
     boxSpacing: 5,
     boxSpacingNoData: 5,

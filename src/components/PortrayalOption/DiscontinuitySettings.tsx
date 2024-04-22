@@ -134,7 +134,7 @@ function onClickValidate(
     },
     type: LegendType.discontinuity,
     orientation: 'horizontal',
-    lineLength: 45,
+    lineLength: 50,
     labels: {
       ...applicationSettingsStore.defaultLegendSettings.labels,
     } as LegendTextElement,
