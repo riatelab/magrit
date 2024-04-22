@@ -11,11 +11,12 @@ interface InputFieldNumberProps {
   rounded?: boolean;
   width?: number;
   disabled?: boolean;
+  layout?: 'horizontal' | 'vertical';
 }
 
 export default function InputFieldNumber(props: InputFieldNumberProps): JSX.Element {
   const mergedProps = mergeProps({ width: 200 }, props);
-  return <div class="field">
+  return <div class={props.layout === 'vertical' ? 'field-block' : 'field'}>
     <label class="label">{mergedProps.label}</label>
     <div class="control">
       <input

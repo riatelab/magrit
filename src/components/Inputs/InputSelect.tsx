@@ -12,12 +12,13 @@ interface InputFieldSelectProps {
   value: string;
   width?: number;
   disabled?: boolean;
+  layout?: 'horizontal' | 'vertical';
 }
 
 export default function InputFieldSelect(props: ParentProps<InputFieldSelectProps>): JSX.Element {
   const mergedProps = mergeProps({ width: 200 }, props);
   const c = children(() => mergedProps.children);
-  return <div class="field">
+  return <div class={props.layout === 'vertical' ? 'field-block' : 'field'}>
     <label class="label">{ mergedProps.label }</label>
     <div class="select" style={{ width: `${mergedProps.width}px` }}>
       <select

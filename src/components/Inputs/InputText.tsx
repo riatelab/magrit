@@ -8,10 +8,11 @@ interface InputFieldTextProps {
   onChange?: (text: string) => void;
   onKeyUp?: (text: string) => void;
   width?: number;
+  layout?: 'horizontal' | 'vertical';
 }
 
 export default function InputFieldText(props: InputFieldTextProps): JSX.Element {
-  return <div class="field">
+  return <div class={props.layout === 'vertical' ? 'field-block' : 'field'}>
     <label class="label">{ props.label }</label>
     <div class="control">
       <input

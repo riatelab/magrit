@@ -7,10 +7,11 @@ interface InputFieldColorProps {
   onChange: (color: string) => void;
   rounded?: boolean;
   width?: number;
+  layout?: 'horizontal' | 'vertical';
 }
 export default function InputFieldColor(props: InputFieldColorProps): JSX.Element {
   const mergedProps = mergeProps({ width: 200 }, props);
-  return <div class="field">
+  return <div class={props.layout === 'vertical' ? 'field-block' : 'field'}>
     <label class="label">{ mergedProps.label }</label>
     <div class="control">
       <input

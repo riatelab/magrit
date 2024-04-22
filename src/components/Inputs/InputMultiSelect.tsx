@@ -8,6 +8,7 @@ interface InputFieldMultiSelectProps {
   values: string[];
   width?: number;
   size?: number;
+  layout?: 'horizontal' | 'vertical';
 }
 
 export default function InputFieldMultiSelect(
@@ -15,7 +16,7 @@ export default function InputFieldMultiSelect(
 ): JSX.Element {
   const c = children(() => props.children);
 
-  return <div class="field" style={{ height: '100%' }}>
+  return <div class={props.layout === 'vertical' ? 'field-block' : 'field'} style={{ height: '100%' }}>
     <label class="label">{props.label}</label>
     <MultipleSelect
       onChange={(e) => {
