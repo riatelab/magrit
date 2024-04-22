@@ -117,3 +117,12 @@ export function parseUserDefinedBreaks(
   }
   return breaks;
 }
+
+export function getEntitiesByClass(
+  values: number[],
+  breaks: number[],
+) {
+  const Cls = getClassifier(ClassificationMethod.manual);
+  const classifier = new Cls(values, null, breaks);
+  return classifier.countByClass();
+}

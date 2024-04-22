@@ -507,6 +507,9 @@ const en = {
       SummaryInfo6: 'If the graphs shown above have convinced you that these hypotheses have been validated, it\'s now time to move on to representing the results.',
       ClassificationColorSelection: 'Classification and selection of colors',
       StandardizedResiduals: 'Standardized residuals',
+      PortrayalType: 'Cartographic portrayal type',
+      PortrayalTypeChoropleth: 'Choropleth representation of standardised residuals',
+      PortrayalTypePropSymbol: 'Proportional symbols representation of residuals',
     },
   },
   FormulaInput: {

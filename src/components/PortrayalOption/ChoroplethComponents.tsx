@@ -19,7 +19,7 @@ import {
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { getPaletteWrapper } from '../../helpers/color';
 import d3 from '../../helpers/d3-custom';
-import { getClassifier } from '../../helpers/classification';
+import { getEntitiesByClass } from '../../helpers/classification';
 import { Mmin } from '../../helpers/math';
 
 // Stores
@@ -42,15 +42,6 @@ import {
 const defaultColorScheme = applicationSettingsStore.defaultColorScheme;
 // eslint-disable-next-line prefer-destructuring
 const defaultNoDataColor = applicationSettingsStore.defaultNoDataColor;
-
-function getEntitiesByClass(
-  values: number[],
-  breaks: number[],
-) {
-  const Cls = getClassifier(ClassificationMethod.manual);
-  const classifier = new Cls(values, null, breaks);
-  return classifier.countByClass();
-}
 
 function getUniqueValues(values: number[]) {
   return Array.from(new Set(values));

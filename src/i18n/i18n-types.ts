@@ -1832,6 +1832,18 @@ type RootTranslation = {
 			 * S​t​a​n​d​a​r​d​i​z​e​d​ ​r​e​s​i​d​u​a​l​s
 			 */
 			StandardizedResiduals: string
+			/**
+			 * C​a​r​t​o​g​r​a​p​h​i​c​ ​p​o​r​t​r​a​y​a​l​ ​t​y​p​e
+			 */
+			PortrayalType: string
+			/**
+			 * C​h​o​r​o​p​l​e​t​h​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​o​f​ ​s​t​a​n​d​a​r​d​i​s​e​d​ ​r​e​s​i​d​u​a​l​s
+			 */
+			PortrayalTypeChoropleth: string
+			/**
+			 * P​r​o​p​o​r​t​i​o​n​a​l​ ​s​y​m​b​o​l​s​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​o​f​ ​r​e​s​i​d​u​a​l​s
+			 */
+			PortrayalTypePropSymbol: string
 		}
 	}
 	FormulaInput: {
@@ -4803,6 +4815,18 @@ export type TranslationFunctions = {
 			 * Standardized residuals
 			 */
 			StandardizedResiduals: () => LocalizedString
+			/**
+			 * Cartographic portrayal type
+			 */
+			PortrayalType: () => LocalizedString
+			/**
+			 * Choropleth representation of standardised residuals
+			 */
+			PortrayalTypeChoropleth: () => LocalizedString
+			/**
+			 * Proportional symbols representation of residuals
+			 */
+			PortrayalTypePropSymbol: () => LocalizedString
 		}
 	}
 	FormulaInput: {

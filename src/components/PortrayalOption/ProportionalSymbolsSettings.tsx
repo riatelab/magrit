@@ -141,10 +141,12 @@ function onClickValidate(
   // settings of proportional symbols or zoom in/out
   // and also if the user wants to change the position of the
   // symbols manually)
-  newData.features.forEach((feature) => {
-    // eslint-disable-next-line no-param-reassign
-    feature.geometry.originalCoordinates = feature.geometry.coordinates;
-  });
+  if (referenceLayerDescription.type !== 'linestring') {
+    newData.features.forEach((feature) => {
+      // eslint-disable-next-line no-param-reassign
+      feature.geometry.originalCoordinates = feature.geometry.coordinates;
+    });
+  }
 
   if (avoidOverlapping) {
     if (symbolType !== ProportionalSymbolsSymbolType.line) {

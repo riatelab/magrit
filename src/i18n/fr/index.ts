@@ -507,6 +507,9 @@ const fr = {
       SummaryInfo6: 'Si les graphiques présentés ci-dessus vous ont convaincu que ces hypothèses ont été validées, il est maintenant temps de passer à la représentation des résultats.',
       ClassificationColorSelection: 'Classification et sélection des couleurs',
       StandardizedResiduals: 'Résidus standardisés',
+      PortrayalType: 'Type de représentation cartographique',
+      PortrayalTypeChoropleth: 'Représentation choroplèthe des résidus standardisés',
+      PortrayalTypePropSymbol: 'Représentation en symboles proportionnels des résidus',
     },
   },
   FormulaInput: {

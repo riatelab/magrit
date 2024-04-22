@@ -1,17 +1,32 @@
 // Imports from solid-js
 import { createSignal, For, Show } from 'solid-js';
+import { produce } from 'solid-js/store';
+
+// Imports from other packages
+import { getAsymmetricDivergingColors } from 'dicopal';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { makeCategoriesMap, makeCategoriesMapping } from '../../helpers/categorical-choropleth';
 import { PortrayalSettingsProps } from './common';
+import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 import { findSuitableName, unproxify } from '../../helpers/common';
+import { getEntitiesByClass } from '../../helpers/classification';
+import { computeCandidateValuesForSymbolsLegend, coordsPointOnFeature, PropSizer } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
+import { generateIdLegend } from '../../helpers/legends';
+import { Mabs } from '../../helpers/math';
 import { computeLinearRegression, LinearRegressionResult, makeCorrelationMatrix } from '../../helpers/statistics';
 
 // Stores
-import { setLoading } from '../../store/GlobalStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
-import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { setLoading } from '../../store/GlobalStore';
+import {
+  layersDescriptionStore,
+  LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../../store/LayersDescriptionStore';
 
 // Subcomponents
 import InputResultName from './InputResultName.tsx';
@@ -19,18 +34,40 @@ import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import {
-  CorrelationMatrix, DiagnosticPlots,
-  LmSummary, RepresentationOptions, ScatterPlot,
+  CorrelationMatrix,
+  DiagnosticPlots,
+  LmSummary,
+  RepresentationOptions,
+  ScatterPlot,
 } from './LinearRegressionComponents.tsx';
 import CollapsibleSection from '../CollapsibleSection.tsx';
 import InputFieldRadio from '../Inputs/InputRadio.tsx';
 import MessageBlock from '../MessageBlock.tsx';
 
+// Types / enums / interfaces
+import { DataType, Variable } from '../../helpers/typeDetection';
+import {
+  type CategoricalChoroplethLegend,
+  CategoricalChoroplethParameters,
+  type ChoroplethLegend,
+  type ClassificationParameters,
+  type CustomPalette,
+  type GeoJSONFeature,
+  type LayerDescriptionChoropleth,
+  type LayerDescriptionProportionalSymbols,
+  type LegendTextElement,
+  LegendType,
+  Orientation,
+  type ProportionalSymbolCategoryParameters,
+  type ProportionalSymbolsLegend,
+  RepresentationType,
+} from '../../global.d';
+
 function onClickValidate(
   layerId: string,
   portrayalType: 'choropleth' | 'proportionalSymbols',
   linearRegressionResult: LinearRegressionResult,
-  layerName: string,
+  newLayerName: string,
 ) {
   console.log('Layer ID:', layerId);
   // The layer description of the reference layer
@@ -38,23 +75,351 @@ function onClickValidate(
     .find((l) => l.id === layerId)!;
 
   // Copy the dataset and enrich it with the linear regression result
+  // Takes the opportunity to iterate over the dataset to compute
+  // extent of the targeted variable
   const newDataset = unproxify(referenceLayerDescription.data);
-  newDataset.features.forEach((f) => {
+  let minStdRes = Infinity;
+  let maxStdRes = -Infinity;
+  let minRes = Infinity;
+  let maxRes = -Infinity;
+  newDataset.features.forEach((f: GeoJSONFeature, i: number) => {
     // eslint-disable-next-line no-param-reassign
-    f.properties.fitted = linearRegressionResult.fittedValues[i];
+    f.properties.fitted = linearRegressionResult.fittedValues[i] as (number | null);
     // eslint-disable-next-line no-param-reassign
-    f.properties.residual = linearRegressionResult.residuals[i];
+    f.properties.residual = linearRegressionResult.residuals[i] as (number | null);
+    // eslint-disable-next-line no-param-reassign, no-nested-ternary
+    f.properties.signResidual = linearRegressionResult.residuals[i] !== null
+      ? Math.sign(linearRegressionResult.residuals[i]) >= 0
+        ? 'Positive'
+        : 'Negative'
+      : null;
     // eslint-disable-next-line no-param-reassign
-    f.properties.standardizedResidual = linearRegressionResult.standardisedResiduals[i];
+    f.properties.standardizedResidual = linearRegressionResult
+      .standardisedResiduals[i] as (number | null);
+    if (f.properties.standardizedResidual !== null) {
+      if (f.properties.standardizedResidual < minStdRes) {
+        minStdRes = f.properties.standardizedResidual as number;
+      }
+      if (f.properties.standardizedResidual > maxStdRes) {
+        maxStdRes = f.properties.standardizedResidual as number;
+      }
+    }
+    if (f.properties.residual !== null) {
+      const absVal = Mabs(f.properties.residual as number);
+      if (absVal < minRes) {
+        minRes = absVal;
+      }
+      if (absVal > maxRes) {
+        maxRes = absVal;
+      }
+    }
   });
+
+  // Fields description
+  const newFields = (unproxify(referenceLayerDescription.fields) as Variable[]).concat([
+    {
+      name: 'fitted',
+      type: 'ratio', // FIXME: we should take the type (ratio / stock) of the x variable
+      hasMissingValues: linearRegressionResult.ignored > 0,
+      dataType: DataType.number,
+    },
+    {
+      name: 'residual',
+      type: 'ratio', // FIXME: we should take the type (ratio / stock) of the x variable
+      hasMissingValues: linearRegressionResult.ignored > 0,
+      dataType: DataType.number,
+    },
+    {
+      name: 'signResidual',
+      type: 'categorical',
+      hasMissingValues: linearRegressionResult.ignored > 0,
+      dataType: DataType.number,
+    },
+    {
+      name: 'standardizedResidual',
+      type: 'ratio',
+      hasMissingValues: linearRegressionResult.ignored > 0,
+      dataType: DataType.number,
+    },
+  ]);
 
   // Generate ID of new layer
   const newId = generateIdLayer();
 
   if (portrayalType === 'choropleth') {
     // Prepare the classification parameters
+    const breaks = [minStdRes, -1.5, -0.5, 0.5, 1.5, maxStdRes];
+    const classificationParameters = {
+      variable: 'standardizedResidual',
+      method: 'manual',
+      classes: 5,
+      breaks,
+      palette: {
+        id: 'Geyser-5',
+        name: 'Geyser',
+        number: 5,
+        type: 'diverging',
+        colors: getAsymmetricDivergingColors('Geyser', 2, 2, true, true, false),
+        provenance: 'dicopal',
+        reversed: false,
+      } as CustomPalette,
+      noDataColor: applicationSettingsStore.defaultNoDataColor,
+      entitiesByClass: getEntitiesByClass(
+        linearRegressionResult.standardisedResiduals,
+        [minStdRes, -1.5, -0.5, 0.5, 1.5, maxStdRes],
+      ),
+    } as ClassificationParameters;
+
+    const newLayerDescription = {
+      id: newId,
+      name: newLayerName,
+      data: newDataset,
+      type: referenceLayerDescription.type,
+      fields: newFields,
+      renderer: 'choropleth' as RepresentationType,
+      visible: true,
+      strokeColor: '#000000',
+      strokeWidth: 0.4,
+      strokeOpacity: 1,
+      fillOpacity: 1,
+      dropShadow: null,
+      shapeRendering: referenceLayerDescription.shapeRendering,
+      rendererParameters: classificationParameters,
+    } as LayerDescriptionChoropleth;
+
+    if (newLayerDescription.type === 'point') {
+      // We also need to transfert the symbolSize and the symbolType parameters
+      newLayerDescription.symbolSize = referenceLayerDescription.symbolSize || 5;
+      newLayerDescription.symbolType = referenceLayerDescription.symbolType || 'circle';
+    }
+
+    // Find a position for the legend
+    const legendPosition = getPossibleLegendPosition(120, 340);
+
+    const legend = {
+      // Part common to all legends
+      id: generateIdLegend(),
+      layerId: newId,
+      title: {
+        text: 'Standardized residuals',
+        ...applicationSettingsStore.defaultLegendSettings.title,
+      } as LegendTextElement,
+      subtitle: {
+        text: `${linearRegressionResult.options.y} ~ ${linearRegressionResult.options.x}`,
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      } as LegendTextElement,
+      note: {
+        text: '',
+        ...applicationSettingsStore.defaultLegendSettings.note,
+      } as LegendTextElement,
+      position: legendPosition,
+      visible: true,
+      roundDecimals: 1,
+      backgroundRect: {
+        visible: false,
+      },
+      // Part specific to choropleth
+      type: LegendType.choropleth,
+      orientation: Orientation.vertical,
+      boxWidth: 50,
+      boxHeight: 30,
+      boxSpacing: 0,
+      boxSpacingNoData: 10,
+      boxCornerRadius: 0,
+      labels: {
+        ...applicationSettingsStore.defaultLegendSettings.labels,
+      } as LegendTextElement,
+      noDataLabel: 'No data',
+      stroke: false,
+      tick: false,
+    } as ChoroplethLegend;
+
+    setLayersDescriptionStore(
+      produce(
+        (draft: LayersDescriptionStoreType) => {
+          draft.layers.push(newLayerDescription);
+          draft.layoutFeaturesAndLegends.push(legend);
+        },
+      ),
+    );
   } else {
     // Prepare the proportional symbols parameters
+    if (
+      referenceLayerDescription.type === 'polygon'
+    ) {
+      newDataset.features.forEach((feature) => {
+        // eslint-disable-next-line no-param-reassign
+        feature.geometry = {
+          type: 'Point',
+          coordinates: coordsPointOnFeature(feature.geometry as never),
+        };
+      });
+    }
+
+    // Store the original position of the features (we will need it
+    // later if the avoid overlapping option is set
+    // to recompute the new position if the user changes the
+    // settings of proportional symbols or zoom in/out
+    // and also if the user wants to change the position of the
+    // symbols manually)
+    if (referenceLayerDescription.type !== 'linestring') {
+      newDataset.features.forEach((feature) => {
+        // eslint-disable-next-line no-param-reassign
+        feature.geometry.originalCoordinates = feature.geometry.coordinates;
+      });
+    }
+
+    const symbolType = referenceLayerDescription.type === 'linestring'
+      ? 'line'
+      : 'circle';
+
+    const categoricalMapping = makeCategoriesMapping(
+      makeCategoriesMap(
+        newDataset.features,
+        'signResidual',
+      ),
+    );
+
+    const propSymbolsParameters = {
+      variable: 'residual',
+      symbolType,
+      referenceRadius: 40,
+      referenceValue: maxRes,
+      avoidOverlapping: false,
+      iterations: 100,
+      movable: false,
+      colorMode: 'categoricalVariable',
+      color: {
+        variable: 'signResidual',
+        mapping: categoricalMapping,
+        noDataColor: applicationSettingsStore.defaultNoDataColor,
+      } as CategoricalChoroplethParameters,
+    } as ProportionalSymbolCategoryParameters;
+
+    const newLayerDescription = {
+      id: newId,
+      name: newLayerName,
+      data: newDataset,
+      type: referenceLayerDescription.type === 'linestring' ? 'linestring' : 'point',
+      fields: newFields,
+      renderer: 'proportionalSymbols' as RepresentationType,
+      visible: true,
+      strokeColor: '#000000',
+      strokeWidth: 1,
+      strokeOpacity: 1,
+      fillColor: undefined,
+      fillOpacity: 1,
+      dropShadow: null,
+      shapeRendering: 'auto',
+      rendererParameters: propSymbolsParameters,
+    } as LayerDescriptionProportionalSymbols;
+
+    // Find a position for the legend
+    const legendPosition = getPossibleLegendPosition(150, 150);
+
+    const propSize = new PropSizer(
+      propSymbolsParameters.referenceValue,
+      propSymbolsParameters.referenceRadius,
+      propSymbolsParameters.symbolType,
+    );
+    const legendValues = computeCandidateValuesForSymbolsLegend(
+      minRes,
+      maxRes,
+      propSize.scale,
+      propSize.getValue,
+    );
+
+    console.log(minRes, maxRes, legendValues);
+
+    const legend = {
+      // Legend common part
+      id: generateIdLegend(),
+      layerId: newId,
+      title: {
+        text: 'Residual',
+        ...applicationSettingsStore.defaultLegendSettings.title,
+      } as LegendTextElement,
+      subtitle: {
+        text: `${linearRegressionResult.options.y} ~ ${linearRegressionResult.options.x}`,
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      } as LegendTextElement,
+      note: {
+        text: '',
+        ...applicationSettingsStore.defaultLegendSettings.note,
+      } as LegendTextElement,
+      position: legendPosition,
+      visible: true,
+      roundDecimals: 1,
+      backgroundRect: {
+        visible: false,
+      },
+      // Part specific to proportional symbols
+      type: LegendType.proportional,
+      layout: 'stacked',
+      values: legendValues,
+      spacing: 5,
+      labels: {
+        ...applicationSettingsStore.defaultLegendSettings.labels,
+      } as LegendTextElement,
+      symbolType: propSymbolsParameters.symbolType,
+    } as ProportionalSymbolsLegend;
+
+    setLayersDescriptionStore(
+      produce(
+        (draft: LayersDescriptionStoreType) => {
+          draft.layers.push(newLayerDescription);
+          draft.layoutFeaturesAndLegends.push(legend);
+        },
+      ),
+    );
+
+    const legendChoroCategoryPosition = getPossibleLegendPosition(120, 340);
+
+    const legendChoroCategory = {
+      // Part common to all legends
+      id: generateIdLegend(),
+      layerId: newId,
+      title: {
+        text: propSymbolsParameters.color.variable,
+        ...applicationSettingsStore.defaultLegendSettings.title,
+      } as LegendTextElement,
+      subtitle: {
+        text: undefined,
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      },
+      note: {
+        text: undefined,
+        ...applicationSettingsStore.defaultLegendSettings.note,
+      },
+      position: legendChoroCategoryPosition,
+      visible: true,
+      roundDecimals: null,
+      backgroundRect: {
+        visible: false,
+      },
+      // Part specific to choropleth
+      type: LegendType.categoricalChoropleth,
+      orientation: Orientation.vertical,
+      boxWidth: 45,
+      boxHeight: 30,
+      boxSpacing: 5,
+      boxSpacingNoData: 5,
+      boxCornerRadius: 0,
+      labels: {
+        ...applicationSettingsStore.defaultLegendSettings.labels,
+      } as LegendTextElement,
+      noDataLabel: 'No data',
+      stroke: false,
+      tick: false,
+    } as CategoricalChoroplethLegend;
+
+    setLayersDescriptionStore(
+      produce(
+        (draft: LayersDescriptionStoreType) => {
+          draft.layoutFeaturesAndLegends.push(legendChoroCategory);
+        },
+      ),
+    );
   }
 }
 
@@ -176,13 +541,15 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
             { value: 'spearman', label: LL().FunctionalitiesSection.LinearRegressionOptions.SpearmanCorrelation() },
           ]
         }
-        onChange={(v) => { setSelectedMatrix(v as 'pearson' | 'spearman'); }}
+        onChange={(v) => {
+          setSelectedMatrix(v as 'pearson' | 'spearman');
+        }}
       />
       <Show when={selectedMatrix() === 'pearson'}>
-        <CorrelationMatrix matrix={pearsonMatrix} />
+        <CorrelationMatrix matrix={pearsonMatrix}/>
       </Show>
       <Show when={selectedMatrix() === 'spearman'}>
-        <CorrelationMatrix matrix={spearmanMatrix} />
+        <CorrelationMatrix matrix={spearmanMatrix}/>
       </Show>
     </CollapsibleSection>
 
@@ -218,6 +585,7 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
         {(variable) => <option value={variable.name}>{variable.name}</option>}
       </For>
     </InputFieldSelect>
+    <hr />
     <Show when={
       explainedVariable() && explanatoryVariable()
       && explanatoryVariable() === explainedVariable()
@@ -269,18 +637,37 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
         dataset={dataset}
         idVariable={identifierVariable}
       />
+      <p class={'m-4'}></p>
+      <hr/>
+      <InputFieldSelect
+        label={LL().FunctionalitiesSection.LinearRegressionOptions.PortrayalType()}
+        onChange={(v) => {
+          setPortrayalType(v as 'choropleth' | 'proportionalSymbols');
+        }}
+        value={portrayalType()}
+        width={400}
+      >
+        <option value="choropleth">
+          {LL().FunctionalitiesSection.LinearRegressionOptions.PortrayalTypeChoropleth()}
+        </option>
+        <option value="proportionalSymbols">
+          {LL().FunctionalitiesSection.LinearRegressionOptions.PortrayalTypePropSymbol()}
+        </option>
+      </InputFieldSelect>
     </Show>
+
     <InputResultName
       value={newLayerName()}
       onKeyUp={(value) => {
         setNewLayerName(value);
       }}
       onEnter={makePortrayal}
+      disabled={linearRegressionResult() === null}
     />
     <ButtonValidation
-      disabled={true}
-      label={ LL().FunctionalitiesSection.CreateLayer() }
-      onClick={ makePortrayal }
+      disabled={linearRegressionResult() === null}
+      label={LL().FunctionalitiesSection.CreateLayer()}
+      onClick={makePortrayal}
     />
   </div>;
 }

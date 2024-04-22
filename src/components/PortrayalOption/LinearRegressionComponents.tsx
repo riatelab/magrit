@@ -4,8 +4,9 @@ import {
 } from 'solid-js';
 
 // Imports from other packages
-import { getAsymmetricDivergingColors, getSequentialColors } from 'dicopal';
+import { getAsymmetricDivergingColors } from 'dicopal';
 import * as Plot from '@observablehq/plot';
+import { BsCheckAll, BsCheckLg } from 'solid-icons/bs';
 
 // Subcomponents
 import PlotFigure from '../PlotFigure.tsx';
@@ -70,6 +71,8 @@ export function makeOptionsScaleLocationPlot(
         stroke: 'red',
         curve: 'linear',
       }),
+      Plot.gridX({ stroke: 'currentColor', strokeOpacity: '0.2' }),
+      Plot.gridY({ stroke: 'currentColor', strokeOpacity: '0.2' }),
     ],
   };
 }
@@ -100,6 +103,8 @@ export function makeOptionsResidualsFittedPlot(
         stroke: 'red',
         curve: 'linear',
       }),
+      Plot.gridX({ stroke: 'currentColor', strokeOpacity: '0.2' }),
+      Plot.gridY({ stroke: 'currentColor', strokeOpacity: '0.2' }),
     ],
   };
 }
@@ -132,6 +137,8 @@ export function makeOptionsQQPlot(lm: LinearRegressionResult | MultipleLinearReg
         fill: 'black',
         stroke: 'currentColor',
       }),
+      Plot.gridX({ stroke: 'currentColor', strokeOpacity: 0.15 }),
+      Plot.gridY({ stroke: 'currentColor', strokeOpacity: 0.15 }),
     ],
   };
 }
@@ -143,7 +150,6 @@ export function makeOptionsStandardisedResidualsColors(
   breaks: number[],
   idVariable: string | undefined,
 ) {
-  console.log(idVariable);
   const filteredStandardisedResiduals = lm.standardisedResiduals
     .filter((r: number | null) => r !== null) as number[];
   const d = filteredStandardisedResiduals
@@ -153,7 +159,6 @@ export function makeOptionsStandardisedResidualsColors(
         index: i,
       };
       if (idVariable) {
-        console.log(dataset[i][idVariable]);
         o[idVariable] = dataset[i][idVariable];
       }
       return o;
@@ -240,6 +245,8 @@ export function ScatterPlot(
           y: props.explainedVariable,
           stroke: 'red',
         }) : null,
+        Plot.gridX({ stroke: 'currentColor', strokeOpacity: '0.2' }),
+        Plot.gridY({ stroke: 'currentColor', strokeOpacity: '0.2' }),
       ],
     }}
     style={{ margin: 'auto' }}
@@ -383,9 +390,13 @@ export function DiagnosticPlots(
 ): JSX.Element {
   const { LL } = useI18nContext();
   return <>
-    <h3>{LL().FunctionalitiesSection.LinearRegressionOptions.DiagnosticPlots()}</h3>
-    <h4>{LL().FunctionalitiesSection.LinearRegressionOptions.ResidualVsFittedValues()}</h4>
-    <div style={{ display: 'flex' }}>
+    <h3 class="has-text-centered">
+      {LL().FunctionalitiesSection.LinearRegressionOptions.DiagnosticPlots()}
+    </h3>
+    <h5 class="has-text-centered">
+      {LL().FunctionalitiesSection.LinearRegressionOptions.ResidualVsFittedValues()}
+    </h5>
+    <div style={{ display: 'flex' }} class="mb-4">
       <PlotFigure id="residuals-vs-fitted" options={makeOptionsResidualsFittedPlot(summary)} style={{ width: '50%' }} />
       <div style={{ width: '50%', 'text-align': 'left', margin: 'auto' }}>
         <p>{LL().FunctionalitiesSection.LinearRegressionOptions.ResidualVsFittedInfo1()}</p>
@@ -393,23 +404,36 @@ export function DiagnosticPlots(
           <li>{LL().FunctionalitiesSection.LinearRegressionOptions.ResidualVsFittedInfo2()}</li>
           <li>{LL().FunctionalitiesSection.LinearRegressionOptions.ResidualVsFittedInfo3()}</li>
         </ul>
-        <p>✅ {LL().FunctionalitiesSection.LinearRegressionOptions.ResidualVsFittedCheck()}</p>
+        <p>
+          <BsCheckLg style={{ 'vertical-align': 'middle', 'margin-bottom': '0.1em' }} size={'1em'} />
+          {LL().FunctionalitiesSection.LinearRegressionOptions.ResidualVsFittedCheck()}
+        </p>
       </div>
     </div>
-    <h4>{LL().FunctionalitiesSection.LinearRegressionOptions.ScaleLocation()}</h4>
-    <div style={{ display: 'flex' }}>
+    <h5 class="has-text-centered">
+      {LL().FunctionalitiesSection.LinearRegressionOptions.ScaleLocation()}
+    </h5>
+    <div style={{ display: 'flex' }} class="mb-4">
       <PlotFigure id="scale-location" options={makeOptionsScaleLocationPlot(summary)} style={{ width: '50%' }} />
       <div style={{ width: '50%', 'text-align': 'left', margin: 'auto' }}>
         <p>{LL().FunctionalitiesSection.LinearRegressionOptions.ScaleLocationInfo1()}</p>
-        <p>✅ {LL().FunctionalitiesSection.LinearRegressionOptions.ScaleLocationCheck()}</p>
+        <p>
+          <BsCheckLg style={{ 'vertical-align': 'middle', 'margin-bottom': '0.1em' }}/>
+          {LL().FunctionalitiesSection.LinearRegressionOptions.ScaleLocationCheck()}
+        </p>
       </div>
     </div>
-    <h4>{LL().FunctionalitiesSection.LinearRegressionOptions.QQ()}</h4>
-    <div style={{ display: 'flex' }}>
+    <h5 class="has-text-centered">
+      {LL().FunctionalitiesSection.LinearRegressionOptions.QQ()}
+    </h5>
+    <div style={{ display: 'flex' }} class="mb-4">
       <PlotFigure id="qq-plot" options={makeOptionsQQPlot(summary)} style={{ width: '50%' }} />
       <div style={{ width: '50%', 'text-align': 'left', margin: 'auto' }}>
         <p>{LL().FunctionalitiesSection.LinearRegressionOptions.QQInfo1()}</p>
-        <p>✅ {LL().FunctionalitiesSection.LinearRegressionOptions.QQCheck()}</p>
+        <p>
+          <BsCheckLg style={{ 'vertical-align': 'middle', 'margin-bottom': '0.1em' }}/>
+          {LL().FunctionalitiesSection.LinearRegressionOptions.QQCheck()}
+        </p>
       </div>
     </div>
   </>;
@@ -424,22 +448,27 @@ export function RepresentationOptions(
 ): JSX.Element {
   const { LL } = useI18nContext();
   return <>
-    <h3>{LL().FunctionalitiesSection.LinearRegressionOptions.RepresentationOptions()}</h3>
-    <p>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo1()}</p>
-    <ul>
-      <li>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo2()}</li>
-      <li>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo3()}</li>
-      <li>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo4()}</li>
-      <li>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo5()}</li>
-    </ul>
-    <p>✅ {LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo6()}</p>
+    <h3 class="has-text-centered">{LL().FunctionalitiesSection.LinearRegressionOptions.RepresentationOptions()}</h3>
+    <div class="mb-4" style={{ width: '70%', margin: 'auto' }}>
+      <p>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo1()}</p>
+      <ul>
+        <li>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo2()}</li>
+        <li>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo3()}</li>
+        <li>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo4()}</li>
+        <li>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo5()}</li>
+      </ul>
+      <p>
+        <BsCheckAll style={{ 'vertical-align': 'middle', 'margin-bottom': '0.1em' }} />
+        {LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo6()}
+      </p>
+    </div>
     <PlotFigure
       id="classification-color-selection"
       options={
         makeOptionsStandardisedResidualsColors(
           props.dataset,
           props.summary,
-          getAsymmetricDivergingColors('Balance', 2, 2, true, true, false),
+          getAsymmetricDivergingColors('Geyser', 2, 2, true, true, false),
           [-1.5, -0.5, 0.5, 1.5],
           props.idVariable,
         )
