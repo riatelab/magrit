@@ -246,7 +246,7 @@ export default function ClassificationPanel(): JSX.Element {
     classificationPanelStore.classificationParameters!.palette.divergingOptions?.left
     || 1,
   );
-  // - wheter there is a neutral central class for the diverging palette
+  // - whether there is a neutral central class for the diverging palette
   const [
     hasNeutralCentralClass,
     setHasNeutralCentralClass,
@@ -254,17 +254,17 @@ export default function ClassificationPanel(): JSX.Element {
     classificationPanelStore.classificationParameters!.palette.divergingOptions?.centralClass
     || false,
   );
-  // - the current breaks (given the last option that changed, or the default breaks)
-  const [
-    currentBreaksInfo,
-    setCurrentBreaksInfo,
-  ] = createSignal<ClassificationParameters>(makeClassificationParameters());
   // - the breaks chosen by the user for the
   //   current classification method (only if 'manual' is chosen)
   const [
     customBreaks,
     setCustomBreaks,
-  ] = createSignal<number[]>(currentBreaksInfo().breaks);
+  ] = createSignal<number[]>(classificationPanelStore.classificationParameters!.breaks);
+  // - the current breaks (given the last option that changed, or the default breaks)
+  const [
+    currentBreaksInfo,
+    setCurrentBreaksInfo,
+  ] = createSignal<ClassificationParameters>(makeClassificationParameters());
   // - display option for the classification plot
   const [
     classificationPlotOption,
