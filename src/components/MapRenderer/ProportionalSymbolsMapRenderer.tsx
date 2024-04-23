@@ -52,26 +52,41 @@ export default function proportionalSymbolsRenderer(
   // eslint-disable-next-line no-nested-ternary
   const getColor = layerDescription.rendererParameters.colorMode === 'singleColor'
     ? createMemo(() => () => layerDescription.rendererParameters.color)
-    : layerDescription.rendererParameters.colorMode === 'ratioVariable'
-      ? createMemo(() => {
-        const Cls = getClassifier(ClassificationMethod.manual);
-        const classifier = new Cls(null, null, layerDescription.rendererParameters.color.breaks);
-
-        return (value: any) => (isNumber(value)
-          ? layerDescription.rendererParameters.color.palette.colors[classifier.getClass(value)]
-          : layerDescription.rendererParameters.color.noDataColor);
+    // eslint-disable-next-line no-nested-ternary
+    : layerDescription.rendererParameters.colorMode === 'positiveNegative'
+      ? createMemo(() => (properties: Record<string, any>) => {
+        const value = +properties[layerDescription.rendererParameters.variable];
+        return value >= 0
+          ? layerDescription.rendererParameters.color[0]
+          : layerDescription.rendererParameters.color[1];
       })
-      : createMemo(() => {
-        const map = new Map<string | number | null | undefined, string>(
-          layerDescription.rendererParameters.color
-            .mapping.map(({ value, color }) => [value, color]),
-        );
-        map.set('', layerDescription.rendererParameters.color.noDataColor);
-        map.set(null, layerDescription.rendererParameters.color.noDataColor);
-        map.set(undefined, layerDescription.rendererParameters.color.noDataColor);
+      : layerDescription.rendererParameters.colorMode === 'ratioVariable'
+        ? createMemo(() => {
+          const Cls = getClassifier(ClassificationMethod.manual);
+          const classifier = new Cls(null, null, layerDescription.rendererParameters.color.breaks);
 
-        return (value: string | number | null | undefined) => map.get(value);
-      });
+          return (properties: Record<string, any>) => {
+            const value = properties[layerDescription.rendererParameters.color.variable];
+            return isNumber(value)
+              ? layerDescription.rendererParameters.color
+                .palette.colors[classifier.getClass(+value)]
+              : layerDescription.rendererParameters.color
+                .noDataColor;
+          };
+        })
+        : createMemo(() => {
+          const map = new Map<string | number | null | undefined, string>(
+            layerDescription.rendererParameters.color
+              .mapping.map(({ value, color }) => [value, color]),
+          );
+          map.set('', layerDescription.rendererParameters.color.noDataColor);
+          map.set(null, layerDescription.rendererParameters.color.noDataColor);
+          map.set(undefined, layerDescription.rendererParameters.color.noDataColor);
+
+          return (properties: Record<string, any>) => map.get(
+            properties[layerDescription.rendererParameters.color.variable],
+          );
+        });
 
   return <g
     ref={refElement!}
@@ -104,11 +119,7 @@ export default function proportionalSymbolsRenderer(
               )}
               cx={projectedCoords()[0]}
               cy={projectedCoords()[1]}
-              fill={
-                getColor()(
-                  feature.properties[layerDescription.rendererParameters.color?.variable],
-                )
-              }
+              fill={getColor()(feature.properties)}
               // @ts-expect-error because use:bind-data isn't a property of this element
               use:bindData={feature}
             ></circle>;
@@ -125,11 +136,7 @@ export default function proportionalSymbolsRenderer(
               height={symbolSize()}
               x={projectedCoords()[0] - symbolSize() / 2}
               y={projectedCoords()[1] - symbolSize() / 2}
-              fill={
-                getColor()(
-                  feature.properties[layerDescription.rendererParameters.color?.variable],
-                )
-              }
+              fill={getColor()(feature.properties)}
               // @ts-expect-error because use:bind-data isn't a property of this element
               use:bindData={feature}
             ></rect>;

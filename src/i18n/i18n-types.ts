@@ -1095,7 +1095,19 @@ type RootTranslation = {
 				 * C​a​t​e​g​o​r​i​c​a​l​ ​v​a​r​i​a​b​l​e
 				 */
 				categoricalVariable: string
+				/**
+				 * C​o​l​o​r​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​t​h​e​ ​s​i​g​n​ ​o​f​ ​t​h​e​ ​v​a​l​u​e​ ​(​p​o​s​i​t​i​v​e​/​n​e​g​a​t​i​v​e​)
+				 */
+				positiveNegative: string
 			}
+			/**
+			 * C​o​l​o​r​ ​f​o​r​ ​p​o​s​i​t​i​v​e​ ​v​a​l​u​e​s
+			 */
+			ColorPositiveValues: string
+			/**
+			 * C​o​l​o​r​ ​f​o​r​ ​n​e​g​a​t​i​v​e​ ​v​a​l​u​e​s
+			 */
+			ColorNegativeValues: string
 			/**
 			 * A​v​o​i​d​ ​o​v​e​r​l​a​p​p​i​n​g​ ​s​y​m​b​o​l​s
 			 */
@@ -4102,7 +4114,19 @@ export type TranslationFunctions = {
 				 * Categorical variable
 				 */
 				categoricalVariable: () => LocalizedString
+				/**
+				 * Color according to the sign of the value (positive/negative)
+				 */
+				positiveNegative: () => LocalizedString
 			}
+			/**
+			 * Color for positive values
+			 */
+			ColorPositiveValues: () => LocalizedString
+			/**
+			 * Color for negative values
+			 */
+			ColorNegativeValues: () => LocalizedString
 			/**
 			 * Avoid overlapping symbols
 			 */

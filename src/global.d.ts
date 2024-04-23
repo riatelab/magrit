@@ -315,9 +315,16 @@ interface ClassificationParameters {
 }
 
 export enum ProportionalSymbolsColorMode {
+  // All the symbols have the same color
   singleColor = 'singleColor',
+  // The symbols are colored based on a ratio variable
+  // (this is our proposed solution for the "proportional symbols and ratio" representation)
   ratioVariable = 'ratioVariable',
+  // The symbols are colored based on a categorical variable
+  // (this is our proposed solution for the "proportional symbols and categories" representation)
   categoricalVariable = 'categoricalVariable',
+  // The symbols are colored differently based on the sign of the variable
+  positiveNegative = 'positiveNegative',
 }
 
 export interface ProportionalSymbolsParametersBase {
@@ -359,10 +366,16 @@ type ProportionalSymbolCategoryParameters = ProportionalSymbolsParametersBase & 
   color: CategoricalChoroplethParameters,
 };
 
+type ProportionalSymbolsPositiveNegativeParameters = ProportionalSymbolsParametersBase & {
+  colorMode: ProportionalSymbolsColorMode.positiveNegative,
+  color: [string, string],
+};
+
 type ProportionalSymbolsParameters =
 ProportionalSymbolSingleColorParameters
 | ProportionalSymbolsRatioParameters
-| ProportionalSymbolCategoryParameters;
+| ProportionalSymbolCategoryParameters
+| ProportionalSymbolsPositiveNegativeParameters;
 
 export interface HalfProportionalMarkParameters {
   variable: string,

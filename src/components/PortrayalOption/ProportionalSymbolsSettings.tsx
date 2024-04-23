@@ -85,7 +85,7 @@ function onClickValidate(
   refValueForSymbolSize: number,
   colorProperties: {
     mode: ProportionalSymbolsColorMode,
-    value: string | ClassificationParameters | CategoricalChoroplethParameters,
+    value: string | ClassificationParameters | CategoricalChoroplethParameters | [string, string],
   },
   newLayerName: string,
   symbolType: ProportionalSymbolsSymbolType,
@@ -266,7 +266,7 @@ function onClickValidate(
       id: generateIdLegend(),
       layerId: newId,
       title: {
-        text: propSymbolsParameters.color.variable,
+        text: (propSymbolsParameters.color as ClassificationParameters).variable,
         ...applicationSettingsStore.defaultLegendSettings.title,
       } as LegendTextElement,
       subtitle: {
@@ -321,7 +321,7 @@ function onClickValidate(
               fontColor: '#000000',
               visible: true,
               title: {
-                text: propSymbolsParameters.color.variable,
+                text: (propSymbolsParameters.color as CategoricalChoroplethParameters).variable,
                 ...applicationSettingsStore.defaultLegendSettings.title,
               } as LegendTextElement,
               subtitle: {
@@ -426,6 +426,8 @@ function onClickValidate(
         ),
       );
     }
+  } else if (propSymbolsParameters.colorMode === 'positiveNegative') {
+    // TODO: Add the legend for positive/negative values
   }
 }
 
@@ -452,14 +454,6 @@ export default function ProportionalSymbolsSettings(
   // if (!targetFields || targetFields.length === 0) {
   //   throw Error('Unexpected Error: No stock field found');
   // }
-
-  const availableColorModes = [ProportionalSymbolsColorMode.singleColor];
-  if (targetFieldsCategory.length > 0) {
-    availableColorModes.push(ProportionalSymbolsColorMode.categoricalVariable);
-  }
-  if (targetFieldsRatio.length > 0) {
-    availableColorModes.push(ProportionalSymbolsColorMode.ratioVariable);
-  }
 
   const [
     targetVariable,
@@ -491,6 +485,9 @@ export default function ProportionalSymbolsSettings(
   const minValues = createMemo(() => min(values()));
   const maxValues = createMemo(() => max(values()));
 
+  // Reactive variable that tells if the target variable has negative values
+  const hasNegativeValues = createMemo(() => minValues() < 0);
+
   // Reactive variable that contains the values of the target ratio variable
   // if any
   const valuesRatio = createMemo(() => (targetRatioVariable()
@@ -499,6 +496,20 @@ export default function ProportionalSymbolsSettings(
       .filter((value) => isNumber(value))
       .map((value: any) => +value) as number[]
     : []));
+
+  const availableColorModes = createMemo(() => {
+    if (hasNegativeValues()) {
+      return [ProportionalSymbolsColorMode.positiveNegative];
+    }
+    const a = [ProportionalSymbolsColorMode.singleColor];
+    if (targetFieldsCategory.length > 0) {
+      a.push(ProportionalSymbolsColorMode.categoricalVariable);
+    }
+    if (targetFieldsRatio.length > 0) {
+      a.push(ProportionalSymbolsColorMode.ratioVariable);
+    }
+    return a;
+  });
 
   const [
     newLayerName,
@@ -523,7 +534,7 @@ export default function ProportionalSymbolsSettings(
   const [
     colorMode,
     setColorMode,
-  ] = createSignal<ProportionalSymbolsColorMode>(ProportionalSymbolsColorMode.singleColor);
+  ] = createSignal<ProportionalSymbolsColorMode>(availableColorModes()[0]);
   // Option for singleColor mode
   const [
     color,
@@ -546,6 +557,12 @@ export default function ProportionalSymbolsSettings(
       )
       : [],
   );
+  // Option for positive/negative color mode
+  const [
+    colors,
+    setColors,
+  ] = createSignal<[string, string]>(['#0000ff', '#ff0000']);
+  // Do we want to make a dorling / demers simulation to avoid overlapping?
   const [
     avoidOverlapping,
     setAvoidOverlapping,
@@ -572,7 +589,7 @@ export default function ProportionalSymbolsSettings(
 
     const colorProperties: {
       mode: ProportionalSymbolsColorMode,
-      value: string | ClassificationParameters | CategoricalChoroplethParameters,
+      value: string | ClassificationParameters | CategoricalChoroplethParameters | [string, string],
     } = {
       mode: colorMode(),
       value: '',
@@ -591,6 +608,9 @@ export default function ProportionalSymbolsSettings(
           noDataColor: '#ffffff',
           mapping: categoriesMapping(),
         } as CategoricalChoroplethParameters;
+        break;
+      case ProportionalSymbolsColorMode.positiveNegative:
+        colorProperties.value = colors();
         break;
       default:
         throw Error('This should not happen');
@@ -629,7 +649,10 @@ export default function ProportionalSymbolsSettings(
   return <div class="portrayal-section__portrayal-options-proportional-symbols">
     <InputFieldSelect
       label={ LL().FunctionalitiesSection.CommonOptions.Variable() }
-      onChange={(value) => { setTargetVariable(value); }}
+      onChange={(value) => {
+        setTargetVariable(value);
+        setColorMode(availableColorModes()[0]);
+      }}
       value={ targetVariable() }
     >
       <For each={targetFields}>
@@ -670,13 +693,13 @@ export default function ProportionalSymbolsSettings(
       max={ 999 }
       step={ 0.1 }
     />
-    <Show when={availableColorModes.length > 1}>
+    <Show when={availableColorModes().length > 1}>
       <InputFieldSelect
         label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ColorMode()}
         onChange={(v) => { setColorMode(v as ProportionalSymbolsColorMode); }}
         value={colorMode()}
       >
-        <For each={availableColorModes}>
+        <For each={availableColorModes()}>
           {
             (cm) => (
               <option value={cm}>
@@ -758,6 +781,18 @@ export default function ProportionalSymbolsSettings(
             onChange={(v) => { setDisplayChartOnMap(v); }}
           />
         </Show>
+      </Match>
+      <Match when={colorMode() === 'positiveNegative'}>
+        <InputFieldColor
+          label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.ColorPositiveValues() }
+          value={ colors()[0] }
+          onChange={(value) => { setColors([value, colors()[1]]); }}
+        />
+        <InputFieldColor
+          label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.ColorNegativeValues() }
+          value={ color() }
+          onChange={(value) => { setColors([colors()[0], value]); }}
+        />
       </Match>
     </Switch>
     <InputFieldCheckbox
