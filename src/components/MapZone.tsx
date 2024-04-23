@@ -572,25 +572,17 @@ export default function MapZone(): JSX.Element {
             }
           </For>
           <For each={layersDescriptionStore.layers}>
-            {(layer) => <>
-              {/*
-                For now we need a workaround issue https://github.com/solidjs/solid/issues/2110
-                regarding the stdDeviation attribute of the feDropShadow filter,
-                that's why we use spread operator to pass the stdDeviation attribute.
-              */}
-              <Show when={layer.visible && !!layer.dropShadow}>
-                <filter id={`filter-drop-shadow-${layer.id}`} width="200%" height="200%">
-                  <feDropShadow
-                    dx={layer.dropShadow!.dx}
-                    dy={layer.dropShadow!.dy}
-                    {...{ stdDeviation: layer.dropShadow!.stdDeviation }}
-                    flood-color={layer.dropShadow!.color}
-                    flood-opacity={1}
-                  />
-                </filter>
-              </Show>
-            </>
-            }
+            {(layer) => <Show when={layer.visible && !!layer.dropShadow}>
+              <filter id={`filter-drop-shadow-${layer.id}`} width="200%" height="200%">
+                <feDropShadow
+                  dx={layer.dropShadow!.dx}
+                  dy={layer.dropShadow!.dy}
+                  stdDeviation={layer.dropShadow!.stdDeviation}
+                  flood-color={layer.dropShadow!.color}
+                  flood-opacity={1}
+                />
+              </filter>
+            </Show>}
           </For>
           {getClipSphere()}
         </defs>
