@@ -585,6 +585,18 @@ export default function TableWindow(): JSX.Element {
               onCellValueChanged={ () => { setDataEdited(true); } }
               suppressDragLeaveHidesColumns={ true }
               suppressColumnMoveAnimation={ true }
+              onGridReady={(event) => {
+                // First we size the columns to fit the content
+                event.api.autoSizeAllColumns();
+                // Then we reduce size of columns that may
+                // be way too large.
+                // Note that there can be 0 columns in the dataset.
+                event.api.getColumns()?.forEach((col) => {
+                  if (col.getActualWidth() > 300) {
+                    col.setActualWidth(300, 'api');
+                  }
+                });
+              }}
             />
           </div>
         </Show>
