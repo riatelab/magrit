@@ -73,6 +73,14 @@ function ScatterPlot(
         style: {
           color: props.fontColor,
         },
+        x: {
+          label: props.explanatoryVariable,
+          tickFormat: (d) => d.toLocaleString(),
+        },
+        y: {
+          label: props.explainedVariable,
+          tickFormat: (d) => d.toLocaleString(),
+        },
         marginLeft: 60,
         marks: [
           Plot.dot(ds(), {

@@ -319,6 +319,9 @@ export const goodnessOfVarianceFit = (
   return (sdam - sdcm) / sdam;
 };
 
+export const formatNum = (n: number, precision: number = 2): string => n
+  .toLocaleString(undefined, { maximumFractionDigits: precision });
+
 /**
  * Returns a string representation of a number with a given precision
  * after the decimal point (but without trailing zeros if any, trying
@@ -335,9 +338,7 @@ export function toPrecisionAfterDecimalPoint(
   const s = n.toString();
   const numberBeforeDecimalPoint = s.indexOf('.');
   if (numberBeforeDecimalPoint === -1 || Number.isInteger(n)) {
-    return n.toFixed(1);
+    return (+n.toFixed(1)).toLocaleString();
   }
-  let p = numberBeforeDecimalPoint + precision;
-  if (s[0] === '0') p -= 1;
-  return n.toPrecision(p).replace(/(0)+$/, '');
+  return formatNum(n, precision);
 }

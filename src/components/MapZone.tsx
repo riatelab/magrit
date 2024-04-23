@@ -79,7 +79,7 @@ import legendLabels from './LegendRenderer/LabelsLegendRenderer.tsx';
 import legendMushrooms from './LegendRenderer/MushroomsLegendRenderer.tsx';
 import legendCategoricalChoroplethBarchart from './LegendRenderer/CategoricalChoroplethBarchartLegend.tsx';
 import legendChoroplethHistogram from './LegendRenderer/ChoroplethHistogramLegend.tsx';
-import lmScatterPlot from './LegendRenderer/LMScatterPlot.tsx';
+import lmScatterPlot from './LegendRenderer/LMScatterPlotRenderer.tsx';
 
 // Types and enums
 import {

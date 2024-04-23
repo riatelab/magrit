@@ -452,7 +452,7 @@ function onClickValidate(
               ...applicationSettingsStore.defaultLegendSettings.title,
             } as LegendTextElement,
             subtitle: {
-              text: `R² = ${linearRegressionResult.rSquared.toFixed(4)}`,
+              text: `R² = ${(+linearRegressionResult.rSquared.toFixed(4)).toLocaleString()}`,
               ...applicationSettingsStore.defaultLegendSettings.subtitle,
             },
             note: {
@@ -483,7 +483,7 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
   // Extract properties from the layer description
   const dataset = layerDescription.data.features.map((f) => f.properties) as Record<string, any>[];
 
-  // Identifier variable (usefull for tooltip
+  // Identifier variable (useful for tooltip
   // on the various chart that are displayed in this component)
   // TODO: In the future we might ask the user to select the identifier variable...
   const identifierVariable = layerDescription.fields.find((f) => f.type === 'identifier')?.name;

@@ -14,9 +14,9 @@ import PlotFigure from '../PlotFigure.tsx';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { isNumber } from '../../helpers/common';
 import {
-  Mfloor, extent, round,
+  Mfloor, extent,
   toPrecisionAfterDecimalPoint,
-  Mabs, Msqrt, Mceil,
+  Mabs, Msqrt, Mceil, formatNum,
 } from '../../helpers/math';
 
 // Types / Interfaces / Enums
@@ -56,8 +56,14 @@ export function makeOptionsScaleLocationPlot(
 
   return {
     grid: true,
-    x: { label: 'Fitted' },
-    y: { label: 'Square root of standardized residuals' },
+    x: {
+      label: 'Fitted',
+      tickFormat: (d) => d.toLocaleString(),
+    },
+    y: {
+      label: 'Square root of standardized residuals',
+      tickFormat: (d) => d.toLocaleString(),
+    },
     marks: [
       Plot.dot(d1, {
         x: 'Fitted',
@@ -87,8 +93,14 @@ export function makeOptionsResidualsFittedPlot(
 
   return {
     grid: true,
-    x: { label: 'Fitted' },
-    y: { label: 'Residuals' },
+    x: {
+      label: 'Fitted',
+      tickFormat: (d) => d.toLocaleString(),
+    },
+    y: {
+      label: 'Residuals',
+      tickFormat: (d) => d.toLocaleString(),
+    },
     marks: [
       Plot.dot(d1, {
         x: 'Fitted',
@@ -120,8 +132,14 @@ export function makeOptionsQQPlot(lm: LinearRegressionResult | MultipleLinearReg
 
   return {
     grid: true,
-    x: { label: 'Theoretical quantiles' },
-    y: { label: 'Standardized residuals' },
+    x: {
+      label: 'Theoretical quantiles',
+      tickFormat: (d) => d.toLocaleString(),
+    },
+    y: {
+      label: 'Standardized residuals',
+      tickFormat: (d) => d.toLocaleString(),
+    },
     marks: [
       Plot.line(d2, {
         x: 'x',
@@ -171,10 +189,14 @@ export function makeOptionsStandardisedResidualsColors(
   ];
 
   return {
+    x: {
+      tickFormat: (t) => t.toLocaleString(),
+    },
     y: {
       grid: true,
       fontSize: 30,
       domain,
+      tickFormat: (t) => t.toLocaleString(),
     },
     height: 200,
     color: {
@@ -239,6 +261,14 @@ export function ScatterPlot(
       width: 400,
       grid: true,
       marginLeft: 60,
+      x: {
+        label: props.explanatoryVariable,
+        tickFormat: (d) => d.toLocaleString(),
+      },
+      y: {
+        label: props.explainedVariable,
+        tickFormat: (d) => d.toLocaleString(),
+      },
       marks: [
         Plot.dot(ds(), {
           x: props.explanatoryVariable,
@@ -284,7 +314,7 @@ export function CorrelationMatrix(
         Plot.text(props.matrix, {
           x: 'a',
           y: 'b',
-          text: (d) => d.correlation.toFixed(2),
+          text: (d) => (+d.correlation.toFixed(2)).toLocaleString(),
           fill: (d) => (Math.abs(d.correlation) > 0.6 ? 'white' : 'black'),
         }),
         Plot.axisX({ lineWidth: 7, marginBottom: 50 }),
@@ -367,7 +397,7 @@ export function LmSummary(
     <p>
       {
         LL().FunctionalitiesSection.LinearRegressionOptions.RSE({
-          value: round(summary.residualStandardError, 4),
+          value: formatNum(summary.residualStandardError, 4),
           dof: summary.residuals.filter((d) => d !== null).length - 2,
         })
       }
@@ -382,12 +412,12 @@ export function LmSummary(
       <br/>
       {
         LL().FunctionalitiesSection.LinearRegressionOptions.MultipleR2({
-          value: round(summary.rSquared, 4),
+          value: formatNum(summary.rSquared, 4),
         })
-      }, &nbsp;
+      }&nbsp;-&nbsp;
       {
         LL().FunctionalitiesSection.LinearRegressionOptions.AdjustedR2({
-          value: round(summary.rSquared, 4),
+          value: formatNum(summary.rSquared, 4),
         })
       }
     </p>
