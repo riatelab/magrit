@@ -4,7 +4,6 @@ import {
 } from 'solid-js';
 
 // Imports from other packages
-import { getAsymmetricDivergingColors } from 'dicopal';
 import * as Plot from '@observablehq/plot';
 import { BsCheckAll, BsCheckLg } from 'solid-icons/bs';
 
@@ -13,6 +12,7 @@ import PlotFigure from '../PlotFigure.tsx';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { isNumber } from '../../helpers/common';
 import {
   Mfloor, extent, round,
   toPrecisionAfterDecimalPoint,
@@ -207,13 +207,21 @@ export function ScatterPlot(
     dataset: Record<string, any>[],
     explainedVariable: string,
     explanatoryVariable: string,
+    logX?: boolean,
+    logY?: boolean,
     drawLine?: boolean,
   },
 ): JSX.Element {
-  const ds = createMemo(() => props.dataset.map((d) => ({
-    [props.explanatoryVariable]: +d[props.explanatoryVariable],
-    [props.explainedVariable]: +d[props.explainedVariable],
-  })));
+  const ds = createMemo(() => props.dataset.map((d) => {
+    if (isNumber(d[props.explainedVariable]) && isNumber(d[props.explanatoryVariable])) {
+      return {
+        [props.explainedVariable]: +d[props.explainedVariable],
+        [props.explanatoryVariable]: +d[props.explanatoryVariable],
+      };
+    }
+    return null;
+  }).filter((d) => d !== null));
+
   const minX = createMemo(() => {
     const [min, max] = extent(ds().map((d) => d[props.explanatoryVariable]));
     const p03 = min + 0.03 * (max - min);

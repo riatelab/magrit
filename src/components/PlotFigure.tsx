@@ -19,5 +19,5 @@ export default function PlotFigure(props: PlotFigureProps) {
     refElement.appendChild(plot);
   });
 
-  return <div id={props.id} ref={refElement} class={'plot-container'} style={props.style}></div>;
+  return <div id={props.id} ref={refElement!} class={'plot-container'} style={props.style}></div>;
 }

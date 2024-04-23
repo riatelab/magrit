@@ -36,9 +36,10 @@ import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import {
   CorrelationMatrix,
   DiagnosticPlots,
-  LmSummary,
   InformationBeforeValidation,
-  ScatterPlot, makeOptionsStandardisedResidualsColors,
+  LmSummary,
+  makeOptionsStandardisedResidualsColors,
+  ScatterPlot,
 } from './LinearRegressionComponents.tsx';
 import CollapsibleSection from '../CollapsibleSection.tsx';
 import InputFieldRadio from '../Inputs/InputRadio.tsx';
@@ -58,18 +59,21 @@ import {
   type LayerDescriptionProportionalSymbols,
   type LegendTextElement,
   LegendType,
+  LinearRegressionScatterPlot,
   Orientation,
   type ProportionalSymbolCategoryParameters,
-  type ProportionalSymbolsLegend, ProportionalSymbolsSymbolType,
+  type ProportionalSymbolsLegend,
+  ProportionalSymbolsSymbolType,
   RepresentationType,
 } from '../../global.d';
-import InputFieldText from '../Inputs/InputText.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 function onClickValidate(
   layerId: string,
   portrayalType: 'choropleth' | 'proportionalSymbols',
   linearRegressionResult: LinearRegressionResult,
+  addScatterPlot: boolean,
   newLayerName: string,
 ) {
   console.log('Layer ID:', layerId);
@@ -93,8 +97,8 @@ function onClickValidate(
     // eslint-disable-next-line no-param-reassign, no-nested-ternary
     f.properties.signResidual = linearRegressionResult.residuals[i] !== null
       ? Math.sign(linearRegressionResult.residuals[i]) >= 0
-        ? 'Positive'
-        : 'Negative'
+        ? 'Surplus'
+        : 'Deficit'
       : null;
     // eslint-disable-next-line no-param-reassign
     f.properties.standardizedResidual = linearRegressionResult
@@ -171,6 +175,9 @@ function onClickValidate(
         linearRegressionResult.standardisedResiduals,
         [minStdRes, -1.5, -0.5, 0.5, 1.5, maxStdRes],
       ),
+      // FIXME: the following is not defined in the model
+      //   and we will change it
+      lm: linearRegressionResult,
     } as ClassificationParameters;
 
     const newLayerDescription = {
@@ -297,6 +304,9 @@ function onClickValidate(
         mapping: categoricalMapping,
         noDataColor: applicationSettingsStore.defaultNoDataColor,
       } as CategoricalChoroplethParameters,
+      // FIXME: the following is not defined in the model
+      //   and we will change it
+      lm: linearRegressionResult,
     } as ProportionalSymbolCategoryParameters;
 
     const newLayerDescription = {
@@ -381,7 +391,7 @@ function onClickValidate(
       id: generateIdLegend(),
       layerId: newId,
       title: {
-        text: propSymbolsParameters.color.variable,
+        text: '',
         ...applicationSettingsStore.defaultLegendSettings.title,
       } as LegendTextElement,
       subtitle: {
@@ -418,6 +428,41 @@ function onClickValidate(
       produce(
         (draft: LayersDescriptionStoreType) => {
           draft.layoutFeaturesAndLegends.push(legendChoroCategory);
+        },
+      ),
+    );
+  }
+
+  if (addScatterPlot) {
+    // Add the scatter plot to the layout
+    setLayersDescriptionStore(
+      produce(
+        (draft: LayersDescriptionStoreType) => {
+          draft.layoutFeaturesAndLegends.push({
+            id: generateIdLegend(),
+            layerId: newId,
+            type: LegendType.linearRegressionScatterPlot,
+            position: getPossibleLegendPosition(300, 300),
+            width: 300,
+            height: 300,
+            fontColor: '#000000',
+            visible: true,
+            title: {
+              text: `${linearRegressionResult.options.y} ~ ${linearRegressionResult.options.x}`,
+              ...applicationSettingsStore.defaultLegendSettings.title,
+            } as LegendTextElement,
+            subtitle: {
+              text: `R² = ${linearRegressionResult.rSquared.toFixed(4)}`,
+              ...applicationSettingsStore.defaultLegendSettings.subtitle,
+            },
+            note: {
+              text: undefined,
+              ...applicationSettingsStore.defaultLegendSettings.note,
+            },
+            backgroundRect: {
+              visible: false,
+            },
+          } as LinearRegressionScatterPlot);
         },
       ),
     );
@@ -512,6 +557,11 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
     setSymbolType,
   ] = createSignal<'circle' | 'square' | 'line'>('circle');
 
+  const [
+    addScatterPlot,
+    setAddScatterPlot,
+  ] = createSignal<boolean>(true);
+
   const makePortrayal = async () => {
     const layerName = findSuitableName(
       newLayerName() || LL().FunctionalitiesSection.NewLayer(),
@@ -530,6 +580,7 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
         layerDescription.id,
         portrayalType(),
         linearRegressionResult() as LinearRegressionResult,
+        addScatterPlot(),
         layerName,
       );
 
@@ -613,6 +664,8 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
         dataset={dataset}
         explainedVariable={explainedVariable()}
         explanatoryVariable={explanatoryVariable()}
+        logX={false}
+        logY={false}
         drawLine={drawRegressionLine()}
       />
       <Show when={linearRegressionResult() === null}>
@@ -715,18 +768,10 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
             }
           </For>
         </InputFieldSelect>
-        <InputFieldText
-          label={'Label valeurs négatives'}
-          width={200}
-        />
         <InputFieldColor
           label={'Couleur valeurs négatives'}
           // value={}
           // onChange={}
-        />
-        <InputFieldText
-          label={'Label valeurs positives'}
-          width={200}
         />
         <InputFieldColor
           label={'Couleur valeurs négatives'}
@@ -734,6 +779,11 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
           // onChange={}
         />
       </Show>
+      <InputFieldCheckbox
+        label={LL().FunctionalitiesSection.LinearRegressionOptions.AddScatterPlot()}
+        checked={addScatterPlot()}
+        onChange={(v) => { setAddScatterPlot(v); }}
+      />
     </Show>
     <InputResultName
       value={newLayerName()}

@@ -865,6 +865,16 @@ interface CategoricalChoroplethBarchartLegend extends LegendBase {
   order: 'ascending' | 'descending' | 'none',
 }
 
+interface LinearRegressionScatterPlot extends LegendBase {
+  type: LegendType.linearRegressionScatterPlot,
+  // The width of the scatter plot
+  width: number,
+  // The height of the scatter plot
+  height: number,
+  // The font color of the chart elements
+  fontColor: string,
+}
+
 export type Legend = (
   ChoroplethLegend
   | CategoricalChoroplethLegend
@@ -875,6 +885,7 @@ export type Legend = (
   | MushroomsLegend
   | CategoricalChoroplethBarchartLegend
   | ChoroplethHistogramLegend
+  | LinearRegressionScatterPlot
 );
 
 export enum NumberFormatting {
@@ -904,6 +915,7 @@ export enum LegendType {
   mushrooms = 'mushrooms',
   choroplethHistogram = 'choroplethHistogram',
   categoricalChoroplethBarchart = 'categoricalChoroplethBarchart',
+  linearRegressionScatterPlot = 'linearRegressionScatterPlot',
 }
 
 export enum Orientation {

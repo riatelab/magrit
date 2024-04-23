@@ -510,6 +510,7 @@ const en = {
       PortrayalType: 'Cartographic portrayal type',
       PortrayalTypeChoropleth: 'Choropleth representation of standardised residuals',
       PortrayalTypePropSymbol: 'Proportional symbols representation of residuals',
+      AddScatterPlot: 'Add the scatter plot on the map',
     },
   },
   FormulaInput: {

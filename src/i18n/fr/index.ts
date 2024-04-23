@@ -510,6 +510,7 @@ const fr = {
       PortrayalType: 'Type de représentation cartographique',
       PortrayalTypeChoropleth: 'Représentation choroplèthe des résidus standardisés',
       PortrayalTypePropSymbol: 'Représentation en symboles proportionnels des résidus',
+      AddScatterPlot: 'Ajouter un graphique avec le nuage de points sur la carte',
     },
   },
   FormulaInput: {

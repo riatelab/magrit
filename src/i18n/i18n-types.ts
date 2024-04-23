@@ -1844,6 +1844,10 @@ type RootTranslation = {
 			 * P​r​o​p​o​r​t​i​o​n​a​l​ ​s​y​m​b​o​l​s​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​o​f​ ​r​e​s​i​d​u​a​l​s
 			 */
 			PortrayalTypePropSymbol: string
+			/**
+			 * A​d​d​ ​t​h​e​ ​s​c​a​t​t​e​r​ ​p​l​o​t​ ​o​n​ ​t​h​e​ ​m​a​p
+			 */
+			AddScatterPlot: string
 		}
 	}
 	FormulaInput: {
@@ -4827,6 +4831,10 @@ export type TranslationFunctions = {
 			 * Proportional symbols representation of residuals
 			 */
 			PortrayalTypePropSymbol: () => LocalizedString
+			/**
+			 * Add the scatter plot on the map
+			 */
+			AddScatterPlot: () => LocalizedString
 		}
 	}
 	FormulaInput: {

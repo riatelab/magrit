@@ -79,6 +79,7 @@ import legendLabels from './LegendRenderer/LabelsLegendRenderer.tsx';
 import legendMushrooms from './LegendRenderer/MushroomsLegendRenderer.tsx';
 import legendCategoricalChoroplethBarchart from './LegendRenderer/CategoricalChoroplethBarchartLegend.tsx';
 import legendChoroplethHistogram from './LegendRenderer/ChoroplethHistogramLegend.tsx';
+import lmScatterPlot from './LegendRenderer/LMScatterPlot.tsx';
 
 // Types and enums
 import {
@@ -108,6 +109,7 @@ import {
   type CategoricalChoroplethLegend,
   type DiscontinuityLegend,
   type LabelsLegend,
+  type LinearRegressionScatterPlot,
   type MushroomsLegend,
   type ChoroplethHistogramLegend,
 } from '../global.d';
@@ -176,6 +178,9 @@ const dispatchLegendRenderer = (legend: Legend) => {
   }
   if (legend.type === 'choroplethHistogram') {
     return legendChoroplethHistogram(legend as ChoroplethHistogramLegend);
+  }
+  if (legend.type === 'linearRegressionScatterPlot') {
+    return lmScatterPlot(legend as LinearRegressionScatterPlot);
   }
   return null;
 };
@@ -413,7 +418,7 @@ export default function MapZone(): JSX.Element {
     translate: globalStore.projection.translate(),
   });
 
-  const getClipSphere = () => {
+  const ClipSphere = () => {
     const el = <path d={globalStore.pathGenerator({ type: 'Sphere' })} /> as JSX.Element & ID3Element;
     // eslint-disable-next-line no-underscore-dangle
     el.__data__ = { type: 'Sphere' } as never;
@@ -584,7 +589,9 @@ export default function MapZone(): JSX.Element {
               </filter>
             </Show>}
           </For>
-          {getClipSphere()}
+          <Show when={mapStore.projection.type === 'd3'}>
+            <ClipSphere />
+          </Show>
         </defs>
 
         {/* Generate SVG group for each layer */}
