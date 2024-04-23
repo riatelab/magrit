@@ -191,7 +191,7 @@ export default function FormulaInput(
   return <div class="field-block">
     <label class="label">{LL().FormulaInput.formula()}</label>
     <div class="control is-flex">
-      <div class="is-flex" style={{ width: '75%', ...styleBadges }}>
+      <div class="is-flex" style={{ width: '68%', ...styleBadges }}>
         <For each={props.dsDescription.fields.map((d) => d.name)}>
           {
             (field) => (
@@ -249,7 +249,7 @@ export default function FormulaInput(
           }
         </For>
       </div>
-      <div class="is-flex" style={{ width: '25%', 'flex-flow': 'row-reverse', ...styleBadges }}>
+      <div class="is-flex" style={{ width: '32%', 'flex-flow': 'row-reverse', ...styleBadges }}>
         <For each={['POWER()', 'SUBSTRING()', 'CONCAT()']}>
           {
             (func) => (
