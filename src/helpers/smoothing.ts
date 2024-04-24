@@ -8,8 +8,7 @@ import { setLoadingMessage } from '../store/GlobalStore';
 
 // Helpers
 import { makeCentroidLayer } from './geo';
-import { intersectionLayer } from './geos';
-import { max } from './math';
+import { isNumber } from './common';
 import { convertToTopojsonQuantizeAndBackToGeojson } from './topojson';
 
 // Types
@@ -271,6 +270,54 @@ function computeKdeInner(
   return value;
 }
 
+const prepareArrays = (
+  grid: GeoJSONFeatureCollection,
+  inputLayer: GeoJSONFeatureCollection,
+  variableName: string,
+): {
+  xCells: number[],
+  yCells: number[],
+  xDots: number[],
+  yDots: number[],
+  values: number[],
+} => {
+  // We know the length of these arrays
+  const xCells: number[] = new Array(grid.features.length);
+  const yCells: number[] = new Array(grid.features.length);
+
+  // There might be non-number or null values in the input layer
+  // so we will need to filter them out
+  const xDots: number[] = [];
+  const yDots: number[] = [];
+  const values: number[] = [];
+
+  for (let i = 0; i < grid.features.length; i++) { // eslint-disable-line no-plusplus
+    // eslint-disable-next-line prefer-destructuring
+    xCells[i] = grid.features[i].geometry.coordinates[0];
+    // eslint-disable-next-line prefer-destructuring
+    yCells[i] = grid.features[i].geometry.coordinates[1];
+  }
+
+  for (let i = 0; i < inputLayer.features.length; i++) { // eslint-disable-line no-plusplus
+    const v = inputLayer.features[i].properties[variableName] as any;
+    if (isNumber(v)) {
+      // eslint-disable-next-line prefer-destructuring
+      xDots.push(inputLayer.features[i].geometry.coordinates[0]);
+      // eslint-disable-next-line prefer-destructuring
+      yDots.push(inputLayer.features[i].geometry.coordinates[1]);
+      values.push(+v as number);
+    }
+  }
+
+  return {
+    xCells,
+    yCells,
+    xDots,
+    yDots,
+    values,
+  };
+};
+
 export async function computeStewartValues(
   data: GeoJSONFeatureCollection,
   inputType: 'point' | 'polygon',
@@ -285,32 +332,16 @@ export async function computeStewartValues(
   const inputLayer = makeCentroidLayer(data, inputType, [variableName]);
 
   // Appropriate function to compute the potential
-  const computeStewartInner = stewartParameters.function === 'gaussian'
+  const computeStewartInner = stewartParameters.function === 'Gaussian'
     ? computeStewartInnerExponential
     : computeStewartInnerPareto;
 
-  // Extract coordinates values from the grid and the input points
-  // in arrays that can be passed to the GPU
-  const xCells: number[] = new Array(grid.features.length);
-  const yCells: number[] = new Array(grid.features.length);
-  const xDots: number[] = new Array(inputLayer.features.length);
-  const yDots: number[] = new Array(inputLayer.features.length);
-  const values: number[] = new Array(inputLayer.features.length);
-
-  for (let i = 0; i < grid.features.length; i++) { // eslint-disable-line no-plusplus
-    // eslint-disable-next-line prefer-destructuring
-    xCells[i] = grid.features[i].geometry.coordinates[0];
-    // eslint-disable-next-line prefer-destructuring
-    yCells[i] = grid.features[i].geometry.coordinates[1];
-  }
-
-  for (let i = 0; i < inputLayer.features.length; i++) { // eslint-disable-line no-plusplus
-    // eslint-disable-next-line prefer-destructuring
-    xDots[i] = inputLayer.features[i].geometry.coordinates[0];
-    // eslint-disable-next-line prefer-destructuring
-    yDots[i] = inputLayer.features[i].geometry.coordinates[1];
-    values[i] = inputLayer.features[i].properties[variableName] as number;
-  }
+  // Values ready to be used in the GPU kernel
+  const {
+    xCells, yCells,
+    xDots, yDots,
+    values,
+  } = prepareArrays(grid, inputLayer, variableName);
 
   // Create the GPU instance and define the kernel
   const gpu = new GPU({ mode: 'webgl2' });
@@ -374,28 +405,12 @@ export async function computeKdeValues(
   // Compute the inputs points from
   const inputLayer = makeCentroidLayer(data, inputType, [variableName]);
 
-  // Extract coordinates values from the grid and the input points
-  // in arrays that can be passed to the GPU
-  const xCells: number[] = new Array(grid.features.length);
-  const yCells: number[] = new Array(grid.features.length);
-  const xDots: number[] = new Array(inputLayer.features.length);
-  const yDots: number[] = new Array(inputLayer.features.length);
-  const values: number[] = new Array(inputLayer.features.length);
-
-  for (let i = 0; i < grid.features.length; i++) { // eslint-disable-line no-plusplus
-    // eslint-disable-next-line prefer-destructuring
-    xCells[i] = grid.features[i].geometry.coordinates[0];
-    // eslint-disable-next-line prefer-destructuring
-    yCells[i] = grid.features[i].geometry.coordinates[1];
-  }
-
-  for (let i = 0; i < inputLayer.features.length; i++) { // eslint-disable-line no-plusplus
-    // eslint-disable-next-line prefer-destructuring
-    xDots[i] = inputLayer.features[i].geometry.coordinates[0];
-    // eslint-disable-next-line prefer-destructuring
-    yDots[i] = inputLayer.features[i].geometry.coordinates[1];
-    values[i] = inputLayer.features[i].properties[variableName];
-  }
+  // Values ready to be used in the GPU kernel
+  const {
+    xCells, yCells,
+    xDots, yDots,
+    values,
+  } = prepareArrays(grid, inputLayer, variableName);
 
   // We will use this value to normalize input values
   const normalizer = computeNormalizer(values);
