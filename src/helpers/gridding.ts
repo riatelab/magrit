@@ -46,18 +46,10 @@ import type {
 // };
 
 const getBbox = (feature: GeoJSONFeature, ix: number | undefined) => {
-  // Did we store a bbox in the feature?
-  if (feature.bbox) {
-    return {
-      minX: feature.bbox[0],
-      minY: feature.bbox[1],
-      maxX: feature.bbox[2],
-      maxY: feature.bbox[3],
-      ix,
-    };
-  }
-  // If not we compute it
-  const t = bbox(feature as AllGeoJSON);
+  // Note that we use the "recompute" options because there may already be a bounding
+  // box stored at the feature level, but its in WGS84 and here we want
+  // the bounding box in the current projection of the data.
+  const t = bbox(feature as AllGeoJSON, { recompute: true });
   return {
     minX: t[0],
     minY: t[1],
@@ -100,7 +92,13 @@ export const computeGriddedLayer = async (
   const projectedData = isGeo ? data : reprojFunc(proj, data);
 
   // We want to compute the bounding box of the data (in the current map projection if it's not geo)
-  const extent = bbox(projectedData as AllGeoJSON) as [number, number, number, number];
+  // Note that we use the "recompute" options because there may already be a bounding
+  // box stored at the feature collection level, but its in WGS84 and here we want
+  // the bounding box in the current projection of the data.
+  const extent = bbox(
+    projectedData as AllGeoJSON,
+    { recompute: true },
+  ) as [number, number, number, number];
 
   // Generate the grid with the appropriate shape
   const grid = gridFunctions[params.cellType](extent, resolution);
