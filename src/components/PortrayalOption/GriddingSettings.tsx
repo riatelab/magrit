@@ -107,6 +107,12 @@ async function onClickValidate(
     data: newData,
     fields: [
       {
+        name: 'id',
+        hasMissingValues: false,
+        type: VariableType.identifier,
+        dataType: 'string',
+      },
+      {
         name: `density-${targetVariable}`,
         hasMissingValues: false,
         type: VariableType.ratio,

@@ -4,6 +4,7 @@ import RBush from 'rbush';
 
 // Helpers
 import d3 from './d3-custom';
+import { isNumber } from './common';
 import { planarArea } from './geo';
 import { intersectionFeature, intersectionLayer } from './geos';
 import { transformResolution, gridFunctions } from './grid-creation';
@@ -19,7 +20,7 @@ import rewindLayer from './rewind';
 import { mapStore } from '../store/MapStore';
 
 // Types / Interfaces / Enum
-import {
+import type {
   GeoJSONFeature,
   GeoJSONFeatureCollection,
   GriddedLayerParameters,
@@ -138,7 +139,13 @@ export const computeGriddedLayer = async (
         const intersectionArea = areaFn(intersection as AllGeoJSON);
         const featureArea = areaFn(poly as AllGeoJSON);
         areasPart.push(intersectionArea / featureArea);
-        values.push(+(intersection.properties[params.variable] as any));
+        // TODO: the current behavior for missing values is to set them to 0,
+        //       but we may want to change this in the future
+        values.push(
+          isNumber(intersection.properties[params.variable])
+            ? +(intersection.properties[params.variable] as any)
+            : 0,
+        );
       }
     }
     let sum = 0;
