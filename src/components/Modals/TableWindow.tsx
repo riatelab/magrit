@@ -264,9 +264,12 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
           }),
       };
 
+      // Compute the new fields names
+      const newFieldsName = Object.keys(rowData()[0]);
+
       // If fields have been removed, we need to remove them from the layer description
       const fieldsToRemove = dsDescription.fields
-        .filter((f) => !newData.features[0].properties[f.name]);
+        .filter((f) => !newFieldsName.includes(f.name));
 
       // Update the description of the layer fields
       setLayersDescriptionStore(
@@ -287,9 +290,12 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
       const newData = (unproxify(dsDescription.data as never) as any[])
         .map((feature, i) => rowData()[i]);
 
+      // Compute the new fields names
+      const newFieldsName = Object.keys(rowData()[0]);
+
       // If fields have been removed, we need to remove them from the layer description
       const fieldsToRemove = dsDescription.fields
-        .filter((f) => !newData[0][f.name]);
+        .filter((f) => !newFieldsName.includes(f.name));
 
       // Update the description of the layer fields
       setLayersDescriptionStore(
