@@ -61,11 +61,8 @@ export function draggedElementsAreFiles(e: DragEvent): boolean {
   if (
     e.dataTransfer
     && e.dataTransfer.types
-    && !e.dataTransfer?.types.some((el) => el === 'Files')
+    && !e.dataTransfer.types.every((el) => el === 'Files')
   ) {
-    return false;
-  }
-  if (e.relatedTarget && (e.relatedTarget as Node).nodeType) {
     return false;
   }
   return true;
