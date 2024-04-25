@@ -374,6 +374,7 @@ const createScaleBar = (/* LL: Accessor<TranslationFunctions>,  */) => {
     label: 'km',
     tickValues: [0, 50, 100, 250, 500],
     // tickPadding: 10,
+    labelPosition: 'top',
     style: ScaleBarStyle.lineWithTicksOnTop,
     backgroundRect: { visible: false } as BackgroundRect,
     behavior: 'absoluteSize' as ScaleBarBehavior,
@@ -521,7 +522,7 @@ const createFreeDraw = (
   // Set the cursor to crosshair to indicate that we are in drawing mode
   svgElement.style.cursor = 'crosshair';
 
-  const dragStarted = (ev: d3.D3DragEvent) => {
+  const dragStarted = (ev: d3.D3DragEvent<never, never, never>) => {
     // Push the point to the array
     pts.push([ev.x, ev.y]);
     // Draw the temporary line
