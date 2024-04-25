@@ -45,6 +45,7 @@ import {
   type LayoutFeature,
   type Legend,
   LegendType,
+  type LinearRegressionScatterPlot,
   type MushroomsLegend,
   type ProportionalSymbolsLegend,
   RepresentationType,
@@ -1028,6 +1029,55 @@ function makeSettginsCategoricalChoroplethBarchart(
   </>;
 }
 
+function makeSettingsScatterPlot(
+  legend: LinearRegressionScatterPlot,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <>
+    <FieldText legend={legend} LL={LL} role={'title'}/>
+    <FieldText legend={legend} LL={LL} role={'subtitle'}/>
+    <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldNumber
+      label={LL().Legend.Modal.Width()}
+      value={legend.width}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['width'], v)}
+      min={10}
+      max={800}
+      step={1}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.Height()}
+      value={legend.height}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['height'], v)}
+      min={10}
+      max={800}
+      step={1}
+    />
+    <OptionBackgroundRectangle legend={legend} LL={LL}/>
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        {LL().Legend.Modal.FontProperties()}
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
+      </p>
+    </div>
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'note']}
+      />
+    </Show>
+  </>;
+}
+
 function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.Element {
   if (legend.type === LegendType.choropleth) {
     return makeSettingsChoroplethLegend(legend as ChoroplethLegend, LL);
@@ -1056,6 +1106,12 @@ function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.
   if (legend.type === LegendType.choroplethHistogram) {
     return makeSettingsChoroplethHistogram(
       legend as ChoroplethHistogramLegend,
+      LL,
+    );
+  }
+  if (legend.type === LegendType.linearRegressionScatterPlot) {
+    return makeSettingsScatterPlot(
+      legend as LinearRegressionScatterPlot,
       LL,
     );
   }
