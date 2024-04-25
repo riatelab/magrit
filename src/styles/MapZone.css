@@ -30,6 +30,10 @@
   /*outline: orange solid 1px;*/
 }
 
+.map-zone__map text {
+  user-select: none;
+}
+
 .map-zone__inner-placeholder {
   padding: 2rem;
   margin: auto;

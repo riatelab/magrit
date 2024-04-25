@@ -110,7 +110,6 @@ export default function legendLabels(
       <text
         x={0}
         y={heightTitleSubtitle() + sizeDisplayedEntry().height}
-        style={{ 'user-select': 'none' }}
       >
         <tspan
           x={0}

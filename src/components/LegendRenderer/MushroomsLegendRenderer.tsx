@@ -180,7 +180,6 @@ export default function legendMushrooms(
                 fill={legend.labels.fontColor}
                 text-anchor="start"
                 dominant-baseline="middle"
-                style={{ 'user-select': 'none' }}
                 x={maxRadius() * 2 + defaultSpacing * 2}
                 y={heightTitleSubtitle() + maxRadiusTop() - symbolSize}
               >{
@@ -252,7 +251,6 @@ export default function legendMushrooms(
                 fill={legend.labels.fontColor}
                 text-anchor="start"
                 dominant-baseline="middle"
-                style={{ 'user-select': 'none' }}
                 x={maxRadius() * 2 + defaultSpacing * 2}
                 y={
                   heightTitleSubtitle()

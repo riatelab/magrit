@@ -148,7 +148,6 @@ function stackedSquareLegend(
                 fill={legend.labels.fontColor}
                 text-anchor="start"
                 dominant-baseline="middle"
-                style={{ 'user-select': 'none' }}
                 x={maxHeight() + defaultSpacing * 2}
                 y={heightTitleSubtitle() + maxHeight() - symbolSize}
               >{
@@ -310,7 +309,6 @@ function horizontalSquareLegend(
               fill={legend.labels.fontColor}
               text-anchor="middle"
               dominant-baseline="hanging"
-              style={{ 'user-select': 'none' }}
               x={d.x + d.size / 2}
               y={heightTitleSubtitle() + maxHeight() + defaultSpacing * 2}
             >{
@@ -460,7 +458,6 @@ function verticalSquareLegend(
                 fill={legend.labels.fontColor}
                 text-anchor="start"
                 dominant-baseline="middle"
-                style={{ 'user-select': 'none' }}
                 x={maxHeight() + defaultSpacing * 2}
                 y={d.y + d.size / 2}
               >{
@@ -591,7 +588,6 @@ function stackedCircleLegend(
                 fill={legend.labels.fontColor}
                 text-anchor="start"
                 dominant-baseline="middle"
-                style={{ 'user-select': 'none' }}
                 x={maxRadius() * 2 + defaultSpacing * 2}
                 y={heightTitleSubtitle() + maxRadius() * 2 - symbolSize * 2}
               >{
@@ -743,7 +739,6 @@ function verticalCircleLegend(
               fill={legend.labels.fontColor}
               text-anchor="start"
               dominant-baseline="middle"
-              style={{ 'user-select': 'none' }}
               x={d.x * 2 + defaultSpacing}
               y={d.y}
             >{
@@ -893,7 +888,6 @@ function horizontalCircleLegend(
               fill={legend.labels.fontColor}
               text-anchor="middle"
               dominant-baseline="hanging"
-              style={{ 'user-select': 'none' }}
               x={d.x}
               y={maxRadius() * 2 + heightTitleSubtitle() + defaultSpacing * 2}
             >{

@@ -214,7 +214,6 @@ function verticalLegend(
             font-style={legendParameters.labels.fontStyle}
             font-weight={legendParameters.labels.fontWeight}
             fill={legendParameters.labels.fontColor}
-            style={{ 'user-select': 'none' }}
             text-anchor="start"
             dominant-baseline="middle"
           >{
@@ -245,7 +244,6 @@ function verticalLegend(
           font-style={legendParameters.labels.fontStyle}
           font-weight={legendParameters.labels.fontWeight}
           fill={legendParameters.labels.fontColor}
-          style={{ 'user-select': 'none' }}
           text-anchor="start"
           dominant-baseline="middle"
         >{ legendParameters.noDataLabel }</text>
@@ -435,7 +433,6 @@ function horizontalLegend(
             font-style={legendParameters.labels.fontStyle}
             font-weight={legendParameters.labels.fontWeight}
             fill={legendParameters.labels.fontColor}
-            style={{ 'user-select': 'none' }}
             text-anchor="middle"
             dominant-baseline="hanging"
           >{
@@ -467,7 +464,6 @@ function horizontalLegend(
           font-style={legendParameters.labels.fontStyle}
           font-weight={legendParameters.labels.fontWeight}
           fill={legendParameters.labels.fontColor}
-          style={{ 'user-select': 'none' }}
           text-anchor="middle"
           dominant-baseline="hanging"
         >{ legendParameters.noDataLabel }</text>

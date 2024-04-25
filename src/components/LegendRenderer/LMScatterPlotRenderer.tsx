@@ -67,8 +67,8 @@ function ScatterPlot(
   return <>
     {
       Plot.plot({
-        height: props.dimension[0],
-        width: props.dimension[1],
+        width: props.dimension[0],
+        height: props.dimension[1],
         grid: true,
         style: {
           color: props.fontColor,

@@ -168,7 +168,6 @@ function verticalDiscontinuityLegend(
             font-family={legend.labels.fontFamily}
             font-style={legend.labels.fontStyle}
             font-weight={legend.labels.fontWeight}
-            style={{ 'user-select': 'none' }}
             text-anchor="start"
             dominant-baseline="hanging"
           >{
@@ -296,7 +295,6 @@ function horizontalDiscontinuityLegend(
             font-family={legend.labels.fontFamily}
             font-style={legend.labels.fontStyle}
             font-weight={legend.labels.fontWeight}
-            style={{ 'user-select': 'none' }}
             text-anchor="middle"
             dominant-baseline="hanging"
           >{

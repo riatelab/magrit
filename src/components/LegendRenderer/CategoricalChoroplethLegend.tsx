@@ -199,7 +199,6 @@ function verticalLegend(legendParameters: CategoricalChoroplethLegend): JSX.Elem
             font-style={legendParameters.labels.fontStyle}
             font-weight={legendParameters.labels.fontWeight}
             fill={legendParameters.labels.fontColor}
-            style={{ 'user-select': 'none' }}
             text-anchor="start"
             dominant-baseline="middle"
           >{ categoryName }</text>
@@ -220,7 +219,6 @@ function verticalLegend(legendParameters: CategoricalChoroplethLegend): JSX.Elem
           font-style={legendParameters.labels.fontStyle}
           font-weight={legendParameters.labels.fontWeight}
           fill={legendParameters.labels.fontColor}
-          style={{ 'user-select': 'none' }}
           text-anchor="start"
           dominant-baseline="middle"
         >{ legendParameters.noDataLabel }</text>
@@ -397,7 +395,6 @@ function horizontalLegend(legendParameters: CategoricalChoroplethLegend): JSX.El
             font-style={legendParameters.labels.fontStyle}
             font-weight={legendParameters.labels.fontWeight}
             fill={legendParameters.labels.fontColor}
-            style={{ 'user-select': 'none' }}
             text-anchor="middle"
             dominant-baseline="hanging"
           >{ categoryName }</text>
@@ -417,7 +414,6 @@ function horizontalLegend(legendParameters: CategoricalChoroplethLegend): JSX.El
           font-style={legendParameters.labels.fontStyle}
           font-weight={legendParameters.labels.fontWeight}
           fill={legendParameters.labels.fontColor}
-          style={{ 'user-select': 'none' }}
           text-anchor="middle"
           dominant-baseline="hanging"
         >{ legendParameters.noDataLabel }</text>
