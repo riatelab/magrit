@@ -60,13 +60,11 @@ function verticalLegend(legendParameters: CategoricalChoroplethLegend): JSX.Elem
 
   const { LL } = useI18nContext();
 
-  const heightTitle = createMemo(() => (
-    getTextSize(
-      legendParameters.title.text,
-      legendParameters.title.fontSize,
-      legendParameters.title.fontFamily,
-    ).height
-  ));
+  const heightTitle = createMemo(() => (getTextSize(
+    legendParameters.title.text,
+    legendParameters.title.fontSize,
+    legendParameters.title.fontFamily,
+  ).height + defaultSpacing));
 
   const distanceToTop = createMemo(() => {
     let vDistanceToTop = 0;

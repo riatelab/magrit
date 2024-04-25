@@ -52,13 +52,11 @@ function verticalLegend(
 
   const { LL } = useI18nContext();
 
-  const heightTitle = createMemo(() => (
-    getTextSize(
-      legendParameters.title.text,
-      legendParameters.title.fontSize,
-      legendParameters.title.fontFamily,
-    ).height
-  ));
+  const heightTitle = createMemo(() => (getTextSize(
+    legendParameters.title.text,
+    legendParameters.title.fontSize,
+    legendParameters.title.fontFamily,
+  ).height + defaultSpacing));
 
   const distanceToTop = createMemo(() => {
     let vDistanceToTop = 0;
@@ -280,7 +278,7 @@ function horizontalLegend(
   // To do so, we need to know the size of each of these elements (and the presence / absence of
   // each of them).
   const heightTitle = createMemo(() => (getTextSize(
-    legendParameters.title.text || '',
+    legendParameters.title.text,
     legendParameters.title.fontSize,
     legendParameters.title.fontFamily,
   ).height + defaultSpacing));
