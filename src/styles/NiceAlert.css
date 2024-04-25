@@ -5,7 +5,7 @@
 .nice-alert .modal-card {
     width: 32em;
     text-align: center;
-    height: 22em;
+    min-height: 22em;
 }
 
 .nice-alert .modal-card-foot {

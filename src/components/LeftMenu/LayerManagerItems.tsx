@@ -97,7 +97,11 @@ const onClickTrashLayer = (id: string, LL: Accessor<TranslationFunctions>) => {
   const ld = layersDescriptionStore.layers.find((l) => l.id === id)!;
 
   const innerElement = () => <>
-    <p>{ LL().Alerts.DeleteLayer() } <i><b>{ ld.name }</b></i> ?</p>
+    <p>{LL().Alerts.DeleteLayer()}
+      <i>
+        <b style={{ 'overflow-wrap': 'break-word' }}> {ld.name}</b>
+      </i> ?
+    </p>
   </>;
 
   const onDeleteConfirmed = (): void => {
