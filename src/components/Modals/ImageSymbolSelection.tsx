@@ -99,7 +99,7 @@ export default function ImageSymbolSelection(
   );
 
   return <div class="image-symbol-selection" ref={imageSelectionModal!}>
-    <p><strong>{ LL().ImageSymbolSelection.SelectedImage() }</strong></p>
+    <p><strong>{ LL().ImageSymbolSelection.SelectImage() }</strong></p>
     <div
       class="image-symbol-selection__symbol-library"
       style={{
@@ -110,7 +110,6 @@ export default function ImageSymbolSelection(
         background: 'whitesmoke',
       }}
     >
-      {/* TODO: add list of symbols... */}
       <For each={images}>
         {
           (svgContent) => <div
