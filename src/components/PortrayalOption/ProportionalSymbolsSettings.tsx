@@ -180,11 +180,22 @@ function onClickValidate(
     propSymbolsParameters.referenceRadius,
     propSymbolsParameters.symbolType,
   );
+
+  // eslint-disable-next-line no-nested-ternary
+  const nValuesLegend = propSymbolsParameters.colorMode === 'positiveNegative'
+    ? 5 // eslint-disable-next-line no-nested-ternary
+    : propSymbolsParameters.referenceRadius > 50
+      ? 4
+      : propSymbolsParameters.referenceRadius > 25
+        ? 3
+        : 2;
+
   const legendValues = computeCandidateValuesForSymbolsLegend(
     extent[0],
     extent[1],
     propSize.scale,
     propSize.getValue,
+    nValuesLegend,
   );
 
   // Find a position for the legend
@@ -236,7 +247,7 @@ function onClickValidate(
     },
     // Part specific to proportional symbols
     type: LegendType.proportional,
-    layout: 'stacked',
+    layout: propSymbolsParameters.colorMode === 'positiveNegative' ? 'vertical' : 'stacked',
     values: legendValues,
     spacing: 5,
     labels: {
@@ -426,8 +437,6 @@ function onClickValidate(
         ),
       );
     }
-  } else if (propSymbolsParameters.colorMode === 'positiveNegative') {
-    // TODO: Add the legend for positive/negative values
   }
 }
 

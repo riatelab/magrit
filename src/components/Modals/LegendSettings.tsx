@@ -48,6 +48,7 @@ import {
   type LinearRegressionScatterPlot,
   type MushroomsLegend,
   type ProportionalSymbolsLegend,
+  type ProportionalSymbolsParameters,
   RepresentationType,
 } from '../../global.d';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
@@ -394,6 +395,10 @@ function makeSettingsProportionalSymbolsLegend(
   legend: ProportionalSymbolsLegend,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
+  const layer = findLayerById(
+    layersDescriptionStore.layers,
+    legend.layerId,
+  )!;
   const [
     displayMoreOptions,
     setDisplayMoreOptions,
@@ -408,17 +413,19 @@ function makeSettingsProportionalSymbolsLegend(
     <div class="field">
       <label class="label">{ LL().Legend.Modal.LegendSymbolLayout() }</label>
       <div class="control">
-        <label class="radio" style={{ 'margin-right': '2em' }}>
-          <input
-            type="radio"
-            name="legend-layout"
-            {...(legend.layout === 'stacked' ? { checked: true } : {}) }
-            onChange={() => {
-              updateProps(legend.id, ['layout'], 'stacked');
-            }}
-          />
-          { LL().Legend.Modal.LegendSymbolLayoutStacked() }
-        </label>
+        <Show when={(layer.rendererParameters as ProportionalSymbolsParameters).colorMode !== 'positiveNegative'}>
+          <label class="radio" style={{ 'margin-right': '2em' }}>
+            <input
+              type="radio"
+              name="legend-layout"
+              {...(legend.layout === 'stacked' ? { checked: true } : {}) }
+              onChange={() => {
+                updateProps(legend.id, ['layout'], 'stacked');
+              }}
+            />
+            { LL().Legend.Modal.LegendSymbolLayoutStacked() }
+          </label>
+        </Show>
         <label class="radio" style={{ 'margin-right': '2em' }}>
           <input
             type="radio"

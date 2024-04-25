@@ -12,7 +12,7 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 import { precisionToMinimumFractionDigits } from '../../helpers/common';
 import { PropSizer } from '../../helpers/geo';
 import { findLayerById } from '../../helpers/layers';
-import { round, sum } from '../../helpers/math';
+import { Mmax, round, sum } from '../../helpers/math';
 
 // Sub-components
 import {
@@ -30,9 +30,9 @@ import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Types / Interfaces / Enums
-import type {
-  LayerDescriptionProportionalSymbols,
-  ProportionalSymbolsLegend,
+import {
+  LayerDescriptionProportionalSymbols, ProportionalSymbolSingleColorParameters,
+  ProportionalSymbolsLegend, ProportionalSymbolsPositiveNegativeParameters,
 } from '../../global';
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
@@ -53,14 +53,25 @@ function stackedSquareLegend(
     layer.rendererParameters.symbolType,
   );
 
-  const color = createMemo(() => (
-    layer.rendererParameters.colorMode === 'singleColor'
-      ? layer.rendererParameters.color
-      : 'white'
-  ));
+  const getColor = createMemo(() => {
+    if (layer.rendererParameters.colorMode === 'singleColor') {
+      return () => (layer.rendererParameters as ProportionalSymbolSingleColorParameters).color;
+    }
+    if (layer.rendererParameters.colorMode === 'positiveNegative') {
+      return (value: number) => (
+        value >= 0
+          ? (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[0]
+          : (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]
+      );
+    }
+    return () => 'white';
+  });
 
   const maxHeight = createMemo(
-    () => propSize.scale(legend.values[legend.values.length - 1]),
+    () => Mmax(
+      propSize.scale(legend.values[legend.values.length - 1]),
+      propSize.scale(legend.values[0]),
+    ),
   );
 
   const heightTitle = createMemo(
@@ -103,6 +114,7 @@ function stackedSquareLegend(
         legend.subtitle?.text,
         legend.note?.text,
         legend.roundDecimals,
+        legend.values,
       );
     }
   });
@@ -131,7 +143,7 @@ function stackedSquareLegend(
             const symbolSize = propSize.scale(value);
             return <>
               <rect
-                fill={color()}
+                fill={getColor()(value)}
                 fill-opacity={layer.fillOpacity}
                 stroke={layer.strokeColor}
                 stroke-width={layer.strokeWidth}
@@ -196,14 +208,25 @@ function horizontalSquareLegend(
     layer.rendererParameters.symbolType,
   );
 
-  const color = createMemo(() => (
-    layer.rendererParameters.colorMode === 'singleColor'
-      ? layer.rendererParameters.color
-      : 'white'
-  ));
+  const getColor = createMemo(() => {
+    if (layer.rendererParameters.colorMode === 'singleColor') {
+      return () => (layer.rendererParameters as ProportionalSymbolSingleColorParameters).color;
+    }
+    if (layer.rendererParameters.colorMode === 'positiveNegative') {
+      return (value: number) => (
+        value >= 0
+          ? (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[0]
+          : (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]
+      );
+    }
+    return () => 'white';
+  });
 
   const maxHeight = createMemo(
-    () => propSize.scale(legend.values[legend.values.length - 1]),
+    () => Mmax(
+      propSize.scale(legend.values[legend.values.length - 1]),
+      propSize.scale(legend.values[0]),
+    ),
   );
 
   const heightTitle = createMemo(
@@ -248,6 +271,7 @@ function horizontalSquareLegend(
         legend.note?.text,
         legend.roundDecimals,
         legend.spacing,
+        legend.values,
       );
     }
   });
@@ -256,7 +280,11 @@ function horizontalSquareLegend(
   // (and use createMemo to make it reactive)
   const sizesAndPositions = createMemo(() => {
     let lastSize = 0;
-    return legend.values.toReversed()
+    // If we have negative values we want the horizontal legend to start (on the left)
+    // by the lowest value, otherwise we want the horizontal legend to start by the highest value
+    const hasNegativeValues = legend.values.some((v) => v < 0);
+    const targetValues = hasNegativeValues ? legend.values : legend.values.toReversed();
+    return targetValues
       .map((value, i) => {
         const symbolSize = propSize.scale(value);
         const x = lastSize + i * legend.spacing;
@@ -292,7 +320,7 @@ function horizontalSquareLegend(
         {
           (d) => <>
             <rect
-              fill={color()}
+              fill={getColor()(d.value)}
               fill-opacity={layer.fillOpacity}
               stroke={layer.strokeColor}
               stroke-width={layer.strokeWidth}
@@ -345,14 +373,25 @@ function verticalSquareLegend(
     layer.rendererParameters.symbolType,
   );
 
-  const color = createMemo(() => (
-    layer.rendererParameters.colorMode === 'singleColor'
-      ? layer.rendererParameters.color
-      : 'white'
-  ));
+  const getColor = createMemo(() => {
+    if (layer.rendererParameters.colorMode === 'singleColor') {
+      return () => (layer.rendererParameters as ProportionalSymbolSingleColorParameters).color;
+    }
+    if (layer.rendererParameters.colorMode === 'positiveNegative') {
+      return (value: number) => (
+        value >= 0
+          ? (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[0]
+          : (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]
+      );
+    }
+    return () => 'white';
+  });
 
   const maxHeight = createMemo(
-    () => propSize.scale(legend.values[legend.values.length - 1]),
+    () => Mmax(
+      propSize.scale(legend.values[legend.values.length - 1]),
+      propSize.scale(legend.values[0]),
+    ),
   );
 
   const heightTitle = createMemo(
@@ -398,6 +437,7 @@ function verticalSquareLegend(
         legend.subtitle?.text,
         legend.note?.text,
         legend.roundDecimals,
+        legend.values,
       );
     }
   });
@@ -441,7 +481,7 @@ function verticalSquareLegend(
         {
           (d) => <>
               <rect
-                fill={color()}
+                fill={getColor()(d.value)}
                 fill-opacity={layer.fillOpacity}
                 stroke={layer.strokeColor}
                 stroke-width={layer.strokeWidth}
@@ -494,14 +534,25 @@ function stackedCircleLegend(
     layer.rendererParameters.symbolType,
   );
 
-  const color = createMemo(() => (
-    layer.rendererParameters.colorMode === 'singleColor'
-      ? layer.rendererParameters.color
-      : 'white'
-  ));
+  const getColor = createMemo(() => {
+    if (layer.rendererParameters.colorMode === 'singleColor') {
+      return () => (layer.rendererParameters as ProportionalSymbolSingleColorParameters).color;
+    }
+    if (layer.rendererParameters.colorMode === 'positiveNegative') {
+      return (value: number) => (
+        value >= 0
+          ? (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[0]
+          : (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]
+      );
+    }
+    return () => 'white';
+  });
 
   const maxRadius = createMemo(
-    () => propSize.scale(legend.values[legend.values.length - 1]),
+    () => Mmax(
+      propSize.scale(legend.values[legend.values.length - 1]),
+      propSize.scale(legend.values[0]),
+    ),
   );
 
   const heightTitle = createMemo(
@@ -544,6 +595,7 @@ function stackedCircleLegend(
         legend.subtitle?.text,
         legend.note?.text,
         legend.roundDecimals,
+        legend.values,
       );
     }
   });
@@ -572,7 +624,7 @@ function stackedCircleLegend(
             const symbolSize = propSize.scale(value);
             return <>
               <circle
-                fill={color()}
+                fill={getColor()(value)}
                 fill-opacity={layer.fillOpacity}
                 stroke={layer.strokeColor}
                 stroke-width={layer.strokeWidth}
@@ -635,14 +687,25 @@ function verticalCircleLegend(
     layer.rendererParameters.symbolType,
   );
 
-  const color = createMemo(() => (
-    layer.rendererParameters.colorMode === 'singleColor'
-      ? layer.rendererParameters.color
-      : 'white'
-  ));
+  const getColor = createMemo(() => {
+    if (layer.rendererParameters.colorMode === 'singleColor') {
+      return () => (layer.rendererParameters as ProportionalSymbolSingleColorParameters).color;
+    }
+    if (layer.rendererParameters.colorMode === 'positiveNegative') {
+      return (value: number) => (
+        value >= 0
+          ? (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[0]
+          : (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]
+      );
+    }
+    return () => 'white';
+  });
 
   const maxRadius = createMemo(
-    () => propSize.scale(legend.values[legend.values.length - 1]),
+    () => Mmax(
+      propSize.scale(legend.values[legend.values.length - 1]),
+      propSize.scale(legend.values[0]),
+    ),
   );
 
   const heightTitle = createMemo(
@@ -679,6 +742,7 @@ function verticalCircleLegend(
         legend.note?.text,
         legend.roundDecimals,
         legend.spacing,
+        legend.values,
       );
     }
   });
@@ -723,7 +787,7 @@ function verticalCircleLegend(
         {
           (d) => <>
             <circle
-              fill={color()}
+              fill={getColor()(d.value)}
               fill-opacity={layer.fillOpacity}
               stroke={layer.strokeColor}
               stroke-width={layer.strokeWidth}
@@ -759,7 +823,12 @@ function verticalCircleLegend(
     {
       makeLegendText(
         legend.note,
-        [0, sizesAndPositions()[sizesAndPositions().length - 1].y + defaultSpacing * 3],
+        [
+          0,
+          sizesAndPositions()[sizesAndPositions().length - 1].y
+          + sizesAndPositions()[sizesAndPositions().length - 1].size
+          + defaultSpacing * 2,
+        ],
         'note',
       )
     }
@@ -782,14 +851,25 @@ function horizontalCircleLegend(
     layer.rendererParameters.symbolType,
   );
 
-  const color = createMemo(() => (
-    layer.rendererParameters.colorMode === 'singleColor'
-      ? layer.rendererParameters.color
-      : 'white'
-  ));
+  const getColor = createMemo(() => {
+    if (layer.rendererParameters.colorMode === 'singleColor') {
+      return () => (layer.rendererParameters as ProportionalSymbolSingleColorParameters).color;
+    }
+    if (layer.rendererParameters.colorMode === 'positiveNegative') {
+      return (value: number) => (
+        value >= 0
+          ? (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[0]
+          : (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]
+      );
+    }
+    return () => 'white';
+  });
 
   const maxRadius = createMemo(
-    () => propSize.scale(legend.values[legend.values.length - 1]),
+    () => Mmax(
+      propSize.scale(legend.values[legend.values.length - 1]),
+      propSize.scale(legend.values[0]),
+    ),
   );
 
   const heightTitle = createMemo(
@@ -831,17 +911,22 @@ function horizontalCircleLegend(
         legend.note?.text,
         legend.roundDecimals,
         legend.spacing,
+        legend.values,
       );
     }
   });
 
   const sizesAndPositions = createMemo(() => {
     let lastSize = 0;
-    return legend.values.toReversed()
+    // If we have negative values we want the horizontal legend to start (on the left)
+    // by the lowest value, otherwise we want the horizontal legend to start by the highest value
+    const hasNegativeValues = legend.values.some((v) => v < 0);
+    const targetValues = hasNegativeValues ? legend.values : legend.values.toReversed();
+    return targetValues
       .map((value, i) => {
         const symbolSize = propSize.scale(value);
-        const x = maxRadius() + lastSize * 2 + legend.spacing * i;
-        lastSize += symbolSize;
+        const x = symbolSize + lastSize + i * legend.spacing;
+        lastSize += symbolSize * 2;
         return {
           size: symbolSize,
           x,
@@ -872,7 +957,7 @@ function horizontalCircleLegend(
         {
           (d) => <>
             <circle
-              fill={color()}
+              fill={getColor()(d.value)}
               fill-opacity={layer.fillOpacity}
               stroke={layer.strokeColor}
               stroke-width={layer.strokeWidth}
