@@ -45,12 +45,12 @@ import CollapsibleSection from '../CollapsibleSection.tsx';
 import InputFieldRadio from '../Inputs/InputRadio.tsx';
 import MessageBlock from '../MessageBlock.tsx';
 import PlotFigure from '../PlotFigure.tsx';
+import InputFieldColor from '../Inputs/InputColor.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 // Types / enums / interfaces
 import { DataType, Variable } from '../../helpers/typeDetection';
 import {
-  type CategoricalChoroplethLegend,
-  CategoricalChoroplethParameters,
   type ChoroplethLegend,
   type ClassificationParameters,
   type CustomPalette,
@@ -59,20 +59,19 @@ import {
   type LayerDescriptionProportionalSymbols,
   type LegendTextElement,
   LegendType,
-  LinearRegressionScatterPlot,
+  type LinearRegressionScatterPlot,
   Orientation,
-  type ProportionalSymbolCategoryParameters,
   type ProportionalSymbolsLegend,
+  type ProportionalSymbolsPositiveNegativeParameters,
   ProportionalSymbolsSymbolType,
   RepresentationType,
 } from '../../global.d';
-import InputFieldColor from '../Inputs/InputColor.tsx';
-import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 function onClickValidate(
   layerId: string,
   portrayalType: 'choropleth' | 'proportionalSymbols',
   linearRegressionResult: LinearRegressionResult,
+  colorOptions: string | [string, string],
   addScatterPlot: boolean,
   newLayerName: string,
 ) {
@@ -94,12 +93,6 @@ function onClickValidate(
     f.properties.fitted = linearRegressionResult.fittedValues[i] as (number | null);
     // eslint-disable-next-line no-param-reassign
     f.properties.residual = linearRegressionResult.residuals[i] as (number | null);
-    // eslint-disable-next-line no-param-reassign, no-nested-ternary
-    f.properties.signResidual = linearRegressionResult.residuals[i] !== null
-      ? Math.sign(linearRegressionResult.residuals[i]) >= 0
-        ? 'Surplus'
-        : 'Deficit'
-      : null;
     // eslint-disable-next-line no-param-reassign
     f.properties.standardizedResidual = linearRegressionResult
       .standardisedResiduals[i] as (number | null);
@@ -112,12 +105,11 @@ function onClickValidate(
       }
     }
     if (f.properties.residual !== null) {
-      const absVal = Mabs(f.properties.residual as number);
-      if (absVal < minRes) {
-        minRes = absVal;
+      if (f.properties.residual < minRes) {
+        minRes = f.properties.residual;
       }
-      if (absVal > maxRes) {
-        maxRes = absVal;
+      if (f.properties.residual > maxRes) {
+        maxRes = f.properties.residual;
       }
     }
   });
@@ -137,12 +129,6 @@ function onClickValidate(
       dataType: DataType.number,
     },
     {
-      name: 'signResidual',
-      type: 'categorical',
-      hasMissingValues: linearRegressionResult.ignored > 0,
-      dataType: DataType.number,
-    },
-    {
       name: 'standardizedResidual',
       type: 'ratio',
       hasMissingValues: linearRegressionResult.ignored > 0,
@@ -155,6 +141,7 @@ function onClickValidate(
 
   if (portrayalType === 'choropleth') {
     // Prepare the classification parameters
+    const palName = colorOptions as string;
     const breaks = [minStdRes, -1.5, -0.5, 0.5, 1.5, maxStdRes];
     const classificationParameters = {
       variable: 'standardizedResidual',
@@ -162,8 +149,8 @@ function onClickValidate(
       classes: 5,
       breaks,
       palette: {
-        id: 'Geyser-5',
-        name: 'Geyser',
+        id: `${palName}-5`,
+        name: palName,
         number: 5,
         type: 'diverging',
         colors: getAsymmetricDivergingColors('Geyser', 2, 2, true, true, false),
@@ -254,6 +241,7 @@ function onClickValidate(
     );
   } else {
     // Prepare the proportional symbols parameters
+    const [colorPos, colorNeg] = colorOptions as [string, string];
     if (
       referenceLayerDescription.type === 'polygon'
     ) {
@@ -283,13 +271,6 @@ function onClickValidate(
       ? 'line'
       : 'circle';
 
-    const categoricalMapping = makeCategoriesMapping(
-      makeCategoriesMap(
-        newDataset.features,
-        'signResidual',
-      ),
-    );
-
     const propSymbolsParameters = {
       variable: 'residual',
       symbolType,
@@ -298,16 +279,12 @@ function onClickValidate(
       avoidOverlapping: false,
       iterations: 100,
       movable: false,
-      colorMode: 'categoricalVariable',
-      color: {
-        variable: 'signResidual',
-        mapping: categoricalMapping,
-        noDataColor: applicationSettingsStore.defaultNoDataColor,
-      } as CategoricalChoroplethParameters,
+      colorMode: 'positiveNegative',
+      color: [colorPos, colorNeg], // ['#3d8f63', '#8F3D6B'],
       // FIXME: the following is not defined in the model
       //   and we will change it
       lm: linearRegressionResult,
-    } as ProportionalSymbolCategoryParameters;
+    } as ProportionalSymbolsPositiveNegativeParameters;
 
     const newLayerDescription = {
       id: newId,
@@ -335,12 +312,22 @@ function onClickValidate(
       propSymbolsParameters.referenceRadius,
       propSymbolsParameters.symbolType,
     );
-    const legendValues = computeCandidateValuesForSymbolsLegend(
-      minRes,
+
+    const legendValuesPos = computeCandidateValuesForSymbolsLegend(
+      0,
       maxRes,
       propSize.scale,
       propSize.getValue,
-    );
+      4,
+    ).slice(1);
+
+    const legendValuesNeg = computeCandidateValuesForSymbolsLegend(
+      0,
+      Mabs(minRes),
+      propSize.scale,
+      propSize.getValue,
+      4,
+    ).slice(1).map((d) => -d).toReversed();
 
     const legend = {
       // Legend common part
@@ -366,8 +353,8 @@ function onClickValidate(
       },
       // Part specific to proportional symbols
       type: LegendType.proportional,
-      layout: 'stacked',
-      values: legendValues,
+      layout: 'vertical',
+      values: [...legendValuesNeg, ...legendValuesPos],
       spacing: 5,
       labels: {
         ...applicationSettingsStore.defaultLegendSettings.labels,
@@ -380,54 +367,6 @@ function onClickValidate(
         (draft: LayersDescriptionStoreType) => {
           draft.layers.push(newLayerDescription);
           draft.layoutFeaturesAndLegends.push(legend);
-        },
-      ),
-    );
-
-    const legendChoroCategoryPosition = getPossibleLegendPosition(120, 340);
-
-    const legendChoroCategory = {
-      // Part common to all legends
-      id: generateIdLegend(),
-      layerId: newId,
-      title: {
-        text: '',
-        ...applicationSettingsStore.defaultLegendSettings.title,
-      } as LegendTextElement,
-      subtitle: {
-        text: undefined,
-        ...applicationSettingsStore.defaultLegendSettings.subtitle,
-      },
-      note: {
-        text: undefined,
-        ...applicationSettingsStore.defaultLegendSettings.note,
-      },
-      position: legendChoroCategoryPosition,
-      visible: true,
-      roundDecimals: null,
-      backgroundRect: {
-        visible: false,
-      },
-      // Part specific to choropleth
-      type: LegendType.categoricalChoropleth,
-      orientation: Orientation.vertical,
-      boxWidth: 50,
-      boxHeight: 30,
-      boxSpacing: 5,
-      boxSpacingNoData: 5,
-      boxCornerRadius: 0,
-      labels: {
-        ...applicationSettingsStore.defaultLegendSettings.labels,
-      } as LegendTextElement,
-      noDataLabel: 'No data',
-      stroke: false,
-      tick: false,
-    } as CategoricalChoroplethLegend;
-
-    setLayersDescriptionStore(
-      produce(
-        (draft: LayersDescriptionStoreType) => {
-          draft.layoutFeaturesAndLegends.push(legendChoroCategory);
         },
       ),
     );
@@ -558,6 +497,11 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
   ] = createSignal<'circle' | 'square' | 'line'>('circle');
 
   const [
+    colors,
+    setColors,
+  ] = createSignal<[string, string]>(['#3d8f63', '#8F3D6B']);
+
+  const [
     addScatterPlot,
     setAddScatterPlot,
   ] = createSignal<boolean>(true);
@@ -580,6 +524,7 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
         layerDescription.id,
         portrayalType(),
         linearRegressionResult() as LinearRegressionResult,
+        portrayalType() === 'choropleth' ? paletteName() : colors(),
         addScatterPlot(),
         layerName,
       );
@@ -769,14 +714,14 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
           </For>
         </InputFieldSelect>
         <InputFieldColor
-          label={'Couleur valeurs négatives'}
-          // value={}
-          // onChange={}
+          label={'Couleur valeurs positives'}
+          value={colors()[0]}
+          onChange={(v) => { setColors([v, colors()[1]]); }}
         />
         <InputFieldColor
           label={'Couleur valeurs négatives'}
-          // value={}
-          // onChange={}
+          value={colors()[1]}
+          onChange={(v) => { setColors([colors()[0], v]); }}
         />
       </Show>
       <InputFieldCheckbox
