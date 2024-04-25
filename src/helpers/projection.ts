@@ -223,8 +223,6 @@ export const getD3ProjectionFromProj4 = (proj: InterfaceProjection): GeoProjecti
 };
 
 export const getProjection = (projString: string): InterfaceProjection => {
-  // TODO: maybe we should resolve EPSG -> proj4 string here
-  //  (and throw an error if the EPSG code isn't found)
   // Here we try to read the proj4 string with mapshaper-proj (mpoj)
   // If it fails, we try with proj4js.
   // If it fails again, we throw an error.

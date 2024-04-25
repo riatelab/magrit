@@ -374,7 +374,6 @@ export default function ClassificationPanel(): JSX.Element {
                   </tr>
                   <tr>
                     <td>{ LL().ClassificationPanel.minimum() }</td>
-                    { /* TODO: find a better decimalPlaces value */}
                     <td>{ round(statSummary.minimum, statSummary.precision) }</td>
                   </tr>
                   <tr>

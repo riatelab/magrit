@@ -444,8 +444,6 @@ const AppPage: () => JSX.Element = () => {
         elem.click();
       });
 
-    // Todo: the content of the about panel
-    //  could be moved to a separate component
     document.getElementById('button-about-magrit')
       ?.addEventListener('click', () => {
         setModalStore({

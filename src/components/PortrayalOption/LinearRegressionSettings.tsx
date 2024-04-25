@@ -7,7 +7,6 @@ import { getAsymmetricDivergingColors } from 'dicopal';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { makeCategoriesMap, makeCategoriesMapping } from '../../helpers/categorical-choropleth';
 import { PortrayalSettingsProps } from './common';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 import { findSuitableName, unproxify } from '../../helpers/common';
