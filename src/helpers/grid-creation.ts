@@ -16,11 +16,18 @@ const generateSquareGrid = (
   extent: [number, number, number, number],
   cellSize: number,
 ): GeoJSONFeatureCollection => {
-  const [xmin, ymin, xmax, ymax] = extent;
+  let [xmin, ymin, xmax, ymax] = extent;
   const grid: GeoJSONFeatureCollection = {
     type: 'FeatureCollection',
     features: [],
   };
+
+  const halfCellSize = cellSize / 2;
+  xmin -= halfCellSize;
+  ymin -= halfCellSize;
+  xmax += halfCellSize;
+  ymax += halfCellSize;
+
   const rows = Mceil((ymax - ymin) / cellSize);
   const cols = Mceil((xmax - xmin) / cellSize);
 
@@ -66,15 +73,20 @@ const generateDiamondGrid = (
   extent: [number, number, number, number],
   cellSize: number,
 ): GeoJSONFeatureCollection => {
-  const [xmin, ymin, xmax, ymax] = extent;
+  let [xmin, ymin, xmax, ymax] = extent;
   const grid: GeoJSONFeatureCollection = {
     type: 'FeatureCollection',
     features: [],
   };
+  const halfCellSize = cellSize / 2;
   const height = cellSize * 1.45;
   const halfHeight = height / 2;
-  const rows = Mceil((ymax - ymin) / height) + 1;
-  const cols = Mceil((xmax - xmin) / height) + 2;
+  xmin -= halfCellSize;
+  ymin -= halfCellSize;
+  xmax += halfCellSize;
+  ymax += halfCellSize;
+  const rows = Mceil((ymax - ymin) / height);
+  const cols = Mceil((xmax - xmin) / height) + 1;
 
   const xLeftOrigin = xmin - height;
   const yBottomOrigin = ymin - halfHeight;
@@ -118,17 +130,15 @@ const generateHexGrid = (
   cellSize: number,
 ): GeoJSONFeatureCollection => {
   let [xmin, ymin, xmax, ymax] = extent;
-  // TODO... why does it seems like we need to adjust the extent
-  //         when clipping the grid afterwards.. but when using the
-  //         non-clipped grid, we don't need to do that?
-  xmin -= cellSize / 2;
-  ymin -= cellSize / 2;
-  xmax += cellSize * 2.5;
-  ymax += cellSize * 2.5;
   const hexWidth = SQRT3 * cellSize;
   const hexHeight = 2 * cellSize;
   const verticalSpacing = hexHeight * (3 / 4);
   const horizontalSpacing = hexWidth;
+
+  xmin -= hexWidth;
+  ymin -= hexHeight;
+  xmax += hexWidth * 2.5;
+  ymax += hexHeight * 2.5;
 
   const grid: GeoJSONFeatureCollection = {
     type: 'FeatureCollection',
@@ -179,11 +189,18 @@ const generateTriangularGrid = (
   extent: [number, number, number, number],
   cellSize: number,
 ): GeoJSONFeatureCollection => {
-  const [xmin, ymin, xmax, ymax] = extent;
+  let [xmin, ymin, xmax, ymax] = extent;
   const grid: GeoJSONFeatureCollection = {
     type: 'FeatureCollection',
     features: [],
   };
+
+  const halfCellSize = cellSize / 2;
+  xmin -= halfCellSize;
+  ymin -= halfCellSize;
+  xmax += halfCellSize;
+  ymax += halfCellSize;
+
   const rows = Mceil((ymax - ymin) / cellSize);
   const cols = Mceil((xmax - xmin) / cellSize);
 
