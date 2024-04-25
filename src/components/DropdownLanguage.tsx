@@ -79,6 +79,7 @@ export default function DropdownLanguage(): JSX.Element {
               }}
               onClick={() => {
                 loadAndSetLocal(entry.value as Locales, setLocale);
+                localStorage.setItem('selected-lang', entry.value);
               }}
             >
               {entry.name}

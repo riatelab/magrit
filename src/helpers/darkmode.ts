@@ -8,6 +8,7 @@ export const enableDarkMode = () => {
     body.classList.remove('theme-light');
     body.classList.add('theme-dark');
   }
+  localStorage.setItem('selected-theme', 'dark');
 };
 
 export const enableLightMode = () => {
@@ -16,6 +17,7 @@ export const enableLightMode = () => {
     body.classList.remove('theme-dark');
     body.classList.add('theme-light');
   }
+  localStorage.setItem('selected-theme', 'light');
 };
 
 export const toggleDarkMode = () => {
@@ -26,7 +28,13 @@ export const toggleDarkMode = () => {
   }
 };
 
-export const userPrefersDarkMode = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+export const userPrefersDarkMode = () => {
+  const stored = localStorage.getItem('selected-theme');
+  if (stored) {
+    return stored === 'dark';
+  }
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+};
 
 export const listenToPrefersDarkMode = () => {
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
@@ -39,8 +47,6 @@ export const listenToPrefersDarkMode = () => {
 };
 
 export const initializeLightDarkMode = () => {
-  // Todo: we should store somewhere (localStorage or cookie?) the user preference
-  //    and use it to initialize the mode if it exists
   listenToPrefersDarkMode();
   if (userPrefersDarkMode()) {
     enableDarkMode();

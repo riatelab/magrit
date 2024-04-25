@@ -264,10 +264,14 @@ const reloadFromProjectObject = async (
 
 const AppPage: () => JSX.Element = () => {
   const { setLocale, LL } = useI18nContext();
+  // Do we have a selected langage stored in the local storage ?
+  const prefLang = localStorage.getItem('selected-lang');
   // Read the user locale from the application settings store
-  const { userLocale } = applicationSettingsStore;
-  // Split the locale to get the language only
-  const userLanguage = userLocale.split('-')[0];
+  // and split the locale to get the language only
+  const browserLang = applicationSettingsStore.userLocale.split('-')[0];
+  // The user language is the last selected language if it is available
+  // in the list of available locales, otherwise it is the browser language
+  const userLanguage = prefLang && isLocale(prefLang) ? prefLang : browserLang;
   // Is it available in the list of available locales ?
   if (isLocale(userLanguage)) {
     loadLocale(userLanguage);
