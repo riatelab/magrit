@@ -73,8 +73,8 @@ const generateDiamondGrid = (
   };
   const height = cellSize * 1.45;
   const halfHeight = height / 2;
-  const rows = Mceil((ymax - ymin) / cellSize) + 1;
-  const cols = Mceil((xmax - xmin) / cellSize) + 2;
+  const rows = Mceil((ymax - ymin) / height) + 1;
+  const cols = Mceil((xmax - xmin) / height) + 2;
 
   const xLeftOrigin = xmin - height;
   const yBottomOrigin = ymin - halfHeight;
