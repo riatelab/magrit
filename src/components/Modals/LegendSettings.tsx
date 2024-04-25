@@ -24,6 +24,7 @@ import {
   unproxify,
 } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
+import { round } from '../../helpers/math';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
 
 // Subcomponents
@@ -314,13 +315,16 @@ function FieldChangeValues(
 ): JSX.Element {
   const styleInputElement = { width: '8.5em !important', 'font-size': '0.9rem' };
   return <div class="field">
-    <label class="label">{ props.LL().Legend.Modal.ChooseValues() }</label>
-    <div class="control">
+    <label class="label" style={{ width: '30%' }}>
+      { props.LL().Legend.Modal.ChooseValues() }
+    </label>
+    <div class="control" style={{ width: '70%', 'text-align': 'right' }}>
       <FaSolidPlus
         style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}
+        title={props.LL().Legend.Modal.AddValue()}
         onClick={() => {
           const values = unproxify(props.legend.values.slice()) as number[];
-          values.unshift(1);
+          values.unshift(props.legend.values[0] - 1);
           debouncedUpdateProps(props.legend.id, ['values'], values);
         }}
       />
@@ -331,7 +335,7 @@ function FieldChangeValues(
             type="number"
             min={0}
             step={1}
-            value={value}
+            value={round(value, (props.legend.roundDecimals || 0) + 3)}
             onChange={(ev) => {
               const newValue = +ev.target.value;
               const values = unproxify(props.legend.values.slice()) as number[];

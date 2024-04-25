@@ -805,6 +805,7 @@ const en = {
       LegendSymbolLayoutVertical: 'Vertical',
       LegendSymbolLayoutHorizontal: 'Horizontal',
       LegendSymbolLayoutStacked: 'Stacked',
+      AddValue: 'Add a value',
       BoxWidth: 'Box width',
       BoxHeight: 'Box height',
       BoxSpacing: 'Spacing between boxes',

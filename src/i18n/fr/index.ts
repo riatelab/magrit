@@ -805,6 +805,7 @@ const fr = {
       LegendSymbolLayoutVertical: 'Verticale',
       LegendSymbolLayoutHorizontal: 'Horizontale',
       LegendSymbolLayoutStacked: 'Empilée',
+      AddValue: 'Ajouter une valeur',
       BoxWidth: 'Largeur des boites',
       BoxHeight: 'Hauteur des boites',
       BoxSpacing: 'Espacement entre les boites',

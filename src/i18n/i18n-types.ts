@@ -2908,6 +2908,10 @@ type RootTranslation = {
 			 */
 			LegendSymbolLayoutStacked: string
 			/**
+			 * A​d​d​ ​a​ ​v​a​l​u​e
+			 */
+			AddValue: string
+			/**
 			 * B​o​x​ ​w​i​d​t​h
 			 */
 			BoxWidth: string
@@ -5903,6 +5907,10 @@ export type TranslationFunctions = {
 			 * Stacked
 			 */
 			LegendSymbolLayoutStacked: () => LocalizedString
+			/**
+			 * Add a value
+			 */
+			AddValue: () => LocalizedString
 			/**
 			 * Box width
 			 */
