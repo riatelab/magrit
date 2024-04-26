@@ -53,28 +53,34 @@ import {
   type ChoroplethLegend,
   type ClassificationParameters,
   type CustomPalette,
-  type GeoJSONFeature,
+  type GeoJSONFeature, type GeoJSONPosition,
   type LayerDescriptionChoropleth,
   type LayerDescriptionProportionalSymbols,
-  type LegendTextElement,
-  LegendType,
-  type LinearRegressionScatterPlot,
-  Orientation,
+  type LegendTextElement, type LinearRegressionScatterPlot,
   type ProportionalSymbolsLegend,
   type ProportionalSymbolsPositiveNegativeParameters,
-  ProportionalSymbolsSymbolType,
-  RepresentationType,
+  LegendType, Orientation,
+  ProportionalSymbolsSymbolType, RepresentationType,
 } from '../../global.d';
+
+interface OptionsChoro {
+  type: 'choropleth';
+  palette: string;
+}
+
+interface OptionsPropSymbols {
+  type: 'proportionalSymbols';
+  colors: [string, string];
+  symbolType: 'circle' | 'square';
+}
 
 function onClickValidate(
   layerId: string,
-  portrayalType: 'choropleth' | 'proportionalSymbols',
   linearRegressionResult: LinearRegressionResult,
-  colorOptions: string | [string, string],
+  portrayalOptions: OptionsChoro | OptionsPropSymbols,
   addScatterPlot: boolean,
   newLayerName: string,
 ) {
-  console.log('Layer ID:', layerId);
   // The layer description of the reference layer
   const referenceLayerDescription = layersDescriptionStore.layers
     .find((l) => l.id === layerId)!;
@@ -96,19 +102,19 @@ function onClickValidate(
     f.properties.standardizedResidual = linearRegressionResult
       .standardisedResiduals[i] as (number | null);
     if (f.properties.standardizedResidual !== null) {
-      if (f.properties.standardizedResidual < minStdRes) {
+      if ((f.properties.standardizedResidual as number) < minStdRes) {
         minStdRes = f.properties.standardizedResidual as number;
       }
-      if (f.properties.standardizedResidual > maxStdRes) {
+      if (f.properties.standardizedResidual as number > maxStdRes) {
         maxStdRes = f.properties.standardizedResidual as number;
       }
     }
     if (f.properties.residual !== null) {
-      if (f.properties.residual < minRes) {
-        minRes = f.properties.residual;
+      if ((f.properties.residual as number) < minRes) {
+        minRes = f.properties.residual as number;
       }
-      if (f.properties.residual > maxRes) {
-        maxRes = f.properties.residual;
+      if ((f.properties.residual as number) > maxRes) {
+        maxRes = f.properties.residual as number;
       }
     }
   });
@@ -138,9 +144,9 @@ function onClickValidate(
   // Generate ID of new layer
   const newId = generateIdLayer();
 
-  if (portrayalType === 'choropleth') {
+  if (portrayalOptions.type === 'choropleth') {
     // Prepare the classification parameters
-    const palName = colorOptions as string;
+    const palName = portrayalOptions.palette as string;
     const breaks = [minStdRes, -1.5, -0.5, 0.5, 1.5, maxStdRes];
     const classificationParameters = {
       variable: 'standardizedResidual',
@@ -240,15 +246,15 @@ function onClickValidate(
     );
   } else {
     // Prepare the proportional symbols parameters
-    const [colorPos, colorNeg] = colorOptions as [string, string];
+    const [colorPos, colorNeg] = portrayalOptions.colors as [string, string];
     if (
       referenceLayerDescription.type === 'polygon'
     ) {
-      newDataset.features.forEach((feature) => {
+      newDataset.features.forEach((feature: GeoJSONFeature) => {
         // eslint-disable-next-line no-param-reassign
         feature.geometry = {
           type: 'Point',
-          coordinates: coordsPointOnFeature(feature.geometry as never),
+          coordinates: coordsPointOnFeature(feature.geometry as never) as GeoJSONPosition,
         };
       });
     }
@@ -260,15 +266,15 @@ function onClickValidate(
     // and also if the user wants to change the position of the
     // symbols manually)
     if (referenceLayerDescription.type !== 'linestring') {
-      newDataset.features.forEach((feature) => {
+      newDataset.features.forEach((feature: GeoJSONFeature) => {
         // eslint-disable-next-line no-param-reassign
         feature.geometry.originalCoordinates = feature.geometry.coordinates;
       });
     }
 
-    const symbolType = referenceLayerDescription.type === 'linestring'
+    const symbolType = (referenceLayerDescription.type === 'linestring'
       ? 'line'
-      : 'circle';
+      : portrayalOptions.symbolType) as ProportionalSymbolsSymbolType;
 
     const propSymbolsParameters = {
       variable: 'residual',
@@ -511,6 +517,17 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
       layersDescriptionStore.layers.map((d) => d.name),
     );
 
+    const portrayalOptions = portrayalType() === 'choropleth'
+      ? {
+        type: 'choropleth',
+        palette: paletteName(),
+      } as OptionsChoro
+      : {
+        type: 'proportionalSymbols',
+        colors: colors(),
+        symbolType: symbolType(),
+      } as OptionsPropSymbols;
+
     // Close the current modal
     setFunctionalitySelectionStore({ show: false, id: '', type: '' });
 
@@ -521,9 +538,8 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
     setTimeout(() => {
       onClickValidate(
         layerDescription.id,
-        portrayalType(),
         linearRegressionResult() as LinearRegressionResult,
-        portrayalType() === 'choropleth' ? paletteName() : colors(),
+        portrayalOptions,
         addScatterPlot(),
         layerName,
       );
@@ -629,7 +645,6 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
                   },
                 ),
               );
-              console.log(linearRegressionResult());
             }}
           >
             {LL().FunctionalitiesSection.LinearRegressionOptions.Compute()}
@@ -713,12 +728,12 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
           </For>
         </InputFieldSelect>
         <InputFieldColor
-          label={'Couleur valeurs positives'}
+          label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ColorPositiveValues()}
           value={colors()[0]}
           onChange={(v) => { setColors([v, colors()[1]]); }}
         />
         <InputFieldColor
-          label={'Couleur valeurs négatives'}
+          label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ColorPositiveValues()}
           value={colors()[1]}
           onChange={(v) => { setColors([colors()[0], v]); }}
         />
