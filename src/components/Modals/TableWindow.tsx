@@ -244,10 +244,10 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
   // A function to extract the columns from the data
   if (type === 'layer') {
     res.getColumnDefs = (data) => Object.keys(data.features[0].properties)
-      .map((key) => ({ field: key, headerName: key }));
+      .map((key) => ({ field: key, headerName: key, maxWidth: 300 }));
   } else {
     res.getColumnDefs = (data) => Object.keys(data[0])
-      .map((key) => ({ field: key, headerName: key }));
+      .map((key) => ({ field: key, headerName: key, maxWidth: 300 }));
   }
 
   // A function to update the data
@@ -429,7 +429,8 @@ export default function TableWindow(): JSX.Element {
 
     // Update the column definitions
     setColumnDefs(
-      columnDefs().concat({ field: variableName, headerName: variableName }),
+      columnDefs().concat({ field: variableName, headerName: variableName })
+        .map((colDef) => ({ ...colDef, maxWidth: 300 })),
     );
 
     // Remember that the data has been edited (to ask for confirmation when closing the modal)
@@ -517,41 +518,34 @@ export default function TableWindow(): JSX.Element {
     }
   };
 
-  onMount(() => {
-    // Let some time for the table to be rendered
-    setTimeout(() => {
-      // Add a context menu on the headers of the table
-      // to propose to remove a column.
-      // We need to add the listener on the parent of the header cells because
-      // all the header cells aren't rendered (only the visible ones).
-      parentGridRef.querySelector('.ag-header-container')
-        ?.addEventListener('contextmenu', (e) => {
-          const target = e.target as HTMLElement;
-          if (
-            !target.classList.contains('ag-header-cell-label')
-            && !target.classList.contains('ag-header-cell-text')
-          ) {
-            // The user clicked on the header container but not on a header cell
-            // (maybe on a resize handle for example).
-            return;
-          }
-          e.preventDefault();
-          e.stopPropagation();
-          // Go up in the DOM to find the column id
-          let elem = target;
-          while (!elem.classList.contains('ag-header-cell')) {
-            elem = elem.parentElement!;
-          }
-          const colId = elem.getAttribute('col-id')!;
-          triggerContextMenu(e as MouseEvent, colId);
-        });
+  const listenerContextMenuHeader = (e: Event) => {
+    const target = e.target as HTMLElement;
+    if (
+      !target.classList.contains('ag-header-cell-label')
+      && !target.classList.contains('ag-header-cell-text')
+    ) {
+      // The user clicked on the header container but not on a header cell
+      // (maybe on a resize handle for example).
+      return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+    // Go up in the DOM to find the column id
+    let elem = target;
+    while (!elem.classList.contains('ag-header-cell')) {
+      elem = elem.parentElement!;
+    }
+    const colId = elem.getAttribute('col-id')!;
+    triggerContextMenu(e as MouseEvent, colId);
+  };
 
-      // Bind the escape key to the cancel button
-      document.addEventListener('keydown', listenerEscapeKey);
-    }, 125);
+  onMount(() => {
+    // Bind the escape key to the cancel button
+    document.addEventListener('keydown', listenerEscapeKey);
   });
 
   onCleanup(() => {
+    // Unbind the escape key
     document.removeEventListener('keydown', listenerEscapeKey);
   });
 
@@ -591,17 +585,32 @@ export default function TableWindow(): JSX.Element {
               onCellValueChanged={ () => { setDataEdited(true); } }
               suppressDragLeaveHidesColumns={ true }
               suppressColumnMoveAnimation={ true }
-              onGridReady={(event) => {
-                // First we size the columns to fit the content
-                event.api.autoSizeAllColumns();
-                // Then we reduce size of columns that may
-                // be way too large.
-                // Note that there can be 0 columns in the dataset.
-                event.api.getColumns()?.forEach((col) => {
-                  if (col.getActualWidth() > 300) {
-                    col.setActualWidth(300, 'api');
-                  }
-                });
+              autoSizeStrategy={{ type: 'fitCellContents' }}
+              onGridPreDestroyed={() => {
+                // Unbind the context menu listener on the header cells
+                parentGridRef.querySelector('.ag-header-container')!
+                  .removeEventListener('contextmenu', listenerContextMenuHeader);
+              }}
+              onGridReady={() => {
+                setTimeout(() => {
+                  // The idea is that the grid is rendered with the 'fitCellContents' strategy
+                  // so that width of each column fits its contents, but with a maximum width
+                  // of 300px (we defined that in the columnDefs at the beginning / when
+                  // updating the data when a new column is added).
+                  // Then, when the grid is rendered, we remove the maxWidth property
+                  // so users can resize the columns as they want, with no maximum width.
+                  setColumnDefs(columnDefs().map((colDef) => {
+                    const newColDef = { ...colDef };
+                    delete newColDef.maxWidth;
+                    return newColDef;
+                  }));
+
+                  // Add a context menu on the headers of the table to propose to remove a column.
+                  // We need to add the listener on the parent of the header cells because
+                  // all the header cells aren't rendered (only the visible ones).
+                  parentGridRef.querySelector('.ag-header-container')!
+                    .addEventListener('contextmenu', listenerContextMenuHeader);
+                }, 15);
               }}
             />
           </div>
