@@ -904,35 +904,6 @@ function makeSettingsChoroplethHistogram(
       max={800}
       step={1}
     />
-    <div class="field">
-      <label class="label">{LL().Legend.Modal.LegendOrientation()}</label>
-      <div class="control">
-        <label class="radio" style={{ 'margin-right': '2em' }}>
-          <input
-            type="radio"
-            name="legend-orientation"
-            {...(legend.orientation === 'horizontal' ? { checked: true } : {})}
-            onChange={(ev) => {
-              const value = ev.target.checked ? 'horizontal' : 'vertical';
-              updateProps(legend.id, ['orientation'], value);
-            }}
-          />
-          {LL().Legend.Modal.LegendOrientationHorizontal()}
-        </label>
-        <label class="radio">
-          <input
-            type="radio"
-            name="legend-orientation"
-            {...(legend.orientation === 'vertical' ? { checked: true } : {})}
-            onChange={(ev) => {
-              const value = ev.target.checked ? 'vertical' : 'horizontal';
-              updateProps(legend.id, ['orientation'], value);
-            }}
-          />
-          {LL().Legend.Modal.LegendOrientationVertical()}
-        </label>
-      </div>
-    </div>
     <OptionBackgroundRectangle legend={legend} LL={LL}/>
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}

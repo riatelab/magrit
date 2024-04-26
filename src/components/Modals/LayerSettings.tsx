@@ -366,7 +366,6 @@ function makeSettingsDefaultPoint(
                   position: [legendPosition[0], legendPosition[1]],
                   width: 300,
                   height: 250,
-                  orientation: 'horizontal',
                   fontColor: '#000000',
                   visible: true,
                   title: {
@@ -491,7 +490,6 @@ function makeSettingsDefaultPoint(
                   position: [legendPosition[0], legendPosition[1]],
                   width: 300,
                   height: 250,
-                  orientation: 'horizontal',
                   fontColor: '#000000',
                   visible: true,
                   title: {
@@ -910,7 +908,6 @@ function makeSettingsDefaultLine(
                   position: [legendPosition[0], legendPosition[1]],
                   width: 300,
                   height: 250,
-                  orientation: 'horizontal',
                   fontColor: '#000000',
                   visible: true,
                   title: {
@@ -1220,7 +1217,6 @@ function makeSettingsDefaultPolygon(
                   position: [legendPosition[0], legendPosition[1]],
                   width: 300,
                   height: 250,
-                  orientation: 'horizontal',
                   fontColor: '#000000',
                   visible: true,
                   title: {

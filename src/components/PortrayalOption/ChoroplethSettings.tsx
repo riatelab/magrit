@@ -156,7 +156,6 @@ function onClickValidate(
             position: [legendPosition[0] + 200, legendPosition[1]],
             width: 300,
             height: 250,
-            orientation: 'horizontal',
             fontColor: '#000000',
             visible: true,
             title: {

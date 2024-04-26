@@ -62,18 +62,18 @@ import {
   type CategoricalChoroplethBarchartLegend,
   type CategoricalChoroplethLegend,
   type CategoricalChoroplethMapping,
-  type CategoricalChoroplethParameters, ChoroplethHistogramLegend,
+  type CategoricalChoroplethParameters,
+  type ChoroplethHistogramLegend,
   type ChoroplethLegend,
   type ClassificationParameters,
-  type GeoJSONFeatureCollection,
+  type GeoJSONFeatureCollection, type GeoJSONPosition,
   type LayerDescriptionProportionalSymbols,
   type LegendTextElement,
-  LegendType,
-  Orientation,
+  LegendType, Orientation,
+  type ProportionalSymbolCategoryParameters,
   ProportionalSymbolsColorMode,
-  type ProportionalSymbolsLegend,
-  ProportionalSymbolsSymbolType,
-  RepresentationType,
+  type ProportionalSymbolsLegend, type ProportionalSymbolsRatioParameters,
+  ProportionalSymbolsSymbolType, RepresentationType,
   type VectorType,
 } from '../../global.d';
 import type { PortrayalSettingsProps } from './common';
@@ -113,8 +113,6 @@ function onClickValidate(
     color: colorProperties.value,
   };
 
-  console.log(propSymbolsParameters);
-
   // Copy dataset
   const newData = JSON.parse(
     JSON.stringify(
@@ -130,7 +128,7 @@ function onClickValidate(
       // eslint-disable-next-line no-param-reassign
       feature.geometry = {
         type: 'Point',
-        coordinates: coordsPointOnFeature(feature.geometry as never),
+        coordinates: coordsPointOnFeature(feature.geometry as never) as GeoJSONPosition,
       };
     });
   }
@@ -267,7 +265,9 @@ function onClickValidate(
 
   if (propSymbolsParameters.colorMode === 'ratioVariable') {
     // How many decimals to display in the legend
-    const minPrecision = getMinimumPrecision(propSymbolsParameters.color.breaks);
+    const minPrecision = getMinimumPrecision(
+      (propSymbolsParameters as ProportionalSymbolsRatioParameters).color.breaks,
+    );
 
     // Find a position for the legend
     const legendChoroRatioPosition = getPossibleLegendPosition(120, 340);
@@ -328,7 +328,6 @@ function onClickValidate(
               position: [legendPosition[0] + 200, legendPosition[1]],
               width: 300,
               height: 250,
-              orientation: 'horizontal',
               fontColor: '#000000',
               visible: true,
               title: {
@@ -360,7 +359,8 @@ function onClickValidate(
       id: generateIdLegend(),
       layerId: newId,
       title: {
-        text: propSymbolsParameters.color.variable,
+        text: (
+          propSymbolsParameters as ProportionalSymbolCategoryParameters).color.variable,
         ...applicationSettingsStore.defaultLegendSettings.title,
       } as LegendTextElement,
       subtitle: {
@@ -418,7 +418,8 @@ function onClickValidate(
               fontColor: '#000000',
               visible: true,
               title: {
-                text: propSymbolsParameters.color.variable,
+                text: (
+                  propSymbolsParameters as ProportionalSymbolCategoryParameters).color.variable,
                 ...applicationSettingsStore.defaultLegendSettings.title,
               } as LegendTextElement,
               subtitle: {

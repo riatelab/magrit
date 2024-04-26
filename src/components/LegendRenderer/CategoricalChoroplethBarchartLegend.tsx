@@ -103,7 +103,11 @@ function CategoriesPlot(
         marginTop: 10,
         marginLeft: sizeLargestLabel() + 10,
         color: { domain: domain(), range: range() },
-        x: { label: null },
+        x: {
+          label: null,
+          nice: true,
+          tickFormat: (d) => d.toLocaleString(),
+        },
         y: {
           type: 'band',
           label: null,
@@ -128,7 +132,7 @@ function CategoriesPlot(
         width: props.width,
         style: { color: props.color },
         marginTop: 10,
-        marginBottom: Math.max(sizeLargestLabel() * 0.6, 25),
+        marginBottom: Math.max(sizeLargestLabel() * 0.65, 25),
         marginLeft: 30,
         color: { domain: domain(), range: range() },
         x: {
@@ -136,7 +140,11 @@ function CategoriesPlot(
           tickRotate: -30,
           label: null,
         },
-        y: { label: null, nice: true },
+        y: {
+          label: null,
+          nice: true,
+          tickFormat: (d) => d.toLocaleString(),
+        },
         marks: [
           Plot.gridY(),
           Plot.barY(
@@ -225,8 +233,8 @@ export default function legendCategoricalChoroplethBarchart(
     style={{ cursor: 'grab' }}
   >
     <RectangleBox backgroundRect={legend.backgroundRect}/>
-    {makeLegendText(legend.title, [0, 0], 'title')}
-    {makeLegendText(legend.subtitle, [0, heightTitle()], 'subtitle')}
+    {makeLegendText(legend.title, [legend.width / 2, 0], 'title', { 'text-anchor': 'middle' })}
+    {makeLegendText(legend.subtitle, [legend.width / 2, heightTitle()], 'subtitle', { 'text-anchor': 'middle' })}
     <g
       transform={`translate(0, ${heightTitle() + heightSubtitle()})`}
     >
@@ -242,8 +250,9 @@ export default function legendCategoricalChoroplethBarchart(
     {
       makeLegendText(
         legend.note,
-        [0, heightTitle() + heightSubtitle() + legend.height],
+        [legend.width / 2, heightTitle() + heightSubtitle() + legend.height],
         'note',
+        { 'text-anchor': 'middle' },
       )
     }
   </g>;

@@ -859,8 +859,6 @@ interface ChoroplethHistogramLegend extends LegendBase {
   height: number,
   // The font color of the chart elements
   fontColor: string,
-  // The orientation of the histogram
-  orientation: Orientation,
 }
 
 interface CategoricalChoroplethBarchartLegend extends LegendBase {

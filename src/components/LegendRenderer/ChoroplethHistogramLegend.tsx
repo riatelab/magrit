@@ -31,7 +31,6 @@ import {
   type ClassificationParameters,
   type LayerDescription,
   type LayerDescriptionProportionalSymbols,
-  Orientation,
   type ProportionalSymbolsRatioParameters,
 } from '../../global.d';
 
@@ -40,7 +39,6 @@ const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 function ChoroplethHistogram(
   props: {
     classification: ClassificationParameters,
-    orientation: Orientation,
     color: string,
     height: number,
     width: number,
@@ -73,10 +71,13 @@ function ChoroplethHistogram(
       height: props.height,
       width: props.width,
       style: { color: props.color },
-      marginBottom: 20,
+      marginBottom: 40,
+      marginLeft: 20,
       x: {
         domain: minmax,
         tickFormat: (d) => d.toLocaleString(),
+        tickRotate: -30,
+        ticks: props.classification.breaks.slice(1, -1),
       },
       y: {
         nice: false,
@@ -91,7 +92,7 @@ function ChoroplethHistogram(
           fill: (d) => d.color,
         }),
         Plot.ruleY([0]),
-        Plot.ruleX([minmax[0]]),
+        // Plot.ruleX([minmax[0]]),
       ],
     }) as SVGSVGElement
   }</>;
@@ -166,14 +167,13 @@ export default function legendChoroplethHistogram(
     style={{ cursor: 'grab' }}
   >
     <RectangleBox backgroundRect={legend.backgroundRect}/>
-    {makeLegendText(legend.title, [0, 0], 'title')}
-    {makeLegendText(legend.subtitle, [0, heightTitle()], 'subtitle')}
+    {makeLegendText(legend.title, [legend.width / 2, 0], 'title', { 'text-anchor': 'middle' })}
+    {makeLegendText(legend.subtitle, [legend.width / 2, heightTitle()], 'subtitle', { 'text-anchor': 'middle' })}
     <g
       transform={`translate(0, ${heightTitle() + heightSubtitle()})`}
     >
       <ChoroplethHistogram
         classification={getClassificationParameters(layer)}
-        orientation={legend.orientation}
         color={legend.fontColor}
         width={legend.width}
         height={legend.height}
@@ -182,8 +182,9 @@ export default function legendChoroplethHistogram(
     {
       makeLegendText(
         legend.note,
-        [0, heightTitle() + heightSubtitle() + legend.height],
+        [legend.width / 2, heightTitle() + heightSubtitle() + legend.height],
         'note',
+        { 'text-anchor': 'middle' },
       )
     }
   </g>;
