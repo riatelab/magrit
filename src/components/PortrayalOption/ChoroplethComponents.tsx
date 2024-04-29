@@ -213,6 +213,7 @@ export function ChoroplethClassificationSelector(
         onClick={() => {
           setClassificationPanelStore({
             show: true,
+            type: 'color',
             layerName: '',
             series: props.values(),
             classificationParameters: props.targetClassification(),

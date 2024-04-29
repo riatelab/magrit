@@ -322,6 +322,7 @@ function makeSettingsDefaultPoint(
             const params = unproxify(props.rendererParameters as never);
             setClassificationPanelStore({
               show: true,
+              type: 'color',
               layerName: props.name,
               series: props.data.features
                 .map((f) => f.properties[(
@@ -444,6 +445,7 @@ function makeSettingsDefaultPoint(
             const params = unproxify(props.rendererParameters!.color as never);
             setClassificationPanelStore({
               show: true,
+              type: 'color',
               layerName: props.name,
               series: props.data.features
                 .map((f) => f.properties[(
@@ -843,6 +845,40 @@ function makeSettingsDefaultLine(
   // TODO: we have layer of proportional symbols with geometry type "linestring"
   //  so we should handle this case here
   return <>
+    <Show when={props.renderer === 'discontinuity'}>
+      <div class="field" style={{ 'text-align': 'center' }}>
+        <button
+          class="button"
+          style={{ margin: 'auto' }}
+          onClick={() => {
+            // Save current state of classification parameters
+            const params = unproxify(props.rendererParameters as never);
+            setClassificationPanelStore({
+              show: true,
+              type: 'size',
+              layerName: props.name,
+              series: props.data.features
+                .map((f) => f.properties.value),
+              classificationParameters: params,
+              onCancel: () => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: params },
+                );
+              },
+              onConfirm: (newParams) => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: newParams },
+                );
+              },
+            });
+          }}
+        >{LL().LayerSettings.ChangeClassification()}</button>
+      </div>
+    </Show>
     <Show when={
       props.renderer === 'default'
       || props.renderer === 'discontinuity'
@@ -864,6 +900,7 @@ function makeSettingsDefaultLine(
             const params = unproxify(props.rendererParameters as never);
             setClassificationPanelStore({
               show: true,
+              type: 'color',
               layerName: props.name,
               series: props.data.features
                 .map((f) => f.properties[(
@@ -1173,6 +1210,7 @@ function makeSettingsDefaultPolygon(
             const params = unproxify(props.rendererParameters as never);
             setClassificationPanelStore({
               show: true,
+              type: 'color',
               layerName: props.name,
               series: props.data.features
                 .map((f) => f.properties[(

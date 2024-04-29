@@ -47,6 +47,7 @@ import {
   LegendType,
   RepresentationType,
 } from '../../global.d';
+import InputFieldColor from '../Inputs/InputColor.tsx';
 
 const subsetClassificationMethodsForDiscontinuity = [
   'quantiles',
@@ -60,6 +61,7 @@ function onClickValidate(
   referenceLayerId: string,
   targetVariable: string,
   discontinuityType: 'absolute' | 'relative',
+  color: string,
   classificationMethod: ClassificationMethod,
   newLayerName: string,
 ): void {
@@ -98,7 +100,7 @@ function onClickValidate(
     fields,
     renderer: 'discontinuity' as RepresentationType,
     visible: true,
-    strokeColor: '#960e47',
+    strokeColor: color,
     // strokeWidth: 2,
     strokeOpacity: 1,
     dropShadow: null,
@@ -183,6 +185,10 @@ export default function DiscontinuitySettings(
     discontinuityType,
     setDiscontinuityType,
   ] = createSignal<'absolute' | 'relative'>('absolute');
+  const [
+    selectedColor,
+    setSelectedColor,
+  ] = createSignal<string>('#960e47');
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
@@ -204,6 +210,7 @@ export default function DiscontinuitySettings(
         layerDescription.id,
         targetVariable(),
         discontinuityType(),
+        selectedColor(),
         classificationMethod(),
         layerName,
       );
@@ -250,6 +257,11 @@ export default function DiscontinuitySettings(
         }
       </For>
     </InputFieldSelect>
+    <InputFieldColor
+      label={LL().FunctionalitiesSection.CommonOptions.Color()}
+      value={selectedColor()}
+      onChange={(v) => { setSelectedColor(v); }}
+    />
     <InputResultName
       value={newLayerName()}
       onKeyUp={(value) => setNewLayerName(value)}

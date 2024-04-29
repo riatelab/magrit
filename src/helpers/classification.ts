@@ -126,3 +126,22 @@ export function getEntitiesByClass(
   const classifier = new Cls(values, null, breaks);
   return classifier.countByClass();
 }
+
+export enum OptionsClassification {
+  numberOfClasses,
+  amplitude,
+  meanPosition,
+  breaks,
+}
+
+export const classificationMethodHasOption = (
+  option: OptionsClassification,
+  method: ClassificationMethod,
+  entries: { value: ClassificationMethod, name: any, options: OptionsClassification[] }[],
+): boolean => {
+  const t = entries.find((e) => e.value === method);
+  if (!t || !t.options) {
+    return false;
+  }
+  return t.options.includes(option);
+};

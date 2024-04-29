@@ -1,12 +1,13 @@
 import { createStore } from 'solid-js/store';
-import { ClassificationMethod, ClassificationParameters } from '../global';
+import { ClassificationMethod, ClassificationParameters, DiscontinuityParameters } from '../global';
 
 type ClassificationPanelStoreType = {
   show: boolean,
+  type?: 'color' | 'size',
   layerName?: string,
   series?: any[],
-  classificationParameters?: ClassificationParameters,
-  onConfirm?: (classification: ClassificationParameters) => void,
+  classificationParameters?: ClassificationParameters | DiscontinuityParameters,
+  onConfirm?: (classification: ClassificationParameters | DiscontinuityParameters) => void,
   onCancel?: () => void,
 };
 
@@ -15,6 +16,7 @@ const [
   setClassificationPanelStore,
 ] = createStore({
   show: false,
+  type: undefined,
   layerName: undefined,
   series: undefined,
   classificationParameters: undefined,

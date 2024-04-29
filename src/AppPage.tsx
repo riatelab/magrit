@@ -80,6 +80,7 @@ import type { TranslationFunctions } from './i18n/i18n-types';
 // Styles
 import './styles/Transitions.css';
 import InfoFeatureBox from './components/InfoFeatureBox.tsx';
+import ClassificationDiscontinuityPanel from './components/Modals/ClassificationDiscontinuityPanel.tsx';
 
 interface ProjectDescription {
   version: string,
@@ -502,8 +503,11 @@ const AppPage: () => JSX.Element = () => {
         </Show>
       </Transition>
       <Transition name="slide-fade">
-        <Show when={classificationPanelStore.show}>
+        <Show when={classificationPanelStore.show && classificationPanelStore.type! === 'color'}>
           <ClassificationPanel />
+        </Show>
+        <Show when={classificationPanelStore.show && classificationPanelStore.type! === 'size'}>
+          <ClassificationDiscontinuityPanel />
         </Show>
         <Show when={tableWindowStore.show}>
           <TableWindow />

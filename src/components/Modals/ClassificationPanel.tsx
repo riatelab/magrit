@@ -17,7 +17,13 @@ import toast from 'solid-toast';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import d3 from '../../helpers/d3-custom';
-import { getClassifier, parseUserDefinedBreaks, prepareStatisticalSummary } from '../../helpers/classification';
+import {
+  classificationMethodHasOption,
+  getClassifier,
+  parseUserDefinedBreaks,
+  prepareStatisticalSummary,
+  OptionsClassification,
+} from '../../helpers/classification';
 import { isNumber } from '../../helpers/common';
 import { Mmin, Mround, round } from '../../helpers/math';
 import { makeClassificationPlot, makeColoredBucketPlot, makeDistributionPlot } from '../DistributionPlots.tsx';
@@ -40,29 +46,9 @@ import {
   type CustomPalette,
 } from '../../global.d';
 
-enum OptionsClassification {
-  numberOfClasses,
-  amplitude,
-  meanPosition,
-  breaks,
-}
-
-const classificationMethodHasOption = (
-  option: OptionsClassification,
-  method: ClassificationMethod,
-  entries: { value: ClassificationMethod, name: any, options: OptionsClassification[] }[],
-): boolean => {
-  const t = entries.find((e) => e.value === method);
-  if (!t || !t.options) {
-    return false;
-  }
-  return t.options.includes(option);
-};
-
 export default function ClassificationPanel(): JSX.Element {
   // Function to recompute the classification given the current options.
   // We scope it here to facilitate the use of the signals that are defined below...
-
   const updateClassificationParameters = () => {
     /* eslint-disable @typescript-eslint/no-use-before-define */
     const cp = makeClassificationParameters();
@@ -133,7 +119,7 @@ export default function ClassificationPanel(): JSX.Element {
       throw new Error('Palette type not found !');
     }
     const cp = {
-      variable: classificationPanelStore.classificationParameters!.variable,
+      variable: parameters!.variable,
       method: classificationMethod(),
       classes,
       breaks,
@@ -151,6 +137,8 @@ export default function ClassificationPanel(): JSX.Element {
   }; /* eslint-enable @typescript-eslint/no-use-before-define */
 
   const { LL } = useI18nContext();
+
+  const parameters = classificationPanelStore.classificationParameters as ClassificationParameters;
 
   // The values that we are gonna use for the classification
   const filteredSeries = classificationPanelStore.series!
@@ -180,7 +168,7 @@ export default function ClassificationPanel(): JSX.Element {
     classificationMethod,
     setClassificationMethod,
   ] = createSignal<ClassificationMethod>(
-    classificationPanelStore.classificationParameters!.method
+    parameters.method
     || ClassificationMethod.quantiles,
   );
   // - the number of classes chosen by the user for the current classification method
@@ -188,7 +176,7 @@ export default function ClassificationPanel(): JSX.Element {
     numberOfClasses,
     setNumberOfClasses,
   ] = createSignal<number>(
-    classificationPanelStore.classificationParameters!.classes
+    parameters.classes
     || Mmin(d3.thresholdSturges(filteredSeries), 9),
   );
   // - the amplitude chosen by the user for the
@@ -197,7 +185,7 @@ export default function ClassificationPanel(): JSX.Element {
     amplitude,
     setAmplitude,
   ] = createSignal<number>(
-    classificationPanelStore.classificationParameters!.amplitude || 1,
+    parameters.amplitude || 1,
   );
   // - whether the mean position is chosen by the user for the current classification
   //   method (only if 'standard deviation' is chosen)
@@ -205,14 +193,14 @@ export default function ClassificationPanel(): JSX.Element {
     meanPositionRole,
     setMeanPositionRole,
   ] = createSignal<'center' | 'boundary'>(
-    classificationPanelStore.classificationParameters!.meanPositionRole || 'center',
+    parameters.meanPositionRole || 'center',
   );
   // - the type of color scheme chosen by the user (sequential or diverging)
   const [
     typeScheme,
     setTypeScheme,
   ] = createSignal<'sequential' | 'diverging' | 'custom'>(
-    classificationPanelStore.classificationParameters!.palette.type as 'sequential' | 'diverging'
+    parameters.palette.type as 'sequential' | 'diverging'
     || 'sequential',
   );
   // - the color palette chosen by the user for the current classification method
@@ -220,7 +208,7 @@ export default function ClassificationPanel(): JSX.Element {
     paletteName,
     setPaletteName,
   ] = createSignal<string>(
-    classificationPanelStore.classificationParameters!.palette.name
+    parameters.palette.name
     || 'Algae',
   );
   // - the color chosen by the user for the no data values
@@ -228,14 +216,14 @@ export default function ClassificationPanel(): JSX.Element {
     noDataColor,
     setNoDataColor,
   ] = createSignal<string>(
-    classificationPanelStore.classificationParameters!.noDataColor,
+    parameters.noDataColor,
   );
   // - whether to reverse the color palette
   const [
     isPaletteReversed,
     setIsPaletteReversed,
   ] = createSignal<boolean>(
-    classificationPanelStore.classificationParameters!.palette.reversed,
+    parameters.palette.reversed,
   );
   // - the inflection point chosen by the user for the
   //   current classification method (only if 'diverging' is chosen)
@@ -243,7 +231,7 @@ export default function ClassificationPanel(): JSX.Element {
     centralClass,
     setCentralClass,
   ] = createSignal<number | undefined>(
-    classificationPanelStore.classificationParameters!.palette.divergingOptions?.left
+    parameters.palette.divergingOptions?.left
     || 1,
   );
   // - whether there is a neutral central class for the diverging palette
@@ -251,7 +239,7 @@ export default function ClassificationPanel(): JSX.Element {
     hasNeutralCentralClass,
     setHasNeutralCentralClass,
   ] = createSignal<boolean>(
-    classificationPanelStore.classificationParameters!.palette.divergingOptions?.centralClass
+    parameters.palette.divergingOptions?.centralClass
     || false,
   );
   // - the breaks chosen by the user for the
@@ -259,7 +247,7 @@ export default function ClassificationPanel(): JSX.Element {
   const [
     customBreaks,
     setCustomBreaks,
-  ] = createSignal<number[]>(classificationPanelStore.classificationParameters!.breaks);
+  ] = createSignal<number[]>(parameters.breaks);
   // - the current breaks (given the last option that changed, or the default breaks)
   const [
     currentBreaksInfo,
@@ -358,7 +346,7 @@ export default function ClassificationPanel(): JSX.Element {
         <p class="modal-card-title">
           { LL().ClassificationPanel.title() }&nbsp;
           - {classificationPanelStore.layerName}&nbsp;
-          - {classificationPanelStore.classificationParameters!.variable}
+          - {parameters.variable}
         </p>
       </header>
       <section class="modal-card-body">
