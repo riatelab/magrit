@@ -105,6 +105,10 @@ export const computeGriddedLayer = async (
 
   // Clip the grid with the data (this will remove the cells that are outside of the data)
   const clippedGrid = await intersectionLayer(grid, projectedData);
+  // When some cells are clipped, we may occasionally have some cells that are not polygons
+  // (but points, because the topological dimension of the resulting intersection is 0
+  // so we only have contact between the grid and the input layer on point(s)).
+  clippedGrid.features = clippedGrid.features.filter((d) => d.geometry?.type === 'Polygon');
 
   // Area function
   const areaFn = isGeo ? area : planarArea;
