@@ -1,6 +1,6 @@
 // Imports from solid-js
 import {
-  createSignal, JSX, Match,
+  createSignal, For, JSX, Match,
   onCleanup, onMount,
   Show, Switch,
 } from 'solid-js';
@@ -20,7 +20,7 @@ import {
 } from '../../helpers/classification';
 import { isNumber } from '../../helpers/common';
 import { Mmin, Mround, round } from '../../helpers/math';
-import { makeClassificationPlot, makeColoredBucketPlot, makeDistributionPlot } from '../DistributionPlots.tsx';
+import { makeDistributionPlot } from '../DistributionPlots.tsx';
 
 // Sub-components
 import DropdownMenu from '../DropdownMenu.tsx';
@@ -35,11 +35,74 @@ import '../../styles/ClassificationPanel.css';
 
 // Types, interfaces and enums
 import {
-  ClassificationMethod, type ClassificationParameters,
+  ClassificationMethod,
   type DiscontinuityParameters,
 } from '../../global.d';
 
 export default function ClassificationDiscontinuityPanel(): JSX.Element {
+  const updateClassificationParameters = () => {
+    /* eslint-disable @typescript-eslint/no-use-before-define */
+    const cp = makeClassificationParameters();
+    setCurrentBreaksInfo(cp);
+    setCustomBreaks(cp.breaks);
+    setNumberOfClasses(cp.classes);
+    setSelectedSizes(cp.sizes);
+    /* eslint-enable @typescript-eslint/no-use-before-define */
+  };
+
+  const makeClassificationParameters = (): DiscontinuityParameters => {
+    /* eslint-disable @typescript-eslint/no-use-before-define */
+    const classifier = new (getClassifier(classificationMethod()))(filteredSeries, null);
+    let breaks;
+    let classes;
+    if (
+      !([
+        // ClassificationMethod.standardDeviation,
+        ClassificationMethod.manual,
+        ClassificationMethod.q6,
+      ].includes(classificationMethod()))
+    ) {
+      breaks = classifier.classify(numberOfClasses());
+      classes = numberOfClasses();
+    } else if (classificationMethod() === ClassificationMethod.q6) {
+      breaks = classifier.classify();
+      classes = 6;
+      // } else if (classificationMethod() === ClassificationMethod.standardDeviation) {
+      //   breaks = classifier.classify(amplitude(), meanPositionRole() === 'center');
+      //   classes = breaks.length - 1;
+    } else if (classificationMethod() === ClassificationMethod.manual) {
+      console.log(customBreaks());
+      breaks = classifier.classify(customBreaks());
+      classes = breaks.length - 1;
+    } else {
+      throw new Error('Classification method not found !');
+    }
+    const entitiesByClass = classifier.countByClass();
+
+    const sizes: number[] = [];
+    if (classes > selectedSizes().length) {
+      sizes.push(...selectedSizes());
+      for (let i = 0; i < classes - selectedSizes().length; i += 1) {
+        sizes.push(sizes[sizes.length - 1] + 1 + i);
+      }
+    } else if (classes < selectedSizes().length) {
+      sizes.push(...selectedSizes().slice(0, classes));
+    } else {
+      sizes.push(...selectedSizes());
+    }
+
+    const p = {
+      variable: parameters.variable,
+      type: parameters.type,
+      classificationMethod: classificationMethod(),
+      classes,
+      breaks,
+      sizes,
+    };
+    /* eslint-enable @typescript-eslint/no-use-before-define */
+    return p;
+  };
+
   let refParentNode: HTMLDivElement;
   let refTextArea: HTMLTextAreaElement;
   const { LL } = useI18nContext();
@@ -122,56 +185,17 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
     customBreaks,
     setCustomBreaks,
   ] = createSignal<number[]>(parameters.breaks);
-  // - the current breaks (given the last option that changed, or the default breaks)
-  const [
-    currentBreaksInfo,
-    setCurrentBreaksInfo,
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  ] = createSignal<DiscontinuityParameters>(makeClassificationParameters());
   // - the size for the lines in each class
   const [
     selectedSizes,
     setSelectedSizes,
   ] = createSignal<number[]>(parameters.sizes || []);
-
-  const makeClassificationParameters = (): DiscontinuityParameters => {
-    const classifier = new (getClassifier(classificationMethod()))(filteredSeries, null);
-    let breaks;
-    let classes;
-    if (
-      !([
-        ClassificationMethod.standardDeviation,
-        ClassificationMethod.manual,
-        ClassificationMethod.q6,
-      ].includes(classificationMethod()))
-    ) {
-      breaks = classifier.classify(numberOfClasses());
-      classes = numberOfClasses();
-    } else if (classificationMethod() === ClassificationMethod.q6) {
-      breaks = classifier.classify();
-      classes = 6;
-    // } else if (classificationMethod() === ClassificationMethod.standardDeviation) {
-    //   breaks = classifier.classify(amplitude(), meanPositionRole() === 'center');
-    //   classes = breaks.length - 1;
-    } else if (classificationMethod() === ClassificationMethod.manual) {
-      breaks = classifier.classify(customBreaks());
-      classes = breaks.length - 1;
-    } else {
-      throw new Error('Classification method not found !');
-    }
-    const entitiesByClass = classifier.countByClass();
-
-    const p = {
-      variable: parameters.variable,
-      type: parameters.type,
-      classificationMethod: classificationMethod(),
-      classes,
-      breaks,
-      sizes: selectedSizes(),
-    };
-
-    return p;
-  };
+  // - the current breaks info
+  const [
+    currentBreaksInfo,
+    setCurrentBreaksInfo,
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  ] = createSignal<DiscontinuityParameters>(makeClassificationParameters());
 
   return <div
     class="modal-window modal classification-panel"
@@ -189,7 +213,7 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
           - {classificationPanelStore.classificationParameters!.variable}
         </p>
       </header>
-      <section class="modal-card-body">
+      <section class="modal-card-body" style={{ 'padding-bottom': '4em' }}>
         <div class="is-flex">
           <div style={{ width: '40%', 'text-align': 'center' }}>
             <h3> {LL().ClassificationPanel.summary()}</h3>
@@ -230,13 +254,200 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
           </div>
         </div>
         <hr/>
+        <div style={{ 'text-align': 'center' }}>
+          <h3> {LL().ClassificationPanel.classification()} </h3>
+          <div class={'is-flex is-flex-direction-row is-justify-content-space-evenly mb-5'}>
+            <div style={{ 'flex-grow': 1 }}>
+              <p class="label is-marginless">{LL().ClassificationPanel.classificationMethod()}</p>
+              <DropdownMenu
+                id={'dropdown-classification-method'}
+                style={{ width: '220px' }}
+                entries={entriesClassificationMethod}
+                defaultEntry={
+                  entriesClassificationMethod
+                    .find((d) => d.value === classificationMethod())!
+                }
+                onChange={(value) => {
+                  setClassificationMethod(value as ClassificationMethod);
+                  // If the classification method is nestedMeans, we need to force
+                  // the number of classes to be a power of 2.
+                  if (value === ClassificationMethod.nestedMeans) {
+                    setNumberOfClasses(2 ** Math.round(Math.log2(numberOfClasses())));
+                  }
+                  updateClassificationParameters();
+                }}
+              />
+            </div>
+            <Show
+              when={
+                classificationMethodHasOption(
+                  OptionsClassification.numberOfClasses,
+                  classificationMethod(),
+                  entriesClassificationMethod,
+                )
+              }
+              fallback={<div style={{ 'flex-grow': 2 }}><p></p></div>}
+            >
+              <div style={{ 'flex-grow': 2 }}>
+                <p class="label is-marginless">{LL().ClassificationPanel.numberOfClasses()}</p>
+                <input
+                  class={'input'}
+                  type={'number'}
+                  value={numberOfClasses()}
+                  min={3}
+                  max={9}
+                  onChange={(event) => {
+                    // If the current method is 'nestedMeans', we need to force
+                    // the number of classes to be a power of 2.
+                    let v = +event.target.value;
+                    if (classificationMethod() === ClassificationMethod.nestedMeans) {
+                      v = 2 ** Math.round(Math.log2(v));
+                      // eslint-disable-next-line no-param-reassign
+                      event.target.value = `${v}`;
+                    }
+                    setNumberOfClasses(v);
+                    updateClassificationParameters();
+                  }}
+                />
+              </div>
+            </Show>
+            {/*
+           <Show when={
+              classificationMethodHasOption(
+                OptionsClassification.breaks,
+                classificationMethod(),
+                entriesClassificationMethod,
+              )
+            }>
+              <div style={{ 'flex-grow': 5 }}>
+                <p class="label is-marginless">{LL().ClassificationPanel.breaksInput()}</p>
+                <textarea
+                  class={'textarea'}
+                  style={{ 'min-height': '3em', 'max-height': '6em' }}
+                  ref={refTextArea!}
+                  value={currentBreaksInfo().breaks.join(' - ')}
+                >
+                </textarea>
+                <button
+                  class="button"
+                  style={{ width: '100%', height: '2em' }}
+                  onClick={() => {
+                    try {
+                      const b = parseUserDefinedBreaks(
+                        filteredSeries,
+                        refTextArea.value,
+                        statSummary,
+                      );
+                      setCustomBreaks(b);
+                    } catch (e) {
+                      toast.error(LL().ClassificationPanel.errorCustomBreaks(), {
+                        duration: 10000,
+                      });
+                      refTextArea.value = currentBreaksInfo().breaks.join(' - ');
+                      return;
+                    }
+                    updateClassificationParameters();
+                  }}
+                >
+                  {LL().ClassificationPanel.validate()}
+                </button>
+              </div>
+            </Show>
+            */}
+          </div>
+          <div>
+            <div class="is-flex is-flex-direction-column is-justify-content-center">
+              <div class="is-flex is-flex-direction-row is-justify-content-center">
+                <div style={{ width: '160px' }}>{LL().ClassificationPanel.lowerLimit()}</div>
+                <div style={{ width: '160px' }}>{LL().ClassificationPanel.upperLimit()}</div>
+                <div style={{ width: '160px' }}>{LL().ClassificationPanel.size()}</div>
+              </div>
+              <For each={selectedSizes()}>
+                {
+                  (size, index) => <div class="is-flex is-flex-direction-row is-justify-content-center">
+                    <input
+                      type="number"
+                      style={{ width: '160px' }}
+                      disabled={classificationMethod() !== ClassificationMethod.manual}
+                      value={round(customBreaks()[index()], statSummary.precision)}
+                      step={parseFloat(`1e-${statSummary.precision}`)}
+                      onChange={(ev) => {
+                        // is the selected boundary greater than the previous one?
+                        // is the selected boundary smaller than the next one?
+                        if (
+                          ev.target.value === ''
+                          || +ev.target.value <= (customBreaks()[index() - 1] || -Infinity)
+                          || +ev.target.value >= customBreaks()[index() + 1]
+                        ) {
+                          // rollback to the previous value
+                          // eslint-disable-next-line no-param-reassign
+                          ev.target.value = `${round(customBreaks()[index()], statSummary.precision)}`;
+                          return;
+                        }
+                        const v = +ev.target.value;
+                        const b = customBreaks().map((d, i) => (i === index() ? v : d));
+                        setCustomBreaks(b);
+                        updateClassificationParameters();
+                      }}
+                    />
+                    <input
+                      type="number"
+                      style={{ width: '160px' }}
+                      disabled={classificationMethod() !== ClassificationMethod.manual}
+                      value={round(customBreaks()[index() + 1], statSummary.precision)}
+                      step={parseFloat(`1e-${statSummary.precision}`)}
+                      onChange={(ev) => {
+                        // is the selected boundary smaller than the next one?
+                        // is the selected boundary greater than the next one?
+                        if (
+                          ev.target.value === ''
+                          || +ev.target.value >= (customBreaks()[index() + 1] || +Infinity)
+                          || +ev.target.value <= customBreaks()[index()]
+                        ) {
+                          // rollback to the previous value
+                          // eslint-disable-next-line no-param-reassign
+                          ev.target.value = `${round(customBreaks()[index() + 1], statSummary.precision)}`;
+                          return;
+                        }
+                        const v = +ev.target.value;
+                        const b = customBreaks().map((d, i) => (i === (index() + 1) ? v : d));
+                        setCustomBreaks(b);
+                        updateClassificationParameters();
+                      }}
+                    />
+                    <input
+                      type="number"
+                      style={{ width: '160px' }}
+                      min={selectedSizes()[index() - 1]}
+                      max={selectedSizes()[index() + 1]}
+                      value={size}
+                      onChange={(event) => {
+                        if (
+                          event.target.value === ''
+                          || +event.target.value < 1
+                        ) {
+                          // eslint-disable-next-line no-param-reassign
+                          event.target.value = `${size}`;
+                          return;
+                        }
+                        const v = +event.target.value;
+                        setSelectedSizes(selectedSizes().map((d, i) => (i === index() ? v : d)));
+                        updateClassificationParameters();
+                      }}
+                    />
+                  </div>
+                }
+              </For>
+            </div>
+          </div>
+        </div>
       </section>
       <footer class="modal-card-foot">
         <button
           class="button is-success classification-panel__confirm-button"
           onClick={() => {
             if (classificationPanelStore.onConfirm) {
-              classificationPanelStore.onConfirm();
+              classificationPanelStore.onConfirm(currentBreaksInfo());
             }
             setClassificationPanelStore({ show: false });
           }}

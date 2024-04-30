@@ -775,6 +775,9 @@ const fr = {
     missingValues: '{{ Une entité sans données | ?? entités sans données }}',
     count: 'Entités par classe',
     errorCustomBreaks: 'Erreur - Les limites de classes saisies ne sont pas valides. Veillez à saisir des valeurs numériques séparées par des tirets et permettant de former au minimum 2 classes.',
+    lowerLimit: 'Limite inférieure',
+    upperLimit: 'Limite supérieure',
+    size: 'Size (px)',
   },
   Legend: {
     ContextMenu: {

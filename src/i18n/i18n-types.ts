@@ -2802,6 +2802,18 @@ type RootTranslation = {
 		 * E​r​r​o​r​ ​-​ ​T​h​e​ ​c​l​a​s​s​ ​l​i​m​i​t​s​ ​e​n​t​e​r​e​d​ ​a​r​e​ ​i​n​v​a​l​i​d​.​ ​P​l​e​a​s​e​ ​e​n​t​e​r​ ​n​u​m​e​r​i​c​a​l​ ​v​a​l​u​e​s​ ​s​e​p​a​r​a​t​e​d​ ​b​y​ ​d​a​s​h​e​s​ ​t​o​ ​f​o​r​m​ ​a​t​ ​l​e​a​s​t​ ​2​ ​c​l​a​s​s​e​s​.
 		 */
 		errorCustomBreaks: string
+		/**
+		 * L​o​w​e​r​ ​l​i​m​i​t
+		 */
+		lowerLimit: string
+		/**
+		 * U​p​p​e​r​ ​l​i​m​i​t
+		 */
+		upperLimit: string
+		/**
+		 * S​i​z​e​ ​(​p​x​)
+		 */
+		size: string
 	}
 	Legend: {
 		ContextMenu: {
@@ -5802,6 +5814,18 @@ export type TranslationFunctions = {
 		 * Error - The class limits entered are invalid. Please enter numerical values separated by dashes to form at least 2 classes.
 		 */
 		errorCustomBreaks: () => LocalizedString
+		/**
+		 * Lower limit
+		 */
+		lowerLimit: () => LocalizedString
+		/**
+		 * Upper limit
+		 */
+		upperLimit: () => LocalizedString
+		/**
+		 * Size (px)
+		 */
+		size: () => LocalizedString
 	}
 	Legend: {
 		ContextMenu: {
