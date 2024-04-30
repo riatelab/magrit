@@ -198,8 +198,14 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
     const typePortrayal = g.getAttribute('mgt:portrayal-type')!;
     // Redraw the paths according to the type of portrayal
     if (
-      simpleRedrawRenderers.has(typePortrayal)
-      && g.getAttribute('mgt:geometry-type')! !== 'point'
+      (
+        simpleRedrawRenderers.has(typePortrayal)
+        && g.getAttribute('mgt:geometry-type')! !== 'point'
+      )
+      || (
+        typePortrayal === 'proportionalSymbols'
+        && g.getAttribute('mgt:geometry-type')! === 'linestring'
+      )
     ) {
       if (typePortrayal === 'graticule') {
         // We clip the graticule for performance reasons

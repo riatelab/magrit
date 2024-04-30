@@ -47,7 +47,10 @@ import {
   choroplethPointRenderer,
   choroplethPolygonRenderer,
 } from './MapRenderer/ChoroplethMapRenderer.tsx';
-import proportionalSymbolsRenderer from './MapRenderer/ProportionalSymbolsMapRenderer.tsx';
+import {
+  proportionalSymbolsLinearRenderer,
+  proportionalSymbolsPunctualRenderer,
+} from './MapRenderer/ProportionalSymbolsMapRenderer.tsx';
 import discontinuityRenderer from './MapRenderer/DiscontinuityMapRenderer.tsx';
 import { defaultLabelsRenderer } from './MapRenderer/LabelsMapRenderer.tsx';
 import graticuleRenderer from './MapRenderer/GraticuleRenderer.tsx';
@@ -205,7 +208,8 @@ const dispatchMapRenderer = (layer: LayerDescription) => {
     if (layer.type === 'point') return categoricalChoroplethPointRenderer(layer as LayerDescriptionCategoricalChoropleth);
     if (layer.type === 'linestring') return categoricalChoroplethLineRenderer(layer as LayerDescriptionCategoricalChoropleth);
   } else if (layer.renderer === 'proportionalSymbols') {
-    return proportionalSymbolsRenderer(layer as LayerDescriptionProportionalSymbols);
+    if (layer.type === 'point') return proportionalSymbolsPunctualRenderer(layer as LayerDescriptionProportionalSymbols);
+    if (layer.type === 'linestring') return proportionalSymbolsLinearRenderer(layer as LayerDescriptionProportionalSymbols);
   } else if (layer.renderer === 'labels') {
     if (layer.type === 'point') return defaultLabelsRenderer(layer as LayerDescriptionLabels);
   } else if (layer.renderer === 'discontinuity') {

@@ -1000,22 +1000,93 @@ function horizontalCircleLegend(
   </g>;
 }
 
+function verticalLineLegend(
+  legend: ProportionalSymbolsLegend,
+): JSX.Element {
+  const { LL } = useI18nContext();
+  let refElement: SVGGElement;
+
+  const layer = findLayerById(
+    layersDescriptionStore.layers,
+    legend.layerId,
+  )!;
+
+  return <g
+    ref={refElement!}
+    class="legend proportionalSymbols"
+    for={layer.id}
+    transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
+    visibility={layer.visible && legend.visible ? undefined : 'hidden'}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerContextMenuLegend(e, legend.id, LL);
+    }}
+    onDblClick={() => {
+      makeLegendSettingsModal(legend.id, LL);
+    }}
+    style={{ cursor: 'grab' }}
+  >
+    <RectangleBox backgroundRect={legend.backgroundRect}/>
+  </g>;
+}
+
+function horizontalLineLegend(
+  legend: ProportionalSymbolsLegend,
+): JSX.Element {
+  const { LL } = useI18nContext();
+  let refElement: SVGGElement;
+
+  const layer = findLayerById(
+    layersDescriptionStore.layers,
+    legend.layerId,
+  )!;
+
+  return <g
+    ref={refElement!}
+    class="legend proportionalSymbols"
+    for={layer.id}
+    transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
+    visibility={layer.visible && legend.visible ? undefined : 'hidden'}
+    onContextMenu={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerContextMenuLegend(e, legend.id, LL);
+    }}
+    onDblClick={() => {
+      makeLegendSettingsModal(legend.id, LL);
+    }}
+    style={{ cursor: 'grab' }}
+  >
+    <RectangleBox backgroundRect={legend.backgroundRect} />
+  </g>;
+}
+
 export default function legendProportionalSymbols(
   legend: ProportionalSymbolsLegend,
 ): JSX.Element {
   return <>
     {
-      (legend.symbolType === 'circle'
-        ? ({
-          stacked: stackedCircleLegend,
-          vertical: verticalCircleLegend,
-          horizontal: horizontalCircleLegend,
-        })[legend.layout](legend)
-        : ({
-          stacked: stackedSquareLegend,
-          vertical: verticalSquareLegend,
-          horizontal: horizontalSquareLegend,
-        })[legend.layout](legend))
+      (
+        // eslint-disable-next-line no-nested-ternary
+        legend.symbolType === 'circle'
+          ? ({
+            stacked: stackedCircleLegend,
+            vertical: verticalCircleLegend,
+            horizontal: horizontalCircleLegend,
+          })[legend.layout](legend)
+          : legend.symbolType === 'square'
+            ? ({
+              stacked: stackedSquareLegend,
+              vertical: verticalSquareLegend,
+              horizontal: horizontalSquareLegend,
+            })[legend.layout](legend)
+            : ({
+              stacked: verticalLineLegend,
+              vertical: verticalLineLegend,
+              horizontal: horizontalLineLegend,
+            })[legend.layout](legend)
+      )
     }
   </>;
 }

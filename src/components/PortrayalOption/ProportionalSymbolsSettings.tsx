@@ -139,15 +139,13 @@ function onClickValidate(
   // settings of proportional symbols or zoom in/out
   // and also if the user wants to change the position of the
   // symbols manually)
-  if (referenceLayerDescription.type !== 'linestring') {
+  if (symbolType !== ProportionalSymbolsSymbolType.line) {
     newData.features.forEach((feature) => {
       // eslint-disable-next-line no-param-reassign
       feature.geometry.originalCoordinates = feature.geometry.coordinates;
     });
-  }
 
-  if (avoidOverlapping) {
-    if (symbolType !== ProportionalSymbolsSymbolType.line) {
+    if (avoidOverlapping) {
       // Compute the new position if we want to avoid overlapping
       newData.features = makeDorlingDemersSimulation(
         newData.features,
@@ -160,14 +158,8 @@ function onClickValidate(
         100,
         1,
       );
-    } else { // symbolType === ProportionalSymbolsSymbolType.line
-      // This should not happen because we don't allow the user to
-      // check the "avoid overlapping" checkbox if the symbol type
-      // is a line
-      throw new Error('No avoid overlapping algorithm for line symbols');
     }
   }
-
   // Sort the features by descending value of the target variable
   // (so that the biggest symbols are drawn first)
   newData.features

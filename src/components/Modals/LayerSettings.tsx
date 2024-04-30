@@ -72,7 +72,10 @@ import {
   type CategoricalChoroplethBarchartLegend,
   type ProportionalSymbolCategoryParameters,
   type ChoroplethHistogramLegend,
-  type ProportionalSymbolsRatioParameters, CustomPalette, type GeoJSONFeature,
+  type ProportionalSymbolsRatioParameters,
+  CustomPalette,
+  type GeoJSONFeature,
+  type ProportionalSymbolSingleColorParameters,
 } from '../../global.d';
 
 // Styles
@@ -842,8 +845,6 @@ function makeSettingsDefaultLine(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  // TODO: we have layer of proportional symbols with geometry type "linestring"
-  //  so we should handle this case here
   return <>
     <Show when={props.renderer === 'discontinuity'}>
       <div class="field" style={{ 'text-align': 'center' }}>
@@ -890,7 +891,22 @@ function makeSettingsDefaultLine(
         onChange={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
       />
     </Show>
-    <Show when={props.renderer === 'choropleth'}>
+    <Show when={
+      props.renderer === 'proportionalSymbols'
+      && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'singleColor'
+    }>
+      <InputFieldColor
+        label={ LL().LayerSettings.StrokeColor() }
+        value={ (props.rendererParameters as ProportionalSymbolSingleColorParameters).color! }
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'color'], v)}
+      />
+    </Show>
+    <Show when={
+      props.renderer === 'choropleth'
+      // || (props.renderer === 'proportionalSymbols'
+      //   && (props.rendererParameters as ProportionalSymbolsParametersBase)
+      //     .colorMode === 'ratioVariable')
+    }>
       <div class="field" style={{ 'text-align': 'center' }}>
         <button
           class="button"
@@ -981,6 +997,7 @@ function makeSettingsDefaultLine(
       props.renderer !== 'discontinuity'
       && !(props.renderer === 'links'
         && ['Exchange', 'BilateralVolume'].includes((props.rendererParameters as LinksParameters).type))
+      && !(props.renderer === 'proportionalSymbols')
     }>
       <InputFieldNumber
         label={ LL().LayerSettings.StrokeWidth() }
@@ -1111,7 +1128,12 @@ function makeSettingsDefaultLine(
         step={1}
       />
     </Show>
-    <Show when={props.renderer === 'categoricalChoropleth'}>
+    <Show when={
+      props.renderer === 'categoricalChoropleth'
+      // || (props.renderer === 'proportionalSymbols'
+      //   && (props.rendererParameters as ProportionalSymbolsParametersBase)
+      //     .colorMode === 'categoricalVariable')
+    }>
       <DetailsSummary
         summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
       >
