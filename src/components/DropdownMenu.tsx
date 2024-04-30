@@ -160,10 +160,21 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
       </button>
     </div>
     <div class="dropdown-menu" id={ props.id } role="menu" style={{ width: '100%' }}>
-      <div class="dropdown-content" style={{ 'z-index': 1001, 'max-height': '30vh', overflow: 'auto' }}>
+      <div
+        class="dropdown-content"
+        style={{
+          'z-index': 1001,
+          'max-height': '30vh',
+          overflow: 'auto',
+          ...{
+            width: props.style?.width.includes('px') ? props.style.width : undefined,
+            position: props.style?.width.includes('px') ? 'fixed' : undefined,
+          },
+        }}
+      >
         <For each={props.entries}>
           {(entry) => (
-            <a href="#" class="dropdown-item" onClick={ (ev) => {
+            <a href="#" class="dropdown-item" onClick={(ev) => {
               setDropdownItemTarget(ev, props);
               props.onChange(entry.value);
             }}>
