@@ -524,7 +524,11 @@ export default function ProportionalSymbolsSettings(
   const [
     symbolType,
     setSymbolType,
-  ] = createSignal<ProportionalSymbolsSymbolType>(ProportionalSymbolsSymbolType.circle);
+  ] = createSignal<ProportionalSymbolsSymbolType>(
+    geometryType === 'linestring'
+      ? ProportionalSymbolsSymbolType.line
+      : ProportionalSymbolsSymbolType.circle,
+  );
   const [
     refSymbolSize,
     setRefSymbolSize,
@@ -671,6 +675,7 @@ export default function ProportionalSymbolsSettings(
         // For linestrings we allow circle, square and line
         Object.values(ProportionalSymbolsSymbolType)
           .filter((st) => (geometryType === 'linestring' ? true : st !== ProportionalSymbolsSymbolType.line))
+          .sort((a, b) => (a.startsWith('line') ? -1 : 1))
       }>
         {
           (st) => <option
