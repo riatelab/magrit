@@ -1009,7 +1009,112 @@ function verticalLineLegend(
   const layer = findLayerById(
     layersDescriptionStore.layers,
     legend.layerId,
-  )!;
+  ) as LayerDescriptionProportionalSymbols;
+
+  const propSize = new PropSizer(
+    layer.rendererParameters.referenceValue,
+    layer.rendererParameters.referenceRadius,
+    layer.rendererParameters.symbolType,
+  );
+
+  const getColor = createMemo(() => {
+    if (layer.rendererParameters.colorMode === 'singleColor') {
+      return () => (layer.rendererParameters as ProportionalSymbolSingleColorParameters).color;
+    }
+    if (layer.rendererParameters.colorMode === 'positiveNegative') {
+      return (value: number) => (
+        value >= 0
+          ? (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[0]
+          : (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]
+      );
+    }
+    return () => 'white';
+  });
+
+  const maxSize = createMemo(
+    () => Mmax(
+      propSize.scale(legend.values[legend.values.length - 1]),
+      propSize.scale(legend.values[0]),
+    ),
+  );
+
+  const heightTitle = createMemo(
+    () => getTextSize(
+      legend.title.text,
+      legend.title.fontSize,
+      legend.title.fontFamily,
+    ).height + defaultSpacing,
+  );
+
+  const heightTitleSubtitle = createMemo(() => {
+    if (!legend.subtitle || !legend.subtitle.text) {
+      return heightTitle();
+    }
+    return heightTitle() + getTextSize(
+      legend.subtitle.text,
+      legend.subtitle.fontSize,
+      legend.subtitle.fontFamily,
+    ).height + defaultSpacing;
+  });
+
+  const distanceToTop = createMemo(
+    () => heightTitleSubtitle() + getTextSize(
+      '1234567890',
+      legend.labels.fontSize,
+      legend.labels.fontFamily,
+    ).height / 2 + defaultSpacing,
+  );
+
+  const sizesAndPositions = createMemo(() => {
+    // If we have negative values we want the horizontal legend to start (on the top)
+    // by the lowest value, otherwise we want the vertical legend to start by the highest value
+    const hasNegativeValues = legend.values.some((v) => v < 0);
+    const targetValues = hasNegativeValues ? legend.values : legend.values.toReversed();
+    let lastPosition = distanceToTop() + propSize.scale(targetValues[0]) / 2;
+    return targetValues
+      .map((value, i) => {
+        const symbolSize = propSize.scale(value);
+        const result = {
+          size: symbolSize,
+          x: 0,
+          y: lastPosition,
+          value,
+        };
+        lastPosition += symbolSize + legend.spacing;
+        return result;
+      });
+  });
+
+  const positionNote = createMemo(() => (
+    (
+      sizesAndPositions()[sizesAndPositions().length - 1].y
+      + sizesAndPositions()[sizesAndPositions().length - 1].size / 2
+    ) + getTextSize(
+      legend.note.text,
+      legend.note.fontSize,
+      legend.note.fontFamily,
+    ).height + defaultSpacing
+  ));
+
+  onMount(() => {
+    bindElementsLegend(refElement, legend);
+  });
+
+  createEffect(() => {
+    if (refElement && layer.visible && legend.visible) {
+      computeRectangleBox(
+        refElement,
+        heightTitle(),
+        heightTitleSubtitle(),
+        positionNote(),
+        sizesAndPositions(),
+        legend.title.text,
+        legend.subtitle?.text,
+        legend.note?.text,
+        legend.roundDecimals,
+      );
+    }
+  });
 
   return <g
     ref={refElement!}
@@ -1028,6 +1133,42 @@ function verticalLineLegend(
     style={{ cursor: 'grab' }}
   >
     <RectangleBox backgroundRect={legend.backgroundRect}/>
+    { makeLegendText(legend.title, [0, 0], 'title') }
+    { makeLegendText(legend.subtitle, [0, heightTitle()], 'subtitle') }
+    <g class="legend-content">
+      <For each={sizesAndPositions()}>
+        {
+          (d) => <>
+            <line
+              stroke={getColor()(d.value)}
+              stroke-width={d.size}
+              x1={d.x}
+              y1={d.y}
+              x2={d.x + 60}
+              y2={d.y}
+            ></line>
+            <text
+              font-size={`${legend.labels.fontSize}px`}
+              font-family={legend.labels.fontFamily}
+              font-style={legend.labels.fontStyle}
+              font-weight={legend.labels.fontWeight}
+              fill={legend.labels.fontColor}
+              text-anchor="start"
+              dominant-baseline="middle"
+              x={60 + defaultSpacing}
+              y={d.y}
+            >{ d.value }</text>
+          </>
+        }
+      </For>
+    </g>
+    {
+      makeLegendText(
+        legend.note,
+        [0, positionNote()],
+        'note',
+      )
+    }
   </g>;
 }
 
@@ -1040,7 +1181,92 @@ function horizontalLineLegend(
   const layer = findLayerById(
     layersDescriptionStore.layers,
     legend.layerId,
-  )!;
+  ) as LayerDescriptionProportionalSymbols;
+
+  const propSize = new PropSizer(
+    layer.rendererParameters.referenceValue,
+    layer.rendererParameters.referenceRadius,
+    layer.rendererParameters.symbolType,
+  );
+
+  const getColor = createMemo(() => {
+    if (layer.rendererParameters.colorMode === 'singleColor') {
+      return () => (layer.rendererParameters as ProportionalSymbolSingleColorParameters).color;
+    }
+    if (layer.rendererParameters.colorMode === 'positiveNegative') {
+      return (value: number) => (
+        value >= 0
+          ? (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[0]
+          : (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]
+      );
+    }
+    return () => 'white';
+  });
+
+  const maxSize = createMemo(
+    () => Mmax(
+      propSize.scale(legend.values[legend.values.length - 1]),
+      propSize.scale(legend.values[0]),
+    ),
+  );
+
+  const heightTitle = createMemo(
+    () => getTextSize(
+      legend.title.text,
+      legend.title.fontSize,
+      legend.title.fontFamily,
+    ).height + defaultSpacing,
+  );
+
+  const heightTitleSubtitle = createMemo(() => {
+    if (!legend.subtitle || !legend.subtitle.text) {
+      return heightTitle();
+    }
+    return heightTitle() + getTextSize(
+      legend.subtitle.text,
+      legend.subtitle.fontSize,
+      legend.subtitle.fontFamily,
+    ).height + defaultSpacing;
+  });
+
+  const distanceLabelsToTop = createMemo(() => heightTitleSubtitle()
+    + maxSize()
+    + defaultSpacing);
+
+  const positionNote = createMemo(() => (
+    distanceLabelsToTop() + defaultSpacing + legend.labels.fontSize
+  ));
+
+  onMount(() => {
+    bindElementsLegend(refElement, legend);
+  });
+
+  createEffect(() => {
+    if (refElement && layer.visible && legend.visible) {
+      computeRectangleBox(
+        refElement,
+        heightTitle(),
+        heightTitleSubtitle(),
+        positionNote(),
+        maxSize(),
+        legend.title.text,
+        legend.subtitle?.text,
+        legend.note?.text,
+        legend.roundDecimals,
+      );
+    }
+  });
+
+  // Precompute the size and position of the symbols now
+  // instead of computing it in the For directive
+  // (and use createMemo to make it reactive)
+  const sizesAndPositions = createMemo(() => legend.values
+    .map((value, i) => ({
+      size: propSize.scale(value),
+      x: (60 + legend.spacing) * i,
+      y: heightTitleSubtitle() + maxSize() / 2,
+      value,
+    })));
 
   return <g
     ref={refElement!}
@@ -1059,6 +1285,52 @@ function horizontalLineLegend(
     style={{ cursor: 'grab' }}
   >
     <RectangleBox backgroundRect={legend.backgroundRect} />
+    { makeLegendText(legend.title, [0, 0], 'title') }
+    { makeLegendText(legend.subtitle, [0, heightTitle()], 'subtitle') }
+    <g class="legend-content">
+      <For each={sizesAndPositions()}>
+        {
+          (d) => <>
+            <line
+              stroke={getColor()(d.value)}
+              stroke-width={d.size}
+              x1={d.x}
+              y1={d.y}
+              x2={d.x + 60}
+              y2={d.y}
+            ></line>
+            <text
+              font-size={`${legend.labels.fontSize}px`}
+              font-family={legend.labels.fontFamily}
+              font-style={legend.labels.fontStyle}
+              font-weight={legend.labels.fontWeight}
+              fill={legend.labels.fontColor}
+              text-anchor="middle"
+              dominant-baseline="hanging"
+              x={d.x + 60 / 2}
+              y={distanceLabelsToTop()}
+            >{
+              round(d.value, legend.roundDecimals)
+                .toLocaleString(
+                  applicationSettingsStore.userLocale,
+                  {
+                    minimumFractionDigits: precisionToMinimumFractionDigits(
+                      legend.roundDecimals,
+                    ),
+                  },
+                )
+            }</text>
+          </>
+        }
+      </For>
+    </g>
+    {
+      makeLegendText(
+        legend.note,
+        [0, positionNote()],
+        'note',
+      )
+    }
   </g>;
 }
 

@@ -237,7 +237,10 @@ function onClickValidate(
     },
     // Part specific to proportional symbols
     type: LegendType.proportional,
-    layout: propSymbolsParameters.colorMode === 'positiveNegative' ? 'vertical' : 'stacked',
+    layout: (
+      propSymbolsParameters.colorMode === 'positiveNegative'
+      || propSymbolsParameters.symbolType === 'line'
+    ) ? 'horizontal' : 'stacked',
     values: legendValues,
     spacing: 5,
     labels: {
@@ -532,7 +535,11 @@ export default function ProportionalSymbolsSettings(
   const [
     refSymbolSize,
     setRefSymbolSize,
-  ] = createSignal<number>(50);
+  ] = createSignal<number>(
+    geometryType === 'linestring'
+      ? 30
+      : 50,
+  );
   const [
     refValueForSymbolSize,
     setRefValueForSymbolSize,
