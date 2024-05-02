@@ -231,10 +231,13 @@ const makeMapResizable = (refMapShadow: HTMLDivElement) => {
   let initialShadowRect: DOMRect;
   interact('.map-zone__inner')
     .resizable({
-      // resize from all edges and corners
+      // Resize from all edges and corners
       edges: {
         left: true, right: true, bottom: true, top: true,
       },
+      // Don't start resizing if the user seems to want to interact
+      // with a legend or a layout feature
+      ignoreFrom: 'g.legend, g.layout-feature',
       listeners: {
         start() {
           // eslint-disable-next-line no-param-reassign
@@ -248,34 +251,75 @@ const makeMapResizable = (refMapShadow: HTMLDivElement) => {
           // compute the new position of the shadow div.
           // By default, it looks like we are resizing two times slower
           // than what the cursor does
-          const dw = initialShadowRect.width - event.rect.width;
-          const dh = initialShadowRect.height - event.rect.height;
-          const w = initialShadowRect.width - dw * 2;
-          const h = initialShadowRect.height - dh * 2;
-          // eslint-disable-next-line no-param-reassign
-          refMapShadow.style.top = `${(globalStore.windowDimensions.height - h - applicationSettingsStore.headerHeight) / 2}px`;
-          // eslint-disable-next-line no-param-reassign
-          refMapShadow.style.left = `${(globalStore.windowDimensions.width - w - applicationSettingsStore.leftMenuWidth) / 2}px`;
-          // eslint-disable-next-line no-param-reassign
-          refMapShadow.style.height = `${h}px`;
-          // eslint-disable-next-line no-param-reassign
-          refMapShadow.style.width = `${w}px`;
+          if (event.edges.top || event.edges.bottom) {
+            const dh = initialShadowRect.height - event.rect.height;
+            const h = initialShadowRect.height - dh * 2;
+            // eslint-disable-next-line no-param-reassign
+            refMapShadow.style.top = `${(globalStore.windowDimensions.height - h - applicationSettingsStore.headerHeight) / 2}px`;
+            // eslint-disable-next-line no-param-reassign
+            refMapShadow.style.height = `${h}px`;
+          }
+
+          if (event.edges.left || event.edges.right) {
+            const dw = initialShadowRect.width - event.rect.width;
+            const w = initialShadowRect.width - dw * 2;
+            // eslint-disable-next-line no-param-reassign
+            refMapShadow.style.left = `${(globalStore.windowDimensions.width - w - applicationSettingsStore.leftMenuWidth) / 2}px`;
+            // eslint-disable-next-line no-param-reassign
+            refMapShadow.style.width = `${w}px`;
+          }
         },
-        end() {
+        end(event) {
+          const boundingRect = refMapShadow.getBoundingClientRect();
           // We need to compute the difference in size between the shadow div
           // and the map div, we will shift the map content by half of this difference
-          const dw = initialShadowRect.width - refMapShadow.getBoundingClientRect().width + 3;
-          const dh = initialShadowRect.height - refMapShadow.getBoundingClientRect().height + 3;
-          // Update map dimensions
-          setMapStore('mapDimensions', {
-            width: Mround(refMapShadow.getBoundingClientRect().width - 6),
-            height: Mround(refMapShadow.getBoundingClientRect().height - 6),
-          });
-          setMapStore('lockZoomPan', currentLock || false);
-          setMapStore('translate', [
-            mapStore.translate[0] - dw / 2,
-            mapStore.translate[1] - dh / 2,
-          ]);
+          if (
+            (event.edges.top || event.edges.bottom)
+            && (event.edges.left || event.edges.right)
+          ) {
+            const dw = initialShadowRect.width - boundingRect.width - 1;
+            const dh = initialShadowRect.height - boundingRect.height;
+            // Update map dimensions
+            setMapStore({
+              mapDimensions: {
+                width: Mround(boundingRect.width - 3),
+                height: Mround(boundingRect.height - 4),
+              },
+              lockZoomPan: currentLock || false,
+              translate: [
+                mapStore.translate[0] - dw / 2,
+                mapStore.translate[1] - dh / 2,
+              ],
+            });
+          } else if (event.edges.top || event.edges.bottom) {
+            const dh = initialShadowRect.height - boundingRect.height;
+            // Update map dimensions
+            setMapStore({
+              mapDimensions: {
+                width: mapStore.mapDimensions.width,
+                height: Mround(boundingRect.height - 4),
+              },
+              lockZoomPan: currentLock || false,
+              translate: [
+                mapStore.translate[0],
+                mapStore.translate[1] - dh / 2,
+              ],
+            });
+          } else if (event.edges.left || event.edges.right) {
+            const dw = initialShadowRect.width - boundingRect.width - 1;
+            // Update map dimensions
+            setMapStore({
+              mapDimensions: {
+                width: Mround(boundingRect.width - 3),
+                height: mapStore.mapDimensions.height,
+              },
+              lockZoomPan: currentLock || false,
+              translate: [
+                mapStore.translate[0] - dw / 2,
+                mapStore.translate[1],
+              ],
+            });
+          }
           // eslint-disable-next-line no-param-reassign
           refMapShadow.style.display = 'none';
         },
@@ -526,10 +570,10 @@ export default function MapZone(): JSX.Element {
       class="map-zone__shadow"
       ref={refMapShadow!}
       style={{
-        top: `${(globalStore.windowDimensions.height - mapStore.mapDimensions.height - applicationSettingsStore.headerHeight) / 2 - 2}px`,
+        top: `${(globalStore.windowDimensions.height - mapStore.mapDimensions.height - applicationSettingsStore.headerHeight) / 2 - 3}px`,
         left: `${(globalStore.windowDimensions.width - mapStore.mapDimensions.width - applicationSettingsStore.leftMenuWidth) / 2 - 2}px`,
-        height: `${mapStore.mapDimensions.height + 2}px`,
-        width: `${mapStore.mapDimensions.width + 2}px`,
+        height: `${mapStore.mapDimensions.height + 4}px`,
+        width: `${mapStore.mapDimensions.width + 5}px`,
       }}
     >
       <div class='resizer top-left'></div>

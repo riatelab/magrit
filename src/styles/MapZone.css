@@ -64,22 +64,6 @@
   background: var(--bulma-background);
 }
 
-/*
-.resizable {
-  position: absolute;
-  top: 100px;
-  left: 100px;
-}
-*/
-
-.map-zone__shadow .resizers {
-  width: 100%;
-  height: 100%;
-  box-sizing: content-box;
-  position: absolute;
-  display: none;
-}
-
 .map-zone__shadow .resizer {
   width: 10px;
   height: 10px;
