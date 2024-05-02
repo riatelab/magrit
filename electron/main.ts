@@ -1,7 +1,9 @@
 import {
-  app, dialog, BrowserWindow, MessageBoxSyncOptions, shell,
+  app, dialog, BrowserWindow, shell,
 } from 'electron';
 
+// Since we only support two languages for now, and use only a few strings here,
+// we can hardcode the translations here.
 const translations = {
   fr: {
     'Close the application?': 'Fermer l\'application ?',
