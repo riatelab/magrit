@@ -26,7 +26,6 @@ import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/L
 import { setLoading } from '../../store/GlobalStore';
 
 // Sub-components
-import CollapsibleMessageBanner from '../CollapsibleMessageBanner.tsx';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
@@ -267,7 +266,7 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
     [
       ...layerDescription.fields,
       ...newFieldsDescription
-        .filter((f) => !layerDescription.fields.map((l) => l.name).includes(f.name)),
+        .filter((f: Variable) => !layerDescription.fields.map((l) => l.name).includes(f.name)),
     ],
   );
 

@@ -15,7 +15,6 @@ import { unproxify } from '../../helpers/common';
 import { VariableType, Variable } from '../../helpers/typeDetection';
 
 // Subcomponents
-import CollapsibleMessageBanner from '../CollapsibleMessageBanner.tsx';
 import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums

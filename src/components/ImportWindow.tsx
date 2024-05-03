@@ -48,7 +48,6 @@ import { mapStore, setMapStore } from '../store/MapStore';
 import { setModalStore } from '../store/ModalStore';
 
 // Other components
-import CollapsibleMessageBanner from './CollapsibleMessageBanner.tsx';
 import MessageBlock from './MessageBlock.tsx';
 import SimplificationModal from './Modals/SimplificationModal.tsx';
 import { openLayerManager } from './LeftMenu/LeftMenu.tsx';

@@ -38,14 +38,13 @@ export default function CollapsibleMessageBanner(
   const { LL } = useI18nContext();
   const c = children(() => props.children);
   const expanded = createMemo(() => props.expanded ?? false);
-  const type = createMemo(() => props.type);
   const [
     showContent,
     setShowContent,
   ] = createSignal(true);
 
   return <article
-    class={`message is-${type()}`}
+    class={`message is-${props.type}`}
     style={{
       'margin-left': expanded() ? '-2em' : '0',
       'margin-right': expanded() ? '-2em' : '0',
