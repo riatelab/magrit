@@ -730,6 +730,7 @@ const en = {
     classificationMethods: {
       equalIntervals: 'Equal intervals',
       quantiles: 'Quantiles',
+      ckmeans: 'CKMeans',
       jenks: 'Jenks',
       standardDeviation: 'Standard deviation',
       q6: 'Q6',
@@ -743,6 +744,7 @@ const en = {
     classificationMethodLegendDescriptions: {
       equalIntervals: 'Classified using equal intervals',
       quantiles: 'Classified using quantiles',
+      ckmeans: 'Classified using the CKMeans algorithm',
       jenks: 'Classified using natural breaks (Jenks)',
       standardDeviation: 'Classified using mean and standard deviation',
       q6: 'Classified using the Q6 method',

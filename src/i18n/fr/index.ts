@@ -730,6 +730,7 @@ const fr = {
     classificationMethods: {
       equalIntervals: 'Intervals égaux',
       quantiles: 'Quantiles',
+      ckmeans: 'CKMeans',
       jenks: 'Jenks',
       standardDeviation: 'Écart-type',
       q6: 'Q6',
@@ -743,6 +744,7 @@ const fr = {
     classificationMethodLegendDescriptions: {
       equalIntervals: 'Discrétisation en intervalles égaux',
       quantiles: 'Discrétisation en quantiles',
+      ckmeans: 'Discrétisation avec l\'algorithme CKMeans',
       jenks: 'Discrétisation avec ma méthodes des seuils naturels (Jenks)',
       standardDeviation: 'Discrétisation avec la méthode de la moyenne et des écart-types',
       q6: 'Discrétisation avec la méthode Q6',

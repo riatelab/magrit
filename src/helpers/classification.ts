@@ -1,6 +1,7 @@
 import {
   ArithmeticProgressionClassifier,
   CustomBreaksClassifier,
+  CkmeansClassifier,
   EqualClassifier,
   GeometricProgressionClassifier,
   HeadTailClassifier,
@@ -14,6 +15,7 @@ import {
   quantile,
   equal,
   jenks,
+  ckmeans,
   headtail,
   geometricProgression,
   arithmeticProgression,
@@ -52,6 +54,8 @@ export const getClassifier = (method: ClassificationMethod) => {
       return Q6Classifier;
     case ClassificationMethod.nestedMeans:
       return NestedMeansClassifier;
+    case ClassificationMethod.ckmeans:
+      return CkmeansClassifier;
     default:
       throw new Error(`Unknown classification method: ${method}`);
   }
@@ -79,6 +83,8 @@ export const getClassificationFunction = (method: ClassificationMethod) => {
       return q6;
     case ClassificationMethod.nestedMeans:
       return nestedMeans;
+    case ClassificationMethod.ckmeans:
+      return ckmeans;
     default:
       throw new Error(`No classification function for method "${method}".`);
   }

@@ -283,6 +283,11 @@ export default function ClassificationPanel(): JSX.Element {
       options: [],
     },
     {
+      name: LL().ClassificationPanel.classificationMethods.ckmeans(),
+      value: ClassificationMethod.ckmeans,
+      options: [OptionsClassification.numberOfClasses],
+    },
+    {
       name: LL().ClassificationPanel.classificationMethods.jenks(),
       value: ClassificationMethod.jenks,
       options: [OptionsClassification.numberOfClasses],

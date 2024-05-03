@@ -112,7 +112,7 @@
     "solid-sortablejs": "^2.1.2",
     "solid-toast": "^0.5.0",
     "solid-transition-group": "^0.2.3",
-    "statsbreaks": "^1.0.6",
+    "statsbreaks": "./../statsbreaks",
     "topojson-client": "^3.1.0",
     "topojson-server": "^3.0.1",
     "topojson-simplify": "^3.0.3",
