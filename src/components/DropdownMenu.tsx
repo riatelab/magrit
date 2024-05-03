@@ -167,8 +167,8 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
           'max-height': '30vh',
           overflow: 'auto',
           ...{
-            width: props.style?.width.includes('px') ? props.style.width : undefined,
-            position: props.style?.width.includes('px') ? 'fixed' : undefined,
+            width: props.style?.width && props.style.width.includes('px') ? props.style.width : undefined,
+            position: props.style?.width && props.style.width.includes('px') ? 'fixed' : undefined,
           },
         }}
       >
