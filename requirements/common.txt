@@ -1,4 +1,4 @@
-aiohttp == 3.8.3
+aiohttp == 3.9.4
 aiohttp-session == 2.9.0
 charset-normalizer == 2.0.12
 cryptography == 3.3.2
