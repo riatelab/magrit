@@ -1,6 +1,11 @@
 Changes
 =======
 
+0.16.5 (2024-05-04)
+-------------------
+
+- Update ``aiohttp`` dependency to fix some security issues.
+
 0.16.4 (2024-03-20)
 -------------------
 

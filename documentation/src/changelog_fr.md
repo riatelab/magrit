@@ -1,5 +1,9 @@
 # Historique des versions et des changements effectués
 
+#### 0.16.5 (2024-05-04)
+
+- Mise à jour de `aiohttp` pour corriger plusieurs problèmes de sécurité avec la version anciennement utilisée.
+
 #### 0.16.4 (2024-03-20)
 
 - Correction de certains liens vers la documentation pour l'utilisation dans docker (cf. discussion dans <a href="https://github.com/riatelab/magrit/issues/115">115</a>).

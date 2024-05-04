@@ -4,7 +4,7 @@
     "minify": "NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production ./node_modules/webpack/bin/webpack.js",
     "watch": "NODE_OPTIONS=--openssl-legacy-provider ./node_modules/webpack/bin/webpack.js --watch"
   },
-  "version": "0.16.4",
+  "version": "0.16.5",
   "node": ">=18.0.0",
   "dependencies": {
     "@turf/turf": "^6.5.0",
