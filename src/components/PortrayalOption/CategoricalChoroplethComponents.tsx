@@ -16,9 +16,13 @@ import Sortable from 'solid-sortablejs';
 import { useI18nContext } from '../../i18n/i18n-solid';
 
 // Types / Interfaces / Enums
-import { type CategoricalChoroplethMapping } from '../../global.d';
+import { type CategoricalChoroplethMapping, type CategoricalPictogramMapping } from '../../global.d';
 
-export function CategoriesSummary(props: { mapping: CategoricalChoroplethMapping[] }): JSX.Element {
+export function CategoriesSummary(
+  props: {
+    mapping: CategoricalChoroplethMapping[] | CategoricalPictogramMapping[],
+  },
+): JSX.Element {
   const { LL } = useI18nContext();
   const hasNull = createMemo(() => props.mapping.some((m) => m[0] === null));
   const nCategories = createMemo(() => props.mapping.length - (hasNull() ? 1 : 0));

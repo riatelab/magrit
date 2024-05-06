@@ -933,6 +933,10 @@ type RootTranslation = {
 			 */
 			CategoricalChoropleth: string
 			/**
+			 * C​a​t​e​g​o​r​i​c​a​l​ ​p​i​c​t​o​g​r​a​m​ ​m​a​p
+			 */
+			CategoricalPictogram: string
+			/**
 			 * S​m​o​o​t​h​e​d​ ​m​a​p
 			 */
 			Smoothed: string
@@ -1345,14 +1349,25 @@ type RootTranslation = {
 			 */
 			Count: string
 			/**
+			 * P​l​e​a​s​e​ ​n​o​t​e​ ​t​h​a​t​ ​t​h​e​ ​v​a​r​i​a​b​l​e​ ​s​e​l​e​c​t​e​d​ ​d​o​e​s​ ​n​o​t​ ​a​p​p​e​a​r​ ​t​o​ ​b​e​ ​c​a​t​e​g​o​r​i​c​a​l​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​t​h​a​t​ ​t​h​e​ ​v​a​r​i​a​b​l​e​ ​s​e​l​e​c​t​e​d​ ​i​s​ ​a​c​t​u​a​l​l​y​ ​c​a​t​e​g​o​r​i​c​a​l​ ​o​r​ ​c​h​o​o​s​e​ ​a​n​o​t​h​e​r​ ​v​a​r​i​a​b​l​e​.
+			 */
+			WarningNotCategoricalMessage: string
+			/**
 			 * C​a​t​e​g​o​r​i​c​a​l​_​C​h​o​r​o​p​l​e​t​h​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
 			 */
 			NewLayerName: RequiredParams<'layerName'>
+		}
+		CategoricalPictogramOptions: {
 			/**
-			 * P​l​e​a​s​e​ ​n​o​t​e​ ​t​h​a​t​ ​t​h​e​ ​v​a​r​i​a​b​l​e​ ​s​e​l​e​c​t​e​d​ ​d​o​e​s​ ​n​o​t​ ​a​p​p​e​a​r​ ​t​o​ ​b​e​ ​c​a​t​e​g​o​r​i​c​a​l​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​t​h​a​t​ ​t​h​e​ ​v​a​r​i​a​b​l​e​ ​s​e​l​e​c​t​e​d​ ​i​s​ ​a​c​t​u​a​l​l​y​ ​c​a​t​e​g​o​r​i​c​a​l​ ​o​r​ ​c​h​o​o​s​e​ ​a​n​o​t​h​e​r​ ​v​a​r​i​a​b​l​e​.
+			 * P​i​c​t​o​g​r​a​m​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
 			 */
-			WarningNotCategoricalMessage: string
+			NewLayerName: RequiredParams<'layerName'>
+			/**
+			 * C​h​o​o​s​e​ ​p​i​c​t​o​g​r​a​m​s​ ​a​n​d​ ​c​a​t​e​g​o​r​y​ ​n​a​m​e​s
+			 */
+			Customize: string
 		}
 		LabelsOptions: {
 			/**
@@ -2278,6 +2293,10 @@ type RootTranslation = {
 			 * A​ ​c​a​t​e​g​o​r​i​c​a​l​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​a​r​e​a​s​ ​a​r​e​ ​s​h​a​d​e​d​ ​o​r​ ​p​a​t​t​e​r​n​e​d​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​c​a​t​e​g​o​r​i​c​a​l​ ​v​a​r​i​a​b​l​e​.
 			 */
 			CategoricalChoropleth: string
+			/**
+			 * A​ ​c​a​t​e​g​o​r​i​c​a​l​ ​p​i​c​t​o​g​r​a​m​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​p​i​c​t​o​g​r​a​m​s​ ​a​r​e​ ​u​s​e​d​ ​t​o​ ​r​e​p​r​e​s​e​n​t​ ​d​i​f​f​e​r​e​n​t​ ​v​a​l​u​e​s​.
+			 */
+			CategoricalPictogram: string
 			/**
 			 * A​ ​s​m​o​o​t​h​e​d​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​ ​i​s​ ​s​m​o​o​t​h​e​d​ ​u​s​i​n​g​ ​a​ ​k​e​r​n​e​l​ ​d​e​n​s​i​t​y​ ​e​s​t​i​m​a​t​i​o​n​.
 			 */
@@ -3982,6 +4001,10 @@ export type TranslationFunctions = {
 			 */
 			CategoricalChoropleth: () => LocalizedString
 			/**
+			 * Categorical pictogram map
+			 */
+			CategoricalPictogram: () => LocalizedString
+			/**
 			 * Smoothed map
 			 */
 			Smoothed: () => LocalizedString
@@ -4386,13 +4409,23 @@ export type TranslationFunctions = {
 			 */
 			Count: () => LocalizedString
 			/**
-			 * Categorical_Choropleth_{layerName}
-			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
-			/**
 			 * Please note that the variable selected does not appear to be categorical. Please check that the variable selected is actually categorical or choose another variable.
 			 */
 			WarningNotCategoricalMessage: () => LocalizedString
+			/**
+			 * Categorical_Choropleth_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+		}
+		CategoricalPictogramOptions: {
+			/**
+			 * Pictogram_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			/**
+			 * Choose pictograms and category names
+			 */
+			Customize: () => LocalizedString
 		}
 		LabelsOptions: {
 			/**
@@ -5305,6 +5338,10 @@ export type TranslationFunctions = {
 			 * A categorical choropleth map is a thematic map in which areas are shaded or patterned in proportion to the value of a categorical variable.
 			 */
 			CategoricalChoropleth: () => LocalizedString
+			/**
+			 * A categorical pictogram map is a thematic map in which pictograms are used to represent different values.
+			 */
+			CategoricalPictogram: () => LocalizedString
 			/**
 			 * A smoothed map is a thematic map in which the value of a variable is smoothed using a kernel density estimation.
 			 */

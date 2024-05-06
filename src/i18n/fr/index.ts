@@ -259,6 +259,7 @@ const fr = {
       Labels: 'Étiquettes',
       Discontinuity: 'Discontinuité',
       CategoricalChoropleth: 'Choropleth catégorielle',
+      CategoricalPictogram: 'Carte catégorielle à pictogrammes',
       Smoothed: 'Carte lissée',
       Cartogram: 'Cartogramme',
       Grid: 'Carroyage',
@@ -366,7 +367,7 @@ const fr = {
     },
     CategoricalChoroplethOptions: {
       DisplayChartOnMap: 'Afficher le diagramme en barre par catégorie sur la carte',
-      Categories: '{{Une catégories | ?? catégories}}',
+      Categories: '{{Une catégorie | ?? catégories}}',
       HasNull: 'Contient des valeurs nulles ou non renseignées',
       NoNull: 'Pas de valeurs nulles ou non renseignées',
       ShowChart: 'Afficher le graphique',
@@ -375,8 +376,12 @@ const fr = {
       Customize: 'Personnaliser les couleurs et les noms de classes',
       Value: 'Valeur :',
       Count: 'Nombre : ',
-      NewLayerName: 'Choroplèthe_catégorielle_{layerName}',
       WarningNotCategoricalMessage: 'Attention, la variable sélectionnée ne semble pas être catégorielle. Veuillez vérifier que la variable choisie est bien catégorielle ou choisir une autre variable.',
+      NewLayerName: 'Choroplèthe_catégorielle_{layerName}',
+    },
+    CategoricalPictogramOptions: {
+      NewLayerName: 'Pictogramme_{layerName}',
+      Customize: 'Choisir les pictogrammes et les noms de catégories',
     },
     LabelsOptions: {
       Filter: 'Filtrer les étiquettes à créer',
@@ -629,6 +634,7 @@ const fr = {
       Labels: 'Une carte avec étiquettes est une carte thématique dans laquelle des étiquettes sont utilisées pour représenter des valeurs différentes.',
       Discontinuity: 'Une carte avec discontinuité est une carte thématique dans laquelle les discontinuités sont mises en évidence.',
       CategoricalChoropleth: 'Une carte choroplèthe catégorielle est une carte thématique dans laquelle les zones sont colorées ou ombrées en fonction de la valeur d\'une variable catégorielle.',
+      CategoricalPictogram: 'Une carte de pictogrammes catégoriels est une carte thématique dans laquelle des pictogrammes sont utilisés pour représenter des valeurs différentes.',
       Smoothed: 'Une carte lissée est une carte thématique dans laquelle les valeurs sont lissées pour une meilleure lisibilité.',
       Cartogram: 'Un cartogramme est une carte thématique dans laquelle les zones sont redimensionnées en fonction de la valeur d\'une variable statistique.',
       Grid: 'Un carroyage est une carte thématique dans laquelle les zones sont redimensionnées en fonction de la valeur d\'une variable statistique.',
@@ -662,7 +668,7 @@ const fr = {
   },
   ImageSymbolSelection: {
     Title: 'Sélection ou import d\'une image',
-    SelectImage: 'Sélectionner un symbol parmi ceux proposés ...',
+    SelectImage: 'Sélectionner un symbole parmi ceux proposés ...',
     UploadImage: 'Ou ajouter une image de votre choix (PNG ou SVG) ...',
     Browse: 'Parcourir ...',
     SelectedImage: 'Image sélectionnée :',

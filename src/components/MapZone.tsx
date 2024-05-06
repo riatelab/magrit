@@ -58,6 +58,7 @@ import smoothedMapRenderer from './MapRenderer/SmoothedMapRenderer.tsx';
 import gridRenderer from './MapRenderer/GridRenderer.tsx';
 import linksRenderer from './MapRenderer/LinksMapRenderer.tsx';
 import mushroomRenderer from './MapRenderer/MushroomsMapRenderer.tsx';
+import categoricalPictogramRenderer from './MapRenderer/CategoricalPictogramMapRenderer.tsx';
 
 // - for rendering the layout features
 import FreeDrawingRenderer from './LayoutFeatureRenderer/FreeDrawingRenderer.tsx';
@@ -115,6 +116,7 @@ import {
   type LinearRegressionScatterPlot,
   type MushroomsLegend,
   type ChoroplethHistogramLegend,
+  type LayerDescriptionCategoricalPictogram,
 } from '../global.d';
 
 // Styles
@@ -222,6 +224,8 @@ const dispatchMapRenderer = (layer: LayerDescription) => {
     return linksRenderer(layer as LayerDescriptionLinks);
   } else if (layer.renderer === 'mushrooms') {
     return mushroomRenderer(layer as LayerDescriptionMushroomLayer);
+  } else if (layer.renderer === 'categoricalPictogram') {
+    return categoricalPictogramRenderer(layer as LayerDescriptionCategoricalPictogram);
   }
   return null;
 };

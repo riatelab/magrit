@@ -36,6 +36,7 @@ import MessageBlock from '../MessageBlock.tsx';
 import SimplificationSettings from '../PortrayalOption/SimplificationSettings.tsx';
 import PointAggregationSettings from '../PortrayalOption/PointAggregationSettings.tsx';
 import LinearRegressionSettings from '../PortrayalOption/LinearRegressionSettings.tsx';
+import CategoricalPictogramSettings from '../PortrayalOption/CategoricalPictogramSettings.tsx';
 
 // Type / interfaces / enums
 import {
@@ -93,6 +94,10 @@ const functionalityDescriptions: FunctionalityDescription[] = [
   {
     name: 'Mushrooms',
     type: RepresentationType.mushrooms,
+  },
+  {
+    name: 'CategoricalPictogram',
+    type: RepresentationType.categoricalPictogram,
   },
   {
     name: 'PointAggregation',
@@ -221,6 +226,7 @@ export default function FunctionalitySelection(): JSX.Element {
         p.enabled = nFeatures > 1 && (vars.nRatio > 0 || vars.nStock > 0) && geomType === 'polygon';
         break;
       case RepresentationType.categoricalChoropleth:
+      case RepresentationType.categoricalPictogram:
         // eslint-disable-next-line no-param-reassign
         p.enabled = nFeatures > 1 && vars.nCategorical > 0;
         break;
@@ -403,6 +409,9 @@ export default function FunctionalitySelection(): JSX.Element {
             {/* eslint-disable-next-line max-len */}
             <Match when={selectedFunctionality()!.type === AnalysisOperationType.simpleLinearRegression}>
               <LinearRegressionSettings layerId={functionalitySelectionStore.id!} />
+            </Match>
+            <Match when={selectedFunctionality()!.type === RepresentationType.categoricalPictogram}>
+              <CategoricalPictogramSettings layerId={functionalitySelectionStore.id!} />
             </Match>
           </Switch>
         </Show>

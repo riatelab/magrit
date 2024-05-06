@@ -3,7 +3,13 @@ import { getColors } from 'dicopal';
 import { isNonNull } from './common';
 import { randomColor } from './color';
 
-import type { CategoricalChoroplethMapping, GeoJSONFeature } from '../global';
+import images from './symbol-library';
+
+import type {
+  CategoricalChoroplethMapping,
+  CategoricalPictogramMapping,
+  GeoJSONFeature,
+} from '../global';
 
 const selectDefaultColors = (n: number): string[] => {
   let colors;
@@ -53,3 +59,16 @@ export const makeCategoriesMapping = (
     }))
     .sort((a, b) => a.categoryName - b.categoryName);
 };
+
+export const makePictoCategoriesMapping = (
+  categories: Map<string | number | null, number>,
+): CategoricalPictogramMapping[] => Array.from(categories)
+  .map((c, i) => ({
+    value: c[0],
+    categoryName: c[0] ? String(c[0]) : null,
+    count: c[1],
+    iconType: 'SVG',
+    iconContent: images[i % images.length],
+    iconDimension: [50, 50],
+  } as CategoricalPictogramMapping))
+  .sort((a, b) => a.categoryName - b.categoryName);

@@ -11,7 +11,8 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { findSuitableName } from '../../helpers/common';
-import { makeCategoriesMap, makeCategoriesMapping } from '../../helpers/categorical';
+import { makeCategoriesMap, makePictoCategoriesMapping } from '../../helpers/categorical';
+import { coordsPointOnFeature } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
 import { generateIdLegend } from '../../helpers/legends';
 import { VariableType } from '../../helpers/typeDetection';
@@ -35,32 +36,25 @@ import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 import CollapsibleSection from '../CollapsibleSection.tsx';
-import {
-  CategoriesSummary,
-  CategoriesPlot,
-  CategoriesCustomisation,
-} from './CategoricalChoroplethComponents.tsx';
+import { CategoriesSummary } from './CategoricalChoroplethComponents.tsx';
+import { CategoriesCustomisation, CategoriesPlot } from './CategoricalPictogramComponents.tsx';
 import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
 import {
   type CategoricalChoroplethBarchartLegend,
-  type CategoricalChoroplethLegend,
-  type CategoricalChoroplethMapping,
-  type CategoricalChoroplethParameters,
-  type LayerDescriptionCategoricalChoropleth,
+  type CategoricalPictogramMapping, type CategoricalPictogramParameters,
+  type GeoJSONFeatureCollection, type GeoJSONPosition,
+  type LayerDescriptionCategoricalPictogram,
   type LegendTextElement,
-  LegendType,
-  Orientation,
-  RepresentationType,
+  LegendType, RepresentationType,
 } from '../../global.d';
 
 function onClickValidate(
   referenceLayerId: string,
   targetVariable: string,
   newName: string,
-  categoriesMapping: CategoricalChoroplethMapping[],
-  displayChartOnMap: boolean,
+  mapping: CategoricalPictogramMapping[],
 ): void {
   // The layer description of the reference layer
   const referenceLayerDescription = layersDescriptionStore.layers
@@ -73,122 +67,56 @@ function onClickValidate(
   // Generate ID for the new layer
   const newId = generateIdLayer();
 
+  // Copy dataset
+  const newData = JSON.parse(
+    JSON.stringify(
+      referenceLayerDescription.data,
+    ),
+  ) as GeoJSONFeatureCollection;
+
+  if (referenceLayerDescription.type !== 'point') {
+    newData.features.forEach((feature) => {
+      // eslint-disable-next-line no-param-reassign
+      feature.geometry = {
+        type: 'Point',
+        coordinates: coordsPointOnFeature(feature.geometry as never) as GeoJSONPosition,
+      };
+    });
+  }
+
   const newLayerDescription = {
     id: newId,
     name: newName,
-    data: referenceLayerDescription.data,
-    type: referenceLayerDescription.type,
+    data: newData,
+    type: 'point',
     fields: referenceLayerDescription.fields,
-    renderer: 'categoricalChoropleth' as RepresentationType,
+    renderer: 'categoricalPictogram' as RepresentationType,
     visible: true,
-    strokeColor: '#000000',
-    strokeWidth: 0.4,
-    strokeOpacity: 1,
-    fillOpacity: 1,
     dropShadow: null,
-    shapeRendering: referenceLayerDescription.shapeRendering,
+    shapeRendering: 'auto',
     rendererParameters: {
       variable: targetVariable,
-      noDataColor: applicationSettingsStore.defaultNoDataColor,
-      mapping: categoriesMapping,
-    } as CategoricalChoroplethParameters,
-  } as LayerDescriptionCategoricalChoropleth;
-
-  if (newLayerDescription.type === 'point') {
-    // We also need to transfert the symbolSize and the symbolType parameters
-    newLayerDescription.symbolSize = referenceLayerDescription.symbolSize || 5;
-    newLayerDescription.symbolType = referenceLayerDescription.symbolType || 'circle';
-  }
+      mapping,
+    } as CategoricalPictogramParameters,
+  } as LayerDescriptionCategoricalPictogram;
 
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(120, 340);
 
-  const legend = {
-    // Part common to all legends
-    id: generateIdLegend(),
-    layerId: newId,
-    title: {
-      text: targetVariable,
-      ...applicationSettingsStore.defaultLegendSettings.title,
-    } as LegendTextElement,
-    subtitle: {
-      text: undefined,
-      ...applicationSettingsStore.defaultLegendSettings.subtitle,
-    },
-    note: {
-      text: undefined,
-      ...applicationSettingsStore.defaultLegendSettings.note,
-    },
-    position: legendPosition,
-    visible: true,
-    roundDecimals: null,
-    backgroundRect: {
-      visible: false,
-    },
-    // Part specific to choropleth
-    type: LegendType.categoricalChoropleth,
-    orientation: Orientation.vertical,
-    boxWidth: 50,
-    boxHeight: 30,
-    boxSpacing: 5,
-    boxSpacingNoData: 5,
-    boxCornerRadius: 0,
-    labels: {
-      ...applicationSettingsStore.defaultLegendSettings.labels,
-    } as LegendTextElement,
-    noDataLabel: 'No data',
-    stroke: false,
-    tick: false,
-  } as CategoricalChoroplethLegend;
+  // TODO:
+  // const legend = {...};
 
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
-        draft.layoutFeaturesAndLegends.push(legend);
+        // draft.layoutFeaturesAndLegends.push(legend);
       },
     ),
   );
-
-  if (displayChartOnMap) {
-    // Add the chart to the layout
-    setLayersDescriptionStore(
-      produce(
-        (draft: LayersDescriptionStoreType) => {
-          draft.layoutFeaturesAndLegends.push({
-            id: generateIdLegend(),
-            layerId: newId,
-            type: LegendType.categoricalChoroplethBarchart,
-            position: [legendPosition[0] + 200, legendPosition[1]],
-            width: 300,
-            height: 250,
-            orientation: 'horizontal',
-            order: 'none',
-            fontColor: '#000000',
-            visible: true,
-            title: {
-              text: targetVariable,
-              ...applicationSettingsStore.defaultLegendSettings.title,
-            } as LegendTextElement,
-            subtitle: {
-              text: undefined,
-              ...applicationSettingsStore.defaultLegendSettings.subtitle,
-            },
-            note: {
-              text: undefined,
-              ...applicationSettingsStore.defaultLegendSettings.note,
-            },
-            backgroundRect: {
-              visible: false,
-            },
-          } as CategoricalChoroplethBarchartLegend);
-        },
-      ),
-    );
-  }
 }
 
-export default function CategoricalChoroplethSettings(props: PortrayalSettingsProps): JSX.Element {
+export default function CategoricalPictogramSettings(props: PortrayalSettingsProps): JSX.Element {
   const { LL } = useI18nContext();
 
   // The description of the layer for which we are creating the settings menu
@@ -199,7 +127,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
   const nbFt = layerDescription.data.features.length;
 
   // The fields of the layer that are of type 'categorical'
-  // (i.e. the fields that can be used for the categorical choropleth).
+  // (i.e. the fields that can be used for the categorical pictogram map).
   // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = layerDescription
     .fields.filter((variable) => variable.type === VariableType.categorical);
@@ -214,24 +142,26 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
-    LL().FunctionalitiesSection.CategoricalChoroplethOptions.NewLayerName({
+    LL().FunctionalitiesSection.CategoricalPictogramOptions.NewLayerName({
       layerName: layerDescription.name,
     }) as string,
   );
   const [
     categoriesMapping,
     setCategoriesMapping,
-  ] = createSignal<CategoricalChoroplethMapping[]>(
-    makeCategoriesMapping(makeCategoriesMap(layerDescription.data.features, targetVariable())),
+  ] = createSignal<CategoricalPictogramMapping[]>(
+    makePictoCategoriesMapping(
+      makeCategoriesMap(
+        layerDescription.data.features,
+        targetVariable(),
+      ),
+    ),
   );
-  const [
-    displayChartOnMap,
-    setDisplayChartOnMap,
-  ] = createSignal<boolean>(false);
+
   const makePortrayal = async () => {
     const layerName = findSuitableName(
       newLayerName() || LL().FunctionalitiesSection.NewLayer(),
-      layersDescriptionStore.layers.map((d) => d.name),
+      layersDescriptionStore.layers.map((l) => l.name),
     );
 
     // Close the current modal
@@ -242,35 +172,35 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
 
     await yieldOrContinue('smooth');
 
-    // Create the portrayal
+    // Create the new layer
     setTimeout(() => {
       onClickValidate(
         layerDescription.id,
         targetVariable(),
         layerName,
         categoriesMapping(),
-        displayChartOnMap(),
       );
+
       // Hide loading overlay
       setLoading(false);
 
       // Open the LayerManager to show the new layer
       openLayerManager();
-    }, 0);
+    });
   };
 
-  return <div class="portrayal-section__portrayal-options-choropleth">
+  return <div class="portrayal-section__portrayal-options-pictogram">
     <InputFieldSelect
       label={ LL().FunctionalitiesSection.CommonOptions.Variable() }
+      value={targetVariable()}
       onChange={(value) => {
         setTargetVariable(value);
         setCategoriesMapping(
-          makeCategoriesMapping(
+          makePictoCategoriesMapping(
             makeCategoriesMap(layerDescription.data.features, value),
           ),
         );
       }}
-      value={ targetVariable() }
     >
       <For each={targetFields}>
         { (variable) => <option value={variable.name}>{variable.name}</option> }
@@ -290,7 +220,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
       <CategoriesPlot mapping={categoriesMapping()} />
     </CollapsibleSection>
     <CollapsibleSection
-      title={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
+      title={LL().FunctionalitiesSection.CategoricalPictogramOptions.Customize()}
     >
       <CategoriesCustomisation
         mapping={categoriesMapping}
@@ -298,11 +228,6 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
         detailed={true}
       />
     </CollapsibleSection>
-    <InputFieldCheckbox
-      label={LL().FunctionalitiesSection.CategoricalChoroplethOptions.DisplayChartOnMap()}
-      checked={displayChartOnMap()}
-      onChange={(v) => { setDisplayChartOnMap(v); }}
-    />
     <InputResultName
       value={newLayerName()}
       onKeyUp={(value) => { setNewLayerName(value); }}

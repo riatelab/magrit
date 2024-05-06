@@ -262,6 +262,15 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
         r.setAttribute('x', `${projectedCoords[0] - size / 2}`);
         r.setAttribute('y', `${projectedCoords[1] - size / 2}`);
       });
+    } else if (typePortrayal === 'categoricalPictogram') {
+      g.querySelectorAll(':scope > g').forEach((gg) => {
+        const iconDimension = JSON.parse(gg.getAttribute('mgt:icon-dimension')!);
+        const projectedCoords = globalStore.projection(
+          // eslint-disable-next-line no-underscore-dangle
+          (gg as SVGGElement & ID3Element).__data__.geometry.coordinates,
+        );
+        gg.setAttribute('transform', `translate(${projectedCoords[0] - iconDimension[0] / 2}, ${projectedCoords[1] - iconDimension[1] / 2})`);
+      });
     } else if (typePortrayal === 'mushrooms') {
       const pos = ['top', 'bottom'];
       // Redraw the symbols (circles)

@@ -81,6 +81,7 @@ type LayerDescription = {
     | SmoothedLayerParameters
     | LinksParameters
     | MushroomsParameters
+    | CategoricalPictogramParameters
     // | DefaultRendererParameters
   ),
 };
@@ -221,10 +222,10 @@ type LayerDescriptionMushroomLayer = LayerDescription & {
 //   rendererParameters: GriddedLayerParameters,
 // };
 //
-// type LayerDescriptionCategoricalPictogram = LayerDescription & {
-//   renderer: RepresentationType.categoricalPictogram,
-//   rendererParameters: CategoricalPictogramParameters,
-// };
+type LayerDescriptionCategoricalPictogram = LayerDescription & {
+  renderer: RepresentationType.categoricalPictogram,
+  rendererParameters: CategoricalPictogramParameters,
+};
 
 type SymbolType = 'circle' | 'square' | 'diamond' | 'diamond2' | 'cross' | 'triangle' | 'star';
 
@@ -507,13 +508,28 @@ interface SmoothedLayerParameters {
   breaks: number[],
 }
 
+interface CategoricalPictogramMapping {
+  // The value of the variable
+  value: string | number | null,
+  // The corresponding category name (might be edited by the user)
+  categoryName: string | null,
+  // The image content (either the base64 content of the PNG or the SVG content)
+  iconContent: string,
+  // The type of image
+  iconType: ImageType,
+  // The dimension of the image
+  iconDimension: [number, number],
+  // The number of values for this category
+  count: number,
+}
+
 interface CategoricalPictogramParameters {
   // The name of the variable used to compute the pictogram
   variable: string,
   // The mapping between categories and icons,
   // stored as an array of [category, categoryName, icon] tuples,
   // one per category.
-  mapping: [string | number, string, string][],
+  mapping: CategoricalPictogramMapping[],
 }
 
 interface LinksParameters {

@@ -16,7 +16,7 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { makeCategoriesMap, makeCategoriesMapping } from '../../helpers/categorical-choropleth';
+import { makeCategoriesMap, makeCategoriesMapping } from '../../helpers/categorical';
 import { randomColorFromCategoricalPalette } from '../../helpers/color';
 import {
   descendingKeyAccessor,
