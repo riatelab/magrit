@@ -112,7 +112,7 @@ export default function AggregationSettings(
   const [
     aggregationMethod,
     setAggregationMethod,
-  ] = createSignal<'topojson' | 'geos'>('topojson');
+  ] = createSignal<'topojson' | 'geos'>('geos');
 
   const makePortrayal = async () => {
     // Check name of the new layer
@@ -169,6 +169,7 @@ export default function AggregationSettings(
         }
       </For>
     </InputFieldSelect>
+    {/*
     <InputFieldSelect
       label={ LL().FunctionalitiesSection.AggregationOptions.Method() }
       onChange={(v) => { setAggregationMethod(v as 'geos' | 'topojson'); }}
@@ -177,6 +178,7 @@ export default function AggregationSettings(
       <option value="geos">GEOS</option>
       <option value="topojson">TopoJSON</option>
     </InputFieldSelect>
+    */}
     <Show when={targetVariable() === ''}>
       <MessageBlock type={'warning'} useIcon={true}>
         { LL().FunctionalitiesSection.AggregationOptions.Information() }
