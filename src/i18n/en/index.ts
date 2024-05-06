@@ -4,6 +4,7 @@ const en = {
   StartApplication: 'Start Application',
   SuccessButton: 'Confirm',
   CancelButton: 'Cancel',
+  ApplyButton: 'Apply',
   Alerts: {
     DeleteLayer: 'Delete layer',
     DeleteTable: 'Delete table',

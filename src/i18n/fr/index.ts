@@ -4,6 +4,7 @@ const fr = {
   StartApplication: 'Démarrer l\'Application',
   SuccessButton: 'Confirmation',
   CancelButton: 'Annulation',
+  ApplyButton: 'Appliquer',
   Alerts: {
     DeleteLayer: 'Supprimer la couche',
     DeleteTable: 'Supprimer le tableau',
@@ -450,7 +451,7 @@ const fr = {
     PointAggregationOptions: {
       MapType: 'Type de carte',
       MapTypeRatio: 'Carte choroplèthe (ratio)',
-      MapTypeStock: 'Carte en symbols proportionnels (stock)',
+      MapTypeStock: 'Carte en symboles proportionnels (stock)',
       MeshType: 'Type de maillage',
       MeshTypeGrid: 'Grille régulière',
       MeshTypePolygonLayer: 'Couche existante',

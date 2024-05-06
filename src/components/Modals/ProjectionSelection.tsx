@@ -304,7 +304,7 @@ export default function ProjectionSelection() : JSX.Element {
                   },
                 );
               }}
-            >Apply
+            >{LL().ApplyButton()}
             </button>
           </div>
         </Show>
@@ -414,7 +414,7 @@ export default function ProjectionSelection() : JSX.Element {
                         },
                       );
                     }}
-                  >Apply
+                  >{LL().ApplyButton()}
                   </button>
                 </div>
               </Show>

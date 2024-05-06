@@ -26,6 +26,10 @@ type RootTranslation = {
 	 * C​a​n​c​e​l
 	 */
 	CancelButton: string
+	/**
+	 * A​p​p​l​y
+	 */
+	ApplyButton: string
 	Alerts: {
 		/**
 		 * D​e​l​e​t​e​ ​l​a​y​e​r
@@ -3105,6 +3109,10 @@ export type TranslationFunctions = {
 	 * Cancel
 	 */
 	CancelButton: () => LocalizedString
+	/**
+	 * Apply
+	 */
+	ApplyButton: () => LocalizedString
 	Alerts: {
 		/**
 		 * Delete layer

@@ -213,7 +213,7 @@ export function IconSelectionOverlay(
           });
           props.close();
         }}
-      >Apply</button>
+      >{LL().ApplyButton()}</button>
     </div>
   </div>;
 }
