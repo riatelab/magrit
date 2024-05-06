@@ -108,7 +108,8 @@ export const computeGriddedLayer = async (
   // When some cells are clipped, we may occasionally have some cells that are not polygons
   // (but points, because the topological dimension of the resulting intersection is 0
   // so we only have contact between the grid and the input layer on point(s)).
-  clippedGrid.features = clippedGrid.features.filter((d) => d.geometry?.type === 'Polygon');
+  clippedGrid.features = clippedGrid.features.filter((d) => (
+    d.geometry?.type === 'Polygon' || d.geometry?.type === 'MultiPolygon'));
 
   // Area function
   const areaFn = isGeo ? area : planarArea;
