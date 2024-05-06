@@ -235,11 +235,16 @@ export function CategoriesCustomisation(
     setIcon:(icon: { type: ImageType, content: string }) => void,
     close: () => void,
   } | null>(null);
+  const [
+    disabled,
+    setDisabled,
+  ] = createSignal<boolean>(false);
   return <div>
     <Sortable
       items={props.mapping()}
       setItems={props.setMapping as any}
       idField={'value'}
+      disabled={disabled()}
     >
       {
         (item) => <div>
@@ -252,7 +257,7 @@ export function CategoriesCustomisation(
               gap: '0.3em',
             }}
           >
-            <BsThreeDotsVertical />
+            <BsThreeDotsVertical style={{ cursor: 'grab' }} />
             <div
               style={{
                 display: 'inline-block',
@@ -292,7 +297,10 @@ export function CategoriesCustomisation(
                     .map((m) => (
                       m.value === item.value ? { ...m, categoryName: e.target.value } : m)),
                 );
+                setDisabled(false);
               }}
+              onFocus={() => { setDisabled(true); }}
+              onFocusOut={() => { setDisabled(false); }}
             />
             <div
               style={{
@@ -319,7 +327,10 @@ export function CategoriesCustomisation(
                           : m
                       )),
                   );
+                  setDisabled(false);
                 }}
+                onFocus={() => { setDisabled(true); }}
+                onFocusOut={() => { setDisabled(false); }}
               />
               px
             </div>

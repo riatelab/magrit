@@ -1,9 +1,7 @@
 // Imports from solid-js
 import {
-  createMemo,
-  JSX,
-  mergeProps,
-  Show,
+  createMemo, createSignal,
+  JSX, mergeProps, Show,
 } from 'solid-js';
 
 // Import from other libraries
@@ -115,18 +113,24 @@ export function CategoriesCustomisation(
   },
 ): JSX.Element {
   const { LL } = useI18nContext();
+  const [
+    disabled,
+    setDisabled,
+  ] = createSignal<boolean>(false);
+
   return <div>
     <Sortable
       items={props.mapping()}
       setItems={props.setMapping as any}
       idField={'value'}
+      disabled={disabled()}
     >
       {
         (item) => <div>
           <div
             style={{ width: '100%', border: 'solid 0.5px currentColor' }}
           >
-            <BsThreeDotsVertical />
+            <BsThreeDotsVertical style={{ cursor: 'grab' }} />
             <input
               type="color"
               style={{ height: '2em', 'vertical-align': 'bottom' }}
@@ -148,7 +152,10 @@ export function CategoriesCustomisation(
                     .map((m) => (
                       m.value === item.value ? { ...m, categoryName: e.target.value } : m)),
                 );
+                setDisabled(false);
               }}
+              onFocus={() => { setDisabled(true); }}
+              onFocusOut={() => { setDisabled(false); }}
             />
             <Show when={props.detailed}>
               <span>
