@@ -376,6 +376,7 @@ const fr = {
       Value: 'Valeur :',
       Count: 'Nombre : ',
       NewLayerName: 'Choroplèthe_catégorielle_{layerName}',
+      WarningNotCategoricalMessage: 'Attention, la variable sélectionnée ne semble pas être catégorielle. Veuillez vérifier que la variable choisie est bien catégorielle ou choisir une autre variable.',
     },
     LabelsOptions: {
       Filter: 'Filtrer les étiquettes à créer',

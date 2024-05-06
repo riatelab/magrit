@@ -376,6 +376,7 @@ const en = {
       Value: 'Value:',
       Count: 'Count:',
       NewLayerName: 'Categorical_Choropleth_{layerName}',
+      WarningNotCategoricalMessage: 'Please note that the variable selected does not appear to be categorical. Please check that the variable selected is actually categorical or choose another variable.',
     },
     LabelsOptions: {
       Filter: 'Filter the labels to create',

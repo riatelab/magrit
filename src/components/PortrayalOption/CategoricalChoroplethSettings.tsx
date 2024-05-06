@@ -1,8 +1,7 @@
 // Import from solid-js
 import {
-  createSignal,
-  For,
-  type JSX,
+  createSignal, For,
+  type JSX, Show,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
@@ -41,6 +40,7 @@ import {
   CategoriesPlot,
   CategoriesCustomisation,
 } from './CategoricalChoroplethComponents.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
 import {
@@ -54,8 +54,6 @@ import {
   Orientation,
   RepresentationType,
 } from '../../global.d';
-
-const defaultNoDataColor = '#ffffff';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -91,7 +89,7 @@ function onClickValidate(
     shapeRendering: referenceLayerDescription.shapeRendering,
     rendererParameters: {
       variable: targetVariable,
-      noDataColor: defaultNoDataColor,
+      noDataColor: applicationSettingsStore.defaultNoDataColor,
       mapping: categoriesMapping,
     } as CategoricalChoroplethParameters,
   } as LayerDescriptionCategoricalChoropleth;
@@ -197,6 +195,9 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
   const layerDescription = layersDescriptionStore.layers
     .find((l) => l.id === props.layerId)!;
 
+  // The number of features in the layer
+  const nbFt = layerDescription.data.features.length;
+
   // The fields of the layer that are of type 'ratio'
   // (i.e. the fields that can be used for the choropleth).
   // We know that we have such fields because otherwise this component would not be rendered.
@@ -276,6 +277,13 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
       </For>
     </InputFieldSelect>
     <CategoriesSummary mapping={categoriesMapping()} />
+    <Show when={categoriesMapping()!.length === 1 || categoriesMapping()!.length === nbFt}>
+      <MessageBlock type={'warning'}>
+        <p>{
+          LL().FunctionalitiesSection.CategoricalChoroplethOptions.WarningNotCategoricalMessage()
+        }</p>
+      </MessageBlock>
+    </Show>
     <CollapsibleSection
       title={LL().FunctionalitiesSection.CategoricalChoroplethOptions.ShowChart()}
     >

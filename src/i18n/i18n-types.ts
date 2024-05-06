@@ -1349,6 +1349,10 @@ type RootTranslation = {
 			 * @param {unknown} layerName
 			 */
 			NewLayerName: RequiredParams<'layerName'>
+			/**
+			 * P​l​e​a​s​e​ ​n​o​t​e​ ​t​h​a​t​ ​t​h​e​ ​v​a​r​i​a​b​l​e​ ​s​e​l​e​c​t​e​d​ ​d​o​e​s​ ​n​o​t​ ​a​p​p​e​a​r​ ​t​o​ ​b​e​ ​c​a​t​e​g​o​r​i​c​a​l​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​t​h​a​t​ ​t​h​e​ ​v​a​r​i​a​b​l​e​ ​s​e​l​e​c​t​e​d​ ​i​s​ ​a​c​t​u​a​l​l​y​ ​c​a​t​e​g​o​r​i​c​a​l​ ​o​r​ ​c​h​o​o​s​e​ ​a​n​o​t​h​e​r​ ​v​a​r​i​a​b​l​e​.
+			 */
+			WarningNotCategoricalMessage: string
 		}
 		LabelsOptions: {
 			/**
@@ -4385,6 +4389,10 @@ export type TranslationFunctions = {
 			 * Categorical_Choropleth_{layerName}
 			 */
 			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			/**
+			 * Please note that the variable selected does not appear to be categorical. Please check that the variable selected is actually categorical or choose another variable.
+			 */
+			WarningNotCategoricalMessage: () => LocalizedString
 		}
 		LabelsOptions: {
 			/**
