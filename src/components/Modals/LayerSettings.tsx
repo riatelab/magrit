@@ -30,6 +30,9 @@ import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
 import InputFieldButton from '../Inputs/InputButton.tsx';
 import { CategoriesCustomisation } from '../PortrayalOption/CategoricalChoroplethComponents.tsx';
+import {
+  CategoriesCustomisation as CategoriesCustomisationPicto,
+} from '../PortrayalOption/CategoricalPictogramComponents.tsx';
 import { LinksSelectionOnExistingLayer } from '../PortrayalOption/LinksComponents.tsx';
 
 // Stores
@@ -76,6 +79,8 @@ import {
   CustomPalette,
   type GeoJSONFeature,
   type ProportionalSymbolSingleColorParameters,
+  type LayerDescriptionCategoricalPictogram,
+  type CategoricalPictogramParameters,
 } from '../../global.d';
 
 // Styles
@@ -171,6 +176,27 @@ function AestheticsSection(props: LayerDescription): JSX.Element {
       />
     </Show>
   </div>;
+}
+
+function makeSettingsPictograms(
+  props: LayerDescriptionCategoricalPictogram,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  return <>
+    <DetailsSummary
+      summaryContent={LL().FunctionalitiesSection.CategoricalPictogramOptions.Customize()}
+    >
+      <CategoriesCustomisationPicto
+        mapping={() => (
+          props.rendererParameters! as CategoricalPictogramParameters).mapping
+        }
+        setMapping={(m) => {
+          updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
+        }}
+        detailed={false}
+      />
+    </DetailsSummary>
+  </>;
 }
 
 function makeSettingsLabels(
@@ -1447,6 +1473,11 @@ export default function LayerSettings(
   let innerElement;
   if (layerDescription.renderer === 'labels') {
     innerElement = makeSettingsLabels(layerDescription as LayerDescriptionLabels, LL);
+  } else if (layerDescription.renderer === 'categoricalPictogram') {
+    innerElement = makeSettingsPictograms(
+      layerDescription as LayerDescriptionCategoricalPictogram,
+      LL,
+    );
   } else {
     innerElement = {
       point: makeSettingsDefaultPoint,

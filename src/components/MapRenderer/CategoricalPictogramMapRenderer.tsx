@@ -27,11 +27,10 @@ export default function categoricalPictogramRenderer(
   layerDescription: LayerDescriptionCategoricalPictogram,
 ): JSX.Element {
   let refElement: SVGGElement;
-  const rendererParameters = layerDescription.rendererParameters as CategoricalPictogramParameters;
 
   const symbolMap = createMemo(
     () => new Map<string | number | null | undefined, [string, string, [number, number]]>(
-      rendererParameters.mapping
+      layerDescription.rendererParameters.mapping
         .map(({
           value,
           iconContent,
@@ -59,28 +58,30 @@ export default function categoricalPictogramRenderer(
     <For each={layerDescription.data.features}>
       {
         (feature) => {
+          const icon = createMemo(() => symbolMap()
+            .get(feature.properties[layerDescription.rendererParameters.variable]));
           const projectedCoords = createMemo(
-            () => globalStore.projection(feature.geometry.coordinates),
+            () => globalStore.projection(feature.geometry.coordinates)
+              .map((d, i) => d - icon()[2][i] / 2),
           );
-          const icon = symbolMap().get(feature.properties[rendererParameters.variable]);
-          if (!icon) return <></>;
-          if (icon[0] === 'SVG') {
+          if (!icon()) return <></>;
+          if (icon()[0] === 'SVG') {
             return <g
-              transform={`translate(${projectedCoords()[0] - icon[2][0] / 2}, ${projectedCoords()[1] - icon[2][1] / 2})`}
-              mgt:icon-dimension={JSON.stringify(icon[2])}
+              transform={`translate(${projectedCoords()[0]}, ${projectedCoords()[1]})`}
+              mgt:icon-dimension={JSON.stringify(icon()[2])}
               // @ts-expect-error because use:bind-data isn't a property of this element
               use:bindData={feature}
               // eslint-disable-next-line solid/no-innerhtml
-              innerHTML={icon[1].replace('<svg ', `<svg width="${icon[2][0]}" height="${icon[2][1]}"`)}
+              innerHTML={icon()[1].replace('<svg ', `<svg width="${icon()[2][0]}" height="${icon()[2][1]}"`)}
             />;
           }
           return <g
-            transform={`translate(${projectedCoords()[0] - icon[2][0] / 2}, ${projectedCoords()[1] - icon[2][1] / 2})`}
-            mgt:icon-dimension={JSON.stringify(icon[2])}
+            transform={`translate(${projectedCoords()[0]}, ${projectedCoords()[1]})`}
+            mgt:icon-dimension={JSON.stringify(icon()[2])}
             // @ts-expect-error because use:bind-data isn't a property of this element
             use:bindData={feature}
           >
-            <image width={icon[2][0]} height={icon[2][1]} href={icon[1]}/>
+            <image width={icon()[2][0]} height={icon()[2][1]} href={icon()[1]}/>
           </g>;
         }
       }
