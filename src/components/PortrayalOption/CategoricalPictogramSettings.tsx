@@ -42,8 +42,9 @@ import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
 import {
-  type CategoricalChoroplethBarchartLegend,
-  type CategoricalPictogramMapping, type CategoricalPictogramParameters,
+  type CategoricalPictogramLegend,
+  type CategoricalPictogramMapping,
+  type CategoricalPictogramParameters,
   type GeoJSONFeatureCollection, type GeoJSONPosition,
   type LayerDescriptionCategoricalPictogram,
   type LegendTextElement,
@@ -103,14 +104,41 @@ function onClickValidate(
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(120, 340);
 
-  // TODO:
-  // const legend = {...};
+  const legend = {
+    // Legend common part
+    id: generateIdLegend(),
+    layerId: newId,
+    title: {
+      text: targetVariable,
+      ...applicationSettingsStore.defaultLegendSettings.title,
+    } as LegendTextElement,
+    subtitle: {
+      text: 'This is a subtitle',
+      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+    } as LegendTextElement,
+    note: {
+      text: 'This is a bottom note',
+      ...applicationSettingsStore.defaultLegendSettings.note,
+    } as LegendTextElement,
+    position: legendPosition,
+    visible: true,
+    roundDecimals: 0,
+    backgroundRect: {
+      visible: false,
+    },
+    // Part specific to categorical pictogram legends
+    type: LegendType.categoricalPictogram,
+    spacing: 10,
+    labels: {
+      ...applicationSettingsStore.defaultLegendSettings.labels,
+    },
+  } as CategoricalPictogramLegend;
 
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
-        // draft.layoutFeaturesAndLegends.push(legend);
+        draft.layoutFeaturesAndLegends.push(legend);
       },
     ),
   );

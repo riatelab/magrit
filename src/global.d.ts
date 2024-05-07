@@ -902,6 +902,15 @@ interface LinearRegressionScatterPlot extends LegendBase {
   fontColor: string,
 }
 
+interface CategoricalPictogramLegend extends LegendBase {
+  type: LegendType.categoricalPictogram,
+  // The spacing between the symbols when the legend is not stacked
+  // (i.e. when the layout is horizontal or vertical)
+  spacing: number,
+  // The text properties of the labels
+  labels: LegendTextElement,
+}
+
 export type Legend = (
   ChoroplethLegend
   | CategoricalChoroplethLegend
@@ -913,6 +922,7 @@ export type Legend = (
   | CategoricalChoroplethBarchartLegend
   | ChoroplethHistogramLegend
   | LinearRegressionScatterPlot
+  | CategoricalPictogramLegend
 );
 
 export enum NumberFormatting {
@@ -935,7 +945,7 @@ export enum LegendType {
   choropleth = 'choropleth',
   proportional = 'proportional',
   categoricalChoropleth = 'categoricalChoropleth',
-  categorical = 'categorical',
+  categoricalPictogram = 'categoricalPictogram',
   discontinuity = 'discontinuity',
   labels = 'labels',
   waffle = 'waffle',

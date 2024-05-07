@@ -84,6 +84,7 @@ import legendMushrooms from './LegendRenderer/MushroomsLegendRenderer.tsx';
 import legendCategoricalChoroplethBarchart from './LegendRenderer/CategoricalChoroplethBarchartLegend.tsx';
 import legendChoroplethHistogram from './LegendRenderer/ChoroplethHistogramLegend.tsx';
 import lmScatterPlot from './LegendRenderer/LMScatterPlotRenderer.tsx';
+import legendCategoricalPictogram from './LegendRenderer/CategoricalPictogramLegendRenderer.tsx';
 
 // Types and enums
 import {
@@ -186,6 +187,9 @@ const dispatchLegendRenderer = (legend: Legend) => {
   }
   if (legend.type === 'linearRegressionScatterPlot') {
     return lmScatterPlot(legend as LinearRegressionScatterPlot);
+  }
+  if (legend.type === 'categoricalPictogram') {
+    return legendCategoricalPictogram(legend as CategoricalPictogramLegend);
   }
   return null;
 };
