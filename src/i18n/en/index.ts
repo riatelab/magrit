@@ -464,6 +464,7 @@ const en = {
       ComputationTypeStandardDeviation: 'Standard deviation',
       LayerToUse: 'Layer to use',
       VariableToUse: 'Numerical variable to use',
+      FilterEmptyCells: 'Filter empty cells',
       NewLayerName: 'Aggregated_points_{layerName}',
     },
     LayerFromTableOptions: {

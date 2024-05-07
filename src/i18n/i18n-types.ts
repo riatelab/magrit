@@ -1661,6 +1661,10 @@ type RootTranslation = {
 			 */
 			VariableToUse: string
 			/**
+			 * F​i​l​t​e​r​ ​e​m​p​t​y​ ​c​e​l​l​s
+			 */
+			FilterEmptyCells: string
+			/**
 			 * A​g​g​r​e​g​a​t​e​d​_​p​o​i​n​t​s​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
 			 */
@@ -4716,6 +4720,10 @@ export type TranslationFunctions = {
 			 * Numerical variable to use
 			 */
 			VariableToUse: () => LocalizedString
+			/**
+			 * Filter empty cells
+			 */
+			FilterEmptyCells: () => LocalizedString
 			/**
 			 * Aggregated_points_{layerName}
 			 */

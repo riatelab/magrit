@@ -464,6 +464,7 @@ const fr = {
       ComputationTypeStandardDeviation: 'Écart-type',
       LayerToUse: 'Couche à utiliser',
       VariableToUse: 'Variable numérique à utiliser',
+      FilterEmptyCells: 'Filtrer les cellules vides',
       NewLayerName: 'Points_agrégés_{layerName}',
     },
     LayerFromTableOptions: {

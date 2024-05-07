@@ -70,12 +70,14 @@ import {
   RepresentationType,
 } from '../../global.d';
 import type { Variable } from '../../helpers/typeDetection';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 function onClickValidate(
   referenceLayerId: string,
   typeLayerToCreate: 'choropleth' | 'proportionalSymbols',
   computationType: PointAggregationStockType | PointAggregationRatioType,
   meshParams: GridParameters & { cellType: GridCellShape } | string,
+  filterEmptyCells: boolean,
   targetVariable: string,
   newName: string,
 ) {
@@ -118,6 +120,11 @@ function onClickValidate(
       computationType,
       targetVariable,
     );
+
+    if (filterEmptyCells) {
+      resultLayer.features = resultLayer.features
+        .filter((d) => d.properties[computationType] !== 0);
+    }
 
     fields = [{
       name: computationType,
@@ -414,6 +421,10 @@ export default function PointAggregationSettings(props: PortrayalSettingsProps):
     targetResolution,
     setTargetResolution,
   ] = createSignal<number>(appropriateResolution);
+  const [
+    filterEmptyCells,
+    setFilterEmptyCells,
+  ] = createSignal<boolean>(false);
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
@@ -445,6 +456,7 @@ export default function PointAggregationSettings(props: PortrayalSettingsProps):
         layerType(),
         computationType()!,
         meshParams,
+        filterEmptyCells(),
         targetVariable(),
         layerName,
       );
@@ -585,6 +597,11 @@ export default function PointAggregationSettings(props: PortrayalSettingsProps):
         min={0}
         max={500}
         step={0.1}
+      />
+      <InputFieldCheckbox
+        label={LL().FunctionalitiesSection.PointAggregationOptions.FilterEmptyCells()}
+        checked={filterEmptyCells()}
+        onChange={(v) => { setFilterEmptyCells(v); }}
       />
       <Show when={isGeo}>
         <MessageBlock type={'warning'} useIcon={true}>
