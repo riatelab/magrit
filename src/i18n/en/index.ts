@@ -738,8 +738,8 @@ const en = {
     classificationMethods: {
       equalIntervals: 'Equal intervals',
       quantiles: 'Quantiles',
-      ckmeans: 'CKMeans',
-      jenks: 'Jenks',
+      ckmeans: 'Natural breaks (CKMeans)',
+      jenks: 'Natural breaks (Jenks)',
       standardDeviation: 'Standard deviation',
       q6: 'Q6',
       pretty: 'Pretty',
@@ -752,7 +752,7 @@ const en = {
     classificationMethodLegendDescriptions: {
       equalIntervals: 'Classified using equal intervals',
       quantiles: 'Classified using quantiles',
-      ckmeans: 'Classified using the CKMeans algorithm',
+      ckmeans: 'Classified using natural breaks (CKMeans)',
       jenks: 'Classified using natural breaks (Jenks)',
       standardDeviation: 'Classified using mean and standard deviation',
       q6: 'Classified using the Q6 method',

@@ -7,6 +7,7 @@ import { useI18nContext } from '../i18n/i18n-solid';
 
 // D3 and math helpers
 import d3 from '../helpers/d3-custom';
+import { pickTextColorBasedOnBgColor } from '../helpers/color';
 import {
   extent,
   lowerQuartile,
@@ -45,24 +46,18 @@ export function makeColoredBucketPlot(
           stroke: 'silver',
         },
       ),
-      Plot.rect(
-        colorNbIndiv,
-        {
-          fill: 'white',
-          x1: (d, i) => i * 10 + 3,
-          x2: (d, i) => i * 10 + 7,
-          y1: 2.5,
-          y2: 7.5,
-        },
-      ),
       Plot.text(
         colorNbIndiv,
         {
-          text: 'nb',
+          text: (d) => d.nb.toLocaleString(),
           x: (d, i) => i * 10 + 5,
           textAnchor: 'middle',
           frameAnchor: 'middle',
           fontSize: 16,
+          fill: (d) => pickTextColorBasedOnBgColor(d.color, '#fefefe', '#333333'),
+          stroke: (d) => pickTextColorBasedOnBgColor(d.color, '#333333', '#fefefe'),
+          strokeWidth: 1.5,
+          fontWeight: 'bold',
         },
       ),
     ],
@@ -138,6 +133,7 @@ export function makeClassificationPlot(
             y: false,
             x: false,
           },
+          fill: 'var(--bulma-background)',
         },
       }),
       show.mean

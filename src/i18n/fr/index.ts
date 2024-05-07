@@ -738,8 +738,8 @@ const fr = {
     classificationMethods: {
       equalIntervals: 'Intervals égaux',
       quantiles: 'Quantiles',
-      ckmeans: 'CKMeans',
-      jenks: 'Jenks',
+      ckmeans: 'Seuils naturels (CKMeans)',
+      jenks: 'Seuils naturels (Jenks)',
       standardDeviation: 'Écart-type',
       q6: 'Q6',
       pretty: 'Pretty breaks',
@@ -752,8 +752,8 @@ const fr = {
     classificationMethodLegendDescriptions: {
       equalIntervals: 'Discrétisation en intervalles égaux',
       quantiles: 'Discrétisation en quantiles',
-      ckmeans: 'Discrétisation avec l\'algorithme CKMeans',
-      jenks: 'Discrétisation avec ma méthodes des seuils naturels (Jenks)',
+      ckmeans: 'Discrétisation avec la méthodes des seuils naturels (CKMeans)',
+      jenks: 'Discrétisation avec la méthodes des seuils naturels (Jenks)',
       standardDeviation: 'Discrétisation avec la méthode de la moyenne et des écart-types',
       q6: 'Discrétisation avec la méthode Q6',
       pretty: 'Discrétisation avec la méthode "pretty breaks"',

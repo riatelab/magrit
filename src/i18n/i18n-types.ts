@@ -2659,11 +2659,11 @@ type RootTranslation = {
 			 */
 			quantiles: string
 			/**
-			 * C​K​M​e​a​n​s
+			 * N​a​t​u​r​a​l​ ​b​r​e​a​k​s​ ​(​C​K​M​e​a​n​s​)
 			 */
 			ckmeans: string
 			/**
-			 * J​e​n​k​s
+			 * N​a​t​u​r​a​l​ ​b​r​e​a​k​s​ ​(​J​e​n​k​s​)
 			 */
 			jenks: string
 			/**
@@ -2709,7 +2709,7 @@ type RootTranslation = {
 			 */
 			quantiles: string
 			/**
-			 * C​l​a​s​s​i​f​i​e​d​ ​u​s​i​n​g​ ​t​h​e​ ​C​K​M​e​a​n​s​ ​a​l​g​o​r​i​t​h​m
+			 * C​l​a​s​s​i​f​i​e​d​ ​u​s​i​n​g​ ​n​a​t​u​r​a​l​ ​b​r​e​a​k​s​ ​(​C​K​M​e​a​n​s​)
 			 */
 			ckmeans: string
 			/**
@@ -5705,11 +5705,11 @@ export type TranslationFunctions = {
 			 */
 			quantiles: () => LocalizedString
 			/**
-			 * CKMeans
+			 * Natural breaks (CKMeans)
 			 */
 			ckmeans: () => LocalizedString
 			/**
-			 * Jenks
+			 * Natural breaks (Jenks)
 			 */
 			jenks: () => LocalizedString
 			/**
@@ -5755,7 +5755,7 @@ export type TranslationFunctions = {
 			 */
 			quantiles: () => LocalizedString
 			/**
-			 * Classified using the CKMeans algorithm
+			 * Classified using natural breaks (CKMeans)
 			 */
 			ckmeans: () => LocalizedString
 			/**
