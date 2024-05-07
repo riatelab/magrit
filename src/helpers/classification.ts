@@ -95,6 +95,7 @@ export function prepareStatisticalSummary(series: number[]) {
 
   return {
     population: series.length,
+    unique: new Set(series).size,
     minimum: min,
     maximum: max,
     mean: d3.mean(series) as number,

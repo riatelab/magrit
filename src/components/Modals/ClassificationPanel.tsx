@@ -145,6 +145,8 @@ export default function ClassificationPanel(): JSX.Element {
     .filter((d) => isNumber(d))
     .map((d) => +d);
 
+  const allValuesSuperiorToZero = filteredSeries.every((d) => d > 0);
+
   const missingValues = classificationPanelStore.series!.length - filteredSeries.length;
 
   // Basic statistical summary displayed to the user
@@ -277,11 +279,11 @@ export default function ClassificationPanel(): JSX.Element {
       value: ClassificationMethod.equalIntervals,
       options: [OptionsClassification.numberOfClasses],
     },
-    {
+    statSummary.unique > 6 ? {
       name: LL().ClassificationPanel.classificationMethods.q6(),
       value: ClassificationMethod.q6,
       options: [],
-    },
+    } : null,
     {
       name: LL().ClassificationPanel.classificationMethods.ckmeans(),
       value: ClassificationMethod.ckmeans,
@@ -297,22 +299,27 @@ export default function ClassificationPanel(): JSX.Element {
       value: ClassificationMethod.standardDeviation,
       options: [OptionsClassification.amplitude, OptionsClassification.meanPosition],
     },
-    {
+    allValuesSuperiorToZero ? {
       name: LL().ClassificationPanel.classificationMethods.geometricProgression(),
       value: ClassificationMethod.geometricProgression,
       options: [OptionsClassification.numberOfClasses],
-    },
+    } : null,
     {
       name: LL().ClassificationPanel.classificationMethods.nestedMeans(),
       value: ClassificationMethod.nestedMeans,
       options: [OptionsClassification.numberOfClasses],
     },
     {
+      name: LL().ClassificationPanel.classificationMethods.headTail(),
+      value: ClassificationMethod.headTail,
+      options: [],
+    },
+    {
       name: LL().ClassificationPanel.classificationMethods.manual(),
       value: ClassificationMethod.manual,
       options: [OptionsClassification.breaks],
     },
-  ];
+  ].filter((d) => d !== null);
 
   const listenerEscKey = (event: KeyboardEvent) => {
     // TODO: in many cases this modal is opened on the top of another modal
@@ -419,13 +426,16 @@ export default function ClassificationPanel(): JSX.Element {
                 }}
               />
             </div>
-            <Show when={
-              classificationMethodHasOption(
-                OptionsClassification.numberOfClasses,
-                classificationMethod(),
-                entriesClassificationMethod,
-              )
-            }>
+            <Show
+              when={
+                classificationMethodHasOption(
+                  OptionsClassification.numberOfClasses,
+                  classificationMethod(),
+                  entriesClassificationMethod,
+                )
+              }
+              fallback={<div style={{ 'flex-grow': 2 }}><p></p></div>}
+            >
               <div style={{ 'flex-grow': 2 }}>
                 <p class="label is-marginless">{ LL().ClassificationPanel.numberOfClasses() }</p>
                 <input

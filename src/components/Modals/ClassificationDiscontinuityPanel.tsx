@@ -104,8 +104,21 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
   };
 
   let refParentNode: HTMLDivElement;
-  let refTextArea: HTMLTextAreaElement;
   const { LL } = useI18nContext();
+
+  const parameters = classificationPanelStore.classificationParameters as DiscontinuityParameters;
+
+  // The values that we are gonna use for the classification
+  const filteredSeries = classificationPanelStore.series!
+    .filter((d) => isNumber(d))
+    .map((d) => +d);
+
+  const missingValues = classificationPanelStore.series!.length - filteredSeries.length;
+
+  const allValuesSuperiorToZero = filteredSeries.every((d) => d > 0);
+
+  // Basic statistical summary displayed to the user
+  const statSummary = prepareStatisticalSummary(filteredSeries);
 
   const entriesClassificationMethod = [
     {
@@ -118,11 +131,11 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
       value: ClassificationMethod.equalIntervals,
       options: [OptionsClassification.numberOfClasses],
     },
-    {
+    statSummary.unique > 6 ? {
       name: LL().ClassificationPanel.classificationMethods.q6(),
       value: ClassificationMethod.q6,
       options: [],
-    },
+    } : null,
     {
       name: LL().ClassificationPanel.classificationMethods.ckmeans(),
       value: ClassificationMethod.ckmeans,
@@ -138,34 +151,27 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
     //   value: ClassificationMethod.standardDeviation,
     //   options: [OptionsClassification.amplitude, OptionsClassification.meanPosition],
     // },
-    {
+    allValuesSuperiorToZero ? {
       name: LL().ClassificationPanel.classificationMethods.geometricProgression(),
       value: ClassificationMethod.geometricProgression,
       options: [OptionsClassification.numberOfClasses],
-    },
+    } : null,
     {
       name: LL().ClassificationPanel.classificationMethods.nestedMeans(),
       value: ClassificationMethod.nestedMeans,
       options: [OptionsClassification.numberOfClasses],
     },
     {
+      name: LL().ClassificationPanel.classificationMethods.headTail(),
+      value: ClassificationMethod.headTail,
+      options: [],
+    },
+    {
       name: LL().ClassificationPanel.classificationMethods.manual(),
       value: ClassificationMethod.manual,
       options: [OptionsClassification.breaks],
     },
-  ];
-
-  const parameters = classificationPanelStore.classificationParameters as DiscontinuityParameters;
-
-  // The values that we are gonna use for the classification
-  const filteredSeries = classificationPanelStore.series!
-    .filter((d) => isNumber(d))
-    .map((d) => +d);
-
-  const missingValues = classificationPanelStore.series!.length - filteredSeries.length;
-
-  // Basic statistical summary displayed to the user
-  const statSummary = prepareStatisticalSummary(filteredSeries);
+  ].filter((d) => d !== null);
 
   // Signals for the current component:
   // - the classification method chosen by the user
@@ -316,49 +322,6 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
                 />
               </div>
             </Show>
-            {/*
-           <Show when={
-              classificationMethodHasOption(
-                OptionsClassification.breaks,
-                classificationMethod(),
-                entriesClassificationMethod,
-              )
-            }>
-              <div style={{ 'flex-grow': 5 }}>
-                <p class="label is-marginless">{LL().ClassificationPanel.breaksInput()}</p>
-                <textarea
-                  class={'textarea'}
-                  style={{ 'min-height': '3em', 'max-height': '6em' }}
-                  ref={refTextArea!}
-                  value={currentBreaksInfo().breaks.join(' - ')}
-                >
-                </textarea>
-                <button
-                  class="button"
-                  style={{ width: '100%', height: '2em' }}
-                  onClick={() => {
-                    try {
-                      const b = parseUserDefinedBreaks(
-                        filteredSeries,
-                        refTextArea.value,
-                        statSummary,
-                      );
-                      setCustomBreaks(b);
-                    } catch (e) {
-                      toast.error(LL().ClassificationPanel.errorCustomBreaks(), {
-                        duration: 10000,
-                      });
-                      refTextArea.value = currentBreaksInfo().breaks.join(' - ');
-                      return;
-                    }
-                    updateClassificationParameters();
-                  }}
-                >
-                  {LL().ClassificationPanel.validate()}
-                </button>
-              </div>
-            </Show>
-            */}
           </div>
           <div>
             <div class="is-flex is-flex-direction-column is-justify-content-center">
