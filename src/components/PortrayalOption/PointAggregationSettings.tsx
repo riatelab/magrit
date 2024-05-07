@@ -1,17 +1,13 @@
 // Import from solid-js
 import {
-  createEffect,
-  createSignal,
-  For,
-  type JSX,
-  on,
-  Show,
+  createEffect, createSignal, For,
+  type JSX, on, Show,
 } from 'solid-js';
 import { produce, unwrap } from 'solid-js/store';
 
 // Imports from other packages
 import { bbox } from '@turf/turf';
-import { quantile } from 'statsbreaks';
+import { ckmeans } from 'statsbreaks';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -73,6 +69,7 @@ import {
   ProportionalSymbolsSymbolType,
   RepresentationType,
 } from '../../global.d';
+import type { Variable } from '../../helpers/typeDetection';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -92,7 +89,7 @@ function onClickValidate(
   // FeatureCollection that will store the result
   let resultLayer;
   // Description of fields of the new layer
-  let fields;
+  let fields : Variable[];
   // Type of the new field
   const typeField = typeLayerToCreate === 'choropleth' ? 'ratio' : 'stock';
 
@@ -126,6 +123,18 @@ function onClickValidate(
       name: computationType,
       type: typeField,
     }];
+  }
+
+  if (computationType === PointAggregationRatioType.WeightedDensity) {
+    fields.push({
+      name: 'WeightedCount',
+      type: 'stock',
+    });
+  } else if (computationType === PointAggregationRatioType.Density) {
+    fields.push({
+      name: 'Count',
+      type: 'stock',
+    });
   }
 
   // New layer description
@@ -250,15 +259,14 @@ function onClickValidate(
   } else {
     // The user want to create a choropleth layer
     const values = resultLayer.features.map((f) => f.properties[computationType]) as number[];
-    console.log(values);
-    const nClasses = Mmin(d3.thresholdSturges(values), 9);
-    const breaks = quantile(values, { nb: nClasses, precision: null });
+    const nClasses = Mmin(d3.thresholdSturges([...new Set(values)]), 5);
+    const breaks = ckmeans(values, { nb: nClasses, precision: null });
     const classification = {
       variable: computationType,
-      method: ClassificationMethod.quantiles,
-      classes: Mmin(d3.thresholdSturges(values), 9),
+      method: ClassificationMethod.ckmeans,
+      classes: nClasses,
       breaks,
-      palette: getPaletteWrapper(applicationSettingsStore.defaultColorScheme, nClasses, true),
+      palette: getPaletteWrapper(applicationSettingsStore.defaultColorScheme, nClasses, false),
       noDataColor: applicationSettingsStore.defaultNoDataColor,
       entitiesByClass: [], // TODO
     } as ClassificationParameters;

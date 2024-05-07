@@ -16,6 +16,7 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { findSuitableName } from '../../helpers/common';
+import { randomColorFromCategoricalPalette } from '../../helpers/color';
 import { generateIdLayer } from '../../helpers/layers';
 import aggregateLayer from '../../helpers/aggregationLayer';
 import { DataType, type Variable } from '../../helpers/typeDetection';
@@ -54,6 +55,7 @@ async function onClickValidate(
     targetVariable,
     aggregationMethod,
   );
+  const color = randomColorFromCategoricalPalette();
   const newLayerDescription = {
     id: generateIdLayer(),
     name: newLayerName,
@@ -69,7 +71,7 @@ async function onClickValidate(
     renderer: 'default',
     visible: true,
     fillOpacity: 1,
-    fillColor: '#395446',
+    fillColor: color,
     strokeColor: '#000000',
     strokeWidth: 1,
     strokeOpacity: 1,

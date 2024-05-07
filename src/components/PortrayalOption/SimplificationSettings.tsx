@@ -11,6 +11,7 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { randomColorFromCategoricalPalette } from '../../helpers/color';
 import { findSuitableName } from '../../helpers/common';
 import { generateIdLayer } from '../../helpers/layers';
 
@@ -44,6 +45,8 @@ async function onClickValidate(
   const newData = JSON.parse(JSON.stringify(referenceDescription.data));
   newData.features = features;
 
+  const color = randomColorFromCategoricalPalette();
+
   const newLayerDescription = {
     id: generateIdLayer(),
     name: newLayerName,
@@ -53,7 +56,7 @@ async function onClickValidate(
     renderer: 'default',
     visible: true,
     fillOpacity: 1,
-    fillColor: '#395446',
+    fillColor: color,
     strokeColor: '#000000',
     strokeWidth: 1,
     strokeOpacity: 1,

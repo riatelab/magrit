@@ -272,6 +272,11 @@ function onClickValidate(
       });
     }
 
+    // We also need to reorder the features so that those with bigger residuals
+    // values are on the bottom
+    newDataset.features
+      .sort((a, b) => Mabs(b.properties.residual) - Mabs(a.properties.residual));
+
     const symbolType = (referenceLayerDescription.type === 'linestring'
       ? 'line'
       : portrayalOptions.symbolType) as ProportionalSymbolsSymbolType;
