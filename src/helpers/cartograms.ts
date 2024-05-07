@@ -4,7 +4,7 @@ import cartWasmUrl from 'go-cart-wasm/dist/cart.wasm?url';
 import { area, centroid, transformScale } from '@turf/turf';
 
 // Helpers
-import { isNumber } from './common';
+import { isFiniteNumber } from './common';
 import d3 from './d3-custom';
 import { planarArea } from './geo';
 import { Mmax, Mmin, Msqrt } from './math';
@@ -89,7 +89,7 @@ export function computeCartogramOlson(
     dVal[i] = {
       id: i,
       // If the value is not a number, we deliberately set it to 0.
-      value: isNumber(t) ? t : 0,
+      value: isFiniteNumber(t) ? t : 0,
       area: area(data.features[i] as never),
     };
   }

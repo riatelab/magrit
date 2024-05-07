@@ -14,7 +14,7 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { randomColorFromCategoricalPalette } from '../../helpers/color';
-import { findSuitableName, isNumber } from '../../helpers/common';
+import { findSuitableName, isFiniteNumber } from '../../helpers/common';
 import { computeCandidateValuesForSymbolsLegend, coordsPointOnFeature, PropSizer } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
 import { generateIdLegend } from '../../helpers/legends';
@@ -230,12 +230,12 @@ export default function MushroomsSettings(
   // for the top part of the mushroom.
   const valuesTop = createMemo(() => layerDescription.data.features
     .map((feature) => feature.properties[targetVariableTop()])
-    .filter((value) => isNumber(value))
+    .filter((value) => isFiniteNumber(value))
     .map((value: any) => +value) as number[]);
 
   const valuesBottom = createMemo(() => layerDescription.data.features
     .map((feature) => feature.properties[targetVariableBottom()])
-    .filter((value) => isNumber(value))
+    .filter((value) => isFiniteNumber(value))
     .map((value: any) => +value) as number[]);
 
   // Reactive variables that contains the extent (min and max) of the target variables

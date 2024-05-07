@@ -9,7 +9,7 @@ import {
 
 // Helpers
 import d3 from './d3-custom';
-import { isNumber } from './common';
+import { isFiniteNumber } from './common';
 import { gridFunctions, transformResolution } from './grid-creation';
 import {
   getProjection,
@@ -116,7 +116,7 @@ const pointAggregationWeightedCount = (
       const indexPt = ftTree[2];
       const pt = pointLayer.features[indexPt];
 
-      const variableValue = isNumber(pt.properties[variable])
+      const variableValue = isFiniteNumber(pt.properties[variable])
         ? +pt.properties[variable]
         : 0;
 
@@ -166,7 +166,7 @@ const pointAggregationMean = (
       const indexPt = ftTree[2];
       const pt = pointLayer.features[indexPt];
 
-      const variableValue = isNumber(pt.properties[variable])
+      const variableValue = isFiniteNumber(pt.properties[variable])
         ? +pt.properties[variable]
         : 0;
 
@@ -218,7 +218,7 @@ const pointAggregationStandardDeviation = (
       const indexPt = ftTree[2];
       const pt = pointLayer.features[indexPt];
 
-      const variableValue = isNumber(pt.properties[variable])
+      const variableValue = isFiniteNumber(pt.properties[variable])
         ? +pt.properties[variable]
         : 0;
 

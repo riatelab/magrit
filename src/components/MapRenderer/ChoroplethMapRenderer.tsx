@@ -7,7 +7,7 @@ import {
 
 // Helpers
 import { getClassifier } from '../../helpers/classification';
-import { isNumber } from '../../helpers/common';
+import { isFiniteNumber } from '../../helpers/common';
 import { getSymbolPath } from '../../helpers/svg';
 import { mergeFilterIds } from './common.tsx';
 
@@ -66,7 +66,7 @@ export function choroplethPolygonRenderer(
       {
         (feature) => <path
           fill={
-            isNumber(feature.properties[rendererParameters().variable])
+            isFiniteNumber(feature.properties[rendererParameters().variable])
               ? rendererParameters().palette.colors[
                 classifier().getClass(feature.properties[rendererParameters().variable])
               ]
@@ -115,7 +115,7 @@ export function choroplethPointRenderer(
       {
         (feature) => <path
           fill={
-            isNumber(feature.properties[rendererParameters().variable])
+            isFiniteNumber(feature.properties[rendererParameters().variable])
               ? rendererParameters().palette.colors[
                 classifier().getClass(feature.properties[rendererParameters().variable])
               ]
@@ -167,7 +167,7 @@ export function choroplethLineRenderer(
       {
         (feature) => <path
           stroke={
-            isNumber(feature.properties[rendererParameters().variable])
+            isFiniteNumber(feature.properties[rendererParameters().variable])
               ? rendererParameters().palette.colors[
                 classifier().getClass(feature.properties[rendererParameters().variable])
               ]

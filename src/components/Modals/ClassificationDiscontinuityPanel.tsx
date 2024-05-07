@@ -18,7 +18,7 @@ import {
   prepareStatisticalSummary,
   OptionsClassification,
 } from '../../helpers/classification';
-import { isNumber } from '../../helpers/common';
+import { isFiniteNumber } from '../../helpers/common';
 import { Mmin, Mround, round } from '../../helpers/math';
 import { makeDistributionPlot } from '../DistributionPlots.tsx';
 
@@ -110,7 +110,7 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
 
   // The values that we are gonna use for the classification
   const filteredSeries = classificationPanelStore.series!
-    .filter((d) => isNumber(d))
+    .filter((d) => isFiniteNumber(d))
     .map((d) => +d);
 
   const missingValues = classificationPanelStore.series!.length - filteredSeries.length;

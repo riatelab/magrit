@@ -19,7 +19,7 @@ import {
   RectangleBox,
   triggerContextMenuLegend,
 } from './common.tsx';
-import { isNumber } from '../../helpers/common';
+import { isFiniteNumber } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
 import { extent, Mfloor } from '../../helpers/math';
 import { LinearRegressionResult } from '../../helpers/statistics';
@@ -43,7 +43,10 @@ function ScatterPlot(
   },
 ): JSX.Element {
   const ds = createMemo(() => props.dataset.map((d) => {
-    if (isNumber(d[props.explainedVariable]) && isNumber(d[props.explanatoryVariable])) {
+    if (
+      isFiniteNumber(d[props.explainedVariable])
+      && isFiniteNumber(d[props.explanatoryVariable])
+    ) {
       return {
         [props.explainedVariable]: +d[props.explainedVariable],
         [props.explanatoryVariable]: +d[props.explanatoryVariable],

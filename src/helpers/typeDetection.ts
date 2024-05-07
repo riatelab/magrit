@@ -1,4 +1,4 @@
-import { isNumber } from './common';
+import { isFiniteNumber } from './common';
 
 // The supported data types for the fields of a layer
 export enum DataType {
@@ -59,7 +59,7 @@ export function detectTypeField(
   for (let i = 0, l = values.length; i < l; i++) {
     if (values[i] === null || values[i] === '' || values[i] === undefined) {
       dt.push(null);
-    } else if (isNumber(values[i])) {
+    } else if (isFiniteNumber(values[i])) {
       dt.push(DataType.number);
     } else if (typeof values[i] === 'boolean' || tf.includes(values[i])) {
       dt.push(DataType.boolean);

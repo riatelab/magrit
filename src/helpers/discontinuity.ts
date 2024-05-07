@@ -2,7 +2,7 @@
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 
 // Helpers
-import { isNumber, unproxify } from './common';
+import { isFiniteNumber, unproxify } from './common';
 import topojson from './topojson';
 import { Mmax } from './math';
 
@@ -44,7 +44,7 @@ const computeDiscontinuity = (
         if (a !== b) {
           const valA = a.properties[referenceVariableName];
           const valB = b.properties[referenceVariableName];
-          if (!isNumber(valA) || !isNumber(valB)) {
+          if (!isFiniteNumber(valA) || !isFiniteNumber(valB)) {
             return false;
           }
           const [newId, newIdRev] = getPairIds(a, b);
@@ -64,7 +64,7 @@ const computeDiscontinuity = (
         if (a !== b) {
           const valA = a.properties[referenceVariableName];
           const valB = b.properties[referenceVariableName];
-          if (!isNumber(valA) || !isNumber(valB)) {
+          if (!isFiniteNumber(valA) || !isFiniteNumber(valB)) {
             return false;
           }
           const [newId, newIdRev] = getPairIds(a, b);

@@ -19,11 +19,30 @@ export function unproxify(value: any): any {
   return value;
 }
 
-export function isNumber(value: any): boolean {
-  // eslint-disable-next-line no-restricted-globals
-  return value !== null && value !== '' && isFinite(value);
+/**
+ * Custom function to check if a value is a finite number.
+ * It should only return true for finite number or the string
+ * representation of a finite number.
+ * We use this function to check if we have a numerical value to be
+ * used for a given feature or if we should handle it as "no data" for example.
+ *
+ * @param value
+ */
+export function isFiniteNumber(value: any): boolean {
+  return value !== null
+    && value !== ''
+    && !(typeof value === 'boolean')
+    // eslint-disable-next-line no-restricted-globals
+    && isFinite(value);
 }
 
+/**
+ * Custom function to check if we have a value (so this is not null,
+ * undefined or an empty string) or if we should handle
+ * it as "no data" for example.
+ *
+ * @param value
+ */
 export function isNonNull(value: any): boolean {
   return value !== null && value !== undefined && value !== '';
 }

@@ -4,7 +4,7 @@ import RBush from 'rbush';
 
 // Helpers
 import d3 from './d3-custom';
-import { isNumber } from './common';
+import { isFiniteNumber } from './common';
 import { planarArea } from './geo';
 import { intersectionFeature, intersectionLayer } from './geos';
 import { transformResolution, gridFunctions } from './grid-creation';
@@ -145,7 +145,7 @@ export const computeGriddedLayer = async (
         // TODO: the current behavior for missing values is to set them to 0,
         //       but we may want to change this in the future
         values.push(
-          isNumber(intersection.properties[params.variable])
+          isFiniteNumber(intersection.properties[params.variable])
             ? +(intersection.properties[params.variable] as any)
             : 0,
         );

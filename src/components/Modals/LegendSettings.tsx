@@ -20,7 +20,7 @@ import {
   capitalizeFirstLetter,
   debounce,
   isNonNull,
-  isNumber,
+  isFiniteNumber,
   unproxify,
 } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
@@ -516,7 +516,7 @@ function makeSettingsChoroplethLegend(
       (feature) => !isNonNull(feature.properties[layer.rendererParameters!.variable]),
     ).length > 0
     : layer.data.features.filter(
-      (feature) => !isNumber(feature.properties[layer.rendererParameters!.variable]),
+      (feature) => !isFiniteNumber(feature.properties[layer.rendererParameters!.variable]),
     ).length > 0;
 
   return <>

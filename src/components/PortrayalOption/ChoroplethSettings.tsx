@@ -22,7 +22,7 @@ import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelecti
 
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { findSuitableName, getMinimumPrecision, isNumber } from '../../helpers/common';
+import { findSuitableName, getMinimumPrecision, isFiniteNumber } from '../../helpers/common';
 import { generateIdLayer } from '../../helpers/layers';
 import { generateIdLegend } from '../../helpers/legends';
 import { VariableType } from '../../helpers/typeDetection';
@@ -208,7 +208,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
   // Collect the values of the target variable (only those that are numbers)
   const values = createMemo(() => layerDescription.data.features
     .map((f) => f.properties[targetVariable()])
-    .filter((d) => isNumber(d))
+    .filter((d) => isFiniteNumber(d))
     .map((d: any) => +d) as number[]);
 
   const [

@@ -9,7 +9,7 @@ import {
 // Helpers
 import { bindDragBehavior, mergeFilterIds } from './common.tsx';
 import { getClassifier } from '../../helpers/classification';
-import { isNumber } from '../../helpers/common';
+import { isFiniteNumber } from '../../helpers/common';
 import { PropSizer } from '../../helpers/geo';
 
 // Directives
@@ -67,7 +67,7 @@ export function proportionalSymbolsPunctualRenderer(
 
           return (properties: Record<string, any>) => {
             const value = properties[layerDescription.rendererParameters.color.variable];
-            return isNumber(value)
+            return isFiniteNumber(value)
               ? layerDescription.rendererParameters.color
                 .palette.colors[classifier.getClass(+value)]
               : layerDescription.rendererParameters.color
@@ -177,7 +177,7 @@ export function proportionalSymbolsLinearRenderer(
 
           return (properties: Record<string, any>) => {
             const value = properties[layerDescription.rendererParameters.color.variable];
-            return isNumber(value)
+            return isFiniteNumber(value)
               ? layerDescription.rendererParameters.color
                 .palette.colors[classifier.getClass(+value)]
               : layerDescription.rendererParameters.color

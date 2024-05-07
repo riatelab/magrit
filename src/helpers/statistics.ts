@@ -2,7 +2,7 @@ import * as ss from 'simple-statistics';
 import lowess from '@stdlib/stats-lowess';
 import cdf from '@stdlib/stats-base-dists-t-cdf';
 
-import { isNumber } from './common';
+import { isFiniteNumber } from './common';
 import {
   Mabs, Mceil, Mfloor, Mpow, Msqrt,
 } from './math';
@@ -81,7 +81,7 @@ export function pearsonCorrelation(
   let nn = 0;
   for (let i = 0; i < n; i += 1, nn += 1) {
     // if ((!xs[i] && xs[i] !== 0) || (!ys[i] && ys[i] !== 0)) {
-    if (!isNumber(xs[i]) || !isNumber(ys[i])) {
+    if (!isFiniteNumber(xs[i]) || !isFiniteNumber(ys[i])) {
       nn -= 1;
       // eslint-disable-next-line no-continue
       continue;
@@ -213,14 +213,14 @@ export function computeLinearRegression(
   // with null
   const x = dataset.map((d) => {
     const v = d[options.x];
-    if (isNumber(v)) {
+    if (isFiniteNumber(v)) {
       return +v;
     }
     return null;
   });
   const y = dataset.map((d) => {
     const v = d[options.y];
-    if (isNumber(v)) {
+    if (isFiniteNumber(v)) {
       return +v;
     }
     return null;

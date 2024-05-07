@@ -29,7 +29,7 @@ import {
   ascending,
   descending,
   getNumberOfDecimals,
-  isNumber,
+  isFiniteNumber,
 } from './common';
 import { makeValid } from './geos';
 
@@ -439,7 +439,7 @@ export const makeDorlingDemersSimulation = (
     .map((d: GeoJSONFeature, i: number) => ({
       x: globalStore.projection(d.geometry.originalCoordinates)[0],
       y: globalStore.projection(d.geometry.originalCoordinates)[1],
-      size: isNumber(d.properties[variableName])
+      size: isFiniteNumber(d.properties[variableName])
         ? propSizer.scale(d.properties[variableName])
         : null,
       padding: strokeWidth / 2,

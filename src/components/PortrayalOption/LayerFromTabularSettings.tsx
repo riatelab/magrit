@@ -11,7 +11,7 @@ import proj4 from 'proj4';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { findSuitableName, isNonNull, isNumber } from '../../helpers/common';
+import { findSuitableName, isNonNull, isFiniteNumber } from '../../helpers/common';
 import { getGeometryType } from '../../helpers/formatConversion';
 import {
   makeLayerFromTableAndWKT,
@@ -55,7 +55,7 @@ function validateFieldsXY(
   const valuesY = table.data.map((d) => d[fieldY]);
 
   const validBoth = valuesX.filter((v, i) => (
-    isNonNull(v) && isNumber(v) && isNonNull(valuesY[i]) && isNumber(valuesY[i])
+    isNonNull(v) && isFiniteNumber(v) && isNonNull(valuesY[i]) && isFiniteNumber(valuesY[i])
   ));
 
   return validBoth.length;

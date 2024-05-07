@@ -22,7 +22,7 @@ import {
   descendingKeyAccessor,
   findSuitableName,
   getMinimumPrecision,
-  isNumber,
+  isFiniteNumber,
 } from '../../helpers/common';
 import {
   computeCandidateValuesForSymbolsLegend,
@@ -482,7 +482,7 @@ export default function ProportionalSymbolsSettings(
   // Reactive variable that contains the values of the target variable
   const values = createMemo(() => layerDescription.data.features
     .map((feature) => feature.properties[targetVariable()])
-    .filter((value) => isNumber(value))
+    .filter((value) => isFiniteNumber(value))
     .map((value: any) => +value) as number[]);
 
   // Reactive variables that contains the min and the max values
@@ -498,7 +498,7 @@ export default function ProportionalSymbolsSettings(
   const valuesRatio = createMemo(() => (targetRatioVariable()
     ? layerDescription.data.features
       .map((feature) => feature.properties[targetRatioVariable()!])
-      .filter((value) => isNumber(value))
+      .filter((value) => isFiniteNumber(value))
       .map((value: any) => +value) as number[]
     : []));
 

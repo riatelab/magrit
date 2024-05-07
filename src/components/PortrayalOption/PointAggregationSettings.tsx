@@ -26,7 +26,7 @@ import d3 from '../../helpers/d3-custom';
 import { getPaletteWrapper } from '../../helpers/color';
 import {
   descendingKeyAccessor, findSuitableName,
-  getMinimumPrecision, isNumber,
+  getMinimumPrecision, isFiniteNumber,
 } from '../../helpers/common';
 import {
   computeAppropriateResolution,
@@ -112,7 +112,7 @@ function onClickValidate(
     );
 
     const hasMissingValues = resultLayer.features
-      .some((d) => !isNumber(d.properties[computationType]));
+      .some((d) => !isFiniteNumber(d.properties[computationType]));
 
     // Description of the new field added to the layer
     fields = referenceLayerDescription.fields.concat([{
@@ -137,7 +137,7 @@ function onClickValidate(
     }
 
     const hasMissingValues = resultLayer.features
-      .some((d) => !isNumber(d.properties[computationType]));
+      .some((d) => !isFiniteNumber(d.properties[computationType]));
 
     // Description of the fields of the new layer
     fields = [
@@ -164,7 +164,7 @@ function onClickValidate(
       type: 'stock' as VariableType,
       dataType: DataType.number,
       hasMissingValues: resultLayer.features
-        .some((d) => !isNumber(d.properties.WeightedCount)),
+        .some((d) => !isFiniteNumber(d.properties.WeightedCount)),
     });
   } else if (computationType === PointAggregationRatioType.Density) {
     fields.push({
@@ -172,7 +172,7 @@ function onClickValidate(
       type: 'stock' as VariableType,
       dataType: DataType.number,
       hasMissingValues: resultLayer.features
-        .some((d) => !isNumber(d.properties.Count)),
+        .some((d) => !isFiniteNumber(d.properties.Count)),
     });
   }
 

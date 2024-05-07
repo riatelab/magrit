@@ -1,4 +1,4 @@
-import { isNumber } from './common';
+import { isFiniteNumber } from './common';
 import { wktToGeojson } from './geos';
 
 import { GeoJSONFeature, GeoJSONFeatureCollection } from '../global';
@@ -27,8 +27,8 @@ export const makeLayerFromTableAndXY = async (
 
   data.forEach((row) => {
     if (
-      isNumber(row[xField])
-      && isNumber(row[yField])
+      isFiniteNumber(row[xField])
+      && isFiniteNumber(row[yField])
     ) {
       const properties = keys
         .reduce((acc, key) => {

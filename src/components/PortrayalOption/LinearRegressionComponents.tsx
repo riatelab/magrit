@@ -12,7 +12,7 @@ import PlotFigure from '../PlotFigure.tsx';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { isNumber } from '../../helpers/common';
+import { isFiniteNumber } from '../../helpers/common';
 import {
   Mfloor, extent,
   toPrecisionAfterDecimalPoint,
@@ -235,7 +235,10 @@ export function ScatterPlot(
   },
 ): JSX.Element {
   const ds = createMemo(() => props.dataset.map((d) => {
-    if (isNumber(d[props.explainedVariable]) && isNumber(d[props.explanatoryVariable])) {
+    if (
+      isFiniteNumber(d[props.explainedVariable])
+      && isFiniteNumber(d[props.explanatoryVariable])
+    ) {
       return {
         [props.explainedVariable]: +d[props.explainedVariable],
         [props.explanatoryVariable]: +d[props.explanatoryVariable],

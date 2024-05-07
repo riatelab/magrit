@@ -9,7 +9,7 @@ import { range } from 'd3-array';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { isNumber, precisionToMinimumFractionDigits } from '../../helpers/common';
+import { isFiniteNumber, precisionToMinimumFractionDigits } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
 import { round } from '../../helpers/math';
 
@@ -84,7 +84,7 @@ function verticalLegend(
   );
 
   const hasNoData = createMemo(() => layer.data.features.filter(
-    (feature) => !isNumber(feature.properties[rendererParameters.variable]),
+    (feature) => !isFiniteNumber(feature.properties[rendererParameters.variable]),
   ).length > 0);
 
   const positionNote = createMemo(() => {
@@ -315,7 +315,7 @@ function horizontalLegend(
     + heightLegendLabels());
 
   const hasNoData = createMemo(() => layer.data.features.filter(
-    (feature) => !isNumber(feature.properties[rendererParameters.variable]),
+    (feature) => !isFiniteNumber(feature.properties[rendererParameters.variable]),
   ).length > 0);
 
   let refElement: SVGGElement;

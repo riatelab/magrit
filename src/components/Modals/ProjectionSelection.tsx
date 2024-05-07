@@ -13,7 +13,7 @@ import { HiOutlineGlobeAlt } from 'solid-icons/hi';
 // Helpers
 import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { camelToFlat, isNumber } from '../../helpers/common';
+import { camelToFlat, isFiniteNumber } from '../../helpers/common';
 import { round } from '../../helpers/math';
 import { epsgDb, type EpsgDbEntryType } from '../../helpers/projection';
 import rewindLayer from '../../helpers/rewind';
@@ -144,7 +144,7 @@ const findMatchingProjections = (search: string): ScoredResult<EpsgDbEntryType>[
 
   // Directly return the projection if the search string
   // is an EPSG code
-  if (searchString.includes('epsg:') || isNumber(searchString)) {
+  if (searchString.includes('epsg:') || isFiniteNumber(searchString)) {
     const code = searchString.replace('epsg:', '');
     const projection = epsgDb[code];
     if (projection) return [{ score: 1, item: projection }];

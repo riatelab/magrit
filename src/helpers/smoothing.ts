@@ -8,7 +8,7 @@ import { setLoadingMessage } from '../store/GlobalStore';
 
 // Helpers
 import { makeCentroidLayer } from './geo';
-import { isNumber } from './common';
+import { isFiniteNumber } from './common';
 import { convertToTopojsonQuantizeAndBackToGeojson } from './topojson';
 
 // Types
@@ -300,7 +300,7 @@ const prepareArrays = (
 
   for (let i = 0; i < inputLayer.features.length; i++) { // eslint-disable-line no-plusplus
     const v = inputLayer.features[i].properties[variableName] as any;
-    if (isNumber(v)) {
+    if (isFiniteNumber(v)) {
       // eslint-disable-next-line prefer-destructuring
       xDots.push(inputLayer.features[i].geometry.coordinates[0]);
       // eslint-disable-next-line prefer-destructuring

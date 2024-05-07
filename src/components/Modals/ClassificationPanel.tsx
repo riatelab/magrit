@@ -24,7 +24,7 @@ import {
   prepareStatisticalSummary,
   OptionsClassification,
 } from '../../helpers/classification';
-import { isNumber } from '../../helpers/common';
+import { isFiniteNumber } from '../../helpers/common';
 import { Mmin, Mround, round } from '../../helpers/math';
 import { makeClassificationPlot, makeColoredBucketPlot, makeDistributionPlot } from '../DistributionPlots.tsx';
 
@@ -142,7 +142,7 @@ export default function ClassificationPanel(): JSX.Element {
 
   // The values that we are gonna use for the classification
   const filteredSeries = classificationPanelStore.series!
-    .filter((d) => isNumber(d))
+    .filter((d) => isFiniteNumber(d))
     .map((d) => +d);
 
   const allValuesSuperiorToZero = filteredSeries.every((d) => d > 0);
