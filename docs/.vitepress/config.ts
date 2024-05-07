@@ -25,7 +25,7 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
         { text: 'Tableau de données', link: 'data-table' },
         { text: 'Propriétés de la couche', link: 'layer-properties' },
         { text: 'Propriété de la légende', link: 'legend-properties' },
-        { text: 'Élément d\'habillage de la carte', link: 'en/layout-features' }
+        { text: 'Élément d\'habillage de la carte', link: 'layout-features' }
       ]
     },
     {
@@ -87,7 +87,6 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
 export default defineConfig({
   title: "Magrit Documentation",
   description: "Magrit Documentation",
-  base: '/docs/',
   locales: {
     root: {
       label: 'French',
@@ -95,6 +94,14 @@ export default defineConfig({
       themeConfig: {
         sidebar: {
           '/': sidebarFr(),
+        },
+        docFooter: {
+          prev: false,
+          next: false,
+        },
+        footer: {
+          message: 'Publié sous les termes de la licence GNU General Public License v3.0 or later.',
+          copyright: 'Copyright © 2024-present Matthieu Viry'
         },
       },
     },
@@ -106,7 +113,15 @@ export default defineConfig({
         sidebar: {
           '/en/': sidebarEn(),
         },
-      }
+        docFooter: {
+          prev: false,
+          next: false,
+        },
+        footer: {
+          message: 'Released under the GNU General Public License v3.0 or later.',
+          copyright: 'Copyright © 2024-present Matthieu Viry'
+        },
+      },
     }
   },
   themeConfig: {

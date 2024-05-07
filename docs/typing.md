@@ -3,6 +3,12 @@
 À chaque type de données est associé un certain nombre de modes de fonctionnalités possibles. Une fois les données importées,
 il est donc important de définir le type de chacune des variables du jeu de données que vous souhaitez cartographier.
 
+<div style="text-align: center;">
+    <img src="./img/field-typing.png" alt="Typage des champs" style="margin: auto;">
+    <i>Fenêtre de typage des champs</i>
+</div>
+
+
 5 types de données sont possibles dans Magrit :
 
 - Identifiant (champs notamment utilisés pour joindre les données)
@@ -41,3 +47,8 @@ Ce champ contient des valeurs permettant d'identifier de manière unique chacune
 Ce sont ces champs qui sont utilisés pour effectuer une jointure de données.
 
 Exemple : Code INSEE de la commune, Code ISO2 d'un pays.
+
+## Inconnu
+
+Ce type de champ est utilisé pour les champs que vous ne souhaitez pas utiliser dans l'application : ils
+ne seront pas proposés dans les menus de sélection des variables.
