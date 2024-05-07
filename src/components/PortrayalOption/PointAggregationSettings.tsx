@@ -24,7 +24,10 @@ import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelecti
 import { useI18nContext } from '../../i18n/i18n-solid';
 import d3 from '../../helpers/d3-custom';
 import { getPaletteWrapper } from '../../helpers/color';
-import { descendingKeyAccessor, findSuitableName, getMinimumPrecision } from '../../helpers/common';
+import {
+  descendingKeyAccessor, findSuitableName,
+  getMinimumPrecision, isNumber,
+} from '../../helpers/common';
 import {
   computeAppropriateResolution,
   computeCandidateValuesForSymbolsLegend,
@@ -69,7 +72,7 @@ import {
   ProportionalSymbolsSymbolType,
   RepresentationType,
 } from '../../global.d';
-import type { Variable } from '../../helpers/typeDetection';
+import { DataType, Variable, VariableType } from '../../helpers/typeDetection';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 function onClickValidate(
@@ -108,12 +111,18 @@ function onClickValidate(
       targetVariable,
     );
 
+    const hasMissingValues = resultLayer.features
+      .some((d) => !isNumber(d.properties[computationType]));
+
+    // Description of the new field added to the layer
     fields = referenceLayerDescription.fields.concat([{
       name: computationType,
-      type: typeField,
+      type: typeField as VariableType,
+      dataType: DataType.number,
+      hasMissingValues,
     }]);
   } else {
-  // The user want to analyze the data using a grid
+    // The user want to analyze the data using a grid
     resultLayer = pointAggregationOnGrid(
       referenceLayerDescription.data,
       meshParams,
@@ -121,26 +130,49 @@ function onClickValidate(
       targetVariable,
     );
 
+    // Filter empty cells if the user wants to
     if (filterEmptyCells) {
       resultLayer.features = resultLayer.features
         .filter((d) => d.properties[computationType] !== 0);
     }
 
-    fields = [{
-      name: computationType,
-      type: typeField,
-    }];
+    const hasMissingValues = resultLayer.features
+      .some((d) => !isNumber(d.properties[computationType]));
+
+    // Description of the fields of the new layer
+    fields = [
+      {
+        name: computationType,
+        type: typeField as VariableType,
+        dataType: DataType.number,
+        hasMissingValues,
+      },
+      {
+        name: 'id',
+        type: VariableType.identifier,
+        dataType: DataType.string,
+        hasMissingValues: false,
+      },
+    ];
   }
 
+  // Depending on the computation type, we also may store
+  // the (weighted) count of points in the cell
   if (computationType === PointAggregationRatioType.WeightedDensity) {
     fields.push({
       name: 'WeightedCount',
-      type: 'stock',
+      type: 'stock' as VariableType,
+      dataType: DataType.number,
+      hasMissingValues: resultLayer.features
+        .some((d) => !isNumber(d.properties.WeightedCount)),
     });
   } else if (computationType === PointAggregationRatioType.Density) {
     fields.push({
       name: 'Count',
-      type: 'stock',
+      type: 'stock' as VariableType,
+      dataType: DataType.number,
+      hasMissingValues: resultLayer.features
+        .some((d) => !isNumber(d.properties.Count)),
     });
   }
 
@@ -166,8 +198,8 @@ function onClickValidate(
         coordinates: coordsPointOnFeature(feature.geometry as never),
       };
       // While we are iterating on the features, we also compute the min and max values
-      minValue = Mmin(feature.properties[computationType], minValue);
-      maxValue = Mmax(feature.properties[computationType], maxValue);
+      minValue = Mmin(feature.properties[computationType] as number, minValue);
+      maxValue = Mmax(feature.properties[computationType] as number, maxValue);
     });
 
     // Store the original position of the features (we will need it
