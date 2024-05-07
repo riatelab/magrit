@@ -68,14 +68,23 @@ const getDefaultClipExtent = () => (
 
 /**
  * Get the extent, in geographic coordinates, covered by the current map view.
+ * If for any reason the extent cannot be computed, the function will return
+ * a default extent covering, roughly, the whole world.
+ * We need to do this because, if some projection fails to compute the map coordinates,
+ * and so the user wants to switch to another projection, we don't want this function
+ * (which is called when a projection changes) to fail.
  *
  */
 export const getCurrentExtent = (targetSvg: SVGSVGElement): number[][] => {
-  const topLeft = globalStore.projection.invert([5, 5]);
-  const bottomRight = globalStore.projection.invert(
-    [mapStore.mapDimensions.width - 5, mapStore.mapDimensions.height - 5],
-  );
-  return [topLeft, bottomRight];
+  try {
+    const topLeft = globalStore.projection.invert([5, 5]);
+    const bottomRight = globalStore.projection.invert(
+      [mapStore.mapDimensions.width - 5, mapStore.mapDimensions.height - 5],
+    );
+    return [topLeft, bottomRight];
+  } catch (e) {
+    return [[-179.0, 85], [179.0, -85]];
+  }
 };
 
 /**
@@ -368,8 +377,8 @@ createEffect(
       setMapStore({
         scale: projection.scale(),
         translate: projection.translate(),
-        rotate: projection.rotate(),
-        center: projection.center(),
+        rotate: projection.rotate ? projection.rotate() : undefined,
+        center: projection.center ? projection.center() : undefined,
         parallel: projection.parallel ? projection.parallel() : undefined,
         parallels: projection.parallels ? projection.parallels() : undefined,
       });
