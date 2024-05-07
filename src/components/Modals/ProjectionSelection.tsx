@@ -256,7 +256,7 @@ export default function ProjectionSelection() : JSX.Element {
     setSelectedProjection,
   ] = createSignal<EpsgDbEntryType | null>(null);
 
-  return <div class="projection-selection" style={{ height: '50vh' }}>
+  return <div class="projection-selection" style={{ height: 'max(42vh, 500px)' }}>
     <div class="tabs is-boxed">
       <ul style={{ margin: 0 }}>
         <li classList={{ 'is-active': currentTab() === 'd3' }}>
@@ -286,7 +286,6 @@ export default function ProjectionSelection() : JSX.Element {
             onChange={(v) => {
               setSelectedGlobalProjection(v);
             }}
-            style={{ 'max-height': '30vh' }}
           />
           <div class="mt-4 mb-4" style={{ 'text-align': 'center' }}>
             <DemoMap projectionName={selectedGlobalProjection() || 'Airy'} width={360} height={260} />
@@ -323,7 +322,7 @@ export default function ProjectionSelection() : JSX.Element {
               console.log(matchingProjections());
             }}
           />
-          <div class="is-flex" style={{ 'column-gap': '1em', height: '30vh' }}>
+          <div class="is-flex" style={{ 'column-gap': '1em', height: '29vh' }}>
             <div
               class="projection-selection-list"
               style={{ width: '50%', height: '100%' }}
