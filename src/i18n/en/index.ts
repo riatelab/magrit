@@ -283,6 +283,7 @@ const en = {
       VariablePlaceholder: 'Variable to use',
       SelectVariable: 'Select a variable',
       Color: 'Color',
+      NoneLayer: 'None',
     },
     ChoroplethOptions: {
       Choropleth: 'Choropleth',
@@ -344,6 +345,7 @@ const en = {
       Count: 'Count',
       ThresholdForContours: 'Threshold for contours',
       ErrorParsingThreshold: 'Error while parsing the threshold. Please use values separated by dashes.',
+      ClippingLayer: 'Clipping layer',
       NewLayerName: 'Smoothing_{layerName}',
     },
     CartogramOptions: {

@@ -283,6 +283,7 @@ const fr = {
       VariablePlaceholder: 'Variable à utiliser',
       SelectVariable: 'Sélectionner une variable',
       Color: 'Couleur',
+      NoneLayer: 'Aucune',
     },
     ChoroplethOptions: {
       Choropleth: 'Choroplèthe',
@@ -344,6 +345,7 @@ const fr = {
       Count: 'Décompte',
       ThresholdForContours: 'Valeurs limites des contours à créer',
       ErrorParsingThresholds: 'Erreur lors de l\'analyse des valeurs limites des contours. Veuillez saisir des valeurs séparées par un tiret.',
+      ClippingLayer: 'Couche de découpage',
       NewLayerName: 'Lissage_{layerName}',
     },
     CartogramOptions: {

@@ -1022,6 +1022,10 @@ type RootTranslation = {
 			 * C​o​l​o​r
 			 */
 			Color: string
+			/**
+			 * N​o​n​e
+			 */
+			NoneLayer: string
 		}
 		ChoroplethOptions: {
 			/**
@@ -1234,6 +1238,10 @@ type RootTranslation = {
 			 * E​r​r​o​r​ ​w​h​i​l​e​ ​p​a​r​s​i​n​g​ ​t​h​e​ ​t​h​r​e​s​h​o​l​d​.​ ​P​l​e​a​s​e​ ​u​s​e​ ​v​a​l​u​e​s​ ​s​e​p​a​r​a​t​e​d​ ​b​y​ ​d​a​s​h​e​s​.
 			 */
 			ErrorParsingThreshold: string
+			/**
+			 * C​l​i​p​p​i​n​g​ ​l​a​y​e​r
+			 */
+			ClippingLayer: string
 			/**
 			 * S​m​o​o​t​h​i​n​g​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
@@ -4098,6 +4106,10 @@ export type TranslationFunctions = {
 			 * Color
 			 */
 			Color: () => LocalizedString
+			/**
+			 * None
+			 */
+			NoneLayer: () => LocalizedString
 		}
 		ChoroplethOptions: {
 			/**
@@ -4306,6 +4318,10 @@ export type TranslationFunctions = {
 			 * Error while parsing the threshold. Please use values separated by dashes.
 			 */
 			ErrorParsingThreshold: () => LocalizedString
+			/**
+			 * Clipping layer
+			 */
+			ClippingLayer: () => LocalizedString
 			/**
 			 * Smoothing_{layerName}
 			 */

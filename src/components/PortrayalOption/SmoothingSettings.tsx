@@ -70,6 +70,7 @@ async function onClickValidate(
   parameters: StewartParameters | KdeParameters,
   thresholds: number[],
   computedValues: { grid: GeoJSONFeatureCollection, values: number[] },
+  clippingLayerId: string,
 ) {
   const referenceLayerDescription = layersDescriptionStore.layers
     .find((l) => l.id === referenceLayerId);
@@ -84,7 +85,18 @@ async function onClickValidate(
     targetVariable,
   );
 
-  const newData = await intersectionLayer(contours, referenceLayerDescription.data);
+  let newData;
+
+  if (clippingLayerId) {
+    const clippingLayer = clippingLayerId === referenceLayerId
+      ? referenceLayerDescription.data
+      : layersDescriptionStore.layers
+        .find((l) => l.id === clippingLayerId)!.data;
+
+    newData = await intersectionLayer(contours, clippingLayer);
+  } else {
+    newData = contours;
+  }
 
   const rendererParameters = {
     variable: targetVariable,
@@ -201,6 +213,9 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   // The bbox of the layer to be smoothed
   const bboxLayer = bbox(layerDescription.data);
 
+  // The geometry type of the target layer
+  const geomType = layerDescription.type;
+
   // The fields of the layer to be smoothed.
   // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = layerDescription
@@ -284,6 +299,15 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     setThresholds,
   ] = createSignal<number[] | null>(null);
 
+  // Clipping layer
+  // (if the target layer is a point layer, it defaults to "none" but the user can
+  // choose any polygon layer ; if the target layer is a polygon layer, it defaults
+  // to the target layer and the user can't change it)
+  const [
+    clippingLayer,
+    setClippingLayer,
+  ] = createSignal<string>(geomType === 'point' ? '' : layerDescription.id);
+
   const makePortrayal = async () => {
     const layerName = findSuitableName(
       newLayerName() || LL().FunctionalitiesSection.NewLayer(),
@@ -309,6 +333,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         currentParameters()!.smoothing,
         thresholds()!,
         computedValues()!,
+        clippingLayer(),
       ).then(() => {
         // Hide loading overlay
         setLoading(false);
@@ -412,6 +437,21 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         disabled={isLoading() || !!computedValues()}
       />
     </Show>
+    <Show when={geomType === 'point'}>
+      <InputFieldSelect
+        label={LL().FunctionalitiesSection.SmoothingOptions.ClippingLayer()}
+        onChange={(v) => { setClippingLayer(v); }}
+        value={clippingLayer()}
+        disabled={isLoading() || !!computedValues()}
+      >
+        <option value="">
+          {LL().FunctionalitiesSection.CommonOptions.NoneLayer()}
+        </option>
+        <For each={layersDescriptionStore.layers.filter((d) => d.type === 'polygon')}>
+          {(item) => <option value={item.id}>{item.name}</option>}
+        </For>
+      </InputFieldSelect>
+    </Show>
     <Show when={!isLoading() && !computedValues()}>
       <div class="has-text-centered">
         <button
@@ -425,12 +465,27 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
             setIsLoading(true);
             setLoading(true);
             await yieldOrContinue('interactive');
+            // If the target layer is a polygon layer, we can use its bbox for the grid,
+            // but if the target layer is a point layer, we need to check if the user wants
+            // to use a clipping layer ; if so we use its bbox, otherwise we use the bbox
+            // of the point layer...
+            let bboxForGrid;
+            if (geomType === 'polygon') {
+              bboxForGrid = bboxLayer;
+            } else {
+              // TODO: we should either check that the bbox of the clipping layer covers the
+              //     bbox of the point layer, or we should only have proposed to the user
+              //     clipping layers that cover the point layer...
+              bboxForGrid = clippingLayer() === ''
+                ? bboxLayer
+                : bbox(layersDescriptionStore.layers.find((l) => l.id === clippingLayer())!.data);
+            }
             // Parameters for creating the grid of points
             const gp = {
-              xMin: bboxLayer[0],
-              yMin: bboxLayer[1],
-              xMax: bboxLayer[2],
-              yMax: bboxLayer[3],
+              xMin: bboxForGrid[0],
+              yMin: bboxForGrid[1],
+              xMax: bboxForGrid[2],
+              yMax: bboxForGrid[3],
               resolution: targetResolution(),
             } as GridParameters;
 
