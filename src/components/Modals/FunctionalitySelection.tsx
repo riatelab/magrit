@@ -52,6 +52,7 @@ interface FunctionalityDescription {
   name: string;
   type: RepresentationType | ProcessingOperationType | AnalysisOperationType;
   enabled: boolean;
+  allowedGeometryType?: 'point' | 'linestring' | 'polygon';
 }
 
 const functionalityDescriptions: FunctionalityDescription[] = [
@@ -84,10 +85,6 @@ const functionalityDescriptions: FunctionalityDescription[] = [
     type: RepresentationType.cartogram,
   },
   {
-    name: 'Grid',
-    type: RepresentationType.grid,
-  },
-  {
     name: 'Links',
     type: RepresentationType.links,
   },
@@ -100,8 +97,14 @@ const functionalityDescriptions: FunctionalityDescription[] = [
     type: RepresentationType.categoricalPictogram,
   },
   {
+    name: 'Grid',
+    type: RepresentationType.grid,
+    allowedGeometryType: 'polygon',
+  },
+  {
     name: 'PointAggregation',
     type: AnalysisOperationType.pointAggregation,
+    allowedGeometryType: 'point',
   },
   {
     name: 'SimpleLinearRegression',
@@ -344,7 +347,11 @@ export default function FunctionalitySelection(): JSX.Element {
                 'grid-gap': '1rem',
               }}
             >
-              <For each={functionalityDescriptions}>
+              <For each={
+                functionalityDescriptions
+                  .filter((d) => (
+                    d.allowedGeometryType ? d.allowedGeometryType === geomType : true))
+              }>
                 {
                   (p) => <CardFunctionality
                     {...p}
