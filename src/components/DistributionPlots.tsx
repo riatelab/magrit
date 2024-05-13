@@ -153,7 +153,7 @@ export function makeClassificationPlot(
 
 export function makeDistributionPlot(values: number[]): ((SVGSVGElement | HTMLElement) & PlotType) {
   const boxPlotSize = 20; // 20 %
-  const rawDataSize = 14; // 15 %
+  const rawDataSize = 14; // 14 %
   const rawDataOffset = 5; // 5 %
   // Should the box plot be centered on the middle of the raw data (true) or
   // on the X axis of the histogram (false)?
@@ -288,7 +288,7 @@ export function makeDistributionPlot(values: number[]): ((SVGSVGElement | HTMLEl
     marginBottom: 20,
     marginRight: 15,
     marginTop: 10,
-    marginLeft: 25,
+    marginLeft: 30,
     marks: [
       Plot.ruleY([0]),
       histFreqX,

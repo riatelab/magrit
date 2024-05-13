@@ -7,10 +7,10 @@ import {
 
 // Imports from other packages
 import {
-  getPalettes,
-  PaletteType,
-  getSequentialColors,
   getAsymmetricDivergingColors,
+  getPalettes,
+  getSequentialColors,
+  PaletteType,
 } from 'dicopal';
 import toast from 'solid-toast';
 
@@ -20,9 +20,9 @@ import d3 from '../../helpers/d3-custom';
 import {
   classificationMethodHasOption,
   getClassifier,
+  OptionsClassification,
   parseUserDefinedBreaks,
   prepareStatisticalSummary,
-  OptionsClassification,
 } from '../../helpers/classification';
 import { isFiniteNumber } from '../../helpers/common';
 import { Mmin, Mround, round } from '../../helpers/math';
@@ -68,6 +68,7 @@ export default function ClassificationPanel(): JSX.Element {
     if (
       !([
         ClassificationMethod.standardDeviation,
+        ClassificationMethod.headTail,
         ClassificationMethod.manual,
         ClassificationMethod.q6,
       ].includes(classificationMethod()))
@@ -77,6 +78,9 @@ export default function ClassificationPanel(): JSX.Element {
     } else if (classificationMethod() === ClassificationMethod.q6) {
       breaks = classifier.classify();
       classes = 6;
+    } else if (classificationMethod() === ClassificationMethod.headTail) {
+      breaks = classifier.classify();
+      classes = breaks.length - 1;
     } else if (classificationMethod() === ClassificationMethod.standardDeviation) {
       breaks = classifier.classify(amplitude(), meanPositionRole() === 'center');
       classes = breaks.length - 1;
@@ -450,6 +454,8 @@ export default function ClassificationPanel(): JSX.Element {
                     let v = +event.target.value;
                     if (classificationMethod() === ClassificationMethod.nestedMeans) {
                       v = 2 ** Math.round(Math.log2(v));
+                      // eslint-disable-next-line no-param-reassign
+                      event.target.value = `${v}`;
                     }
                     setNumberOfClasses(v);
                     updateClassificationParameters();

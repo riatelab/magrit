@@ -58,6 +58,7 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
     if (
       !([
         // ClassificationMethod.standardDeviation,
+        ClassificationMethod.headTail,
         ClassificationMethod.manual,
         ClassificationMethod.q6,
       ].includes(classificationMethod()))
@@ -70,8 +71,10 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
       // } else if (classificationMethod() === ClassificationMethod.standardDeviation) {
       //   breaks = classifier.classify(amplitude(), meanPositionRole() === 'center');
       //   classes = breaks.length - 1;
+    } else if (classificationMethod() === ClassificationMethod.headTail) {
+      breaks = classifier.classify();
+      classes = breaks.length - 1;
     } else if (classificationMethod() === ClassificationMethod.manual) {
-      console.log(customBreaks());
       breaks = classifier.classify(customBreaks());
       classes = breaks.length - 1;
     } else {
