@@ -14,17 +14,22 @@ import '../styles/InfoFeatureBox.css';
 export default function InfoFeatureBox(): JSX.Element {
   let refElement: HTMLDivElement;
   const { LL } = useI18nContext();
-  onMount(() => {
+
+  const setStyle = () => {
     const { height } = refElement.getBoundingClientRect();
-    refElement.style.top = `calc(50% - ${height / 2}px)`;
+    refElement.style.top = `calc(50% - ${height / 2}px + var(--header-height) / 2)`;
+  };
+
+  onMount(() => {
+    setStyle();
   });
+
   createEffect(
     on(
-      () => globalStore.infoTargetFeature,
+      () => [globalStore.infoTargetFeature, globalStore.isInfo],
       () => {
         setTimeout(() => {
-          const { height } = refElement.getBoundingClientRect();
-          refElement.style.top = `calc(50% - ${height / 2}px)`;
+          setStyle();
         }, 5);
       },
     ),
