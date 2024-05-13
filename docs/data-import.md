@@ -1,8 +1,9 @@
----
-outline: deep
----
-
 # Import des données
+
+<div style="text-align: center;">
+    <img src="./img/data-import.png" alt="Fenêtre d'import des données" style="margin: auto;">
+    <i>Exemple : Fenêtre d'import des données avec 3 fichiers chargés<br>(dont un GeoPackage contenant plusieurs couches)</i>
+</div>
 
 ## Import de données géographiques
 

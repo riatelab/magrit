@@ -1,0 +1,1 @@
+# Pictogrammes (catégoriel)

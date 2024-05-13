@@ -1,0 +1,1 @@
+# Choroplèthe catégorielle

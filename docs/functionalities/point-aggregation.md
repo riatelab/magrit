@@ -1,0 +1,1 @@
+# Agrégation d'un semis de points
