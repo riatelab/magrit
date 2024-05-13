@@ -437,11 +437,10 @@ export default function MapZone(): JSX.Element {
     handleClickZoom(-1);
   };
 
+  let resetTimeout: NodeJS.Timeout | number | undefined;
+
   const onClickFeature = (element: SVGElement & ID3Element) => {
-    setGlobalStore({
-      // eslint-disable-next-line no-underscore-dangle
-      infoTargetFeature: element.__data__.properties || {},
-    });
+    clearTimeout(resetTimeout);
     // Clone the clicked SVG element and add it on top of the others
     // with a slightly modified style
     svgElem.getElementById('cloned-feature')?.remove();
@@ -451,6 +450,27 @@ export default function MapZone(): JSX.Element {
     clone.style.strokeWidth = '3px';
     clone.style.fill = 'none';
     svgElem.appendChild(clone);
+    // Get the layer name for the clicked feature
+    let targetGroup = element as SVGElement;
+    while (
+      targetGroup.tagName !== 'g'
+      && !targetGroup.classList.contains('layer')
+      && targetGroup.parentElement
+    ) {
+      targetGroup = targetGroup.parentElement! as SVGElement;
+    }
+    const layer = findLayerById(
+      layersDescriptionStore.layers,
+      targetGroup.id,
+    );
+    // Update the global store with the properties of the clicked feature
+    setGlobalStore({
+      infoTargetFeature: {
+        // eslint-disable-next-line no-underscore-dangle
+        properties: element.__data__.properties || {},
+        layer: layer?.name || '',
+      },
+    });
   };
 
   const onEscapeKey = (e: KeyboardEvent) => {
@@ -461,9 +481,12 @@ export default function MapZone(): JSX.Element {
     }
   };
 
-  const resetInfoFeature = () => {
+  const resetInfoFeature = (delay = 60) => {
     svgElem.getElementById('cloned-feature')?.remove();
-    setGlobalStore({ infoTargetFeature: {} });
+    clearTimeout(resetTimeout);
+    resetTimeout = setTimeout(() => {
+      setGlobalStore({ infoTargetFeature: null });
+    }, delay);
   };
 
   const onMouseMoveInfo = (e) => {
@@ -491,7 +514,7 @@ export default function MapZone(): JSX.Element {
 
   const cleanUpInfoFeature = () => {
     svgElem.style.cursor = 'default';
-    resetInfoFeature();
+    resetInfoFeature(0);
     svgElem.removeEventListener('mousemove', onMouseMoveInfo);
     window.removeEventListener('keydown', onEscapeKey);
   };
@@ -499,7 +522,7 @@ export default function MapZone(): JSX.Element {
   const handleMouseInfo = () => {
     setGlobalStore({ isInfo: !globalStore.isInfo });
     if (globalStore.isInfo) {
-      setGlobalStore({ infoTargetFeature: {} });
+      setGlobalStore({ infoTargetFeature: null });
       svgElem.focus();
       svgElem.style.cursor = 'help';
       svgElem.addEventListener('mousemove', onMouseMoveInfo, { passive: true });

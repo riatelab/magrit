@@ -370,6 +370,11 @@ type RootTranslation = {
 			 */
 			Info: string
 			/**
+			 * L​a​y​e​r​ ​n​a​m​e​:​ ​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			InfoLayerName: RequiredParams<'layerName'>
+			/**
 			 * H​o​v​e​r​ ​o​v​e​r​ ​a​ ​f​e​a​t​u​r​e​ ​t​o​ ​d​i​s​p​l​a​y​ ​i​t​s​ ​i​n​f​o​r​m​a​t​i​o​n​.​ ​P​r​e​s​s​ ​"​E​s​c​"​ ​t​o​ ​c​l​o​s​e​.
 			 */
 			InfoInstruction: string
@@ -3490,6 +3495,10 @@ export type TranslationFunctions = {
 			 * Display information on selected feature
 			 */
 			Info: () => LocalizedString
+			/**
+			 * Layer name: {layerName}
+			 */
+			InfoLayerName: (arg: { layerName: unknown }) => LocalizedString
 			/**
 			 * Hover over a feature to display its information. Press "Esc" to close.
 			 */

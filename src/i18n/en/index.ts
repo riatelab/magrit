@@ -102,6 +102,7 @@ const en = {
       Lock: 'Lock zoom / position',
       Unlock: 'Unlock zoom / position',
       Info: 'Display information on selected feature',
+      InfoLayerName: 'Layer name: {layerName}',
       InfoInstruction: 'Hover over a feature to display its information. Press "Esc" to close.',
     },
   },

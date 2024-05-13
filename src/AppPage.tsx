@@ -36,9 +36,11 @@ import MapZone from './components/MapZone.tsx';
 import NiceAlert from './components/Modals/NiceAlert.tsx';
 import TableWindow from './components/Modals/TableWindow.tsx';
 import ClassificationPanel from './components/Modals/ClassificationPanel.tsx';
+import ClassificationDiscontinuityPanel from './components/Modals/ClassificationDiscontinuityPanel.tsx';
 import { HeaderBarApp } from './components/Headers.tsx';
 import ContextMenu from './components/ContextMenu.tsx';
 import ImportWindow from './components/ImportWindow.tsx';
+import InfoFeatureBox from './components/InfoFeatureBox.tsx';
 import FunctionalitySelection from './components/Modals/FunctionalitySelection.tsx';
 import TableFunctionalitySelection from './components/Modals/TableFunctionalitySelection.tsx';
 // import ReloadPrompt from './components/ReloadPrompt.tsx';
@@ -79,8 +81,6 @@ import type { TranslationFunctions } from './i18n/i18n-types';
 
 // Styles
 import './styles/Transitions.css';
-import InfoFeatureBox from './components/InfoFeatureBox.tsx';
-import ClassificationDiscontinuityPanel from './components/Modals/ClassificationDiscontinuityPanel.tsx';
 
 interface ProjectDescription {
   version: string,

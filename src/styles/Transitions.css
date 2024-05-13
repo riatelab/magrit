@@ -5,7 +5,6 @@
     opacity: 0;
 }
 
-
 .slide-fade-enter-active .modal-card, .slide-fade-exit-active .modal-card{
     transition: transform 0.3s;
     transform: translateY(0px);

@@ -15,4 +15,5 @@
     max-height: calc(100% - 1em - var(--header-height));
     overflow-y: auto;
     padding: 1em 2em;
+    transition: all 125ms ease-in-out;
 }

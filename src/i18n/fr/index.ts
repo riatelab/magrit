@@ -102,6 +102,7 @@ const fr = {
       Lock: 'Verrouiller le zoom / la position',
       Unlock: 'Déverrouiller le zoom / la position',
       Info: 'Afficher les informations de l\'entité sélectionnée',
+      InfoLayerName: 'Couche : {layerName}',
       InfoInstruction: 'Survolez une entité pour afficher ses informations. Appuyez sur "Échap" pour fermer la fenêtre d\'information.',
     },
   },
