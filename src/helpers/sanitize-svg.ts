@@ -30,13 +30,11 @@ const sanitizeSVG = (svg: string) => {
   const width = svgDom.getAttribute('width');
   const height = svgDom.getAttribute('height');
   const viewBox = svgDom.getAttribute('viewBox');
-  if (width && height) {
-    if (!viewBox) {
-      svgDom.setAttribute('viewBox', `0 0 ${width} ${height}`);
-    }
-    svgDom.removeAttribute('width');
-    svgDom.removeAttribute('height');
+  if (width && height && !viewBox) {
+    svgDom.setAttribute('viewBox', `0 0 ${width} ${height}`);
   }
+  svgDom.removeAttribute('width');
+  svgDom.removeAttribute('height');
 
   // Step 2: Update all IDs
   const elementsWithId = svgDom.querySelectorAll('[id]');
@@ -75,6 +73,20 @@ const sanitizeSVG = (svg: string) => {
 
   console.timeEnd('sanitizeSVG');
   return serializedSvg;
+};
+
+// eslint-disable-next-line arrow-body-style
+export const setWidthHeight = (svg: string, width: number, height: number) => {
+  // const parser = new DOMParser();
+  // const doc = parser.parseFromString(svg, 'image/svg+xml');
+  // const svgDom = doc.documentElement;
+  //
+  // svgDom.setAttribute('width', width.toString());
+  // svgDom.setAttribute('height', height.toString());
+  //
+  // const serializer = new XMLSerializer();
+  // return serializer.serializeToString(svgDom);
+  return svg.replace('<svg', `<svg width="${width}" height="${height}"`);
 };
 
 export default sanitizeSVG;

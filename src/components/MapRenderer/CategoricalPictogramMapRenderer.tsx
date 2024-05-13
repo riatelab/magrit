@@ -3,19 +3,16 @@ import { createMemo, For, JSX } from 'solid-js';
 
 // Helpers
 import { mergeFilterIds } from './common.tsx';
+import { setWidthHeight } from '../../helpers/sanitize-svg';
 
 // Directives
 import bindData from '../../directives/bind-data';
 
+// Stores
 import { globalStore } from '../../store/GlobalStore';
 
-import { CategoricalPictogramParameters, LayerDescriptionCategoricalPictogram } from '../../global';
-
-const createCustomViewBox = (content: string): string | undefined => {
-  const width = content.match(/width="(\d+(\.\d+)?)"/)?.[1];
-  const height = content.match(/height="(\d+(\.\d+)?)"/)?.[1];
-  return (width && height) ? `0 0 ${width} ${height}` : undefined;
-};
+// Types / Interfaces / Enums
+import { type LayerDescriptionCategoricalPictogram } from '../../global.d';
 
 // For now we keep an array of directives
 // because otherwise the import is not detected by the compiler...
@@ -72,7 +69,7 @@ export default function categoricalPictogramRenderer(
               // @ts-expect-error because use:bind-data isn't a property of this element
               use:bindData={feature}
               // eslint-disable-next-line solid/no-innerhtml
-              innerHTML={icon()[1].replace('<svg ', `<svg width="${icon()[2][0]}" height="${icon()[2][1]}"`)}
+              innerHTML={setWidthHeight(icon()[1], icon()[2][0], icon()[2][1])}
             />;
           }
           return <g

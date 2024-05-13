@@ -314,7 +314,10 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
     }
   });
   // Also redraw the path elements in the defs
-  svgElement.querySelectorAll('defs clipPath > path').forEach((p) => {
+  // (we use :scope to select only the direct children of the current SVG element: maybe
+  // the user included some custom SVG images as layout features and we dont want
+  // to mess with them).
+  svgElement.querySelectorAll(':scope > defs clipPath > path').forEach((p) => {
     p.setAttribute(
       'd',
       // eslint-disable-next-line no-underscore-dangle

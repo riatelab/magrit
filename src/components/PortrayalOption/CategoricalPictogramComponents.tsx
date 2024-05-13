@@ -24,7 +24,7 @@ const getBackgroundValue = (
   item: Pick<CategoricalPictogramMapping, 'iconType' | 'iconContent'>,
 ) => {
   if (item.iconType === ImageType.SVG) {
-    return `url(data:image/svg+xml;base64,${btoa(item.iconContent)})`;
+    return `url(data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(item.iconContent)))})`;
   }
   return `url(${item.iconContent})`;
 };
@@ -141,7 +141,7 @@ export function IconSelectionOverlay(
               height: '40px',
               display: 'inline-block',
               'background-size': '40px 40px',
-              'background-image': `url(data:image/svg+xml;base64,${btoa(svgContent)})`,
+              'background-image': `url(data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgContent)))})`,
             }}
             onClick={() => {
               setImageType(ImageType.SVG);

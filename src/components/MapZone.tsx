@@ -452,12 +452,11 @@ export default function MapZone(): JSX.Element {
     svgElem.appendChild(clone);
     // Get the layer name for the clicked feature
     let targetGroup = element as SVGElement;
-    while (
-      targetGroup.tagName !== 'g'
-      && !targetGroup.classList.contains('layer')
-      && targetGroup.parentElement
-    ) {
+    let i = 0;
+    while (targetGroup.parentElement && i < 7) {
       targetGroup = targetGroup.parentElement! as SVGElement;
+      if (targetGroup.classList.contains('layer')) break;
+      i += 1;
     }
     const layer = findLayerById(
       layersDescriptionStore.layers,

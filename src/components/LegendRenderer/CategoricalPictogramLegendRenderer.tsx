@@ -16,6 +16,7 @@ import {
   RectangleBox,
   triggerContextMenuLegend,
 } from './common.tsx';
+import { setWidthHeight } from '../../helpers/sanitize-svg';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -120,11 +121,7 @@ export default function legendCategoricalPictogram(
                   ))})`}
                   // eslint-disable-next-line solid/no-innerhtml
                   innerHTML={
-                    item.iconContent
-                      .replace(
-                        '<svg ',
-                        `<svg width="${item.iconDimension[0]}" height="${item.iconDimension[1]}"`,
-                      )
+                    setWidthHeight(item.iconContent, item.iconDimension[0], item.iconDimension[1])
                   }
                 />
                 <text

@@ -48,7 +48,7 @@ export default function ImageSymbolSelection(
 
   const backgroundValue = (content: string) => {
     if (imageType() === ImageType.SVG) {
-      return `url(data:image/svg+xml;base64,${btoa(content)})`;
+      return `url(data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(content)))})`;
     }
     return `url(${content})`;
   };
@@ -118,7 +118,7 @@ export default function ImageSymbolSelection(
               height: '40px',
               display: 'inline-block',
               'background-size': '40px 40px',
-              'background-image': `url(data:image/svg+xml;base64,${btoa(svgContent)})`,
+              'background-image': `url(data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgContent)))})`,
             }}
             onClick={() => {
               setImageType(ImageType.SVG);
