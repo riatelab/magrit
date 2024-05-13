@@ -112,6 +112,7 @@ import {
   type ChoroplethLegend,
   type ProportionalSymbolsLegend,
   type CategoricalChoroplethLegend,
+  type CategoricalPictogramLegend,
   type DiscontinuityLegend,
   type LabelsLegend,
   type LinearRegressionScatterPlot,
@@ -345,97 +346,6 @@ const makeMapResizable = (refMapShadow: HTMLDivElement) => {
     });
 };
 
-const makeMapZoomable = (svgElem: SVGSVGElement & IZoomable) => {
-  // When applyZoomPan is called with redraw = false,
-  // the map is not redrawn, but we set the 'transform' attribute
-  // of the layers to the current transform value.
-  // When applyZoomPan is called with redraw = true,
-  // we change the projection scale and translate values
-  // so that the map paths are redrawn with the new values (the map
-  // should not change visually, so we need to use
-  // the values used in the transform attribute up to now
-  // and remove the transform attribute from the elements on
-  // which it was defined).
-  const applyZoomPan = (e: MouseEvent & d3.D3ZoomEvent<any, any>, redraw: boolean) => {
-    if (!redraw) {
-      const t = e.transform.toString();
-      // We just change the transform attribute of the layers
-      svgElem.querySelectorAll('g.layer').forEach((g: Element) => {
-        // applyTransformTransition(g as SVGGElement, t, 100);
-        g.setAttribute('transform', t);
-      });
-    } else {
-      const lastTransform = svgElem.__zoom; // eslint-disable-line no-underscore-dangle
-      // We need the previous projection scale, rotate and translate values
-      // to compute the new ones
-      const previousProjectionScale = mapStore.scale;
-      const previousProjectionTranslate = mapStore.translate;
-      const initialRotate = mapStore.rotate;
-
-      // Compute new values for scale and translate from
-      // the last zoom event
-      const lastScale = lastTransform.k;
-      const scaleValue = lastScale * previousProjectionScale;
-      const translateValue = [
-        lastTransform.x + previousProjectionTranslate[0] * lastScale,
-        lastTransform.y + previousProjectionTranslate[1] * lastScale,
-      ];
-      // Keep rotation value unchanged for now
-      const rotateValue = initialRotate;
-
-      // Update the projection properties in the mapStore - this
-      // will update the 'projection' entry in the global store
-      // and redraw the map
-      setMapStore({
-        scale: scaleValue,
-        translate: translateValue,
-        rotate: rotateValue,
-      });
-    }
-  };
-
-  // Debounce the applyZoomPan function to avoid redrawing the map
-  // too often when zooming
-  const redrawDebounced = debounce((e) => {
-    applyZoomPan(e, true);
-  }, 20);
-
-  // Set up the zoom behavior
-  const zoom = d3.zoom()
-    .on('zoom', (e) => {
-      if (mapStore.lockZoomPan) {
-        // If zoom/pan is locked,
-        // we just ensure that the __zoom property of the svg element
-        // is set to the identity transform, so that the zoom/pan
-        // does not change the map.
-        // eslint-disable-next-line no-underscore-dangle, no-param-reassign
-        svgElem.__zoom = d3.zoomIdentity;
-      } else {
-        // Otherwise we apply the zoom/pan
-        applyZoomPan(e, false);
-      }
-    })
-    .on('end', (e) => {
-      // Clicking on the map triggers a zoom event
-      // but we don't want to redraw the map in this case
-      if (e.transform.k === 1 && e.transform.x === 0 && e.transform.y === 0) {
-        return;
-      }
-      if (mapStore.lockZoomPan) {
-        // eslint-disable-next-line no-underscore-dangle, no-param-reassign
-        svgElem.__zoom = d3.zoomIdentity;
-      } else if (applicationSettingsStore.zoomBehavior === ZoomBehavior.Redraw) {
-        redrawDebounced(e);
-      }
-    });
-
-  const sel = d3.select(svgElem);
-  // Apply the zoom behavior to the SVG element
-  zoom.apply(null, [sel]);
-  // Remove the default double-click zoom behavior
-  sel.on('dblclick.zoom', null);
-};
-
 export default function MapZone(): JSX.Element {
   let svgElem: SVGSVGElement & IZoomable;
   let refMapShadow: HTMLDivElement;
@@ -515,22 +425,32 @@ export default function MapZone(): JSX.Element {
   };
   const handleClickZoomIn = () => {
     if (mapStore.lockZoomPan) return;
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    resetInfoFeature();
     handleClickZoom(1);
   };
+
   const handleClickZoomOut = () => {
     if (mapStore.lockZoomPan) return;
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    resetInfoFeature();
     handleClickZoom(-1);
   };
 
-  let layerInfo: SVGGElement & ID3Element;
-
-  const onClickFeature = (e: MouseEvent & { target: SVGElement & ID3Element }) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const onClickFeature = (element: SVGElement & ID3Element) => {
     setGlobalStore({
       // eslint-disable-next-line no-underscore-dangle
-      infoTargetFeature: e.target.__data__.properties || {},
+      infoTargetFeature: element.__data__.properties || {},
     });
+    // Clone the clicked SVG element and add it on top of the others
+    // with a slightly modified style
+    svgElem.getElementById('cloned-feature')?.remove();
+    const clone = element.cloneNode(true) as SVGElement & ID3Element;
+    clone.id = 'cloned-feature';
+    clone.style.stroke = 'red';
+    clone.style.strokeWidth = '3px';
+    clone.style.fill = 'none';
+    svgElem.appendChild(clone);
   };
 
   const onEscapeKey = (e: KeyboardEvent) => {
@@ -541,12 +461,38 @@ export default function MapZone(): JSX.Element {
     }
   };
 
+  const resetInfoFeature = () => {
+    svgElem.getElementById('cloned-feature')?.remove();
+    setGlobalStore({ infoTargetFeature: {} });
+  };
+
+  const onMouseMoveInfo = (e) => {
+    const element = document.elementFromPoint(e.clientX, e.clientY);
+    if (!element) return;
+    let it = 0;
+    let targetElement = element;
+    // We need to find the first SVG element in the hierarchy that contains data
+    // eslint-disable-next-line no-underscore-dangle
+    while (!targetElement.__data__ && it < 10) {
+      if (!targetElement.parentElement) {
+        resetInfoFeature();
+        return;
+      }
+      targetElement = targetElement.parentElement;
+      it += 1;
+    }
+    // eslint-disable-next-line no-underscore-dangle
+    if (targetElement.__data__) {
+      onClickFeature(targetElement as SVGGElement & ID3Element);
+    } else {
+      resetInfoFeature();
+    }
+  };
+
   const cleanUpInfoFeature = () => {
     svgElem.style.cursor = 'default';
-    layerInfo.querySelectorAll('path, rect, circle').forEach((el) => {
-      el.removeEventListener('click', onClickFeature);
-    });
-    setGlobalStore({ infoTargetFeature: {} });
+    resetInfoFeature();
+    svgElem.removeEventListener('mousemove', onMouseMoveInfo);
     window.removeEventListener('keydown', onEscapeKey);
   };
 
@@ -556,20 +502,107 @@ export default function MapZone(): JSX.Element {
       setGlobalStore({ infoTargetFeature: {} });
       svgElem.focus();
       svgElem.style.cursor = 'help';
-      // The layer that is on top of the others
-      const layers = svgElem.querySelectorAll('g.layer');
-      layerInfo = layers[layers.length - 1] as SVGGElement & ID3Element;
-      layerInfo.querySelectorAll('path, rect, circle').forEach((el) => {
-        el.addEventListener('click', onClickFeature);
-      });
+      svgElem.addEventListener('mousemove', onMouseMoveInfo, { passive: true });
       window.addEventListener('keydown', onEscapeKey);
     } else {
       cleanUpInfoFeature();
     }
   };
 
+  const makeMapZoomable = (/* svgElem: SVGSVGElement & IZoomable */) => {
+    // When applyZoomPan is called with redraw = false,
+    // the map is not redrawn, but we set the 'transform' attribute
+    // of the layers to the current transform value.
+    // When applyZoomPan is called with redraw = true,
+    // we change the projection scale and translate values
+    // so that the map paths are redrawn with the new values (the map
+    // should not change visually, so we need to use
+    // the values used in the transform attribute up to now
+    // and remove the transform attribute from the elements on
+    // which it was defined).
+    const applyZoomPan = (e: MouseEvent & d3.D3ZoomEvent<any, any>, redraw: boolean) => {
+      if (!redraw) {
+        const t = e.transform.toString();
+        // We just change the transform attribute of the layers
+        svgElem.querySelectorAll('g.layer').forEach((g: Element) => {
+          // applyTransformTransition(g as SVGGElement, t, 100);
+          g.setAttribute('transform', t);
+        });
+      } else {
+        const lastTransform = svgElem.__zoom; // eslint-disable-line no-underscore-dangle
+        // We need the previous projection scale, rotate and translate values
+        // to compute the new ones
+        const previousProjectionScale = mapStore.scale;
+        const previousProjectionTranslate = mapStore.translate;
+        const initialRotate = mapStore.rotate;
+
+        // Compute new values for scale and translate from
+        // the last zoom event
+        const lastScale = lastTransform.k;
+        const scaleValue = lastScale * previousProjectionScale;
+        const translateValue = [
+          lastTransform.x + previousProjectionTranslate[0] * lastScale,
+          lastTransform.y + previousProjectionTranslate[1] * lastScale,
+        ];
+        // Keep rotation value unchanged for now
+        const rotateValue = initialRotate;
+
+        // Update the projection properties in the mapStore - this
+        // will update the 'projection' entry in the global store
+        // and redraw the map
+        setMapStore({
+          scale: scaleValue,
+          translate: translateValue,
+          rotate: rotateValue,
+        });
+      }
+    };
+
+    // Debounce the applyZoomPan function to avoid redrawing the map
+    // too often when zooming
+    const redrawDebounced = debounce((e) => {
+      applyZoomPan(e, true);
+    }, 20);
+
+    // Set up the zoom behavior
+    const zoom = d3.zoom()
+      .on('zoom', (e) => {
+        if (mapStore.lockZoomPan) {
+          // If zoom/pan is locked,
+          // we just ensure that the __zoom property of the svg element
+          // is set to the identity transform, so that the zoom/pan
+          // does not change the map.
+          // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+          svgElem.__zoom = d3.zoomIdentity;
+        } else {
+          // Otherwise we apply the zoom/pan
+          applyZoomPan(e, false);
+          resetInfoFeature();
+        }
+      })
+      .on('end', (e) => {
+        // Clicking on the map triggers a zoom event
+        // but we don't want to redraw the map in this case
+        if (e.transform.k === 1 && e.transform.x === 0 && e.transform.y === 0) {
+          return;
+        }
+        if (mapStore.lockZoomPan) {
+          // eslint-disable-next-line no-underscore-dangle, no-param-reassign
+          svgElem.__zoom = d3.zoomIdentity;
+        } else if (applicationSettingsStore.zoomBehavior === ZoomBehavior.Redraw) {
+          redrawDebounced(e);
+        }
+      });
+
+    const sel = d3.select(svgElem);
+    // Apply the zoom behavior to the SVG element
+    zoom.apply(null, [sel]);
+    // Remove the default double-click zoom behavior
+    sel.on('dblclick.zoom', null);
+  };
+
   onMount(() => {
-    makeMapZoomable(svgElem);
+    makeMapZoomable();
     makeMapResizable(refMapShadow);
   });
 

@@ -113,13 +113,11 @@ export function bindMouseEnterLeave(refElement: SVGGElement): void {
   // that's why we use the style attribute instead of the fill attribute here,
   // so that when the style attribute is used it overrides the fill and fill-opacity attributes).
   refElement.addEventListener('mouseover', () => {
-    if (globalStore.isInfo) return;
     const rectangleBoxLegend = refElement.querySelector('.legend-box') as SVGRectElement;
     rectangleBoxLegend.setAttribute('style', 'fill: green; fill-opacity: 0.1');
   });
   // Remove the style attribute when the mouse leaves the refElement group.
   refElement.addEventListener('mouseleave', () => {
-    if (globalStore.isInfo) return;
     const rectangleBoxLegend = refElement.querySelector('.legend-box') as SVGRectElement;
     rectangleBoxLegend.removeAttribute('style');
   });
@@ -153,6 +151,9 @@ export function bindDragBehavior(
       elem = elem.parentElement as Element;
     }
   }
+
+  // Initial cursor state
+  let initialCursor: string | undefined;
 
   // Get the initial position of the legend
   let [positionX, positionY] = legend.position;
@@ -193,7 +194,7 @@ export function bindDragBehavior(
 
   const deselectElement = async () => {
     refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
-    outerSvg.style.cursor = 'default'; // eslint-disable-line no-param-reassign
+    outerSvg.style.cursor = initialCursor || 'default'; // eslint-disable-line no-param-reassign
     outerSvg.removeEventListener('mousemove', moveElement);
     outerSvg.removeEventListener('mouseup', deselectElement);
 
@@ -216,7 +217,6 @@ export function bindDragBehavior(
   };
 
   refElement.addEventListener('mousedown', (e) => {
-    if (globalStore.isInfo) return;
     // Dragging only occurs when the user
     // clicks with the main mouse button (usually the left one).
     // If the mousedown is triggered by another button, we return immediately.
@@ -227,6 +227,8 @@ export function bindDragBehavior(
     outerSvg.addEventListener('mousemove', moveElement);
     outerSvg.addEventListener('mouseup', deselectElement);
     // Cursor style
+    // Store the previous cursor style of the parent SVG element
+    initialCursor = outerSvg.style.cursor;
     // First change the cursor of the refElement group to grabbing
     refElement.style.cursor = 'grabbing'; // eslint-disable-line no-param-reassign
     // Then change the cursor of the parent SVG element to grabbing
@@ -259,7 +261,7 @@ export function getTextSize(
   const elem = document.createElementNS('http://www.w3.org/2000/svg', 'text');
   elem.style.visibility = 'hidden';
   elem.style.paintOrder = 'stroke';
-  elem.setAttribute('font-size', `${fontSize}px`);
+  elem.setAttribute('f-ont-size', `${fontSize}px`);
   elem.setAttribute('font-family', fontFamily);
   elem.setAttribute('stroke-width', `${strokeWidth}px` || '0px');
   // Add all the lines of the text

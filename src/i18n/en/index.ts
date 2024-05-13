@@ -102,7 +102,7 @@ const en = {
       Lock: 'Lock zoom / position',
       Unlock: 'Unlock zoom / position',
       Info: 'Display information on selected feature',
-      InfoInstruction: 'Click on a feature to display information. Press "Esc" to close.',
+      InfoInstruction: 'Hover over a feature to display its information. Press "Esc" to close.',
     },
   },
   LeftMenu: {
@@ -267,6 +267,7 @@ const en = {
       Links: 'Links',
       Mushrooms: 'Mushrooms',
       PointAggregation: 'Point layer aggregation',
+      LineAggregation: 'Line layer aggregation',
       SimpleLinearRegression: 'Simple linear regression',
       Aggregation: 'Aggregation',
       Selection: 'Selection',
@@ -469,6 +470,13 @@ const en = {
       FilterEmptyCells: 'Filter empty cells',
       NewLayerName: 'Aggregated_points_{layerName}',
     },
+    LineAggregationOptions: {
+      ComputationType: 'Computation type',
+      ComputationTypeTotalDistance: 'Total distance',
+      ComputationTypeWeightedDistance: 'Total distance, weighted by a variable',
+      ComputationTypeMeanDistance: 'Mean distance',
+      NewLayerName: 'Aggregated_lines_{layerName}',
+    },
     LayerFromTableOptions: {
       Mode: 'Mode',
       ModeXY: 'Fields for X and Y coordinates',
@@ -644,6 +652,7 @@ const en = {
       Grid: 'A grid map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable, but with a grid layout.',
       Links: 'A links map is a thematic map in which links are drawn between points or areas, optionally with a width in proportion to the value of a variable.',
       PointAggregation: 'Point aggregation is a functionality that allows you to aggregate point data into a grid or a polygonal layer.',
+      LineAggregation: 'Line aggregation is a functionality that allows you to aggregate line data into a grid or a polygonal layer.',
       SimpleLinearRegression: 'Simple linear regression is a functionality that allows you to display the result of a simple linear regression on a layer.',
       Mushrooms: 'A mushrooms map is a thematic map in which the values of two variables are represented by two half-circles or two half-squares, forming a mushroom-shaped symbol.',
       Aggregation: 'This functionality enables polygonal entities to be aggregated according to the value of a field (or all entities if no field is selected).',

@@ -370,7 +370,7 @@ type RootTranslation = {
 			 */
 			Info: string
 			/**
-			 * C​l​i​c​k​ ​o​n​ ​a​ ​f​e​a​t​u​r​e​ ​t​o​ ​d​i​s​p​l​a​y​ ​i​n​f​o​r​m​a​t​i​o​n​.​ ​P​r​e​s​s​ ​"​E​s​c​"​ ​t​o​ ​c​l​o​s​e​.
+			 * H​o​v​e​r​ ​o​v​e​r​ ​a​ ​f​e​a​t​u​r​e​ ​t​o​ ​d​i​s​p​l​a​y​ ​i​t​s​ ​i​n​f​o​r​m​a​t​i​o​n​.​ ​P​r​e​s​s​ ​"​E​s​c​"​ ​t​o​ ​c​l​o​s​e​.
 			 */
 			InfoInstruction: string
 		}
@@ -964,6 +964,10 @@ type RootTranslation = {
 			 * P​o​i​n​t​ ​l​a​y​e​r​ ​a​g​g​r​e​g​a​t​i​o​n
 			 */
 			PointAggregation: string
+			/**
+			 * L​i​n​e​ ​l​a​y​e​r​ ​a​g​g​r​e​g​a​t​i​o​n
+			 */
+			LineAggregation: string
 			/**
 			 * S​i​m​p​l​e​ ​l​i​n​e​a​r​ ​r​e​g​r​e​s​s​i​o​n
 			 */
@@ -1678,6 +1682,29 @@ type RootTranslation = {
 			 */
 			NewLayerName: RequiredParams<'layerName'>
 		}
+		LineAggregationOptions: {
+			/**
+			 * C​o​m​p​u​t​a​t​i​o​n​ ​t​y​p​e
+			 */
+			ComputationType: string
+			/**
+			 * T​o​t​a​l​ ​d​i​s​t​a​n​c​e
+			 */
+			ComputationTypeTotalDistance: string
+			/**
+			 * T​o​t​a​l​ ​d​i​s​t​a​n​c​e​,​ ​w​e​i​g​h​t​e​d​ ​b​y​ ​a​ ​v​a​r​i​a​b​l​e
+			 */
+			ComputationTypeWeightedDistance: string
+			/**
+			 * M​e​a​n​ ​d​i​s​t​a​n​c​e
+			 */
+			ComputationTypeMeanDistance: string
+			/**
+			 * A​g​g​r​e​g​a​t​e​d​_​l​i​n​e​s​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
+		}
 		LayerFromTableOptions: {
 			/**
 			 * M​o​d​e
@@ -2333,6 +2360,10 @@ type RootTranslation = {
 			 * P​o​i​n​t​ ​a​g​g​r​e​g​a​t​i​o​n​ ​i​s​ ​a​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​t​h​a​t​ ​a​l​l​o​w​s​ ​y​o​u​ ​t​o​ ​a​g​g​r​e​g​a​t​e​ ​p​o​i​n​t​ ​d​a​t​a​ ​i​n​t​o​ ​a​ ​g​r​i​d​ ​o​r​ ​a​ ​p​o​l​y​g​o​n​a​l​ ​l​a​y​e​r​.
 			 */
 			PointAggregation: string
+			/**
+			 * L​i​n​e​ ​a​g​g​r​e​g​a​t​i​o​n​ ​i​s​ ​a​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​t​h​a​t​ ​a​l​l​o​w​s​ ​y​o​u​ ​t​o​ ​a​g​g​r​e​g​a​t​e​ ​l​i​n​e​ ​d​a​t​a​ ​i​n​t​o​ ​a​ ​g​r​i​d​ ​o​r​ ​a​ ​p​o​l​y​g​o​n​a​l​ ​l​a​y​e​r​.
+			 */
+			LineAggregation: string
 			/**
 			 * S​i​m​p​l​e​ ​l​i​n​e​a​r​ ​r​e​g​r​e​s​s​i​o​n​ ​i​s​ ​a​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​t​h​a​t​ ​a​l​l​o​w​s​ ​y​o​u​ ​t​o​ ​d​i​s​p​l​a​y​ ​t​h​e​ ​r​e​s​u​l​t​ ​o​f​ ​a​ ​s​i​m​p​l​e​ ​l​i​n​e​a​r​ ​r​e​g​r​e​s​s​i​o​n​ ​o​n​ ​a​ ​l​a​y​e​r​.
 			 */
@@ -3460,7 +3491,7 @@ export type TranslationFunctions = {
 			 */
 			Info: () => LocalizedString
 			/**
-			 * Click on a feature to display information. Press "Esc" to close.
+			 * Hover over a feature to display its information. Press "Esc" to close.
 			 */
 			InfoInstruction: () => LocalizedString
 		}
@@ -4048,6 +4079,10 @@ export type TranslationFunctions = {
 			 * Point layer aggregation
 			 */
 			PointAggregation: () => LocalizedString
+			/**
+			 * Line layer aggregation
+			 */
+			LineAggregation: () => LocalizedString
 			/**
 			 * Simple linear regression
 			 */
@@ -4745,6 +4780,28 @@ export type TranslationFunctions = {
 			 */
 			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
+		LineAggregationOptions: {
+			/**
+			 * Computation type
+			 */
+			ComputationType: () => LocalizedString
+			/**
+			 * Total distance
+			 */
+			ComputationTypeTotalDistance: () => LocalizedString
+			/**
+			 * Total distance, weighted by a variable
+			 */
+			ComputationTypeWeightedDistance: () => LocalizedString
+			/**
+			 * Mean distance
+			 */
+			ComputationTypeMeanDistance: () => LocalizedString
+			/**
+			 * Aggregated_lines_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+		}
 		LayerFromTableOptions: {
 			/**
 			 * Mode
@@ -5394,6 +5451,10 @@ export type TranslationFunctions = {
 			 * Point aggregation is a functionality that allows you to aggregate point data into a grid or a polygonal layer.
 			 */
 			PointAggregation: () => LocalizedString
+			/**
+			 * Line aggregation is a functionality that allows you to aggregate line data into a grid or a polygonal layer.
+			 */
+			LineAggregation: () => LocalizedString
 			/**
 			 * Simple linear regression is a functionality that allows you to display the result of a simple linear regression on a layer.
 			 */

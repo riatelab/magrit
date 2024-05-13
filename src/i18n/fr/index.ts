@@ -102,7 +102,7 @@ const fr = {
       Lock: 'Verrouiller le zoom / la position',
       Unlock: 'Déverrouiller le zoom / la position',
       Info: 'Afficher les informations de l\'entité sélectionnée',
-      InfoInstruction: 'Cliquez sur une entité pour afficher ses informations. Appuyez sur "Échap" pour fermer la fenêtre d\'information.',
+      InfoInstruction: 'Survolez une entité pour afficher ses informations. Appuyez sur "Échap" pour fermer la fenêtre d\'information.',
     },
   },
   LeftMenu: {
@@ -267,6 +267,7 @@ const fr = {
       Links: 'Liens',
       Mushrooms: 'Champignons',
       PointAggregation: 'Agrégation d\'un semis de points',
+      LineAggregation: 'Agrégation de lignes',
       SimpleLinearRegression: 'Régression linéaire simple',
       Aggregation: 'Agrégation',
       Selection: 'Sélection',
@@ -469,6 +470,13 @@ const fr = {
       FilterEmptyCells: 'Filtrer les cellules vides',
       NewLayerName: 'Points_agrégés_{layerName}',
     },
+    LineAggregationOptions: {
+      ComputationType: 'Type de calcul',
+      ComputationTypeTotalDistance: 'Total des distances',
+      ComputationTypeWeightedDistance: 'Total des distances, pondéré par un champ',
+      ComputationTypeMeanDistance: 'Distance moyenne',
+      NewLayerName: 'Lignes_agrégées_{layerName}',
+    },
     LayerFromTableOptions: {
       Mode: 'Mode',
       ModeXY: 'Champs contenant les coordonnées X et les coordonnées Y',
@@ -645,6 +653,7 @@ const fr = {
       Links: 'Une carte de lien permet de tracer des liens entre des points ou des zones, optionnellement avec une largeur proportionnelle à un phénomène.',
       Mushrooms: 'Une carte en champignon est une carte thématique dans laquelle les valeurs de deux variables sont représentées par deux demi-cercles ou deux demi-carrés, formant un symbole ressemblant à un champignon.',
       PointAggregation: 'Une agrégation de points permet d\'agréger un semis de points dans différents types de maillages, pour obtenir une couche de stock (symboles proportionnels) ou de ratio (choroplèthe).',
+      LineAggregation: 'Une agrégation de lignes permet d\'agréger des lignes dans différents types de maillages, pour obtenir une couche de stock (symboles proportionnels) ou de ratio (choroplèthe).',
       SimpleLinearRegression: 'Une régression linéaire simple permet de réaliser une régression linéaire et d\'afficher le résultat sur une couche géographique.',
       Aggregation: 'Cette fonctionnalité permet d\'agréger des entités polygonales selon la valeur d\'un champ (ou toutes les entités si aucun champ n\'est choisi).',
       Selection: 'Cette fonctionnalité permet de créer une nouvelle couche basée sur la sélection des entités géographiques d\'origine en fonction d\'une expression.',
