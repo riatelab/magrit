@@ -264,7 +264,7 @@ const makeMapResizable = (refMapShadow: HTMLDivElement) => {
             const dh = initialShadowRect.height - event.rect.height;
             const h = initialShadowRect.height - dh * 2;
             // eslint-disable-next-line no-param-reassign
-            refMapShadow.style.top = `${(globalStore.windowDimensions.height - h - applicationSettingsStore.headerHeight) / 2}px`;
+            refMapShadow.style.top = `${(globalStore.windowDimensions.height - h - globalStore.headerHeight) / 2}px`;
             // eslint-disable-next-line no-param-reassign
             refMapShadow.style.height = `${h}px`;
           }
@@ -273,7 +273,7 @@ const makeMapResizable = (refMapShadow: HTMLDivElement) => {
             const dw = initialShadowRect.width - event.rect.width;
             const w = initialShadowRect.width - dw * 2;
             // eslint-disable-next-line no-param-reassign
-            refMapShadow.style.left = `${(globalStore.windowDimensions.width - w - applicationSettingsStore.leftMenuWidth) / 2}px`;
+            refMapShadow.style.left = `${(globalStore.windowDimensions.width - w - globalStore.leftMenuWidth) / 2}px`;
             // eslint-disable-next-line no-param-reassign
             refMapShadow.style.width = `${w}px`;
           }
@@ -633,8 +633,8 @@ export default function MapZone(): JSX.Element {
       class="map-zone__shadow"
       ref={refMapShadow!}
       style={{
-        top: `${(globalStore.windowDimensions.height - mapStore.mapDimensions.height - applicationSettingsStore.headerHeight) / 2 - 3}px`,
-        left: `${(globalStore.windowDimensions.width - mapStore.mapDimensions.width - applicationSettingsStore.leftMenuWidth) / 2 - 2}px`,
+        top: `${(globalStore.windowDimensions.height - mapStore.mapDimensions.height - globalStore.headerHeight) / 2 - 3}px`,
+        left: `${(globalStore.windowDimensions.width - mapStore.mapDimensions.width - globalStore.leftMenuWidth) / 2 - 2}px`,
         height: `${mapStore.mapDimensions.height + 4}px`,
         width: `${mapStore.mapDimensions.width + 5}px`,
       }}

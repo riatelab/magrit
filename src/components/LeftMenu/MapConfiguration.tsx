@@ -13,7 +13,6 @@ import { camelToFlat, unproxify } from '../../helpers/common';
 import { epsgDb } from '../../helpers/projection';
 
 // Stores
-import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
 import { mapStore, setMapStore } from '../../store/MapStore';
 import { setModalStore } from '../../store/ModalStore';
@@ -169,10 +168,10 @@ export default function MapConfiguration(): JSX.Element {
       label={LL().MapConfiguration.Width()}
       value={mapStore.mapDimensions.width}
       onChange={(v) => {
-        const maxSize = globalStore.windowDimensions.width - applicationSettingsStore.leftMenuWidth;
+        const maxSize = globalStore.windowDimensions.width - globalStore.leftMenuWidth;
         const width = v <= maxSize
           ? v
-          : globalStore.windowDimensions.width - applicationSettingsStore.leftMenuWidth - 10;
+          : globalStore.windowDimensions.width - globalStore.leftMenuWidth - 10;
         // Note that clip extent (if used) is automatically updated (in MapStore)
         // and that the path are automatically updated (triggered from MapStore too)
         setMapStore({
@@ -183,7 +182,7 @@ export default function MapConfiguration(): JSX.Element {
         });
       }}
       min={10}
-      max={globalStore.windowDimensions.width - applicationSettingsStore.leftMenuWidth - 10}
+      max={globalStore.windowDimensions.width - globalStore.leftMenuWidth - 10}
       step={1}
       width={100}
     />
@@ -191,10 +190,10 @@ export default function MapConfiguration(): JSX.Element {
       label={LL().MapConfiguration.Height()}
       value={mapStore.mapDimensions.height}
       onChange={(v) => {
-        const maxSize = globalStore.windowDimensions.height - applicationSettingsStore.headerHeight;
+        const maxSize = globalStore.windowDimensions.height - globalStore.headerHeight;
         const height = v <= maxSize
           ? v
-          : globalStore.windowDimensions.height - applicationSettingsStore.headerHeight - 10;
+          : globalStore.windowDimensions.height - globalStore.headerHeight - 10;
         // Note that clip extent (if used) is automatically updated (in MapStore)
         // and that the path are automatically updated (triggered from MapStore too)
         setMapStore({
@@ -205,7 +204,7 @@ export default function MapConfiguration(): JSX.Element {
         });
       }}
       min={10}
-      max={globalStore.windowDimensions.height - applicationSettingsStore.headerHeight - 10}
+      max={globalStore.windowDimensions.height - globalStore.headerHeight - 10}
       step={1}
       width={100}
     />

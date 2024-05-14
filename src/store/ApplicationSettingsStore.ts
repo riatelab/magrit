@@ -34,10 +34,6 @@ type ApplicationSettingsStoreType = {
   // The default behavior when the user resizes the window
   // (either shrink / grow the map or keep the same size and add scrollbars if necessary)
   resizeBehavior: ResizeBehavior,
-  // Size of the header (note that this is computed from the CSS)
-  headerHeight: number,
-  // Size of the left menu (note that this is computed from the CSS)
-  leftMenuWidth: number,
   // Whether to render layers that are not visible (selected
   // by the user in the Layer Manager) with
   // visibility: hidden (RenderVisibility.RenderAsHidden)
@@ -66,8 +62,6 @@ type ApplicationSettingsStoreType = {
   userLocale: string,
 };
 
-const computedStyle = getComputedStyle(document.documentElement);
-
 const [
   applicationSettingsStore,
   setApplicationSettingsStore,
@@ -76,8 +70,6 @@ const [
   defaultNoDataColor: '#ffffff',
   zoomBehavior: ZoomBehavior.Redraw,
   resizeBehavior: ResizeBehavior.ShrinkGrow,
-  headerHeight: +computedStyle.getPropertyValue('--header-height').replace('px', ''),
-  leftMenuWidth: +computedStyle.getPropertyValue('--left-menu-width').replace('px', ''),
   renderVisibility: RenderVisibility.DoNotRender,
   useClipExtent: false,
   defaultLegendSettings: {

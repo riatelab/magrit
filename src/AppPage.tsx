@@ -287,8 +287,8 @@ const AppPage: () => JSX.Element = () => {
   // (we need it before mounting the component because the map is
   // created when the component is mounted and the map uses mapStore.mapDimensions)
   const maxMapDimensions = {
-    width: round((window.innerWidth - applicationSettingsStore.leftMenuWidth) * 0.9, 0),
-    height: round((window.innerHeight - applicationSettingsStore.headerHeight) * 0.9, 0),
+    width: round((window.innerWidth - globalStore.leftMenuWidth) * 0.9, 0),
+    height: round((window.innerHeight - globalStore.headerHeight) * 0.9, 0),
   };
 
   setMapStoreBase({
@@ -304,21 +304,25 @@ const AppPage: () => JSX.Element = () => {
   });
 
   const onResize = (/* event: Event */): void => {
-    if (applicationSettingsStore.resizeBehavior === ResizeBehavior.ShrinkGrow) {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      setGlobalStore({
-        windowDimensions: {
-          width,
-          height,
-        },
-      });
+    // Store new dimensions of the window and size of header / left menu
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    setGlobalStore({
+      windowDimensions: {
+        width,
+        height,
+      },
+      headerHeight: +(getComputedStyle(document.documentElement).getPropertyValue('--header-height').replace('px', '')),
+      leftMenuWidth: +(getComputedStyle(document.documentElement).getPropertyValue('--left-menu-width').replace('px', '')),
+    });
 
+    // Resize (or not) the map according to the resize behavior
+    if (applicationSettingsStore.resizeBehavior === ResizeBehavior.ShrinkGrow) {
       // Store the new dimensions of the map
       setMapStore({
         mapDimensions: {
-          width: Math.round((width - applicationSettingsStore.leftMenuWidth) * 0.9),
-          height: Math.round((height - applicationSettingsStore.headerHeight) * 0.9),
+          width: Math.round((width - globalStore.leftMenuWidth) * 0.9),
+          height: Math.round((height - globalStore.headerHeight) * 0.9),
         },
       });
 
@@ -371,11 +375,11 @@ const AppPage: () => JSX.Element = () => {
           setReloadingProject(true);
           // Compute the default dimension of the map
           const mapWidth = round(
-            (window.innerWidth - applicationSettingsStore.leftMenuWidth) * 0.9,
+            (window.innerWidth - globalStore.leftMenuWidth) * 0.9,
             0,
           );
           const mapHeight = round(
-            (window.innerHeight - applicationSettingsStore.headerHeight) * 0.9,
+            (window.innerHeight - globalStore.headerHeight) * 0.9,
             0,
           );
 
