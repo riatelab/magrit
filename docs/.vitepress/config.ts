@@ -50,6 +50,9 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
         { text: 'Sélection attributaire', link: 'functionalities/selection-by-attribute' },
       ]
     },
+    { text: 'Questions fréquemment posées', link: 'faq' },
+    { text: 'Historique des changements', link: 'changelog' },
+    { text: 'Licences', link: 'licenses' },
   ];
 }
 
@@ -103,6 +106,9 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
         { text: 'Selection by attribute', link: 'en/functionalities/selection-by-attribute' },
       ]
     },
+    { text: 'Frequently asked questions', link: 'en/faq' },
+    { text: 'Changelog', link: 'en/changelog' },
+    { text: 'Licenses', link: 'en/licenses' },
   ];
 }
 
