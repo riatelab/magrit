@@ -139,6 +139,7 @@ export default function legendMushrooms(
 
   return <g
     ref={refElement!}
+    id={legend.id}
     class="legend mushrooms"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}

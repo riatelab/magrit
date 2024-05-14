@@ -19,6 +19,7 @@ import {
 import { FiType, FiLink } from 'solid-icons/fi';
 import { OcGoal2 } from 'solid-icons/oc';
 import toast from 'solid-toast';
+import { LocalizedString } from 'typesafe-i18n';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -176,6 +177,40 @@ const onClickTyping = (id: string, type: 'table' | 'layer', LL: Accessor<Transla
   });
 };
 
+const updateLegendPosition = (legend: Legend, infoMessage: LocalizedString) => {
+  // The legend node (after it is visible again) is used to compute the size of the legend
+  const legendNode = document.querySelector(`g.legend#${legend.id}`) as SVGGElement;
+  const { width, height } = legendNode.getBBox();
+  // Compute the new position of the legend so it is
+  // within the visibility zone
+  const newPosition = [legend.position[0], legend.position[1]];
+  if (legend.position[0] > mapStore.mapDimensions.width) {
+    newPosition[0] = mapStore.mapDimensions.width - width;
+  }
+  if (legend.position[1] > mapStore.mapDimensions.height) {
+    newPosition[1] = mapStore.mapDimensions.height - height;
+  }
+  // Update position so that legend is within the visibility zone
+  setLayersDescriptionStore(
+    'layoutFeaturesAndLegends',
+    (l: LayoutFeature | Legend) => l.id === legend.id,
+    'position',
+    newPosition,
+  );
+  // Inform the user that the legend has been displaced
+  toast.success(infoMessage, {
+    duration: 5000,
+    style: {
+      background: '#1f2937',
+      color: '#f3f4f6',
+    },
+    iconTheme: {
+      primary: '#38bdf8',
+      secondary: '#1f2937',
+    },
+  });
+};
+
 const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
   console.log('click legend on item ', id);
   // We want to handle various cases, mostly as in Magrit v1:
@@ -219,39 +254,12 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
       && (legend.position[0] > mapStore.mapDimensions.width
         || legend.position[1] > mapStore.mapDimensions.height)
     ) {
-      const legendNode = document.querySelector(`g.legend[for="${id}"]`) as SVGGElement;
-      const { width, height } = legendNode.getBBox();
-      const newPosition = [legend.position[0], legend.position[1]];
-      if (legend.position[0] > mapStore.mapDimensions.width) {
-        newPosition[0] = mapStore.mapDimensions.width - width;
-      }
-      if (legend.position[1] > mapStore.mapDimensions.height) {
-        newPosition[1] = mapStore.mapDimensions.height - height;
-      }
-      // Update position so that legend is within the visibility zone
-      setLayersDescriptionStore(
-        'layoutFeaturesAndLegends',
-        (l: LayoutFeature | Legend) => l.id === legend.id,
-        'position',
-        newPosition,
-      );
-      // Inform the user that the legend has been displaced
-      toast.success(LL().LayerManager.LegendDisplacement(), {
-        duration: 5000,
-        style: {
-          background: '#1f2937',
-          color: '#f3f4f6',
-        },
-        iconTheme: {
-          primary: '#38bdf8',
-          secondary: '#1f2937',
-        },
-      });
+      updateLegendPosition(legend, LL().LayerManager.LegendDisplacement());
     }
   } else if (legends.length > 1) {
-    const anyVisible = legends.some((l) => l.visible);
+    const someVisible = legends.some((l) => l.visible);
     const allVisible = legends.every((l) => l.visible);
-    if (anyVisible && allVisible) {
+    if (someVisible && allVisible) {
       // All the legends are visible, we hide them all
       legends.forEach((legend) => {
         setLayersDescriptionStore(
@@ -277,34 +285,7 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
           legend.position[0] > mapStore.mapDimensions.width
           || legend.position[1] > mapStore.mapDimensions.height
         ) {
-          const legendNode = document.querySelector(`g.legend[for="${id}"]`) as SVGGElement;
-          const { width, height } = legendNode.getBBox();
-          const newPosition = [legend.position[0], legend.position[1]];
-          if (legend.position[0] > mapStore.mapDimensions.width) {
-            newPosition[0] = mapStore.mapDimensions.width - width;
-          }
-          if (legend.position[1] > mapStore.mapDimensions.height) {
-            newPosition[1] = mapStore.mapDimensions.height - height;
-          }
-          // Update position so that legend is within the visibility zone
-          setLayersDescriptionStore(
-            'layoutFeaturesAndLegends',
-            (l: LayoutFeature | Legend) => l.id === legend.id,
-            'position',
-            newPosition,
-          );
-          // Inform the user that the legend has been displaced
-          toast.success(LL().LayerManager.LegendDisplacement(), {
-            duration: 5000,
-            style: {
-              background: '#1f2937',
-              color: '#f3f4f6',
-            },
-            iconTheme: {
-              primary: '#38bdf8',
-              secondary: '#1f2937',
-            },
-          });
+          updateLegendPosition(legend, LL().LayerManager.LegendDisplacement());
         }
       });
     }

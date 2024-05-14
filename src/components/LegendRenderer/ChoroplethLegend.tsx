@@ -137,6 +137,7 @@ function verticalLegend(
 
   return <g
     ref={refElement!}
+    id={legendParameters.id}
     class="legend choropleth"
     for={layer.id}
     transform={`translate(${legendParameters.position[0]}, ${legendParameters.position[1]})`}
@@ -349,6 +350,7 @@ function horizontalLegend(
 
   return <g
     ref={refElement!}
+    id={legendParameters.id}
     class="legend choropleth"
     for={layer.id}
     transform={`translate(${legendParameters.position[0]}, ${legendParameters.position[1]})`}

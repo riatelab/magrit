@@ -121,6 +121,7 @@ function stackedSquareLegend(
 
   return <g
     ref={refElement!}
+    id={legend.id}
     class="legend proportionalSymbols"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
@@ -300,6 +301,7 @@ function horizontalSquareLegend(
 
   return <g
     ref={refElement!}
+    id={legend.id}
     class="legend proportionalSymbols"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
@@ -461,6 +463,7 @@ function verticalSquareLegend(
 
   return <g
     ref={refElement!}
+    id={legend.id}
     class="legend proportionalSymbols"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
@@ -602,6 +605,7 @@ function stackedCircleLegend(
 
   return <g
     ref={refElement!}
+    id={legend.id}
     class="legend proportionalSymbols"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
@@ -768,6 +772,7 @@ function verticalCircleLegend(
 
   return <g
     ref={refElement!}
+    id={legend.id}
     class="legend proportionalSymbols"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
@@ -938,6 +943,7 @@ function horizontalCircleLegend(
 
   return <g
     ref={refElement!}
+    id={legend.id}
     class="legend proportionalSymbols"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
@@ -1118,6 +1124,7 @@ function verticalLineLegend(
 
   return <g
     ref={refElement!}
+    id={legend.id}
     class="legend proportionalSymbols"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}

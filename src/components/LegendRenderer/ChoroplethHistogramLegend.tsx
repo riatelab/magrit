@@ -154,6 +154,7 @@ export default function legendChoroplethHistogram(
 
   return <g
     ref={refElement!}
+    id={legend.id}
     class="legend choropleth-histogram"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}

@@ -155,8 +155,10 @@ export function bindDragBehavior(
   // Initial cursor state
   let initialCursor: string | undefined;
 
-  // Get the initial position of the legend
-  let [positionX, positionY] = legend.position;
+  // The initial position of the legend (its set with the real value
+  // in mousedown event listener, when the user starts dragging the legend)
+  let positionX = 0;
+  let positionY = 0;
   let i = 0;
   const moveElement = async (e: MouseEvent) => {
     if (((i++) % 2) === 0) { // eslint-disable-line no-plusplus
@@ -234,7 +236,9 @@ export function bindDragBehavior(
     // Then change the cursor of the parent SVG element to grabbing
     outerSvg.style.cursor = 'grabbing'; // eslint-disable-line no-param-reassign
 
-    // isDragging = true;
+    // Initial position of the legend
+    [positionX, positionY] = legend.position;
+
     x = e.clientX;
     y = e.clientY;
     // Maybe we should disable pointer events on the refElement group ?

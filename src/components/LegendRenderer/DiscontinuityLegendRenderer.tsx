@@ -130,6 +130,7 @@ function verticalDiscontinuityLegend(
 
   return <g
     ref={refElement!}
+    id={legend.id}
     class="legend discontinuity"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
@@ -257,6 +258,7 @@ function horizontalDiscontinuityLegend(
 
   return <g
     ref={refElement!}
+    id={legend.id}
     class="legend discontinuity"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}

@@ -165,6 +165,7 @@ export default function lmScatterPlot(
 
   return <g
     ref={refElement!}
+    id={legend.id}
     class="legend lm-scatter-plot"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}

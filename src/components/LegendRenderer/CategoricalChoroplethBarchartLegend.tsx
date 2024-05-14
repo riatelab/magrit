@@ -220,6 +220,7 @@ export default function legendCategoricalChoroplethBarchart(
 
   return <g
     ref={refElement!}
+    id={legend.id}
     class="legend categorical-choropleth-barchart"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
