@@ -228,13 +228,14 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
       if (legend.position[1] > mapStore.mapDimensions.height) {
         newPosition[1] = mapStore.mapDimensions.height - height;
       }
+      // Update position so that legend is within the visibility zone
       setLayersDescriptionStore(
         'layoutFeaturesAndLegends',
         (l: LayoutFeature | Legend) => l.id === legend.id,
-        'legend',
         'position',
         newPosition,
       );
+      // Inform the user that the legend has been displaced
       toast.success(LL().LayerManager.LegendDisplacement(), {
         duration: 5000,
         style: {
@@ -285,16 +286,14 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
           if (legend.position[1] > mapStore.mapDimensions.height) {
             newPosition[1] = mapStore.mapDimensions.height - height;
           }
-          // FIXME: there seems to be a bug here, when one of the two legend
-          //   (the histogram or the bar chart) is not visible anymore
-          //   because it is out of the visibility zone. Need to investigate.
+          // Update position so that legend is within the visibility zone
           setLayersDescriptionStore(
             'layoutFeaturesAndLegends',
             (l: LayoutFeature | Legend) => l.id === legend.id,
-            'legend',
             'position',
             newPosition,
           );
+          // Inform the user that the legend has been displaced
           toast.success(LL().LayerManager.LegendDisplacement(), {
             duration: 5000,
             style: {
