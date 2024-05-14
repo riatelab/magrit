@@ -43,7 +43,7 @@
     "@types/topojson-simplify": "^3.0.3",
     "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
-    "electron": "^29.3.0",
+    "electron": "^29.3.3",
     "electron-builder": "^24.13.3",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-typescript": "^18.0.0",
