@@ -97,6 +97,7 @@ export function bindDragBehavior(
     outerSvg.style.cursor = 'default'; // eslint-disable-line no-param-reassign
     outerSvg.removeEventListener('mousemove', moveElement);
     outerSvg.removeEventListener('mouseup', deselectElement);
+    outerSvg.removeEventListener('mouseleave', deselectElement);
 
     // Do we want to snap coordinates on a grid ?
     // (if so we do so by rounding the coordinates to the nearest multiple of 10)
@@ -142,6 +143,8 @@ export function bindDragBehavior(
     // Listen on events on the parent SVG element
     outerSvg.addEventListener('mousemove', moveElement);
     outerSvg.addEventListener('mouseup', deselectElement);
+    outerSvg.addEventListener('mouseleave', deselectElement);
+
     // Cursor style
     // Store the previous cursor style of the parent SVG element
     initialCursor = outerSvg.style.cursor;

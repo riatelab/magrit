@@ -159,7 +159,9 @@ export function bindDragBehavior(
   // in mousedown event listener, when the user starts dragging the legend)
   let positionX = 0;
   let positionY = 0;
+
   let i = 0;
+
   const moveElement = async (e: MouseEvent) => {
     if (((i++) % 2) === 0) { // eslint-disable-line no-plusplus
       // We skip some mousemove events to improve performance
@@ -199,6 +201,7 @@ export function bindDragBehavior(
     outerSvg.style.cursor = initialCursor || 'default'; // eslint-disable-line no-param-reassign
     outerSvg.removeEventListener('mousemove', moveElement);
     outerSvg.removeEventListener('mouseup', deselectElement);
+    outerSvg.removeEventListener('mouseleave', deselectElement);
 
     await yieldOrContinue('smooth');
 
@@ -228,6 +231,8 @@ export function bindDragBehavior(
     // Listen on events on the parent SVG element
     outerSvg.addEventListener('mousemove', moveElement);
     outerSvg.addEventListener('mouseup', deselectElement);
+    outerSvg.addEventListener('mouseleave', deselectElement);
+
     // Cursor style
     // Store the previous cursor style of the parent SVG element
     initialCursor = outerSvg.style.cursor;
@@ -265,7 +270,7 @@ export function getTextSize(
   const elem = document.createElementNS('http://www.w3.org/2000/svg', 'text');
   elem.style.visibility = 'hidden';
   elem.style.paintOrder = 'stroke';
-  elem.setAttribute('f-ont-size', `${fontSize}px`);
+  elem.setAttribute('font-size', `${fontSize}px`);
   elem.setAttribute('font-family', fontFamily);
   elem.setAttribute('stroke-width', `${strokeWidth}px` || '0px');
   // Add all the lines of the text
