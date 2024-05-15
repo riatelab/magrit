@@ -32,11 +32,13 @@ Les champs actuels de la couche sont accessibles sous forme de raccourcis (bouto
 - `$id` : l'identifiant unique (et interne) de l'entité,
 - `$area` : l'aire de l'entité (si il s'agit d'un polygone).
 
-Plusieurs opérations sont possibles (certains sont présentes sous forme d'un raccourci - boutons bleus) :
+Plusieurs opérations sont possibles (certaines sont présentes sous forme d'un raccourci - boutons bleus) :
 
 - les opérateurs mathématiques de base (`+`, `-`, `*`, `/`),
 - des fonctions mathématiques (`sqrt`, `exp`, `abs`, `round`, `floor`, `ceil` et `power`),
 - des fonctions de chaînes de caractères (`concat`, `substring`, `lower`, `upper`, `trim` et `replace`).
+- les opérateurs de comparaison (`LIKE`, `=`, `!=`, `>`, `>=`, `<` et `<=`), la négation (`NOT`) et les opérations logiques (`AND`, `OR`),
+- la construction de conditions (`CASE WHEN ... THEN ... ELSE ... END`).
 
 Afin de créer un nouveau champ, il est nécessaire de spécifier le nom du champ à créer, le type de données (stock, ratio, etc.) et la formule de calcul.
 Lorsque la formule est valide, un aperçu des valeurs calculées (3 premières lignes du tableau) est affiché.
@@ -48,6 +50,42 @@ Lorsque la formule n'est pas valide, un message d'erreur est affiché et le bout
 ![Tableau de données - Nouveau champ avec formule invalide](img/data-table-invalid-formula1.png)
 
 ![Tableau de données - Nouveau champ avec formule invalide](img/data-table-invalid-formula2.png)
+
+### Exemples de formules
+
+#### Reclasser des données quantitatives en données qualitatives
+
+La construction de formules utilisant des conditions permet de facilement reclasser des données quantitatives en données qualitatives.
+Par exemple, pour créer une nouvelle colonne "Type de population" basée sur la colonne "Population" avec les
+conditions suivantes :
+
+- si la population est inférieure à 1000, alors "Petite",
+- si la population est comprise entre 1000 et 10000, alors "Moyenne",
+- si la population est supérieure à 10000, alors "Grande".
+
+```sql
+CASE WHEN "Population" < 1000 THEN 'Petite'
+     WHEN "Population" >= 1000 AND "Population" <= 10000 THEN 'Moyenne'
+     ELSE 'Grande'
+```
+
+#### Extraire le code départemental à partir du code INSEE
+
+Pour extraire le code départemental à partir du code INSEE, il est possible d'utiliser la fonction `substring` pour extraire les deux premiers caractères du code INSEE.
+
+```sql
+substring("Code_INSEE", 1, 2)
+```
+
+#### Calculer la densité de population d'un territoire
+
+Pour calculer la densité de population, il est possible de diviser la population par l'aire du territoire concerné.
+Attention à l'unité du champ contenant l'aire et à multiplier le résultat obtenu si nécessaire.
+Admettons ici que l'aire soit en m² et que l'on souhaite obtenir une densité en hab/km² :
+
+```sql
+"Population" / "Aire" * 1000000
+```
 
 ## Suppression d'un champ
 
