@@ -557,7 +557,10 @@ export default function TableWindow(): JSX.Element {
     ref={refParentNode!}
   >
     <div class="modal-background" />
-    <div class="modal-card">
+    <div
+      class="modal-card"
+      style={{ width: 'min(1400px, 95vw)', height: '80vh' }}
+    >
       <header class="modal-card-head">
         <p class="modal-card-title">{ LL().DataTable.titleGeo() }</p>
         {/* <button class="delete" aria-label="close"></button> */}
