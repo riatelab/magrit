@@ -1,5 +1,7 @@
 # Changelog
 
+#### 2.0.0 (xxxx-xx-xx)
+
 #### 0.16.5 (2024-05-04)
 
 - Update ``aiohttp`` dependency to fix some security issues.

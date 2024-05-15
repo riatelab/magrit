@@ -1,1 +1,1 @@
-# Map layout features
+# Layout and design elements of the map

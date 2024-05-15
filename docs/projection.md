@@ -33,14 +33,28 @@ Lors de l'utilisation d'une projection globale, il est généralement possible d
 
 ### Projection globale
 
+Les projections globales sont des projections qui permettent généralement de représenter la Terre dans sa globalité (ou à l'échelle d'un continent).
+
+Ces projections sont fournies par la bibliothèque logicielle [d3.js]().
+
 <div style="text-align: center;">
-    <img src="./img/projection-panel1.png" alt="Paramètres d'une projection" style="margin: auto;">
-    <i>Personnalisation des paramètres d'une projection (ici la projection Wagner)</i>
+    <br />
+    <img src="./img/projection-panel1.png" alt="Sélection d'une projection globale" style="margin: auto;">
+    <i>Sélection d'une projection globale</i>
 </div>
 
 ### Projection locale
 
+Les projections locales sont des projections qui permettent de représenter une portion plus restreinte de la Terre (par exemple un pays, une région).
+
+Ces projections sont fournies par la bibliothèque logicielle [proj4js](https://proj4js.org/) et sont basées sur la base de données [EPSG](https://epsg.org/).
+
+Il est possible de rechercher une projection en tapant son code EPSG (par exemple "2154"), son nom (par exemple "Lambert-93") ou la zone à laquelle elle s'applique ("France") dans la barre de recherche.
+Lorsque le code EPSG de la projection désirée est connu, il est conseillé de l'utiliser pour éviter toute ambiguïté.
+
 <div style="text-align: center;">
-    <img src="./img/projection-panel2.png" alt="Paramètres d'une projection" style="margin: auto;">
-    <i>Personnalisation des paramètres d'une projection (ici la projection Wagner)</i>
+    <br />
+    <img src="./img/projection-panel2.png" alt="Sélection d'une projection locale" style="margin: auto;">
+    <i>Sélection d'une projection locale</i>
 </div>
+

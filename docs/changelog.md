@@ -2,6 +2,9 @@
 
 #### 2.0.0 (xxxx-xx-xx)
 
+Il s'agit d'une refonte totale de l'application (aussi bien concernant son architecture que son interface utilisateur).
+La liste exacte des changements est trop longue pour être listée de manière explicite ici, mais vous pouvez consulter ...
+
 #### 0.16.5 (2024-05-04)
 
 - Mise à jour de `aiohttp` pour corriger plusieurs problèmes de sécurité avec la version anciennement utilisée.

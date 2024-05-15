@@ -14,10 +14,11 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
     },
     {
       text: 'Guide de l\'interface',
-      collapsed: false,
+      collapsed: true,
       items: [
         { text: 'Description de l\'interface', link: 'ui-description' },
         { text: 'Import des données', link: 'data-import' },
+        { text: 'Jeux de données d\'exemples', link: 'example-datasets' },
         { text: 'Paramètres de la carte', link: 'map-configuration' },
         { text: 'Choix d\'une projection cartographique', link: 'projection' },
         { text: 'Gestionnaire de couches', link: 'layer-manager' },
@@ -25,12 +26,12 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
         { text: 'Tableau de données', link: 'data-table' },
         { text: 'Propriétés de la couche', link: 'layer-properties' },
         { text: 'Propriété de la légende', link: 'legend-properties' },
-        { text: 'Élément d\'habillage de la carte', link: 'layout-features' }
+        { text: 'Mise en page et habillage de la carte', link: 'layout-features' }
       ]
     },
     {
       text: 'Fonctionnalités de représentation et d\'analyse',
-      collapsed: false,
+      collapsed: true,
       items: [
         { text: 'Choroplèthe', link: 'functionalities/choropleth' },
         { text: 'Symboles proportionnels', link: 'functionalities/proportional-symbols' },
@@ -70,10 +71,11 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
     },
     {
       text: 'Interface guide',
-      collapsed: false,
+      collapsed: true,
       items: [
         { text: 'User interface description', link: 'en/ui-description' },
         { text: 'Data import', link: 'en/data-import' },
+        { text: 'Example datasets', link: 'en/example-datasets' },
         { text: 'Map settings', link: 'en/map-configuration' },
         { text: 'Choosing a map projection', link: 'en/projection' },
         { text: 'Layer manager', link: 'en/layer-manager' },
@@ -86,7 +88,7 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
     },
     {
       text: 'Representation and analysis features',
-      collapsed: false,
+      collapsed: true,
       items: [
         { text: 'Choropleth', link: 'en/functionalities/choropleth' },
         { text: 'Proportional symbols', link: 'en/functionalities/proportional-symbols' },

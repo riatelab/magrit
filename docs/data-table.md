@@ -25,3 +25,24 @@ Il est possible d'ajouter un nouveau champ en cliquant sur le bouton "Nouveau ch
 Cette fonctionnalité est comparable à la fonctionnalité "calculatrice de champ" des logiciels SIG comme QGIS.
 
 ![Tableau de données](img/data-table-new-field.png)
+
+Les champs actuels de la couche sont accessibles sous forme de raccourcis (boutons jaunes) ainsi que trois champs spéciaux (boutons verts) :
+
+- `$length` : le nombre d'entités dans la couche,
+- `$id` : l'identifiant unique (et interne) de l'entité,
+- `$area` : l'aire de l'entité (si il s'agit d'un polygone).
+
+Plusieurs opérations sont possibles (certains sont présentes sous forme d'un raccourci - boutons bleus) :
+
+- les opérateurs mathématiques de base (`+`, `-`, `*`, `/`),
+- des fonctions mathématiques (`sqrt`, `exp`, `abs`, `round`, `floor`, `ceil` et `power`),
+- des fonctions de chaînes de caractères (`concat`, `substring`, `lower`, `upper`, `trim` et `replace`).
+
+## Suppression d'un champ
+
+Il est possible de supprimer un champ en effectuant un clic droit sur le nom du champ (dans l'entête de colonne) puis en cliquant sur "Supprimer la colonne".
+
+## Fermeture du tableau de données
+
+Lors de la fermeture du tableau de données et si des modifications ont été effectuées, une popup de confirmation s'ouvre.
+Il est possible de sauvegarder les modifications effectuées en cliquant sur le bouton "Confirmation" ou d'annuler les modifications en cliquant sur le bouton "Annulation".

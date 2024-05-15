@@ -7,4 +7,21 @@ Elles expriment les caractéristiques des individus observés mais leur total n'
 
 Il peut s'agir par exemple de la densité de population, du taux de chômage, du taux de mortalité, etc.
 
+## Paramètres lors de la création de la couche
+
+Lors de la création d'une couche choroplèthe, il est nécessaire de renseigner les paramètres suivants :
+
+- La variable à utiliser pour la représentation choroplèthe,
+- La [discrétisation](./classification) à utiliser et les couleurs associées,
+- Le souhait ou non d'afficher un graphique de résumé des classes de données,
+- Le nom de la couche résultante.
+
+La discrétisation peut être choisie via un raccourci vers les principales méthodes (Jenks, quantiles, etc.) :
+dans ce cas la palette choisies par défaut est la palette `YlOrRd` de ColorBrewer et le nombre de classes
+est calculé automatiquement.
+
+Il est également possible d'ouvrir une fenêtre de paramétrage avancé permettant de choisir parmi d'autres
+types de discrétisation et parmi un large éventail de palettes de couleurs.
+
 ## Exemples
+

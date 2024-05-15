@@ -1,1 +1,1 @@
-# Élément d'habillage de la carte
+# Mise en page et habillage de la carte
