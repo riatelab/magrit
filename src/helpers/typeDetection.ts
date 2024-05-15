@@ -82,7 +82,7 @@ export function detectTypeField(
       // that this is an unknown variable
       variableType = VariableType.unknown;
     // We check if all the values are integers
-    } else if (filteredValues.every((v) => Number.isInteger(v))) {
+    } else if (filteredValues.every((v) => Number.isInteger(+v))) {
       // We check if all the values are strictly different
       if (
         !hasDuplicates
@@ -91,8 +91,8 @@ export function detectTypeField(
         // If all the values are strictly different (and if there is no missing value in the field),
         // we probably have an identifier... but this could be a stock or ratio too.
         variableType = hasMissingValues ? VariableType.stock : VariableType.identifier;
-      } else if (filteredValues.length > 15 && (new Set(filteredValues)).size < 10) {
-        // If there are less than 10 different values
+      } else if ((new Set(filteredValues)).size < (filteredValues.length / 2)) {
+        // If there are less than (total values / 2) different values
         // (and more than 15 values in total),
         // we consider this variable as categorical
         variableType = VariableType.categorical;
@@ -116,6 +116,10 @@ export function detectTypeField(
     if (values.every((v) => values.indexOf(v) === values.lastIndexOf(v))) {
       // If all the values are strictly different, we probably have an identifier...
       variableType = VariableType.identifier;
+    } else if (filteredValues.every((v) => v === filteredValues[0])) {
+      // If all the values are the exact same value, lets say for now
+      // that this is an unknown variable
+      variableType = VariableType.unknown;
     } else {
       // ...otherwise this is probably a categorical variable
       variableType = VariableType.categorical;
@@ -147,6 +151,19 @@ export function detectTypeField(
     && (
       fieldName.toLowerCase().startsWith('pop')
       || fieldName.toLowerCase().endsWith('pop')
+    )
+  ) {
+    variableType = VariableType.stock;
+  }
+  // - If we have no missing value and all the values are numbers, and the field name contains
+  //   a reference to the surface / an area, we can probably consider this as a stock*
+  //   (even if the values are not integers)
+  if (
+    dataType === DataType.number
+    && !hasMissingValues
+    && (
+      fieldName.toLowerCase().includes('area')
+      || fieldName.toLowerCase().includes('surface')
     )
   ) {
     variableType = VariableType.stock;
