@@ -9,7 +9,7 @@ Il permet, pour chaque couche, de visualiser et de modifier ses données.
 
 La modification des données est possible en double-cliquant sur une cellule puis en rentant la valeur souhaitée.
 
-![Tableau de données](img/data-table-edit.png)
+![Tableau de données - Modification](img/data-table-edit.png)
 
 ## Export au format CSV
 
@@ -24,7 +24,7 @@ Il est possible d'ajouter un nouveau champ en cliquant sur le bouton "Nouveau ch
 
 Cette fonctionnalité est comparable à la fonctionnalité "calculatrice de champ" des logiciels SIG comme QGIS.
 
-![Tableau de données](img/data-table-new-field.png)
+![Tableau de données - Nouveau champ](img/data-table-new-field.png)
 
 Les champs actuels de la couche sont accessibles sous forme de raccourcis (boutons jaunes) ainsi que trois champs spéciaux (boutons verts) :
 
@@ -37,6 +37,17 @@ Plusieurs opérations sont possibles (certains sont présentes sous forme d'un r
 - les opérateurs mathématiques de base (`+`, `-`, `*`, `/`),
 - des fonctions mathématiques (`sqrt`, `exp`, `abs`, `round`, `floor`, `ceil` et `power`),
 - des fonctions de chaînes de caractères (`concat`, `substring`, `lower`, `upper`, `trim` et `replace`).
+
+Afin de créer un nouveau champ, il est nécessaire de spécifier le nom du champ à créer, le type de données (stock, ratio, etc.) et la formule de calcul.
+Lorsque la formule est valide, un aperçu des valeurs calculées (3 premières lignes du tableau) est affiché.
+
+![Tableau de données - Nouveau champ avec formule valide](img/data-table-new-field-zoom.png)
+
+Lorsque la formule n'est pas valide, un message d'erreur est affiché et le bouton "Calculer" est désactivé.
+
+![Tableau de données - Nouveau champ avec formule invalide](img/data-table-invalid-formula1.png)
+
+![Tableau de données - Nouveau champ avec formule invalide](img/data-table-invalid-formula2.png)
 
 ## Suppression d'un champ
 

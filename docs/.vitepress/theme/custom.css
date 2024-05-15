@@ -1,3 +1,17 @@
 img {
     border: 2px solid #000000;
 }
+
+:root {
+    --vp-layout-max-width: 1600px;
+}
+
+@media (min-width: 1280px) {
+    .content {
+        min-width: 700px;
+    }
+}
+
+.VPDoc.has-aside .content-container {
+    max-width: 850px !important;
+}
