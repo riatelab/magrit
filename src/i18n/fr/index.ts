@@ -719,7 +719,7 @@ const fr = {
     FieldName: 'Nom du champ',
     FieldType: 'Type du champ',
     Information1: 'Le type des variables définit les fonctionnalités d\'analyse et de représentation qui sont proposées dans l\'application.',
-    Information2: 'Cinq types de variables sont proposées : identifiant (une valeur unique permettant d\'identifier une entité, comme un code, ou son nom), catégoriel (une valeur qualitative nominale), ratio (une valeur quantitative relative, comme un taux de chômage ou une densité de population), stock (une valeur quantitative absolue, comme un stock de population ou la production totale de blé), et inconnu (pour les variables que vous ne souhaitez pas utiliser).',
+    Information2: 'Cinq types de variables sont proposées :<br>- <b>identifiant</b> (une valeur unique permettant d\'identifier une entité, comme un code, ou son nom),<br>- <b>catégoriel</b> (une valeur qualitative nominale ou ordinale),<br>- <b>ratio</b> (une valeur quantitative relative, comme un taux de chômage ou une densité de population),<br>- <b>stock</b> (une valeur quantitative absolue, comme un stock de population ou la production totale de blé),<br>- <b>inconnu</b> (pour les variables que vous ne souhaitez pas utiliser).',
     VariableTypes: {
       identifier: 'Identifiant',
       ratio: 'Ratio',

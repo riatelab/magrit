@@ -447,7 +447,10 @@ export function DiagnosticPlots(
           <li>{LL().FunctionalitiesSection.LinearRegressionOptions.ResidualVsFittedInfo3()}</li>
         </ul>
         <p>
-          <BsCheckLg style={{ 'vertical-align': 'middle', 'margin-bottom': '0.1em' }} size={'1em'} />
+          <BsCheckLg
+            style={{ 'vertical-align': 'middle', 'margin-bottom': '0.15em', 'margin-right': '0.2em' }}
+            size={'1.3em'}
+          />
           {LL().FunctionalitiesSection.LinearRegressionOptions.ResidualVsFittedCheck()}
         </p>
       </div>
@@ -460,7 +463,10 @@ export function DiagnosticPlots(
       <div style={{ width: '50%', 'text-align': 'left', margin: 'auto' }}>
         <p>{LL().FunctionalitiesSection.LinearRegressionOptions.ScaleLocationInfo1()}</p>
         <p>
-          <BsCheckLg style={{ 'vertical-align': 'middle', 'margin-bottom': '0.1em' }}/>
+          <BsCheckLg
+            style={{ 'vertical-align': 'middle', 'margin-bottom': '0.15em', 'margin-right': '0.2em' }}
+            size={'1.3em'}
+          />
           {LL().FunctionalitiesSection.LinearRegressionOptions.ScaleLocationCheck()}
         </p>
       </div>
@@ -473,7 +479,10 @@ export function DiagnosticPlots(
       <div style={{ width: '50%', 'text-align': 'left', margin: 'auto' }}>
         <p>{LL().FunctionalitiesSection.LinearRegressionOptions.QQInfo1()}</p>
         <p>
-          <BsCheckLg style={{ 'vertical-align': 'middle', 'margin-bottom': '0.1em' }}/>
+          <BsCheckLg
+            style={{ 'vertical-align': 'middle', 'margin-bottom': '0.15em', 'margin-right': '0.2em' }}
+            size={'1.3em'}
+          />
           {LL().FunctionalitiesSection.LinearRegressionOptions.QQCheck()}
         </p>
       </div>
@@ -494,7 +503,7 @@ export function InformationBeforeValidation(): JSX.Element {
         <li>{LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo5()}</li>
       </ul>
       <p>
-        <BsCheckAll style={{ 'vertical-align': 'middle', 'margin-bottom': '0.1em' }} />
+        <BsCheckAll style={{ 'vertical-align': 'middle', 'margin-bottom': '0.2em', 'margin-right': '0.1em' }} size={'1.4em'} />
         {LL().FunctionalitiesSection.LinearRegressionOptions.SummaryInfo6()}
       </p>
     </div>

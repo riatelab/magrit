@@ -719,7 +719,7 @@ const en = {
     FieldName: 'Field name',
     FieldType: 'Field type',
     Information1: 'Variable type defines the analysis and representation functionalities offered by the application.',
-    Information2: 'Five types of variable are available: identifier (a unique value used to identify an entity, such as a code, or its name), categorical (a nominal qualitative value), ratio (a relative quantitative value, such as an unemployment rate or population density), stock (an absolute quantitative value, such as a population stock or total wheat production), and unknown (for variables you don\'t wish to use).',
+    Information2: 'Five types of variable are available:<br>- <b>identifier</b> (a unique value used to identify an entity, such as a code, or its name),<br>- <b>categorical</b> (a nominal or ordinal qualitative value),<br>- <b>ratio</b> (a relative quantitative value, such as an unemployment rate or population density),<br>- <b>stock</b> (an absolute quantitative value, such as a population stock or total wheat production),<br>- <b>unknown</b> (for variables you don\'t wish to use).',
     VariableTypes: {
       identifier: 'Identifier',
       ratio: 'Ratio',

@@ -2594,7 +2594,7 @@ type RootTranslation = {
 		 */
 		Information1: string
 		/**
-		 * F​i​v​e​ ​t​y​p​e​s​ ​o​f​ ​v​a​r​i​a​b​l​e​ ​a​r​e​ ​a​v​a​i​l​a​b​l​e​:​ ​i​d​e​n​t​i​f​i​e​r​ ​(​a​ ​u​n​i​q​u​e​ ​v​a​l​u​e​ ​u​s​e​d​ ​t​o​ ​i​d​e​n​t​i​f​y​ ​a​n​ ​e​n​t​i​t​y​,​ ​s​u​c​h​ ​a​s​ ​a​ ​c​o​d​e​,​ ​o​r​ ​i​t​s​ ​n​a​m​e​)​,​ ​c​a​t​e​g​o​r​i​c​a​l​ ​(​a​ ​n​o​m​i​n​a​l​ ​q​u​a​l​i​t​a​t​i​v​e​ ​v​a​l​u​e​)​,​ ​r​a​t​i​o​ ​(​a​ ​r​e​l​a​t​i​v​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​l​u​e​,​ ​s​u​c​h​ ​a​s​ ​a​n​ ​u​n​e​m​p​l​o​y​m​e​n​t​ ​r​a​t​e​ ​o​r​ ​p​o​p​u​l​a​t​i​o​n​ ​d​e​n​s​i​t​y​)​,​ ​s​t​o​c​k​ ​(​a​n​ ​a​b​s​o​l​u​t​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​l​u​e​,​ ​s​u​c​h​ ​a​s​ ​a​ ​p​o​p​u​l​a​t​i​o​n​ ​s​t​o​c​k​ ​o​r​ ​t​o​t​a​l​ ​w​h​e​a​t​ ​p​r​o​d​u​c​t​i​o​n​)​,​ ​a​n​d​ ​u​n​k​n​o​w​n​ ​(​f​o​r​ ​v​a​r​i​a​b​l​e​s​ ​y​o​u​ ​d​o​n​'​t​ ​w​i​s​h​ ​t​o​ ​u​s​e​)​.
+		 * F​i​v​e​ ​t​y​p​e​s​ ​o​f​ ​v​a​r​i​a​b​l​e​ ​a​r​e​ ​a​v​a​i​l​a​b​l​e​:​<​b​r​>​-​ ​<​b​>​i​d​e​n​t​i​f​i​e​r​<​/​b​>​ ​(​a​ ​u​n​i​q​u​e​ ​v​a​l​u​e​ ​u​s​e​d​ ​t​o​ ​i​d​e​n​t​i​f​y​ ​a​n​ ​e​n​t​i​t​y​,​ ​s​u​c​h​ ​a​s​ ​a​ ​c​o​d​e​,​ ​o​r​ ​i​t​s​ ​n​a​m​e​)​,​<​b​r​>​-​ ​<​b​>​c​a​t​e​g​o​r​i​c​a​l​<​/​b​>​ ​(​a​ ​n​o​m​i​n​a​l​ ​o​r​ ​o​r​d​i​n​a​l​ ​q​u​a​l​i​t​a​t​i​v​e​ ​v​a​l​u​e​)​,​<​b​r​>​-​ ​<​b​>​r​a​t​i​o​<​/​b​>​ ​(​a​ ​r​e​l​a​t​i​v​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​l​u​e​,​ ​s​u​c​h​ ​a​s​ ​a​n​ ​u​n​e​m​p​l​o​y​m​e​n​t​ ​r​a​t​e​ ​o​r​ ​p​o​p​u​l​a​t​i​o​n​ ​d​e​n​s​i​t​y​)​,​<​b​r​>​-​ ​<​b​>​s​t​o​c​k​<​/​b​>​ ​(​a​n​ ​a​b​s​o​l​u​t​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​l​u​e​,​ ​s​u​c​h​ ​a​s​ ​a​ ​p​o​p​u​l​a​t​i​o​n​ ​s​t​o​c​k​ ​o​r​ ​t​o​t​a​l​ ​w​h​e​a​t​ ​p​r​o​d​u​c​t​i​o​n​)​,​<​b​r​>​-​ ​<​b​>​u​n​k​n​o​w​n​<​/​b​>​ ​(​f​o​r​ ​v​a​r​i​a​b​l​e​s​ ​y​o​u​ ​d​o​n​'​t​ ​w​i​s​h​ ​t​o​ ​u​s​e​)​.
 		 */
 		Information2: string
 		VariableTypes: {
@@ -5686,7 +5686,7 @@ export type TranslationFunctions = {
 		 */
 		Information1: () => LocalizedString
 		/**
-		 * Five types of variable are available: identifier (a unique value used to identify an entity, such as a code, or its name), categorical (a nominal qualitative value), ratio (a relative quantitative value, such as an unemployment rate or population density), stock (an absolute quantitative value, such as a population stock or total wheat production), and unknown (for variables you don't wish to use).
+		 * Five types of variable are available:<br>- <b>identifier</b> (a unique value used to identify an entity, such as a code, or its name),<br>- <b>categorical</b> (a nominal or ordinal qualitative value),<br>- <b>ratio</b> (a relative quantitative value, such as an unemployment rate or population density),<br>- <b>stock</b> (an absolute quantitative value, such as a population stock or total wheat production),<br>- <b>unknown</b> (for variables you don't wish to use).
 		 */
 		Information2: () => LocalizedString
 		VariableTypes: {

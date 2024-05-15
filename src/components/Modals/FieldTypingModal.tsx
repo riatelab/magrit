@@ -93,7 +93,8 @@ export default function FieldTypingModal(
   return <div ref={refParentNode!}>
     <MessageBlock type={'info'}>
       <p>{LL().FieldsTyping.Information1()}</p>
-      <p>{LL().FieldsTyping.Information2()}</p>
+      {/* eslint-disable-next-line solid/no-innerhtml */}
+      <p innerHTML={LL().FieldsTyping.Information2()}></p>
     </MessageBlock>
     <For each={descriptions}>
       {
