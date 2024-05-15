@@ -19,8 +19,8 @@ import {
   ascending,
   capitalizeFirstLetter,
   debounce,
-  isNonNull,
   isFiniteNumber,
+  isNonNull,
   unproxify,
 } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
@@ -36,7 +36,8 @@ import InputFieldText from '../Inputs/InputText.tsx';
 // Types / Interfaces / Enums
 import {
   type CategoricalChoroplethBarchartLegend, type CategoricalChoroplethLegend,
-  type ChoroplethHistogramLegend, type ChoroplethLegend,
+  type CategoricalPictogramLegend, type ChoroplethHistogramLegend,
+  type ChoroplethLegend,
   type DiscontinuityLegend,
   type LabelsLegend,
   type LayerDescriptionCategoricalChoropleth,
@@ -1060,6 +1061,53 @@ function makeSettingsScatterPlot(
   </>;
 }
 
+function makeSettingsCategoricalPictogram(
+  legend: CategoricalPictogramLegend,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <>
+    <FieldText legend={legend} LL={LL} role={'title'}/>
+    <FieldText legend={legend} LL={LL} role={'subtitle'}/>
+    <FieldText legend={legend} LL={LL} role={'note'}/>
+    <div class="field">
+      <label class="label">{LL().Legend.Modal.SymbolsSpacing()}</label>
+      <div class="control">
+        <input
+          class="input"
+          type="number"
+          min={0}
+          max={100}
+          step={1}
+          value={legend.spacing}
+          onChange={(ev) => debouncedUpdateProps(legend.id, ['spacing'], +ev.target.value)}
+        />
+      </div>
+    </div>
+    <OptionBackgroundRectangle legend={legend} LL={LL}/>
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        {LL().Legend.Modal.FontProperties()}
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
+      </p>
+    </div>
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'labels', 'note']}
+      />
+    </Show>
+  </>;
+}
+
 function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.Element {
   if (legend.type === LegendType.choropleth) {
     return makeSettingsChoroplethLegend(legend as ChoroplethLegend, LL);
@@ -1094,6 +1142,12 @@ function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.
   if (legend.type === LegendType.linearRegressionScatterPlot) {
     return makeSettingsScatterPlot(
       legend as LinearRegressionScatterPlot,
+      LL,
+    );
+  }
+  if (legend.type === LegendType.categoricalPictogram) {
+    return makeSettingsCategoricalPictogram(
+      legend as CategoricalPictogramLegend,
       LL,
     );
   }
