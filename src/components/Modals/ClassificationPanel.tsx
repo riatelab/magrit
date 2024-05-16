@@ -236,7 +236,7 @@ export default function ClassificationPanel(): JSX.Element {
   const [
     centralClass,
     setCentralClass,
-  ] = createSignal<number | undefined>(
+  ] = createSignal<number>(
     parameters.palette.divergingOptions?.left
     || 1,
   );
@@ -666,6 +666,7 @@ export default function ClassificationPanel(): JSX.Element {
                         id={'type-scheme-diverging'}
                         onChange={() => {
                           setPaletteName(availableDivergingPalettes[0].value);
+                          setCentralClass(Mround((numberOfClasses() - 1) / 2));
                           setTypeScheme('diverging');
                           updateClassificationParameters();
                         }}
@@ -762,7 +763,7 @@ export default function ClassificationPanel(): JSX.Element {
                     min={1}
                     max={numberOfClasses() - 1 - Number(hasNeutralCentralClass())}
                     step={1}
-                    value={Mround((numberOfClasses() - 1) / 2)}
+                    value={centralClass()}
                     onChange={(value) => {
                       setCentralClass(value);
                       updateClassificationParameters();
