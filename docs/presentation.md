@@ -8,3 +8,13 @@ simple d'utilisation, tout en offrant des fonctionnalités avancées pour les ut
 
 Magrit est un logiciel libre (disponible sous licence GPL 3.0), gratuit et sans publicité.
 Son développement est réalisé sur fonds propres dans une UAR CNRS / Université Paris Cité.
+
+## Dédié à l'apprentissage et à l'enseignement de la cartographie
+
+## Magrit n'est pas un logiciel SIG
+
+Magrit n'est pas un logiciel SIG (Système d'Information Géographique) mais un logiciel de cartographie thématique.
+Il comporte toutefois différentes fonctionnalités permettant de manipuler des données géographiques ce qui peut entretenir la confusion.
+
+## Principales fonctionnalités de l'application
+

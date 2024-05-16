@@ -32,5 +32,5 @@ Magrit est conçu et développé au sein de l'UAR RIATE (CNRS / Université Pari
 <VPTeamMembers size="small" :members="members" />
 
 Des contributions ponctuelles ont également été réalisées par différents utilisateurs :
-des membres (ou ancien membres) de l'UAR RIATE, des membres de l'ESR et des utilisateurs finaux.
+des membres (ou anciens membres) de l'UAR RIATE, des membres de l'ESR et des utilisateurs.
 Nous les remercions pour leur implication et leur soutien :heart:.
