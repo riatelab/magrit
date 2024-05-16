@@ -32,7 +32,7 @@ Il est possible de modifier l'ordre des couches en les faisant glisser-déposer 
 Pour chaque tableau de données, il est possible de :
 
 - afficher un résumé d'information sur le tableau,
-- [joindre les données à une couche géographique](./join),
+- [joindre les données à une couche géographique](./functionalities/join),
 - afficher le [tableau de données](./data-table),
 - modifier le [typage des champs](./typing) de la couche,
 - supprimer le tableau de données.
