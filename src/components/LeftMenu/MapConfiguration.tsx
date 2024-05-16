@@ -89,7 +89,7 @@ export default function MapConfiguration(): JSX.Element {
   const { LL } = useI18nContext();
   let refParentNodeDropdown: HTMLDivElement;
 
-  const shortListEntries = [
+  const shortListEntries = createMemo(() => [
     {
       name: LL().MapConfiguration.GlobalProjections(),
       type: 'group',
@@ -157,7 +157,7 @@ export default function MapConfiguration(): JSX.Element {
       value: 'other',
       type: '',
     },
-  ];
+  ]);
 
   const hasParallel = createMemo(() => !!globalStore.projection?.parallel);
 
@@ -261,7 +261,7 @@ export default function MapConfiguration(): JSX.Element {
         </div>
         <div class="dropdown-menu" id={'map-configuration__projection-dropdown'} role="menu" style={{ width: '100%' }}>
           <div class="dropdown-content" style={{ 'z-index': 1001 }}>
-            <For each={shortListEntries}>
+            <For each={shortListEntries()}>
               {(entry) => {
                 if (entry.type === 'group') {
                   return <div

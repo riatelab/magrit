@@ -93,6 +93,7 @@ const availableProjections = [
   'Laskowski',
   // 'Littrow',
   'Loximuthal',
+  'Mercator',
   'Miller',
   'ModifiedStereographicLee',
   'ModifiedStereographicMiller',
