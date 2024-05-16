@@ -191,7 +191,12 @@ function NewFieldPanel(
       </div>
       <FormulaInput
         typeDataset={props.typeDs}
-        dsDescription={props.dsDescription}
+        records={props.rowData()}
+        geometries={
+          props.typeDs === 'layer'
+            ? (props.dsDescription as LayerDescription).data.features.map((d) => d.geometry)
+            : undefined
+        }
         currentFormula={currentFormula}
         setCurrentFormula={setCurrentFormula}
         sampleOutput={sampleOutput}

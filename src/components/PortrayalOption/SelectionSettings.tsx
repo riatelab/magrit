@@ -188,7 +188,8 @@ export default function SelectionSettings(
     <br />
     <FormulaInput
       typeDataset={'layer'}
-      dsDescription={layerDescription}
+      records={layerDescription.data.features.map((d) => d.properties)}
+      geometries={layerDescription.data.features.map((d) => d.geometry)}
       currentFormula={formula}
       setCurrentFormula={setFormula}
       sampleOutput={sampleOutput}

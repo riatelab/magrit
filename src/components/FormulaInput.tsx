@@ -17,7 +17,11 @@ import alasql from 'alasql';
 import { useI18nContext } from '../i18n/i18n-solid';
 
 // Types
-import type { GeoJSONFeature, LayerDescription, TableDescription } from '../global';
+import type {
+  GeoJSONFeature,
+  GeoJSONGeometryType,
+  LayerDescription,
+} from '../global';
 
 // Insert a value (chosen from the list of fields / special fields / operator)
 // in the formula at the caret position (taking care of the selection if needed)
@@ -115,7 +119,8 @@ export const filterData = (
 export default function FormulaInput(
   props: {
     typeDataset: 'layer' | 'table',
-    dsDescription: LayerDescription | TableDescription,
+    records: Record<string, any>[],
+    geometries?: GeoJSONGeometryType[],
     currentFormula: Accessor<string>,
     setCurrentFormula: Setter<string>,
     sampleOutput: Accessor<SampleOutputFormat | undefined>,
@@ -125,12 +130,6 @@ export default function FormulaInput(
   let refInputFormula: HTMLTextAreaElement;
   const { LL } = useI18nContext();
 
-  const records = props.typeDataset === 'layer'
-    ? (props.dsDescription as LayerDescription).data.features.map((d) => unwrap(d.properties))
-    : (props.dsDescription as TableDescription).data.map((d) => unwrap(d));
-
-  const lengthDataset = records.length;
-
   const styleBadges = {
     'column-gap': '0.4em',
     'flex-wrap': 'wrap',
@@ -139,7 +138,7 @@ export default function FormulaInput(
   } as JSX.CSSProperties;
 
   const computeSampleOutput = () => {
-    const formula = replaceSpecialFields(props.currentFormula(), lengthDataset);
+    const formula = replaceSpecialFields(props.currentFormula(), props.records.length);
 
     if (formula.trim() === '') {
       props.setSampleOutput(undefined);
@@ -147,17 +146,18 @@ export default function FormulaInput(
     }
 
     const query = `SELECT ${formula} as newValue FROM ?`;
-    const data = records.slice(0, 3);
+    const data = props.records.slice(0, 3);
 
     if (hasSpecialFieldId(formula)) {
       data.forEach((d, i) => {
         d['@@uuid'] = i; // eslint-disable-line no-param-reassign
       });
     }
-    if (hasSpecialFieldArea(formula)) {
+    if (props.typeDataset === 'layer' && hasSpecialFieldArea(formula)) {
       data.forEach((d, i) => {
+        // We know props.geometry is defined here because we have a geographic layer
         // eslint-disable-next-line no-param-reassign
-        d['@@area'] = area((props.dsDescription as LayerDescription).data.features[i].geometry as never);
+        d['@@area'] = area(props.geometries![i] as never);
       });
     }
 
@@ -198,7 +198,7 @@ export default function FormulaInput(
     <label class="label">{LL().FormulaInput.formula()}</label>
     <div class="control is-flex">
       <div class="is-flex" style={{ width: '68%', ...styleBadges }}>
-        <For each={props.dsDescription.fields.map((d) => d.name)}>
+        <For each={Object.keys(props.records[0])}>
           {
             (field) => (
               <button

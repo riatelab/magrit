@@ -318,7 +318,8 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
     <Show when={filter()}>
       <FormulaInput
         typeDataset={'layer'}
-        dsDescription={layerDescription}
+        records={layerDescription.data.features.map((d) => d.properties)}
+        geometries={layerDescription.data.features.map((d) => d.geometry)}
         currentFormula={formula}
         setCurrentFormula={setFormula}
         sampleOutput={sampleOutput}
