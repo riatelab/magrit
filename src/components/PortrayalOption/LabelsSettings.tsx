@@ -148,6 +148,8 @@ function onClickValidate(
     } as LabelsParameters,
   } as LayerDescriptionLabels;
 
+  // By default the legend for labels is not visible
+  // (but it is created so that the user can change its visibility)
   const legend = {
     // Part common to all legends
     id: generateIdLegend(),
@@ -165,7 +167,7 @@ function onClickValidate(
       ...applicationSettingsStore.defaultLegendSettings.note,
     },
     position: legendPosition,
-    visible: true,
+    visible: false,
     backgroundRect: {
       visible: false,
     },
