@@ -2,6 +2,7 @@
 import { produce, SetStoreFunction } from 'solid-js/store';
 
 // Helpers
+import { findSuitableName } from './common';
 import {
   convertBinaryTabularDatasetToJSON,
   convertTextualTabularDatasetToJSON,
@@ -24,7 +25,11 @@ import rewindLayer from './rewind';
 
 // Stores
 import { FileDropStoreType } from '../store/FileDropStore';
-import { type LayersDescriptionStoreType, setLayersDescriptionStore } from '../store/LayersDescriptionStore';
+import {
+  layersDescriptionStore,
+  setLayersDescriptionStore,
+  type LayersDescriptionStoreType,
+} from '../store/LayersDescriptionStore';
 import { fitExtent } from '../store/MapStore';
 
 // Types
@@ -163,11 +168,16 @@ function addLayer(
     };
   });
 
+  const safeName = findSuitableName(
+    name,
+    layersDescriptionStore.layers.map((l) => l.name),
+  );
+
   // Add the new layer to the LayerManager by adding it
   // to the layersDescriptionStore
   const newLayerDescription = {
     id: layerId,
-    name,
+    name: safeName,
     type: geomType,
     data: rewoundGeojson,
     visible,
@@ -214,9 +224,15 @@ function addTabularLayer(data: object[], name: string): string {
       dataType: o.dataType,
     };
   });
+
+  const safeName = findSuitableName(
+    name,
+    layersDescriptionStore.tables.map((l) => l.name),
+  );
+
   const tableDescription = {
     id: tableId,
-    name,
+    name: safeName,
     fields: descriptions,
     data,
   } as TableDescription;
