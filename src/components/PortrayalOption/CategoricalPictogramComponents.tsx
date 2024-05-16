@@ -176,7 +176,7 @@ export function IconSelectionOverlay(
               } else {
                 const reader = new FileReader();
                 reader.onload = (ev) => {
-                  setImageType(ImageType.PNG);
+                  setImageType(ImageType.RASTER);
                   setImageContent(ev.target?.result as string);
                 };
                 reader.readAsDataURL(file);

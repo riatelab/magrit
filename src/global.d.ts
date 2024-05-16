@@ -1143,7 +1143,7 @@ export interface Text extends LayoutFeatureBase {
 }
 
 export enum ImageType {
-  PNG = 'PNG',
+  RASTER = 'RASTER',
   SVG = 'SVG',
 }
 

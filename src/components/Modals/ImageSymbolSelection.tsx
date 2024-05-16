@@ -136,7 +136,7 @@ export default function ImageSymbolSelection(
         onClick={() => {
           const input = document.createElement('input');
           input.setAttribute('type', 'file');
-          input.setAttribute('accept', '.png,.svg');
+          input.setAttribute('accept', '.png,.svg,.jpeg,.jpg');
           input.addEventListener('change', (e) => {
             const target = e.target as HTMLInputElement;
             const file = target.files?.[0];
@@ -153,7 +153,7 @@ export default function ImageSymbolSelection(
               } else {
                 const reader = new FileReader();
                 reader.onload = (ev) => {
-                  setImageType(ImageType.PNG);
+                  setImageType(ImageType.RASTER);
                   setImageContent(ev.target?.result as string);
                 };
                 reader.readAsDataURL(file);
