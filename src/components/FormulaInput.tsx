@@ -140,6 +140,12 @@ export default function FormulaInput(
 
   const computeSampleOutput = () => {
     const formula = replaceSpecialFields(props.currentFormula(), lengthDataset);
+
+    if (formula.trim() === '') {
+      props.setSampleOutput(undefined);
+      return;
+    }
+
     const query = `SELECT ${formula} as newValue FROM ?`;
     const data = records.slice(0, 3);
 
