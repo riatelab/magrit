@@ -17,7 +17,7 @@ import {
   computeCartogramGastnerSeguyMore,
   computeCartogramOlson,
 } from '../../helpers/cartograms';
-import { findSuitableName } from '../../helpers/common';
+import { findSuitableName, unproxify } from '../../helpers/common';
 import { generateIdLayer } from '../../helpers/layers';
 import { DataType, type Variable, VariableType } from '../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
@@ -64,7 +64,8 @@ async function onClickValidate(
     throw new Error('Unexpected Error: Reference layer not found');
   }
 
-  const inputData = unwrap(referenceLayerDescription.data as never);
+  const inputData = unproxify(referenceLayerDescription.data as never);
+
   let newData;
   if (cartogramMethod === CartogramMethod.Olson) {
     newData = computeCartogramOlson(
@@ -86,7 +87,7 @@ async function onClickValidate(
     );
   }
 
-  const newFields = unwrap(referenceLayerDescription.fields as never) as Variable[];
+  const newFields = unproxify(referenceLayerDescription.fields as never) as Variable[];
 
   if (
     cartogramMethod === CartogramMethod.GastnerSeguyMore
