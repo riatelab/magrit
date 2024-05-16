@@ -616,7 +616,7 @@ const fr = {
   JoinPanel: {
     Title: 'Joindre à une couche géospatiale',
     Information: 'Cette fonctionnalité permet de joindre les données d\'un tableau à une couche géospatiale. Les données du tableau sont ajoutées à la couche géospatiale en fonction d\'un champ commun aux deux jeux de données.',
-    Information2: 'Seulement les champs contenant des valeurs uniques peuvent être utilisés pour réaliser la jointure.',
+    Information2: 'Seuls les champs contenant des valeurs uniques peuvent être utilisés pour réaliser la jointure.',
     TargetLayer: 'Sélectionner la couche cible',
     TargetLayerPlaceholder: 'Sélectionner une couche',
     JoinFieldTable: 'Champ de la table à utiliser pour la jointure',
