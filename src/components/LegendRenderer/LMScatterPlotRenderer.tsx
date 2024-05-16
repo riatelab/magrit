@@ -123,14 +123,14 @@ export default function lmScatterPlot(
     .options.y;
 
   const dataset = createMemo(() => {
-    const a = [];
+    const a: Record<string, any>[] = [];
     layer.data.features.forEach((f) => {
       a.push({
         [variableX]: f.properties[variableX],
         [variableY]: f.properties[variableY],
       });
     });
-    return a as Record<string, any>[];
+    return a;
   });
 
   const heightTitle = createMemo(() => (getTextSize(

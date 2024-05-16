@@ -66,12 +66,20 @@ function ChoroplethHistogram(
     return bd;
   });
 
+  const sizeLargestLabel = createMemo(() => Math.max(
+    ...props.classification.breaks.slice(1, -1).map((m) => getTextSize(
+      m.toLocaleString(),
+      10,
+      'sans-serif',
+    ).width),
+  ));
+
   return <>{
     Plot.plot({
       height: props.height,
       width: props.width,
       style: { color: props.color },
-      marginBottom: 40,
+      marginBottom: sizeLargestLabel() * 1.2,
       marginLeft: 20,
       x: {
         domain: minmax,
@@ -133,7 +141,7 @@ export default function legendChoroplethHistogram(
       legend.subtitle.text,
       legend.subtitle.fontSize,
       legend.subtitle.fontFamily,
-    ).height + defaultSpacing
+    ).height
     : 0));
 
   onMount(() => {
@@ -171,7 +179,7 @@ export default function legendChoroplethHistogram(
     {makeLegendText(legend.title, [legend.width / 2, 0], 'title', { 'text-anchor': 'middle' })}
     {makeLegendText(legend.subtitle, [legend.width / 2, heightTitle()], 'subtitle', { 'text-anchor': 'middle' })}
     <g
-      transform={`translate(0, ${heightTitle() + heightSubtitle()})`}
+      transform={`translate(0, ${heightTitle() + heightSubtitle() - defaultSpacing * 2})`}
     >
       <ChoroplethHistogram
         classification={getClassificationParameters(layer)}
@@ -183,7 +191,7 @@ export default function legendChoroplethHistogram(
     {
       makeLegendText(
         legend.note,
-        [legend.width / 2, heightTitle() + heightSubtitle() + legend.height],
+        [legend.width / 2, heightTitle() + heightSubtitle() + legend.height - defaultSpacing * 2],
         'note',
         { 'text-anchor': 'middle' },
       )
