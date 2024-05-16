@@ -13,6 +13,7 @@ import { convertToTopojsonQuantizeAndBackToGeojson } from './topojson';
 
 // Types
 import type {
+  GeoJSONFeature,
   GeoJSONFeatureCollection,
   GridParameters,
   KdeParameters,
@@ -172,7 +173,7 @@ export async function makeContourLayer(
     options,
   );
 
-  contours.features.forEach((ft) => {
+  contours.features.forEach((ft: GeoJSONFeature) => {
     // eslint-disable-next-line no-param-reassign
     ft.properties.center = (ft.properties.min_v + ft.properties.max_v) / 2;
     // eslint-disable-next-line no-param-reassign
@@ -263,8 +264,7 @@ function computeKdeInner(
       xCell[this.thread.x],
       yCell[this.thread.x],
     );
-    // eslint-disable-next-line prefer-exponentiation-operator, no-restricted-properties
-    const kv = this.k(dist, this.constants.bandwidth);
+    const kv = this.computeKde(dist, this.constants.bandwidth);
     value += kv * values[i];
   }
   return value;
@@ -434,13 +434,14 @@ export async function computeKdeValues(
   if (kdeParameters.kernel === 'Gaussian') {
     gpu
       .addFunction( // eslint-disable-next-line prefer-arrow-callback
-        function k(dist: number, bandwidth: number): number {
+        function computeKde(dist: number, bandwidth: number): number {
           const exponent = -(dist * dist) / (2 * bandwidth * bandwidth);
           return Math.exp(exponent) / (Math.sqrt(2 * Math.PI) * bandwidth);
         },
         {
           argumentTypes: {
             dist: 'Number',
+            bandwidth: 'Number',
           },
           returnType: 'Number',
         },
@@ -449,7 +450,7 @@ export async function computeKdeValues(
   //   gpu
   //     .addFunction(
   //       // eslint-disable-next-line prefer-arrow-callback
-  //       function k(dist: number, bandwidth: number): number {
+  //       function computeKde(dist: number, bandwidth: number): number {
   //         const u = dist / bandwidth;
   //         if (Math.abs(u) <= 1) {
   //           return (3 / 4) * (1 - u * u) / bandwidth; // eslint-disable-line no-mixed-operators
@@ -459,6 +460,7 @@ export async function computeKdeValues(
   //       {
   //         argumentTypes: {
   //           dist: 'Number',
+  //           bandwidth: 'Number',
   //         },
   //         returnType: 'Number',
   //       },
@@ -466,7 +468,7 @@ export async function computeKdeValues(
   // } else if (kdeParameters.kernel === 'Quartic') {
   //   gpu
   //     .addFunction( // eslint-disable-next-line prefer-arrow-callback
-  //       function k(dist: number, bandwidth: number): number {
+  //       function computeKde(dist: number, bandwidth: number): number {
   //         const u = dist / bandwidth;
   //         if (Math.abs(u) <= 1) {
   //           const t = (1 - u * u) * (1 - u * u);
@@ -478,6 +480,7 @@ export async function computeKdeValues(
   //       {
   //         argumentTypes: {
   //           dist: 'Number',
+  //           bandwidth: 'Number',
   //         },
   //         returnType: 'Number',
   //       },
@@ -486,7 +489,7 @@ export async function computeKdeValues(
     gpu
       .addFunction(
         // eslint-disable-next-line prefer-arrow-callback
-        function k(dist: number, bandwidth: number): number {
+        function computeKde(dist: number, bandwidth: number): number {
           const u = dist / bandwidth;
           if (Math.abs(u) <= 1) {
             return (1 - Math.abs(u)) / bandwidth;
@@ -496,6 +499,7 @@ export async function computeKdeValues(
         {
           argumentTypes: {
             dist: 'Number',
+            bandwidth: 'Number',
           },
           returnType: 'Number',
         },
@@ -504,7 +508,7 @@ export async function computeKdeValues(
   //   gpu
   //     .addFunction(
   //       // eslint-disable-next-line prefer-arrow-callback
-  //       function k(dist: number, bandwidth: number): number {
+  //       function computeKde(dist: number, bandwidth: number): number {
   //         const u = dist / bandwidth;
   //         if (Math.abs(u) <= 1) {
   //           return (1 - Math.abs(u)) * bandwidth;
@@ -514,6 +518,7 @@ export async function computeKdeValues(
   //       {
   //         argumentTypes: {
   //           dist: 'Number',
+  //           bandwidth: 'Number',
   //         },
   //         returnType: 'Number',
   //       },
@@ -522,7 +527,7 @@ export async function computeKdeValues(
     gpu
       .addFunction(
         // eslint-disable-next-line prefer-arrow-callback
-        function k(dist: number, bandwidth: number): number {
+        function computeKde(dist: number, bandwidth: number): number {
           const u = dist / bandwidth;
           if (Math.abs(u) <= 1) {
             return 1 / (2 * bandwidth);
@@ -532,6 +537,7 @@ export async function computeKdeValues(
         {
           argumentTypes: {
             dist: 'Number',
+            bandwidth: 'Number',
           },
           returnType: 'Number',
         },
