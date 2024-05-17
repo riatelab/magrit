@@ -35,6 +35,7 @@ import {
   SupportedTabularFileTypes,
 } from '../helpers/supportedFormats';
 import { findCsvDelimiter, getDatasetInfo } from '../helpers/formatConversion';
+import { removeNadGrids } from '../helpers/projection';
 
 // Stores
 import { fileDropStore, setFileDropStore } from '../store/FileDropStore';
@@ -897,7 +898,7 @@ export default function ImportWindow(): JSX.Element {
                 {
                   type: 'proj4',
                   name: crsToUse.name,
-                  value: crsToUse.wkt,
+                  value: removeNadGrids(crsToUse.wkt as string),
                   bounds: crsToUse.bounds,
                   code: crsToUse.code,
                 },

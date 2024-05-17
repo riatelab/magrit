@@ -15,7 +15,7 @@ import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { camelToFlat, isFiniteNumber } from '../../helpers/common';
 import { round } from '../../helpers/math';
-import { epsgDb, type EpsgDbEntryType } from '../../helpers/projection';
+import { epsgDb, type EpsgDbEntryType, removeNadGrids } from '../../helpers/projection';
 import rewindLayer from '../../helpers/rewind';
 import topojson from '../../helpers/topojson';
 import worldLand from '../../helpers/world-land';
@@ -408,7 +408,9 @@ export default function ProjectionSelection() : JSX.Element {
                         {
                           type: 'proj4',
                           name: selectedProjection()!.name,
-                          value: selectedProjection()!.proj4,
+                          value: removeNadGrids(
+                            (selectedProjection()!.proj4 || selectedProjection()?.wkt) as string,
+                          ),
                           bounds: selectedProjection()!.bbox,
                           code: `EPSG:${selectedProjection()!.code}`,
                         },

@@ -10,7 +10,7 @@ import { FaSolidAngleDown } from 'solid-icons/fa';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
 import { camelToFlat, unproxify } from '../../helpers/common';
-import { epsgDb } from '../../helpers/projection';
+import { epsgDb, removeNadGrids } from '../../helpers/projection';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -70,7 +70,7 @@ function onChangeProjectionEntry(
       'projection',
       {
         name: proj.name,
-        value: proj.proj4,
+        value: removeNadGrids((proj.proj4 || proj.wkt) as string),
         bounds: proj.bbox,
         code: `EPSG:${proj.code}`,
         type: 'proj4',
@@ -131,24 +131,21 @@ export default function MapConfiguration(): JSX.Element {
       value: '2154',
       type: 'proj4',
     },
-    // TODO: handle Grid Based Datum Adjustments
-    //       (we need to download the grid files when the user selects
-    //       a projection that requires it)
-    // {
-    //   name: 'OSGB36 / British National Grid - United Kingdom Ordnance Survey (EPSG:27700)',
-    //   value: '27700',
-    //   type: 'proj4',
-    // },
-    // {
-    //   name: 'NAD27(CGQ77) / Quebec Lambert (EPSG:2138)',
-    //   value: '2138',
-    //   type: 'proj4',
-    // },
-    // {
-    //   name: 'NAD83 / Conus Albers (EPSG:5070)',
-    //   value: '5070',
-    //   type: 'proj4',
-    // },
+    {
+      name: 'Madrid 1870 (Madrid) / Spain LCC (EPSG:2062)',
+      value: '2062',
+      type: 'proj4',
+    },
+    {
+      name: 'OSGB36 / British National Grid (EPSG:27700)',
+      value: '27700',
+      type: 'proj4',
+    },
+    {
+      name: 'NAD83 / Conus Albers (EPSG:5070)',
+      value: '5070',
+      type: 'proj4',
+    },
     {
       type: 'divider',
     },

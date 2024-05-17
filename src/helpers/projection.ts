@@ -318,3 +318,11 @@ export const reprojWithProj4 = (
   });
   return newData;
 };
+
+// Remove +nadgrids=xxxxxx from the proj4 string
+//  or EXTENSION["PROJ4_GRIDS","xxxx"]] from the WKT string
+// TODO: handle Grid Based Datum Adjustments
+//   by downloading the necessary grid files
+export const removeNadGrids = (s: string): string => s
+  .replace(/\+nadgrids=[^ +]*/g, '')
+  .replace(/EXTENSION\["PROJ4_GRIDS","[^"]*"\]/g, '');
