@@ -183,6 +183,14 @@ export default function FormulaInput(
     } catch (e) {
       props.setSampleOutput({ type: 'Error', value: 'ParsingFormula' });
     }
+
+    // Cleanup the special fields
+    data.forEach((d) => {
+      // eslint-disable-next-line no-param-reassign
+      delete d['@@uuid'];
+      // eslint-disable-next-line no-param-reassign
+      delete d['@@area'];
+    });
   };
 
   createEffect(
