@@ -14,7 +14,7 @@ import { getPalettes } from 'dicopal';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { getPaletteWrapper } from '../../helpers/color';
-import { debounce, unproxify } from '../../helpers/common';
+import { unproxify } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
 import { webSafeFonts } from '../../helpers/font';
 import { makeDorlingDemersSimulation } from '../../helpers/geo';
@@ -46,6 +46,8 @@ import {
   // Except for the layoutFeaturesAndLegends, where we want to push the changes
   // through the undo/redo stack
   setLayersDescriptionStore,
+  updateProp,
+  debouncedUpdateProp,
 } from '../../store/LayersDescriptionStore';
 import { setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -86,35 +88,6 @@ import {
 // Styles
 import '../../styles/LayerAndLegendSettings.css';
 import MessageBlock from '../MessageBlock.tsx';
-
-const updateProp = (
-  layerId: string,
-  propOrProps: string | string[],
-  value: string | number | boolean | object | null,
-) => {
-  if (Array.isArray(propOrProps)) {
-    const allPropsExceptLast = propOrProps.slice(0, propOrProps.length - 1);
-    const lastProp = propOrProps[propOrProps.length - 1];
-    const args = [
-      'layers',
-      (l: LayerDescription) => l.id === layerId,
-      ...allPropsExceptLast,
-      {
-        [lastProp]: value,
-      },
-    ];
-    // @ts-expect-error because we use a spread argument
-    setLayersDescriptionStoreBase(...args);
-  } else {
-    setLayersDescriptionStoreBase(
-      'layers',
-      (l: LayerDescription) => l.id === layerId,
-      { [propOrProps]: value },
-    );
-  }
-};
-
-const debouncedUpdateProp = debounce(updateProp, 200);
 
 const layerLinkedToHistogramOrBarChart = (
   layer: LayerDescription,

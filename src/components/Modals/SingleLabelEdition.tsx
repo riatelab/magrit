@@ -3,12 +3,15 @@ import { Accessor, For, JSX } from 'solid-js';
 
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
-import { debounce } from '../../helpers/common';
 import { webSafeFonts } from '../../helpers/font';
 import { findLayerById } from '../../helpers/layers';
 
 // Stores
-import { layersDescriptionStore, setLayersDescriptionStoreBase } from '../../store/LayersDescriptionStore';
+import {
+  layersDescriptionStore,
+  updateProp,
+  debouncedUpdateProp,
+} from '../../store/LayersDescriptionStore';
 
 // Other components
 import InputFieldColor from '../Inputs/InputColor.tsx';
@@ -16,38 +19,7 @@ import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 
 // Types / Interfaces / Enums
-import { LabelsParameters, type LayerDescription } from '../../global';
-
-// TODO: merge some duplicated code about props update
-//  between this file, LayerSettings.tsx and LegendSettings.tsx
-const updateProp = (
-  layerId: string,
-  propOrProps: string | string[],
-  value: string | number | boolean | object | null,
-) => {
-  if (Array.isArray(propOrProps)) {
-    const allPropsExceptLast = propOrProps.slice(0, propOrProps.length - 1);
-    const lastProp = propOrProps[propOrProps.length - 1];
-    const args = [
-      'layers',
-      (l: LayerDescription) => l.id === layerId,
-      ...allPropsExceptLast,
-      {
-        [lastProp]: value,
-      },
-    ];
-    // @ts-expect-error because we use a spread argument
-    setLayersDescriptionStoreBase(...args);
-  } else {
-    setLayersDescriptionStoreBase(
-      'layers',
-      (l: LayerDescription) => l.id === layerId,
-      { [propOrProps]: value },
-    );
-  }
-};
-
-const debouncedUpdateProp = debounce(updateProp, 200);
+import type { LabelsParameters } from '../../global';
 
 export default function SingleLabelEdition(
   props: {

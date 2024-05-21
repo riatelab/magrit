@@ -58,6 +58,8 @@ import InputFieldSelect from '../Inputs/InputSelect.tsx';
 /**
  * Update a single property of a legend in the layersDescriptionStore,
  * given its id and the path to the property.
+ * TODO: we should refactor updateProp in LayersDescriptionStore.tsx
+ *    to be able to use it here too.
  *
  * @param {string} legendId - The id of the legend to update.
  * @param {string[]} props - The path to the property to update.
