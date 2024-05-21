@@ -2532,6 +2532,16 @@ type RootTranslation = {
 		 */
 		PreventShapeRemoval: string
 	}
+	Fonts: {
+		/**
+		 * F​o​n​t​ ​f​a​m​i​l​i​e​s
+		 */
+		FontFamilyTypes: string
+		/**
+		 * F​o​n​t​s
+		 */
+		Fonts: string
+	}
 	DataTable: {
 		/**
 		 * A​t​t​r​i​b​u​t​e​ ​t​a​b​l​e
@@ -5643,6 +5653,16 @@ export type TranslationFunctions = {
 		 * Prevent feature removal
 		 */
 		PreventShapeRemoval: () => LocalizedString
+	}
+	Fonts: {
+		/**
+		 * Font families
+		 */
+		FontFamilyTypes: () => LocalizedString
+		/**
+		 * Fonts
+		 */
+		Fonts: () => LocalizedString
 	}
 	DataTable: {
 		/**

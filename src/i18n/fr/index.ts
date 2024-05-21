@@ -700,6 +700,10 @@ const fr = {
     CountSelfIntersections: '{count} auto-intersections détectées',
     PreventShapeRemoval: 'Empêcher la suppression d\'entités',
   },
+  Fonts: {
+    FontFamilyTypes: 'Types de police',
+    Fonts: 'Polices',
+  },
   DataTable: {
     titleGeo: 'Table attributaire',
     titleTabular: 'Tableau de données',

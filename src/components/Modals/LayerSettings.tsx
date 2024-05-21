@@ -16,7 +16,7 @@ import { TranslationFunctions } from '../../i18n/i18n-types';
 import { getPaletteWrapper } from '../../helpers/color';
 import { unproxify } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
-import { webSafeFonts } from '../../helpers/font';
+import { webSafeFonts, fonts } from '../../helpers/font';
 import { makeDorlingDemersSimulation } from '../../helpers/geo';
 import { generateIdLegend } from '../../helpers/legends';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
@@ -246,19 +246,24 @@ function makeSettingsLabels(
       />
     </Show>
     <InputFieldSelect
-      label={ LL().LayerSettings.FontFamily() }
+      label={LL().LayerSettings.FontFamily()}
       onChange={(v) => {
         updateProp(props.id, ['rendererParameters', 'default', 'fontFamily'], v);
         updateProp(props.id, ['rendererParameters', 'specific'], {});
       }}
       value={rendererParameters.default.fontFamily}
     >
+      <option disabled>{LL().Fonts.FontFamilyTypes()}</option>
       <For each={webSafeFonts}>
+        {(font) => <option value={font}>{font}</option>}
+      </For>
+      <option disabled>{LL().Fonts.Fonts()}</option>
+      <For each={fonts}>
         {(font) => <option value={font}>{font}</option>}
       </For>
     </InputFieldSelect>
     <InputFieldColor
-      label={ LL().LayerSettings.TextColor() }
+      label={LL().LayerSettings.TextColor()}
       value={rendererParameters.default.fontColor}
       onChange={(v) => {
         updateProp(props.id, ['rendererParameters', 'default', 'fontColor'], v);

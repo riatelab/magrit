@@ -9,4 +9,16 @@ export const webSafeFonts = [
   'Cursive',
 ];
 
+export const fonts = [
+  'Roboto',
+  'Lato',
+  'Open Sans',
+  'Great Vibes',
+  'Montserrat',
+  'Pacifio',
+  'Amatic',
+  'Lobster',
+  'Oswald',
+];
+
 export const noOp = () => {};

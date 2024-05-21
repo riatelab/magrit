@@ -700,6 +700,10 @@ const en = {
     CountSelfIntersections: '{count} self-intersections detected',
     PreventShapeRemoval: 'Prevent feature removal',
   },
+  Fonts: {
+    FontFamilyTypes: 'Font families',
+    Fonts: 'Fonts',
+  },
   DataTable: {
     titleGeo: 'Attribute table',
     titleTabular: 'Data table',

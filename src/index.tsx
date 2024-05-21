@@ -11,6 +11,7 @@ import './helpers/array.extension';
 
 import 'bulma/css/bulma.min.css';
 import './styles/Main.css';
+import './styles/fonts.css';
 
 import WelcomePage from './WelcomePage.tsx';
 import AppPage from './AppPage.tsx';

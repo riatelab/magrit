@@ -19,7 +19,7 @@ import InputFieldTextarea from '../Inputs/InputTextarea.tsx';
 // Helpers
 import type { TranslationFunctions } from '../../i18n/i18n-types';
 import { convertFromUnit, convertToUnit } from '../../helpers/distances';
-import { webSafeFonts } from '../../helpers/font';
+import { webSafeFonts, fonts } from '../../helpers/font';
 
 // Types / Interfaces / Enums
 import {
@@ -381,7 +381,12 @@ function makeSettingsText(
             e.currentTarget.value,
           )}
         >
+          <option disabled>{LL().Fonts.FontFamilyTypes()}</option>
           <For each={webSafeFonts}>
+            {(font) => <option value={font}>{font}</option>}
+          </For>
+          <option disabled>{props.LL().Fonts.Fonts()}</option>
+          <For each={fonts}>
             {(font) => <option value={font}>{font}</option>}
           </For>
         </select>

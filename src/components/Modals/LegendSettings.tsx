@@ -14,7 +14,7 @@ import { FaSolidPlus } from 'solid-icons/fa';
 import { layersDescriptionStore, setLayersDescriptionStoreBase } from '../../store/LayersDescriptionStore';
 
 // Helpers
-import { webSafeFonts } from '../../helpers/font';
+import { webSafeFonts, fonts } from '../../helpers/font';
 import {
   ascending,
   capitalizeFirstLetter,
@@ -194,7 +194,12 @@ function TextOptionTable(
               ev.target.value,
             )}
           >
+            <option disabled>{props.LL().Fonts.FontFamilyTypes()}</option>
             <For each={webSafeFonts}>
+              {(font) => <option value={font}>{font}</option>}
+            </For>
+            <option disabled>{props.LL().Fonts.Fonts()}</option>
+            <For each={fonts}>
               {(font) => <option value={font}>{font}</option>}
             </For>
           </select>

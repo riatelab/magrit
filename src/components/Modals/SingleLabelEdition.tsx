@@ -3,7 +3,7 @@ import { Accessor, For, JSX } from 'solid-js';
 
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
-import { webSafeFonts } from '../../helpers/font';
+import { webSafeFonts, fonts } from '../../helpers/font';
 import { findLayerById } from '../../helpers/layers';
 
 // Stores
@@ -66,12 +66,17 @@ export default function SingleLabelEdition(
           : rendererParameters.default.fontFamily
       }
     >
+      <option disabled>{props.LL().Fonts.FontFamilyTypes()}</option>
       <For each={webSafeFonts}>
+        {(font) => <option value={font}>{font}</option>}
+      </For>
+      <option disabled>{props.LL().Fonts.Fonts()}</option>
+      <For each={fonts}>
         {(font) => <option value={font}>{font}</option>}
       </For>
     </InputFieldSelect>
     <InputFieldNumber
-      label={ LL().LayerSettings.FontSize() }
+      label={LL().LayerSettings.FontSize()}
       value={
         rendererParameters.specific[featureIx]
           ? rendererParameters.specific[featureIx].fontSize
