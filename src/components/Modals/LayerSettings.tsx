@@ -461,6 +461,7 @@ function makeSettingsDefaultPoint(
                   height: 250,
                   fontColor: '#000000',
                   visible: true,
+                  roundDecimals: 2,
                   title: {
                     text: (props.rendererParameters as ClassificationParameters).variable,
                     ...applicationSettingsStore.defaultLegendSettings.title,
@@ -586,6 +587,7 @@ function makeSettingsDefaultPoint(
                   height: 250,
                   fontColor: '#000000',
                   visible: true,
+                  roundDecimals: 2,
                   title: {
                     text: (
                       props.rendererParameters as ProportionalSymbolsRatioParameters)
@@ -1052,6 +1054,7 @@ function makeSettingsDefaultLine(
                   height: 250,
                   fontColor: '#000000',
                   visible: true,
+                  roundDecimals: 2,
                   title: {
                     text: (props.rendererParameters as ClassificationParameters).variable,
                     ...applicationSettingsStore.defaultLegendSettings.title,
@@ -1368,6 +1371,7 @@ function makeSettingsDefaultPolygon(
                   height: 250,
                   fontColor: '#000000',
                   visible: true,
+                  roundDecimals: 2,
                   title: {
                     text: (props.rendererParameters as ClassificationParameters).variable,
                     ...applicationSettingsStore.defaultLegendSettings.title,

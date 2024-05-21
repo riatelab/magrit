@@ -3118,6 +3118,10 @@ type RootTranslation = {
 			 * S​a​m​e​ ​o​r​d​e​r​ ​a​s​ ​i​n​ ​t​h​e​ ​l​e​g​e​n​d
 			 */
 			BarOrderNone: string
+			/**
+			 * A​x​e​s​ ​a​n​d​ ​l​a​b​e​l​s​ ​c​o​l​o​r
+			 */
+			AxesAndLabelsColor: string
 		}
 	}
 	CommonTextElement: {
@@ -6226,6 +6230,10 @@ export type TranslationFunctions = {
 			 * Same order as in the legend
 			 */
 			BarOrderNone: () => LocalizedString
+			/**
+			 * Axes and labels color
+			 */
+			AxesAndLabelsColor: () => LocalizedString
 		}
 	}
 	CommonTextElement: {

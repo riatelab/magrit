@@ -860,6 +860,7 @@ const fr = {
       BarOrderAscending: 'Croissant',
       BarOrderDescending: 'Décroissant',
       BarOrderNone: 'Même ordre que dans la légende',
+      AxesAndLabelsColor: 'Couleur des axes et des étiquettes',
     },
   },
   CommonTextElement: {

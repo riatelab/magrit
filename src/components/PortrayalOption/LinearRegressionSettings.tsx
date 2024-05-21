@@ -396,6 +396,7 @@ function onClickValidate(
             height: 300,
             fontColor: '#000000',
             visible: true,
+            roundDecimals: 1,
             title: {
               text: `${linearRegressionResult.options.y} ~ ${linearRegressionResult.options.x}`,
               ...applicationSettingsStore.defaultLegendSettings.title,

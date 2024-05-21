@@ -19,9 +19,9 @@ import {
   RectangleBox,
   triggerContextMenuLegend,
 } from './common.tsx';
-import { isFiniteNumber } from '../../helpers/common';
+import { isFiniteNumber, precisionToMinimumFractionDigits } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
-import { extent, Mfloor } from '../../helpers/math';
+import { extent, Mfloor, round } from '../../helpers/math';
 import { LinearRegressionResult } from '../../helpers/statistics';
 
 // Stores
@@ -40,6 +40,7 @@ function ScatterPlot(
     logX?: boolean,
     logY?: boolean,
     dimension: [number, number],
+    roundDecimals: number,
   },
 ): JSX.Element {
   const ds = createMemo(() => props.dataset.map((d) => {
@@ -54,6 +55,16 @@ function ScatterPlot(
     }
     return null;
   }).filter((d) => d !== null));
+
+  const formatValue = (v: number) => round(v, props.roundDecimals)
+    .toLocaleString(
+      applicationSettingsStore.userLocale,
+      {
+        minimumFractionDigits: precisionToMinimumFractionDigits(
+          props.roundDecimals,
+        ),
+      },
+    );
 
   const minX = createMemo(() => {
     const [min, max] = extent(ds().map((d) => d[props.explanatoryVariable]));
@@ -78,11 +89,11 @@ function ScatterPlot(
         },
         x: {
           label: props.explanatoryVariable,
-          tickFormat: (d) => d.toLocaleString(),
+          tickFormat: (d) => formatValue(d),
         },
         y: {
           label: props.explainedVariable,
-          tickFormat: (d) => d.toLocaleString(),
+          tickFormat: (d) => formatValue(d),
         },
         marginLeft: 60,
         marks: [
@@ -192,6 +203,7 @@ export default function lmScatterPlot(
         logY={false}
         dimension={[legend.width, legend.height]}
         fontColor={legend.fontColor}
+        roundDecimals={legend.roundDecimals}
       />
     </g>
     {

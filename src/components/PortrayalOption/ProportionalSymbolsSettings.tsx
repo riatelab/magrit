@@ -325,6 +325,7 @@ function onClickValidate(
               height: 250,
               fontColor: '#000000',
               visible: true,
+              roundDecimals: minPrecision < 0 ? 0 : minPrecision,
               title: {
                 text: (propSymbolsParameters.color as CategoricalChoroplethParameters).variable,
                 ...applicationSettingsStore.defaultLegendSettings.title,

@@ -907,6 +907,19 @@ function makeSettingsChoroplethHistogram(
       max={800}
       step={1}
     />
+    <InputFieldNumber
+      label={LL().Legend.Modal.RoundDecimals()}
+      value={legend.roundDecimals}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['roundDecimals'], v)}
+      min={-3}
+      max={30}
+      step={1}
+    />
+    <InputFieldColor
+      label={'Axes color'}
+      value={legend.fontColor}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['fontColor'], v)}
+    />
     <OptionBackgroundRectangle legend={legend} LL={LL}/>
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
@@ -955,6 +968,11 @@ function makeSettginsCategoricalChoroplethBarchart(
       min={10}
       max={800}
       step={1}
+    />
+    <InputFieldColor
+      label={LL().Legend.Modal.AxesAndLabelsColor()}
+      value={legend.fontColor}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['fontColor'], v)}
     />
     <div class="field">
       <label class="label">{LL().Legend.Modal.LegendOrientation()}</label>
@@ -1042,6 +1060,19 @@ function makeSettingsScatterPlot(
       min={10}
       max={800}
       step={1}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.RoundDecimals()}
+      value={legend.roundDecimals}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['roundDecimals'], v)}
+      min={-3}
+      max={30}
+      step={1}
+    />
+    <InputFieldColor
+      label={LL().Legend.Modal.AxesAndLabelsColor()}
+      value={legend.fontColor}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['fontColor'], v)}
     />
     <OptionBackgroundRectangle legend={legend} LL={LL}/>
     <div

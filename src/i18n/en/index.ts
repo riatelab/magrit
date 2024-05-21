@@ -860,6 +860,7 @@ const en = {
       BarOrderAscending: 'Ascending',
       BarOrderDescending: 'Descending',
       BarOrderNone: 'Same order as in the legend',
+      AxesAndLabelsColor: 'Axes and labels color',
     },
   },
   CommonTextElement: {

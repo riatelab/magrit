@@ -19,7 +19,9 @@ import {
   RectangleBox,
   triggerContextMenuLegend,
 } from './common.tsx';
+import { precisionToMinimumFractionDigits } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
+import { round } from '../../helpers/math';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -30,7 +32,7 @@ import {
   type ChoroplethHistogramLegend,
   type ClassificationParameters,
   type LayerDescription,
-  type LayerDescriptionProportionalSymbols,
+  type LayerDescriptionProportionalSymbols, LegendTextElement,
   type ProportionalSymbolsRatioParameters,
 } from '../../global.d';
 
@@ -42,6 +44,8 @@ function ChoroplethHistogram(
     color: string,
     height: number,
     width: number,
+    roundDecimals: number,
+    textProperties: LegendTextElement,
   },
 ): JSX.Element {
   const minmax = [
@@ -66,9 +70,19 @@ function ChoroplethHistogram(
     return bd;
   });
 
+  const formatValue = (v: number) => round(v, props.roundDecimals)
+    .toLocaleString(
+      applicationSettingsStore.userLocale,
+      {
+        minimumFractionDigits: precisionToMinimumFractionDigits(
+          props.roundDecimals,
+        ),
+      },
+    );
+
   const sizeLargestLabel = createMemo(() => Math.max(
     ...props.classification.breaks.slice(1, -1).map((m) => getTextSize(
-      m.toLocaleString(),
+      formatValue(m),
       10,
       'sans-serif',
     ).width),
@@ -79,11 +93,11 @@ function ChoroplethHistogram(
       height: props.height,
       width: props.width,
       style: { color: props.color },
-      marginBottom: sizeLargestLabel() * 1.2,
+      marginBottom: 16 + sizeLargestLabel() * 0.60,
       marginLeft: 20,
       x: {
         domain: minmax,
-        tickFormat: (d) => d.toLocaleString(),
+        tickFormat: (d) => formatValue(d),
         tickRotate: -30,
         ticks: props.classification.breaks.slice(1, -1),
       },
@@ -186,6 +200,8 @@ export default function legendChoroplethHistogram(
         color={legend.fontColor}
         width={legend.width}
         height={legend.height}
+        roundDecimals={legend.roundDecimals}
+        textProperties={legend.axes}
       />
     </g>
     {

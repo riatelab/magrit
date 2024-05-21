@@ -885,6 +885,8 @@ interface ChoroplethHistogramLegend extends LegendBase {
   height: number,
   // The font color of the chart elements
   fontColor: string,
+  // The rounding of the values displayed on the axes
+  roundDecimals: number,
 }
 
 interface CategoricalChoroplethBarchartLegend extends LegendBase {
@@ -910,6 +912,8 @@ interface LinearRegressionScatterPlot extends LegendBase {
   height: number,
   // The font color of the chart elements
   fontColor: string,
+  // The rounding of the values displayed on the axes
+  roundDecimals: number,
 }
 
 interface CategoricalPictogramLegend extends LegendBase {
