@@ -454,6 +454,12 @@ export interface LabelsParameters {
   specific: {
     [featureId: number]: SingleLabelParameters,
   },
+  // Parameters for proportional labels
+  proportional?: {
+    variable: string,
+    referenceSize: number,
+    referenceValue: number,
+  },
 }
 
 interface DiscontinuityParameters {

@@ -178,15 +178,78 @@ function makeSettingsLabels(
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
   const rendererParameters = props.rendererParameters as LabelsParameters;
+  const isProportional = !!props.rendererParameters.proportional;
+
   return <>
+    <InputFieldSelect
+      disabled={true}
+      label={LL().LayerSettings.PortrayedVariable()}
+      onChange={(v) => {}}
+      value={props.rendererParameters.variable}
+    >
+      <option value={props.rendererParameters.variable}>{props.rendererParameters.variable}</option>
+    </InputFieldSelect>
     <MessageBlock type={'warning'}>
       <p>{LL().LayerSettings.InformationLabelSettings()}</p>
     </MessageBlock>
+    <Show when={!isProportional}>
+      <InputFieldNumber
+        label={ LL().LayerSettings.FontSize() }
+        value={rendererParameters.default.fontSize}
+        onChange={(v) => {
+          updateProp(props.id, ['rendererParameters', 'default', 'fontSize'], v);
+          updateProp(props.id, ['rendererParameters', 'specific'], {});
+        }}
+        min={1}
+        max={100}
+        step={1}
+      />
+    </Show>
+    <Show when={isProportional}>
+      <InputFieldSelect
+        disabled={true}
+        label={LL().LayerSettings.VariableForProportionality()}
+        onChange={(v) => {}}
+        value={props.rendererParameters.proportional!.variable}
+      >
+        <option value={props.rendererParameters.proportional!.variable}>
+          {props.rendererParameters.proportional!.variable}
+        </option>
+      </InputFieldSelect>
+      <InputFieldNumber
+        label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.OnValue()}
+        value={props.rendererParameters.proportional!.referenceValue}
+        onChange={(v) => {
+          debouncedUpdateProp(
+            props.id,
+            ['rendererParameters', 'proportional', 'referenceValue'],
+            v,
+          );
+        }}
+        min={0}
+        max={Infinity}
+        step={1}
+      />
+      <InputFieldNumber
+        label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize()}
+        value={props.rendererParameters.proportional!.referenceSize}
+        onChange={(v) => {
+          debouncedUpdateProp(
+            props.id,
+            ['rendererParameters', 'proportional', 'referenceSize'],
+            v,
+          );
+        }}
+        min={0}
+        max={100}
+        step={1}
+      />
+    </Show>
     <InputFieldSelect
       label={ LL().LayerSettings.FontFamily() }
       onChange={(v) => {
-        debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'fontFamily'], v);
-        debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
+        updateProp(props.id, ['rendererParameters', 'default', 'fontFamily'], v);
+        updateProp(props.id, ['rendererParameters', 'specific'], {});
       }}
       value={rendererParameters.default.fontFamily}
     >
@@ -194,23 +257,12 @@ function makeSettingsLabels(
         {(font) => <option value={font}>{font}</option>}
       </For>
     </InputFieldSelect>
-    <InputFieldNumber
-      label={ LL().LayerSettings.FontSize() }
-      value={rendererParameters.default.fontSize}
-      onChange={(v) => {
-        debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'fontSize'], v);
-        debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
-      }}
-      min={1}
-      max={100}
-      step={1}
-    />
     <InputFieldColor
       label={ LL().LayerSettings.TextColor() }
       value={rendererParameters.default.fontColor}
       onChange={(v) => {
-        debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'fontColor'], v);
-        debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
+        updateProp(props.id, ['rendererParameters', 'default', 'fontColor'], v);
+        updateProp(props.id, ['rendererParameters', 'specific'], {});
       }}
     />
     <InputFieldNumber
@@ -219,8 +271,8 @@ function makeSettingsLabels(
       onChange={
         (v) => {
           const value = [v, rendererParameters.default.textOffset[1]];
-          debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'textOffset'], value);
-          debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
+          updateProp(props.id, ['rendererParameters', 'default', 'textOffset'], value);
+          updateProp(props.id, ['rendererParameters', 'specific'], {});
         }
       }
       min={-100}
@@ -233,8 +285,8 @@ function makeSettingsLabels(
       onChange={
         (v) => {
           const value = [rendererParameters.default.textOffset[0], v];
-          debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'textOffset'], value);
-          debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
+          updateProp(props.id, ['rendererParameters', 'default', 'textOffset'], value);
+          updateProp(props.id, ['rendererParameters', 'specific'], {});
         }
       }
       min={-100}
@@ -244,8 +296,8 @@ function makeSettingsLabels(
     <InputFieldSelect
       label={ LL().LayerSettings.FontStyle() }
       onChange={(v) => {
-        debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'fontStyle'], v);
-        debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
+        updateProp(props.id, ['rendererParameters', 'default', 'fontStyle'], v);
+        updateProp(props.id, ['rendererParameters', 'specific'], {});
       }}
       value={rendererParameters.default.fontStyle}
     >
@@ -255,8 +307,8 @@ function makeSettingsLabels(
     <InputFieldSelect
       label={ LL().LayerSettings.FontWeight() }
       onChange={(v) => {
-        debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'fontWeight'], v);
-        debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
+        updateProp(props.id, ['rendererParameters', 'default', 'fontWeight'], v);
+        updateProp(props.id, ['rendererParameters', 'specific'], {});
       }}
       value={rendererParameters.default.fontWeight}
     >
@@ -268,11 +320,11 @@ function makeSettingsLabels(
       checked={rendererParameters.default.halo !== undefined}
       onChange={(v) => {
         if (v) {
-          debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'halo'], { color: '#ffffff', width: 2 });
+          updateProp(props.id, ['rendererParameters', 'default', 'halo'], { color: '#ffffff', width: 2 });
         } else {
-          debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'halo'], undefined);
+          updateProp(props.id, ['rendererParameters', 'default', 'halo'], undefined);
         }
-        debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
+        updateProp(props.id, ['rendererParameters', 'specific'], {});
       }}
     />
     <Show when={rendererParameters.default.halo !== undefined}>
@@ -284,8 +336,8 @@ function makeSettingsLabels(
             color: v,
             width: rendererParameters.default.halo!.width,
           };
-          debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'halo'], haloProps);
-          debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
+          updateProp(props.id, ['rendererParameters', 'default', 'halo'], haloProps);
+          updateProp(props.id, ['rendererParameters', 'specific'], {});
         }}
       />
       <InputFieldNumber
@@ -297,8 +349,8 @@ function makeSettingsLabels(
               color: rendererParameters.default.halo!.color,
               width: v,
             };
-            debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'halo'], haloProps);
-            debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
+            updateProp(props.id, ['rendererParameters', 'default', 'halo'], haloProps);
+            updateProp(props.id, ['rendererParameters', 'specific'], {});
           }
         }
         min={0}

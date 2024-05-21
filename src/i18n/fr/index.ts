@@ -389,6 +389,7 @@ const fr = {
       Customize: 'Choisir les pictogrammes et les noms de catégories',
     },
     LabelsOptions: {
+      ProportionalSize: 'Taille proportionnelle à une variable',
       Filter: 'Filtrer les étiquettes à créer',
       NewLayerName: 'Étiquettes_{layerName}',
     },
@@ -586,6 +587,8 @@ const fr = {
       triangle: 'Triangle',
       star: 'Étoile',
     },
+    PortrayedVariable: 'Variable utilisée pour la représentation',
+    VariableForProportionality: 'Variable utilisée pour la proportionnalité',
     AestheticFilter: 'Filtre esthétique',
     DropShadow: 'Ajouter une ombre',
     DropShadowDx: 'Décalage en X',

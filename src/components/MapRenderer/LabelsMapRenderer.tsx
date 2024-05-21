@@ -10,6 +10,7 @@ import {
 // Helpers
 import { bindDragBehavior, mergeFilterIds } from './common.tsx';
 import { unproxify } from '../../helpers/common';
+import { PropSizer } from '../../helpers/geo';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
 
@@ -28,6 +29,7 @@ import SingleLabelEdition from '../Modals/SingleLabelEdition.tsx';
 
 // Types / Interfaces / Enums
 import {
+  type GeoJSONFeature,
   type LabelsParameters,
   type LayerDescription,
   type LayerDescriptionLabels,
@@ -46,7 +48,6 @@ const bindContextMenu = (
   LL: Accessor<TranslationFunctions>,
 ) => {
   element.addEventListener('contextmenu', (e) => {
-    console.log('context menu', i, layer.data.features[i].properties);
     e.preventDefault();
     e.stopPropagation();
     const currentRendererParameters = unproxify(layer.rendererParameters);
@@ -60,7 +61,7 @@ const bindContextMenu = (
             setModalStore({
               show: true,
               content: () => <SingleLabelEdition layerId={layer.id} featureIx={i} LL={LL} />,
-              title: 'Edit label',
+              title: '',
               confirmCallback: () => {
                 // The settings were updated directly in the panel,
                 // skipping the undo/redo stack. So on confirm we
@@ -106,6 +107,18 @@ export function defaultLabelsRenderer(
   let refElement: SVGGElement;
   const rendererParameters = layerDescription.rendererParameters as LabelsParameters;
 
+  const getSize = (feature: GeoJSONFeature, fontSizeLabel: number) => {
+    if (rendererParameters.proportional) {
+      const propSize = new PropSizer(
+        rendererParameters.proportional!.referenceValue,
+        rendererParameters.proportional!.referenceSize,
+        'square' as any,
+      );
+      return propSize.scale(+feature.properties[rendererParameters.proportional.variable]) / 2;
+    }
+    return fontSizeLabel;
+  };
+
   onMount(() => {
     refElement.querySelectorAll('text')
       .forEach((textElement, i) => {
@@ -137,26 +150,32 @@ export function defaultLabelsRenderer(
           const projectedCoords = createMemo(
             () => globalStore.projection(feature.geometry.coordinates),
           );
-          const params = createMemo(() => {
-            if (rendererParameters.specific[i()]) return rendererParameters.specific[i()];
-            return rendererParameters.default;
-          });
+          // const params = createMemo(() => {
+          //   if (rendererParameters.specific[i()]) return rendererParameters.specific[i()];
+          //   return rendererParameters.default;
+          // });
+          const getParam = (param: string) => {
+            if (rendererParameters.specific[i()]) return rendererParameters.specific[i()][param];
+            return rendererParameters.default[param];
+          };
           return <text
-            x={projectedCoords()[0] + params().textOffset[0]}
-            y={projectedCoords()[1] + params().textOffset[1]}
-            alignment-baseline={params().textAlignment}
-            text-anchor={params().textAnchor}
-            font-style={params().fontStyle}
-            font-family={params().fontFamily}
-            font-size={params().fontSize}
-            font-weight={params().fontWeight}
-            fill={params().fontColor}
+            x={projectedCoords()[0] + getParam('textOffset')[0]}
+            y={projectedCoords()[1] + getParam('textOffset')[1]}
+            alignment-baseline={getParam('textAlignment')}
+            text-anchor={getParam('textAnchor')}
+            font-style={getParam('fontStyle')}
+            font-family={getParam('fontFamily')}
+            font-size={getSize(feature, getParam('fontSize'))}
+            font-weight={getParam('fontWeight')}
+            fill={getParam('fontColor')}
             {...(
-              params().halo
-                ? { stroke: params()!.halo.color, 'stroke-width': params()!.halo.width }
+              getParam('halo')
+                ? { stroke: getParam('halo').color, 'stroke-width': getParam('halo').width }
                 : {}
             )}
             use:bindData={feature}
+            mgt:offset-x={getParam('textOffset')[0]}
+            mgt:offset-y={getParam('textOffset')[1]}
           >{ feature.properties[rendererParameters.variable] }</text>;
         }
       }

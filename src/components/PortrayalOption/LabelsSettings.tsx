@@ -23,10 +23,11 @@ import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelecti
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
-import { findSuitableName } from '../../helpers/common';
+import { findSuitableName, isFiniteNumber } from '../../helpers/common';
 import { makeCentroidLayer } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
 import { generateIdLegend } from '../../helpers/legends';
+import { max } from '../../helpers/math';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Subcomponents
@@ -35,6 +36,7 @@ import FormulaInput, { filterData, formatValidSampleOutput, SampleOutputFormat }
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputResultName from './InputResultName.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 import MessageBlock from '../MessageBlock.tsx';
 
@@ -78,6 +80,11 @@ function onClickValidate(
   targetVariable: string,
   newLayerName: string,
   filterFormula?: string,
+  proportionOption?: {
+    variable: string,
+    referenceSize: number,
+    referenceValue: number,
+  },
 ): void {
   const referenceLayerDescription = layersDescriptionStore.layers
     .find((l) => l.id === referenceLayerId)!;
@@ -142,10 +149,13 @@ function onClickValidate(
         textAlignment: 'middle',
         textOffset: [0, 0],
       },
+      proportional: proportionOption,
       specific: {},
       movable: false,
     } as LabelsParameters,
   } as LayerDescriptionLabels;
+
+  console.log(newLayerDescription);
 
   // By default the legend for labels is not visible
   // (but it is created so that the user can change its visibility)
@@ -202,6 +212,10 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
   // We know that we have such fields because otherwise this component would not be rendered.
   const targetFields = layerDescription.fields;
 
+  // Fields that can be used as a target variable for proportional labels
+  const proportionalFields = layerDescription.fields
+    .filter((f) => f.dataType === 'number');
+
   // The variable that contains the label to display
   const [targetVariable, setTargetVariable] = createSignal<string>(targetFields[0].name);
 
@@ -214,6 +228,26 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
       layerName: layerDescription.name,
     }) as string,
   );
+
+  // Do we want the labels to be proportional to a variable?
+  const [
+    proportional,
+    setProportional,
+  ] = createSignal<boolean>(false);
+
+  // Options for proportional symbols
+  const [
+    propVariable,
+    setPropVariable,
+  ] = createSignal<string>(proportionalFields[0] ? proportionalFields[0].name : '');
+  const [
+    refSymbolSize,
+    setRefSymbolSize,
+  ] = createSignal<number>(10);
+  const [
+    refValueForSymbolSize,
+    setRefValueForSymbolSize,
+  ] = createSignal<number>(10);
 
   // Do we want to filter the data before displaying it?
   const [
@@ -251,12 +285,20 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
     await yieldOrContinue('smooth');
 
     // Create the portrayal
+    const propOptions = proportional()
+      ? {
+        variable: propVariable(),
+        referenceSize: refSymbolSize(),
+        referenceValue: refValueForSymbolSize(),
+      }
+      : undefined;
     setTimeout(() => {
       onClickValidate(
         layerDescription.id,
         targetVariable(),
         layerName,
         formula(),
+        propOptions,
       );
       // Hide loading overlay
       setLoading(false);
@@ -265,6 +307,24 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
       openLayerManager();
     }, 0);
   };
+
+  createEffect(
+    on(
+      () => propVariable(),
+      () => {
+        if (propVariable() !== '') {
+          const values = layerDescription.data.features
+            .map((feature) => feature.properties[propVariable()])
+            .filter((value) => isFiniteNumber(value))
+            .map((value: any) => +value);
+
+          const maxValues = max(values);
+
+          setRefValueForSymbolSize(maxValues);
+        }
+      },
+    ),
+  );
 
   createEffect(
     on(
@@ -361,6 +421,40 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
             </MessageBlock>
           </Match>
         </Switch>
+      </Show>
+    </Show>
+    <Show when={proportionalFields.length > 0}>
+      <InputFieldCheckbox
+        label={LL().FunctionalitiesSection.LabelsOptions.ProportionalSize()}
+        checked={proportional()}
+        onChange={(v) => { setProportional(v); }}
+      />
+      <Show when={proportional()}>
+        <InputFieldSelect
+          label={LL().FunctionalitiesSection.CommonOptions.Variable()}
+          onChange={(v) => { setPropVariable(v); }}
+          value={propVariable()}
+        >
+          <For each={proportionalFields}>
+            { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+          </For>
+        </InputFieldSelect>
+        <InputFieldNumber
+          label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize() }
+          value={ refSymbolSize() }
+          onChange={(value) => { setRefSymbolSize(value); }}
+          min={ 1 }
+          max={ 200 }
+          step={ 1 }
+        />
+        <InputFieldNumber
+          label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.OnValue() }
+          value={ refValueForSymbolSize() }
+          onChange={(value) => { setRefValueForSymbolSize(value); }}
+          min={ 1 }
+          max={ 999 }
+          step={ 0.1 }
+        />
       </Show>
     </Show>
     <InputResultName

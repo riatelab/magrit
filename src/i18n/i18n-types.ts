@@ -1392,6 +1392,10 @@ type RootTranslation = {
 		}
 		LabelsOptions: {
 			/**
+			 * P​r​o​p​o​r​t​i​o​n​a​l​ ​s​i​z​e
+			 */
+			ProportionalSize: string
+			/**
 			 * F​i​l​t​e​r​ ​t​h​e​ ​l​a​b​e​l​s​ ​t​o​ ​c​r​e​a​t​e
 			 */
 			Filter: string
@@ -2112,6 +2116,14 @@ type RootTranslation = {
 			 */
 			star: string
 		}
+		/**
+		 * V​a​r​i​a​b​l​e​ ​u​s​e​d​ ​f​o​r​ ​t​h​e​ ​p​o​r​t​r​a​y​a​l
+		 */
+		PortrayedVariable: string
+		/**
+		 * V​a​r​i​a​b​l​e​ ​u​s​e​d​ ​f​o​r​ ​p​r​o​p​o​r​t​i​o​n​a​l​i​t​y
+		 */
+		VariableForProportionality: string
 		/**
 		 * A​e​s​t​h​e​t​i​c​ ​f​i​l​t​e​r
 		 */
@@ -4505,6 +4517,10 @@ export type TranslationFunctions = {
 		}
 		LabelsOptions: {
 			/**
+			 * Proportional size
+			 */
+			ProportionalSize: () => LocalizedString
+			/**
 			 * Filter the labels to create
 			 */
 			Filter: () => LocalizedString
@@ -5211,6 +5227,14 @@ export type TranslationFunctions = {
 			 */
 			star: () => LocalizedString
 		}
+		/**
+		 * Variable used for the portrayal
+		 */
+		PortrayedVariable: () => LocalizedString
+		/**
+		 * Variable used for proportionality
+		 */
+		VariableForProportionality: () => LocalizedString
 		/**
 		 * Aesthetic filter
 		 */

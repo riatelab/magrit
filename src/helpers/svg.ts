@@ -298,8 +298,10 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
           // eslint-disable-next-line no-underscore-dangle
           (t as SVGTextElement & ID3Element).__data__.geometry.coordinates,
         );
-        t.setAttribute('x', `${projectedCoords[0]}`);
-        t.setAttribute('y', `${projectedCoords[1]}`);
+        const offsetX = +(t.getAttribute('mgt:offset-x') || 0);
+        const offsetY = +(t.getAttribute('mgt:offset-y') || 0);
+        t.setAttribute('x', `${projectedCoords[0] + offsetX}`);
+        t.setAttribute('y', `${projectedCoords[1] + offsetY}`);
       });
     } else if (typePortrayal === 'links') {
       const linkCurvature = g.getAttribute('mgt:link-curvature')!;

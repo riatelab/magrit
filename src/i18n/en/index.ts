@@ -389,6 +389,7 @@ const en = {
       Customize: 'Choose pictograms and category names',
     },
     LabelsOptions: {
+      ProportionalSize: 'Proportional size',
       Filter: 'Filter the labels to create',
       NewLayerName: 'Labels_{layerName}',
     },
@@ -586,6 +587,8 @@ const en = {
       triangle: 'Triangle',
       star: 'Star',
     },
+    PortrayedVariable: 'Variable used for the portrayal',
+    VariableForProportionality: 'Variable used for proportionality',
     AestheticFilter: 'Aesthetic filter',
     DropShadow: 'Add a shadow',
     DropShadowDx: 'Shadow offset on the x-axis',
