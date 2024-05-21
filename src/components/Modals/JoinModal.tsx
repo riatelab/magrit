@@ -19,7 +19,7 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
-import { sleep, unproxify } from '../../helpers/common';
+import { unproxify } from '../../helpers/common';
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
@@ -119,9 +119,6 @@ const checkJoin = async (
       }
     }
   });
-
-  // Just to test the loading indicator
-  await sleep(1000);
 
   return result;
 };
