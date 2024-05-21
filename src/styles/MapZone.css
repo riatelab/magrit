@@ -92,3 +92,7 @@
   bottom: -5px;
   cursor: nwse-resize;
 }
+
+.map-zone__map g.movable > * {
+  cursor: grab;
+}

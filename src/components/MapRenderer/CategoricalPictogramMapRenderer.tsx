@@ -40,7 +40,11 @@ export default function categoricalPictogramRenderer(
   return <g
     ref={refElement!}
     id={layerDescription.id}
-    class="layer categoricalPictogram"
+    classList={{
+      layer: true,
+      categoricalPictogram: true,
+      // movable: layerDescription.rendererParameters.movable,
+    }}
     visibility={layerDescription.visible ? undefined : 'hidden'}
     fill-opacity={layerDescription.fillOpacity}
     stroke={layerDescription.strokeColor}

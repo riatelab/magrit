@@ -85,6 +85,7 @@ import {
 
 // Styles
 import '../../styles/LayerAndLegendSettings.css';
+import MessageBlock from '../MessageBlock.tsx';
 
 const updateProp = (
   layerId: string,
@@ -205,10 +206,16 @@ function makeSettingsLabels(
 ): JSX.Element {
   const rendererParameters = props.rendererParameters as LabelsParameters;
   return <>
+    <MessageBlock type={'warning'}>
+      <p>{LL().LayerSettings.InformationLabelSettings()}</p>
+    </MessageBlock>
     <InputFieldSelect
       label={ LL().LayerSettings.FontFamily() }
-      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontFamily'], v)}
-      value={rendererParameters.fontFamily}
+      onChange={(v) => {
+        debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'fontFamily'], v);
+        debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
+      }}
+      value={rendererParameters.default.fontFamily}
     >
       <For each={webSafeFonts}>
         {(font) => <option value={font}>{font}</option>}
@@ -216,24 +223,31 @@ function makeSettingsLabels(
     </InputFieldSelect>
     <InputFieldNumber
       label={ LL().LayerSettings.FontSize() }
-      value={rendererParameters.fontSize}
-      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontSize'], v)}
+      value={rendererParameters.default.fontSize}
+      onChange={(v) => {
+        debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'fontSize'], v);
+        debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
+      }}
       min={1}
       max={100}
       step={1}
     />
     <InputFieldColor
       label={ LL().LayerSettings.TextColor() }
-      value={rendererParameters.fontColor}
-      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontColor'], v)}
+      value={rendererParameters.default.fontColor}
+      onChange={(v) => {
+        debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'fontColor'], v);
+        debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
+      }}
     />
     <InputFieldNumber
       label={ LL().LayerSettings.XOffset() }
-      value={rendererParameters.textOffset[0]}
+      value={rendererParameters.default.textOffset[0]}
       onChange={
         (v) => {
-          const value = [v, rendererParameters.textOffset[1]];
-          debouncedUpdateProp(props.id, ['rendererParameters', 'textOffset'], value);
+          const value = [v, rendererParameters.default.textOffset[1]];
+          debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'textOffset'], value);
+          debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
         }
       }
       min={-100}
@@ -242,11 +256,12 @@ function makeSettingsLabels(
     />
     <InputFieldNumber
       label={ LL().LayerSettings.YOffset() }
-      value={rendererParameters.textOffset[1]}
+      value={rendererParameters.default.textOffset[1]}
       onChange={
         (v) => {
-          const value = [rendererParameters.textOffset[0], v];
-          debouncedUpdateProp(props.id, ['rendererParameters', 'textOffset'], value);
+          const value = [rendererParameters.default.textOffset[0], v];
+          debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'textOffset'], value);
+          debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
         }
       }
       min={-100}
@@ -255,53 +270,62 @@ function makeSettingsLabels(
     />
     <InputFieldSelect
       label={ LL().LayerSettings.FontStyle() }
-      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontStyle'], v)}
-      value={rendererParameters.fontStyle}
+      onChange={(v) => {
+        debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'fontStyle'], v);
+        debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
+      }}
+      value={rendererParameters.default.fontStyle}
     >
       <option value="normal">Normal</option>
       <option value="italic">Italic</option>
     </InputFieldSelect>
     <InputFieldSelect
       label={ LL().LayerSettings.FontWeight() }
-      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'fontWeight'], v)}
-      value={rendererParameters.fontWeight}
+      onChange={(v) => {
+        debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'fontWeight'], v);
+        debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
+      }}
+      value={rendererParameters.default.fontWeight}
     >
       <option value="normal">Normal</option>
       <option value="bold">Bold</option>
     </InputFieldSelect>
     <InputFieldCheckbox
       label={ LL().LayerSettings.BufferAroundText() }
-      checked={rendererParameters.halo !== undefined}
+      checked={rendererParameters.default.halo !== undefined}
       onChange={(v) => {
         if (v) {
-          debouncedUpdateProp(props.id, ['rendererParameters', 'halo'], { color: '#ffffff', width: 2 });
+          debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'halo'], { color: '#ffffff', width: 2 });
         } else {
-          debouncedUpdateProp(props.id, ['rendererParameters', 'halo'], undefined);
+          debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'halo'], undefined);
         }
+        debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
       }}
     />
-    <Show when={rendererParameters.halo !== undefined}>
+    <Show when={rendererParameters.default.halo !== undefined}>
       <InputFieldColor
         label={ LL().LayerSettings.BufferColor() }
-        value={rendererParameters.halo!.color}
+        value={rendererParameters.default.halo!.color}
         onChange={(v) => {
           const haloProps = {
             color: v,
-            width: rendererParameters.halo!.width,
+            width: rendererParameters.default.halo!.width,
           };
-          debouncedUpdateProp(props.id, ['rendererParameters', 'halo'], haloProps);
+          debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'halo'], haloProps);
+          debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
         }}
       />
       <InputFieldNumber
         label={ LL().LayerSettings.BufferWidth() }
-        value={rendererParameters.halo!.width}
+        value={rendererParameters.default.halo!.width}
         onChange={
           (v) => {
             const haloProps = {
-              color: rendererParameters.halo!.color,
+              color: rendererParameters.default.halo!.color,
               width: v,
             };
-            debouncedUpdateProp(props.id, ['rendererParameters', 'halo'], haloProps);
+            debouncedUpdateProp(props.id, ['rendererParameters', 'default', 'halo'], haloProps);
+            debouncedUpdateProp(props.id, ['rendererParameters', 'specific'], {});
           }
         }
         min={0}
@@ -312,12 +336,26 @@ function makeSettingsLabels(
     <InputFieldCheckbox
       label={ LL().LayerSettings.AllowMovingLabels() }
       checked={rendererParameters.movable}
-      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}
+      onChange={(v) => {
+        debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v);
+      }}
     />
     <InputFieldButton
       label={LL().LayerSettings.ResetLabelLocations()}
       onClick={() => {
-        // TODO...
+        // Restore position of the labels
+        setLayersDescriptionStoreBase(
+          produce((draft: LayersDescriptionStoreType) => {
+            draft.layers.filter((l) => l.id === props.id).forEach((layerDescription) => {
+              layerDescription.data.features.forEach((f) => {
+                // eslint-disable-next-line no-param-reassign
+                f.geometry.coordinates[0] = f.geometry.originalCoordinates[0] as number;
+                // eslint-disable-next-line no-param-reassign
+                f.geometry.coordinates[1] = f.geometry.originalCoordinates[1] as number;
+              });
+            });
+          }),
+        );
       }}
     />
   </>;

@@ -132,18 +132,17 @@ function onClickValidate(
     shapeRendering: 'auto',
     rendererParameters: {
       variable: targetVariable,
-      fontSize: 12,
-      fontFamily: 'Sans-serif',
-      fontColor: '#000000',
-      fontStyle: 'normal',
-      fontWeight: 'normal',
-      textAnchor: 'middle',
-      textAlignment: 'middle',
-      textOffset: [0, 0],
-      textBuffer: {
-        size: 0,
-        color: '#fefefe',
+      default: {
+        fontSize: 12,
+        fontFamily: 'Sans-serif',
+        fontColor: '#000000',
+        fontStyle: 'normal',
+        fontWeight: 'normal',
+        textAnchor: 'middle',
+        textAlignment: 'middle',
+        textOffset: [0, 0],
       },
+      specific: {},
       movable: false,
     } as LabelsParameters,
   } as LayerDescriptionLabels;

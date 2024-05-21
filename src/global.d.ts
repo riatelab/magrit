@@ -419,9 +419,7 @@ export interface GraticuleParameters {
   extent?: [number, number, number, number],
 }
 
-export interface LabelsParameters {
-  // The name of the variable used for creating the labels
-  variable: string,
+export interface SingleLabelParameters {
   // The font size of the labels
   fontSize: number,
   // The font family of the labels
@@ -438,17 +436,23 @@ export interface LabelsParameters {
   textAlignment: string,
   // The text offset of the labels
   textOffset: [number, number],
-  // The text buffer of the labels
-  textBuffer?: {
-    size: number,
-    color: string,
-  },
-  // Whether the labels can be moved by the user or not
-  movable: boolean,
   // Stroke to create a halo around the labels
   halo?: {
     color: string,
     width: number,
+  },
+}
+
+export interface LabelsParameters {
+  // The name of the variable used for creating the labels
+  variable: string,
+  // Whether the labels can be moved by the user or not
+  movable: boolean,
+  // The default parameters for the labels
+  default: SingleLabelParameters,
+  // Specific parameters per feature
+  specific: {
+    [featureId: number]: SingleLabelParameters,
   },
 }
 

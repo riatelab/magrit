@@ -612,6 +612,7 @@ const fr = {
     GraticuleStepY: 'Pas du graticule en Y',
     AddBarChartCategoricalChoropleth: 'Ajouter un diagramme en barre par catégories...',
     AddHistogramChoropleth: 'Ajouter un histogramme de répartition des valeurs...',
+    InformationLabelSettings: 'Veuillez noter que la modification de ces paramètres s\'appliquera à l\'ensemble des étiquettes de la couche (pouvant ainsi écraser les éventuels styles définis individuellement). Si vous souhaitez modifier les paramètres d\'une seule étiquette, cela est possible en faisant un clic droit sur l\'étiquette en question.',
   },
   JoinPanel: {
     Title: 'Joindre à une couche géospatiale',

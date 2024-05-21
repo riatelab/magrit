@@ -79,7 +79,7 @@ export function bindDragBehavior(
     element.removeAttribute('transform');
 
     // Reset the cursor style
-    element.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
+    element.style.cursor = null; // eslint-disable-line no-param-reassign
     outerSvg.style.cursor = 'default'; // eslint-disable-line no-param-reassign
 
     // Remove all the event listeners on the parent SVG element
@@ -117,9 +117,10 @@ export function bindDragBehavior(
     outerSvg.addEventListener('mouseup', deselectElement);
 
     // Cursor style
-    // First change the cursor of the element group to default value
-    element.style.cursor = 'default'; // eslint-disable-line no-param-reassign
+    // First change the cursor of the element to grabbing
+    element.style.cursor = 'grabbing'; // eslint-disable-line no-param-reassign
     // Then change the cursor of the parent SVG element to grabbing
+    // (so that the cursor stays in grabbing state even if the mouse is not over the element)
     outerSvg.style.cursor = 'grabbing'; // eslint-disable-line no-param-reassign
 
     // Display a red dot at the original position of the element
