@@ -67,6 +67,12 @@ html.theme-dark select > option[disabled] {
     color: grey;
 }
 
+/* Overwrite some Bulma's default values */
+
+.modal-card-body {
+    padding: 1em 1.5em !important;
+}
+
 .modal .modal-card-foot .button:not(:last-child) {
   margin-right: 0.5em;
 }
