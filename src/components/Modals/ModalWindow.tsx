@@ -55,7 +55,7 @@ export default function DefaultModal(): JSX.Element {
       const modal = e.target as HTMLElement;
       const modalRect = modal.getBoundingClientRect();
       if (modalRect.bottom > globalStore.windowDimensions.height) {
-        modal.style.top = `${modal.offsetTop - (modalRect.bottom - globalStore.windowDimensions.height)}px`;
+        modal.style.top = `${modal.offsetTop - (modalRect.bottom + 15 - globalStore.windowDimensions.height)}px`;
       }
     });
   });
