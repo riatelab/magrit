@@ -25,7 +25,7 @@ Les polices d'écritures proposées dans Magrit sont les suivantes :
 - Oswald
 - Lobster
 - Playfair Display
-- Good Dog
+- Dosis
 - League Gothic
 
 Il s'agit de polices gratuites et libres de droit (d'après la revue qui en a été faite par [Font Squirrel](https://www.fontsquirrel.com/)).

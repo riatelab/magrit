@@ -385,7 +385,7 @@ function makeSettingsText(
           <For each={webSafeFonts}>
             {(font) => <option value={font}>{font}</option>}
           </For>
-          <option disabled>{props.LL().Fonts.Fonts()}</option>
+          <option disabled>{LL().Fonts.Fonts()}</option>
           <For each={fonts}>
             {(font) => <option value={font}>{font}</option>}
           </For>

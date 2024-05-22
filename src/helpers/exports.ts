@@ -8,9 +8,10 @@ import { globalStore } from '../store/GlobalStore';
 // Helpers
 import { SupportedGeoFileTypes } from './supportedFormats';
 import { convertFromGeoJSON } from './formatConversion';
+import { getTargetSvg, redrawPaths } from './svg';
+import { findCssFontDefinition } from './font';
 
 // Types / Interfaces
-import { getTargetSvg, redrawPaths } from './svg';
 import type { GeoJSONFeatureCollection } from '../global';
 
 /**
@@ -63,6 +64,54 @@ function changeResolution(canvas: HTMLCanvasElement, scaleFactor: number) {
   canvas.width = Math.ceil(canvas.width * scaleFactor); // eslint-disable-line no-param-reassign
   canvas.height = Math.ceil(canvas.height * scaleFactor); // eslint-disable-line no-param-reassign
   canvas.getContext('2d')?.scale(scaleFactor, scaleFactor);
+}
+
+/**
+ * Identify the various fonts used in the SVG map and add them to the SVG.
+ *
+ * @param {SVGElement} svgElement
+ * @param {string[]} ignoreFonts
+ * @returns {string}
+ */
+function patchSvgForFonts(
+  svgElement: SVGElement,
+  ignoreFonts: string[] = ['Serif', 'Sans-serif', 'Monospace', 'Cursive'],
+): string {
+  function getListUsedFonts() {
+    const elems = Array.from(svgElement.getElementsByTagName('text'));
+    const needed: (string | null)[] = [];
+    for (let i = 0; i < elems.length; i += 1) {
+      const fontName = elems[i].style.fontFamily || elems[i].getAttribute('font-family');
+      if (!ignoreFonts.includes(fontName)) {
+        needed.push(fontName);
+      }
+    }
+    return needed.filter((d) => d);
+  }
+
+  const needed = getListUsedFonts();
+  if (needed.length === 0) {
+    return;
+  }
+
+  const fontsToAdd = needed
+    .map((name) => findCssFontDefinition(name));
+
+  const styleElem = document.createElement('style');
+  styleElem.innerHTML = fontsToAdd.join(' ');
+  svgElement.querySelector('defs')!.appendChild(styleElem);
+}
+
+/**
+ * Remove the font definitions from the SVG map.
+ *
+ * @param svgElement
+ */
+function unpatchSvgForFonts(svgElement: SVGElement) {
+  const styleElems = Array.from(svgElement.getElementsByTagName('style'));
+  styleElems.forEach((styleElem) => {
+    styleElem.remove();
+  });
 }
 
 /**
@@ -122,10 +171,14 @@ export async function exportMapToSvg(
   options: object = {},
 ) {
   const targetSvg = getTargetSvg();
+  // Patch the SVG to include the fonts used in the map
+  patchSvgForFonts(targetSvg);
   // Function to be executed after the map is exported to SVG
   // (whether it failed or succeeded)
   // in order to restore various settings
   const finallyFn = () => {
+    // Unpatch the SVG to remove the fonts used in the map
+    unpatchSvgForFonts(targetSvg);
     // Restore the projection clip extent and redraw the paths
     globalStore.projection.clipExtent(getDefaultClipExtent());
     redrawPaths(targetSvg);
@@ -193,11 +246,20 @@ export async function exportMapToSvg(
  */
 export async function exportMapToPng(outputName: string, scaleFactor = 1) {
   const targetSvg = getTargetSvg();
-  const mapDimensions = getMapDimension(targetSvg);
+  const mapDimensions = getMapDimension();
   const targetCanvas = document.createElement('canvas');
   targetCanvas.width = mapDimensions.width;
   targetCanvas.height = mapDimensions.height;
   document.body.appendChild(targetCanvas);
+
+  // Patch the SVG to include the fonts used in the map
+  patchSvgForFonts(targetSvg);
+
+  // Cleanup function
+  const cleanUp = () => {
+    targetCanvas.remove();
+    unpatchSvgForFonts(targetSvg);
+  };
 
   // eslint-disable-next-line no-param-reassign
   const outputNameClean = cleanOutputName(outputName, 'png');
@@ -217,6 +279,7 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
     context = tContext;
     image = new Image();
   } catch (err) {
+    cleanUp();
     console.warn('Error serializing SVG', err);
     return Promise.reject(err);
   }
@@ -225,7 +288,7 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
     try {
       changeResolution(targetCanvas, scaleFactor);
     } catch (err) {
-      targetCanvas.remove();
+      cleanUp();
       console.warn('Error when rescaling image', err);
       return Promise.reject(err);
     }
@@ -240,7 +303,7 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
       `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgXml)}`,
     );
   } catch (err) {
-    targetCanvas.remove();
+    cleanUp();
     console.warn('Error when setting image source', err);
     return Promise.reject(err);
   }
@@ -251,15 +314,16 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
   try {
     imgUrl = targetCanvas.toDataURL(mimeType);
   } catch (err) {
-    targetCanvas.remove();
+    cleanUp();
     console.warn('Error when converting image to data url', err);
     return Promise.reject(err);
   }
 
   return clickLinkFromDataUrl(imgUrl, outputNameClean).then(() => {
-    targetCanvas.remove();
+    cleanUp();
     return Promise.resolve(true);
   }).catch((err) => {
+    cleanUp();
     console.warn('Error when using the data url version of the image', err);
     return Promise.reject(err);
   });
