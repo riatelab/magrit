@@ -31,7 +31,7 @@ import {
   PropSizer,
 } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
-import { max, min } from '../../helpers/math';
+import { Mabs, max, min } from '../../helpers/math';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 import { generateIdLegend } from '../../helpers/legends';
 
@@ -172,21 +172,36 @@ function onClickValidate(
   );
 
   // eslint-disable-next-line no-nested-ternary
-  const nValuesLegend = propSymbolsParameters.colorMode === 'positiveNegative'
-    ? 5 // eslint-disable-next-line no-nested-ternary
-    : propSymbolsParameters.referenceRadius > 50
-      ? 4
-      : propSymbolsParameters.referenceRadius > 25
-        ? 3
-        : 2;
+  const nValuesLegend = propSymbolsParameters.referenceRadius > 50
+    ? 4
+    : propSymbolsParameters.referenceRadius > 25
+      ? 3
+      : 2;
 
-  const legendValues = computeCandidateValuesForSymbolsLegend(
-    extent[0],
-    extent[1],
-    propSize.scale,
-    propSize.getValue,
-    nValuesLegend,
-  );
+  const legendValues = propSymbolsParameters.colorMode !== 'positiveNegative'
+    ? computeCandidateValuesForSymbolsLegend(
+      extent[0],
+      extent[1],
+      propSize.scale,
+      propSize.getValue,
+      nValuesLegend,
+    )
+    : [
+      ...computeCandidateValuesForSymbolsLegend(
+        0,
+        Mabs(extent[0]),
+        propSize.scale,
+        propSize.getValue,
+        4,
+      ).slice(1).map((d) => -d).toReversed(),
+      ...computeCandidateValuesForSymbolsLegend(
+        0,
+        extent[1],
+        propSize.scale,
+        propSize.getValue,
+        4,
+      ).slice(1),
+    ];
 
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(150, 150);
@@ -240,7 +255,7 @@ function onClickValidate(
     layout: (
       propSymbolsParameters.colorMode === 'positiveNegative'
       || propSymbolsParameters.symbolType === 'line'
-    ) ? 'horizontal' : 'stacked',
+    ) ? 'vertical' : 'stacked',
     values: legendValues,
     spacing: 5,
     labels: {
@@ -805,7 +820,7 @@ export default function ProportionalSymbolsSettings(
         />
         <InputFieldColor
           label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.ColorNegativeValues() }
-          value={ color() }
+          value={ colors()[1] }
           onChange={(value) => { setColors([colors()[0], value]); }}
         />
       </Match>
