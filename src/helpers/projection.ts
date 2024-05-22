@@ -326,3 +326,8 @@ export const reprojWithProj4 = (
 export const removeNadGrids = (s: string): string => s
   .replace(/\+nadgrids=[^ +]*/g, '')
   .replace(/EXTENSION\["PROJ4_GRIDS","[^"]*"\]/g, '');
+
+export const getProjectionFromEpsgCode = (code: string): InterfaceProjection => {
+  const desc = epsgDb[+code.replace('EPSG:', '')];
+  return getProjection(removeNadGrids(desc.proj4 || desc.wkt));
+};

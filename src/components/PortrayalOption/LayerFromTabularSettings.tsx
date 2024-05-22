@@ -19,7 +19,11 @@ import {
   wktSeemsValid,
 } from '../../helpers/layerFromTable';
 import { generateIdLayer, getDefaultRenderingParams } from '../../helpers/layers';
-import { epsgDb, type EpsgDbEntryType } from '../../helpers/projection';
+import {
+  epsgDb,
+  getProjectionFromEpsgCode,
+  reprojWithProj4,
+} from '../../helpers/projection';
 
 // Stores
 import {
@@ -35,8 +39,9 @@ import { setLoading } from '../../store/GlobalStore';
 // Other components
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputResultName from './InputResultName.tsx';
-import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldRadio from '../Inputs/InputRadio.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import InputFieldText from '../Inputs/InputText.tsx';
 import MessageBlock from '../MessageBlock.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
@@ -73,7 +78,7 @@ function validateExtentCoordinates(
   const valuesY = table.data.map((d) => d[fieldY]);
 
   // Find the projection in the ESPG database
-  const projection = epsgDb[targetCrs.replace('EPSG:', '')];
+  const projection = epsgDb[+targetCrs.replace('EPSG:', '')];
   if (!projection || !projection.bbox) return null;
 
   // Instantiate a proj4 object for the target CRS
@@ -113,16 +118,25 @@ async function onClickValidate(
   newLayerName: string,
   mode: 'coordinates' | 'wkt',
   fieldOrFields: string | [string, string],
+  epsgCode: string,
 ) {
   const tableDescription = layersDescriptionStore.tables
     .find((table) => table.id === referenceTableId)!;
 
   if (mode === 'coordinates') {
-    const newData = await makeLayerFromTableAndXY(
+    let newData = await makeLayerFromTableAndXY(
       tableDescription.data,
       fieldOrFields[0],
       fieldOrFields[1],
     );
+
+    if (epsgCode !== 'EPSG:4326') {
+      newData = reprojWithProj4(
+        getProjectionFromEpsgCode(epsgCode),
+        newData,
+        true,
+      );
+    }
 
     const newFields = tableDescription.fields
       .filter((f) => f.name !== fieldOrFields[0] && f.name !== fieldOrFields[1])
@@ -145,10 +159,18 @@ async function onClickValidate(
       }),
     );
   } else {
-    const newData = await makeLayerFromTableAndWKT(
+    let newData = await makeLayerFromTableAndWKT(
       tableDescription.data,
       fieldOrFields as string,
     );
+
+    if (epsgCode !== 'EPSG:4326') {
+      newData = reprojWithProj4(
+        getProjectionFromEpsgCode(epsgCode),
+        newData,
+        true,
+      );
+    }
 
     const newFields = tableDescription.fields
       .filter((f) => f.name !== fieldOrFields as string)
@@ -209,6 +231,11 @@ export default function LayerFromTabularSettings(
   ] = createSignal<string>('');
 
   const [
+    selectValue,
+    setSelectValue,
+  ] = createSignal<string>('EPSG:4326');
+
+  const [
     pointCrs,
     setPointCrs,
   ] = createSignal<string>('EPSG:4326');
@@ -225,7 +252,7 @@ export default function LayerFromTabularSettings(
 
   createEffect(
     on(
-      () => [fieldX(), fieldY(), fieldWkt()],
+      () => [fieldX(), fieldY(), fieldWkt(), pointCrs()],
       () => {
         if (mode() === 'coordinates') {
           if (fieldX() === '' || fieldY() === '') return;
@@ -289,6 +316,7 @@ export default function LayerFromTabularSettings(
         mode() === 'coordinates'
           ? [fieldX(), fieldY()]
           : fieldWkt(),
+        pointCrs(),
       );
 
       // Hide loading overlay
@@ -348,6 +376,32 @@ export default function LayerFromTabularSettings(
           {(field) => <option value={field.name}>{field.name}</option>}
         </For>
       </InputFieldSelect>
+    </Show>
+    <InputFieldSelect
+      label={LL().FunctionalitiesSection.LayerFromTableOptions.Crs()}
+      onChange={(v) => {
+        setSelectValue(v);
+        if (v !== '') setPointCrs(v);
+      }}
+      value={selectValue()}
+    >
+      <option value="EPSG:4326">EPSG:4326</option>
+      <option value="ESPG:3857">EPSG:3857</option>
+      <option value="ESPG:2154">EPSG:2154</option>
+      <option value="ESPG:3035">EPSG:3035</option>
+      <option value="">{LL().FunctionalitiesSection.LayerFromTableOptions.MoreCrs()}</option>
+    </InputFieldSelect>
+    <Show when={selectValue() === ''}>
+      <InputFieldText
+        label={''}
+        value={pointCrs()}
+        dataList={
+          Object.keys(epsgDb)
+            .map((k) => ({ value: `EPSG:${k}`, name: `EPSG:${k} (${epsgDb[k].name})` }))
+        }
+        onChange={(v) => { setPointCrs(v); }}
+        width={200}
+      />
     </Show>
     <Show when={
       (

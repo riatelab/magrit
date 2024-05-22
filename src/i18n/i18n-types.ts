@@ -1748,6 +1748,14 @@ type RootTranslation = {
 			 */
 			NFeaturesToCreate: string
 			/**
+			 * C​o​o​r​d​i​n​a​t​e​ ​r​e​f​e​r​e​n​c​e​ ​s​y​s​t​e​m
+			 */
+			Crs: string
+			/**
+			 * M​o​r​e​ ​C​R​S​.​.​.
+			 */
+			MoreCrs: string
+			/**
 			 * T​h​e​ ​v​a​l​u​e​s​ ​i​n​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​f​i​e​l​d​s​ ​d​o​ ​n​o​t​ ​a​p​p​e​a​r​ ​t​o​ ​b​e​ ​v​a​l​i​d​ ​g​e​o​g​r​a​p​h​i​c​ ​c​o​o​r​d​i​n​a​t​e​s​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​s​e​l​e​c​t​i​o​n​.
 			 */
 			CoordsNotInCRS: string
@@ -4878,6 +4886,14 @@ export type TranslationFunctions = {
 			 * {{One feature|?? features}} to create.
 			 */
 			NFeaturesToCreate: (arg0: number | string | boolean) => LocalizedString
+			/**
+			 * Coordinate reference system
+			 */
+			Crs: () => LocalizedString
+			/**
+			 * More CRS...
+			 */
+			MoreCrs: () => LocalizedString
 			/**
 			 * The values in the selected fields do not appear to be valid geographic coordinates. Please check your selection.
 			 */

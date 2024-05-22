@@ -488,6 +488,8 @@ const en = {
       FieldWkt: 'Field containing the WKT geometry',
       NoFeatureToCreate: 'No feature to create - Please check the field(s) selected.',
       NFeaturesToCreate: '{{One feature | ?? features}} to create.',
+      Crs: 'Coordinate reference system',
+      MoreCrs: 'More CRS...',
       CoordsNotInCRS: 'The values in the selected fields do not appear to be valid geographic coordinates. Please check your selection.',
     },
     LinearRegressionOptions: {

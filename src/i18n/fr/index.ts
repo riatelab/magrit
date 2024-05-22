@@ -488,6 +488,8 @@ const fr = {
       FieldWkt: 'Champ contenant les géométries au format WKT',
       NoFeatureToCreate: 'Aucune entité à créer - Veuillez vérifier le(s) champ(s) sélectionnés.',
       NFeaturesToCreate: '{{Une entité | ?? entités}} à créer.',
+      Crs: 'Système de coordonnées de référence',
+      MoreCrs: 'Plus de SCR...',
       CoordsNotInCRS: 'Les valeurs contenues dans les champs sélectionnés ne semblent pas être des coordonnées géographiques valides. Veuillez vérifier votre sélection.',
     },
     LinearRegressionOptions: {
