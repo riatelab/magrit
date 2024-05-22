@@ -562,11 +562,12 @@ export async function computeKdeValues(
 
   await setLoadingMessage('SmoothingComputingGPUKDE');
 
-  const resultValues = kernel(xCells, yCells, xDots, yDots, values) as Float32Array;
+  const resultValues = Array.from(kernel(xCells, yCells, xDots, yDots, values) as Float32Array)
+    .map((d) => d * gridParameters.resolution);
 
   grid.features.forEach((cell, i) => {
     cell.properties.z = resultValues[i]; // eslint-disable-line no-param-reassign
   });
 
-  return [grid, Array.from(resultValues)];
+  return [grid, resultValues];
 }
