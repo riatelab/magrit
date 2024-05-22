@@ -582,9 +582,17 @@ type RootTranslation = {
 			 */
 			FreeDrawing: string
 			/**
-			 * C​l​i​c​k​ ​t​o​ ​l​o​c​a​t​e​ ​t​h​e​ ​t​e​x​t​.
+			 * C​l​i​c​k​ ​t​o​ ​p​o​s​i​t​i​o​n​ ​t​h​e​ ​t​e​x​t​.
 			 */
 			Text: string
+			/**
+			 * C​l​i​c​k​ ​t​o​ ​p​o​s​i​t​i​o​n​ ​t​h​e​ ​n​o​r​t​h​ ​a​r​r​o​w​.
+			 */
+			NorthArrow: string
+			/**
+			 * C​l​i​c​k​ ​t​o​ ​p​o​s​i​t​i​o​n​ ​t​h​e​ ​s​c​a​l​e​ ​b​a​r​.
+			 */
+			ScaleBar: string
 			/**
 			 * T​y​p​e​ ​y​o​u​r​ ​t​e​x​t​ ​h​e​r​e​.​.​.
 			 */
@@ -3745,9 +3753,17 @@ export type TranslationFunctions = {
 			 */
 			FreeDrawing: () => LocalizedString
 			/**
-			 * Click to locate the text.
+			 * Click to position the text.
 			 */
 			Text: () => LocalizedString
+			/**
+			 * Click to position the north arrow.
+			 */
+			NorthArrow: () => LocalizedString
+			/**
+			 * Click to position the scale bar.
+			 */
+			ScaleBar: () => LocalizedString
 			/**
 			 * Type your text here...
 			 */

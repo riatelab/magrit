@@ -43,10 +43,12 @@ import { getTargetSvg } from '../../helpers/svg';
 import {
   addTemporaryPoint,
   drawSuggestionLine,
+  drawSuggestionRectangle,
   drawTemporaryLine,
   generateIdLayoutFeature,
   getSvgCoordinates,
   removeTemporaryLines,
+  removeTemporaryRects,
   snapToNearestAngle,
 } from '../../helpers/layoutFeatures';
 
@@ -77,7 +79,7 @@ import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 const makeDrawingInstructions = (
   LL: Accessor<TranslationFunctions>,
-  object: 'Rectangle' | 'Line' | 'Text',
+  object: 'Rectangle' | 'Line' | 'Text' | 'ScaleBar' | 'NorthArrow',
 ): string => `${LL().LayoutFeatures.DrawingInstructions[object]()}\n${LL().LayoutFeatures.DrawingInstructions.PressEscToCancel()}`;
 
 const createRectangle = (LL: Accessor<TranslationFunctions>) => {
@@ -105,9 +107,12 @@ const createRectangle = (LL: Accessor<TranslationFunctions>) => {
     // When we have two points, we can create the rectangle
     if (pts.length === 2) {
       // Clean up everything
+      document.body.removeEventListener('keydown', onEscape); // eslint-disable-line @typescript-eslint/no-use-before-define
+      svgElement.removeEventListener('mousemove', onMove); // eslint-disable-line @typescript-eslint/no-use-before-define
       svgElement.removeEventListener('click', onClick);
       svgElement.style.cursor = 'default';
       svgElement.querySelectorAll('.temporary-point').forEach((elem) => elem.remove());
+      removeTemporaryRects();
 
       // Remove toast
       toast.dismiss();
@@ -137,21 +142,37 @@ const createRectangle = (LL: Accessor<TranslationFunctions>) => {
       );
     }
   };
+  const onMove = (ev: MouseEvent) => {
+    // Draw line between last point and cursor
+    const cursorPt: { x: number, y: number } = getSvgCoordinates(svgElement, ev);
+    if (pts.length > 0) {
+      drawSuggestionRectangle(
+        [
+          pts[0],
+          [cursorPt.x, cursorPt.y],
+        ],
+      );
+    }
+  };
+
   const onEscape = (ev: KeyboardEvent) => {
     if (ev.key === 'Escape') {
       // Remove toast
       toast.dismiss();
       // Remove event listeners
       svgElement.removeEventListener('click', onClick);
+      svgElement.removeEventListener('mousemove', onMove);
       document.body.removeEventListener('keydown', onEscape);
       // Reset cursor
       svgElement.style.cursor = 'default';
       // Remove temporary points
       svgElement.querySelectorAll('.temporary-point').forEach((elem) => elem.remove());
+      removeTemporaryRects();
     }
   };
   svgElement.style.cursor = 'crosshair';
   svgElement.addEventListener('click', onClick);
+  svgElement.addEventListener('mousemove', onMove);
   document.body.addEventListener('keydown', onEscape);
 };
 
@@ -281,6 +302,7 @@ const createLine = (LL: Accessor<TranslationFunctions>) => {
     svgElement.removeEventListener('click', onClick);
     svgElement.removeEventListener('dblclick', onDblClick);
     svgElement.removeEventListener('mousemove', onMove);
+    document.body.removeEventListener('keydown', onEscape); // eslint-disable-line @typescript-eslint/no-use-before-define
     // Reset cursor
     svgElement.style.cursor = 'default';
     // Remove temporary points
@@ -335,58 +357,142 @@ const createLine = (LL: Accessor<TranslationFunctions>) => {
   document.body.addEventListener('keydown', onEscape);
 };
 
-const createNorthArrow = (/* LL: Accessor<TranslationFunctions>,  */) => {
-  // TODO: we could propose to the user to click on the map to place the north arrow
-  const northArrowDescription = {
-    id: generateIdLayoutFeature(),
-    type: LayoutFeatureType.NorthArrow,
-    position: [100, 100],
-    size: 40,
-    autoRotate: true,
-    rotation: 0,
-    style: 'simple',
-    fillColor: '#000000',
-    strokeColor: '#000000',
-    strokeOpacity: 1,
-    backgroundRect: { visible: false } as BackgroundRect,
-  } as NorthArrow;
+const createNorthArrow = (LL: Accessor<TranslationFunctions>) => {
+  toast.success(makeDrawingInstructions(LL, 'NorthArrow'), {
+    duration: Infinity,
+    style: {
+      background: '#1f2937',
+      color: '#f3f4f6',
+    },
+    iconTheme: {
+      primary: '#38bdf8',
+      secondary: '#1f2937',
+    },
+  });
 
-  setLayersDescriptionStore(
-    produce(
-      (draft: LayersDescriptionStoreType) => {
-        draft.layoutFeaturesAndLegends.push(northArrowDescription);
-      },
-    ),
-  );
+  const svgElement = getTargetSvg();
+  const onClick = (ev: MouseEvent) => {
+    // Point coordinates in SVG space
+    const cursorPt = getSvgCoordinates(svgElement, ev);
+
+    // Add the north arrow to the map
+    const northArrowDescription = {
+      id: generateIdLayoutFeature(),
+      type: LayoutFeatureType.NorthArrow,
+      position: [cursorPt.x, cursorPt.y],
+      size: 40,
+      autoRotate: true,
+      rotation: 0,
+      style: 'simple',
+      fillColor: '#000000',
+      strokeColor: '#000000',
+      strokeOpacity: 1,
+      backgroundRect: { visible: false } as BackgroundRect,
+    } as NorthArrow;
+
+    setLayersDescriptionStore(
+      produce(
+        (draft: LayersDescriptionStoreType) => {
+          draft.layoutFeaturesAndLegends.push(northArrowDescription);
+        },
+      ),
+    );
+
+    // Remove toast
+    toast.dismiss();
+
+    // Clean up everything
+    document.body.removeEventListener('keydown', onEscape); // eslint-disable-line @typescript-eslint/no-use-before-define
+    svgElement.removeEventListener('click', onClick);
+    svgElement.style.cursor = 'default';
+  };
+
+  const onEscape = (ev: KeyboardEvent) => {
+    if (ev.key === 'Escape') {
+      // Remove toast
+      toast.dismiss();
+      // Remove event listeners
+      svgElement.removeEventListener('click', onClick);
+      document.body.removeEventListener('keydown', onEscape);
+      // Reset cursor
+      svgElement.style.cursor = 'default';
+    }
+  };
+
+  svgElement.style.cursor = 'crosshair';
+  svgElement.addEventListener('click', onClick);
+  document.body.addEventListener('keydown', onEscape);
 };
 
-const createScaleBar = (/* LL: Accessor<TranslationFunctions>,  */) => {
-  // TODO: we could propose to the user to click on the map to place the scalebar
-  const scaleBarDescription = {
-    id: generateIdLayoutFeature(),
-    type: LayoutFeatureType.ScaleBar,
-    position: [100, 100],
-    width: 100,
-    height: 10,
-    distance: NaN,
-    rotation: 0,
-    unit: DistanceUnit.km,
-    label: 'km',
-    tickValues: [0, 50, 100, 250, 500],
-    // tickPadding: 10,
-    labelPosition: 'top',
-    style: ScaleBarStyle.lineWithTicksOnTop,
-    backgroundRect: { visible: false } as BackgroundRect,
-    behavior: 'absoluteSize' as ScaleBarBehavior,
-  } as ScaleBar;
+const createScaleBar = (LL: Accessor<TranslationFunctions>) => {
+  toast.success(makeDrawingInstructions(LL, 'ScaleBar'), {
+    duration: Infinity,
+    style: {
+      background: '#1f2937',
+      color: '#f3f4f6',
+    },
+    iconTheme: {
+      primary: '#38bdf8',
+      secondary: '#1f2937',
+    },
+  });
 
-  setLayersDescriptionStore(
-    produce(
-      (draft: LayersDescriptionStoreType) => {
-        draft.layoutFeaturesAndLegends.push(scaleBarDescription);
-      },
-    ),
-  );
+  const svgElement = getTargetSvg();
+  const onClick = (ev: MouseEvent) => {
+    // Point coordinates in SVG space
+    const cursorPt = getSvgCoordinates(svgElement, ev);
+
+    // Add the scale bar to the map
+    const scaleBarDescription = {
+      id: generateIdLayoutFeature(),
+      type: LayoutFeatureType.ScaleBar,
+      position: [cursorPt.x, cursorPt.y],
+      width: 100,
+      height: 10,
+      distance: NaN,
+      rotation: 0,
+      unit: DistanceUnit.km,
+      label: 'km',
+      tickValues: [0, 50, 100, 250, 500],
+      // tickPadding: 10,
+      labelPosition: 'top',
+      style: ScaleBarStyle.lineWithTicksOnTop,
+      backgroundRect: { visible: false } as BackgroundRect,
+      behavior: 'absoluteSize' as ScaleBarBehavior,
+    } as ScaleBar;
+
+    setLayersDescriptionStore(
+      produce(
+        (draft: LayersDescriptionStoreType) => {
+          draft.layoutFeaturesAndLegends.push(scaleBarDescription);
+        },
+      ),
+    );
+
+    // Remove toast
+    toast.dismiss();
+
+    // Clean up everything
+    document.body.removeEventListener('keydown', onEscape); // eslint-disable-line @typescript-eslint/no-use-before-define
+    svgElement.removeEventListener('click', onClick);
+    svgElement.style.cursor = 'default';
+  };
+
+  const onEscape = (ev: KeyboardEvent) => {
+    if (ev.key === 'Escape') {
+      // Remove toast
+      toast.dismiss();
+      // Remove event listeners
+      svgElement.removeEventListener('click', onClick);
+      document.body.removeEventListener('keydown', onEscape);
+      // Reset cursor
+      svgElement.style.cursor = 'default';
+    }
+  };
+
+  svgElement.style.cursor = 'crosshair';
+  svgElement.addEventListener('click', onClick);
+  document.body.addEventListener('keydown', onEscape);
 };
 
 const createText = (LL: Accessor<TranslationFunctions>) => {
@@ -406,9 +512,6 @@ const createText = (LL: Accessor<TranslationFunctions>) => {
   const onClick = (ev: MouseEvent) => {
     // Point coordinates in SVG space
     const cursorPt = getSvgCoordinates(svgElement, ev);
-
-    // Add a temporary point
-    addTemporaryPoint(cursorPt.x, cursorPt.y);
 
     // Remove toast
     toast.dismiss();
@@ -440,11 +543,11 @@ const createText = (LL: Accessor<TranslationFunctions>) => {
     );
 
     // Clean up everything
+    document.body.removeEventListener('keydown', onEscape); // eslint-disable-line @typescript-eslint/no-use-before-define
     svgElement.removeEventListener('click', onClick);
     svgElement.style.cursor = 'default';
-    svgElement.querySelectorAll('.temporary-point')
-      .forEach((elem) => elem.remove());
   };
+
   const onEscape = (ev: KeyboardEvent) => {
     if (ev.key === 'Escape') {
       // Remove toast
@@ -454,11 +557,9 @@ const createText = (LL: Accessor<TranslationFunctions>) => {
       document.body.removeEventListener('keydown', onEscape);
       // Reset cursor
       svgElement.style.cursor = 'default';
-      // Remove temporary points
-      svgElement.querySelectorAll('.temporary-point')
-        .forEach((elem) => elem.remove());
     }
   };
+
   svgElement.style.cursor = 'crosshair';
   svgElement.addEventListener('click', onClick);
   document.body.addEventListener('keydown', onEscape);
@@ -659,7 +760,7 @@ export default function LayoutFeatures(): JSX.Element {
           class="unstyled"
           title={LL().LayoutFeatures.NorthArrow()}
           aria-label={LL().LayoutFeatures.NorthArrow()}
-          onClick={() => { createNorthArrow(); }}
+          onClick={() => { createNorthArrow(LL); }}
         >
           <img
             class="layout-features-section__icon-element"
@@ -671,7 +772,7 @@ export default function LayoutFeatures(): JSX.Element {
           class="unstyled"
           title={LL().LayoutFeatures.ScaleBar()}
           aria-label={LL().LayoutFeatures.ScaleBar()}
-          onClick={() => { createScaleBar(); }}
+          onClick={() => { createScaleBar(LL); }}
         >
           <img
             class="layout-features-section__icon-element"

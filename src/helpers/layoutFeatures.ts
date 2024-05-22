@@ -35,6 +35,11 @@ export const removeTemporaryLines = () => {
   svgElement.querySelectorAll('.temporary-line').forEach((elem) => elem.remove());
 };
 
+export const removeTemporaryRects = () => {
+  const svgElement = getTargetSvg();
+  svgElement.querySelectorAll('.temporary-rect').forEach((elem) => elem.remove());
+};
+
 export const drawTemporaryLine = (points: [number, number][]) => {
   const svgElement = getTargetSvg();
   const lineElement = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
@@ -61,6 +66,29 @@ export const drawSuggestionLine = (
   lineElement.setAttribute('stroke-dasharray', '5, 5');
   lineElement.setAttribute('fill', 'none');
   svgElement.appendChild(lineElement);
+};
+
+export const drawSuggestionRectangle = (
+  points: [[number, number], [number, number]],
+): void => {
+  const svgElement = getTargetSvg();
+  svgElement.querySelectorAll('.suggested').forEach((elem) => elem.remove());
+  const rectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rectElement.classList.add('suggested');
+  rectElement.classList.add('temporary-rect');
+  const x = Math.min(points[0][0], points[1][0]);
+  const y = Math.min(points[0][1], points[1][1]);
+  const width = Math.abs(points[1][0] - points[0][0]);
+  const height = Math.abs(points[1][1] - points[0][1]);
+  rectElement.setAttribute('x', `${x}`);
+  rectElement.setAttribute('y', `${y}`);
+  rectElement.setAttribute('width', `${width}`);
+  rectElement.setAttribute('height', `${height}`);
+  rectElement.setAttribute('fill', 'none');
+  rectElement.setAttribute('stroke', 'black');
+  rectElement.setAttribute('stroke-width', '2');
+  rectElement.setAttribute('stroke-dasharray', '5, 5');
+  svgElement.appendChild(rectElement);
 };
 
 export const getSvgCoordinates = (svgElement: SVGSVGElement, ev: MouseEvent) => {

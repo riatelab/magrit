@@ -166,6 +166,8 @@ const fr = {
       Rectangle: 'Cliquez une première fois pour localiser le premier coin du rectangle. Cliquez une seconde fois pour localiser le coin opposé.',
       FreeDrawing: 'Cliquez pour commencer à dessiner puis relâchez le bouton de la souris pour terminer. Appuyez sur "Échap" pour quitter le mode de dessin.',
       Text: 'Cliquez pour localiser l\'emplacement du texte à ajouter.',
+      NorthArrow: 'Cliquez pour localiser l\'emplacement de la flèche Nord à ajouter',
+      ScaleBar: 'Cliquez pour localiser l\'emplacement de l\'échelle à ajouter',
       TextPlaceholder: 'Saisir le texte à ajouter...',
       PressEscToCancel: 'Appuyez sur "Échap" pour annuler.',
     },
