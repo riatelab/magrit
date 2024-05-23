@@ -38,11 +38,11 @@ import { globalStore } from '../store/GlobalStore';
 
 // Types / Interfaces / Enums
 import {
-  GeoJSONFeature,
-  GeoJSONFeatureCollection,
+  type GeoJSONFeature,
+  type GeoJSONFeatureCollection,
   type GeoJSONGeometry,
-  GeoJSONGeometryType,
-  GeoJSONPosition,
+  type GeoJSONGeometryType,
+  type GeoJSONPosition,
   ProportionalSymbolsSymbolType,
 } from '../global.d';
 
