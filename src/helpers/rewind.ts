@@ -122,7 +122,8 @@ function geoRewindStream(simple = true) {
               ? !geoContains(
                 { type: 'Polygon', coordinates: [rring] },
                 polygon[1][0],
-              )
+              // eslint-disable-next-line @typescript-eslint/no-loop-func
+              ) && !rring.some((p) => p[0] === polygon[1][0][0] && p[1] === polygon[1][0][1])
               // a single ring polygon must be smaller than a hemisphere (optional)
               : simple && geoArea({ type: 'Polygon', coordinates: [rring] }) > 2 * Math.PI
         ) {
