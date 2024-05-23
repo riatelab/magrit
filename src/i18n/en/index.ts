@@ -138,6 +138,7 @@ const en = {
   LayoutFeatures: {
     BackgroundColor: 'Background color',
     Opacity: 'Opacity',
+    MapMargins: 'Map margins',
     MapSkinElements: 'Map skin elements',
     Sphere: 'Sphere',
     Graticule: 'Graticule',

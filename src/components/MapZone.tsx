@@ -713,6 +713,28 @@ export default function MapZone(): JSX.Element {
           }>{dispatchMapRenderer(layer)}</Show>
           }
         </For>
+        {/* Mask representing the margins selected by the user */}
+        <Show when={
+          mapStore.mapMargins.bottom > 0
+          || mapStore.mapMargins.right > 0
+          || mapStore.mapMargins.left > 0
+          || mapStore.mapMargins.top > 0
+        }>
+          <g class="margins-mask">
+            <path
+              fill-rule="evenodd"
+              stroke="none"
+              fill={mapStore.mapMargins.color}
+              opacity={mapStore.mapMargins.opacity}
+              d={`M0,0 L${mapStore.mapDimensions.width},0 L${mapStore.mapDimensions.width},${mapStore.mapMargins.top} L0,${mapStore.mapMargins.top}
+                    Z M0,${mapStore.mapDimensions.height} L${mapStore.mapDimensions.width},${mapStore.mapDimensions.height} L${mapStore.mapDimensions.width},${mapStore.mapDimensions.height - mapStore.mapMargins.bottom} L0,${mapStore.mapDimensions.height - mapStore.mapMargins.bottom}
+                    Z M0,${mapStore.mapMargins.top} L${mapStore.mapMargins.left},${mapStore.mapMargins.top} L${mapStore.mapMargins.left},${mapStore.mapDimensions.height - mapStore.mapMargins.bottom} L0,${mapStore.mapDimensions.height - mapStore.mapMargins.bottom}
+                    Z M${mapStore.mapDimensions.width - mapStore.mapMargins.right},${mapStore.mapMargins.top} L${mapStore.mapDimensions.width},${mapStore.mapMargins.top} L${mapStore.mapDimensions.width},${mapStore.mapDimensions.height - mapStore.mapMargins.bottom} L${mapStore.mapDimensions.width - mapStore.mapMargins.right},${mapStore.mapDimensions.height - mapStore.mapMargins.bottom}
+                    Z`}
+            />
+          </g>
+        </Show>
+        {/* Layout features and legends, on top of the margins mask */}
         <For each={layersDescriptionStore.layoutFeaturesAndLegends}>
           {
             (elem) => {
@@ -755,7 +777,7 @@ export default function MapZone(): JSX.Element {
           title={LL().MapZone.Controls.Plus()}
           disabled={mapStore.lockZoomPan}
         >
-          <FiPlusSquare size={'1.5em'} />
+          <FiPlusSquare size={'1.5em'}/>
         </button>
       </p>
       <p class="control">
@@ -766,7 +788,7 @@ export default function MapZone(): JSX.Element {
           title={LL().MapZone.Controls.Minus()}
           disabled={mapStore.lockZoomPan}
         >
-          <FiMinusSquare size={'1.5em'} />
+          <FiMinusSquare size={'1.5em'}/>
         </button>
       </p>
       <p class="control">
@@ -774,15 +796,17 @@ export default function MapZone(): JSX.Element {
           <Match when={!mapStore.lockZoomPan}>
             <button
               class="button"
-              onClick={() => { setMapStore({ lockZoomPan: true }); }}
+              onClick={() => {
+                setMapStore({ lockZoomPan: true });
+              }}
               aria-label={LL().MapZone.Controls.Lock()}
               title={LL().MapZone.Controls.Lock()}
             >
-              <FiUnlock size={'1.5em'} />
+              <FiUnlock size={'1.5em'}/>
             </button>
           </Match>
           <Match when={mapStore.lockZoomPan}>
-            <button
+          <button
               class="button"
               onClick={() => { setMapStore({ lockZoomPan: false }); }}
               aria-label={LL().MapZone.Controls.Unlock()}

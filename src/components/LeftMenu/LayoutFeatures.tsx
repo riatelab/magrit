@@ -1,6 +1,7 @@
 // Import from solid-js
 import {
-  Accessor, createSignal, JSX, Setter,
+  Accessor, createSignal,
+  JSX, Setter, Show,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
@@ -54,6 +55,7 @@ import {
 
 // Other components
 import ImageSymbolSelection from '../Modals/ImageSymbolSelection.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 
@@ -75,7 +77,6 @@ import {
   ScaleBarBehavior,
   ScaleBarStyle,
 } from '../../global.d';
-import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 const makeDrawingInstructions = (
   LL: Accessor<TranslationFunctions>,
@@ -836,6 +837,81 @@ export default function LayoutFeatures(): JSX.Element {
             alt={LL().LayoutFeatures.FreeDrawing()}
           />
         </button>
+      </div>
+    </div>
+    <div>
+      <label class="label">{LL().LayoutFeatures.MapMargins()}</label>
+      <div>
+        <div class="is-flex is-justify-content-space-around">
+          <input
+            type="number"
+            class="input"
+            style={{ width: '80px', height: '1.8em' }}
+            value={mapStore.mapMargins.top}
+            onChange={(e) => {
+              setMapStore('mapMargins', 'top', Number(e.currentTarget.value));
+            }}
+          />
+        </div>
+        <div class="is-flex is-justify-content-space-around">
+          <input
+            type="number"
+            class="input"
+            style={{ width: '80px', height: '1.8em' }}
+            value={mapStore.mapMargins.left}
+            onChange={(e) => {
+              setMapStore('mapMargins', 'left', Number(e.currentTarget.value));
+            }}
+          />
+          <input
+            type="number"
+            class="input"
+            style={{ width: '80px', height: '1.8em' }}
+            value={mapStore.mapMargins.right}
+            onChange={(e) => {
+              setMapStore('mapMargins', 'right', Number(e.currentTarget.value));
+            }}
+          />
+        </div>
+        <div class="is-flex is-justify-content-space-around">
+          <input
+            type="number"
+            class="input"
+            style={{ width: '80px', height: '1.8em' }}
+            value={mapStore.mapMargins.bottom}
+            onChange={(e) => {
+              setMapStore('mapMargins', 'bottom', Number(e.currentTarget.value));
+            }}
+          />
+        </div>
+        <Show
+          when={
+            mapStore.mapMargins.top
+            || mapStore.mapMargins.left
+            || mapStore.mapMargins.right
+            || mapStore.mapMargins.bottom
+          }
+        >
+          <div class="is-flex is-justify-content-space-around has-text-centered">
+            <InputFieldColor
+              label={'Color'}
+              value={mapStore.mapMargins.color}
+              onChange={(v) => { setMapStore('mapMargins', 'color', v); }}
+              layout={'vertical'}
+              width={80}
+            />
+            <InputFieldNumber
+              label={'Opacity'}
+              value={mapStore.mapMargins.opacity}
+              onChange={(v) => { setMapStore('mapMargins', 'opacity', v); }}
+              min={0}
+              max={1}
+              step={0.1}
+              width={80}
+              layout={'vertical'}
+            />
+          </div>
+        </Show>
       </div>
     </div>
   </div>;

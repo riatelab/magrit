@@ -488,6 +488,10 @@ type RootTranslation = {
 		 */
 		Opacity: string
 		/**
+		 * M​a​p​ ​m​a​r​g​i​n​s
+		 */
+		MapMargins: string
+		/**
 		 * M​a​p​ ​s​k​i​n​ ​e​l​e​m​e​n​t​s
 		 */
 		MapSkinElements: string
@@ -3658,6 +3662,10 @@ export type TranslationFunctions = {
 		 * Opacity
 		 */
 		Opacity: () => LocalizedString
+		/**
+		 * Map margins
+		 */
+		MapMargins: () => LocalizedString
 		/**
 		 * Map skin elements
 		 */

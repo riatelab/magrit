@@ -138,6 +138,7 @@ const fr = {
   LayoutFeatures: {
     BackgroundColor: 'Couleur de fond',
     Opacity: 'Opacité',
+    MapMargins: 'Marges de la carte',
     MapSkinElements: 'Éléments d\'habillage de la carte',
     Sphere: 'Sphère',
     Graticule: 'Graticule',
