@@ -175,9 +175,9 @@ export async function makeContourLayer(
 
   contours.features.forEach((ft: GeoJSONFeature) => {
     // eslint-disable-next-line no-param-reassign
-    ft.properties.center = (ft.properties.min_v + ft.properties.max_v) / 2;
+    ft.properties.center_v = (ft.properties.min_v + ft.properties.max_v) / 2;
     // eslint-disable-next-line no-param-reassign
-    ft.properties[variableName] = ft.properties.center;
+    ft.properties[variableName] = ft.properties.center_v;
   });
 
   // Convert the contour layer to TopoJSON, apply the quantization and convert back to GeoJSON
