@@ -75,7 +75,7 @@ const getDefaultClipExtent = () => (
  * (which is called when a projection changes) to fail.
  *
  */
-export const getCurrentExtent = (targetSvg: SVGSVGElement): number[][] => {
+export const getCurrentExtent = (): number[][] => {
   try {
     const topLeft = globalStore.projection.invert([5, 5]);
     const bottomRight = globalStore.projection.invert(
@@ -108,9 +108,6 @@ const setMapStore = (...args: any[]) => {
  * @param {number} [margin=0.03] - The margin to apply to the extent of the layer.
  */
 const fitExtent = (id: string, margin = 0.03) => {
-  // Get a reference to the SVG element
-  const svgElem = getTargetSvg();
-
   // Margin so that the extent of the layer is not on the border of the map
   const marginX = mapStore.mapDimensions.width * margin;
   const marginY = mapStore.mapDimensions.height * margin;
@@ -263,8 +260,7 @@ createEffect(
     () => {
       console.log('MapStore.ts: createEffect: mapStore.projection.value');
       // 0. We don't need to execute what follows if the map is not yet initialized
-      const targetSvg = document.querySelector('svg.map-zone__map');
-      if (!targetSvg) {
+      if (!document.querySelector('svg.map-zone__map')) {
         return;
       }
 
@@ -335,7 +331,7 @@ createEffect(
       //    (in which case we don't want to fit the map to the previous extent but to the extent
       //    of the map as it was when the project was saved)
       if (!globalStore.isReloadingProject) {
-        const currentExtent = getCurrentExtent(targetSvg as SVGSVGElement & IZoomable);
+        const currentExtent = getCurrentExtent();
         if (currentExtent && currentExtent[0] && currentExtent[1]) {
           projection.fitExtent(
             [

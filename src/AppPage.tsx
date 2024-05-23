@@ -55,7 +55,6 @@ import {
   setMapStoreBase,
 } from './store/MapStore';
 import {
-  defaultLayersDescription,
   layersDescriptionStore,
   setLayersDescriptionStore,
 } from './store/LayersDescriptionStore';
@@ -65,7 +64,6 @@ import { fileDropStore, setFileDropStore } from './store/FileDropStore';
 import { tableWindowStore } from './store/TableWindowStore';
 import { applicationSettingsStore, ResizeBehavior } from './store/ApplicationSettingsStore';
 import { contextMenuStore } from './store/ContextMenuStore';
-import { resetUndoRedoStackStore } from './store/stateStackStore';
 import { undo, redo } from './store/undo-redo';
 import { functionalitySelectionStore } from './store/FunctionalitySelectionStore';
 
@@ -256,7 +254,7 @@ const reloadFromProjectObject = async (
   setLayersDescriptionStore({ layers, layoutFeaturesAndLegends, tables });
   // Update the map store
   // (this updates the projection and pathGenerator in the global store)
-  setMapStore(map);
+  setMapStoreBase(map);
   // Reverse the "userHasAddedLayer" flag
   setGlobalStore({ userHasAddedLayer: true });
   // Hide the loading overlay
@@ -319,7 +317,7 @@ const AppPage: () => JSX.Element = () => {
     // Resize (or not) the map according to the resize behavior
     if (applicationSettingsStore.resizeBehavior === ResizeBehavior.ShrinkGrow) {
       // Store the new dimensions of the map
-      setMapStore({
+      setMapStoreBase({
         mapDimensions: {
           width: Math.round((width - globalStore.leftMenuWidth) * 0.9),
           height: Math.round((height - globalStore.headerHeight) * 0.9),
