@@ -245,8 +245,9 @@ const makeMapResizable = (refMapShadow: HTMLDivElement) => {
         left: true, right: true, bottom: true, top: true,
       },
       // Don't start resizing if the user seems to want to interact
-      // with a legend or a layout feature
-      ignoreFrom: 'g.legend, g.layout-feature',
+      // with a legend, a layout feature or one of the various draggable
+      // elements (labels, proportional symbols, etc.)
+      ignoreFrom: 'g.legend, g.layout-feature, text, circle, rect, image',
       listeners: {
         start() {
           // eslint-disable-next-line no-param-reassign
