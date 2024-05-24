@@ -7,6 +7,7 @@ interface InputFieldTextareaProps {
   placeholder?: string;
   onChange?: (text: string) => void;
   onKeyUp?: (text: string) => void;
+  bindKeyUpAsChange?: boolean;
   width?: number;
   height?: number;
   rows?: number;
@@ -20,7 +21,10 @@ export default function InputFieldTextarea(props: InputFieldTextareaProps): JSX.
       <textarea
         class="textarea"
         onChange={(e) => { if (props.onChange) props.onChange(e.currentTarget.value); }}
-        onKeyUp={(e) => { if (props.onKeyUp) props.onKeyUp(e.currentTarget.value); }}
+        onKeyUp={(e) => {
+          if (props.onKeyUp) props.onKeyUp(e.currentTarget.value);
+          else if (props.bindKeyUpAsChange && props.onChange) props.onChange(e.currentTarget.value);
+        }}
         placeholder={ props.placeholder }
         style={{
           width: props.width ? `${props.width}px` : 'unset',

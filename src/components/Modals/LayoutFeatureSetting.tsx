@@ -355,6 +355,7 @@ function makeSettingsText(
       label={LL().LayoutFeatures.Modal.TextContent()}
       value={ft.text}
       rows={ft.text.split('\n').length}
+      bindKeyUpAsChange={true}
       onChange={(value) => updateLayoutFeatureProperty(
         layoutFeatureId,
         ['text'],

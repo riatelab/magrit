@@ -211,15 +211,22 @@ function TextOptionTable(
 }
 
 function FieldText(
-  props: { legend: Legend, LL: Accessor<TranslationFunctions>, role: string },
+  props: {
+    legend: Legend,
+    LL: Accessor<TranslationFunctions>,
+    role: 'title' | 'subtitle' | 'note',
+  },
 ): JSX.Element {
   return <div class="field">
-    <label class="label">{ props.LL().Legend.Modal[`Legend${capitalizeFirstLetter(props.role)}`]() }</label>
+    <label class="label">
+      { props.LL().Legend.Modal[`Legend${capitalizeFirstLetter(props.role) as 'Title' | 'Subtitle' | 'Note'}`]() }
+    </label>
     <div class="control">
       <input
         class="input"
         type="text"
-        value={ props.legend[props.role].text || '' }
+        value={ props.legend[props.role]?.text || '' }
+        onKeyUp={(ev) => debouncedUpdateProps(props.legend.id, [props.role, 'text'], ev.target.value)}
         onChange={(ev) => debouncedUpdateProps(props.legend.id, [props.role, 'text'], ev.target.value)}
       />
     </div>
