@@ -77,6 +77,7 @@ import {
   ScaleBarBehavior,
   ScaleBarStyle,
 } from '../../global.d';
+import InputFieldText from '../Inputs/InputText.tsx';
 
 const makeDrawingInstructions = (
   LL: Accessor<TranslationFunctions>,
@@ -839,7 +840,7 @@ export default function LayoutFeatures(): JSX.Element {
         </button>
       </div>
     </div>
-    <div>
+    <div class="mb-5">
       <label class="label">{LL().LayoutFeatures.MapMargins()}</label>
       <div>
         <div class="is-flex is-justify-content-space-around">
@@ -894,14 +895,14 @@ export default function LayoutFeatures(): JSX.Element {
         >
           <div class="is-flex is-justify-content-space-around has-text-centered">
             <InputFieldColor
-              label={'Color'}
+              label={LL().LayoutFeatures.Color()}
               value={mapStore.mapMargins.color}
               onChange={(v) => { setMapStore('mapMargins', 'color', v); }}
               layout={'vertical'}
               width={80}
             />
             <InputFieldNumber
-              label={'Opacity'}
+              label={LL().LayoutFeatures.Opacity()}
               value={mapStore.mapMargins.opacity}
               onChange={(v) => { setMapStore('mapMargins', 'opacity', v); }}
               min={0}
@@ -913,6 +914,147 @@ export default function LayoutFeatures(): JSX.Element {
           </div>
         </Show>
       </div>
+    </div>
+    <div>
+      <InputFieldText
+        label={LL().LayoutFeatures.Title()}
+        value={mapStore.mapAnnotations.title}
+        bindKeyUpAsChange={true}
+        onChange={(v) => {
+          setMapStore('mapAnnotations', 'title', v);
+          const hasTitle = layersDescriptionStore.layoutFeaturesAndLegends
+            .find((d) => d.id === 'LayoutFeature-title');
+          if (v) {
+            if (hasTitle) {
+              // Update the title element
+              setLayersDescriptionStore(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.forEach((d) => {
+                      if (d.id === 'LayoutFeature-title') {
+                        // eslint-disable-next-line no-param-reassign
+                        (d as Text).text = v;
+                      }
+                    });
+                  },
+                ),
+              );
+            } else {
+              // Create the title element
+              const textDescription = {
+                id: 'LayoutFeature-title',
+                type: LayoutFeatureType.Text,
+                position: [mapStore.mapDimensions.width / 2, 30],
+                text: v,
+                fontSize: 18,
+                fontFamily: 'Sans-serif',
+                fontColor: '#000000',
+                fontOpacity: 1,
+                fontStyle: 'normal',
+                fontWeight: 'normal',
+                textAnchor: 'middle',
+                textDecoration: 'none',
+                rotation: 0,
+                backgroundRect: { visible: false } as BackgroundRect,
+              } as Text;
+
+              setLayersDescriptionStore(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.push(textDescription);
+                  },
+                ),
+              );
+            }
+          } else {
+            // eslint-disable-next-line no-lonely-if
+            if (hasTitle) {
+              // Remove the title element
+              setLayersDescriptionStore(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    // eslint-disable-next-line no-param-reassign
+                    draft.layoutFeaturesAndLegends = draft.layoutFeaturesAndLegends
+                      .filter((d) => d.id !== 'LayoutFeature-title');
+                  },
+                ),
+              );
+            }
+          }
+        }}
+        width={280}
+      />
+      <InputFieldText
+        label={LL().LayoutFeatures.Source()}
+        value={mapStore.mapAnnotations.source}
+        bindKeyUpAsChange={true}
+        onChange={(v) => {
+          setMapStore('mapAnnotations', 'source', v);
+          const hasSource = layersDescriptionStore.layoutFeaturesAndLegends
+            .find((d) => d.id === 'LayoutFeature-source');
+          if (v) {
+            if (hasSource) {
+              // Update the source element
+              setLayersDescriptionStore(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.forEach((d) => {
+                      if (d.id === 'LayoutFeature-source') {
+                        // eslint-disable-next-line no-param-reassign
+                        (d as Text).text = v;
+                      }
+                    });
+                  },
+                ),
+              );
+            } else {
+              // Create the source element
+              const textDescription = {
+                id: 'LayoutFeature-source',
+                type: LayoutFeatureType.Text,
+                position: [
+                  mapStore.mapDimensions.width - 10,
+                  mapStore.mapDimensions.height - 20,
+                ],
+                text: v,
+                fontSize: 12,
+                fontFamily: 'Sans-serif',
+                fontColor: '#000000',
+                fontOpacity: 1,
+                fontStyle: 'normal',
+                fontWeight: 'normal',
+                textAnchor: 'end',
+                textDecoration: 'none',
+                rotation: 0,
+                backgroundRect: { visible: false } as BackgroundRect,
+              } as Text;
+
+              setLayersDescriptionStore(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.push(textDescription);
+                  },
+                ),
+              );
+            }
+          } else {
+            // eslint-disable-next-line no-lonely-if
+            if (hasSource) {
+              // Remove the source element
+              setLayersDescriptionStore(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    // eslint-disable-next-line no-param-reassign
+                    draft.layoutFeaturesAndLegends = draft.layoutFeaturesAndLegends
+                      .filter((d) => d.id !== 'LayoutFeature-source');
+                  },
+                ),
+              );
+            }
+          }
+        }}
+        width={280}
+      />
     </div>
   </div>;
 }

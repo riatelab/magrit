@@ -492,6 +492,18 @@ type RootTranslation = {
 		 */
 		MapMargins: string
 		/**
+		 * C​o​u​l​e​u​r
+		 */
+		Color: string
+		/**
+		 * T​i​t​r​e
+		 */
+		Title: string
+		/**
+		 * S​o​u​r​c​e
+		 */
+		Source: string
+		/**
 		 * M​a​p​ ​s​k​i​n​ ​e​l​e​m​e​n​t​s
 		 */
 		MapSkinElements: string
@@ -3666,6 +3678,18 @@ export type TranslationFunctions = {
 		 * Map margins
 		 */
 		MapMargins: () => LocalizedString
+		/**
+		 * Couleur
+		 */
+		Color: () => LocalizedString
+		/**
+		 * Titre
+		 */
+		Title: () => LocalizedString
+		/**
+		 * Source
+		 */
+		Source: () => LocalizedString
 		/**
 		 * Map skin elements
 		 */

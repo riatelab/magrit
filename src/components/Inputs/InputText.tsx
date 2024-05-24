@@ -11,6 +11,7 @@ interface InputFieldTextProps {
   width?: number;
   layout?: 'horizontal' | 'vertical';
   dataList?: { value: string, name: string }[];
+  bindKeyUpAsChange?: boolean;
 }
 
 export default function InputFieldText(props: InputFieldTextProps): JSX.Element {
@@ -22,7 +23,10 @@ export default function InputFieldText(props: InputFieldTextProps): JSX.Element 
         class="input"
         type="text"
         onChange={(e) => { if (props.onChange) props.onChange(e.currentTarget.value); }}
-        onKeyUp={(e) => { if (props.onKeyUp) props.onKeyUp(e.currentTarget.value); }}
+        onKeyUp={(e) => {
+          if (props.onKeyUp) props.onKeyUp(e.currentTarget.value);
+          else if (props.bindKeyUpAsChange && props.onChange) props.onChange(e.currentTarget.value);
+        }}
         value={ props.value || '' }
         placeholder={ props.placeholder }
         style={{ width: props.width ? `${props.width}px` : 'unset' }}
