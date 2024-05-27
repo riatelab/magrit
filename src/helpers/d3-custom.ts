@@ -4,6 +4,7 @@ import {
   csvParse,
   dsvFormat,
   tsvParse,
+  type DSVRowArray,
 } from 'd3-dsv';
 import { drag } from 'd3-drag';
 import { curveBasis, line } from 'd3-shape';
@@ -465,4 +466,5 @@ export type {
   GeoProjection,
   GeoRawProjection,
   BrushBehavior,
+  DSVRowArray,
 };

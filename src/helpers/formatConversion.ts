@@ -2,6 +2,7 @@
 import JSZip from 'jszip';
 
 // Helpers
+import { isFiniteNumber } from './common';
 import d3 from './d3-custom';
 import { SupportedTabularFileTypes } from './supportedFormats';
 
@@ -91,14 +92,59 @@ export function findCsvDelimiter(rawText: string): string {
   return delimiters[maxIndex];
 }
 
+const renameEmptyColumns = (rawData: string): string => {
+  const lines = rawData.split('\n');
+  const header = lines[0].split(',');
+  const renamedHeader = header.map((h, i) => (h === '' ? `column_${i}` : h));
+  lines[0] = renamedHeader.join(',');
+  return lines.join('\n');
+};
+
+const autoTypeDataset = (dataset: d3.DSVRowArray<string>): Record<string, any>[] => {
+  const cols = dataset.columns;
+  for (let i = 0; i < cols.length; i += 1) {
+    const tmp = [];
+    // Check that all values of this field can be coerced to Number :
+    for (let j = 0; j < dataset.length; j += 1) {
+      if (
+        dataset[j][cols[i]].replace
+        && (
+          !Number.isNaN(+dataset[j][cols[i]].replace(',', '.'))
+          || !Number.isNaN(+dataset[j][cols[i]].split(' ').join(''))
+        )
+      ) {
+        // Add the converted value to temporary field if its ok ...
+        const tempVal = dataset[j][cols[i]].replace(',', '.').split(' ').join('');
+        tmp.push(isFiniteNumber(tempVal) ? (+tempVal) : tempVal);
+      } else if (isFiniteNumber(dataset[j][cols[i]])) {
+        tmp.push(+dataset[j][cols[i]]);
+      } else {
+        // Or break early if a value can't be coerced :
+        break; // So no value of this field will be converted
+      }
+    }
+    // If the whole field has been converted successfully, apply the modification :
+    if (tmp.length === dataset.length) {
+      for (let j = 0; j < dataset.length; j += 1) {
+        // eslint-disable-next-line no-param-reassign
+        dataset[j][cols[i]] = tmp[j];
+      }
+    }
+  }
+  // eslint-disable-next-line no-param-reassign
+  delete dataset.columns;
+  return dataset;
+};
+
 export async function convertTextualTabularDatasetToJSON(
   file: File,
   ext: SupportedTabularFileTypes[keyof SupportedTabularFileTypes],
-): Promise<object[]> {
+): Promise<Record<string, any>[]> {
   if (ext === 'csv' || ext === 'tsv' || ext === 'txt') {
-    const text = await file.text();
+    let text = await file.text();
+    text = renameEmptyColumns(text);
     const delimiter = findCsvDelimiter(text);
-    return d3.dsvFormat(delimiter).parse(text);
+    return autoTypeDataset(d3.dsvFormat(delimiter).parse(text));
   }
   if (ext === 'json') {
     const text = await file.text();
