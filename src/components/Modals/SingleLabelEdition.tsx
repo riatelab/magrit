@@ -7,6 +7,7 @@ import { webSafeFonts, fonts } from '../../helpers/font';
 import { findLayerById } from '../../helpers/layers';
 
 // Stores
+import { globalStore } from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
   updateProp,
@@ -17,9 +18,10 @@ import {
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import InputFieldText from '../Inputs/InputText.tsx';
 
 // Types / Interfaces / Enums
-import type { LabelsParameters } from '../../global';
+import type { ID3Element, LabelsParameters } from '../../global';
 
 export default function SingleLabelEdition(
   props: {
@@ -42,7 +44,48 @@ export default function SingleLabelEdition(
   const rendererParameters = layer.rendererParameters as LabelsParameters;
   const defaultLabel = rendererParameters.default;
 
+  const redraw = () => {
+    const layerElement = document.getElementById(layerId);
+    layerElement.querySelectorAll('text').forEach((text) => {
+      const projectedCoords = globalStore.projection(
+        // eslint-disable-next-line no-underscore-dangle
+        (t as SVGTextElement & ID3Element).__data__.geometry.coordinates,
+      );
+      const offsetX = +(t.getAttribute('mgt:offset-x') || 0);
+      const offsetY = +(t.getAttribute('mgt:offset-y') || 0);
+      t.setAttribute('x', `${projectedCoords[0] + offsetX}`);
+      t.setAttribute('y', `${projectedCoords[1] + offsetY}`);
+    });
+  };
+
   return <div class="single-label-edition">
+    <InputFieldText
+      label={LL().LayerSettings.Value()}
+      value={
+        rendererParameters.specific[featureIx]
+          ? rendererParameters.specific[featureIx].text
+          : layer.data.features[featureIx].properties[rendererParameters.variable]
+      }
+      onChange={(v) => {
+        if (!rendererParameters.specific[featureIx]) {
+          debouncedUpdateProp(
+            layerId,
+            ['rendererParameters', 'specific', featureIx],
+            {
+              ...defaultLabel,
+              text: v,
+            },
+          );
+          return;
+        }
+        debouncedUpdateProp(
+          layerId,
+          ['rendererParameters', 'specific', featureIx, 'text'],
+          v,
+        );
+      }}
+      width={200}
+    />
     <InputFieldSelect
       label={LL().LayerSettings.FontFamily()}
       onChange={(v) => {
@@ -50,7 +93,11 @@ export default function SingleLabelEdition(
           debouncedUpdateProp(
             layerId,
             ['rendererParameters', 'specific', featureIx],
-            { ...defaultLabel, fontFamily: v },
+            {
+              ...defaultLabel,
+              text: layer.data.features[featureIx].properties[rendererParameters.variable],
+              fontFamily: v,
+            },
           );
           return;
         }
@@ -87,7 +134,11 @@ export default function SingleLabelEdition(
           debouncedUpdateProp(
             layerId,
             ['rendererParameters', 'specific', featureIx],
-            { ...defaultLabel, fontSize: v },
+            {
+              ...defaultLabel,
+              text: layer.data.features[featureIx].properties[rendererParameters.variable],
+              fontSize: v,
+            },
           );
           return;
         }
@@ -109,6 +160,18 @@ export default function SingleLabelEdition(
           : rendererParameters.default.fontColor
       }
       onChange={(v) => {
+        if (!rendererParameters.specific[featureIx]) {
+          debouncedUpdateProp(
+            layerId,
+            ['rendererParameters', 'specific', featureIx],
+            {
+              ...defaultLabel,
+              text: layer.data.features[featureIx].properties[rendererParameters.variable],
+              fontColor: v,
+            },
+          );
+          return;
+        }
         debouncedUpdateProp(
           layerId,
           ['rendererParameters', 'specific', featureIx, 'fontColor'],
@@ -130,7 +193,11 @@ export default function SingleLabelEdition(
             updateProp(
               layerId,
               ['rendererParameters', 'specific', featureIx],
-              { ...defaultLabel, textOffset: value },
+              {
+                ...defaultLabel,
+                text: layer.data.features[featureIx].properties[rendererParameters.variable],
+                textOffset: value,
+              },
             );
             return;
           }
@@ -140,6 +207,7 @@ export default function SingleLabelEdition(
             ['rendererParameters', 'specific', featureIx, 'textOffset'],
             value,
           );
+          redraw();
         }
       }
       min={-100}
@@ -160,7 +228,11 @@ export default function SingleLabelEdition(
             updateProp(
               layerId,
               ['rendererParameters', 'specific', featureIx],
-              { ...defaultLabel, textOffset: value },
+              {
+                ...defaultLabel,
+                text: layer.data.features[featureIx].properties[rendererParameters.variable],
+                textOffset: value,
+              },
             );
             return;
           }
@@ -170,6 +242,7 @@ export default function SingleLabelEdition(
             ['rendererParameters', 'specific', featureIx, 'textOffset'],
             value,
           );
+          redraw();
         }
       }
       min={-100}
@@ -183,7 +256,11 @@ export default function SingleLabelEdition(
           debouncedUpdateProp(
             layerId,
             ['rendererParameters', 'specific', featureIx],
-            { ...defaultLabel, fontStyle: v },
+            {
+              ...defaultLabel,
+              text: layer.data.features[featureIx].properties[rendererParameters.variable],
+              fontStyle: v,
+            },
           );
           return;
         }
@@ -209,7 +286,11 @@ export default function SingleLabelEdition(
           debouncedUpdateProp(
             layerId,
             ['rendererParameters', 'specific', featureIx],
-            { ...defaultLabel, fontWeight: v },
+            {
+              ...defaultLabel,
+              text: layer.data.features[featureIx].properties[rendererParameters.variable],
+              fontWeight: v,
+            },
           );
           return;
         }

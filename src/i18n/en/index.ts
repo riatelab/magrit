@@ -578,6 +578,7 @@ const en = {
   LayerSettings: {
     LayerSettings: 'Layer settings',
     Name: 'Name',
+    Value: 'Value',
     FillColor: 'Fill color',
     StrokeColor: 'Stroke color',
     FillOpacity: 'Fill opacity',
@@ -624,6 +625,8 @@ const en = {
     AddBarChartCategoricalChoropleth: 'Add a bar chart by category...',
     AddHistogramChoropleth: 'Add a class summary histogram...',
     InformationLabelSettings: 'Please note that modifying the label settings will only affect all the labels of the layer (possibly overwriting the settings defined manually for some labels). If you want to modify the settings of a specific label, you can do so by clicking on the label and then on the "Edit" button in the context menu.',
+    EditLabel: 'Edit label',
+    DeleteLabel: 'Delete label',
   },
   JoinPanel: {
     Title: 'Join to a geospatial layer',

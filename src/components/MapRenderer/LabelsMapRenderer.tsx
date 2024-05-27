@@ -21,7 +21,11 @@ import bindData from '../../directives/bind-data';
 import { globalStore } from '../../store/GlobalStore';
 import { setContextMenuStore } from '../../store/ContextMenuStore';
 import { setModalStore } from '../../store/ModalStore';
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+import {
+  debouncedUpdateProp,
+  layersDescriptionStore,
+  setLayersDescriptionStore,
+} from '../../store/LayersDescriptionStore';
 import { pushUndoStackStore } from '../../store/stateStackStore';
 
 // Other components
@@ -56,7 +60,7 @@ const bindContextMenu = (
       position: [e.clientX, e.clientY],
       entries: [
         {
-          label: 'Edit label',
+          label: LL().LayerSettings.EditLabel(),
           callback: () => {
             setModalStore({
               show: true,
@@ -92,6 +96,29 @@ const bindContextMenu = (
                 );
               },
             });
+          },
+        },
+        {
+          label: LL().LayerSettings.DeleteLabel(),
+          callback: () => {
+            const defaultLabel = layer.rendererParameters.default;
+
+            if (!layer.rendererParameters.specific[i]) {
+              debouncedUpdateProp(
+                layer.id,
+                ['rendererParameters', 'specific', i],
+                {
+                  ...defaultLabel,
+                  text: '',
+                },
+              );
+            } else {
+              debouncedUpdateProp(
+                layer.id,
+                ['rendererParameters', 'specific', i, 'text'],
+                '',
+              );
+            }
           },
         },
       ],
@@ -150,11 +177,11 @@ export function defaultLabelsRenderer(
           const projectedCoords = createMemo(
             () => globalStore.projection(feature.geometry.coordinates),
           );
-          // const params = createMemo(() => {
-          //   if (rendererParameters.specific[i()]) return rendererParameters.specific[i()];
-          //   return rendererParameters.default;
-          // });
           const getParam = (param: string) => {
+            if (param === 'text') {
+              if (rendererParameters.specific[i()]) return rendererParameters.specific[i()][param];
+              return feature.properties[rendererParameters.variable];
+            }
             if (rendererParameters.specific[i()]) return rendererParameters.specific[i()][param];
             return rendererParameters.default[param];
           };
@@ -176,7 +203,7 @@ export function defaultLabelsRenderer(
             use:bindData={feature}
             mgt:offset-x={getParam('textOffset')[0]}
             mgt:offset-y={getParam('textOffset')[1]}
-          >{ feature.properties[rendererParameters.variable] }</text>;
+          >{ getParam('text') }</text>;
         }
       }
     </For>

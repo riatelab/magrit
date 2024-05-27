@@ -578,6 +578,7 @@ const fr = {
   LayerSettings: {
     LayerSettings: 'Paramètres de la couche',
     Name: 'Nom',
+    Value: 'Value',
     FillColor: 'Couleur de remplissage',
     StrokeColor: 'Couleur de la ligne',
     FillOpacity: 'Opacité du remplissage',
@@ -624,6 +625,8 @@ const fr = {
     AddBarChartCategoricalChoropleth: 'Ajouter un diagramme en barre par catégories...',
     AddHistogramChoropleth: 'Ajouter un histogramme de répartition des valeurs...',
     InformationLabelSettings: 'Veuillez noter que la modification de ces paramètres s\'appliquera à l\'ensemble des étiquettes de la couche (pouvant ainsi écraser les éventuels styles définis individuellement). Si vous souhaitez modifier les paramètres d\'une seule étiquette, cela est possible en faisant un clic droit sur l\'étiquette en question.',
+    EditLabel: 'Éditer l\'étiquette',
+    DeleteLabel: 'Supprimer l`étiquette',
   },
   JoinPanel: {
     Title: 'Joindre à une couche géospatiale',

@@ -452,7 +452,7 @@ export interface LabelsParameters {
   default: SingleLabelParameters,
   // Specific parameters per feature
   specific: {
-    [featureId: number]: SingleLabelParameters,
+    [featureId: number]: SingleLabelParameters & { text: string },
   },
   // Parameters for proportional labels
   proportional?: {

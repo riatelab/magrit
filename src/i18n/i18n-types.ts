@@ -2087,6 +2087,10 @@ type RootTranslation = {
 		 */
 		Name: string
 		/**
+		 * V​a​l​u​e
+		 */
+		Value: string
+		/**
 		 * F​i​l​l​ ​c​o​l​o​r
 		 */
 		FillColor: string
@@ -2264,6 +2268,14 @@ type RootTranslation = {
 		 * P​l​e​a​s​e​ ​n​o​t​e​ ​t​h​a​t​ ​m​o​d​i​f​y​i​n​g​ ​t​h​e​ ​l​a​b​e​l​ ​s​e​t​t​i​n​g​s​ ​w​i​l​l​ ​o​n​l​y​ ​a​f​f​e​c​t​ ​a​l​l​ ​t​h​e​ ​l​a​b​e​l​s​ ​o​f​ ​t​h​e​ ​l​a​y​e​r​ ​(​p​o​s​s​i​b​l​y​ ​o​v​e​r​w​r​i​t​i​n​g​ ​t​h​e​ ​s​e​t​t​i​n​g​s​ ​d​e​f​i​n​e​d​ ​m​a​n​u​a​l​l​y​ ​f​o​r​ ​s​o​m​e​ ​l​a​b​e​l​s​)​.​ ​I​f​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​m​o​d​i​f​y​ ​t​h​e​ ​s​e​t​t​i​n​g​s​ ​o​f​ ​a​ ​s​p​e​c​i​f​i​c​ ​l​a​b​e​l​,​ ​y​o​u​ ​c​a​n​ ​d​o​ ​s​o​ ​b​y​ ​c​l​i​c​k​i​n​g​ ​o​n​ ​t​h​e​ ​l​a​b​e​l​ ​a​n​d​ ​t​h​e​n​ ​o​n​ ​t​h​e​ ​"​E​d​i​t​"​ ​b​u​t​t​o​n​ ​i​n​ ​t​h​e​ ​c​o​n​t​e​x​t​ ​m​e​n​u​.
 		 */
 		InformationLabelSettings: string
+		/**
+		 * E​d​i​t​ ​l​a​b​e​l
+		 */
+		EditLabel: string
+		/**
+		 * D​e​l​e​t​e​ ​l​a​b​e​l
+		 */
+		DeleteLabel: string
 	}
 	JoinPanel: {
 		/**
@@ -5244,6 +5256,10 @@ export type TranslationFunctions = {
 		 */
 		Name: () => LocalizedString
 		/**
+		 * Value
+		 */
+		Value: () => LocalizedString
+		/**
 		 * Fill color
 		 */
 		FillColor: () => LocalizedString
@@ -5421,6 +5437,14 @@ export type TranslationFunctions = {
 		 * Please note that modifying the label settings will only affect all the labels of the layer (possibly overwriting the settings defined manually for some labels). If you want to modify the settings of a specific label, you can do so by clicking on the label and then on the "Edit" button in the context menu.
 		 */
 		InformationLabelSettings: () => LocalizedString
+		/**
+		 * Edit label
+		 */
+		EditLabel: () => LocalizedString
+		/**
+		 * Delete label
+		 */
+		DeleteLabel: () => LocalizedString
 	}
 	JoinPanel: {
 		/**
