@@ -26,7 +26,7 @@ export const findCssFontDefinition = (fontName: string): string => {
     .filter((s) => s.constructor.name === 'CSSFontFaceRule') as CSSFontFaceRule[];
 
   return allFontFaceRules
-    .filter((f) => f.style.fontFamily === fontName || f.style.fontFamily === `"${fontName}"`)
+    .filter((f) => f.style.getPropertyValue('font-family') === fontName || f.style.getPropertyValue('font-family') === `"${fontName}"`)
     .map((f) => f.cssText)
     .join(' ');
 };
