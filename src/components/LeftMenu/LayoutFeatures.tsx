@@ -840,7 +840,7 @@ export default function LayoutFeatures(): JSX.Element {
         </button>
       </div>
     </div>
-    <div class="mb-5">
+    <div>
       <label class="label">{LL().LayoutFeatures.MapMargins()}</label>
       <div>
         <div class="is-flex is-justify-content-space-around">
@@ -893,7 +893,10 @@ export default function LayoutFeatures(): JSX.Element {
             || mapStore.mapMargins.bottom
           }
         >
-          <div class="is-flex is-justify-content-space-around has-text-centered">
+          <div
+            class="is-flex is-justify-content-space-around has-text-centered"
+            style={{ 'margin-bottom': '-1.4em' }}
+          >
             <InputFieldColor
               label={LL().LayoutFeatures.Color()}
               value={mapStore.mapMargins.color}
@@ -915,7 +918,7 @@ export default function LayoutFeatures(): JSX.Element {
         </Show>
       </div>
     </div>
-    <div>
+    <div style={{ 'margin-top': '1.4em' }}>
       <InputFieldText
         label={LL().LayoutFeatures.Title()}
         value={mapStore.mapAnnotations.title}
