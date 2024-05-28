@@ -1,7 +1,7 @@
 // Imports from external packages
-import { GPU } from 'gpu.js';
 import { pointGrid } from '@turf/turf';
 import type { isobands } from 'contour-wasm';
+import { GPU } from '../vendor/gpu-browser';
 
 // Stores
 import { setLoadingMessage } from '../store/GlobalStore';

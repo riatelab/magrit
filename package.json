@@ -96,7 +96,6 @@
     "gdal3.js": "^2.8.1",
     "geos-wasm": "^2.0.0",
     "go-cart-wasm": "^0.3.0",
-    "gpu.js": "^2.16.0",
     "interactjs": "^1.10.27",
     "jszip": "^3.10.1",
     "main-thread-scheduling": "^14.1.1",

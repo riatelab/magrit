@@ -64,7 +64,7 @@ export default function smoothedMapRenderer(
       {
         (feature) => <path
           fill={
-            rendererParameters().palette.colors[classifier().getClass(feature.properties.center)]
+            rendererParameters().palette.colors[classifier().getClass(feature.properties.center_v)]
           }
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
