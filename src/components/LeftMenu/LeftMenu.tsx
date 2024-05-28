@@ -28,7 +28,7 @@ import '../../styles/LeftMenu.css';
 const [expandedSection, setExpandedSection] = createSignal(1);
 
 export function openLayerManager() {
-  setExpandedSection(3);
+  setExpandedSection(4);
 }
 
 export default function LeftMenu(): JSX.Element {

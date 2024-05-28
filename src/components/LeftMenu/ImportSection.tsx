@@ -33,10 +33,11 @@ export default function ImportSection(): JSX.Element {
     </div>
     <div>
       <button
-        class="button is-primary is-outlined"
+        class="button is-primary is-outlined "
         style={{
           'border-top-left-radius': '0',
           'border-top-right-radius': '0',
+          'background-color': 'unset !important',
         }}
         onClick={() => {
           setModalStore({
@@ -49,6 +50,7 @@ export default function ImportSection(): JSX.Element {
             cancelButton: LL().DatasetCatalog.cancelButton(),
           });
         }}
+        disabled={true}
       >
         { LL().ImportSection.ExampleDatasets() }
       </button>
