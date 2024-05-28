@@ -155,8 +155,6 @@ function onClickValidate(
     } as LabelsParameters,
   } as LayerDescriptionLabels;
 
-  console.log(newLayerDescription);
-
   // By default the legend for labels is not visible
   // (but it is created so that the user can change its visibility)
   const legend = {

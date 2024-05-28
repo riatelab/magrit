@@ -77,7 +77,7 @@ function validateExtentCoordinates(
   const valuesX = table.data.map((d) => d[fieldX]);
   const valuesY = table.data.map((d) => d[fieldY]);
 
-  // Find the projection in the ESPG database
+  // Find the projection in the EPSG database
   const projection = epsgDb[+targetCrs.replace('EPSG:', '')];
   if (!projection || !projection.bbox) return null;
 
@@ -386,9 +386,9 @@ export default function LayerFromTabularSettings(
       value={selectValue()}
     >
       <option value="EPSG:4326">EPSG:4326</option>
-      <option value="ESPG:3857">EPSG:3857</option>
-      <option value="ESPG:2154">EPSG:2154</option>
-      <option value="ESPG:3035">EPSG:3035</option>
+      <option value="EPSG:3857">EPSG:3857</option>
+      <option value="EPSG:2154">EPSG:2154</option>
+      <option value="EPSG:3035">EPSG:3035</option>
       <option value="">{LL().FunctionalitiesSection.LayerFromTableOptions.MoreCrs()}</option>
     </InputFieldSelect>
     <Show when={selectValue() === ''}>
