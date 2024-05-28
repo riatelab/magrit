@@ -409,6 +409,10 @@ type RootTranslation = {
 		 * P​a​g​e​ ​l​a​y​o​u​t​ ​a​n​d​ ​s​k​i​n​ ​e​l​e​m​e​n​t​s
 		 */
 		LayoutFeatures: string
+		/**
+		 * E​x​p​a​n​d​ ​/​ ​c​o​l​l​a​p​s​e​ ​t​h​e​ ​m​e​n​u
+		 */
+		CollapseExpand: string
 	}
 	ImportSection: {
 		/**
@@ -3616,6 +3620,10 @@ export type TranslationFunctions = {
 		 * Page layout and skin elements
 		 */
 		LayoutFeatures: () => LocalizedString
+		/**
+		 * Expand / collapse the menu
+		 */
+		CollapseExpand: () => LocalizedString
 	}
 	ImportSection: {
 		/**

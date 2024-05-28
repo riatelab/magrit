@@ -41,7 +41,10 @@ export default function LeftMenu(): JSX.Element {
         <TbFileImport style={{ height: '1.1em' }}/>
         <span>{LL().LeftMenu.Import()}</span>
       </div>
-      <button class={`chevron-button ${expandedSection() === 1 ? 'is-active' : ''}`}>
+      <button
+        class={`chevron-button ${expandedSection() === 1 ? 'is-active' : ''}`}
+        aria-label={LL().LeftMenu.CollapseExpand()}
+      >
         <ChevronIcon/>
       </button>
     </div>
@@ -56,7 +59,10 @@ export default function LeftMenu(): JSX.Element {
         <AiOutlineLayout/>
         <span>{LL().LeftMenu.MapConfiguration()}</span>
       </div>
-      <button class={`chevron-button ${expandedSection() === 2 ? 'is-active' : ''}`}>
+      <button
+        class={`chevron-button ${expandedSection() === 2 ? 'is-active' : ''}`}
+        aria-label={LL().LeftMenu.CollapseExpand()}
+      >
         <ChevronIcon/>
       </button>
     </div>
@@ -71,7 +77,10 @@ export default function LeftMenu(): JSX.Element {
         <BsMap/>
         <span>{LL().LeftMenu.Projection()}</span>
       </div>
-      <button class={`chevron-button ${expandedSection() === 3 ? 'is-active' : ''}`}>
+      <button
+        class={`chevron-button ${expandedSection() === 3 ? 'is-active' : ''}`}
+        aria-label={LL().LeftMenu.CollapseExpand()}
+      >
         <ChevronIcon/>
       </button>
     </div>
@@ -86,7 +95,10 @@ export default function LeftMenu(): JSX.Element {
         <FiLayers/>
         <span>{LL().LeftMenu.LayerManager()}</span>
       </div>
-      <button class={`chevron-button ${expandedSection() === 4 ? 'is-active' : ''}`}>
+      <button
+        class={`chevron-button ${expandedSection() === 4 ? 'is-active' : ''}`}
+        aria-label={LL().LeftMenu.CollapseExpand()}
+      >
         <ChevronIcon/>
       </button>
     </div>
@@ -101,7 +113,10 @@ export default function LeftMenu(): JSX.Element {
         <RiDocumentPagesLine/>
         <span>{LL().LeftMenu.LayoutFeatures()}</span>
       </div>
-      <button class={`chevron-button ${expandedSection() === 5 ? 'is-active' : ''}`}>
+      <button
+        class={`chevron-button ${expandedSection() === 5 ? 'is-active' : ''}`}
+        aria-label={LL().LeftMenu.CollapseExpand()}
+      >
         <ChevronIcon/>
       </button>
     </div>
@@ -116,7 +131,10 @@ export default function LeftMenu(): JSX.Element {
         <TiExportOutline/>
         <span>{LL().LeftMenu.ExportSection()}</span>
       </div>
-      <button class={`chevron-button ${expandedSection() === 6 ? 'is-active' : ''}`}>
+      <button
+        class={`chevron-button ${expandedSection() === 6 ? 'is-active' : ''}`}
+        aria-label={LL().LeftMenu.CollapseExpand()}
+      >
         <ChevronIcon/>
       </button>
     </div>

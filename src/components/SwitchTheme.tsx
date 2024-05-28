@@ -2,6 +2,8 @@ import { JSX } from 'solid-js';
 
 import { FaSolidMoon, FaSolidSun } from 'solid-icons/fa';
 
+import { useI18nContext } from '../i18n/i18n-solid';
+
 import '../styles/SwitchTheme.css';
 
 export default function SwitchTheme(
@@ -10,7 +12,9 @@ export default function SwitchTheme(
     id?: string,
   },
 ): JSX.Element {
+  const { LL } = useI18nContext();
   return <button
+    aria-label={LL().HeaderApp.NightDayMode()}
     class={props.class ? `switch-theme ${props.class}` : 'switch-theme'}
     id={props.id}
     type="button"

@@ -114,6 +114,7 @@ const fr = {
     FunctionalityChoice: 'Choix d\'une fonctionnalité de représentation ou d\'analyse',
     ExportSection: 'Export des données',
     LayoutFeatures: 'Mise en page et éléments d\'habillage',
+    CollapseExpand: 'Déplier / replier le menu',
   },
   ImportSection: {
     OpenImportWindow: 'Ouvrir la fenêtre d\'import des données ...',

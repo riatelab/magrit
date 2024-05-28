@@ -114,6 +114,7 @@ const en = {
     FunctionalityChoice: 'Choice of portrayal or analysis functionality',
     ExportSection: 'Map and data export',
     LayoutFeatures: 'Page layout and skin elements',
+    CollapseExpand: 'Expand / collapse the menu',
   },
   ImportSection: {
     OpenImportWindow: 'Open data import window...',
