@@ -1,7 +1,7 @@
 // Import from solid-js
 import {
   Accessor, createSignal,
-  JSX, Setter, Show,
+  JSX, Setter,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
@@ -681,244 +681,7 @@ export default function LayoutFeatures(): JSX.Element {
   ] = createSignal<boolean>(false);
 
   return <div class="layout-features-section">
-    <InputFieldColor
-      label={LL().LayoutFeatures.BackgroundColor()}
-      value={mapStore.backgroundColor}
-      onChange={(v) => { setMapStore({ backgroundColor: v }); }}
-      width={100}
-    />
-    <InputFieldNumber
-      label={LL().LayoutFeatures.Opacity()}
-      value={mapStore.backgroundColorOpacity}
-      onChange={(v) => { setMapStore({ backgroundColorOpacity: v }); }}
-      min={0}
-      max={1}
-      step={0.1}
-      width={100}
-    />
-    <InputFieldCheckbox
-      label={LL().LayoutFeatures.SnapToGrid()}
-      checked={globalStore.snapToGridWhenDragging}
-      onChange={(v) => { setGlobalStore({ snapToGridWhenDragging: v }); }}
-    />
-    <div class="field-block">
-      <label class="label">{ LL().LayoutFeatures.MapSkinElements() }</label>
-      <div class="is-flex is-justify-content-space-evenly">
-        <button
-          class="unstyled"
-          title={LL().LayoutFeatures.Line()}
-          aria-label={LL().LayoutFeatures.Line()}
-        >
-          <img
-            class="layout-features-section__icon-element"
-            src={layoutFeatureArrow}
-            alt={LL().LayoutFeatures.Line()}
-            onClick={() => { createLine(LL); }}
-          />
-        </button>
-        <button
-          class="unstyled"
-          title={LL().LayoutFeatures.Rectangle()}
-          aria-label={LL().LayoutFeatures.Rectangle()}
-          onClick={() => { createRectangle(LL); }}
-        >
-          <img
-            class="layout-features-section__icon-element"
-            src={layoutFeatureRectangle}
-            alt={LL().LayoutFeatures.Rectangle()}
-          />
-        </button>
-        <button
-          class="unstyled"
-          title={LL().LayoutFeatures.Graticule()}
-          aria-label={LL().LayoutFeatures.Graticule()}
-          onClick={() => { createGraticule(LL); }}
-        >
-          <img
-            classList={{
-              'layout-features-section__icon-element': true,
-              disabled: alreadyHasGraticule(layersDescriptionStore.layers),
-            }}
-            src={layoutFeatureGraticule}
-            alt={LL().LayoutFeatures.Graticule()}
-          />
-        </button>
-        <button
-          class="unstyled"
-          title={LL().LayoutFeatures.Sphere()}
-          aria-label={LL().LayoutFeatures.Sphere()}
-          onClick={() => { createSphere(LL); }}
-        >
-          <img
-            classList={{
-              'layout-features-section__icon-element': true,
-              disabled: alreadyHasSphere(layersDescriptionStore.layers),
-            }}
-            src={layoutFeatureSphere}
-            alt={LL().LayoutFeatures.Sphere()}
-          />
-        </button>
-        <button
-          class="unstyled"
-          title={LL().LayoutFeatures.NorthArrow()}
-          aria-label={LL().LayoutFeatures.NorthArrow()}
-          onClick={() => { createNorthArrow(LL); }}
-        >
-          <img
-            class="layout-features-section__icon-element"
-            src={layoutFeatureNorthArrow}
-            alt={LL().LayoutFeatures.NorthArrow()}
-          />
-        </button>
-        <button
-          class="unstyled"
-          title={LL().LayoutFeatures.ScaleBar()}
-          aria-label={LL().LayoutFeatures.ScaleBar()}
-          onClick={() => { createScaleBar(LL); }}
-        >
-          <img
-            class="layout-features-section__icon-element"
-            src={layoutFeatureScaleBar}
-            alt={LL().LayoutFeatures.ScaleBar()}
-          />
-        </button>
-        <button
-          class="unstyled"
-          title={LL().LayoutFeatures.Text()}
-          aria-label={LL().LayoutFeatures.Text()}
-          onClick={() => { createText(LL); }}
-        >
-          <img
-            class="layout-features-section__icon-element"
-            src={layoutFeatureText}
-            alt={LL().LayoutFeatures.Text()}
-          />
-        </button>
-        <button
-          class="unstyled"
-          title={LL().LayoutFeatures.Image()}
-          aria-label={LL().LayoutFeatures.Image()}
-          onClick={() => {
-            // We open a modal allowing the user to
-            // choose an existing image or upload a new one
-            setModalStore({
-              show: true,
-              title: LL().ImageSymbolSelection.Title(),
-              content: () => <ImageSymbolSelection LL={LL}/>,
-            });
-          }}
-        >
-          <img
-            class="layout-features-section__icon-element"
-            src={layoutFeatureSymbol}
-            alt={LL().LayoutFeatures.Image()}
-          />
-        </button>
-        <button
-          classList={{
-            unstyled: true,
-            'is-outlined': isFreeDrawing(),
-            'is-warning': isFreeDrawing(),
-          }}
-          title={LL().LayoutFeatures.FreeDrawing()}
-          aria-label={LL().LayoutFeatures.FreeDrawing()}
-          onClick={() => {
-            setIsFreeDrawing(!isFreeDrawing());
-            if (isFreeDrawing()) {
-              createFreeDraw(LL, setIsFreeDrawing);
-            } else {
-              // Dispatch keyboard event (escape) to remove the free drawing behavior
-              document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-            }
-          }}
-        >
-          <img
-            class="layout-features-section__icon-element"
-            src={layoutFeatureDraw}
-            alt={LL().LayoutFeatures.FreeDrawing()}
-          />
-        </button>
-      </div>
-    </div>
     <div>
-      <label class="label">{LL().LayoutFeatures.MapMargins()}</label>
-      <div>
-        <div class="is-flex is-justify-content-space-around">
-          <input
-            type="number"
-            class="input"
-            style={{ width: '80px', height: '1.8em' }}
-            value={mapStore.mapMargins.top}
-            onChange={(e) => {
-              setMapStore('mapMargins', 'top', Number(e.currentTarget.value));
-            }}
-          />
-        </div>
-        <div class="is-flex is-justify-content-space-around">
-          <input
-            type="number"
-            class="input"
-            style={{ width: '80px', height: '1.8em' }}
-            value={mapStore.mapMargins.left}
-            onChange={(e) => {
-              setMapStore('mapMargins', 'left', Number(e.currentTarget.value));
-            }}
-          />
-          <input
-            type="number"
-            class="input"
-            style={{ width: '80px', height: '1.8em' }}
-            value={mapStore.mapMargins.right}
-            onChange={(e) => {
-              setMapStore('mapMargins', 'right', Number(e.currentTarget.value));
-            }}
-          />
-        </div>
-        <div class="is-flex is-justify-content-space-around">
-          <input
-            type="number"
-            class="input"
-            style={{ width: '80px', height: '1.8em' }}
-            value={mapStore.mapMargins.bottom}
-            onChange={(e) => {
-              setMapStore('mapMargins', 'bottom', Number(e.currentTarget.value));
-            }}
-          />
-        </div>
-        <Show
-          when={
-            mapStore.mapMargins.top
-            || mapStore.mapMargins.left
-            || mapStore.mapMargins.right
-            || mapStore.mapMargins.bottom
-          }
-        >
-          <div
-            class="is-flex is-justify-content-space-around has-text-centered"
-            style={{ 'margin-bottom': '-1.4em' }}
-          >
-            <InputFieldColor
-              label={LL().LayoutFeatures.Color()}
-              value={mapStore.mapMargins.color}
-              onChange={(v) => { setMapStore('mapMargins', 'color', v); }}
-              layout={'vertical'}
-              width={80}
-            />
-            <InputFieldNumber
-              label={LL().LayoutFeatures.Opacity()}
-              value={mapStore.mapMargins.opacity}
-              onChange={(v) => { setMapStore('mapMargins', 'opacity', v); }}
-              min={0}
-              max={1}
-              step={0.1}
-              width={80}
-              layout={'vertical'}
-            />
-          </div>
-        </Show>
-      </div>
-    </div>
-    <div style={{ 'margin-top': '1.4em' }}>
       <InputFieldText
         label={LL().LayoutFeatures.Title()}
         value={mapStore.mapAnnotations.title}
@@ -949,7 +712,7 @@ export default function LayoutFeatures(): JSX.Element {
                 type: LayoutFeatureType.Text,
                 position: [mapStore.mapDimensions.width / 2, 30],
                 text: v,
-                fontSize: 18,
+                fontSize: 26,
                 fontFamily: 'Sans-serif',
                 fontColor: '#000000',
                 fontOpacity: 1,
@@ -1058,6 +821,185 @@ export default function LayoutFeatures(): JSX.Element {
         }}
         width={280}
       />
+    </div>
+    <InputFieldColor
+      label={LL().LayoutFeatures.BackgroundColor()}
+      value={mapStore.backgroundColor}
+      onChange={(v) => {
+        setMapStore({ backgroundColor: v });
+      }}
+      width={100}
+    />
+    <InputFieldNumber
+      label={LL().LayoutFeatures.Opacity()}
+      value={mapStore.backgroundColorOpacity}
+      onChange={(v) => {
+        setMapStore({ backgroundColorOpacity: v });
+      }}
+      min={0}
+      max={1}
+      step={0.1}
+      width={100}
+    />
+    <InputFieldCheckbox
+      label={LL().LayoutFeatures.SnapToGrid()}
+      checked={globalStore.snapToGridWhenDragging}
+      onChange={(v) => {
+        setGlobalStore({ snapToGridWhenDragging: v });
+      }}
+    />
+    <div class="field-block">
+      <label class="label">{LL().LayoutFeatures.MapSkinElements()}</label>
+      <div class="is-flex is-justify-content-space-evenly">
+        <button
+          class="unstyled"
+          title={LL().LayoutFeatures.Line()}
+          aria-label={LL().LayoutFeatures.Line()}
+        >
+          <img
+            class="layout-features-section__icon-element"
+            src={layoutFeatureArrow}
+            alt={LL().LayoutFeatures.Line()}
+            onClick={() => {
+              createLine(LL);
+            }}
+          />
+        </button>
+        <button
+          class="unstyled"
+          title={LL().LayoutFeatures.Rectangle()}
+          aria-label={LL().LayoutFeatures.Rectangle()}
+          onClick={() => {
+            createRectangle(LL);
+          }}
+        >
+          <img
+            class="layout-features-section__icon-element"
+            src={layoutFeatureRectangle}
+            alt={LL().LayoutFeatures.Rectangle()}
+          />
+        </button>
+        <button
+          class="unstyled"
+          title={LL().LayoutFeatures.Graticule()}
+          aria-label={LL().LayoutFeatures.Graticule()}
+          onClick={() => {
+            createGraticule(LL);
+          }}
+        >
+          <img
+            classList={{
+              'layout-features-section__icon-element': true,
+              disabled: alreadyHasGraticule(layersDescriptionStore.layers),
+            }}
+            src={layoutFeatureGraticule}
+            alt={LL().LayoutFeatures.Graticule()}
+          />
+        </button>
+        <button
+          class="unstyled"
+          title={LL().LayoutFeatures.Sphere()}
+          aria-label={LL().LayoutFeatures.Sphere()}
+          onClick={() => {
+            createSphere(LL);
+          }}
+        >
+          <img
+            classList={{
+              'layout-features-section__icon-element': true,
+              disabled: alreadyHasSphere(layersDescriptionStore.layers),
+            }}
+            src={layoutFeatureSphere}
+            alt={LL().LayoutFeatures.Sphere()}
+          />
+        </button>
+        <button
+          class="unstyled"
+          title={LL().LayoutFeatures.NorthArrow()}
+          aria-label={LL().LayoutFeatures.NorthArrow()}
+          onClick={() => {
+            createNorthArrow(LL);
+          }}
+        >
+          <img
+            class="layout-features-section__icon-element"
+            src={layoutFeatureNorthArrow}
+            alt={LL().LayoutFeatures.NorthArrow()}
+          />
+        </button>
+        <button
+          class="unstyled"
+          title={LL().LayoutFeatures.ScaleBar()}
+          aria-label={LL().LayoutFeatures.ScaleBar()}
+          onClick={() => {
+            createScaleBar(LL);
+          }}
+        >
+          <img
+            class="layout-features-section__icon-element"
+            src={layoutFeatureScaleBar}
+            alt={LL().LayoutFeatures.ScaleBar()}
+          />
+        </button>
+        <button
+          class="unstyled"
+          title={LL().LayoutFeatures.Text()}
+          aria-label={LL().LayoutFeatures.Text()}
+          onClick={() => {
+            createText(LL);
+          }}
+        >
+          <img
+            class="layout-features-section__icon-element"
+            src={layoutFeatureText}
+            alt={LL().LayoutFeatures.Text()}
+          />
+        </button>
+        <button
+          class="unstyled"
+          title={LL().LayoutFeatures.Image()}
+          aria-label={LL().LayoutFeatures.Image()}
+          onClick={() => {
+            // We open a modal allowing the user to
+            // choose an existing image or upload a new one
+            setModalStore({
+              show: true,
+              title: LL().ImageSymbolSelection.Title(),
+              content: () => <ImageSymbolSelection LL={LL}/>,
+            });
+          }}
+        >
+          <img
+            class="layout-features-section__icon-element"
+            src={layoutFeatureSymbol}
+            alt={LL().LayoutFeatures.Image()}
+          />
+        </button>
+        <button
+          classList={{
+            unstyled: true,
+            'is-outlined': isFreeDrawing(),
+            'is-warning': isFreeDrawing(),
+          }}
+          title={LL().LayoutFeatures.FreeDrawing()}
+          aria-label={LL().LayoutFeatures.FreeDrawing()}
+          onClick={() => {
+            setIsFreeDrawing(!isFreeDrawing());
+            if (isFreeDrawing()) {
+              createFreeDraw(LL, setIsFreeDrawing);
+            } else {
+              // Dispatch keyboard event (escape) to remove the free drawing behavior
+              document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+            }
+          }}
+        >
+          <img
+            class="layout-features-section__icon-element"
+            src={layoutFeatureDraw}
+            alt={LL().LayoutFeatures.FreeDrawing()}
+          />
+        </button>
+      </div>
     </div>
   </div>;
 }

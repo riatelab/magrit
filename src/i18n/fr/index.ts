@@ -109,6 +109,7 @@ const fr = {
   LeftMenu: {
     Import: 'Import des données',
     MapConfiguration: 'Configuration de la carte',
+    Projection: 'Projection cartographique',
     LayerManager: 'Gestion des couches',
     FunctionalityChoice: 'Choix d\'une fonctionnalité de représentation ou d\'analyse',
     ExportSection: 'Export des données',

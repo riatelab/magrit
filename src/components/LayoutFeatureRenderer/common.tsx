@@ -18,7 +18,7 @@ import LayoutFeatureSettings from '../Modals/LayoutFeatureSetting.tsx';
 
 // Stores
 import { type ContextMenuEntry, setContextMenuStore } from '../../store/ContextMenuStore';
-import { mapStore } from '../../store/MapStore';
+import { mapStore, setMapStore } from '../../store/MapStore';
 import { setModalStore } from '../../store/ModalStore';
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 
@@ -299,6 +299,11 @@ export function triggerContextMenuLayoutFeature(
       const layoutFeaturesAndLegends = layersDescriptionStore.layoutFeaturesAndLegends
         .filter((l) => l.id !== layoutFeatureId);
       setLayersDescriptionStore({ layoutFeaturesAndLegends });
+      if (layoutFeatureId === 'LayoutFeature-title') {
+        setMapStore('mapAnnotations', 'title', '');
+      } else if (layoutFeatureId === 'LayoutFeature-source') {
+        setMapStore('mapAnnotations', 'source', '');
+      }
     },
   });
 

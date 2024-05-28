@@ -390,6 +390,10 @@ type RootTranslation = {
 		 */
 		MapConfiguration: string
 		/**
+		 * C​a​r​t​o​g​r​a​p​h​i​c​ ​p​r​o​j​e​c​t​i​o​n
+		 */
+		Projection: string
+		/**
 		 * L​a​y​e​r​ ​m​a​n​a​g​e​r
 		 */
 		LayerManager: string
@@ -3592,6 +3596,10 @@ export type TranslationFunctions = {
 		 * Map configuration
 		 */
 		MapConfiguration: () => LocalizedString
+		/**
+		 * Cartographic projection
+		 */
+		Projection: () => LocalizedString
 		/**
 		 * Layer manager
 		 */
