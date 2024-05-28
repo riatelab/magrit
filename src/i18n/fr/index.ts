@@ -607,6 +607,7 @@ const fr = {
     AllowMovingSymbols: 'Autoriser le déplacement des symboles',
     Iterations: 'Nombre d\'itérations',
     ResetLabelLocations: 'Réinitialiser les positions des étiquettes',
+    ResetLabelContents: 'Réinitialiser les contenus des étiquettes',
     ChangeClassification: 'Changer les options de discrétisation',
     FontFamily: 'Police d\'écriture',
     FontSize: 'Taille de la police',

@@ -198,7 +198,16 @@ function makeSettingsLabels(
         value={rendererParameters.default.fontSize}
         onChange={(v) => {
           updateProp(props.id, ['rendererParameters', 'default', 'fontSize'], v);
-          updateProp(props.id, ['rendererParameters', 'specific'], {});
+          // Update the fontSize properties for each "specific" parameters
+          setLayersDescriptionStoreBase(
+            produce((draft: LayersDescriptionStoreType) => {
+              const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
+              Object.keys((layer.rendererParameters as LabelsParameters).specific).forEach((k) => {
+                // eslint-disable-next-line no-param-reassign
+                layer.rendererParameters.specific[+k].fontSize = v;
+              });
+            }),
+          );
         }}
         min={1}
         max={100}
@@ -249,7 +258,16 @@ function makeSettingsLabels(
       label={LL().LayerSettings.FontFamily()}
       onChange={(v) => {
         updateProp(props.id, ['rendererParameters', 'default', 'fontFamily'], v);
-        updateProp(props.id, ['rendererParameters', 'specific'], {});
+        // Update the fontFamily properties for each "specific" parameters
+        setLayersDescriptionStoreBase(
+          produce((draft: LayersDescriptionStoreType) => {
+            const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
+            Object.keys((layer.rendererParameters as LabelsParameters).specific).forEach((k) => {
+              // eslint-disable-next-line no-param-reassign
+              layer.rendererParameters.specific[+k].fontFamily = v;
+            });
+          }),
+        );
       }}
       value={rendererParameters.default.fontFamily}
     >
@@ -267,7 +285,16 @@ function makeSettingsLabels(
       value={rendererParameters.default.fontColor}
       onChange={(v) => {
         updateProp(props.id, ['rendererParameters', 'default', 'fontColor'], v);
-        updateProp(props.id, ['rendererParameters', 'specific'], {});
+        // Update the fontColor properties for each "specific" parameters
+        setLayersDescriptionStoreBase(
+          produce((draft: LayersDescriptionStoreType) => {
+            const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
+            Object.keys((layer.rendererParameters as LabelsParameters).specific).forEach((k) => {
+              // eslint-disable-next-line no-param-reassign
+              layer.rendererParameters.specific[+k].fontColor = v;
+            });
+          }),
+        );
       }}
     />
     <InputFieldNumber
@@ -277,7 +304,16 @@ function makeSettingsLabels(
         (v) => {
           const value = [v, rendererParameters.default.textOffset[1]];
           updateProp(props.id, ['rendererParameters', 'default', 'textOffset'], value);
-          updateProp(props.id, ['rendererParameters', 'specific'], {});
+          // Update the textOffset properties for each "specific" parameters
+          setLayersDescriptionStoreBase(
+            produce((draft: LayersDescriptionStoreType) => {
+              const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
+              Object.keys((layer.rendererParameters as LabelsParameters).specific).forEach((k) => {
+                // eslint-disable-next-line no-param-reassign
+                layer.rendererParameters.specific[+k].textOffset = value;
+              });
+            }),
+          );
         }
       }
       min={-100}
@@ -291,7 +327,16 @@ function makeSettingsLabels(
         (v) => {
           const value = [rendererParameters.default.textOffset[0], v];
           updateProp(props.id, ['rendererParameters', 'default', 'textOffset'], value);
-          updateProp(props.id, ['rendererParameters', 'specific'], {});
+          // Update the textOffset properties for each "specific" parameters
+          setLayersDescriptionStoreBase(
+            produce((draft: LayersDescriptionStoreType) => {
+              const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
+              Object.keys((layer.rendererParameters as LabelsParameters).specific).forEach((k) => {
+                // eslint-disable-next-line no-param-reassign
+                layer.rendererParameters.specific[+k].textOffset = value;
+              });
+            }),
+          );
         }
       }
       min={-100}
@@ -302,7 +347,16 @@ function makeSettingsLabels(
       label={ LL().LayerSettings.FontStyle() }
       onChange={(v) => {
         updateProp(props.id, ['rendererParameters', 'default', 'fontStyle'], v);
-        updateProp(props.id, ['rendererParameters', 'specific'], {});
+        // Update the fontStyle properties for each "specific" parameters
+        setLayersDescriptionStoreBase(
+          produce((draft: LayersDescriptionStoreType) => {
+            const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
+            Object.keys((layer.rendererParameters as LabelsParameters).specific).forEach((k) => {
+              // eslint-disable-next-line no-param-reassign
+              layer.rendererParameters.specific[+k].fontStyle = value;
+            });
+          }),
+        );
       }}
       value={rendererParameters.default.fontStyle}
     >
@@ -313,7 +367,16 @@ function makeSettingsLabels(
       label={ LL().LayerSettings.FontWeight() }
       onChange={(v) => {
         updateProp(props.id, ['rendererParameters', 'default', 'fontWeight'], v);
-        updateProp(props.id, ['rendererParameters', 'specific'], {});
+        // Update the fontWeight properties for each "specific" parameters
+        setLayersDescriptionStoreBase(
+          produce((draft: LayersDescriptionStoreType) => {
+            const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
+            Object.keys((layer.rendererParameters as LabelsParameters).specific).forEach((k) => {
+              // eslint-disable-next-line no-param-reassign
+              layer.rendererParameters.specific[+k].fontWeight = v;
+            });
+          }),
+        );
       }}
       value={rendererParameters.default.fontWeight}
     >
@@ -324,12 +387,18 @@ function makeSettingsLabels(
       label={ LL().LayerSettings.BufferAroundText() }
       checked={rendererParameters.default.halo !== undefined}
       onChange={(v) => {
-        if (v) {
-          updateProp(props.id, ['rendererParameters', 'default', 'halo'], { color: '#ffffff', width: 2 });
-        } else {
-          updateProp(props.id, ['rendererParameters', 'default', 'halo'], undefined);
-        }
-        updateProp(props.id, ['rendererParameters', 'specific'], {});
+        const value = v ? { color: '#ffffff', width: 2 } : undefined;
+        updateProp(props.id, ['rendererParameters', 'default', 'halo'], value);
+        // Update the halo properties for each "specific" parameters
+        setLayersDescriptionStoreBase(
+          produce((draft: LayersDescriptionStoreType) => {
+            const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
+            Object.keys((layer.rendererParameters as LabelsParameters).specific).forEach((k) => {
+              // eslint-disable-next-line no-param-reassign
+              layer.rendererParameters.specific[+k].halo = value;
+            });
+          }),
+        );
       }}
     />
     <Show when={rendererParameters.default.halo !== undefined}>
@@ -342,7 +411,16 @@ function makeSettingsLabels(
             width: rendererParameters.default.halo!.width,
           };
           updateProp(props.id, ['rendererParameters', 'default', 'halo'], haloProps);
-          updateProp(props.id, ['rendererParameters', 'specific'], {});
+          // Update the halo properties for each "specific" parameters
+          setLayersDescriptionStoreBase(
+            produce((draft: LayersDescriptionStoreType) => {
+              const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
+              Object.keys((layer.rendererParameters as LabelsParameters).specific).forEach((k) => {
+                // eslint-disable-next-line no-param-reassign
+                layer.rendererParameters.specific[+k].halo = haloProps;
+              });
+            }),
+          );
         }}
       />
       <InputFieldNumber
@@ -355,7 +433,17 @@ function makeSettingsLabels(
               width: v,
             };
             updateProp(props.id, ['rendererParameters', 'default', 'halo'], haloProps);
-            updateProp(props.id, ['rendererParameters', 'specific'], {});
+            // Update the halo properties for each "specific" parameters
+            setLayersDescriptionStoreBase(
+              produce((draft: LayersDescriptionStoreType) => {
+                const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
+                Object.keys((layer.rendererParameters as LabelsParameters).specific)
+                  .forEach((k) => {
+                    // eslint-disable-next-line no-param-reassign
+                    layer.rendererParameters.specific[+k].halo = haloProps;
+                  });
+              }),
+            );
           }
         }
         min={0}
@@ -370,24 +458,43 @@ function makeSettingsLabels(
         debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v);
       }}
     />
-    <InputFieldButton
-      label={LL().LayerSettings.ResetLabelLocations()}
-      onClick={() => {
-        // Restore position of the labels
-        setLayersDescriptionStoreBase(
-          produce((draft: LayersDescriptionStoreType) => {
-            draft.layers.filter((l) => l.id === props.id).forEach((layerDescription) => {
-              layerDescription.data.features.forEach((f) => {
-                // eslint-disable-next-line no-param-reassign
-                f.geometry.coordinates[0] = f.geometry.originalCoordinates[0] as number;
-                // eslint-disable-next-line no-param-reassign
-                f.geometry.coordinates[1] = f.geometry.originalCoordinates[1] as number;
+    <div class="is-flex is-justify-content-space-around">
+      <InputFieldButton
+        label={LL().LayerSettings.ResetLabelLocations()}
+        onClick={() => {
+          // Restore position of the labels
+          setLayersDescriptionStoreBase(
+            produce((draft: LayersDescriptionStoreType) => {
+              draft.layers.filter((l) => l.id === props.id).forEach((layerDescription) => {
+                layerDescription.data.features.forEach((f) => {
+                  // eslint-disable-next-line no-param-reassign
+                  f.geometry.coordinates[0] = f.geometry.originalCoordinates[0] as number;
+                  // eslint-disable-next-line no-param-reassign
+                  f.geometry.coordinates[1] = f.geometry.originalCoordinates[1] as number;
+                });
               });
-            });
-          }),
-        );
-      }}
-    />
+            }),
+          );
+        }}
+      />
+      <InputFieldButton
+        label={LL().LayerSettings.ResetLabelContents()}
+        onClick={() => {
+          // Restore content of the labels
+          setLayersDescriptionStoreBase(
+            produce((draft: LayersDescriptionStoreType) => {
+              const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
+              Object.keys((layer.rendererParameters as LabelsParameters).specific)
+                .forEach((k) => {
+                  // eslint-disable-next-line no-param-reassign
+                  layer.rendererParameters.specific[+k].text = layer.data.features[+k]
+                    .properties[layer.rendererParameters.variable];
+                });
+            }),
+          );
+        }}
+      />
+    </div>
   </>;
 }
 

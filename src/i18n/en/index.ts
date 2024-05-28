@@ -607,6 +607,7 @@ const en = {
     AllowMovingSymbols: 'Allow moving symbols',
     Iterations: 'Iterations',
     ResetLabelLocations: 'Reset label locations',
+    ResetLabelContents: 'Reset label contents',
     ChangeClassification: 'Change classification options',
     FontFamily: 'Font family',
     FontSize: 'Font size',

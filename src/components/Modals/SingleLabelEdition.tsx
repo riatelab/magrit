@@ -45,16 +45,16 @@ export default function SingleLabelEdition(
   const defaultLabel = rendererParameters.default;
 
   const redraw = () => {
-    const layerElement = document.getElementById(layerId);
+    const layerElement = document.getElementById(layerId)!;
     layerElement.querySelectorAll('text').forEach((text) => {
       const projectedCoords = globalStore.projection(
         // eslint-disable-next-line no-underscore-dangle
-        (t as SVGTextElement & ID3Element).__data__.geometry.coordinates,
+        (text as SVGTextElement & ID3Element).__data__.geometry.coordinates,
       );
-      const offsetX = +(t.getAttribute('mgt:offset-x') || 0);
-      const offsetY = +(t.getAttribute('mgt:offset-y') || 0);
-      t.setAttribute('x', `${projectedCoords[0] + offsetX}`);
-      t.setAttribute('y', `${projectedCoords[1] + offsetY}`);
+      const offsetX = +(text.getAttribute('mgt:offset-x') || 0);
+      const offsetY = +(text.getAttribute('mgt:offset-y') || 0);
+      text.setAttribute('x', `${projectedCoords[0] + offsetX}`);
+      text.setAttribute('y', `${projectedCoords[1] + offsetY}`);
     });
   };
 

@@ -2197,6 +2197,10 @@ type RootTranslation = {
 		 */
 		ResetLabelLocations: string
 		/**
+		 * R​e​s​e​t​ ​l​a​b​e​l​ ​c​o​n​t​e​n​t​s
+		 */
+		ResetLabelContents: string
+		/**
 		 * C​h​a​n​g​e​ ​c​l​a​s​s​i​f​i​c​a​t​i​o​n​ ​o​p​t​i​o​n​s
 		 */
 		ChangeClassification: string
@@ -5365,6 +5369,10 @@ export type TranslationFunctions = {
 		 * Reset label locations
 		 */
 		ResetLabelLocations: () => LocalizedString
+		/**
+		 * Reset label contents
+		 */
+		ResetLabelContents: () => LocalizedString
 		/**
 		 * Change classification options
 		 */
