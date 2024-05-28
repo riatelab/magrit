@@ -76,6 +76,7 @@ The left menu is:
 
 .left-menu__section-container {
     padding: 10px 5px;
+    background-color: #fbfcff;
 }
 
 /* Import section in the left menu */

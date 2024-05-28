@@ -67,8 +67,15 @@ html.theme-dark select > option[disabled] {
     color: grey;
 }
 
-/* Overwrite some Bulma's default values */
+html.theme-dark .left-menu__section-container {
+    background-color: #262933; /* #191b21; */
+}
 
+html.theme-dark .left-menu__section-container li.is-active a {
+    background-color: hsl(222deg 13.89% 14.12%);
+}
+
+/* Overwrite some Bulma's default values */
 .modal-card-body {
     padding: 1em 1.5em !important;
 }
