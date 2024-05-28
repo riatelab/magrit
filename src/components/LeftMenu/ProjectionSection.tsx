@@ -229,7 +229,7 @@ export default function ProjectionSection(): JSX.Element {
       </div>
     </div>
     <Show when={globalStore.projection && mapStore.projection.type === 'd3'}>
-      <DetailsSummary summaryContent={LL().MapConfiguration.ShowProjectionParameters()}>
+      {/* <DetailsSummary summaryContent={LL().MapConfiguration.ShowProjectionParameters()}> */}
         <InputFieldRangeSlider
           label={LL().MapConfiguration.ProjectionCenterLambda()}
           value={mapStore.rotate[0]}
@@ -284,7 +284,7 @@ export default function ProjectionSection(): JSX.Element {
             step={1}
           />
         </Show>
-      </DetailsSummary>
+      {/* </DetailsSummary> */}
     </Show>
   </div>;
 }
