@@ -328,7 +328,6 @@ function OptionBackgroundRectangle(
 function FieldChangeValues(
   props: { legend: ProportionalSymbolsLegend, LL: Accessor<TranslationFunctions> },
 ): JSX.Element {
-  const styleInputElement = { width: '8.5em !important', 'font-size': '0.9rem' };
   return <div class="field">
     <label class="label" style={{ width: '30%' }}>
       { props.LL().Legend.Modal.ChooseValues() }
@@ -346,7 +345,7 @@ function FieldChangeValues(
       <For each={props.legend.values}>
         {
           (value, i) => <input
-            style={styleInputElement}
+            style={{ 'font-size': '0.9rem' }}
             type="number"
             min={0}
             step={1}
@@ -372,7 +371,6 @@ function FieldChangeMushroomValues(
     LL: Accessor<TranslationFunctions>,
   },
 ): JSX.Element {
-  const styleInputElement = { width: '8.5em !important', 'font-size': '0.9rem' };
   return <div class="field">
     <label class="label">{ props.LL().Legend.Modal.ChooseValues() }</label>
     <div class="control">
@@ -387,7 +385,7 @@ function FieldChangeMushroomValues(
       <For each={props.legend.values[props.which]}>
         {
           (value, i) => <input
-            style={styleInputElement}
+            style={{ 'font-size': '0.9rem' }}
             type="number"
             min={0}
             step={1}

@@ -133,7 +133,6 @@ export default function FormulaInput(
   const styleBadges = {
     'column-gap': '0.4em',
     'flex-wrap': 'wrap',
-    'font-size': '0.85rem !important',
     'row-gap': '0.4em',
   } as JSX.CSSProperties;
 
