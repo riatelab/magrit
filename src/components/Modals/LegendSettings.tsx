@@ -299,6 +299,7 @@ function OptionBackgroundRectangle(
         min={0}
         max={1}
         step={0.1}
+        strictMinMax={true}
       />
       <InputFieldColor
         label={ props.LL().Legend.Modal.BackgroundRectangleStrokeColor() }
@@ -312,6 +313,7 @@ function OptionBackgroundRectangle(
         min={0}
         max={1}
         step={0.1}
+        strictMinMax={true}
       />
       <InputFieldNumber
         label={ props.LL().Legend.Modal.BackgroundRectangleStrokeWidth() }
@@ -320,6 +322,7 @@ function OptionBackgroundRectangle(
         min={0}
         max={10}
         step={1}
+        strictMin={true}
       />
     </Show>
   </>;
@@ -537,78 +540,53 @@ function makeSettingsChoroplethLegend(
     <FieldText legend={legend} LL={LL} role={'subtitle'} />
     <FieldText legend={legend} LL={LL} role={'note'} />
     <FieldRoundDecimals legend={legend} LL={LL} />
-    <div class="field">
-      <label class="label">{ LL().Legend.Modal.BoxWidth() }</label>
-      <div class="control">
-        <input
-          class="input"
-          type="number"
-          value={ legend.boxWidth }
-          min={0}
-          max={100}
-          step={1}
-          onChange={(ev) => debouncedUpdateProps(legend.id, ['boxWidth'], +ev.target.value)}
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().Legend.Modal.BoxHeight() }</label>
-      <div class="control">
-        <input
-          class="input"
-          type="number"
-          value={ legend.boxHeight }
-          min={0}
-          max={100}
-          step={1}
-          onChange={(ev) => debouncedUpdateProps(legend.id, ['boxHeight'], +ev.target.value)}
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().Legend.Modal.BoxCornerRadius() }</label>
-      <div class="control">
-        <input
-          class="input"
-          type="number"
-          min={0}
-          max={100}
-          step={1}
-          value={ legend.boxCornerRadius }
-          onChange={(ev) => {
-            const radiusValue = +ev.target.value;
-            // Remove the tick if the radius is > 0
-            // (because the tick is interesting only for square / rectangular boxes)
-            if (radiusValue > 0 && legend.tick) {
-              updateProps(legend.id, ['tick'], false);
-            }
-            debouncedUpdateProps(legend.id, ['boxCornerRadius'], radiusValue);
-          }}
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">{ LL().Legend.Modal.BoxSpacing() }</label>
-      <div class="control">
-        <input
-          class="input"
-          type="number"
-          min={0}
-          max={100}
-          step={1}
-          value={ legend.boxSpacing }
-          onChange={(ev) => {
-            const spacingValue = +ev.target.value;
-            // Remove the tick if the spacing is > 0
-            // (because the tick is interesting only if boxes are adjacent)
-            if (spacingValue > 0 && legend.tick) {
-              updateProps(legend.id, ['tick'], false);
-            }
-            debouncedUpdateProps(legend.id, ['boxSpacing'], spacingValue);
-          }}
-        />
-      </div>
-    </div>
+    <InputFieldNumber
+      label={ LL().Legend.Modal.BoxWidth() }
+      value={ legend.boxWidth }
+      min={0}
+      max={100}
+      step={1}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['boxWidth'], v)}
+    />
+    <InputFieldNumber
+      label={ LL().Legend.Modal.BoxHeight() }
+      value={ legend.boxHeight }
+      min={0}
+      max={100}
+      step={1}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['boxHeight'], v)}
+    />
+    <InputFieldNumber
+      label={ LL().Legend.Modal.BoxCornerRadius() }
+      value={ legend.boxCornerRadius }
+      min={0}
+      max={100}
+      step={1}
+      strictMin={true}
+      onChange={(v) => {
+        // Remove the tick if the radius is > 0
+        // (because the tick is interesting only for square / rectangular boxes)
+        if (v > 0 && legend.tick) {
+          updateProps(legend.id, ['tick'], false);
+        }
+        debouncedUpdateProps(legend.id, ['boxCornerRadius'], v);
+      }}
+    />
+    <InputFieldNumber
+      label={ LL().Legend.Modal.BoxSpacing() }
+      value={ legend.boxSpacing }
+      min={0}
+      max={100}
+      step={1}
+      onChange={(v) => {
+        // Remove the tick if the spacing is > 0
+        // (because the tick is interesting only if boxes are adjacent)
+        if (v > 0 && legend.tick) {
+          updateProps(legend.id, ['tick'], false);
+        }
+        debouncedUpdateProps(legend.id, ['boxSpacing'], v);
+      }}
+    />
     <div class="field">
       <label class="label">{ LL().Legend.Modal.DisplayStroke() }</label>
       <div class="control">
@@ -638,20 +616,14 @@ function makeSettingsChoroplethLegend(
       </div>
     </Show>
     <Show when={hasNoData}>
-      <div class="field">
-        <label class="label">{ LL().Legend.Modal.BoxSpacingNoData() }</label>
-        <div class="control">
-          <input
-            class="input"
-            type="number"
-            min={0}
-            max={100}
-            step={1}
-            value={ legend.boxSpacingNoData }
-            onChange={(ev) => debouncedUpdateProps(legend.id, ['boxSpacingNoData'], +ev.target.value)}
-          />
-        </div>
-      </div>
+      <InputFieldNumber
+        label={LL().Legend.Modal.BoxSpacingNoData()}
+        value={legend.boxSpacingNoData}
+        min={0}
+        max={100}
+        step={1}
+        onChange={(v) => debouncedUpdateProps(legend.id, ['boxSpacingNoData'], v)}
+      />
       <div class="field">
         <label class="label">{ LL().Legend.Modal.NoDataLabel() }</label>
         <div class="control">
@@ -723,24 +695,19 @@ function makeSettingsDiscontinuityLegend(
   ] = createSignal<boolean>(false);
 
   return <>
-   <FieldText legend={legend} LL={LL} role={'title'} />
-   <FieldText legend={legend} LL={LL} role={'subtitle'} />
-   <FieldText legend={legend} LL={LL} role={'note'} />
-   <FieldRoundDecimals legend={legend} LL={LL} />
-   <div class="field">
-     <label class="label">{ LL().Legend.Modal.LineLength() }</label>
-     <div class="control">
-       <input
-         class="input"
-         type="number"
-         value={ legend.lineLength }
-         min={0}
-         max={100}
-         step={1}
-         onChange={(ev) => debouncedUpdateProps(legend.id, ['lineLength'], +ev.target.value)}
-       />
-     </div>
-   </div>
+    <FieldText legend={legend} LL={LL} role={'title'} />
+    <FieldText legend={legend} LL={LL} role={'subtitle'} />
+    <FieldText legend={legend} LL={LL} role={'note'} />
+    <FieldRoundDecimals legend={legend} LL={LL} />
+    <InputFieldNumber
+      label={LL().Legend.Modal.LineLength()}
+      value={legend.lineLength}
+      min={5}
+      max={100}
+      step={1}
+      strictMinMax={true}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['lineLength'], v)}
+    />
     <div class="field">
       <label class="label">{ LL().Legend.Modal.LegendOrientation() }</label>
       <div class="control">

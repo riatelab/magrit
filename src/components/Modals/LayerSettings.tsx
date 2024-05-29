@@ -212,6 +212,7 @@ function makeSettingsLabels(
         min={1}
         max={100}
         step={1}
+        strictMin={true}
       />
     </Show>
     <Show when={isProportional}>
@@ -249,9 +250,10 @@ function makeSettingsLabels(
             v,
           );
         }}
-        min={0}
-        max={100}
+        min={1}
+        max={200}
         step={1}
+        strictMin={true}
       />
     </Show>
     <InputFieldSelect
@@ -449,6 +451,7 @@ function makeSettingsLabels(
         min={0}
         max={10}
         step={1}
+        strictMin={true}
       />
     </Show>
     <InputFieldCheckbox
@@ -623,7 +626,7 @@ function makeSettingsDefaultPoint(
         value={(props.rendererParameters as ProportionalSymbolsParameters).referenceValue}
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'referenceValue'], v)}
         min={1}
-        max={99999999999}
+        max={Infinity}
         step={0.1}
       />
     </Show>
@@ -802,6 +805,7 @@ function makeSettingsDefaultPoint(
       min={0}
       max={1}
       step={0.1}
+      strictMinMax={true}
     />
     <InputFieldNumber
       label={LL().LayerSettings.StrokeOpacity()}
@@ -810,6 +814,7 @@ function makeSettingsDefaultPoint(
       min={0}
       max={1}
       step={0.1}
+      strictMinMax={true}
     />
     <InputFieldNumber
       label={LL().LayerSettings.StrokeWidth()}
@@ -883,7 +888,7 @@ function makeSettingsDefaultPoint(
         value={(props.rendererParameters as MushroomsParameters).bottom.referenceValue}
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'referenceValue'], v)}
         min={1}
-        max={99999999999}
+        max={Infinity}
         step={0.1}
       />
       <InputFieldColor
@@ -948,6 +953,7 @@ function makeSettingsDefaultPoint(
           min={1}
           max={1000}
           step={1}
+          strictMinMax={true}
           onChange={(v) => {
             debouncedUpdateProp(props.id, ['rendererParameters', 'iterations'], v);
             // Compute position of the symbols with the new value
@@ -1196,6 +1202,7 @@ function makeSettingsDefaultLine(
       min={0}
       max={1}
       step={0.1}
+      strictMinMax={true}
     />
     <Show when={
       props.renderer !== 'discontinuity'
@@ -1210,6 +1217,7 @@ function makeSettingsDefaultLine(
         min={0}
         max={10}
         step={0.1}
+        strictMin={true}
       />
     </Show>
     <InputFieldCheckbox
@@ -1238,7 +1246,7 @@ function makeSettingsDefaultLine(
         value={ (props.rendererParameters as LinksParameters).proportional!.referenceValue }
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'proportional', 'referenceValue'], v)}
         min={1}
-        max={1e12}
+        max={Infinity}
         step={0.5}
       />
     </Show>
@@ -1305,6 +1313,7 @@ function makeSettingsDefaultLine(
         min={1}
         max={180}
         step={1}
+        strictMinMax={true}
       />
       <InputFieldNumber
         label={ LL().LayerSettings.GraticuleStepY() }
@@ -1330,6 +1339,7 @@ function makeSettingsDefaultLine(
         min={1}
         max={180}
         step={1}
+        strictMinMax={true}
       />
     </Show>
     <Show when={
@@ -1556,6 +1566,7 @@ function makeSettingsDefaultPolygon(
       min={0}
       max={1}
       step={0.1}
+      strictMinMax={true}
     />
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeOpacity() }
@@ -1564,6 +1575,7 @@ function makeSettingsDefaultPolygon(
       min={0}
       max={1}
       step={0.1}
+      strictMinMax={true}
     />
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeWidth() }
@@ -1572,6 +1584,7 @@ function makeSettingsDefaultPolygon(
       min={0}
       max={10}
       step={0.1}
+      strictMin={true}
     />
     <Show when={props.renderer === 'categoricalChoropleth'}>
       <DetailsSummary

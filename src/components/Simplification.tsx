@@ -370,6 +370,7 @@ export default function Simplification(
           min={100}
           max={1e7}
           step={1e1}
+          strictMin={true}
         />
         <InputFieldRangeSlider
           label={LL().SimplificationModal.SimplificationFactor()}
