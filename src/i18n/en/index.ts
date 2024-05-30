@@ -709,9 +709,10 @@ const en = {
     Title: 'Simplification of geometries',
     QuantizationFactor: 'Quantization factor',
     SimplificationFactor: 'Simplification factor',
-    CountGeometries: '{geom} non-empty geometries, {pts} points',
+    CountGeometries: '{geom} geometries, {pts} points',
+    NullGeometries: '{{ null:0 geometry | 1 geometry | ?? geometries }} deleted by simplification',
     CheckSelfIntersection: 'Check self-intersection',
-    CountSelfIntersections: '{count} self-intersections detected',
+    CountSelfIntersections: '{{ count:0 self-intersection | 1 self-intersection | ?? self-intersections }} detected',
     PreventShapeRemoval: 'Prevent feature removal',
   },
   Fonts: {

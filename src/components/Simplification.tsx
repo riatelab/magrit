@@ -38,6 +38,7 @@ import '../styles/SimplificationModal.css';
 import '../styles/RangeSlider.css';
 
 interface SimplificationInfo {
+  id: number,
   name: string;
   color: string;
   polygons: number;
@@ -205,7 +206,7 @@ export default function Simplification(
   const [
     quantizationFactor,
     setQuantizationFactor,
-  ] = createSignal(1e7);
+  ] = createSignal('1e+7');
   const [
     checkIntersections,
     setCheckIntersections,
@@ -304,6 +305,7 @@ export default function Simplification(
             checkIntersections(),
           );
           return {
+            id: i,
             name: layerName,
             color: colors[i % colors.length],
             ...simplificationInfo,
@@ -336,7 +338,7 @@ export default function Simplification(
 
     function convertToQuantizedTopojson() {
       // When the quantization factor changes, we update the topology...
-      const qf = quantizationFactor();
+      const qf = +quantizationFactor();
       topo = topojson.topology(layers, qf);
       // ...and we simplify again based on the new topology
       simplify();
@@ -363,15 +365,46 @@ export default function Simplification(
   >
     <div class="is-flex">
       <div class="simplification-inner__parameters-container">
-        <InputFieldNumber
-          label={LL().SimplificationModal.QuantizationFactor()}
-          value={quantizationFactor()}
-          onChange={(v) => setQuantizationFactor(v)}
-          min={100}
-          max={1e7}
-          step={1e1}
-          strictMin={true}
-        />
+        <div class="field">
+          <label class="label">{LL().SimplificationModal.QuantizationFactor()}</label>
+          <div class="control">
+            <input
+              class="input"
+              type="number"
+              onChange={(e) => {
+                const value = +e.currentTarget.value;
+                if (+e.currentTarget.value < +e.currentTarget.min) {
+                  e.currentTarget.value = Number(e.currentTarget.min).toExponential();
+                } else if (+e.currentTarget.value > +e.currentTarget.max) {
+                  e.currentTarget.value = Number(e.currentTarget.max).toExponential();
+                } else if (value < +quantizationFactor()) {
+                  e.currentTarget.value = (+quantizationFactor() / 10).toExponential();
+                } else if (value > +quantizationFactor()) {
+                  e.currentTarget.value = (+quantizationFactor() * 10).toExponential();
+                } else {
+                  e.currentTarget.value = value.toExponential();
+                }
+                setQuantizationFactor(e.currentTarget.value);
+              }}
+              onBlur={(e) => {
+                const value = Number(e.currentTarget.value);
+                if (value < 1e2) {
+                  e.currentTarget.value = '1e2';
+                } else if (value > 1e10) {
+                  e.currentTarget.value = '1e10';
+                } else {
+                  e.currentTarget.value = value.toExponential();
+                }
+                setQuantizationFactor(e.currentTarget.value);
+              }}
+              value={quantizationFactor()}
+              min={1e2}
+              max={1e10}
+              step={1e2}
+              style={{ width: '200px' }}
+            />
+          </div>
+        </div>
         <InputFieldRangeSlider
           label={LL().SimplificationModal.SimplificationFactor()}
           value={simplificationFactor()}
@@ -382,9 +415,11 @@ export default function Simplification(
           step={0.0005}
         />
         <InputFieldCheckbox
-          label={ LL().SimplificationModal.CheckSelfIntersection() }
-          checked={ checkIntersections() }
-          onChange={(v) => { setCheckIntersections(v); }}
+          label={LL().SimplificationModal.CheckSelfIntersection()}
+          checked={checkIntersections()}
+          onChange={(v) => {
+            setCheckIntersections(v);
+          }}
         />
       </div>
       <div class="simplification-inner__layer-list-container">
@@ -393,28 +428,40 @@ export default function Simplification(
             <For each={stats()}>
               {
                 (si) => <li>
-                  <input type="checkbox" checked />
+                  <input type="checkbox" checked/>
                   <strong>{si.name}</strong>
                   <div
                     class="simplification-inner__color-box"
                     style={{ background: si.color }}
-                  ></div>
-                  <span>
+                   />
+                  <div>
                     {
                       LL().SimplificationModal.CountGeometries({
                         geom: si.polygons,
                         pts: si.vertices,
                       })
                     }
+                    <Show when={descriptions[si.id].data.features.length - si.polygons > 0}>
+                      ,&nbsp;
+                      <span class="has-text-danger">
+                      {
+                        LL().SimplificationModal.NullGeometries({
+                          null: descriptions[si.id].data.features.length - si.polygons,
+                        })
+                      }
+                      </span>
+                    </Show>
                     <Show when={si.selfIntersections}>
                       ,&nbsp;
+                      <span class="has-text-warning">
                       {
                         LL().SimplificationModal.CountSelfIntersections({
                           count: si.selfIntersections!.length,
                         })
                       }
+                      </span>
                     </Show>
-                    </span>
+                  </div>
                 </li>
               }
             </For>
@@ -423,7 +470,7 @@ export default function Simplification(
       </div>
     </div>
     <div class="simplification-inner__map-container">
-      <canvas style={{ background: 'white' }}></canvas>
+      <canvas style={{ background: 'white' }} />
     </div>
   </div>;
 }

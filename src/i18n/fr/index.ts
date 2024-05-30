@@ -709,9 +709,10 @@ const fr = {
     Title: 'Simplification des géométries',
     QuantizationFactor: 'Facteur de quantification',
     SimplificationFactor: 'Facteur de simplification',
-    CountGeometries: '{geom} géométries non nulles, {pts} points',
+    CountGeometries: '{geom} géométries, {pts} points',
+    NullGeometries: '{{ null:0 géométrie supprimée | 1 géométrie supprimée | ?? géométries supprimées }} par la simplification',
     CheckSelfIntersection: 'Vérifier les auto-intersections',
-    CountSelfIntersections: '{count} auto-intersections détectées',
+    CountSelfIntersections: '{{ count:0 auto-intersection détectée | 1 auto-intersection détectée | ?? auto-intersections détectées }}',
     PreventShapeRemoval: 'Empêcher la suppression d\'entités',
   },
   Fonts: {

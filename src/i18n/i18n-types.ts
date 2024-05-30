@@ -2569,20 +2569,23 @@ type RootTranslation = {
 		 */
 		SimplificationFactor: string
 		/**
-		 * {​g​e​o​m​}​ ​n​o​n​-​e​m​p​t​y​ ​g​e​o​m​e​t​r​i​e​s​,​ ​{​p​t​s​}​ ​p​o​i​n​t​s
+		 * {​g​e​o​m​}​ ​g​e​o​m​e​t​r​i​e​s​,​ ​{​p​t​s​}​ ​p​o​i​n​t​s
 		 * @param {unknown} geom
 		 * @param {unknown} pts
 		 */
 		CountGeometries: RequiredParams<'geom' | 'pts'>
 		/**
+		 * {​{​0​ ​g​e​o​m​e​t​r​y​|​1​ ​g​e​o​m​e​t​r​y​|​?​?​ ​g​e​o​m​e​t​r​i​e​s​}​}​ ​d​e​l​e​t​e​d​ ​b​y​ ​s​i​m​p​l​i​f​i​c​a​t​i​o​n
+		 */
+		NullGeometries: string
+		/**
 		 * C​h​e​c​k​ ​s​e​l​f​-​i​n​t​e​r​s​e​c​t​i​o​n
 		 */
 		CheckSelfIntersection: string
 		/**
-		 * {​c​o​u​n​t​}​ ​s​e​l​f​-​i​n​t​e​r​s​e​c​t​i​o​n​s​ ​d​e​t​e​c​t​e​d
-		 * @param {unknown} count
+		 * {​{​0​ ​s​e​l​f​-​i​n​t​e​r​s​e​c​t​i​o​n​|​1​ ​s​e​l​f​-​i​n​t​e​r​s​e​c​t​i​o​n​|​?​?​ ​s​e​l​f​-​i​n​t​e​r​s​e​c​t​i​o​n​s​}​}​ ​d​e​t​e​c​t​e​d
 		 */
-		CountSelfIntersections: RequiredParams<'count'>
+		CountSelfIntersections: string
 		/**
 		 * P​r​e​v​e​n​t​ ​f​e​a​t​u​r​e​ ​r​e​m​o​v​a​l
 		 */
@@ -5750,17 +5753,21 @@ export type TranslationFunctions = {
 		 */
 		SimplificationFactor: () => LocalizedString
 		/**
-		 * {geom} non-empty geometries, {pts} points
+		 * {geom} geometries, {pts} points
 		 */
 		CountGeometries: (arg: { geom: unknown, pts: unknown }) => LocalizedString
+		/**
+		 * {{0 geometry|1 geometry|?? geometries}} deleted by simplification
+		 */
+		NullGeometries: (arg: { null: number | string | boolean }) => LocalizedString
 		/**
 		 * Check self-intersection
 		 */
 		CheckSelfIntersection: () => LocalizedString
 		/**
-		 * {count} self-intersections detected
+		 * {{0 self-intersection|1 self-intersection|?? self-intersections}} detected
 		 */
-		CountSelfIntersections: (arg: { count: unknown }) => LocalizedString
+		CountSelfIntersections: (arg: { count: number | string | boolean }) => LocalizedString
 		/**
 		 * Prevent feature removal
 		 */
