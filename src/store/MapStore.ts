@@ -95,10 +95,13 @@ const getDefaultClipExtent = () => (
  */
 export const getCurrentExtent = (): number[][] => {
   try {
-    const topLeft = globalStore.projection.invert([20, 20]);
+    const topLeft = globalStore.projection.invert([10, 10]);
     const bottomRight = globalStore.projection.invert(
-      [mapStore.mapDimensions.width - 20, mapStore.mapDimensions.height - 20],
+      [mapStore.mapDimensions.width - 10, mapStore.mapDimensions.height - 10],
     );
+    if (topLeft[0] > 180 || topLeft[0] < -180 || topLeft[1] > 90 || topLeft[1] < -90) {
+      return [[-179.0, 85], [179.0, -85]];
+    }
     return [topLeft, bottomRight];
   } catch (e) {
     return [[-179.0, 85], [179.0, -85]];
@@ -353,8 +356,8 @@ createEffect(
         if (currentExtent && currentExtent[0] && currentExtent[1]) {
           projection.fitExtent(
             [
-              [20, 20],
-              [mapStore.mapDimensions.width - 20, mapStore.mapDimensions.height - 20],
+              [-10, -10],
+              [mapStore.mapDimensions.width + 10, mapStore.mapDimensions.height + 10],
             ],
             {
               type: 'FeatureCollection',
