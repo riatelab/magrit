@@ -539,7 +539,9 @@ function makeSettingsChoroplethLegend(
     <FieldText legend={legend} LL={LL} role={'title'} />
     <FieldText legend={legend} LL={LL} role={'subtitle'} />
     <FieldText legend={legend} LL={LL} role={'note'} />
-    <FieldRoundDecimals legend={legend} LL={LL} />
+    <Show when={legend.type !== 'categoricalChoropleth'}>
+      <FieldRoundDecimals legend={legend} LL={LL} />
+    </Show>
     <InputFieldNumber
       label={ LL().Legend.Modal.BoxWidth() }
       value={ legend.boxWidth }
