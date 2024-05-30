@@ -84,6 +84,8 @@ const makeDrawingInstructions = (
   object: 'Rectangle' | 'Line' | 'Text' | 'ScaleBar' | 'NorthArrow',
 ): string => `${LL().LayoutFeatures.DrawingInstructions[object]()}\n${LL().LayoutFeatures.DrawingInstructions.PressEscToCancel()}`;
 
+let currentCleanUp;
+
 const createRectangle = (LL: Accessor<TranslationFunctions>) => {
   toast.success(makeDrawingInstructions(LL, 'Rectangle'), {
     duration: Infinity,
@@ -157,19 +159,28 @@ const createRectangle = (LL: Accessor<TranslationFunctions>) => {
     }
   };
 
+  const cleanUpFunction = () => {
+    // Remove toast
+    toast.dismiss();
+    // Remove event listeners
+    svgElement.removeEventListener('click', onClick);
+    svgElement.removeEventListener('mousemove', onMove);
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    document.body.removeEventListener('keydown', onEscape);
+    // Reset cursor
+    svgElement.style.cursor = 'default';
+    // Remove temporary points
+    svgElement.querySelectorAll('.temporary-point').forEach((elem) => elem.remove());
+    removeTemporaryRects();
+    // Reset clean up function
+    currentCleanUp = undefined;
+  };
+
+  currentCleanUp = cleanUpFunction;
+
   const onEscape = (ev: KeyboardEvent) => {
     if (ev.key === 'Escape') {
-      // Remove toast
-      toast.dismiss();
-      // Remove event listeners
-      svgElement.removeEventListener('click', onClick);
-      svgElement.removeEventListener('mousemove', onMove);
-      document.body.removeEventListener('keydown', onEscape);
-      // Reset cursor
-      svgElement.style.cursor = 'default';
-      // Remove temporary points
-      svgElement.querySelectorAll('.temporary-point').forEach((elem) => elem.remove());
-      removeTemporaryRects();
+      cleanUpFunction();
     }
   };
   svgElement.style.cursor = 'crosshair';
@@ -283,6 +294,29 @@ const createLine = (LL: Accessor<TranslationFunctions>) => {
     }
   };
 
+  const cleanUpFunction = () => {
+    // Remove toast
+    toast.dismiss();
+    // Remove event listeners
+    svgElement.removeEventListener('click', onClick);
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    svgElement.removeEventListener('dblclick', onDblClick);
+    svgElement.removeEventListener('mousemove', onMove);
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    document.body.removeEventListener('keydown', onEscape);
+    // Reset cursor
+    svgElement.style.cursor = 'default';
+    // Remove temporary points
+    svgElement.querySelectorAll('.temporary-point')
+      .forEach((elem) => elem.remove());
+    // Remove the temporary line
+    removeTemporaryLines();
+    // Reset clean up function
+    currentCleanUp = undefined;
+  };
+
+  currentCleanUp = cleanUpFunction;
+
   const onDblClick = () => {
     // Remove last point (the one that was added by the double click)
     pts.pop();
@@ -298,20 +332,9 @@ const createLine = (LL: Accessor<TranslationFunctions>) => {
         pts.pop();
       }
     }
-    // Remove toast
-    toast.dismiss();
-    // Remove event listeners
-    svgElement.removeEventListener('click', onClick);
-    svgElement.removeEventListener('dblclick', onDblClick);
-    svgElement.removeEventListener('mousemove', onMove);
-    document.body.removeEventListener('keydown', onEscape); // eslint-disable-line @typescript-eslint/no-use-before-define
-    // Reset cursor
-    svgElement.style.cursor = 'default';
-    // Remove temporary points
-    svgElement.querySelectorAll('.temporary-point')
-      .forEach((elem) => elem.remove());
-    // Remove the temporary line
-    removeTemporaryLines();
+    // Clean up everything
+    cleanUpFunction();
+
     // Create the layout feature
     const lineDescription = {
       id: generateIdLayoutFeature(),
@@ -336,20 +359,7 @@ const createLine = (LL: Accessor<TranslationFunctions>) => {
   };
   const onEscape = (ev: KeyboardEvent) => {
     if (ev.key === 'Escape') {
-      // Remove toast
-      toast.dismiss();
-      // Remove event listeners
-      svgElement.removeEventListener('click', onClick);
-      svgElement.removeEventListener('dblclick', onDblClick);
-      svgElement.removeEventListener('mousemove', onMove);
-      document.body.removeEventListener('keydown', onEscape);
-      // Reset cursor
-      svgElement.style.cursor = 'default';
-      // Remove temporary points
-      svgElement.querySelectorAll('.temporary-point')
-        .forEach((elem) => elem.remove());
-      // Remove the temporary line
-      removeTemporaryLines();
+      cleanUpFunction();
     }
   };
   svgElement.style.cursor = 'crosshair';
@@ -373,6 +383,23 @@ const createNorthArrow = (LL: Accessor<TranslationFunctions>) => {
   });
 
   const svgElement = getTargetSvg();
+
+  const cleanUpFunction = () => {
+    // Remove toast
+    toast.dismiss();
+    // Remove event listeners
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    svgElement.removeEventListener('click', onClick);
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    document.body.removeEventListener('keydown', onEscape);
+    // Reset cursor
+    svgElement.style.cursor = 'default';
+    // Reset clean up function
+    currentCleanUp = undefined;
+  };
+
+  currentCleanUp = cleanUpFunction;
+
   const onClick = (ev: MouseEvent) => {
     // Point coordinates in SVG space
     const cursorPt = getSvgCoordinates(svgElement, ev);
@@ -400,24 +427,12 @@ const createNorthArrow = (LL: Accessor<TranslationFunctions>) => {
       ),
     );
 
-    // Remove toast
-    toast.dismiss();
-
-    // Clean up everything
-    document.body.removeEventListener('keydown', onEscape); // eslint-disable-line @typescript-eslint/no-use-before-define
-    svgElement.removeEventListener('click', onClick);
-    svgElement.style.cursor = 'default';
+    cleanUpFunction();
   };
 
   const onEscape = (ev: KeyboardEvent) => {
     if (ev.key === 'Escape') {
-      // Remove toast
-      toast.dismiss();
-      // Remove event listeners
-      svgElement.removeEventListener('click', onClick);
-      document.body.removeEventListener('keydown', onEscape);
-      // Reset cursor
-      svgElement.style.cursor = 'default';
+      cleanUpFunction();
     }
   };
 
@@ -440,6 +455,23 @@ const createScaleBar = (LL: Accessor<TranslationFunctions>) => {
   });
 
   const svgElement = getTargetSvg();
+
+  const cleanUpFunction = () => {
+    // Remove toast
+    toast.dismiss();
+    // Remove event listeners
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    svgElement.removeEventListener('click', onClick);
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    document.body.removeEventListener('keydown', onEscape);
+    // Reset cursor
+    svgElement.style.cursor = 'default';
+    // Reset clean up function
+    currentCleanUp = undefined;
+  };
+
+  currentCleanUp = cleanUpFunction;
+
   const onClick = (ev: MouseEvent) => {
     // Point coordinates in SVG space
     const cursorPt = getSvgCoordinates(svgElement, ev);
@@ -471,24 +503,12 @@ const createScaleBar = (LL: Accessor<TranslationFunctions>) => {
       ),
     );
 
-    // Remove toast
-    toast.dismiss();
-
-    // Clean up everything
-    document.body.removeEventListener('keydown', onEscape); // eslint-disable-line @typescript-eslint/no-use-before-define
-    svgElement.removeEventListener('click', onClick);
-    svgElement.style.cursor = 'default';
+    cleanUpFunction();
   };
 
   const onEscape = (ev: KeyboardEvent) => {
     if (ev.key === 'Escape') {
-      // Remove toast
-      toast.dismiss();
-      // Remove event listeners
-      svgElement.removeEventListener('click', onClick);
-      document.body.removeEventListener('keydown', onEscape);
-      // Reset cursor
-      svgElement.style.cursor = 'default';
+      cleanUpFunction();
     }
   };
 
@@ -511,12 +531,26 @@ const createText = (LL: Accessor<TranslationFunctions>) => {
   });
 
   const svgElement = getTargetSvg();
+
+  const cleanUpFunction = () => {
+    // Remove toast
+    toast.dismiss();
+    // Remove event listeners
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    svgElement.removeEventListener('click', onClick);
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    document.body.removeEventListener('keydown', onEscape);
+    // Reset cursor
+    svgElement.style.cursor = 'default';
+    // Reset clean up function
+    currentCleanUp = undefined;
+  };
+
+  currentCleanUp = cleanUpFunction;
+
   const onClick = (ev: MouseEvent) => {
     // Point coordinates in SVG space
     const cursorPt = getSvgCoordinates(svgElement, ev);
-
-    // Remove toast
-    toast.dismiss();
 
     // Create the text
     const textDescription = {
@@ -544,21 +578,12 @@ const createText = (LL: Accessor<TranslationFunctions>) => {
       ),
     );
 
-    // Clean up everything
-    document.body.removeEventListener('keydown', onEscape); // eslint-disable-line @typescript-eslint/no-use-before-define
-    svgElement.removeEventListener('click', onClick);
-    svgElement.style.cursor = 'default';
+    cleanUpFunction();
   };
 
   const onEscape = (ev: KeyboardEvent) => {
     if (ev.key === 'Escape') {
-      // Remove toast
-      toast.dismiss();
-      // Remove event listeners
-      svgElement.removeEventListener('click', onClick);
-      document.body.removeEventListener('keydown', onEscape);
-      // Reset cursor
-      svgElement.style.cursor = 'default';
+      cleanUpFunction();
     }
   };
 
@@ -569,7 +594,7 @@ const createText = (LL: Accessor<TranslationFunctions>) => {
 
 const createFreeDraw = (
   LL: Accessor<TranslationFunctions>,
-  setIsFreeDrawing: Setter<boolean>,
+  setSelected: Setter<'line' | 'rectangle' | 'scaleBar' | 'northArrow' | 'text' | 'freeDraw' | undefined>,
 ) => {
   toast.success(LL().LayoutFeatures.DrawingInstructions.FreeDrawing(), {
     duration: Infinity,
@@ -603,8 +628,12 @@ const createFreeDraw = (
     // Remove temporary line
     removeTemporaryLines();
     // Reset "is drawing" state
-    setIsFreeDrawing(false);
+    setSelected(undefined);
+    // Reset clean up function
+    currentCleanUp = undefined;
   };
+
+  currentCleanUp = cleanUp;
 
   // Event listener for escape key
   const onEscape = (ev: KeyboardEvent) => {
@@ -679,6 +708,11 @@ export default function LayoutFeatures(): JSX.Element {
     isFreeDrawing,
     setIsFreeDrawing,
   ] = createSignal<boolean>(false);
+
+  const [
+    selected,
+    setSelected,
+  ] = createSignal<'rectangle' | 'line' | 'scaleBar' | 'northArrow' | 'text' | 'freeDraw' | undefined>(undefined);
 
   return <div class="layout-features-section">
     <div>
@@ -861,6 +895,10 @@ export default function LayoutFeatures(): JSX.Element {
             src={layoutFeatureArrow}
             alt={LL().LayoutFeatures.Line()}
             onClick={() => {
+              if (selected() && currentCleanUp) {
+                currentCleanUp();
+              }
+              setSelected('line');
               createLine(LL);
             }}
           />
@@ -870,6 +908,10 @@ export default function LayoutFeatures(): JSX.Element {
           title={LL().LayoutFeatures.Rectangle()}
           aria-label={LL().LayoutFeatures.Rectangle()}
           onClick={() => {
+            if (selected() && currentCleanUp) {
+              currentCleanUp();
+            }
+            setSelected('rectangle');
             createRectangle(LL);
           }}
         >
@@ -918,6 +960,10 @@ export default function LayoutFeatures(): JSX.Element {
           title={LL().LayoutFeatures.NorthArrow()}
           aria-label={LL().LayoutFeatures.NorthArrow()}
           onClick={() => {
+            if (selected() && currentCleanUp) {
+              currentCleanUp();
+            }
+            setSelected('northArrow');
             createNorthArrow(LL);
           }}
         >
@@ -932,6 +978,10 @@ export default function LayoutFeatures(): JSX.Element {
           title={LL().LayoutFeatures.ScaleBar()}
           aria-label={LL().LayoutFeatures.ScaleBar()}
           onClick={() => {
+            if (selected() && currentCleanUp) {
+              currentCleanUp();
+            }
+            setSelected('scaleBar');
             createScaleBar(LL);
           }}
         >
@@ -946,6 +996,10 @@ export default function LayoutFeatures(): JSX.Element {
           title={LL().LayoutFeatures.Text()}
           aria-label={LL().LayoutFeatures.Text()}
           onClick={() => {
+            if (selected() && currentCleanUp) {
+              currentCleanUp();
+            }
+            setSelected('text');
             createText(LL);
           }}
         >
@@ -978,16 +1032,18 @@ export default function LayoutFeatures(): JSX.Element {
         <button
           classList={{
             unstyled: true,
-            'is-outlined': isFreeDrawing(),
-            'is-warning': isFreeDrawing(),
+            'is-outlined': selected() === 'freeDraw',
+            'is-warning': selected() === 'freeDraw',
           }}
           title={LL().LayoutFeatures.FreeDrawing()}
           aria-label={LL().LayoutFeatures.FreeDrawing()}
           onClick={() => {
-            setIsFreeDrawing(!isFreeDrawing());
-            if (isFreeDrawing()) {
-              createFreeDraw(LL, setIsFreeDrawing);
+            if (selected() !== 'freeDraw') {
+              if (currentCleanUp) currentCleanUp();
+              setSelected('freeDraw');
+              createFreeDraw(LL, setSelected);
             } else {
+              setSelected(undefined);
               // Dispatch keyboard event (escape) to remove the free drawing behavior
               document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
             }
