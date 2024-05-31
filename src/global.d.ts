@@ -1065,6 +1065,13 @@ export enum ScaleBarBehavior {
   geographicSize = 'geographicSize',
 }
 
+export enum ScaleBarMeasureLocation {
+  // The distance is measured on the center of the map
+  centerMap = 'centerMap',
+  // The distance is measured under the scale bar
+  underScaleBar = 'underScaleBar',
+}
+
 export interface ScaleBar extends LayoutFeatureBase {
   type: LayoutFeatureType.ScaleBar,
   // The width of the scale bar (in px)
@@ -1093,6 +1100,9 @@ export interface ScaleBar extends LayoutFeatureBase {
   // or its geographic size (the distance it represents)
   // when the map is zoomed in or out
   behavior: ScaleBarBehavior,
+  // Whether the distance is measured on the center of the map
+  // or under the scale bar
+  measureLocation: ScaleBarMeasureLocation,
 }
 
 export interface Line extends LayoutFeatureBase {

@@ -712,6 +712,18 @@ type RootTranslation = {
 			 */
 			ScaleBarGeographicSize: string
 			/**
+			 * L​o​c​a​t​i​o​n​ ​o​f​ ​t​h​e​ ​s​c​a​l​e​ ​b​a​r​ ​m​e​a​s​u​r​e
+			 */
+			ScaleBarMeasureLocation: string
+			/**
+			 * A​t​ ​t​h​e​ ​c​e​n​t​e​r​ ​o​f​ ​t​h​e​ ​m​a​p
+			 */
+			ScaleBarMeasureLocationCenterMap: string
+			/**
+			 * U​n​d​e​r​ ​t​h​e​ ​s​c​a​l​e​ ​b​a​r
+			 */
+			ScaleBarMeasureLocationUnderScaleBar: string
+			/**
 			 * D​i​s​t​a​n​c​e​ ​u​n​i​t
 			 */
 			Units: string
@@ -3929,6 +3941,18 @@ export type TranslationFunctions = {
 			 * Fixed distance (in distance unit), size (in px) computed dynamically
 			 */
 			ScaleBarGeographicSize: () => LocalizedString
+			/**
+			 * Location of the scale bar measure
+			 */
+			ScaleBarMeasureLocation: () => LocalizedString
+			/**
+			 * At the center of the map
+			 */
+			ScaleBarMeasureLocationCenterMap: () => LocalizedString
+			/**
+			 * Under the scale bar
+			 */
+			ScaleBarMeasureLocationUnderScaleBar: () => LocalizedString
 			/**
 			 * Distance unit
 			 */

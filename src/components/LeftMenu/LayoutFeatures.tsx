@@ -58,6 +58,7 @@ import ImageSymbolSelection from '../Modals/ImageSymbolSelection.tsx';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import InputFieldText from '../Inputs/InputText.tsx';
 
 // Types / Interfaces
 import type {
@@ -72,19 +73,17 @@ import type {
 
 // Enums
 import {
-  DistanceUnit,
-  LayoutFeatureType,
-  ScaleBarBehavior,
-  ScaleBarStyle,
+  DistanceUnit, LayoutFeatureType,
+  ScaleBarBehavior, ScaleBarStyle,
+  ScaleBarMeasureLocation,
 } from '../../global.d';
-import InputFieldText from '../Inputs/InputText.tsx';
 
 const makeDrawingInstructions = (
   LL: Accessor<TranslationFunctions>,
   object: 'Rectangle' | 'Line' | 'Text' | 'ScaleBar' | 'NorthArrow',
 ): string => `${LL().LayoutFeatures.DrawingInstructions[object]()}\n${LL().LayoutFeatures.DrawingInstructions.PressEscToCancel()}`;
 
-let currentCleanUp;
+let currentCleanUp: () => void | undefined;
 
 const createRectangle = (LL: Accessor<TranslationFunctions>) => {
   toast.success(makeDrawingInstructions(LL, 'Rectangle'), {
@@ -493,6 +492,7 @@ const createScaleBar = (LL: Accessor<TranslationFunctions>) => {
       style: ScaleBarStyle.lineWithTicksOnTop,
       backgroundRect: { visible: false } as BackgroundRect,
       behavior: 'absoluteSize' as ScaleBarBehavior,
+      measureLocation: ScaleBarMeasureLocation.centerMap,
     } as ScaleBar;
 
     setLayersDescriptionStore(
@@ -703,11 +703,6 @@ const createFreeDraw = (
 
 export default function LayoutFeatures(): JSX.Element {
   const { LL } = useI18nContext();
-
-  const [
-    isFreeDrawing,
-    setIsFreeDrawing,
-  ] = createSignal<boolean>(false);
 
   const [
     selected,

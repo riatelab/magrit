@@ -187,13 +187,26 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
       100,
     );
     // We need to compute the distance for the given width.
-    // Geo coordinates of pt1 and pt2:
-    const left = globalStore.projection
-      .invert(props.position);
-    const right = globalStore.projection
-      .invert([props.position[0] + props.width, props.position[1]]);
-    // Compute the distance between the two points
-    const dist = sphericalLawOfCosine(left, right);
+    // Geo coordinates of pt1 and pt2, given the value of
+    // the measureLocation property:
+    let dist;
+    if (props.measureLocation === 'underScaleBar') {
+      const left = globalStore.projection
+        .invert(props.position);
+      const right = globalStore.projection
+        .invert([props.position[0] + props.width, props.position[1]]);
+      // Compute the distance between the two points
+      dist = sphericalLawOfCosine(left, right);
+    } else { // measureLocation === 'centerMap'
+      const { width, height } = mapStore.mapDimensions;
+      const center = [width / 2, height];
+      const left = globalStore.projection
+        .invert([center[0] - props.width / 2, center[1]]);
+      const right = globalStore.projection
+        .invert([center[0] + props.width / 2, center[1]]);
+      // Compute the distance between the two points
+      dist = sphericalLawOfCosine(left, right);
+    }
     setLayersDescriptionStore(
       'layoutFeaturesAndLegends',
       (f: LayoutFeature | Legend) => f.id === props.id,
@@ -217,6 +230,7 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
         props.position,
         props.width,
         props.behavior,
+        props.measureLocation,
         mapStore.scale,
         mapStore.translate,
         globalStore.projection,
@@ -229,13 +243,26 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
           // The scale bar is always the same size (in pixels) no matter the zoom level
           // but we need to recompute the displayed distance
           // We need to compute the distance for the given width.
-          // Geo coordinates of pt1 and pt2:
-          const left = globalStore.projection
-            .invert(props.position);
-          const right = globalStore.projection
-            .invert([props.position[0] + props.width, props.position[1]]);
-          // Compute the distance between the two points
-          const distance = sphericalLawOfCosine(left, right);
+          // Geo coordinates of pt1 and pt2, given the value of
+          // the measureLocation property:
+          let distance;
+          if (props.measureLocation === 'underScaleBar') {
+            const left = globalStore.projection
+              .invert(props.position);
+            const right = globalStore.projection
+              .invert([props.position[0] + props.width, props.position[1]]);
+            // Compute the distance between the two points
+            distance = sphericalLawOfCosine(left, right);
+          } else { // measureLocation === 'centerMap'
+            const { width, height } = mapStore.mapDimensions;
+            const center = [width / 2, height];
+            const left = globalStore.projection
+              .invert([center[0] - props.width / 2, center[1]]);
+            const right = globalStore.projection
+              .invert([center[0] + props.width / 2, center[1]]);
+            // Compute the distance between the two points
+            distance = sphericalLawOfCosine(left, right);
+          }
           const tickValues = getTickValues(convertToUnit(distance, props.unit));
           setLayersDescriptionStore(
             'layoutFeaturesAndLegends',
@@ -276,13 +303,24 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
             // we need to set a default distance if the current distance is 0/NaN.
             handleNanDistance();
           }
-          // Geo coordinates of pt1 and pt2:
-          const left = globalStore.projection
-            .invert(props.position);
-          const right = globalStore.projection
-            .invert([props.position[0] + props.width, props.position[1]]);
-          // Compute the current distance between the two points
-          const currentDistance = sphericalLawOfCosine(left, right);
+          let currentDistance;
+          if (props.measureLocation === 'underScaleBar') {
+            const left = globalStore.projection
+              .invert(props.position);
+            const right = globalStore.projection
+              .invert([props.position[0] + props.width, props.position[1]]);
+            // Compute the distance between the two points
+            currentDistance = sphericalLawOfCosine(left, right);
+          } else { // measureLocation === 'centerMap'
+            const { width, height } = mapStore.mapDimensions;
+            const center = [width / 2, height];
+            const left = globalStore.projection
+              .invert([center[0] - props.width / 2, center[1]]);
+            const right = globalStore.projection
+              .invert([center[0] + props.width / 2, center[1]]);
+            // Compute the distance between the two points
+            currentDistance = sphericalLawOfCosine(left, right);
+          }
           // Compute the ratio between the target distance and the current distance
           const ratio = props.distance / currentDistance;
           // Compute the new width

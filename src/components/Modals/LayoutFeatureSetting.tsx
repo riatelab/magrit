@@ -10,8 +10,10 @@ import {
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Subcomponents
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import InputFieldRadio from '../Inputs/InputRadio.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
 import InputFieldTextarea from '../Inputs/InputTextarea.tsx';
@@ -32,12 +34,12 @@ import {
   type Line,
   type NorthArrow,
   type Rectangle,
-  type ScaleBar, ScaleBarBehavior,
+  type ScaleBar,
+  ScaleBarBehavior,
+  ScaleBarMeasureLocation,
   ScaleBarStyle,
   type Text,
 } from '../../global.d';
-import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
-import InputFieldRadio from '../Inputs/InputRadio.tsx';
 
 /**
  * Update a single property of a layout feature in the layersDescriptionStore,
@@ -201,6 +203,23 @@ function makeSettingsScaleBar(
       <option value={ScaleBarBehavior.geographicSize}>
         { LL().LayoutFeatures.Modal.ScaleBarGeographicSize() }
       </option>
+    </InputFieldSelect>
+    <InputFieldSelect
+      label={LL().LayoutFeatures.Modal.ScaleBarMeasureLocation()}
+      onChange={(value) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['measureLocation'],
+        value,
+      )}
+      value={ft.measureLocation}
+      width={250}
+    >
+     <option value={ScaleBarMeasureLocation.underScaleBar}>
+       { LL().LayoutFeatures.Modal.ScaleBarMeasureLocationUnderScaleBar() }
+     </option>
+     <option value={ScaleBarMeasureLocation.centerMap}>
+       { LL().LayoutFeatures.Modal.ScaleBarMeasureLocationCenterMap() }
+     </option>
     </InputFieldSelect>
     <InputFieldSelect
       label={ LL().LayoutFeatures.Modal.ScaleBarType() }
