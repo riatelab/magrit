@@ -318,7 +318,10 @@ export default function FunctionalitySelection(): JSX.Element {
     role="dialog"
   >
     <div class="modal-background" />
-    <div class="modal-card" style={{ width: 'min(70vw, 1300px)', height: '90vh' }}>
+    <div class="modal-card" style={{
+      width: !selectedFunctionality() ? 'min(95vw, 1260px)' : 'min(95vw, 920px)',
+      height: '90vh',
+    }}>
       <header class="modal-card-head">
         <Show when={!selectedFunctionality()}>
           <p class="modal-card-title">{ LL().PortrayalSelection.Title() }</p>
