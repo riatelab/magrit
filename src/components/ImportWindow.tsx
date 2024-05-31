@@ -622,6 +622,7 @@ export default function ImportWindow(): JSX.Element {
           <p>{ LL().ImportWindow.Instructions() }</p>
           <p>{LL().ImportWindow.SupportedVectorFormats()}</p>
           <p>{LL().ImportWindow.SupportedTabularFormats()}</p>
+          <p>{LL().ImportWindow.InstructionNotFolder()}</p>
         </MessageBlock>
         <div class="has-text-centered mb-4">
           <button

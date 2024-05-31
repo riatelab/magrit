@@ -259,6 +259,10 @@ type RootTranslation = {
 		 */
 		SupportedTabularFormats: string
 		/**
+		 * P​l​e​a​s​e​ ​n​o​t​e​ ​t​h​a​t​ ​y​o​u​ ​c​a​n​ ​o​n​l​y​ ​i​m​p​o​r​t​ ​f​i​l​e​s​,​ ​n​o​t​ ​f​o​l​d​e​r​s​.
+		 */
+		InstructionNotFolder: string
+		/**
 		 * A​n​a​l​y​z​i​n​g​ ​d​a​t​a​s​e​t​.​.​.
 		 */
 		AnalyzingDataset: string
@@ -3477,6 +3481,10 @@ export type TranslationFunctions = {
 		 * Supported tabular formats are: Excel (.xls, .xlsx), CSV (.csv), TSV (.tsv) and OpenDocument Spreadsheet (.ods).
 		 */
 		SupportedTabularFormats: () => LocalizedString
+		/**
+		 * Please note that you can only import files, not folders.
+		 */
+		InstructionNotFolder: () => LocalizedString
 		/**
 		 * Analyzing dataset...
 		 */

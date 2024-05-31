@@ -70,6 +70,15 @@ export function draggedElementsAreFiles(e: DragEvent): boolean {
   ) {
     return false;
   }
+  // TODO: investigate the use of https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItem/webkitGetAsEntry
+  //    to handle directories better than this:
+  if (
+    e.dataTransfer
+    && e.dataTransfer.files
+    && Array.from(e.dataTransfer.files).some((f) => f.size === 4096)
+  ) {
+    return false;
+  }
   return true;
 }
 

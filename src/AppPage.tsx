@@ -202,10 +202,15 @@ const dropHandler = (e: Event, LL: Accessor<TranslationFunctions>): void => {
   e.preventDefault();
   e.stopPropagation();
 
-  // Only files should trigger the opening of the drop overlay
-  if (!draggedElementsAreFiles(e as DragEvent)) return;
   // We dont want the user to be able to drop files while a project is reloading
   if (globalStore.isReloadingProject) return;
+
+  // Only files should trigger the opening of the drop overlay
+  if (!draggedElementsAreFiles(e as DragEvent)) {
+    toast.error(LL().ImportWindow.InstructionNotFolder());
+    setFileDropStore({ show: false, files: [] });
+    return;
+  }
 
   // Store the supported files in the fileDropStore
   // and display a toast message for the unsupported files
@@ -219,10 +224,15 @@ const dropHandler = (e: Event, LL: Accessor<TranslationFunctions>): void => {
     toast.error(LL().ImportWindow.UnsupportedFileFormat({ file }));
   });
 
+  if (fileDropStore.files.length === 0) {
+    // All the files are unsupported
+    setFileDropStore({ show: false });
+  }
+
   if (timeout) {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
-      // setOverlayDropStore({ show: false, files: [] });
+      // setFileDropStore({ show: false, files: [] });
       timeout = null;
     }, 500);
   }

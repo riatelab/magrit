@@ -73,6 +73,7 @@ const en = {
     Open: 'Open...',
     SupportedVectorFormats: 'Supported vector formats are: ESRI Shapefile (.shp, .shx, .dbf, .prj, .cpg), GeoPackage (.gpkg), GeoJSON (.geojson or .json), TopoJSON (.topojson or .json), GML (.gml) and KML (.kml).',
     SupportedTabularFormats: 'Supported tabular formats are: Excel (.xls, .xlsx), CSV (.csv), TSV (.tsv) and OpenDocument Spreadsheet (.ods).',
+    InstructionNotFolder: 'Please note that you can only import files, not folders.',
     AnalyzingDataset: 'Analyzing dataset...',
     CancelButton: 'Cancel',
     ImportButton: '{{No dataset to import | Import dataset | Import ?? datasets}}',
