@@ -79,11 +79,22 @@ function verticalDiscontinuityLegend(
         };
         lastSize += size + defaultSpacing;
         return result;
-      });
+      })
+      .filter((s) => s.size > 0);
   });
 
   const positionsLabel = createMemo(() => {
-    const reversedBreaks = layer.rendererParameters.breaks.toReversed();
+    const reversedBreaks = layer.rendererParameters.breaks
+      .filter((b, i) => (
+        (i === 0 && layer.rendererParameters.sizes[i] > 0)
+        || (
+          i > 0 && i < layer.rendererParameters.breaks.length - 1
+          && layer.rendererParameters.sizes[i] > 0
+        )
+        || (i === layer.rendererParameters.breaks.length - 1
+          && layer.rendererParameters.sizes[i - 1] > 0)
+      ))
+      .toReversed();
     const tmp = sizesAndPositions()
       .map((s, i) => ({
         y: s.y - s.size - defaultSpacing,
@@ -91,7 +102,7 @@ function verticalDiscontinuityLegend(
       }));
     tmp.push({
       y: (sizesAndPositions()[sizesAndPositions().length - 1].y
-        + sizesAndPositions()[sizesAndPositions().length - 1].size + defaultSpacing),
+        + sizesAndPositions()[sizesAndPositions().length - 1].size),
       breakValue: reversedBreaks[reversedBreaks.length - 1],
     });
     return tmp;
@@ -275,7 +286,7 @@ function horizontalDiscontinuityLegend(
     { makeLegendText(legend.title, [0, 0], 'title') }
     { makeLegendText(legend.subtitle, [0, heightTitle()], 'subtitle') }
     <g class="legend-content">
-      <For each={layer.rendererParameters.sizes}>
+      <For each={layer.rendererParameters.sizes.filter((s) => s > 0)}>
         {
           (size, i) => <line
             x1={i() * legend.lineLength}
@@ -288,7 +299,18 @@ function horizontalDiscontinuityLegend(
           </line>
         }
       </For>
-      <For each={layer.rendererParameters.breaks}>
+      <For each={
+        layer.rendererParameters.breaks
+          .filter((b, i) => (
+            (i === 0 && layer.rendererParameters.sizes[i] > 0)
+            || (
+              i > 0 && i < layer.rendererParameters.breaks.length - 1
+              && layer.rendererParameters.sizes[i] > 0
+            )
+            || (i === layer.rendererParameters.breaks.length - 1
+              && layer.rendererParameters.sizes[i - 1] > 0)
+          ))
+      }>
         {
           (breakValue, i) => <text
             x={i() * legend.lineLength}

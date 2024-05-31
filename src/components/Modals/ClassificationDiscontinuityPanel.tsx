@@ -372,7 +372,7 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
                         // is the selected boundary greater than the next one?
                         if (
                           ev.target.value === ''
-                          || +ev.target.value >= (customBreaks()[index() + 1] || +Infinity)
+                          || +ev.target.value >= (customBreaks()[index() + 2] || +Infinity)
                           || +ev.target.value <= customBreaks()[index()]
                         ) {
                           // rollback to the previous value
@@ -389,13 +389,13 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
                     <input
                       type="number"
                       style={{ width: '160px' }}
-                      min={selectedSizes()[index() - 1]}
+                      min={index() === 0 ? 0 : selectedSizes()[index() - 1]}
                       max={selectedSizes()[index() + 1]}
                       value={size}
                       onChange={(event) => {
                         if (
                           event.target.value === ''
-                          || +event.target.value < 1
+                          || +event.target.value < 0
                         ) {
                           // eslint-disable-next-line no-param-reassign
                           event.target.value = `${size}`;
