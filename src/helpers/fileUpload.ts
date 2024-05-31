@@ -62,13 +62,16 @@ export function prepareFileExtensions(files: FileList): CustomFileList {
     });
 }
 
-export function draggedElementsAreFiles(e: DragEvent): boolean {
+export function draggedElementsAreFiles(e: DragEvent): {
+  isFiles: boolean,
+  reason: 'notFiles' | 'directory' | 'emptyFiles' | null,
+} {
   if (
     e.dataTransfer
     && e.dataTransfer.types
     && !e.dataTransfer.types.every((el) => el === 'Files')
   ) {
-    return false;
+    return { isFiles: false, reason: 'notFiles' };
   }
   // TODO: investigate the use of https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItem/webkitGetAsEntry
   //    to handle directories better than this:
@@ -77,9 +80,27 @@ export function draggedElementsAreFiles(e: DragEvent): boolean {
     && e.dataTransfer.files
     && Array.from(e.dataTransfer.files).some((f) => f.size === 4096)
   ) {
-    return false;
+    return {
+      isFiles: false,
+      reason: 'directory',
+    };
   }
-  return true;
+  if (
+    e.dataTransfer && e.dataTransfer.files
+    && (
+      e.dataTransfer.files.length === 0
+      || Array.from(e.dataTransfer.files).every((f) => f.size === 0)
+    )
+  ) {
+    return {
+      isFiles: false,
+      reason: 'emptyFiles',
+    };
+  }
+  return {
+    isFiles: true,
+    reason: null,
+  };
 }
 
 export function isAuthorizedFile(file: FileEntry): boolean {
