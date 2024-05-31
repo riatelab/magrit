@@ -420,7 +420,7 @@ export function LmSummary(
       }&nbsp;-&nbsp;
       {
         LL().FunctionalitiesSection.LinearRegressionOptions.AdjustedR2({
-          value: toPrecisionAfterDecimalPoint(summary.rSquared, 4),
+          value: toPrecisionAfterDecimalPoint(summary.adjustedRSquared, 4),
         })
       }
     </p>
