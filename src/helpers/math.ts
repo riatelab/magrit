@@ -319,6 +319,16 @@ export const goodnessOfVarianceFit = (
   return (sdam - sdcm) / sdam;
 };
 
+function positionFirstNonZeroDigit(value: number): number {
+  const s = value.toString();
+  let i = 0;
+  while (s[i] === '0' || s[i] === '.') {
+    i += 1;
+    if (i === s.length) break;
+  }
+  return i;
+}
+
 export const formatNum = (n: number, precision: number = 2): string => n
   .toLocaleString(undefined, { maximumFractionDigits: precision });
 
@@ -339,6 +349,12 @@ export function toPrecisionAfterDecimalPoint(
   const numberBeforeDecimalPoint = s.indexOf('.');
   if (numberBeforeDecimalPoint === -1 || Number.isInteger(n)) {
     return (+n.toFixed(1)).toLocaleString();
+  }
+  // If the number need more than "precision" to be displayed correctly,
+  // increment precision as needed.
+  const positionFirstNonZero = positionFirstNonZeroDigit(n);
+  if (positionFirstNonZero > precision) {
+    return formatNum(n, positionFirstNonZero);
   }
   return formatNum(n, precision);
 }

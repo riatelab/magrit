@@ -16,7 +16,7 @@ import { isFiniteNumber } from '../../helpers/common';
 import {
   Mfloor, extent,
   toPrecisionAfterDecimalPoint,
-  Mabs, Msqrt, Mceil, formatNum,
+  Mabs, Msqrt, Mceil,
 } from '../../helpers/math';
 
 // Types / Interfaces / Enums
@@ -400,7 +400,7 @@ export function LmSummary(
     <p>
       {
         LL().FunctionalitiesSection.LinearRegressionOptions.RSE({
-          value: formatNum(summary.residualStandardError, 4),
+          value: toPrecisionAfterDecimalPoint(summary.residualStandardError, 4),
           dof: summary.residuals.filter((d) => d !== null).length - 2,
         })
       }
@@ -415,12 +415,12 @@ export function LmSummary(
       <br/>
       {
         LL().FunctionalitiesSection.LinearRegressionOptions.MultipleR2({
-          value: formatNum(summary.rSquared, 4),
+          value: toPrecisionAfterDecimalPoint(summary.rSquared, 4),
         })
       }&nbsp;-&nbsp;
       {
         LL().FunctionalitiesSection.LinearRegressionOptions.AdjustedR2({
-          value: formatNum(summary.rSquared, 4),
+          value: toPrecisionAfterDecimalPoint(summary.rSquared, 4),
         })
       }
     </p>
