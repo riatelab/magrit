@@ -159,11 +159,13 @@ export const computeGriddedLayer = async (
     cellFeature.properties.sum = sum;
   }
 
-  const resultGrid = isGeo
-    ? rewindLayer(clippedGrid)
-    : rewindLayer(reprojFunc(proj, clippedGrid, true));
+  // const resultGrid = isGeo
+  //   ? rewindLayer(clippedGrid, false)
+  //   : rewindLayer(reprojFunc(proj, clippedGrid, true), false);
 
-  return resultGrid;
+  return isGeo
+    ? clippedGrid
+    : reprojFunc(proj, clippedGrid, true);
 };
 
 export const noop = () => {};
