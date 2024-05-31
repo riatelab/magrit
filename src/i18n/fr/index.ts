@@ -264,11 +264,11 @@ const fr = {
   },
   FunctionalitiesSection: {
     FunctionalityTypes: {
-      Choropleth: 'Choropleth',
+      Choropleth: 'Choroplèthe',
       ProportionalSymbols: 'Symboles proportionnels',
       Labels: 'Étiquettes',
       Discontinuity: 'Discontinuité',
-      CategoricalChoropleth: 'Choropleth catégorielle',
+      CategoricalChoropleth: 'Choroplèthe catégorielle',
       CategoricalPictogram: 'Carte catégorielle à pictogrammes',
       Smoothed: 'Carte lissée',
       Cartogram: 'Cartogramme',
@@ -772,7 +772,7 @@ const fr = {
     classification: 'Discrétisation',
     classificationMethod: 'Méthode de discrétisation',
     classificationMethods: {
-      equalIntervals: 'Intervals égaux',
+      equalIntervals: 'Intervalles égaux',
       quantiles: 'Quantiles',
       ckmeans: 'Seuils naturels (CKMeans)',
       jenks: 'Seuils naturels (Jenks)',
