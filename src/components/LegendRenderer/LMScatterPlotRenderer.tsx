@@ -68,13 +68,13 @@ function ScatterPlot(
 
   const minX = createMemo(() => {
     const [min, max] = extent(ds().map((d) => d[props.explanatoryVariable]));
-    const p03 = min + 0.03 * (max - min);
+    const p03 = 0.03 * (max - min);
     return Mfloor(min - p03);
   });
 
   const minY = createMemo(() => {
     const [min, max] = extent(ds().map((d) => d[props.explainedVariable]));
-    const p03 = min + 0.03 * (max - min);
+    const p03 = 0.03 * (max - min);
     return Mfloor(min - p03);
   });
 
