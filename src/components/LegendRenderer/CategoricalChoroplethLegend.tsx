@@ -86,7 +86,7 @@ function verticalLegend(legendParameters: CategoricalChoroplethLegend): JSX.Elem
     () => legendParameters.boxHeight + legendParameters.boxSpacing,
   );
 
-  const hasNoData = createMemo(() => layer.data.features.filter(
+  const hasNoData = createMemo(() => legendParameters.noDataBox && layer.data.features.filter(
     (feature) => !isNonNull(feature.properties[rendererParameters.variable]),
   ).length > 0);
 
@@ -297,7 +297,7 @@ function horizontalLegend(legendParameters: CategoricalChoroplethLegend): JSX.El
   const distanceNoteToTop = createMemo(() => distanceLabelsToTop()
     + heightLegendLabels());
 
-  const hasNoData = createMemo(() => layer.data.features.filter(
+  const hasNoData = createMemo(() => legendParameters.noDataBox && layer.data.features.filter(
     (feature) => !isNonNull(feature.properties[rendererParameters.variable]),
   ).length > 0);
 

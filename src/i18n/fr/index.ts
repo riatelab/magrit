@@ -864,6 +864,7 @@ const fr = {
       BoxSpacing: 'Espacement entre les boites',
       BoxSpacingNoData: 'Espacement entre les boites et la boite "sans données"',
       NoDataLabel: 'Étiquette de la boite "sans données"',
+      NoDataBox: 'Afficher la boite "sans données"',
       BoxCornerRadius: 'Rayon des coins des boites',
       DisplayTick: 'Afficher un tiret entre chaque boite',
       DisplayStroke: 'Afficher la bordure pour chaque boîte',

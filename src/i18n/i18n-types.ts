@@ -3128,6 +3128,10 @@ type RootTranslation = {
 			 */
 			NoDataLabel: string
 			/**
+			 * D​i​s​p​l​a​y​ ​a​ ​"​n​o​ ​d​a​t​a​"​ ​b​o​x
+			 */
+			NoDataBox: string
+			/**
 			 * B​o​x​ ​c​o​r​n​e​r​ ​r​a​d​i​u​s
 			 */
 			BoxCornerRadius: string
@@ -6325,6 +6329,10 @@ export type TranslationFunctions = {
 			 * Label for the "no data" box
 			 */
 			NoDataLabel: () => LocalizedString
+			/**
+			 * Display a "no data" box
+			 */
+			NoDataBox: () => LocalizedString
 			/**
 			 * Box corner radius
 			 */

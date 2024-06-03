@@ -169,6 +169,7 @@ async function onClickValidate(
       ...applicationSettingsStore.defaultLegendSettings.labels,
     } as LegendTextElement,
     noDataLabel: 'No data',
+    noDataBox: true,
     stroke: false,
     tick: false,
   } as ChoroplethLegend;

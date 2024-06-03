@@ -83,7 +83,7 @@ function verticalLegend(
     () => legendParameters.boxHeight + legendParameters.boxSpacing,
   );
 
-  const hasNoData = createMemo(() => layer.data.features.filter(
+  const hasNoData = createMemo(() => legendParameters.noDataBox && layer.data.features.filter(
     (feature) => !isFiniteNumber(feature.properties[rendererParameters.variable]),
   ).length > 0);
 
@@ -315,7 +315,7 @@ function horizontalLegend(
   const distanceNoteToTop = createMemo(() => distanceLabelsToTop()
     + heightLegendLabels());
 
-  const hasNoData = createMemo(() => layer.data.features.filter(
+  const hasNoData = createMemo(() => legendParameters.noDataBox && layer.data.features.filter(
     (feature) => !isFiniteNumber(feature.properties[rendererParameters.variable]),
   ).length > 0);
 

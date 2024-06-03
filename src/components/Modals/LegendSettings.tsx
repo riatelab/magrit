@@ -42,15 +42,15 @@ import {
   type LabelsLegend,
   type LayerDescriptionCategoricalChoropleth,
   type LayerDescriptionChoropleth,
-  type LayerDescriptionGriddedLayer,
+  type LayerDescriptionGriddedLayer, LayerDescriptionProportionalSymbols,
   type LayerDescriptionSmoothedLayer,
   type LayoutFeature,
   type Legend,
   LegendType,
   type LinearRegressionScatterPlot,
-  type MushroomsLegend,
+  type MushroomsLegend, ProportionalSymbolCategoryParameters,
   type ProportionalSymbolsLegend,
-  type ProportionalSymbolsParameters,
+  type ProportionalSymbolsParameters, ProportionalSymbolsRatioParameters,
   RepresentationType,
 } from '../../global.d';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
@@ -521,18 +521,26 @@ function makeSettingsChoroplethLegend(
   )! as LayerDescriptionChoropleth
   | LayerDescriptionSmoothedLayer
   | LayerDescriptionCategoricalChoropleth
-  | LayerDescriptionGriddedLayer;
+  | LayerDescriptionGriddedLayer
+  | LayerDescriptionProportionalSymbols;
 
   const isChoroplethLegend = (
     representationType: RepresentationType,
   ) => ['choropleth', 'smoothed', 'grid'].includes(representationType);
 
+  const choroVariable = layer.renderer === 'proportionalSymbols'
+    ? (
+      layer.rendererParameters as
+        ProportionalSymbolsRatioParameters | ProportionalSymbolCategoryParameters
+    ).color.variable
+    : layer.rendererParameters!.variable;
+
   const hasNoData = legend.type === 'categoricalChoropleth'
     ? layer.data.features.filter(
-      (feature) => !isNonNull(feature.properties[layer.rendererParameters!.variable]),
+      (feature) => !isNonNull(feature.properties[choroVariable]),
     ).length > 0
     : layer.data.features.filter(
-      (feature) => !isFiniteNumber(feature.properties[layer.rendererParameters!.variable]),
+      (feature) => !isFiniteNumber(feature.properties[choroVariable]),
     ).length > 0;
 
   return <>
@@ -618,34 +626,41 @@ function makeSettingsChoroplethLegend(
       </div>
     </Show>
     <Show when={hasNoData}>
-      <InputFieldNumber
-        label={LL().Legend.Modal.BoxSpacingNoData()}
-        value={legend.boxSpacingNoData}
-        min={0}
-        max={100}
-        step={1}
-        onChange={(v) => debouncedUpdateProps(legend.id, ['boxSpacingNoData'], v)}
+      <InputFieldCheckbox
+        label={LL().Legend.Modal.NoDataBox()}
+        checked={legend.noDataBox}
+        onChange={(v) => updateProps(legend.id, ['noDataBox'], v)}
       />
-      <div class="field">
-        <label class="label">{ LL().Legend.Modal.NoDataLabel() }</label>
-        <div class="control">
-          <input
-            class="input"
-            type="text"
-            value={ legend.noDataLabel }
-            onChange={(ev) => debouncedUpdateProps(legend.id, ['noDataLabel'], ev.target.value)}
-          />
+      <Show when={legend.noDataBox}>
+        <InputFieldNumber
+          label={LL().Legend.Modal.BoxSpacingNoData()}
+          value={legend.boxSpacingNoData}
+          min={0}
+          max={100}
+          step={1}
+          onChange={(v) => debouncedUpdateProps(legend.id, ['boxSpacingNoData'], v)}
+        />
+        <div class="field">
+          <label class="label">{LL().Legend.Modal.NoDataLabel()}</label>
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              value={legend.noDataLabel}
+              onChange={(ev) => debouncedUpdateProps(legend.id, ['noDataLabel'], ev.target.value)}
+            />
+          </div>
         </div>
-      </div>
+      </Show>
     </Show>
     <div class="field">
-      <label class="label">{ LL().Legend.Modal.LegendOrientation() }</label>
+      <label class="label">{LL().Legend.Modal.LegendOrientation()}</label>
       <div class="control">
         <label class="radio" style={{ 'margin-right': '2em' }}>
           <input
             type="radio"
             name="legend-orientation"
-            {...(legend.orientation === 'horizontal' ? { checked: true } : {}) }
+            {...(legend.orientation === 'horizontal' ? { checked: true } : {})}
             onChange={(ev) => {
               const value = ev.target.checked ? 'horizontal' : 'vertical';
               updateProps(legend.id, ['orientation'], value);

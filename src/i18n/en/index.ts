@@ -864,6 +864,7 @@ const en = {
       BoxSpacing: 'Spacing between boxes',
       BoxSpacingNoData: 'Spacing between boxes and no data box',
       NoDataLabel: 'Label for the "no data" box',
+      NoDataBox: 'Display a "no data" box',
       BoxCornerRadius: 'Box corner radius',
       DisplayTick: 'Display tick between each box',
       DisplayStroke: 'Display stroke for each box',

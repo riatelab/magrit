@@ -788,6 +788,8 @@ interface ChoroplethLegend extends LegendBase {
   labels: LegendTextElement,
   // The label of the no-data box
   noDataLabel: string,
+  // Whether to display the no-data box
+  noDataBox: boolean,
   // Whether to display the stroke of the boxes
   stroke: boolean,
   // Whether to display a tick between each box
@@ -816,6 +818,8 @@ interface CategoricalChoroplethLegend extends LegendBase {
   labels: LegendTextElement,
   // The label of the no-data box
   noDataLabel: string,
+  // Whether to display the no-data box
+  noDataBox: boolean,
   // Whether to display the stroke of the boxes
   stroke: boolean,
   // Whether to display a tick between each box
