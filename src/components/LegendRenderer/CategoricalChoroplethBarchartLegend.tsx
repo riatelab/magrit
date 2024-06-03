@@ -199,7 +199,7 @@ export default function legendCategoricalChoroplethBarchart(
       legend.subtitle.text,
       legend.subtitle.fontSize,
       legend.subtitle.fontFamily,
-    ).height + defaultSpacing
+    ).height
     : 0));
 
   onMount(() => {
@@ -237,7 +237,7 @@ export default function legendCategoricalChoroplethBarchart(
     {makeLegendText(legend.title, [legend.width / 2, 0], 'title', { 'text-anchor': 'middle' })}
     {makeLegendText(legend.subtitle, [legend.width / 2, heightTitle()], 'subtitle', { 'text-anchor': 'middle' })}
     <g
-      transform={`translate(0, ${heightTitle() + heightSubtitle()})`}
+      transform={`translate(0, ${heightTitle() + heightSubtitle() - defaultSpacing * 2})`}
     >
       <CategoriesPlot
         mapping={getCategoricalParameters(layer).mapping}
@@ -251,7 +251,7 @@ export default function legendCategoricalChoroplethBarchart(
     {
       makeLegendText(
         legend.note,
-        [legend.width / 2, heightTitle() + heightSubtitle() + legend.height],
+        [legend.width / 2, heightTitle() + heightSubtitle() + legend.height - defaultSpacing * 2],
         'note',
         { 'text-anchor': 'middle' },
       )
