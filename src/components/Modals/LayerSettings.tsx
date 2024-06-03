@@ -170,6 +170,7 @@ function makeSettingsPictograms(
         detailed={false}
       />
     </DetailsSummary>
+    <AestheticsSection {...props} />
   </>;
 }
 
@@ -498,6 +499,7 @@ function makeSettingsLabels(
         }}
       />
     </div>
+    <AestheticsSection {...props} />
   </>;
 }
 
