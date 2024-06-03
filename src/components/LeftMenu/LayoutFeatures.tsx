@@ -713,9 +713,11 @@ export default function LayoutFeatures(): JSX.Element {
     <div>
       <InputFieldText
         label={LL().LayoutFeatures.Title()}
-        value={mapStore.mapAnnotations.title}
+        value={mapStore.mapAnnotations.title.replaceAll('\n', '\\n')}
         bindKeyUpAsChange={true}
         onChange={(v) => {
+          // eslint-disable-next-line no-param-reassign
+          v = v.replaceAll('\\n', '\n');
           setMapStore('mapAnnotations', 'title', v);
           const hasTitle = layersDescriptionStore.layoutFeaturesAndLegends
             .find((d) => d.id === 'LayoutFeature-title');
@@ -781,9 +783,11 @@ export default function LayoutFeatures(): JSX.Element {
       />
       <InputFieldText
         label={LL().LayoutFeatures.Source()}
-        value={mapStore.mapAnnotations.source}
+        value={mapStore.mapAnnotations.source.replaceAll('\n', '\\n')}
         bindKeyUpAsChange={true}
         onChange={(v) => {
+          // eslint-disable-next-line no-param-reassign
+          v = v.replaceAll('\\n', '\n');
           setMapStore('mapAnnotations', 'source', v);
           const hasSource = layersDescriptionStore.layoutFeaturesAndLegends
             .find((d) => d.id === 'LayoutFeature-source');

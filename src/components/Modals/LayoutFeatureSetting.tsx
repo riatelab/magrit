@@ -8,6 +8,7 @@ import {
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { setMapStore } from '../../store/MapStore';
 
 // Subcomponents
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
@@ -369,17 +370,27 @@ function makeSettingsText(
   const ft = layersDescriptionStore.layoutFeaturesAndLegends
     .find((f) => f.id === layoutFeatureId) as Text;
 
+  const isMapSource = layoutFeatureId === 'LayoutFeature-source';
+  const isMapTitle = layoutFeatureId === 'LayoutFeature-title';
+
   return <>
     <InputFieldTextarea
       label={LL().LayoutFeatures.Modal.TextContent()}
       value={ft.text}
       rows={ft.text.split('\n').length}
       bindKeyUpAsChange={true}
-      onChange={(value) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['text'],
-        value,
-      )}
+      onChange={(value) => {
+        updateLayoutFeatureProperty(
+          layoutFeatureId,
+          ['text'],
+          value,
+        );
+        if (isMapSource) {
+          setMapStore('mapAnnotations', 'source', value);
+        } else if (isMapTitle) {
+          setMapStore('mapAnnotations', 'title', value);
+        }
+      }}
     />
     <div>
       <label
