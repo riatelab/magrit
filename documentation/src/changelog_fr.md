@@ -1,5 +1,9 @@
 # Historique des versions et des changements effectués
 
+#### 0.16.6 (2024-06-03)
+
+- Mise à jour de la page d'acceuil pour annoncer la prochaine version.
+
 #### 0.16.5 (2024-05-04)
 
 - Mise à jour de `aiohttp` pour corriger plusieurs problèmes de sécurité avec la version anciennement utilisée.

@@ -876,6 +876,9 @@
         },
         "meta": {
             "description": "Magrit est une application de cartographie thématique open source et accessible en ligne. Elle permet de créer des cartes à partir de vos propres données."
+        },
+        "announcements": {
+            "new_version": "\uD83D\uDCE2 Une nouvelle version majeure de Magrit est en cours de développement. Rendez-vous ici fin juin 2024 pour la découvrir !"
         }
     },
     "contact_form": {

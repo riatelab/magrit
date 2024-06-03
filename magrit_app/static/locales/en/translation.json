@@ -875,6 +875,9 @@
         },
         "meta": {
             "description": "Magrit is an open source thematic mapping application available online. It allows you to create maps from your own data."
+        },
+        "announcements": {
+            "new_version": "\uD83D\uDCE2 A major new version of Magrit is currently under development. Be sure to visit this page at the end of June 2024 to discover it!"
         }
     },
     "contact_form": {
