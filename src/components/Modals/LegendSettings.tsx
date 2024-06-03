@@ -226,8 +226,8 @@ function FieldText(
         class="input"
         type="text"
         value={ props.legend[props.role]?.text || '' }
-        onKeyUp={(ev) => debouncedUpdateProps(props.legend.id, [props.role, 'text'], ev.target.value)}
-        onChange={(ev) => debouncedUpdateProps(props.legend.id, [props.role, 'text'], ev.target.value)}
+        onKeyUp={(ev) => updateProps(props.legend.id, [props.role, 'text'], ev.target.value)}
+        onChange={(ev) => updateProps(props.legend.id, [props.role, 'text'], ev.target.value)}
       />
     </div>
   </div>;
