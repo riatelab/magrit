@@ -7,7 +7,7 @@
 
 .layer-manager-item__container {
     padding: 0.5em;
-    width: 90%;
+    width: 80%;
 }
 
 .layer-manager-item__name {
@@ -21,6 +21,10 @@
 .layer-manager-item__icons {
     display: flex;
     justify-content: space-between;
+}
+
+.layer-manager-item__icons-right {
+    margin-right: 0.25em;
 }
 
 .layer-manager-item__icons-right > *,
