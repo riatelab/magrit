@@ -88,8 +88,8 @@ export function computeCartogramOlson(
     const t = data.features[i].properties[variableName];
     dVal[i] = {
       id: i,
-      // If the value is not a number, we deliberately set it to 0.
-      value: isFiniteNumber(t) ? t : 0,
+      // If the value is not a number, we deliberately set it to 0.1.
+      value: isFiniteNumber(t) ? t : 0.1,
       area: area(data.features[i] as never),
     };
   }
@@ -157,8 +157,10 @@ const getDougenikInfo = (
   areaFn: (geom: GeoJSONFeature) => number,
   centroidFn: (geom: GeoJSONFeature) => [number, number],
 ): DougInfo => {
-  const areas = data.features.map((f) => areaFn(f as never));
-  const values = data.features.map((f) => +f.properties[variableName]);
+  const areas = data.features
+    .map((f) => areaFn(f as never));
+  const values = data.features
+    .map((f) => (isFiniteNumber(f.properties[variableName]) ? +f.properties[variableName] : 0.1));
   const areaTotal = areas.reduce((a, b) => a + b, 0);
   const valueTotal = values.reduce((a, b) => a + b, 0);
   const fraction = areaTotal / valueTotal;
@@ -301,7 +303,8 @@ function makeDougenikCartogram(
   // Compute the information for the final cartogram
   // and retrieve the size error for each feature
   const areas = resultData.features.map((f) => areaFn(f as never));
-  const values = resultData.features.map((f) => +f.properties[variableName]);
+  const values = resultData.features
+    .map((f) => (isFiniteNumber(f.properties[variableName]) ? +f.properties[variableName] : 0.1));
   const areaTotal = areas.reduce((a, b) => a + b, 0);
   const valueTotal = values.reduce((a, b) => a + b, 0);
 

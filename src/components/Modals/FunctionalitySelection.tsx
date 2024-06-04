@@ -243,7 +243,7 @@ export default function FunctionalitySelection(): JSX.Element {
         break;
       case RepresentationType.cartogram:
         // eslint-disable-next-line no-param-reassign
-        p.enabled = nFeatures > 1 && vars.nStock > 0;
+        p.enabled = geomType === 'polygon' && nFeatures > 1 && vars.nStock > 0;
         break;
       case RepresentationType.links:
         // eslint-disable-next-line no-param-reassign
