@@ -34,6 +34,7 @@ import {
 import {
   setFunctionalitySelectionStore,
 } from '../../store/FunctionalitySelectionStore';
+import { fitExtent } from '../../store/MapStore';
 import { setLoading } from '../../store/GlobalStore';
 
 // Other components
@@ -123,6 +124,9 @@ async function onClickValidate(
   const tableDescription = layersDescriptionStore.tables
     .find((table) => table.id === referenceTableId)!;
 
+  const shouldFitLayer = layersDescriptionStore.layers.length === 0;
+  const layerId = generateIdLayer();
+
   if (mode === 'coordinates') {
     let newData = await makeLayerFromTableAndXY(
       tableDescription.data,
@@ -143,7 +147,7 @@ async function onClickValidate(
       .map((f) => ({ ...f }));
 
     const newLayerDescription = {
-      id: generateIdLayer(),
+      id: layerId,
       name: newLayerName,
       data: newData,
       type: 'point',
@@ -179,7 +183,7 @@ async function onClickValidate(
     const geometryType = getGeometryType(newData);
 
     const newLayerDescription = {
-      id: generateIdLayer(),
+      id: layerId,
       name: newLayerName,
       data: newData,
       type: geometryType,
@@ -194,6 +198,10 @@ async function onClickValidate(
         draft.layers.push(newLayerDescription);
       }),
     );
+  }
+
+  if (shouldFitLayer) {
+    fitExtent(layerId);
   }
 }
 
