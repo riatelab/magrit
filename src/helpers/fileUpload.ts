@@ -62,7 +62,18 @@ export function prepareFileExtensions(files: FileList): CustomFileList {
     });
 }
 
-export function draggedElementsAreFiles(e: DragEvent): {
+export function draggedElementsAreFiles(e: DragEvent): boolean {
+  if (
+    e.dataTransfer
+    && e.dataTransfer.types
+    && !e.dataTransfer.types.every((el) => el === 'Files')
+  ) {
+    return false;
+  }
+  return true;
+}
+
+export function droppedElementsAreFiles(e: DragEvent): {
   isFiles: boolean,
   reason: 'notFiles' | 'directory' | 'emptyFiles' | null,
 } {

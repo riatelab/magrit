@@ -23,7 +23,7 @@ import { isLocale } from './i18n/i18n-util';
 import { loadLocale } from './i18n/i18n-util.sync';
 import { toggleDarkMode } from './helpers/darkmode';
 import { clickLinkFromDataUrl } from './helpers/exports';
-import { draggedElementsAreFiles, prepareFilterAndStoreFiles } from './helpers/fileUpload';
+import { draggedElementsAreFiles, droppedElementsAreFiles, prepareFilterAndStoreFiles } from './helpers/fileUpload';
 import { round } from './helpers/math';
 import { initDb, storeProject } from './helpers/storage';
 
@@ -43,7 +43,6 @@ import ImportWindow from './components/ImportWindow.tsx';
 import InfoFeatureBox from './components/InfoFeatureBox.tsx';
 import FunctionalitySelection from './components/Modals/FunctionalitySelection.tsx';
 import TableFunctionalitySelection from './components/Modals/TableFunctionalitySelection.tsx';
-// import ReloadPrompt from './components/ReloadPrompt.tsx';
 
 // Stores
 import { classificationPanelStore } from './store/ClassificationPanelStore';
@@ -51,7 +50,6 @@ import { globalStore, setGlobalStore, setReloadingProject } from './store/Global
 import {
   type MapStoreType,
   mapStore,
-  setMapStore,
   setMapStoreBase,
 } from './store/MapStore';
 import {
@@ -152,7 +150,7 @@ const dragEnterHandler = (e: Event): void => {
   e.stopPropagation();
 
   // Only files should trigger the opening of the drop overlay
-  if (!draggedElementsAreFiles(e as DragEvent).isFiles) return;
+  if (!draggedElementsAreFiles(e as DragEvent)) return;
   // We dont want the user to be able to drop files while a project is reloading
   if (globalStore.isReloadingProject) return;
 
@@ -165,7 +163,7 @@ const dragOverHandler = (e: Event): void => {
   e.stopPropagation();
 
   // Only files should trigger the opening of the drop overlay
-  if (!draggedElementsAreFiles(e as DragEvent).isFiles) return;
+  if (!draggedElementsAreFiles(e as DragEvent)) return;
   // We dont want the user to be able to drop files while a project is reloading
   if (globalStore.isReloadingProject) return;
 
@@ -184,7 +182,7 @@ const dragLeaveHandler = (e: Event): void => {
   e.stopPropagation();
 
   // Only files should trigger the opening of the drop overlay
-  if (!draggedElementsAreFiles(e as DragEvent).isFiles) return;
+  if (!draggedElementsAreFiles(e as DragEvent)) return;
   // We dont want the user to be able to drop files while a project is reloading
   if (globalStore.isReloadingProject) return;
 
@@ -206,7 +204,7 @@ const dropHandler = (e: Event, LL: Accessor<TranslationFunctions>): void => {
   if (globalStore.isReloadingProject) return;
 
   // Only files should trigger the opening of the drop overlay
-  const draggedElementsStatus = draggedElementsAreFiles(e as DragEvent);
+  const draggedElementsStatus = droppedElementsAreFiles(e as DragEvent);
   if (!draggedElementsStatus.isFiles) {
     if (draggedElementsStatus.reason === 'directory') {
       toast.error(LL().ImportWindow.InstructionNotFolder());
