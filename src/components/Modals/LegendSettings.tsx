@@ -134,8 +134,9 @@ function TextOptionTable(
       <For each={props.textProperties}>
         {(textElement) => <td>
           <input
-            class="color"
+            class="input"
             type="color"
+            style={{ height: '1.75em', padding: '0.05em', width: '5em' }}
             value={ props.legend[textElement].fontColor }
             onChange={(e) => debouncedUpdateProps(
               props.legend.id,

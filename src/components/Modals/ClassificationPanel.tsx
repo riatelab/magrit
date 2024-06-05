@@ -731,7 +731,7 @@ export default function ClassificationPanel(): JSX.Element {
                   <br/>
                   <div class="control is-flex is-align-content-center is-flex-wrap-wrap-reverse">
                     <input
-                      class="color mr-5"
+                      class="input mr-5"
                       type="color"
                       value={noDataColor()}
                       onChange={(e) => {

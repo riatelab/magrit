@@ -16,6 +16,7 @@ export default function InputFieldColor(props: InputFieldColorProps): JSX.Elemen
     <div class="control">
       <input
         classList={{ color: mergedProps.rounded }}
+        class="input"
         type="color"
         onChange={(e) => {
           mergedProps.onChange(e.currentTarget.value);
