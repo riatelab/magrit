@@ -2581,7 +2581,7 @@ type RootTranslation = {
 		 */
 		Title: string
 		/**
-		 * Q​u​a​n​t​i​z​a​t​i​o​n​ ​f​a​c​t​o​r
+		 * C​o​o​r​d​i​n​a​t​e​s​ ​p​r​e​c​i​s​i​o​n
 		 */
 		QuantizationFactor: string
 		/**
@@ -5789,7 +5789,7 @@ export type TranslationFunctions = {
 		 */
 		Title: () => LocalizedString
 		/**
-		 * Quantization factor
+		 * Coordinates precision
 		 */
 		QuantizationFactor: () => LocalizedString
 		/**

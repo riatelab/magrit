@@ -712,7 +712,7 @@ const en = {
   },
   SimplificationModal: {
     Title: 'Simplification of geometries',
-    QuantizationFactor: 'Quantization factor',
+    QuantizationFactor: 'Coordinates precision',
     SimplificationFactor: 'Simplification factor',
     CountGeometries: '{geom} geometries, {pts} points',
     NullGeometries: '{{ null:0 geometry | 1 geometry | ?? geometries }} deleted by simplification',
