@@ -229,8 +229,6 @@ function addLayer(
     }
   });
 
-  console.log(fieldsDescription);
-
   const safeName = findSuitableName(
     name,
     layersDescriptionStore.layers.map((l) => l.name),
