@@ -2,7 +2,7 @@
 import { produce, SetStoreFunction } from 'solid-js/store';
 
 // Helpers
-import { findSuitableName } from './common';
+import { findSuitableName, isFiniteNumber, isNonNull } from './common';
 import {
   convertBinaryTabularDatasetToJSON,
   convertTextualTabularDatasetToJSON,
@@ -196,6 +196,7 @@ function addLayer(
 
   const fieldsName: string[] = Object.keys(rewoundGeojson.features[0].properties);
 
+  // Detect the type of fields
   const fieldsDescription: Variable[] = fieldsName.map((field) => {
     const o = detectTypeField(
       rewoundGeojson.features.map((ft) => ft.properties[field]) as never[],
@@ -208,6 +209,27 @@ function addLayer(
       dataType: o.dataType,
     };
   });
+
+  // Cast values to the detect field type if possible and needed
+  fieldsDescription.forEach((field) => {
+    if (field.dataType === 'number') {
+      rewoundGeojson.features.forEach((ft) => {
+        // eslint-disable-next-line no-param-reassign
+        ft.properties[field.name] = isFiniteNumber(ft.properties[field.name])
+          ? +ft.properties[field.name]
+          : null;
+      });
+    } else {
+      rewoundGeojson.features.forEach((ft) => {
+        // eslint-disable-next-line no-param-reassign
+        ft.properties[field.name] = isNonNull(ft.properties[field.name])
+          ? ft.properties[field.name]
+          : null;
+      });
+    }
+  });
+
+  console.log(fieldsDescription);
 
   const safeName = findSuitableName(
     name,

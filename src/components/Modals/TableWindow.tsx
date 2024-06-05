@@ -202,12 +202,14 @@ function NewFieldPanel(
         sampleOutput={sampleOutput}
         setSampleOutput={setSampleOutput}
       />
-      <div class="control" style={{ display: 'flex', height: '7em' }}>
+      <div class="control" style={{ display: 'flex', height: '12em' }}>
         <div style={{ display: 'flex', 'align-items': 'center', width: '12%' }}>
           <label class="label">{LL().FormulaInput.sampleOutput()}</label>
         </div>
         <pre
-          style={{ display: 'flex', 'align-items': 'center', width: '120%' }}
+          style={{
+            display: 'flex', 'align-items': 'center', width: '120%', 'font-size': '0.75em',
+          }}
           classList={{ 'has-text-danger': sampleOutput() && sampleOutput()!.type === 'Error' }}
           id="sample-output"
         >
@@ -248,11 +250,27 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
 
   // A function to extract the columns from the data
   if (type === 'layer') {
-    res.getColumnDefs = (data) => Object.keys(data.features[0].properties)
-      .map((key) => ({ field: key, headerName: key, maxWidth: 300 }));
+    res.getColumnDefs = (data, fieldDescriptions) => Object.keys(data.features[0].properties)
+      .map((key) => {
+        const fd = fieldDescriptions.find((f) => f.name === key);
+        const o = { field: key, headerName: key, maxWidth: 300 };
+        if (fd.dataType === 'number') {
+          o.type = 'numericColumn';
+          o.cellEditor = 'agNumberCellEditor';
+        }
+        return o;
+      });
   } else {
-    res.getColumnDefs = (data) => Object.keys(data[0])
-      .map((key) => ({ field: key, headerName: key, maxWidth: 300 }));
+    res.getColumnDefs = (data, fieldDescriptions) => Object.keys(data[0])
+      .map((key) => {
+        const fd = fieldDescriptions.find((f) => f.name === key);
+        const o = { field: key, headerName: key, maxWidth: 300 };
+        if (fd.dataType === 'number') {
+          o.type = 'numericColumn';
+          o.cellEditor = 'agNumberCellEditor';
+        }
+        return o;
+      });
   }
 
   // A function to update the data
@@ -362,7 +380,7 @@ export default function TableWindow(): JSX.Element {
   const [
     columnDefs,
     setColumnDefs,
-  ] = createSignal<any[]>(getColumnDefs(dsDescription.data));
+  ] = createSignal<any[]>(getColumnDefs(dsDescription.data, dsDescription.fields));
 
   // The new variables that will be added to the layer description
   // when the modal is closed and if the user chooses to save the data

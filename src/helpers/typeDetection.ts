@@ -60,7 +60,15 @@ export function detectTypeField(
     if (values[i] === null || values[i] === '' || values[i] === undefined) {
       dt.push(null);
     } else if (isFiniteNumber(values[i])) {
-      dt.push(DataType.number);
+      if (values[i].toString().trim().startsWith('0')) {
+        if (values[i].toString().trim() === 0 || values[i].toString().trim().startsWith('0.')) {
+          dt.push(DataType.number);
+        } else {
+          dt.push(DataType.string);
+        }
+      } else {
+        dt.push(DataType.number);
+      }
     } else if (typeof values[i] === 'boolean' || tf.includes(values[i])) {
       dt.push(DataType.boolean);
     } else {

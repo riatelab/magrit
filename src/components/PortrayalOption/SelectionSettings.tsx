@@ -195,12 +195,14 @@ export default function SelectionSettings(
       sampleOutput={sampleOutput}
       setSampleOutput={setSampleOutput}
     />
-    <div class="control" style={{ display: 'flex', height: '7em' }}>
+    <div class="control" style={{ display: 'flex', height: '12em' }}>
       <div style={{ display: 'flex', 'align-items': 'center', width: '12%' }}>
         <label class="label">{LL().FormulaInput.sampleOutput()}</label>
       </div>
       <pre
-        style={{ display: 'flex', 'align-items': 'center', width: '120%' }}
+        style={{
+          display: 'flex', 'align-items': 'center', width: '120%', 'font-size': '0.75em',
+        }}
         classList={{ 'has-text-danger': sampleOutput() && sampleOutput()!.type === 'Error' }}
         id="sample-output"
       >

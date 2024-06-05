@@ -77,10 +77,13 @@ export const replaceSpecialFields = (formula: string, lengthDataset: number): st
 export const formatValidSampleOutput = (
   value: { [key: number]: number | string | boolean },
 ): string => {
+  const nItems = Object.keys(value).length;
   const strArray = [];
-  for (let i = 0; i < 3; i += 1) {
+  for (let i = 0; i < nItems; i += 1) {
     if (value[i] !== undefined) {
       strArray.push(`[${i}] ${value[i]}`);
+    } else {
+      strArray.push(`[${i}] null`);
     }
   }
   return strArray.join('\n');
@@ -145,7 +148,7 @@ export default function FormulaInput(
     }
 
     const query = `SELECT ${formula} as newValue FROM ?`;
-    const data = props.records.slice(0, 3);
+    const data = props.records.slice(0, 8);
 
     if (hasSpecialFieldId(formula)) {
       data.forEach((d, i) => {
@@ -162,14 +165,15 @@ export default function FormulaInput(
 
     try {
       const newColumn = alasql(query, [data]);
-      if (newColumn[0].newValue === undefined) {
+      const allUndefined = newColumn.every((d: any) => d.newValue === undefined);
+      if (allUndefined) {
         props.setSampleOutput({ type: 'Error', value: 'EmptyResult' });
         // TODO: we may try to parse the query here (as it is syntactically correct
         //   since no error was thrown by alasql)
         //   and detect why the output is empty (e.g. a column name is wrong, etc.)
       } else {
         const resultObj: { [key: number]: number | string | boolean } = {};
-        for (let i = 0; i < 3; i += 1) {
+        for (let i = 0; i < newColumn.length; i += 1) {
           if (newColumn[i]) {
             resultObj[i] = newColumn[i].newValue;
           }
