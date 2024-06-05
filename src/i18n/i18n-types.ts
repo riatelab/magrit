@@ -2414,15 +2414,15 @@ type RootTranslation = {
 		Information: string
 		ShortDescriptions: {
 			/**
-			 * A​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​a​r​e​a​s​ ​a​r​e​ ​s​h​a​d​e​d​ ​o​r​ ​p​a​t​t​e​r​n​e​d​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​.
+			 * A​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​l​e​t​s​ ​y​o​u​ ​a​s​s​i​g​n​ ​a​ ​c​o​l​o​r​ ​t​o​ ​g​e​o​g​r​a​p​h​i​c​ ​o​b​j​e​c​t​s​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​s​ ​o​f​ ​a​ ​r​e​l​a​t​i​v​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​r​i​a​b​l​e​ ​(​r​a​t​e​s​,​ ​i​n​d​i​c​e​s​)​.
 			 */
 			Choropleth: string
 			/**
-			 * A​ ​p​r​o​p​o​r​t​i​o​n​a​l​ ​s​y​m​b​o​l​s​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​s​i​z​e​ ​o​f​ ​a​ ​s​y​m​b​o​l​ ​v​a​r​i​e​s​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​.
+			 * A​ ​p​r​o​p​o​r​t​i​o​n​a​l​ ​s​y​m​b​o​l​ ​m​a​p​ ​l​e​t​s​ ​y​o​u​ ​v​a​r​y​ ​t​h​e​ ​a​r​e​a​ ​o​f​ ​a​ ​s​y​m​b​o​l​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​n​ ​a​b​s​o​l​u​t​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​r​i​a​b​l​e​.
 			 */
 			ProportionalSymbols: string
 			/**
-			 * A​ ​l​a​b​e​l​s​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​ ​i​s​ ​d​i​s​p​l​a​y​e​d​ ​a​s​ ​a​ ​l​a​b​e​l​.
+			 * A​d​d​s​ ​l​a​b​e​l​s​ ​(​ ​w​h​i​c​h​ ​m​a​y​ ​b​e​ ​p​r​o​p​o​r​t​i​o​n​a​l​ ​t​o​ ​a​ ​v​a​l​u​e​)​ ​t​o​ ​a​ ​b​a​c​k​g​r​o​u​n​d​ ​m​a​p​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​s​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​.
 			 */
 			Labels: string
 			/**
@@ -2438,15 +2438,15 @@ type RootTranslation = {
 			 */
 			CategoricalPictogram: string
 			/**
-			 * A​ ​s​m​o​o​t​h​e​d​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​ ​i​s​ ​s​m​o​o​t​h​e​d​ ​u​s​i​n​g​ ​a​ ​k​e​r​n​e​l​ ​d​e​n​s​i​t​y​ ​e​s​t​i​m​a​t​i​o​n​.
+			 * A​ ​s​m​o​o​t​h​e​d​ ​m​a​p​ ​m​a​k​e​s​ ​i​t​ ​p​o​s​s​i​b​l​e​ ​t​o​ ​s​h​i​f​t​ ​f​r​o​m​ ​a​ ​d​i​s​c​r​e​t​e​ ​t​o​ ​a​ ​c​o​n​t​i​n​u​o​u​s​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​ ​b​y​ ​t​a​k​i​n​g​ ​i​n​t​o​ ​a​c​c​o​u​n​t​ ​t​h​e​ ​n​e​i​g​h​b​o​r​h​o​o​d​ ​v​a​l​u​e​s​ ​o​f​ ​e​a​c​h​ ​g​e​o​g​r​a​p​h​i​c​ ​o​b​j​e​c​t​.
 			 */
 			Smoothed: string
 			/**
-			 * A​ ​c​a​r​t​o​g​r​a​m​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​g​e​o​m​e​t​r​y​ ​o​f​ ​a​r​e​a​s​ ​i​s​ ​d​i​s​t​o​r​t​e​d​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​.
+			 * A​ ​c​a​r​t​o​g​r​a​m​ ​r​e​s​h​a​p​e​s​ ​p​o​l​y​g​o​n​a​l​ ​g​e​o​g​r​a​p​h​i​c​ ​o​b​j​e​c​t​s​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​r​i​a​b​l​e​.
 			 */
 			Cartogram: string
 			/**
-			 * A​ ​g​r​i​d​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​a​r​e​a​s​ ​a​r​e​ ​s​h​a​d​e​d​ ​o​r​ ​p​a​t​t​e​r​n​e​d​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​,​ ​b​u​t​ ​w​i​t​h​ ​a​ ​g​r​i​d​ ​l​a​y​o​u​t​.
+			 * G​r​i​d​d​i​n​g​ ​i​s​ ​t​h​e​ ​p​r​o​c​e​s​s​ ​o​f​ ​r​e​o​r​g​a​n​i​z​i​n​g​ ​g​e​o​g​r​a​p​h​i​c​ ​d​a​t​a​ ​i​n​t​o​ ​a​ ​r​e​g​u​l​a​r​ ​g​e​o​g​r​a​p​h​i​c​ ​g​r​i​d​.
 			 */
 			Grid: string
 			/**
@@ -2466,7 +2466,7 @@ type RootTranslation = {
 			 */
 			SimpleLinearRegression: string
 			/**
-			 * A​ ​m​u​s​h​r​o​o​m​s​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​v​a​l​u​e​s​ ​o​f​ ​t​w​o​ ​v​a​r​i​a​b​l​e​s​ ​a​r​e​ ​r​e​p​r​e​s​e​n​t​e​d​ ​b​y​ ​t​w​o​ ​h​a​l​f​-​c​i​r​c​l​e​s​ ​o​r​ ​t​w​o​ ​h​a​l​f​-​s​q​u​a​r​e​s​,​ ​f​o​r​m​i​n​g​ ​a​ ​m​u​s​h​r​o​o​m​-​s​h​a​p​e​d​ ​s​y​m​b​o​l​.
+			 * A​ ​m​u​s​h​r​o​o​m​ ​m​a​p​ ​i​n​v​o​l​v​e​s​ ​v​a​r​y​i​n​g​ ​t​h​e​ ​a​r​e​a​ ​o​f​ ​t​w​o​ ​s​e​m​i​c​i​r​c​l​e​s​ ​o​r​ ​s​q​u​a​r​e​s​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​s​ ​o​f​ ​t​w​o​ ​a​b​s​o​l​u​t​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​r​i​a​b​l​e​s​.
 			 */
 			Mushrooms: string
 			/**
@@ -5622,15 +5622,15 @@ export type TranslationFunctions = {
 		Information: () => LocalizedString
 		ShortDescriptions: {
 			/**
-			 * A choropleth map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable.
+			 * A choropleth map lets you assign a color to geographic objects according to the values of a relative quantitative variable (rates, indices).
 			 */
 			Choropleth: () => LocalizedString
 			/**
-			 * A proportional symbols map is a thematic map in which the size of a symbol varies in proportion to the value of a variable.
+			 * A proportional symbol map lets you vary the area of a symbol in proportion to the value of an absolute quantitative variable.
 			 */
 			ProportionalSymbols: () => LocalizedString
 			/**
-			 * A labels map is a thematic map in which the value of a variable is displayed as a label.
+			 * Adds labels ( which may be proportional to a value) to a background map according to the values of a variable.
 			 */
 			Labels: () => LocalizedString
 			/**
@@ -5646,15 +5646,15 @@ export type TranslationFunctions = {
 			 */
 			CategoricalPictogram: () => LocalizedString
 			/**
-			 * A smoothed map is a thematic map in which the value of a variable is smoothed using a kernel density estimation.
+			 * A smoothed map makes it possible to shift from a discrete to a continuous representation by taking into account the neighborhood values of each geographic object.
 			 */
 			Smoothed: () => LocalizedString
 			/**
-			 * A cartogram is a thematic map in which the geometry of areas is distorted in proportion to the value of a variable.
+			 * A cartogram reshapes polygonal geographic objects according to the value of a quantitative variable.
 			 */
 			Cartogram: () => LocalizedString
 			/**
-			 * A grid map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable, but with a grid layout.
+			 * Gridding is the process of reorganizing geographic data into a regular geographic grid.
 			 */
 			Grid: () => LocalizedString
 			/**
@@ -5674,7 +5674,7 @@ export type TranslationFunctions = {
 			 */
 			SimpleLinearRegression: () => LocalizedString
 			/**
-			 * A mushrooms map is a thematic map in which the values of two variables are represented by two half-circles or two half-squares, forming a mushroom-shaped symbol.
+			 * A mushroom map involves varying the area of two semicircles or squares in proportion to the values of two absolute quantitative variables.
 			 */
 			Mushrooms: () => LocalizedString
 			/**
