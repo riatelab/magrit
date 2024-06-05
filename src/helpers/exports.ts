@@ -3,7 +3,7 @@ import { topology } from 'topojson-server';
 
 // Stores
 import { getDefaultClipExtent, mapStore } from '../store/MapStore';
-import { globalStore } from '../store/GlobalStore';
+import { globalStore, setGlobalStore } from '../store/GlobalStore';
 
 // Helpers
 import { SupportedGeoFileTypes } from './supportedFormats';
@@ -173,6 +173,8 @@ export async function exportMapToSvg(
   const targetSvg = getTargetSvg();
   // Patch the SVG to include the fonts used in the map
   patchSvgForFonts(targetSvg);
+  // Current state of snapping grid
+  const displaySnapGrid = globalStore.displaySnappingGrid;
   // Function to be executed after the map is exported to SVG
   // (whether it failed or succeeded)
   // in order to restore various settings
@@ -181,6 +183,9 @@ export async function exportMapToSvg(
     unpatchSvgForFonts(targetSvg);
     // Restore the projection clip extent and redraw the paths
     globalStore.projection.clipExtent(getDefaultClipExtent());
+    // Restore the state of the snapping grid
+    setGlobalStore('displaySnappingGrid', displaySnapGrid);
+    // Redraw the paths
     redrawPaths(targetSvg);
   };
   // Set the projection clip extent if needed
@@ -198,6 +203,10 @@ export async function exportMapToSvg(
     globalStore.projection.clipExtent(null);
     // Redraw the paths
     redrawPaths(targetSvg);
+  }
+
+  if (displaySnapGrid) {
+    setGlobalStore('displaySnappingGrid', false);
   }
 
   const outputNameClean = cleanOutputName(outputName, 'svg');
@@ -255,11 +264,19 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
   // Patch the SVG to include the fonts used in the map
   patchSvgForFonts(targetSvg);
 
+  // Current state of snapping grid
+  const displaySnapGrid = globalStore.displaySnappingGrid;
+
   // Cleanup function
   const cleanUp = () => {
     targetCanvas.remove();
     unpatchSvgForFonts(targetSvg);
+    // Restore the state of the snapping grid
+    setGlobalStore('displaySnappingGrid', displaySnapGrid);
   };
+
+  // Remove snapping grid if active
+  setGlobalStore('displaySnappingGrid', false);
 
   // eslint-disable-next-line no-param-reassign
   const outputNameClean = cleanOutputName(outputName, 'png');

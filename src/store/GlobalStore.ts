@@ -16,6 +16,7 @@ type GlobalStoreType = {
   pathGenerator: any,
   userHasAddedLayer: boolean,
   snapToGridWhenDragging: boolean,
+  displaySnappingGrid: boolean,
   // Size of the header (note that this is computed from the CSS)
   headerHeight: number,
   // Size of the left menu (note that this is computed from the CSS)
@@ -38,6 +39,7 @@ const [
   pathGenerator: null,
   userHasAddedLayer: false,
   snapToGridWhenDragging: false,
+  displaySnappingGrid: false,
   headerHeight: +(getComputedStyle(document.documentElement).getPropertyValue('--header-height').replace('px', '')),
   leftMenuWidth: +(getComputedStyle(document.documentElement).getPropertyValue('--left-menu-width').replace('px', '')),
 } as GlobalStoreType);

@@ -705,7 +705,6 @@ export default function MapZone(): JSX.Element {
             <ClipSphere />
           </Show>
         </defs>
-
         {/* Generate SVG group for each layer */}
         <For each={layersDescriptionStore.layers}>
           {(layer) => <Show when={
@@ -766,6 +765,32 @@ export default function MapZone(): JSX.Element {
               <p>{LL().MapZone.DropFilesHere()}</p>
             </div>
           </foreignObject>
+        </Show>
+        <Show when={globalStore.displaySnappingGrid}>
+          <g class="grid" pointer-events="none">
+            <defs>
+              <pattern
+                id="grid-pattern"
+                width="10"
+                height="10"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M 10 0 L 0 0 0 10"
+                  fill="none"
+                  stroke="grey"
+                  stroke-width="0.5"
+                />
+              </pattern>
+            </defs>
+            <rect
+              x="0"
+              y="0"
+              width={mapStore.mapDimensions.width}
+              height={mapStore.mapDimensions.height}
+              fill="url(#grid-pattern)"
+            />
+          </g>
         </Show>
       </svg>
     </div>

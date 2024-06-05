@@ -1,7 +1,7 @@
 // Import from solid-js
 import {
   Accessor, createSignal,
-  JSX, Setter,
+  JSX, Setter, Show,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
@@ -83,7 +83,7 @@ const makeDrawingInstructions = (
   object: 'Rectangle' | 'Line' | 'Text' | 'ScaleBar' | 'NorthArrow',
 ): string => `${LL().LayoutFeatures.DrawingInstructions[object]()}\n${LL().LayoutFeatures.DrawingInstructions.PressEscToCancel()}`;
 
-let currentCleanUp: () => void | undefined;
+let currentCleanUp: (() => void) | undefined;
 
 const createRectangle = (LL: Accessor<TranslationFunctions>) => {
   toast.success(makeDrawingInstructions(LL, 'Rectangle'), {
@@ -879,8 +879,20 @@ export default function LayoutFeatures(): JSX.Element {
       checked={globalStore.snapToGridWhenDragging}
       onChange={(v) => {
         setGlobalStore({ snapToGridWhenDragging: v });
+        if (!v && globalStore.displaySnappingGrid) {
+          setGlobalStore({ displaySnappingGrid: false });
+        }
       }}
     />
+    <Show when={globalStore.snapToGridWhenDragging}>
+      <InputFieldCheckbox
+        label={LL().LayoutFeatures.DisplayGrid()}
+        checked={globalStore.displaySnappingGrid}
+        onChange={(v) => {
+          setGlobalStore({ displaySnappingGrid: v });
+        }}
+      />
+    </Show>
     <div class="field-block">
       <label class="label">{LL().LayoutFeatures.MapSkinElements()}</label>
       <div class="is-flex is-justify-content-space-evenly">
