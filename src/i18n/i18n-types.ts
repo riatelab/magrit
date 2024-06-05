@@ -559,6 +559,10 @@ type RootTranslation = {
 		 * A​u​t​o​m​a​t​i​c​a​l​l​y​ ​a​l​i​g​n​ ​i​t​e​m​s​ ​o​n​ ​a​ ​g​r​i​d
 		 */
 		SnapToGrid: string
+		/**
+		 * D​i​s​p​l​a​y​ ​t​h​e​ ​u​n​d​e​r​l​y​i​n​g​ ​g​r​i​d
+		 */
+		DisplayGrid: string
 		ContextMenu: {
 			/**
 			 * E​d​i​t​ ​s​e​t​t​i​n​g​s​.​.​.
@@ -2118,6 +2122,26 @@ type RootTranslation = {
 		 * V​a​l​u​e
 		 */
 		Value: string
+		/**
+		 * F​i​l​l
+		 */
+		Fill: string
+		/**
+		 * S​t​r​o​k​e
+		 */
+		Stroke: string
+		/**
+		 * W​i​d​t​h​ ​(​p​x​)
+		 */
+		Width: string
+		/**
+		 * O​p​a​c​i​t​y
+		 */
+		Opacity: string
+		/**
+		 * C​o​l​o​r
+		 */
+		Color: string
 		/**
 		 * F​i​l​l​ ​c​o​l​o​r
 		 */
@@ -3797,6 +3821,10 @@ export type TranslationFunctions = {
 		 * Automatically align items on a grid
 		 */
 		SnapToGrid: () => LocalizedString
+		/**
+		 * Display the underlying grid
+		 */
+		DisplayGrid: () => LocalizedString
 		ContextMenu: {
 			/**
 			 * Edit settings...
@@ -5326,6 +5354,26 @@ export type TranslationFunctions = {
 		 * Value
 		 */
 		Value: () => LocalizedString
+		/**
+		 * Fill
+		 */
+		Fill: () => LocalizedString
+		/**
+		 * Stroke
+		 */
+		Stroke: () => LocalizedString
+		/**
+		 * Width (px)
+		 */
+		Width: () => LocalizedString
+		/**
+		 * Opacity
+		 */
+		Opacity: () => LocalizedString
+		/**
+		 * Color
+		 */
+		Color: () => LocalizedString
 		/**
 		 * Fill color
 		 */
