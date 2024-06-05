@@ -206,7 +206,7 @@ const dropHandler = (e: Event, LL: Accessor<TranslationFunctions>): void => {
   // Only files should trigger the opening of the drop overlay
   const draggedElementsStatus = droppedElementsAreFiles(e as DragEvent);
   if (!draggedElementsStatus.isFiles) {
-    if (draggedElementsStatus.reason === 'directory') {
+    if (draggedElementsStatus.reason === 'directory' || draggedElementsStatus.reason === 'emptyFiles') {
       toast.error(LL().ImportWindow.InstructionNotFolder());
     }
     setFileDropStore({ show: false, files: [] });

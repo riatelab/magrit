@@ -66,7 +66,7 @@ export function draggedElementsAreFiles(e: DragEvent): boolean {
   if (
     e.dataTransfer
     && e.dataTransfer.types
-    && !e.dataTransfer.types.every((el) => el === 'Files')
+    && !e.dataTransfer.types.every((el) => el === 'Files' || el === 'application/x-moz-file')
   ) {
     return false;
   }
@@ -80,7 +80,7 @@ export function droppedElementsAreFiles(e: DragEvent): {
   if (
     e.dataTransfer
     && e.dataTransfer.types
-    && !e.dataTransfer.types.every((el) => el === 'Files')
+    && !e.dataTransfer.types.every((el) => el === 'Files' || el === 'application/x-moz-file')
   ) {
     return { isFiles: false, reason: 'notFiles' };
   }
