@@ -1095,6 +1095,7 @@ function makeSettingsDefaultLine(
       props.renderer === 'default'
       || props.renderer === 'discontinuity'
       || props.renderer === 'links'
+      || props.renderer === 'graticule'
     }>
       <InputFieldColor
         label={ LL().LayerSettings.StrokeColor() }
