@@ -368,7 +368,8 @@ const fr = {
       Dougenik: 'Dougenik et al. (1985)',
       Olson: 'Olson (2005)',
       GastnerSeguyMore: 'Gastner, Seguy & More (2018)',
-      WarningGeo: 'La projection cartographique actuelle est géographique (ou son unité est en degrés). Le cartogramme va être calculé dans la projection actuelle. Privilégiez, lorsque que c\'est possible, l\'utilisation de données projetées (avec une unité de distance en mètres par exemple) pour une meilleure précision.',
+      WarningGeo: 'La <b>projection cartographique</b> actuelle est géographique (ou son unité est en degrés). Le cartogramme va être calculé dans la projection actuelle. Privilégiez, lorsque que c\'est possible, l\'utilisation de données projetées (avec une unité de distance en mètres par exemple) pour une meilleure précision.',
+      WarningMissingOrZeroValues: 'La <b>variable</b> sélectionnée contient des valeurs manquantes ou des valeurs inférieures ou égales à zéro. Ces valeurs seront remplacées par une valeur représentant un fraction de la plus petite valeur positive de la variable sélectionnée.',
       NewLayerName: 'Cartogramme_{layerName}',
     },
     GridOptions: {

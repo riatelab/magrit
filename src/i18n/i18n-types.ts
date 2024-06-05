@@ -1327,9 +1327,13 @@ type RootTranslation = {
 			 */
 			GastnerSeguyMore: string
 			/**
-			 * T​h​e​ ​c​u​r​r​e​n​t​ ​m​a​p​ ​p​r​o​j​e​c​t​i​o​n​ ​i​s​ ​g​e​o​g​r​a​p​h​i​c​ ​(​o​r​ ​i​t​s​ ​u​n​i​t​ ​i​s​ ​d​e​g​r​e​e​s​)​.​ ​T​h​e​ ​c​a​r​t​o​g​r​a​m​ ​w​i​l​l​ ​b​e​ ​c​a​l​c​u​l​a​t​e​d​ ​i​n​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​p​r​o​j​e​c​t​i​o​n​.​ ​W​h​e​n​e​v​e​r​ ​p​o​s​s​i​b​l​e​,​ ​y​o​u​ ​s​h​o​u​l​d​ ​u​s​e​ ​p​r​o​j​e​c​t​e​d​ ​d​a​t​a​ ​(​w​i​t​h​ ​a​ ​d​i​s​t​a​n​c​e​ ​u​n​i​t​ ​i​n​ ​m​e​t​r​e​s​,​ ​f​o​r​ ​e​x​a​m​p​l​e​)​ ​f​o​r​ ​g​r​e​a​t​e​r​ ​a​c​c​u​r​a​c​y​.
+			 * T​h​e​ ​c​u​r​r​e​n​t​ ​<​b​>​m​a​p​ ​p​r​o​j​e​c​t​i​o​n​<​/​b​>​ ​i​s​ ​g​e​o​g​r​a​p​h​i​c​ ​(​o​r​ ​i​t​s​ ​u​n​i​t​ ​i​s​ ​d​e​g​r​e​e​s​)​.​ ​T​h​e​ ​c​a​r​t​o​g​r​a​m​ ​w​i​l​l​ ​b​e​ ​c​a​l​c​u​l​a​t​e​d​ ​i​n​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​p​r​o​j​e​c​t​i​o​n​.​ ​W​h​e​n​e​v​e​r​ ​p​o​s​s​i​b​l​e​,​ ​y​o​u​ ​s​h​o​u​l​d​ ​u​s​e​ ​p​r​o​j​e​c​t​e​d​ ​d​a​t​a​ ​(​w​i​t​h​ ​a​ ​d​i​s​t​a​n​c​e​ ​u​n​i​t​ ​i​n​ ​m​e​t​r​e​s​,​ ​f​o​r​ ​e​x​a​m​p​l​e​)​ ​f​o​r​ ​g​r​e​a​t​e​r​ ​a​c​c​u​r​a​c​y​.
 			 */
 			WarningGeo: string
+			/**
+			 * T​h​e​ ​<​b​>​v​a​r​i​a​b​l​e​<​/​b​>​ ​s​e​l​e​c​t​e​d​ ​c​o​n​t​a​i​n​s​ ​m​i​s​s​i​n​g​ ​o​r​ ​z​e​r​o​ ​v​a​l​u​e​s​.​ ​T​h​e​s​e​ ​v​a​l​u​e​s​ ​w​i​l​l​ ​b​e​ ​r​e​p​l​a​c​e​d​ ​b​y​ ​a​ ​f​r​a​c​t​i​o​n​ ​o​f​ ​t​h​e​ ​s​m​a​l​l​e​s​t​ ​p​o​s​i​t​i​v​e​ ​v​a​l​u​e​ ​i​n​ ​t​h​e​ ​d​a​t​a​s​e​t​.
+			 */
+			WarningMissingOrZeroValues: string
 			/**
 			 * C​a​r​t​o​g​r​a​m​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
@@ -4550,9 +4554,13 @@ export type TranslationFunctions = {
 			 */
 			GastnerSeguyMore: () => LocalizedString
 			/**
-			 * The current map projection is geographic (or its unit is degrees). The cartogram will be calculated in the current projection. Whenever possible, you should use projected data (with a distance unit in metres, for example) for greater accuracy.
+			 * The current <b>map projection</b> is geographic (or its unit is degrees). The cartogram will be calculated in the current projection. Whenever possible, you should use projected data (with a distance unit in metres, for example) for greater accuracy.
 			 */
 			WarningGeo: () => LocalizedString
+			/**
+			 * The <b>variable</b> selected contains missing or zero values. These values will be replaced by a fraction of the smallest positive value in the dataset.
+			 */
+			WarningMissingOrZeroValues: () => LocalizedString
 			/**
 			 * Cartogram_{layerName}
 			 */

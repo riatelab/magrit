@@ -47,6 +47,21 @@ export function isNonNull(value: any): boolean {
   return value !== null && value !== undefined && value !== '';
 }
 
+/**
+ * Custom function to check if a value is a positive finite number.
+ * @param value
+ * @returns {boolean}
+ */
+export const isPositiveFiniteNumber = (value: any): boolean => {
+  if (!isFiniteNumber(value)) {
+    return false;
+  }
+  if (+value <= 0) {
+    return false;
+  }
+  return true;
+};
+
 export const ascending = (a: number, b: number) => a - b;
 
 export const ascendingKeyAccessor = (

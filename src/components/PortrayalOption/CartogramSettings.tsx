@@ -1,5 +1,6 @@
 // Imports from solid-js
 import {
+  createMemo,
   createSignal,
   For,
   type JSX,
@@ -17,7 +18,8 @@ import {
   computeCartogramGastnerSeguyMore,
   computeCartogramOlson,
 } from '../../helpers/cartograms';
-import { findSuitableName, unproxify } from '../../helpers/common';
+import { randomColorFromCategoricalPalette } from '../../helpers/color';
+import { findSuitableName, isPositiveFiniteNumber, unproxify } from '../../helpers/common';
 import { generateIdLayer } from '../../helpers/layers';
 import { DataType, type Variable, VariableType } from '../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
@@ -116,7 +118,7 @@ async function onClickValidate(
     strokeColor: '#000000',
     strokeWidth: 0.5,
     strokeOpacity: 1,
-    fillColor: '#a12f2f',
+    fillColor: randomColorFromCategoricalPalette('Vivid'),
     fillOpacity: 1,
     dropShadow: null,
     shapeRendering: referenceLayerDescription.shapeRendering,
@@ -177,6 +179,18 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
     numberOfIterations,
     setNumberOfIterations,
   ] = createSignal<number>(5);
+
+  const hasMissingOrZeroValues = createMemo(() => {
+    const v = targetVariable();
+    let hasMissingOrZero = false;
+    for (let i = 0; i < layerDescription.data.features.length; i += 1) {
+      if (!isPositiveFiniteNumber(layerDescription.data.features[i].properties[v])) {
+        hasMissingOrZero = true;
+        break;
+      }
+    }
+    return hasMissingOrZero;
+  });
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(
@@ -241,9 +255,16 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
         step={1}
       />
     </Show>
+    <Show when={hasMissingOrZeroValues()}>
+      <MessageBlock type={'warning'} useIcon={true}>
+        {/* eslint-disable-next-line solid/no-innerhtml, max-len */}
+        <p innerHTML={LL().FunctionalitiesSection.CartogramOptions.WarningMissingOrZeroValues()}></p>
+      </MessageBlock>
+    </Show>
     <Show when={isGeo}>
       <MessageBlock type={'warning'} useIcon={true}>
-        { LL().FunctionalitiesSection.CartogramOptions.WarningGeo() }
+        {/* eslint-disable-next-line solid/no-innerhtml */}
+        <p innerHTML={LL().FunctionalitiesSection.CartogramOptions.WarningGeo()}></p>
       </MessageBlock>
     </Show>
     <InputResultName

@@ -4,7 +4,7 @@ import cartWasmUrl from 'go-cart-wasm/dist/cart.wasm?url';
 import { area, centroid, transformScale } from '@turf/turf';
 
 // Helpers
-import { isFiniteNumber } from './common';
+import { isFiniteNumber, isPositiveFiniteNumber } from './common';
 import d3 from './d3-custom';
 import { planarArea } from './geo';
 import { Mmax, Mmin, Msqrt } from './math';
@@ -153,14 +153,12 @@ interface InfoFeature {
  */
 const getDougenikInfo = (
   data: GeoJSONFeatureCollection,
-  variableName: string,
+  values: number[],
   areaFn: (geom: GeoJSONFeature) => number,
   centroidFn: (geom: GeoJSONFeature) => [number, number],
 ): DougInfo => {
   const areas = data.features
     .map((f) => areaFn(f as never));
-  const values = data.features
-    .map((f) => (isFiniteNumber(f.properties[variableName]) ? +f.properties[variableName] : 0.1));
   const areaTotal = areas.reduce((a, b) => a + b, 0);
   const valueTotal = values.reduce((a, b) => a + b, 0);
   const fraction = areaTotal / valueTotal;
@@ -272,6 +270,29 @@ const transformFeatureDougenik = (
   }
 };
 
+const replaceNullAndZeroValues = (
+  features: GeoJSONFeature[],
+  variableName: string,
+): number[] => {
+  // Get the min value of the non null values
+  let minValue = Infinity;
+  features.forEach((f) => {
+    const value = f.properties[variableName];
+    if (isPositiveFiniteNumber(value)) {
+      minValue = Mmin(minValue, +value);
+    }
+  });
+
+  //  Generate the value that will be used as a replacement for null values
+  const rv = minValue * 0.5 < 0.1 ? minValue : minValue * 0.5;
+
+  // Replace null values with the min value
+  return features.map((f) => {
+    const value = f.properties[variableName];
+    return !isPositiveFiniteNumber(value) ? rv : +value;
+  });
+};
+
 function makeDougenikCartogram(
   data: GeoJSONFeatureCollection,
   variableName: string,
@@ -280,10 +301,12 @@ function makeDougenikCartogram(
   centroidFn: (geom: GeoJSONFeature) => [number, number],
 ): GeoJSONFeatureCollection {
   const resultData = JSON.parse(JSON.stringify(data)) as GeoJSONFeatureCollection;
+  const values = replaceNullAndZeroValues(resultData.features, variableName);
+
   for (let i = 0; i < iterations; i += 1) {
     const dougInfo = getDougenikInfo(
       resultData,
-      variableName,
+      values,
       areaFn,
       centroidFn,
     );
@@ -303,8 +326,6 @@ function makeDougenikCartogram(
   // Compute the information for the final cartogram
   // and retrieve the size error for each feature
   const areas = resultData.features.map((f) => areaFn(f as never));
-  const values = resultData.features
-    .map((f) => (isFiniteNumber(f.properties[variableName]) ? +f.properties[variableName] : 0.1));
   const areaTotal = areas.reduce((a, b) => a + b, 0);
   const valueTotal = values.reduce((a, b) => a + b, 0);
 
