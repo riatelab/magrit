@@ -514,6 +514,29 @@ function makeSettingsDefaultPoint(
         - For 'choropleth' renderer, we propose to reopen the classification modal
         - For 'proportional' renderer, ... (TODO)
     */}
+    <Show when={props.renderer !== 'proportionalSymbols' && props.renderer !== 'mushrooms'}>
+      <InputFieldSelect
+        label={LL().LayerSettings.SymbolType()}
+        onChange={(v) => debouncedUpdateProp(props.id, 'symbolType', v)}
+        value={props.symbolType!}
+      >
+        <option value="circle">{LL().LayerSettings.SymbolTypes.circle()}</option>
+        <option value="square">{LL().LayerSettings.SymbolTypes.square()}</option>
+        <option value="cross">{LL().LayerSettings.SymbolTypes.cross()}</option>
+        <option value="star">{LL().LayerSettings.SymbolTypes.star()}</option>
+        <option value="diamond">{LL().LayerSettings.SymbolTypes.diamond()}</option>
+        <option value="diamond2">{LL().LayerSettings.SymbolTypes.diamond2()}</option>
+        <option value="triangle">{LL().LayerSettings.SymbolTypes.triangle()}</option>
+      </InputFieldSelect>
+      <InputFieldNumber
+        label={LL().LayerSettings.SymbolSize()}
+        value={props.symbolSize!}
+        onChange={(v) => debouncedUpdateProp(props.id, 'symbolSize', v)}
+        min={1}
+        max={20}
+        step={1}
+      />
+    </Show>
     <Show when={props.renderer === 'default'}>
       <InputFieldColor
         label={ LL().LayerSettings.FillColor() }
@@ -795,11 +818,6 @@ function makeSettingsDefaultPoint(
         }}
       />
     </Show>
-    <InputFieldColor
-      label={LL().LayerSettings.StrokeColor()}
-      value={props.strokeColor!}
-      onChange={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
-    />
     <InputFieldNumber
       label={LL().LayerSettings.FillOpacity()}
       value={props.fillOpacity!}
@@ -808,6 +826,11 @@ function makeSettingsDefaultPoint(
       max={1}
       step={0.1}
       strictMinMax={true}
+    />
+    <InputFieldColor
+      label={LL().LayerSettings.StrokeColor()}
+      value={props.strokeColor!}
+      onChange={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
     />
     <InputFieldNumber
       label={LL().LayerSettings.StrokeOpacity()}
@@ -826,29 +849,6 @@ function makeSettingsDefaultPoint(
       max={10}
       step={0.1}
     />
-    <Show when={props.renderer !== 'proportionalSymbols' && props.renderer !== 'mushrooms'}>
-      <InputFieldNumber
-        label={LL().LayerSettings.SymbolSize()}
-        value={props.symbolSize!}
-        onChange={(v) => debouncedUpdateProp(props.id, 'symbolSize', v)}
-        min={1}
-        max={20}
-        step={1}
-      />
-      <InputFieldSelect
-        label={LL().LayerSettings.SymbolType()}
-        onChange={(v) => debouncedUpdateProp(props.id, 'symbolType', v)}
-        value={props.symbolType!}
-      >
-        <option value="circle">{LL().LayerSettings.SymbolTypes.circle()}</option>
-        <option value="square">{LL().LayerSettings.SymbolTypes.square()}</option>
-        <option value="cross">{LL().LayerSettings.SymbolTypes.cross()}</option>
-        <option value="star">{LL().LayerSettings.SymbolTypes.star()}</option>
-        <option value="diamond">{LL().LayerSettings.SymbolTypes.diamond()}</option>
-        <option value="diamond2">{LL().LayerSettings.SymbolTypes.diamond2()}</option>
-        <option value="triangle">{LL().LayerSettings.SymbolTypes.triangle()}</option>
-      </InputFieldSelect>
-    </Show>
     <Show when={props.renderer === 'mushrooms'}>
       <div class="mt-4 mb-5 has-text-weight-bold">
         {LL().FunctionalitiesSection.MushroomsOptions.TopProperties()}
@@ -1557,11 +1557,6 @@ function makeSettingsDefaultPolygon(
         }}
       />
     </Show>
-    <InputFieldColor
-      label={ LL().LayerSettings.StrokeColor() }
-      value={ props.strokeColor! }
-      onChange={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
-    />
     <InputFieldNumber
       label={ LL().LayerSettings.FillOpacity() }
       value={ props.fillOpacity! }
@@ -1570,6 +1565,11 @@ function makeSettingsDefaultPolygon(
       max={1}
       step={0.1}
       strictMinMax={true}
+    />
+    <InputFieldColor
+      label={ LL().LayerSettings.StrokeColor() }
+      value={ props.strokeColor! }
+      onChange={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
     />
     <InputFieldNumber
       label={ LL().LayerSettings.StrokeOpacity() }
