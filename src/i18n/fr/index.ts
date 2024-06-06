@@ -156,7 +156,7 @@ const fr = {
     NorthArrow: 'Flèche Nord',
     FreeDrawing: 'Dessin libre',
     SnapToGrid: 'Aligner automatiquement les éléments sur une grille',
-    DisplayGrid: 'Display the underlying grid',
+    DisplayGrid: 'Afficher la grille d\'alignement',
     ContextMenu: {
       EditSettings: 'Modifier les paramètres...',
       Edit: 'Modifier',
