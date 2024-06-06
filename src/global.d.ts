@@ -585,8 +585,8 @@ export enum LinkType {
 export enum LinkHeadType {
   None = 'None',
   Arrow = 'Arrow',
-  NoneOnSymbol = 'NoneOnSymbol',
-  ArrowOnSymbol = 'ArrowOnSymbol',
+  // NoneOnSymbol = 'NoneOnSymbol',
+  // ArrowOnSymbol = 'ArrowOnSymbol',
 }
 
 export enum LinkCurvature {

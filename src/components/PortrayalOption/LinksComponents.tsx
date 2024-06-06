@@ -284,7 +284,7 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
         display: 'flex',
         'justify-content': 'space-evenly',
       }}>
-        <div style={{ width: '25%' }}>
+        <div style={{ width: '20%' }}>
           <InputFieldNumber
             label={'Min'}
             value={currentSelectionIntensity() ? currentSelectionIntensity()[0] : ''}
@@ -294,9 +294,10 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
             min={0}
             max={1e12}
             step={1}
+            width={100}
           />
         </div>
-        <div style={{ width: '25%' }}>
+        <div style={{ width: '20%' }}>
           <InputFieldNumber
             label={'Max'}
             value={currentSelectionIntensity() ? currentSelectionIntensity()[1] : ''}
@@ -306,6 +307,7 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
             min={0}
             max={1e12}
             step={1}
+            width={100}
           />
         </div>
       </div>
@@ -324,7 +326,7 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
         display: 'flex',
         'justify-content': 'space-evenly',
       }}>
-        <div style={{ width: '25%' }}>
+        <div style={{ width: '20%' }}>
           <InputFieldNumber
             label={'Min'}
             value={currentSelectionDistance() ? currentSelectionDistance()[0] : ''}
@@ -334,9 +336,10 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
             min={0}
             max={1e12}
             step={1}
+            width={100}
           />
         </div>
-        <div style={{ width: '25%' }}>
+        <div style={{ width: '20%' }}>
           <InputFieldNumber
             label={'Max'}
             value={currentSelectionDistance() ? currentSelectionDistance()[1] : ''}
@@ -346,6 +349,7 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
             min={0}
             max={1e12}
             step={1}
+            width={100}
           />
         </div>
       </div>
