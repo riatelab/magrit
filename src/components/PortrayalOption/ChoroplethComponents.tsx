@@ -18,6 +18,7 @@ import {
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { getPaletteWrapper } from '../../helpers/color';
+import { getUniqueValues } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
 import { getEntitiesByClass } from '../../helpers/classification';
 import { Mmin } from '../../helpers/math';
@@ -42,14 +43,6 @@ import {
 const defaultColorScheme = applicationSettingsStore.defaultColorScheme;
 // eslint-disable-next-line prefer-destructuring
 const defaultNoDataColor = applicationSettingsStore.defaultNoDataColor;
-
-function getUniqueValues(values: number[]) {
-  return Array.from(new Set(values));
-}
-
-function countUniqueValues(values: number[]) {
-  return new Set(values).size;
-}
 
 // eslint-disable-next-line import/prefer-default-export
 export function ChoroplethClassificationSelector(

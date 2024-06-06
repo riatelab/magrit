@@ -11,7 +11,7 @@ import { produce, unwrap } from 'solid-js/store';
 // Imports from other packages
 import { getPalette } from 'dicopal';
 import { yieldOrContinue } from 'main-thread-scheduling';
-import { jenks } from 'statsbreaks';
+import { CkmeansClassifier } from 'statsbreaks';
 import { bbox } from '@turf/turf';
 
 // Stores
@@ -28,11 +28,13 @@ import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelecti
 // Helper
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { getPaletteWrapper } from '../../helpers/color';
-import { findSuitableName } from '../../helpers/common';
+import { findSuitableName, getMinimumPrecision, getUniqueValues } from '../../helpers/common';
+import d3 from '../../helpers/d3-custom';
 import { computeAppropriateResolution } from '../../helpers/geo';
 import { computeGriddedLayer } from '../../helpers/gridding';
 import { generateIdLayer } from '../../helpers/layers';
 import { generateIdLegend } from '../../helpers/legends';
+import { Mmin } from '../../helpers/math';
 import { getProjectionUnit } from '../../helpers/projection';
 import { VariableType } from '../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
@@ -79,8 +81,8 @@ async function onClickValidate(
     cellType,
     gridParameters,
     noDataColor: applicationSettingsStore.defaultNoDataColor,
-    palette: getPaletteWrapper('Carrots', 7, true),
     breaks: [],
+    palette: {} as never,
   } as GriddedLayerParameters;
 
   const newData = await computeGriddedLayer(
@@ -91,7 +93,14 @@ async function onClickValidate(
   // Compute breaks based on the computed values
   const values = newData.features
     .map((ft) => ft.properties[`density-${targetVariable}`] as number);
-  params.breaks = jenks(values, { nb: 7, precision: null });
+
+  const numberOfClasses = Mmin(d3.thresholdSturges(getUniqueValues(values)), 7);
+
+  const classifier = new CkmeansClassifier(values, null);
+
+  params.breaks = classifier.classify(numberOfClasses);
+  params.palette = getPaletteWrapper('Carrots', numberOfClasses, true);
+  params.entitiesByClass = classifier.countByClass();
   params.variable = `density-${targetVariable}`;
 
   // Find a position for the legend
@@ -136,6 +145,9 @@ async function onClickValidate(
     rendererParameters: params,
   } as LayerDescription;
 
+  // How many decimals to display in the legend
+  const minPrecision = getMinimumPrecision(params.breaks);
+
   const legend = {
     // Part common to all legends
     id: generateIdLegend(),
@@ -153,7 +165,7 @@ async function onClickValidate(
     } as LegendTextElement,
     position: legendPosition,
     visible: true,
-    roundDecimals: 1,
+    roundDecimals: minPrecision < 0 ? 0 : minPrecision,
     backgroundRect: {
       visible: false,
     },
