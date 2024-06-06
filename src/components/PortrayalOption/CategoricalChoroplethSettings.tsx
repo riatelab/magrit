@@ -223,7 +223,10 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
     categoriesMapping,
     setCategoriesMapping,
   ] = createSignal<CategoricalChoroplethMapping[]>(
-    makeCategoriesMapping(makeCategoriesMap(layerDescription.data.features, targetVariable())),
+    makeCategoriesMapping(
+      makeCategoriesMap(layerDescription.data.features, targetVariable()),
+      applicationSettingsStore.defaultNoDataColor,
+    ),
   );
   const [
     displayChartOnMap,
@@ -268,6 +271,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
         setCategoriesMapping(
           makeCategoriesMapping(
             makeCategoriesMap(layerDescription.data.features, value),
+            applicationSettingsStore.defaultNoDataColor,
           ),
         );
       }}

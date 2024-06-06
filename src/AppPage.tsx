@@ -29,6 +29,7 @@ import { initDb, storeProject } from './helpers/storage';
 
 // Sub-components
 import AboutModal from './components/Modals/AboutModal.tsx';
+import ApplicationSettingsModal from './components/Modals/ApplicationSettings.tsx';
 import DefaultModal from './components/Modals/ModalWindow.tsx';
 import LeftMenu from './components/LeftMenu/LeftMenu.tsx';
 import LoadingOverlay from './components/LoadingOverlay.tsx';
@@ -474,6 +475,17 @@ const AppPage: () => JSX.Element = () => {
             LL,
             version: globalStore.version,
           }),
+        });
+      });
+
+    document.getElementById('button-app-settings')
+      ?.addEventListener('click', () => {
+        setModalStore({
+          show: true,
+          title: LL().ApplicationSettingsModal.Title(),
+          escapeKey: 'confirm',
+          content: () => ApplicationSettingsModal({ LL }),
+          width: '700px',
         });
       });
 

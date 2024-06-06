@@ -8,6 +8,7 @@ import {
   FaSolidFloppyDisk,
   FaSolidFolderOpen,
   FaSolidFile,
+  FaSolidGear,
 } from 'solid-icons/fa';
 import { ImUndo, ImRedo } from 'solid-icons/im';
 
@@ -105,54 +106,63 @@ export function HeaderBarApp(): JSX.Element {
         <div class="navbar-item">
           <button
             class="button button-header-bar"
-            id="button-undo"
-            aria-label={ LL().HeaderApp.Undo() }
-            title={ LL().HeaderApp.Undo() }
-            disabled={ stateStackStore.undoStack.length === 0}
+            id="button-app-settings"
+            aria-label={LL().HeaderApp.ApplicationSettings()}
+            title={LL().HeaderApp.ApplicationSettings()}
           >
-            <ImUndo size={'1.5em'} />
+            <FaSolidGear size={'1.5em'}/>
+          </button>
+          <p style={{ margin: '1em' }}></p>
+          <button
+            class="button button-header-bar"
+            id="button-undo"
+            aria-label={LL().HeaderApp.Undo()}
+            title={LL().HeaderApp.Undo()}
+            disabled={stateStackStore.undoStack.length === 0}
+          >
+            <ImUndo size={'1.5em'}/>
           </button>
           <button
             class="button button-header-bar"
             id="button-redo"
-            aria-label={ LL().HeaderApp.Redo() }
-            title={ LL().HeaderApp.Redo() }
-            disabled={ stateStackStore.redoStack.length === 0 }
+            aria-label={LL().HeaderApp.Redo()}
+            title={LL().HeaderApp.Redo()}
+            disabled={stateStackStore.redoStack.length === 0}
           >
-            <ImRedo size={'1.5em'} />
+            <ImRedo size={'1.5em'}/>
           </button>
           <p style={{ margin: '1em' }}></p>
           <button
             class="button button-header-bar"
             id="button-new-project"
-            aria-label={ LL().HeaderApp.NewProject() }
-            title={ LL().HeaderApp.NewProject() }
+            aria-label={LL().HeaderApp.NewProject()}
+            title={LL().HeaderApp.NewProject()}
           >
-            <FaSolidFile size={'1.5em'} />
+            <FaSolidFile size={'1.5em'}/>
           </button>
           <button
             class="button button-header-bar"
             id="button-import-project"
-            aria-label={ LL().HeaderApp.ImportProjet() }
-            title={ LL().HeaderApp.ImportProjet() }
+            aria-label={LL().HeaderApp.ImportProjet()}
+            title={LL().HeaderApp.ImportProjet()}
           >
-            <FaSolidFolderOpen size={'1.5em'} />
+            <FaSolidFolderOpen size={'1.5em'}/>
           </button>
           <button
             class="button button-header-bar"
             id="button-export-project"
-            aria-label={ LL().HeaderApp.SaveProject() }
-            title={ LL().HeaderApp.SaveProject() }
+            aria-label={LL().HeaderApp.SaveProject()}
+            title={LL().HeaderApp.SaveProject()}
           >
-            <FaSolidFloppyDisk size={'1.5em'} />
+            <FaSolidFloppyDisk size={'1.5em'}/>
           </button>
           <button
             class="button button-header-bar"
             id="button-about-magrit"
-            aria-label={ LL().HeaderApp.About() }
-            title={ LL().HeaderApp.About() }
+            aria-label={LL().HeaderApp.About()}
+            title={LL().HeaderApp.About()}
           >
-            <FaSolidCircleQuestion size={'1.5em'} />
+            <FaSolidCircleQuestion size={'1.5em'}/>
           </button>
           <div
             class="vertical-divider"
@@ -162,8 +172,8 @@ export function HeaderBarApp(): JSX.Element {
               background: 'var(--bulma-border)',
             }}
           ></div>
-          <DropdownLanguage />
-          <SwitchTheme class="button-header-bar" id="toggle-night-day" />
+          <DropdownLanguage/>
+          <SwitchTheme class="button-header-bar" id="toggle-night-day"/>
         </div>
       </div>
     </div>

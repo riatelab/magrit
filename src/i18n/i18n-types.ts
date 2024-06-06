@@ -134,6 +134,10 @@ type RootTranslation = {
 		 * R​e​d​o
 		 */
 		Redo: string
+		/**
+		 * A​p​p​l​i​c​a​t​i​o​n​ ​s​e​t​t​i​n​g​s
+		 */
+		ApplicationSettings: string
 	}
 	Pagination: {
 		/**
@@ -236,6 +240,28 @@ type RootTranslation = {
 		 * C​a​n​c​e​l
 		 */
 		cancelButton: string
+	}
+	ApplicationSettingsModal: {
+		/**
+		 * A​p​p​l​i​c​a​t​i​o​n​ ​s​e​t​t​i​n​g​s
+		 */
+		Title: string
+		/**
+		 * L​o​c​a​l​e​ ​f​o​r​ ​f​o​r​m​a​t​t​i​n​g​ ​n​u​m​b​e​r​s​ ​o​n​ ​t​h​e​ ​m​a​p
+		 */
+		LocaleNumberFormatting: string
+		/**
+		 * D​e​f​a​u​l​t​ ​c​o​l​o​r​ ​f​o​r​ ​"​n​o​ ​d​a​t​a​"​ ​v​a​l​u​e​s
+		 */
+		DefaultNoDataColor: string
+		/**
+		 * D​e​f​a​u​l​t​ ​o​p​t​i​o​n​s​ ​f​o​r​ ​l​e​g​e​n​d​s
+		 */
+		DefaultLegendOptions: string
+		/**
+		 * T​h​e​s​e​ ​o​p​t​i​o​n​s​ ​w​i​l​l​ ​b​e​ ​u​s​e​d​ ​f​o​r​ ​e​a​c​h​ ​n​e​w​ ​l​e​g​e​n​d​ ​c​r​e​a​t​e​d​ ​i​n​ ​t​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​.
+		 */
+		DefaultLegendOptionsInformation: string
 	}
 	ImportWindow: {
 		/**
@@ -3417,6 +3443,10 @@ export type TranslationFunctions = {
 		 * Redo
 		 */
 		Redo: () => LocalizedString
+		/**
+		 * Application settings
+		 */
+		ApplicationSettings: () => LocalizedString
 	}
 	Pagination: {
 		/**
@@ -3519,6 +3549,28 @@ export type TranslationFunctions = {
 		 * Cancel
 		 */
 		cancelButton: () => LocalizedString
+	}
+	ApplicationSettingsModal: {
+		/**
+		 * Application settings
+		 */
+		Title: () => LocalizedString
+		/**
+		 * Locale for formatting numbers on the map
+		 */
+		LocaleNumberFormatting: () => LocalizedString
+		/**
+		 * Default color for "no data" values
+		 */
+		DefaultNoDataColor: () => LocalizedString
+		/**
+		 * Default options for legends
+		 */
+		DefaultLegendOptions: () => LocalizedString
+		/**
+		 * These options will be used for each new legend created in the application.
+		 */
+		DefaultLegendOptionsInformation: () => LocalizedString
 	}
 	ImportWindow: {
 		/**

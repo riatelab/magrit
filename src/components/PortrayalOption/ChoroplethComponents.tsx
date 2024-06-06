@@ -41,8 +41,6 @@ import {
 
 // eslint-disable-next-line prefer-destructuring
 const defaultColorScheme = applicationSettingsStore.defaultColorScheme;
-// eslint-disable-next-line prefer-destructuring
-const defaultNoDataColor = applicationSettingsStore.defaultNoDataColor;
 
 // eslint-disable-next-line import/prefer-default-export
 export function ChoroplethClassificationSelector(
@@ -81,7 +79,7 @@ export function ChoroplethClassificationSelector(
           classes: numberOfClasses(),
           breaks,
           palette: palette(),
-          noDataColor: defaultNoDataColor,
+          noDataColor: applicationSettingsStore.defaultNoDataColor,
           entitiesByClass: getEntitiesByClass(props.values(), breaks),
         } as ClassificationParameters);
       },
@@ -95,7 +93,7 @@ export function ChoroplethClassificationSelector(
     // eslint-disable-next-line solid/reactivity
     breaks: quantile(props.values(), { nb: numberOfClasses(), precision: null }),
     palette: palette(), // eslint-disable-line solid/reactivity
-    noDataColor: defaultNoDataColor,
+    noDataColor: applicationSettingsStore.defaultNoDataColor,
     entitiesByClass: getEntitiesByClass(
       props.values(),
       quantile(props.values(), { nb: numberOfClasses(), precision: null }),
@@ -119,7 +117,7 @@ export function ChoroplethClassificationSelector(
             classes: numberOfClasses(),
             breaks,
             palette: palette(),
-            noDataColor: defaultNoDataColor,
+            noDataColor: applicationSettingsStore.defaultNoDataColor,
             entitiesByClass: getEntitiesByClass(props.values(), breaks),
           } as ClassificationParameters);
         }}
@@ -142,7 +140,7 @@ export function ChoroplethClassificationSelector(
             classes: numberOfClasses(),
             breaks,
             palette: palette(),
-            noDataColor: defaultNoDataColor,
+            noDataColor: applicationSettingsStore.defaultNoDataColor,
             entitiesByClass: getEntitiesByClass(props.values(), breaks),
           } as ClassificationParameters);
         }}
@@ -165,7 +163,7 @@ export function ChoroplethClassificationSelector(
             classes: 6,
             breaks,
             palette: getPaletteWrapper(defaultColorScheme, 6, false),
-            noDataColor: defaultNoDataColor,
+            noDataColor: applicationSettingsStore.defaultNoDataColor,
             entitiesByClass: getEntitiesByClass(props.values(), breaks),
           } as ClassificationParameters);
         }}
@@ -188,7 +186,7 @@ export function ChoroplethClassificationSelector(
             classes: numberOfClasses(),
             breaks,
             palette: palette(),
-            noDataColor: defaultNoDataColor,
+            noDataColor: applicationSettingsStore.defaultNoDataColor,
             entitiesByClass: getEntitiesByClass(props.values(), breaks),
           } as ClassificationParameters);
         }}

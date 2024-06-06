@@ -85,7 +85,7 @@ const [
       fontSize: 12,
       fontFamily: 'Sans-serif',
       fontColor: '#000000',
-      fontStyle: 'normal',
+      fontStyle: 'italic',
       fontWeight: 'normal',
     },
     labels: {

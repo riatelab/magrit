@@ -36,6 +36,7 @@ const en = {
     Language: 'Language selection',
     Undo: 'Undo',
     Redo: 'Redo',
+    ApplicationSettings: 'Application settings',
   },
   Pagination: {
     Next: 'Next',
@@ -66,6 +67,13 @@ const en = {
     altDatasetPreview: 'Dataset preview',
     confirmButton: 'Add to map',
     cancelButton: 'Cancel',
+  },
+  ApplicationSettingsModal: {
+    Title: 'Application settings',
+    LocaleNumberFormatting: 'Locale for formatting numbers on the map',
+    DefaultNoDataColor: 'Default color for "no data" values',
+    DefaultLegendOptions: 'Default options for legends',
+    DefaultLegendOptionsInformation: 'These options will be used for each new legend created in the application.',
   },
   ImportWindow: {
     Title: 'Data import',
@@ -636,7 +644,6 @@ const en = {
     BufferColor: 'Buffer color',
     BufferWidth: 'Buffer width',
     AllowMovingLabels: 'Allow moving labels',
-    Palette: 'Palette',
     GraticuleStepX: 'Graticule step (X)',
     GraticuleStepY: 'Graticule step (Y)',
     AddBarChartCategoricalChoropleth: 'Add a bar chart by category...',

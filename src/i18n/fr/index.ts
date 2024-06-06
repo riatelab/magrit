@@ -36,6 +36,7 @@ const fr = {
     Language: 'Sélection de la langue',
     Undo: 'Annuler',
     Redo: 'Rétablir',
+    ApplicationSettings: 'Paramètres généraux de l\'application',
   },
   Pagination: {
     Next: 'Suivant',
@@ -66,6 +67,13 @@ const fr = {
     altDatasetPreview: 'Aperçu du jeu de données',
     confirmButton: 'Ajouter à la carte',
     cancelButton: 'Annuler',
+  },
+  ApplicationSettingsModal: {
+    Title: 'Paramètres généraux de l\'application',
+    LocaleNumberFormatting: 'Langue pour le formatage des nombres sur la carte',
+    DefaultNoDataColor: 'Couleur par défault pour les valeurs manquantes',
+    DefaultLegendOptions: 'Options par défaut pour la création des légendes',
+    DefaultLegendOptionsInformation: 'Ces options seront utilisées pour toutes les nouvelles légendes créées dans l\'application.',
   },
   ImportWindow: {
     Title: 'Import des données',
@@ -636,7 +644,6 @@ const fr = {
     BufferColor: 'Couleur du tampon',
     BufferWidth: 'Largeur du tampon',
     AllowMovingLabels: 'Autoriser le déplacement des étiquettes',
-    Palette: 'Palette',
     GraticuleStepX: 'Pas du graticule en X',
     GraticuleStepY: 'Pas du graticule en Y',
     AddBarChartCategoricalChoropleth: 'Ajouter un diagramme en barre par catégories...',
