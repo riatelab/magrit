@@ -88,6 +88,11 @@ import {
 // Styles
 import '../../styles/LayerAndLegendSettings.css';
 import MessageBlock from '../MessageBlock.tsx';
+import {
+  InputFieldColorOpacity,
+  InputFieldPaletteOpacity,
+  InputFieldWidthColorOpacity, InputFieldWidthPaletteOpacity,
+} from '../Inputs/InputFieldColorOpacity.tsx';
 
 const layerLinkedToHistogramOrBarChart = (
   layer: LayerDescription,
@@ -538,10 +543,12 @@ function makeSettingsDefaultPoint(
       />
     </Show>
     <Show when={props.renderer === 'default'}>
-      <InputFieldColor
-        label={ LL().LayerSettings.FillColor() }
-        value={props.fillColor!}
-        onChange={(v) => debouncedUpdateProp(props.id, 'fillColor', v)}
+      <InputFieldColorOpacity
+        label={LL().LayerSettings.Fill()}
+        valueColor={props.fillColor!}
+        valueOpacity={props.fillOpacity!}
+        onChangeColor={(v) => debouncedUpdateProp(props.id, 'fillColor', v)}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
       />
     </Show>
     <Show when={props.renderer === 'choropleth'}>
@@ -578,6 +585,13 @@ function makeSettingsDefaultPoint(
           }}
         >{LL().LayerSettings.ChangeClassification()}</button>
       </div>
+      <InputFieldPaletteOpacity
+        label={LL().LayerSettings.Fill()}
+        valuePalette={(props.rendererParameters as ClassificationParameters).palette}
+        valueOpacity={props.fillOpacity!}
+        onClickPalette={() => {}}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
+      />
       <InputFieldCheckbox
         label={LL().LayerSettings.AddHistogramChoropleth()}
         checked={
@@ -659,10 +673,12 @@ function makeSettingsDefaultPoint(
       props.renderer === 'proportionalSymbols'
       && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'singleColor'
     }>
-      <InputFieldColor
-        label={ LL().LayerSettings.FillColor() }
-        value={ (props.rendererParameters as ProportionalSymbolsParameters).color as string }
-        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'color'], v)}
+      <InputFieldColorOpacity
+        label={LL().LayerSettings.Fill()}
+        valueColor={(props.rendererParameters as ProportionalSymbolsParameters).color as string}
+        valueOpacity={props.fillOpacity!}
+        onChangeColor={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'color'], v)}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
       />
     </Show>
     <Show when={
@@ -704,6 +720,13 @@ function makeSettingsDefaultPoint(
           }}
         >{LL().LayerSettings.ChangeClassification()}</button>
       </div>
+      <InputFieldPaletteOpacity
+        label={LL().LayerSettings.Fill()}
+        valuePalette={(props.rendererParameters!.color as ClassificationParameters).palette}
+        valueOpacity={props.fillOpacity!}
+        onClickPalette={() => {}}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
+      />
       <InputFieldCheckbox
         label={LL().LayerSettings.AddHistogramChoropleth()}
         checked={
@@ -756,6 +779,13 @@ function makeSettingsDefaultPoint(
       props.renderer === 'proportionalSymbols'
       && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'categoricalVariable'
     }>
+      <InputFieldPaletteOpacity
+        label={LL().LayerSettings.Fill()}
+        valuePalette={{ type: 'categorical' }}
+        valueOpacity={props.fillOpacity!}
+        onClickPalette={() => {}}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
+      />
       <DetailsSummary
         summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
       >
@@ -818,36 +848,14 @@ function makeSettingsDefaultPoint(
         }}
       />
     </Show>
-    <InputFieldNumber
-      label={LL().LayerSettings.FillOpacity()}
-      value={props.fillOpacity!}
-      onChange={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
-      min={0}
-      max={1}
-      step={0.1}
-      strictMinMax={true}
-    />
-    <InputFieldColor
-      label={LL().LayerSettings.StrokeColor()}
-      value={props.strokeColor!}
-      onChange={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
-    />
-    <InputFieldNumber
-      label={LL().LayerSettings.StrokeOpacity()}
-      value={props.strokeOpacity!}
-      onChange={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
-      min={0}
-      max={1}
-      step={0.1}
-      strictMinMax={true}
-    />
-    <InputFieldNumber
-      label={LL().LayerSettings.StrokeWidth()}
-      value={props.strokeWidth!}
-      onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
-      min={0}
-      max={10}
-      step={0.1}
+    <InputFieldWidthColorOpacity
+      label={LL().LayerSettings.Stroke()}
+      valueWidth={props.strokeWidth!}
+      valueColor={props.strokeColor!}
+      valueOpacity={props.fillOpacity!}
+      onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
+      onChangeColor={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
+      onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
     />
     <Show when={props.renderer === 'mushrooms'}>
       <div class="mt-4 mb-5 has-text-weight-bold">
@@ -1057,6 +1065,82 @@ function makeSettingsDefaultLine(
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
   return <>
+    {/* Options for default renderer / graticule renderer */}
+    <Show when={props.renderer === 'default' || props.renderer === 'graticule'}>
+      <InputFieldWidthColorOpacity
+        label={LL().LayerSettings.Line()}
+        valueWidth={props.strokeWidth!}
+        valueColor={props.strokeColor!}
+        valueOpacity={props.strokeOpacity!}
+        onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
+        onChangeColor={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
+      />
+      <InputFieldCheckbox
+        label={ LL().LayerSettings.StrokeDashed() }
+        checked={!!props.strokeDasharray}
+        onChange={(checked) => {
+          const v = checked ? '5 5' : undefined;
+          debouncedUpdateProp(props.id, 'strokeDasharray', v);
+        }}
+      />
+      <Show when={props.renderer === 'graticule'}>
+        <InputFieldNumber
+          label={ LL().LayerSettings.GraticuleStepX() }
+          value={(props.rendererParameters as GraticuleParameters).step[0]}
+          onChange={(v) => {
+            const newStep: [number, number] = [
+              v,
+              (props.rendererParameters as GraticuleParameters).step[1],
+            ];
+
+            updateProp(
+              props.id,
+              ['rendererParameters', 'step'],
+              newStep,
+            );
+
+            debouncedUpdateProp(
+              props.id,
+              ['data', 'features', 0, 'geometry'],
+              d3.geoGraticule().step(newStep)() as MultiLineString,
+            );
+          }}
+          min={1}
+          max={180}
+          step={1}
+          strictMinMax={true}
+        />
+        <InputFieldNumber
+          label={ LL().LayerSettings.GraticuleStepY() }
+          value={(props.rendererParameters as GraticuleParameters).step[1]}
+          onChange={(v) => {
+            const newStep: [number, number] = [
+              (props.rendererParameters as GraticuleParameters).step[0],
+              v,
+            ];
+
+            updateProp(
+              props.id,
+              ['rendererParameters', 'step'],
+              newStep,
+            );
+
+            debouncedUpdateProp(
+              props.id,
+              ['data', 'features', 0, 'geometry'],
+              d3.geoGraticule().step(newStep)() as MultiLineString,
+            );
+          }}
+          min={1}
+          max={180}
+          step={1}
+          strictMinMax={true}
+        />
+      </Show>
+    </Show>
+
+    {/* Options for discontinuity renderer */}
     <Show when={props.renderer === 'discontinuity'}>
       <div class="field" style={{ 'text-align': 'center' }}>
         <button
@@ -1090,35 +1174,293 @@ function makeSettingsDefaultLine(
           }}
         >{LL().LayerSettings.ChangeClassification()}</button>
       </div>
-    </Show>
-    <Show when={
-      props.renderer === 'default'
-      || props.renderer === 'discontinuity'
-      || props.renderer === 'links'
-      || props.renderer === 'graticule'
-    }>
-      <InputFieldColor
-        label={ LL().LayerSettings.StrokeColor() }
-        value={ props.strokeColor! }
-        onChange={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
+      <InputFieldColorOpacity
+        label={LL().LayerSettings.Line()}
+        valueColor={props.strokeColor!}
+        valueOpacity={props.strokeOpacity!}
+        onChangeColor={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
       />
     </Show>
-    <Show when={
-      props.renderer === 'proportionalSymbols'
-      && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'singleColor'
-    }>
-      <InputFieldColor
-        label={ LL().LayerSettings.StrokeColor() }
-        value={ (props.rendererParameters as ProportionalSymbolSingleColorParameters).color! }
-        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'color'], v)}
+
+    {/* Options for links renderer */}
+    <Show when={props.renderer === 'links'}>
+      <Show when={!['Exchange', 'BilateralVolume'].includes((props.rendererParameters as LinksParameters).type)}>
+        <InputFieldWidthColorOpacity
+          label={LL().LayerSettings.Line()}
+          valueWidth={props.strokeWidth!}
+          valueColor={props.strokeColor!}
+          valueOpacity={props.strokeOpacity!}
+          onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
+          onChangeColor={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
+          onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
+        />
+      </Show>
+      <Show when={['Exchange', 'BilateralVolume'].includes((props.rendererParameters as LinksParameters).type)}>
+        <InputFieldColorOpacity
+          label={LL().LayerSettings.Line()}
+          valueColor={props.strokeColor!}
+          valueOpacity={props.strokeOpacity!}
+          onChangeColor={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
+          onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
+        />
+        <Show when={(props.rendererParameters as LinksParameters).proportional}>
+          <InputFieldNumber
+            label={ LL().FunctionalitiesSection.LinksOptions.LinkSizeProportionalReferenceSize() }
+            value={ (props.rendererParameters as LinksParameters).proportional!.referenceSize }
+            onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'proportional', 'referenceSize'], v)}
+            min={1}
+            max={50}
+            step={0.5}
+          />
+          <InputFieldNumber
+            label={ LL().FunctionalitiesSection.LinksOptions.LinkSizeProportionalReferenceValue() }
+            value={ (props.rendererParameters as LinksParameters).proportional!.referenceValue }
+            onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'proportional', 'referenceValue'], v)}
+            min={1}
+            max={Infinity}
+            step={0.5}
+          />
+        </Show>
+        <Show when={(props.rendererParameters as LinksParameters).classification}>
+          <></>
+        </Show>
+      </Show>
+      <InputFieldSelect
+        label={LL().FunctionalitiesSection.LinksOptions.LinkCurvature()}
+        value={(props.rendererParameters as LinksParameters).curvature}
+        onChange={(v) => updateProp(props.id, ['rendererParameters', 'curvature'], v)}
+      >
+        <For each={Object.entries(LinkCurvature)}>
+          {
+            ([key, value]) => <option value={value}>
+              {LL().FunctionalitiesSection.LinksOptions[`LinkCurvature${key}`]()}
+            </option>
+          }
+        </For>
+      </InputFieldSelect>
+      <InputFieldSelect
+        label={LL().FunctionalitiesSection.LinksOptions.LinkHeadType()}
+        value={(props.rendererParameters as LinksParameters).head}
+        onChange={(v) => updateProp(props.id, ['rendererParameters', 'head'], v)}
+      >
+        <For each={Object.entries(LinkHeadType)}>
+          {
+            ([key, value]) => <option value={value}>
+              {LL().FunctionalitiesSection.LinksOptions[`LinkHeadType${key}`]()}
+            </option>
+          }
+        </For>
+      </InputFieldSelect>
+      <DetailsSummary summaryContent={LL().FunctionalitiesSection.LinksOptions.Selection()}>
+        <LinksSelectionOnExistingLayer layerId={props.id}/>
+      </DetailsSummary>
+      <InputFieldCheckbox
+        label={ LL().LayerSettings.StrokeDashed() }
+        checked={!!props.strokeDasharray}
+        onChange={(checked) => {
+          const v = checked ? '5 5' : undefined;
+          debouncedUpdateProp(props.id, 'strokeDasharray', v);
+        }}
       />
     </Show>
-    <Show when={
-      props.renderer === 'choropleth'
-      // || (props.renderer === 'proportionalSymbols'
-      //   && (props.rendererParameters as ProportionalSymbolsParametersBase)
-      //     .colorMode === 'ratioVariable')
-    }>
+
+    {/* Options for proportional symbol renderer */}
+    <Show when={props.renderer === 'proportionalSymbols'}>
+      <InputFieldNumber
+        label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize()}
+        value={(props.rendererParameters as ProportionalSymbolsParameters).referenceRadius}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'referenceRadius'], v)}
+        min={1}
+        max={200}
+        step={0.1}
+      />
+      <InputFieldNumber
+        label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.OnValue() }
+        value={(props.rendererParameters as ProportionalSymbolsParameters).referenceValue}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'referenceValue'], v)}
+        min={1}
+        max={Infinity}
+        step={0.1}
+      />
+      <Show when={(props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'singleColor'}>
+        <InputFieldColorOpacity
+          label={LL().LayerSettings.Line()}
+          valueColor={(props.rendererParameters as ProportionalSymbolSingleColorParameters).color!}
+          valueOpacity={props.strokeOpacity!}
+          onChangeColor={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'color'], v)}
+          onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
+        />
+      </Show>
+      <Show when={(props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'ratioVariable'}>
+        <div class="field" style={{ 'text-align': 'center' }}>
+          <button
+            class="button"
+            style={{ margin: 'auto' }}
+            onClick={() => {
+              // Save current state of classification parameters
+              const params = unproxify(
+                props.rendererParameters.color as never,
+              ) as ClassificationParameters;
+              setClassificationPanelStore({
+                show: true,
+                type: 'color',
+                layerName: props.name,
+                series: props.data.features
+                  .map((f) => f.properties[(
+                    props.rendererParameters as ClassificationParameters).variable]),
+                classificationParameters: params,
+                onCancel: () => {
+                  setLayersDescriptionStoreBase(
+                    'layers',
+                    (l: LayerDescription) => l.id === props.id,
+                    'rendererParameters',
+                    'color',
+                    params,
+                  );
+                },
+                onConfirm: (newParams) => {
+                  setLayersDescriptionStoreBase(
+                    'layers',
+                    (l: LayerDescription) => l.id === props.id,
+                    'rendererParameters',
+                    'color',
+                    newParams,
+                  );
+                },
+              });
+            }}
+          >{LL().LayerSettings.ChangeClassification()}</button>
+        </div>
+        <InputFieldWidthPaletteOpacity
+          label={LL().LayerSettings.Line()}
+          valueWidth={props.strokeWidth!}
+          valuePalette={(props.rendererParameters as ClassificationParameters).palette}
+          valueOpacity={props.strokeOpacity!}
+          onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
+          onClickPalette={() => {}}
+          onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
+        />
+        <InputFieldCheckbox
+          label={LL().LayerSettings.AddHistogramChoropleth()}
+          checked={
+            layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+          }
+          disabled={
+            layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+          }
+          onChange={(v) => {
+            const legendPosition = getPossibleLegendPosition(300, 250);
+
+            setLayersDescriptionStore(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeaturesAndLegends.push({
+                    id: generateIdLegend(),
+                    layerId: props.id,
+                    type: LegendType.choroplethHistogram,
+                    position: [legendPosition[0], legendPosition[1]],
+                    width: 300,
+                    height: 250,
+                    fontColor: '#000000',
+                    visible: true,
+                    roundDecimals: 2,
+                    title: {
+                      text: (props.rendererParameters as ClassificationParameters).variable,
+                      ...applicationSettingsStore.defaultLegendSettings.title,
+                    } as LegendTextElement,
+                    subtitle: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                    },
+                    note: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.note,
+                    },
+                    backgroundRect: {
+                      visible: false,
+                    },
+                  } as ChoroplethHistogramLegend);
+                },
+              ),
+            );
+          }}
+        />
+      </Show>
+      <Show when={(props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'categoricalVariable'}>
+        <InputFieldWidthPaletteOpacity
+          label={LL().LayerSettings.Line()}
+          valueWidth={props.strokeWidth!}
+          valuePalette={{ type: 'categorical' }}
+          valueOpacity={props.strokeOpacity!}
+          onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
+          onClickPalette={() => {}}
+          onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
+        />
+        <DetailsSummary
+          summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
+        >
+          <CategoriesCustomisation
+            mapping={() => (
+              props.rendererParameters.color! as CategoricalChoroplethParameters).mapping}
+            setMapping={(m) => {
+              updateProp(props.id, ['rendererParameters', 'color', 'mapping'], m as never);
+            }}
+            detailed={false}
+          />
+        </DetailsSummary>
+        <InputFieldCheckbox
+          label={LL().LayerSettings.AddBarChartCategoricalChoropleth()}
+          checked={
+            layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+          }
+          disabled={
+            layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+          }
+          onChange={(v) => {
+            const legendPosition = getPossibleLegendPosition(300, 250);
+
+            setLayersDescriptionStore(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeaturesAndLegends.push({
+                    id: generateIdLegend(),
+                    layerId: props.id,
+                    type: LegendType.categoricalChoroplethBarchart,
+                    position: [legendPosition[0], legendPosition[1]],
+                    width: 300,
+                    height: 250,
+                    orientation: 'horizontal',
+                    order: 'none',
+                    fontColor: '#000000',
+                    visible: true,
+                    title: {
+                      text: (
+                        props.rendererParameters as CategoricalChoroplethParameters).variable,
+                      ...applicationSettingsStore.defaultLegendSettings.title,
+                    } as LegendTextElement,
+                    subtitle: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                    },
+                    note: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.note,
+                    },
+                    backgroundRect: {
+                      visible: false,
+                    },
+                  } as CategoricalChoroplethBarchartLegend);
+                },
+              ),
+            );
+          }}
+        />
+      </Show>
+    </Show>
+
+    {/* Options for choropleth renderer */}
+    <Show when={props.renderer === 'choropleth'}>
       <div class="field" style={{ 'text-align': 'center' }}>
         <button
           class="button"
@@ -1152,6 +1494,15 @@ function makeSettingsDefaultLine(
           }}
         >{LL().LayerSettings.ChangeClassification()}</button>
       </div>
+      <InputFieldWidthPaletteOpacity
+        label={LL().LayerSettings.Line()}
+        valueWidth={props.strokeWidth!}
+        valuePalette={(props.rendererParameters as ClassificationParameters).palette}
+        valueOpacity={props.strokeOpacity!}
+        onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
+        onClickPalette={() => {}}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
+      />
       <InputFieldCheckbox
         label={LL().LayerSettings.AddHistogramChoropleth()}
         checked={
@@ -1198,159 +1549,18 @@ function makeSettingsDefaultLine(
         }}
       />
     </Show>
-    <InputFieldNumber
-      label={LL().LayerSettings.StrokeOpacity()}
-      value={props.strokeOpacity!}
-      onChange={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
-      min={0}
-      max={1}
-      step={0.1}
-      strictMinMax={true}
-    />
-    <Show when={
-      props.renderer !== 'discontinuity'
-      && !(props.renderer === 'links'
-        && ['Exchange', 'BilateralVolume'].includes((props.rendererParameters as LinksParameters).type))
-      && !(props.renderer === 'proportionalSymbols')
-    }>
-      <InputFieldNumber
-        label={ LL().LayerSettings.StrokeWidth() }
-        value={props.strokeWidth!}
-        onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
-        min={0}
-        max={10}
-        step={0.1}
-        strictMin={true}
-      />
-    </Show>
-    <InputFieldCheckbox
-      label={ LL().LayerSettings.StrokeDashed() }
-      checked={!!props.strokeDasharray}
-      onChange={(checked) => {
-        const v = checked ? '5 5' : undefined;
-        debouncedUpdateProp(props.id, 'strokeDasharray', v);
-      }}
-    />
-    <Show when={
-      props.renderer === 'links'
-      && ['Exchange', 'BilateralVolume'].includes((props.rendererParameters as LinksParameters).type)
-      && (props.rendererParameters as LinksParameters).proportional
-    }>
-      <InputFieldNumber
-        label={ LL().FunctionalitiesSection.LinksOptions.LinkSizeProportionalReferenceSize() }
-        value={ (props.rendererParameters as LinksParameters).proportional!.referenceSize }
-        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'proportional', 'referenceSize'], v)}
-        min={1}
-        max={50}
-        step={0.5}
-      />
-      <InputFieldNumber
-        label={ LL().FunctionalitiesSection.LinksOptions.LinkSizeProportionalReferenceValue() }
-        value={ (props.rendererParameters as LinksParameters).proportional!.referenceValue }
-        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'proportional', 'referenceValue'], v)}
-        min={1}
-        max={Infinity}
-        step={0.5}
-      />
-    </Show>
-    <Show when={
-      props.renderer === 'links'
-      && ['Exchange', 'BilateralVolume'].includes((props.rendererParameters as LinksParameters).type)
-      && (props.rendererParameters as LinksParameters).classification
-    }>
-      <></>
-    </Show>
-    <Show when={props.renderer === 'links'}>
-      <InputFieldSelect
-        label={LL().FunctionalitiesSection.LinksOptions.LinkCurvature()}
-        value={(props.rendererParameters as LinksParameters).curvature}
-        onChange={(v) => updateProp(props.id, ['rendererParameters', 'curvature'], v)}
-      >
-        <For each={Object.entries(LinkCurvature)}>
-          {
-            ([key, value]) => <option value={value}>
-              {LL().FunctionalitiesSection.LinksOptions[`LinkCurvature${key}`]()}
-            </option>
-          }
-        </For>
-      </InputFieldSelect>
-      <InputFieldSelect
-        label={LL().FunctionalitiesSection.LinksOptions.LinkHeadType()}
-        value={(props.rendererParameters as LinksParameters).head}
-        onChange={(v) => updateProp(props.id, ['rendererParameters', 'head'], v)}
-      >
-        <For each={Object.entries(LinkHeadType)}>
-          {
-            ([key, value]) => <option value={value}>
-              {LL().FunctionalitiesSection.LinksOptions[`LinkHeadType${key}`]()}
-            </option>
-          }
-        </For>
-      </InputFieldSelect>
-      <DetailsSummary summaryContent={LL().FunctionalitiesSection.LinksOptions.Selection()}>
-        <LinksSelectionOnExistingLayer layerId={props.id}/>
-      </DetailsSummary>
-    </Show>
-    <Show when={props.renderer === 'graticule'}>
-      <InputFieldNumber
-        label={ LL().LayerSettings.GraticuleStepX() }
-        value={(props.rendererParameters as GraticuleParameters).step[0]}
-        onChange={(v) => {
-          const newStep: [number, number] = [
-            v,
-            (props.rendererParameters as GraticuleParameters).step[1],
-          ];
 
-          updateProp(
-            props.id,
-            ['rendererParameters', 'step'],
-            newStep,
-          );
-
-          debouncedUpdateProp(
-            props.id,
-            ['data', 'features', 0, 'geometry'],
-            d3.geoGraticule().step(newStep)() as MultiLineString,
-          );
-        }}
-        min={1}
-        max={180}
-        step={1}
-        strictMinMax={true}
+    {/* Options for categorical choropleth renderer */}
+    <Show when={props.renderer === 'categoricalChoropleth'}>
+      <InputFieldWidthPaletteOpacity
+        label={LL().LayerSettings.Line()}
+        valueWidth={props.strokeWidth!}
+        valuePalette={{ type: 'categorical' }}
+        valueOpacity={props.strokeOpacity!}
+        onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
+        onClickPalette={() => {}}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
       />
-      <InputFieldNumber
-        label={ LL().LayerSettings.GraticuleStepY() }
-        value={(props.rendererParameters as GraticuleParameters).step[1]}
-        onChange={(v) => {
-          const newStep: [number, number] = [
-            (props.rendererParameters as GraticuleParameters).step[0],
-            v,
-          ];
-
-          updateProp(
-            props.id,
-            ['rendererParameters', 'step'],
-            newStep,
-          );
-
-          debouncedUpdateProp(
-            props.id,
-            ['data', 'features', 0, 'geometry'],
-            d3.geoGraticule().step(newStep)() as MultiLineString,
-          );
-        }}
-        min={1}
-        max={180}
-        step={1}
-        strictMinMax={true}
-      />
-    </Show>
-    <Show when={
-      props.renderer === 'categoricalChoropleth'
-      // || (props.renderer === 'proportionalSymbols'
-      //   && (props.rendererParameters as ProportionalSymbolsParametersBase)
-      //     .colorMode === 'categoricalVariable')
-    }>
       <DetailsSummary
         summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
       >
@@ -1410,6 +1620,7 @@ function makeSettingsDefaultLine(
         }}
       />
     </Show>
+
     <AestheticsSection {...props} />
   </>;
 }
@@ -1433,10 +1644,12 @@ function makeSettingsDefaultPolygon(
         - For 'proportional' renderer, ... (TODO)
     */}
     <Show when={props.renderer === 'default' || props.renderer === 'sphere' || props.renderer === 'cartogram'}>
-      <InputFieldColor
-        label={ LL().LayerSettings.FillColor() }
-        value={props.fillColor!}
-        onChange={(v) => debouncedUpdateProp(props.id, 'fillColor', v)}
+      <InputFieldColorOpacity
+        label={LL().LayerSettings.Fill()}
+        valueColor={props.fillColor!}
+        valueOpacity={props.fillOpacity!}
+        onChangeColor={(v) => debouncedUpdateProp(props.id, 'fillColor', v)}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
       />
     </Show>
     <Show when={props.renderer === 'choropleth'}>
@@ -1473,6 +1686,13 @@ function makeSettingsDefaultPolygon(
           }}
         >{LL().LayerSettings.ChangeClassification()}</button>
       </div>
+      <InputFieldPaletteOpacity
+        label={LL().LayerSettings.Fill()}
+        valuePalette={(props.rendererParameters as ClassificationParameters).palette}
+        valueOpacity={props.fillOpacity!}
+        onClickPalette={() => {}}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
+      />
       <InputFieldCheckbox
         label={LL().LayerSettings.AddHistogramChoropleth()}
         checked={
@@ -1556,38 +1776,22 @@ function makeSettingsDefaultPolygon(
           updateProp(props.id, ['rendererParameters', 'palette'], p);
         }}
       />
+      <InputFieldPaletteOpacity
+        label={LL().LayerSettings.Fill()}
+        valuePalette={(props.rendererParameters as ClassificationParameters).palette}
+        valueOpacity={props.fillOpacity!}
+        onClickPalette={() => {}}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
+      />
     </Show>
-    <InputFieldNumber
-      label={ LL().LayerSettings.FillOpacity() }
-      value={ props.fillOpacity! }
-      onChange={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
-      min={0}
-      max={1}
-      step={0.1}
-      strictMinMax={true}
-    />
-    <InputFieldColor
-      label={ LL().LayerSettings.StrokeColor() }
-      value={ props.strokeColor! }
-      onChange={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
-    />
-    <InputFieldNumber
-      label={ LL().LayerSettings.StrokeOpacity() }
-      value={ props.strokeOpacity! }
-      onChange={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
-      min={0}
-      max={1}
-      step={0.1}
-      strictMinMax={true}
-    />
-    <InputFieldNumber
-      label={ LL().LayerSettings.StrokeWidth() }
-      value={props.strokeWidth!}
-      onChange={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
-      min={0}
-      max={10}
-      step={0.1}
-      strictMin={true}
+    <InputFieldWidthColorOpacity
+      label={LL().LayerSettings.Stroke()}
+      valueWidth={props.strokeWidth!}
+      valueColor={props.strokeColor!}
+      valueOpacity={props.fillOpacity!}
+      onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
+      onChangeColor={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
+      onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
     />
     <Show when={props.renderer === 'categoricalChoropleth'}>
       <DetailsSummary

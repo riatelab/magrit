@@ -280,6 +280,8 @@ interface CustomPalette {
   colors: string[],
   // The provenance of the palette
   provenance: 'dicopal' | 'user',
+  // The prodiver of the palette (only if it comes from dicopal)
+  // provider?: string,
   // Is the palette reversed?
   reversed: boolean,
   // The provider of the palette (only if it comes from dicopal)

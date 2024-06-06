@@ -54,6 +54,7 @@ import {
   RepresentationType,
 } from '../../global.d';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import { InputFieldColorOpacity, InputFieldWidthColorOpacity } from '../Inputs/InputFieldColorOpacity.tsx';
 
 /**
  * Update a single property of a legend in the layersDescriptionStore,
@@ -222,11 +223,12 @@ function FieldText(
     <label class="label">
       { props.LL().Legend.Modal[`Legend${capitalizeFirstLetter(props.role) as 'Title' | 'Subtitle' | 'Note'}`]() }
     </label>
-    <div class="control">
+    <div class="control" style={{ width: '300px' }}>
       <input
         class="input"
         type="text"
         value={ props.legend[props.role]?.text || '' }
+        style={{ width: '100%' }}
         onKeyUp={(ev) => updateProps(props.legend.id, [props.role, 'text'], ev.target.value)}
         onChange={(ev) => updateProps(props.legend.id, [props.role, 'text'], ev.target.value)}
       />
@@ -288,42 +290,21 @@ function OptionBackgroundRectangle(
       }}
     />
     <Show when={props.legend.backgroundRect.visible}>
-      <InputFieldColor
-        label={ props.LL().Legend.Modal.BackgroundRectangleColor() }
-        value={ props.legend.backgroundRect.fill! }
-        onChange={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'fill'], v)}
+      <InputFieldColorOpacity
+        label={props.LL().Legend.Modal.BackgroundRectangleFill()}
+        valueColor={props.legend.backgroundRect.fill!}
+        valueOpacity={props.legend.backgroundRect.fillOpacity!}
+        onChangeColor={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'fill'], v)}
+        onChangeOpacity={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'fillOpacity'], v)}
       />
-      <InputFieldNumber
-        label={ props.LL().Legend.Modal.BackgroundRectangleOpacity() }
-        value={ props.legend.backgroundRect.fillOpacity! }
-        onChange={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'fillOpacity'], v)}
-        min={0}
-        max={1}
-        step={0.1}
-        strictMinMax={true}
-      />
-      <InputFieldColor
-        label={ props.LL().Legend.Modal.BackgroundRectangleStrokeColor() }
-        value={ props.legend.backgroundRect.stroke! }
-        onChange={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'stroke'], v)}
-      />
-      <InputFieldNumber
-        label={ props.LL().Legend.Modal.BackgroundRectangleStrokeOpacity() }
-        value={ props.legend.backgroundRect.strokeOpacity! }
-        onChange={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'strokeOpacity'], v)}
-        min={0}
-        max={1}
-        step={0.1}
-        strictMinMax={true}
-      />
-      <InputFieldNumber
-        label={ props.LL().Legend.Modal.BackgroundRectangleStrokeWidth() }
-        value={ props.legend.backgroundRect.strokeWidth! }
-        onChange={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'strokeWidth'], v)}
-        min={0}
-        max={10}
-        step={1}
-        strictMin={true}
+      <InputFieldWidthColorOpacity
+        label={props.LL().Legend.Modal.BackgroundRectangleStroke()}
+        valueWidth={props.legend.backgroundRect.strokeWidth!}
+        valueColor={props.legend.backgroundRect.stroke!}
+        valueOpacity={props.legend.backgroundRect.strokeOpacity!}
+        onChangeWidth={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'strokeWidth'], v)}
+        onChangeColor={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'stroke'], v)}
+        onChangeOpacity={(v) => debouncedUpdateProps(props.legend.id, ['backgroundRect', 'strokeOpacity'], v)}
       />
     </Show>
   </>;
@@ -349,7 +330,8 @@ function FieldChangeValues(
       <For each={props.legend.values}>
         {
           (value, i) => <input
-            style={{ 'font-size': '0.9rem' }}
+            style={{ 'font-size': '0.9rem', height: '1.5rem' }}
+            class="input"
             type="number"
             min={0}
             step={1}

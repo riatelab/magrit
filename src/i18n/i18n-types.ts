@@ -2131,6 +2131,10 @@ type RootTranslation = {
 		 */
 		Stroke: string
 		/**
+		 * L​i​n​e
+		 */
+		Line: string
+		/**
 		 * W​i​d​t​h​ ​(​p​x​)
 		 */
 		Width: string
@@ -2142,6 +2146,14 @@ type RootTranslation = {
 		 * C​o​l​o​r
 		 */
 		Color: string
+		/**
+		 * P​a​l​e​t​t​e
+		 */
+		Palette: string
+		/**
+		 * C​l​i​c​k​ ​t​o​ ​c​h​a​n​g​e​ ​t​h​e​ ​c​o​l​o​r​ ​p​a​l​e​t​t​e​ ​o​r​ ​c​h​a​n​g​e​ ​t​h​e​ ​c​l​a​s​s​i​f​i​c​a​t​i​o​n
+		 */
+		InformationPalette: string
 		/**
 		 * F​i​l​l​ ​c​o​l​o​r
 		 */
@@ -2300,10 +2312,6 @@ type RootTranslation = {
 		 * A​l​l​o​w​ ​m​o​v​i​n​g​ ​l​a​b​e​l​s
 		 */
 		AllowMovingLabels: string
-		/**
-		 * P​a​l​e​t​t​e
-		 */
-		Palette: string
 		/**
 		 * G​r​a​t​i​c​u​l​e​ ​s​t​e​p​ ​(​X​)
 		 */
@@ -3103,6 +3111,14 @@ type RootTranslation = {
 			 * B​a​c​k​g​r​o​u​n​d​ ​r​e​c​t​a​n​g​l​e​ ​s​t​r​o​k​e​ ​o​p​a​c​i​t​y
 			 */
 			BackgroundRectangleStrokeOpacity: string
+			/**
+			 * B​a​c​k​g​r​o​u​n​d​ ​r​e​c​t​a​n​g​l​e​ ​f​i​l​l
+			 */
+			BackgroundRectangleFill: string
+			/**
+			 * B​a​c​k​g​r​o​u​n​d​ ​r​e​c​t​a​n​g​l​e​ ​s​t​r​o​k​e
+			 */
+			BackgroundRectangleStroke: string
 			/**
 			 * L​e​g​e​n​d​ ​o​r​i​e​n​t​a​t​i​o​n
 			 */
@@ -5363,6 +5379,10 @@ export type TranslationFunctions = {
 		 */
 		Stroke: () => LocalizedString
 		/**
+		 * Line
+		 */
+		Line: () => LocalizedString
+		/**
 		 * Width (px)
 		 */
 		Width: () => LocalizedString
@@ -5374,6 +5394,14 @@ export type TranslationFunctions = {
 		 * Color
 		 */
 		Color: () => LocalizedString
+		/**
+		 * Palette
+		 */
+		Palette: () => LocalizedString
+		/**
+		 * Click to change the color palette or change the classification
+		 */
+		InformationPalette: () => LocalizedString
 		/**
 		 * Fill color
 		 */
@@ -5532,10 +5560,6 @@ export type TranslationFunctions = {
 		 * Allow moving labels
 		 */
 		AllowMovingLabels: () => LocalizedString
-		/**
-		 * Palette
-		 */
-		Palette: () => LocalizedString
 		/**
 		 * Graticule step (X)
 		 */
@@ -6333,6 +6357,14 @@ export type TranslationFunctions = {
 			 * Background rectangle stroke opacity
 			 */
 			BackgroundRectangleStrokeOpacity: () => LocalizedString
+			/**
+			 * Background rectangle fill
+			 */
+			BackgroundRectangleFill: () => LocalizedString
+			/**
+			 * Background rectangle stroke
+			 */
+			BackgroundRectangleStroke: () => LocalizedString
 			/**
 			 * Legend orientation
 			 */
