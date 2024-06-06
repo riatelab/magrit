@@ -1,9 +1,17 @@
-import { type JSX, For, onMount } from 'solid-js';
+import {
+  type JSX,
+  For,
+  onMount,
+  Show,
+} from 'solid-js';
 import { FaSolidAngleDown } from 'solid-icons/fa';
+
+import '../styles/Dropdown.css';
 
 interface DropdownMenuEntry {
   name: string;
   value: string;
+  prefixImage?: string;
 }
 
 interface DropdownMenuPlaceholder {
@@ -29,6 +37,8 @@ function onClickOutsideDropdown(): void {
   }
   document.removeEventListener('click', onClickOutsideDropdown);
 }
+
+// const getImageUrl = (path: string) => new URL(path, import.meta.url).href;
 
 export function setDropdownItemTarget(
   event: Event,
@@ -131,7 +141,6 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
   >
     <div
       class="dropdown-trigger"
-      style={{ width: '100%' }}
       onClick={ onClickDropdown }
       onKeyDown={ onKeyDownDropdown }
     >
@@ -139,19 +148,10 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
         class="button"
         aria-haspopup="true"
         aria-controls={ props.id }
-        style={{ width: '100%' }}
         title={ props.triggerTitle }
         aria-label={ props.triggerTitle }
       >
-        <span
-          class="dropdown-item-target"
-          style={{
-            width: '100%',
-            'text-overflow': 'ellipsis',
-            overflow: 'hidden',
-            'text-align': 'left',
-          }}
-        >
+        <span class="dropdown-item-target">
           { props.defaultEntry.name }
         </span>
         <span class="icon is-small">
@@ -159,7 +159,7 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
         </span>
       </button>
     </div>
-    <div class="dropdown-menu" id={ props.id } role="menu" style={{ width: '100%' }}>
+    <div class="dropdown-menu" id={ props.id } role="menu">
       <div
         class="dropdown-content"
         style={{
@@ -174,10 +174,16 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
       >
         <For each={props.entries}>
           {(entry) => (
-            <a href="#" class="dropdown-item" onClick={(ev) => {
-              setDropdownItemTarget(ev, props);
-              props.onChange(entry.value);
-            }}>
+            <a
+              href="#" class="dropdown-item"
+              onClick={(ev) => {
+                setDropdownItemTarget(ev, props);
+                props.onChange(entry.value);
+              }}
+            >
+              <Show when={entry.prefixImage}>
+                <img src={entry.prefixImage} alt={entry.name} />
+              </Show>
               {entry.name}
             </a>
           )}

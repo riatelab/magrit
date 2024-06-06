@@ -27,6 +27,7 @@ import {
 import { isFiniteNumber } from '../../helpers/common';
 import { Mmin, Mround, round } from '../../helpers/math';
 import { makeClassificationPlot, makeColoredBucketPlot, makeDistributionPlot } from '../DistributionPlots.tsx';
+import * as PaletteThumbnails from '../../helpers/palette-thumbnail';
 
 // Sub-components
 import DropdownMenu from '../DropdownMenu.tsx';
@@ -160,12 +161,14 @@ export default function ClassificationPanel(): JSX.Element {
     .map((d) => ({
       name: `${d.name} (${d.provider})`,
       value: d.name,
+      prefixImage: PaletteThumbnails[`img${d.provider}${d.name}`] as string,
     }));
 
   const availableDivergingPalettes = getPalettes({ type: 'diverging', number: 8 })
     .map((d) => ({
       name: `${d.name} (${d.provider})`,
       value: d.name,
+      prefixImage: PaletteThumbnails[`img${d.provider}${d.name}`] as string,
     }));
 
   // Signals for the current component:
@@ -684,7 +687,7 @@ export default function ClassificationPanel(): JSX.Element {
                       <Match when={typeScheme() === 'sequential'}>
                         <DropdownMenu
                           id={'dropdown-palette-name'}
-                          style={{ width: '220px' }}
+                          style={{ width: '240px' }}
                           entries={availableSequentialPalettes}
                           defaultEntry={
                             availableSequentialPalettes.find((d) => d.value === paletteName())
@@ -699,7 +702,7 @@ export default function ClassificationPanel(): JSX.Element {
                       <Match when={typeScheme() === 'diverging'}>
                         <DropdownMenu
                           id={'dropdown-palette-name'}
-                          style={{ width: '220px' }}
+                          style={{ width: '240px' }}
                           entries={availableDivergingPalettes}
                           defaultEntry={
                             availableDivergingPalettes.find((d) => d.value === paletteName())
