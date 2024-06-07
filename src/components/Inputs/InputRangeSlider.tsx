@@ -92,7 +92,7 @@ export default function InputFieldRangeSlider(props: InputFieldRangeNumberProps)
 
   return <div class="field pr-2">
     <label class="label">{props.label}</label>
-    <div class="output mr-6 ml-6">
+    <div class="output mr-4 ml-2">
       {
         props.formater
           ? props.formater(currentValue())
@@ -100,7 +100,7 @@ export default function InputFieldRangeSlider(props: InputFieldRangeNumberProps)
       }
     </div>
     <div class="control">
-      <div class="slider slider-styled is-info" ref={refSliderNode!} style={{ width: '120px' }}>
+      <div class="slider slider-styled is-info" ref={refSliderNode!} style={{ width: `${props.width || 120}px` }}>
       </div>
     </div>
   </div>;

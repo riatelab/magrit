@@ -174,7 +174,7 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
       );
     },
     escapeKey: 'cancel',
-    width: 'min(95vw, 740px)',
+    width: 'min(95vw, 720px)',
   });
 };
 

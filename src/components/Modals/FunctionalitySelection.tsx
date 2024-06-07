@@ -319,7 +319,7 @@ export default function FunctionalitySelection(): JSX.Element {
   >
     <div class="modal-background" />
     <div class="modal-card" style={{
-      width: !selectedFunctionality() ? 'min(95vw, 1260px)' : 'min(95vw, 920px)',
+      width: !selectedFunctionality() ? 'min(95vw, 1260px)' : 'min(95vw, 860px)',
       height: '90vh',
     }}>
       <header class="modal-card-head">

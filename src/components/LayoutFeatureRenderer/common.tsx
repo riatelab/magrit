@@ -186,7 +186,7 @@ export function makeLayoutFeaturesSettingsModal(
     },
     escapeKey: 'cancel',
     // We can use a slightly smaller width for this modal
-    width: '570px',
+    width: '540px',
   });
 }
 

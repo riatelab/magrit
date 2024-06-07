@@ -401,7 +401,7 @@ export default function Simplification(
               min={1e2}
               max={1e10}
               step={1e2}
-              style={{ width: '200px' }}
+              style={{ width: '120px' }}
             />
           </div>
         </div>
@@ -413,6 +413,7 @@ export default function Simplification(
           min={0}
           max={1}
           step={0.0005}
+          width={100}
         />
         <InputFieldCheckbox
           label={LL().SimplificationModal.CheckSelfIntersection()}
