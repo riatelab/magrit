@@ -104,6 +104,10 @@ input.input[type="color"] {
     padding: 0.25em;
 }
 
+input.input {
+    height: 2em;
+}
+
 button.unstyled {
   background-color: unset;
   border: unset;
