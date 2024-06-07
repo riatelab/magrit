@@ -138,6 +138,16 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
     content: () => <LayerSettings id={ id } LL={ LL } />,
     title: LL().LayerSettings.LayerSettings(),
     confirmCallback: (): void => {
+      // First, we check that the user didn't set an empty layer name
+      if (layerDescription.name === '') {
+        // Restore previous name
+        setLayersDescriptionStoreBase(
+          'layers',
+          (l: LayerDescription) => l.id === id,
+          'name',
+          initialLayerDescription.name,
+        );
+      }
       // The properties of the layer was updated directly in the panel,
       // skipping the undo/redo stack. So on confirm we
       // push the whole previous state to the undo stack
