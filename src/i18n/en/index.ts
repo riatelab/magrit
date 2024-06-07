@@ -189,6 +189,8 @@ const en = {
     },
     Modal: {
       Title: 'Settings', // 'Settings for {{ type }}',
+      DashedLine: 'Dashed line',
+      DisplayArrowHead: 'Display arrow head',
       FillColor: 'Fill color',
       FillOpacity: 'Fill opacity',
       StrokeColor: 'Stroke color',

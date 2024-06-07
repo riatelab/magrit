@@ -189,6 +189,8 @@ const fr = {
     },
     Modal: {
       Title: 'Propriétés', // 'Propriétés pour {{ type d'objet }}'
+      DashedLine: 'Ligne pointillée',
+      DisplayArrowHead: 'Afficher la tête de flèche',
       FillColor: 'Couleur de remplissage',
       FillOpacity: 'Opacité du remplissage',
       StrokeColor: 'Couleur de la bordure',
@@ -600,7 +602,7 @@ const fr = {
     Line: 'Ligne',
     Width: 'Épaisseur (px)',
     Opacity: 'Opacité',
-    Color: 'Color',
+    Color: 'Couleur',
     Palette: 'Palette',
     InformationPalette: 'Cliquez pour changer la palette ou les options de discrétisation',
     FillColor: 'Couleur de remplissage',

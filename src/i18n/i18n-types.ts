@@ -666,6 +666,14 @@ type RootTranslation = {
 			 */
 			Title: string
 			/**
+			 * D​a​s​h​e​d​ ​l​i​n​e
+			 */
+			DashedLine: string
+			/**
+			 * D​i​s​p​l​a​y​ ​a​r​r​o​w​ ​h​e​a​d
+			 */
+			DisplayArrowHead: string
+			/**
 			 * F​i​l​l​ ​c​o​l​o​r
 			 */
 			FillColor: string
@@ -3969,6 +3977,14 @@ export type TranslationFunctions = {
 			 * Settings
 			 */
 			Title: () => LocalizedString
+			/**
+			 * Dashed line
+			 */
+			DashedLine: () => LocalizedString
+			/**
+			 * Display arrow head
+			 */
+			DisplayArrowHead: () => LocalizedString
 			/**
 			 * Fill color
 			 */

@@ -675,7 +675,7 @@ function makeSettingsLine(
       step={1}
     />
     <InputFieldCheckbox
-      label={'Display arrow'}
+      label={LL().LayoutFeatures.Modal.DisplayArrowHead()}
       checked={ft.arrow}
       onChange={(newValue) => updateLayoutFeatureProperty(
         layoutFeatureId,
@@ -685,7 +685,7 @@ function makeSettingsLine(
     />
   {/* We also want to allow the line to be dashed */}
   <InputFieldCheckbox
-    label={'Dashed line'}
+    label={LL().LayoutFeatures.Modal.DashedLine()}
     checked={!!ft.strokeDasharray}
     onChange={(newValue) => updateLayoutFeatureProperty(
       layoutFeatureId,
