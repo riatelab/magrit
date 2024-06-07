@@ -18,6 +18,7 @@ import InputFieldRadio from '../Inputs/InputRadio.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
 import InputFieldTextarea from '../Inputs/InputTextarea.tsx';
+import { InputFieldColorOpacity, InputFieldWidthColorOpacity } from '../Inputs/InputFieldColorOpacity.tsx';
 
 // Helpers
 import type { TranslationFunctions } from '../../i18n/i18n-types';
@@ -76,6 +77,42 @@ function makeSettingsRectangle(
   const ft = layersDescriptionStore.layoutFeaturesAndLegends
     .find((f) => f.id === layoutFeatureId) as Rectangle;
   return <>
+    <InputFieldColorOpacity
+      label={LL().LayoutFeatures.Modal.Fill()}
+      valueColor={ft.fillColor}
+      valueOpacity={ft.fillOpacity}
+      onChangeColor={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['fillColor'],
+        newValue,
+      )}
+      onChangeOpacity={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['fillOpacity'],
+        newValue,
+      )}
+    />
+    <InputFieldWidthColorOpacity
+      label={LL().LayoutFeatures.Modal.Stroke()}
+      valueWidth={ft.strokeWidth}
+      valueColor={ft.strokeColor}
+      valueOpacity={ft.strokeOpacity}
+      onChangeWidth={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeWidth'],
+        newValue,
+      )}
+      onChangeColor={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeColor'],
+        newValue,
+      )}
+      onChangeOpacity={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeOpacity'],
+        newValue,
+      )}
+    />
     <InputFieldNumber
       label={ LL().LayoutFeatures.Modal.Width() }
       value={ ft.width }
@@ -98,60 +135,6 @@ function makeSettingsRectangle(
       )}
       min={1}
       max={1000}
-      step={1}
-    />
-    <InputFieldColor
-      label={ LL().LayoutFeatures.Modal.FillColor() }
-      value={ft.fillColor}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['fillColor'],
-        newValue,
-      )}
-    />
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.FillOpacity() }
-      value={ft.fillOpacity}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['fillOpacity'],
-        newValue,
-      )}
-      min={0}
-      max={1}
-      step={0.1}
-    />
-    <InputFieldColor
-      label={ LL().LayoutFeatures.Modal.StrokeColor() }
-      value={ft.strokeColor}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['strokeColor'],
-        newValue,
-      )}
-    />
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.StrokeOpacity() }
-      value={ft.strokeOpacity}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['strokeOpacity'],
-        newValue,
-      )}
-      min={0}
-      max={1}
-      step={0.1}
-    />
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.StrokeWidth() }
-      value={ft.strokeWidth}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['strokeWidth'],
-        newValue,
-      )}
-      min={0}
-      max={100}
       step={1}
     />
     <InputFieldNumber
@@ -641,38 +624,26 @@ function makeSettingsLine(
     .find((f) => f.id === layoutFeatureId) as Line;
 
   return <>
-    <InputFieldColor
-      label={LL().LayoutFeatures.Modal.StrokeColor()}
-      value={ft.strokeColor}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['strokeColor'],
-        newValue,
-      )}
-    />
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.StrokeOpacity() }
-      value={ft.strokeOpacity}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['strokeOpacity'],
-        newValue,
-      )}
-      min={0}
-      max={1}
-      step={0.1}
-    />
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.StrokeWidth() }
-      value={ft.strokeWidth}
-      onChange={(newValue) => updateLayoutFeatureProperty(
+    <InputFieldWidthColorOpacity
+      label={LL().LayoutFeatures.Modal.Line()}
+      valueWidth={ft.strokeWidth}
+      valueColor={ft.strokeColor}
+      valueOpacity={ft.strokeOpacity}
+      onChangeWidth={(newValue) => updateLayoutFeatureProperty(
         layoutFeatureId,
         ['strokeWidth'],
         newValue,
       )}
-      min={0}
-      max={100}
-      step={1}
+      onChangeColor={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeColor'],
+        newValue,
+      )}
+      onChangeOpacity={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeOpacity'],
+        newValue,
+      )}
     />
     <InputFieldCheckbox
       label={LL().LayoutFeatures.Modal.DisplayArrowHead()}
@@ -759,35 +730,41 @@ function makeSettingsImage(
         }}
       />
       <Show when={ ft.allowModifyFillStroke }>
-        <InputFieldColor
-          label={ LL().LayoutFeatures.Modal.FillColor() }
-          value={ ft.fillColor }
-          onChange={(newValue) => updateLayoutFeatureProperty(
+        <InputFieldColorOpacity
+          label={LL().LayoutFeatures.Modal.Fill()}
+          valueColor={ft.fillColor || '#ffffff'}
+          valueOpacity={ft.fillOpacity || 1}
+          onChangeColor={(newValue) => updateLayoutFeatureProperty(
             layoutFeatureId,
             ['fillColor'],
             newValue,
           )}
-        />
-        <InputFieldColor
-          label={ LL().LayoutFeatures.Modal.StrokeColor() }
-          value={ ft.strokeColor }
-          onChange={(newValue) => updateLayoutFeatureProperty(
+          onChangeOpacity={(newValue) => updateLayoutFeatureProperty(
             layoutFeatureId,
-            ['strokeColor'],
+            ['fillOpacity'],
             newValue,
           )}
         />
-        <InputFieldNumber
-          label={ LL().LayoutFeatures.Modal.StrokeWidth()}
-          value={ ft.strokeWidth }
-          onChange={(newValue) => updateLayoutFeatureProperty(
+        <InputFieldWidthColorOpacity
+          label={LL().LayoutFeatures.Modal.Line()}
+          valueWidth={ft.strokeWidth || 1}
+          valueColor={ft.strokeColor || '#000000'}
+          valueOpacity={ft.strokeOpacity || 1}
+          onChangeWidth={(newValue) => updateLayoutFeatureProperty(
             layoutFeatureId,
             ['strokeWidth'],
             newValue,
           )}
-          min={0}
-          max={10}
-          step={0.1}
+          onChangeColor={(newValue) => updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['strokeColor'],
+            newValue,
+          )}
+          onChangeOpacity={(newValue) => updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['strokeOpacity'],
+            newValue,
+          )}
         />
       </Show>
     </Show>
@@ -859,38 +836,26 @@ function makeSettingsFreeDrawing(
   const ft = layersDescriptionStore.layoutFeaturesAndLegends
     .find((f) => f.id === layoutFeatureId) as FreeDrawing;
   return <>
-    <InputFieldColor
-      label={ LL().LayoutFeatures.Modal.StrokeColor() }
-      value={ft.strokeColor}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['strokeColor'],
-        newValue,
-      )}
-    />
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.StrokeOpacity() }
-      value={ft.strokeOpacity}
-      onChange={(newValue) => updateLayoutFeatureProperty(
-        layoutFeatureId,
-        ['strokeOpacity'],
-        newValue,
-      )}
-      min={0}
-      max={1}
-      step={0.1}
-    />
-    <InputFieldNumber
-      label={ LL().LayoutFeatures.Modal.StrokeWidth() }
-      value={ft.strokeWidth}
-      onChange={(newValue) => updateLayoutFeatureProperty(
+    <InputFieldWidthColorOpacity
+      label={LL().LayoutFeatures.Modal.Line()}
+      valueWidth={ft.strokeWidth}
+      valueColor={ft.strokeColor}
+      valueOpacity={ft.strokeOpacity}
+      onChangeWidth={(newValue) => updateLayoutFeatureProperty(
         layoutFeatureId,
         ['strokeWidth'],
         newValue,
       )}
-      min={0}
-      max={100}
-      step={1}
+      onChangeColor={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeColor'],
+        newValue,
+      )}
+      onChangeOpacity={(newValue) => updateLayoutFeatureProperty(
+        layoutFeatureId,
+        ['strokeOpacity'],
+        newValue,
+      )}
     />
   </>;
 }

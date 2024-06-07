@@ -674,25 +674,17 @@ type RootTranslation = {
 			 */
 			DisplayArrowHead: string
 			/**
-			 * F​i​l​l​ ​c​o​l​o​r
+			 * S​t​r​o​k​e
 			 */
-			FillColor: string
+			Stroke: string
 			/**
-			 * F​i​l​l​ ​o​p​a​c​i​t​y
+			 * L​i​n​e
 			 */
-			FillOpacity: string
+			Line: string
 			/**
-			 * S​t​r​o​k​e​ ​c​o​l​o​r
+			 * F​i​l​l
 			 */
-			StrokeColor: string
-			/**
-			 * S​t​r​o​k​e​ ​w​i​d​t​h
-			 */
-			StrokeWidth: string
-			/**
-			 * S​t​r​o​k​e​ ​o​p​a​c​i​t​y
-			 */
-			StrokeOpacity: string
+			Fill: string
 			/**
 			 * R​o​u​n​d​ ​c​o​r​n​e​r​s
 			 */
@@ -730,11 +722,11 @@ type RootTranslation = {
 			 */
 			Width: string
 			/**
-			 * H​e​i​g​h​t
+			 * H​e​i​g​h​t​ ​(​p​x​)
 			 */
 			Height: string
 			/**
-			 * T​a​i​l​l​e
+			 * S​i​z​e
 			 */
 			Size: string
 			/**
@@ -3986,25 +3978,17 @@ export type TranslationFunctions = {
 			 */
 			DisplayArrowHead: () => LocalizedString
 			/**
-			 * Fill color
+			 * Stroke
 			 */
-			FillColor: () => LocalizedString
+			Stroke: () => LocalizedString
 			/**
-			 * Fill opacity
+			 * Line
 			 */
-			FillOpacity: () => LocalizedString
+			Line: () => LocalizedString
 			/**
-			 * Stroke color
+			 * Fill
 			 */
-			StrokeColor: () => LocalizedString
-			/**
-			 * Stroke width
-			 */
-			StrokeWidth: () => LocalizedString
-			/**
-			 * Stroke opacity
-			 */
-			StrokeOpacity: () => LocalizedString
+			Fill: () => LocalizedString
 			/**
 			 * Round corners
 			 */
@@ -4042,11 +4026,11 @@ export type TranslationFunctions = {
 			 */
 			Width: () => LocalizedString
 			/**
-			 * Height
+			 * Height (px)
 			 */
 			Height: () => LocalizedString
 			/**
-			 * Taille
+			 * Size
 			 */
 			Size: () => LocalizedString
 			/**
