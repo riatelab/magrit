@@ -157,7 +157,7 @@ function onClickValidate(
         name: palName,
         number: 5,
         type: 'diverging',
-        colors: getAsymmetricDivergingColors('Geyser', 2, 2, true, true, false),
+        colors: getAsymmetricDivergingColors(palName, 2, 2, true, true, false),
         provenance: 'dicopal',
         reversed: false,
       } as CustomPalette,
@@ -496,7 +496,7 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
   const [
     paletteName,
     setPaletteName,
-  ] = createSignal<string>('Geyser');
+  ] = createSignal<string>('PuOr');
 
   const [
     symbolType,
