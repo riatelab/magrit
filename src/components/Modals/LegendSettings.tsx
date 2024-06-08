@@ -511,7 +511,7 @@ function makeSettingsChoroplethLegend(
     representationType: RepresentationType,
   ) => ['choropleth', 'smoothed', 'grid'].includes(representationType);
 
-  const choroVariable = layer.renderer === 'proportionalSymbols'
+  const choroVariable = layer.representationType === 'proportionalSymbols'
     ? (
       layer.rendererParameters as
         ProportionalSymbolsRatioParameters | ProportionalSymbolCategoryParameters
@@ -591,7 +591,7 @@ function makeSettingsChoroplethLegend(
       </div>
     </div>
     <Show when={
-      isChoroplethLegend(layer.renderer)
+      isChoroplethLegend(layer.representationType)
       && legend.boxSpacing === 0
       && legend.boxCornerRadius === 0
     }>

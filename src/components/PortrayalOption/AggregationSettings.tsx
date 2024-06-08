@@ -68,7 +68,7 @@ async function onClickValidate(
         type: 'categorical',
       } as Variable,
     ],
-    renderer: 'default',
+    representationType: 'default',
     visible: true,
     fillOpacity: 1,
     fillColor: color,

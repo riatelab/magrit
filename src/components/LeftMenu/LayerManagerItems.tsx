@@ -394,7 +394,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
           >
             <FaSolidMagnifyingGlass size={'1.1em'}/>
           </button>
-          <Show when={props.renderer !== 'sphere'}>
+          <Show when={props.representationType !== 'sphere'}>
             <button
               aria-label={LL().LayerManager.AttributeTable()}
               class="unstyled"
@@ -453,8 +453,8 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
         }}
         title={LL().LeftMenu.FunctionalityChoice()}
         disabled={
-          props.renderer === 'sphere'
-          || props.renderer === 'graticule'
+          props.representationType === 'sphere'
+          || props.representationType === 'graticule'
           || props.id.startsWith('Layer-default-world-')
         }
       >

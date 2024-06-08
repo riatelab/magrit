@@ -54,13 +54,12 @@ import {
   type ClassificationParameters,
   type CustomPalette,
   type GeoJSONFeature, type GeoJSONPosition,
-  type LayerDescriptionChoropleth,
-  type LayerDescriptionProportionalSymbols,
   type LegendTextElement, type LinearRegressionScatterPlot,
   type ProportionalSymbolsLegend,
   type ProportionalSymbolsPositiveNegativeParameters,
   LegendType, Orientation,
   ProportionalSymbolsSymbolType, RepresentationType,
+  type LayerDescriptionLMResultRatio, type LayerDescriptionLMResultStock,
 } from '../../global.d';
 
 interface OptionsChoro {
@@ -167,9 +166,6 @@ function onClickValidate(
         linearRegressionResult.standardisedResiduals,
         [minStdRes, -1.5, -0.5, 0.5, 1.5, maxStdRes],
       ),
-      // FIXME: the following is not defined in the model
-      //   and we will change it
-      lm: linearRegressionResult,
     } as ClassificationParameters;
 
     const newLayerDescription = {
@@ -178,7 +174,7 @@ function onClickValidate(
       data: newDataset,
       type: referenceLayerDescription.type,
       fields: newFields,
-      renderer: 'choropleth' as RepresentationType,
+      representationType: 'choropleth' as RepresentationType,
       visible: true,
       strokeColor: '#000000',
       strokeWidth: 0.4,
@@ -187,7 +183,8 @@ function onClickValidate(
       dropShadow: null,
       shapeRendering: referenceLayerDescription.shapeRendering,
       rendererParameters: classificationParameters,
-    } as LayerDescriptionChoropleth;
+      layerCreationOptions: linearRegressionResult,
+    } as LayerDescriptionLMResultRatio;
 
     if (newLayerDescription.type === 'point') {
       // We also need to transfert the symbolSize and the symbolType parameters
@@ -292,9 +289,6 @@ function onClickValidate(
       movable: false,
       colorMode: 'positiveNegative',
       color: [colorPos, colorNeg], // ['#3d8f63', '#8F3D6B'],
-      // FIXME: the following is not defined in the model
-      //   and we will change it
-      lm: linearRegressionResult,
     } as ProportionalSymbolsPositiveNegativeParameters;
 
     const newLayerDescription = {
@@ -303,7 +297,7 @@ function onClickValidate(
       data: newDataset,
       type: referenceLayerDescription.type === 'linestring' ? 'linestring' : 'point',
       fields: newFields,
-      renderer: 'proportionalSymbols' as RepresentationType,
+      representationType: 'proportionalSymbols' as RepresentationType,
       visible: true,
       strokeColor: '#000000',
       strokeWidth: 1,
@@ -313,7 +307,8 @@ function onClickValidate(
       dropShadow: null,
       shapeRendering: 'auto',
       rendererParameters: propSymbolsParameters,
-    } as LayerDescriptionProportionalSymbols;
+      layerCreationOptions: linearRegressionResult,
+    } as LayerDescriptionLMResultStock;
 
     // Find a position for the legend
     const legendPosition = getPossibleLegendPosition(150, 150);

@@ -57,7 +57,7 @@ async function onClickValidate(
     type: layerDescription.type,
     fields: unwrap(layerDescription.fields),
     visible: true,
-    renderer: 'default',
+    representationType: 'default',
     ...getDefaultRenderingParams(layerDescription.type),
     shapeRendering: 'auto',
   } as LayerDescription;

@@ -62,7 +62,7 @@ export default function linksRenderer(
       clip-path="url(#clip-sphere)"
       filter={mergeFilterIds(layerDescription)}
       mgt:geometry-type={layerDescription.type}
-      mgt:portrayal-type={layerDescription.renderer}
+      mgt:portrayal-type={layerDescription.representationType}
       mgt:link-curvature={rendererParameters().curvature}
     >
       <For each={filteredFeatures()}>
@@ -115,7 +115,7 @@ export default function linksRenderer(
     clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.renderer}
+    mgt:portrayal-type={layerDescription.representationType}
     mgt:link-curvature={rendererParameters().curvature}
   >
     <For each={filteredFeatures()}>

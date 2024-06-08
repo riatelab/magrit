@@ -53,7 +53,7 @@ async function onClickValidate(
     data: newData,
     type: referenceDescription.type,
     fields: unwrap(referenceDescription.fields),
-    renderer: 'default',
+    representationType: 'default',
     visible: true,
     fillOpacity: 1,
     fillColor: color,

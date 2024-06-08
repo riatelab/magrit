@@ -54,7 +54,7 @@ function verticalLegend(legendParameters: CategoricalChoroplethLegend): JSX.Elem
   if (!layer.rendererParameters) {
     throw new Error('Classification attribute is not defined - this should not happen');
   }
-  const rendererParameters = layer.renderer === 'categoricalChoropleth'
+  const rendererParameters = layer.representationType === 'categoricalChoropleth'
     ? layer.rendererParameters as CategoricalChoroplethParameters
     : layer.rendererParameters.color as CategoricalChoroplethParameters;
 
@@ -248,7 +248,7 @@ function horizontalLegend(legendParameters: CategoricalChoroplethLegend): JSX.El
   if (!layer.rendererParameters) {
     throw new Error('Classification attribute is not defined - this should not happen');
   }
-  const rendererParameters = layer.renderer === 'categoricalChoropleth'
+  const rendererParameters = layer.representationType === 'categoricalChoropleth'
     ? layer.rendererParameters as CategoricalChoroplethParameters
     : layer.rendererParameters.color as CategoricalChoroplethParameters;
 

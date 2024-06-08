@@ -111,7 +111,7 @@ async function onClickValidate(
     id: generateIdLayer(),
     name: newName,
     type: 'polygon',
-    renderer: 'cartogram' as RepresentationType,
+    representationType: 'cartogram' as RepresentationType,
     data: newData,
     fields: newFields,
     visible: true,
@@ -122,9 +122,10 @@ async function onClickValidate(
     fillOpacity: 1,
     dropShadow: null,
     shapeRendering: referenceLayerDescription.shapeRendering,
-    rendererParameters: {
+    layerCreationOptions: {
       variable: targetVariable,
       method: cartogramMethod,
+      iterations: cartogramMethod === CartogramMethod.Dougenik ? iterations : undefined,
     } as CartogramParameters,
   } as LayerDescriptionCartogram;
 

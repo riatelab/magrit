@@ -46,7 +46,7 @@ function verticalLegend(
     legendParameters.layerId,
   )!;
 
-  const rendererParameters = layer.renderer === 'proportionalSymbols'
+  const rendererParameters = layer.representationType === 'proportionalSymbols'
     ? layer.rendererParameters!.color as ClassificationParameters
     : layer.rendererParameters as AllowChoroplethLegend;
 
@@ -266,7 +266,7 @@ function horizontalLegend(
     legendParameters.layerId,
   )!;
 
-  const rendererParameters = layer.renderer === 'proportionalSymbols'
+  const rendererParameters = layer.representationType === 'proportionalSymbols'
     ? layer.rendererParameters!.color as ClassificationParameters
     : layer.rendererParameters as AllowChoroplethLegend;
 

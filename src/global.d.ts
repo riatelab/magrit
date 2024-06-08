@@ -4,6 +4,7 @@ import type { Gdal } from 'gdal3.js/src/index.d';
 import type { Dexie } from 'dexie';
 import type { Variable } from './helpers/typeDetection';
 import type { MapStoreType } from './store/MapStore';
+import type { LinearRegressionResult } from './helpers/statistics';
 
 declare namespace globalThis {
   let gdal: Gdal;
@@ -37,7 +38,7 @@ type LayerDescription = {
   // Type of the layer
   type: VectorType | 'raster',
   // The type of representation of the layer
-  renderer: RepresentationType,
+  representationType: RepresentationType,
   // The data for the layer
   // (this is either a GeoJSONFeatureCollection or a Sphere, as a special case)
   data: GeoJSONFeatureCollection,
@@ -74,15 +75,18 @@ type LayerDescription = {
     | ClassificationParameters
     | CategoricalChoroplethParameters
     | DiscontinuityParameters
-    | CartogramParameters
-    | GriddedLayerParameters
     | LabelsParameters
     | GraticuleParameters
-    | SmoothedLayerParameters
     | LinksParameters
     | MushroomsParameters
     | CategoricalPictogramParameters
     // | DefaultRendererParameters
+  ),
+  layerCreationOptions?: (
+    CartogramParameters
+    | GriddedLayerParameters
+    | SmoothedLayerParameters
+    | LinearRegressionResult
   ),
 };
 
@@ -161,70 +165,89 @@ interface DefaultPolygonRendererParameters {
   fillOpacity: number,
 }
 // type LayerDescriptionDefault = LayerDescription & {
-//   renderer: RepresentationType.default,
+//   representationType: RepresentationType.default,
 //   rendererParameters: DefaultRendererParameters
 // };
 
 type LayerDescriptionChoropleth = LayerDescription & {
-  renderer: RepresentationType.choropleth,
+  representationType: RepresentationType.choropleth,
   rendererParameters: ClassificationParameters,
 };
 
 type LayerDescriptionProportionalSymbols = LayerDescription & {
   type: 'point',
-  renderer: RepresentationType.proportionalSymbols,
+  representationType: RepresentationType.proportionalSymbols,
   rendererParameters: ProportionalSymbolsParameters,
 };
 
 type LayerDescriptionLabels = LayerDescription & {
   type: 'point'
-  renderer: RepresentationType.labels,
+  representationType: RepresentationType.labels,
   rendererParameters: LabelsParameters,
 };
 
 type LayerDescriptionCategoricalChoropleth = LayerDescription & {
-  renderer: RepresentationType.categoricalChoropleth,
+  representationType: RepresentationType.categoricalChoropleth,
   rendererParameters: CategoricalChoroplethParameters,
 };
 
 type LayerDescriptionDiscontinuity = LayerDescription & {
-  renderer: RepresentationType.discontinuity,
+  representationType: RepresentationType.discontinuity,
   rendererParameters: DiscontinuityParameters,
 };
 
 type LayerDescriptionCartogram = LayerDescription & {
-  renderer: RepresentationType.cartogram,
-  rendererParameters: CartogramParameters,
+  representationType: RepresentationType.cartogram,
+  rendererParameters: undefined,
+  layerCreationOptions: CartogramParameters,
 };
 
 type LayerDescriptionGriddedLayer = LayerDescription & {
-  renderer: RepresentationType.grid,
-  rendererParameters: GriddedLayerParameters,
+  representationType: RepresentationType.grid,
+  rendererParameters: ClassificationParameters,
+  layerCreationOptions: GriddedLayerParameters,
 };
 
 type LayerDescriptionLinks = LayerDescription & {
-  renderer: RepresentationType.links,
+  representationType: RepresentationType.links,
   rendererParameters: LinksParameters,
 };
 
 type LayerDescriptionSmoothedLayer = LayerDescription & {
-  renderer: RepresentationType.smoothed
-  rendererParameters: SmoothedLayerParameters,
+  representationType: RepresentationType.smoothed
+  rendererParameters: ClassificationParameters,
+  layerCreationOptions: SmoothedLayerParameters,
 };
 
 type LayerDescriptionMushroomLayer = LayerDescription & {
-  renderer: RepresentationType.mushrooms,
+  representationType: RepresentationType.mushrooms,
   rendererParameters: MushroomsParameters,
 };
 
 // type LayerDescriptionWaffle = LayerDescription & {
-//   renderer: RepresentationType.waffle,
+//   representationType: RepresentationType.waffle,
 //   rendererParameters: GriddedLayerParameters,
 // };
-//
+
 type LayerDescriptionCategoricalPictogram = LayerDescription & {
-  renderer: RepresentationType.categoricalPictogram,
+  representationType: RepresentationType.categoricalPictogram,
   rendererParameters: CategoricalPictogramParameters,
+};
+
+type LayerDescriptionLMResultStock = LayerDescriptionProportionalSymbols & {
+  layerCreationOptions: LinearRegressionResult,
+};
+
+type LayerDescriptionLMResultRatio = LayerDescriptionChoropleth & {
+  layerCreationOptions: LinearRegressionResult,
+};
+
+type LayerDescriptionPointAggResultStock = LayerDescriptionProportionalSymbols & {
+  layerCreationOptions: unknown, // TODO
+};
+
+type LayerDescriptionPointAggResultRatio = LayerDescriptionChoropleth & {
+  layerCreationOptions: unknown, // TODO
 };
 
 type SymbolType = 'circle' | 'square' | 'diamond' | 'diamond2' | 'cross' | 'triangle' | 'star';
@@ -496,12 +519,6 @@ interface GriddedLayerParameters {
   // The parameters of the grid used to compute the gridded layer
   // (bbox and resolution)
   gridParameters: GridParameters,
-  // The color to use for features with no data
-  noDataColor: string,
-  // The palette used to color the gridded layer
-  palette: CustomPalette,
-  // The breaks used to compute the contour of the gridded layer from the grid
-  breaks: number[],
 }
 
 interface SmoothedLayerParameters {
@@ -513,11 +530,6 @@ interface SmoothedLayerParameters {
   smoothingParameters: StewartParameters | KdeParameters,
   // The parameters of the grid used to compute the smoothed layer
   gridParameters: GridParameters,
-  // The palette used to color the smoothed layer
-  palette: CustomPalette,
-  // The thresholds used to compute the contour of the
-  // smoothed layer from the grid
-  breaks: number[],
 }
 
 interface CategoricalPictogramMapping {

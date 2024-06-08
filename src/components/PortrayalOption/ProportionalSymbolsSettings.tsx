@@ -214,7 +214,7 @@ function onClickValidate(
     data: newData,
     type: symbolType === ProportionalSymbolsSymbolType.line ? 'linestring' : 'point',
     fields: referenceLayerDescription.fields,
-    renderer: 'proportionalSymbols' as RepresentationType,
+    representationType: 'proportionalSymbols' as RepresentationType,
     visible: true,
     strokeColor: '#000000',
     strokeWidth: 1,

@@ -105,7 +105,7 @@ export function proportionalSymbolsPunctualRenderer(
     stroke-linejoin="round"
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.renderer}
+    mgt:portrayal-type={layerDescription.representationType}
   >
     <For each={layerDescription.data.features}>
       {
@@ -214,7 +214,7 @@ export function proportionalSymbolsLinearRenderer(
     stroke-linejoin="round"
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.renderer}
+    mgt:portrayal-type={layerDescription.representationType}
   >
     <For each={layerDescription.data.features}>
       {

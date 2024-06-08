@@ -128,7 +128,7 @@ function onClickValidate(
     data: newData,
     type: 'point',
     fields: referenceLayerDescription.fields,
-    renderer: 'labels' as RepresentationType,
+    representationType: 'labels' as RepresentationType,
     visible: true,
     // strokeColor: '#000000',
     // strokeWidth: 1,

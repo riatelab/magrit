@@ -98,7 +98,7 @@ function onClickValidate(
     data: newData,
     type: 'linestring',
     fields,
-    renderer: 'discontinuity' as RepresentationType,
+    representationType: 'discontinuity' as RepresentationType,
     visible: true,
     strokeColor: color,
     // strokeWidth: 2,

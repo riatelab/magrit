@@ -58,7 +58,7 @@ export default function smoothedMapRenderer(
         : layerDescription.shapeRendering
     }
     mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.renderer}
+    mgt:portrayal-type={layerDescription.representationType}
   >
     <For each={layerDescription.data.features}>
       {

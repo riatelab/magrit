@@ -46,7 +46,7 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
-  type ChoroplethLegend,
+  type ChoroplethLegend, ClassificationParameters,
   type GeoJSONFeatureCollection,
   type GridParameters,
   KdeKernel,
@@ -98,14 +98,24 @@ async function onClickValidate(
     newData = contours;
   }
 
-  const rendererParameters = {
+  const nClasses = thresholds.length - 1;
+
+  const layerCreationOptions = {
     variable: targetVariable,
     method: smoothingMethod,
     smoothingParameters: parameters,
     gridParameters: gridParams,
-    breaks: thresholds,
-    palette: getPaletteWrapper('Carrots', thresholds.length - 1, true),
   } as SmoothedLayerParameters;
+
+  const rendererParameters = {
+    variable: targetVariable,
+    method: 'manual',
+    classes: nClasses,
+    breaks: thresholds,
+    palette: getPaletteWrapper('Carrots', nClasses, true),
+    noDataColor: applicationSettingsStore.defaultNoDataColor,
+    entitiesByClass: [],
+  } as ClassificationParameters;
 
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(120, 340);
@@ -118,7 +128,7 @@ async function onClickValidate(
     // layerId: referenceLayerId,
     name: newName,
     type: 'polygon',
-    renderer: 'smoothed' as RepresentationType,
+    representationType: 'smoothed' as RepresentationType,
     data: newData,
     fields: [
       {
@@ -155,6 +165,7 @@ async function onClickValidate(
     dropShadow: null,
     shapeRendering: 'auto',
     rendererParameters,
+    layerCreationOptions,
   } as LayerDescriptionSmoothedLayer;
 
   const legend = {

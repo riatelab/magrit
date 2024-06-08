@@ -166,7 +166,7 @@ export function defaultLabelsRenderer(
     filter={mergeFilterIds(layerDescription)}
     style={{ 'user-select': 'none', 'stroke-linejoin': 'round', 'paint-order': 'stroke' }}
     mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.renderer}
+    mgt:portrayal-type={layerDescription.representationType}
   >
     <For each={layerDescription.data.features}>
       {

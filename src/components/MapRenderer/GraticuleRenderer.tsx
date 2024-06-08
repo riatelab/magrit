@@ -33,7 +33,7 @@ export default function graticuleRenderer(layerDescription: LayerDescription): J
     clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.renderer}
+    mgt:portrayal-type={layerDescription.representationType}
   >
     <For each={layerDescription.data.features}>
       {

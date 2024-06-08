@@ -361,7 +361,7 @@ function makeSettingsLabels(
             const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
             Object.keys((layer.rendererParameters as LabelsParameters).specific).forEach((k) => {
               // eslint-disable-next-line no-param-reassign
-              layer.rendererParameters.specific[+k].fontStyle = value;
+              layer.rendererParameters.specific[+k].fontStyle = v;
             });
           }),
         );
@@ -519,7 +519,7 @@ function makeSettingsDefaultPoint(
         - For 'choropleth' renderer, we propose to reopen the classification modal
         - For 'proportional' renderer, ... (TODO)
     */}
-    <Show when={props.renderer !== 'proportionalSymbols' && props.renderer !== 'mushrooms'}>
+    <Show when={props.representationType !== 'proportionalSymbols' && props.representationType !== 'mushrooms'}>
       <InputFieldSelect
         label={LL().LayerSettings.SymbolType()}
         onChange={(v) => debouncedUpdateProp(props.id, 'symbolType', v)}
@@ -542,7 +542,7 @@ function makeSettingsDefaultPoint(
         step={1}
       />
     </Show>
-    <Show when={props.renderer === 'default'}>
+    <Show when={props.representationType === 'default'}>
       <InputFieldColorOpacity
         label={LL().LayerSettings.Fill()}
         valueColor={props.fillColor!}
@@ -551,7 +551,7 @@ function makeSettingsDefaultPoint(
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
       />
     </Show>
-    <Show when={props.renderer === 'choropleth'}>
+    <Show when={props.representationType === 'choropleth'}>
       <div class="field" style={{ 'text-align': 'center' }}>
         <button
           class="button"
@@ -638,7 +638,7 @@ function makeSettingsDefaultPoint(
         }}
       />
     </Show>
-    <Show when={props.renderer === 'proportionalSymbols'}>
+    <Show when={props.representationType === 'proportionalSymbols'}>
       <InputFieldSelect
         disabled={true}
         label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.SymbolType()}
@@ -670,7 +670,7 @@ function makeSettingsDefaultPoint(
       />
     </Show>
     <Show when={
-      props.renderer === 'proportionalSymbols'
+      props.representationType === 'proportionalSymbols'
       && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'singleColor'
     }>
       <InputFieldColorOpacity
@@ -682,7 +682,7 @@ function makeSettingsDefaultPoint(
       />
     </Show>
     <Show when={
-      props.renderer === 'proportionalSymbols'
+      props.representationType === 'proportionalSymbols'
       && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'ratioVariable'
     }>
       <div class="field" style={{ 'text-align': 'center' }}>
@@ -776,7 +776,7 @@ function makeSettingsDefaultPoint(
       />
     </Show>
     <Show when={
-      props.renderer === 'proportionalSymbols'
+      props.representationType === 'proportionalSymbols'
       && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'categoricalVariable'
     }>
       <InputFieldPaletteOpacity
@@ -857,7 +857,7 @@ function makeSettingsDefaultPoint(
       onChangeColor={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
       onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
     />
-    <Show when={props.renderer === 'mushrooms'}>
+    <Show when={props.representationType === 'mushrooms'}>
       <div class="mt-4 mb-5 has-text-weight-bold">
         {LL().FunctionalitiesSection.MushroomsOptions.TopProperties()}
       </div>
@@ -907,7 +907,7 @@ function makeSettingsDefaultPoint(
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'color'], v)}
       />
     </Show>
-    <Show when={props.renderer === 'proportionalSymbols'}>
+    <Show when={props.representationType === 'proportionalSymbols'}>
       <InputFieldCheckbox
         label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.AvoidOverlapping() }
         checked={ (props.rendererParameters as ProportionalSymbolsParameters).avoidOverlapping }
@@ -996,7 +996,7 @@ function makeSettingsDefaultPoint(
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}
       />
     </Show>
-    <Show when={props.renderer === 'categoricalChoropleth'}>
+    <Show when={props.representationType === 'categoricalChoropleth'}>
       <DetailsSummary
         summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
       >
@@ -1066,7 +1066,7 @@ function makeSettingsDefaultLine(
 ): JSX.Element {
   return <>
     {/* Options for default renderer / graticule renderer */}
-    <Show when={props.renderer === 'default' || props.renderer === 'graticule'}>
+    <Show when={props.representationType === 'default' || props.representationType === 'graticule'}>
       <InputFieldWidthColorOpacity
         label={LL().LayerSettings.Line()}
         valueWidth={props.strokeWidth!}
@@ -1084,7 +1084,7 @@ function makeSettingsDefaultLine(
           debouncedUpdateProp(props.id, 'strokeDasharray', v);
         }}
       />
-      <Show when={props.renderer === 'graticule'}>
+      <Show when={props.representationType === 'graticule'}>
         <InputFieldNumber
           label={ LL().LayerSettings.GraticuleStepX() }
           value={(props.rendererParameters as GraticuleParameters).step[0]}
@@ -1141,7 +1141,7 @@ function makeSettingsDefaultLine(
     </Show>
 
     {/* Options for discontinuity renderer */}
-    <Show when={props.renderer === 'discontinuity'}>
+    <Show when={props.representationType === 'discontinuity'}>
       <div class="field" style={{ 'text-align': 'center' }}>
         <button
           class="button"
@@ -1184,7 +1184,7 @@ function makeSettingsDefaultLine(
     </Show>
 
     {/* Options for links renderer */}
-    <Show when={props.renderer === 'links'}>
+    <Show when={props.representationType === 'links'}>
       <Show when={!['Exchange', 'BilateralVolume'].includes((props.rendererParameters as LinksParameters).type)}>
         <InputFieldWidthColorOpacity
           label={LL().LayerSettings.Line()}
@@ -1266,7 +1266,7 @@ function makeSettingsDefaultLine(
     </Show>
 
     {/* Options for proportional symbol renderer */}
-    <Show when={props.renderer === 'proportionalSymbols'}>
+    <Show when={props.representationType === 'proportionalSymbols'}>
       <InputFieldNumber
         label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize()}
         value={(props.rendererParameters as ProportionalSymbolsParameters).referenceRadius}
@@ -1460,7 +1460,7 @@ function makeSettingsDefaultLine(
     </Show>
 
     {/* Options for choropleth renderer */}
-    <Show when={props.renderer === 'choropleth'}>
+    <Show when={props.representationType === 'choropleth'}>
       <div class="field" style={{ 'text-align': 'center' }}>
         <button
           class="button"
@@ -1551,7 +1551,7 @@ function makeSettingsDefaultLine(
     </Show>
 
     {/* Options for categorical choropleth renderer */}
-    <Show when={props.renderer === 'categoricalChoropleth'}>
+    <Show when={props.representationType === 'categoricalChoropleth'}>
       <InputFieldWidthPaletteOpacity
         label={LL().LayerSettings.Line()}
         valueWidth={props.strokeWidth!}
@@ -1643,7 +1643,7 @@ function makeSettingsDefaultPolygon(
         - For 'choropleth' renderer, we propose to reopen the classification modal
         - For 'proportional' renderer, ... (TODO)
     */}
-    <Show when={props.renderer === 'default' || props.renderer === 'sphere' || props.renderer === 'cartogram'}>
+    <Show when={props.representationType === 'default' || props.representationType === 'sphere' || props.representationType === 'cartogram'}>
       <InputFieldColorOpacity
         label={LL().LayerSettings.Fill()}
         valueColor={props.fillColor!}
@@ -1652,7 +1652,7 @@ function makeSettingsDefaultPolygon(
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
       />
     </Show>
-    <Show when={props.renderer === 'choropleth'}>
+    <Show when={props.representationType === 'choropleth' || props.representationType === 'grid'}>
       <div class="field" style={{ 'text-align': 'center' }}>
         <button
           class="button"
@@ -1739,19 +1739,19 @@ function makeSettingsDefaultPolygon(
         }}
       />
     </Show>
-    <Show when={props.renderer === 'smoothed' || props.renderer === 'grid'}>
+    <Show when={props.representationType === 'smoothed'}>
       <InputFieldSelect
         label={LL().LayerSettings.Palette()}
         onChange={(palName) => {
-          const n = (props.rendererParameters as SmoothedLayerParameters).breaks.length - 1;
+          const n = (props.rendererParameters as ClassificationParameters).breaks.length - 1;
           const palette = getPaletteWrapper(
             palName,
             n,
-            (props.rendererParameters as SmoothedLayerParameters).palette.reversed,
+            (props.rendererParameters as ClassificationParameters).palette.reversed,
           );
           debouncedUpdateProp(props.id, ['rendererParameters', 'palette'], palette);
         }}
-        value={(props.rendererParameters as SmoothedLayerParameters).palette.name}
+        value={(props.rendererParameters as ClassificationParameters).palette.name}
         width={300}
       >
         <For each={availableSequentialPalettes}>
@@ -1764,12 +1764,12 @@ function makeSettingsDefaultPolygon(
         label={ LL().ClassificationPanel.reversePalette() }
         checked={
           (
-            props.rendererParameters as SmoothedLayerParameters | GriddedLayerParameters
+            props.rendererParameters as ClassificationParameters
           ).palette.reversed
         }
         onChange={(value) => {
           const p = unproxify(
-            (props.rendererParameters as SmoothedLayerParameters | GriddedLayerParameters).palette,
+            (props.rendererParameters as ClassificationParameters).palette,
           ) as CustomPalette;
           p.colors = p.colors.toReversed();
           p.reversed = value;
@@ -1793,7 +1793,7 @@ function makeSettingsDefaultPolygon(
       onChangeColor={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
       onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
     />
-    <Show when={props.renderer === 'categoricalChoropleth'}>
+    <Show when={props.representationType === 'categoricalChoropleth'}>
       <DetailsSummary
         summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
       >
@@ -1870,9 +1870,9 @@ export default function LayerSettings(
     .find((l) => l.id === id) as LayerDescription;
 
   let innerElement;
-  if (layerDescription.renderer === 'labels') {
+  if (layerDescription.representationType === 'labels') {
     innerElement = makeSettingsLabels(layerDescription as LayerDescriptionLabels, LL);
-  } else if (layerDescription.renderer === 'categoricalPictogram') {
+  } else if (layerDescription.representationType === 'categoricalPictogram') {
     innerElement = makeSettingsPictograms(
       layerDescription as LayerDescriptionCategoricalPictogram,
       LL,

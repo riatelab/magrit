@@ -50,7 +50,7 @@ import MessageBlock from '../MessageBlock.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
-  type ChoroplethLegend,
+  type ChoroplethLegend, ClassificationParameters,
   GeoJSONFeatureCollection,
   GridCellShape,
   type GriddedLayerParameters,
@@ -76,18 +76,15 @@ async function onClickValidate(
     throw new Error('Unexpected Error: Reference layer not found');
   }
 
-  const params = {
+  const layerCreationOptions = {
     variable: targetVariable,
     cellType,
     gridParameters,
-    noDataColor: applicationSettingsStore.defaultNoDataColor,
-    breaks: [],
-    palette: {} as never,
   } as GriddedLayerParameters;
 
   const newData = await computeGriddedLayer(
     unwrap(referenceLayerDescription.data as never) as GeoJSONFeatureCollection,
-    params,
+    layerCreationOptions,
   );
 
   // Compute breaks based on the computed values
@@ -98,10 +95,13 @@ async function onClickValidate(
 
   const classifier = new CkmeansClassifier(values, null);
 
-  params.breaks = classifier.classify(numberOfClasses);
-  params.palette = getPaletteWrapper('Carrots', numberOfClasses, true);
-  params.entitiesByClass = classifier.countByClass();
-  params.variable = `density-${targetVariable}`;
+  const rendererParameters = {
+    noDataColor: applicationSettingsStore.defaultNoDataColor,
+    breaks: classifier.classify(numberOfClasses),
+    palette: getPaletteWrapper('Carrots', numberOfClasses, true),
+    entitiesByClass: classifier.countByClass(),
+    variable: `density-${targetVariable}`,
+  } as ClassificationParameters;
 
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(120, 340);
@@ -112,7 +112,7 @@ async function onClickValidate(
     id: newId,
     name: newLayerName,
     type: 'polygon',
-    renderer: RepresentationType.grid,
+    representationType: RepresentationType.grid,
     data: newData,
     fields: [
       {
@@ -142,11 +142,12 @@ async function onClickValidate(
     fillOpacity: 1,
     dropShadow: null,
     shapeRendering: 'auto',
-    rendererParameters: params,
+    rendererParameters,
+    layerCreationOptions,
   } as LayerDescription;
 
   // How many decimals to display in the legend
-  const minPrecision = getMinimumPrecision(params.breaks);
+  const minPrecision = getMinimumPrecision(rendererParameters.breaks);
 
   const legend = {
     // Part common to all legends

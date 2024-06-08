@@ -79,7 +79,7 @@ function onClickValidate(
     data: referenceLayerDescription.data,
     type: referenceLayerDescription.type,
     fields: referenceLayerDescription.fields,
-    renderer: 'categoricalChoropleth' as RepresentationType,
+    representationType: 'categoricalChoropleth' as RepresentationType,
     visible: true,
     strokeColor: '#000000',
     strokeWidth: 0.4,

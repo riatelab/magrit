@@ -32,7 +32,7 @@ export const findLayerById = (
  */
 export const alreadyHasSphere = (
   layersDescription: LayerDescription[],
-): boolean => layersDescription.some((layer: LayerDescription) => layer.renderer === 'sphere');
+): boolean => layersDescription.some((layer: LayerDescription) => layer.representationType === 'sphere');
 
 /**
  * Whether the map already has a graticule layer.
@@ -42,7 +42,7 @@ export const alreadyHasSphere = (
  */
 export const alreadyHasGraticule = (
   layersDescription: LayerDescription[],
-): boolean => layersDescription.some((layer: LayerDescription) => layer.renderer === 'graticule');
+): boolean => layersDescription.some((layer: LayerDescription) => layer.representationType === 'graticule');
 
 export const makeDefaultWorldLand = (): LayerDescription => ({
   type: 'polygon',
@@ -57,7 +57,7 @@ export const makeDefaultWorldLand = (): LayerDescription => ({
   dropShadow: null,
   shapeRendering: 'auto',
   fields: [],
-  renderer: 'default' as RepresentationType,
+  representationType: 'default' as RepresentationType,
   data: ( // We know types are correct here, so we just use 'never' to avoid type checking
     topojson.feature(worldLand as never, worldLand.objects.world_country as never)
   ) as unknown as GeoJSONFeatureCollection,
@@ -76,7 +76,7 @@ export const makeDefaultSphere = (): LayerDescription => ({
   dropShadow: null,
   shapeRendering: 'auto',
   fields: [],
-  renderer: 'sphere' as RepresentationType,
+  representationType: 'sphere' as RepresentationType,
   data: { type: 'Sphere' } as never,
 });
 
@@ -91,7 +91,7 @@ export const makeDefaultGraticule = (): LayerDescription => ({
   strokeDasharray: '5 5',
   dropShadow: null,
   shapeRendering: 'auto',
-  renderer: 'graticule' as RepresentationType,
+  representationType: 'graticule' as RepresentationType,
   data: {
     type: 'FeatureCollection',
     features: [
@@ -114,7 +114,7 @@ export const getDefaultRenderingParams = (geomType: string) => {
 
   if (geomType === 'point') {
     return {
-      renderer: 'default',
+      representationType: 'default',
       strokeColor: '#212121',
       strokeWidth: 1,
       strokeOpacity: 1,
@@ -127,7 +127,7 @@ export const getDefaultRenderingParams = (geomType: string) => {
   }
   if (geomType === 'linestring') {
     return {
-      renderer: 'default',
+      representationType: 'default',
       strokeColor: color,
       strokeWidth: 1.5,
       strokeOpacity: 1,
@@ -136,7 +136,7 @@ export const getDefaultRenderingParams = (geomType: string) => {
   }
   if (geomType === 'polygon') {
     return {
-      renderer: 'default',
+      representationType: 'default',
       strokeColor: '#212121',
       strokeWidth: 0.4,
       strokeOpacity: 1,

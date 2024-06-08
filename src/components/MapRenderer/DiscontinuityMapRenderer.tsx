@@ -51,7 +51,7 @@ export default function discontinuityRenderer(
     clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.renderer}
+    mgt:portrayal-type={layerDescription.representationType}
   >
     <For each={layerDescription.data.features}>
       {

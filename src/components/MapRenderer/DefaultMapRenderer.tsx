@@ -45,7 +45,7 @@ export function defaultPolygonRenderer(
         : layerDescription.shapeRendering
     }
     mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.renderer}
+    mgt:portrayal-type={layerDescription.representationType}
   >
     <For each={layerDescription.data.features}>
       {
@@ -83,7 +83,7 @@ export function defaultPolygonRendererMeshed(
     filter={mergeFilterIds(layerDescription)}
     shape-rendering={layerDescription.shapeRendering}
     mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.renderer}
+    mgt:portrayal-type={layerDescription.representationType}
   >
     <path
       // @ts-expect-error because use:bind-data isn't a property of this element
@@ -118,7 +118,7 @@ export function defaultPointRenderer(
     // clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.renderer}
+    mgt:portrayal-type={layerDescription.representationType}
     mgt:symbol-size={layerDescription.symbolSize}
     mgt:symbol-type={layerDescription.symbolType}
   >
@@ -157,7 +157,7 @@ export function defaultLineRenderer(
     clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.renderer}
+    mgt:portrayal-type={layerDescription.representationType}
   >
     <For each={layerDescription.data.features}>
       {
@@ -186,7 +186,7 @@ export function sphereRenderer(layerDescription: LayerDescription): JSX.Element 
       stroke-linejoin="round"
       filter={mergeFilterIds(layerDescription)}
       mgt:geometry-type={layerDescription.type}
-      mgt:portrayal-type={layerDescription.renderer}
+      mgt:portrayal-type={layerDescription.representationType}
     >
       <path
         vector-effect="non-scaling-stroke"

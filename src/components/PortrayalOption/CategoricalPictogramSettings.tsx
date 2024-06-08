@@ -91,7 +91,7 @@ function onClickValidate(
     data: newData,
     type: 'point',
     fields: referenceLayerDescription.fields,
-    renderer: 'categoricalPictogram' as RepresentationType,
+    representationType: 'categoricalPictogram' as RepresentationType,
     visible: true,
     dropShadow: null,
     shapeRendering: 'auto',

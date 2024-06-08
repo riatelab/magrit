@@ -176,11 +176,11 @@ export default function legendCategoricalChoroplethBarchart(
   )!;
 
   function getCategoricalParameters(layerDescription: LayerDescription) {
-    if (layerDescription.renderer === 'categoricalChoropleth') {
+    if (layerDescription.representationType === 'categoricalChoropleth') {
       return layerDescription.rendererParameters as CategoricalChoroplethParameters;
     }
     if (
-      layerDescription.renderer === 'proportionalSymbols'
+      layerDescription.representationType === 'proportionalSymbols'
       && (layerDescription as LayerDescriptionProportionalSymbols).rendererParameters.colorMode === 'categoricalVariable'
     ) {
       return (layerDescription.rendererParameters as ProportionalSymbolCategoryParameters).color;

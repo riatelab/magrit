@@ -65,7 +65,7 @@ export function categoricalChoroplethPolygonRenderer(
         : layerDescription.shapeRendering
     }
     mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.renderer}
+    mgt:portrayal-type={layerDescription.representationType}
   >
     <For each={layerDescription.data.features}>
       {
@@ -114,7 +114,7 @@ export function categoricalChoroplethPointRenderer(
     // clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.renderer}
+    mgt:portrayal-type={layerDescription.representationType}
     mgt:symbol-size={layerDescription.symbolSize}
     mgt:symbol-type={layerDescription.symbolType}
   >
@@ -170,7 +170,7 @@ export function categoricalChoroplethLineRenderer(
     clip-path="url(#clip-sphere)"
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.renderer}
+    mgt:portrayal-type={layerDescription.representationType}
   >
     <For each={layerDescription.data.features}>
       {

@@ -143,7 +143,7 @@ const gatherArrowColors = (
   // to gather the color of all the lines with arrow heads
   const arrowColors = new Set<string>();
   layers.forEach((layer) => {
-    if (layer.renderer === 'links') {
+    if (layer.representationType === 'links') {
       const linksParams = (layer as LayerDescriptionLinks).rendererParameters;
       if (linksParams.head === 'Arrow' || linksParams.head === 'ArrowOnSymbol') {
         arrowColors.add(layer.strokeColor!);
@@ -196,40 +196,40 @@ const dispatchLegendRenderer = (legend: Legend) => {
 };
 
 const dispatchMapRenderer = (layer: LayerDescription) => {
-  if (layer.renderer === 'sphere') {
+  if (layer.representationType === 'sphere') {
     return sphereRenderer(layer);
   }
-  if (layer.renderer === 'graticule') {
+  if (layer.representationType === 'graticule') {
     return graticuleRenderer(layer);
   }
-  if (layer.renderer === 'default' || layer.renderer === 'cartogram') {
+  if (layer.representationType === 'default' || layer.representationType === 'cartogram') {
     if (layer.type === 'polygon') return defaultPolygonRenderer(layer);
     if (layer.type === 'point') return defaultPointRenderer(layer);
     if (layer.type === 'linestring') return defaultLineRenderer(layer);
-  } else if (layer.renderer === 'choropleth') {
+  } else if (layer.representationType === 'choropleth') {
     if (layer.type === 'polygon') return choroplethPolygonRenderer(layer as LayerDescriptionChoropleth);
     if (layer.type === 'point') return choroplethPointRenderer(layer as LayerDescriptionChoropleth);
     if (layer.type === 'linestring') return choroplethLineRenderer(layer as LayerDescriptionChoropleth);
-  } else if (layer.renderer === 'categoricalChoropleth') {
+  } else if (layer.representationType === 'categoricalChoropleth') {
     if (layer.type === 'polygon') return categoricalChoroplethPolygonRenderer(layer as LayerDescriptionCategoricalChoropleth);
     if (layer.type === 'point') return categoricalChoroplethPointRenderer(layer as LayerDescriptionCategoricalChoropleth);
     if (layer.type === 'linestring') return categoricalChoroplethLineRenderer(layer as LayerDescriptionCategoricalChoropleth);
-  } else if (layer.renderer === 'proportionalSymbols') {
+  } else if (layer.representationType === 'proportionalSymbols') {
     if (layer.type === 'point') return proportionalSymbolsPunctualRenderer(layer as LayerDescriptionProportionalSymbols);
     if (layer.type === 'linestring') return proportionalSymbolsLinearRenderer(layer as LayerDescriptionProportionalSymbols);
-  } else if (layer.renderer === 'labels') {
+  } else if (layer.representationType === 'labels') {
     if (layer.type === 'point') return defaultLabelsRenderer(layer as LayerDescriptionLabels);
-  } else if (layer.renderer === 'discontinuity') {
+  } else if (layer.representationType === 'discontinuity') {
     return discontinuityRenderer(layer as LayerDescriptionDiscontinuity);
-  } else if (layer.renderer === 'smoothed') {
+  } else if (layer.representationType === 'smoothed') {
     return smoothedMapRenderer(layer as LayerDescriptionSmoothedLayer);
-  } else if (layer.renderer === 'grid') {
+  } else if (layer.representationType === 'grid') {
     return gridRenderer(layer as LayerDescriptionGriddedLayer);
-  } else if (layer.renderer === 'links') {
+  } else if (layer.representationType === 'links') {
     return linksRenderer(layer as LayerDescriptionLinks);
-  } else if (layer.renderer === 'mushrooms') {
+  } else if (layer.representationType === 'mushrooms') {
     return mushroomRenderer(layer as LayerDescriptionMushroomLayer);
-  } else if (layer.renderer === 'categoricalPictogram') {
+  } else if (layer.representationType === 'categoricalPictogram') {
     return categoricalPictogramRenderer(layer as LayerDescriptionCategoricalPictogram);
   }
   return null;

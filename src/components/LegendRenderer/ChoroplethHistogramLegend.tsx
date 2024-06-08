@@ -45,7 +45,7 @@ function ChoroplethHistogram(
     height: number,
     width: number,
     roundDecimals: number,
-    textProperties: LegendTextElement,
+    // textProperties: LegendTextElement,
   },
 ): JSX.Element {
   const minmax = [
@@ -132,11 +132,11 @@ export default function legendChoroplethHistogram(
   )!;
 
   function getClassificationParameters(layerDescription: LayerDescription) {
-    if (layerDescription.renderer === 'choropleth') {
+    if (layerDescription.representationType === 'choropleth') {
       return layerDescription.rendererParameters as ClassificationParameters;
     }
     if (
-      layerDescription.renderer === 'proportionalSymbols'
+      layerDescription.representationType === 'proportionalSymbols'
       && (layerDescription as LayerDescriptionProportionalSymbols).rendererParameters.colorMode === 'ratioVariable'
     ) {
       return (layerDescription.rendererParameters as ProportionalSymbolsRatioParameters).color;
@@ -201,7 +201,7 @@ export default function legendChoroplethHistogram(
         width={legend.width}
         height={legend.height}
         roundDecimals={legend.roundDecimals}
-        textProperties={legend.axes}
+        // textProperties={legend.axes}
       />
     </g>
     {

@@ -127,10 +127,10 @@ export default function lmScatterPlot(
 
   const layer = findLayerById(layersDescriptionStore.layers, legend.layerId)!;
 
-  const variableX = (layer.rendererParameters.lm as LinearRegressionResult)
+  const variableX = (layer.layerCreationOptions as LinearRegressionResult)
     .options.x;
 
-  const variableY = (layer.rendererParameters.lm as LinearRegressionResult)
+  const variableY = (layer.layerCreationOptions as LinearRegressionResult)
     .options.y;
 
   const dataset = createMemo(() => {

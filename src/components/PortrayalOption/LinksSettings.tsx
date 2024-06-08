@@ -160,7 +160,7 @@ function onClickValidate(
         type: VariableType.stock,
       },
     ],
-    renderer: 'links' as RepresentationType,
+    representationType: 'links' as RepresentationType,
     visible: true,
     strokeWidth: 1,
     strokeColor: '#000000',
