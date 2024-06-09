@@ -14,7 +14,8 @@ Son développement est réalisé sur fonds propres dans une UAR CNRS / Universit
 ## Magrit n'est pas un logiciel SIG
 
 Magrit n'est pas un logiciel SIG (Système d'Information Géographique) mais un logiciel de cartographie thématique.
-Il comporte toutefois différentes fonctionnalités permettant de manipuler des données géographiques ce qui peut entretenir la confusion.
+Il comporte toutefois différentes fonctionnalités permettant de manipuler des données géographiques, et ce 
+essentiellement pour les besoins de la cartographie thématique (sélection attributaire, jointure de données, etc.).
 
 ## Principales fonctionnalités de l'application
 

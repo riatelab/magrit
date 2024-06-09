@@ -3,13 +3,21 @@
 Le tableau de données est un élément central de l'interface de Magrit.
 Il permet, pour chaque couche, de visualiser et de modifier ses données.
 
-![Tableau de données](img/data-table.png)
+<ZoomImg
+    src="./img/data-table.png"
+    alt="Tableau de données"
+    caption="Tableau de données"
+/>
 
 ## Modification des données
 
 La modification des données est possible en double-cliquant sur une cellule puis en rentant la valeur souhaitée.
 
-![Tableau de données - Modification](img/data-table-edit.png)
+<ZoomImg
+    src="./img/data-table-edit.png"
+    alt="Tableau de données - Modification"
+    caption="Tableau de données - Modification"
+/>
 
 ## Export au format CSV
 
@@ -24,7 +32,11 @@ Il est possible d'ajouter un nouveau champ en cliquant sur le bouton "Nouveau ch
 
 Cette fonctionnalité est comparable à la fonctionnalité "calculatrice de champ" des logiciels SIG comme QGIS.
 
-![Tableau de données - Nouveau champ](img/data-table-new-field.png)
+<ZoomImg
+    src="./img/data-table-new-field.png"
+    alt="Tableau de données - Nouveau champ"
+    caption="Tableau de données - Nouveau champ"
+/>
 
 Les champs actuels de la couche sont accessibles sous forme de raccourcis (boutons jaunes) ainsi que trois champs spéciaux (boutons verts) :
 
@@ -43,13 +55,25 @@ Plusieurs opérations sont possibles (certaines sont présentes sous forme d'un 
 Afin de créer un nouveau champ, il est nécessaire de spécifier le nom du champ à créer, le type de données (stock, ratio, etc.) et la formule de calcul.
 Lorsque la formule est valide, un aperçu des valeurs calculées (3 premières lignes du tableau) est affiché.
 
-![Tableau de données - Nouveau champ avec formule valide](img/data-table-new-field-zoom.png)
+<ZoomImg
+    src="./img/data-table-new-field-zoom.png"
+    alt="Tableau de données - Nouveau champ avec formule valide"
+    caption="Tableau de données - Nouveau champ avec formule valide"
+/>
+
 
 Lorsque la formule n'est pas valide, un message d'erreur est affiché et le bouton "Calculer" est désactivé.
 
-![Tableau de données - Nouveau champ avec formule invalide](img/data-table-invalid-formula1.png)
+<ZoomImg
+    src="./img/data-table-invalid-formula1.png"
+    alt="Tableau de données - Nouveau champ avec formule invalide"
+    caption="Tableau de données - Nouveau champ avec formule invalide"
+/>
 
-![Tableau de données - Nouveau champ avec formule invalide](img/data-table-invalid-formula2.png)
+<ZoomImg
+    src="./img/data-table-invalid-formula2.png"
+    alt="Tableau de données - Nouveau champ avec formule invalide"
+    caption="Tableau de données - Nouveau champ avec formule invalide"
 
 ### Exemples de formules
 
@@ -64,8 +88,8 @@ conditions suivantes :
 - si la population est supérieure à 10000, alors "Grande".
 
 ```sql
-CASE WHEN "Population" < 1000 THEN 'Petite'
-     WHEN "Population" >= 1000 AND "Population" <= 10000 THEN 'Moyenne'
+CASE WHEN Population < 1000 THEN 'Petite'
+     WHEN Population >= 1000 AND Population <= 10000 THEN 'Moyenne'
      ELSE 'Grande'
 ```
 
@@ -74,7 +98,7 @@ CASE WHEN "Population" < 1000 THEN 'Petite'
 Pour extraire le code départemental à partir du code INSEE, il est possible d'utiliser la fonction `substring` pour extraire les deux premiers caractères du code INSEE.
 
 ```sql
-substring("Code_INSEE", 1, 2)
+substring(Code_INSEE, 1, 2)
 ```
 
 #### Calculer la densité de population d'un territoire
@@ -84,7 +108,7 @@ Attention à l'unité du champ contenant l'aire et à multiplier le résultat ob
 Admettons ici que l'aire soit en m² et que l'on souhaite obtenir une densité en hab/km² :
 
 ```sql
-"Population" / "Aire" * 1000000
+Population / Aire * 1000000
 ```
 
 ## Suppression d'un champ

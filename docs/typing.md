@@ -3,11 +3,11 @@
 À chaque type de données est associé un certain nombre de modes de fonctionnalités possibles. Une fois les données importées,
 il est donc important de définir le type de chacune des variables du jeu de données que vous souhaitez cartographier.
 
-<div style="text-align: center;">
-    <img src="./img/field-typing.png" alt="Typage des champs" style="margin: auto;">
-    <i>Fenêtre de typage des champs</i>
-</div>
-
+<ZoomImg
+    src="./img/field-typing.png"
+    alt="Typage des champs"
+    caption="Fenêtre de typage des champs"
+/>
 
 5 types de données sont possibles dans Magrit :
 

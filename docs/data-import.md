@@ -10,11 +10,11 @@ et des données tabulaires (XLS, XLSX, CSV, TSV, ODS).
 Il est possible d'ajouter plusieurs fichiers à la fois en les sélectionnant dans la fenêtre de dialogue ou en les glissant et
 déposant sur la fenêtre d'import des données.
 
-<div style="text-align: center;">
-    <br>
-    <img src="./img/data-import.png" alt="Fenêtre d'import des données" style="margin: auto;">
-    <i>Exemple : Fenêtre d'import des données avec 3 fichiers chargés<br>(dont un GeoPackage contenant plusieurs couches)</i>
-</div>
+<ZoomImg
+    src="./img/data-import.png"
+    alt="Fenêtre d'import des données"
+    caption="Exemple : Fenêtre d'import des données avec 3 fichiers chargés (dont un GeoPackage contenant plusieurs couches)"
+/>
 
 Lorsqu'un format de fichier pouvant contenir plusieurs couches (GeoPackage ou TopoJSON) ou plusieurs tables (XLS, XLSX, ODS)
 est chargé, une liste des couches ou tables est affichée dans la fenêtre d'import des données. Il est possible de sélectionner

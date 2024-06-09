@@ -16,3 +16,4 @@ Une fois la relation entre les deux variables établie, il est possible de visua
   via une carte choroplèthe.
 
 ## Paramètres
+

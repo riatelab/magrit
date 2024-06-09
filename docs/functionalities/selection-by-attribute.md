@@ -28,32 +28,32 @@ Plusieurs opérations sont possibles (certaines sont présentes sous forme d'un 
 ### Sélection des entités dont la population est supérieure à 10000
 
 ```sql
-"Population" > 10000
+Population > 10000
 ```
 
 
 ### Sélection des communes appartenant aux départements 75, 92, 93 et 94
 
 ```sql
-"Departement" IN ('75', '92', '93', '94')
+Departement IN ('75', '92', '93', '94')
 ```
 
 Alternative utilisant des opérateurs logiques :
 
 ```sql
-"Departement" = '75' OR "Departement" = '92' OR "Departement" = '93' OR "Departement" = '94'
+Departement = '75' OR Departement = '92' OR Departement = '93' OR Departement = '94'
 ```
 
 #### Sélection des entités dont le nom commence par "Saint"
 
 ```sql
-"Nom" LIKE 'Saint%'
+Nom LIKE 'Saint%'
 ```
 
 #### Sélection de l'entité avec le nom "Paris"
 
 ```sql
-"Nom" = 'Paris'
+Nom = 'Paris'
 ```
 
 ## Exemples de sélections complexes (1)
@@ -63,19 +63,19 @@ Ces exemples combinent plusieurs conditions grâce aux opérateurs logiques `AND
 ### Sélection des entités dont la population est comprise entre 1000 et 10000
 
 ```sql
-"Population" >= 1000 AND "Population" <= 10000
+Population >= 1000 AND Population <= 10000
 ```
 
 ### Sélection des communes appartenant aux départements 75, 92, 93 et 94 et dont la population est supérieure à 10000
 
 ```sql
-"Departement" IN ('75', '92', '93', '94') AND "Population" > 10000
+Departement IN ('75', '92', '93', '94') AND Population > 10000
 ```
 
 ### Sélection des communes du département 94 dont le nom commence par "Saint" et dont la population est supérieure à 10000
 
 ```sql
-"Departement" = '94' AND "Nom" LIKE 'Saint%' AND "Population" > 10000
+Departement = '94' AND Nom LIKE 'Saint%' AND Population > 10000
 ```
 
 ## Exemples de sélections complexes (2)
@@ -87,15 +87,15 @@ Il est également possible d'utiliser la construction `CASE WHEN ... THEN ... EL
 
 ```sql
 
-"Departement" = '94' AND ("Nom" LIKE 'Saint%' OR "Nom" LIKE 'Ville%') AND "Population" > 10000
+Departement = '94' AND (Nom LIKE 'Saint%' OR Nom LIKE 'Ville%') AND Population > 10000
 ```
 
 ### Sélection des communes du département 94 dont le nom commence par "Saint" ou "Ville" et des communes de n'importe quel département dont la population est comprise entre 1000 et 10000
 
 ```sql
-CASE WHEN "Departement" = '94' THEN
-  "Nom" LIKE 'Saint%' OR "Nom" LIKE 'Ville%'
+CASE WHEN Departement = '94' THEN
+  Nom LIKE 'Saint%' OR Nom LIKE 'Ville%'
 ELSE
-  "Population" >= 1000 AND "Population" <= 10000
+  Population >= 1000 AND Population <= 10000
 END
 ```

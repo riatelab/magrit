@@ -16,6 +16,3 @@ Après la création de la couche, il est possible de modifier à nouveau le pict
 
 ## Exemples
 
-
-
-

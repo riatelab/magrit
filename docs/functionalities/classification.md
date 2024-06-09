@@ -9,10 +9,11 @@ Les méthodes proposées par l'outil peuvent être utilisées telles quelles ou 
 
 ## Vue d'ensemble de la fenêtre de discrétisation
 
-<div style="text-align: center;">
-    <br><img src="../img/classification.png" alt="Fenêtre de discrétisation" style="margin: auto;">
-    <i>Fenêtre de discrétisation</i>
-</div>
+<ZoomImg
+    src="../img/classification.png"
+    alt="Fenêtre de discrétisation"
+    caption="Fenêtre de discrétisation"
+/>
 
 Plusieurs éléments sont présents dans cette fenêtre :
 

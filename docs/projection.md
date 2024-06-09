@@ -13,10 +13,11 @@ Dans Magrit, la projection par défaut lors de l'ajout des données est la proje
 Il est possible de changer la projection de la carte dans la section "Configuration de la carte" située dans le menu de gauche : plusieurs
 projections courantes sont proposées ainsi que la possibilité d'explorer toutes les projections disponibles dans Magrit.
 
-<div style="text-align: center;">
-    <img src="./img/projection-short-list.png" alt="Menu d'accès rapide aux projections" style="margin: auto;">
-    <i>Menu d'accès rapide aux projections</i>
-</div>
+<ZoomImg
+    src="./img/projection-short-list.png"
+    alt="Menu d'accès rapide aux projections"
+    caption="Menu d'accès rapide aux projections"
+/>
 
 ## Personnalisation des paramètres de la projection
 
@@ -24,10 +25,11 @@ Lors de l'utilisation d'une projection globale, il est généralement possible d
 - son centre (sur les axes λ, φ et γ)
 - son ou ses parallèle(s) standard(s)
 
-<div style="text-align: center;">
-    <img src="./img/projection-detailed-params.png" alt="Paramètres d'une projection" style="margin: auto;">
-    <i>Personnalisation des paramètres d'une projection (ici la projection Wagner)</i>
-</div>
+<ZoomImg
+    src="./img/projection-detailed-params.png"
+    alt="Paramètres d'une projection"
+    caption="Personnalisation des paramètres d'une projection (ici la projection Wagner)"
+/>
 
 ## Fenêtre de choix d'une projection
 
@@ -37,11 +39,11 @@ Les projections globales sont des projections qui permettent généralement de r
 
 Ces projections sont fournies par la bibliothèque logicielle [d3.js]().
 
-<div style="text-align: center;">
-    <br />
-    <img src="./img/projection-panel1.png" alt="Sélection d'une projection globale" style="margin: auto;">
-    <i>Sélection d'une projection globale</i>
-</div>
+<ZoomImg
+    src="./img/projection-panel1.png"
+    alt="Sélection d'une projection globale"
+    caption="Sélection d'une projection globale"
+/>
 
 ### Projection locale
 
@@ -52,9 +54,8 @@ Ces projections sont fournies par la bibliothèque logicielle [proj4js](https://
 Il est possible de rechercher une projection en tapant son code EPSG (par exemple "2154"), son nom (par exemple "Lambert-93") ou la zone à laquelle elle s'applique ("France") dans la barre de recherche.
 Lorsque le code EPSG de la projection désirée est connu, il est conseillé de l'utiliser pour éviter toute ambiguïté.
 
-<div style="text-align: center;">
-    <br />
-    <img src="./img/projection-panel2.png" alt="Sélection d'une projection locale" style="margin: auto;">
-    <i>Sélection d'une projection locale</i>
-</div>
-
+<ZoomImg
+    src="./img/projection-panel2.png"
+    alt="Sélection d'une projection locale"
+    caption="Sélection d'une projection locale"
+/>
