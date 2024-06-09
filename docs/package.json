@@ -13,8 +13,11 @@
     "vitepress": "^1.1.4"
   },
   "scripts": {
-      "dev": "vitepress dev",
-      "build": "vitepress build",
-      "serve": "vitepress preview"
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "serve": "vitepress preview"
+  },
+  "dependencies": {
+    "medium-zoom": "^1.1.0"
   }
 }
