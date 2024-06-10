@@ -4,7 +4,7 @@ Le tableau de données est un élément central de l'interface de Magrit.
 Il permet, pour chaque couche, de visualiser et de modifier ses données.
 
 <ZoomImg
-    src="./img/data-table.png"
+    src="./data-table.png"
     alt="Tableau de données"
     caption="Tableau de données"
 />
@@ -14,7 +14,7 @@ Il permet, pour chaque couche, de visualiser et de modifier ses données.
 La modification des données est possible en double-cliquant sur une cellule puis en rentant la valeur souhaitée.
 
 <ZoomImg
-    src="./img/data-table-edit.png"
+    src="./data-table-edit.png"
     alt="Tableau de données - Modification"
     caption="Tableau de données - Modification"
 />
@@ -33,7 +33,7 @@ Il est possible d'ajouter un nouveau champ en cliquant sur le bouton "Nouveau ch
 Cette fonctionnalité est comparable à la fonctionnalité "calculatrice de champ" des logiciels SIG comme QGIS.
 
 <ZoomImg
-    src="./img/data-table-new-field.png"
+    src="./data-table-new-field.png"
     alt="Tableau de données - Nouveau champ"
     caption="Tableau de données - Nouveau champ"
 />
@@ -56,7 +56,7 @@ Afin de créer un nouveau champ, il est nécessaire de spécifier le nom du cham
 Lorsque la formule est valide, un aperçu des valeurs calculées (3 premières lignes du tableau) est affiché.
 
 <ZoomImg
-    src="./img/data-table-new-field-zoom.png"
+    src="./data-table-new-field-zoom.png"
     alt="Tableau de données - Nouveau champ avec formule valide"
     caption="Tableau de données - Nouveau champ avec formule valide"
 />
@@ -65,13 +65,13 @@ Lorsque la formule est valide, un aperçu des valeurs calculées (3 premières l
 Lorsque la formule n'est pas valide, un message d'erreur est affiché et le bouton "Calculer" est désactivé.
 
 <ZoomImg
-    src="./img/data-table-invalid-formula1.png"
+    src="./data-table-invalid-formula1.png"
     alt="Tableau de données - Nouveau champ avec formule invalide"
     caption="Tableau de données - Nouveau champ avec formule invalide"
 />
 
 <ZoomImg
-    src="./img/data-table-invalid-formula2.png"
+    src="./data-table-invalid-formula2.png"
     alt="Tableau de données - Nouveau champ avec formule invalide"
     caption="Tableau de données - Nouveau champ avec formule invalide"
 />

@@ -1,7 +1,7 @@
 # Description de l'interface utilisateur
 
 <ZoomImg
-    src="./img/ui.png"
+    src="./ui.png"
     alt="Vue d'ensemble de l'interface"
     caption="Vue d'ensemble de l'interface lors de la réalisation d'une carte"
 />

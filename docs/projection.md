@@ -14,7 +14,7 @@ Il est possible de changer la projection de la carte dans la section "Configurat
 projections courantes sont proposées ainsi que la possibilité d'explorer toutes les projections disponibles dans Magrit.
 
 <ZoomImg
-    src="./img/projection-short-list.png"
+    src="./projection-short-list.png"
     alt="Menu d'accès rapide aux projections"
     caption="Menu d'accès rapide aux projections"
 />
@@ -26,7 +26,7 @@ Lors de l'utilisation d'une projection globale, il est généralement possible d
 - son ou ses parallèle(s) standard(s)
 
 <ZoomImg
-    src="./img/projection-detailed-params.png"
+    src="./projection-detailed-params.png"
     alt="Paramètres d'une projection"
     caption="Personnalisation des paramètres d'une projection (ici la projection Wagner)"
 />
@@ -40,7 +40,7 @@ Les projections globales sont des projections qui permettent généralement de r
 Ces projections sont fournies par la bibliothèque logicielle [d3.js]().
 
 <ZoomImg
-    src="./img/projection-panel1.png"
+    src="./projection-panel1.png"
     alt="Sélection d'une projection globale"
     caption="Sélection d'une projection globale"
 />
@@ -55,7 +55,7 @@ Il est possible de rechercher une projection en tapant son code EPSG (par exempl
 Lorsque le code EPSG de la projection désirée est connu, il est conseillé de l'utiliser pour éviter toute ambiguïté.
 
 <ZoomImg
-    src="./img/projection-panel2.png"
+    src="./projection-panel2.png"
     alt="Sélection d'une projection locale"
     caption="Sélection d'une projection locale"
 />

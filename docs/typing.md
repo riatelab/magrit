@@ -4,7 +4,7 @@
 il est donc important de définir le type de chacune des variables du jeu de données que vous souhaitez cartographier.
 
 <ZoomImg
-    src="./img/field-typing.png"
+    src="./field-typing.png"
     alt="Typage des champs"
     caption="Fenêtre de typage des champs"
 />

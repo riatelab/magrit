@@ -122,6 +122,9 @@ export default defineConfig({
   title: "Magrit Documentation",
   description: "Magrit Documentation",
   base: '/docs/',
+  vite: {
+    publicDir: 'public',
+  },
   locales: {
     root: {
       label: 'French',

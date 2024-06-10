@@ -1,7 +1,7 @@
 # Configuration de la carte
 
 <ZoomImg
-    src="./img/map-configuration.png"
+    src="./map-configuration.png"
     alt="Panneau de configuration de la carte"
     caption="Panneau de configuration de la carte"
 />

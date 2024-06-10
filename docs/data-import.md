@@ -11,7 +11,7 @@ Il est possible d'ajouter plusieurs fichiers à la fois en les sélectionnant da
 déposant sur la fenêtre d'import des données.
 
 <ZoomImg
-    src="./img/data-import.png"
+    src="./data-import.png"
     alt="Fenêtre d'import des données"
     caption="Exemple : Fenêtre d'import des données avec 3 fichiers chargés (dont un GeoPackage contenant plusieurs couches)"
 />
