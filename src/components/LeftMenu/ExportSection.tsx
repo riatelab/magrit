@@ -4,6 +4,9 @@ import {
   createSignal, JSX, Show,
 } from 'solid-js';
 
+// Imports from other libraries
+import { yieldOrContinue } from 'main-thread-scheduling';
+
 // Helpers
 import { exportMapToPng, exportMapToSvg, exportToGeo } from '../../helpers/exports';
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -13,6 +16,7 @@ import { SupportedGeoFileTypes } from '../../helpers/supportedFormats';
 
 // Stores
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { setLoading } from '../../store/GlobalStore';
 import { mapStore } from '../../store/MapStore';
 
 // Sub-components
@@ -184,7 +188,12 @@ export default function ExportSection(): JSX.Element {
         />
         <div class="has-text-centered">
           <button
-            onClick={ async () => { await exportMapToSvg('export.svg', clipCurrentExtentChecked()); } }
+            onClick={ async () => {
+              setLoading(true, 'ExportPreparation');
+              await yieldOrContinue('smooth');
+              await exportMapToSvg('export.svg', clipCurrentExtentChecked());
+              setLoading(false, 'ExportPreparation');
+            }}
             class="button is-success"
           >
             { LL().ExportSection.ExportSvg() }
@@ -230,8 +239,11 @@ export default function ExportSection(): JSX.Element {
         <div class="has-text-centered">
           <button
             onClick={async () => {
+              setLoading(true, 'ExportPreparation');
+              await yieldOrContinue('smooth');
               const scaleFactor = exportHeight() / mapStore.mapDimensions.height;
               await exportMapToPng('export.png', scaleFactor);
+              setLoading(false, 'ExportPreparation');
             }}
             class="button is-success"
           >
@@ -296,7 +308,7 @@ export default function ExportSection(): JSX.Element {
               class="input"
               type="text"
               placeholder="+proj=moll +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +type=crs"
-              onKeyUp={ (ev) => setCustomCrs(ev.target.value) }
+              onKeyUp={ (ev) => setCustomCrs(ev.currentTarget.value) }
             />
           </div>
           <br/>
@@ -312,12 +324,15 @@ export default function ExportSection(): JSX.Element {
               customCrs(),
             )}
             onClick={ async () => {
+              setLoading(true, 'ExportPreparation');
+              await yieldOrContinue('smooth');
               await exportToGeoWrapper(
                 selectedLayer()!,
                 selectedFormat()!,
                 selectedCrs()!,
                 customCrs(),
               );
+              setLoading(false);
             } }
           >
             { LL().ExportSection.Export() }
