@@ -5,6 +5,7 @@ import type { Dexie } from 'dexie';
 import type { Variable } from './helpers/typeDetection';
 import type { MapStoreType } from './store/MapStore';
 import type { LinearRegressionResult } from './helpers/statistics';
+import type { ApplicationSettingsStoreType } from './store/ApplicationSettingsStore';
 
 declare namespace globalThis {
   let gdal: Gdal;
@@ -20,6 +21,7 @@ type DexieDb = Dexie
 & { projects: Dexie.Table<
 { date: Date, data: {
   version: string,
+  applicationSettings: ApplicationSettingsStoreType,
   layers: LayerDescription[],
   layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
   map: MapStoreType,

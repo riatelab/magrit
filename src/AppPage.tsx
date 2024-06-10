@@ -29,7 +29,6 @@ import { initDb, storeProject } from './helpers/storage';
 
 // Sub-components
 import AboutModal from './components/Modals/AboutModal.tsx';
-import ApplicationSettingsModal from './components/Modals/ApplicationSettings.tsx';
 import DefaultModal from './components/Modals/ModalWindow.tsx';
 import LeftMenu from './components/LeftMenu/LeftMenu.tsx';
 import LoadingOverlay from './components/LoadingOverlay.tsx';
@@ -61,7 +60,12 @@ import { modalStore, setModalStore } from './store/ModalStore';
 import { niceAlertStore, setNiceAlertStore } from './store/NiceAlertStore';
 import { fileDropStore, setFileDropStore } from './store/FileDropStore';
 import { tableWindowStore } from './store/TableWindowStore';
-import { applicationSettingsStore, ResizeBehavior } from './store/ApplicationSettingsStore';
+import {
+  applicationSettingsStore,
+  type ApplicationSettingsStoreType,
+  ResizeBehavior,
+  setApplicationSettingsStore,
+} from './store/ApplicationSettingsStore';
 import { contextMenuStore } from './store/ContextMenuStore';
 import { undo, redo } from './store/undo-redo';
 import { functionalitySelectionStore } from './store/FunctionalitySelectionStore';
@@ -81,6 +85,7 @@ import './styles/Transitions.css';
 
 interface ProjectDescription {
   version: string,
+  applicationSettings: ApplicationSettingsStoreType,
   layers: LayerDescription[],
   layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
   map: MapStoreType,
@@ -115,8 +120,11 @@ const prepareExportProject = (): ProjectDescription => {
   const { layers, layoutFeaturesAndLegends, tables } = layersDescriptionStore;
   // The state of the map
   const map = { ...mapStore };
+  // The application settings
+  const applicationSettings = { ...applicationSettingsStore };
   return {
     version,
+    applicationSettings,
     layers,
     layoutFeaturesAndLegends,
     map,
@@ -254,11 +262,14 @@ const reloadFromProjectObject = async (
   // The state we want to use
   const {
     version,
+    applicationSettings,
     layers,
     layoutFeaturesAndLegends,
     map,
     tables,
   } = obj;
+  // Reset the application settings store
+  setApplicationSettingsStore(applicationSettings);
   // Reset the layers description store before changing the map store
   // (this avoid redrawing the map for the potential current layers)
   setLayersDescriptionStore({ layers: [], layoutFeaturesAndLegends: [], tables: [] });
@@ -469,23 +480,13 @@ const AppPage: () => JSX.Element = () => {
       ?.addEventListener('click', () => {
         setModalStore({
           show: true,
-          title: LL().AboutPanel.title(),
+          title: LL().AboutAndSettingsPanel.title(),
           escapeKey: 'confirm',
           content: () => AboutModal({
             LL,
             version: globalStore.version,
           }),
-        });
-      });
-
-    document.getElementById('button-app-settings')
-      ?.addEventListener('click', () => {
-        setModalStore({
-          show: true,
-          title: LL().ApplicationSettingsModal.Title(),
-          escapeKey: 'confirm',
-          content: () => ApplicationSettingsModal({ LL }),
-          width: '700px',
+          width: '660px',
         });
       });
 

@@ -106,15 +106,6 @@ export function HeaderBarApp(): JSX.Element {
         <div class="navbar-item">
           <button
             class="button button-header-bar"
-            id="button-app-settings"
-            aria-label={LL().HeaderApp.ApplicationSettings()}
-            title={LL().HeaderApp.ApplicationSettings()}
-          >
-            <FaSolidGear size={'1.5em'}/>
-          </button>
-          <p style={{ margin: '1em' }}></p>
-          <button
-            class="button button-header-bar"
             id="button-undo"
             aria-label={LL().HeaderApp.Undo()}
             title={LL().HeaderApp.Undo()}

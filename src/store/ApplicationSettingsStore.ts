@@ -23,7 +23,7 @@ const getUserLocale = () => (navigator.languages && navigator.languages.length
 
 // A bunch of (global) settings for the application
 // (this is not the same as GlobalStore, which contains the state of the application)
-type ApplicationSettingsStoreType = {
+export type ApplicationSettingsStoreType = {
   // The default color scheme for the Choropleth representation
   defaultColorScheme: string,
   // The default "no data" color for the Choropleth representation

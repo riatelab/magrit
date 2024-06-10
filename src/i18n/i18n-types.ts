@@ -63,6 +63,10 @@ type RootTranslation = {
 		 */
 		Reloading: string
 		/**
+		 * P​r​e​p​a​r​i​n​g​ ​e​x​p​o​r​t​.​.​.
+		 */
+		ExportPreparation: string
+		/**
 		 * D​a​t​a​ ​p​r​e​p​a​r​a​t​i​o​n​.​.​.
 		 */
 		SmoothingDataPreparation: string
@@ -119,7 +123,7 @@ type RootTranslation = {
 		 */
 		NewProject: string
 		/**
-		 * A​b​o​u​t​ ​M​a​g​r​i​t
+		 * A​b​o​u​t​ ​M​a​g​r​i​t​ ​/​ ​G​e​n​e​r​a​l​ ​s​e​t​t​i​n​g​s
 		 */
 		About: string
 		/**
@@ -240,28 +244,6 @@ type RootTranslation = {
 		 * C​a​n​c​e​l
 		 */
 		cancelButton: string
-	}
-	ApplicationSettingsModal: {
-		/**
-		 * A​p​p​l​i​c​a​t​i​o​n​ ​s​e​t​t​i​n​g​s
-		 */
-		Title: string
-		/**
-		 * L​o​c​a​l​e​ ​f​o​r​ ​f​o​r​m​a​t​t​i​n​g​ ​n​u​m​b​e​r​s​ ​o​n​ ​t​h​e​ ​m​a​p
-		 */
-		LocaleNumberFormatting: string
-		/**
-		 * D​e​f​a​u​l​t​ ​c​o​l​o​r​ ​f​o​r​ ​"​n​o​ ​d​a​t​a​"​ ​v​a​l​u​e​s
-		 */
-		DefaultNoDataColor: string
-		/**
-		 * D​e​f​a​u​l​t​ ​o​p​t​i​o​n​s​ ​f​o​r​ ​l​e​g​e​n​d​s
-		 */
-		DefaultLegendOptions: string
-		/**
-		 * T​h​e​s​e​ ​o​p​t​i​o​n​s​ ​w​i​l​l​ ​b​e​ ​u​s​e​d​ ​f​o​r​ ​e​a​c​h​ ​n​e​w​ ​l​e​g​e​n​d​ ​c​r​e​a​t​e​d​ ​i​n​ ​t​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​.
-		 */
-		DefaultLegendOptionsInformation: string
 	}
 	ImportWindow: {
 		/**
@@ -903,11 +885,19 @@ type RootTranslation = {
 			AllowModifyingFillStroke: string
 		}
 	}
-	AboutPanel: {
+	AboutAndSettingsPanel: {
 		/**
 		 * A​b​o​u​t​ ​M​a​g​r​i​t
 		 */
 		title: string
+		/**
+		 * C​r​e​d​i​t​s
+		 */
+		TabAbout: string
+		/**
+		 * S​e​t​t​i​n​g​s
+		 */
+		TabSettings: string
 		/**
 		 * M​a​g​r​i​t​ ​i​s​ ​a​n​ ​o​p​e​n​ ​s​o​u​r​c​e​ ​W​e​b​ ​a​p​p​l​i​c​a​t​i​o​n​ ​f​o​r​ ​t​h​e​ ​v​i​s​u​a​l​i​z​a​t​i​o​n​ ​a​n​d​ ​t​h​e​ ​a​n​a​l​y​s​i​s​ ​o​f​ ​g​e​o​s​p​a​t​i​a​l​ ​d​a​t​a​.​ ​I​t​ ​i​s​ ​d​e​v​e​l​o​p​e​d​ ​b​y​ ​t​h​e​ ​U​A​R​ ​R​I​A​T​E​ ​(​C​N​R​S​,​ ​U​n​i​v​e​r​s​i​t​é​ ​P​a​r​i​s​ ​C​i​t​é​)​.
 		 */
@@ -932,6 +922,26 @@ type RootTranslation = {
 		 * D​o​c​u​m​e​n​t​a​t​i​o​n
 		 */
 		documentation: string
+		/**
+		 * L​o​c​a​l​e​ ​f​o​r​ ​f​o​r​m​a​t​t​i​n​g​ ​n​u​m​b​e​r​s​ ​o​n​ ​t​h​e​ ​m​a​p
+		 */
+		LocaleNumberFormatting: string
+		/**
+		 * D​e​f​a​u​l​t​ ​c​o​l​o​r​ ​f​o​r​ ​"​n​o​ ​d​a​t​a​"​ ​v​a​l​u​e​s
+		 */
+		DefaultNoDataColor: string
+		/**
+		 * D​e​f​a​u​l​t​ ​o​p​t​i​o​n​s​ ​f​o​r​ ​l​e​g​e​n​d​s
+		 */
+		DefaultLegendOptions: string
+		/**
+		 * T​h​e​s​e​ ​o​p​t​i​o​n​s​ ​w​i​l​l​ ​b​e​ ​u​s​e​d​ ​f​o​r​ ​n​e​w​ ​l​a​y​e​r​s​ ​/​ ​n​e​w​ ​l​e​g​e​n​d​s​ ​c​r​e​a​t​e​d​ ​i​n​ ​t​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​ ​b​u​t​ ​w​i​l​l​ ​n​o​t​ ​a​f​f​e​c​t​ ​e​x​i​s​t​i​n​g​ ​o​n​e​s​.
+		 */
+		DefaultOptionsInformation: string
+		/**
+		 * C​u​s​t​o​m​ ​p​a​l​e​t​t​e​s
+		 */
+		CustomPalettes: string
 	}
 	LayerManager: {
 		/**
@@ -3372,6 +3382,10 @@ export type TranslationFunctions = {
 		 */
 		Reloading: () => LocalizedString
 		/**
+		 * Preparing export...
+		 */
+		ExportPreparation: () => LocalizedString
+		/**
 		 * Data preparation...
 		 */
 		SmoothingDataPreparation: () => LocalizedString
@@ -3428,7 +3442,7 @@ export type TranslationFunctions = {
 		 */
 		NewProject: () => LocalizedString
 		/**
-		 * About Magrit
+		 * About Magrit / General settings
 		 */
 		About: () => LocalizedString
 		/**
@@ -3549,28 +3563,6 @@ export type TranslationFunctions = {
 		 * Cancel
 		 */
 		cancelButton: () => LocalizedString
-	}
-	ApplicationSettingsModal: {
-		/**
-		 * Application settings
-		 */
-		Title: () => LocalizedString
-		/**
-		 * Locale for formatting numbers on the map
-		 */
-		LocaleNumberFormatting: () => LocalizedString
-		/**
-		 * Default color for "no data" values
-		 */
-		DefaultNoDataColor: () => LocalizedString
-		/**
-		 * Default options for legends
-		 */
-		DefaultLegendOptions: () => LocalizedString
-		/**
-		 * These options will be used for each new legend created in the application.
-		 */
-		DefaultLegendOptionsInformation: () => LocalizedString
 	}
 	ImportWindow: {
 		/**
@@ -4207,11 +4199,19 @@ export type TranslationFunctions = {
 			AllowModifyingFillStroke: () => LocalizedString
 		}
 	}
-	AboutPanel: {
+	AboutAndSettingsPanel: {
 		/**
 		 * About Magrit
 		 */
 		title: () => LocalizedString
+		/**
+		 * Credits
+		 */
+		TabAbout: () => LocalizedString
+		/**
+		 * Settings
+		 */
+		TabSettings: () => LocalizedString
 		/**
 		 * Magrit is an open source Web application for the visualization and the analysis of geospatial data. It is developed by the UAR RIATE (CNRS, Université Paris Cité).
 		 */
@@ -4236,6 +4236,26 @@ export type TranslationFunctions = {
 		 * Documentation
 		 */
 		documentation: () => LocalizedString
+		/**
+		 * Locale for formatting numbers on the map
+		 */
+		LocaleNumberFormatting: () => LocalizedString
+		/**
+		 * Default color for "no data" values
+		 */
+		DefaultNoDataColor: () => LocalizedString
+		/**
+		 * Default options for legends
+		 */
+		DefaultLegendOptions: () => LocalizedString
+		/**
+		 * These options will be used for new layers / new legends created in the application but will not affect existing ones.
+		 */
+		DefaultOptionsInformation: () => LocalizedString
+		/**
+		 * Custom palettes
+		 */
+		CustomPalettes: () => LocalizedString
 	}
 	LayerManager: {
 		/**

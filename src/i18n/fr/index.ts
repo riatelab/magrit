@@ -15,6 +15,7 @@ const fr = {
   LoadingMessages: {
     Default: 'Chargement...',
     Reloading: 'Rechargement du projet...',
+    ExportPreparation: 'Préparation de l\'export...',
     SmoothingDataPreparation: 'Préparation des données...',
     SmoothingComputingGPUKDE: 'Calcul de l\'estimation de densité par noyau sur le GPU...',
     SmoothingComputingGPUStewart: 'Calcul du potentiel de Stewart sur le GPU...',
@@ -32,7 +33,7 @@ const fr = {
     ImportProjet: 'Importer un projet Magrit',
     SaveProject: 'Sauvegarder le projet',
     NewProject: 'Nouveau projet',
-    About: 'À propos de Magrit',
+    About: 'À propos de Magrit / Paramètres généraux de l\'application',
     Language: 'Sélection de la langue',
     Undo: 'Annuler',
     Redo: 'Rétablir',
@@ -67,13 +68,6 @@ const fr = {
     altDatasetPreview: 'Aperçu du jeu de données',
     confirmButton: 'Ajouter à la carte',
     cancelButton: 'Annuler',
-  },
-  ApplicationSettingsModal: {
-    Title: 'Paramètres généraux de l\'application',
-    LocaleNumberFormatting: 'Langue pour le formatage des nombres sur la carte',
-    DefaultNoDataColor: 'Couleur par défault pour les valeurs manquantes',
-    DefaultLegendOptions: 'Options par défaut pour la création des légendes',
-    DefaultLegendOptionsInformation: 'Ces options seront utilisées pour toutes les nouvelles légendes créées dans l\'application.',
   },
   ImportWindow: {
     Title: 'Import des données',
@@ -255,14 +249,21 @@ const fr = {
       AllowModifyingFillStroke: 'Autoriser la modification du remplissage et de la bordure',
     },
   },
-  AboutPanel: {
+  AboutAndSettingsPanel: {
     title: 'À propos de Magrit',
+    TabAbout: 'Crédits',
+    TabSettings: 'Options générales',
     description: 'Magrit est une application Web open source pour la visualisation et l\'analyse de données géospatiales. Cette application est développée par les membres de l\'UAR RIATE (CNRS, Université Paris Cité).',
     usefulLinks: 'Liens utiles :',
     UarRiate: 'UAR RIATE',
     linkGithub: 'Page du projet sur GitHub',
     linkGithubIssues: 'Rapport de bug',
     documentation: 'Documentation',
+    LocaleNumberFormatting: 'Langue pour le formatage des nombres sur la carte',
+    DefaultNoDataColor: 'Couleur par défault pour les valeurs manquantes',
+    DefaultLegendOptions: 'Options par défaut pour la création des légendes',
+    DefaultOptionsInformation: 'Ces options seront utilisées pour toutes les nouvelles couches et légendes créées dans l\'application mais n\'aura pas d\'effet sur celles existants déjà.',
+    CustomPalette: 'Palettes personnalisées',
   },
   LayerManager: {
     point: 'Couche de points - {nFt} {{nFt: entité | entités }} - {nCol} {{nCol: colonne | colonnes }}',

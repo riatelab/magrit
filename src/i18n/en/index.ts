@@ -15,6 +15,7 @@ const en = {
   LoadingMessages: {
     Default: 'Loading...',
     Reloading: 'Reloading project...',
+    ExportPreparation: 'Preparing export...',
     SmoothingDataPreparation: 'Data preparation...',
     SmoothingComputingGPUKDE: 'Computing KDE on GPU...',
     SmoothingComputingGPUStewart: 'Computing Stewart\'s potential on GPU...',
@@ -32,7 +33,7 @@ const en = {
     ImportProjet: 'Import a Magrit project',
     SaveProject: 'Save project',
     NewProject: 'New project',
-    About: 'About Magrit',
+    About: 'About Magrit / General settings',
     Language: 'Language selection',
     Undo: 'Undo',
     Redo: 'Redo',
@@ -67,13 +68,6 @@ const en = {
     altDatasetPreview: 'Dataset preview',
     confirmButton: 'Add to map',
     cancelButton: 'Cancel',
-  },
-  ApplicationSettingsModal: {
-    Title: 'Application settings',
-    LocaleNumberFormatting: 'Locale for formatting numbers on the map',
-    DefaultNoDataColor: 'Default color for "no data" values',
-    DefaultLegendOptions: 'Default options for legends',
-    DefaultLegendOptionsInformation: 'These options will be used for each new legend created in the application.',
   },
   ImportWindow: {
     Title: 'Data import',
@@ -255,14 +249,21 @@ const en = {
       AllowModifyingFillStroke: 'Allow modifying fill and stroke properties',
     },
   },
-  AboutPanel: {
+  AboutAndSettingsPanel: {
     title: 'About Magrit',
+    TabAbout: 'Credits',
+    TabSettings: 'Settings',
     description: 'Magrit is an open source Web application for the visualization and the analysis of geospatial data. It is developed by the UAR RIATE (CNRS, Université Paris Cité).',
     usefulLinks: 'Useful links:',
     UarRiate: 'UAR RIATE',
     linkGithub: 'GitHub project page',
     linkGithubIssues: 'GitHub issues',
     documentation: 'Documentation',
+    LocaleNumberFormatting: 'Locale for formatting numbers on the map',
+    DefaultNoDataColor: 'Default color for "no data" values',
+    DefaultLegendOptions: 'Default options for legends',
+    DefaultOptionsInformation: 'These options will be used for new layers / new legends created in the application but will not affect existing ones.',
+    CustomPalettes: 'Custom palettes',
   },
   LayerManager: {
     point: 'Point layer - {nFt} {{nFt: feature | features}} - {nCol} {{nCol: column | columns}}',
