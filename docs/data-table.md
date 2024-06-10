@@ -74,6 +74,7 @@ Lorsque la formule n'est pas valide, un message d'erreur est affiché et le bout
     src="./img/data-table-invalid-formula2.png"
     alt="Tableau de données - Nouveau champ avec formule invalide"
     caption="Tableau de données - Nouveau champ avec formule invalide"
+/>
 
 ### Exemples de formules
 

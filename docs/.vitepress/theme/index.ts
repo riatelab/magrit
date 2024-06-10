@@ -6,6 +6,6 @@ import './custom.css';
 export default {
   ...DefaultTheme,
   enhanceApp({ app }) {
-    app.component('ZoomImg', ZoomImg)
+    app.component('ZoomImg', ZoomImg);
   },
 };
