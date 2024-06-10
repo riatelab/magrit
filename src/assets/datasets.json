@@ -1,0 +1,14 @@
+[
+  {
+    "id": "nuts0",
+    "type": "vector",
+    "totalFeatures": 37,
+    "keywords": ["Europe", "NUTS", "NUTS0", "country"],
+    "geometry": {
+      "source": "GISCO",
+      "url": "https://ropengov.github.io/giscoR/",
+      "download_date": "2024-06-06",
+      "license": null
+    }
+  }
+]

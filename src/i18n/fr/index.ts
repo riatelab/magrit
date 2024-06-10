@@ -43,6 +43,18 @@ const fr = {
     Next: 'Suivant',
     Previous: 'Précédent',
   },
+  DataSets: {
+    nuts0: {
+      name: 'Europe – NUTS0',
+      abstract: 'Les 37 NUTS0 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni',
+      fields: {
+        NUTS_ID: 'Identifiant de NUTS',
+        NAME_LTN: 'Nom',
+        AREA_TOT_2024: 'Superficie totale 2024 (km²)',
+        Zone: 'EU27, EFTA, CC ou UK',
+      },
+    },
+  },
   DatasetCatalog: {
     title: 'Catalogue de données d\'exemple',
     placeholderSearchBar: 'Rechercher un jeu de données...',
@@ -262,7 +274,7 @@ const fr = {
     LocaleNumberFormatting: 'Langue pour le formatage des nombres sur la carte',
     DefaultNoDataColor: 'Couleur par défault pour les valeurs manquantes',
     DefaultLegendOptions: 'Options par défaut pour la création des légendes',
-    DefaultOptionsInformation: 'Ces options seront utilisées pour toutes les nouvelles couches et légendes créées dans l\'application mais n\'aura pas d\'effet sur celles existants déjà.',
+    DefaultOptionsInformation: 'Ces options seront utilisées pour toutes les nouvelles couches et légendes créées dans l\'application mais n\'auront pas d\'effet sur celles qui existent déjà.',
     CustomPalette: 'Palettes personnalisées',
   },
   LayerManager: {

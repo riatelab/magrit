@@ -153,6 +153,36 @@ type RootTranslation = {
 		 */
 		Previous: string
 	}
+	DataSets: {
+		nuts0: {
+			/**
+			 * E​u​r​o​p​e​ ​–​ ​N​U​T​S​0
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​3​7​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​0​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​ ​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * N​U​T​S​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				NUTS_ID: string
+				/**
+				 * N​a​m​e
+				 */
+				NAME_LTN: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​ ​2​0​2​4​ ​(​k​m​²​)
+				 */
+				AREA_TOT_2024: string
+				/**
+				 * E​U​2​7​,​ ​E​F​T​A​,​ ​C​C​ ​o​r​ ​U​K
+				 */
+				Zone: string
+			}
+		}
+	}
 	DatasetCatalog: {
 		/**
 		 * E​x​a​m​p​l​e​ ​d​a​t​a​s​e​t​ ​c​a​t​a​l​o​g
@@ -3471,6 +3501,36 @@ export type TranslationFunctions = {
 		 * Previous
 		 */
 		Previous: () => LocalizedString
+	}
+	DataSets: {
+		nuts0: {
+			/**
+			 * Europe – NUTS0
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 37 European NUTS0 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * NUTS identifier
+				 */
+				NUTS_ID: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NAME_LTN: () => LocalizedString
+				/**
+				 * Total area 2024 (km²)
+				 */
+				AREA_TOT_2024: () => LocalizedString
+				/**
+				 * EU27, EFTA, CC or UK
+				 */
+				Zone: () => LocalizedString
+			}
+		}
 	}
 	DatasetCatalog: {
 		/**

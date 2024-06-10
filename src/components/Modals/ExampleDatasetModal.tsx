@@ -29,20 +29,53 @@ import Pagination from '../Pagination.tsx';
 import imgParis from '../../assets/Mairie_de_Paris.jpg';
 import imgWorld from '../../assets/World_Time_Zones_Map.jpg';
 
+interface DataProvider {
+  // The source of the geometry / dataset
+  source: string,
+  // The attribution to be shown in the map when using
+  // the described geometry / data
+  attribution: string,
+  // The url that allows to download the geometry / dataset
+  url: string,
+  // The download date (yyyy-mm-dd)
+  date: string,
+  // The license of the geometry / dataset
+  // (ideally an SPDX identifier)
+  license: string,
+}
+
+interface FieldDescription {
+  // The name of the field
+  name: string,
+  // // The description of the field
+  // description: string,
+  // The (magrit-)type of the field
+  type: 'unknown' | 'stock' | 'ratio' | 'categorical' | 'identifier',
+  // The provenance of the field (the index of the appropriate data provider in
+  // the 'data' array).
+  provenance: number,
+}
+
 interface DatasetEntry {
-  // Name of the dataset, in the various languages of the application
-  name: { [key in string]: string };
-  // Description of the dataset, in the various languages of the application
-  description: { [key in string]: string };
-  type: 'vector' | 'raster'; // Type of dataset
-  keywords: string[]; // Keywords for searching
-  source: string; // Source (url)
-  directLink?: string; // Direct link to the dataset
-  license: string; // Licence (SPDX identifier)
-  attribution: string; // The attribution that should appear in the map when using this data
-  imageUrl: string; // The url of the image that should be shown in the modal
-  date: string; // The date of the dataset
-  totalFeatures?: number; // The total number of features in the dataset
+  // Internal id of the dataset
+  id: string,
+  // // Name of the dataset
+  // name: string;
+  // // Description of the dataset
+  // description: string;
+  // Type of dataset
+  type: 'vector' | 'raster';
+  // The total number of features in the dataset (vector)
+  // or the total number of pixels in the dataset (raster)
+  totalFeatures: number;
+  // Keywords associated with the dataset
+  keywords: string[];
+  // Information about the geometry provider
+  geometry: DataProvider,
+  // Information about the data provider(s)
+  data: DataProvider[],
+  // Information about the various fields in the dataset
+  fields: FieldDescription[],
 }
 
 const dds1 = {

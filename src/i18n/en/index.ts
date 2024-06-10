@@ -43,6 +43,18 @@ const en = {
     Next: 'Next',
     Previous: 'Previous',
   },
+  DataSets: {
+    nuts0: {
+      name: 'Europe – NUTS0',
+      abstract: 'The 37 European NUTS0 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom',
+      fields: {
+        NUTS_ID: 'NUTS identifier',
+        NAME_LTN: 'Name',
+        AREA_TOT_2024: 'Total area 2024 (km²)',
+        Zone: 'EU27, EFTA, CC or UK',
+      },
+    },
+  },
   DatasetCatalog: {
     title: 'Example dataset catalog',
     placeholderSearchBar: 'Search a dataset...',
