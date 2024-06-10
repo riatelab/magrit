@@ -63,7 +63,7 @@ function verticalLegend(
     if (legendParameters.title) {
       vDistanceToTop += heightTitle() + defaultSpacing;
     }
-    if (legendParameters.subtitle && legendParameters.subtitle.text) {
+    if (legendParameters.subtitle.text) {
       vDistanceToTop += getTextSize(
         legendParameters.subtitle.text,
         legendParameters.subtitle.fontSize,
@@ -123,14 +123,13 @@ function verticalLegend(
         heightTitle(),
         hasNoData(),
         positionNote(),
-        legendParameters.roundDecimals,
-        legendParameters.boxWidth,
-        legendParameters.title.text,
-        legendParameters.subtitle?.text,
-        legendParameters.note?.text,
-        legendParameters.roundDecimals,
         legendParameters.boxSpacing,
         legendParameters.boxSpacingNoData,
+        legendParameters.boxWidth,
+        legendParameters.title.text,
+        legendParameters.subtitle.text,
+        legendParameters.note.text,
+        legendParameters.roundDecimals,
       );
     }
   });
@@ -285,7 +284,7 @@ function horizontalLegend(
   ).height + defaultSpacing));
 
   const heightSubtitle = createMemo(() => (
-    legendParameters.subtitle && legendParameters.subtitle.text
+    legendParameters.subtitle.text
       ? getTextSize(
         legendParameters.subtitle.text,
         legendParameters.subtitle.fontSize,
@@ -337,13 +336,13 @@ function horizontalLegend(
         distanceLabelsToTop(),
         distanceNoteToTop(),
         hasNoData(),
-        legendParameters.title.text,
-        legendParameters.subtitle?.text,
-        legendParameters.note?.text,
-        legendParameters.roundDecimals,
         legendParameters.boxSpacing,
         legendParameters.boxSpacingNoData,
         legendParameters.boxWidth,
+        legendParameters.title.text,
+        legendParameters.subtitle.text,
+        legendParameters.note.text,
+        legendParameters.roundDecimals,
       );
     }
   });

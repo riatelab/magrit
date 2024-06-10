@@ -733,9 +733,9 @@ interface LegendBase {
   // The title of the legend
   title: LegendTextElement,
   // The subtitle of the legend
-  subtitle?: LegendTextElement,
+  subtitle: LegendTextElement,
   // The (bottom) note of the legend
-  note?: LegendTextElement,
+  note: LegendTextElement,
   // The type of legend among the available ones
   type: LegendType,
   // Position of the legend on the SVG element

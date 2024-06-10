@@ -150,7 +150,7 @@ export default function legendChoroplethHistogram(
     legend.title.fontFamily,
   ).height + defaultSpacing));
 
-  const heightSubtitle = createMemo(() => (legend.subtitle && legend.subtitle.text
+  const heightSubtitle = createMemo(() => (legend.subtitle.text
     ? getTextSize(
       legend.subtitle.text,
       legend.subtitle.fontSize,
@@ -167,7 +167,11 @@ export default function legendChoroplethHistogram(
   // Recompute the size of the rectangle box when the legend is updated
   createEffect(
     on(
-      () => [heightTitle(), heightSubtitle(), legend.height, legend.width, legend.note?.text],
+      () => [
+        heightTitle(), heightSubtitle(),
+        legend.height, legend.width,
+        legend.title.text, legend.subtitle.text, legend.note.text,
+      ],
       () => {
         computeRectangleBox(refElement);
       },

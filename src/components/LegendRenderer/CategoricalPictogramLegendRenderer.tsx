@@ -82,8 +82,8 @@ export default function legendCategoricalPictogram(
         heightTitleSubtitle(),
         positionNote(),
         legend.title.text,
-        legend.subtitle?.text,
-        legend.note?.text,
+        legend.subtitle.text,
+        legend.note.text,
         legend.spacing,
         layer.rendererParameters.mapping,
       );

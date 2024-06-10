@@ -130,11 +130,11 @@ function verticalDiscontinuityLegend(
         positionNote(),
         positionsLabel(),
         sizesAndPositions(),
-        legend.title.text,
-        legend.subtitle?.text,
-        legend.note?.text,
-        legend.roundDecimals,
         legend.lineLength,
+        legend.title.text,
+        legend.subtitle.text,
+        legend.note.text,
+        legend.roundDecimals,
       );
     }
   });
@@ -259,8 +259,8 @@ function horizontalDiscontinuityLegend(
         positionNote(),
         maxSize(),
         legend.title.text,
-        legend.subtitle?.text,
-        legend.note?.text,
+        legend.subtitle.text,
+        legend.note.text,
         legend.roundDecimals,
         legend.lineLength,
       );

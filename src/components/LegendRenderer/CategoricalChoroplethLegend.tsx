@@ -71,7 +71,7 @@ function verticalLegend(legendParameters: CategoricalChoroplethLegend): JSX.Elem
     if (legendParameters.title) {
       vDistanceToTop += heightTitle() + defaultSpacing;
     }
-    if (legendParameters.subtitle && legendParameters.subtitle.text) {
+    if (legendParameters.subtitle.text) {
       vDistanceToTop += getTextSize(
         legendParameters.subtitle.text,
         legendParameters.subtitle.fontSize,
@@ -127,12 +127,12 @@ function verticalLegend(legendParameters: CategoricalChoroplethLegend): JSX.Elem
         hasNoData(),
         legendParameters.roundDecimals,
         legendParameters.boxWidth,
-        legendParameters.title.text,
-        legendParameters.subtitle?.text,
-        legendParameters.note?.text,
-        legendParameters.roundDecimals,
         legendParameters.boxSpacing,
         legendParameters.boxSpacingNoData,
+        legendParameters.title.text,
+        legendParameters.subtitle.text,
+        legendParameters.note.text,
+        legendParameters.roundDecimals,
         (layer.rendererParameters as CategoricalChoroplethParameters).mapping,
       );
     }
@@ -267,7 +267,7 @@ function horizontalLegend(legendParameters: CategoricalChoroplethLegend): JSX.El
   ).height + defaultSpacing));
 
   const heightSubtitle = createMemo(() => (
-    legendParameters.subtitle && legendParameters.subtitle.text
+    legendParameters.subtitle.text
       ? getTextSize(
         legendParameters.subtitle.text,
         legendParameters.subtitle.fontSize,
@@ -322,12 +322,12 @@ function horizontalLegend(legendParameters: CategoricalChoroplethLegend): JSX.El
         distanceBoxesToTop(),
         distanceLabelsToTop(),
         distanceNoteToTop(),
-        legendParameters.title.text,
-        legendParameters.subtitle?.text,
-        legendParameters.note?.text,
-        legendParameters.roundDecimals,
         legendParameters.boxSpacing,
         legendParameters.boxSpacingNoData,
+        legendParameters.title.text,
+        legendParameters.subtitle.text,
+        legendParameters.note.text,
+        legendParameters.roundDecimals,
         (layer.rendererParameters as CategoricalChoroplethParameters).mapping,
       );
     }

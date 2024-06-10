@@ -130,8 +130,8 @@ export default function legendMushrooms(
         heightTitleSubtitle(),
         positionNote(),
         legend.title.text,
-        legend.subtitle?.text,
-        legend.note?.text,
+        legend.subtitle.text,
+        legend.note.text,
         legend.roundDecimals,
       );
     }

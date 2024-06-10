@@ -166,11 +166,9 @@ function onClickValidate(
       ...applicationSettingsStore.defaultLegendSettings.title,
     } as LegendTextElement,
     subtitle: {
-      text: 'This is a subtitle',
       ...applicationSettingsStore.defaultLegendSettings.subtitle,
     },
     note: {
-      text: 'This is a bottom note',
       ...applicationSettingsStore.defaultLegendSettings.note,
     },
     position: legendPosition,

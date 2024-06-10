@@ -58,9 +58,9 @@ export default function legendLabels(
   });
   const sizeDisplayedEntry = createMemo(() => getTextSize(
     `${layer.data.features[0].properties[layer.rendererParameters.variable]}`,
-    layer.rendererParameters.fontSize,
-    layer.rendererParameters.fontFamily,
-    layer.rendererParameters.halo ? layer.rendererParameters.halo.width : 0,
+    layer.rendererParameters.default.fontSize,
+    layer.rendererParameters.default.fontFamily,
+    layer.rendererParameters.default.halo ? layer.rendererParameters.default.halo.width : 0,
   ));
 
   const positionNote = createMemo(() => (
@@ -83,10 +83,12 @@ export default function legendLabels(
   createEffect(() => {
     computeRectangleBox(
       refElement,
-      layer,
       heightTitle(),
       heightTitleSubtitle(),
       positionNote(),
+      legend.title.text,
+      legend.subtitle.text,
+      legend.note.text,
     );
   });
 
@@ -115,14 +117,14 @@ export default function legendLabels(
         <tspan
           x={0}
           text-anchor="start"
-          font-style={layer.rendererParameters.fontStyle}
-          font-family={layer.rendererParameters.fontFamily}
-          font-size={layer.rendererParameters.fontSize}
-          font-weight={layer.rendererParameters.fontWeight}
-          fill={layer.rendererParameters.fontColor}
+          font-style={layer.rendererParameters.default.fontStyle}
+          font-family={layer.rendererParameters.default.fontFamily}
+          font-size={layer.rendererParameters.default.fontSize}
+          font-weight={layer.rendererParameters.default.fontWeight}
+          fill={layer.rendererParameters.default.fontColor}
           {...(
-            layer.rendererParameters.halo
-              ? { stroke: layer.rendererParameters.halo.color, 'stroke-width': layer.rendererParameters.halo.width }
+            layer.rendererParameters.default.halo
+              ? { stroke: layer.rendererParameters.default.halo.color, 'stroke-width': layer.rendererParameters.default.halo.width }
               : {}
           )}
           style={{ 'paint-order': 'stroke' }}
