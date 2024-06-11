@@ -1310,7 +1310,7 @@ type RootTranslation = {
 			 */
 			KDE: string
 			/**
-			 * B​a​n​d​w​i​d​t​h
+			 * B​a​n​d​w​i​d​t​h​ ​(​k​m​)
 			 */
 			Bandwidth: string
 			/**
@@ -1346,7 +1346,7 @@ type RootTranslation = {
 			 */
 			Biweight: string
 			/**
-			 * S​p​a​n
+			 * S​p​a​n​ ​(​k​m​)
 			 */
 			Span: string
 			/**
@@ -4648,7 +4648,7 @@ export type TranslationFunctions = {
 			 */
 			KDE: () => LocalizedString
 			/**
-			 * Bandwidth
+			 * Bandwidth (km)
 			 */
 			Bandwidth: () => LocalizedString
 			/**
@@ -4684,7 +4684,7 @@ export type TranslationFunctions = {
 			 */
 			Biweight: () => LocalizedString
 			/**
-			 * Span
+			 * Span (km)
 			 */
 			Span: () => LocalizedString
 			/**
