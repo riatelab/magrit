@@ -53,10 +53,11 @@
   bottom: 0;
   justify-content: center !important;
   margin-bottom: 0 !important;
+  height: 0;
 }
 
 .map-zone__controls > p.control {
-  margin-bottom: 0 !important;
+  margin-bottom: 2em !important;
 }
 
 .map-zone__controls > p.control > button {
