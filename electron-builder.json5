@@ -1,6 +1,3 @@
-/**
- * @see https://www.electron.build/configuration/configuration
- */
 {
   "appId": "com.riatelab.magrit",
   "asar": true,
@@ -36,6 +33,6 @@
     "target": ["AppImage"],
     "artifactName": "${productName}-Linux-${version}.${ext}",
     "category": "Education",
-    "icon": "dist/assets/magrit-logo-only-CTN102zB.png"
+    "icon": "build/icon.icns"
   }
 }
