@@ -953,6 +953,10 @@ type RootTranslation = {
 		 */
 		documentation: string
 		/**
+		 * S​n​a​p​p​i​n​g​ ​g​r​i​d​ ​c​o​l​o​r
+		 */
+		SnappingGridColor: string
+		/**
 		 * L​o​c​a​l​e​ ​f​o​r​ ​f​o​r​m​a​t​t​i​n​g​ ​n​u​m​b​e​r​s​ ​o​n​ ​t​h​e​ ​m​a​p
 		 */
 		LocaleNumberFormatting: string
@@ -4296,6 +4300,10 @@ export type TranslationFunctions = {
 		 * Documentation
 		 */
 		documentation: () => LocalizedString
+		/**
+		 * Snapping grid color
+		 */
+		SnappingGridColor: () => LocalizedString
 		/**
 		 * Locale for formatting numbers on the map
 		 */

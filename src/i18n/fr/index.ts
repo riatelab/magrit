@@ -271,6 +271,7 @@ const fr = {
     linkGithub: 'Page du projet sur GitHub',
     linkGithubIssues: 'Rapport de bug',
     documentation: 'Documentation',
+    SnappingGridColor: 'Couleur de la grille d\'alignement',
     LocaleNumberFormatting: 'Langue pour le formatage des nombres sur la carte',
     DefaultNoDataColor: 'Couleur par défault pour les valeurs manquantes',
     DefaultLegendOptions: 'Options par défaut pour la création des légendes',

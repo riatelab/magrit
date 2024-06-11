@@ -58,8 +58,10 @@ export type ApplicationSettingsStoreType = {
     note: Partial<LegendTextElement>,
   },
   // The locale of the browser (used for formatting numbers and dates)
-  // (maybe in the future we will allow the user to change the locale)
   userLocale: string,
+  // The color of the snapping grid that the user can display
+  // to align layout features / legends on the map
+  snappingGridColor: string,
 };
 
 const [
@@ -72,6 +74,7 @@ const [
   resizeBehavior: ResizeBehavior.ShrinkGrow,
   renderVisibility: RenderVisibility.DoNotRender,
   useClipExtent: false,
+  snappingGridColor: '#808080',
   defaultLegendSettings: {
     spacing: 5,
     title: {

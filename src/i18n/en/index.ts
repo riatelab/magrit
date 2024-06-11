@@ -271,6 +271,7 @@ const en = {
     linkGithub: 'GitHub project page',
     linkGithubIssues: 'GitHub issues',
     documentation: 'Documentation',
+    SnappingGridColor: 'Snapping grid color',
     LocaleNumberFormatting: 'Locale for formatting numbers on the map',
     DefaultNoDataColor: 'Default color for "no data" values',
     DefaultLegendOptions: 'Default options for legends',

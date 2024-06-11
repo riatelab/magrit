@@ -298,6 +298,12 @@ export default function AboutModal(
           <option value="zh-Hans-CN-u-nu-hanidec">zh-Hans-CN-u-nu-hanidec</option>
         </InputFieldSelect>
         <hr/>
+        <InputFieldColor
+          label={props.LL().AboutAndSettingsPanel.SnappingGridColor()}
+          value={applicationSettingsStore.snappingGridColor}
+          onChange={(v) => setApplicationSettingsStore('snappingGridColor', v)}
+        />
+        <hr/>
         <div class="has-text-centered">
           <p>{props.LL().AboutAndSettingsPanel.DefaultOptionsInformation()}</p>
         </div>

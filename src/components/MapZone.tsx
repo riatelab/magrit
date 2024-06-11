@@ -778,7 +778,7 @@ export default function MapZone(): JSX.Element {
                 <path
                   d="M 10 0 L 0 0 0 10"
                   fill="none"
-                  stroke="grey"
+                  stroke={applicationSettingsStore.snappingGridColor}
                   stroke-width="0.5"
                 />
               </pattern>
