@@ -361,13 +361,9 @@ export const pointAggregationOnGrid = (
     resultLayer = pointAggregationStandardDeviation(pointLayer, gridLayer, targetVariable);
   }
 
-  // let resultGeoLayer = isGeo
-  //   ? rewindLayer(resultLayer)
-  //   : rewindLayer(reprojFunc(proj, resultLayer, true));
-
   let resultGeoLayer = isGeo
-    ? resultLayer
-    : reprojFunc(proj, resultLayer, true);
+    ? rewindLayer(resultLayer)
+    : rewindLayer(reprojFunc(proj, resultLayer, true));
 
   if (
     analysisType === PointAggregationRatioType.Density
