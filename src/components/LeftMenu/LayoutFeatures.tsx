@@ -879,20 +879,15 @@ export default function LayoutFeatures(): JSX.Element {
       checked={globalStore.snapToGridWhenDragging}
       onChange={(v) => {
         setGlobalStore({ snapToGridWhenDragging: v });
-        if (!v && globalStore.displaySnappingGrid) {
-          setGlobalStore({ displaySnappingGrid: false });
-        }
       }}
     />
-    <Show when={globalStore.snapToGridWhenDragging}>
-      <InputFieldCheckbox
-        label={LL().LayoutFeatures.DisplayGrid()}
-        checked={globalStore.displaySnappingGrid}
-        onChange={(v) => {
-          setGlobalStore({ displaySnappingGrid: v });
-        }}
-      />
-    </Show>
+    <InputFieldCheckbox
+      label={LL().LayoutFeatures.DisplayGrid()}
+      checked={globalStore.displaySnappingGrid}
+      onChange={(v) => {
+        setGlobalStore({ displaySnappingGrid: v });
+      }}
+    />
     <div class="field-block">
       <label class="label">{LL().LayoutFeatures.MapSkinElements()}</label>
       <div class="is-flex is-justify-content-space-evenly">
