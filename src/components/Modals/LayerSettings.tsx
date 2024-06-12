@@ -1570,7 +1570,10 @@ function makeSettingsDefaultLine(
         }}
       />
     </Show>
-    <Show when={(props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'categoricalVariable'}>
+    <Show when={
+      props.representationType === 'proportionalSymbols'
+      && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'categoricalVariable'
+    }>
       <InputFieldCheckbox
         label={LL().LayerSettings.AddBarChartCategoricalChoropleth()}
         checked={
@@ -1619,7 +1622,10 @@ function makeSettingsDefaultLine(
         }}
       />
     </Show>
-    <Show when={(props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'ratioVariable'}>
+    <Show when={
+      props.representationType === 'proportionalSymbols'
+      && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'ratioVariable'
+    }>
       <InputFieldCheckbox
         label={LL().LayerSettings.AddHistogramChoropleth()}
         checked={
