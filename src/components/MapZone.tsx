@@ -70,6 +70,7 @@ import NorthArrowRenderer from './LayoutFeatureRenderer/NorthArrowRenderer.tsx';
 import ImageRenderer from './LayoutFeatureRenderer/ImageRenderer.tsx';
 
 // - for rendering the legends
+import legendDefault from './LegendRenderer/DefaultLegendRenderer.tsx';
 import legendChoropleth from './LegendRenderer/ChoroplethLegend.tsx';
 import legendProportionalSymbols from './LegendRenderer/ProportionnalSymbolsLegend.tsx';
 import legendDiscontinuity from './LegendRenderer/DiscontinuityLegendRenderer.tsx';
@@ -108,6 +109,7 @@ import {
   type ScaleBar,
   type Text,
   type Legend,
+  type DefaultLegend,
   type CategoricalChoroplethBarchartLegend,
   type ChoroplethLegend,
   type ProportionalSymbolsLegend,
@@ -162,6 +164,9 @@ const gatherArrowColors = (
 };
 
 const dispatchLegendRenderer = (legend: Legend) => {
+  if (legend.type === 'default') {
+    return legendDefault(legend as DefaultLegend);
+  }
   if (legend.type === 'choropleth') {
     return legendChoropleth(legend as ChoroplethLegend);
   }

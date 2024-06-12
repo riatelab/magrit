@@ -3325,6 +3325,10 @@ type RootTranslation = {
 			 * A​x​e​s​ ​a​n​d​ ​l​a​b​e​l​s​ ​c​o​l​o​r
 			 */
 			AxesAndLabelsColor: string
+			/**
+			 * L​e​g​e​n​d​ ​c​o​n​t​e​n​t
+			 */
+			LegendContent: string
 		}
 	}
 	CommonTextElement: {
@@ -6641,6 +6645,10 @@ export type TranslationFunctions = {
 			 * Axes and labels color
 			 */
 			AxesAndLabelsColor: () => LocalizedString
+			/**
+			 * Legend content
+			 */
+			LegendContent: () => LocalizedString
 		}
 	}
 	CommonTextElement: {

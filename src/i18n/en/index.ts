@@ -923,6 +923,7 @@ const en = {
       BarOrderDescending: 'Descending',
       BarOrderNone: 'Same order as in the legend',
       AxesAndLabelsColor: 'Axes and labels color',
+      LegendContent: 'Legend content',
     },
   },
   CommonTextElement: {

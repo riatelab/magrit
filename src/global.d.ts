@@ -783,6 +783,29 @@ interface LegendTextElement {
 }
 
 /**
+ * The parameters of the legend for layers using the default renderer
+ */
+
+interface DefaultLegend extends LegendBase {
+  type: LegendType.default,
+  // The type of geometry of the corresponding layer
+  typeGeometry: 'point' | 'linestring' | 'polygon',
+  // Whether to display the entry as a polygon (for linestring and point layers)
+  // or as the real shape (i.e a line or a point)
+  displayAsPolygon: boolean,
+  // The text properties of the labels (and no-data label if any)
+  labels: LegendTextElement,
+  // Box width (for polygon layers), or line length (for linestring layers),
+  // or symbol size (for point layers)
+  boxWidth: number,
+  // Box height (for polygon layers only)
+  boxHeight: number,
+  // The corner radius of each box (rx and ry of each rect),
+  // only used for polygon layers
+  boxCornerRadius: number,
+}
+
+/**
  * The parameters of the legend for choropleth maps
  */
 interface ChoroplethLegend extends LegendBase {
@@ -957,13 +980,14 @@ export type Legend = (
   | ChoroplethHistogramLegend
   | LinearRegressionScatterPlot
   | CategoricalPictogramLegend
+  | DefaultLegend
 );
 
-export enum NumberFormatting {
-  useSameLocaleAsBrowser = 'useSameLocaleAsBrowser',
-  useSameLocaleAsCurrentLanguage = 'useSameLocaleAsCurrentLanguage',
-  useCustomLocale = 'useCustomLocale',
-}
+// export enum NumberFormatting {
+//   useSameLocaleAsBrowser = 'useSameLocaleAsBrowser',
+//   useSameLocaleAsCurrentLanguage = 'useSameLocaleAsCurrentLanguage',
+//   useCustomLocale = 'useCustomLocale',
+// }
 
 export interface ID3Element {
   __data__: GeoJSONFeature,
@@ -976,6 +1000,7 @@ export interface IZoomable {
 // We have multiple king of legends
 // (choropleth, proportional, categorical, ...)
 export enum LegendType {
+  default = 'default',
   choropleth = 'choropleth',
   proportional = 'proportional',
   categoricalChoropleth = 'categoricalChoropleth',

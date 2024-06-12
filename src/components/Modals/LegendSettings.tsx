@@ -14,7 +14,7 @@ import { FaSolidPlus } from 'solid-icons/fa';
 import { layersDescriptionStore, setLayersDescriptionStoreBase } from '../../store/LayersDescriptionStore';
 
 // Helpers
-import { webSafeFonts, fonts } from '../../helpers/font';
+import { fonts, webSafeFonts } from '../../helpers/font';
 import {
   ascending,
   capitalizeFirstLetter,
@@ -30,31 +30,37 @@ import type { TranslationFunctions } from '../../i18n/i18n-types';
 // Subcomponents
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
+import { InputFieldColorOpacity, InputFieldWidthColorOpacity } from '../Inputs/InputFieldColorOpacity.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
 
 // Types / Interfaces / Enums
 import {
-  type CategoricalChoroplethBarchartLegend, type CategoricalChoroplethLegend,
-  type CategoricalPictogramLegend, type ChoroplethHistogramLegend,
+  type CategoricalChoroplethBarchartLegend,
+  type CategoricalChoroplethLegend,
+  type CategoricalPictogramLegend,
+  type ChoroplethHistogramLegend,
   type ChoroplethLegend,
+  DefaultLegend,
   type DiscontinuityLegend,
   type LabelsLegend,
   type LayerDescriptionCategoricalChoropleth,
   type LayerDescriptionChoropleth,
-  type LayerDescriptionGriddedLayer, LayerDescriptionProportionalSymbols,
+  type LayerDescriptionGriddedLayer,
+  LayerDescriptionProportionalSymbols,
   type LayerDescriptionSmoothedLayer,
   type LayoutFeature,
   type Legend,
   LegendType,
   type LinearRegressionScatterPlot,
-  type MushroomsLegend, ProportionalSymbolCategoryParameters,
+  type MushroomsLegend,
+  ProportionalSymbolCategoryParameters,
   type ProportionalSymbolsLegend,
-  type ProportionalSymbolsParameters, ProportionalSymbolsRatioParameters,
+  type ProportionalSymbolsParameters,
+  ProportionalSymbolsRatioParameters,
   RepresentationType,
 } from '../../global.d';
-import InputFieldSelect from '../Inputs/InputSelect.tsx';
-import { InputFieldColorOpacity, InputFieldWidthColorOpacity } from '../Inputs/InputFieldColorOpacity.tsx';
 
 /**
  * Update a single property of a legend in the layersDescriptionStore,
@@ -229,8 +235,8 @@ function FieldText(
         type="text"
         value={ props.legend[props.role]?.text || '' }
         style={{ width: '100%' }}
-        onKeyUp={(ev) => updateProps(props.legend.id, [props.role, 'text'], ev.target.value)}
-        onChange={(ev) => updateProps(props.legend.id, [props.role, 'text'], ev.target.value)}
+        onKeyUp={(ev) => updateProps(props.legend.id, [props.role, 'text'], ev.currentTarget.value)}
+        onChange={(ev) => updateProps(props.legend.id, [props.role, 'text'], ev.currentTarget.value)}
       />
     </div>
   </div>;
@@ -770,6 +776,90 @@ function makeSettingsLabels(
     <FieldText legend={legend} LL={LL} role={'title'}/>
     <FieldText legend={legend} LL={LL} role={'subtitle'}/>
     <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldText
+      label={LL().Legend.Modal.LegendContent()}
+      value={legend.labels.text}
+      onChange={(v) => updateProps(legend.id, ['labels', 'text'], v)}
+      bindKeyUpAsChange={true}
+      width={300}
+    />
+    <OptionBackgroundRectangle legend={legend} LL={LL}/>
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        {LL().Legend.Modal.FontProperties()}
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
+      </p>
+    </div>
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'labels', 'note']}
+      />
+    </Show>
+  </>;
+}
+
+function makeSettingsDefault(
+  legend: DefaultLegend,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <>
+    <FieldText legend={legend} LL={LL} role={'title'}/>
+    <FieldText legend={legend} LL={LL} role={'subtitle'}/>
+    <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldText
+      label={LL().Legend.Modal.LegendContent()}
+      value={legend.labels.text}
+      onChange={(v) => updateProps(legend.id, ['labels', 'text'], v)}
+      bindKeyUpAsChange={true}
+      width={300}
+    />
+    <Show when={legend.displayAsPolygon || legend.typeGeometry === 'polygon'}>
+      <InputFieldNumber
+        label={ LL().Legend.Modal.BoxWidth() }
+        value={ legend.boxWidth }
+        min={0}
+        max={100}
+        step={1}
+        onChange={(v) => debouncedUpdateProps(legend.id, ['boxWidth'], v)}
+      />
+      <InputFieldNumber
+        label={ LL().Legend.Modal.BoxHeight() }
+        value={ legend.boxHeight }
+        min={0}
+        max={100}
+        step={1}
+        onChange={(v) => debouncedUpdateProps(legend.id, ['boxHeight'], v)}
+      />
+      <InputFieldNumber
+        label={ LL().Legend.Modal.BoxCornerRadius() }
+        value={ legend.boxCornerRadius }
+        min={0}
+        max={100}
+        step={1}
+        strictMin={true}
+        onChange={(v) => debouncedUpdateProps(legend.id, ['boxCornerRadius'], v)}
+      />
+    </Show>
+    <Show when={legend.typeGeometry === 'linestring'}>
+      <InputFieldNumber
+        label={ LL().Legend.Modal.LineLength() }
+        value={ legend.boxWidth }
+        min={0}
+        max={100}
+        step={1}
+        onChange={(v) => debouncedUpdateProps(legend.id, ['boxWidth'], v)}
+      />
+    </Show>
     <OptionBackgroundRectangle legend={legend} LL={LL}/>
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
@@ -1119,6 +1209,9 @@ function makeSettingsCategoricalPictogram(
 }
 
 function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.Element {
+  if (legend.type === LegendType.default) {
+    return makeSettingsDefault(legend as DefaultLegend, LL);
+  }
   if (legend.type === LegendType.choropleth) {
     return makeSettingsChoroplethLegend(legend as ChoroplethLegend, LL);
   }

@@ -11,6 +11,7 @@ import {
   removeFeaturesWithEmptyGeometry,
 } from './formatConversion';
 import { generateIdLayer, generateIdTable, getDefaultRenderingParams } from './layers';
+import { makeDefaultLegendDescription } from './legends';
 import {
   allowedFileExtensions,
   allowedMimeTypes,
@@ -24,6 +25,7 @@ import { detectTypeField, Variable } from './typeDetection';
 import rewindLayer from './rewind';
 
 // Stores
+import { applicationSettingsStore } from '../store/ApplicationSettingsStore';
 import { FileDropStoreType } from '../store/FileDropStore';
 import {
   layersDescriptionStore,
@@ -33,7 +35,10 @@ import {
 import { fitExtent } from '../store/MapStore';
 
 // Types
-import { GeoJSONFeatureCollection, LayerDescription, TableDescription } from '../global';
+import type {
+  DefaultLegend, GeoJSONFeatureCollection,
+  LayerDescription, TableDescription,
+} from '../global';
 
 // A file, dropped by the user
 export interface FileEntry {
@@ -234,8 +239,8 @@ function addLayer(
     layersDescriptionStore.layers.map((l) => l.name),
   );
 
-  // Add the new layer to the LayerManager by adding it
-  // to the layersDescriptionStore
+  // Add the new layer (and the corresponding legend)
+  // to the LayerManager by adding it to the layersDescriptionStore
   const newLayerDescription = {
     id: layerId,
     name: safeName,
@@ -249,6 +254,8 @@ function addLayer(
     //   && rewoundGeojson.features.length > 10000 ? 'optimizeSpeed' : 'auto',
   };
 
+  const newLegendDescription = makeDefaultLegendDescription(newLayerDescription);
+
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
@@ -258,6 +265,7 @@ function addLayer(
         //   setGlobalStore({ userHasAddedLayer: true });
         // }
         draft.layers.push(newLayerDescription as LayerDescription);
+        draft.layoutFeaturesAndLegends.push(newLegendDescription as DefaultLegend);
       },
     ),
   );
