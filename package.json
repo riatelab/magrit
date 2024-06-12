@@ -43,7 +43,7 @@
     "@types/topojson-simplify": "^3.0.3",
     "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
-    "electron": "^30.1.0",
+    "electron": "^31.0.0",
     "electron-builder": "^24.13.3",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-typescript": "^18.0.0",
@@ -62,7 +62,7 @@
     "vitest": "^1.5.3"
   },
   "dependencies": {
-    "@observablehq/plot": "^0.6.14",
+    "@observablehq/plot": "^0.6.15",
     "@solid-primitives/autofocus": "^0.0.111",
     "@solidjs/router": "^0.13.5",
     "@stdlib/stats-base-dists-t-cdf": "^0.2.1",
