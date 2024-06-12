@@ -17,7 +17,7 @@ export default function MapConfiguration(): JSX.Element {
   const { LL } = useI18nContext();
 
   return <div class="map-configuration">
-    <div class="is-flex is-justify-content-space-around">
+    <div class="is-flex is-justify-content-space-around has-text-centered">
       <InputFieldNumber
         label={LL().MapConfiguration.Width()}
         value={mapStore.mapDimensions.width}
