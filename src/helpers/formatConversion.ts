@@ -27,6 +27,7 @@ export async function convertToGeoJSON(
     '-lco', 'RFC7946=NO',
     '-lco', 'WRITE_NON_FINITE_VALUES=YES',
     '-lco', 'WRITE_BBOX=YES',
+    '-lco', 'COORDINATE_PRECISION=6',
   ].concat(params.opts || []);
   const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
   const bytes = await globalThis.gdal.getFileBytes(output);
