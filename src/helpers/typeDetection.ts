@@ -76,7 +76,7 @@ export function detectTypeField(
     }
   }
 
-  const filteredValues = values.filter((v) => v !== null);
+  const filteredValues = values.filter((v) => v !== null && v !== '' && v !== undefined);
   const filteredDatatypes = dt.filter((v) => v !== null);
   const hasMissingValues = filteredDatatypes.length !== dt.length;
   const hasDuplicates = filteredValues.length !== (new Set(filteredValues)).size;
@@ -87,8 +87,10 @@ export function detectTypeField(
 
     if (filteredValues.every((v) => v === filteredValues[0])) {
       // If all the values are the exact same value, lets say for now
-      // that this is an unknown variable
-      variableType = VariableType.unknown;
+      // that this is a categorical variable, but with a single category
+      // (such as the 'REGION' field in a dataset from which municipalities
+      // of a single region have been extracted)
+      variableType = VariableType.categorical;
     // We check if all the values are integers
     } else if (filteredValues.every((v) => Number.isInteger(+v))) {
       // We check if all the values are strictly different
@@ -99,8 +101,8 @@ export function detectTypeField(
         // If all the values are strictly different (and if there is no missing value in the field),
         // we probably have an identifier... but this could be a stock or ratio too.
         variableType = hasMissingValues ? VariableType.stock : VariableType.identifier;
-      } else if ((new Set(filteredValues)).size < (filteredValues.length / 2)) {
-        // If there are less than (total values / 2) different values
+      } else if ((new Set(filteredValues)).size < (filteredValues.length / 3)) {
+        // If there are less than (total values / 3) different values
         // (and more than 15 values in total),
         // we consider this variable as categorical
         variableType = VariableType.categorical;
@@ -126,8 +128,10 @@ export function detectTypeField(
       variableType = VariableType.identifier;
     } else if (filteredValues.every((v) => v === filteredValues[0])) {
       // If all the values are the exact same value, lets say for now
-      // that this is an unknown variable
-      variableType = VariableType.unknown;
+      // that this is a categorical variable, but with a single category
+      // (such as the 'REGION' field in a dataset from which municipalities
+      // of a single region have been extracted)
+      variableType = VariableType.categorical;
     } else {
       // ...otherwise this is probably a categorical variable
       variableType = VariableType.categorical;

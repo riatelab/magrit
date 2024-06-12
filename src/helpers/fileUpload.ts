@@ -210,7 +210,7 @@ function addLayer(
     };
   });
 
-  // Cast values to the detect field type if possible and needed
+  // Cast values to the detected field type if possible and needed
   fieldsDescription.forEach((field) => {
     if (field.dataType === 'number') {
       rewoundGeojson.features.forEach((ft) => {
@@ -269,11 +269,11 @@ function addLayer(
   return layerId;
 }
 
-function addTabularLayer(data: object[], name: string): string {
+function addTabularLayer(data: Record<string, any>[], name: string): string {
   const tableId = generateIdTable();
   const fields: string[] = Object.keys(data[0]);
 
-  const descriptions = fields.map((field) => {
+  const fieldsDescription = fields.map((field) => {
     const o = detectTypeField(
       data.map((ft) => ft[field as keyof typeof ft]),
       field,
@@ -286,6 +286,25 @@ function addTabularLayer(data: object[], name: string): string {
     };
   });
 
+  // Cast values to the detected field type if possible and needed
+  fieldsDescription.forEach((field) => {
+    if (field.dataType === 'number') {
+      data.forEach((ft) => {
+        // eslint-disable-next-line no-param-reassign
+        ft[field.name] = isFiniteNumber(ft[field.name])
+          ? +ft[field.name]
+          : null;
+      });
+    } else {
+      data.forEach((ft) => {
+        // eslint-disable-next-line no-param-reassign
+        ft[field.name] = isNonNull(ft[field.name])
+          ? ft[field.name]
+          : null;
+      });
+    }
+  });
+
   const safeName = findSuitableName(
     name,
     layersDescriptionStore.tables.map((l) => l.name),
@@ -294,7 +313,7 @@ function addTabularLayer(data: object[], name: string): string {
   const tableDescription = {
     id: tableId,
     name: safeName,
-    fields: descriptions,
+    fields: fieldsDescription,
     data,
   } as TableDescription;
 
