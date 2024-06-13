@@ -96,7 +96,7 @@ const debouncedUpdateProps = debounce(updateProps, 200);
 function TextOptionTable(
   props: {
     legend: Legend,
-    textProperties: ('title' | 'subtitle' | 'labels' | 'note')[],
+    textProperties: ('title' | 'subtitle' | 'labels' | 'axis' | 'note')[],
     LL: Accessor<TranslationFunctions>,
   },
 ): JSX.Element {
@@ -983,7 +983,7 @@ function makeSettingsChoroplethHistogram(
       step={1}
     />
     <InputFieldColor
-      label={'Axes color'}
+      label={LL().Legend.Modal.AxesAndLabels()}
       value={legend.fontColor}
       onChange={(v) => debouncedUpdateProps(legend.id, ['fontColor'], v)}
     />
@@ -1037,7 +1037,7 @@ function makeSettginsCategoricalChoroplethBarchart(
       step={1}
     />
     <InputFieldColor
-      label={LL().Legend.Modal.AxesAndLabelsColor()}
+      label={LL().Legend.Modal.AxesAndLabels()}
       value={legend.fontColor}
       onChange={(v) => debouncedUpdateProps(legend.id, ['fontColor'], v)}
     />
@@ -1137,9 +1137,14 @@ function makeSettingsScatterPlot(
       step={1}
     />
     <InputFieldColor
-      label={LL().Legend.Modal.AxesAndLabelsColor()}
-      value={legend.fontColor}
-      onChange={(v) => debouncedUpdateProps(legend.id, ['fontColor'], v)}
+      label={LL().Legend.Modal.DotColor()}
+      value={legend.dotColor}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['dotColor'], v)}
+    />
+    <InputFieldColor
+      label={LL().Legend.Modal.RegressionLineColor()}
+      value={legend.regressionLineColor}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['regressionLineColor'], v)}
     />
     <OptionBackgroundRectangle legend={legend} LL={LL}/>
     <div
@@ -1155,7 +1160,7 @@ function makeSettingsScatterPlot(
       <TextOptionTable
         legend={legend}
         LL={LL}
-        textProperties={['title', 'subtitle', 'note']}
+        textProperties={['title', 'subtitle', 'axis', 'note']}
       />
     </Show>
   </>;

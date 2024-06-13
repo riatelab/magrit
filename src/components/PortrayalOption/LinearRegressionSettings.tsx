@@ -390,7 +390,8 @@ function onClickValidate(
             position: getPossibleLegendPosition(300, 300),
             width: 300,
             height: 300,
-            fontColor: '#000000',
+            regressionLineColor: '#FF0000',
+            dotColor: '#008000',
             visible: true,
             roundDecimals: 1,
             title: {
@@ -400,6 +401,10 @@ function onClickValidate(
             subtitle: {
               text: `R² = ${(+linearRegressionResult.rSquared.toFixed(4)).toLocaleString()}`,
               ...applicationSettingsStore.defaultLegendSettings.subtitle,
+            },
+            axis: {
+              text: undefined,
+              ...applicationSettingsStore.defaultLegendSettings.labels,
             },
             note: {
               text: undefined,

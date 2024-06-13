@@ -953,10 +953,14 @@ interface LinearRegressionScatterPlot extends LegendBase {
   width: number,
   // The height of the scatter plot
   height: number,
-  // The font color of the chart elements
-  fontColor: string,
+  // The properties of the text in the chart axis
+  axis: LegendTextElement,
   // The rounding of the values displayed on the axes
   roundDecimals: number,
+  // The color of the dots
+  dotColor: string,
+  // The color of the regression line
+  regressionLineColor: string,
 }
 
 interface CategoricalPictogramLegend extends LegendBase {

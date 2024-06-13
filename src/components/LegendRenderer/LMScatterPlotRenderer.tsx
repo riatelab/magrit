@@ -27,7 +27,7 @@ import { LinearRegressionResult } from '../../helpers/statistics';
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
-import { LinearRegressionScatterPlot } from '../../global';
+import { LegendTextElement, LinearRegressionScatterPlot } from '../../global';
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
@@ -36,11 +36,13 @@ function ScatterPlot(
     dataset: Record<string, any>[],
     explainedVariable: string,
     explanatoryVariable: string,
-    fontColor: string,
+    textProperties: LegendTextElement,
     logX?: boolean,
     logY?: boolean,
     dimension: [number, number],
     roundDecimals: number,
+    dotColor: string,
+    regressionLineColor: string,
   },
 ): JSX.Element {
   const ds = createMemo(() => props.dataset.map((d) => {
@@ -85,7 +87,11 @@ function ScatterPlot(
         height: props.dimension[1],
         grid: true,
         style: {
-          color: props.fontColor,
+          color: props.textProperties.fontColor,
+          fontFamily: props.textProperties.fontFamily,
+          fontSize: `${props.textProperties.fontSize}px`,
+          fontWeight: props.textProperties.fontWeight,
+          fontStyle: props.textProperties.fontStyle,
         },
         x: {
           label: props.explanatoryVariable,
@@ -101,7 +107,7 @@ function ScatterPlot(
             x: props.explanatoryVariable,
             y: props.explainedVariable,
             // fill: 'currentColor',
-            stroke: 'green',
+            stroke: props.dotColor,
           }),
           Plot.ruleX([minX()]),
           Plot.ruleY([minY()]),
@@ -109,7 +115,7 @@ function ScatterPlot(
           Plot.linearRegressionY(ds(), {
             x: props.explanatoryVariable,
             y: props.explainedVariable,
-            stroke: 'red',
+            stroke: props.regressionLineColor,
           }),
           Plot.gridX({ stroke: 'currentColor', strokeOpacity: '0.2' }),
           Plot.gridY({ stroke: 'currentColor', strokeOpacity: '0.2' }),
@@ -206,8 +212,10 @@ export default function lmScatterPlot(
         logX={false}
         logY={false}
         dimension={[legend.width, legend.height]}
-        fontColor={legend.fontColor}
+        textProperties={legend.axis}
         roundDecimals={legend.roundDecimals}
+        dotColor={legend.dotColor}
+        regressionLineColor={legend.regressionLineColor}
       />
     </g>
     {

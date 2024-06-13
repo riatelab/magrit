@@ -3154,6 +3154,10 @@ type RootTranslation = {
 			 */
 			labelsTextElement: string
 			/**
+			 * A​x​e​s​ ​a​n​d​ ​l​a​b​e​l​s
+			 */
+			axisTextElement: string
+			/**
 			 * N​o​t​e
 			 */
 			noteTextElement: string
@@ -3322,9 +3326,17 @@ type RootTranslation = {
 			 */
 			BarOrderNone: string
 			/**
-			 * A​x​e​s​ ​a​n​d​ ​l​a​b​e​l​s​ ​c​o​l​o​r
+			 * A​x​e​s​ ​a​n​d​ ​l​a​b​e​l​s
 			 */
-			AxesAndLabelsColor: string
+			AxesAndLabels: string
+			/**
+			 * D​o​t​ ​c​o​l​o​r
+			 */
+			DotColor: string
+			/**
+			 * R​e​g​r​e​s​s​i​o​n​ ​l​i​n​e​ ​c​o​l​o​r
+			 */
+			RegressionLineColor: string
 			/**
 			 * L​e​g​e​n​d​ ​c​o​n​t​e​n​t
 			 */
@@ -6474,6 +6486,10 @@ export type TranslationFunctions = {
 			 */
 			labelsTextElement: () => LocalizedString
 			/**
+			 * Axes and labels
+			 */
+			axisTextElement: () => LocalizedString
+			/**
 			 * Note
 			 */
 			noteTextElement: () => LocalizedString
@@ -6642,9 +6658,17 @@ export type TranslationFunctions = {
 			 */
 			BarOrderNone: () => LocalizedString
 			/**
-			 * Axes and labels color
+			 * Axes and labels
 			 */
-			AxesAndLabelsColor: () => LocalizedString
+			AxesAndLabels: () => LocalizedString
+			/**
+			 * Dot color
+			 */
+			DotColor: () => LocalizedString
+			/**
+			 * Regression line color
+			 */
+			RegressionLineColor: () => LocalizedString
 			/**
 			 * Legend content
 			 */
