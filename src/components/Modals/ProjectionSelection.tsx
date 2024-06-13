@@ -246,7 +246,7 @@ export default function ProjectionSelection() : JSX.Element {
   const [
     selectedGlobalProjection,
     setSelectedGlobalProjection,
-  ] = createSignal<string | null>(null);
+  ] = createSignal<string>('Airy');
   // Signals for "custom" tab
   const [
     matchingProjections,
@@ -289,7 +289,7 @@ export default function ProjectionSelection() : JSX.Element {
             }}
           />
           <div class="mt-4 mb-4" style={{ 'text-align': 'center' }}>
-            <DemoMap projectionName={selectedGlobalProjection() || 'Airy'} width={360} height={260} />
+            <DemoMap projectionName={selectedGlobalProjection()} width={360} height={260} />
           </div>
           <div class="mt-4" style={{ 'text-align': 'center' }}>
             <button
