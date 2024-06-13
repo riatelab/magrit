@@ -562,10 +562,14 @@ export const cleanGeometryGeos = async (
     after: countCoordinates(geom),
   };
   if (count.before !== count.after) {
-    console.log('Cleaning geometry with geos-wasm -> Changed the number of vertices', count, geom);
+    // console.log(
+    //   'Cleaning geometry with geos-wasm -> Changed the number of vertices',
+    //   count,
+    //   geom,
+    // );
     if (count.after < 4 && geom.type.includes('Polygon')) {
-      console.log('Cleaning failed -> not enough points');
-      console.log(geometry, geom);
+      // console.log('Cleaning failed -> not enough points');
+      // console.log(geometry, geom);
       return null;
     }
   }
@@ -576,8 +580,8 @@ export const cleanGeometryGeos = async (
     (geometry.type.includes('Polygon') && !geom.type.includes('Polygon'))
     || (geometry.type.includes('Line') && !geom.type.includes('Line'))
   ) {
-    console.log('Cleaning failed -> changed the type of geometry');
-    console.log(geometry, geom);
+    // console.log('Cleaning failed -> changed the type of geometry');
+    // console.log(geometry, geom);
     // Sometimes we also get a GeometryCollection
     // containing the wanted polygon + some other geometries such as MultiPoint for example.
     // If so, we try to extract the wanted (multi)polygon or the wanted (multi)linestring
@@ -588,7 +592,7 @@ export const cleanGeometryGeos = async (
       // If it generated a GeometryCollection, try to extract the
       // appropriate geoms
       const geoms = geom.geometries.filter((g) => g.type.includes(targetType));
-      console.log('Geoms', geoms);
+      // console.log('Geoms', geoms);
       // In the end, we want to avoid GeometryCollections
       // in the dataset we are constructing...
       if (geoms.length > 1) {

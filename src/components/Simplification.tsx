@@ -206,7 +206,7 @@ export default function Simplification(
   const [
     quantizationFactor,
     setQuantizationFactor,
-  ] = createSignal('1e+7');
+  ] = createSignal('1e+6');
   const [
     checkIntersections,
     setCheckIntersections,
@@ -390,8 +390,8 @@ export default function Simplification(
                 const value = Number(e.currentTarget.value);
                 if (value < 1e2) {
                   e.currentTarget.value = '1e2';
-                } else if (value > 1e10) {
-                  e.currentTarget.value = '1e10';
+                } else if (value > 1e6) {
+                  e.currentTarget.value = '1e6';
                 } else {
                   e.currentTarget.value = value.toExponential();
                 }
@@ -399,7 +399,7 @@ export default function Simplification(
               }}
               value={quantizationFactor()}
               min={1e2}
-              max={1e10}
+              max={1e6}
               step={1e2}
               style={{ width: '120px' }}
             />
