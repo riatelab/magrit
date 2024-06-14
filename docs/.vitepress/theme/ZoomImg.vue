@@ -22,7 +22,7 @@
 <template>
   <div style="text-align: center;">
     <br>
-    <img :ref="imgRef" :src="withBase(src)" :alt="alt" style="margin: auto;" />
+    <img ref="imgRef" :src="withBase(src)" :alt="alt" style="margin: auto;" />
     <i>{{ caption }}</i>
   </div>
 </template>
