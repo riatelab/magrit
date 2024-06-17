@@ -45,12 +45,12 @@ export default function ImportSection(): JSX.Element {
             title: LL().DatasetCatalog.title(),
             content: () => <ExampleDatasetModal />,
             escapeKey: 'cancel',
-            width: '90vw',
+            width: 'min(1700px, 95vw)',
             successButton: LL().DatasetCatalog.confirmButton(),
             cancelButton: LL().DatasetCatalog.cancelButton(),
           });
         }}
-        disabled={true}
+        disabled={false}
       >
         { LL().ImportSection.ExampleDatasets() }
       </button>

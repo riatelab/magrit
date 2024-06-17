@@ -3,12 +3,298 @@
     "id": "nuts0",
     "type": "vector",
     "totalFeatures": 37,
-    "keywords": ["Europe", "NUTS", "NUTS0", "country"],
+    "defaultProjection": "naturalEarth2",
     "geometry": {
       "source": "GISCO",
       "url": "https://ropengov.github.io/giscoR/",
       "download_date": "2024-06-06",
       "license": null
-    }
+    },
+    "data": [
+      {
+        "source": "Eurostat",
+        "url": "https://ec.europa.eu/eurostat/web/main/data/database",
+        "download_date": "2024-06-06",
+        "licence": null
+      }
+    ],
+    "fields": [
+      {
+        "name": "NUTS_ID",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NAME_LTN",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "AREA_TOT_2024",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "zone",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "nuts1",
+    "type": "vector",
+    "totalFeatures": 125,
+    "defaultProjection": "naturalEarth2",
+    "geometry": {
+      "source": "GISCO",
+      "url": "https://ropengov.github.io/giscoR/",
+      "download_date": "2024-06-06",
+      "license": null
+    },
+    "data": [
+      {
+        "source": "Eurostat",
+        "url": "https://ec.europa.eu/eurostat/web/main/data/database",
+        "download_date": "2024-06-06",
+        "licence": null
+      }
+    ],
+    "fields": [
+      {
+        "name": "NUTS_ID",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NAME_LTN",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "AREA_TOT_2024",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "zone",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "nuts2",
+    "type": "vector",
+    "totalFeatures": 327,
+    "defaultProjection": "naturalEarth2",
+    "geometry": {
+      "source": "GISCO",
+      "url": "https://ropengov.github.io/giscoR/",
+      "download_date": "2024-06-06",
+      "license": null
+    },
+    "data": [
+      {
+        "source": "Eurostat",
+        "url": "https://ec.europa.eu/eurostat/web/main/data/database",
+        "download_date": "2024-06-06",
+        "licence": null
+      }
+    ],
+    "fields": [
+      {
+        "name": "NUTS_ID",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NAME_LTN",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "AREA_TOT_2024",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "zone",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "nuts2_data",
+    "type": "vector",
+    "totalFeatures": 332,
+    "defaultProjection": "naturalEarth2",
+    "geometry": {
+      "source": "GISCO",
+      "url": "https://ropengov.github.io/giscoR/",
+      "download_date": "2024-06-06",
+      "license": null
+    },
+    "data": [
+      {
+        "source": "Eurostat",
+        "url": "https://ec.europa.eu/eurostat/web/main/data/database",
+        "download_date": "2024-06-06",
+        "licence": null
+      }
+    ],
+    "fields": [
+      {
+        "name": "NUTS_ID",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NAME_LTN",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "AREA_TOT_2024",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_TOT2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_09_RT_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_024_RT_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_65P_RT_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_80P_RT_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "LIFE_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "HIGH_EDU_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "UNEMP_25P_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "UNEMP_LT_25P_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "GDP_CAP_PPS_2022",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "INC_PPS_2021",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "AREA_ART_RT",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "AREA_CUL_RT",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "AREA_BOI_RT",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "zone",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
   }
 ]

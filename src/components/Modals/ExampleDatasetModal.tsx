@@ -10,6 +10,7 @@ import {
   Setter,
   Show,
 } from 'solid-js';
+import { produce } from 'solid-js/store';
 
 // Imports from other packages
 import { FaSolidDatabase } from 'solid-icons/fa';
@@ -18,128 +19,68 @@ import { ImFilter } from 'solid-icons/im';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { Variable } from '../../helpers/typeDetection';
+import { addLayer } from '../../helpers/fileUpload';
 
 // Stores
+import { globalStore, setGlobalStore } from '../../store/GlobalStore';
+import { type LayersDescriptionStoreType, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
 import { setModalStore } from '../../store/ModalStore';
 
 // Subcomponents
 import Pagination from '../Pagination.tsx';
 
 // Assets
-import imgParis from '../../assets/Mairie_de_Paris.jpg';
-import imgWorld from '../../assets/World_Time_Zones_Map.jpg';
+import datasets from '../../assets/datasets.json';
 
 interface DataProvider {
   // The source of the geometry / dataset
   source: string,
-  // The attribution to be shown in the map when using
-  // the described geometry / data
-  attribution: string,
   // The url that allows to download the geometry / dataset
   url: string,
   // The download date (yyyy-mm-dd)
   date: string,
   // The license of the geometry / dataset
-  // (ideally an SPDX identifier)
+  // (ideally an SPDX identifier or an URL to the
+  // appropriate license document)
   license: string,
-}
-
-interface FieldDescription {
-  // The name of the field
-  name: string,
-  // // The description of the field
-  // description: string,
-  // The (magrit-)type of the field
-  type: 'unknown' | 'stock' | 'ratio' | 'categorical' | 'identifier',
-  // The provenance of the field (the index of the appropriate data provider in
-  // the 'data' array).
-  provenance: number,
 }
 
 interface DatasetEntry {
   // Internal id of the dataset
   id: string,
-  // // Name of the dataset
-  // name: string;
-  // // Description of the dataset
-  // description: string;
   // Type of dataset
   type: 'vector' | 'raster';
   // The total number of features in the dataset (vector)
   // or the total number of pixels in the dataset (raster)
   totalFeatures: number;
-  // Keywords associated with the dataset
-  keywords: string[];
+  // Information about the projection that should be used when displaying these data
+  defaultProjection: {
+    type: 'd3' | 'proj4',
+    value: string, // We allow proj4 string, WKT1 string, or a d3 projection name
+  },
   // Information about the geometry provider
   geometry: DataProvider,
   // Information about the data provider(s)
   data: DataProvider[],
   // Information about the various fields in the dataset
-  fields: FieldDescription[],
+  fields: (Variable & { provenance: number })[],
 }
-
-const dds1 = {
-  name: {
-    en: 'Paris districts',
-    fr: 'Quartiers de Paris',
-  },
-  description: {
-    en: 'The 80 districts of Paris.',
-    fr: 'Les 80 quartiers administratifs de Paris.',
-  },
-  type: 'vector',
-  keywords: ['paris', 'quartiers', 'districts'],
-  source: 'https://opendata.paris.fr/explore/dataset/quartier_paris/',
-  directLink: 'https://opendata.paris.fr/explore/dataset/quartier_paris/download/?format=geojson&timezone=Europe/Berlin&lang=fr&use_labels_for_header=true&csv_separator=%3B',
-  license: 'ODbL-1.0',
-  attribution: 'Direction de l\'Urbanisme - Ville de Paris',
-  imageUrl: imgParis,
-  date: '2013',
-  totalFeatures: 80,
-} as DatasetEntry;
-
-const dds2 = {
-  name: {
-    en: 'World countries',
-    fr: 'Pays du monde',
-  },
-  description: {
-    en: 'All the countries of the world.',
-    fr: 'Tous les pays du monde.',
-  },
-  type: 'vector',
-  keywords: ['world', 'monde', 'countries', 'country', 'pays'],
-  source: 'https://www.naturalearthdata.com/',
-  directLink: 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_countries.zip',
-  license: 'Public Domain',
-  attribution: 'Natural Earth',
-  imageUrl: imgWorld,
-  date: '2022',
-} as DatasetEntry;
-
-const datasets = Array.from({ length: 100 })
-  .map((_, i) => {
-    const dds = [dds1, dds2][i % 2];
-    const o = JSON.parse(JSON.stringify(dds));
-    o.name.en = `${o.name.en} ${i}`;
-    o.name.fr = `${o.name.fr} ${i}`;
-    return o;
-  });
 
 function CardDatasetEntry(
   ds: DatasetEntry & { onClick: (arg0: MouseEvent) => void },
 ): JSX.Element {
-  const { locale } = useI18nContext();
+  const { LL } = useI18nContext();
   return <div class="card" style={{ margin: '1em' }} onClick={(e) => ds.onClick(e)}>
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
       <p class="card-header-title">
         <FaSolidDatabase style={{ height: '1.2em', width: '1.8em' }}/>
-        <span style={{ 'font-size': '1.3em' }}>{ ds.name[locale()] }</span>
+        <span style={{ 'font-size': '1.3em' }}>{ LL().Datasets[ds.id].name }</span>
       </p>
     </header>
     <section class="card-content">
       <div class="content">
-        { ds.description[locale()] }
+        { LL().Datasets[ds.id].abstract }
       </div>
     </section>
   </div>;
@@ -165,61 +106,89 @@ function DatasetPage(props: {
 }
 
 function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
-  const { locale, LL } = useI18nContext();
+  const { LL } = useI18nContext();
   return <div>
-    <h3>{ ds.name[locale()] || ds.name.en }</h3>
+    <h3>{ LL().Datasets[ds.id].name }</h3>
     <h4>{ LL().DatasetCatalog.about() }</h4>
     <div>
       <table>
         <tbody>
+        <tr>
+          <td>{LL().DatasetCatalog.type()}</td>
+          <td>{LL().DatasetCatalog.types[ds.type]()}</td>
+        </tr>
+        <Show when={ds.totalFeatures}>
           <tr>
-            <td>{ LL().DatasetCatalog.license() }</td>
-            <td>{ ds.license }</td>
+            <td></td>
+            <td>{LL().DatasetCatalog.features(ds.totalFeatures as number)}</td>
           </tr>
-          <tr>
-            <td>{ LL().DatasetCatalog.provider() }</td>
-            <td>{ ds.source }</td>
-          </tr>
-          <tr>
-            <td>{ LL().DatasetCatalog.attributions() }</td>
-            <td>{ ds.attribution }</td>
-          </tr>
-          <tr>
-            <td>{ LL().DatasetCatalog.type() }</td>
-            <td>{ LL().DatasetCatalog.types[ds.type]() }</td>
-          </tr>
-          <Show when={ds.totalFeatures}>
-            <tr>
-              <td></td>
-              <td>{ LL().DatasetCatalog.features(ds.totalFeatures as number) }</td>
-            </tr>
-          </Show>
-          <Show when={ds.directLink}>
-            <tr>
-              <td></td>
-              <td>
-                <a href={ds.directLink} target="_blank" rel="noopener noreferrer">
-                  <FiExternalLink style={{ height: '1em', width: '1em', 'vertical-align': 'text-top' }}/>
-                  { LL().DatasetCatalog.directLink() }
-                </a>
-              </td>
-            </tr>
-          </Show>
+        </Show>
+        <tr>
+          <td>{LL().DatasetCatalog.providerGeometry()}</td>
+          <td>{ds.geometry.source}</td>
+        </tr>
+        <tr>
+          <td>{LL().DatasetCatalog.attributionGeometry()}</td>
+          <td>{LL().Datasets[ds.id].geometryAttribution()}</td>
+        </tr>
+        <tr>
+          <td>{LL().DatasetCatalog.licenseGeometry()}</td>
+          <td>{ds.geometry.license}</td>
+        </tr>
+        <tr>
+          <td>{LL().DatasetCatalog.providerData()}</td>
+          <td>{ds.data.map((d) => d.source).join(', ')}</td>
+        </tr>
+        <tr>
+          <td>{LL().DatasetCatalog.attributionData()}</td>
+          <td>{
+            ds.data.map((d, i) => LL().Datasets[ds.id].dataAttribution[i + 1]()).join(', ')}</td>
+        </tr>
+        <tr>
+          <td>{LL().DatasetCatalog.licenceData()}</td>
+          <td>{ds.data.map((d) => d.license).join(', ')}</td>
+        </tr>
         </tbody>
       </table>
     </div>
-    <br />
-    <h4>{ LL().DatasetCatalog.description() }</h4>
+    <br/>
+    <h4>{LL().DatasetCatalog.description()}</h4>
     <div>
-      <p> { ds.description[locale()] || ds.description.en }</p>
+      <p> {LL().Datasets[ds.id].abstract}</p>
     </div>
-    <br />
-    <h4>{ LL().DatasetCatalog.preview() }</h4>
-    <div>
+    <br/>
+    <h4>{LL().DatasetCatalog.variableDescription()}</h4>
+    <table style={{ 'font-size': '0.8rem', width: '100%' }} class="table">
+      <thead>
+        <tr>
+          <th>{LL().DatasetCatalog.variable.name()}</th>
+          <th>{LL().DatasetCatalog.variable.description()}</th>
+          <th>{LL().DatasetCatalog.variable.provenance()}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <For each={ds.fields}>
+          {
+            (variableDescription) => <tr>
+              <td>{variableDescription.name}</td>
+              <td>{LL().Datasets[ds.id].fields[variableDescription.name]}</td>
+              <td>{
+                variableDescription.provenance === 0
+                  ? LL().Datasets[ds.id].geometryAttribution
+                  : LL().Datasets[ds.id].dataAttribution[variableDescription.provenance]
+
+              }</td>
+            </tr>
+          }
+        </For>
+      </tbody>
+    </table>
+    <h4>{LL().DatasetCatalog.preview() }</h4>
+    <div class="has-text-centered">
       <img
-        src={ds.imageUrl}
+        src={`/dataset/${ds.id}.png`}
         class="image"
-        style={{ border: 'solid 1px silver' }}
+        style={{ border: 'solid 1px silver', width: '300px', margin: 'auto' }}
         alt={LL().DatasetCatalog.altDatasetPreview()}
       />
     </div>
@@ -275,9 +244,10 @@ export default function ExampleDatasetModal(): JSX.Element {
 
     return datasets.filter((ds) => {
       let found = false;
+      const keywords = LL().Datasets[ds.id].keywords().split(',').map((k) => k.trim().toLowerCase());
       terms.forEach((term: string) => {
-        ds.keywords.forEach((keyword: string) => {
-          if (keyword.toLowerCase().includes(term)) {
+        keywords.forEach((keyword: string) => {
+          if (keyword.includes(term)) {
             found = true;
           }
         });
@@ -289,8 +259,30 @@ export default function ExampleDatasetModal(): JSX.Element {
   onMount(() => {
     setModalStore({
       confirmCallback: () => {
-        // TODO: Add the selected dataset to the map...
         console.log(selectedDataset());
+        fetch(`/dataset/${selectedDataset()!.id}.geojson`)
+          .then((response) => {
+            console.log(response);
+            return response.json();
+          })
+          .then((geojsonData) => {
+            // TODO: write a custom addLayer function for example dataset
+            // (allowing to use the types and the defaultProjection declared
+            // in the datasets.json file)
+            if (!globalStore.userHasAddedLayer) {
+              setLayersDescriptionStore(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    // eslint-disable-next-line no-param-reassign
+                    draft.layers = [];
+                  },
+                ),
+              );
+              setGlobalStore({ userHasAddedLayer: true });
+            }
+
+            addLayer(geojsonData, selectedDataset()!.id, true, true);
+          });
       },
     });
   });
@@ -316,6 +308,7 @@ export default function ExampleDatasetModal(): JSX.Element {
       border: 'solid 1px silver',
       'border-radius': '1em',
       overflow: 'auto',
+      height: '80vh',
     }}>
       <div class="is-flex">
         <div class="field has-addons" style={{ margin: '1em' }}>
@@ -386,6 +379,7 @@ export default function ExampleDatasetModal(): JSX.Element {
       border: 'solid 1px silver',
       'border-radius': '1em',
       overflow: 'auto',
+      height: '80vh',
     }}>
       <div>
         <Show

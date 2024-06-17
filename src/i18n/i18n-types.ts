@@ -153,7 +153,7 @@ type RootTranslation = {
 		 */
 		Previous: string
 	}
-	DataSets: {
+	Datasets: {
 		nuts0: {
 			/**
 			 * E​u​r​o​p​e​ ​–​ ​N​U​T​S​0
@@ -179,7 +179,199 @@ type RootTranslation = {
 				/**
 				 * E​U​2​7​,​ ​E​F​T​A​,​ ​C​C​ ​o​r​ ​U​K
 				 */
-				Zone: string
+				zone: string
+			}
+			/**
+			 * E​u​r​o​p​e​,​ ​N​U​T​S​,​ ​N​U​T​S​0​,​ ​C​o​u​n​t​r​y
+			 */
+			keywords: string
+			/**
+			 * ©​ ​E​u​r​o​G​e​o​g​r​a​p​h​i​c​s​ ​f​o​r​ ​t​h​e​ ​a​d​m​i​n​i​s​t​r​a​t​i​v​e​ ​b​o​u​n​d​a​r​i​e​s
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y
+				 */
+				'1': string
+			}
+		}
+		nuts1: {
+			/**
+			 * E​u​r​o​p​e​ ​–​ ​N​U​T​S​1
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​1​2​5​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​1​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​ ​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * N​U​T​S​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				NUTS_ID: string
+				/**
+				 * N​a​m​e
+				 */
+				NAME_LTN: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​ ​2​0​2​4​ ​(​k​m​²​)
+				 */
+				AREA_TOT_2024: string
+				/**
+				 * E​U​2​7​,​ ​E​F​T​A​,​ ​C​C​ ​o​r​ ​U​K
+				 */
+				zone: string
+			}
+			/**
+			 * E​u​r​o​p​e​,​ ​N​U​T​S​,​ ​N​U​T​S​1​,​ ​R​e​g​i​o​n
+			 */
+			keywords: string
+			/**
+			 * ©​ ​E​u​r​o​G​e​o​g​r​a​p​h​i​c​s​ ​f​o​r​ ​t​h​e​ ​a​d​m​i​n​i​s​t​r​a​t​i​v​e​ ​b​o​u​n​d​a​r​i​e​s
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y
+				 */
+				'1': string
+			}
+		}
+		nuts2: {
+			/**
+			 * E​u​r​o​p​e​ ​–​ ​N​U​T​S​2
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​3​2​7​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​2​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​ ​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * N​U​T​S​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				NUTS_ID: string
+				/**
+				 * N​a​m​e
+				 */
+				NAME_LTN: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​ ​2​0​2​4​ ​(​k​m​²​)
+				 */
+				AREA_TOT_2024: string
+				/**
+				 * E​U​2​7​,​ ​E​F​T​A​,​ ​C​C​ ​o​r​ ​U​K
+				 */
+				zone: string
+			}
+			/**
+			 * E​u​r​o​p​e​,​ ​N​U​T​S​,​ ​N​U​T​S​1​,​ ​R​e​g​i​o​n
+			 */
+			keywords: string
+			/**
+			 * ©​ ​E​u​r​o​G​e​o​g​r​a​p​h​i​c​s​ ​f​o​r​ ​t​h​e​ ​a​d​m​i​n​i​s​t​r​a​t​i​v​e​ ​b​o​u​n​d​a​r​i​e​s
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y
+				 */
+				'1': string
+			}
+		}
+		nuts2_data: {
+			/**
+			 * E​u​r​o​p​e​ ​-​ ​N​U​T​S​2​ ​w​i​t​h​ ​e​x​a​m​p​l​e​ ​d​a​t​a
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​3​3​2​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​2​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m​.​ ​A​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​k​e​y​ ​i​n​d​i​c​a​t​o​r​s​ ​e​x​t​r​a​c​t​e​d​ ​f​r​o​m​ ​E​u​r​o​s​t​a​t​ ​a​n​d​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​r​e​f​e​r​e​n​c​e​ ​g​e​o​m​e​t​r​i​e​s
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * N​U​T​S​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				NUTS_ID: string
+				/**
+				 * N​a​m​e
+				 */
+				NAME_LTN: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​ ​2​0​2​4​ ​(​k​m​²​)
+				 */
+				AREA_TOT_2024: string
+				/**
+				 * S​h​a​r​e​ ​o​f​ ​p​o​p​u​l​a​t​i​o​n​ ​a​g​e​d​ ​0​-​9​,​ ​2​0​2​3​ ​(​%​)
+				 */
+				POP_09_RT_2023: string
+				/**
+				 * S​h​a​r​e​ ​o​f​ ​p​o​p​u​l​a​t​i​o​n​ ​a​g​e​d​ ​0​-​2​4​,​ ​2​0​2​3​ ​(​%​)
+				 */
+				POP_024_RT_2023: string
+				/**
+				 * S​h​a​r​e​ ​o​f​ ​p​o​p​u​l​a​t​i​o​n​ ​a​g​e​d​ ​o​v​e​r​ ​6​5​,​ ​2​0​2​3​ ​(​%​)
+				 */
+				POP_65P_RT_2023: string
+				/**
+				 * S​h​a​r​e​ ​o​f​ ​p​o​p​u​l​a​t​i​o​n​ ​a​g​e​d​ ​o​v​e​r​ ​8​0​,​ ​2​0​2​3​ ​(​%​)
+				 */
+				POP_80P_RT_2023: string
+				/**
+				 * L​i​f​e​ ​e​x​p​e​c​t​a​n​c​y​ ​a​t​ ​b​i​r​t​h​,​ ​2​0​2​2​ ​(​y​e​a​r​s​)
+				 */
+				LIFE_EXP_2022: string
+				/**
+				 * S​h​a​r​e​ ​o​f​ ​w​o​r​k​i​n​g​ ​p​o​p​u​l​a​t​i​o​n​ ​w​i​t​h​ ​a​ ​h​i​g​h​ ​l​e​v​e​l​ ​o​f​ ​e​d​u​c​a​t​i​o​n​,​ ​2​0​2​3​ ​(​%​)
+				 */
+				HIGH_EDU_2023: string
+				/**
+				 * U​n​e​m​p​l​o​y​m​e​n​t​ ​r​a​t​e​,​ ​o​v​e​r​ ​2​5​s​,​ ​2​0​2​3​ ​(​%​)
+				 */
+				UNEMP_25P_2023: string
+				/**
+				 * L​o​n​g​-​t​e​r​m​ ​u​n​e​m​p​l​o​y​m​e​n​t​ ​r​a​t​e​ ​(​o​v​e​r​ ​1​2​ ​m​o​n​t​h​s​)​ ​f​o​r​ ​t​h​e​ ​2​5​+​ ​a​g​e​ ​g​r​o​u​p​,​ ​2​0​2​3​ ​(​%​)
+				 */
+				UNEMP_LT_25P_2023: string
+				/**
+				 * G​r​o​s​s​ ​d​o​m​e​s​t​i​c​ ​p​r​o​d​u​c​t​ ​i​n​ ​p​u​r​c​h​a​s​i​n​g​ ​p​o​w​e​r​ ​p​a​r​i​t​y​ ​p​e​r​ ​c​a​p​i​t​a​,​ ​2​0​2​2​ ​(​e​u​r​o​s​)
+				 */
+				GDP_CAP_PPS_2022: string
+				/**
+				 * H​o​u​s​e​h​o​l​d​ ​i​n​c​o​m​e​ ​i​n​ ​p​u​r​c​h​a​s​i​n​g​ ​p​o​w​e​r​ ​p​a​r​i​t​y​,​ ​2​0​2​1​ ​(​e​u​r​o​s​)
+				 */
+				INC_PPS_2021: string
+				/**
+				 * S​h​a​r​e​ ​o​f​ ​a​r​t​i​f​i​c​i​a​l​ ​s​u​r​f​a​c​e​,​ ​2​0​1​8​ ​(​%​)
+				 */
+				AREA_ART_RT: string
+				/**
+				 * S​h​a​r​e​ ​o​f​ ​a​r​e​a​ ​d​e​d​i​c​a​t​e​d​ ​t​o​ ​c​r​o​p​s​,​ ​2​0​1​8​ ​(​%​)
+				 */
+				AREA_CUL_RT: string
+				/**
+				 * S​h​a​r​e​ ​o​f​ ​w​o​o​d​e​d​ ​a​r​e​a​,​ ​2​0​1​8​ ​(​%​)
+				 */
+				AREA_BOI_RT: string
+				/**
+				 * E​U​2​7​,​ ​E​F​T​A​,​ ​C​C​ ​o​r​ ​U​K
+				 */
+				zone: string
+			}
+			/**
+			 * E​u​r​o​p​e​,​ ​N​U​T​S​,​ ​N​U​T​S​2​,​ ​R​e​g​i​o​n
+			 */
+			keywords: string
+			/**
+			 * ©​ ​E​u​r​o​G​e​o​g​r​a​p​h​i​c​s​ ​f​o​r​ ​t​h​e​ ​a​d​m​i​n​i​s​t​r​a​t​i​v​e​ ​b​o​u​n​d​a​r​i​e​s
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y
+				 */
+				'1': string
 			}
 		}
 	}
@@ -209,13 +401,35 @@ type RootTranslation = {
 		 */
 		description: string
 		/**
+		 * V​a​r​i​a​b​l​e​ ​d​e​s​c​r​i​p​t​i​o​n
+		 */
+		variableDescription: string
+		variable: {
+			/**
+			 * N​a​m​e
+			 */
+			name: string
+			/**
+			 * D​e​s​c​r​i​p​t​i​o​n
+			 */
+			description: string
+			/**
+			 * P​r​o​v​e​n​a​n​c​e
+			 */
+			provenance: string
+		}
+		/**
 		 * P​r​e​v​i​e​w
 		 */
 		preview: string
 		/**
-		 * L​i​c​e​n​s​e
+		 * L​i​c​e​n​s​e​ ​(​g​e​o​m​e​t​r​i​e​s​)
 		 */
-		license: string
+		licenseGeometry: string
+		/**
+		 * L​i​c​e​n​s​e​ ​(​d​a​t​a​)
+		 */
+		licenceData: string
 		/**
 		 * T​y​p​e
 		 */
@@ -231,13 +445,21 @@ type RootTranslation = {
 			raster: string
 		}
 		/**
-		 * P​r​o​v​i​d​e​r
+		 * P​r​o​v​i​d​e​r​ ​(​g​e​o​m​e​t​r​i​e​s​)
 		 */
-		provider: string
+		providerGeometry: string
 		/**
-		 * A​t​t​r​i​b​u​t​i​o​n​s
+		 * P​r​o​v​i​d​e​r​ ​(​d​a​t​a​)
 		 */
-		attributions: string
+		providerData: string
+		/**
+		 * A​t​t​r​i​b​u​t​i​o​n​s​ ​(​g​e​o​m​e​t​r​i​e​s​)
+		 */
+		attributionGeometry: string
+		/**
+		 * A​t​t​r​i​b​u​t​i​o​n​s​ ​(​d​a​t​a​)
+		 */
+		attributionData: string
 		/**
 		 * D​a​t​e
 		 */
@@ -3522,7 +3744,7 @@ export type TranslationFunctions = {
 		 */
 		Previous: () => LocalizedString
 	}
-	DataSets: {
+	Datasets: {
 		nuts0: {
 			/**
 			 * Europe – NUTS0
@@ -3548,7 +3770,199 @@ export type TranslationFunctions = {
 				/**
 				 * EU27, EFTA, CC or UK
 				 */
-				Zone: () => LocalizedString
+				zone: () => LocalizedString
+			}
+			/**
+			 * Europe, NUTS, NUTS0, Country
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © EuroGeographics for the administrative boundaries
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © European Union, 1995 - today
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		nuts1: {
+			/**
+			 * Europe – NUTS1
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 125 European NUTS1 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * NUTS identifier
+				 */
+				NUTS_ID: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NAME_LTN: () => LocalizedString
+				/**
+				 * Total area 2024 (km²)
+				 */
+				AREA_TOT_2024: () => LocalizedString
+				/**
+				 * EU27, EFTA, CC or UK
+				 */
+				zone: () => LocalizedString
+			}
+			/**
+			 * Europe, NUTS, NUTS1, Region
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © EuroGeographics for the administrative boundaries
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © European Union, 1995 - today
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		nuts2: {
+			/**
+			 * Europe – NUTS2
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 327 European NUTS2 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * NUTS identifier
+				 */
+				NUTS_ID: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NAME_LTN: () => LocalizedString
+				/**
+				 * Total area 2024 (km²)
+				 */
+				AREA_TOT_2024: () => LocalizedString
+				/**
+				 * EU27, EFTA, CC or UK
+				 */
+				zone: () => LocalizedString
+			}
+			/**
+			 * Europe, NUTS, NUTS1, Region
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © EuroGeographics for the administrative boundaries
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © European Union, 1995 - today
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		nuts2_data: {
+			/**
+			 * Europe - NUTS2 with example data
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 332 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom. Associated with key indicators extracted from Eurostat and associated with reference geometries
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * NUTS identifier
+				 */
+				NUTS_ID: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NAME_LTN: () => LocalizedString
+				/**
+				 * Total area 2024 (km²)
+				 */
+				AREA_TOT_2024: () => LocalizedString
+				/**
+				 * Share of population aged 0-9, 2023 (%)
+				 */
+				POP_09_RT_2023: () => LocalizedString
+				/**
+				 * Share of population aged 0-24, 2023 (%)
+				 */
+				POP_024_RT_2023: () => LocalizedString
+				/**
+				 * Share of population aged over 65, 2023 (%)
+				 */
+				POP_65P_RT_2023: () => LocalizedString
+				/**
+				 * Share of population aged over 80, 2023 (%)
+				 */
+				POP_80P_RT_2023: () => LocalizedString
+				/**
+				 * Life expectancy at birth, 2022 (years)
+				 */
+				LIFE_EXP_2022: () => LocalizedString
+				/**
+				 * Share of working population with a high level of education, 2023 (%)
+				 */
+				HIGH_EDU_2023: () => LocalizedString
+				/**
+				 * Unemployment rate, over 25s, 2023 (%)
+				 */
+				UNEMP_25P_2023: () => LocalizedString
+				/**
+				 * Long-term unemployment rate (over 12 months) for the 25+ age group, 2023 (%)
+				 */
+				UNEMP_LT_25P_2023: () => LocalizedString
+				/**
+				 * Gross domestic product in purchasing power parity per capita, 2022 (euros)
+				 */
+				GDP_CAP_PPS_2022: () => LocalizedString
+				/**
+				 * Household income in purchasing power parity, 2021 (euros)
+				 */
+				INC_PPS_2021: () => LocalizedString
+				/**
+				 * Share of artificial surface, 2018 (%)
+				 */
+				AREA_ART_RT: () => LocalizedString
+				/**
+				 * Share of area dedicated to crops, 2018 (%)
+				 */
+				AREA_CUL_RT: () => LocalizedString
+				/**
+				 * Share of wooded area, 2018 (%)
+				 */
+				AREA_BOI_RT: () => LocalizedString
+				/**
+				 * EU27, EFTA, CC or UK
+				 */
+				zone: () => LocalizedString
+			}
+			/**
+			 * Europe, NUTS, NUTS2, Region
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © EuroGeographics for the administrative boundaries
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © European Union, 1995 - today
+				 */
+				'1': () => LocalizedString
 			}
 		}
 	}
@@ -3578,13 +3992,35 @@ export type TranslationFunctions = {
 		 */
 		description: () => LocalizedString
 		/**
+		 * Variable description
+		 */
+		variableDescription: () => LocalizedString
+		variable: {
+			/**
+			 * Name
+			 */
+			name: () => LocalizedString
+			/**
+			 * Description
+			 */
+			description: () => LocalizedString
+			/**
+			 * Provenance
+			 */
+			provenance: () => LocalizedString
+		}
+		/**
 		 * Preview
 		 */
 		preview: () => LocalizedString
 		/**
-		 * License
+		 * License (geometries)
 		 */
-		license: () => LocalizedString
+		licenseGeometry: () => LocalizedString
+		/**
+		 * License (data)
+		 */
+		licenceData: () => LocalizedString
 		/**
 		 * Type
 		 */
@@ -3600,13 +4036,21 @@ export type TranslationFunctions = {
 			raster: () => LocalizedString
 		}
 		/**
-		 * Provider
+		 * Provider (geometries)
 		 */
-		provider: () => LocalizedString
+		providerGeometry: () => LocalizedString
 		/**
-		 * Attributions
+		 * Provider (data)
 		 */
-		attributions: () => LocalizedString
+		providerData: () => LocalizedString
+		/**
+		 * Attributions (geometries)
+		 */
+		attributionGeometry: () => LocalizedString
+		/**
+		 * Attributions (data)
+		 */
+		attributionData: () => LocalizedString
 		/**
 		 * Date
 		 */

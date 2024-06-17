@@ -15,6 +15,7 @@ const isElectron = isDevElectron || isBuildElectron;
 
 export default defineConfig({
   base: './',
+  publicDir: 'src/public',
   plugins: [
     wasm(),
     // We use top-level await, which was added in ES2022

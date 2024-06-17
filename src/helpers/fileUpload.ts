@@ -189,7 +189,7 @@ export const prepareFilterAndStoreFiles = (
   return unsupportedFiles;
 };
 
-function addLayer(
+export function addLayer(
   geojson: GeoJSONFeatureCollection,
   name: string,
   fit: boolean,
