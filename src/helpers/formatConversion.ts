@@ -96,7 +96,7 @@ export function findCsvDelimiter(rawText: string): string {
 const renameEmptyColumns = (rawData: string): string => {
   const lines = rawData.split('\n');
   const header = lines[0].split(',');
-  const renamedHeader = header.map((h, i) => (h === '' ? `column_${i}` : h));
+  const renamedHeader = header.map((h, i) => (h === '' || h === '""' ? `column_${i}` : h));
   lines[0] = renamedHeader.join(',');
   return lines.join('\n');
 };
