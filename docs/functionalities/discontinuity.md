@@ -5,8 +5,8 @@ Les cartes de discontinuités mettent en avant les limites (ou "frontières") en
 
 Deux méthodes permettent de calculer ce différentiel :
 
-- **discontinuité absolue** : écart absolu entre les valeurs de la variable étudiée c'est à dire `max(A,B) - min(A,B)` ;
-- **discontinuité relative** : écart relatif entre les valeurs de la variable étudiée c'est à dire `max(A,B) / min(A,B)`.
+- **discontinuité absolue** : écart absolu entre les valeurs de la variable étudiée c'est à dire `max(A,B) - min(A,B)`
+- **discontinuité relative** : écart relatif entre les valeurs de la variable étudiée c'est à dire `max(A,B) / min(A,B)`
 
 La visualisation de lignes de discontinuités permet de mettre en exergue les ruptures spatiales des phénomènes socio-économiques étudiés,
 qui selon la formule de Brunet et Dolphus (1990) montre que « l’espace géographique est fondamentalement discontinu ».

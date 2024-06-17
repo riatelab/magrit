@@ -308,5 +308,333 @@
         "provenance": 1
       }
     ]
+  },
+  {
+    "id": "world_177",
+    "type": "vector",
+    "totalFeatures": 177,
+    "defaultProjection": {
+      "type": "d3",
+      "value": "NaturalEarth2"
+    },
+    "geometry": {
+      "source": "VisionCarto",
+      "url": "https://github.com/visionscarto/world-atlas?tab=readme-ov-file",
+      "download_date": "2024-06-14",
+      "license": "Public domain"
+    },
+    "data": [
+      {
+        "source": "World Bank",
+        "url": "https://databank.worldbank.org/source/world-development-indicators",
+        "download_date": "2024-06-14",
+        "licence": "CC BY 4.0"
+      },
+      {
+        "source": "United Nations, UAR RIATE",
+        "url": "https://unstats.un.org/unsd/methodology/m49/overview/",
+        "download_date": "2024-06-14",
+        "licence": "CC BY 4.0"
+      }
+    ],
+    "fields": [
+      {
+        "name": "a3",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "id",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "name",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "REGION_BLOC",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "REGION_UN",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "SUBREGION_UN",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "LAST_DEV",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 2
+      },
+      {
+        "name": "AREA_2021",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "FOREST_AREA_2021",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "POP_2022",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "LIFE_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "FERT_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "HIV_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "CO2_POP_2020",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "GNI_POP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "INC_20P_2021",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "GDP_INDS_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "HIG_TEC_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "MIL_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "world_242",
+    "type": "vector",
+    "totalFeatures": 242,
+    "defaultProjection": {
+      "type": "d3",
+      "value": "NaturalEarth2"
+    },
+    "geometry": {
+      "source": "VisionCarto",
+      "url": "https://github.com/visionscarto/world-atlas?tab=readme-ov-file",
+      "download_date": "2024-06-14",
+      "license": "Public domain"
+    },
+    "data": [
+      {
+        "source": "World Bank",
+        "url": "https://databank.worldbank.org/source/world-development-indicators",
+        "download_date": "2024-06-14",
+        "licence": "CC BY 4.0"
+      },
+      {
+        "source": "United Nations, UAR RIATE",
+        "url": "https://unstats.un.org/unsd/methodology/m49/overview/",
+        "download_date": "2024-06-14",
+        "licence": "CC BY 4.0"
+      }
+    ],
+    "fields": [
+      {
+        "name": "a3",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "id",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "name",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "REGION_BLOC",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "REGION_UN",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "SUBREGION_UN",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "LAST_DEV",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 2
+      },
+      {
+        "name": "AREA_2021",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "FOREST_AREA_2021",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "POP_2022",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "LIFE_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "FERT_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "HIV_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "CO2_POP_2020",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "GNI_POP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "INC_20P_2021",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "GDP_INDS_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "HIG_TEC_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "MIL_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      }
+    ]
   }
 ]
