@@ -44,16 +44,6 @@ const fr = {
     Previous: 'Précédent',
   },
   DataSets: {
-    nuts0: {
-      name: 'Europe – NUTS0',
-      abstract: 'Les 37 NUTS0 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni',
-      fields: {
-        NUTS_ID: 'Identifiant de NUTS',
-        NAME_LTN: 'Nom',
-        AREA_TOT_2024: 'Superficie totale 2024 (km²)',
-        Zone: 'EU27, EFTA, CC ou UK',
-      },
-    },
   },
   DatasetCatalog: {
     title: 'Catalogue de données d\'exemple',
