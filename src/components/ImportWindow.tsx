@@ -389,7 +389,16 @@ const analyzeDataset = async (
       // tabular data or something else...
       // Read the file to determine the type
       const content = await file.file.text();
-      if (content.includes('"FeatureCollection"')) {
+      if (content === '') {
+        // TODO: investigate if using https://developer.mozilla.org/en-US/docs/Web/API/File_and_Directory_Entries_API/Introduction
+        //  could help to avoid obtaining empty files
+        //  when reading files that are very large...
+        result = {
+          name,
+          valid: false,
+          reason: 'Empty content or too large file',
+        } as InvalidDataset;
+      } else if (content.includes('"FeatureCollection"')) {
         // We have a GeoJSON file
         // result = analyseDatasetGeoJSON(content, name);
         result = await analyseGeospatialDatasetGDAL(file);
