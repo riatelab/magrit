@@ -372,42 +372,218 @@ type RootTranslation = {
 				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y
 				 */
 				'1': string
+			}
+		}
+		world_177: {
+			/**
+			 * W​o​r​l​d​ ​–​ ​1​7​7​ ​c​o​u​n​t​r​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​1​7​7​ ​c​o​n​t​r​i​e​s​ ​o​f​ ​t​h​e​ ​W​o​r​l​d​ ​:​ ​a​ ​d​a​t​a​s​e​t​ ​d​e​r​i​v​e​d​ ​f​r​o​m​ ​N​a​t​u​r​a​l​ ​E​a​r​t​h​ ​(​1​1​0​m​)​ ​a​n​d​ ​c​o​n​s​o​l​i​d​a​t​e​d​ ​b​y​ ​P​h​i​l​i​p​p​e​ ​R​i​v​i​è​r​e​.​ ​A​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​k​e​y​ ​i​n​d​i​c​a​t​o​r​s​ ​e​x​t​r​a​c​t​e​d​ ​f​r​o​m​ ​U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​a​n​d​ ​W​o​r​l​d​ ​b​a​n​k​ ​(​l​a​s​t​ ​y​e​a​r​ ​a​v​a​i​l​a​b​l​e​)
+			 */
+			abstract: string
+			fields: {
 				/**
-				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​r​e​g​_​a​r​e​a​3​)
+				 * I​S​O​3​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				a3: string
+				/**
+				 * S​D​M​X​ ​G​l​o​b​a​l​ ​R​e​g​i​s​t​r​y​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				id: string
+				/**
+				 * N​a​m​e
+				 */
+				name: string
+				/**
+				 * R​e​g​i​o​n​a​l​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REGION_BLOC: string
+				/**
+				 * U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​r​e​g​i​o​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REGION_UN: string
+				/**
+				 * U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​s​u​b​-​r​e​g​i​o​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				SUBREGION_UN: string
+				/**
+				 * B​e​l​o​n​g​i​n​g​ ​t​o​ ​t​h​e​ ​U​N​ ​L​e​a​s​t​ ​D​e​v​e​l​o​p​e​d​ ​C​o​u​n​t​r​i​e​s​ ​l​i​s​t
+				 */
+				LAST_DEV: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​1​ ​(​k​m​²​)
+				 */
+				AREA_2021: string
+				/**
+				 * F​o​r​e​s​t​ ​a​r​e​a​,​ ​2​0​2​1​,​ ​(​k​m​²​)
+				 */
+				FOREST_AREA_2021: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​2
+				 */
+				POP_2022: string
+				/**
+				 * L​i​f​e​ ​e​x​p​e​c​t​a​n​c​y​ ​a​t​ ​b​i​r​t​h​,​ ​2​0​2​2​ ​(​y​e​a​r​s​)
+				 */
+				LIFE_EXP_2022: string
+				/**
+				 * F​e​r​t​i​l​i​t​y​ ​r​a​t​e​,​ ​2​0​2​2​ ​(​b​i​r​t​h​s​ ​p​e​r​ ​w​o​m​a​n​)
+				 */
+				FERT_2022: string
+				/**
+				 * P​r​e​v​a​l​e​n​c​e​ ​o​f​ ​H​I​V​,​2​0​2​2​ ​(​%​ ​o​f​ ​p​o​p​u​l​a​t​i​o​n​ ​a​g​e​s​ ​1​5​-​4​9​)
+				 */
+				HIV_2022: string
+				/**
+				 * C​O​2​ ​e​m​i​s​s​i​o​n​s​,​ ​2​0​2​0​ ​(​m​e​t​r​i​c​ ​t​o​n​s​ ​p​e​r​ ​c​a​p​i​t​a​)
+				 */
+				CO2_POP_2020: string
+				/**
+				 * G​N​I​ ​p​e​r​ ​c​a​p​i​t​a​,​ ​P​P​P​,​ ​2​0​2​2​ ​(​c​u​r​r​e​n​t​ ​i​n​t​e​r​n​a​t​i​o​n​a​l​ ​$​)
+				 */
+				GNI_POP_2022: string
+				/**
+				 * I​n​c​o​m​e​ ​s​h​a​r​e​ ​h​e​l​d​ ​b​y​ ​l​o​w​e​s​t​ ​2​0​%​ ​,​ ​2​0​2​1​ ​(​%​)
+				 */
+				INC_20P_2021: string
+				/**
+				 * I​n​d​u​s​t​r​y​ ​(​i​n​c​l​u​d​i​n​g​ ​c​o​n​s​t​r​u​c​t​i​o​n​)​,​ ​v​a​l​u​e​ ​a​d​d​e​d​,​ ​2​0​2​2​ ​(​%​ ​o​f​ ​G​D​P​)
+				 */
+				GDP_INDS_2022: string
+				/**
+				 * H​i​g​h​-​t​e​c​h​n​o​l​o​g​y​ ​e​x​p​o​r​t​s​,​ ​2​0​2​2​ ​(​%​ ​o​f​ ​m​a​n​u​f​a​c​t​u​r​e​d​ ​e​x​p​o​r​t​s​)
+				 */
+				HIG_TEC_EXP_2022: string
+				/**
+				 * M​i​l​i​t​a​r​y​ ​e​x​p​e​n​d​i​t​u​r​e​,​ ​2​0​2​2​ ​(​%​ ​o​f​ ​G​D​P​)​ 
+				 */
+				MIL_EXP_2022: string
+			}
+			/**
+			 * M​o​n​d​e​,​ ​p​a​y​s​,​ ​N​a​t​i​o​n​s​ ​U​n​i​e​s
+			 */
+			keywords: string
+			/**
+			 * N​a​t​u​r​a​l​ ​E​a​r​t​h​ ​e​t​ ​P​h​i​l​i​p​p​e​ ​R​i​v​i​è​r​e​ ​(​V​i​s​i​o​n​s​c​a​r​t​o​)​,​ ​2​0​2​4
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * W​o​r​l​d​ ​B​a​n​k​,​ ​2​0​2​4
+				 */
+				'1': string
+				/**
+				 * U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​(​c​o​n​s​o​l​i​d​a​t​e​d​ ​b​y​ ​R​I​A​T​E​)​,​ ​2​0​2​4
 				 */
 				'2': string
+			}
+		}
+		world_242: {
+			/**
+			 * W​o​r​l​d​ ​–​ ​2​4​2​ ​c​o​u​n​t​r​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​2​4​2​ ​c​o​n​t​r​i​e​s​ ​o​f​ ​t​h​e​ ​W​o​r​l​d​ ​:​ ​a​ ​d​a​t​a​s​e​t​ ​d​e​r​i​v​e​d​ ​f​r​o​m​ ​N​a​t​u​r​a​l​ ​E​a​r​t​h​ ​(​5​0​m​)​ ​a​n​d​ ​c​o​n​s​o​l​i​d​a​t​e​d​ ​b​y​ ​P​h​i​l​i​p​p​e​ ​R​i​v​i​è​r​e​.​ ​A​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​k​e​y​ ​i​n​d​i​c​a​t​o​r​s​ ​e​x​t​r​a​c​t​e​d​ ​f​r​o​m​ ​U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​a​n​d​ ​W​o​r​l​d​ ​b​a​n​k​ ​(​l​a​s​t​ ​y​e​a​r​ ​a​v​a​i​l​a​b​l​e​)
+			 */
+			abstract: string
+			fields: {
 				/**
-				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​d​e​m​o​_​r​_​p​j​a​n​g​r​o​u​p​)
+				 * I​S​O​3​ ​i​d​e​n​t​i​f​i​e​r
 				 */
-				'3': string
+				a3: string
 				/**
-				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​t​g​s​0​0​1​0​1​)
+				 * S​D​M​X​ ​G​l​o​b​a​l​ ​R​e​g​i​s​t​r​y​ ​i​d​e​n​t​i​f​i​e​r
 				 */
-				'4': string
+				id: string
 				/**
-				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​t​g​s​0​0​1​0​9​)
+				 * N​a​m​e
 				 */
-				'5': string
+				name: string
 				/**
-				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​l​f​s​t​_​r​_​l​f​u​3​r​t​)
+				 * R​e​g​i​o​n​a​l​ ​b​e​l​o​n​g​i​n​g
 				 */
-				'6': string
+				REGION_BLOC: string
 				/**
-				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​l​f​s​t​_​r​_​l​f​u​2​l​t​u​)
+				 * U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​r​e​g​i​o​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
 				 */
-				'7': string
+				REGION_UN: string
 				/**
-				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​n​a​m​a​_​1​0​r​_​2​g​d​p​)
+				 * U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​s​u​b​-​r​e​g​i​o​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
 				 */
-				'8': string
+				SUBREGION_UN: string
 				/**
-				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​n​a​m​a​_​1​0​r​_​2​h​h​i​n​c​)
+				 * B​e​l​o​n​g​i​n​g​ ​t​o​ ​t​h​e​ ​U​N​ ​L​e​a​s​t​ ​D​e​v​e​l​o​p​e​d​ ​C​o​u​n​t​r​i​e​s​ ​l​i​s​t
 				 */
-				'9': string
+				LAST_DEV: string
 				/**
-				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​l​a​n​_​l​c​v​_​o​v​w​)
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​1​ ​(​k​m​²​)
 				 */
-				'10': string
+				AREA_2021: string
+				/**
+				 * F​o​r​e​s​t​ ​a​r​e​a​,​ ​2​0​2​1​,​ ​(​k​m​²​)
+				 */
+				FOREST_AREA_2021: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​2
+				 */
+				POP_2022: string
+				/**
+				 * L​i​f​e​ ​e​x​p​e​c​t​a​n​c​y​ ​a​t​ ​b​i​r​t​h​,​ ​2​0​2​2​ ​(​y​e​a​r​s​)
+				 */
+				LIFE_EXP_2022: string
+				/**
+				 * F​e​r​t​i​l​i​t​y​ ​r​a​t​e​,​ ​2​0​2​2​ ​(​b​i​r​t​h​s​ ​p​e​r​ ​w​o​m​a​n​)
+				 */
+				FERT_2022: string
+				/**
+				 * P​r​e​v​a​l​e​n​c​e​ ​o​f​ ​H​I​V​,​2​0​2​2​ ​(​%​ ​o​f​ ​p​o​p​u​l​a​t​i​o​n​ ​a​g​e​s​ ​1​5​-​4​9​)
+				 */
+				HIV_2022: string
+				/**
+				 * C​O​2​ ​e​m​i​s​s​i​o​n​s​,​ ​2​0​2​0​ ​(​m​e​t​r​i​c​ ​t​o​n​s​ ​p​e​r​ ​c​a​p​i​t​a​)
+				 */
+				CO2_POP_2020: string
+				/**
+				 * G​N​I​ ​p​e​r​ ​c​a​p​i​t​a​,​ ​P​P​P​,​ ​2​0​2​2​ ​(​c​u​r​r​e​n​t​ ​i​n​t​e​r​n​a​t​i​o​n​a​l​ ​$​)
+				 */
+				GNI_POP_2022: string
+				/**
+				 * I​n​c​o​m​e​ ​s​h​a​r​e​ ​h​e​l​d​ ​b​y​ ​l​o​w​e​s​t​ ​2​0​%​ ​,​ ​2​0​2​1​ ​(​%​)
+				 */
+				INC_20P_2021: string
+				/**
+				 * I​n​d​u​s​t​r​y​ ​(​i​n​c​l​u​d​i​n​g​ ​c​o​n​s​t​r​u​c​t​i​o​n​)​,​ ​v​a​l​u​e​ ​a​d​d​e​d​,​ ​2​0​2​2​ ​(​%​ ​o​f​ ​G​D​P​)
+				 */
+				GDP_INDS_2022: string
+				/**
+				 * H​i​g​h​-​t​e​c​h​n​o​l​o​g​y​ ​e​x​p​o​r​t​s​,​ ​2​0​2​2​ ​(​%​ ​o​f​ ​m​a​n​u​f​a​c​t​u​r​e​d​ ​e​x​p​o​r​t​s​)
+				 */
+				HIG_TEC_EXP_2022: string
+				/**
+				 * M​i​l​i​t​a​r​y​ ​e​x​p​e​n​d​i​t​u​r​e​,​ ​2​0​2​2​ ​(​%​ ​o​f​ ​G​D​P​)​ 
+				 */
+				MIL_EXP_2022: string
+			}
+			/**
+			 * M​o​n​d​e​,​ ​p​a​y​s​,​ ​N​a​t​i​o​n​s​ ​U​n​i​e​s
+			 */
+			keywords: string
+			/**
+			 * N​a​t​u​r​a​l​ ​E​a​r​t​h​ ​e​t​ ​P​h​i​l​i​p​p​e​ ​R​i​v​i​è​r​e​ ​(​V​i​s​i​o​n​s​c​a​r​t​o​)​,​ ​2​0​2​4
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * W​o​r​l​d​ ​B​a​n​k​,​ ​2​0​2​4
+				 */
+				'1': string
+				/**
+				 * U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​(​c​o​n​s​o​l​i​d​a​t​e​d​ ​b​y​ ​R​I​A​T​E​)​,​ ​2​0​2​4
+				 */
+				'2': string
 			}
 		}
 	}
@@ -3999,42 +4175,218 @@ export type TranslationFunctions = {
 				 * © European Union, 1995 - today
 				 */
 				'1': () => LocalizedString
+			}
+		}
+		world_177: {
+			/**
+			 * World – 177 countries
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 177 contries of the World : a dataset derived from Natural Earth (110m) and consolidated by Philippe Rivière. Associated with key indicators extracted from United Nations and World bank (last year available)
+			 */
+			abstract: () => LocalizedString
+			fields: {
 				/**
-				 * © European Union, 1995 - today (Eurostat table reg_area3)
+				 * ISO3 identifier
+				 */
+				a3: () => LocalizedString
+				/**
+				 * SDMX Global Registry identifier
+				 */
+				id: () => LocalizedString
+				/**
+				 * Name
+				 */
+				name: () => LocalizedString
+				/**
+				 * Regional belonging
+				 */
+				REGION_BLOC: () => LocalizedString
+				/**
+				 * United Nations region of belonging
+				 */
+				REGION_UN: () => LocalizedString
+				/**
+				 * United Nations sub-region of belonging
+				 */
+				SUBREGION_UN: () => LocalizedString
+				/**
+				 * Belonging to the UN Least Developed Countries list
+				 */
+				LAST_DEV: () => LocalizedString
+				/**
+				 * Total area, 2021 (km²)
+				 */
+				AREA_2021: () => LocalizedString
+				/**
+				 * Forest area, 2021, (km²)
+				 */
+				FOREST_AREA_2021: () => LocalizedString
+				/**
+				 * Total population, 2022
+				 */
+				POP_2022: () => LocalizedString
+				/**
+				 * Life expectancy at birth, 2022 (years)
+				 */
+				LIFE_EXP_2022: () => LocalizedString
+				/**
+				 * Fertility rate, 2022 (births per woman)
+				 */
+				FERT_2022: () => LocalizedString
+				/**
+				 * Prevalence of HIV,2022 (% of population ages 15-49)
+				 */
+				HIV_2022: () => LocalizedString
+				/**
+				 * CO2 emissions, 2020 (metric tons per capita)
+				 */
+				CO2_POP_2020: () => LocalizedString
+				/**
+				 * GNI per capita, PPP, 2022 (current international $)
+				 */
+				GNI_POP_2022: () => LocalizedString
+				/**
+				 * Income share held by lowest 20% , 2021 (%)
+				 */
+				INC_20P_2021: () => LocalizedString
+				/**
+				 * Industry (including construction), value added, 2022 (% of GDP)
+				 */
+				GDP_INDS_2022: () => LocalizedString
+				/**
+				 * High-technology exports, 2022 (% of manufactured exports)
+				 */
+				HIG_TEC_EXP_2022: () => LocalizedString
+				/**
+				 * Military expenditure, 2022 (% of GDP) 
+				 */
+				MIL_EXP_2022: () => LocalizedString
+			}
+			/**
+			 * Monde, pays, Nations Unies
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * Natural Earth et Philippe Rivière (Visionscarto), 2024
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * World Bank, 2024
+				 */
+				'1': () => LocalizedString
+				/**
+				 * United Nations (consolidated by RIATE), 2024
 				 */
 				'2': () => LocalizedString
+			}
+		}
+		world_242: {
+			/**
+			 * World – 242 countries
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 242 contries of the World : a dataset derived from Natural Earth (50m) and consolidated by Philippe Rivière. Associated with key indicators extracted from United Nations and World bank (last year available)
+			 */
+			abstract: () => LocalizedString
+			fields: {
 				/**
-				 * © European Union, 1995 - today (Eurostat table demo_r_pjangroup)
+				 * ISO3 identifier
 				 */
-				'3': () => LocalizedString
+				a3: () => LocalizedString
 				/**
-				 * © European Union, 1995 - today (Eurostat tabletgs00101)
+				 * SDMX Global Registry identifier
 				 */
-				'4': () => LocalizedString
+				id: () => LocalizedString
 				/**
-				 * © European Union, 1995 - today (Eurostat table tgs00109)
+				 * Name
 				 */
-				'5': () => LocalizedString
+				name: () => LocalizedString
 				/**
-				 * © European Union, 1995 - today (Eurostat table lfst_r_lfu3rt)
+				 * Regional belonging
 				 */
-				'6': () => LocalizedString
+				REGION_BLOC: () => LocalizedString
 				/**
-				 * © European Union, 1995 - today (Eurostat table lfst_r_lfu2ltu)
+				 * United Nations region of belonging
 				 */
-				'7': () => LocalizedString
+				REGION_UN: () => LocalizedString
 				/**
-				 * © European Union, 1995 - today (Eurostat table nama_10r_2gdp)
+				 * United Nations sub-region of belonging
 				 */
-				'8': () => LocalizedString
+				SUBREGION_UN: () => LocalizedString
 				/**
-				 * © European Union, 1995 - today (Eurostat table nama_10r_2hhinc)
+				 * Belonging to the UN Least Developed Countries list
 				 */
-				'9': () => LocalizedString
+				LAST_DEV: () => LocalizedString
 				/**
-				 * © European Union, 1995 - today (Eurostat table lan_lcv_ovw)
+				 * Total area, 2021 (km²)
 				 */
-				'10': () => LocalizedString
+				AREA_2021: () => LocalizedString
+				/**
+				 * Forest area, 2021, (km²)
+				 */
+				FOREST_AREA_2021: () => LocalizedString
+				/**
+				 * Total population, 2022
+				 */
+				POP_2022: () => LocalizedString
+				/**
+				 * Life expectancy at birth, 2022 (years)
+				 */
+				LIFE_EXP_2022: () => LocalizedString
+				/**
+				 * Fertility rate, 2022 (births per woman)
+				 */
+				FERT_2022: () => LocalizedString
+				/**
+				 * Prevalence of HIV,2022 (% of population ages 15-49)
+				 */
+				HIV_2022: () => LocalizedString
+				/**
+				 * CO2 emissions, 2020 (metric tons per capita)
+				 */
+				CO2_POP_2020: () => LocalizedString
+				/**
+				 * GNI per capita, PPP, 2022 (current international $)
+				 */
+				GNI_POP_2022: () => LocalizedString
+				/**
+				 * Income share held by lowest 20% , 2021 (%)
+				 */
+				INC_20P_2021: () => LocalizedString
+				/**
+				 * Industry (including construction), value added, 2022 (% of GDP)
+				 */
+				GDP_INDS_2022: () => LocalizedString
+				/**
+				 * High-technology exports, 2022 (% of manufactured exports)
+				 */
+				HIG_TEC_EXP_2022: () => LocalizedString
+				/**
+				 * Military expenditure, 2022 (% of GDP) 
+				 */
+				MIL_EXP_2022: () => LocalizedString
+			}
+			/**
+			 * Monde, pays, Nations Unies
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * Natural Earth et Philippe Rivière (Visionscarto), 2024
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * World Bank, 2024
+				 */
+				'1': () => LocalizedString
+				/**
+				 * United Nations (consolidated by RIATE), 2024
+				 */
+				'2': () => LocalizedString
 			}
 		}
 	}
