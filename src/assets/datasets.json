@@ -3,7 +3,10 @@
     "id": "nuts0",
     "type": "vector",
     "totalFeatures": 37,
-    "defaultProjection": "naturalEarth2",
+    "defaultProjection": {
+      "type": "d3",
+      "value": "NaturalEarth2"
+    },
     "geometry": {
       "source": "GISCO",
       "url": "https://ropengov.github.io/giscoR/",
@@ -53,7 +56,10 @@
     "id": "nuts1",
     "type": "vector",
     "totalFeatures": 125,
-    "defaultProjection": "naturalEarth2",
+    "defaultProjection": {
+      "type": "d3",
+      "value": "NaturalEarth2"
+    },
     "geometry": {
       "source": "GISCO",
       "url": "https://ropengov.github.io/giscoR/",
@@ -103,7 +109,10 @@
     "id": "nuts2",
     "type": "vector",
     "totalFeatures": 327,
-    "defaultProjection": "naturalEarth2",
+    "defaultProjection": {
+      "type": "d3",
+      "value": "NaturalEarth2"
+    },
     "geometry": {
       "source": "GISCO",
       "url": "https://ropengov.github.io/giscoR/",
@@ -153,7 +162,10 @@
     "id": "nuts2_data",
     "type": "vector",
     "totalFeatures": 332,
-    "defaultProjection": "naturalEarth2",
+    "defaultProjection": {
+      "type": "d3",
+      "value": "NaturalEarth2"
+    },
     "geometry": {
       "source": "GISCO",
       "url": "https://ropengov.github.io/giscoR/",
