@@ -9,7 +9,7 @@
     },
     "geometry": {
       "source": "GISCO",
-      "url": "https://ropengov.github.io/giscoR/",
+      "url": "https://ec.europa.eu/eurostat/fr/web/gisco",
       "download_date": "2024-06-06",
       "license": null
     },
@@ -62,7 +62,7 @@
     },
     "geometry": {
       "source": "GISCO",
-      "url": "https://ropengov.github.io/giscoR/",
+      "url": "https://ec.europa.eu/eurostat/fr/web/gisco",
       "download_date": "2024-06-06",
       "license": null
     },
@@ -115,7 +115,7 @@
     },
     "geometry": {
       "source": "GISCO",
-      "url": "https://ropengov.github.io/giscoR/",
+      "url": "https://ec.europa.eu/eurostat/fr/web/gisco",
       "download_date": "2024-06-06",
       "license": null
     },
@@ -168,7 +168,7 @@
     },
     "geometry": {
       "source": "GISCO",
-      "url": "https://ropengov.github.io/giscoR/",
+      "url": "https://ec.europa.eu/eurostat/fr/web/gisco",
       "download_date": "2024-06-06",
       "license": null
     },
@@ -193,112 +193,112 @@
         "dataType": "string",
         "type": "identifier",
         "hasMissingValue": false,
-        "provenance": 1
+        "provenance": 2
       },
       {
         "name": "AREA_TOT_2024",
         "dataType": "number",
         "type": "stock",
         "hasMissingValue": false,
-        "provenance": 1
+        "provenance": 2
       },
       {
         "name": "POP_TOT2023",
         "dataType": "number",
         "type": "stock",
         "hasMissingValue": false,
-        "provenance": 1
+        "provenance": 3
       },
       {
         "name": "POP_09_RT_2023",
         "dataType": "number",
         "type": "ratio",
         "hasMissingValue": false,
-        "provenance": 1
+        "provenance": 3
       },
       {
         "name": "POP_024_RT_2023",
         "dataType": "number",
         "type": "ratio",
         "hasMissingValue": false,
-        "provenance": 1
+        "provenance": 3
       },
       {
         "name": "POP_65P_RT_2023",
         "dataType": "number",
         "type": "ratio",
         "hasMissingValue": false,
-        "provenance": 1
+        "provenance": 3
       },
       {
         "name": "POP_80P_RT_2023",
         "dataType": "number",
         "type": "ratio",
         "hasMissingValue": false,
-        "provenance": 1
+        "provenance": 3
       },
       {
         "name": "LIFE_EXP_2022",
         "dataType": "number",
         "type": "ratio",
         "hasMissingValue": false,
-        "provenance": 1
+        "provenance": 4
       },
       {
         "name": "HIGH_EDU_2023",
         "dataType": "number",
         "type": "ratio",
         "hasMissingValue": true,
-        "provenance": 1
+        "provenance": 5
       },
       {
         "name": "UNEMP_25P_2023",
         "dataType": "number",
         "type": "ratio",
         "hasMissingValue": true,
-        "provenance": 1
+        "provenance": 6
       },
       {
         "name": "UNEMP_LT_25P_2023",
         "dataType": "number",
         "type": "ratio",
         "hasMissingValue": true,
-        "provenance": 1
+        "provenance": 7
       },
       {
         "name": "GDP_CAP_PPS_2022",
         "dataType": "number",
         "type": "stock",
         "hasMissingValue": true,
-        "provenance": 1
+        "provenance": 8
       },
       {
         "name": "INC_PPS_2021",
         "dataType": "number",
         "type": "stock",
         "hasMissingValue": true,
-        "provenance": 1
+        "provenance": 9
       },
       {
         "name": "AREA_ART_RT",
         "dataType": "number",
         "type": "ratio",
         "hasMissingValue": true,
-        "provenance": 1
+        "provenance": 10
       },
       {
         "name": "AREA_CUL_RT",
         "dataType": "number",
         "type": "ratio",
         "hasMissingValue": true,
-        "provenance": 1
+        "provenance": 10
       },
       {
         "name": "AREA_BOI_RT",
         "dataType": "number",
         "type": "ratio",
         "hasMissingValue": true,
-        "provenance": 1
+        "provenance": 10
       },
       {
         "name": "zone",

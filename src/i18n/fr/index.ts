@@ -91,7 +91,7 @@ const fr = {
     },
     nuts2_data: {
       name: 'Europe – NUTS2 avec données d’exemple',
-      abstract: 'Les 332 NUTS2 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni. Associé à des indicateurs clé extraits d’Eurostat et associé aux géométries de référence',
+      abstract: 'Les 332 NUTS2 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni. Associé à des indicateurs clé extraits d’Eurostat (dernière année disponible) et associé aux géométries de référence',
       fields: {
         NUTS_ID: 'Identifiant de NUTS',
         NAME_LTN: 'Nom',
@@ -116,6 +116,15 @@ const fr = {
       geometryAttribution: '© EuroGeographics pour les limites administratives.',
       dataAttribution: {
         1: '© Union européenne, 1995 – aujourd\'hui',
+        2: '© Union européenne, 1995 – aujourd\'hui (table Eurostat reg_area3)',
+        3: '© Union européenne, 1995 – aujourd\'hui (table Eurostat demo_r_pjangroup)',
+        4: '© Union européenne, 1995 – aujourd\'hui (table Eurostat tgs00101)', 
+        5: '© Union européenne, 1995 – aujourd\'hui (table Eurostat tgs00109)',   
+        6: '© Union européenne, 1995 – aujourd\'hui (table Eurostat lfst_r_lfu3rt)',
+        7: '© Union européenne, 1995 – aujourd\'hui (table Eurostat lfst_r_lfu2ltu)', 
+        8: '© Union européenne, 1995 – aujourd\'hui (table Eurostat nama_10r_2gdp)',
+        9: '© Union européenne, 1995 – aujourd\'hui (table Eurostat nama_10r_2hhinc)',
+        10: '© Union européenne, 1995 – aujourd\'hui (table Eurostat lan_lcv_ovw)',
       },
     },
   },

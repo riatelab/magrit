@@ -91,7 +91,7 @@ const en = {
     },
     nuts2_data: {
       name: 'Europe - NUTS2 with example data',
-      abstract: 'The 332 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom. Associated with key indicators extracted from Eurostat and associated with reference geometries',
+      abstract: 'The 332 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom. Associated with key indicators extracted from Eurostat (last year available) and associated with reference geometries',
       fields: {
         NUTS_ID: 'NUTS identifier',
         NAME_LTN: 'Name',
@@ -115,6 +115,15 @@ const en = {
       geometryAttribution: '© EuroGeographics for the administrative boundaries',
       dataAttribution: {
         1: '© European Union, 1995 - today',
+        2: '© European Union, 1995 - today (Eurostat table reg_area3)',
+        3: '© European Union, 1995 - today (Eurostat table demo_r_pjangroup)',
+        4: '© European Union, 1995 - today (Eurostat tabletgs00101)', 
+        5: '© European Union, 1995 - today (Eurostat table tgs00109)',   
+        6: '© European Union, 1995 - today (Eurostat table lfst_r_lfu3rt)',
+        7: '© European Union, 1995 - today (Eurostat table lfst_r_lfu2ltu)', 
+        8: '© European Union, 1995 - today (Eurostat table nama_10r_2gdp)',
+        9: '© European Union, 1995 - today (Eurostat table nama_10r_2hhinc)',
+        10: '© European Union, 1995 - today (Eurostat table lan_lcv_ovw)',
       },
     },
   },
