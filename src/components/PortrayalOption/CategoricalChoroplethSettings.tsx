@@ -165,7 +165,7 @@ function onClickValidate(
             height: 250,
             orientation: 'horizontal',
             order: 'none',
-            fontColor: '#000000',
+            roundDecimals: null,
             visible: true,
             title: {
               text: targetVariable,
@@ -174,6 +174,10 @@ function onClickValidate(
             subtitle: {
               text: undefined,
               ...applicationSettingsStore.defaultLegendSettings.subtitle,
+            },
+            axis: {
+              text: undefined,
+              ...applicationSettingsStore.defaultLegendSettings.labels,
             },
             note: {
               text: undefined,

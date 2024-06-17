@@ -32,6 +32,7 @@ import {
   type CategoricalChoroplethParameters,
   type LayerDescription,
   type LayerDescriptionProportionalSymbols,
+  type LegendTextElement,
   Orientation,
   type ProportionalSymbolCategoryParameters,
 } from '../../global.d';
@@ -72,7 +73,7 @@ function CategoriesPlot(
     mapping: CategoricalChoroplethMapping[],
     orientation: Orientation,
     order: 'ascending' | 'descending' | 'none',
-    color: string,
+    textProperties: LegendTextElement,
     height: number,
     width: number,
   },
@@ -97,7 +98,13 @@ function CategoriesPlot(
   {
     props.orientation === 'vertical'
       ? Plot.plot({
-        style: { color: props.color },
+        style: {
+          color: props.textProperties.fontColor,
+          fontFamily: props.textProperties.fontFamily,
+          fontSize: `${props.textProperties.fontSize}px`,
+          fontWeight: props.textProperties.fontWeight,
+          fontStyle: props.textProperties.fontStyle,
+        },
         height: props.height,
         width: props.width,
         marginTop: 10,
@@ -130,7 +137,13 @@ function CategoriesPlot(
       : Plot.plot({
         height: props.height,
         width: props.width,
-        style: { color: props.color },
+        style: {
+          color: props.textProperties.fontColor,
+          fontFamily: props.textProperties.fontFamily,
+          fontSize: `${props.textProperties.fontSize}px`,
+          fontWeight: props.textProperties.fontWeight,
+          fontStyle: props.textProperties.fontStyle,
+        },
         marginTop: 10,
         marginBottom: Math.max(sizeLargestLabel() * 0.65, 25),
         marginLeft: 30,
@@ -247,7 +260,7 @@ export default function legendCategoricalChoroplethBarchart(
         mapping={getCategoricalParameters(layer).mapping}
         orientation={legend.orientation}
         order={legend.order}
-        color={legend.fontColor}
+        textProperties={legend.axis}
         width={legend.width}
         height={legend.height}
       />

@@ -56,14 +56,12 @@ import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import {
   type CategoricalChoroplethParameters,
   type ClassificationParameters,
-  type GriddedLayerParameters,
   type LabelsParameters,
   type LayerDescription,
   type LayerDescriptionLabels,
   type LinksParameters,
   type MushroomsParameters,
   type ProportionalSymbolsParameters,
-  type SmoothedLayerParameters,
   LinkCurvature,
   LinkHeadType,
   ProportionalSymbolsSymbolType,
@@ -910,7 +908,6 @@ function makeSettingsDefaultPoint(
                   position: [legendPosition[0], legendPosition[1]],
                   width: 300,
                   height: 250,
-                  fontColor: '#000000',
                   visible: true,
                   roundDecimals: 2,
                   title: {
@@ -920,6 +917,10 @@ function makeSettingsDefaultPoint(
                   subtitle: {
                     text: undefined,
                     ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  axis: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.labels,
                   },
                   note: {
                     text: undefined,
@@ -960,7 +961,6 @@ function makeSettingsDefaultPoint(
                   position: [legendPosition[0], legendPosition[1]],
                   width: 300,
                   height: 250,
-                  fontColor: '#000000',
                   visible: true,
                   roundDecimals: 2,
                   title: {
@@ -972,6 +972,10 @@ function makeSettingsDefaultPoint(
                   subtitle: {
                     text: undefined,
                     ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  axis: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.labels,
                   },
                   note: {
                     text: undefined,
@@ -1014,7 +1018,7 @@ function makeSettingsDefaultPoint(
                   height: 250,
                   orientation: 'horizontal',
                   order: 'none',
-                  fontColor: '#000000',
+                  roundDecimals: null,
                   visible: true,
                   title: {
                     text: (
@@ -1025,6 +1029,10 @@ function makeSettingsDefaultPoint(
                   subtitle: {
                     text: undefined,
                     ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  axis: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.labels,
                   },
                   note: {
                     text: undefined,
@@ -1064,7 +1072,7 @@ function makeSettingsDefaultPoint(
                   height: 250,
                   orientation: 'horizontal',
                   order: 'none',
-                  fontColor: '#000000',
+                  roundDecimals: null,
                   visible: true,
                   title: {
                     text: (
@@ -1074,6 +1082,10 @@ function makeSettingsDefaultPoint(
                   subtitle: {
                     text: undefined,
                     ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  axis: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.labels,
                   },
                   note: {
                     text: undefined,
@@ -1498,7 +1510,7 @@ function makeSettingsDefaultLine(
                   height: 250,
                   orientation: 'horizontal',
                   order: 'none',
-                  fontColor: '#000000',
+                  roundDecimals: null,
                   visible: true,
                   title: {
                     text: (
@@ -1508,6 +1520,10 @@ function makeSettingsDefaultLine(
                   subtitle: {
                     text: undefined,
                     ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  axis: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.labels,
                   },
                   note: {
                     text: undefined,
@@ -1545,7 +1561,6 @@ function makeSettingsDefaultLine(
                   position: [legendPosition[0], legendPosition[1]],
                   width: 300,
                   height: 250,
-                  fontColor: '#000000',
                   visible: true,
                   roundDecimals: 2,
                   title: {
@@ -1555,6 +1570,10 @@ function makeSettingsDefaultLine(
                   subtitle: {
                     text: undefined,
                     ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  axis: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.labels,
                   },
                   note: {
                     text: undefined,
@@ -1597,8 +1616,8 @@ function makeSettingsDefaultLine(
                   height: 250,
                   orientation: 'horizontal',
                   order: 'none',
-                  fontColor: '#000000',
                   visible: true,
+                  roundDecimals: null,
                   title: {
                     text: (
                       props.rendererParameters as CategoricalChoroplethParameters).variable,
@@ -1607,6 +1626,10 @@ function makeSettingsDefaultLine(
                   subtitle: {
                     text: undefined,
                     ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  axis: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.labels,
                   },
                   note: {
                     text: undefined,
@@ -1647,7 +1670,6 @@ function makeSettingsDefaultLine(
                   position: [legendPosition[0], legendPosition[1]],
                   width: 300,
                   height: 250,
-                  fontColor: '#000000',
                   visible: true,
                   roundDecimals: 2,
                   title: {
@@ -1657,6 +1679,10 @@ function makeSettingsDefaultLine(
                   subtitle: {
                     text: undefined,
                     ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  axis: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.labels,
                   },
                   note: {
                     text: undefined,
@@ -1846,7 +1872,6 @@ function makeSettingsDefaultPolygon(
                   position: [legendPosition[0], legendPosition[1]],
                   width: 300,
                   height: 250,
-                  fontColor: '#000000',
                   visible: true,
                   roundDecimals: 2,
                   title: {
@@ -1856,6 +1881,10 @@ function makeSettingsDefaultPolygon(
                   subtitle: {
                     text: undefined,
                     ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  axis: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.labels,
                   },
                   note: {
                     text: undefined,
@@ -1895,8 +1924,8 @@ function makeSettingsDefaultPolygon(
                   height: 250,
                   orientation: 'horizontal',
                   order: 'none',
-                  fontColor: '#000000',
                   visible: true,
+                  roundDecimals: null,
                   title: {
                     text: (
                       props.rendererParameters as CategoricalChoroplethParameters).variable,
@@ -1905,6 +1934,10 @@ function makeSettingsDefaultPolygon(
                   subtitle: {
                     text: undefined,
                     ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                  },
+                  axis: {
+                    text: undefined,
+                    ...applicationSettingsStore.defaultLegendSettings.labels,
                   },
                   note: {
                     text: undefined,

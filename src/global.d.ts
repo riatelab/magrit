@@ -926,10 +926,10 @@ interface ChoroplethHistogramLegend extends LegendBase {
   width: number,
   // The height of the histogram
   height: number,
-  // The font color of the chart elements
-  fontColor: string,
   // The rounding of the values displayed on the axes
   roundDecimals: number,
+  // The properties of the text in the chart axis
+  axis: LegendTextElement,
 }
 
 interface CategoricalChoroplethBarchartLegend extends LegendBase {
@@ -938,8 +938,8 @@ interface CategoricalChoroplethBarchartLegend extends LegendBase {
   width: number,
   // The height of the bar chart
   height: number,
-  // The font color of the chart elements
-  fontColor: string,
+  // The properties of the text in the chart axis
+  axis: LegendTextElement,
   // The orientation of the bar chart
   orientation: Orientation,
   // Whether to order the bars by the number of occurrence

@@ -982,11 +982,6 @@ function makeSettingsChoroplethHistogram(
       max={30}
       step={1}
     />
-    <InputFieldColor
-      label={LL().Legend.Modal.AxesAndLabels()}
-      value={legend.fontColor}
-      onChange={(v) => debouncedUpdateProps(legend.id, ['fontColor'], v)}
-    />
     <OptionBackgroundRectangle legend={legend} LL={LL}/>
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
@@ -1001,7 +996,7 @@ function makeSettingsChoroplethHistogram(
       <TextOptionTable
         legend={legend}
         LL={LL}
-        textProperties={['title', 'subtitle', 'note']}
+        textProperties={['title', 'subtitle', 'axis', 'note']}
       />
     </Show>
   </>;
@@ -1035,11 +1030,6 @@ function makeSettginsCategoricalChoroplethBarchart(
       min={10}
       max={800}
       step={1}
-    />
-    <InputFieldColor
-      label={LL().Legend.Modal.AxesAndLabels()}
-      value={legend.fontColor}
-      onChange={(v) => debouncedUpdateProps(legend.id, ['fontColor'], v)}
     />
     <div class="field">
       <label class="label">{LL().Legend.Modal.LegendOrientation()}</label>
@@ -1093,7 +1083,7 @@ function makeSettginsCategoricalChoroplethBarchart(
       <TextOptionTable
         legend={legend}
         LL={LL}
-        textProperties={['title', 'subtitle', 'note']}
+        textProperties={['title', 'subtitle', 'axis', 'note']}
       />
     </Show>
   </>;

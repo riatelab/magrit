@@ -337,7 +337,6 @@ function onClickValidate(
               position: [legendPosition[0] + 200, legendPosition[1]],
               width: 300,
               height: 250,
-              fontColor: '#000000',
               visible: true,
               roundDecimals: minPrecision < 0 ? 0 : minPrecision,
               title: {
@@ -347,6 +346,10 @@ function onClickValidate(
               subtitle: {
                 text: undefined,
                 ...applicationSettingsStore.defaultLegendSettings.subtitle,
+              },
+              axis: {
+                text: undefined,
+                ...applicationSettingsStore.defaultLegendSettings.labels,
               },
               note: {
                 text: undefined,
@@ -426,7 +429,7 @@ function onClickValidate(
               height: 250,
               orientation: 'horizontal',
               order: 'none',
-              fontColor: '#000000',
+              roundDecimals: null,
               visible: true,
               title: {
                 text: (
@@ -436,6 +439,10 @@ function onClickValidate(
               subtitle: {
                 text: undefined,
                 ...applicationSettingsStore.defaultLegendSettings.subtitle,
+              },
+              axis: {
+                text: undefined,
+                ...applicationSettingsStore.defaultLegendSettings.labels,
               },
               note: {
                 text: undefined,

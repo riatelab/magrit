@@ -32,7 +32,8 @@ import {
   type ChoroplethHistogramLegend,
   type ClassificationParameters,
   type LayerDescription,
-  type LayerDescriptionProportionalSymbols, LegendTextElement,
+  type LayerDescriptionProportionalSymbols,
+  type LegendTextElement,
   type ProportionalSymbolsRatioParameters,
 } from '../../global.d';
 
@@ -41,11 +42,10 @@ const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 function ChoroplethHistogram(
   props: {
     classification: ClassificationParameters,
-    color: string,
     height: number,
     width: number,
     roundDecimals: number,
-    // textProperties: LegendTextElement,
+    textProperties: LegendTextElement,
   },
 ): JSX.Element {
   const minmax = [
@@ -92,7 +92,13 @@ function ChoroplethHistogram(
     Plot.plot({
       height: props.height,
       width: props.width,
-      style: { color: props.color },
+      style: {
+        color: props.textProperties.fontColor,
+        fontFamily: props.textProperties.fontFamily,
+        fontSize: `${props.textProperties.fontSize}px`,
+        fontWeight: props.textProperties.fontWeight,
+        fontStyle: props.textProperties.fontStyle,
+      },
       marginBottom: 16 + sizeLargestLabel() * 0.60,
       marginLeft: 20,
       x: {
@@ -201,7 +207,7 @@ export default function legendChoroplethHistogram(
     >
       <ChoroplethHistogram
         classification={getClassificationParameters(layer)}
-        color={legend.fontColor}
+        textProperties={legend.axis}
         width={legend.width}
         height={legend.height}
         roundDecimals={legend.roundDecimals}
