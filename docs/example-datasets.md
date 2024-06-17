@@ -8,31 +8,25 @@ trouver des jeux de données sont listés plus bas).
 
 ## Données proposées dans l'application
 
-### Quartiers de Paris
+### NUTS0
 
-### Communes du Grand Paris
+### NUTS1
 
-### IRIS du Grand Paris
+### NUTS2
 
-### Communes de Martinique
+### NUTS2 (avec données)
 
-### Régions de France métropolitaine
+### NUTS3
 
-### Départements de France métropolitaine
+### Pays du monde (version 177 pays)
 
-### Communes de France métropolitaine
+### Pays du monde (version 242 pays)
 
-#### Communes par région de France métropolitaine
+## Où trouver d'autres jeux de données ?
 
-#### Communes pour l'ensemble de la France métropolitaine
-
-### Pays du monde
-
-## Où trouver des jeux de données ?
-
-En fonction de l'échelle de travail, différent fournisseurs de données permettent le téléchargement de
+En fonction de l'échelle de travail, différents fournisseurs de données permettent le téléchargement de
 fonds de cartes libres d'utilisation permettant par exemple la jointure d'un jeu de données dans Magrit.
-On peut citer par exemple:
+On peut citer par exemple :
 
 - [Natural Earth](https://www.naturalearthdata.com/) : données géographiques mondiales à différentes échelles,
 - [GADM](https://gadm.org/) : données géographiques administratives mondiales,

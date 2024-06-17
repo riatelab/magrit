@@ -17,8 +17,8 @@ Le panneau de configuration de la carte permet de modifier les paramètres relat
     caption="Panneau de configuration de la carte (avec marges)"
 />
 
-::: tip
-Si vous le souhaitez, il est également possible de redimmensionner la carte en sélectionnant l'un de ses côtés ou l'un de ses coins
+::: tip Conseil
+Si vous le souhaitez, il est également possible de redimensionner la carte en sélectionnant l'un de ses côtés ou l'un de ses coins
 et en le déplaçant vers la position souhaitée afin d'atteindre la largeur et/ou la hauteur souhaitée.
 
 <ZoomImg
