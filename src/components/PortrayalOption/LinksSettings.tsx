@@ -18,7 +18,7 @@ import { VsWarning } from 'solid-icons/vs';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { zip } from '../../helpers/array';
 import { PortrayalSettingsProps } from './common';
-import { findSuitableName } from '../../helpers/common';
+import { findSuitableName, isFiniteNumber, unproxify } from '../../helpers/common';
 import { makeCentroidLayer } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
 import { createLinksData, createSimpleLinksData } from '../../helpers/links';
@@ -41,15 +41,15 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Types / Interfaces / Enums
 import {
-  Filter,
-  LayerDescription,
+  type LayerDescription,
   type LayerDescriptionLinks,
   LinkCurvature,
   LinkHeadType,
   LinkPosition,
   type LinksParameters,
   LinkType,
-  RepresentationType, TableDescription,
+  RepresentationType,
+  type TableDescription,
   VectorType,
 } from '../../global.d';
 
@@ -104,11 +104,6 @@ function onClickValidate(
       tableIntensityVariable,
     );
 
-  const maxData = newData.features.reduce(
-    (acc, f) => Math.max(acc, f.properties[tableIntensityVariable]),
-    0,
-  );
-
   const params = {
     variable: tableIntensityVariable,
     type: linkType,
@@ -133,6 +128,14 @@ function onClickValidate(
     // If the link type is not 'link', we want to use the intensity to
     // determine the width of the links.
     // Otherwise, links have a fixed width.
+    const maxData = newData.features.reduce(
+      (acc, f) => (
+        isFiniteNumber(f.properties.Intensity)
+          ? Math.max(acc, +f.properties.Intensity)
+          : 0),
+      0,
+    );
+
     params.proportional = {
       referenceSize: 10,
       referenceValue: maxData,
@@ -141,25 +144,55 @@ function onClickValidate(
 
   const newId = generateIdLayer();
 
+  const newFields = [
+    {
+      name: 'Origin',
+      type: VariableType.categorical,
+      dataType: tableDescription.fields.find((f) => f.name === tableOriginVariable)!.dataType,
+      hasMissingValues: false,
+    },
+    {
+      name: 'Destination',
+      type: VariableType.categorical,
+      dataType: tableDescription.fields.find((f) => f.name === tableDestinationVariable)!.dataType,
+      hasMissingValues: false,
+    },
+    {
+      name: 'DistanceKm',
+      type: VariableType.stock,
+      dataType: 'number',
+      hasMissingValues: false,
+    },
+  ];
+
+  if (tableIntensityVariable !== '') {
+    newFields.push({
+      name: 'Intensity',
+      type: VariableType.stock,
+      dataType: 'number',
+      hasMissingValues: false,
+    });
+  }
+
+  // Also add field description for all the other variables that are present in the table
+  // and that have been copied if linkType === LinkType.Exchange
+  if (linkType === LinkType.Exchange) {
+    const fds = tableDescription.fields
+      .filter((f) => (
+        f.name !== tableOriginVariable
+        && f.name !== tableDestinationVariable
+        && f.name !== tableIntensityVariable))
+      .map((f) => unproxify(f));
+
+    newFields.push(...fds);
+  }
+
   const newLayerDescription = {
     id: newId,
     name: newName,
     data: newData,
     type: 'linestring',
-    fields: [
-      {
-        name: tableOriginVariable,
-        type: VariableType.categorical,
-      },
-      {
-        name: tableDestinationVariable,
-        type: VariableType.categorical,
-      },
-      {
-        name: tableIntensityVariable,
-        type: VariableType.stock,
-      },
-    ],
+    fields: newFields,
     representationType: 'links' as RepresentationType,
     visible: true,
     strokeWidth: 1,
@@ -169,6 +202,8 @@ function onClickValidate(
     shapeRendering: 'auto',
     rendererParameters: params as LinksParameters,
   } as LayerDescriptionLinks;
+
+  // Todo: add legend for this new layer
 
   setLayersDescriptionStore(
     produce(
