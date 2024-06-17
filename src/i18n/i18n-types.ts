@@ -286,7 +286,7 @@ type RootTranslation = {
 			 */
 			name: string
 			/**
-			 * T​h​e​ ​3​3​2​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​2​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m​.​ ​A​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​k​e​y​ ​i​n​d​i​c​a​t​o​r​s​ ​e​x​t​r​a​c​t​e​d​ ​f​r​o​m​ ​E​u​r​o​s​t​a​t​ ​a​n​d​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​r​e​f​e​r​e​n​c​e​ ​g​e​o​m​e​t​r​i​e​s
+			 * T​h​e​ ​3​3​2​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​2​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m​.​ ​A​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​k​e​y​ ​i​n​d​i​c​a​t​o​r​s​ ​e​x​t​r​a​c​t​e​d​ ​f​r​o​m​ ​E​u​r​o​s​t​a​t​ ​(​l​a​s​t​ ​y​e​a​r​ ​a​v​a​i​l​a​b​l​e​)​ ​a​n​d​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​r​e​f​e​r​e​n​c​e​ ​g​e​o​m​e​t​r​i​e​s
 			 */
 			abstract: string
 			fields: {
@@ -372,6 +372,42 @@ type RootTranslation = {
 				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y
 				 */
 				'1': string
+				/**
+				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​r​e​g​_​a​r​e​a​3​)
+				 */
+				'2': string
+				/**
+				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​d​e​m​o​_​r​_​p​j​a​n​g​r​o​u​p​)
+				 */
+				'3': string
+				/**
+				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​t​g​s​0​0​1​0​1​)
+				 */
+				'4': string
+				/**
+				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​t​g​s​0​0​1​0​9​)
+				 */
+				'5': string
+				/**
+				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​l​f​s​t​_​r​_​l​f​u​3​r​t​)
+				 */
+				'6': string
+				/**
+				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​l​f​s​t​_​r​_​l​f​u​2​l​t​u​)
+				 */
+				'7': string
+				/**
+				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​n​a​m​a​_​1​0​r​_​2​g​d​p​)
+				 */
+				'8': string
+				/**
+				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​n​a​m​a​_​1​0​r​_​2​h​h​i​n​c​)
+				 */
+				'9': string
+				/**
+				 * ©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​-​ ​t​o​d​a​y​ ​(​E​u​r​o​s​t​a​t​ ​t​a​b​l​e​ ​l​a​n​_​l​c​v​_​o​v​w​)
+				 */
+				'10': string
 			}
 		}
 	}
@@ -3877,7 +3913,7 @@ export type TranslationFunctions = {
 			 */
 			name: () => LocalizedString
 			/**
-			 * The 332 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom. Associated with key indicators extracted from Eurostat and associated with reference geometries
+			 * The 332 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom. Associated with key indicators extracted from Eurostat (last year available) and associated with reference geometries
 			 */
 			abstract: () => LocalizedString
 			fields: {
@@ -3963,6 +3999,42 @@ export type TranslationFunctions = {
 				 * © European Union, 1995 - today
 				 */
 				'1': () => LocalizedString
+				/**
+				 * © European Union, 1995 - today (Eurostat table reg_area3)
+				 */
+				'2': () => LocalizedString
+				/**
+				 * © European Union, 1995 - today (Eurostat table demo_r_pjangroup)
+				 */
+				'3': () => LocalizedString
+				/**
+				 * © European Union, 1995 - today (Eurostat tabletgs00101)
+				 */
+				'4': () => LocalizedString
+				/**
+				 * © European Union, 1995 - today (Eurostat table tgs00109)
+				 */
+				'5': () => LocalizedString
+				/**
+				 * © European Union, 1995 - today (Eurostat table lfst_r_lfu3rt)
+				 */
+				'6': () => LocalizedString
+				/**
+				 * © European Union, 1995 - today (Eurostat table lfst_r_lfu2ltu)
+				 */
+				'7': () => LocalizedString
+				/**
+				 * © European Union, 1995 - today (Eurostat table nama_10r_2gdp)
+				 */
+				'8': () => LocalizedString
+				/**
+				 * © European Union, 1995 - today (Eurostat table nama_10r_2hhinc)
+				 */
+				'9': () => LocalizedString
+				/**
+				 * © European Union, 1995 - today (Eurostat table lan_lcv_ovw)
+				 */
+				'10': () => LocalizedString
 			}
 		}
 	}
