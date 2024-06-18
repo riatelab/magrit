@@ -189,7 +189,7 @@
         "provenance": 0
       },
       {
-        "name": "NAME_LTN",
+        "name": "NAME_LATN",
         "dataType": "string",
         "type": "identifier",
         "hasMissingValue": false,
@@ -203,7 +203,7 @@
         "provenance": 1
       },
       {
-        "name": "POP_TOT2023",
+        "name": "POP_TOT_2023",
         "dataType": "number",
         "type": "stock",
         "hasMissingValue": false,

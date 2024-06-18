@@ -94,7 +94,8 @@ const en = {
       abstract: 'The 332 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom. Associated with key indicators extracted from Eurostat (last year available) and associated with reference geometries',
       fields: {
         NUTS_ID: 'NUTS identifier',
-        NAME_LTN: 'Name',
+        NAME_LATN: 'Name',
+        POP_TOT_2023: 'Total population, 2023',
         AREA_TOT_2024: 'Total area 2024 (km²)',
         POP_09_RT_2023: 'Share of population aged 0-9, 2023 (%)',
         POP_024_RT_2023: 'Share of population aged 0-24, 2023 (%)',

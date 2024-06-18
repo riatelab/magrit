@@ -297,7 +297,11 @@ type RootTranslation = {
 				/**
 				 * N​a​m​e
 				 */
-				NAME_LTN: string
+				NAME_LATN: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​3
+				 */
+				POP_TOT_2023: string
 				/**
 				 * T​o​t​a​l​ ​a​r​e​a​ ​2​0​2​4​ ​(​k​m​²​)
 				 */
@@ -4100,7 +4104,11 @@ export type TranslationFunctions = {
 				/**
 				 * Name
 				 */
-				NAME_LTN: () => LocalizedString
+				NAME_LATN: () => LocalizedString
+				/**
+				 * Total population, 2023
+				 */
+				POP_TOT_2023: () => LocalizedString
 				/**
 				 * Total area 2024 (km²)
 				 */

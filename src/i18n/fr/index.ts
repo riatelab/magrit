@@ -94,9 +94,9 @@ const fr = {
       abstract: 'Les 332 NUTS2 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni. Associé à des indicateurs clé extraits d’Eurostat (dernière année disponible) et associé aux géométries de référence',
       fields: {
         NUTS_ID: 'Identifiant de NUTS',
-        NAME_LTN: 'Nom',
+        NAME_LATN: 'Nom',
+        POP_TOT_2023: 'Population totale, 2023',
         AREA_TOT_2024: 'Superficie totale 2024 (km²)',
-        POP_TOT_2024: 'Population totale, 2024',
         POP_09_RT_2023: 'Part de la population âgée de 0 à 9 ans, 2023 (%)',
         POP_024_RT_2023: 'Part de la population âgée de 0 à 24 ans, 2023 (%)',
         POP_65P_RT_2023: 'Part de la population âgée de plus de 65 ans, 2023 (%)',

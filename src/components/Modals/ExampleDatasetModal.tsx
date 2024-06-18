@@ -18,7 +18,6 @@ import { ImFilter } from 'solid-icons/im';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { detectTypeField, Variable } from '../../helpers/typeDetection';
 import rewindLayer from '../../helpers/rewind';
 import { getGeometryType } from '../../helpers/formatConversion';
 import { generateIdLayer, getDefaultRenderingParams } from '../../helpers/layers';
@@ -44,6 +43,7 @@ import datasets from '../../assets/datasets.json';
 
 // Types
 import type { DefaultLegend, GeoJSONFeatureCollection, LayerDescription } from '../../global';
+import type { Variable } from '../../helpers/typeDetection';
 
 interface DataProvider {
   // The source of the geometry / dataset
@@ -214,26 +214,19 @@ export function addExampleLayer(
   geojson: GeoJSONFeatureCollection,
   name: string,
   projection: { type: 'd3' | 'proj4', value?: string, code?: number },
+  fields: (Variable & { provenance: number })[],
 ): string {
   const rewoundGeojson = rewindLayer(geojson, true);
   const geomType = getGeometryType(rewoundGeojson);
   const layerId = generateIdLayer();
 
-  const fieldsName: string[] = Object.keys(rewoundGeojson.features[0].properties);
-
-  // Detect the type of fields
-  const fieldsDescription: Variable[] = fieldsName.map((field) => {
-    const o = detectTypeField(
-      rewoundGeojson.features.map((ft) => ft.properties[field]) as never[],
-      field,
-    );
-    return {
-      name: field,
-      hasMissingValues: o.hasMissingValues,
-      type: o.variableType,
-      dataType: o.dataType,
-    };
-  });
+  // Read the type of the fields from the metadata
+  const fieldsDescription: Variable[] = fields.map((v) => ({
+    name: v.name,
+    dataType: v.dataType,
+    type: v.type,
+    hasMissingValues: v.hasMissingValues,
+  } as Variable));
 
   // Cast values to the detected field type if possible and needed
   fieldsDescription.forEach((field) => {
@@ -397,6 +390,7 @@ export default function ExampleDatasetModal(): JSX.Element {
               geojsonData,
               selectedDataset()!.id,
               selectedDataset()!.defaultProjection,
+              selectedDataset()!.fields,
             );
           })
           .finally(() => {
