@@ -59,6 +59,7 @@ import '../styles/ImportWindow.css';
 interface LayerOrTableDescription {
   name: string,
   features: number,
+  type: 'tabular' | 'geo',
   geometryType?: 'point' | 'line' | 'polygon' | 'unknown',
   crs?: GdalCrs,
   delimiter?: string,
@@ -70,7 +71,6 @@ interface LayerOrTableDescription {
 
 interface DatasetInformation {
   name: string,
-  type: 'tabular' | 'geo',
   detailedType: SupportedGeoFileTypes | SupportedTabularFileTypes | 'Unknown',
   complete: boolean,
   layers: LayerOrTableDescription[],
@@ -186,6 +186,7 @@ const analyseTabularDatasetGDAL = async (
 
   const layers = result.layers.map((layer: any) => ({
     name: layer.name,
+    type: 'tabular',
     features: layer.featureCount,
     useCRS: false,
     addToProject: true,
@@ -203,7 +204,6 @@ const analyseTabularDatasetGDAL = async (
   /* eslint-enable no-nested-ternary */
 
   return {
-    type: 'tabular',
     name,
     detailedType,
     complete: true,
@@ -236,16 +236,33 @@ const analyseGeospatialDatasetGDAL = async (
     } as InvalidDataset;
   }
 
-  const layers = result.layers.map((layer: any) => ({
-    name: layer.name,
-    features: layer.featureCount,
-    geometryType: layer.geometryFields[0] ? layer.geometryFields[0].type : 'unknown',
-    crs: readCrs(layer.geometryFields[0]),
-    useCRS: false,
-    addToProject: true,
-    simplify: false,
-    fitMap: false,
-  }));
+  const layers = result.layers.map((layer: any) => {
+    if (layer.geometryFields.length > 0) {
+      // We have a layer with geometries
+      return {
+        name: layer.name,
+        features: layer.featureCount,
+        type: 'geo',
+        geometryType: layer.geometryFields[0] ? layer.geometryFields[0].type : 'unknown',
+        crs: readCrs(layer.geometryFields[0]),
+        useCRS: false,
+        addToProject: true,
+        simplify: false,
+        fitMap: false,
+      };
+    } else { // eslint-disable-line no-else-return
+      // We have a tabular layer
+      return {
+        name: layer.name,
+        features: layer.featureCount,
+        type: 'tabular',
+        useCRS: false,
+        addToProject: true,
+        simplify: false,
+        fitMap: false,
+      };
+    }
+  });
 
   /* eslint-disable no-nested-ternary */
   const detailedType = result.driverLongName === 'GeoPackage'
@@ -262,7 +279,6 @@ const analyseGeospatialDatasetGDAL = async (
               ? SupportedGeoFileTypes.TopoJSON : 'Unknown';
   /* eslint-enable no-nested-ternary */
   return {
-    type: 'geo',
     name,
     detailedType,
     complete: true,
@@ -276,12 +292,12 @@ const analyzeDatasetTopoJSON = (
 ): DatasetInformation | InvalidDataset => {
   const obj = JSON.parse(content);
   return {
-    type: 'geo',
     name,
     detailedType: SupportedGeoFileTypes.TopoJSON,
     complete: true,
     layers: Object.keys(obj.objects).map((layerName) => ({
       name: layerName,
+      type: 'geo',
       features: obj.objects[layerName].geometries.length,
       geometryType: obj.objects[layerName].geometries[0]?.type || 'unknown',
       crs: {
@@ -311,7 +327,6 @@ const analyseDatasetTabularJSON = (
     };
   }
   return {
-    type: 'tabular',
     name,
     detailedType: SupportedTabularFileTypes.JSON,
     complete: true,
@@ -319,6 +334,7 @@ const analyseDatasetTabularJSON = (
       {
         name,
         features: obj.length,
+        type: 'tabular',
         addToProject: true,
         simplify: false,
         useCRS: false,
@@ -343,13 +359,13 @@ const analyseDatasetTabularText = (
       : SupportedTabularFileTypes.TXT;
 
   return {
-    type: 'tabular',
     name,
     detailedType,
     complete: true,
     layers: [
       {
         name,
+        type: 'tabular',
         features: ds.length,
         delimiter,
         addToProject: true,
@@ -432,7 +448,6 @@ const analyzeDataset = async (
       shapefileExtensions.includes(file.ext)
     ) {
       result = {
-        type: 'geo',
         name,
         detailedType: SupportedGeoFileTypes.Shapefile,
         complete: false,
@@ -443,7 +458,6 @@ const analyzeDataset = async (
     const exts = ds[name].files.map((f) => f.ext);
     if (!shapefileMandatoryExtensions.every((e) => exts.includes(e))) {
       result = {
-        type: 'geo',
         name,
         detailedType: SupportedGeoFileTypes.Shapefile,
         complete: false,
@@ -726,7 +740,7 @@ export default function ImportWindow(): JSX.Element {
                       {
                         (layer) => {
                           const randomId = uuidv4();
-                          if (fileDescription.info.type === 'geo') {
+                          if (layer.type === 'geo') {
                             return <tr class="entry-detail">
                               <td>
                                 <input
@@ -926,14 +940,20 @@ export default function ImportWindow(): JSX.Element {
                   // avoid some problems with async/await and context switching
                   // when we need to import multiple layers from the same GeoPackage file).
                   dsToImport.push(
-                    [ds.files, ds.info.detailedType, l.name, l.fitMap, l.simplify] as never[],
+                    [
+                      ds.files, ds.info.detailedType,
+                      l.type, l.name, l.fitMap, l.simplify,
+                    ] as never[],
                   );
                 }
               }));
             }));
 
             for (let i = 0; i < dsToImport.length; i += 1) {
-              const [files, type, name, fitMap, simplify] = dsToImport[i];
+              const [
+                files, format, type,
+                name, fitMap, simplify,
+              ] = dsToImport[i];
               // Layers that will be simplified are not visible by default
               // (so they are not mounted now on the map).
               const shouldBeVisible = !simplify;
@@ -945,6 +965,7 @@ export default function ImportWindow(): JSX.Element {
                 // eslint-disable-next-line no-await-in-loop
                 const { id, nRemoved } = await convertAndAddFiles(
                   files,
+                  format,
                   type,
                   name,
                   fitMap,

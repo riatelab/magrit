@@ -22,6 +22,7 @@ export enum SupportedBinaryTabularFileTypes {
   ODS = 'ods',
   XLS = 'xls',
   XLSX = 'xlsx',
+  GeoPackage = 'gpkg',
 }
 
 /**
@@ -35,6 +36,7 @@ export enum SupportedTabularFileTypes {
   TXT = 'txt',
   XLS = 'xls',
   XLSX = 'xlsx',
+  GeoPackage = 'gpkg',
 }
 /**
  * Allowed mime types for import

@@ -139,10 +139,10 @@ export const isTextualTabularFile = (files: CustomFileList): boolean => Object
   .map((key) => SupportedTextualTabularFileTypes[key as never] as string)
   .indexOf(files[0].ext) > -1;
 
-export const isBinaryTabularFile = (files: CustomFileList): boolean => Object
+export const isBinaryTabularFile = (files: CustomFileList, type: 'tabular' | 'geo'): boolean => Object
   .keys(SupportedBinaryTabularFileTypes)
   .map((key) => SupportedBinaryTabularFileTypes[key as never] as string)
-  .indexOf(files[0].ext) > -1;
+  .indexOf(files[0].ext) > -1 && type === 'tabular';
 
 export const isTopojson = async (files: CustomFileList) => files.length === 1
   && (files[0].ext === 'topojson' || files[0].ext === 'json')
@@ -348,6 +348,7 @@ function addTabularLayer(data: Record<string, any>[], name: string): string {
  *
  * @param files
  * @param format
+ * @param type
  * @param layerName
  * @param fit
  * @param visible
@@ -355,6 +356,7 @@ function addTabularLayer(data: Record<string, any>[], name: string): string {
 export const convertAndAddFiles = async (
   files: CustomFileList,
   format: SupportedTabularFileTypes | SupportedGeoFileTypes,
+  type: 'tabular' | 'geo',
   layerName: string,
   fit: boolean,
   visible: boolean,
@@ -381,8 +383,8 @@ export const convertAndAddFiles = async (
     };
   }
 
-  // If the file is a binary tabular file, we use GDA to convert it to JSON
-  if (isBinaryTabularFile(files)) {
+  // If the file is a binary tabular file, we use GDAL to convert it to JSON
+  if (isBinaryTabularFile(files, type)) {
     try {
       const opts = ['-nln', layerName, '-sql', `SELECT * FROM "${layerName}"`];
       const res = await convertBinaryTabularDatasetToJSON(
@@ -390,7 +392,7 @@ export const convertAndAddFiles = async (
         { opts, openOpts: [] },
       );
       return {
-        id: addTabularLayer(res, files[0].name),
+        id: addTabularLayer(res, layerName),
         nRemoved: 0,
       };
     } catch (e: any) {
