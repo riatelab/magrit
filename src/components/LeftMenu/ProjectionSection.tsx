@@ -18,7 +18,6 @@ import { mapStore, setMapStore } from '../../store/MapStore';
 import { setModalStore } from '../../store/ModalStore';
 
 // Sub-components
-import DetailsSummary from '../DetailsSummary.tsx';
 import { onClickDropdown, onKeyDownDropdown, setDropdownItemTarget } from '../DropdownMenu.tsx';
 import InputFieldRangeSlider from '../Inputs/InputRangeSlider.tsx';
 import ProjectionSelection from '../Modals/ProjectionSelection.tsx';

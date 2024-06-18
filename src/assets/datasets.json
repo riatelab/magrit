@@ -110,8 +110,8 @@
     "type": "vector",
     "totalFeatures": 327,
     "defaultProjection": {
-      "type": "d3",
-      "value": "NaturalEarth2"
+      "type": "proj4",
+      "code": 3035
     },
     "geometry": {
       "source": "GISCO",

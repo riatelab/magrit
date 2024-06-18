@@ -14,24 +14,36 @@ import { produce } from 'solid-js/store';
 
 // Imports from other packages
 import { FaSolidDatabase } from 'solid-icons/fa';
-import { FiExternalLink } from 'solid-icons/fi';
 import { ImFilter } from 'solid-icons/im';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { Variable } from '../../helpers/typeDetection';
-import { addLayer } from '../../helpers/fileUpload';
+import { detectTypeField, Variable } from '../../helpers/typeDetection';
+import rewindLayer from '../../helpers/rewind';
+import { getGeometryType } from '../../helpers/formatConversion';
+import { generateIdLayer, getDefaultRenderingParams } from '../../helpers/layers';
+import { findSuitableName, isFiniteNumber, isNonNull } from '../../helpers/common';
+import { makeDefaultLegendDescription } from '../../helpers/legends';
+import { epsgDb, removeNadGrids } from '../../helpers/projection';
 
 // Stores
-import { globalStore, setGlobalStore } from '../../store/GlobalStore';
-import { type LayersDescriptionStoreType, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { globalStore, setGlobalStore, setLoading } from '../../store/GlobalStore';
+import {
+  layersDescriptionStore,
+  type LayersDescriptionStoreType,
+  setLayersDescriptionStore,
+} from '../../store/LayersDescriptionStore';
 import { setModalStore } from '../../store/ModalStore';
+import { fitExtent, setMapStore } from '../../store/MapStore';
 
 // Subcomponents
 import Pagination from '../Pagination.tsx';
 
 // Assets
 import datasets from '../../assets/datasets.json';
+
+// Types
+import type { DefaultLegend, GeoJSONFeatureCollection, LayerDescription } from '../../global';
 
 interface DataProvider {
   // The source of the geometry / dataset
@@ -57,7 +69,10 @@ interface DatasetEntry {
   // Information about the projection that should be used when displaying these data
   defaultProjection: {
     type: 'd3' | 'proj4',
-    value: string, // We allow proj4 string, WKT1 string, or a d3 projection name
+    // In case of d3, a d3 projection name (like NaturalEarth2)
+    value?: string,
+    // In case of proj4, an EPSG code (like 2154)
+    code?: number,
   },
   // Information about the geometry provider
   geometry: DataProvider,
@@ -146,7 +161,7 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
         </tr>
         <tr>
           <td>{LL().DatasetCatalog.licenceData()}</td>
-          <td>{ds.data.map((d) => d.license).join(', ')}</td>
+          <td>{ds.data.map((d) => d.license).filter((d) => !!d).join(', ')}</td>
         </tr>
         </tbody>
       </table>
@@ -193,6 +208,120 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
       />
     </div>
   </div>;
+}
+
+export function addExampleLayer(
+  geojson: GeoJSONFeatureCollection,
+  name: string,
+  projection: { type: 'd3' | 'proj4', value?: string, code?: number },
+): string {
+  const rewoundGeojson = rewindLayer(geojson, true);
+  const geomType = getGeometryType(rewoundGeojson);
+  const layerId = generateIdLayer();
+
+  const fieldsName: string[] = Object.keys(rewoundGeojson.features[0].properties);
+
+  // Detect the type of fields
+  const fieldsDescription: Variable[] = fieldsName.map((field) => {
+    const o = detectTypeField(
+      rewoundGeojson.features.map((ft) => ft.properties[field]) as never[],
+      field,
+    );
+    return {
+      name: field,
+      hasMissingValues: o.hasMissingValues,
+      type: o.variableType,
+      dataType: o.dataType,
+    };
+  });
+
+  // Cast values to the detected field type if possible and needed
+  fieldsDescription.forEach((field) => {
+    if (field.dataType === 'number') {
+      rewoundGeojson.features.forEach((ft) => {
+        // eslint-disable-next-line no-param-reassign
+        ft.properties[field.name] = isFiniteNumber(ft.properties[field.name])
+          ? +ft.properties[field.name]
+          : null;
+      });
+    } else {
+      rewoundGeojson.features.forEach((ft) => {
+        // eslint-disable-next-line no-param-reassign
+        ft.properties[field.name] = isNonNull(ft.properties[field.name])
+          ? ft.properties[field.name]
+          : null;
+      });
+    }
+  });
+
+  const safeName = findSuitableName(
+    name,
+    layersDescriptionStore.layers.map((l) => l.name),
+  );
+
+  // Add the new layer (and the corresponding legend)
+  // to the LayerManager by adding it to the layersDescriptionStore
+  const newLayerDescription = {
+    id: layerId,
+    name: safeName,
+    type: geomType,
+    data: rewoundGeojson,
+    visible: true,
+    fields: fieldsDescription,
+    ...getDefaultRenderingParams(geomType),
+    shapeRendering: 'auto',
+    // shapeRendering: geomType === 'polygon'
+    //   && rewoundGeojson.features.length > 10000 ? 'optimizeSpeed' : 'auto',
+  };
+
+  const newLegendDescription = makeDefaultLegendDescription(newLayerDescription);
+
+  const fit = layersDescriptionStore.layers.length === 0;
+
+  setLayersDescriptionStore(
+    produce(
+      (draft: LayersDescriptionStoreType) => {
+        if (!globalStore.userHasAddedLayer) {
+          // eslint-disable-next-line no-param-reassign
+          draft.layers = [];
+          setGlobalStore({ userHasAddedLayer: true });
+        }
+        draft.layers.push(newLayerDescription as LayerDescription);
+        draft.layoutFeaturesAndLegends.push(newLegendDescription as DefaultLegend);
+      },
+    ),
+  );
+
+  // Change the projection of the map if needed
+  if (projection.type === 'd3') {
+    setMapStore(
+      'projection',
+      {
+        name: projection.value!,
+        value: `geo${projection.value!}`,
+        type: 'd3',
+      },
+    );
+  } else { // projetion.type === 'proj4'
+    const proj = epsgDb[projection.code!];
+    setMapStore(
+      'projection',
+      {
+        name: proj.name,
+        value: removeNadGrids((proj.proj4 || proj.wkt) as string),
+        bounds: proj.bbox,
+        code: `EPSG:${proj.code}`,
+        type: 'proj4',
+      },
+    );
+  }
+
+  // Fit extent to the new layer if its the first layer added
+  if (fit) {
+    fitExtent(layerId);
+  }
+
+  return layerId;
 }
 
 // A large modal (or even a full page) that shows the datasets
@@ -259,29 +388,19 @@ export default function ExampleDatasetModal(): JSX.Element {
   onMount(() => {
     setModalStore({
       confirmCallback: () => {
-        console.log(selectedDataset());
+        setLoading(true);
         fetch(`/dataset/${selectedDataset()!.id}.geojson`)
-          .then((response) => {
-            console.log(response);
-            return response.json();
-          })
+          .then((response) => response.json())
+          // eslint-disable-next-line solid/reactivity
           .then((geojsonData) => {
-            // TODO: write a custom addLayer function for example dataset
-            // (allowing to use the types and the defaultProjection declared
-            // in the datasets.json file)
-            if (!globalStore.userHasAddedLayer) {
-              setLayersDescriptionStore(
-                produce(
-                  (draft: LayersDescriptionStoreType) => {
-                    // eslint-disable-next-line no-param-reassign
-                    draft.layers = [];
-                  },
-                ),
-              );
-              setGlobalStore({ userHasAddedLayer: true });
-            }
-
-            addLayer(geojsonData, selectedDataset()!.id, true, true);
+            addExampleLayer(
+              geojsonData,
+              selectedDataset()!.id,
+              selectedDataset()!.defaultProjection,
+            );
+          })
+          .finally(() => {
+            setLoading(false);
           });
       },
     });
