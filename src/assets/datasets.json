@@ -18,7 +18,7 @@
         "source": "Eurostat",
         "url": "https://ec.europa.eu/eurostat/web/main/data/database",
         "download_date": "2024-06-06",
-        "licence": null
+        "license": null
       }
     ],
     "fields": [
@@ -71,7 +71,7 @@
         "source": "Eurostat",
         "url": "https://ec.europa.eu/eurostat/web/main/data/database",
         "download_date": "2024-06-06",
-        "licence": null
+        "license": null
       }
     ],
     "fields": [
@@ -124,7 +124,7 @@
         "source": "Eurostat",
         "url": "https://ec.europa.eu/eurostat/web/main/data/database",
         "download_date": "2024-06-06",
-        "licence": null
+        "license": null
       }
     ],
     "fields": [
@@ -177,7 +177,7 @@
         "source": "Eurostat",
         "url": "https://ec.europa.eu/eurostat/web/main/data/database",
         "download_date": "2024-06-06",
-        "licence": null
+        "license": null
       }
     ],
     "fields": [
@@ -328,13 +328,13 @@
         "source": "World Bank",
         "url": "https://databank.worldbank.org/source/world-development-indicators",
         "download_date": "2024-06-14",
-        "licence": "CC BY 4.0"
+        "license": "CC-BY-4.0"
       },
       {
         "source": "United Nations, UAR RIATE",
         "url": "https://unstats.un.org/unsd/methodology/m49/overview/",
         "download_date": "2024-06-14",
-        "licence": "CC BY 4.0"
+        "license": "CC-BY-4.0"
       }
     ],
     "fields": [
@@ -492,13 +492,13 @@
         "source": "World Bank",
         "url": "https://databank.worldbank.org/source/world-development-indicators",
         "download_date": "2024-06-14",
-        "licence": "CC BY 4.0"
+        "license": "CC-BY-4.0"
       },
       {
         "source": "United Nations, UAR RIATE",
         "url": "https://unstats.un.org/unsd/methodology/m49/overview/",
         "download_date": "2024-06-14",
-        "licence": "CC BY 4.0"
+        "license": "CC-BY-4.0"
       }
     ],
     "fields": [
