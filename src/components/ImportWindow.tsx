@@ -465,28 +465,36 @@ const analyzeDataset = async (
       };
     } else {
       result = await analyseGeospatialDatasetGDAL(ds[name].files);
-      console.log(result);
     }
   }
 
   return result as DatasetInformation;
 };
 
+const extTransform = (ext) => {
+  if (shapefileExtensions.includes(ext)) {
+    return 'shp';
+  }
+  return ext;
+};
+
 const groupFiles = (
   files: CustomFileList,
 ): { [key: string]: { name: string, files: FileEntry[] } } => {
   // We want to group the files by their name (because shapefiles have multiple files)
-  // but other files have only one file
+  // but other files have only one file (and we want to avoid grouping
+  // other files than shapefiles).
   const groupedFiles: { [key: string]: { name: string, files: FileEntry[] } } = {};
   files.forEach((file) => {
-    if (groupedFiles[file.name] === undefined) {
-      groupedFiles[file.name] = {
+    const key = `${file.name}.${extTransform(file.ext)}`;
+    if (groupedFiles[key] === undefined) {
+      groupedFiles[key] = {
         name: file.name,
         files: [file],
       };
     } else {
       if (
-        groupedFiles[file.name].files.some((f) => (
+        groupedFiles[key].files.some((f) => (
           f.name === file.name
           && f.ext === file.ext
           && f.file.size === file.file.size
@@ -494,7 +502,7 @@ const groupFiles = (
       ) {
         return;
       }
-      groupedFiles[file.name].files.push(file);
+      groupedFiles[key].files.push(file);
     }
   });
   return groupedFiles;
@@ -543,6 +551,7 @@ export default function ImportWindow(): JSX.Element {
       const resultValue = createMutable((await Promise.all(
         Object.keys(groupedFiles)
           .map(async (fileName) => {
+            const fd = groupedFiles[fileName];
             // Use existing description if available
             if (
               fileDescriptions()
@@ -551,7 +560,7 @@ export default function ImportWindow(): JSX.Element {
               return fileDescriptions().find((f: DatasetDescription) => f.name === fileName);
             }
 
-            const dsInfo = await analyzeDataset({ [fileName]: groupedFiles[fileName] });
+            const dsInfo = await analyzeDataset({ [fd.name]: fd });
             if ('valid' in dsInfo && !dsInfo.valid) {
               // We have an invalid dataset that we don't wan't to add to the list.
               // We display a toast message to inform the user and we remove the file
