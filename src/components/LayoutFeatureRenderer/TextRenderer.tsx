@@ -34,7 +34,7 @@ export default function TextRenderer(props: Text): JSX.Element {
 
   createEffect(
     on( // We need to recompute the rectangle box when following properties change
-      () => [props.fontSize, props.text, props.rotation, props.textAnchor],
+      () => [props.fontSize, props.text, props.rotation, props.textAnchor, props.fontFamily],
       () => {
         computeRectangleBox(refElement);
       },

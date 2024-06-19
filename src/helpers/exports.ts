@@ -4,6 +4,7 @@ import { topology } from 'topojson-server';
 // Stores
 import { getDefaultClipExtent, mapStore } from '../store/MapStore';
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
+import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 
 // Helpers
 import { SupportedGeoFileTypes } from './supportedFormats';
@@ -12,7 +13,11 @@ import { getTargetSvg, redrawPaths } from './svg';
 import { findCssFontDefinition } from './font';
 
 // Types / Interfaces
-import type { GeoJSONFeatureCollection } from '../global';
+import {
+  type GeoJSONFeatureCollection,
+  LabelsParameters,
+  LayoutFeatureType,
+} from '../global.d';
 
 /**
  * Get the dimensions of the SVG map element.
@@ -71,22 +76,75 @@ function changeResolution(canvas: HTMLCanvasElement, scaleFactor: number) {
  *
  * @param {SVGElement} svgElement
  * @param {string[]} ignoreFonts
- * @returns {string}
+ * @returns {void}
  */
 function patchSvgForFonts(
   svgElement: SVGElement,
   ignoreFonts: string[] = ['Serif', 'Sans-serif', 'Monospace', 'Cursive'],
-): string {
+): void {
   function getListUsedFonts() {
-    const elems = Array.from(svgElement.getElementsByTagName('text'));
-    const needed: (string | null)[] = [];
-    for (let i = 0; i < elems.length; i += 1) {
-      const fontName = elems[i].style.fontFamily || elems[i].getAttribute('font-family');
-      if (!ignoreFonts.includes(fontName)) {
-        needed.push(fontName);
-      }
-    }
-    return needed.filter((d) => d);
+    const res: string[] = [];
+    // Font used in label layers
+    layersDescriptionStore
+      .layers
+      .filter((d) => d.representationType === 'labels')
+      .forEach((layer) => {
+        const defaultFont = (layer.rendererParameters as LabelsParameters).default.fontFamily;
+        if (!ignoreFonts.includes(defaultFont)) {
+          res.push(defaultFont);
+        }
+        Object.keys((layer.rendererParameters as LabelsParameters).specific)
+          .forEach((field) => {
+            const font = (layer.rendererParameters as LabelsParameters).specific[field].fontFamily;
+            if (font && font !== defaultFont) {
+              res.push(font);
+            }
+          });
+      });
+
+    // Font used in layout features
+    layersDescriptionStore
+      .layoutFeaturesAndLegends
+      .forEach((layoutFeatureOrLegend) => {
+        if (layoutFeatureOrLegend.type === LayoutFeatureType.Text) {
+          const font = layoutFeatureOrLegend.fontFamily;
+          if (font && !ignoreFonts.includes(font)) {
+            res.push(font);
+          }
+        }
+        if (layoutFeatureOrLegend.title) {
+          const font = layoutFeatureOrLegend.title.fontFamily;
+          if (font && !ignoreFonts.includes(font)) {
+            res.push(font);
+          }
+        }
+        if (layoutFeatureOrLegend.subtitle) {
+          const font = layoutFeatureOrLegend.subtitle.fontFamily;
+          if (font && !ignoreFonts.includes(font)) {
+            res.push(font);
+          }
+        }
+        if (layoutFeatureOrLegend.axis) {
+          const font = layoutFeatureOrLegend.axis.fontFamily;
+          if (font && !ignoreFonts.includes(font)) {
+            res.push(font);
+          }
+        }
+        if (layoutFeatureOrLegend.labels) {
+          const font = layoutFeatureOrLegend.labels.fontFamily;
+          if (font && !ignoreFonts.includes(font)) {
+            res.push(font);
+          }
+        }
+        if (layoutFeatureOrLegend.note) {
+          const font = layoutFeatureOrLegend.note.fontFamily;
+          if (font && !ignoreFonts.includes(font)) {
+            res.push(font);
+          }
+        }
+      });
+
+    return res;
   }
 
   const needed = getListUsedFonts();

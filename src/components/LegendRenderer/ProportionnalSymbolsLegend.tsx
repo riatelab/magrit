@@ -1034,7 +1034,7 @@ function verticalLineLegend(
           : (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]
       );
     }
-    return () => 'white';
+    return () => 'black';
   });
 
   const maxSize = createMemo(
@@ -1163,7 +1163,8 @@ function verticalLineLegend(
               text-anchor="start"
               dominant-baseline="middle"
               x={60 + defaultSpacing}
-              y={d.y}
+              // Little offset to center the text... lets see if it works for most cases
+              y={d.y + 0.5}
             >{ d.value }</text>
           </>
         }
@@ -1207,7 +1208,7 @@ function horizontalLineLegend(
           : (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]
       );
     }
-    return () => 'white';
+    return () => 'black';
   });
 
   const maxSize = createMemo(
