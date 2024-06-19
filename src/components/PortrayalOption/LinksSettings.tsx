@@ -19,10 +19,13 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 import { zip } from '../../helpers/array';
 import { PortrayalSettingsProps } from './common';
 import { findSuitableName, isFiniteNumber, unproxify } from '../../helpers/common';
-import { makeCentroidLayer } from '../../helpers/geo';
+import { computeCandidateValuesForSymbolsLegend, makeCentroidLayer, PropSizer } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
 import { createLinksData, createSimpleLinksData } from '../../helpers/links';
 import { VariableType } from '../../helpers/typeDetection';
+import { generateIdLegend } from '../../helpers/legends';
+import { extent } from '../../helpers/math';
+import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Stores
 import { setLoading } from '../../store/GlobalStore';
@@ -32,6 +35,7 @@ import {
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
 import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Subcomponents
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
@@ -41,13 +45,17 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Types / Interfaces / Enums
 import {
+  type DefaultLegend,
   type LayerDescription,
   type LayerDescriptionLinks,
+  type LegendTextElement,
+  LegendType,
   LinkCurvature,
   LinkHeadType,
   LinkPosition,
   type LinksParameters,
   LinkType,
+  type ProportionalSymbolsLegend,
   RepresentationType,
   type TableDescription,
   VectorType,
@@ -137,7 +145,7 @@ function onClickValidate(
     );
 
     params.proportional = {
-      referenceSize: 10,
+      referenceRadius: 10,
       referenceValue: maxData,
     };
   }
@@ -203,12 +211,101 @@ function onClickValidate(
     rendererParameters: params as LinksParameters,
   } as LayerDescriptionLinks;
 
-  // Todo: add legend for this new layer
+  // Find a position for the legend
+  const legendPosition = getPossibleLegendPosition(150, 150);
 
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
+      },
+    ),
+  );
+
+  let legend;
+  if (linkType !== LinkType.Link) {
+    const values = newData.features.map((d) => +d.properties.Intensity);
+    const [min, max] = extent(values);
+
+    const propSize = new PropSizer(
+      params.proportional!.referenceValue,
+      params.proportional!.referenceRadius,
+      'line',
+    );
+
+    const legendValues = computeCandidateValuesForSymbolsLegend(
+      min,
+      max,
+      propSize.scale,
+      propSize.getValue,
+      3,
+    );
+    legend = {
+      // Legend common part
+      id: generateIdLegend(),
+      layerId: newId,
+      title: {
+        text: 'Intensity',
+        ...applicationSettingsStore.defaultLegendSettings.title,
+      } as LegendTextElement,
+      subtitle: {
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      } as LegendTextElement,
+      note: {
+        ...applicationSettingsStore.defaultLegendSettings.note,
+      } as LegendTextElement,
+      position: legendPosition,
+      visible: true,
+      roundDecimals: 0,
+      backgroundRect: {
+        visible: false,
+      },
+      // Part specific to proportional symbols
+      type: LegendType.proportional,
+      layout: 'vertical',
+      values: legendValues,
+      spacing: 5,
+      labels: {
+        ...applicationSettingsStore.defaultLegendSettings.labels,
+      } as LegendTextElement,
+      symbolType: 'line',
+    } as ProportionalSymbolsLegend;
+  } else {
+    legend = {
+      id: generateIdLegend(),
+      layerId: newId,
+      title: {
+        text: '',
+        ...applicationSettingsStore.defaultLegendSettings.title,
+      },
+      subtitle: {
+        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+      },
+      note: {
+        ...applicationSettingsStore.defaultLegendSettings.note,
+      },
+      position: legendPosition,
+      visible: false,
+      roundDecimals: 0,
+      backgroundRect: { visible: false },
+      // Part specific to default legends
+      type: 'default',
+      typeGeometry: 'linestring',
+      displayAsPolygon: false,
+      labels: {
+        text: 'Link',
+        ...applicationSettingsStore.defaultLegendSettings.labels,
+      },
+      boxWidth: 50,
+      boxHeight: 30,
+      boxCornerRadius: 0,
+    } as DefaultLegend;
+  }
+
+  setLayersDescriptionStore(
+    produce(
+      (draft: LayersDescriptionStoreType) => {
+        draft.layoutFeaturesAndLegends.push(legend);
       },
     ),
   );

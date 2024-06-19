@@ -111,8 +111,6 @@ export const linkPath = (
   linkCurvature: LinkCurvature,
 ): string => {
   switch (linkCurvature) {
-    case LinkCurvature.StraightOnSphere:
-      return pathGenerator(feature);
     case LinkCurvature.StraightOnPlane: {
       const pt1 = projection((feature.geometry.coordinates as [number, number][])[0]);
       const pt2 = projection((feature.geometry.coordinates as [number, number][])[1]);
@@ -132,12 +130,13 @@ export const linkPath = (
       );
       // Compute the control point for the quadratic Bezier curve
       const controlPoint = [
-        bisector[0] + ((distance) * (pt2[1] - pt1[1])) / distance,
-        bisector[1] + ((distance) * (pt1[0] - pt2[0])) / distance,
+        bisector[0] + ((distance / 2) * (pt2[1] - pt1[1])) / (distance * 2),
+        bisector[1] + ((distance / 2) * (pt1[0] - pt2[0])) / (distance * 2),
       ];
 
       return `M ${pt1[0]},${pt1[1]} Q ${controlPoint[0]},${controlPoint[1]} ${pt2[0]},${pt2[1]}`;
     }
+    case LinkCurvature.StraightOnSphere:
     default:
       return pathGenerator(feature);
   }

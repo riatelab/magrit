@@ -568,10 +568,14 @@ interface LinksParameters {
     classificationMethod: ClassificationMethod,
     // The number of classes
     classes: number,
+    // The break values (computed or manually set)
+    breaks: number[],
+    // The thickness of the links, for each class
+    sizes: number[],
   },
   // Sizes parameter (when no classification is specified)
   proportional?: {
-    referenceSize: number,
+    referenceRadius: number,
     referenceValue: number,
   },
   type: LinkType,
@@ -986,12 +990,6 @@ export type Legend = (
   | CategoricalPictogramLegend
   | DefaultLegend
 );
-
-// export enum NumberFormatting {
-//   useSameLocaleAsBrowser = 'useSameLocaleAsBrowser',
-//   useSameLocaleAsCurrentLanguage = 'useSameLocaleAsCurrentLanguage',
-//   useCustomLocale = 'useCustomLocale',
-// }
 
 export interface ID3Element {
   __data__: GeoJSONFeature,

@@ -46,7 +46,7 @@ export default function linksRenderer(
   if (rendererParameters().proportional) {
     const propSize = createMemo(() => new PropSizer(
       rendererParameters().proportional!.referenceValue,
-      rendererParameters().proportional!.referenceSize,
+      rendererParameters().proportional!.referenceRadius,
       'line' as ProportionalSymbolsSymbolType,
     ));
 
