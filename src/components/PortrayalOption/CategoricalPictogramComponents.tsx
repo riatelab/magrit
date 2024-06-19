@@ -289,7 +289,7 @@ export function CategoriesCustomisation(
             ></div>
             <input
               type="text"
-              style={{ height: '3em', width: '400px' }}
+              style={{ height: '3em', width: '45%' }}
               value={item.categoryName || ''}
               onChange={(e) => {
                 props.setMapping(
