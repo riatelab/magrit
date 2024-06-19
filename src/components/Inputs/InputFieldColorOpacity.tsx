@@ -1,7 +1,6 @@
-import { type JSX, mergeProps } from 'solid-js';
+import { For, type JSX, mergeProps } from 'solid-js';
 import { type LocalizedString } from 'typesafe-i18n';
 import { useI18nContext } from '../../i18n/i18n-solid';
-import * as PaletteThumbnails from '../../helpers/palette-thumbnail';
 
 interface InputFieldColorOpacityProps {
   label: LocalizedString | string;
@@ -185,7 +184,7 @@ export function InputFieldWidthColorOpacity(props: InputFieldWidthColorOpacityPr
 
 interface InputFieldPaletteOpacityProps {
   label: LocalizedString | string;
-  valuePalette: { provider: string, name: string, type: 'sequential' | 'categorical' | 'diverging' };
+  valuePalette: string[];
   valueOpacity: number;
   onClickPalette: (e: Event) => void;
   onChangeOpacity: (opacity: number) => void;
@@ -193,23 +192,6 @@ interface InputFieldPaletteOpacityProps {
   disabled?: boolean;
   gap?: number;
 }
-
-const getUrlImagePalette = (
-  d: { name: string, provider: string, type: 'sequential' | 'diverging' | 'categorical' },
-) => { // eslint-disable-line consistent-return
-  if (PaletteThumbnails[`img${d.provider}${d.name}`]) {
-    return PaletteThumbnails[`img${d.provider}${d.name}`];
-  }
-  if (d.type === 'sequential') {
-    return PaletteThumbnails.imgcolorbrewerOrRd;
-  }
-  if (d.type === 'categorical') {
-    return PaletteThumbnails.imgd3Observable10;
-  }
-  if (d.type === 'diverging') {
-    return PaletteThumbnails.imgcolorbrewerRdYlGn;
-  }
-};
 
 export function InputFieldPaletteOpacity(props: InputFieldPaletteOpacityProps): JSX.Element {
   const { LL } = useI18nContext();
@@ -240,14 +222,19 @@ export function InputFieldPaletteOpacity(props: InputFieldPaletteOpacityProps): 
           onClick={(e) => mergedProps.onClickPalette(e)}
           title={LL().LayerSettings.InformationPalette()}
         >
-          <img
-            src={getUrlImagePalette(mergedProps.valuePalette)}
-            alt={`${mergedProps.valuePalette.name} (${mergedProps.valuePalette.provider})`}
-            style={{
-              height: '1em',
-              width: '100%',
-            }}
-          />
+          <For each={mergedProps.valuePalette}>
+            {
+              (color) => (
+                <div
+                  style={{
+                    width: `${100 / mergedProps.valuePalette.length}%`,
+                    height: '100%',
+                    background: color,
+                  }}
+                ></div>
+              )
+            }
+          </For>
         </div>
         <div style={{ width: `${mergedProps.gap}px` }}></div>
         <input
@@ -280,7 +267,7 @@ export function InputFieldPaletteOpacity(props: InputFieldPaletteOpacityProps): 
 interface InputFieldWidthPaletteOpacityProps {
   label: LocalizedString | string;
   valueWidth: number;
-  valuePalette: { provider: string, name: string, type: 'sequential' | 'categorical' | 'diverging' };
+  valuePalette: string[];
   valueOpacity: number;
   onChangeWidth: (width: number) => void;
   onClickPalette: (e: Event) => void;
@@ -352,10 +339,19 @@ export function InputFieldWidthPaletteOpacity(
           }}
           onClick={(e) => mergedProps.onClickPalette(e)}
         >
-          <img
-            src={getUrlImagePalette(mergedProps.valuePalette)}
-            alt={`${mergedProps.valuePalette.name} (${mergedProps.valuePalette.provider})`}
-          />
+          <For each={mergedProps.valuePalette}>
+            {
+              (color) => (
+                <div
+                  style={{
+                    width: `${100 / mergedProps.valuePalette.length}%`,
+                    height: '100%',
+                    background: color,
+                  }}
+                ></div>
+              )
+            }
+          </For>
         </div>
         <div style={{ width: `${mergedProps.gap}px` }}></div>
         <input

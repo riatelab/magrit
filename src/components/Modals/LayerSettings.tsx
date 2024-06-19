@@ -89,7 +89,8 @@ import MessageBlock from '../MessageBlock.tsx';
 import {
   InputFieldColorOpacity,
   InputFieldPaletteOpacity,
-  InputFieldWidthColorOpacity, InputFieldWidthPaletteOpacity,
+  InputFieldWidthColorOpacity,
+  InputFieldWidthPaletteOpacity,
 } from '../Inputs/InputFieldColorOpacity.tsx';
 
 const layerLinkedToHistogramOrBarChart = (
@@ -585,7 +586,7 @@ function makeSettingsDefaultPoint(
       </div>
       <InputFieldPaletteOpacity
         label={LL().LayerSettings.Fill()}
-        valuePalette={(props.rendererParameters as ClassificationParameters).palette}
+        valuePalette={(props.rendererParameters as ClassificationParameters).palette.colors}
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {}}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
@@ -675,7 +676,7 @@ function makeSettingsDefaultPoint(
       </div>
       <InputFieldPaletteOpacity
         label={LL().LayerSettings.Fill()}
-        valuePalette={(props.rendererParameters!.color as ClassificationParameters).palette}
+        valuePalette={(props.rendererParameters!.color as ClassificationParameters).palette.colors}
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {}}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
@@ -687,7 +688,11 @@ function makeSettingsDefaultPoint(
     }>
       <InputFieldPaletteOpacity
         label={LL().LayerSettings.Fill()}
-        valuePalette={{ type: 'categorical' }}
+        valuePalette={
+          (props.rendererParameters.color as CategoricalChoroplethParameters)
+            .mapping
+            .map((c) => c.color)
+        }
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {}}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
@@ -705,13 +710,13 @@ function makeSettingsDefaultPoint(
           detailed={false}
         />
       </DetailsSummary>
-      <InputFieldPaletteOpacity
+      {/* <InputFieldPaletteOpacity
         label={LL().LayerSettings.Fill()}
         valuePalette={{ type: 'categorical' }}
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {}}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
-      />
+      /> */}
     </Show>
     <Show when={props.representationType === 'categoricalChoropleth'}>
       <DetailsSummary
@@ -727,7 +732,11 @@ function makeSettingsDefaultPoint(
       </DetailsSummary>
       <InputFieldPaletteOpacity
         label={LL().LayerSettings.Fill()}
-        valuePalette={{ type: 'categorical' }}
+        valuePalette={
+          (props.rendererParameters as CategoricalChoroplethParameters)
+            .mapping
+            .map((c) => c.color)
+        }
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {}}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
@@ -737,7 +746,7 @@ function makeSettingsDefaultPoint(
       label={LL().LayerSettings.Stroke()}
       valueWidth={props.strokeWidth!}
       valueColor={props.strokeColor!}
-      valueOpacity={props.fillOpacity!}
+      valueOpacity={props.strokeOpacity!}
       onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
       onChangeColor={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
       onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
@@ -1380,7 +1389,7 @@ function makeSettingsDefaultLine(
         <InputFieldWidthPaletteOpacity
           label={LL().LayerSettings.Line()}
           valueWidth={props.strokeWidth!}
-          valuePalette={(props.rendererParameters as ClassificationParameters).palette}
+          valuePalette={(props.rendererParameters as ClassificationParameters).palette.colors}
           valueOpacity={props.strokeOpacity!}
           onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
           onClickPalette={() => {}}
@@ -1391,7 +1400,11 @@ function makeSettingsDefaultLine(
         <InputFieldWidthPaletteOpacity
           label={LL().LayerSettings.Line()}
           valueWidth={props.strokeWidth!}
-          valuePalette={{ type: 'categorical' }}
+          valuePalette={
+            (props.rendererParameters.color as CategoricalChoroplethParameters)
+              .mapping
+              .map((c) => c.color)
+          }
           valueOpacity={props.strokeOpacity!}
           onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
           onClickPalette={() => {}}
@@ -1450,7 +1463,7 @@ function makeSettingsDefaultLine(
       <InputFieldWidthPaletteOpacity
         label={LL().LayerSettings.Line()}
         valueWidth={props.strokeWidth!}
-        valuePalette={(props.rendererParameters as ClassificationParameters).palette}
+        valuePalette={(props.rendererParameters as ClassificationParameters).palette.colors}
         valueOpacity={props.strokeOpacity!}
         onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
         onClickPalette={() => {}}
@@ -1463,7 +1476,11 @@ function makeSettingsDefaultLine(
       <InputFieldWidthPaletteOpacity
         label={LL().LayerSettings.Line()}
         valueWidth={props.strokeWidth!}
-        valuePalette={{ type: 'categorical' }}
+        valuePalette={
+          (props.rendererParameters as CategoricalChoroplethParameters)
+            .mapping
+            .map((c) => c.color)
+        }
         valueOpacity={props.strokeOpacity!}
         onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
         onClickPalette={() => {}}
@@ -1765,7 +1782,7 @@ function makeSettingsDefaultPolygon(
       </div>
       <InputFieldPaletteOpacity
         label={LL().LayerSettings.Fill()}
-        valuePalette={(props.rendererParameters as ClassificationParameters).palette}
+        valuePalette={(props.rendererParameters as ClassificationParameters).palette.colors}
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {}}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
@@ -1810,7 +1827,7 @@ function makeSettingsDefaultPolygon(
       />
       <InputFieldPaletteOpacity
         label={LL().LayerSettings.Fill()}
-        valuePalette={(props.rendererParameters as ClassificationParameters).palette}
+        valuePalette={(props.rendererParameters as ClassificationParameters).palette.colors}
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {}}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
@@ -1830,7 +1847,11 @@ function makeSettingsDefaultPolygon(
       </DetailsSummary>
       <InputFieldPaletteOpacity
         label={LL().LayerSettings.Fill()}
-        valuePalette={{ type: 'categorical' }}
+        valuePalette={
+          (props.rendererParameters as CategoricalChoroplethParameters)
+            .mapping
+            .map((c) => c.color)
+        }
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {}}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
@@ -1840,7 +1861,7 @@ function makeSettingsDefaultPolygon(
       label={LL().LayerSettings.Stroke()}
       valueWidth={props.strokeWidth!}
       valueColor={props.strokeColor!}
-      valueOpacity={props.fillOpacity!}
+      valueOpacity={props.strokeOpacity!}
       onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
       onChangeColor={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
       onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
