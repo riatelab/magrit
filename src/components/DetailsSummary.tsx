@@ -23,7 +23,7 @@ export default function DetailsSummary(
     >
       { props.summaryContent }
     </summary>
-    <div>
+    <div class="mb-4">
       { c() }
     </div>
   </details>;
