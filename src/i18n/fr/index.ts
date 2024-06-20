@@ -267,7 +267,7 @@ const fr = {
     CollapseExpand: 'Déplier / replier le menu',
   },
   ImportSection: {
-    OpenImportWindow: 'Ouvrir la fenêtre d\'import des données ...',
+    OpenImportWindow: 'Ouvrir la fenêtre d\'import des données...',
     ExampleDatasets: 'Explorer les jeux de données d\'exemple...',
   },
   MapConfiguration: {
@@ -875,9 +875,9 @@ const fr = {
   },
   ImageSymbolSelection: {
     Title: 'Sélection ou import d\'une image',
-    SelectImage: 'Sélectionner un symbole parmi ceux proposés ...',
-    UploadImage: 'Ou ajouter une image de votre choix (PNG ou SVG) ...',
-    Browse: 'Parcourir ...',
+    SelectImage: 'Sélectionner un symbole parmi ceux proposés...',
+    UploadImage: 'Ou ajouter une image de votre choix (PNG ou SVG)...',
+    Browse: 'Parcourir...',
     SelectedImage: 'Image sélectionnée :',
   },
   SimplificationModal: {
