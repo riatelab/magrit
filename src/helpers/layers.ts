@@ -5,6 +5,7 @@ import { getPalette } from 'dicopal';
 import d3 from './d3-custom';
 import worldLand from './world-land';
 import topojson from './topojson';
+import { DataType, VariableType } from './typeDetection';
 
 // Types
 import {
@@ -56,7 +57,14 @@ export const makeDefaultWorldLand = (): LayerDescription => ({
   fillOpacity: 1,
   dropShadow: null,
   shapeRendering: 'auto',
-  fields: [],
+  fields: [
+    {
+      name: 'id',
+      dataType: DataType.string,
+      type: VariableType.identifier,
+      hasMissingValues: false,
+    },
+  ],
   representationType: 'default' as RepresentationType,
   data: ( // We know types are correct here, so we just use 'never' to avoid type checking
     topojson.feature(worldLand as never, worldLand.objects.world_country as never)
@@ -102,7 +110,14 @@ export const makeDefaultGraticule = (): LayerDescription => ({
       },
     ],
   },
-  fields: [],
+  fields: [
+    {
+      name: 'id',
+      dataType: DataType.string,
+      type: VariableType.identifier,
+      hasMissingValues: false,
+    },
+  ],
   rendererParameters: {
     step: [20, 20],
   } as GraticuleParameters,
