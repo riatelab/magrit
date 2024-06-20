@@ -6,6 +6,7 @@ import {
   For,
   type JSX,
   Match,
+  on,
   Show,
   Switch,
 } from 'solid-js';
@@ -616,8 +617,18 @@ export default function ProportionalSymbolsSettings(
     setRefValueForSymbolSize(maxValues);
   });
 
+  createEffect(
+    on(
+      () => symbolType(),
+      () => {
+        if (symbolType() === 'line') {
+          setAvoidOverlapping(false);
+        }
+      },
+    ),
+  );
+
   const makePortrayal = async () => {
-    console.log('makePortrayal');
     // Compute a suitable name for the new layer
     const layerName = findSuitableName(
       newLayerName() || LL().FunctionalitiesSection.NewLayer(),
@@ -834,11 +845,13 @@ export default function ProportionalSymbolsSettings(
         />
       </Match>
     </Switch>
-    <InputFieldCheckbox
-      label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.AvoidOverlapping() }
-      checked={ avoidOverlapping() }
-      onChange={() => { setAvoidOverlapping(!avoidOverlapping()); }}
-    />
+    <Show when={symbolType() !== 'line'}>
+      <InputFieldCheckbox
+        label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.AvoidOverlapping() }
+        checked={ avoidOverlapping() }
+        onChange={() => { setAvoidOverlapping(!avoidOverlapping()); }}
+      />
+    </Show>
     <InputResultName
       value={newLayerName()}
       onKeyUp={ (value) => { setNewLayerName(value); }}
