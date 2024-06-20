@@ -9,6 +9,7 @@ import {
   Show,
 } from 'solid-js';
 import { createMutable, produce } from 'solid-js/store';
+import { autofocus } from '@solid-primitives/autofocus';
 
 // Import from other packages
 import { FaSolidTrashCan } from 'solid-icons/fa';
@@ -660,6 +661,8 @@ export default function ImportWindow(): JSX.Element {
           <button
             class="button is-primary is-outlined"
             onClick={handleInputFiles}
+            ref={autofocus}
+            autofocus={true}
           >
             {LL().ImportWindow.Open()}
           </button>
