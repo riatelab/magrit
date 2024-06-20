@@ -1239,7 +1239,7 @@ function makeSettingsDefaultLine(
 
     {/* Options for links renderer */}
     <Show when={props.representationType === 'links'}>
-      <Show when={!['Exchange', 'BilateralVolume'].includes((props.rendererParameters as LinksParameters).type)}>
+      <Show when={(props.rendererParameters as LinksParameters).sizeType === 'fixed'}>
         <InputFieldWidthColorOpacity
           label={LL().LayerSettings.Line()}
           valueWidth={props.strokeWidth!}
@@ -1250,7 +1250,7 @@ function makeSettingsDefaultLine(
           onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
         />
       </Show>
-      <Show when={['Exchange', 'BilateralVolume'].includes((props.rendererParameters as LinksParameters).type)}>
+      <Show when={(props.rendererParameters as LinksParameters).sizeType !== 'fixed'}>
         <InputFieldColorOpacity
           label={LL().LayerSettings.Line()}
           valueColor={props.strokeColor!}
@@ -1258,10 +1258,10 @@ function makeSettingsDefaultLine(
           onChangeColor={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
           onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
         />
-        <Show when={(props.rendererParameters as LinksParameters).proportional}>
+        <Show when={(props.rendererParameters as LinksParameters).sizeType === 'proportional'}>
           <InputFieldNumber
             label={ LL().FunctionalitiesSection.LinksOptions.LinkSizeProportionalReferenceSize() }
-            value={ (props.rendererParameters as LinksParameters).proportional!.referenceSize }
+            value={ (props.rendererParameters as LinksParameters).proportional!.referenceRadius }
             onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'proportional', 'referenceSize'], v)}
             min={1}
             max={50}

@@ -144,10 +144,13 @@ function onClickValidate(
       0,
     );
 
+    params.sizeType = 'proportional';
     params.proportional = {
       referenceRadius: 10,
       referenceValue: maxData,
     };
+  } else {
+    params.sizeType = 'fixed';
   }
 
   const newId = generateIdLayer();

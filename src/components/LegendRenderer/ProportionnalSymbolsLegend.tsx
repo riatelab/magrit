@@ -31,7 +31,8 @@ import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Types / Interfaces / Enums
 import {
-  LayerDescriptionProportionalSymbols, ProportionalSymbolSingleColorParameters,
+  LayerDescriptionLinks,
+  LayerDescriptionProportionalSymbols, LinksParameters, ProportionalSymbolSingleColorParameters,
   ProportionalSymbolsLegend, ProportionalSymbolsPositiveNegativeParameters,
 } from '../../global';
 
@@ -1015,34 +1016,43 @@ function verticalLineLegend(
   const layer = findLayerById(
     layersDescriptionStore.layers,
     legend.layerId,
-  ) as LayerDescriptionProportionalSymbols;
+  ) as LayerDescriptionProportionalSymbols | LayerDescriptionLinks;
 
-  const propSize = new PropSizer(
-    layer.rendererParameters.referenceValue,
-    layer.rendererParameters.referenceRadius,
-    layer.rendererParameters.symbolType,
-  );
+  const layerType = layer.representationType;
 
-  const getColor = createMemo(() => {
-    if (layer.rendererParameters.colorMode === 'singleColor') {
-      return () => (layer.rendererParameters as ProportionalSymbolSingleColorParameters).color;
-    }
-    if (layer.rendererParameters.colorMode === 'positiveNegative') {
-      return (value: number) => (
-        value >= 0
-          ? (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[0]
-          : (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]
+  const propSize = createMemo(() => {
+    if (layerType === 'proportionalSymbols') {
+      return new PropSizer(
+        layer.rendererParameters.referenceValue,
+        layer.rendererParameters.referenceRadius,
+        layer.rendererParameters.symbolType,
       );
     }
-    return () => 'black';
+    // layerType === 'links'
+    return new PropSizer(
+      (layer.rendererParameters as LinksParameters).proportional!.referenceValue,
+      (layer.rendererParameters as LinksParameters).proportional!.referenceRadius,
+      'line',
+    );
   });
 
-  const maxSize = createMemo(
-    () => Mmax(
-      propSize.scale(legend.values[legend.values.length - 1]),
-      propSize.scale(legend.values[0]),
-    ),
-  );
+  const getColor = createMemo(() => {
+    if (layerType === 'proportionalSymbols') {
+      if (layer.rendererParameters.colorMode === 'singleColor') {
+        return () => (layer.rendererParameters as ProportionalSymbolSingleColorParameters).color;
+      }
+      if (layer.rendererParameters.colorMode === 'positiveNegative') {
+        return (value: number) => (
+          value >= 0
+            ? (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[0]
+            : (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]
+        );
+      }
+      return () => 'black';
+    }
+    // layerType === 'links'
+    return () => layer.strokeColor;
+  });
 
   const heightTitle = createMemo(
     () => getTextSize(
@@ -1076,10 +1086,10 @@ function verticalLineLegend(
     // by the lowest value, otherwise we want the vertical legend to start by the highest value
     const hasNegativeValues = legend.values.some((v) => v < 0);
     const targetValues = hasNegativeValues ? legend.values : legend.values.toReversed();
-    let lastPosition = distanceToTop() + propSize.scale(targetValues[0]) / 2;
+    let lastPosition = distanceToTop() + propSize().scale(targetValues[0]) / 2;
     return targetValues
       .map((value, i) => {
-        const symbolSize = propSize.scale(value);
+        const symbolSize = propSize().scale(value);
         const result = {
           size: symbolSize,
           x: 0,
@@ -1189,32 +1199,48 @@ function horizontalLineLegend(
   const layer = findLayerById(
     layersDescriptionStore.layers,
     legend.layerId,
-  ) as LayerDescriptionProportionalSymbols;
+  ) as LayerDescriptionProportionalSymbols | LayerDescriptionLinks;
 
-  const propSize = new PropSizer(
-    layer.rendererParameters.referenceValue,
-    layer.rendererParameters.referenceRadius,
-    layer.rendererParameters.symbolType,
-  );
+  const layerType = layer.representationType;
 
-  const getColor = createMemo(() => {
-    if (layer.rendererParameters.colorMode === 'singleColor') {
-      return () => (layer.rendererParameters as ProportionalSymbolSingleColorParameters).color;
-    }
-    if (layer.rendererParameters.colorMode === 'positiveNegative') {
-      return (value: number) => (
-        value >= 0
-          ? (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[0]
-          : (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]
+  const propSize = createMemo(() => {
+    if (layerType === 'proportionalSymbols') {
+      return new PropSizer(
+        layer.rendererParameters.referenceValue,
+        layer.rendererParameters.referenceRadius,
+        layer.rendererParameters.symbolType,
       );
     }
-    return () => 'black';
+    // layerType === 'links'
+    return new PropSizer(
+      (layer.rendererParameters as LinksParameters).proportional!.referenceValue,
+      (layer.rendererParameters as LinksParameters).proportional!.referenceRadius,
+      'line',
+    );
+  });
+
+  const getColor = createMemo(() => {
+    if (layerType === 'proportionalSymbols') {
+      if (layer.rendererParameters.colorMode === 'singleColor') {
+        return () => (layer.rendererParameters as ProportionalSymbolSingleColorParameters).color;
+      }
+      if (layer.rendererParameters.colorMode === 'positiveNegative') {
+        return (value: number) => (
+          value >= 0
+            ? (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[0]
+            : (layer.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]
+        );
+      }
+      return () => 'black';
+    }
+    // layerType === 'links'
+    return () => layer.strokeColor;
   });
 
   const maxSize = createMemo(
     () => Mmax(
-      propSize.scale(legend.values[legend.values.length - 1]),
-      propSize.scale(legend.values[0]),
+      propSize().scale(legend.values[legend.values.length - 1]),
+      propSize().scale(legend.values[0]),
     ),
   );
 
@@ -1270,7 +1296,7 @@ function horizontalLineLegend(
   // (and use createMemo to make it reactive)
   const sizesAndPositions = createMemo(() => legend.values
     .map((value, i) => ({
-      size: propSize.scale(value),
+      size: propSize().scale(value),
       x: (60 + legend.spacing) * i,
       y: heightTitleSubtitle() + maxSize() / 2,
       value,

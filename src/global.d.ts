@@ -561,6 +561,8 @@ interface CategoricalPictogramParameters {
 interface LinksParameters {
   // The name of the variable that contains intensity / volume information
   variable: string,
+  // How to scale the width of the links
+  sizeType: 'fixed' | 'proportional' | 'graduated',
   // Classification parameters (if not specified, the links are not classified
   // and their width is computed as a direct proportion of the value of the variable)
   classification?: {
