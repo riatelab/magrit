@@ -1,7 +1,7 @@
 import d3 from './d3-custom';
 import { globalStore } from '../store/GlobalStore';
 import {
-  degToRadConstant, Mcos, Msin, Msqrt,
+  degToRadConstant, Mcos, Msin,
 } from './math';
 import {
   type GeoJSONFeature,
@@ -232,75 +232,103 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
       const size = +g.getAttribute('mgt:symbol-size')!;
       const symbol = g.getAttribute('mgt:symbol-type')!;
       g.querySelectorAll('path').forEach((p) => {
-        const coords = globalStore.projection(
+        const coords = globalStore.pathGenerator.centroid(
           // eslint-disable-next-line no-underscore-dangle
-          (p as SVGPathElement & ID3Element).__data__.geometry.coordinates,
+          (p as SVGPathElement & ID3Element).__data__.geometry,
         );
-        p.setAttribute(
-          'd', // eslint-disable-next-line no-underscore-dangle
-          getSymbolPath(symbol as SymbolType, coords, size),
-        );
+        if (!Number.isNaN(coords[0])) {
+          p.setAttribute(
+            'd', // eslint-disable-next-line no-underscore-dangle
+            getSymbolPath(symbol as SymbolType, coords, size),
+          );
+          p.setAttribute('visibility', 'visible');
+        } else {
+          p.setAttribute('visibility', 'hidden');
+        }
       });
     } else if (typePortrayal === 'proportionalSymbols') {
       // Redraw the symbols (circles)
       g.querySelectorAll('circle').forEach((c) => {
-        const projectedCoords = globalStore.projection(
+        const projectedCoords = globalStore.pathGenerator.centroid(
           // eslint-disable-next-line no-underscore-dangle
-          (c as SVGCircleElement & ID3Element).__data__.geometry.coordinates,
+          (c as SVGCircleElement & ID3Element).__data__.geometry,
         );
-        c.setAttribute('cx', `${projectedCoords[0]}`);
-        c.setAttribute('cy', `${projectedCoords[1]}`);
+        if (!Number.isNaN(projectedCoords[0])) {
+          c.setAttribute('cx', `${projectedCoords[0]}`);
+          c.setAttribute('cy', `${projectedCoords[1]}`);
+          c.setAttribute('visibility', 'visible');
+        } else {
+          c.setAttribute('visibility', 'hidden');
+        }
       });
       // Redraw the symbols (squares)
       g.querySelectorAll('rect').forEach((r) => {
-        const projectedCoords = globalStore.projection(
+        const projectedCoords = globalStore.pathGenerator.centroid(
           // eslint-disable-next-line no-underscore-dangle
-          (r as SVGRectElement & ID3Element).__data__.geometry.coordinates,
+          (r as SVGRectElement & ID3Element).__data__.geometry,
         );
-        const size = +r.getAttribute('width')!;
-        r.setAttribute('x', `${projectedCoords[0] - size / 2}`);
-        r.setAttribute('y', `${projectedCoords[1] - size / 2}`);
+        if (!Number.isNaN(projectedCoords[0])) {
+          const size = +r.getAttribute('width')!;
+          r.setAttribute('x', `${projectedCoords[0] - size / 2}`);
+          r.setAttribute('y', `${projectedCoords[1] - size / 2}`);
+          r.setAttribute('visibility', 'visible');
+        } else {
+          r.setAttribute('visibility', 'hidden');
+        }
       });
     } else if (typePortrayal === 'categoricalPictogram') {
       g.querySelectorAll(':scope > g').forEach((gg) => {
-        const iconDimension = JSON.parse(gg.getAttribute('mgt:icon-dimension')!);
-        const projectedCoords = globalStore.projection(
+        const projectedCoords = globalStore.pathGenerator.centroid(
           // eslint-disable-next-line no-underscore-dangle
-          (gg as SVGGElement & ID3Element).__data__.geometry.coordinates,
+          (gg as SVGGElement & ID3Element).__data__.geometry,
         );
-        gg.setAttribute('transform', `translate(${projectedCoords[0] - iconDimension[0] / 2}, ${projectedCoords[1] - iconDimension[1] / 2})`);
+        if (!Number.isNaN(projectedCoords[0])) {
+          const iconDimension = JSON.parse(gg.getAttribute('mgt:icon-dimension')!);
+          gg.setAttribute('transform', `translate(${projectedCoords[0] - iconDimension[0] / 2}, ${projectedCoords[1] - iconDimension[1] / 2})`);
+          gg.setAttribute('visibility', 'visible');
+        } else {
+          gg.setAttribute('visibility', 'hidden');
+        }
       });
     } else if (typePortrayal === 'mushrooms') {
       const pos = ['top', 'bottom'];
       // Redraw the symbols (circles)
       g.querySelectorAll('g').forEach((gg) => {
-        const projectedCoords = globalStore.projection(
+        const projectedCoords = globalStore.pathGenerator.centroid(
           // eslint-disable-next-line no-underscore-dangle
-          (gg as SVGGElement & ID3Element).__data__.geometry.coordinates,
+          (gg as SVGGElement & ID3Element).__data__.geometry,
         );
-        gg.querySelectorAll('path').forEach((p, i) => {
-          const sizeValue = p.getAttribute('mgt:size-value')!;
-          p.setAttribute(
-            'd',
-            semiCirclePath(
-              +sizeValue,
-              projectedCoords[0],
-              projectedCoords[1],
-              pos[i] as 'top' | 'bottom',
-            ),
-          );
-        });
+        if (!Number.isNaN(projectedCoords[0])) {
+          gg.querySelectorAll('path').forEach((p, i) => {
+            const sizeValue = p.getAttribute('mgt:size-value')!;
+            p.setAttribute(
+              'd',
+              semiCirclePath(
+                +sizeValue,
+                projectedCoords[0],
+                projectedCoords[1],
+                pos[i] as 'top' | 'bottom',
+              ),
+            );
+          });
+          gg.setAttribute('visibility', 'visible');
+        } else {
+          gg.setAttribute('visibility', 'hidden');
+        }
       });
     } else if (typePortrayal === 'labels') {
       g.querySelectorAll('text').forEach((t) => {
-        const projectedCoords = globalStore.projection(
-          // eslint-disable-next-line no-underscore-dangle
-          (t as SVGTextElement & ID3Element).__data__.geometry.coordinates,
-        );
-        const offsetX = +(t.getAttribute('mgt:offset-x') || 0);
-        const offsetY = +(t.getAttribute('mgt:offset-y') || 0);
-        t.setAttribute('x', `${projectedCoords[0] + offsetX}`);
-        t.setAttribute('y', `${projectedCoords[1] + offsetY}`);
+        const c = globalStore.pathGenerator // eslint-disable-next-line no-underscore-dangle
+          .centroid((t as SVGTextElement & ID3Element).__data__.geometry);
+        if (!Number.isNaN(c[0])) {
+          const offsetX = +(t.getAttribute('mgt:offset-x') || 0);
+          const offsetY = +(t.getAttribute('mgt:offset-y') || 0);
+          t.setAttribute('x', `${c[0] + offsetX}`);
+          t.setAttribute('y', `${c[1] + offsetY}`);
+          t.setAttribute('visibility', 'visible');
+        } else {
+          t.setAttribute('visibility', 'hidden');
+        }
       });
     } else if (typePortrayal === 'links') {
       const linkCurvature = g.getAttribute('mgt:link-curvature')!;
