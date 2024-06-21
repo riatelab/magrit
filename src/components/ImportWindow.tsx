@@ -661,8 +661,7 @@ export default function ImportWindow(): JSX.Element {
           <button
             class="button is-primary is-outlined"
             onClick={handleInputFiles}
-            ref={autofocus}
-            autofocus={true}
+            autofocus
           >
             {LL().ImportWindow.Open()}
           </button>
