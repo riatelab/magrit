@@ -201,7 +201,7 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
     <h4>{LL().DatasetCatalog.preview() }</h4>
     <div class="has-text-centered">
       <img
-        src={`/dataset/${ds.id}.png`}
+        src={`dataset/${ds.id}.png`}
         class="image"
         style={{ border: 'solid 1px silver', width: '300px', margin: 'auto' }}
         alt={LL().DatasetCatalog.altDatasetPreview()}
@@ -382,7 +382,7 @@ export default function ExampleDatasetModal(): JSX.Element {
     setModalStore({
       confirmCallback: () => {
         setLoading(true);
-        fetch(`/dataset/${selectedDataset()!.id}.geojson`)
+        fetch(`dataset/${selectedDataset()!.id}.geojson`)
           .then((response) => response.json())
           // eslint-disable-next-line solid/reactivity
           .then((geojsonData) => {
