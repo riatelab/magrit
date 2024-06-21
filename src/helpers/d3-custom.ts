@@ -52,6 +52,7 @@ import {
   geoEquirectangular,
   geoNaturalEarth1,
   geoMercator,
+  geoOrthographic,
   geoEqualEarth,
 } from 'd3-geo';
 import {
@@ -317,6 +318,7 @@ export default {
   geoWinkel1, // Custom projection, from projection-winkel1 file
   geoHatano, // Custom projection, from projection-hatano file
   geoNaturalEarth1,
+  geoOrthographic,
   geoEqualEarth,
   geoAiry,
   geoAitoff,

@@ -109,6 +109,7 @@ const availableProjections = [
   'NellHammer',
   'InterruptedQuarticAuthalic',
   'Nicolosi',
+  'Orthographic',
   'Patterson',
   'Polyconic',
   // 'Polyhedral',
