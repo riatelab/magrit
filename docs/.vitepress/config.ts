@@ -121,7 +121,7 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
 export default defineConfig({
   title: "Magrit Documentation",
   description: "Magrit Documentation",
-  base: '/docs/',
+  // base: './',
   vite: {
     publicDir: 'public',
   },
