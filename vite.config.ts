@@ -69,6 +69,7 @@ export default defineConfig({
     isolate: false,
   },
   build: {
+    outDir: isBuildElectron ? 'dist' : 'dist/app',
     target: isBuildElectron ? 'es2022' : 'es2020',
     minify: false,
     // rollupOptions: {
