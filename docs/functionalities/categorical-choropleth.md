@@ -8,3 +8,15 @@ Ce type de représentation peut également être utilisé pour représenter des 
 
 ## Exemples
 
+<ZoomImg
+    src="../categorical-choro.png"
+    alt="Carte choroplèthe catégorielle des communes de la région Île-de-France, colorée selon leur département d'appartenance"
+    caption="Carte choroplèthe catégorielle des communes de la région Île-de-France, colorée selon leur département d'appartenance"
+/>
+
+<ZoomImg
+    src="../categorical-choro-bar-chart.png"
+    alt="Carte choroplèthe catégorielle des communes de la région Île-de-France, colorée selon leur département d'appartenance (+ diagramme en barres)"
+    caption="Carte choroplèthe catégorielle des communes de la région Île-de-France, colorée selon leur département d'appartenance (+ diagramme en barres)"
+/>
+

@@ -135,7 +135,7 @@ export default defineConfig({
         },
         footer: {
           message: 'Publié sous les termes de la licence GNU General Public License v3.0 or later.',
-          copyright: 'Copyright © 2024-present Matthieu Viry'
+          copyright: 'Copyright © 2024-present CNRS (UAR 2414 RIATE)'
         },
       },
     },
@@ -149,7 +149,7 @@ export default defineConfig({
         },
         footer: {
           message: 'Released under the GNU General Public License v3.0 or later.',
-          copyright: 'Copyright © 2024-present Matthieu Viry'
+          copyright: 'Copyright © 2024-present CNRS (UAR 2414 RIATE)'
         },
       },
     }

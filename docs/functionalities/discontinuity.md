@@ -18,4 +18,3 @@ Cette représentation est particulièrement pertinente lorsqu'elle peut être co
 ## Exemples
 
 
-

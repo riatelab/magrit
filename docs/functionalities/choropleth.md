@@ -25,3 +25,14 @@ types de discrétisation et parmi un large éventail de palettes de couleurs.
 
 ## Exemples
 
+<ZoomImg
+    src="../choro.png"
+    alt="Carte choroplèthe de la densité de population par quartier de la ville de Paris"
+    caption="Carte choroplèthe de la densité de population par quartier de la ville de Paris"
+/>
+
+<ZoomImg
+    src="../choro-histogram.png"
+    alt="Carte choroplèthe de la densité de population par quartier de la ville de Paris (avec histogramme)"
+    caption="Carte choroplèthe de la densité de population par quartier de la ville de Paris (avec histogramme)"
+/>

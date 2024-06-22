@@ -15,7 +15,7 @@ Dans Magrit, cette opération de simplification du tracé est opérée sur la ve
 
 ## Paramètres
 
-Il est possible de xxxxxx <!-- TODO --> les coordonnées des points du tracé en définissant une valeur (généralement une puissance de 10)
+Il est possible d'ajuster la précision des coordonnées des points du tracé en définissant une valeur (ici en utilisant une puissance de 10)
 qui correspond à la précision souhaitée. Les coordonnées sont arrondies à cette valeur ayant pour effet d'aider
 à accrocher les points des entités voisines les uns aux autres lorsque la topologie du jeu de données d'entrées
 n'est pas parfaite.
@@ -30,7 +30,15 @@ et se fait par tâtonnement : le résultat doit vous satisfaire visuellement, sa
 ## Exemple
 
 Dans l'exemple suivant, l'opération de simplification du tracé permet de passer d'un jeu de données
-contenant au total XXXXX points à un jeu de données contenant XXXXX points :
+contenant au total 227 950 points à un jeu de données contenant 27 071 points, et cela sans différence visible
+à l'échelle utilisée pour la cartographie thématique, ce qui permet d'améliorer les performances
+d'affichage et de calcul de l'application :
+
+<ZoomImg
+    src="../simplification-senegal-departements.png"
+    alt="Simplification du tracé d'un jeu de données (départements du Sénégal)"
+    caption="Simplification du tracé d'un jeu de données (départements du Sénégal)"
+/>
 
 
 

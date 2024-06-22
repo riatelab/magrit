@@ -44,8 +44,12 @@ Cette méthode permet de créer des classes homogènes. En effet l'algorithme vi
 
 Cette méthode permet de créer des classes homogènes. En effet l'algorithme vise à trouver le nombre de classe souhaitées en minimisant la variance intra-classe et en maximisant la variance inter-classe.
 
-> Cette méthode est désormais dépréciée en faveur de la méthode CKMeans donnant de meilleurs résultats
-en un temps de calcul bien plus court.
+::: warning Dépréciation
+Cette méthode est désormais dépréciée en faveur de la méthode CKMeans donnant de meilleurs résultats
+(les entités sont généralement classées comme dans la méthode de Fisher-Jenks mais avec des limites de classes plus faciles à lire)
+en un temps de calcul bien plus court. Nous vous conseillons donc d'utiliser la méthode CKMeans à la place.
+
+:::
 
 ### Moyenne et écart-type
 
@@ -65,6 +69,9 @@ Le nombre de classes qu'il est possible de choisir pour cette méthode est donc 
 
 ### Saisie manuelle
 
+Il est également possible de saisir manuellement les bornes de classes.
+Cette méthode peut notamment être utile pour créer de "jolies" limites de classes après avoir effectué une discrétisation automatique avec les quantiles
+ou les seuils naturels par exemple.
 
 
 ## Choix d'une progression de couleurs
