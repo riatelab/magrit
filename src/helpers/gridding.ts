@@ -157,6 +157,7 @@ export const computeGriddedLayer = async (
     }
     cellFeature.properties[`density-${params.variable}`] = (sum / areaFn(cellFeature as AllGeoJSON)) * 1000000;
     cellFeature.properties.sum = sum;
+    cellFeature.properties.id = ixCell;
   }
 
   // const resultGrid = isGeo

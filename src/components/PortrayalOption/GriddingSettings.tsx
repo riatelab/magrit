@@ -1,7 +1,6 @@
 // Import from solid-js
 import type { JSX } from 'solid-js';
 import {
-  createMemo,
   createSignal,
   For,
   Show,
@@ -9,7 +8,6 @@ import {
 import { produce, unwrap } from 'solid-js/store';
 
 // Imports from other packages
-import { getPalette } from 'dicopal';
 import { yieldOrContinue } from 'main-thread-scheduling';
 import { CkmeansClassifier } from 'statsbreaks';
 import { bbox } from '@turf/turf';
@@ -119,7 +117,7 @@ async function onClickValidate(
         name: 'id',
         hasMissingValues: false,
         type: VariableType.identifier,
-        dataType: 'string',
+        dataType: 'number',
       },
       {
         name: `density-${targetVariable}`,
