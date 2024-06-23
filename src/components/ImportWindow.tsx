@@ -570,7 +570,7 @@ export default function ImportWindow(): JSX.Element {
                 file: fileName,
                 message: (dsInfo as InvalidDataset).reason,
               }));
-              invalidToBeRemoved.push(fileName);
+              invalidToBeRemoved.push(fd.name);
               return null;
             }
             return {
