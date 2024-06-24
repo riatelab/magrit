@@ -134,9 +134,12 @@ export default defineConfig({
           '/': sidebarFr(),
         },
         footer: {
-          message: 'Publié sous les termes de la licence GNU General Public License v3.0 or later.',
+          message: 'Publié selon les termes de la GNU General Public License v3.0 ou ultérieure.',
           copyright: 'Copyright © 2024-present CNRS (UAR 2414 RIATE)'
         },
+        nav: [
+          { text: 'Accéder à l\'application', link: '/app/', target: '_self' },
+        ]
       },
     },
     en: {
@@ -151,6 +154,9 @@ export default defineConfig({
           message: 'Released under the GNU General Public License v3.0 or later.',
           copyright: 'Copyright © 2024-present CNRS (UAR 2414 RIATE)'
         },
+        nav: [
+          { text: 'Access the application', link: '/app/', target: '_self' },
+        ]
       },
     }
   },
