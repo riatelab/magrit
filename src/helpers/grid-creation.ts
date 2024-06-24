@@ -175,8 +175,8 @@ const generateHexGrid = (
           coordinates: [vertices],
         },
         properties: {
-          centerX: x,
-          centerY: y,
+          // centerX: x,
+          // centerY: y,
         },
       });
     }

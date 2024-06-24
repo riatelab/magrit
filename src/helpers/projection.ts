@@ -295,11 +295,14 @@ export const reprojWithD3 = (
   invert: boolean = false,
 ): GeoJSONFeatureCollection => {
   const newData = JSON.parse(JSON.stringify(data));
+  delete newData.bbox;
   const projFunc = invert
     ? (coord) => proj.invert(coord)
     : (coord) => proj(coord);
   newData.features.forEach((f: GeoJSONFeature) => {
     reprojGeom(f.geometry, projFunc);
+    // eslint-disable-next-line no-param-reassign
+    delete f.geometry.bbox;
   });
   return newData;
 };
@@ -310,11 +313,14 @@ export const reprojWithProj4 = (
   invert: boolean = false,
 ): GeoJSONFeatureCollection => {
   const newData = JSON.parse(JSON.stringify(data));
+  delete newData.bbox;
   const projFunc = invert
     ? (coord) => proj.inverse(coord)
     : (coord) => proj.forward(coord);
   newData.features.forEach((f: GeoJSONFeature) => {
     reprojGeom(f.geometry, projFunc);
+    // eslint-disable-next-line no-param-reassign
+    delete f.geometry.bbox;
   });
   return newData;
 };

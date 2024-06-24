@@ -59,7 +59,7 @@ const pointAggregationCount = (
   );
 
   const resultingFeatures = maskLayer.features.map((maskFeature) => {
-    const box = bbox(maskFeature) as [number, number, number, number];
+    const box = bbox(maskFeature, { recompute: true }) as [number, number, number, number];
     const treeMatches = tree.search({
       minX: box[0],
       minY: box[1],
@@ -103,7 +103,7 @@ const pointAggregationWeightedCount = (
   );
 
   const resultingFeatures = maskLayer.features.map((maskFeature) => {
-    const box = bbox(maskFeature) as [number, number, number, number];
+    const box = bbox(maskFeature, { recompute: true }) as [number, number, number, number];
     const treeMatches = tree.search({
       minX: box[0],
       minY: box[1],
@@ -152,7 +152,7 @@ const pointAggregationMean = (
   );
 
   const resultingFeatures = maskLayer.features.map((maskFeature) => {
-    const box = bbox(maskFeature) as [number, number, number, number];
+    const box = bbox(maskFeature, { recompute: true }) as [number, number, number, number];
     const treeMatches = tree.search({
       minX: box[0],
       minY: box[1],
@@ -203,7 +203,7 @@ const pointAggregationStandardDeviation = (
   );
 
   const resultingFeatures = maskLayer.features.map((maskFeature) => {
-    const box = bbox(maskFeature) as [number, number, number, number];
+    const box = bbox(maskFeature, { recompute: true }) as [number, number, number, number];
     const treeMatches = tree.search({
       minX: box[0],
       minY: box[1],
@@ -332,33 +332,36 @@ export const pointAggregationOnGrid = (
   const projectedData = isGeo ? pointLayer : reprojFunc(proj, pointLayer);
 
   // We want to compute the bounding box of the data (in the current map projection if it's not geo)
-  const extent = bbox(projectedData as AllGeoJSON) as [number, number, number, number];
+  const extent = bbox(
+    projectedData as AllGeoJSON,
+    { recompute: true },
+  ) as [number, number, number, number];
 
   // Generate the grid with the appropriate shape
   const gridLayer = gridFunctions[gridParameters.cellType](extent, resolution);
 
   let resultLayer;
   if (analysisType === PointAggregationStockType.Count) {
-    resultLayer = pointAggregationCount(pointLayer, gridLayer);
+    resultLayer = pointAggregationCount(projectedData, gridLayer);
   }
   if (analysisType === PointAggregationStockType.WeightedCount) {
-    resultLayer = pointAggregationWeightedCount(pointLayer, gridLayer, targetVariable);
+    resultLayer = pointAggregationWeightedCount(projectedData, gridLayer, targetVariable);
   }
   if (analysisType === PointAggregationRatioType.Density) {
     // We treat density as a count for now
     // and will compute the count/area later
-    resultLayer = pointAggregationCount(pointLayer, gridLayer);
+    resultLayer = pointAggregationCount(projectedData, gridLayer);
   }
   if (analysisType === PointAggregationRatioType.WeightedDensity) {
     // We treat weighted density as a weighted count for now
     // and will compute the count/area later
-    resultLayer = pointAggregationWeightedCount(pointLayer, gridLayer, targetVariable);
+    resultLayer = pointAggregationWeightedCount(projectedData, gridLayer, targetVariable);
   }
   if (analysisType === PointAggregationRatioType.Mean) {
-    resultLayer = pointAggregationMean(pointLayer, gridLayer, targetVariable);
+    resultLayer = pointAggregationMean(projectedData, gridLayer, targetVariable);
   }
   if (analysisType === PointAggregationRatioType.StandardDeviation) {
-    resultLayer = pointAggregationStandardDeviation(pointLayer, gridLayer, targetVariable);
+    resultLayer = pointAggregationStandardDeviation(projectedData, gridLayer, targetVariable);
   }
 
   let resultGeoLayer = isGeo

@@ -1,12 +1,12 @@
 // Imports from solid-js
 import {
-  createMemo, createSignal, For, type JSX,
+  createMemo, createSignal,
+  For, type JSX,
   mergeProps, Show,
 } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 // Import from other libraries
-import { FaSolidArrowRight } from 'solid-icons/fa';
 import { BsThreeDotsVertical } from 'solid-icons/bs';
 import * as Plot from '@observablehq/plot';
 import Sortable from 'solid-sortablejs';
@@ -289,7 +289,7 @@ export function CategoriesCustomisation(
             ></div>
             <input
               type="text"
-              style={{ height: '3em', width: '45%' }}
+              style={{ height: '3em', width: '40%' }}
               value={item.categoryName || ''}
               onChange={(e) => {
                 props.setMapping(
@@ -331,16 +331,17 @@ export function CategoriesCustomisation(
                 }}
                 onFocus={() => { setDisabled(true); }}
                 onFocusOut={() => { setDisabled(false); }}
+                style={{ width: '4em' }}
               />
               px
             </div>
             <Show when={props.detailed}>
-            <span>
+            <div style={{ width: 'calc(100% - (40% + 4em))' }}>
               &nbsp;({ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Value() }
               &nbsp;{item.value} -
               &nbsp;{ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Count() }
               &nbsp;{item.count})
-            </span>
+            </div>
             </Show>
           </div>
         </div>
