@@ -51,4 +51,9 @@ features:
       width: calc(100% / 2) !important;
     }
 }
+
+.VPFeatures .VPImage {
+    border: none !important;
+    margin-bottom: 10px !important;
+}
 </style>
