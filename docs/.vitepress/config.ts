@@ -6,7 +6,7 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
       text: 'Introduction',
       collapsed: false,
       items: [
-        { text: 'Philosophie de l\'application', link: '/presentation' },
+        { text: 'Philosophie de l\'application', link: '/documentation' },
         { text: 'Exemples de cartes', link: '/map-examples' },
         { text: 'Passer à Magrit v2', link: '/upgrade-to-v2' },
         { text: 'Accéder à l\'application / Installation', link: '/access-the-app' },
@@ -64,7 +64,7 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
       text: 'Introduction',
       collapsed: false,
       items: [
-        { text: 'Application philosophy', link: '/en/presentation' },
+        { text: 'Application philosophy', link: '/en/documentation' },
         { text: 'Map examples', link: '/en/map-examples' },
         { text: 'Upgrading to Magrit v2', link: '/en/upgrade-to-v2' },
         { text: 'Accessing the application / Installation', link: '/en/access-the-app' },
