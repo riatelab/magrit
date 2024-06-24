@@ -253,8 +253,11 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
     res.getColumnDefs = (data, fieldDescriptions) => Object.keys(data.features[0].properties)
       .map((key) => {
         const fd = fieldDescriptions.find((f) => f.name === key);
+        if (!fd) {
+          console.log(`Missing field description for field: ${key}`);
+        }
         const o = { field: key, headerName: key, maxWidth: 300 };
-        if (fd.dataType === 'number') {
+        if (fd && fd.dataType === 'number') {
           o.type = 'numericColumn';
           o.cellEditor = 'agNumberCellEditor';
         }
@@ -264,8 +267,11 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
     res.getColumnDefs = (data, fieldDescriptions) => Object.keys(data[0])
       .map((key) => {
         const fd = fieldDescriptions.find((f) => f.name === key);
+        if (!fd) {
+          console.log(`Missing field description for field: ${key}`);
+        }
         const o = { field: key, headerName: key, maxWidth: 300 };
-        if (fd.dataType === 'number') {
+        if (fd && fd.dataType === 'number') {
           o.type = 'numericColumn';
           o.cellEditor = 'agNumberCellEditor';
         }
