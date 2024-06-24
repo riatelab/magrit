@@ -45,14 +45,9 @@ features:
       light: ../icon/hammer_light.svg
 ---
 
-<style>
-@media (min-width: 768px) {
-    .item.grid-4 {
-      width: calc(100% / 2) !important;
-    }
-}
-.VPFeatures .VPImage {
-    border: none !important;
-    margin-bottom: 10px !important;
-}
-</style>
+<div>
+    <br />
+    <a href="https://riate.cnrs.fr" target="_blank" rel="noopener noreferrer">
+    <img src="/logos-footer.png" style="margin:auto;border: 6px solid whitesmoke !important;background: whitesmoke; border-radius: 6px; width:400px" alt="Logos CNRS / Univ. Paris Cité / UAR RIATE">
+    </a>
+</div>

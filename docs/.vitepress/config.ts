@@ -119,8 +119,8 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Magrit Documentation",
-  description: "Magrit Documentation",
+  title: "Magrit",
+  description: "Magrit",
   // base: './',
   vite: {
     publicDir: 'public',
@@ -128,6 +128,8 @@ export default defineConfig({
   locales: {
     root: {
       label: 'French',
+      title: 'Magrit',
+      description: 'Magrit est une application Web de cartographie thématique',
       lang: 'fr',
       themeConfig: {
         sidebar: {
@@ -144,6 +146,8 @@ export default defineConfig({
     },
     en: {
       label: 'English',
+      title: 'Magrit',
+      description: 'Magrit is a thematic cartography Web application',
       lang: 'en',
       link: '/en/',
       themeConfig: {
