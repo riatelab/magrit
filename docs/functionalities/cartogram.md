@@ -9,9 +9,17 @@ Trois méthodes de création de cartogrammes sont disponibles dans Magrit :
 
 - la première, basée sur l'algorithme de Dougenik et al. (1) permet la création de cartogrammes "contigus" (la topologie du fond de carte est préservée tant que possible),
 - la seconde, basée sur l'algorithme de Olson (2) permet la création de cartogrammes "non-contigus" (la méthode ne cherche pas à préserver la topologie du fond de carte),
-- la troisième, basée sur l'algorithme de Gastner, Seguy et More (3) permet la création de cartogrammes "contigus" (la topologie du fond de carte est préservée).
+- la troisième, basée sur l'algorithme de Gastner, Seguy et More (3) permet la création de cartogrammes "contigus" (la topologie du fond de carte est préservée tant que possible).
 
 Les méthodes (1) et (3) offrent des résultats comparables en termes de qualité visuelle, mais la méthode (1) est généralement plus rapide.
+
+## Exemple
+
+<ZoomImg
+    src="/cartograms.png"
+    alt="Les 3 types de cartogrammes appliqués aux quartiers de Paris (variable: Population 2012)"
+    caption="Les 3 types de cartogrammes appliqués aux quartiers de Paris (variable: Population 2012)"
+/>
 
 ## Références
 

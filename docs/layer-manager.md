@@ -16,15 +16,23 @@ dans le gestionnaire de couche.
 
 Plusieurs fonctionnalités sont accessibles pour chacune des couches de données géographiques :
 
-- affichage d'un résumé d'information sur la couche,
-- modification des [paramètres de la couche](./layer-properties) (couleur, bordure, opacité, etc.),
-- inverser la visibilité de la couche (visible / invisible),
-- zoomer sur la couche,
-- afficher le [tableau de données](./data-table) associé à la couche,
-- modifier le [typage des champs](./typing) de la couche,
-- supprimer la couche.
+- affichage d'un résumé d'information sur la couche au survol (1),
+- affichage / masquage de la légende de la couche (2),
+- inverser la visibilité de la couche (visible / invisible) (3),
+- zoomer sur la couche (4),
+- afficher le [tableau de données](./data-table) associé à la couche (5),
+- modifier le [typage des champs](./typing) de la couche (6),
+- supprimer la couche (7),
+- modifier les [propriétés de la couche](./layer-properties) (8),
+- [créer une nouvelle représentation](./layer-creation) à partir de la couche (9).
 
-Par ailleurs, comme dans un logiciel SIG ou dans un logiciel de dessin vectoriel, l'ordre des couches dans le gestionnaire de couche
+<ZoomImg
+    src="./layer-manager-item.png"
+    alt="Fonctionnalités accessibles pour chaque couche"
+    caption="Fonctionnalités accessibles pour chaque couche"
+/>
+
+Par ailleurs, comme dans un logiciel SIG ou dans un logiciel de dessin vectoriel, l'ordre des couches dans le gestionnaire de couches
 reflète l'ordre d'affichage des couches sur la carte (la couche en haut de la liste est affichée au-dessus des autres couches, etc.).
 Il est possible de modifier l'ordre des couches en les faisant glisser-déposer à la position souhaitée.
 

@@ -15,6 +15,16 @@ Cette représentation est particulièrement pertinente lorsqu'elle peut être co
 
 ## Paramètres
 
+- Variable à utiliser
+- Type de discontinuité (absolue ou relative)
+- Type de discrétisation
+
+Il est possible de modifier, après création de la couche, les paramètres de discrétisation (nombre de classes, méthode de discrétisation, taille associée à chaque classe, etc.).
+
 ## Exemples
 
-
+<ZoomImg
+    src="/example-discontinuity.png"
+    alt="Exemple de carte de discontinuité"
+    caption="Exemple de carte de discontinuité"
+/>

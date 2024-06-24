@@ -26,7 +26,8 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
         { text: 'Tableau de données', link: '/data-table' },
         { text: 'Propriétés de la couche', link: '/layer-properties' },
         { text: 'Propriété de la légende', link: '/legend-properties' },
-        { text: 'Mise en page et habillage de la carte', link: '/layout-features' }
+        { text: 'Mise en page et habillage de la carte', link: '/layout-features' },
+        { text: 'Création d\'une représentation', link: '/layer-creation' }
       ]
     },
     {
@@ -84,7 +85,8 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
         { text: 'Data table', link: '/en/data-table' },
         { text: 'Layer properties', link: '/en/layer-properties' },
         { text: 'Legend properties', link: '/en/legend-properties' },
-        { text: 'Map layout features', link: '/en/layout-features' }
+        { text: 'Map layout features', link: '/en/layout-features' },
+        { text: 'Creating a portrayal', link: '/en/layer-creation' },
       ]
     },
     {
