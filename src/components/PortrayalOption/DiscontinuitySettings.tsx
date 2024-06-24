@@ -237,11 +237,11 @@ export default function DiscontinuitySettings(
       onChange={(value) => setDiscontinuityType(value as 'absolute' | 'relative')}
       value={discontinuityType()}
     >
-      <option value="absolute">
-        { LL().FunctionalitiesSection.DiscontinuityOptions.Absolute() }
-      </option>
       <option value="relative">
-        { LL().FunctionalitiesSection.DiscontinuityOptions.Relative() }
+        {LL().FunctionalitiesSection.DiscontinuityOptions.Relative()}
+      </option>
+      <option value="absolute">
+        {LL().FunctionalitiesSection.DiscontinuityOptions.Absolute()}
       </option>
     </InputFieldSelect>
     <InputFieldSelect
