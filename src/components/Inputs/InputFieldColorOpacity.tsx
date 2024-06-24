@@ -220,7 +220,7 @@ export function InputFieldPaletteOpacity(props: InputFieldPaletteOpacityProps): 
             height: '1.75em',
           }}
           onClick={(e) => mergedProps.onClickPalette(e)}
-          title={LL().LayerSettings.InformationPalette()}
+          // title={LL().LayerSettings.InformationPalette()}
         >
           <For each={mergedProps.valuePalette}>
             {
@@ -338,6 +338,7 @@ export function InputFieldWidthPaletteOpacity(
             height: '1.75em',
           }}
           onClick={(e) => mergedProps.onClickPalette(e)}
+          // title={LL().LayerSettings.InformationPalette()}
         >
           <For each={mergedProps.valuePalette}>
             {
