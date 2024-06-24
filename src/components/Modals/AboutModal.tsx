@@ -230,16 +230,18 @@ export default function AboutModal(
         <div style={{ 'text-align': 'center' }}>
           <b>{LL().AboutAndSettingsPanel.usefulLinks()}</b>
           <br/>
-          <p>
-            <a
-              class={'button is-link'}
-              style={{ width: '280px' }}
-              href={`${window.location.origin}/docs/`}
-              target="_blank"
-            >
-              <b>{LL().AboutAndSettingsPanel.documentation()}</b>
-            </a>
-          </p>
+          <Show when={!(navigator.userAgent.toLowerCase().indexOf(' electron/') > -1)}>
+            <p>
+              <a
+                class={'button is-link'}
+                style={{ width: '280px' }}
+                href={`${window.location.origin}/documentation.html`}
+                target="_blank"
+              >
+                <b>{LL().AboutAndSettingsPanel.documentation()}</b>
+              </a>
+            </p>
+          </Show>
           <p>
             <a
               class={'button is-link'}
