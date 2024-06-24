@@ -71,6 +71,12 @@ export async function computeCartogramGastnerSeguyMore(
 
   const resultProj = goCartInstance.makeCartogram(projectedData, variableName);
 
+  // Remove unnecessary cartogram_id property
+  resultProj.features.forEach((f) => {
+    // eslint-disable-next-line no-param-reassign
+    delete f.properties.cartogram_id;
+  });
+
   return rewindLayer(
     isGeo
       ? resultProj

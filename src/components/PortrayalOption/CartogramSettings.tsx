@@ -102,10 +102,18 @@ async function onClickValidate(
       hasMissingValues: false,
       dataType: 'number' as DataType,
     });
+  } else { // cartogramMethod === CartogramMethod.Olson
+    // There is a new "scale" field
+    newFields.push({
+      name: 'scale',
+      type: VariableType.ratio,
+      hasMissingValues: false,
+      dataType: 'number' as DataType,
+    });
   }
 
   // Find a position for the legend
-  const legendPosition = getPossibleLegendPosition(120, 340);
+  // const legendPosition = getPossibleLegendPosition(120, 340);
 
   const newLayerDescription = {
     id: generateIdLayer(),
