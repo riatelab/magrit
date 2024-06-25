@@ -39,9 +39,13 @@ export async function convertBinaryTabularDatasetToJSON(
   params: { openOpts: string[]; opts: string[] } = { opts: [], openOpts: [] },
 ): Promise<object[]> {
   const layer = await convertToGeoJSON(fileOrFiles, params);
-  // We want to strip any line breaks from the column names
+  // We want to strip any line breaks
+  // and punctuation from the column names
   const columnsBefore = Object.keys(layer.features[0].properties);
-  const columns = columnsBefore.map((c) => c.replace(/(\r\n|\n|\r)/gm, ' '));
+  const columns = columnsBefore.map((c) => c.replace(/[\r\n]+/g, ' ')
+    .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .replaceAll('\'', '-'));
   return layer.features.map((f: GeoJSONFeature) => {
     const properties = {};
     columns.forEach((c) => {
