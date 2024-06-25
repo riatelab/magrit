@@ -89,8 +89,8 @@ function CategoriesPlot(
   const sizeLargestLabel = createMemo(() => Math.max(
     ...props.mapping.map((m) => getTextSize(
       m.categoryName || '',
-      10,
-      'sans-serif',
+      props.textProperties.fontSize,
+      props.textProperties.fontFamily,
     ).width),
   ));
 
@@ -108,7 +108,7 @@ function CategoriesPlot(
         height: props.height,
         width: props.width,
         marginTop: 10,
-        marginLeft: sizeLargestLabel() + 10,
+        marginLeft: sizeLargestLabel() * 1.2,
         color: { domain: domain(), range: range() },
         x: {
           label: null,
@@ -145,7 +145,7 @@ function CategoriesPlot(
           fontStyle: props.textProperties.fontStyle,
         },
         marginTop: 10,
-        marginBottom: Math.max(sizeLargestLabel() * 0.65, 25),
+        marginBottom: Math.sin(-30) * sizeLargestLabel(),
         marginLeft: 30,
         color: { domain: domain(), range: range() },
         x: {

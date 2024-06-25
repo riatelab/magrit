@@ -83,8 +83,8 @@ function ChoroplethHistogram(
   const sizeLargestLabel = createMemo(() => Math.max(
     ...props.classification.breaks.slice(1, -1).map((m) => getTextSize(
       formatValue(m),
-      10,
-      'sans-serif',
+      props.textProperties.fontSize,
+      props.textProperties.fontStyle,
     ).width),
   ));
 

@@ -21,7 +21,11 @@ import {
 } from './common.tsx';
 import { isFiniteNumber, precisionToMinimumFractionDigits } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
-import { extent, Mfloor, round } from '../../helpers/math';
+import {
+  extent,
+  max as computeMax,
+  Mfloor, round,
+} from '../../helpers/math';
 import { LinearRegressionResult } from '../../helpers/statistics';
 
 // Stores
@@ -80,6 +84,12 @@ function ScatterPlot(
     return Mfloor(min - p03);
   });
 
+  const sizeLargestLabel = createMemo(() => getTextSize(
+    formatValue(computeMax(ds().map((d) => d[props.explainedVariable]))),
+    props.textProperties.fontSize,
+    props.textProperties.fontStyle,
+  ).width);
+
   return <>
     {
       Plot.plot({
@@ -101,7 +111,7 @@ function ScatterPlot(
           label: props.explainedVariable,
           tickFormat: (d) => formatValue(d),
         },
-        marginLeft: 60,
+        marginLeft: Math.max(sizeLargestLabel() + 12, 60),
         marks: [
           Plot.dot(ds(), {
             x: props.explanatoryVariable,
