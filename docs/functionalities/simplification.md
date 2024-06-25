@@ -1,7 +1,8 @@
 # Simplification du tracé (généralisation)
 
 En cartographie, la généralisation est une étape importante de la préparation des données
-géographiques. Elle consiste à ... <!-- TODO -->
+géographiques. Il s'agit du *"principe de simplification et d’adaptation du tracé d’un contour
+cartographique à l’échelle de restitution de la carte, selon un double impératif de précision et de clarté"* ([Glossaire Géoconfluences](https://geoconfluences.ens-lyon.fr/glossaire/generalisation-carto)).
 
 Dans Magrit, seule l'étape de simplification du tracé (entités linéaires ou surfaciques) est disponible.
 

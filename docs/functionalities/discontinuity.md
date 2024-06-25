@@ -9,7 +9,7 @@ Deux méthodes permettent de calculer ce différentiel :
 - **discontinuité relative** : écart relatif entre les valeurs de la variable étudiée c'est à dire `max(A,B) / min(A,B)`
 
 La visualisation de lignes de discontinuités permet de mettre en exergue les ruptures spatiales des phénomènes socio-économiques étudiés,
-qui selon la formule de Brunet et Dolphus (1990) montre que « l’espace géographique est fondamentalement discontinu ».
+qui, selon la formule de Brunet et Dolphus (1990), montrent que *"l’espace géographique est fondamentalement discontinu"*.
 
 Cette représentation est particulièrement pertinente lorsqu'elle peut être combinée à une représentation par aplats de couleurs (Cf. [carte choroplèthe](./choropleth)).
 
