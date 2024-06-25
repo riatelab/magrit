@@ -63,6 +63,8 @@ Cette méthode de discrétisation permet de créer des classes dont les limites 
 
 ### Head / Tail Breaks
 
+Cette méthode de discrétisation permet de créer des classes pour des séries très déséquilibrées à gauche (avec beaucoup de valeurs faibles et quelques très fortes valeurs).
+
 ### Moyennes emboitées
 
 Le nombre de classes qu'il est possible de choisir pour cette méthode est donc nécessairement une puissance de 2 (2, 4, 8, etc.).

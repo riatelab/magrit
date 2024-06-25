@@ -1,8 +1,7 @@
 # Passer à Magrit v2
 
-## D'un point de vue utilisateur
+Bien qu'il s'agisse d'une refonte totale de l'application, Magrit v2 conserve les principales fonctionnalités de la version précédente.
 
-## D'un point de vue enseignant / formateur
-
-## D'un point de vue développeur
-
+::: warning Attention
+Les fichiers projet de Magrit v1 ne sont pas compatibles avec Magrit v2.
+:::

@@ -17,3 +17,9 @@ Lors de la création d'une couche de ce type, il est nécessaire de renseigner l
 Après la création de la couche, il est possible de modifier la discrétisation des données (nombre de classes, types de discrétisation, palettes de couleurs, etc.). 
 
 ## Exemples
+
+<ZoomImg
+    src="/grid-0.png"
+    alt="Carroyage (hexagones - variable 'POPULATION' - jeu de données des communes françaises)"
+    caption="Carroyage (hexagones - variable 'POPULATION' - jeu de données des communes françaises)"
+/>

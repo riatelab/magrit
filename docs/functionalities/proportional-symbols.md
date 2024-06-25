@@ -26,3 +26,31 @@ Par défaut, les symboles sont autorisés à se chevaucher (puisqu'ils sont posi
 
 Si l'option "éviter le chevauchement" est activée, les symboles sont déplacés pour éviter les chevauchements.
 La carte
+
+## Coloration des symboles
+
+Les symboles peuvent être colorés de différentes manières :
+- couleur unique,
+- selon une variable qualitative,
+- selon une variable quantitative relative.
+
+## Exemples
+
+
+<ZoomImg
+    src="/prop-symbols-0.png"
+    alt="Carte en symboles proportionnels (couleur unique)"
+    caption="Carte en symboles proportionnels (couleur unique)"
+/>
+
+<ZoomImg
+    src="/prop-symbols-choro.png"
+    alt="Carte en symboles proportionnels (coloration par variable quantitative relative)"
+    caption="Carte en symboles proportionnels (coloration par variable quantitative relative)"
+/>
+
+<ZoomImg
+    src="/prop-symbols-typo.png"
+    alt="Carte en symboles proportionnels (coloration par variable qualitative)"
+    caption="Carte en symboles proportionnels (coloration par variable qualitative)"
+/>

@@ -6,6 +6,14 @@ représentation et d'analyse de l'application ; ces jeux de données n'ont toute
 les différents besoins en fonds de carte ou en données thématiques des utilisateurs (des ressources permettant de 
 trouver des jeux de données sont listés plus bas).
 
+::: tip Information
+
+De nouveaux jeux de données doivent être ajoutés dans les semaines à venir (communes françaises par régions, départements, etc.).
+
+:::
+
+<!--
+
 ## Données proposées dans l'application
 
 ### NUTS0
@@ -21,6 +29,8 @@ trouver des jeux de données sont listés plus bas).
 ### Pays du monde (version 177 pays)
 
 ### Pays du monde (version 242 pays)
+
+-->
 
 ## Où trouver d'autres jeux de données ?
 

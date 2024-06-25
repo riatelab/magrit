@@ -35,6 +35,7 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
       collapsed: true,
       items: [
         { text: 'Choroplèthe', link: '/functionalities/choropleth' },
+        { text: 'Discrétisation', link: '/functionalities/classification' },
         { text: 'Symboles proportionnels', link: '/functionalities/proportional-symbols' },
         { text: 'Choroplèthe catégorielle', link: '/functionalities/categorical-choropleth' },
         { text: 'Agrégation d\'un semis de points', link: '/functionalities/point-aggregation' },
@@ -94,6 +95,7 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
       collapsed: true,
       items: [
         { text: 'Choropleth', link: '/en/functionalities/choropleth' },
+        { text: 'Classification', link: '/functionalities/classification' },
         { text: 'Proportional symbols', link: '/en/functionalities/proportional-symbols' },
         { text: 'Categorical choropleth', link: '/en/functionalities/categorical-choropleth' },
         { text: 'Point aggregation', link: '/en/functionalities/point-aggregation' },

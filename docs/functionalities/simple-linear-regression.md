@@ -15,5 +15,10 @@ Une fois la relation entre les deux variables établie, il est possible de visua
 - soit en cartographiant les résidus standardisés, c'est-à-dire les écarts entre les valeurs observées et les valeurs prédites par le modèle, divisés par l'écart-type des résidus,
   via une carte choroplèthe.
 
-## Paramètres
+## Exemple
 
+<ZoomImg
+  src="/linear-reg.png"
+  alt="Exemple de régression linéaire avec représentation des résidus (carte en symboles proportionnels)"
+  caption="Exemple de régression linéaire avec représentation des résidus (carte en symboles proportionnels)"
+/>
