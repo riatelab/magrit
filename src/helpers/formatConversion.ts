@@ -27,7 +27,6 @@ export async function convertToGeoJSON(
     '-lco', 'RFC7946=NO',
     '-lco', 'WRITE_NON_FINITE_VALUES=YES',
     '-lco', 'WRITE_BBOX=YES',
-    '-lco', 'COORDINATE_PRECISION=6',
   ].concat(params.opts || []);
   const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
   const bytes = await globalThis.gdal.getFileBytes(output);
@@ -40,7 +39,16 @@ export async function convertBinaryTabularDatasetToJSON(
   params: { openOpts: string[]; opts: string[] } = { opts: [], openOpts: [] },
 ): Promise<object[]> {
   const layer = await convertToGeoJSON(fileOrFiles, params);
-  return layer.features.map((f: GeoJSONFeature) => f.properties);
+  // We want to strip any line breaks from the column names
+  const columnsBefore = Object.keys(layer.features[0].properties);
+  const columns = columnsBefore.map((c) => c.replace(/(\r\n|\n|\r)/gm, ' '));
+  return layer.features.map((f: GeoJSONFeature) => {
+    const properties = {};
+    columns.forEach((c) => {
+      properties[c] = f.properties[c];
+    });
+    return properties;
+  });
 }
 
 export const removeFeaturesWithEmptyGeometry = (layer: GeoJSONFeatureCollection) => {

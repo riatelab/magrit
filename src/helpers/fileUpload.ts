@@ -20,12 +20,11 @@ import {
   SupportedTabularFileTypes,
   SupportedTextualTabularFileTypes,
 } from './supportedFormats';
-import { convertTopojsonToGeojson } from './topojson';
+import { convertTopojsonToGeojson, convertToTopojsonQuantizeAndBackToGeojson } from './topojson';
 import { detectTypeField, Variable } from './typeDetection';
 import rewindLayer from './rewind';
 
 // Stores
-import { applicationSettingsStore } from '../store/ApplicationSettingsStore';
 import { FileDropStoreType } from '../store/FileDropStore';
 import {
   layersDescriptionStore,
@@ -365,6 +364,9 @@ export const convertAndAddFiles = async (
   // we don't use GDAL and convert it directly to GeoJSON
   if (format === SupportedGeoFileTypes.TopoJSON) {
     const res = convertTopojsonToGeojson(await files[0].file.text());
+
+    // Round coordinate precision to 6 digits after the decimal point
+    // res = convertToTopojsonQuantizeAndBackToGeojson(res[layerName], 1e5);
     // We want to remove the features with empty geometries
     // (i.e. if the geometry is null or undefined or if the coordinates array is empty)
     const { layer, nbRemoved } = removeFeaturesWithEmptyGeometry(res[layerName]);
@@ -411,6 +413,10 @@ export const convertAndAddFiles = async (
       files.map((f) => f.file),
       { opts, openOpts: [] },
     );
+
+    // Round coordinate precision to 6 digits after the decimal point
+    // res = convertToTopojsonQuantizeAndBackToGeojson(res, 1e5);
+
     // We want to remove the features with empty geometries
     // (i.e. if the geometry is null or undefined or if the coordinates array is empty)
     const { layer, nbRemoved } = removeFeaturesWithEmptyGeometry(res);

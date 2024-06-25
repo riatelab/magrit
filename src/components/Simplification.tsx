@@ -22,7 +22,6 @@ import { round } from '../helpers/math';
 
 // Other components
 import InputFieldCheckbox from './Inputs/InputCheckbox.tsx';
-import InputFieldNumber from './Inputs/InputNumber.tsx';
 import InputFieldRangeSlider from './Inputs/InputRangeSlider.tsx';
 
 // Stores
