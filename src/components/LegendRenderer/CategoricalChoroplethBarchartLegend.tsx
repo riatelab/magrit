@@ -145,7 +145,7 @@ function CategoriesPlot(
           fontStyle: props.textProperties.fontStyle,
         },
         marginTop: 10,
-        marginBottom: Math.sin(-30) * sizeLargestLabel(),
+        marginBottom: 7 + 0.5 * sizeLargestLabel(),
         marginLeft: 30,
         color: { domain: domain(), range: range() },
         x: {
