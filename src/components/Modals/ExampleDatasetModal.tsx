@@ -39,7 +39,7 @@ import { fitExtent, setMapStore } from '../../store/MapStore';
 import Pagination from '../Pagination.tsx';
 
 // Assets
-import datasets from '../../assets/datasets.json';
+import allDatasets from '../../assets/datasets.json';
 
 // Types
 import type { DefaultLegend, GeoJSONFeatureCollection, LayerDescription } from '../../global';
@@ -81,6 +81,8 @@ interface DatasetEntry {
   // Information about the various fields in the dataset
   fields: (Variable & { provenance: number })[],
 }
+
+const datasets = allDatasets.filter((d) => !d.id.startsWith('world_')) as DatasetEntry[];
 
 function CardDatasetEntry(
   ds: DatasetEntry & { onClick: (arg0: MouseEvent) => void },
