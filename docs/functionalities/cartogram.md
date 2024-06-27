@@ -1,9 +1,8 @@
 # Cartogramme (anamorphose)
 
-Les cartogrammes, ou anamorphoses, sont utilisées en cartographie statistique pour montrer l'importance d'un phénomène donné :
-ce type de carte est couramment appelé un cartogramme.
-Elles permettent de déformer les unités territoriales (polygones) sur la base d'un attribut rapporté à la superficie
-des entités (densité).
+Les cartogrammes, ou anamorphoses, sont utilisées en cartographie statistique pour montrer l'importance d'un phénomène donné.
+Elles permettent de déformer les unités territoriales (polygones) sur la base d'un attribut de stock (variable quantitative absolue)
+rapporté à la superficie des entités.
 
 Trois méthodes de création de cartogrammes sont disponibles dans Magrit :
 
