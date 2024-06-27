@@ -363,6 +363,14 @@ const AppPage: () => JSX.Element = () => {
   // Todo: there is a lot of code executed in onMount,
   //  it should be refactored / split into smaller functions
   onMount(async () => {
+    // Load GDAL
+    // TODO: we should handle the case where gdal isn't fully loaded yet but the user
+    //  tries to use it (for example by dropping a file...)
+    loadGdal().then((gdal) => {
+      // @ts-expect-error - we should fix the type of globalThis.gdal
+      globalThis.gdal = gdal;
+    });
+
     // Add event listener to the window to handle resize events
     window.addEventListener('resize', onResize);
 
@@ -489,10 +497,6 @@ const AppPage: () => JSX.Element = () => {
           width: '660px',
         });
       });
-
-    // Load GDAL
-    // @ts-expect-error - we should fix the type of globalThis.gdal
-    globalThis.gdal = await loadGdal();
 
     // Is there a project in the DB ?
     const project = await db.projects.toArray();
