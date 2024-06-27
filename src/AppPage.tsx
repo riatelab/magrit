@@ -403,45 +403,6 @@ const AppPage: () => JSX.Element = () => {
         const createNewProject = (): void => {
           window.removeEventListener('beforeunload', onBeforeUnloadWindow);
           document.location.reload();
-          // setReloadingProject(true);
-          // // Compute the default dimension of the map
-          // const mapWidth = round(
-          //   (window.innerWidth - globalStore.leftMenuWidth) * 0.9,
-          //   0,
-          // );
-          // const mapHeight = round(
-          //   (window.innerHeight - globalStore.headerHeight) * 0.9,
-          //   0,
-          // );
-          //
-          // // Remove all layers and layout features
-          // setLayersDescriptionStore(defaultLayersDescription());
-          //
-          // // Reset the "userHasAddedLayer" flag
-          // setGlobalStore({ userHasAddedLayer: false, isInfo: false });
-          //
-          // // Reset the map store
-          // // (this will also reset the projection and pathGenerator in the global store)
-          // setMapStore({
-          //   mapDimensions: {
-          //     width: mapWidth,
-          //     height: mapHeight,
-          //   },
-          //   scale: 160,
-          //   translate: [mapWidth / 2, mapHeight / 2],
-          //   projection: {
-          //     type: 'd3',
-          //     value: 'geoNaturalEarth2',
-          //     name: 'NaturalEarth2',
-          //   },
-          //   backgroundColor: '#ffffff',
-          //   backgroundColorOpacity: 1,
-          // });
-          //
-          // // Reset the undo/redo store
-          // resetUndoRedoStackStore();
-          //
-          // setReloadingProject(false);
         };
 
         setNiceAlertStore({
@@ -572,10 +533,7 @@ const AppPage: () => JSX.Element = () => {
         <InfoFeatureBox />
       </Portal>
     </Show>
-    <Toaster
-      position={'bottom-center'}
-    />
-    {/* <ReloadPrompt /> */}
+    <Toaster position={'bottom-center'} />
   </>;
 };
 
