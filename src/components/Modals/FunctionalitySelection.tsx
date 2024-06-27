@@ -18,8 +18,10 @@ import { summaryForChoosingPortrayal } from '../../helpers/layerDescription';
 // Stores
 import { functionalitySelectionStore, setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { setModalStore } from '../../store/ModalStore';
 
 // Subcomponents
+import FieldTypingModal from './FieldTypingModal.tsx';
 import CartogramSettings from '../PortrayalOption/CartogramSettings.tsx';
 import ChoroplethSettings from '../PortrayalOption/ChoroplethSettings.tsx';
 import ProportionalSymbolsSettings from '../PortrayalOption/ProportionalSymbolsSettings.tsx';
@@ -194,96 +196,111 @@ export default function FunctionalitySelection(): JSX.Element {
   let refParentNode: HTMLDivElement;
 
   // Clone the functionalityDescriptions array
-  const functionalities = functionalityDescriptions.slice();
+  const [
+    functionalities,
+    setFunctionalities,
+  ] = createSignal(functionalityDescriptions.slice());
 
   // - What are the available variable for the selected layer?
   // - What is the geometry type for the selected layer ?
   // - How many features are there in the selected layer ?
   const {
-    hasAnyVariable,
-    availableVariables: vars,
     geomType,
     name: layerName,
-    nFeatures,
   } = summaryForChoosingPortrayal(functionalitySelectionStore.id);
-  // - Is there any tabular datasets that may contain information for links ?
-  const projectHasTabularDataset = layersDescriptionStore.tables.length > 0;
+
+  const setFunctionalitiesFlag = () => {
+    // - Is there any tabular datasets that may contain information for links ?
+    const projectHasTabularDataset = layersDescriptionStore.tables.length > 0;
+    const {
+      hasAnyVariable,
+      availableVariables: vars,
+      nFeatures,
+    } = summaryForChoosingPortrayal(functionalitySelectionStore.id);
+
+    // Because signals only tracks the first level of the object, we need to reset the array
+    // to trigger a reactivity update
+    setFunctionalities([]);
+    setFunctionalities(functionalityDescriptions.slice().map((p) => {
+      switch (p.type) {
+        case RepresentationType.choropleth:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = nFeatures > 1 && vars.nRatio > 0;
+          break;
+        case RepresentationType.proportionalSymbols:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = vars.nStock > 0;
+          break;
+        case RepresentationType.labels:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = hasAnyVariable;
+          break;
+        case RepresentationType.discontinuity:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = nFeatures > 1 && (vars.nRatio > 0 || vars.nStock > 0) && geomType === 'polygon';
+          break;
+        case RepresentationType.categoricalChoropleth:
+        case RepresentationType.categoricalPictogram:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = nFeatures > 1 && vars.nCategorical > 0;
+          break;
+        case RepresentationType.grid:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = nFeatures > 1 && vars.nStock > 0 && geomType === 'polygon';
+          break;
+        case RepresentationType.smoothed:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = nFeatures > 1 && vars.nStock > 0 && (geomType === 'polygon' || geomType === 'point');
+          break;
+        case RepresentationType.cartogram:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = geomType === 'polygon' && nFeatures > 1 && vars.nStock > 0;
+          break;
+        case RepresentationType.links:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = (
+            nFeatures > 1
+            && projectHasTabularDataset
+            && vars.nIdentifier > 0
+            && (geomType === 'polygon' || geomType === 'point')
+          );
+          break;
+        case RepresentationType.mushrooms:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = vars.nStock >= 2 && (geomType === 'polygon' || geomType === 'point');
+          break;
+        case ProcessingOperationType.aggregation:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = nFeatures > 1 && geomType === 'polygon';
+          break;
+        case ProcessingOperationType.selection:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = nFeatures > 1 && hasAnyVariable;
+          break;
+        case ProcessingOperationType.simplification:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = geomType === 'polygon' || geomType === 'linestring';
+          break;
+        case AnalysisOperationType.pointAggregation:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = geomType === 'point';
+          break;
+        case AnalysisOperationType.simpleLinearRegression:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = (vars.nStock + vars.nRatio) >= 2;
+          break;
+        default:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = false;
+          break;
+      }
+      return p;
+    }).filter((d) => (
+      d.allowedGeometryType ? d.allowedGeometryType === geomType : true)));
+  };
 
   // Set the enable flag for the various functionality types
-  functionalities.forEach((p) => {
-    switch (p.type) {
-      case RepresentationType.choropleth:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = nFeatures > 1 && vars.nRatio > 0;
-        break;
-      case RepresentationType.proportionalSymbols:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = vars.nStock > 0;
-        break;
-      case RepresentationType.labels:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = hasAnyVariable;
-        break;
-      case RepresentationType.discontinuity:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = nFeatures > 1 && (vars.nRatio > 0 || vars.nStock > 0) && geomType === 'polygon';
-        break;
-      case RepresentationType.categoricalChoropleth:
-      case RepresentationType.categoricalPictogram:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = nFeatures > 1 && vars.nCategorical > 0;
-        break;
-      case RepresentationType.grid:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = nFeatures > 1 && vars.nStock > 0 && geomType === 'polygon';
-        break;
-      case RepresentationType.smoothed:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = nFeatures > 1 && vars.nStock > 0 && (geomType === 'polygon' || geomType === 'point');
-        break;
-      case RepresentationType.cartogram:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = geomType === 'polygon' && nFeatures > 1 && vars.nStock > 0;
-        break;
-      case RepresentationType.links:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = (
-          nFeatures > 1
-          && projectHasTabularDataset
-          && vars.nIdentifier > 0
-          && (geomType === 'polygon' || geomType === 'point')
-        );
-        break;
-      case RepresentationType.mushrooms:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = vars.nStock >= 2 && (geomType === 'polygon' || geomType === 'point');
-        break;
-      case ProcessingOperationType.aggregation:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = nFeatures > 1 && geomType === 'polygon';
-        break;
-      case ProcessingOperationType.selection:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = nFeatures > 1 && hasAnyVariable;
-        break;
-      case ProcessingOperationType.simplification:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = geomType === 'polygon' || geomType === 'linestring';
-        break;
-      case AnalysisOperationType.pointAggregation:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = geomType === 'point';
-        break;
-      case AnalysisOperationType.simpleLinearRegression:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = (vars.nStock + vars.nRatio) >= 2;
-        break;
-      default:
-        // eslint-disable-next-line no-param-reassign
-        p.enabled = false;
-        break;
-    }
-  });
+  setFunctionalitiesFlag();
 
   const listenerEscKey = (event: KeyboardEvent) => {
     const isEscape = event.key
@@ -340,7 +357,21 @@ export default function FunctionalitySelection(): JSX.Element {
           </MessageBlock>
           <div class="has-text-centered mb-4">
             {LL().PortrayalSelection.Layer()}
-            &nbsp;<b>{ layerName }</b>
+            &nbsp;<b>{ layerName }</b> -
+            &nbsp;<a
+              class="is-clickable"
+              href={'#'}
+              style={{ 'text-decoration': 'underline', color: '#00b2ff' }}
+              onClick={() => {
+                setModalStore({
+                  show: true,
+                  content: () => <FieldTypingModal type={'layer'} id={functionalitySelectionStore.id} />,
+                  title: LL().FieldsTyping.ModalTitle(),
+                  escapeKey: 'cancel',
+                  confirmCallback: () => { setFunctionalitiesFlag(); },
+                });
+              }}
+            >{LL().PortrayalSelection.OpenTypingModal()}</a>
           </div>
           <section style={{ height: '100%', overflow: 'auto', padding: '1em' }}>
             <div
@@ -350,11 +381,7 @@ export default function FunctionalitySelection(): JSX.Element {
                 'grid-gap': '1rem',
               }}
             >
-              <For each={
-                functionalityDescriptions
-                  .filter((d) => (
-                    d.allowedGeometryType ? d.allowedGeometryType === geomType : true))
-              }>
+              <For each={functionalities()}>
                 {
                   (p) => <CardFunctionality
                     {...p}

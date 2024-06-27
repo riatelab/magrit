@@ -7,7 +7,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
-import { setModalStore } from '../../store/ModalStore';
+import { modalStore, setModalStore } from '../../store/ModalStore';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -66,6 +66,18 @@ export default function FieldTypingModal(
   };
 
   onMount(() => {
+    // Did the caller already provide a confirm callback?
+    // If so we need to keep it and call it after our own confirm callback
+    let cfcb;
+    if (modalStore.confirmCallback) {
+      cfcb = modalStore.confirmCallback;
+    }
+    // Did the caller already provide a cancel callback?
+    // If so we need to keep it and call it after our own cancel callback
+    let cncb;
+    if (modalStore.cancelCallback) {
+      cncb = modalStore.cancelCallback;
+    }
     setModalStore({
       confirmCallback: () => {
         const newDescriptions = getNewDescriptions();
@@ -78,6 +90,8 @@ export default function FieldTypingModal(
             { fields: newDescriptions },
           );
         }
+        // Call the callback provided by the caller
+        if (cfcb) { cfcb(); }
       },
       cancelCallback: () => {
         // Reset the descriptions to their original values when clicking on cancel
@@ -86,6 +100,8 @@ export default function FieldTypingModal(
           (l: LayerDescription | TableDescription) => l.id === targetId,
           { fields: descriptions },
         );
+        // Call the callback provided by the caller
+        if (cncb) { cncb(); }
       },
     });
   });
@@ -126,17 +142,5 @@ export default function FieldTypingModal(
         )
       }
     </For>
-    {/*
-    <CollapsibleMessageBanner
-      expanded={true}
-      title={LL().Messages.Information()}
-      type={'info'}
-      useIcon={true}
-      style={{ 'margin-bottom': '-2em', 'margin-top': '4em' }}
-    >
-      <p>{LL().FieldsTyping.Information1()}</p>
-      <p>{LL().FieldsTyping.Information2()}</p>
-    </CollapsibleMessageBanner>
-    */}
   </div>;
 }

@@ -834,6 +834,7 @@ const en = {
     Table: 'Table:',
     Back: 'Back to functionality selection',
     Information: 'Select the functionality you wish to apply to your data layer. Greyed-out functionalities indicate that your dataset does not contain any data allowing you to use it. If you suspect this is an error, you can change the field type in the Layer Manager.',
+    OpenTypingModal: 'Verify or change field types',
     ShortDescriptions: {
       Choropleth: 'A choropleth map lets you assign a color to geographic objects according to the values of a relative quantitative variable (rates, indices).',
       ProportionalSymbols: 'A proportional symbol map lets you vary the area of a symbol in proportion to the value of an absolute quantitative variable.',

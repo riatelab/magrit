@@ -2952,6 +2952,10 @@ type RootTranslation = {
 		 * S​e​l​e​c​t​ ​t​h​e​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​a​p​p​l​y​ ​t​o​ ​y​o​u​r​ ​d​a​t​a​ ​l​a​y​e​r​.​ ​G​r​e​y​e​d​-​o​u​t​ ​f​u​n​c​t​i​o​n​a​l​i​t​i​e​s​ ​i​n​d​i​c​a​t​e​ ​t​h​a​t​ ​y​o​u​r​ ​d​a​t​a​s​e​t​ ​d​o​e​s​ ​n​o​t​ ​c​o​n​t​a​i​n​ ​a​n​y​ ​d​a​t​a​ ​a​l​l​o​w​i​n​g​ ​y​o​u​ ​t​o​ ​u​s​e​ ​i​t​.​ ​I​f​ ​y​o​u​ ​s​u​s​p​e​c​t​ ​t​h​i​s​ ​i​s​ ​a​n​ ​e​r​r​o​r​,​ ​y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​t​h​e​ ​f​i​e​l​d​ ​t​y​p​e​ ​i​n​ ​t​h​e​ ​L​a​y​e​r​ ​M​a​n​a​g​e​r​.
 		 */
 		Information: string
+		/**
+		 * V​e​r​i​f​y​ ​o​r​ ​c​h​a​n​g​e​ ​f​i​e​l​d​ ​t​y​p​e​s
+		 */
+		OpenTypingModal: string
 		ShortDescriptions: {
 			/**
 			 * A​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​l​e​t​s​ ​y​o​u​ ​a​s​s​i​g​n​ ​a​ ​c​o​l​o​r​ ​t​o​ ​g​e​o​g​r​a​p​h​i​c​ ​o​b​j​e​c​t​s​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​s​ ​o​f​ ​a​ ​r​e​l​a​t​i​v​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​r​i​a​b​l​e​ ​(​r​a​t​e​s​,​ ​i​n​d​i​c​e​s​)​.
@@ -6724,6 +6728,10 @@ export type TranslationFunctions = {
 		 * Select the functionality you wish to apply to your data layer. Greyed-out functionalities indicate that your dataset does not contain any data allowing you to use it. If you suspect this is an error, you can change the field type in the Layer Manager.
 		 */
 		Information: () => LocalizedString
+		/**
+		 * Verify or change field types
+		 */
+		OpenTypingModal: () => LocalizedString
 		ShortDescriptions: {
 			/**
 			 * A choropleth map lets you assign a color to geographic objects according to the values of a relative quantitative variable (rates, indices).

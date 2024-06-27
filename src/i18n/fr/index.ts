@@ -834,6 +834,7 @@ const fr = {
     Table: 'Tableau :',
     Back: 'Retour au choix d\'une fonctionnalité',
     Information: 'Sélectionnez la fonctionnalité que vous souhaitez appliquer à votre couche de données. Les fonctionnalités grisées indiquent que votre jeu de données ne contient pas de données permettant de l\'utiliser. Si vous pensez qu\'il s\'agit d\'une erreur, vous pouvez modifier le type des champs dans le gestionnaire de couches.',
+    OpenTypingModal: 'Vérifier ou modifier le typage des champs',
     ShortDescriptions: {
       Choropleth: 'Une carte choroplèthe permet d’affecter une couleur aux objets géographiques en fonction des valeurs d’une variable quantitative relative (taux, indices).',
       ProportionalSymbols: 'Une carte à symboles proportionnels permet de faire varier la surface d’un symbole proportionnellement à une valeur d’une variable quantitative absolue.',

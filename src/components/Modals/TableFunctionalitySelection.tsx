@@ -17,8 +17,10 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 // Stores
 import { functionalitySelectionStore, setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
+import { setModalStore } from '../../store/ModalStore';
 
 // Subcomponents
+import FieldTypingModal from './FieldTypingModal.tsx';
 import LayerFromTabularSettings from '../PortrayalOption/LayerFromTabularSettings.tsx';
 
 // Types / Interfaces / Enums
@@ -156,7 +158,27 @@ export default function TableFunctionalitySelection(): JSX.Element {
         <Show when={!selectedFunctionality()}>
           <div class="has-text-centered mb-4">
             {LL().PortrayalSelection.Table()}
-            &nbsp;<b>{tableDescription.name}</b>
+            &nbsp;<b>{tableDescription.name}</b> -
+            &nbsp;<a
+            class="is-clickable"
+            href={'#'}
+            style={{ 'text-decoration': 'underline', color: '#00b2ff' }}
+            onClick={() => {
+              setModalStore({
+                show: true,
+                content: () => <FieldTypingModal type={'table'} id={functionalitySelectionStore.id} />,
+                title: LL().FieldsTyping.ModalTitle(),
+                escapeKey: 'cancel',
+                // TODO: we should implement the same logic as in
+                //  FunctionalitiesSelection.tsx to rerender
+                //  the CardFunctionality components when the modal is closed
+                //  (but for now it's not necessary because none of the
+                //  functionalities in this modal are affected by the FieldTypingModal
+                //  and we are just putting this option here to be consistent with the
+                //  FunctionalitiesSelection.tsx modal)
+              });
+            }}
+          >{LL().PortrayalSelection.OpenTypingModal()}</a>
           </div>
           <section style={{ height: '100%', overflow: 'auto', padding: '1em' }}>
             <div
