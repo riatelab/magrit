@@ -13,8 +13,6 @@ Les deux méthodes de lissage proposées sont :
 
 ## Exemple
 
-Potentiel de population dans un voisinage gaussien de 20 km
-
 <ZoomImg
     src="/smoothed-stewart-pop.png"
     alt="Potentiel de population dans un voisinage gaussien de 20 km (méthode de Stewart - données de population des communes françaises)"
