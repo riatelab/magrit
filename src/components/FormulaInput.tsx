@@ -215,7 +215,7 @@ export default function FormulaInput(
               <button
                 class="tag is-warning"
                 title={
-                  /[àâäéèêëîïôöùûüç -]/i.test(field)
+                  /[àâäéèêëîïôöùûüç -+]/i.test(field)
                     ? `${field} - ${LL().FormulaInput.noteSpecialCharacters()}`
                     : field
                 }
@@ -223,7 +223,7 @@ export default function FormulaInput(
                   // If the field name contains spaces or special characters,
                   // we need to put it between brackets
                   let fieldValue = field;
-                  if (/[àâäéèêëîïôöùûüç -]/i.test(fieldValue)) {
+                  if (/[àâäéèêëîïôöùûüç -+]/i.test(fieldValue)) {
                     fieldValue = `[${fieldValue}]`;
                   }
                   // Insert the field in the formula

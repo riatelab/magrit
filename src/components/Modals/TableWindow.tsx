@@ -22,7 +22,7 @@ import type { LocalizedString } from 'typesafe-i18n';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
-import { unproxify } from '../../helpers/common';
+import { sanitizeColumnName, unproxify } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
 import { isDarkMode } from '../../helpers/darkmode';
 import { clickLinkFromDataUrl } from '../../helpers/exports';
@@ -107,7 +107,7 @@ function NewFieldPanel(
     && sampleOutput()!.type !== 'Error');
 
   const onClickCompute = () => {
-    const variableName = newColumnName();
+    const variableName = sanitizeColumnName(newColumnName());
     const lengthDataset = props.rowData().length;
     const formula = replaceSpecialFields(currentFormula(), lengthDataset);
     const query = `SELECT ${formula} as newValue FROM ?`;
@@ -166,6 +166,7 @@ function NewFieldPanel(
               setNewColumnName(e.target.value);
             }}
           />
+          <p class="message is-danger">&nbsp;{LL().DataTable.NewColumnModal.notAcceptedChars()}</p>
         </div>
       </div>
       <div class="field-block">

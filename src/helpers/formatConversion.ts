@@ -2,7 +2,7 @@
 import JSZip from 'jszip';
 
 // Helpers
-import { isFiniteNumber } from './common';
+import { isFiniteNumber, sanitizeColumnName } from './common';
 import d3 from './d3-custom';
 import { SupportedTabularFileTypes } from './supportedFormats';
 
@@ -42,15 +42,13 @@ export async function convertBinaryTabularDatasetToJSON(
   // We want to strip any line breaks
   // and punctuation from the column names
   const columnsBefore = Object.keys(layer.features[0].properties);
-  const columns = columnsBefore.map((c) => c.replace(/[\r\n]+/g, ' ')
-    .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, ' ')
-    .replace(/\s{2,}/g, ' ')
-    .replaceAll('\'', '-'));
+  const columnsAfter = columnsBefore.map((c) => sanitizeColumnName(c));
+
   return layer.features.map((f: GeoJSONFeature) => {
     const properties = {};
-    columns.forEach((c) => {
-      properties[c] = f.properties[c];
-    });
+    for (let i = 0; i < columnsBefore.length; i += 1) {
+      properties[columnsAfter[i]] = f.properties[columnsBefore[i]];
+    }
     return properties;
   });
 }

@@ -906,6 +906,7 @@ const en = {
     NewColumnModal: {
       BackToDatatable: 'Back to data table',
       title: 'New column',
+      notAcceptedChars: 'The following special characters are not accepted: .,/#!$%^&*;:{}=`~()\'',
       name: 'Name',
       namePlaceholder: 'Type the name of the column',
       newColumnType: 'New column type',

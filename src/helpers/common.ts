@@ -170,3 +170,8 @@ export const camelToFlat = (c: string) => (
 /* eslint-enable no-return-assign, no-param-reassign, no-sequences */
 
 export const getUniqueValues = (values: number[]) => Array.from(new Set(values));
+
+export const sanitizeColumnName = (c: string) => c.replace(/[\r\n]+/g, ' ')
+  .replace(/[.,/#!$%^&*;:{}=`~()]/g, ' ')
+  .replace(/\s{2,}/g, ' ')
+  .replaceAll('\'', '-');
