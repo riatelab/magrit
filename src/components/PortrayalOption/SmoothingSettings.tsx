@@ -18,6 +18,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
+import { showErrorMessage } from '../../store/NiceAlertStore';
 import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Helper
@@ -349,10 +350,13 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       ).then(() => {
         // Hide loading overlay
         setLoading(false);
-
         // Open the LayerManager to show the new layer
         openLayerManager();
-      });
+      })
+        .catch((e) => {
+          setLoading(false);
+          showErrorMessage(e.message ? e.message : `${e}`, LL);
+        });
     }, 0);
   };
 

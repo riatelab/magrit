@@ -18,6 +18,7 @@ import {
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
 import { mapStore } from '../../store/MapStore';
+import { showErrorMessage } from '../../store/NiceAlertStore';
 import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Helper
@@ -43,6 +44,7 @@ import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Subcomponents
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
@@ -73,7 +75,6 @@ import {
   RepresentationType,
 } from '../../global.d';
 import { DataType, Variable, VariableType } from '../../helpers/typeDetection';
-import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -482,19 +483,22 @@ export default function PointAggregationSettings(props: PortrayalSettingsProps):
 
     // Create the portrayal
     setTimeout(() => {
-      onClickValidate(
-        layerDescription.id,
-        layerType(),
-        computationType()!,
-        meshParams,
-        filterEmptyCells(),
-        targetVariable(),
-        layerName,
-      );
-
-      setLoading(false);
-
-      openLayerManager();
+      try {
+        onClickValidate(
+          layerDescription.id,
+          layerType(),
+          computationType()!,
+          meshParams,
+          filterEmptyCells(),
+          targetVariable(),
+          layerName,
+        );
+      } catch (e) {
+        showErrorMessage(e.message ? e.message : `${e}`, LL);
+      } finally {
+        setLoading(false);
+        openLayerManager();
+      }
     }, 0);
   };
 

@@ -3030,6 +3030,11 @@ type RootTranslation = {
 			 */
 			LayerCreationFromTable: string
 		}
+		/**
+		 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​c​r​e​a​t​i​n​g​ ​t​h​e​ ​l​a​y​e​r​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​d​a​t​a​ ​a​n​d​ ​t​h​e​ ​p​a​r​a​m​e​t​e​r​s​ ​o​f​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​f​e​a​t​u​r​e​.​ ​I​f​ ​y​o​u​ ​s​u​s​p​e​c​t​ ​a​ ​b​u​g​,​ ​p​l​e​a​s​e​ ​r​e​p​o​r​t​ ​i​t​ ​o​n​ ​t​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​'​s​ ​G​i​t​H​u​b​ ​r​e​p​o​s​i​t​o​r​y​.​ ​E​r​r​o​r​ ​m​e​s​s​a​g​e​:​ ​{​0​}
+		 * @param {unknown} 0
+		 */
+		Error: RequiredParams<'0'>
 	}
 	ProjectionSelection: {
 		/**
@@ -6811,6 +6816,10 @@ export type TranslationFunctions = {
 			 */
 			LayerCreationFromTable: () => LocalizedString
 		}
+		/**
+		 * An error occurred while creating the layer. Please check your data and the parameters of the selected feature. If you suspect a bug, please report it on the application's GitHub repository. Error message: {0}
+		 */
+		Error: (arg0: unknown) => LocalizedString
 	}
 	ProjectionSelection: {
 		/**

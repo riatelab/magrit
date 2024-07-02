@@ -27,9 +27,11 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
+import { showErrorMessage } from '../../store/NiceAlertStore';
 import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Subcomponents
+import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputResultName from './InputResultName.tsx';
@@ -47,7 +49,6 @@ import {
   LegendType,
   RepresentationType,
 } from '../../global.d';
-import InputFieldColor from '../Inputs/InputColor.tsx';
 
 const subsetClassificationMethodsForDiscontinuity = [
   'quantiles',
@@ -206,19 +207,23 @@ export default function DiscontinuitySettings(
 
     // Create the portrayal
     setTimeout(() => {
-      onClickValidate(
-        layerDescription.id,
-        targetVariable(),
-        discontinuityType(),
-        selectedColor(),
-        classificationMethod(),
-        layerName,
-      );
-      // Hide loading overlay
-      setLoading(false);
-
-      // Open the LayerManager to show the new layer
-      openLayerManager();
+      try {
+        onClickValidate(
+          layerDescription.id,
+          targetVariable(),
+          discontinuityType(),
+          selectedColor(),
+          classificationMethod(),
+          layerName,
+        );
+      } catch (e) {
+        showErrorMessage(e.message ? e.message : `${e}`, LL);
+      } finally {
+        // Hide loading overlay
+        setLoading(false);
+        // Open the LayerManager to show the new layer
+        openLayerManager();
+      }
     }, 0);
   };
 

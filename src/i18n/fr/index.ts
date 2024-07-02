@@ -855,6 +855,7 @@ const fr = {
       Simplification: 'Cette fonctionnalité permet de simplifier le tracé des entités linéaires ou polygonales. Cette opération, également appelée "généralisation" en cartographie, permet d\'obtenir un jeu de données moins détaillé et plus léger.',
       LayerCreationFromTable: 'Cette fonctionnalité permet de créer une couche géographique à partir d\'un tableau de données contenant des coordonnées',
     },
+    Error: 'Une erreur s\'est produite lors de la création de la couche. Veuillez vérifier vos données ainsi que les paramètres de la fonctionnalité sélectionnée. Si vous pensez qu\'ils s\'agit d\'un bug, merci de le signaler sur le dépôt GitHub de l\'application. Message de l\'erreur : {0}',
   },
   ProjectionSelection: {
     title: 'Sélection de la projection',

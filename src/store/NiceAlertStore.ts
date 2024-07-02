@@ -1,5 +1,6 @@
 import { createStore } from 'solid-js/store';
-import { JSX } from 'solid-js';
+import { Accessor, JSX } from 'solid-js';
+import { TranslationFunctions } from '../i18n/i18n-types';
 
 type NiceAlertStoreType = {
   show: boolean,
@@ -39,8 +40,17 @@ const resetNiceAlertStore = () => {
   });
 };
 
+const showErrorMessage = (message: string, LL: Accessor<TranslationFunctions>) => {
+  setNiceAlertStore({
+    type: 'error',
+    content: `${LL().PortrayalSelection.Error(message)}`,
+    show: true,
+  });
+};
+
 export {
   niceAlertStore,
   setNiceAlertStore,
   resetNiceAlertStore,
+  showErrorMessage,
 };

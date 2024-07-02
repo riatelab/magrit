@@ -41,6 +41,7 @@ import {
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
 import { mapStore } from '../../store/MapStore';
+import { showErrorMessage } from '../../store/NiceAlertStore';
 import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Types / Interfaces / Enums
@@ -229,7 +230,11 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
 
         // Open the LayerManager to show the new layer
         openLayerManager();
-      });
+      })
+        .catch((e) => {
+          setLoading(false);
+          showErrorMessage(e.message ? e.message : `${e}`, LL);
+        });
     }, 0);
   };
 

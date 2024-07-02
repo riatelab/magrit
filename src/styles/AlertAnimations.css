@@ -11,7 +11,7 @@
 .f-modal-alert .f-modal-icon.f-modal-success, .f-modal-alert .f-modal-icon.f-modal-error {
     border-color: #A5DC86;
 }
-.f-modal-alert .f-modal-icon.f-modal-success:after, .f-modal-alert .f-modal-icon.f-modal-success:before, .f-modal-alert .f-modal-icon.f-modal-error:after, .f-modal-alert .f-modal-icon.f-modal-error:before {
+.f-modal-alert .f-modal-icon.f-modal-success:after, .f-modal-alert .f-modal-icon.f-modal-success:before { /* .f-modal-alert .f-modal-icon.f-modal-error:after, .f-modal-alert .f-modal-icon.f-modal-error:before */
     background: #fff;
     content: "";
     height: 120px;
@@ -19,14 +19,14 @@
     transform: rotate(45deg);
     width: 60px;
 }
-.f-modal-alert .f-modal-icon.f-modal-success:before, .f-modal-alert .f-modal-icon.f-modal-error:before {
+.f-modal-alert .f-modal-icon.f-modal-success:before { /* , .f-modal-alert .f-modal-icon.f-modal-error:before */
     border-radius: 120px 0 0 120px;
     left: -33px;
     top: -7px;
     transform-origin: 60px 60px;
     transform: rotate(-45deg);
 }
-.f-modal-alert .f-modal-icon.f-modal-success:after, .f-modal-alert .f-modal-icon.f-modal-error:after {
+.f-modal-alert .f-modal-icon.f-modal-success:after { /* , .f-modal-alert .f-modal-icon.f-modal-error:after */
     border-radius: 0 120px 120px 0;
     left: 30px;
     top: -11px;

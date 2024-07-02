@@ -855,6 +855,7 @@ const en = {
       Simplification: 'This functionality simplifies the drawing of linear or polygonal entities. This operation, also known as \'generalisation\' in cartography, results in a less detailed and lighter dataset.',
       LayerCreationFromTable: 'This function creates a geospatial layer from a data table containing coordinates.',
     },
+    Error: 'An error occurred while creating the layer. Please check your data and the parameters of the selected feature. If you suspect a bug, please report it on the application\'s GitHub repository. Error message: {0}',
   },
   ProjectionSelection: {
     title: 'Projection selection',

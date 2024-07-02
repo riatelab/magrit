@@ -22,6 +22,7 @@ import {
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
+import { showErrorMessage } from '../../store/NiceAlertStore';
 import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Subcomponents
@@ -109,18 +110,21 @@ export default function SimplificationSettings(
     await yieldOrContinue('smooth');
 
     // Actually create the new layer
-    setTimeout(async () => {
-      await onClickValidate(
+    setTimeout(() => {
+      onClickValidate(
         layerDescription.id,
         simplifiedLayers()[0],
         layerName,
-      );
-
-      // Hide loading overlay
-      setLoading(false);
-
-      // Open the LayerManager to show the new layer
-      openLayerManager();
+      ).then(() => {
+        // Hide loading overlay
+        setLoading(false);
+        // Open the LayerManager to show the new layer
+        openLayerManager();
+      })
+        .catch((e) => {
+          setLoading(false);
+          showErrorMessage(e.message ? e.message : `${e}`, LL);
+        });
     }, 0);
   };
 

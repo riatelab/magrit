@@ -29,7 +29,6 @@ function makeAnimation(type: string): JSX.Element {
         <span class="f-modal-line f-modal-right animateXRight"></span>
       </span>
       <div class="f-modal-placeholder"></div>
-      <div class="f-modal-fix"></div>
     </div>;
   }
   if (type === 'success') {

@@ -21,6 +21,7 @@ import {
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
 import { mapStore } from '../../store/MapStore';
+import { showErrorMessage } from '../../store/NiceAlertStore';
 import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 
 // Helper
@@ -48,7 +49,8 @@ import MessageBlock from '../MessageBlock.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
-  type ChoroplethLegend, ClassificationParameters,
+  type ChoroplethLegend,
+  type ClassificationParameters,
   GeoJSONFeatureCollection,
   GridCellShape,
   type GriddedLayerParameters,
@@ -278,10 +280,13 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
       ).then(() => {
         // Hide loading overlay
         setLoading(false);
-
         // Open the LayerManager to show the new layer
         openLayerManager();
-      });
+      })
+        .catch((e) => {
+          setLoading(false);
+          showErrorMessage(e.message ? e.message : `${e}`, LL);
+        });
     }, 0);
   };
 
