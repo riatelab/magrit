@@ -3,7 +3,8 @@
 Plusieurs méthodes sont proposées afin de transformer une série continue de valeurs en une série discrète,
 c'est à dire en un nombre fini de classes.
 
-Lors de la création d'une représentation choroplèthe, le nombre de classes ainsi que les valeurs limites de ces classes doivent être justifiées sémantiquement et/ou statistiquement.
+Lors de la création d'une représentation choroplèthe, le nombre de classes ainsi que les valeurs limites
+de ces classes doivent être justifiées statistiquement et/ou thématiquement.
 
 Les méthodes proposées par l'outil peuvent être utilisées telles quelles ou bien comme des guides de lecture et d'analyse préalables à la saisie manuelle des limites de classes souhaité.
 
@@ -17,7 +18,7 @@ Les méthodes proposées par l'outil peuvent être utilisées telles quelles ou 
 
 Plusieurs éléments sont présents dans cette fenêtre :
 
-- Un résumé de la série de valeur à discrétiser (nombre de valeur non-nulles, moyenne, médiane, minimum, maximum, etc.),
+- Un résumé de la série de valeurs à discrétiser (nombre de valeurs non-nulles, moyenne, médiane, minimum, maximum, etc.),
 - Un aperçu graphique de la distribution des valeurs (histogramme, courbe de densité et boîte à moustaches),
 - Une section dédiée à la discrétisation (choix de la méthode, nombre de classes, choix de la palette de couleurs et visualisation du nombre d'entités par classe).
 
@@ -29,7 +30,7 @@ Cette méthode, parfois également décrite par le terme de "discrétisation en 
 
 ### Intervalles égaux
 
-Cette méthode, parfois également appelées "amplitudes égales", permet de créer des classes qui possèdent toutes la même étendue.
+Cette méthode, parfois également appelée "amplitudes égales", permet de créer des classes qui possèdent toutes la même étendue.
 
 ### Q6
 
@@ -54,7 +55,7 @@ en un temps de calcul bien plus court. Nous vous conseillons donc d'utiliser la 
 ### Moyenne et écart-type
 
 Cette méthode propose de former des classes en fonction de la valeur de l'écart-type et de la moyenne.
-Ce mode de discrétisation ne permet pas de choisir directement un nombre de classe mais permet de choisir la portion d'écart-type
+Ce mode de discrétisation ne permet pas de choisir directement un nombre de classes mais permet de choisir la portion d'écart-type
 qui correspond à la taille d'une classe ainsi que le rôle de la moyenne (utilisée comme borne de classe ou comme centre de classe).
 
 ### Progression géométrique
