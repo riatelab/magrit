@@ -9,7 +9,7 @@
 Le panneau de configuration de la carte permet de modifier les paramètres relatifs aux dimensions de la carte :
 - sa largeur et sa hauteur en pixels,
 - le souhait de verrouiller ou non le zoom / déplacement de la carte,
-- la présence ou non de marges (et, le cas échéant, la couleur et l'opacité de ces marges - ces options ne s'affiche que si une marge a été spécifiée).
+- la présence ou non de marges (et, le cas échéant, la couleur et l'opacité de ces marges - ces options ne s'affichent que si une marge a été spécifiée).
 
 <ZoomImg
     src="./map-configuration-margins.png"

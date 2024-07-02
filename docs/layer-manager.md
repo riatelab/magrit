@@ -1,16 +1,16 @@
-# Le gestionnaire de couche
+# Le gestionnaire de couches
 
-Le gestionnaire de couche permet de modifier les paramètres de chacun des jeux de données (qu'il s'agisse d'une couche 
+Le gestionnaire de couches permet de modifier les paramètres de chacun des jeux de données (qu'il s'agisse d'une couche 
 de données géographiques ou d'un tableau de données) ajoutés dans l'application.
 
 <ZoomImg
     src="./layer-manager.png"
-    alt="Gestionnaire de couche"
-    caption="Exemple : Gestionnaire de couche avec trois couches géographiques et un tableau de données"
+    alt="Gestionnaire de couches"
+    caption="Exemple : Gestionnaire de couches avec trois couches géographiques et un tableau de données"
 />
 
 Lorsque des couches géographiques et des tableaux de données sont présents, ils sont séparés par un séparateur horizontal
-dans le gestionnaire de couche.
+dans le gestionnaire de couches.
 
 ## Couches géographiques (partie supérieure)
 

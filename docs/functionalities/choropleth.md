@@ -17,7 +17,7 @@ Lors de la création d'une couche choroplèthe, il est nécessaire de renseigner
 - Le nom de la couche résultante.
 
 La discrétisation peut être choisie via un raccourci vers les principales méthodes (Jenks, quantiles, etc.) :
-dans ce cas la palette choisies par défaut est la palette `YlOrRd` de ColorBrewer et le nombre de classes
+dans ce cas la palette choisie par défaut est la palette `YlOrRd` de ColorBrewer et le nombre de classes
 est calculé automatiquement.
 
 Il est également possible d'ouvrir une fenêtre de paramétrage avancé permettant de choisir parmi d'autres

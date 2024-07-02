@@ -5,7 +5,7 @@ c'est à dire en un nombre fini de classes.
 
 Lors de la création d'une représentation choroplèthe, le nombre de classes ainsi que les valeurs limites de ces classes doivent être justifiées sémantiquement et/ou statistiquement.
 
-Les méthodes proposées par l'outil peuvent être utilisées telles quelles ou bien comme des guides de lecture et d'analyse préalables à la saisie manuelle des limites de classes souhaitées.
+Les méthodes proposées par l'outil peuvent être utilisées telles quelles ou bien comme des guides de lecture et d'analyse préalables à la saisie manuelle des limites de classes souhaité.
 
 ## Vue d'ensemble de la fenêtre de discrétisation
 
@@ -38,11 +38,11 @@ elle produit ainsi 6 classes.
 
 ### Seuils naturels (algorithme CKMeans)
 
-Cette méthode permet de créer des classes homogènes. En effet l'algorithme vise à trouver le nombre de classe souhaitées en minimisant la variance intra-classe et en maximisant la variance inter-classe.
+Cette méthode permet de créer des classes homogènes. En effet l'algorithme vise à trouver le nombre de classe souhaité en minimisant la variance intra-classe et en maximisant la variance inter-classe.
 
 ### Seuils naturels (algorithme de Fisher-Jenks)
 
-Cette méthode permet de créer des classes homogènes. En effet l'algorithme vise à trouver le nombre de classe souhaitées en minimisant la variance intra-classe et en maximisant la variance inter-classe.
+Cette méthode permet de créer des classes homogènes. En effet l'algorithme vise à trouver le nombre de classe souhaité en minimisant la variance intra-classe et en maximisant la variance inter-classe.
 
 ::: warning Dépréciation
 Cette méthode est désormais dépréciée en faveur de la méthode CKMeans donnant de meilleurs résultats

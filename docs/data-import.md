@@ -31,7 +31,7 @@ Plusieurs informations sont reportées pour chaque couche de données géographi
 
 Plusieurs fonctionnalités sont également activables :
 
-- la possibilité d'utilisé la projection d'une couche de données pour l'ensemble du projet
+- la possibilité d'utiliser la projection d'une couche de données pour l'ensemble du projet
 - la possibilité de simplifier la géométrie des entités (utile pour les couches de données très détaillées - une fênetre s'ouvrira alors après validation de la fenêtre d'import des données pour choisir le niveau de simplification)
 - la possibilité de zoomer sur une couche de données après son import
 

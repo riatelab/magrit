@@ -46,6 +46,5 @@ On peut citer par exemple :
   - [IGN](https://www.ign.fr/) : données géographiques nationales (France),
   - [INSEE](https://www.insee.fr/) : données statistiques nationales (France),
   - [Eurostat](https://ec.europa.eu/eurostat) : données statistiques européennes,
-  - [US Census Bureau](https://www.census.gov/) : données statistiques américaines,
-  - etc.
+  - [US Census Bureau](https://www.census.gov/) : données statistiques américaines.
 

@@ -25,7 +25,7 @@ Lors du choix des symboles "cercle" ou "carré", il est possible de choisir si l
 Par défaut, les symboles sont autorisés à se chevaucher (puisqu'ils sont positionnés au centre des entités).
 
 Si l'option "éviter le chevauchement" est activée, les symboles sont déplacés pour éviter les chevauchements.
-La carte
+
 
 ## Coloration des symboles
 
