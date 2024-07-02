@@ -61,7 +61,7 @@ export function detectTypeField(
       dt.push(null);
     } else if (isFiniteNumber(values[i])) {
       if (values[i].toString().trim().startsWith('0')) {
-        if (values[i].toString().trim() === 0 || values[i].toString().trim().startsWith('0.')) {
+        if (values[i].toString().trim() === '0' || values[i].toString().trim().startsWith('0.')) {
           dt.push(DataType.number);
         } else {
           dt.push(DataType.string);
@@ -148,7 +148,16 @@ export function detectTypeField(
     // and regular strings "2A" and "2B")
     dataType = DataType.string; // We want to consider all the entries as string
     variableType = VariableType.identifier; // And it might be an identifier
+  } else if (
+    filteredDatatypes.every((d) => d === DataType.number || d === DataType.string)
+    && hasDuplicates
+  ) {
+    // Here we have a mix of numbers and strings, and duplicates
+    // so it might be a categorical variable
+    dataType = DataType.string; // We want to consider all the entries as string
+    variableType = VariableType.categorical; // And it might be a categorical variable
   } else {
+    // We still dont have determined the type of the field...
     dataType = DataType.string;
     variableType = VariableType.unknown;
   }
@@ -159,7 +168,10 @@ export function detectTypeField(
   //   we will consider it as a stock
   if (
     dataType === DataType.number
-    && variableType === VariableType.identifier
+    && (
+      variableType === VariableType.identifier
+      || variableType === VariableType.categorical
+    )
     && (
       fieldName.toLowerCase().startsWith('pop')
       || fieldName.toLowerCase().endsWith('pop')
