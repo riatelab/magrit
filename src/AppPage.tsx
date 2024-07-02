@@ -37,7 +37,7 @@ import NiceAlert from './components/Modals/NiceAlert.tsx';
 import TableWindow from './components/Modals/TableWindow.tsx';
 import ClassificationPanel from './components/Modals/ClassificationPanel.tsx';
 import ClassificationDiscontinuityPanel from './components/Modals/ClassificationDiscontinuityPanel.tsx';
-import { HeaderBarApp } from './components/Headers.tsx';
+import HeaderBarApp from './components/Headers.tsx';
 import ContextMenu from './components/ContextMenu.tsx';
 import ImportWindow from './components/ImportWindow.tsx';
 import InfoFeatureBox from './components/InfoFeatureBox.tsx';

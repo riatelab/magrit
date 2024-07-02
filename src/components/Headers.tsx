@@ -1,6 +1,5 @@
 // Imports from solid-js
 import { JSX, onMount } from 'solid-js';
-import { A } from '@solidjs/router';
 
 // Imports from other packages
 import {
@@ -8,7 +7,6 @@ import {
   FaSolidFloppyDisk,
   FaSolidFolderOpen,
   FaSolidFile,
-  FaSolidGear,
 } from 'solid-icons/fa';
 import { ImUndo, ImRedo } from 'solid-icons/im';
 
@@ -46,44 +44,7 @@ const handleBurgerClick = () => {
   });
 };
 
-export function HeaderBarWelcome(): JSX.Element {
-  onMount(handleBurgerClick);
-  const { LL } = useI18nContext();
-  return <nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="#" style={{ 'background-color': 'transparent' }}>
-        <img class="magrit-logo" src={img} style={{ width: '100%' }} alt="magrit-logo"/>
-      </a>
-
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navBarHome">
-        <span aria-hidden="true"/>
-        <span aria-hidden="true"/>
-        <span aria-hidden="true"/>
-      </a>
-    </div>
-
-    <div id="navBarHome" class="navbar-menu">
-      <div class="navbar-start">
-        {/* <a class="navbar-item" to="/">Home</a> */}
-        {/* <a class="navbar-item" to="/about">About</a> */}
-        {/* <a class="navbar-item" to="/documentation">Documentation</a> */}
-      </div>
-      <div class="navbar-end">
-        <div class="navbar-item">
-          <DropdownLanguage/>
-          &nbsp;&nbsp;
-          <SwitchTheme class="button-header-bar" id="toggle-night-day" />
-          &nbsp;&nbsp;
-          <div class="buttons">
-            <A href="/app" class="button is-primary">{LL().StartApplication()}</A>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>;
-}
-
-export function HeaderBarApp(): JSX.Element {
+export default function HeaderBarApp(): JSX.Element {
   const { LL } = useI18nContext();
   onMount(handleBurgerClick);
   return <nav class="navbar" role="navigation" aria-label="main navigation">
