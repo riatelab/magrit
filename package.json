@@ -21,7 +21,7 @@
     "dev": "npm-run-all --parallel vite typesafe-i18n",
     "dev:electron": "MODE=electrondev npm-run-all --parallel vite typesafe-i18n",
     "build": "rm -rf dist/ && vite build && npm run docs:build && cp -r docs/.vitepress/dist/* dist/",
-    "build:electron": "MODE=electronbuild vite build && npm run docs:build && mkdir -p dist/docs && cp -r docs/.vitepress/dist/* dist/docs/ && mkdir -p build && cp src/assets/magrit-logo-only.png build/icon.png && cp src/assets/magrit-logo-only.icns build/icon.icns && electron-builder -wl && rm -rf build",
+    "build:electron": "MODE=electronbuild vite build && npm run docs:build && mkdir -p dist/docs && cp -r docs/.vitepress/dist/* dist/docs/ && mkdir -p build && cp src/assets/picto-black.png build/icon.png && cp src/assets/picto-black.icns build/icon.icns && electron-builder -wl && rm -rf build",
     "serve": "vite preview",
     "test": "vitest",
     "typesafe-i18n": "typesafe-i18n",

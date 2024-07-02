@@ -23,7 +23,7 @@ import DropdownLanguage from './DropdownLanguage.tsx';
 import SwitchTheme from './SwitchTheme.tsx';
 
 // Assets
-import img from '../assets/magrit.svg?url';
+import img from '../assets/logo_typo_picto_green.svg?url';
 
 // Styles
 import '../styles/Headers.css';

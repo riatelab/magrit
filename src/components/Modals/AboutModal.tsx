@@ -16,7 +16,7 @@ import { applicationSettingsStore, setApplicationSettingsStore } from '../../sto
 // Subcomponents
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
-import magritLogo from '../../assets/magrit-logo-only.png';
+import magritLogoTypoBaseline from '../../assets/cartouche_baseline_green.svg?url';
 
 // Helpers
 import { webSafeFonts, fonts } from '../../helpers/font';
@@ -215,13 +215,18 @@ export default function AboutModal(
     </div>
     <Show when={currentTab() === 'about'}>
       <div class="tab-about">
-        <div>
+        <div class="has-text-centered mb-4">
+          <img
+            class="magrit-logo"
+            src={magritLogoTypoBaseline}
+            alt="magrit-logo"
+            style={{ width: '300px' }}
+          />
+        </div>
+        <div class="mb-4">
           <p class="has-text-centered">
             <b>Magrit - Version {version}</b>
           </p>
-        </div>
-        <div class="has-text-centered">
-          <img class="magrit-logo" src={magritLogo} alt="magrit-logo" style={{ width: '100px' }}/>
         </div>
         <div>
           <p><b>{LL().AboutAndSettingsPanel.description()}</b></p>

@@ -41,9 +41,9 @@ img.magrit-logo {
   transition: 200ms ease-out;
 }
 
-html.theme-dark img.magrit-logo {
+/*html.theme-dark img.magrit-logo {
   filter:invert(1);
-}
+}*/
 
 html.theme-dark .file-import-table tr.entry-detail {
     background: #373737;

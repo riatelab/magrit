@@ -132,7 +132,7 @@ export default defineConfig({
   locales: {
     root: {
       label: 'French',
-      title: 'Magrit',
+      title: 'Magrit - Cartographie thématique',
       description: 'Magrit est une application Web de cartographie thématique',
       lang: 'fr',
       themeConfig: {
@@ -150,7 +150,7 @@ export default defineConfig({
     },
     en: {
       label: 'English',
-      title: 'Magrit',
+      title: 'Magrit - Thematic cartography',
       description: 'Magrit is a thematic cartography Web application',
       lang: 'en',
       link: '/en/',
@@ -169,6 +169,8 @@ export default defineConfig({
     }
   },
   themeConfig: {
+    logo: '/logo_typo_picto_green.svg',
+    siteTitle: false, // 'Magrit',
     socialLinks: [
       { icon: 'github', link: 'https://github.com/riatelab/magrit' }
     ],

@@ -2,6 +2,10 @@ img {
     border: 2px solid #000000;
 }
 
+img.logo {
+    border: none;
+}
+
 :root {
     --vp-layout-max-width: 1600px;
 }
