@@ -88,7 +88,11 @@ function CardDatasetEntry(
   ds: DatasetEntry & { onClick: (arg0: MouseEvent) => void },
 ): JSX.Element {
   const { LL } = useI18nContext();
-  return <div class="card" style={{ margin: '1em' }} onClick={(e) => ds.onClick(e)}>
+  return <div
+    class="card is-clickable"
+    style={{ margin: '1em' }}
+    onClick={(e) => ds.onClick(e)}
+  >
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
       <p class="card-header-title">
         <FaSolidDatabase style={{ height: '1.2em', width: '1.8em' }}/>
@@ -109,7 +113,13 @@ function DatasetPage(props: {
   offset: number,
   maxEntryPerPage: number,
 }): JSX.Element {
-  return <div style={{ display: 'grid', 'grid-template-columns': '1fr 1fr' }}>
+  return <div
+    style={{
+      display: 'grid',
+      'grid-template-columns': '1fr 1fr',
+      height: '78%',
+      'overflow-y': 'auto',
+    }}>
     <For each={props.datasetEntries.slice(props.offset, props.offset + props.maxEntryPerPage)}>
       {
         (d) => <
