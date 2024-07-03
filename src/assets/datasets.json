@@ -636,5 +636,199 @@
         "provenance": 1
       }
     ]
+  },
+  {
+    "id": "quartiers_paris",
+    "type": "vector",
+    "totalFeatures": 80,
+    "defaultProjection": {
+      "type": "proj4",
+      "code": 2154
+    },
+    "geometry": {
+      "source": "APUR",
+      "url": "https://opendata.apur.org/maps/12f1272266204fbe951d8e9d172c7826/about",
+      "download_date": "2018-01-09",
+      "license": "ODbL"
+    },
+    "data": [
+      {
+        "source": "INSEE",
+        "url": "",
+        "download_date": "2018-01-09",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "c_quinsee",
+        "dataType": "number",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "n_sq_qu",
+        "dataType": "number",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "c_qu",
+        "dataType": "number",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "surface",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "n_sq_ar",
+        "dataType": "number",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "l_qu",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "c_ar",
+        "dataType": "number",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "P12_POP",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "P07_POP",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "fra_metro_com",
+    "type": "vector",
+    "totalFeatures": 34858,
+    "defaultProjection": {
+      "type": "proj4",
+      "code": 2154
+    },
+    "geometry": {
+      "source": "RIATE - IGN - Natural Earth",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/statistiques/2521169",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "fra_metro_dep",
+    "type": "vector",
+    "totalFeatures": 96,
+    "defaultProjection": {
+      "type": "proj4",
+      "code": 2154
+    },
+    "geometry": {
+      "source": "RIATE - IGN - Natural Earth",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/statistiques/2521169",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
   }
 ]

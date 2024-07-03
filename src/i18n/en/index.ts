@@ -44,6 +44,56 @@ const en = {
     Previous: 'Previous',
   },
   Datasets: {
+    quartiers_paris: {
+      name: 'Neighborhoods of Paris',
+      abstract: 'The 80 neighborhoods of Paris',
+      fields: {
+        c_quinsee: 'INSEE code of the neighborhood',
+        n_sq_qu: 'Sequential identifier of the neighborhood',
+        c_qu: 'Neighborhood number',
+        surface: 'Area of the neighborhood in m2',
+        n_sq_ar: 'Link to district - sequential identifier of district',
+        l_qu: 'Neighborhood name',
+        c_ar: 'District number',
+        P12_POP: 'Population 2012',
+        P07_POP: 'Population 2007',
+      },
+      keywords: 'France, Paris, neighborhoods, municipalities',
+      geometryAttribution: '© Atelier Parisien d\'Urbanisme (APUR)',
+      dataAttribution: {
+        1: '© INSEE',
+      },
+    },
+    fra_metro_com: {
+      name: 'Metropolitan France – municipalities',
+      abstract: 'The 34858 metropolitan French municipalities (2023 editions) based on Voronoi polygons',
+      fields: {
+        INSEE_COM: 'Municipal identifier',
+        NOM: 'Name',
+        POP_2020: 'Total population, 2020',
+        SUPERF_2023: 'Total area, 2023 (km²)',
+      },
+      keywords: 'France, communes, municipalities, metropolitan areas',
+      geometryAttribution: '© RIATE - from IGN municipality centroids and Natural Earth simplified contours',
+      dataAttribution: {
+        1: '© INSEE - 2024',
+      },
+    },
+    fra_metro_dep: {
+      name: 'Metropolitan France – departments',
+      abstract: 'Les 96 metropolitan French departments',
+      fields: {
+        DEP: 'Department identifier',
+        NOM: 'Name',
+        POP_2020: 'Total population, 2020',
+        SUPERF_2023: 'Total area, 2023 (km²)',
+      },
+      keywords: 'France, department, metropolitan areas',
+      geometryAttribution: '© RIATE - aggregated from the metropolitan French municipalities layer',
+      dataAttribution: {
+        1: '© INSEE - 2024',
+      },
+    },
     nuts0: {
       name: 'Europe – NUTS0',
       abstract: 'The 37 European NUTS0 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom',
@@ -120,7 +170,7 @@ const en = {
     },
     world_177: {
       name: 'World – 177 countries',
-      abstract: 'The 177 contries of the World : a dataset derived from Natural Earth (110m) and consolidated by Philippe Rivière. Associated with key indicators extracted from United Nations and World bank (last year available)',
+      abstract: 'The 177 countries of the World : a dataset derived from Natural Earth (110m) and consolidated by Philippe Rivière. Associated with key indicators extracted from United Nations and World bank (last year available)',
       fields: {
         a3: 'ISO3 identifier',
         id: 'SDMX Global Registry identifier',
@@ -151,7 +201,7 @@ const en = {
     },
     world_242: {
       name: 'World – 242 countries',
-      abstract: 'The 242 contries of the World : a dataset derived from Natural Earth (50m) and consolidated by Philippe Rivière. Associated with key indicators extracted from United Nations and World bank (last year available)',
+      abstract: 'The 242 countries of the World : a dataset derived from Natural Earth (50m) and consolidated by Philippe Rivière. Associated with key indicators extracted from United Nations and World bank (last year available)',
       fields: {
         a3: 'ISO3 identifier',
         id: 'SDMX Global Registry identifier',

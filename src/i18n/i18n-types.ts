@@ -154,6 +154,152 @@ type RootTranslation = {
 		Previous: string
 	}
 	Datasets: {
+		quartiers_paris: {
+			/**
+			 * N​e​i​g​h​b​o​r​h​o​o​d​s​ ​o​f​ ​P​a​r​i​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​8​0​ ​n​e​i​g​h​b​o​r​h​o​o​d​s​ ​o​f​ ​P​a​r​i​s
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * I​N​S​E​E​ ​c​o​d​e​ ​o​f​ ​t​h​e​ ​n​e​i​g​h​b​o​r​h​o​o​d
+				 */
+				c_quinsee: string
+				/**
+				 * S​e​q​u​e​n​t​i​a​l​ ​i​d​e​n​t​i​f​i​e​r​ ​o​f​ ​t​h​e​ ​n​e​i​g​h​b​o​r​h​o​o​d
+				 */
+				n_sq_qu: string
+				/**
+				 * N​e​i​g​h​b​o​r​h​o​o​d​ ​n​u​m​b​e​r
+				 */
+				c_qu: string
+				/**
+				 * A​r​e​a​ ​o​f​ ​t​h​e​ ​n​e​i​g​h​b​o​r​h​o​o​d​ ​i​n​ ​m​2
+				 */
+				surface: string
+				/**
+				 * L​i​n​k​ ​t​o​ ​d​i​s​t​r​i​c​t​ ​-​ ​s​e​q​u​e​n​t​i​a​l​ ​i​d​e​n​t​i​f​i​e​r​ ​o​f​ ​d​i​s​t​r​i​c​t
+				 */
+				n_sq_ar: string
+				/**
+				 * N​e​i​g​h​b​o​r​h​o​o​d​ ​n​a​m​e
+				 */
+				l_qu: string
+				/**
+				 * D​i​s​t​r​i​c​t​ ​n​u​m​b​e​r
+				 */
+				c_ar: string
+				/**
+				 * P​o​p​u​l​a​t​i​o​n​ ​2​0​1​2
+				 */
+				P12_POP: string
+				/**
+				 * P​o​p​u​l​a​t​i​o​n​ ​2​0​0​7
+				 */
+				P07_POP: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​P​a​r​i​s​,​ ​n​e​i​g​h​b​o​r​h​o​o​d​s​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			keywords: string
+			/**
+			 * ©​ ​A​t​e​l​i​e​r​ ​P​a​r​i​s​i​e​n​ ​d​'​U​r​b​a​n​i​s​m​e​ ​(​A​P​U​R​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E
+				 */
+				'1': string
+			}
+		}
+		fra_metro_com: {
+			/**
+			 * M​e​t​r​o​p​o​l​i​t​a​n​ ​F​r​a​n​c​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​3​4​8​5​8​ ​m​e​t​r​o​p​o​l​i​t​a​n​ ​F​r​e​n​c​h​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​(​2​0​2​3​ ​e​d​i​t​i​o​n​s​)​ ​b​a​s​e​d​ ​o​n​ ​V​o​r​o​n​o​i​ ​p​o​l​y​g​o​n​s
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​m​e​t​r​o​p​o​l​i​t​a​n​ ​a​r​e​a​s
+			 */
+			keywords: string
+			/**
+			 * ©​ ​R​I​A​T​E​ ​-​ ​f​r​o​m​ ​I​G​N​ ​m​u​n​i​c​i​p​a​l​i​t​y​ ​c​e​n​t​r​o​i​d​s​ ​a​n​d​ ​N​a​t​u​r​a​l​ ​E​a​r​t​h​ ​s​i​m​p​l​i​f​i​e​d​ ​c​o​n​t​o​u​r​s
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​-​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		fra_metro_dep: {
+			/**
+			 * M​e​t​r​o​p​o​l​i​t​a​n​ ​F​r​a​n​c​e​ ​–​ ​d​e​p​a​r​t​m​e​n​t​s
+			 */
+			name: string
+			/**
+			 * L​e​s​ ​9​6​ ​m​e​t​r​o​p​o​l​i​t​a​n​ ​F​r​e​n​c​h​ ​d​e​p​a​r​t​m​e​n​t​s
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * D​e​p​a​r​t​m​e​n​t​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				DEP: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​d​e​p​a​r​t​m​e​n​t​,​ ​m​e​t​r​o​p​o​l​i​t​a​n​ ​a​r​e​a​s
+			 */
+			keywords: string
+			/**
+			 * ©​ ​R​I​A​T​E​ ​-​ ​a​g​g​r​e​g​a​t​e​d​ ​f​r​o​m​ ​t​h​e​ ​m​e​t​r​o​p​o​l​i​t​a​n​ ​F​r​e​n​c​h​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​l​a​y​e​r
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​-​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
 		nuts0: {
 			/**
 			 * E​u​r​o​p​e​ ​–​ ​N​U​T​S​0
@@ -384,7 +530,7 @@ type RootTranslation = {
 			 */
 			name: string
 			/**
-			 * T​h​e​ ​1​7​7​ ​c​o​n​t​r​i​e​s​ ​o​f​ ​t​h​e​ ​W​o​r​l​d​ ​:​ ​a​ ​d​a​t​a​s​e​t​ ​d​e​r​i​v​e​d​ ​f​r​o​m​ ​N​a​t​u​r​a​l​ ​E​a​r​t​h​ ​(​1​1​0​m​)​ ​a​n​d​ ​c​o​n​s​o​l​i​d​a​t​e​d​ ​b​y​ ​P​h​i​l​i​p​p​e​ ​R​i​v​i​è​r​e​.​ ​A​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​k​e​y​ ​i​n​d​i​c​a​t​o​r​s​ ​e​x​t​r​a​c​t​e​d​ ​f​r​o​m​ ​U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​a​n​d​ ​W​o​r​l​d​ ​b​a​n​k​ ​(​l​a​s​t​ ​y​e​a​r​ ​a​v​a​i​l​a​b​l​e​)
+			 * T​h​e​ ​1​7​7​ ​c​o​u​n​t​r​i​e​s​ ​o​f​ ​t​h​e​ ​W​o​r​l​d​ ​:​ ​a​ ​d​a​t​a​s​e​t​ ​d​e​r​i​v​e​d​ ​f​r​o​m​ ​N​a​t​u​r​a​l​ ​E​a​r​t​h​ ​(​1​1​0​m​)​ ​a​n​d​ ​c​o​n​s​o​l​i​d​a​t​e​d​ ​b​y​ ​P​h​i​l​i​p​p​e​ ​R​i​v​i​è​r​e​.​ ​A​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​k​e​y​ ​i​n​d​i​c​a​t​o​r​s​ ​e​x​t​r​a​c​t​e​d​ ​f​r​o​m​ ​U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​a​n​d​ ​W​o​r​l​d​ ​b​a​n​k​ ​(​l​a​s​t​ ​y​e​a​r​ ​a​v​a​i​l​a​b​l​e​)
 			 */
 			abstract: string
 			fields: {
@@ -490,7 +636,7 @@ type RootTranslation = {
 			 */
 			name: string
 			/**
-			 * T​h​e​ ​2​4​2​ ​c​o​n​t​r​i​e​s​ ​o​f​ ​t​h​e​ ​W​o​r​l​d​ ​:​ ​a​ ​d​a​t​a​s​e​t​ ​d​e​r​i​v​e​d​ ​f​r​o​m​ ​N​a​t​u​r​a​l​ ​E​a​r​t​h​ ​(​5​0​m​)​ ​a​n​d​ ​c​o​n​s​o​l​i​d​a​t​e​d​ ​b​y​ ​P​h​i​l​i​p​p​e​ ​R​i​v​i​è​r​e​.​ ​A​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​k​e​y​ ​i​n​d​i​c​a​t​o​r​s​ ​e​x​t​r​a​c​t​e​d​ ​f​r​o​m​ ​U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​a​n​d​ ​W​o​r​l​d​ ​b​a​n​k​ ​(​l​a​s​t​ ​y​e​a​r​ ​a​v​a​i​l​a​b​l​e​)
+			 * T​h​e​ ​2​4​2​ ​c​o​u​n​t​r​i​e​s​ ​o​f​ ​t​h​e​ ​W​o​r​l​d​ ​:​ ​a​ ​d​a​t​a​s​e​t​ ​d​e​r​i​v​e​d​ ​f​r​o​m​ ​N​a​t​u​r​a​l​ ​E​a​r​t​h​ ​(​5​0​m​)​ ​a​n​d​ ​c​o​n​s​o​l​i​d​a​t​e​d​ ​b​y​ ​P​h​i​l​i​p​p​e​ ​R​i​v​i​è​r​e​.​ ​A​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​k​e​y​ ​i​n​d​i​c​a​t​o​r​s​ ​e​x​t​r​a​c​t​e​d​ ​f​r​o​m​ ​U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​a​n​d​ ​W​o​r​l​d​ ​b​a​n​k​ ​(​l​a​s​t​ ​y​e​a​r​ ​a​v​a​i​l​a​b​l​e​)
 			 */
 			abstract: string
 			fields: {
@@ -3975,6 +4121,152 @@ export type TranslationFunctions = {
 		Previous: () => LocalizedString
 	}
 	Datasets: {
+		quartiers_paris: {
+			/**
+			 * Neighborhoods of Paris
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 80 neighborhoods of Paris
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * INSEE code of the neighborhood
+				 */
+				c_quinsee: () => LocalizedString
+				/**
+				 * Sequential identifier of the neighborhood
+				 */
+				n_sq_qu: () => LocalizedString
+				/**
+				 * Neighborhood number
+				 */
+				c_qu: () => LocalizedString
+				/**
+				 * Area of the neighborhood in m2
+				 */
+				surface: () => LocalizedString
+				/**
+				 * Link to district - sequential identifier of district
+				 */
+				n_sq_ar: () => LocalizedString
+				/**
+				 * Neighborhood name
+				 */
+				l_qu: () => LocalizedString
+				/**
+				 * District number
+				 */
+				c_ar: () => LocalizedString
+				/**
+				 * Population 2012
+				 */
+				P12_POP: () => LocalizedString
+				/**
+				 * Population 2007
+				 */
+				P07_POP: () => LocalizedString
+			}
+			/**
+			 * France, Paris, neighborhoods, municipalities
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © Atelier Parisien d'Urbanisme (APUR)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		fra_metro_com: {
+			/**
+			 * Metropolitan France – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 34858 metropolitan French municipalities (2023 editions) based on Voronoi polygons
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+			}
+			/**
+			 * France, communes, municipalities, metropolitan areas
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © RIATE - from IGN municipality centroids and Natural Earth simplified contours
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE - 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		fra_metro_dep: {
+			/**
+			 * Metropolitan France – departments
+			 */
+			name: () => LocalizedString
+			/**
+			 * Les 96 metropolitan French departments
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Department identifier
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+			}
+			/**
+			 * France, department, metropolitan areas
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © RIATE - aggregated from the metropolitan French municipalities layer
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE - 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
 		nuts0: {
 			/**
 			 * Europe – NUTS0
@@ -4205,7 +4497,7 @@ export type TranslationFunctions = {
 			 */
 			name: () => LocalizedString
 			/**
-			 * The 177 contries of the World : a dataset derived from Natural Earth (110m) and consolidated by Philippe Rivière. Associated with key indicators extracted from United Nations and World bank (last year available)
+			 * The 177 countries of the World : a dataset derived from Natural Earth (110m) and consolidated by Philippe Rivière. Associated with key indicators extracted from United Nations and World bank (last year available)
 			 */
 			abstract: () => LocalizedString
 			fields: {
@@ -4311,7 +4603,7 @@ export type TranslationFunctions = {
 			 */
 			name: () => LocalizedString
 			/**
-			 * The 242 contries of the World : a dataset derived from Natural Earth (50m) and consolidated by Philippe Rivière. Associated with key indicators extracted from United Nations and World bank (last year available)
+			 * The 242 countries of the World : a dataset derived from Natural Earth (50m) and consolidated by Philippe Rivière. Associated with key indicators extracted from United Nations and World bank (last year available)
 			 */
 			abstract: () => LocalizedString
 			fields: {

@@ -44,6 +44,56 @@ const fr = {
     Previous: 'Précédent',
   },
   Datasets: {
+    quartiers_paris: {
+      name: 'Quartiers de la Ville de Paris',
+      abstract: 'Les 80 quartiers administratifs de la Ville de Paris',
+      fields: {
+        c_quinsee: 'Code INSEE du quartier',
+        n_sq_qu: 'Identifiant séquentiel du quartier',
+        c_qu: 'Numéro de quartier',
+        surface: 'Superficie du quartier en m2',
+        n_sq_ar: 'Lien avec l\'arrondissement - Identifiant séquentiel d\'arrondissement',
+        l_qu: 'Nom du quartier',
+        c_ar: 'Numéro d\'arrondissement',
+        P12_POP: 'Population 2012',
+        P07_POP: 'Population 2007',
+      },
+      keywords: 'France, Paris, quartiers, municipalités',
+      geometryAttribution: '© Atelier Parisien d\'Urbanisme (APUR)',
+      dataAttribution: {
+        1: '© INSEE',
+      },
+    },
+    fra_metro_com: {
+      name: 'France métropolitaine – communes',
+      abstract: 'Les 34858 communes de France métropolitaine (édition 2023) en polygones de Voronoi',
+      fields: {
+        INSEE_COM: 'Identifiant de commune',
+        NOM: 'Nom',
+        POP_2020: 'Population 2020',
+        SUPERF_2023: 'Superficie totale 2023 (km²)',
+      },
+      keywords: 'France, communes, municipalités, métropole',
+      geometryAttribution: '© RIATE - à partir des centroides des communes IGN et des contours simplifiés Natural Earth',
+      dataAttribution: {
+        1: '© INSEE - 2024',
+      },
+    },
+    fra_metro_dep: {
+      name: 'France métropolitaine – départements',
+      abstract: 'Les 96 départements de France métropolitaine',
+      fields: {
+        DEP: 'Identifiant de département',
+        NOM: 'Nom',
+        POP_2020: 'Population 2020',
+        SUPERF_2023: 'Superficie totale 2023 (km²)',
+      },
+      keywords: 'France, départements, métropole',
+      geometryAttribution: '© RIATE - agrégation du fond de carte communal (France métropolitaine communes)',
+      dataAttribution: {
+        1: '© INSEE - 2024',
+      },
+    },
     nuts0: {
       name: 'Europe – NUTS0',
       abstract: 'Les 37 NUTS0 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni',
