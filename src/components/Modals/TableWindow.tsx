@@ -25,7 +25,7 @@ import type { TranslationFunctions } from '../../i18n/i18n-types';
 import { sanitizeColumnName, unproxify } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
 import { isDarkMode } from '../../helpers/darkmode';
-import { clickLinkFromDataUrl } from '../../helpers/exports';
+import { clickLinkFromBlob } from '../../helpers/exports';
 import {
   detectTypeField,
   type Variable,
@@ -502,10 +502,8 @@ export default function TableWindow(): JSX.Element {
   // Function that is called when the user clicks the "export csv" button
   const csvExport = async () => {
     const csvStr = d3.csvFormat(rowData());
-    await clickLinkFromDataUrl(
-      `data:text/plan;charset=utf-8,${encodeURIComponent(csvStr)}`,
-      `${dsName}.csv`,
-    );
+    const blob = new Blob([csvStr], { type: 'text/csv' });
+    await clickLinkFromBlob(blob, `${dsName}.csv`);
   };
 
   const triggerContextMenu = (

@@ -22,7 +22,7 @@ import { useI18nContext } from './i18n/i18n-solid';
 import { isLocale } from './i18n/i18n-util';
 import { loadLocale } from './i18n/i18n-util.sync';
 import { toggleDarkMode } from './helpers/darkmode';
-import { clickLinkFromDataUrl } from './helpers/exports';
+import { clickLinkFromBlob } from './helpers/exports';
 import { draggedElementsAreFiles, droppedElementsAreFiles, prepareFilterAndStoreFiles } from './helpers/fileUpload';
 import { round } from './helpers/math';
 import { initDb, storeProject } from './helpers/storage';
@@ -46,7 +46,9 @@ import TableFunctionalitySelection from './components/Modals/TableFunctionalityS
 
 // Stores
 import { classificationPanelStore } from './store/ClassificationPanelStore';
-import { globalStore, setGlobalStore, setReloadingProject } from './store/GlobalStore';
+import {
+  globalStore, setGlobalStore, setLoading, setReloadingProject,
+} from './store/GlobalStore';
 import {
   type MapStoreType,
   mapStore,
@@ -419,10 +421,16 @@ const AppPage: () => JSX.Element = () => {
       });
 
     document.getElementById('button-export-project')
-      ?.addEventListener('click', () => {
+      ?.addEventListener('click', async () => {
+        setLoading(true, 'ExportPreparation');
+        await yieldOrContinue('interactive');
         const projectObj = prepareExportProject();
-        const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(projectObj))}`;
-        return clickLinkFromDataUrl(dataStr, 'export-project.mjson');
+        const serializedProject = JSON.stringify(projectObj, null, 0);
+        const blob = new Blob([serializedProject], { type: 'application/json' });
+        return clickLinkFromBlob(blob, 'export-project.mjson')
+          .finally(() => {
+            setLoading(false);
+          });
       });
 
     document.getElementById('button-import-project')

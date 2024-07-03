@@ -173,23 +173,21 @@ function unpatchSvgForFonts(svgElement: SVGElement) {
 }
 
 /**
- * Download the given data URL as a file.
+ * Create a link to download the given blob as a file.
  *
- * @param {string} url
- * @param {string} fileName
+ * @param blob
+ * @param fileName
  */
-export const clickLinkFromDataUrl = async (url: string, fileName: string) => {
-  const res = await fetch(url);
-  const blob = await res.blob();
-  const blobUrl = URL.createObjectURL(blob);
+export const clickLinkFromBlob = async (blob: Blob, fileName: string) => {
+  const url = URL.createObjectURL(blob);
   const dlAnchorElement = document.createElement('a');
-  dlAnchorElement.setAttribute('href', blobUrl);
+  dlAnchorElement.setAttribute('href', url);
   dlAnchorElement.setAttribute('download', fileName);
   dlAnchorElement.style.display = 'none';
   document.body.appendChild(dlAnchorElement);
   dlAnchorElement.click();
   dlAnchorElement.remove();
-  URL.revokeObjectURL(blobUrl);
+  URL.revokeObjectURL(url);
 };
 
 interface LoadableImage {
@@ -293,15 +291,23 @@ export async function exportMapToSvg(
   // Add the XML declaration at the beginning of the document
   source = `<?xml version="1.0" standalone="no"?>\r\n${source}`;
 
-  const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(source)}`;
+  const blob = new Blob([source], { type: 'image/svg+xml' });
 
-  return clickLinkFromDataUrl(url, outputNameClean)
+  return clickLinkFromBlob(blob, outputNameClean)
     .then(() => Promise.resolve(true))
     .catch((err) => {
       console.warn('Error while downloading SVG file', err);
       Promise.reject(err);
     })
     .finally(finallyFn);
+}
+
+function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => {
+      if (blob) resolve(blob);
+    });
+  });
 }
 
 /**
@@ -383,18 +389,18 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
     return Promise.reject(err);
   }
 
-  let imgUrl;
+  let blob;
   // image.onload = function () {
   context.drawImage(image, 0, 0);
   try {
-    imgUrl = targetCanvas.toDataURL(mimeType);
+    blob = await canvasToBlob(targetCanvas);
   } catch (err) {
     cleanUp();
     console.warn('Error when converting image to data url', err);
     return Promise.reject(err);
   }
 
-  return clickLinkFromDataUrl(imgUrl, outputNameClean).then(() => {
+  return clickLinkFromBlob(blob, outputNameClean).then(() => {
     cleanUp();
     return Promise.resolve(true);
   }).catch((err) => {
@@ -410,7 +416,6 @@ export async function exportToGeo(
   format: SupportedGeoFileTypes,
   crs = 'EPSG:4326',
 ) {
-  console.log(layer, format, crs);
   let result = '';
   let filename = '';
   const ext = `${format}`;
@@ -436,18 +441,18 @@ export async function exportToGeo(
     throw new Error(`Unsupported file format: ${format}`);
   }
 
-  let dataStr = '';
+  let blob;
   if (format === SupportedGeoFileTypes.GeoJSON || format === SupportedGeoFileTypes.TopoJSON) {
-    dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(result)}`;
+    blob = new Blob([result], { type: 'application/json' });
   } else if (format === SupportedGeoFileTypes.KML || format === SupportedGeoFileTypes.GML) {
-    dataStr = `data:text/xml;charset=utf-8,${encodeURIComponent(result)}`;
+    blob = new Blob([result], { type: 'application/xml' });
   } else if (format === SupportedGeoFileTypes.Shapefile) {
-    dataStr = `data:application/zip;base64,${result}`;
+    blob = new Blob([result], { type: 'application/zip' });
   } else if (format === SupportedGeoFileTypes.GeoPackage) {
-    dataStr = `data:application/geopackage+sqlite3;base64,${result}`;
+    blob = new Blob([result], { type: 'application/geopackage+sqlite3' });
   }
 
-  return clickLinkFromDataUrl(dataStr, filename)
+  return clickLinkFromBlob(blob!, filename)
     .then(() => Promise.resolve(true))
     .catch((err) => {
       console.warn('Error when using the data url version of the exported layer', err);
