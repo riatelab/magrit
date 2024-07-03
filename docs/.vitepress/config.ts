@@ -95,7 +95,7 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
       collapsed: true,
       items: [
         { text: 'Choropleth', link: '/en/functionalities/choropleth' },
-        { text: 'Classification', link: '/functionalities/classification' },
+        { text: 'Classification', link: '/en/functionalities/classification' },
         { text: 'Proportional symbols', link: '/en/functionalities/proportional-symbols' },
         { text: 'Categorical choropleth', link: '/en/functionalities/categorical-choropleth' },
         { text: 'Point aggregation', link: '/en/functionalities/point-aggregation' },

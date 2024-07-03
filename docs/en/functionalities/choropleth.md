@@ -27,13 +27,13 @@ types of classification and from a wide range of color palettes.
 ## Examples
 
 <ZoomImg
-    src="../choro.png"
+    src="/choro.png"
     alt="Choropleth map of population density by neighborhood in the city of Paris"
     caption="Choropleth map of population density by neighborhood in the city of Paris"
 />
 
 <ZoomImg
-    src="../choro-histogram.png"
+    src="/choro-histogram.png"
     alt="Choropleth map of population density by neighborhood in the city of Paris (with histogram)"
     caption="Choropleth map of population density by neighborhood in the city of Paris (with histogram)"
 />

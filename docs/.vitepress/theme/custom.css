@@ -26,7 +26,7 @@ img.logo {
 }
 
 @media (min-width: 768px) {
-    .VPHome .item.grid-4 {
+    .VPHome .item.grid-4, .VPHome .item.grid-6 {
         width: calc(100% / 2) !important;
     }
 }
