@@ -67,5 +67,3 @@ sur les bases des options suivantes :
 - Possibilité de sélectionner les colonnes à ajouter à la couche géographique,
 - Possibilité d'ajouter un préfixe aux colonnes ajoutées,
 - Possibilité de supprimer les entités de la couche géographique pour lesquelles aucune correspondance n'a été trouvée.
-
-## Exemples

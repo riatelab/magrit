@@ -5,7 +5,7 @@ sont glissés et déposés dans la fenêtre de l'application. Il est également 
 la fenêtre d'import des données à partir du menu latéral gauche, dans l'onglet "Import des données"
 puis en cliquant sur "Ouvrir la fenêtre d'import des données...".
 
-La fenêtre d'import des données permet de charger des fichiers de données géographiques (GeoPackage, Shapefile, GeoJSON, TopoJSON, KML, GML).
+La fenêtre d'import des données permet de charger des fichiers de données géographiques (GeoPackage, Shapefile, GeoJSON, TopoJSON, KML, GML)
 et des données tabulaires (XLS, XLSX, CSV, TSV, ODS).
 Il est possible d'ajouter plusieurs fichiers à la fois en les sélectionnant dans la fenêtre de dialogue ou en les glissant et
 déposant sur la fenêtre d'import des données.

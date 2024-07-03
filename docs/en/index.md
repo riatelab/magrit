@@ -43,6 +43,11 @@ features:
     icon: 
       dark: ../icon/hammer_dark.svg
       light: ../icon/hammer_light.svg
+  - title: Privacy-friendly
+    details: Magrit does not collect any personal data. The data you use in the application is not transmitted to remote servers and remains in your browser.
+    icon: 
+        dark: ../icon/privacy_dark.svg
+        light: ../icon/privacy_light.svg
 ---
 
 <div>

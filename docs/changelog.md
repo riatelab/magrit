@@ -1,9 +1,21 @@
 # Historique des changements
 
-#### 2.0.0 (xxxx-xx-xx)
+#### 2.0.0 (2024-07-04)
 
 Il s'agit d'une refonte totale de l'application (aussi bien concernant son architecture que son interface utilisateur).
-La liste exacte des changements est trop longue pour être listée de manière explicite ici, mais vous pouvez consulter ...
+La liste exacte des changements est trop longue pour être listée de manière explicite ici, mais voici quelques points importants :
+
+- Nouvelle interface utilisateur (thème sombre, etc.)
+- Nouvelle architecture (utilisation de Solid.js, plus de serveur Python : toutes les opérations sont effectuées dans le navigateur)
+- Nouvelles fonctionnalités (aggrégation, sélection, simplification, KDE, régression linéaire, etc.)
+- La possibilité de télécharger une version autonome de l'application (sans avoir besoin de connexion internet pour l'utiliser)
+
+Les fonctionnalités de l'ancienne version de Magrit sont toujours disponibles
+(les différents types de représentation, l'export PNG / SVG, l'export de fichier projet, etc.).
+
+#### 0.16.6 (2024-06-03)
+
+- Mise à jour de la page d'accueil.
 
 #### 0.16.5 (2024-05-04)
 

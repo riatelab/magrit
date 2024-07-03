@@ -20,7 +20,7 @@ The representation of this type of phenomenon must respect the expression of the
 
 Examples: Total population in thousands of inhabitants, Surface area in hectares.
 
-## Ratios
+## Ratio
 
 Relative quantitative variables (also called rate variables or ratio variables), express a ratio between two quantities whose sum has no meaning.
 By extension, they can be associated with numerical composite indicators (indices, etc.).
@@ -28,7 +28,7 @@ By extension, they can be associated with numerical composite indicators (indice
 Examples: GDP per capita, Human Development Index.
 
 
-## Categories
+## Category
 
 The modalities of qualitative characters are not measurable; they are names, acronyms or codes.
 Qualitative modalities cannot be summed, nor averaged.
@@ -41,3 +41,7 @@ This field contains values that uniquely identify each entity in the data layer.
 These fields are used to perform a data join.
 
 Example: INSEE commune code, ISO2 country code.
+
+## Unknown
+
+This type is used for fields that you do not want to use in the application.

@@ -1,6 +1,21 @@
 # Changelog
 
-#### 2.0.0 (xxxx-xx-xx)
+#### 2.0.0 (2024-07-04)
+
+This is a complete overhaul of the application (in terms of both architecture and user interface).
+The exact list of changes is too long to be explicitly listed here, but here are a few highlights:
+
+- New user interface (dark theme, etc.)
+- New architecture (use of Solid.js, no more Python server: all operations are performed in the browser)
+- New functionalities (aggregation, selection, simplification, KDE, linear regression, etc.)
+- The ability to download a stand-alone version of the application (without needing an Internet connection to use it)
+
+The features of the previous version of Magrit are still available
+(the various portrayal types, PNG / SVG export, project file export, etc.).
+
+#### 0.16.6 (2024-06-03)
+
+- Update homepage.
 
 #### 0.16.5 (2024-05-04)
 

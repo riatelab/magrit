@@ -43,6 +43,11 @@ features:
     icon: 
       dark: /icon/hammer_dark.svg
       light: /icon/hammer_light.svg
+  - title: Respectueux de la vie privée
+    details: Magrit ne collecte aucune donnée personnelle. Les données que vous utilisez dans l'application ne sont pas transmises à des serveurs distants et restent dans votre navigateur.
+    icon: 
+      dark: /icon/privacy_dark.svg
+      light: /icon/privacy_light.svg
 ---
 
 <div>

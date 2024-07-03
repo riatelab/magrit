@@ -32,6 +32,6 @@ essentiellement pour les besoins de la cartographie thématique (sélection attr
 
 ## Principales fonctionnalités de l'application
 
-Les représentations thématiques classiques sont proposées, faisant intervenir aussi bien des variables visuelles « d’ordre » que des **variables visuelles « de différenciation »** et des **variables visuelles « de proportionnalité »**, afin de proposer plusieurs combinaisons de cartes. 
+Les représentations thématiques classiques sont proposées, faisant intervenir aussi bien des **variables visuelles « d’ordre »** que des **variables visuelles « de différenciation »** et des **variables visuelles « de proportionnalité »**, afin de proposer plusieurs combinaisons de cartes. 
 
 Des représentations plus originales sont aussi proposées. Contrairement aux représentations précédentes, ces dernières font appel à des calculs parfois complexes pour représenter les données fournies par l’utilisateur (carroyages, lissages, cartogrammes).

@@ -1,26 +1,25 @@
 # Agrégation
 
-Cette fonctionnalité permet de fusionner des entités géographiques entre elles pour former des entités de plus grande taille.
+This feature allows you to merge geographic entities into larger ones.
 
-Cette opération est utile pour agréger des données statistiques à une échelle plus grande que celle des données initiales.
+This operation is useful for aggregating geographical data on a larger scale than that of the initial data.
 
-Il est ainsi possible :
+You can :
 
-- de choisir un champ de regroupement (par exemple, le nom d'un département) ;
-- de choisir d'agréger toutes les entités de la couche.
+- choose a grouping field (for example, the name of a department) ;
+- choose to aggregate all entities in the layer.
 
-
-## Exemples
+## Examples
 
 <ZoomImg
-    src="../../aggregation-1.png"
-    alt="Aggrégation des communes françaises par département"
-    caption="Aggrégation des communes françaises par département"
+    src="/aggregation-1.png"
+    alt="Aggregation of French communes by department"
+    caption="Aggregation of French communes by department"
 />
 
 <ZoomImg
-    src="../../aggregation-0.png"
-    alt="Aggrégation des communes françaises sans champ de regroupement "
-    caption="Aggrégation des communes françaises sans champ de regroupement "
+    src="/aggregation-0.png"
+    alt="Aggregation of French communes without grouping field"
+    caption="Aggregation of French communes without grouping field"
 />
 
