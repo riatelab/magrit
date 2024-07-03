@@ -1,5 +1,7 @@
 // Imports from solid-js
-import { For, JSX, onMount } from 'solid-js';
+import {
+  For, JSX, onMount, Show,
+} from 'solid-js';
 
 // Stores
 import {
@@ -18,7 +20,7 @@ import { VariableType, Variable } from '../../helpers/typeDetection';
 import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
-import type { LayerDescription, TableDescription } from '../../global';
+import type { GeoJSONFeatureCollection, LayerDescription, TableDescription } from '../../global';
 
 export default function FieldTypingModal(
   props: {
@@ -42,6 +44,17 @@ export default function FieldTypingModal(
   if (!dataset) {
     throw new Error(`Layer or table '${targetId}' not found`);
   }
+
+  const hasDuplicates: Record<string, boolean> = {};
+
+  dataset.fields.forEach((field) => {
+    const varName = field.name;
+    const values = key === 'layers'
+      ? (dataset.data as GeoJSONFeatureCollection).features.map((f) => f.properties[varName])
+      : (dataset.data as Record<string, any>[]).map((f) => f[varName]);
+    const filteredValues = values.filter((v) => v !== null && v !== '' && v !== undefined);
+    hasDuplicates[varName] = filteredValues.length !== (new Set(filteredValues)).size;
+  });
 
   const descriptions = unproxify(dataset.fields as never) as Variable[];
 
@@ -68,13 +81,13 @@ export default function FieldTypingModal(
   onMount(() => {
     // Did the caller already provide a confirm callback?
     // If so we need to keep it and call it after our own confirm callback
-    let cfcb;
+    let cfcb: undefined | (() => void);
     if (modalStore.confirmCallback) {
       cfcb = modalStore.confirmCallback;
     }
     // Did the caller already provide a cancel callback?
     // If so we need to keep it and call it after our own cancel callback
-    let cncb;
+    let cncb: undefined | (() => void);
     if (modalStore.cancelCallback) {
       cncb = modalStore.cancelCallback;
     }
@@ -120,15 +133,21 @@ export default function FieldTypingModal(
             <div class="control">
               <div class="select">
                 <select>
-                  <option value="identifier" selected={field.type === VariableType.identifier}>
-                    {LL().FieldsTyping.VariableTypes.identifier()}
-                  </option>
-                  <option value="stock" selected={field.type === VariableType.stock}>
-                    {LL().FieldsTyping.VariableTypes.stock()}
-                  </option>
-                  <option value="ratio" selected={field.type === VariableType.ratio}>
-                    {LL().FieldsTyping.VariableTypes.ratio()}
-                  </option>
+                  <Show when={!hasDuplicates[field.name]}>
+                    <option value="identifier" selected={field.type === VariableType.identifier}>
+                      {LL().FieldsTyping.VariableTypes.identifier()}
+                    </option>
+                  </Show>
+                  <Show when={field.dataType === 'number'}>
+                    <option value="stock" selected={field.type === VariableType.stock}>
+                      {LL().FieldsTyping.VariableTypes.stock()}
+                    </option>
+                  </Show>
+                  <Show when={field.dataType === 'number'}>
+                    <option value="ratio" selected={field.type === VariableType.ratio}>
+                      {LL().FieldsTyping.VariableTypes.ratio()}
+                    </option>
+                  </Show>
                   <option value="categorical" selected={field.type === VariableType.categorical}>
                     {LL().FieldsTyping.VariableTypes.categorical()}
                   </option>
