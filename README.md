@@ -1,9 +1,12 @@
 # Magrit - Thematic cartography
 
+![Magrit - Banner](./src/assets/banner_green.jpg)
+
+
 [en] [Magrit](https://magrit.cnrs.fr) is an online thematic mapping application developed by [UAR RIATE](https://riate.cnrs.fr/).  
 [fr]  [Magrit](https://magrit.cnrs.fr) est une application de cartographie thématique développée par l'[UAR RIATE](https://riate.cnrs.fr/).
 
-![Magrit - Logo](./src/assets/cartouche_baseline_green.svg)
+![GitHub Release](https://img.shields.io/github/v/release/riatelab/magrit?style=for-the-badge&color=00d1b2)
 
 ## Basics
 
