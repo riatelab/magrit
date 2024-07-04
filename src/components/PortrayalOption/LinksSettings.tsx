@@ -11,8 +11,6 @@ import { produce, unwrap } from 'solid-js/store';
 
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
-import { FaSolidCheck } from 'solid-icons/fa';
-import { VsWarning } from 'solid-icons/vs';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -41,6 +39,7 @@ import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Types / Interfaces / Enums
@@ -421,7 +420,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
     }
     const table = layersDescriptionStore.tables.find((l) => l.id === targetDataset())!;
     return table.fields
-      .filter((v) => v.type === VariableType.ratio || v.type === VariableType.stock);
+      .filter((v) => v.dataType === 'number');
   });
 
   const [
@@ -553,50 +552,69 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
       </InputFieldSelect>
       <Show when={matchingState() !== null}>
         <Show when={matchingState()?.allMatch}>
-          <div class="field is-justify-content-flex-start">
-            <FaSolidCheck />
+          <MessageBlock type={'success'} useIcon={true}>
             { LL().FunctionalitiesSection.LinksOptions.AllMatch() }
-          </div>
+          </MessageBlock>
         </Show>
         <Show when={matchingState()?.someMatch}>
-          <div class="field is-justify-content-flex-start">
-            <VsWarning />
+          <MessageBlock type={'warning'} useIcon={true}>
             { LL().FunctionalitiesSection.LinksOptions.SomeMatch() }
-          </div>
+          </MessageBlock>
         </Show>
         <Show when={!matchingState()?.allMatch && !matchingState()?.someMatch}>
-          <div class="field is-justify-content-flex-start">
-            <VsWarning />
+          <MessageBlock type={'danger'} useIcon={true}>
             { LL().FunctionalitiesSection.LinksOptions.NoMatch() }
-          </div>
+          </MessageBlock>
         </Show>
       </Show>
       <InputFieldSelect
         label={ LL().FunctionalitiesSection.LinksOptions.Intensity() }
         onChange={(value) => {
           setIntensityVariable(value);
+          if (value === '') {
+            setLinkType(LinkType.Link);
+          } else {
+            setLinkType(LinkType.Exchange);
+          }
         }}
         value={ intensityVariable() }
       >
+        <option value=''>{LL().FunctionalitiesSection.LinksOptions.NoIntensity()}</option>
         <For each={targetFieldsIntensity()}>
           { (variable) => <option value={variable.name}>{variable.name}</option> }
         </For>
       </InputFieldSelect>
-      <InputFieldSelect
-        label={ LL().FunctionalitiesSection.LinksOptions.LinkType() }
-        onChange={(value) => {
-          setLinkType(value as LinkType);
-        }}
-        value={ linkType() }
+      <Show when={intensityVariable() !== ''}>
+        <InputFieldSelect
+          label={ LL().FunctionalitiesSection.LinksOptions.LinkType() }
+          onChange={(value) => {
+            setLinkType(value as LinkType);
+          }}
+          value={ linkType() }
+          >
+          <For each={Object.entries(LinkType).filter((d) => d[0] !== 'Link')}>
+            {
+              ([key, value]) => <option value={value}>
+                { LL().FunctionalitiesSection.LinksOptions[`LinkType${key}`]() }
+              </option>
+            }
+          </For>
+        </InputFieldSelect>
+      </Show>
+      <Show when={intensityVariable() === ''}>
+        <InputFieldSelect
+          label={ LL().FunctionalitiesSection.LinksOptions.LinkType() }
+          onChange={(value) => {
+            setLinkType(value as LinkType);
+          }}
+          value={ linkType() }
+          disabled={true}
         >
-        <For each={Object.entries(LinkType)}>
-          {
-            ([key, value]) => <option value={value}>
-              { LL().FunctionalitiesSection.LinksOptions[`LinkType${key}`]() }
-            </option>
-          }
-        </For>
-      </InputFieldSelect>
+          <option value={LinkType.Link}>
+            { LL().FunctionalitiesSection.LinksOptions.LinkTypeLink() }
+          </option>
+        </InputFieldSelect>
+      </Show>
       <InputFieldSelect
         label={ LL().FunctionalitiesSection.LinksOptions.LinkHeadType() }
         onChange={(value) => {

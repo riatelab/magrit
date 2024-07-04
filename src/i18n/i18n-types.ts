@@ -2233,6 +2233,10 @@ type RootTranslation = {
 			 */
 			LinkSizeProportionalReferenceValue: string
 			/**
+			 * N​o​ ​i​n​t​e​n​s​i​t​y​ ​v​a​r​i​a​b​l​e
+			 */
+			NoIntensity: string
+			/**
 			 * A​l​l​ ​o​r​i​g​i​n​s​ ​a​n​d​ ​d​e​s​t​i​n​a​t​i​o​n​s​ ​m​a​t​c​h​ ​I​D​s​ ​o​f​ ​f​e​a​t​u​r​e​s​ ​i​n​ ​t​h​e​ ​g​e​o​g​r​a​p​h​i​c​ ​l​a​y​e​r
 			 */
 			AllMatch: string
@@ -6177,6 +6181,10 @@ export type TranslationFunctions = {
 			 * On value
 			 */
 			LinkSizeProportionalReferenceValue: () => LocalizedString
+			/**
+			 * No intensity variable
+			 */
+			NoIntensity: () => LocalizedString
 			/**
 			 * All origins and destinations match IDs of features in the geographic layer
 			 */

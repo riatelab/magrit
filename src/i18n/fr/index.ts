@@ -649,6 +649,7 @@ const fr = {
       LinkSizeFixed: 'Fixe',
       LinkSizeProportionalReferenceSize: 'Taille maximale',
       LinkSizeProportionalReferenceValue: 'Sur la valeur',
+      NoIntensity: 'Pas de variable d\'intensité',
       AllMatch: 'Toutes les couples d\'origine / destination ont une correspondance avec des entités de la couche géographique',
       SomeMatch: 'Plusieurs couples origines / destination (mais pas tous) ont une correspondance avec des entités de la couche géographique',
       NoMatch: 'Aucun couple origine / destination n\'a de correspondance avec des entités de la couche géographique',

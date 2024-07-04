@@ -649,6 +649,7 @@ const en = {
       LinkSizeFixed: 'Fixed',
       LinkSizeProportionalReferenceSize: 'Maximal Size',
       LinkSizeProportionalReferenceValue: 'On value',
+      NoIntensity: 'No intensity variable',
       AllMatch: 'All origins and destinations match IDs of features in the geographic layer',
       SomeMatch: 'Some origins and destinations (but not all) match IDs of features in the geographic layer',
       NoMatch: 'No origins and destinations match IDs of features in the geographic layer',
