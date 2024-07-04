@@ -56,3 +56,11 @@ features:
     <img src="/logos-footer.png" style="margin:auto;border: 6px solid whitesmoke !important;background: whitesmoke; border-radius: 6px; width:400px" alt="Logos CNRS / Univ. Paris Cité / UAR RIATE">
     </a>
 </div>
+
+::: danger Information
+
+The previous Magrit version is still available at <a target="_self" href="https://magrit.cnrs.fr/v1/">https://magrit.cnrs.fr/v1/</a>.
+
+Note that this version is no longer maintained and will be shut down in the future.
+
+:::

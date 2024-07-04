@@ -4,7 +4,7 @@ This analysis method transforms and plots the information contained in a set of 
 
 The user has two options for selecting the mesh to be used:
 
-- use of a regular grid (choice of tile size and shape) created by the application
+- use of a regular grid (choice of cell size and shape) created by the application
 - use of a polygon layer (administrative background, for example) supplied by the user.
 
 Several analysis options are available to calculate :

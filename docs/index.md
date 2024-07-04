@@ -56,3 +56,12 @@ features:
     <img src="/logos-footer.png" style="margin:auto;border: 6px solid whitesmoke !important;background: whitesmoke; border-radius: 6px; width:400px" alt="Logos CNRS / Univ. Paris Cité / RIATE">
     </a>
 </div>
+
+
+::: danger Information
+
+L'ancienne version de Magrit reste disponible à l'adresse suivante : <a target="_self" href="https://magrit.cnrs.fr/v1/">https://magrit.cnrs.fr/v1/</a>.
+
+Elle ne bénéficie plus de mises à jour et a vocation à être mise hors service à terme.
+
+:::
