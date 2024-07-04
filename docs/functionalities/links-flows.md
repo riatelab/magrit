@@ -45,6 +45,6 @@ Après la création de la couche de liens, il est possible de filtrer les liens 
 
 <ZoomImg
     src="/link-map.png"
-    alt="Exemple de carte, après sélection de l'origine "France" et distance inférieure à 1015 km'
-    title="Exemple de carte, après sélection de l'origine "France" et distance inférieure à 1015 km"
+    alt="Exemple de carte, après sélection de l'origine 'France' et distance inférieure à 1015 km"
+    title="Exemple de carte, après sélection de l'origine 'France' et distance inférieure à 1015 km"
 />
