@@ -21,7 +21,7 @@ import DropdownLanguage from './DropdownLanguage.tsx';
 import SwitchTheme from './SwitchTheme.tsx';
 
 // Assets
-import img from '../assets/logo_typo_picto_green.svg?url';
+import img from '../assets/logo_typo_picto_green.png';
 
 // Styles
 import '../styles/Headers.css';
