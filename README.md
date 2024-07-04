@@ -3,7 +3,7 @@
 [en] [Magrit](https://magrit.cnrs.fr) is an online thematic mapping application developed by [UAR RIATE](https://riate.cnrs.fr/).  
 [fr]  [Magrit](https://magrit.cnrs.fr) est une application de cartographie thématique développée par l'[UAR RIATE](https://riate.cnrs.fr/).
 
-![](./src/assets/cartouche_baseline_green.svg)
+![Magrit - Logo](./src/assets/cartouche_baseline_green.svg)
 
 ## Basics
 
@@ -25,9 +25,9 @@
 
 ## Examples
 
-![](./docs/public/example_map_europe_1.png)
-![](./docs/public/example_map_world_wealth.png)
-![](./docs/public/example_map_cinema_paris.png)
+![Example map - Youth in Europe](./docs/public/example_map_europe_1.png)
+![Example map - World wealth](./docs/public/example_map_world_wealth.png)
+![Example map - Cinemas in Paris](./docs/public/example_map_cinema_paris.png)
 
 ## Development
 
@@ -72,6 +72,14 @@ npm run build:electron
 ```
 
 The application (for Windows and GNU/Linux) will be built in the `release` directory.
+
+## Contributing to Magrit
+
+Contributions are welcome! There are various ways to contribute to the project which are detailed in CONTRIBUTING file! You can notably:
+
+- Report bugs or send us feedback.
+- Add new translations or fix existing ones.
+- Contribute code (you're in the right place! Clone the repo, fix what you want to be fixed and submit a pull request - note that for all non-trivial modifications, it's best to start by opening an issue to discuss it together!).
 
 ## License
 
