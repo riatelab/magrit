@@ -18,7 +18,7 @@ import bindData from '../../directives/bind-data';
 // Types / Interfaces / Enums
 import {
   ClassificationMethod,
-  type GriddedLayerParameters,
+  type ClassificationParameters,
   type LayerDescriptionGriddedLayer,
 } from '../../global.d';
 
@@ -32,7 +32,7 @@ export default function gridRenderer(
   layerDescription: LayerDescriptionGriddedLayer,
 ): JSX.Element {
   const rendererParameters = createMemo(
-    () => layerDescription.rendererParameters as GriddedLayerParameters,
+    () => layerDescription.rendererParameters as ClassificationParameters,
   );
 
   const classifier = createMemo(() => {

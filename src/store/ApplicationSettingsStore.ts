@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store';
-import { LegendTextElement } from '../global';
+import { CustomPalette, LegendTextElement } from '../global';
 
 export enum RenderVisibility {
   RenderAsHidden,
@@ -62,6 +62,8 @@ export type ApplicationSettingsStoreType = {
   // The color of the snapping grid that the user can display
   // to align layout features / legends on the map
   snappingGridColor: string,
+  // The custom palettes defined by the user
+  customPalettes: CustomPalette[],
 };
 
 const [

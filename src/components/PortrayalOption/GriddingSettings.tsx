@@ -80,6 +80,7 @@ async function onClickValidate(
     variable: targetVariable,
     cellType,
     gridParameters,
+    gridCreation: 'projection',
   } as GriddedLayerParameters;
 
   const newData = await computeGriddedLayer(

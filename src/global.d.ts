@@ -521,6 +521,9 @@ interface GriddedLayerParameters {
   // The parameters of the grid used to compute the gridded layer
   // (bbox and resolution)
   gridParameters: GridParameters,
+  // Whether the grid is created on the plane of the map
+  // or in the current projection
+  gridCreation: 'plane' | 'projection',
 }
 
 interface SmoothedLayerParameters {
