@@ -1,5 +1,0 @@
-include LICENSE
-include README.md
-recursive-include magrit_app/static *
-recursive-include magrit_app/templates *
-recursive-exclude magrit_app/static/js/node_modules *

@@ -1,0 +1,19 @@
+.info-feature-box {
+    background-color: var(--bulma-background-active);
+    border-top-left-radius: 0.4em;
+    border-bottom-left-radius: 0.4em;
+    border-color: var(--bulma-text);
+    border-width: 1px;
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    position: absolute;
+    right: 0;
+    color: var(--bulma-text-soft-invert);
+    cursor: default;
+    max-width: 30vh;
+    max-height: calc(100% - 1em - var(--header-height));
+    overflow-y: auto;
+    padding: 1em 2em;
+    transition: all 125ms ease-in-out;
+}

@@ -1,0 +1,21 @@
+.table-window .modal-card {
+    width: 80vw;
+}
+
+.table-window .modal-card-foot {
+    justify-content: space-between;
+}
+
+div[col-id][role="columnheader"],
+div[col-id][role="gridcell"] {
+    transition : background-color 1s linear;
+}
+
+div.ag-new-cell-highlight[col-id][role="columnheader"],
+div.ag-new-cell-highlight[col-id][role="gridcell"] {
+    background-color: #ffff0080;
+}
+
+.ag-dnd-ghost {
+    position: relative !important;
+}

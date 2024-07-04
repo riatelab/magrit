@@ -1,0 +1,75 @@
+/*
+
+We have two types of "field":
+- 'field' class is a field with display: flex, justify-content: space-between
+  (so the label is on the left and the input on the right, on the same line)
+- 'field-block' class is a field with display: block
+  (so the label is above the input)
+
+*/
+.field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25em !important;
+    height: 2.5em;
+}
+
+.field input.input {
+    height: 2.3em;
+}
+
+.field-block {
+    display: block;
+    margin-bottom: 1.25em !important;
+}
+
+.field .select,
+.field-block .select {
+    height: 2.3em;
+    min-width: 133px;
+}
+
+.field .select select,
+.field-block .select select {
+    height: 2.3em;
+    line-height: 1.1;
+    width: 100%;
+}
+
+.field label.label {
+    margin-bottom: unset;
+}
+
+/* Styles for the LegendSettings component */
+.legend-settings__content .field input[type=number],
+.legend-settings__content .field input[type=color] {
+    width: 8em !important;
+}
+
+.legend-settings__content table {
+    margin: auto;
+}
+
+.legend-settings__content table tr {
+    height: 3em;
+}
+
+.legend-settings__content table select {
+    width: 100%;
+}
+
+.legend-settings__content table input[type=number] {
+    width: 5em !important;
+    height: 2em;
+}
+
+.table-font-properties {
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.table-font-properties input[type=number],
+.table-font-properties select {
+    font-size: 0.9rem;
+}

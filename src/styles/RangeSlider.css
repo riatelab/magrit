@@ -1,0 +1,89 @@
+/*
+Modified from the LESS version available on https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/.
+See possible licence issues before using this code in production.
+*/
+input[type=range] {
+    -webkit-appearance: none;
+    margin: 10px 0;
+    width: 100%;
+}
+input[type=range]:focus {
+    outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 0 #222, 0 0 0 #2f2f2f;
+    background: #424242;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+input[type=range]::-webkit-slider-thumb {
+    box-shadow: 1px 1px 1px #111, 0 0 1px #1e1e1e;
+    border: 1px solid white;
+    height: 20px;
+    width: 20px;
+    border-radius: 8px;
+    background: #555bc8;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -8.5px;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #4f4f4f;
+}
+input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 0 #222, 0 0 0 #2f2f2f;
+    background: #424242;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+input[type=range]::-moz-range-thumb {
+    box-shadow: 1px 1px 1px #111, 0 0 1px #1e1e1e;
+    border: 1px solid white;
+    height: 20px;
+    width: 20px;
+    border-radius: 8px;
+    background: #555bc8;
+    cursor: pointer;
+}
+input[type=range]::-ms-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    border-width: 20px 0;
+    color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+    background: #353535;
+    border: 1px solid black;
+    border-radius: 10px;
+    box-shadow: 0 0 0 #222, 0 0 0 #2f2f2f;
+}
+input[type=range]::-ms-fill-upper {
+    background: #424242;
+    border: 1px solid black;
+    border-radius: 10px;
+    box-shadow: 0 0 0 #222, 0 0 0 #2f2f2f;
+}
+input[type=range]::-ms-thumb {
+    box-shadow: 1px 1px 1px #111, 0 0 1px #1e1e1e;
+    border: 1px solid white;
+    height: 20px;
+    width: 20px;
+    border-radius: 8px;
+    background: #555bc8;
+    cursor: pointer;
+}
+input[type=range]:focus::-ms-fill-lower {
+    background: #424242;
+}
+input[type=range]:focus::-ms-fill-upper {
+    background: #4f4f4f;
+}

@@ -1,0 +1,34 @@
+.lm-summary {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.lm-summary p {
+    text-align: left;
+    line-height: 1.5;
+}
+
+.lm-summary table {
+    text-align: center;
+}
+
+.lm-summary .table-simple {
+    width: 46%;
+}
+
+.lm-summary .table-details {
+    width: 66%;
+}
+
+.lm-summary td, .lm-summary th {
+    padding: 0.5rem;
+}
+
+.lm-summary .table-details tr > td:first-child {
+    text-align: left;
+    font-weight: 600;
+}

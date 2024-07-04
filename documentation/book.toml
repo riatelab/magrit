@@ -1,7 +1,0 @@
-[book]
-title = "Les docs de Magrit"
-description = "Documentation utilisateur de Magrit"
-
-[build]
-build-dir = "../magrit_app/static/book/"
-

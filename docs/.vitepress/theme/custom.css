@@ -1,0 +1,44 @@
+img {
+    border: 2px solid #000000;
+}
+
+img.logo {
+    border: none;
+}
+
+:root {
+    --vp-layout-max-width: 1600px;
+}
+
+@media (min-width: 1280px) {
+    .content {
+        min-width: 700px;
+    }
+}
+
+.VPDoc.has-aside .content-container {
+    max-width: 850px !important;
+}
+
+.VPButton.brand {
+    background-color: #00d1b2 !important;
+    color: #3c3c43 !important;
+}
+
+@media (min-width: 768px) {
+    .VPHome .item.grid-4, .VPHome .item.grid-6 {
+        width: calc(100% / 2) !important;
+    }
+}
+.VPFeatures .VPImage {
+    border: none !important;
+    margin-bottom: 10px !important;
+}
+.VPHome {
+    margin-bottom: 38px !important;
+}
+
+.VPHome .main h1 span.clip {
+    color: #00d1b2 !important;
+    -webkit-text-fill-color: #00d1b2 !important;
+}

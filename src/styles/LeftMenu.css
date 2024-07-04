@@ -1,0 +1,121 @@
+/*
+The left menu is:
+- fixed on the left of the window
+- occupying the whole height of the window minus the navbar
+- with a grey background color
+- with a 1px solid grey border
+*/
+.left-menu {
+    position: fixed;
+    left: 0;
+    top: var(--header-height);
+    height: calc(100% - var(--header-height));
+    background-color: var(--background-color);
+    border-right: 1px solid var(--border-color);
+    width: var(--left-menu-width);
+    max-width: var(--left-menu-width);
+    /*border-left: solid 2px gray;*/
+    /*border-bottom: solid 2px gray;*/
+}
+
+.left-menu__title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    border: solid 1px var(--border-color);
+    align-items: center;
+}
+
+.left-menu__title-inner {
+    display: flex;
+    align-items: center;
+}
+
+.left-menu__title-inner svg {
+    margin-right: 0.8rem;
+    transform: scale(1.2);
+}
+
+.expanded-collapse-menu {
+    height: auto;
+    overflow: unset;
+}
+
+.collapse-transition {
+    transition: height var(--sc-auto-duration) cubic-bezier(0.65, 0, 0.35, 1);
+    border: solid 1px var(--border-color) !important;
+}
+
+.chevron-button {
+    padding: 5px;
+    background-color: var(--chevron-color);
+    display: flex;
+    cursor: pointer;
+    border: 1px solid #888888;
+    aspect-ratio: 1;
+    border-radius: 5px;
+    align-items: center;
+    transition: background-color 200ms ease-out, border 200ms ease-out;
+}
+
+.chevron-button svg {
+    transform: rotate(0deg);
+    stroke: white;
+}
+
+.chevron-button .is-active {
+    background-color: black;
+    border: 1px solid red;
+}
+
+.chevron-button.is-active svg {
+    transform: rotate(180deg);
+}
+
+.left-menu__section-container {
+    padding: 10px 5px;
+    background-color: #fbfcff;
+}
+
+/* Import section in the left menu */
+.import-section {
+    text-align: center;
+}
+
+.import-section button.button {
+    min-width: 85%;
+    max-width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
+}
+/* End of Import section in the left menu */
+
+/* MapConfiguration section of the left menu */
+#map-configuration__projection-dropdown .dropdown-content {
+    max-height: 50vh;
+    overflow-y: scroll;
+}
+
+.layout-features-section__icon-element {
+    width: 27px;
+    filter: grayscale(0.7);
+    transform: scale(0.9);
+    -webkit-filter: grayscale(0.7);
+    -webkit-transform: scale(0.9);
+}
+
+.layout-features-section__icon-element.disabled {
+    filter: grayscale(1);
+    -webkit-filter: grayscale(1);
+    cursor: not-allowed;
+}
+
+.layout-features-section__icon-element:not(.disabled):hover {
+    background-color: #c7c7c7;
+    filter: grayscale(0);
+    transform: scale(1);
+    -webkit-filter: grayscale(0);
+    -webkit-transform: scale(1);
+}

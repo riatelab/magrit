@@ -1,99 +1,48 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
-# C extensions
-*.so
-
-# Distribution / packaging
-.Python
-env/
-build/
-develop-eggs/
-/dist/
-downloads/
-eggs/
-.eggs/
-src/
-# Virtual environnements
-venv/
-
-# lib/ dont exclude lib to grab JS libs
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*,cover
-.hypothesis/
-
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
+lib-cov
+*.seed
 *.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+*.swp
 
-# Sphinx documentation
-docs/_build/
+pids
+logs
+results
+tmp
 
-# PyBuilder
-target/
+# Build
+public/css/main.css
 
-#Ipython Notebook
-.ipynb_checkpoints
+# Coverage reports
+coverage
 
-#R non-useful files :
-.RData
-.Rhistory
-Rplots.pdf
+# API keys and secrets
+.env
 
-# Temporary folder to ignore :
-tmp/
+# Dependency directory
+node_modules
+bower_components
 
-# Node / npm files to ignore :
-.npm
-.grunt
-.eslintcache
-.node_repl_history
-node_modules/
-jspm_packages/
+# Editors
+.idea
+*.iml
 
-# Dont track built js and html files
-client/dist
-magrit_app/static/dist
-magrit_app/static/*.html
+# OS metadata
+.DS_Store
+Thumbs.db
 
-# Dont track built documentation files
-margrit_app/static/book
+# Ignore built files
+dist/**/*
+dist-electron/**/*
+release/**/*
 
-# Dont track mdbook executable if any
-documentation/mdbook
+# Vitepress
+docs/.vitepress/cache
+docs/.vitepress/dist
 
-# Pytest cache
-/.pytest_cache/
+# ignore yarn.lock
+yarn.lock
 
-# IDE stuff
-.idea/

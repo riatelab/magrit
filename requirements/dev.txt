@@ -1,6 +1,0 @@
--r prod.txt
-flaky == 3.4.0
-selenium == 3.141.0
-imageio == 2.21.0
-pytest == 6.1.0
-pytest-aiohttp == 1.0.4

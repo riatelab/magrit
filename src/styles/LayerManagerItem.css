@@ -1,0 +1,81 @@
+.layer-manager-item {
+    /*background-color: var(--background-color);*/
+    border: 1px solid #e5e5e5;
+    width: 100%;
+    cursor: grab;
+}
+
+.layer-manager-item__container {
+    padding: 0.5em;
+    width: 80%;
+}
+
+.layer-manager-item__name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    white-space: nowrap; /* Layer name are only displayed on one line ... */
+    text-overflow: ellipsis; /* ... and if they are too long, they are truncated with an ellipsis */
+    overflow: hidden;
+}
+
+.layer-manager-item__icons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.layer-manager-item__icons-right {
+    margin-right: 0.25em;
+}
+
+.layer-manager-item__icons-right > *,
+.layer-manager-item__icons-left > * {
+    margin-left: 5px;
+    display: inline-block;
+}
+
+.layer-manager-item__icons-right > button {
+    cursor: pointer;
+}
+
+.layer-manager-item__action {
+    width: 10%;
+}
+
+.layer-manager-item__action > button {
+    background-color: transparent;
+    border: currentColor;
+    border-left: 1px solid #e5e5e5;
+    border-radius: 0;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.layer-manager-item__action > button:active {
+    border: 1px solid #e8e8e8;
+}
+
+.layer-manager-item__action > button[disabled] {
+    cursor: not-allowed;
+}
+
+.layer-manager-item__action > button svg {
+    filter: drop-shadow(3px 3px 6px grey);
+    fill: var(--bulma-primary);
+    height: 1.5em;
+    width: 1.5em;
+    stroke: currentColor;
+}
+
+.layer-manager-item__action > button[disabled] svg {
+    filter: none;
+    fill: var(--bulma-border-weak);
+}
+
+/* Style for the item that is currently being dragged */
+.sortable-chosen .layer-manager-item {
+    background-color: var(--sortable-chosen-background);
+    transition: background-color 0.15s ease-in-out;
+}

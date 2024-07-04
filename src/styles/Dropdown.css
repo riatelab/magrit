@@ -1,0 +1,28 @@
+.dropdown .dropdown-content a.dropdown-item:focus-visible {
+    outline-offset: -2px;
+}
+
+.dropdown .dropdown-content a.dropdown-item {
+    align-items: center;
+    display: inline-flex;
+    gap: 0.5em;
+}
+
+.dropdown .dropdown-trigger {
+    width: 100%;
+}
+
+.dropdown .dropdown-trigger > button {
+    width: 100%;
+}
+
+.dropdown .dropdown-trigger .dropdown-item-target {
+    width: 100%;
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+}
+
+.dropdown .dropdown-menu {
+    width: 100%;
+}

@@ -1,0 +1,17 @@
+.nice-alert .modal-background {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.nice-alert .modal-card {
+    width: 32em;
+    text-align: center;
+    min-height: 22em;
+}
+
+.nice-alert .modal-card-foot {
+    justify-content: center;
+}
+
+.nice-alert .modal-card-head {
+    border-bottom: transparent;
+}

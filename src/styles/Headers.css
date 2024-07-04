@@ -1,0 +1,18 @@
+.navbar {
+  height: var(--header-height);
+  background-color: var(--background-color) !important;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.navbar .navbar-item > * {
+  margin-right: 0.5em;
+}
+
+@media screen and (max-width: 1023px) {
+    .navbar .vertical-divider {
+        display: none;
+    }
+    .navbar .switch-theme {
+        margin: 0.5em 0;
+    }
+}

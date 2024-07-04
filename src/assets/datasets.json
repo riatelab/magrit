@@ -1,0 +1,834 @@
+[
+  {
+    "id": "nuts0",
+    "type": "vector",
+    "totalFeatures": 37,
+    "defaultProjection": {
+      "type": "d3",
+      "value": "NaturalEarth2"
+    },
+    "geometry": {
+      "source": "GISCO",
+      "url": "https://ec.europa.eu/eurostat/fr/web/gisco",
+      "download_date": "2024-06-06",
+      "license": null
+    },
+    "data": [
+      {
+        "source": "Eurostat",
+        "url": "https://ec.europa.eu/eurostat/web/main/data/database",
+        "download_date": "2024-06-06",
+        "license": null
+      }
+    ],
+    "fields": [
+      {
+        "name": "NUTS_ID",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NAME_LTN",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "AREA_TOT_2024",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "zone",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "nuts1",
+    "type": "vector",
+    "totalFeatures": 125,
+    "defaultProjection": {
+      "type": "d3",
+      "value": "NaturalEarth2"
+    },
+    "geometry": {
+      "source": "GISCO",
+      "url": "https://ec.europa.eu/eurostat/fr/web/gisco",
+      "download_date": "2024-06-06",
+      "license": null
+    },
+    "data": [
+      {
+        "source": "Eurostat",
+        "url": "https://ec.europa.eu/eurostat/web/main/data/database",
+        "download_date": "2024-06-06",
+        "license": null
+      }
+    ],
+    "fields": [
+      {
+        "name": "NUTS_ID",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NAME_LTN",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "AREA_TOT_2024",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "zone",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "nuts2",
+    "type": "vector",
+    "totalFeatures": 327,
+    "defaultProjection": {
+      "type": "proj4",
+      "code": 3035
+    },
+    "geometry": {
+      "source": "GISCO",
+      "url": "https://ec.europa.eu/eurostat/fr/web/gisco",
+      "download_date": "2024-06-06",
+      "license": null
+    },
+    "data": [
+      {
+        "source": "Eurostat",
+        "url": "https://ec.europa.eu/eurostat/web/main/data/database",
+        "download_date": "2024-06-06",
+        "license": null
+      }
+    ],
+    "fields": [
+      {
+        "name": "NUTS_ID",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NAME_LTN",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "AREA_TOT_2024",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "zone",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "nuts2_data",
+    "type": "vector",
+    "totalFeatures": 332,
+    "defaultProjection": {
+      "type": "d3",
+      "value": "NaturalEarth2"
+    },
+    "geometry": {
+      "source": "GISCO",
+      "url": "https://ec.europa.eu/eurostat/fr/web/gisco",
+      "download_date": "2024-06-06",
+      "license": null
+    },
+    "data": [
+      {
+        "source": "Eurostat",
+        "url": "https://ec.europa.eu/eurostat/web/main/data/database",
+        "download_date": "2024-06-06",
+        "license": null
+      }
+    ],
+    "fields": [
+      {
+        "name": "NUTS_ID",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NAME_LATN",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "AREA_TOT_2024",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_TOT_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_09_RT_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_024_RT_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_65P_RT_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_80P_RT_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "LIFE_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "HIGH_EDU_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "UNEMP_25P_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "UNEMP_LT_25P_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "GDP_CAP_PPS_2022",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "INC_PPS_2021",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "AREA_ART_RT",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "AREA_CUL_RT",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "AREA_BOI_RT",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "zone",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "world_177",
+    "type": "vector",
+    "totalFeatures": 177,
+    "defaultProjection": {
+      "type": "d3",
+      "value": "NaturalEarth2"
+    },
+    "geometry": {
+      "source": "VisionCarto",
+      "url": "https://github.com/visionscarto/world-atlas?tab=readme-ov-file",
+      "download_date": "2024-06-14",
+      "license": "Public domain"
+    },
+    "data": [
+      {
+        "source": "World Bank",
+        "url": "https://databank.worldbank.org/source/world-development-indicators",
+        "download_date": "2024-06-14",
+        "license": "CC-BY-4.0"
+      },
+      {
+        "source": "United Nations, UAR RIATE",
+        "url": "https://unstats.un.org/unsd/methodology/m49/overview/",
+        "download_date": "2024-06-14",
+        "license": "CC-BY-4.0"
+      }
+    ],
+    "fields": [
+      {
+        "name": "a3",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "id",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "name",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "REGION_BLOC",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "REGION_UN",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "SUBREGION_UN",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "LAST_DEV",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 2
+      },
+      {
+        "name": "AREA_2021",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "FOREST_AREA_2021",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "POP_2022",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "LIFE_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "FERT_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "HIV_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "CO2_POP_2020",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "GNI_POP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "INC_20P_2021",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "GDP_INDS_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "HIG_TEC_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "MIL_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "world_242",
+    "type": "vector",
+    "totalFeatures": 242,
+    "defaultProjection": {
+      "type": "d3",
+      "value": "NaturalEarth2"
+    },
+    "geometry": {
+      "source": "VisionCarto",
+      "url": "https://github.com/visionscarto/world-atlas?tab=readme-ov-file",
+      "download_date": "2024-06-14",
+      "license": "Public domain"
+    },
+    "data": [
+      {
+        "source": "World Bank",
+        "url": "https://databank.worldbank.org/source/world-development-indicators",
+        "download_date": "2024-06-14",
+        "license": "CC-BY-4.0"
+      },
+      {
+        "source": "United Nations, UAR RIATE",
+        "url": "https://unstats.un.org/unsd/methodology/m49/overview/",
+        "download_date": "2024-06-14",
+        "license": "CC-BY-4.0"
+      }
+    ],
+    "fields": [
+      {
+        "name": "a3",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "id",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "name",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "REGION_BLOC",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "REGION_UN",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "SUBREGION_UN",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "LAST_DEV",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 2
+      },
+      {
+        "name": "AREA_2021",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "FOREST_AREA_2021",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "POP_2022",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "LIFE_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "FERT_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "HIV_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "CO2_POP_2020",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "GNI_POP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "INC_20P_2021",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "GDP_INDS_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "HIG_TEC_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "MIL_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "quartiers_paris",
+    "type": "vector",
+    "totalFeatures": 80,
+    "defaultProjection": {
+      "type": "proj4",
+      "code": 2154
+    },
+    "geometry": {
+      "source": "APUR",
+      "url": "https://opendata.apur.org/maps/12f1272266204fbe951d8e9d172c7826/about",
+      "download_date": "2018-01-09",
+      "license": "ODbL"
+    },
+    "data": [
+      {
+        "source": "INSEE",
+        "url": "",
+        "download_date": "2018-01-09",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "c_quinsee",
+        "dataType": "number",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "n_sq_qu",
+        "dataType": "number",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "c_qu",
+        "dataType": "number",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "surface",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "n_sq_ar",
+        "dataType": "number",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "l_qu",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "c_ar",
+        "dataType": "number",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "P12_POP",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "P07_POP",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "fra_metro_com",
+    "type": "vector",
+    "totalFeatures": 34858,
+    "defaultProjection": {
+      "type": "proj4",
+      "code": 2154
+    },
+    "geometry": {
+      "source": "RIATE - IGN - Natural Earth",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/statistiques/2521169",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "fra_metro_dep",
+    "type": "vector",
+    "totalFeatures": 96,
+    "defaultProjection": {
+      "type": "proj4",
+      "code": 2154
+    },
+    "geometry": {
+      "source": "RIATE - IGN - Natural Earth",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/statistiques/2521169",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  }
+]

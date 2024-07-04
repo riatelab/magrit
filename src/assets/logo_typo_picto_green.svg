@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Calque_1"
+   viewBox="0 0 416.85 66.94"
+   version="1.1"
+   sodipodi:docname="logo_typo_picto_green.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview21"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="1.7759276"
+     inkscape:cx="208.34182"
+     inkscape:cy="28.998929"
+     inkscape:window-width="1920"
+     inkscape:window-height="1018"
+     inkscape:window-x="0"
+     inkscape:window-y="28"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Calque_1" />
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1{fill:#00ffcb;stroke-width:0px;}</style>
+  </defs>
+  <path
+     class="cls-1"
+     d="M33.99,1.23h16.81c8.17,0,14.82,6.66,14.82,14.84v8.34h-10.2v-8.34c0-2.56-2.08-4.64-4.63-4.64h-16.81V1.23ZM42.47,66.94v-10.21h8.33c2.55,0,4.63-2.08,4.63-4.64v-16.83h10.2v16.83c0,8.18-6.65,14.84-14.82,14.84h-8.33ZM32.81,24.41c5.32,0,9.66,4.34,9.66,9.67s-4.33,9.67-9.66,9.67-9.66-4.34-9.66-9.67,4.33-9.67,9.66-9.67ZM0,16.08C0,7.89,6.65,1.23,14.83,1.23h8.33v10.21h-8.33c-2.55,0-4.63,2.08-4.63,4.64v16.83H0v-16.83ZM0,43.76h10.2v8.34c0,2.56,2.08,4.64,4.63,4.64h16.81v10.21H14.83c-8.18,0-14.83-6.66-14.83-14.84v-8.34Z"
+     id="path6"
+     style="fill:#00d1b2;fill-opacity:1" />
+  <path
+     class="cls-1"
+     d="M217.37,65.77c7.25,0,13.36-2.55,17.82-7.39v5.99h11.76V11.51h-11.76v5.96c-4.38-4.78-10.61-7.37-17.82-7.37-14.65,0-25.69,11.9-25.69,27.68s10.8,27.99,25.69,27.99ZM207.86,25.91c2.77-3.18,6.58-4.79,11.35-4.79,9.23,0,15.45,6.74,15.45,16.77s-6.06,16.77-15.45,16.77-15.46-6.74-15.46-16.77c0-4.81,1.38-8.84,4.11-11.98Z"
+     id="path8"
+     style="fill:#00d1b2;fill-opacity:1" />
+  <path
+     class="cls-1"
+     d="M112.45,64.37v-29.63c0-8.06,4.35-13.08,11.34-13.08s11.34,5.01,11.34,13.08v29.63h11.76v-29.63c0-7.94,4.45-13.08,11.34-13.08s11.44,5.01,11.44,13.08v29.63h11.76v-31.15c0-13.42-8.61-22.79-20.93-22.79-8.1,0-14.13,2.96-17.55,8.58-3.42-5.55-9.16-8.58-16.34-8.58-6.5,0-11.54,2.06-15.02,6.13v-5.05h-10.89v52.86h11.75Z"
+     id="path10"
+     style="fill:#00d1b2;fill-opacity:1" />
+  <rect
+     class="cls-1"
+     x="362.72"
+     y="11.51"
+     width="11.75"
+     height="52.86"
+     id="rect12"
+     style="fill:#00d1b2;fill-opacity:1" />
+  <path
+     class="cls-1"
+     d="M335.2,39.04c0-10.56,0-15.86,14.5-15.86h.9v-11.81h-.9c-26.29,0-26.29,18-26.29,27.66v25.31h11.79v-25.31Z"
+     id="path14"
+     style="fill:#00d1b2;fill-opacity:1" />
+  <polygon
+     class="cls-1"
+     points="394.22 64.35 406 64.35 406 22.4 416.85 22.4 416.85 11.36 406 11.36 406 0 394.22 0 394.22 11.36 388.02 11.36 388.02 22.4 394.22 22.4 394.22 64.35"
+     id="polygon16"
+     style="fill:#00d1b2;fill-opacity:1" />
+  <path
+     class="cls-1"
+     d="M283.45,65.76c.78.07,1.57.05,2.38.05,14.89,0,25.69-11.76,25.69-27.99,0-.74-.14-1.42-.19-2.14h-22.67v10.17h9.16c-2.3,5.24-6.98,8.48-13.09,8.74-8.92-.27-14.9-6.9-14.9-16.72,0-4.81,1.38-8.84,4.11-11.98,2.58-2.97,6.11-4.51,10.42-4.71,4.58.09,8.27,1.67,10.97,4.76.44.51.8,1.08,1.17,1.64h13.27c-3.63-10.4-12.7-17.45-23.95-17.45-.81,0-1.6-.12-2.38-.05-14.65,0-25.69,11.9-25.69,27.68s10.8,27.99,25.69,27.99Z"
+     id="path18"
+     style="fill:#00d1b2;fill-opacity:1" />
+</svg>
