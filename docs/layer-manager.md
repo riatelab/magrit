@@ -4,7 +4,7 @@ Le gestionnaire de couches permet de modifier les paramètres de chacun des jeux
 de données géographiques ou d'un tableau de données) ajoutés dans l'application.
 
 <ZoomImg
-    src="./layer-manager.png"
+    src="/layer-manager.png"
     alt="Gestionnaire de couches"
     caption="Exemple : Gestionnaire de couches avec trois couches géographiques et un tableau de données"
 />

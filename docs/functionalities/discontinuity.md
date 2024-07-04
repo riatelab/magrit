@@ -21,7 +21,7 @@ Cette représentation est particulièrement pertinente lorsqu'elle peut être co
 
 Il est possible de modifier, après création de la couche, les paramètres de discrétisation (nombre de classes, méthode de discrétisation, taille associée à chaque classe, etc.).
 
-## Exemples
+## Exemple
 
 <ZoomImg
     src="/example-discontinuity.png"

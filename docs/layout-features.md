@@ -4,7 +4,7 @@ Cette section permet de configurer l'habillage de la carte, c'est-à-dire les é
 la carte elle-même : titre, source et autres éléments textuels, flèche de nord, échelle, ajout d'images diverses, etc.
 
 <ZoomImg
-    src="./layout-features.png"
+    src="/layout-features.png"
     alt="Éléments d'habillage de la carte"
     caption="Éléments d'habillage de la carte"
 />

@@ -14,7 +14,7 @@ Plusieurs options d'analyse sont proposées et visent à calculer :
 - la moyenne des valeurs des points situés dans chaque cellule/entité.
 - l'écart-type des valeurs des points situés dans chaque cellule/entité.
 
-## Exemple
+### Exemples
 
 <ZoomImg
     src="/aggregation-pts-0.png"

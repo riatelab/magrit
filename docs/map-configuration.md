@@ -1,7 +1,7 @@
 # Configuration de la carte
 
 <ZoomImg
-    src="./map-configuration.png"
+    src="/map-configuration.png"
     alt="Panneau de configuration de la carte"
     caption="Panneau de configuration de la carte"
 />
@@ -12,7 +12,7 @@ Le panneau de configuration de la carte permet de modifier les paramètres relat
 - la présence ou non de marges (et, le cas échéant, la couleur et l'opacité de ces marges - ces options ne s'affichent que si une marge a été spécifiée).
 
 <ZoomImg
-    src="./map-configuration-margins.png"
+    src="/map-configuration-margins.png"
     alt="Panneau de configuration de la carte"
     caption="Panneau de configuration de la carte (avec marges)"
 />
@@ -22,7 +22,7 @@ Si vous le souhaitez, il est également possible de redimensionner la carte en s
 et en le déplaçant vers la position souhaitée afin d'atteindre la largeur et/ou la hauteur souhaitée.
 
 <ZoomImg
-    src="./map-configuration-resize.png"
+    src="/map-configuration-resize.png"
     alt="Redimensionnement de la carte"
     caption="Redimensionnement de la carte"
 />

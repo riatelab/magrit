@@ -36,10 +36,8 @@ contenant au total 227 950 points à un jeu de données contenant 27 071 points,
 d'affichage et de calcul de l'application :
 
 <ZoomImg
-    src="../simplification-senegal-departements.png"
+    src="/simplification-senegal-departements.png"
     alt="Simplification du tracé d'un jeu de données (départements du Sénégal)"
     caption="Simplification du tracé d'un jeu de données (départements du Sénégal)"
 />
-
-
 

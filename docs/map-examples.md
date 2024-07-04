@@ -4,37 +4,37 @@ Toutes les cartes montrées en exemple ici sont directement exportées depuis Ma
 dans un logiciel de dessin vectoriel.
 
 <ZoomImg
-    src="./example_map_climbing_in_paris.png"
+    src="/example_map_climbing_in_paris.png"
     alt="Carte 'Climbing in Paris'"
     caption="Climbing in Paris (Réalisation: Ronan Ysebaert)"
 />
 
 <ZoomImg
-    src="./example_map_europe_1.png"
+    src="/example_map_europe_1.png"
     alt="Carte 'Où sont les jeunes en Europe'"
     caption="Où sont les jeunes en Europe (Réalisation: Ronan Ysebaert)"
 />
 
 <ZoomImg
-    src="./example_map_world_subregions.png"
+    src="/example_map_world_subregions.png"
     alt="Carte 'Principaux ensembles régionaux dans le Monde'"
     caption="Principaux ensembles régionaux dans le Monde (Réalisation: Ronan Ysebaert)"
 />
 
 <ZoomImg
-    src="./example_map_world_tree.png"
+    src="/example_map_world_tree.png"
     alt="Carte 'La tête dans les arbres ?'"
     caption="La tête dans les arbres ? (Réalisation: Ronan Ysebaert)"
 />
 
 <ZoomImg
-    src="./example_map_world_wealth.png"
+    src="/example_map_world_wealth.png"
     alt="Carte 'Les lignes de fracture de richesses mondiales'"
     caption="Les lignes de fracture de richesses mondiales (Réalisation: Ronan Ysebaert)"
 />
 
 <ZoomImg
-    src="./example_map_cinema_paris.png"
+    src="/example_map_cinema_paris.png"
     alt="Carte 'Établissements cinématographiques à Paris'"
     caption="Établissements cinématographiques à Paris"
 />

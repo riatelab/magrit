@@ -17,7 +17,7 @@ Cette option est disponible dans la barre de menu de l'application, en haut à d
 
 ## Autres paramètres
 
-Ces paramètres sont accessible en cliquant sur le bouton (?) dans la barre de menu de l'application, en haut à droite de l'écran
+Ces paramètres sont accessibles en cliquant sur le bouton (?) dans la barre de menu de l'application, en haut à droite de l'écran
 puis en cliquant sur "Options générales".
 
 Les options proposées sont les suivantes :
