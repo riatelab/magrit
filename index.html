@@ -3,10 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
-    <meta http-equiv="Pragma" content="no-cache"/>
-    <meta http-equiv="Expires" content="0"/>
     <link rel="shortcut icon" type="image/ico" href="/src/assets/favicon.ico" />
     <title>Magrit - Thematic cartography</title>
     <style>
@@ -18,7 +14,10 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 1em;
+            gap: 2em;
+            background-color: white;
+            color: black;
+            font-family: sans-serif;
         }
         .init-loader {
             border: 16px solid #f3f3f3;
@@ -38,8 +37,11 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root">
       <div class="loader-container">
+        <div>
+          <img src="/src/assets/cartouche_baseline_black.png" alt="Magrit logo" />
+        </div>
         <div class="init-loader"></div>
-        <div>Please wait while loading the application...</div>
+        <div>Merci de patienter pendant le chargement de l'application...</div>
       </div>
     </div>
     <!-- # INSERT SCRIPT HERE -->
