@@ -3,6 +3,8 @@
 [en] [Magrit](https://magrit.cnrs.fr) is an online thematic mapping application developed by [UAR RIATE](https://riate.cnrs.fr/).  
 [fr]  [Magrit](https://magrit.cnrs.fr) est une application de cartographie thématique développée par l'[UAR RIATE](https://riate.cnrs.fr/).
 
+![](./src/assets/cartouche_baseline_green.svg)
+
 ## Basics
 
 - Magrit is a web application for thematic mapping (*cartography*).
@@ -19,8 +21,13 @@
 ## Try it out
 
 - Online version: [https://magrit.cnrs.fr](https://magrit.cnrs.fr)
-- Online documentation: [https://magrit.cnrs.fr/docs](https://magrit.cnrs.fr/docs)
-- Download the desktop version: [Windows]() / [MacOS]() / [Linux]()
+- [Download the desktop version](https://magrit.cnrs.fr/download/)
+
+## Examples
+
+![](./docs/public/example_map_europe_1.png)
+![](./docs/public/example_map_world_wealth.png)
+![](./docs/public/example_map_cinema_paris.png)
 
 ## Development
 
@@ -56,7 +63,7 @@ A window will open with the application running.
 npm run build
 ```
 
-The application will be built in the `dist` directory.
+The application and it's documentation will be built in the `dist` directory.
 
 ### Building for production, with electron
 
@@ -64,7 +71,7 @@ The application will be built in the `dist` directory.
 npm run build:electron
 ```
 
-The application will be built in the `release` directory.
+The application (for Windows and GNU/Linux) will be built in the `release` directory.
 
 ## License
 
