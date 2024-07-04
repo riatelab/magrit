@@ -85,6 +85,9 @@ Contributions are welcome! There are various ways to contribute to the project w
 - Add new translations or fix existing ones.
 - Contribute code (you're in the right place! Clone the repo, fix what you want to be fixed and submit a pull request - note that for all non-trivial modifications, it's best to start by opening an issue to discuss it together!).
 
+If you want to read more about what we are planning to do, you can check the [roadmap](ROADMAP.md)
+of the project.
+
 ## License
 
 GPL-3.0-or-later
