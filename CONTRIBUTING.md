@@ -4,17 +4,57 @@
 
 To report a bug or to suggest some enhancements, don't hesitate to create a issue on the dedicated bug tracker on github: https://github.com/riatelab/magrit/issues.
 
-## Updating existing translation strings
+## Repository structure
 
-TODO
+The repository roughly is structured as follows:
 
-## Translating to a new language
-
-TODO
+```
+magrit/
+├── docs/                    # Documentation in French
+|   ├── en/                  # Documentation in english
+|   └── .vitepress/          # Configuration of the documentation
+├── electron/                # Electron configuration
+├── src/                     # Source code of the application
+|   ├── assets/              # Static assets
+|   ├── components/          # Components of the application
+|   ├── helpers/             # Helper functions
+|   ├── i18n/                # Translation files
+|   ├── public/dataset/      # Example datasets
+|   ├── store/               # Stores of the application
+|   ├── styles/              # Styles of the application
+|   ├── vendor/              # Vendored libraries (only GPU.js)
+|   ├── AppPage.tsx          # Main component of the application
+|   └── index.tsx            # Entry point of the application
+├── electron-builder.json5   # Configuration of the electron builder
+├── package.json             # Dependencies of the application and build scripts
+└── vite.config.ts           # Configuration of the vite bundler 
+```
 
 ## Contributing code
 
-TODO
+The source code is located in the `src` folder.
+It is written in TypeScript and uses the Solid.js library for the user interface.
+
+It uses the `npm` package manager to manage dependencies (except for the vendored libraries which are stored in the `vendor` folder),
+the `vite` bundler to build the code of the application
+and `electron-builder` to package the application for Windows and GNU/Linux (and soon MacOS).
+
+While awaiting for more detailed information about the architecture of the application, you can 
+contact us by opening an issue on the github repository if needed.
+
+## Updating existing translation strings for the application
+
+The application's translation files are located in `the src/i18n` folder.
+If you notice any spelling mistakes or wrong phrasing, you can correct them here.
+
+## Updating existing translation strings for the documentation
+
+The documentation in French is located in the `docs` folder while the English documentation is located in the `docs/en` folder.
+If you notice any spelling mistakes or wrong phrasing, you can correct them here.
+
+## Translating to a new language
+
+Please contact us by opening an issue so we can discuss this together!
 
 ## License
 
