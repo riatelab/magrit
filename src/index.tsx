@@ -46,9 +46,11 @@ if (s instanceof HTMLLinkElement) {
   // (to avoid the flash of unstyled content)
   if (s.sheet) firstRender();
   else {
-    s.addEventListener('load', () => {
+    const onload = () => {
       firstRender();
-    });
+      s.removeEventListener('load', onload);
+    };
+    s.addEventListener('load', onload);
   }
 } else {
   // In dev we can just render the app right away
