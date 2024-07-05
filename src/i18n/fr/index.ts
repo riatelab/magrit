@@ -751,7 +751,7 @@ const fr = {
       QQInfo1: 'Le diagramme quantile-quantile (également appelé diagramme QQ) est utile pour vérifier si l\'hypothèse de normalité est respectée (les résidus de la régression doivent suivre une distribution normale).',
       QQCheck: 'Il est bon que les résidus soient bien alignés sur la ligne droite en pointillés.',
       RepresentationOptions: 'Options de représentation des résultats',
-      SummaryInfo1: 'En théorie, plusieurs hypothèses ne doivent pas être enfreintes lors d\'une régression linéaire simple :',
+      SummaryInfo1: 'En théorie, plusieurs hypothèses doivent être satisfaites lors d\'une régression linéaire simple :',
       SummaryInfo2: 'Linéarité : la relation entre la réponse et les variables explicatives est linéaire.',
       SummaryInfo3: 'Indépendance : les résidus sont indépendants.',
       SummaryInfo4: 'Homoscédasticité : la variance des résidus est constante pour toutes les valeurs ajustées.',
