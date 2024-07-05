@@ -1,5 +1,9 @@
 # Changelog
 
+#### 2.0.2 (2024-07-05)
+
+- Render the app after the stylesheet has loaded (to avoid flash of unstyled content).
+
 #### 2.0.1 (2024-07-05)
 
 - Fix some typos / bad phrasing in french translation.
