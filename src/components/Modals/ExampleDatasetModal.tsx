@@ -281,7 +281,7 @@ export function addExampleLayer(
 
   const newLegendDescription = makeDefaultLegendDescription(newLayerDescription);
 
-  const fit = layersDescriptionStore.layers.length === 0;
+  const fit = layersDescriptionStore.layers.length === 0 || !globalStore.userHasAddedLayer;
 
   setLayersDescriptionStore(
     produce(
