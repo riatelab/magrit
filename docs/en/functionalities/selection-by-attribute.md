@@ -11,7 +11,7 @@ It is thus possible to create simple selections or complex selections by combini
 
 The layer's current fields can be accessed as shortcuts (yellow buttons), as well as three special fields (green buttons):
 
-- `$length`: the number of entities in the layer,
+- `$count`: the number of entities in the layer,
 - `$id`: the unique (and internal) identifier of the entity,
 - `$area`: the area of the entity (if it's a polygon).
 

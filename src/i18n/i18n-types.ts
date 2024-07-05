@@ -2705,9 +2705,9 @@ type RootTranslation = {
 		 */
 		'SUBSTRING()': string
 		/**
-		 * S​p​e​c​i​a​l​ ​f​i​e​l​d​ ​-​ ​T​h​e​ ​l​e​n​g​t​h​ ​o​f​ ​t​h​e​ ​d​a​t​a​s​e​t​ ​(​n​u​m​b​e​r​ ​o​f​ ​f​e​a​t​u​r​e​s​)
+		 * S​p​e​c​i​a​l​ ​f​i​e​l​d​ ​-​ ​T​h​e​ ​c​o​u​n​t​ ​o​f​ ​t​h​e​ ​d​a​t​a​s​e​t​ ​(​n​u​m​b​e​r​ ​o​f​ ​f​e​a​t​u​r​e​s​)
 		 */
-		specialFieldLength: string
+		specialFieldCount: string
 		/**
 		 * S​p​e​c​i​a​l​ ​f​i​e​l​d​ ​-​ ​T​h​e​ ​a​r​e​a​ ​o​f​ ​t​h​e​ ​f​e​a​t​u​r​e​,​ ​i​n​ ​s​q​u​a​r​e​ ​m​e​t​e​r​s​ ​(​o​n​l​y​ ​f​o​r​ ​p​o​l​y​g​o​n​ ​l​a​y​e​r​s​)​.​ ​N​o​t​e​ ​t​h​a​t​ ​t​h​i​s​ ​c​a​l​c​u​l​a​t​i​o​n​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​g​e​o​g​r​a​p​h​i​c​a​l​ ​c​o​o​r​d​i​n​a​t​e​s​ ​a​n​d​ ​i​s​ ​m​a​d​e​ ​o​n​ ​t​h​e​ ​s​p​h​e​r​o​i​d​.​ ​T​h​i​s​ ​r​e​s​u​l​t​ ​m​a​y​ ​b​e​ ​l​e​s​s​ ​a​c​c​u​r​a​t​e​ ​t​h​a​n​ ​i​f​ ​t​h​e​ ​c​a​l​c​u​l​a​t​i​o​n​ ​h​a​d​ ​b​e​e​n​ ​c​a​r​r​i​e​d​ ​o​u​t​ ​i​n​ ​a​ ​l​o​c​a​l​ ​p​r​o​j​e​c​t​i​o​n​ ​b​a​s​e​d​ ​o​n​ ​a​n​ ​a​d​a​p​t​e​d​ ​e​l​l​i​p​s​o​i​d​.
 		 */
@@ -6641,9 +6641,9 @@ export type TranslationFunctions = {
 		 */
 		'SUBSTRING()': () => LocalizedString
 		/**
-		 * Special field - The length of the dataset (number of features)
+		 * Special field - The count of the dataset (number of features)
 		 */
-		specialFieldLength: () => LocalizedString
+		specialFieldCount: () => LocalizedString
 		/**
 		 * Special field - The area of the feature, in square meters (only for polygon layers). Note that this calculation is based on the geographical coordinates and is made on the spheroid. This result may be less accurate than if the calculation had been carried out in a local projection based on an adapted ellipsoid.
 		 */

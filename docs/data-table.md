@@ -40,7 +40,7 @@ Cette fonctionnalité est comparable à la fonctionnalité "calculatrice de cham
 
 Les champs actuels de la couche sont accessibles sous forme de raccourcis (boutons jaunes) ainsi que trois champs spéciaux (boutons verts) :
 
-- `$length` : le nombre d'entités dans la couche,
+- `$count` : le nombre d'entités dans la couche,
 - `$id` : l'identifiant unique (et interne) de l'entité,
 - `$area` : l'aire de l'entité (si il s'agit d'un polygone).
 

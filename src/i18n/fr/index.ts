@@ -778,7 +778,7 @@ const fr = {
     'POWER()': 'Puissance',
     'CONCAT()': 'Concaténation',
     'SUBSTRING()': 'Extraction d\'une sous-chaîne de caractères',
-    specialFieldLength: 'Champ spécial - La taille du jeu de données (nombre d\'entités)',
+    specialFieldCount: 'Champ spécial - La taille du jeu de données (nombre d\'entités)',
     specialFieldArea: 'Champ spécial - L\'aire de l\'entité (seulement pour les polygones). Notez que ce calcul est réalisé à partir des coordonnées géographiques et est réalisé sur le sphéroïde. Ce résultat peut-être moins précis que si le calcul avait été réalisé dans une projection locale basée sur un éllipsoide adapté.',
     specialFieldId: 'Champ spécial - L\'identifiant unique (interne) de l\'entité',
   },

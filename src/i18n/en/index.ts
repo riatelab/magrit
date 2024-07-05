@@ -778,7 +778,7 @@ const en = {
     'POWER()': 'Power operator',
     'CONCAT()': 'Concatenate 2 or more strings',
     'SUBSTRING()': 'Extract a substring',
-    specialFieldLength: 'Special field - The length of the dataset (number of features)',
+    specialFieldCount: 'Special field - The count of the dataset (number of features)',
     specialFieldArea: 'Special field - The area of the feature, in square meters (only for polygon layers). Note that this calculation is based on the geographical coordinates and is made on the spheroid. This result may be less accurate than if the calculation had been carried out in a local projection based on an adapted ellipsoid.',
     specialFieldId: 'Special field - The (internal) row id of the feature',
   },

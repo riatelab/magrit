@@ -15,6 +15,7 @@ import alasql from 'alasql';
 
 // Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
+import { capitalizeFirstLetter } from '../helpers/common';
 
 // Types
 import type {
@@ -61,8 +62,8 @@ export type ErrorSampleOutput = SampleOutputFormat & { type: 'Error', value: 'Pa
 export type ValidSampleOutput = SampleOutputFormat & { type: 'Valid', value: { [key: number]: boolean | string | number } };
 
 export const specialFields = {
-  layer: ['$length', '$id', '$area'],
-  table: ['$length', '$id'],
+  layer: ['$count', '$id', '$area'],
+  table: ['$count', '$id'],
 };
 
 export const hasSpecialFieldId = (formula: string) => formula.includes('@@uuid');
@@ -70,7 +71,7 @@ export const hasSpecialFieldId = (formula: string) => formula.includes('@@uuid')
 export const hasSpecialFieldArea = (formula: string) => formula.includes('@@area');
 
 export const replaceSpecialFields = (formula: string, lengthDataset: number): string => formula
-  .replaceAll(/\$length/gi, lengthDataset.toString())
+  .replaceAll(/\$count/gi, lengthDataset.toString())
   .replaceAll(/\$id/gi, '[@@uuid]')
   .replaceAll(/\$area/gi, '[@@area]');
 
@@ -247,7 +248,7 @@ export default function FormulaInput(
                 class="tag is-success"
                 title={
                   LL().FormulaInput[
-                    specialField.replace('$', 'specialField') as 'specialFieldId' | 'specialFieldLength' | 'specialFieldArea'
+                    `specialField${capitalizeFirstLetter(specialField.replace('$', ''))}` as 'specialFieldId' | 'specialFieldCount' | 'specialFieldArea'
                   ]()
                 }
                 onClick={() => {
