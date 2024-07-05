@@ -28,11 +28,29 @@ loadLocale('en');
 // to update the mode accordingly)
 initializeLightDarkMode();
 
-render(
-  () => (
-    <TypesafeI18n locale={'en'}>
-      <AppPage />
-    </TypesafeI18n>
-  ) as JSX.Element,
-  root,
-);
+const firstRender = () => {
+  render(
+    () => (
+      <TypesafeI18n locale={'en'}>
+        <AppPage />
+      </TypesafeI18n>
+    ) as JSX.Element,
+    root,
+  );
+};
+
+const s = document.querySelector('#stylesheet');
+
+if (s instanceof HTMLLinkElement) {
+  // In production, we only want to render the app after the stylesheet has loaded
+  // (to avoid the flash of unstyled content)
+  if (s.sheet) firstRender();
+  else {
+    s.addEventListener('load', () => {
+      firstRender();
+    });
+  }
+} else {
+  // In dev we can just render the app right away
+  firstRender();
+}

@@ -22,7 +22,7 @@ const jsToBottomCssNoneMedia = () => ({
     // eslint-disable-next-line no-param-reassign
     html = html.replace('<!-- # INSERT SCRIPT HERE -->', scriptTag);
     // eslint-disable-next-line no-param-reassign
-    html = html.replace('rel="stylesheet"', 'rel="stylesheet" media="none" onload="if(media!=\'all\')media=\'all\'"');
+    html = html.replace('rel="stylesheet"', 'id="stylesheet" rel="stylesheet" media="none" onload="if(media!=\'all\')media=\'all\'"');
     return html;
   },
 });
