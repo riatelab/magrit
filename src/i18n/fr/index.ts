@@ -872,7 +872,7 @@ const fr = {
     MatchedData: 'Entrées du tableau ayant une correspondance :',
     ImpossibleJoin: 'Les choix réalisés ne permettent par de réaliser de jointure.',
     NoData: 'sans données',
-    Prefix: 'Utiliser un préfixe pour les champs joins ?',
+    Prefix: 'Utiliser un préfixe pour les champs joints ?',
     PrefixValue: 'Préfixe',
     SelectFields: 'Sélectionner les champs à joindre ?',
     Confirm: 'Ajouter les champs à la couche sélectionnée',
