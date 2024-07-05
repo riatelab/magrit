@@ -116,6 +116,7 @@
     "topojson-simplify": "^3.0.3",
     "typesafe-i18n": "^5.26.2",
     "uuid": "^10.0.0",
+    "vite-plugin-css-injected-by-js": "^3.5.1",
     "wkt-parser": "^1.3.3"
   },
   "resolutions": {

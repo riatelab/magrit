@@ -7,13 +7,14 @@ import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
 import svgLoader from 'vite-svg-loader';
 // import devtools from 'solid-devtools/vite';
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import electron from 'vite-plugin-electron/simple';
 
 const isDevElectron = process.env.MODE === 'electrondev';
 const isBuildElectron = process.env.MODE === 'electronbuild';
 const isElectron = isDevElectron || isBuildElectron;
 
-const jsToBottomCssNoneMedia = () => ({
+const jsToBottom = () => ({
   name: 'no-attribute',
   transformIndexHtml(html) {
     const scriptTag = html.match(/<script[^>]*>(.*?)<\/script[^>]*>/)[0];
@@ -21,8 +22,6 @@ const jsToBottomCssNoneMedia = () => ({
     html = html.replace(scriptTag, '');
     // eslint-disable-next-line no-param-reassign
     html = html.replace('<!-- # INSERT SCRIPT HERE -->', scriptTag);
-    // eslint-disable-next-line no-param-reassign
-    html = html.replace('rel="stylesheet"', 'id="stylesheet" rel="stylesheet" media="none" onload="if(media!=\'all\')media=\'all\'"');
     return html;
   },
 });
@@ -31,6 +30,11 @@ export default defineConfig({
   base: './',
   publicDir: 'src/public',
   plugins: [
+    cssInjectedByJsPlugin({
+      topExecutionPriority: true,
+      id: 'stylesheet',
+      preRenderCSSCode: (cssCode) => cssCode.replaceAll('./font-gis', './assets/font-gis'),
+    }),
     wasm(),
     // We use top-level await, which was added in ES2022
     // so if we target anything lower than ES2022, we need to
@@ -60,7 +64,7 @@ export default defineConfig({
       // Optional: Use Node.js API in the Renderer process
       renderer: {},
     }) : {},
-    jsToBottomCssNoneMedia(),
+    jsToBottom(),
   ],
   server: {
     port: 3000,
