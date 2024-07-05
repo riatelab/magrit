@@ -1,5 +1,9 @@
 # Changelog
 
+#### 2.0.3 (2024-07-05)
+
+- Still improve the rendering of the app after the stylesheet has loaded.
+
 #### 2.0.2 (2024-07-05)
 
 - Render the app after the stylesheet has loaded (to avoid flash of unstyled content).

@@ -1,5 +1,9 @@
 # Historique des changements
 
+#### 2.1.0 (2024-07-05)
+
+- Améliore le premier rendu de l'application.
+
 #### 2.0.2 (2024-07-05)
 
 - Ne faire le rendu de la page qu'après que la feuille de style ait été chargée pour éviter un flash de contenu non-stylé.
