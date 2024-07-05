@@ -1,5 +1,13 @@
 # Historique des changements
 
+#### 2.0.1 (2024-07-05)
+
+- Correction de fautes d'orthographe / mauvaise formulation dans la traduction française.
+- Correction du zoom lors de l'ajout d'un jeu de données d'exemple lorsqu'il s'agit de la première couche ajoutée à l'application
+  (Corrige <a href="https://github.com/riatelab/magrit/issues/128">128</a>).
+- Changement du nom du champ spécial `$length` vers `$count` dans le composant de formules SQL-like pour éviter le risque de confusion
+  (Corrige <a href="https://github.com/riatelab/magrit/issues/130">130</a>).
+
 #### 2.0.0 (2024-07-04)
 
 Il s'agit d'une refonte totale de l'application (aussi bien concernant son architecture que son interface utilisateur).
