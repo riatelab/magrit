@@ -3,7 +3,7 @@
 #### 2.0.1 (2024-07-05)
 
 - Fix some typos / bad phrasing in french translation.
-- Fix zooming / scale when adding an example dataset and when it is the first layer added to the applicatio
+- Fix zooming / scale when adding an example dataset and when it is the first layer added to the application
   (Fixes <a href="https://github.com/riatelab/magrit/issues/128">128</a>).
 - Change the name of the special field `$length` to `$count` in the SQL-like formula component
   (Fixes <a href="https://github.com/riatelab/magrit/issues/130">130</a>).
