@@ -33,6 +33,13 @@
 ![Example map - World wealth](./docs/public/example_map_world_wealth.png)
 ![Example map - Cinemas in Paris](./docs/public/example_map_cinema_paris.png)
 
+## Last changes
+
+You can find the last changes in the Changelog file, either in the source code (in [French](./docs/changelog.md) or in [English](./docs/en/changelog.md))
+or directly on the Web site ([Fr](https://magrit.cnrs.fr/changelog.html) or [En](https://magrit.cnrs.fr/en/changelog.html)).
+
+Information about changes are also available in the [release notes](https://github.com/riatelab/magrit/releases) of the GitHub repository.
+
 ## Development
 
 Requirements:
@@ -79,7 +86,7 @@ The application (for Windows and GNU/Linux) will be built in the `release` direc
 
 ## Contributing to Magrit
 
-Contributions are welcome! There are various ways to contribute to the project which are detailed in CONTRIBUTING file! You can notably:
+Contributions are welcome! There are various ways to contribute to the project which are detailed in [CONTRIBUTING](CONTRIBUTING.md) file! You can notably:
 
 - Report bugs or send us feedback.
 - Add new translations or fix existing ones.
