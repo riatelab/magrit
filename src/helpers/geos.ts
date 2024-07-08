@@ -33,7 +33,7 @@ async function intersectionFeature(
   // If the intersection is empty, the coordinates array will be empty
   // and we choose to return null (to avoid features with empty geometry
   // in the caller functions)
-  if (geometry.coordinates.length === 0) {
+  if (!geometry || !geometry.coordinates || geometry.coordinates.length === 0) {
     return null;
   }
 
@@ -42,7 +42,7 @@ async function intersectionFeature(
     id: feature1.id,
     properties: feature1.properties,
     geometry,
-  };
+  } as GeoJSONFeature;
 }
 
 /**
