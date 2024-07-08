@@ -1,5 +1,15 @@
 # Changelog
 
+<br />
+
+#### 2.0.4 (2024-07-08)
+
+- Fix the topology of NUTS example datasets (partially fixes <a href="https://github.com/riatelab/magrit/issues/127">127</a>) and associated metadata.
+
+- Better handling of null geometries after intersection when creating grids (partially fixes <a href="https://github.com/riatelab/magrit/issues/127">127</a>).
+
+- Improved the first rendering of the application (this time the problem should be solved).
+
 #### 2.0.3 (2024-07-05)
 
 - Still improve the rendering of the app after the stylesheet has loaded.
@@ -16,7 +26,7 @@
 - Change the name of the special field `$length` to `$count` in the SQL-like formula component
   (Fixes <a href="https://github.com/riatelab/magrit/issues/130">130</a>).
 
-#### 2.0.0 (2024-07-04)
+### 2.0.0 (2024-07-04)
 
 This is a complete overhaul of the application (in terms of both architecture and user interface).
 The exact list of changes is too long to be explicitly listed here, but here are a few highlights:
@@ -28,6 +38,9 @@ The exact list of changes is too long to be explicitly listed here, but here are
 
 The features of the previous version of Magrit are still available
 (the various portrayal types, PNG / SVG export, project file export, etc.).
+
+---
+
 
 #### 0.16.6 (2024-06-03)
 

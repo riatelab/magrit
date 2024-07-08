@@ -1,6 +1,17 @@
 # Historique des changements
 
-#### 2.1.0 (2024-07-05)
+<br />
+
+#### 2.0.4 (2024-07-08)
+
+- Corrige la topologie des jeux de données d'exemple NUTS (Corrige partiellement <a href="https://github.com/riatelab/magrit/issues/127">127</a>)
+  ainsi que les métadonnées associées.
+
+- Meilleure gestion des géométries nulles après intersection lors de la création de grilles (Corrige partiellement <a href="https://github.com/riatelab/magrit/issues/127">127</a>).
+
+- Améliore le premier rendu de l'application (problème résolu cette fois).
+
+#### 2.0.3 (2024-07-05)
 
 - Améliore le premier rendu de l'application.
 
@@ -16,7 +27,7 @@
 - Changement du nom du champ spécial `$length` vers `$count` dans le composant de formules SQL-like pour éviter le risque de confusion
   (Corrige <a href="https://github.com/riatelab/magrit/issues/130">130</a>).
 
-#### 2.0.0 (2024-07-04)
+### 2.0.0 (2024-07-04)
 
 Il s'agit d'une refonte totale de l'application (aussi bien concernant son architecture que son interface utilisateur).
 La liste exacte des changements est trop longue pour être listée de manière explicite ici, mais voici quelques points importants :
@@ -28,6 +39,9 @@ La liste exacte des changements est trop longue pour être listée de manière e
 
 Les fonctionnalités de l'ancienne version de Magrit sont toujours disponibles
 (les différents types de représentation, l'export PNG / SVG, l'export de fichier projet, etc.).
+
+
+---
 
 #### 0.16.6 (2024-06-03)
 
