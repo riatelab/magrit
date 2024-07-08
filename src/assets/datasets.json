@@ -30,7 +30,7 @@
         "provenance": 0
       },
       {
-        "name": "NAME_LTN",
+        "name": "NAME_LATN",
         "dataType": "string",
         "type": "identifier",
         "hasMissingValue": false,
@@ -83,7 +83,7 @@
         "provenance": 0
       },
       {
-        "name": "NAME_LTN",
+        "name": "NAME_LATN",
         "dataType": "string",
         "type": "identifier",
         "hasMissingValue": false,
@@ -136,7 +136,7 @@
         "provenance": 0
       },
       {
-        "name": "NAME_LTN",
+        "name": "NAME_LATN",
         "dataType": "string",
         "type": "identifier",
         "hasMissingValue": false,
