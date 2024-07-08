@@ -4,7 +4,6 @@ import { createSignal, For, Show } from 'solid-js';
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
-import { getPalette } from 'dicopal';
 import { yieldOrContinue } from 'main-thread-scheduling';
 import * as Plot from '@observablehq/plot';
 import toast from 'solid-toast';
@@ -47,7 +46,7 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
-  type ChoroplethLegend, ClassificationParameters,
+  type ChoroplethLegend, type ClassificationParameters,
   type GeoJSONFeatureCollection,
   type GridParameters,
   KdeKernel,

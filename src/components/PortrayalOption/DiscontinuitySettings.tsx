@@ -1,6 +1,5 @@
 // Imports from solid-js
 import {
-  createMemo,
   createSignal,
   For,
   JSX,

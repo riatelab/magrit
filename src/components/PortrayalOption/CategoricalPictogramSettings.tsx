@@ -31,7 +31,6 @@ import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelecti
 
 // Subcomponents
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
-import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';

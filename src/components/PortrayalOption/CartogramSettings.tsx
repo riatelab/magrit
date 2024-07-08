@@ -22,7 +22,6 @@ import { randomColorFromCategoricalPalette } from '../../helpers/color';
 import { findSuitableName, isPositiveFiniteNumber, unproxify } from '../../helpers/common';
 import { generateIdLayer } from '../../helpers/layers';
 import { DataType, type Variable, VariableType } from '../../helpers/typeDetection';
-import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 import { getProjectionUnit } from '../../helpers/projection';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
@@ -112,9 +111,6 @@ async function onClickValidate(
       dataType: 'number' as DataType,
     });
   }
-
-  // Find a position for the legend
-  // const legendPosition = getPossibleLegendPosition(120, 340);
 
   const newLayerDescription = {
     id: generateIdLayer(),
