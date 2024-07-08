@@ -234,6 +234,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
         .catch((e) => {
           setLoading(false);
           showErrorMessage(e.message ? e.message : `${e}`, LL);
+          console.warn('Original error:', e);
         });
     }, 0);
   };

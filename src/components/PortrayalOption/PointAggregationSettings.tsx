@@ -495,6 +495,7 @@ export default function PointAggregationSettings(props: PortrayalSettingsProps):
         );
       } catch (e) {
         showErrorMessage(e.message ? e.message : `${e}`, LL);
+        console.warn('Original error:', e);
       } finally {
         setLoading(false);
         openLayerManager();

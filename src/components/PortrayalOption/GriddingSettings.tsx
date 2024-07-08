@@ -287,6 +287,7 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
         .catch((e) => {
           setLoading(false);
           showErrorMessage(e.message ? e.message : `${e}`, LL);
+          console.warn('Original error:', e);
         });
     }, 0);
   };

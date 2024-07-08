@@ -218,6 +218,7 @@ export default function DiscontinuitySettings(
         );
       } catch (e) {
         showErrorMessage(e.message ? e.message : `${e}`, LL);
+        console.warn('Original error:', e);
       } finally {
         // Hide loading overlay
         setLoading(false);

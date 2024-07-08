@@ -148,6 +148,7 @@ export default function AggregationSettings(
         .catch((e) => {
           setLoading(false);
           showErrorMessage(e.message ? e.message : `${e}`, LL);
+          console.warn('Original error:', e);
         });
     }, 0);
   };
