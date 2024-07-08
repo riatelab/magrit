@@ -1,5 +1,13 @@
 # Contributing to Magrit
 
+## Development process
+
+Development of Magrit is done in the open on GitHub, and we are grateful to the community for contributing bugfixes and improvements. Read below to learn how you can take part in improving Magrit.
+
+Also note that the development is done first in the `dev` branch which is then merged into the `main` branch when a new version is released.
+
+In consequence, if you want to contribute to the project, you should fork the repository and create a pull request to the `dev` branch.
+
 ## Reporting issues
 
 To report a bug or to suggest some enhancements, don't hesitate to create a issue on the dedicated bug tracker on github: https://github.com/riatelab/magrit/issues.
