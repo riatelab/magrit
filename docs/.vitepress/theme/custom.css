@@ -42,3 +42,14 @@ img.logo {
     color: #00d1b2 !important;
     -webkit-text-fill-color: #00d1b2 !important;
 }
+
+/* We want the second link in the nav bar to be styled like a button */
+.VPNavBarMenu a:nth-child(3) {
+    background-color: #00d1b2;
+    color: #3c3c43;
+    border-radius: 20px;
+}
+
+.VPNavBarMenuLink {
+    line-height: 40px !important;
+}
