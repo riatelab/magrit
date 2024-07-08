@@ -1,5 +1,6 @@
 // Imports from solid-js
 import { JSX, onCleanup, onMount } from 'solid-js';
+import { autofocus } from '@solid-primitives/autofocus';
 
 // Imports from other packages
 import { LocalizedString } from 'typesafe-i18n';
@@ -13,6 +14,11 @@ import { globalStore } from '../../store/GlobalStore';
 
 // Styles
 import '../../styles/ModalWindow.css';
+
+const autoFocus = {
+  ref: autofocus,
+  autofocus: true,
+};
 
 export default function DefaultModal(): JSX.Element {
   const { LL } = useI18nContext();
@@ -133,12 +139,11 @@ export default function DefaultModal(): JSX.Element {
       <footer class="modal-card-foot">
         <button
           class="button is-success confirm-button"
-          // ref={autofocus}
-          autofocus
           onClick={ () => {
             (modalStore.confirmCallback || (() => {}))();
             resetModalStore();
           }}
+          {...autoFocus}
         >{ successButton }</button>
         <button
           class="button cancel-button"

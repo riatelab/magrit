@@ -96,6 +96,11 @@ interface GdalCrs {
   bounds?: number[],
 }
 
+const autoFocus = {
+  ref: autofocus,
+  autofocus: true,
+};
+
 const countLayerToImport = (fileDescriptions: DatasetDescription[]) => {
   if (!fileDescriptions) return 0;
   let total = 0;
@@ -661,7 +666,7 @@ export default function ImportWindow(): JSX.Element {
           <button
             class="button is-primary is-outlined"
             onClick={handleInputFiles}
-            autofocus
+            {...autoFocus}
           >
             {LL().ImportWindow.Open()}
           </button>
