@@ -99,7 +99,7 @@ const en = {
       abstract: 'The 37 European NUTS0 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom',
       fields: {
         NUTS_ID: 'NUTS identifier',
-        NAME_LTN: 'Name',
+        NAME_LATN: 'Name',
         AREA_TOT_2024: 'Total area 2024 (km²)',
         zone: 'EU27, EFTA, CC or UK',
       },
@@ -114,7 +114,7 @@ const en = {
       abstract: 'The 125 European NUTS1 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom',
       fields: {
         NUTS_ID: 'NUTS identifier',
-        NAME_LTN: 'Name',
+        NAME_LATN: 'Name',
         AREA_TOT_2024: 'Total area 2024 (km²)',
         zone: 'EU27, EFTA, CC or UK',
       },
@@ -129,7 +129,7 @@ const en = {
       abstract: 'The 327 European NUTS2 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom',
       fields: {
         NUTS_ID: 'NUTS identifier',
-        NAME_LTN: 'Name',
+        NAME_LATN: 'Name',
         AREA_TOT_2024: 'Total area 2024 (km²)',
         zone: 'EU27, EFTA, CC or UK',
       },

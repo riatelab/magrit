@@ -99,7 +99,7 @@ const fr = {
       abstract: 'Les 37 NUTS0 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni',
       fields: {
         NUTS_ID: 'Identifiant de NUTS',
-        NAME_LTN: 'Nom',
+        NAME_LATN: 'Nom',
         AREA_TOT_2024: 'Superficie totale 2024 (km²)',
         zone: 'EU27, EFTA, CC ou UK',
       },
@@ -114,7 +114,7 @@ const fr = {
       abstract: 'Les 125 NUTS1 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni',
       fields: {
         NUTS_ID: 'NUTS identifier',
-        NAME_LTN: 'Name',
+        NAME_LATN: 'Name',
         AREA_TOT_2024: 'Total area 2024 (km²)',
         zone: 'EU27, EFTA, CC or UK',
       },
@@ -129,7 +129,7 @@ const fr = {
       abstract: 'Les 327 NUTS2 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni',
       fields: {
         NUTS_ID: 'Identifiant de NUTS',
-        NAME_LTN: 'Nom',
+        NAME_LATN: 'Nom',
         AREA_TOT_2024: 'Superficie totale 2024 (km²)',
         zone: 'EU27, EFTA, CC ou UK',
       },

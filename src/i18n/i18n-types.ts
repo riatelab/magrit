@@ -317,7 +317,7 @@ type RootTranslation = {
 				/**
 				 * N​a​m​e
 				 */
-				NAME_LTN: string
+				NAME_LATN: string
 				/**
 				 * T​o​t​a​l​ ​a​r​e​a​ ​2​0​2​4​ ​(​k​m​²​)
 				 */
@@ -359,7 +359,7 @@ type RootTranslation = {
 				/**
 				 * N​a​m​e
 				 */
-				NAME_LTN: string
+				NAME_LATN: string
 				/**
 				 * T​o​t​a​l​ ​a​r​e​a​ ​2​0​2​4​ ​(​k​m​²​)
 				 */
@@ -401,7 +401,7 @@ type RootTranslation = {
 				/**
 				 * N​a​m​e
 				 */
-				NAME_LTN: string
+				NAME_LATN: string
 				/**
 				 * T​o​t​a​l​ ​a​r​e​a​ ​2​0​2​4​ ​(​k​m​²​)
 				 */
@@ -4288,7 +4288,7 @@ export type TranslationFunctions = {
 				/**
 				 * Name
 				 */
-				NAME_LTN: () => LocalizedString
+				NAME_LATN: () => LocalizedString
 				/**
 				 * Total area 2024 (km²)
 				 */
@@ -4330,7 +4330,7 @@ export type TranslationFunctions = {
 				/**
 				 * Name
 				 */
-				NAME_LTN: () => LocalizedString
+				NAME_LATN: () => LocalizedString
 				/**
 				 * Total area 2024 (km²)
 				 */
@@ -4372,7 +4372,7 @@ export type TranslationFunctions = {
 				/**
 				 * Name
 				 */
-				NAME_LTN: () => LocalizedString
+				NAME_LATN: () => LocalizedString
 				/**
 				 * Total area 2024 (km²)
 				 */
