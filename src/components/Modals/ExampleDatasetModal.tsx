@@ -61,6 +61,8 @@ interface DataProvider {
 interface DatasetEntry {
   // Internal id of the dataset
   id: string,
+  // Do we currently propose the dataset in the ui ?
+  active: boolean,
   // Type of dataset
   type: 'vector' | 'raster';
   // The total number of features in the dataset (vector)
@@ -82,7 +84,7 @@ interface DatasetEntry {
   fields: (Variable & { provenance: number })[],
 }
 
-const datasets = allDatasets.filter((d) => !d.id.startsWith('world_')) as DatasetEntry[];
+const datasets = allDatasets.filter((d) => d.active) as DatasetEntry[];
 
 function CardDatasetEntry(
   ds: DatasetEntry & { onClick: (arg0: MouseEvent) => void },

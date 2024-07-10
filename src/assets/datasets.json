@@ -1,6 +1,7 @@
 [
   {
     "id": "nuts0",
+    "active": true,
     "type": "vector",
     "totalFeatures": 37,
     "defaultProjection": {
@@ -54,6 +55,7 @@
   },
   {
     "id": "nuts1",
+    "active": true,
     "type": "vector",
     "totalFeatures": 125,
     "defaultProjection": {
@@ -107,6 +109,7 @@
   },
   {
     "id": "nuts2",
+    "active": true,
     "type": "vector",
     "totalFeatures": 327,
     "defaultProjection": {
@@ -160,6 +163,7 @@
   },
   {
     "id": "nuts2_data",
+    "active": true,
     "type": "vector",
     "totalFeatures": 332,
     "defaultProjection": {
@@ -311,6 +315,7 @@
   },
   {
     "id": "world_177",
+    "active": false,
     "type": "vector",
     "totalFeatures": 177,
     "defaultProjection": {
@@ -475,6 +480,7 @@
   },
   {
     "id": "world_242",
+    "active": false,
     "type": "vector",
     "totalFeatures": 242,
     "defaultProjection": {
@@ -639,6 +645,7 @@
   },
   {
     "id": "quartiers_paris",
+    "active": true,
     "type": "vector",
     "totalFeatures": 80,
     "defaultProjection": {
@@ -727,6 +734,7 @@
   },
   {
     "id": "fra_metro_com",
+    "active": true,
     "type": "vector",
     "totalFeatures": 34858,
     "defaultProjection": {
@@ -822,11 +830,12 @@
   },
   {
     "id": "fra_com",
+    "active": true,
     "type": "vector",
     "totalFeatures": 34987,
     "defaultProjection": {
-      "type": "proj4",
-      "code": 4326
+      "type": "d3",
+      "value": "naturalEarth2"
     },
     "geometry": {
       "source": "RIATE - IGN - Natural Earth",
@@ -917,6 +926,7 @@
   },
   {
     "id": "fra_template_com",
+    "active": true,
     "type": "vector",
     "totalFeatures": 34987,
     "defaultProjection": {
@@ -1012,6 +1022,7 @@
   },
   {
     "id": "fra_metro_dep",
+    "active": false,
     "type": "vector",
     "totalFeatures": 96,
     "defaultProjection": {
