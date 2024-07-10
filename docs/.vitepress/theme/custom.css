@@ -50,6 +50,11 @@ img.logo {
     border-radius: 20px;
 }
 
+.VPNavBarMenu a:nth-child(3):hover {
+    background-color: #00d1b2;
+    color: #3c3c43;
+}
+
 .VPNavBarMenuLink {
     line-height: 40px !important;
 }
