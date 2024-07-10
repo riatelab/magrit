@@ -242,9 +242,165 @@ type RootTranslation = {
 				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
 				 */
 				SUPERF_2023: string
+				/**
+				 * D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​u​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2020: string
 			}
 			/**
 			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​m​e​t​r​o​p​o​l​i​t​a​n​ ​a​r​e​a​s
+			 */
+			keywords: string
+			/**
+			 * ©​ ​R​I​A​T​E​ ​-​ ​f​r​o​m​ ​I​G​N​ ​m​u​n​i​c​i​p​a​l​i​t​y​ ​c​e​n​t​r​o​i​d​s​ ​a​n​d​ ​N​a​t​u​r​a​l​ ​E​a​r​t​h​ ​s​i​m​p​l​i​f​i​e​d​ ​c​o​n​t​o​u​r​s
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​-​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		fra_com: {
+			/**
+			 * F​r​a​n​c​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​3​4​9​8​7​ ​F​r​e​n​c​h​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​(​2​0​2​3​ ​e​d​i​t​i​o​n​s​)​ ​b​a​s​e​d​ ​o​n​ ​V​o​r​o​n​o​i​ ​p​o​l​y​g​o​n​s
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​u​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2020: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​m​e​t​r​o​p​o​l​i​t​a​n​ ​a​r​e​a​s
+			 */
+			keywords: string
+			/**
+			 * ©​ ​R​I​A​T​E​ ​-​ ​f​r​o​m​ ​I​G​N​ ​m​u​n​i​c​i​p​a​l​i​t​y​ ​c​e​n​t​r​o​i​d​s​ ​a​n​d​ ​N​a​t​u​r​a​l​ ​E​a​r​t​h​ ​s​i​m​p​l​i​f​i​e​d​ ​c​o​n​t​o​u​r​s
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​-​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		fra_template_com: {
+			/**
+			 * F​r​a​n​c​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​(​m​a​p​ ​t​e​m​p​l​a​t​e​)
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​3​4​9​8​7​ ​F​r​e​n​c​h​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​(​2​0​2​3​ ​e​d​i​t​i​o​n​s​)​ ​b​a​s​e​d​ ​o​n​ ​V​o​r​o​n​o​i​ ​p​o​l​y​g​o​n​s​.​ ​T​h​e​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​t​h​e​ ​o​v​e​r​s​e​a​s​ ​r​e​g​i​o​n​s​ ​a​r​e​ ​d​i​s​p​l​a​y​e​d​ ​i​n​ ​b​o​x​e​s​.
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​u​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2020: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​t​e​m​p​l​a​t​e
 			 */
 			keywords: string
 			/**
@@ -317,7 +473,7 @@ type RootTranslation = {
 				/**
 				 * N​a​m​e
 				 */
-				NAME_LATN: string
+				NAME_LTN: string
 				/**
 				 * T​o​t​a​l​ ​a​r​e​a​ ​2​0​2​4​ ​(​k​m​²​)
 				 */
@@ -359,7 +515,7 @@ type RootTranslation = {
 				/**
 				 * N​a​m​e
 				 */
-				NAME_LATN: string
+				NAME_LTN: string
 				/**
 				 * T​o​t​a​l​ ​a​r​e​a​ ​2​0​2​4​ ​(​k​m​²​)
 				 */
@@ -401,7 +557,7 @@ type RootTranslation = {
 				/**
 				 * N​a​m​e
 				 */
-				NAME_LATN: string
+				NAME_LTN: string
 				/**
 				 * T​o​t​a​l​ ​a​r​e​a​ ​2​0​2​4​ ​(​k​m​²​)
 				 */
@@ -3659,21 +3815,17 @@ type RootTranslation = {
 		 */
 		inflexionPointPosition: string
 		/**
-		 * M​e​a​n
+		 * D​i​s​p​l​a​y​ ​m​e​a​n
 		 */
 		displayMean: string
 		/**
-		 * M​e​d​i​a​n
+		 * D​i​s​p​l​a​y​ ​m​e​d​i​a​n
 		 */
 		displayMedian: string
 		/**
-		 * S​t​a​n​d​a​r​d​ ​d​e​v​i​a​t​i​o​n
+		 * D​i​s​p​l​a​y​ ​s​t​a​n​d​a​r​d​ ​d​e​v​i​a​t​i​o​n
 		 */
 		displayStdDev: string
-		/**
-		 * P​o​p​u​l​a​t​i​o​n
-		 */
-		displayPopulation: string
 		/**
 		 * L​o​g​a​r​i​t​h​m​i​c​ ​s​c​a​l​e
 		 */
@@ -4233,9 +4385,165 @@ export type TranslationFunctions = {
 				 * Total area, 2023 (km²)
 				 */
 				SUPERF_2023: () => LocalizedString
+				/**
+				 * Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2020: () => LocalizedString
 			}
 			/**
 			 * France, communes, municipalities, metropolitan areas
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © RIATE - from IGN municipality centroids and Natural Earth simplified contours
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE - 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		fra_com: {
+			/**
+			 * France – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 34987 French municipalities (2023 editions) based on Voronoi polygons
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2020: () => LocalizedString
+			}
+			/**
+			 * France, communes, municipalities, metropolitan areas
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © RIATE - from IGN municipality centroids and Natural Earth simplified contours
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE - 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		fra_template_com: {
+			/**
+			 * France – municipalities (map template)
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 34987 French municipalities (2023 editions) based on Voronoi polygons. The municipalities of the overseas regions are displayed in boxes.
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2020: () => LocalizedString
+			}
+			/**
+			 * France, communes, municipalities, template
 			 */
 			keywords: () => LocalizedString
 			/**
@@ -4308,7 +4616,7 @@ export type TranslationFunctions = {
 				/**
 				 * Name
 				 */
-				NAME_LATN: () => LocalizedString
+				NAME_LTN: () => LocalizedString
 				/**
 				 * Total area 2024 (km²)
 				 */
@@ -4350,7 +4658,7 @@ export type TranslationFunctions = {
 				/**
 				 * Name
 				 */
-				NAME_LATN: () => LocalizedString
+				NAME_LTN: () => LocalizedString
 				/**
 				 * Total area 2024 (km²)
 				 */
@@ -4392,7 +4700,7 @@ export type TranslationFunctions = {
 				/**
 				 * Name
 				 */
-				NAME_LATN: () => LocalizedString
+				NAME_LTN: () => LocalizedString
 				/**
 				 * Total area 2024 (km²)
 				 */
@@ -7611,21 +7919,17 @@ export type TranslationFunctions = {
 		 */
 		inflexionPointPosition: () => LocalizedString
 		/**
-		 * Mean
+		 * Display mean
 		 */
 		displayMean: () => LocalizedString
 		/**
-		 * Median
+		 * Display median
 		 */
 		displayMedian: () => LocalizedString
 		/**
-		 * Standard deviation
+		 * Display standard deviation
 		 */
 		displayStdDev: () => LocalizedString
-		/**
-		 * Population
-		 */
-		displayPopulation: () => LocalizedString
 		/**
 		 * Logarithmic scale
 		 */
