@@ -15,7 +15,7 @@ We have two types of "field":
     height: 2.5em;
 }
 
-.field input.input {
+.field:not(.multi-input) input.input {
     height: 2.3em;
 }
 
@@ -42,8 +42,8 @@ We have two types of "field":
 }
 
 /* Styles for the LegendSettings component */
-.legend-settings__content .field input[type=number],
-.legend-settings__content .field input[type=color] {
+.legend-settings__content .field:not(.multi-input) input[type=number],
+.legend-settings__content .field:not(.multi-input) input[type=color] {
     width: 8em !important;
 }
 

@@ -16,7 +16,7 @@ interface InputFieldColorOpacityProps {
 export function InputFieldColorOpacity(props: InputFieldColorOpacityProps): JSX.Element {
   const { LL } = useI18nContext();
   const mergedProps = mergeProps({ width: 200, gap: 5 }, props);
-  return <div class="field">
+  return <div class="field multi-input">
     <label class="label">{mergedProps.label}</label>
     <div>
       <div class="control is-flex">
@@ -91,7 +91,7 @@ interface InputFieldWidthColorOpacityProps {
 export function InputFieldWidthColorOpacity(props: InputFieldWidthColorOpacityProps): JSX.Element {
   const { LL } = useI18nContext();
   const mergedProps = mergeProps({ width: 200, gap: 5 }, props);
-  return <div class="field">
+  return <div class="field multi-input">
     <label class="label">{mergedProps.label}</label>
     <div>
       <div class="control is-flex">
@@ -196,7 +196,7 @@ interface InputFieldPaletteOpacityProps {
 export function InputFieldPaletteOpacity(props: InputFieldPaletteOpacityProps): JSX.Element {
   const { LL } = useI18nContext();
   const mergedProps = mergeProps({ width: 200, gap: 5 }, props);
-  return <div class="field">
+  return <div class="field multi-input">
     <label class="label">{mergedProps.label}</label>
     <div>
       <div class="control is-flex">
@@ -282,7 +282,7 @@ export function InputFieldWidthPaletteOpacity(
 ): JSX.Element {
   const { LL } = useI18nContext();
   const mergedProps = mergeProps({ width: 200, gap: 5 }, props);
-  return <div class="field">
+  return <div class="field multi-input">
     <label class="label">{mergedProps.label}</label>
     <div>
       <div class="control is-flex">
@@ -396,7 +396,7 @@ interface InputFieldColorWidthProps {
 export function InputFieldColorWidth(props: InputFieldColorWidthProps): JSX.Element {
   const { LL } = useI18nContext();
   const mergedProps = mergeProps({ width: 200, gap: 5 }, props);
-  return <div class="field">
+  return <div class="field multi-input">
     <label class="label">{mergedProps.label}</label>
     <div>
       <div class="control is-flex">
@@ -471,21 +471,27 @@ interface InputFieldColorWidthHeightProps {
 export function InputFieldColorWidthHeight(props: InputFieldColorWidthHeightProps): JSX.Element {
   const { LL } = useI18nContext();
   const mergedProps = mergeProps({ width: 200, gap: 5 }, props);
-  return <div class="field">
+  return <div class="field multi-input">
     <label class="label">{mergedProps.label}</label>
     <div>
       <div class="control is-flex">
         <div style={{
-          width: `${(mergedProps.width / 3) - mergedProps.gap / 3}px`,
+          width: `${(mergedProps.width / 2) - mergedProps.gap / 2}px`,
           'text-align': 'center',
           'font-size': '0.9em',
         }}>{LL().LayerSettings.Color()}</div>
         <div style={{ width: `${mergedProps.gap}px` }}></div>
         <div style={{
-          width: `${(mergedProps.width / 3) - mergedProps.gap / 3}px`,
+          width: `${(mergedProps.width / 2) - mergedProps.gap / 2}px`,
           'text-align': 'center',
           'font-size': '0.9em',
         }}>{LL().LayerSettings.Width()}</div>
+        <div style={{ width: `${mergedProps.gap}px` }}></div>
+        <div style={{
+          width: `${(mergedProps.width / 2) - mergedProps.gap / 2}px`,
+          'text-align': 'center',
+          'font-size': '0.9em',
+        }}>{LL().LayerSettings.HeightPct()}</div>
       </div>
       <div class="control is-flex">
         <input
@@ -519,6 +525,23 @@ export function InputFieldColorWidthHeight(props: InputFieldColorWidthHeightProp
           min={0}
           max={10}
           step={0.1}
+          style={{
+            width: `${(mergedProps.width / 2) - mergedProps.gap / 2}px`,
+            height: '1.75em',
+          }}
+          disabled={mergedProps.disabled}
+        />
+        <div style={{ width: `${mergedProps.gap}px` }}></div>
+        <input
+          class="input"
+          type="number"
+          onChange={(e) => {
+            mergedProps.onChangeHeight(+e.currentTarget.value);
+          }}
+          value={mergedProps.valueHeight}
+          min={0}
+          max={100}
+          step={1}
           style={{
             width: `${(mergedProps.width / 2) - mergedProps.gap / 2}px`,
             height: '1.75em',

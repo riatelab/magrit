@@ -22,7 +22,7 @@ import {
 } from './common.tsx';
 import { precisionToMinimumFractionDigits } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
-import { round } from '../../helpers/math';
+import { max, round } from '../../helpers/math';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -55,7 +55,7 @@ function ChoroplethHistogram(
     meanOptions?: AdditionalElementOptions & { value: number },
     medianOptions?: AdditionalElementOptions & { value: number },
     stddevOptions?: AdditionalElementOptions & { values: [number, number] },
-    populationOptions?: AdditionalElementOptions & { series: number[] },
+    populationOptions?: AdditionalElementOptions & { series: number[], height: number },
   },
 ): JSX.Element {
   const minmax = [
@@ -149,9 +149,9 @@ function ChoroplethHistogram(
           : null,
         props.populationOptions
           ? Plot.ruleX(props.populationOptions.series, {
-            x: (d) => d - 0.5,
+            x: (d) => d,
             y1: 0,
-            y2: 7.5,
+            y2: (props.populationOptions.height * max(breaksData().map((d) => d.y))) / 100,
             stroke: props.populationOptions.color,
             width: 1,
           })

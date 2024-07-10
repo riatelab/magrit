@@ -852,6 +852,7 @@ const fr = {
     Stroke: 'Bordure',
     Line: 'Ligne',
     Width: 'Épaisseur (px)',
+    HeightPct: 'Hauteur (%)',
     Opacity: 'Opacité',
     Color: 'Couleur',
     Palette: 'Palette',

@@ -852,6 +852,7 @@ const en = {
     Stroke: 'Stroke',
     Line: 'Line',
     Width: 'Width (px)',
+    HeightPct: 'Height (%)',
     Opacity: 'Opacity',
     Color: 'Color',
     Palette: 'Palette',

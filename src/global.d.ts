@@ -961,6 +961,8 @@ interface ChoroplethHistogramLegend extends LegendBase {
   populationOptions?: {
     color: string,
     width: number,
+    height: number,
+    series: number[],
   },
 }
 

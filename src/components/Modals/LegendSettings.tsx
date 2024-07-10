@@ -25,7 +25,7 @@ import {
   unproxify,
 } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
-import { round } from '../../helpers/math';
+import { Mround, round } from '../../helpers/math';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
 
 // Subcomponents
@@ -34,6 +34,7 @@ import InputFieldColor from '../Inputs/InputColor.tsx';
 import {
   InputFieldColorOpacity,
   InputFieldColorWidth,
+  InputFieldColorWidthHeight,
   InputFieldWidthColorOpacity,
 } from '../Inputs/InputFieldColorOpacity.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
@@ -46,24 +47,24 @@ import {
   type CategoricalChoroplethLegend,
   type CategoricalPictogramLegend,
   type ChoroplethHistogramLegend,
-  type ChoroplethLegend, ClassificationParameters,
+  type ChoroplethLegend, type ClassificationParameters,
   DefaultLegend,
   type DiscontinuityLegend,
   type LabelsLegend, LayerDescription,
   type LayerDescriptionCategoricalChoropleth,
   type LayerDescriptionChoropleth,
   type LayerDescriptionGriddedLayer,
-  LayerDescriptionProportionalSymbols,
+  type LayerDescriptionProportionalSymbols,
   type LayerDescriptionSmoothedLayer,
   type LayoutFeature,
   type Legend,
   LegendType,
   type LinearRegressionScatterPlot,
   type MushroomsLegend,
-  ProportionalSymbolCategoryParameters,
+  type ProportionalSymbolCategoryParameters,
   type ProportionalSymbolsLegend,
   type ProportionalSymbolsParameters,
-  ProportionalSymbolsRatioParameters,
+  type ProportionalSymbolsRatioParameters,
   RepresentationType,
 } from '../../global.d';
 
@@ -1043,7 +1044,9 @@ function makeSettingsChoroplethHistogram(
       checked={!!legend.medianOptions}
       onChange={(v) => {
         if (v) {
-          updateProps(legend.id, ['medianOptions'], { color: '#00ff00', width: 2, value: statSummary.median });
+          updateProps(legend.id, ['medianOptions'], {
+            color: '#00ff00', width: 2, value: statSummary.median,
+          });
         } else {
           updateProps(legend.id, ['medianOptions'], undefined);
         }
@@ -1058,6 +1061,7 @@ function makeSettingsChoroplethHistogram(
         onChangeWidth={(v) => { updateProps(legend.id, ['medianOptions', 'width'], v); }}
       />
     </Show>
+    {/*
     <InputFieldCheckbox
       label={LL().Legend.Modal.DisplayStdDev()}
       checked={!!legend.stddevOptions}
@@ -1066,7 +1070,11 @@ function makeSettingsChoroplethHistogram(
           updateProps(
             legend.id,
             ['stddevOptions'],
-            { color: '#ef54e4', width: 2, values: [-statSummary.standardDeviation, statSummary.standardDeviation] },
+            {
+              color: '#ef54e4',
+              width: 2,
+              values: [-statSummary.standardDeviation, statSummary.standardDeviation],
+            },
           );
         } else {
           updateProps(legend.id, ['stddevOptions'], undefined);
@@ -1082,6 +1090,7 @@ function makeSettingsChoroplethHistogram(
         onChangeWidth={(v) => { updateProps(legend.id, ['stddevOptions', 'width'], v); }}
       />
     </Show>
+    */}
     <InputFieldCheckbox
       label={LL().Legend.Modal.DisplayPopulation()}
       checked={!!legend.populationOptions}
@@ -1090,7 +1099,9 @@ function makeSettingsChoroplethHistogram(
           updateProps(
             legend.id,
             ['populationOptions'],
-            { color: '#fe0000', width: 1, series: filteredSeries },
+            {
+              color: '#1100fe', width: 1, series: filteredSeries, height: 5,
+            },
           );
         } else {
           updateProps(legend.id, ['populationOptions'], undefined);
@@ -1098,12 +1109,14 @@ function makeSettingsChoroplethHistogram(
       }}
     />
     <Show when={!!legend.populationOptions}>
-      <InputFieldColorWidth
+      <InputFieldColorWidthHeight
         label={''}
         valueColor={legend.populationOptions!.color}
         valueWidth={legend.populationOptions!.width}
+        valueHeight={legend.populationOptions!.height}
         onChangeColor={(v) => { updateProps(legend.id, ['populationOptions', 'color'], v); }}
         onChangeWidth={(v) => { updateProps(legend.id, ['populationOptions', 'width'], v); }}
+        onChangeHeight={(v) => { updateProps(legend.id, ['populationOptions', 'height'], v); }}
       />
     </Show>
     <OptionBackgroundRectangle legend={legend} LL={LL}/>

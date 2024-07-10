@@ -2953,6 +2953,10 @@ type RootTranslation = {
 		 */
 		Width: string
 		/**
+		 * H​e​i​g​h​t​ ​(​%​)
+		 */
+		HeightPct: string
+		/**
 		 * O​p​a​c​i​t​y
 		 */
 		Opacity: string
@@ -7064,6 +7068,10 @@ export type TranslationFunctions = {
 		 * Width (px)
 		 */
 		Width: () => LocalizedString
+		/**
+		 * Height (%)
+		 */
+		HeightPct: () => LocalizedString
 		/**
 		 * Opacity
 		 */
