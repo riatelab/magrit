@@ -317,7 +317,7 @@ type RootTranslation = {
 				/**
 				 * N​a​m​e
 				 */
-				NAME_LATN: string
+				NAME_LTN: string
 				/**
 				 * T​o​t​a​l​ ​a​r​e​a​ ​2​0​2​4​ ​(​k​m​²​)
 				 */
@@ -359,7 +359,7 @@ type RootTranslation = {
 				/**
 				 * N​a​m​e
 				 */
-				NAME_LATN: string
+				NAME_LTN: string
 				/**
 				 * T​o​t​a​l​ ​a​r​e​a​ ​2​0​2​4​ ​(​k​m​²​)
 				 */
@@ -401,7 +401,7 @@ type RootTranslation = {
 				/**
 				 * N​a​m​e
 				 */
-				NAME_LATN: string
+				NAME_LTN: string
 				/**
 				 * T​o​t​a​l​ ​a​r​e​a​ ​2​0​2​4​ ​(​k​m​²​)
 				 */
@@ -3659,21 +3659,17 @@ type RootTranslation = {
 		 */
 		inflexionPointPosition: string
 		/**
-		 * M​e​a​n
+		 * D​i​s​p​l​a​y​ ​m​e​a​n
 		 */
 		displayMean: string
 		/**
-		 * M​e​d​i​a​n
+		 * D​i​s​p​l​a​y​ ​m​e​d​i​a​n
 		 */
 		displayMedian: string
 		/**
-		 * S​t​a​n​d​a​r​d​ ​d​e​v​i​a​t​i​o​n
+		 * D​i​s​p​l​a​y​ ​s​t​a​n​d​a​r​d​ ​d​e​v​i​a​t​i​o​n
 		 */
 		displayStdDev: string
-		/**
-		 * P​o​p​u​l​a​t​i​o​n
-		 */
-		displayPopulation: string
 		/**
 		 * L​o​g​a​r​i​t​h​m​i​c​ ​s​c​a​l​e
 		 */
@@ -4292,7 +4288,7 @@ export type TranslationFunctions = {
 				/**
 				 * Name
 				 */
-				NAME_LATN: () => LocalizedString
+				NAME_LTN: () => LocalizedString
 				/**
 				 * Total area 2024 (km²)
 				 */
@@ -4334,7 +4330,7 @@ export type TranslationFunctions = {
 				/**
 				 * Name
 				 */
-				NAME_LATN: () => LocalizedString
+				NAME_LTN: () => LocalizedString
 				/**
 				 * Total area 2024 (km²)
 				 */
@@ -4376,7 +4372,7 @@ export type TranslationFunctions = {
 				/**
 				 * Name
 				 */
-				NAME_LATN: () => LocalizedString
+				NAME_LTN: () => LocalizedString
 				/**
 				 * Total area 2024 (km²)
 				 */
@@ -7595,21 +7591,17 @@ export type TranslationFunctions = {
 		 */
 		inflexionPointPosition: () => LocalizedString
 		/**
-		 * Mean
+		 * Display mean
 		 */
 		displayMean: () => LocalizedString
 		/**
-		 * Median
+		 * Display median
 		 */
 		displayMedian: () => LocalizedString
 		/**
-		 * Standard deviation
+		 * Display standard deviation
 		 */
 		displayStdDev: () => LocalizedString
-		/**
-		 * Population
-		 */
-		displayPopulation: () => LocalizedString
 		/**
 		 * Logarithmic scale
 		 */

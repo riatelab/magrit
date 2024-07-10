@@ -735,7 +735,7 @@
     },
     "geometry": {
       "source": "RIATE - IGN - Natural Earth",
-      "url": "https://geoservices.ign.fr/adminexpress",
+      "url": "https://rysebaert.gitpages.huma-num.fr/fr_template/",
       "download_date": "2024-07-03",
       "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
     },
@@ -773,6 +773,238 @@
         "name": "SUPERF_2023",
         "dataType": "number",
         "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "BV2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "fra_com",
+    "type": "vector",
+    "totalFeatures": 34987,
+    "defaultProjection": {
+      "type": "proj4",
+      "code": 4326
+    },
+    "geometry": {
+      "source": "RIATE - IGN - Natural Earth",
+      "url": "https://rysebaert.gitpages.huma-num.fr/fr_template/",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/statistiques/2521169",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "BV2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "fra_template_com",
+    "type": "vector",
+    "totalFeatures": 34987,
+    "defaultProjection": {
+      "type": "proj4",
+      "code": 2154
+    },
+    "geometry": {
+      "source": "RIATE - IGN - Natural Earth",
+      "url": "https://rysebaert.gitpages.huma-num.fr/fr_template/",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/statistiques/2521169",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+      {
+        "name": "BV2020",
+        "dataType": "string",
+        "type": "categorical",
         "hasMissingValue": false,
         "provenance": 1
       }
