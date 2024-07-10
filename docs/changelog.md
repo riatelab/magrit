@@ -2,6 +2,16 @@
 
 <br />
 
+#### 2.0.5 (2024-07-10)
+
+- Correction d'un bug avec la méthode de classification de la moyenne et de l'écart-type (lorsque la moyenne est demandée comme limite de classe). Correction en amont  dans [mthh/statsbreaks](https://github.com/mthh/statsbreaks).
+
+- Permettre d'afficher la population (*rug plot*) sur le graphique de discrétisation du panneau de discrétisation.
+
+- Améliore la couleur du tracé de la boite à moustache (en particulier lors de l'utilisation du thème sombre) dans le panneau de discrétisation.
+
+- Changement des liens vers l'ancienne version de Magrit dans la documentation.
+
 #### 2.0.4 (2024-07-08)
 
 - Corrige la topologie des jeux de données d'exemple NUTS (Corrige partiellement <a href="https://github.com/riatelab/magrit/issues/127">127</a>)

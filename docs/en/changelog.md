@@ -2,6 +2,19 @@
 
 <br />
 
+#### 2.0.5 (2024-07-10)
+
+- Fix bug with mean & standard deviation classification method (when the average is requested to be a class limit). Fixed upstream
+  in [mthh/statsbreaks](https://github.com/mthh/statsbreaks).
+
+- Enable displaying population (rug plot) on the classification plot of the classification panel.
+
+- Improves the color of the box plot (especially when using the dark theme) in the classification panel.
+
+- Changed the links to the old version of Magrit in the documentation.
+
+
+
 #### 2.0.4 (2024-07-08)
 
 - Fix the topology of NUTS example datasets (partially fixes <a href="https://github.com/riatelab/magrit/issues/127">127</a>) and associated metadata.
