@@ -2,6 +2,16 @@
 
 <br />
 
+#### Unreleased (2024-07-xx)
+
+- Ajout d'une fonctionnalité permettant d'afficher la moyenne, la médiane et la population sur l'histogramme
+  affiché sur la carte pour les représentations choroplèthes.
+
+- Ajout de nouveaux jeux de données d'exemple par [@rysebaert](https://github.com/rysebaert) :
+  - Communes de France métropolitaine,
+  - Communes de France métropolitaine + DROM,
+  - Communes de France métropolitaine + DROM dans des encarts (pour permettre de représenter facilement France métropolitaine + DROM dans une même carte).
+
 #### 2.0.5 (2024-07-10)
 
 - Correction d'un bug avec la méthode de classification de la moyenne et de l'écart-type (lorsque la moyenne est demandée comme limite de classe). Correction en amont  dans [mthh/statsbreaks](https://github.com/mthh/statsbreaks).

@@ -2,6 +2,15 @@
 
 <br />
 
+#### Unreleased (2024-07-xx)
+
+- Add functionality to display the mean, median and population on the histogram displayed on the map for choropleth representations.
+
+- New example datasets added by [@rysebaert](https://github.com/rysebaert):
+  - Municipalities of Metropolitan France,
+  - Municipalities of Metropolitan France + overseas regions,
+  - Municipalities of Metropolitan France + overseas regions in inserts (to enable easy representation of mainland France + overseas regions in the same map).
+
 #### 2.0.5 (2024-07-10)
 
 - Fix bug with mean & standard deviation classification method (when the average is requested to be a class limit). Fixed upstream
