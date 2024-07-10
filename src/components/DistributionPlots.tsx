@@ -4,6 +4,7 @@ import type { Plot as PlotType } from '@observablehq/plot';
 
 // Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
+import { isDarkMode } from '../helpers/darkmode';
 
 // D3 and math helpers
 import d3 from '../helpers/d3-custom';
@@ -179,6 +180,9 @@ export function makeDistributionPlot(values: number[]): ((SVGSVGElement | HTMLEl
   const jitter = (data: number[]) => data
     .map(() => (-(Math.random() * rawDataSize + rawDataOffset) * maxTotal) / 100);
 
+  // Color for the border of the box plot
+  const colorStrokeBoxPlot = isDarkMode() ? 'whitesmoke' : 'black';
+
   // Graphical mark for the box plot
   const boxPlotX = [
     Plot.ruleX(
@@ -192,7 +196,7 @@ export function makeDistributionPlot(values: number[]): ((SVGSVGElement | HTMLEl
           y1: -boxPlotOffset - (boxPlotSize * maxTotal) / 100 / 2,
           y2: -boxPlotOffset + (boxPlotSize * maxTotal) / 100 / 2,
           strokeWidth: 3,
-          stroke: '#333333',
+          stroke: colorStrokeBoxPlot,
         },
       ),
     ),
@@ -207,7 +211,7 @@ export function makeDistributionPlot(values: number[]): ((SVGSVGElement | HTMLEl
           x: accessorFn,
           y1: -boxPlotOffset - (boxPlotSize * maxTotal) / 100 / 2,
           y2: -boxPlotOffset + (boxPlotSize * maxTotal) / 100 / 2,
-          stroke: '#333333',
+          stroke: colorStrokeBoxPlot,
           strokeWidth: 1.5,
         },
       ),
@@ -222,7 +226,7 @@ export function makeDistributionPlot(values: number[]): ((SVGSVGElement | HTMLEl
         {
           x: accessorFn,
           y: -boxPlotOffset,
-          stroke: '#333333',
+          stroke: colorStrokeBoxPlot,
           strokeWidth: 1.5,
         },
       ),
@@ -237,7 +241,7 @@ export function makeDistributionPlot(values: number[]): ((SVGSVGElement | HTMLEl
         {
           x: accessorFn,
           y: -boxPlotOffset,
-          stroke: '#333333',
+          stroke: colorStrokeBoxPlot,
           strokeWidth: 1.5,
         },
       ),
