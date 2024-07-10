@@ -17,7 +17,7 @@ D'autres éléments peuvent être paramétrés en fonction du type de représent
 La fenêtre obtenue dépend ainsi du type de carte à laquelle la légende est associée.
 
 <ZoomImg
-    src="./legend-settings-choropleth.png"
-    alt="Paramètre de la légende (carte choroplèthe)"
-    caption="Paramètre de la légende (carte choroplèthe)"
+    src="/legend-settings-choropleth.png"
+    alt="Paramètres de la légende (carte choroplèthe)"
+    caption="Paramètres de la légende (carte choroplèthe)"
 />

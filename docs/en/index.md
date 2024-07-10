@@ -12,7 +12,7 @@ hero:
       target: _self
     - theme: alt
       text: Access the user manual
-      link: /documentation
+      link: /en/documentation
     - theme: alt
       text: GitHub repository
       link: https://github.com/riatelab/magrit

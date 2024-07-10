@@ -1,9 +1,23 @@
 # Legend properties
 
-::: warning
+Each legend can be configured via its own window. To do this, you can :
 
-The english version of the documentation is currently under construction.
+- double-click on the legend,
+- right-click on the legend and select "Modify parameters...".
 
-Some parts are not yet translated and some translations may be incomplete or inaccurate.
+It is always possible to modify the following elements:
 
-:::
+- legend title / subtitle / notes,
+- font properties for different legend elements,
+- rounding of numerical values (if applicable),
+- display of a background rectangle for the legend.
+
+Other elements can be parameterized according to the type of map display (choice of vertical or horizontal layout, spacing between different modes, etc.).
+
+The resulting window thus depends on the type of map with which the legend is associated.
+
+<ZoomImg
+    src="/legend-settings-choropleth.png"
+    alt="Legend parameters (choropleth map)"
+    caption="Legend parameters (choropleth map)"
+/>

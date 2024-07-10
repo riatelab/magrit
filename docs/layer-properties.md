@@ -8,13 +8,13 @@ Pour cela, il suffit de cliquer sur le bouton en forme d'engrenage situé à dro
 La fenêtre obtenue dépend du type de représentation de la couche (symboles proportionnels, cartes choroplèthes, etc.).
 
 <ZoomImg
-    src="./layer-settings-default.png"
-    alt="Paramètre de la couche (représentation par défaut)"
-    caption="Paramètre de la couche (représentation par défaut)"
+    src="/layer-settings-default.png"
+    alt="Paramètres de la couche (représentation par défaut)"
+    caption="Paramètres de la couche (représentation par défaut)"
 />
 
 <ZoomImg
-    src="./layer-settings-choropleth.png"
-    alt="Paramètre de la couche (représentation choroplèthe)"
-    caption="Paramètre de la couche (représentation choroplèthe)"
+    src="/layer-settings-choropleth.png"
+    alt="Paramètres de la couche (représentation choroplèthe)"
+    caption="Paramètres de la couche (représentation choroplèthe)"
 />

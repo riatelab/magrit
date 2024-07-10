@@ -38,7 +38,7 @@ Après la création de la couche de liens, il est possible de filtrer les liens 
 <ZoomImg
     src="/link-selection.png"
     alt="Interface de configuration des liens après création de la couche"
-    title="Interface de configuration des liens après création de la couche"
+    caption="Interface de configuration des liens après création de la couche"
 />
 
 ## Exemple
@@ -46,5 +46,5 @@ Après la création de la couche de liens, il est possible de filtrer les liens 
 <ZoomImg
     src="/link-map.png"
     alt="Exemple de carte, après sélection de l'origine 'France' et distance inférieure à 1015 km"
-    title="Exemple de carte, après sélection de l'origine 'France' et distance inférieure à 1015 km"
+    caption="Exemple de carte, après sélection de l'origine 'France' et distance inférieure à 1015 km"
 />
