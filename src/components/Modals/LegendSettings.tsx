@@ -15,6 +15,7 @@ import { layersDescriptionStore, setLayersDescriptionStoreBase } from '../../sto
 
 // Helpers
 import { fonts, webSafeFonts } from '../../helpers/font';
+import { prepareStatisticalSummary } from '../../helpers/classification';
 import {
   ascending,
   capitalizeFirstLetter,
@@ -30,7 +31,11 @@ import type { TranslationFunctions } from '../../i18n/i18n-types';
 // Subcomponents
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
-import { InputFieldColorOpacity, InputFieldWidthColorOpacity } from '../Inputs/InputFieldColorOpacity.tsx';
+import {
+  InputFieldColorOpacity,
+  InputFieldColorWidth,
+  InputFieldWidthColorOpacity,
+} from '../Inputs/InputFieldColorOpacity.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
@@ -41,10 +46,10 @@ import {
   type CategoricalChoroplethLegend,
   type CategoricalPictogramLegend,
   type ChoroplethHistogramLegend,
-  type ChoroplethLegend,
+  type ChoroplethLegend, ClassificationParameters,
   DefaultLegend,
   type DiscontinuityLegend,
-  type LabelsLegend,
+  type LabelsLegend, LayerDescription,
   type LayerDescriptionCategoricalChoropleth,
   type LayerDescriptionChoropleth,
   type LayerDescriptionGriddedLayer,
@@ -954,6 +959,37 @@ function makeSettingsChoroplethHistogram(
     setDisplayMoreOptions,
   ] = createSignal<boolean>(false);
 
+  const refLayerId = legend.layerId;
+
+  const refLayerDescription = findLayerById(
+    layersDescriptionStore.layers,
+    refLayerId,
+  )!;
+
+  // The values that we are gonna use for the classification
+  function getClassificationParameters(layerDescription: LayerDescription) {
+    if (layerDescription.representationType === 'choropleth') {
+      return layerDescription.rendererParameters as ClassificationParameters;
+    }
+    if (
+      layerDescription.representationType === 'proportionalSymbols'
+      && (layerDescription as LayerDescriptionProportionalSymbols).rendererParameters.colorMode === 'ratioVariable'
+    ) {
+      return (layerDescription.rendererParameters as ProportionalSymbolsRatioParameters).color;
+    }
+    throw new Error('Invalid reference layer');
+  }
+
+  const classificationParameters = getClassificationParameters(refLayerDescription);
+
+  const filteredSeries = refLayerDescription.data.features
+    .map((d) => d.properties[classificationParameters.variable])
+    .filter((d) => isFiniteNumber(d))
+    .map((d) => +d);
+
+  // Basic statistical summary displayed to the user
+  const statSummary = prepareStatisticalSummary(filteredSeries);
+
   return <>
     <FieldText legend={legend} LL={LL} role={'title'}/>
     <FieldText legend={legend} LL={LL} role={'subtitle'}/>
@@ -982,6 +1018,94 @@ function makeSettingsChoroplethHistogram(
       max={30}
       step={1}
     />
+    <InputFieldCheckbox
+      label={LL().Legend.Modal.DisplayMean()}
+      checked={!!legend.meanOptions}
+      onChange={(v) => {
+        if (v) {
+          updateProps(legend.id, ['meanOptions'], { color: '#ff0000', width: 2, value: statSummary.mean });
+        } else {
+          updateProps(legend.id, ['meanOptions'], undefined);
+        }
+      }}
+    />
+    <Show when={!!legend.meanOptions}>
+      <InputFieldColorWidth
+        label={''}
+        valueColor={legend.meanOptions!.color}
+        valueWidth={legend.meanOptions!.width}
+        onChangeColor={(v) => { updateProps(legend.id, ['meanOptions', 'color'], v); }}
+        onChangeWidth={(v) => { updateProps(legend.id, ['meanOptions', 'width'], v); }}
+      />
+    </Show>
+    <InputFieldCheckbox
+      label={LL().Legend.Modal.DisplayMedian()}
+      checked={!!legend.medianOptions}
+      onChange={(v) => {
+        if (v) {
+          updateProps(legend.id, ['medianOptions'], { color: '#00ff00', width: 2, value: statSummary.median });
+        } else {
+          updateProps(legend.id, ['medianOptions'], undefined);
+        }
+      }}
+    />
+    <Show when={!!legend.medianOptions}>
+      <InputFieldColorWidth
+        label={''}
+        valueColor={legend.medianOptions!.color}
+        valueWidth={legend.medianOptions!.width}
+        onChangeColor={(v) => { updateProps(legend.id, ['medianOptions', 'color'], v); }}
+        onChangeWidth={(v) => { updateProps(legend.id, ['medianOptions', 'width'], v); }}
+      />
+    </Show>
+    <InputFieldCheckbox
+      label={LL().Legend.Modal.DisplayStdDev()}
+      checked={!!legend.stddevOptions}
+      onChange={(v) => {
+        if (v) {
+          updateProps(
+            legend.id,
+            ['stddevOptions'],
+            { color: '#ef54e4', width: 2, values: [-statSummary.standardDeviation, statSummary.standardDeviation] },
+          );
+        } else {
+          updateProps(legend.id, ['stddevOptions'], undefined);
+        }
+      }}
+    />
+    <Show when={!!legend.stddevOptions}>
+      <InputFieldColorWidth
+        label={''}
+        valueColor={legend.stddevOptions!.color}
+        valueWidth={legend.stddevOptions!.width}
+        onChangeColor={(v) => { updateProps(legend.id, ['stddevOptions', 'color'], v); }}
+        onChangeWidth={(v) => { updateProps(legend.id, ['stddevOptions', 'width'], v); }}
+      />
+    </Show>
+    <InputFieldCheckbox
+      label={LL().Legend.Modal.DisplayPopulation()}
+      checked={!!legend.populationOptions}
+      onChange={(v) => {
+        if (v) {
+          updateProps(
+            legend.id,
+            ['populationOptions'],
+            { color: '#fe0000', width: 1, series: filteredSeries },
+          );
+        } else {
+          updateProps(legend.id, ['populationOptions'], undefined);
+        }
+      }}
+    />
+    <Show when={!!legend.populationOptions}>
+      <InputFieldColorWidth
+        label={''}
+        valueColor={legend.populationOptions!.color}
+        valueWidth={legend.populationOptions!.width}
+        onChangeColor={(v) => { updateProps(legend.id, ['populationOptions', 'color'], v); }}
+        onChangeWidth={(v) => { updateProps(legend.id, ['populationOptions', 'width'], v); }}
+      />
+    </Show>
     <OptionBackgroundRectangle legend={legend} LL={LL}/>
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}

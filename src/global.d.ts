@@ -939,6 +939,29 @@ interface ChoroplethHistogramLegend extends LegendBase {
   roundDecimals: number,
   // The properties of the text in the chart axis
   axis: LegendTextElement,
+  // Should we display the mean
+  meanOptions?: {
+    color: string,
+    width: number,
+    value: number,
+  },
+  // Should we display the median
+  medianOptions?: {
+    color: string,
+    width: number,
+    value: number,
+  },
+  // Should we display standard deviation bars
+  stddevOptions?: {
+    color: string,
+    width: number,
+    values: [number, number],
+  },
+  // Should we display the population (as a rug plot)
+  populationOptions?: {
+    color: string,
+    width: number,
+  },
 }
 
 interface CategoricalChoroplethBarchartLegend extends LegendBase {

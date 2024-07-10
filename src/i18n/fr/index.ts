@@ -1117,6 +1117,10 @@ const fr = {
       DotColor: 'Couleur des points',
       RegressionLineColor: 'Couleur de la ligne de régression',
       LegendContent: 'Contenu de la légende',
+      DisplayMean: 'Afficher la moyenne',
+      DisplayMedian: 'Afficher la médiane',
+      DisplayStdDev: 'Afficher l\'écart-type',
+      DisplayPopulation: 'Afficher la population',
     },
   },
   CommonTextElement: {

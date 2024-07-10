@@ -1117,6 +1117,10 @@ const en = {
       DotColor: 'Dot color',
       RegressionLineColor: 'Regression line color',
       LegendContent: 'Legend content',
+      DisplayMean: 'Display mean',
+      DisplayMedian: 'Display median',
+      DisplayStdDev: 'Display standard deviation',
+      DisplayPopulation: 'Display population',
     },
   },
   CommonTextElement: {

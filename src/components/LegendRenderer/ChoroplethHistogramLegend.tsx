@@ -8,6 +8,7 @@ import {
 
 // Import from other libraries
 import * as Plot from '@observablehq/plot';
+import type { PlotOptions } from '@observablehq/plot';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -39,6 +40,11 @@ import {
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
+interface AdditionalElementOptions {
+  color: string,
+  width: number,
+}
+
 function ChoroplethHistogram(
   props: {
     classification: ClassificationParameters,
@@ -46,6 +52,10 @@ function ChoroplethHistogram(
     width: number,
     roundDecimals: number,
     textProperties: LegendTextElement,
+    meanOptions?: AdditionalElementOptions & { value: number },
+    medianOptions?: AdditionalElementOptions & { value: number },
+    stddevOptions?: AdditionalElementOptions & { values: [number, number] },
+    populationOptions?: AdditionalElementOptions & { series: number[] },
   },
 ): JSX.Element {
   const minmax = [
@@ -119,10 +129,37 @@ function ChoroplethHistogram(
           y: (d) => d.y,
           fill: (d) => d.color,
         }),
+        props.meanOptions
+          ? Plot.ruleX(
+            [props.meanOptions.value],
+            { stroke: props.meanOptions.color, strokeWidth: props.meanOptions.width },
+          )
+          : null,
+        props.medianOptions
+          ? Plot.ruleX(
+            [props.medianOptions.value],
+            { stroke: props.medianOptions.color, strokeWidth: props.medianOptions.width },
+          )
+          : null,
+        props.stddevOptions
+          ? Plot.ruleX(
+            props.stddevOptions.values[0],
+            { stroke: props.stddevOptions.color, strokeWidth: props.stddevOptions.width },
+          )
+          : null,
+        props.populationOptions
+          ? Plot.ruleX(props.populationOptions.series, {
+            x: (d) => d - 0.5,
+            y1: 0,
+            y2: 7.5,
+            stroke: props.populationOptions.color,
+            width: 1,
+          })
+          // Plot.ruleX([minmax[0]]),
+          : null,
         Plot.ruleY([0]),
-        // Plot.ruleX([minmax[0]]),
       ],
-    }) as SVGSVGElement
+    } as PlotOptions) as SVGSVGElement
   }</>;
 }
 
@@ -211,6 +248,10 @@ export default function legendChoroplethHistogram(
         width={legend.width}
         height={legend.height}
         roundDecimals={legend.roundDecimals}
+        meanOptions={legend.meanOptions}
+        medianOptions={legend.medianOptions}
+        stddevOptions={legend.stddevOptions}
+        populationOptions={legend.populationOptions}
         // textProperties={legend.axes}
       />
     </g>

@@ -3947,6 +3947,22 @@ type RootTranslation = {
 			 * L​e​g​e​n​d​ ​c​o​n​t​e​n​t
 			 */
 			LegendContent: string
+			/**
+			 * D​i​s​p​l​a​y​ ​m​e​a​n
+			 */
+			DisplayMean: string
+			/**
+			 * D​i​s​p​l​a​y​ ​m​e​d​i​a​n
+			 */
+			DisplayMedian: string
+			/**
+			 * D​i​s​p​l​a​y​ ​s​t​a​n​d​a​r​d​ ​d​e​v​i​a​t​i​o​n
+			 */
+			DisplayStdDev: string
+			/**
+			 * D​i​s​p​l​a​y​ ​p​o​p​u​l​a​t​i​o​n
+			 */
+			DisplayPopulation: string
 		}
 	}
 	CommonTextElement: {
@@ -7883,6 +7899,22 @@ export type TranslationFunctions = {
 			 * Legend content
 			 */
 			LegendContent: () => LocalizedString
+			/**
+			 * Display mean
+			 */
+			DisplayMean: () => LocalizedString
+			/**
+			 * Display median
+			 */
+			DisplayMedian: () => LocalizedString
+			/**
+			 * Display standard deviation
+			 */
+			DisplayStdDev: () => LocalizedString
+			/**
+			 * Display population
+			 */
+			DisplayPopulation: () => LocalizedString
 		}
 	}
 	CommonTextElement: {
