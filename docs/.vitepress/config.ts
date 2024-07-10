@@ -58,6 +58,7 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
     { text: 'Historique des changements', link: '/changelog' },
     { text: 'Licences', link: '/licenses' },
     { text: 'L\'équipe de Magrit', link: '/team' },
+    { text: 'Nous contacter', link: '/contact-us' },
   ];
 }
 
@@ -118,6 +119,7 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
     { text: 'Changelog', link: '/en/changelog' },
     { text: 'Licenses', link: '/en/licenses' },
     { text: 'Team', link: '/en/team' },
+    { text: 'Contact us', link: '/en/contact-us' },
   ];
 }
 
