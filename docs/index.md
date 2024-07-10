@@ -60,7 +60,7 @@ features:
 
 ::: danger Information
 
-L'ancienne version de Magrit reste disponible à l'adresse suivante : <a target="_self" href="https://magrit.cnrs.fr/v1/">https://magrit.cnrs.fr/v1/</a>.
+L'ancienne version de Magrit reste disponible à l'adresse suivante : <a target="_self" href="http://magrit.cnrs.fr:9999/">http://magrit.cnrs.fr:9999/</a>.
 
 Elle ne bénéficie plus de mises à jour et a vocation à être mise hors service à terme.
 

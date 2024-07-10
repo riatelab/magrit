@@ -37,4 +37,4 @@ Une procédure de mise à jour automatique sera proposée dans une prochaine ver
 
 La v1 de Magrit a été disponible de 2017 à juillet 2024 à l'URL [https://magrit.cnrs.fr/](https://magrit.cnrs.fr/).
 
-À compter du 04 juillet 2024, cette version n'est plus maintenue mais reste accessible en ligne, pour une durée indéterminée, à l'adresse [https://magrit.cnrs.fr/v1/](https://magrit.cnrs.fr/v1/).
+À compter du 04 juillet 2024, cette version n'est plus maintenue mais reste accessible en ligne, pour une durée indéterminée, à l'adresse <a target="_self" href="http://magrit.cnrs.fr:9999/">http://magrit.cnrs.fr:9999/</a>.
