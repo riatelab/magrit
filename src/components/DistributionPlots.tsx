@@ -67,6 +67,7 @@ export function makeColoredBucketPlot(
 
 export function makeClassificationPlot(
   classifParam: ClassificationParameters,
+  series: number[],
   statSummary: {
     median: number;
     mean: number;
@@ -79,6 +80,7 @@ export function makeClassificationPlot(
     mean: boolean,
     median: boolean,
     sd: boolean,
+    rug: boolean,
   },
 ): ((SVGSVGElement | HTMLElement) & PlotType) {
   const { LL } = useI18nContext();
@@ -146,8 +148,17 @@ export function makeClassificationPlot(
       show.sd
         ? Plot.ruleX([statSummary.mean - statSummary.standardDeviation, statSummary.mean + statSummary.standardDeviation], { stroke: 'grey', strokeWidth: 2.5 })
         : null,
+      show.rug
+        ? Plot.ruleX(series, {
+          x: (d) => d - 0.5,
+          y1: 0,
+          y2: 10,
+          stroke: 'red',
+          width: 1,
+        })
+        : null,
       Plot.ruleY([0]),
-      Plot.ruleX([minmax[0]]),
+      // Plot.ruleX([minmax[0] - 1.5]),
     ],
   });
 }

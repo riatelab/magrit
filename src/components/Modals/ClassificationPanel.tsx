@@ -266,10 +266,11 @@ export default function ClassificationPanel(): JSX.Element {
   const [
     classificationPlotOption,
     setClassificationPlotOption,
-  ] = createSignal<{ median: boolean, mean: boolean, sd: boolean }>({
+  ] = createSignal<{ median: boolean, mean: boolean, sd: boolean, rug: boolean }>({
     median: false,
     mean: false,
     sd: false,
+    rug: false,
   });
 
   let refParentNode: HTMLDivElement;
@@ -583,6 +584,7 @@ export default function ClassificationPanel(): JSX.Element {
                   {
                     makeClassificationPlot(
                       currentBreaksInfo(),
+                      filteredSeries,
                       statSummary,
                       classificationPlotOption(),
                     )
@@ -592,6 +594,22 @@ export default function ClassificationPanel(): JSX.Element {
                   {makeColoredBucketPlot(currentBreaksInfo())}
                 </div>
                 <div class="is-flex is-flex-direction-row is-justify-content-space-around mt-2">
+                  <div class="control">
+                    <label class="label">
+                      <input
+                        style={{ 'vertical-align': 'text-bottom' }}
+                        type="checkbox"
+                        checked={classificationPlotOption().rug}
+                        onChange={(e) => {
+                          setClassificationPlotOption({
+                            ...classificationPlotOption(),
+                            rug: e.target.checked,
+                          });
+                        }}
+                      />
+                      {LL().ClassificationPanel.displayPopulation()}
+                    </label>
+                  </div>
                   <div class="control">
                     <label class="label">
                       <input
