@@ -184,7 +184,7 @@ export default function DiscontinuitySettings(
   const [
     discontinuityType,
     setDiscontinuityType,
-  ] = createSignal<'absolute' | 'relative'>('absolute');
+  ] = createSignal<'absolute' | 'relative'>('relative');
   const [
     selectedColor,
     setSelectedColor,
