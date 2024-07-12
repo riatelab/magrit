@@ -2,7 +2,7 @@
 
 <br />
 
-#### Unreleased (2024-07-xx)
+#### 2.0.6 (2024-07-12)
 
 - Add functionality to display the mean, median and population on the histogram displayed on the map for choropleth representations.
 

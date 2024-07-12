@@ -2,7 +2,7 @@
 
 <br />
 
-#### Unreleased (2024-07-xx)
+#### 2.0.6 (2024-07-12)
 
 - Ajout d'une fonctionnalité permettant d'afficher la moyenne, la médiane et la population sur l'histogramme
   affiché sur la carte pour les représentations choroplèthes.
