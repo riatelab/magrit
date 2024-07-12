@@ -143,7 +143,7 @@ function ChoroplethHistogram(
           : null,
         props.stddevOptions
           ? Plot.ruleX(
-            props.stddevOptions.values[0],
+            props.stddevOptions.values,
             { stroke: props.stddevOptions.color, strokeWidth: props.stddevOptions.width },
           )
           : null,

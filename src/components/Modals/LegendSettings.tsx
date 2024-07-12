@@ -1073,7 +1073,10 @@ function makeSettingsChoroplethHistogram(
             {
               color: '#ef54e4',
               width: 2,
-              values: [-statSummary.standardDeviation, statSummary.standardDeviation],
+              values: [
+                statSummary.mean - statSummary.standardDeviation,
+                statSummary.mean + statSummary.standardDeviation,
+              ],
             },
           );
         } else {

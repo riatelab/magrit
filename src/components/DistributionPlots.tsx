@@ -152,7 +152,7 @@ export function makeClassificationPlot(
         ? Plot.ruleX(series, {
           x: (d) => d,
           y1: 0,
-          y2: 10,
+          y2: 7.5,
           stroke: 'red',
           width: 1,
         })
