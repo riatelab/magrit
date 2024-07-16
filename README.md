@@ -8,6 +8,8 @@
 
 ![GitHub Release](https://img.shields.io/github/v/release/riatelab/magrit?style=for-the-badge&color=00d1b2)
 
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9208/badge)](https://www.bestpractices.dev/projects/9208)
+
 ## Basics
 
 - Magrit is a web application for thematic mapping (*cartography*).
