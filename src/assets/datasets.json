@@ -820,7 +820,7 @@
         "provenance": 1
       },
       {
-        "name": "BV2020",
+        "name": "BV2022",
         "dataType": "string",
         "type": "categorical",
         "hasMissingValue": false,
@@ -916,7 +916,7 @@
         "provenance": 1
       },
       {
-        "name": "BV2020",
+        "name": "BV2022",
         "dataType": "string",
         "type": "categorical",
         "hasMissingValue": false,
@@ -1012,7 +1012,7 @@
         "provenance": 1
       },
       {
-        "name": "BV2020",
+        "name": "BV2022",
         "dataType": "string",
         "type": "categorical",
         "hasMissingValue": false,

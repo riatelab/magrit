@@ -265,7 +265,7 @@ type RootTranslation = {
 				/**
 				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
 				 */
-				BV2020: string
+				BV2022: string
 			}
 			/**
 			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​m​e​t​r​o​p​o​l​i​t​a​n​ ​a​r​e​a​s
@@ -331,7 +331,7 @@ type RootTranslation = {
 				/**
 				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
 				 */
-				BV2020: string
+				BV2022: string
 			}
 			/**
 			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​m​e​t​r​o​p​o​l​i​t​a​n​ ​a​r​e​a​s
@@ -397,7 +397,7 @@ type RootTranslation = {
 				/**
 				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
 				 */
-				BV2020: string
+				BV2022: string
 			}
 			/**
 			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​t​e​m​p​l​a​t​e
@@ -4416,7 +4416,7 @@ export type TranslationFunctions = {
 				/**
 				 * Life basin of belonging
 				 */
-				BV2020: () => LocalizedString
+				BV2022: () => LocalizedString
 			}
 			/**
 			 * France, communes, municipalities, metropolitan areas
@@ -4482,7 +4482,7 @@ export type TranslationFunctions = {
 				/**
 				 * Life basin of belonging
 				 */
-				BV2020: () => LocalizedString
+				BV2022: () => LocalizedString
 			}
 			/**
 			 * France, communes, municipalities, metropolitan areas
@@ -4548,7 +4548,7 @@ export type TranslationFunctions = {
 				/**
 				 * Life basin of belonging
 				 */
-				BV2020: () => LocalizedString
+				BV2022: () => LocalizedString
 			}
 			/**
 			 * France, communes, municipalities, template
