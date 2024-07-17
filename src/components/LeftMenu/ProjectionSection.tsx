@@ -21,6 +21,7 @@ import { setModalStore } from '../../store/ModalStore';
 import { onClickDropdown, onKeyDownDropdown, setDropdownItemTarget } from '../DropdownMenu.tsx';
 import InputFieldRangeSlider from '../Inputs/InputRangeSlider.tsx';
 import ProjectionSelection from '../Modals/ProjectionSelection.tsx';
+import InputFieldNumberSlider from '../Inputs/InputNumberSlider.tsx';
 
 function onChangeProjectionEntry(
   entry: { name: string, value: string, type: string },
@@ -229,7 +230,7 @@ export default function ProjectionSection(): JSX.Element {
     </div>
     <Show when={globalStore.projection && mapStore.projection.type === 'd3'}>
       {/* <DetailsSummary summaryContent={LL().MapConfiguration.ShowProjectionParameters()}> */}
-        <InputFieldRangeSlider
+        <InputFieldNumberSlider
           label={LL().MapConfiguration.ProjectionCenterLambda()}
           value={mapStore.rotate[0]}
           onChange={(v) => {
@@ -237,9 +238,9 @@ export default function ProjectionSection(): JSX.Element {
           }}
           min={-180}
           max={180}
-          step={1}
+          step={0.1}
         />
-        <InputFieldRangeSlider
+        <InputFieldNumberSlider
           label={LL().MapConfiguration.ProjectionCenterPhi()}
           value={mapStore.rotate[1]}
           onChange={(v) => {
@@ -247,9 +248,9 @@ export default function ProjectionSection(): JSX.Element {
           }}
           min={-180}
           max={180}
-          step={1}
+          step={0.1}
         />
-        <InputFieldRangeSlider
+        <InputFieldNumberSlider
           label={LL().MapConfiguration.ProjectionCenterGamma()}
           value={mapStore.rotate[2]}
           onChange={(v) => {
@@ -257,10 +258,10 @@ export default function ProjectionSection(): JSX.Element {
           }}
           min={-180}
           max={180}
-          step={1}
+          step={0.1}
         />
         <Show when={hasParallel()}>
-          <InputFieldRangeSlider
+          <InputFieldNumberSlider
             label={LL().MapConfiguration.StandardParallel()}
             value={mapStore.parallel || globalStore.projection.parallel()}
             onChange={(v) => {
@@ -268,11 +269,11 @@ export default function ProjectionSection(): JSX.Element {
             }}
             min={-90}
             max={90}
-            step={1}
+            step={0.1}
           />
         </Show>
         <Show when={hasParallels()}>
-          <InputFieldRangeSlider
+          <InputFieldNumberSlider
             label={LL().MapConfiguration.StandardParallels()}
             value={mapStore.parallels || globalStore.projection.parallels()}
             onChange={(v) => {
@@ -280,7 +281,7 @@ export default function ProjectionSection(): JSX.Element {
             }}
             min={-90}
             max={90}
-            step={1}
+            step={0.1}
           />
         </Show>
       {/* </DetailsSummary> */}
