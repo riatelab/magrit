@@ -81,7 +81,8 @@ const formatCurrentProjection = (
   type: string,
   name: string,
   code: string | undefined,
-) => (type === 'd3' ? camelToFlat(name) : `${name} (${code})`);
+  // eslint-disable-next-line no-nested-ternary
+) => (type === 'd3' ? camelToFlat(name) : code ? `${name} (${code})` : name);
 
 export default function ProjectionSection(): JSX.Element {
   const { LL } = useI18nContext();

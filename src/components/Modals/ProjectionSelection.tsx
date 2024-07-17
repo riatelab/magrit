@@ -8,14 +8,17 @@ import {
 // Imports from other external libraries
 import { BsMap } from 'solid-icons/bs';
 import { FiExternalLink } from 'solid-icons/fi';
-import { HiOutlineGlobeAlt } from 'solid-icons/hi';
+import { HiOutlineGlobeAlt, HiSolidDocumentText } from 'solid-icons/hi';
 
 // Helpers
 import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { camelToFlat, isFiniteNumber } from '../../helpers/common';
 import { round } from '../../helpers/math';
-import { epsgDb, type EpsgDbEntryType, removeNadGrids } from '../../helpers/projection';
+import {
+  epsgDb, type EpsgDbEntryType,
+  getProjection, removeNadGrids,
+} from '../../helpers/projection';
 import rewindLayer from '../../helpers/rewind';
 import topojson from '../../helpers/topojson';
 import worldLand from '../../helpers/world-land';
@@ -30,6 +33,7 @@ import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
 import type { GeoJSONFeatureCollection, ScoredResult } from '../../global.d';
+import InputFieldTextarea from '../Inputs/InputTextarea.tsx';
 
 const worldLandGeo = rewindLayer(
   topojson.feature(
@@ -248,13 +252,13 @@ export default function ProjectionSelection() : JSX.Element {
   const [
     currentTab,
     setCurrentTab,
-  ] = createSignal<'d3' | 'custom'>('d3');
+  ] = createSignal<'d3' | 'epsg' | 'custom-string'>('d3');
   // Signals for "d3" tab
   const [
     selectedGlobalProjection,
     setSelectedGlobalProjection,
   ] = createSignal<string>('Airy');
-  // Signals for "custom" tab
+  // Signals for "epsg" tab
   const [
     matchingProjections,
     setMatchingProjections,
@@ -263,20 +267,63 @@ export default function ProjectionSelection() : JSX.Element {
     selectedProjection,
     setSelectedProjection,
   ] = createSignal<EpsgDbEntryType | null>(null);
+  // Signals for "custom-string" tab
+  const [
+    customProjectionString,
+    setCustomProjectionString,
+  ] = createSignal<string>('');
+  const [
+    customProjectionName,
+    setCustomProjectionName,
+  ] = createSignal<string>('');
+  const [
+    customProjectionIsValid,
+    setCustomProjectionIsValid,
+  ] = createSignal<boolean>(false);
+
+  createEffect(
+    on(
+      () => [customProjectionString()],
+      () => {
+        if (customProjectionString().trim() === '') {
+          setCustomProjectionIsValid(false);
+          return;
+        }
+        try {
+          getProjection(customProjectionString());
+          setCustomProjectionIsValid(true);
+        } catch (e) {
+          setCustomProjectionIsValid(false);
+        }
+      },
+    ),
+  );
 
   return <div class="projection-selection" style={{ height: 'max(42vh, 500px)' }}>
     <div class="tabs is-boxed">
       <ul style={{ margin: 0 }}>
         <li classList={{ 'is-active': currentTab() === 'd3' }}>
-          <a onClick={() => { setCurrentTab('d3'); }}>
-            <span class="icon is-small"><HiOutlineGlobeAlt /></span>
+          <a onClick={() => {
+            setCurrentTab('d3');
+          }}>
+            <span class="icon is-small"><HiOutlineGlobeAlt/></span>
             <span>{LL().ProjectionSelection.GlobalProjection()}</span>
           </a>
         </li>
-        <li classList={{ 'is-active': currentTab() === 'custom' }}>
-          <a onClick={() => { setCurrentTab('custom'); }}>
+        <li classList={{ 'is-active': currentTab() === 'epsg' }}>
+          <a onClick={() => {
+            setCurrentTab('epsg');
+          }}>
             <span class="icon is-small"><BsMap/></span>
             <span>{LL().ProjectionSelection.LocalProjection()}</span>
+          </a>
+        </li>
+        <li classList={{ 'is-active': currentTab() === 'custom-string' }}>
+          <a onClick={() => {
+            setCurrentTab('custom-string');
+          }}>
+            <span class="icon is-small"><HiSolidDocumentText /></span>
+            <span>{LL().ProjectionSelection.CustomString()}</span>
           </a>
         </li>
       </ul>
@@ -317,7 +364,7 @@ export default function ProjectionSelection() : JSX.Element {
         </Show>
       </div>
       <div class="projection-selection__content-local">
-        <Show when={currentTab() === 'custom'}>
+        <Show when={currentTab() === 'epsg'}>
           <MessageBlock type={'info'}>
             {LL().ProjectionSelection.InformationLocalProjection()}
           </MessageBlock>
@@ -428,6 +475,57 @@ export default function ProjectionSelection() : JSX.Element {
                 </div>
               </Show>
             </div>
+          </div>
+        </Show>
+      </div>
+      <div class="projection-selection__content-custom-string">
+        <Show when={currentTab() === 'custom-string'}>
+          <MessageBlock type={'info'}>
+            {LL().ProjectionSelection.InformationCustomString()}
+          </MessageBlock>
+          <InputFieldText
+            label={LL().ProjectionSelection.ProjectionName()}
+            value={customProjectionName()}
+            onChange={(value) => { setCustomProjectionName(value); }}
+            placeholder={LL().ProjectionSelection.ProjectionNamePlaceholder()}
+            bindKeyUpAsChange={true}
+            width={300}
+          />
+          <InputFieldTextarea
+            label={LL().ProjectionSelection.ProjectionString()}
+            value={customProjectionString()}
+            onChange={(value) => { setCustomProjectionString(value); }}
+            bindKeyUpAsChange={true}
+          />
+          <Show when={customProjectionString() !== '' && !customProjectionIsValid()}>
+            <MessageBlock type={'danger'}>
+              {LL().ProjectionSelection.InvalidProjectionString()}
+            </MessageBlock>
+          </Show>
+          <Show when={customProjectionString() !== '' && customProjectionIsValid()}>
+            <MessageBlock type={'success'}>
+              {LL().ProjectionSelection.ValidProjectionString()}
+            </MessageBlock>
+          </Show>
+          <div style={{ 'text-align': 'center' }}>
+            <button
+              class="button"
+              onClick={() => {
+                setMapStore(
+                  'projection',
+                  {
+                    type: 'proj4',
+                    name: customProjectionName(),
+                    value: removeNadGrids(customProjectionString()),
+                    bounds: null,
+                    code: null,
+                  },
+                );
+              }}
+              disabled={!(customProjectionName().trim() !== '' && customProjectionIsValid())}
+            >
+              {LL().ApplyButton()}
+            </button>
           </div>
         </Show>
       </div>

@@ -3368,6 +3368,14 @@ type RootTranslation = {
 		 */
 		InformationLocalProjection: string
 		/**
+		 * M​a​n​u​a​l​ ​e​n​t​r​y​ ​o​f​ ​p​r​o​j​4​ ​o​r​ ​W​K​T​ ​s​t​r​i​n​g
+		 */
+		CustomString: string
+		/**
+		 * T​h​e​ ​p​r​o​j​4​ ​a​n​d​ ​W​K​T​ ​f​o​r​m​a​l​i​s​m​s​ ​a​l​l​o​w​ ​y​o​u​ ​t​o​ ​s​p​e​c​i​f​y​ ​a​ ​c​a​r​t​o​g​r​a​p​h​i​c​ ​p​r​o​j​e​c​t​i​o​n​ ​p​r​e​c​i​s​e​l​y​.​ ​I​f​ ​y​o​u​ ​h​a​v​e​ ​a​ ​p​r​o​j​4​ ​o​r​ ​W​K​T​ ​s​t​r​i​n​g​,​ ​y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​i​t​ ​b​e​l​o​w​.
+		 */
+		InformationCustomString: string
+		/**
 		 * E​n​t​e​r​ ​a​n​ ​E​P​S​G​ ​c​o​d​e​ ​o​r​ ​a​ ​p​r​o​j​e​c​t​i​o​n​ ​n​a​m​e
 		 */
 		SearchProjection: string
@@ -3411,6 +3419,26 @@ type RootTranslation = {
 		 * M​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n
 		 */
 		MoreInformation: string
+		/**
+		 * D​e​f​i​n​i​t​i​o​n​ ​o​f​ ​t​h​e​ ​p​r​o​j​e​c​t​i​o​n
+		 */
+		ProjectionString: string
+		/**
+		 * P​r​o​j​e​c​t​i​o​n​ ​n​a​m​e
+		 */
+		ProjectionName: string
+		/**
+		 * E​n​t​e​r​ ​a​ ​n​a​m​e​ ​f​o​r​ ​t​h​e​ ​n​e​w​ ​p​r​o​j​e​c​t​i​o​n
+		 */
+		ProjectionNamePlaceholder: string
+		/**
+		 * I​n​v​a​l​i​d​ ​d​e​f​i​n​i​t​i​o​n​ ​(​p​l​e​a​s​e​ ​n​o​t​e​ ​t​h​a​t​ ​o​n​l​y​ ​p​r​o​j​4​ ​a​n​d​ ​W​K​T​1​ ​d​e​f​i​n​i​t​i​o​n​s​ ​a​r​e​ ​c​u​r​r​e​n​t​l​y​ ​s​u​p​p​o​r​t​e​d​)
+		 */
+		InvalidProjectionString: string
+		/**
+		 * V​a​l​i​d​ ​d​e​f​i​n​i​t​i​o​n​ ​-​ ​y​o​u​ ​c​a​n​ ​a​p​p​l​y​ ​i​t​ ​u​s​i​n​g​ ​t​h​e​ ​b​u​t​t​o​n​ ​j​u​s​t​ ​b​e​l​o​w
+		 */
+		ValidProjectionString: string
 	}
 	ImageSymbolSelection: {
 		/**
@@ -7483,6 +7511,14 @@ export type TranslationFunctions = {
 		 */
 		InformationLocalProjection: () => LocalizedString
 		/**
+		 * Manual entry of proj4 or WKT string
+		 */
+		CustomString: () => LocalizedString
+		/**
+		 * The proj4 and WKT formalisms allow you to specify a cartographic projection precisely. If you have a proj4 or WKT string, you can enter it below.
+		 */
+		InformationCustomString: () => LocalizedString
+		/**
 		 * Enter an EPSG code or a projection name
 		 */
 		SearchProjection: () => LocalizedString
@@ -7526,6 +7562,26 @@ export type TranslationFunctions = {
 		 * More information
 		 */
 		MoreInformation: () => LocalizedString
+		/**
+		 * Definition of the projection
+		 */
+		ProjectionString: () => LocalizedString
+		/**
+		 * Projection name
+		 */
+		ProjectionName: () => LocalizedString
+		/**
+		 * Enter a name for the new projection
+		 */
+		ProjectionNamePlaceholder: () => LocalizedString
+		/**
+		 * Invalid definition (please note that only proj4 and WKT1 definitions are currently supported)
+		 */
+		InvalidProjectionString: () => LocalizedString
+		/**
+		 * Valid definition - you can apply it using the button just below
+		 */
+		ValidProjectionString: () => LocalizedString
 	}
 	ImageSymbolSelection: {
 		/**
