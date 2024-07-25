@@ -26,9 +26,27 @@ The options offered are as follows:
 
 It is possible to choose the default language for number formatting in the application.
 
+This enables to choose if a number (such as 12345.67) should be formatted as:
+
+- `en-US` : 12,345.67
+- `fr-FR` : 12 345,67
+- `de-DE` : 12.345,67
+- `es-ES` : 12.345,67
+- `ar-EG` : ١٢٬٣٤٥٫٦٧
+- etc.
+
 ### Alignment grid color
+
+It is possible to choose the color of the alignment grid to help position elements on the map.
+
+This grid can be displayed in the [“Layout features”](./layout-features) section of the application's left-hand side menu.
 
 ### Default options for legends and graphs
 
+Default settings can be selected for text elements, captions and graphics.
+
+For each type of element (title, subtitle, notes, labels), the user can choose font, size, style, color and alignment.
+
 ### Default color for no-data values
 
+It is possible to choose the default color for entities without data (this is used in choropleth and categorical choropleth maps).

@@ -26,8 +26,28 @@ Les options proposées sont les suivantes :
 
 Il est possible de choisir la langue par défaut pour le formatage des nombres dans l'application.
 
+Cela permet de choisir si un nombre (tel que 12345.67) doit être formaté :
+
+- `en-US` : 12,345.67
+- `fr-FR` : 12 345,67
+- `de-DE` : 12.345,67
+- `es-ES` : 12.345,67
+- `ar-EG` : ١٢٬٣٤٥٫٦٧
+- etc.
+
 ### Couleur de la grille d'alignement
+
+Il est possible de choisir la couleur de la grille d'alignement qui a pour but d'aider à positionner les éléments sur la carte.
+
+Cette grille peut-être affichée dans la section ["Mise en page et éléments d'habillage"](./layout-features) du menu latéral gauche de l'application.
 
 ### Options par défault pour les légendes et graphiques
 
+Il est possible de choisir les paramètres par défaut des éléments textuels des légendes et graphiques.
+
+Pour chaque type d'élément (titre, sous-titre, notes, étiquettes), il est possible de choisir la police, la taille, le style, la couleur et l'alignement.
+
 ### Couleur par défaut pour les entités sans données
+
+Il est possible de choisir la couleur par défaut pour les entités sans données (utilisée dans les cartes choroplèthes et choroplèthes catégorielles).
+
