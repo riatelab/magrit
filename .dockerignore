@@ -1,9 +1,5 @@
 .git
-.pytest_cache
 build
 dist
-misc
+release
 tests
-venv*
-*.egg-info
-**/*.so
