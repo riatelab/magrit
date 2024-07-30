@@ -53,7 +53,7 @@
         "mapping",
         "geography"
     ],
-    "license": "https://spdx.org/licenses/GPL-3.0",
+    "license": "https://spdx.org/licenses/GPL-3.0-or-later",
     "name": "Magrit",
     "relatedLink": "https://magrit.cnrs.fr/",
     "developmentStatus": "active",
