@@ -2,8 +2,8 @@ name: Build the Electron version of Magrit
 
 on:
   push:
-#    tags:
-#      - '*'
+    tags:
+      - "v*.*.*"
     branches:
       - dev
 
@@ -42,18 +42,27 @@ jobs:
         id: get_version
         run: echo "::set-output name=version::$(node -p -e "require('./package.json').version")"
 
-      - name: Upload artifacts
+      - name: Upload .exe artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: linux-windows-build
-          path: release/${{ steps.get_version.outputs.version }}/*.{exe,AppImage}
+          name: windows-build
+          path: release/${{ steps.get_version.outputs.version }}/*.exe
 
-#      - name: Upload Linux and Windows Artifacts to Release
-#        uses: softprops/action-gh-release@v1
-#        with:
-#          files: release/${{ steps.get_version.outputs.version }}/*.{exe,AppImage}
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload .AppImage artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-build
+          path: release/${{ steps.get_version.outputs.version }}/*.AppImage
+
+      - name: Upload Artifacts to Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            release/${{ steps.get_version.outputs.version }}/Magrit-Windows-${{ steps.get_version.outputs.version }}-portable.exe
+            release/${{ steps.get_version.outputs.version }}/Magrit-Linux-${{ steps.get_version.outputs.version }}.AppImage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-macos:
     runs-on: macos-latest
@@ -89,9 +98,10 @@ jobs:
           name: macos-build
           path: release/${{ steps.get_version.outputs.version }}/*.dmg
 
-#      - name: Upload macOS Artifacts to Release
-#        uses: softprops/action-gh-release@v1
-#        with:
-#          files: release/${{ steps.get_version.outputs.version }}/*.dmg
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload macOS Artifacts to Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: release/${{ steps.get_version.outputs.version }}/Magrit-Mac-${{ steps.get_version.outputs.version }}-Installer.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
