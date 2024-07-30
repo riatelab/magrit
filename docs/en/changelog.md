@@ -2,6 +2,14 @@
 
 <br />
 
+#### 2.0.7 (unreleased)
+
+- Reintroduce the publishing of an image on the Docker Hub with each new release.
+
+- Add the ability to define a custom projection via a WKT or proj4 chain (Fix <a href=“https://github.com/riatelab/magrit/issues/133”>133</a>).
+
+- Enhance components for modifying projection axis parameters (to enable more precise input of values).
+
 #### 2.0.6 (2024-07-12)
 
 - Add functionality to display the mean, median and population on the histogram displayed on the map for choropleth representations.

@@ -2,6 +2,15 @@
 
 <br />
 
+#### 2.0.7 (unreleased)
+
+- Réintroduction de la publication d'une image sur le Docker Hub à chaque nouvelle version.
+
+- Ajout de la possibilité de définir une projection personnalisée via une chaîne WKT ou proj4
+  (Corrige <a href="https://github.com/riatelab/magrit/issues/133">133</a>).
+
+- Amélioration des composants permettant de définir les paramètres des axes d'une projection (pour permettre une saisie plus précise des valeurs).
+
 #### 2.0.6 (2024-07-12)
 
 - Ajout d'une fonctionnalité permettant d'afficher la moyenne, la médiane et la population sur l'histogramme
