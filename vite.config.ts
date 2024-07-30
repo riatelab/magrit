@@ -51,7 +51,8 @@ export default defineConfig({
     // devtools(),
     solidPlugin({ ssr: false }),
     svgLoader(),
-    eslint(),
+    // Don't run eslint when building for electron
+    isBuildElectron ? {} : eslint(),
     isElectron ? electron({
       main: {
         // Shortcut of `build.lib.entry`
