@@ -1,0 +1,37 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Magrit
+message: Please cite this software using these metadata.
+type: software
+authors:
+  - given-names: Matthieu
+    family-names: Viry
+    affiliation: French National Centre for Scientific Research (CNRS)
+    orcid: 'https://orcid.org/0000-0002-0693-8556'
+  - given-names: Timothée
+    family-names: Giraud
+    affiliation: French National Centre for Scientific Research (CNRS)
+    orcid: 'https://orcid.org/0000-0002-1932-3323'
+  - name: >-
+      UAR 2414 RIATE - Center for Spatial Analysis and
+      Geovisualisation
+    website: 'https://riate.cnrs.fr/'
+repository-code: 'https://github.com/riatelab/magrit'
+url: 'https://magrit.cnrs.fr/'
+abstract: >-
+  Magrit is an online thematic mapping application developed
+  by UAR RIATE. It offers conventional cartographic methods
+  coupled with innovative techniques such as proportional
+  symbols, choropleth map, discontinuity map, smoothed map,
+  gridded map or cartogram. The interface has been designed
+  to be intuitive and easy to learn. It allows you to teach
+  and learn thematic cartography.
+keywords:
+  - maps
+  - cartography
+  - spatial analysis
+  - mapping
+  - geography
+license: GPL-3.0

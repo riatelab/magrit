@@ -1,0 +1,62 @@
+{
+    "@context": "https://w3id.org/codemeta/3.0",
+    "type": "SoftwareSourceCode",
+    "applicationCategory": "Cartography",
+    "author": [
+        {
+            "id": "https://orcid.org/0000-0002-0693-8556",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "French National Centre for Scientific Research (CNRS)"
+            },
+            "familyName": "Viry",
+            "givenName": "Matthieu"
+        },
+        {
+            "type": "Role",
+            "schema:author": "https://orcid.org/0000-0002-0693-8556",
+            "roleName": "Author"
+        },
+        {
+            "type": "Role",
+            "schema:author": "https://orcid.org/0000-0002-0693-8556",
+            "roleName": "Developer"
+        },
+        {
+            "id": "https://orcid.org/0000-0002-1932-3323",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "French National Centre for Scientific Research (CNRS)"
+            },
+            "familyName": "Giraud",
+            "givenName": "Timothée"
+        },
+        {
+            "type": "Role",
+            "schema:author": "https://orcid.org/0000-0002-1932-3323",
+            "roleName": "Author"
+        }
+    ],
+    "codeRepository": "https://github.com/riatelab/magrit",
+    "description": "Magrit is an online thematic mapping application developed by UAR RIATE. It offers conventional cartographic methods coupled with innovative techniques such as proportional symbols, choropleth map, discontinuity map, smoothed map, gridded map or cartogram. The interface has been designed to be intuitive and easy to learn. It allows you to teach and learn thematic cartography.",
+    "downloadUrl": "https://magrit.cnrs.fr/",
+    "funder": {
+        "type": "Organization",
+        "name": "UAR 2414 RIATE (CNRS, Université Paris Cité)"
+    },
+    "keywords": [
+        "maps",
+        "cartography",
+        "spatial analysis",
+        "mapping",
+        "geography"
+    ],
+    "license": "https://spdx.org/licenses/GPL-3.0",
+    "name": "Magrit",
+    "relatedLink": "https://magrit.cnrs.fr/",
+    "developmentStatus": "active",
+    "issueTracker": "https://github.com/riatelab/magrit/issues",
+    "referencePublication": "https://doi.org/10.5194/ica-proc-1-120-2018"
+}
