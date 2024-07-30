@@ -35,6 +35,8 @@ jobs:
 
       - name: Build application and create distribution
         run: npm run build:electron
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Read version from package.json
         id: get_version
@@ -74,6 +76,8 @@ jobs:
 
       - name: Build application and create distribution
         run: npm run build:electron-mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Read version from package.json
         id: get_version
