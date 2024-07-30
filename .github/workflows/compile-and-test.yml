@@ -1,13 +1,6 @@
 name: Compile and test the code
 
-on:
-  push:
-    branches:
-      - *
-  pull_request:
-    branches:
-      - main
-      - dev
+on: [push, pull_request]
 
 jobs:
   build:
