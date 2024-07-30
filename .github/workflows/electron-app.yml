@@ -1,0 +1,87 @@
+name: Build the Electron version of Magrit
+
+on:
+  push:
+#    tags:
+#      - '*'
+    branches:
+      - dev
+
+jobs:
+  build-linux-windows:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build application and create distribution
+        run: npm run build:electron
+
+      - name: Read version from package.json
+        id: get_version
+        run: echo "::set-output name=version::$(node -p -e "require('./package.json').version")"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-windows-build
+          path: release/${{ steps.get_version.outputs.version }}/*.{exe,AppImage}
+
+#      - name: Upload Linux and Windows Artifacts to Release
+#        uses: softprops/action-gh-release@v1
+#        with:
+#          files: release/${{ steps.get_version.outputs.version }}/*.{exe,AppImage}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-macos:
+    runs-on: macos-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build application and create distribution
+        run: npm run build:electron-mac
+
+      - name: Read version from package.json
+        id: get_version
+        run: echo "::set-output name=version::$(node -p -e "require('./package.json').version")"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: macos-build
+          path: release/${{ steps.get_version.outputs.version }}/*.dmg
+
+#      - name: Upload macOS Artifacts to Release
+#        uses: softprops/action-gh-release@v1
+#        with:
+#          files: release/${{ steps.get_version.outputs.version }}/*.dmg
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
