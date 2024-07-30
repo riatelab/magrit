@@ -24,6 +24,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Install Mono and Wine
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt update
+          sudo apt install -y wine64 wine32 mono-complete
+
       - name: Install dependencies
         run: npm install
 
