@@ -2,7 +2,7 @@
 
 <br />
 
-#### 2.0.7 (unreleased)
+#### 2.0.7 (2024-07-31)
 
 - Reintroduce the publishing of an image on the Docker Hub with each new release.
 
