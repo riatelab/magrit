@@ -98,7 +98,7 @@ export default function SelectionSettings(
   const { LL } = useI18nContext();
 
   const layerDescription = layersDescriptionStore.layers
-    .find((layer) => layer.id === props.layerId)!;
+    .find((layer) => layer.id === props.layerId)!; // eslint-disable-line solid/reactivity
 
   const nFeaturesLayer = layerDescription.data.features.length;
 

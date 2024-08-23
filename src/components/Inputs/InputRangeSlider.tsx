@@ -35,7 +35,7 @@ export default function InputFieldRangeSlider(props: InputFieldRangeNumberProps)
   const [
     currentValue,
     setCurrentValue,
-  ] = createSignal(props.value);
+  ] = createSignal(props.value); // eslint-disable-line solid/reactivity
 
   const createSlider = () => {
     slider = noUiSlider.create(refSliderNode, {

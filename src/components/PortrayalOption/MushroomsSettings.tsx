@@ -207,7 +207,7 @@ export default function MushroomsSettings(
   const { LL } = useI18nContext();
 
   const layerDescription = layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!;
+    .find((l) => l.id === props.layerId)!; // eslint-disable-line solid/reactivity
 
   // The fields of the layer that are of type 'stock'.
   // We know that we have such fields because otherwise this component would not be rendered.

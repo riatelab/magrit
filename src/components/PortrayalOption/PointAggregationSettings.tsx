@@ -385,7 +385,7 @@ export default function PointAggregationSettings(props: PortrayalSettingsProps):
 
   // The description of the layer for which we are creating the settings menu
   const layerDescription = layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!;
+    .find((l) => l.id === props.layerId)!; // eslint-disable-line solid/reactivity
 
   // The fields that are of type stock or ratio
   const targetFields = layerDescription

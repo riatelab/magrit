@@ -62,6 +62,8 @@ function CardFunctionality(
         : undefined
     }
     onKeyDown={
+      // We don't care about pDesc reactivity here
+      // eslint-disable-next-line solid/reactivity
       pDesc.enabled
         ? (e) => {
           if (e.key === 'Enter' || e.key === ' ') {

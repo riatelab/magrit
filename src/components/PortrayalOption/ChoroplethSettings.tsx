@@ -189,7 +189,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
 
   // The description of the layer for which we are creating the settings menu
   const layerDescription = layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!;
+    .find((l) => l.id === props.layerId)!; // eslint-disable-line solid/reactivity
 
   // The fields of the layer that are of type 'ratio'
   // (i.e. the fields that can be used for the choropleth).

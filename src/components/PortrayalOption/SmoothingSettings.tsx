@@ -220,7 +220,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
 
   // The description of the layer to be smoothed
   const layerDescription = layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!;
+    .find((l) => l.id === props.layerId)!; // eslint-disable-line solid/reactivity
 
   // The bbox of the layer to be smoothed
   const bboxLayer = bbox(layerDescription.data);

@@ -20,7 +20,7 @@ import {
   SupportedTabularFileTypes,
   SupportedTextualTabularFileTypes,
 } from './supportedFormats';
-import { convertTopojsonToGeojson, convertToTopojsonQuantizeAndBackToGeojson } from './topojson';
+import { convertTopojsonToGeojson } from './topojson';
 import { detectTypeField, Variable } from './typeDetection';
 import rewindLayer from './rewind';
 

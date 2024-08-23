@@ -203,7 +203,7 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
 
   // The description of the layer of which we want to create a gridded representation
   const layerDescription = layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!;
+    .find((l) => l.id === props.layerId)!; // eslint-disable-line solid/reactivity
 
   // The bbox of the layer
   const bboxLayer = bbox(layerDescription.data);

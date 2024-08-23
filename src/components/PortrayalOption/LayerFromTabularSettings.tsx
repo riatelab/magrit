@@ -211,7 +211,7 @@ export default function LayerFromTabularSettings(
   const { LL } = useI18nContext();
 
   const tableDescription = layersDescriptionStore.tables
-    .find((table) => table.id === props.tableId)!;
+    .find((table) => table.id === props.tableId)!; // eslint-disable-line solid/reactivity
 
   const [
     newLayerName,

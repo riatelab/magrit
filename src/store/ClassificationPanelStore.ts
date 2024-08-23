@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store';
-import { ClassificationMethod, ClassificationParameters, DiscontinuityParameters } from '../global';
+import type { ClassificationParameters, DiscontinuityParameters } from '../global';
 
 type ClassificationPanelStoreType = {
   show: boolean,

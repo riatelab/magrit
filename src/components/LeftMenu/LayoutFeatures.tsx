@@ -1,7 +1,6 @@
 // Import from solid-js
 import {
-  Accessor, createSignal,
-  JSX, Setter, Show,
+  Accessor, createSignal, JSX, Setter,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 

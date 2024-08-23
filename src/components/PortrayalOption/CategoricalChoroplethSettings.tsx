@@ -198,7 +198,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
 
   // The description of the layer for which we are creating the settings menu
   const layerDescription = layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!;
+    .find((l) => l.id === props.layerId)!; // eslint-disable-line solid/reactivity
 
   // The number of features in the layer
   const nbFt = layerDescription.data.features.length;

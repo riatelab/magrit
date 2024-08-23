@@ -1,12 +1,7 @@
 // Imports from solid-js
 import {
-  createSignal, For, JSX, Match,
-  onCleanup, onMount,
-  Show, Switch,
+  createSignal, For, JSX, Show,
 } from 'solid-js';
-
-// Imports from other packages
-import toast from 'solid-toast';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -14,18 +9,15 @@ import d3 from '../../helpers/d3-custom';
 import {
   classificationMethodHasOption,
   getClassifier,
-  parseUserDefinedBreaks,
   prepareStatisticalSummary,
   OptionsClassification,
 } from '../../helpers/classification';
 import { isFiniteNumber } from '../../helpers/common';
-import { Mmin, Mround, round } from '../../helpers/math';
+import { Mmin, round } from '../../helpers/math';
 import { makeDistributionPlot } from '../DistributionPlots.tsx';
 
 // Sub-components
 import DropdownMenu from '../DropdownMenu.tsx';
-import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
-import InputFieldRangeSlider from '../Inputs/InputRangeSlider.tsx';
 
 // Store
 import { classificationPanelStore, setClassificationPanelStore } from '../../store/ClassificationPanelStore';

@@ -466,7 +466,7 @@ export default function ProportionalSymbolsSettings(
   const { LL } = useI18nContext();
 
   const layerDescription = layersDescriptionStore.layers
-    .find((l) => l.id === props.layerId)!;
+    .find((l) => l.id === props.layerId)!; // eslint-disable-line solid/reactivity
 
   const geometryType = layerDescription.type as VectorType;
 

@@ -345,8 +345,6 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
   // eslint-disable-next-line no-param-reassign
   const outputNameClean = cleanOutputName(outputName, 'png');
 
-  const mimeType = 'image/png';
-
   let svgXml;
   let context: CanvasRenderingContext2D;
   let image: HTMLImageElement;

@@ -81,6 +81,7 @@ const Collapse: ParentComponent<CollapseProps> = (props) => {
     props,
   );
 
+  // eslint-disable-next-line solid/reactivity
   const [style, setStyle] = createSignal(!mergedProps.value ? collapsedStyles : fixedStyles);
 
   createEffect((prevValue) => {
