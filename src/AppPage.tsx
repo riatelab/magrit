@@ -25,6 +25,7 @@ import { toggleDarkMode } from './helpers/darkmode';
 import { clickLinkFromBlob } from './helpers/exports';
 import { draggedElementsAreFiles, droppedElementsAreFiles, prepareFilterAndStoreFiles } from './helpers/fileUpload';
 import { round } from './helpers/math';
+import parseQueryString from './helpers/query-string';
 import { initDb, storeProject } from './helpers/storage';
 
 // Sub-components
@@ -262,6 +263,8 @@ const reloadFromProjectObject = async (
   await yieldOrContinue('smooth');
 
   // The state we want to use
+  // TODO: we should check the integrity of the project object
+  //  either by using a schema, by checking the presence of the required fields...
   const {
     version,
     applicationSettings,
@@ -284,6 +287,30 @@ const reloadFromProjectObject = async (
   setGlobalStore({ userHasAddedLayer: true });
   // Hide the loading overlay
   setReloadingProject(false);
+};
+
+const projectFromQueryString = async (): Promise<ProjectDescription | undefined> => {
+  let projectDefinition;
+  if (window.location.search) {
+    const qs = parseQueryString(window.location.search);
+    const reloadUrl = qs.reload.startsWith('http') ? qs.reload : undefined;
+    if (typeof (window.history.replaceState) !== 'undefined') {
+      // replaceState should avoid creating a new entry on the history
+      const obj = {
+        Page: window.location.search,
+        Url: window.location.pathname,
+      };
+      window.history.replaceState(obj, obj.Page, obj.Url);
+    }
+    if (reloadUrl) {
+      const response = await fetch(reloadUrl);
+      if (response.ok) {
+        const project = await response.json();
+        projectDefinition = project;
+      }
+    }
+  }
+  return projectDefinition;
 };
 
 const AppPage: () => JSX.Element = () => {
@@ -466,21 +493,26 @@ const AppPage: () => JSX.Element = () => {
           width: '660px',
         });
       });
-
-    // Is there a project in the DB ?
-    const project = await db.projects.toArray();
-    // If there is a project, propose to reload it
-    if (project.length > 0) {
-      const { date, data } = project[0];
-      setNiceAlertStore({
-        show: true,
-        content: () => <p>{ LL().Alerts.ReloadLastProject(date.toLocaleDateString())}</p>,
-        confirmCallback: () => {
-          setGlobalStore({ userHasAddedLayer: true });
-          reloadFromProjectObject(data);
-        },
-        focusOn: 'confirm',
-      });
+    // Is there a project in the query string ?
+    const projectQs = await projectFromQueryString();
+    if (projectQs) {
+      reloadFromProjectObject(projectQs);
+    } else {
+      // If not, we check if there is a project in the local DB
+      const projects = await db.projects.toArray();
+      // If there is a project, propose to reload it
+      if (projects.length > 0) {
+        const { date, data } = projects[0];
+        setNiceAlertStore({
+          show: true,
+          content: () => <p>{LL().Alerts.ReloadLastProject(date.toLocaleDateString())}</p>,
+          confirmCallback: () => {
+            setGlobalStore({ userHasAddedLayer: true });
+            reloadFromProjectObject(data);
+          },
+          focusOn: 'confirm',
+        });
+      }
     }
     // We only keep the last project in the DB
     // so at this point we can delete all projects
