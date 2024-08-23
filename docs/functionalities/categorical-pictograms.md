@@ -14,5 +14,10 @@ Lors de la création d'une couche de ce type, il est nécessaire de renseigner l
 Après la création de la couche, il est possible de modifier à nouveau le pictogramme et le nom associés à chaque catégorie.
 
 
-## Exemples
+## Exemple
 
+<ZoomImg
+    src="/categorical-picto.png"
+    alt="Carte catégorielle en pictogrammes de la catégorie d'âge dominante par quartier de Paris"
+    caption="Carte catégorielle en pictogrammes de la catégorie d'âge dominante par quartier de Paris"
+/>

@@ -20,3 +20,11 @@ When creating a layer of this type, the following parameters must be entered:
 - The name of the resulting layer.
 
 Once the layer has been created, it is possible to modify the pictogram and the name associated with each category.
+
+## Example
+
+<ZoomImg
+    src="/categorical-picto.png"
+    alt="Categorical map in pictograms of the dominant age category by district of Paris"
+    caption="Categorical map in pictograms of the dominant age category by district of Paris"
+/>
