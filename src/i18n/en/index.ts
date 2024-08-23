@@ -367,6 +367,7 @@ const en = {
   ImportSection: {
     OpenImportWindow: 'Open data import window...',
     ExampleDatasets: 'Browse example datasets...',
+    GdalNotLoaded: 'The import module isn\'t loaded yet. Please wait a few seconds...',
   },
   MapConfiguration: {
     Dimensions: 'Dimensions',

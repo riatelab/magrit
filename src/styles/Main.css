@@ -112,6 +112,10 @@ button.unstyled {
   padding: unset;
 }
 
+.button.is-primary[disabled], fieldset[disabled] .button.is-primary {
+  background-color: unset !important;
+}
+
 /* Somehow large outline to make visible which button is focused */
 button.button:focus {
   /* -webkit-focus-ring-color auto thin; */

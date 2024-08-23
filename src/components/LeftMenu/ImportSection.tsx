@@ -10,6 +10,7 @@ import { setModalStore } from '../../store/ModalStore';
 
 // Subcomponents
 import ExampleDatasetModal from '../Modals/ExampleDatasetModal.tsx';
+import { gdalLoaded } from './gdalLoadingStatus';
 
 // Styles
 import '../../styles/LeftMenu.css';
@@ -25,8 +26,11 @@ export default function ImportSection(): JSX.Element {
           'border-bottom-left-radius': '0',
           'border-bottom-right-radius': '0',
           'border-bottom-width': '0',
+          cursor: gdalLoaded() ? 'pointer' : 'not-allowed',
         }}
         onClick={() => { setFileDropStore({ show: true }); }}
+        disabled={!gdalLoaded()}
+        title={gdalLoaded() ? '' : LL().ImportSection.GdalNotLoaded()}
       >
         { LL().ImportSection.OpenImportWindow() }
       </button>
@@ -50,7 +54,6 @@ export default function ImportSection(): JSX.Element {
             cancelButton: LL().DatasetCatalog.cancelButton(),
           });
         }}
-        disabled={false}
       >
         { LL().ImportSection.ExampleDatasets() }
       </button>

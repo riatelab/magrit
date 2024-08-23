@@ -1205,6 +1205,10 @@ type RootTranslation = {
 		 * B​r​o​w​s​e​ ​e​x​a​m​p​l​e​ ​d​a​t​a​s​e​t​s​.​.​.
 		 */
 		ExampleDatasets: string
+		/**
+		 * T​h​e​ ​i​m​p​o​r​t​ ​m​o​d​u​l​e​ ​i​s​n​'​t​ ​l​o​a​d​e​d​ ​y​e​t​.​ ​P​l​e​a​s​e​ ​w​a​i​t​ ​a​ ​f​e​w​ ​s​e​c​o​n​d​s​.​.​.
+		 */
+		GdalNotLoaded: string
 	}
 	MapConfiguration: {
 		/**
@@ -5379,6 +5383,10 @@ export type TranslationFunctions = {
 		 * Browse example datasets...
 		 */
 		ExampleDatasets: () => LocalizedString
+		/**
+		 * The import module isn't loaded yet. Please wait a few seconds...
+		 */
+		GdalNotLoaded: () => LocalizedString
 	}
 	MapConfiguration: {
 		/**

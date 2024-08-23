@@ -367,6 +367,7 @@ const fr = {
   ImportSection: {
     OpenImportWindow: 'Ouvrir la fenêtre d\'import des données...',
     ExampleDatasets: 'Explorer les jeux de données d\'exemple...',
+    GdalNotLoaded: 'Le module d\'import n\'a pas fini de charger. Veuillez patienter quelques instants...',
   },
   MapConfiguration: {
     Dimensions: 'Dimensions',

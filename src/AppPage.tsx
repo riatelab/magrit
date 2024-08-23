@@ -44,6 +44,7 @@ import ImportWindow from './components/ImportWindow.tsx';
 import InfoFeatureBox from './components/InfoFeatureBox.tsx';
 import FunctionalitySelection from './components/Modals/FunctionalitySelection.tsx';
 import TableFunctionalitySelection from './components/Modals/TableFunctionalitySelection.tsx';
+import { setGdalLoaded } from './components/LeftMenu/gdalLoadingStatus';
 
 // Stores
 import { classificationPanelStore } from './store/ClassificationPanelStore';
@@ -398,6 +399,7 @@ const AppPage: () => JSX.Element = () => {
     loadGdal().then((gdal) => {
       // @ts-expect-error - we should fix the type of globalThis.gdal
       globalThis.gdal = gdal;
+      setGdalLoaded(true);
     });
 
     // Add event listener to the window to handle resize events
