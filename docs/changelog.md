@@ -2,6 +2,14 @@
 
 <br />
 
+#### 2.0.8 (2024-08-27)
+
+- Correction de la valeur affichée pour les barres d'échelles (Corrige <a href="https://github.com/riatelab/magrit/issues/137">137</a>).
+
+- Ajout d'une fonctionnalité permettant de recharger directement un fichier projet à partir d'une URL distance (voir documentation pour plus de détails).
+
+- Déactive le bouton pour ouvrir la fenêtre d'import tant que GDAL n'a pas fini de charger.
+
 #### 2.0.7 (2024-07-31)
 
 - Réintroduction de la publication d'une image sur le Docker Hub à chaque nouvelle version.

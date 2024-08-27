@@ -2,6 +2,14 @@
 
 <br />
 
+#### 2.0.8 (2024-08-27)
+
+- Corrected the value displayed for scale bars (Fixes <a href=“https://github.com/riatelab/magrit/issues/137”>137</a>).
+
+- Add functionality to directly reload a project file from a remote URL (see documentation for details).
+
+- Disable the button to open the import window until GDAL has finished loading.
+
 #### 2.0.7 (2024-07-31)
 
 - Reintroduce the publishing of an image on the Docker Hub with each new release.
