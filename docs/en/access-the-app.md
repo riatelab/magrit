@@ -16,12 +16,19 @@ You can download the version corresponding to your operating system at [https://
 
 ### Supported operating systems
 
-The two operating systems supported for Magrit's *Desktop* version are :
+The two fully supported operating systems for Magrit's *Desktop* version are :
 
 - Windows 64-bit,
 - GNU/Linux 64-bit.
 
-A version for MacOS is currently under development and will be available in July 2024.
+A version for MacOS is also available, but we are unable to “sign” the application at this time. You will therefore need to authorize installation of the application in your Mac's security settings,
+for example, by typing the following command in the terminal:
+
+```bash
+xattr -cr [application path]
+```
+
+For more information on installing the application on MacOS, or to report a problem with starting the application on MacOS, please consult the [dedicated GitHub issue](https://github.com/riatelab/magrit/issues/136).
 
 ### Installation
 
@@ -37,4 +44,4 @@ An automatic update procedure will be proposed in a future version of the applic
 
 Magrit v1 was available from 2017 to July 2024 at the URL [https://magrit.cnrs.fr/](https://magrit.cnrs.fr/).
 
-As of July 4, 2024, this version is no longer maintained but remains accessible online, for an indefinite period, at the address [https://magrit.cnrs.fr/v1/](https://magrit.cnrs.fr/v1/).
+As of July 4, 2024, this version is no longer maintained but remains accessible online, for an indefinite period, at the address <a target="_self" href="https://magrit.cnrs.fr:9999/">https://magrit.cnrs.fr:9999/</a>.
