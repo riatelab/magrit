@@ -59,7 +59,7 @@ features:
 
 ::: danger Information
 
-The previous Magrit version is still available at <a target="_self" href="http://magrit.cnrs.fr:9999/">http://magrit.cnrs.fr:9999/</a>.
+The previous Magrit version is still available at <a target="_self" href="https://magrit.cnrs.fr:9999/">https://magrit.cnrs.fr:9999/</a>.
 
 Note that this version is no longer maintained and will be shut down in the future.
 
