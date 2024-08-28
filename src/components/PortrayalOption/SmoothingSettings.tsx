@@ -30,9 +30,7 @@ import { computeAppropriateResolution } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
 import { generateIdLegend } from '../../helpers/legends';
 import { Mpow } from '../../helpers/math';
-import {
-  computeKdeValues, computeStewartValues, makeContourLayer,
-} from '../../helpers/smoothing';
+import { computeKdeValues, computeStewartValues, makeContourLayer } from '../../helpers/smoothing';
 import { Variable, VariableType } from '../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
@@ -46,7 +44,8 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
-  type ChoroplethLegend, type ClassificationParameters,
+  type ChoroplethLegend,
+  type ClassificationParameters,
   type GeoJSONFeatureCollection,
   type GridParameters,
   KdeKernel,
@@ -71,6 +70,7 @@ async function onClickValidate(
   thresholds: number[],
   computedValues: { grid: GeoJSONFeatureCollection, values: number[] },
   clippingLayerId: string,
+  targetDivisorVariable?: string,
 ) {
   const referenceLayerDescription = layersDescriptionStore.layers
     .find((l) => l.id === referenceLayerId);
@@ -105,6 +105,7 @@ async function onClickValidate(
     method: smoothingMethod,
     smoothingParameters: parameters,
     gridParameters: gridParams,
+    divisorVariable: targetDivisorVariable,
   } as SmoothedLayerParameters;
 
   const rendererParameters = {
@@ -123,6 +124,43 @@ async function onClickValidate(
   // Create a new layer
   const newId = generateIdLayer();
 
+  // Field descriptions for the new layer
+  const fieldDescriptions = [
+    {
+      name: 'min_v',
+      type: VariableType.stock,
+      hasMissingValues: false,
+      dataType: 'number',
+    } as Variable,
+    {
+      name: 'center_v',
+      type: VariableType.stock,
+      hasMissingValues: false,
+      dataType: 'number',
+    } as Variable,
+    {
+      name: 'max_v',
+      type: VariableType.stock,
+      hasMissingValues: false,
+      dataType: 'number',
+    } as Variable,
+    {
+      name: targetVariable,
+      type: VariableType.stock,
+      hasMissingValues: false,
+      dataType: 'number',
+    },
+  ];
+
+  if (targetDivisorVariable) {
+    fieldDescriptions.push({
+      name: targetDivisorVariable,
+      type: VariableType.stock,
+      hasMissingValues: false,
+      dataType: 'number',
+    });
+  }
+
   const newLayerDescription = {
     id: newId,
     // layerId: referenceLayerId,
@@ -130,32 +168,7 @@ async function onClickValidate(
     type: 'polygon',
     representationType: 'smoothed' as RepresentationType,
     data: newData,
-    fields: [
-      {
-        name: 'min_v',
-        type: VariableType.stock,
-        hasMissingValues: false,
-        dataType: 'number',
-      } as Variable,
-      {
-        name: 'center_v',
-        type: VariableType.stock,
-        hasMissingValues: false,
-        dataType: 'number',
-      } as Variable,
-      {
-        name: 'max_v',
-        type: VariableType.stock,
-        hasMissingValues: false,
-        dataType: 'number',
-      } as Variable,
-      {
-        name: targetVariable,
-        type: VariableType.stock,
-        hasMissingValues: false,
-        dataType: 'number',
-      },
-    ],
+    fields: fieldDescriptions,
     visible: true,
     strokeColor: '#000000',
     strokeWidth: 1,
@@ -242,6 +255,10 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     targetVariable,
     setTargetVariable,
   ] = createSignal<string>(targetFields[0].name);
+  const [
+    targetDivisorVariable,
+    setTargetDivisorVariable,
+  ] = createSignal<string>('');
   const [
     targetSmoothingMethod,
     setTargetSmoothingMethod,
@@ -346,6 +363,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         thresholds()!,
         computedValues()!,
         clippingLayer(),
+        targetDivisorVariable() === '' ? undefined : targetDivisorVariable(),
       ).then(() => {
         // Hide loading overlay
         setLoading(false);
@@ -365,6 +383,9 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       label={LL().FunctionalitiesSection.CommonOptions.Variable()}
       onChange={(v) => {
         setTargetVariable(v);
+        if (targetVariable() === targetDivisorVariable()) {
+          setTargetDivisorVariable('');
+        }
       }}
       value={targetVariable()}
       disabled={isLoading() || !!computedValues()}
@@ -372,6 +393,19 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       <For each={targetFields}>
         {(variable) => <option value={variable.name}>{variable.name}</option>}
       </For>
+    </InputFieldSelect>
+    <InputFieldSelect
+      label={LL().FunctionalitiesSection.SmoothingOptions.DivisorVariable()}
+      onChange={(v) => {
+        setTargetDivisorVariable(v);
+      }}
+      value={targetDivisorVariable()}
+      disabled={isLoading() || !!computedValues()}
+    >
+      <option value={''}>{LL().FunctionalitiesSection.SmoothingOptions.NoDivisorVariable()}</option>
+     <For each={targetFields.filter((d) => d.name !== targetVariable())}>
+       {(variable) => <option value={variable.name}>{variable.name}</option>}
+     </For>
     </InputFieldSelect>
     <InputFieldSelect
       label={LL().FunctionalitiesSection.SmoothingOptions.Type()}
@@ -535,6 +569,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
                 targetVariable(),
                 gp as GridParameters,
                 smoothingParams as KdeParameters,
+                targetDivisorVariable() === '' ? undefined : targetDivisorVariable(),
               );
             } else {
               [grid, values] = await computeStewartValues(
@@ -543,6 +578,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
                 targetVariable(),
                 gp as GridParameters,
                 smoothingParams as StewartParameters,
+                targetDivisorVariable() === '' ? undefined : targetDivisorVariable(),
               );
             }
 

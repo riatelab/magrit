@@ -535,6 +535,8 @@ interface SmoothedLayerParameters {
   smoothingParameters: StewartParameters | KdeParameters,
   // The parameters of the grid used to compute the smoothed layer
   gridParameters: GridParameters,
+  // The (optional) divisior variable used to compute the smoothed layer
+  divisorVariable?: string,
 }
 
 interface CategoricalPictogramMapping {

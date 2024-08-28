@@ -227,6 +227,30 @@ function computeStewartInnerExponential(
   return sum;
 }
 
+function computeStewartInnerExponentialWithDivisor(
+  xCell: number[],
+  yCell: number[],
+  xDot: number[],
+  yDot: number[],
+  values: number[],
+): number {
+  let sum1 = 0;
+  let sum2 = 0;
+  for (let i = 0; i < this.constants.size; i++) { // eslint-disable-line no-plusplus
+    const dist = this.haversineDistance(
+      xDot[i],
+      yDot[i],
+      xCell[this.thread.x],
+      yCell[this.thread.x],
+    );
+    // eslint-disable-next-line prefer-exponentiation-operator, no-restricted-properties
+    const c = Math.exp(-this.constants.alpha * Math.pow(dist, this.constants.beta));
+    sum1 += (values[i * 2] * c);
+    sum2 += (values[i * 2 + 1] * c);
+  }
+  return sum1 / sum2;
+}
+
 function computeStewartInnerPareto(
   xCell: number[],
   yCell: number[],
@@ -246,6 +270,30 @@ function computeStewartInnerPareto(
     sum += (values[i] * Math.pow(1 + this.constants.alpha * dist, -this.constants.beta));
   }
   return sum;
+}
+
+function computeStewartInnerParetoWithDivisor(
+  xCell: number[],
+  yCell: number[],
+  xDot: number[],
+  yDot: number[],
+  values: number[],
+): number {
+  let sum1 = 0;
+  let sum2 = 0;
+  for (let i = 0; i < this.constants.size; i++) { // eslint-disable-line no-plusplus
+    const dist = this.haversineDistance(
+      xDot[i],
+      yDot[i],
+      xCell[this.thread.x],
+      yCell[this.thread.x],
+    );
+    // eslint-disable-next-line prefer-exponentiation-operator, no-restricted-properties
+    const c = Math.pow(1 + this.constants.alpha * dist, -this.constants.beta);
+    sum1 += (values[i * 2] * c);
+    sum2 += (values[i * 2 + 1] * c);
+  }
+  return sum1 / sum2;
 }
 
 function computeKdeInner(
@@ -270,10 +318,34 @@ function computeKdeInner(
   return value;
 }
 
+function computeKdeInnerWithDivisor(
+  xCell: number[],
+  yCell: number[],
+  xDot: number[],
+  yDot: number[],
+  values: number[],
+): number {
+  let value1 = 0;
+  let value2 = 0;
+  // let vs = 0;
+  for (let i = 0; i < this.constants.size; i++) { // eslint-disable-line no-plusplus
+    const dist = this.haversineDistance(
+      xDot[i],
+      yDot[i],
+      xCell[this.thread.x],
+      yCell[this.thread.x],
+    );
+    const kv = this.computeKde(dist, this.constants.bandwidth);
+    value1 += kv * values[i * 2];
+    value2 += kv * values[i * 2 + 1];
+  }
+  return value1 / value2;
+}
+
 const prepareArrays = (
   grid: GeoJSONFeatureCollection,
   inputLayer: GeoJSONFeatureCollection,
-  variableName: string,
+  variableNames: string[],
 ): {
   xCells: number[],
   yCells: number[],
@@ -299,13 +371,17 @@ const prepareArrays = (
   }
 
   for (let i = 0; i < inputLayer.features.length; i++) { // eslint-disable-line no-plusplus
-    const v = inputLayer.features[i].properties[variableName] as any;
-    if (isFiniteNumber(v)) {
+    const vs = [];
+    for (let j = 0; j < variableNames.length; j++) { // eslint-disable-line no-plusplus
+      const v = inputLayer.features[i].properties[variableNames[j]] as any;
+      vs.push(v);
+    }
+    if (vs.every((v) => isFiniteNumber(v))) {
       // eslint-disable-next-line prefer-destructuring
       xDots.push(inputLayer.features[i].geometry.coordinates[0]);
       // eslint-disable-next-line prefer-destructuring
       yDots.push(inputLayer.features[i].geometry.coordinates[1]);
-      values.push(+v as number);
+      values.push(...vs.map((v) => +v));
     }
   }
 
@@ -324,24 +400,31 @@ export async function computeStewartValues(
   variableName: string,
   gridParameters: GridParameters,
   stewartParameters: StewartParameters,
+  divisorVariableName?: string,
 ): Promise<[GeoJSONFeatureCollection, number[]]> {
+  // Is there one or two variables ?
+  const varArray = divisorVariableName ? [variableName, divisorVariableName] : [variableName];
+
   // Make a suitable grid of points
   const grid = makePointGrid(gridParameters, true);
 
   // Compute the inputs points from
-  const inputLayer = makeCentroidLayer(data, inputType, [variableName]);
+  const inputLayer = makeCentroidLayer(data, inputType, varArray);
 
   // Appropriate function to compute the potential
+  // eslint-disable-next-line no-nested-ternary
   const computeStewartInner = stewartParameters.function === 'Gaussian'
-    ? computeStewartInnerExponential
-    : computeStewartInnerPareto;
+    ? (divisorVariableName
+      ? computeStewartInnerExponentialWithDivisor : computeStewartInnerExponential)
+    : (divisorVariableName
+      ? computeStewartInnerParetoWithDivisor : computeStewartInnerPareto);
 
   // Values ready to be used in the GPU kernel
   const {
     xCells, yCells,
     xDots, yDots,
     values,
-  } = prepareArrays(grid, inputLayer, variableName);
+  } = prepareArrays(grid, inputLayer, varArray);
 
   // Create the GPU instance and define the kernel
   const gpu = new GPU({ mode: 'webgl2' });
@@ -397,20 +480,24 @@ export async function computeKdeValues(
   variableName: string,
   gridParameters: GridParameters,
   kdeParameters: KdeParameters,
+  divisorVariableName?: string,
 ): Promise<[GeoJSONFeatureCollection, number[]]> {
   await setLoadingMessage('SmoothingDataPreparation');
+  // Is there one or two variables ?
+  const varArray = divisorVariableName ? [variableName, divisorVariableName] : [variableName];
+
   // Make a suitable grid of points
   const grid = makePointGrid(gridParameters, true);
 
   // Compute the inputs points from
-  const inputLayer = makeCentroidLayer(data, inputType, [variableName]);
+  const inputLayer = makeCentroidLayer(data, inputType, varArray);
 
   // Values ready to be used in the GPU kernel
   const {
     xCells, yCells,
     xDots, yDots,
     values,
-  } = prepareArrays(grid, inputLayer, variableName);
+  } = prepareArrays(grid, inputLayer, varArray);
 
   // We will use this value to normalize input values
   const normalizer = computeNormalizer(values);
@@ -546,7 +633,7 @@ export async function computeKdeValues(
 
   const kernel = gpu
     .createKernel(
-      computeKdeInner,
+      divisorVariableName ? computeKdeInnerWithDivisor : computeKdeInner,
       {
         constants: {
           normalizer,

@@ -602,6 +602,8 @@ const fr = {
       NewLayerName: 'Discontinuité_{layerName}',
     },
     SmoothingOptions: {
+      DivisorVariable: 'Variable de pondération',
+      NoDivisorVariable: 'Aucune',
       Type: 'Type de lissage',
       Resolution: 'Résolution de la grille (km)',
       Stewart: 'Potentiel de Stewart',

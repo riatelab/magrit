@@ -2038,6 +2038,14 @@ type RootTranslation = {
 		}
 		SmoothingOptions: {
 			/**
+			 * D​i​v​i​s​o​r​ ​v​a​r​i​a​b​l​e
+			 */
+			DivisorVariable: string
+			/**
+			 * N​o​n​e
+			 */
+			NoDivisorVariable: string
+			/**
 			 * S​m​o​o​t​h​i​n​g​ ​t​y​p​e
 			 */
 			Type: string
@@ -6205,6 +6213,14 @@ export type TranslationFunctions = {
 			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
 		SmoothingOptions: {
+			/**
+			 * Divisor variable
+			 */
+			DivisorVariable: () => LocalizedString
+			/**
+			 * None
+			 */
+			NoDivisorVariable: () => LocalizedString
 			/**
 			 * Smoothing type
 			 */

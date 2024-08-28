@@ -602,6 +602,8 @@ const en = {
       NewLayerName: 'Discontinuity_{layerName}',
     },
     SmoothingOptions: {
+      DivisorVariable: 'Divisor variable',
+      NoDivisorVariable: 'None',
       Type: 'Smoothing type',
       Resolution: 'Grid resolution (km)',
       Stewart: 'Stewart\'s potential',
