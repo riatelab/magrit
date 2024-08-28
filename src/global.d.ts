@@ -82,6 +82,7 @@ type LayerDescription = {
     | LinksParameters
     | MushroomsParameters
     | CategoricalPictogramParameters
+    | WaffleParameters
     // | DefaultRendererParameters
   ),
   layerCreationOptions?: (
@@ -226,10 +227,10 @@ type LayerDescriptionMushroomLayer = LayerDescription & {
   rendererParameters: MushroomsParameters,
 };
 
-// type LayerDescriptionWaffle = LayerDescription & {
-//   representationType: RepresentationType.waffle,
-//   rendererParameters: GriddedLayerParameters,
-// };
+type LayerDescriptionWaffle = LayerDescription & {
+  representationType: RepresentationType.waffle,
+  rendererParameters: WaffleParameters,
+};
 
 type LayerDescriptionCategoricalPictogram = LayerDescription & {
   representationType: RepresentationType.categoricalPictogram,
@@ -537,6 +538,22 @@ interface SmoothedLayerParameters {
   gridParameters: GridParameters,
   // The (optional) divisior variable used to compute the smoothed layer
   divisorVariable?: string,
+}
+
+interface WaffleParameters {
+  // The variable we want to represent with the waffle
+  // (the order is important, because symbols are drawn in the reverse order of the variables)
+  variables: string[],
+  // The type of symbol used to represent the waffles
+  symbolType: ProportionalSymbolsSymbolType.circle | ProportionalSymbolsSymbolType.square,
+  // The radius for each symbol
+  radius: number,
+  // The number of columns for the waffle
+  columns: number,
+  // How much stock is represented by each symbol
+  symbolValue: number,
+  // How much space is left between each symbol
+  spacing: number,
 }
 
 interface CategoricalPictogramMapping {
@@ -916,6 +933,10 @@ interface DiscontinuityLegend extends LegendBase {
 
 interface WaffleLegend extends LegendBase {
   type: LegendType.waffle,
+  // Spacing between the symbols
+  spacing: number,
+  // Name of each variable
+  variableNames: string[],
 }
 
 interface MushroomsLegend extends LegendBase {
