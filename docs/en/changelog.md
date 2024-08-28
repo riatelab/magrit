@@ -2,6 +2,10 @@
 
 <br />
 
+#### Unreleased
+
+- New functionality to select numerator / denominator for smoothed maps (Fixes <a href=“https://github.com/riatelab/magrit/issues/135”>135</a>)
+
 #### 2.0.8 (2024-08-27)
 
 - Corrected the value displayed for scale bars (Fixes <a href=“https://github.com/riatelab/magrit/issues/137”>137</a>).

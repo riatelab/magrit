@@ -2,6 +2,10 @@
 
 <br />
 
+#### Unreleased
+
+- Nouvelle fonctionnalité permettant de choisir une variable pour le numérateur et pour le dénominateur lors de la création de cartes lissées (Corrige <a href="https://github.com/riatelab/magrit/issues/135">135</a>).
+
 #### 2.0.8 (2024-08-27)
 
 - Correction de la valeur affichée pour les barres d'échelles (Corrige <a href="https://github.com/riatelab/magrit/issues/137">137</a>).
