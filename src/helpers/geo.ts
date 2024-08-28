@@ -612,6 +612,15 @@ export const cleanGeometryGeos = async (
   return geom;
 };
 
+/**
+ * Compute the distance between two points on the Earth's surface
+ * using the spherical law of cosines (https://en.wikipedia.org/wiki/Spherical_law_of_cosines).
+ *
+ * @param {[number, number]} pt1 - The first point (lon, lat)
+ * @param {[number, number]} pt2 - The second point (lon, lat)
+ * @param {number} radius - The radius of the Earth (default: 6371e3)
+ * @return {number} - The distance between the two points in meters
+ */
 export const sphericalLawOfCosine = (
   pt1: [number, number],
   pt2: [number, number],
