@@ -111,6 +111,11 @@ const renameEmptyColumns = (rawData: string): string => {
   return lines.join('\n');
 };
 
+const removeEmptyLines = (rawData: string): string => {
+  const lines = rawData.split('\n');
+  return lines.filter((l) => l.trim() !== '').join('\n');
+};
+
 const autoTypeDataset = (dataset: d3.DSVRowArray<string>): Record<string, any>[] => {
   const cols = dataset.columns;
   for (let i = 0; i < cols.length; i += 1) {
@@ -129,6 +134,9 @@ const autoTypeDataset = (dataset: d3.DSVRowArray<string>): Record<string, any>[]
         tmp.push(isFiniteNumber(tempVal) ? (+tempVal) : tempVal);
       } else if (isFiniteNumber(dataset[j][cols[i]])) {
         tmp.push(+dataset[j][cols[i]]);
+      } else if (dataset[j][cols[i]] === 'NA') {
+        // We also handle a special case for 'NA' values (common in R datasets)
+        tmp.push(null);
       } else {
         // Or break early if a value can't be coerced :
         break; // So no value of this field will be converted
@@ -154,6 +162,7 @@ export async function convertTextualTabularDatasetToJSON(
   if (ext === 'csv' || ext === 'tsv' || ext === 'txt') {
     let text = await file.text();
     text = renameEmptyColumns(text);
+    text = removeEmptyLines(text);
     const delimiter = findCsvDelimiter(text);
     return autoTypeDataset(d3.dsvFormat(delimiter).parse(text));
   }
