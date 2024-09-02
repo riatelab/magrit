@@ -1018,6 +1018,10 @@ interface LinearRegressionScatterPlot extends LegendBase {
   dotColor: string,
   // The color of the regression line
   regressionLineColor: string,
+  // Whether to display the confidence interval
+  confidenceInterval: boolean,
+  // The color of the confidence interval
+  confidenceIntervalColor: string,
 }
 
 interface CategoricalPictogramLegend extends LegendBase {

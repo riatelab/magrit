@@ -4144,6 +4144,14 @@ type RootTranslation = {
 			 */
 			RegressionLineColor: string
 			/**
+			 * D​i​s​p​l​a​y​ ​c​o​n​f​i​d​e​n​c​e​ ​i​n​t​e​r​v​a​l
+			 */
+			RegressionConfidenceInterval: string
+			/**
+			 * C​o​n​f​i​d​e​n​c​e​ ​i​n​t​e​r​v​a​l​ ​c​o​l​o​r
+			 */
+			RegressionConfidenceIntervalColor: string
+			/**
 			 * L​e​g​e​n​d​ ​c​o​n​t​e​n​t
 			 */
 			LegendContent: string
@@ -8295,6 +8303,14 @@ export type TranslationFunctions = {
 			 * Regression line color
 			 */
 			RegressionLineColor: () => LocalizedString
+			/**
+			 * Display confidence interval
+			 */
+			RegressionConfidenceInterval: () => LocalizedString
+			/**
+			 * Confidence interval color
+			 */
+			RegressionConfidenceIntervalColor: () => LocalizedString
 			/**
 			 * Legend content
 			 */

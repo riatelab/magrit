@@ -1276,6 +1276,18 @@ function makeSettingsScatterPlot(
       value={legend.regressionLineColor}
       onChange={(v) => debouncedUpdateProps(legend.id, ['regressionLineColor'], v)}
     />
+    <InputFieldCheckbox
+      label={LL().Legend.Modal.RegressionConfidenceInterval()}
+      checked={legend.confidenceInterval}
+      onChange={(v) => updateProps(legend.id, ['confidenceInterval'], v)}
+    />
+    <Show when={legend.confidenceInterval}>
+      <InputFieldColor
+        label={LL().Legend.Modal.RegressionConfidenceIntervalColor()}
+        value={legend.confidenceIntervalColor}
+        onChange={(v) => debouncedUpdateProps(legend.id, ['confidenceIntervalColor'], v)}
+      />
+    </Show>
     <OptionBackgroundRectangle legend={legend} LL={LL}/>
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}

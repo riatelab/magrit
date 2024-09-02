@@ -1175,6 +1175,8 @@ const fr = {
       AxesAndLabels: 'Axes et étiquettes',
       DotColor: 'Couleur des points',
       RegressionLineColor: 'Couleur de la ligne de régression',
+      RegressionConfidenceInterval: 'Afficher l\'intervalle de confiance',
+      RegressionConfidenceIntervalColor: 'Couleur de l\'intervalle de confiance',
       LegendContent: 'Contenu de la légende',
       DisplayMean: 'Afficher la moyenne',
       DisplayMedian: 'Afficher la médiane',

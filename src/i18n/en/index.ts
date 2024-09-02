@@ -1175,6 +1175,8 @@ const en = {
       AxesAndLabels: 'Axes and labels',
       DotColor: 'Dot color',
       RegressionLineColor: 'Regression line color',
+      RegressionConfidenceInterval: 'Display confidence interval',
+      RegressionConfidenceIntervalColor: 'Confidence interval color',
       LegendContent: 'Legend content',
       DisplayMean: 'Display mean',
       DisplayMedian: 'Display median',

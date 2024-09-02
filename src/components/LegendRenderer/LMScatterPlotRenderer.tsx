@@ -47,6 +47,8 @@ function ScatterPlot(
     roundDecimals: number,
     dotColor: string,
     regressionLineColor: string,
+    confidenceInterval: boolean,
+    confidenceIntervalColor: string,
   },
 ): JSX.Element {
   const ds = createMemo(() => props.dataset.map((d) => {
@@ -126,6 +128,8 @@ function ScatterPlot(
             x: props.explanatoryVariable,
             y: props.explainedVariable,
             stroke: props.regressionLineColor,
+            fill: props.confidenceIntervalColor,
+            fillOpacity: props.confidenceInterval ? 0.1 : 0,
           }),
           Plot.gridX({ stroke: 'currentColor', strokeOpacity: '0.2' }),
           Plot.gridY({ stroke: 'currentColor', strokeOpacity: '0.2' }),
@@ -226,6 +230,8 @@ export default function lmScatterPlot(
         roundDecimals={legend.roundDecimals}
         dotColor={legend.dotColor}
         regressionLineColor={legend.regressionLineColor}
+        confidenceInterval={legend.confidenceInterval}
+        confidenceIntervalColor={legend.confidenceIntervalColor}
       />
     </g>
     {

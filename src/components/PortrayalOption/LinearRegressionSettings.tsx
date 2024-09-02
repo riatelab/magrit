@@ -14,7 +14,7 @@ import { getEntitiesByClass } from '../../helpers/classification';
 import { computeCandidateValuesForSymbolsLegend, coordsPointOnFeature, PropSizer } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
 import { generateIdLegend } from '../../helpers/legends';
-import { Mabs } from '../../helpers/math';
+import { Mabs, toPrecisionAfterDecimalPoint } from '../../helpers/math';
 import { computeLinearRegression, LinearRegressionResult, makeCorrelationMatrix } from '../../helpers/statistics';
 
 // Stores
@@ -391,6 +391,8 @@ function onClickValidate(
             width: 300,
             height: 300,
             regressionLineColor: '#FF0000',
+            confidenceInterval: false,
+            confidenceIntervalColor: '#FF0000',
             dotColor: '#008000',
             visible: true,
             roundDecimals: 1,
@@ -407,7 +409,7 @@ function onClickValidate(
               ...applicationSettingsStore.defaultLegendSettings.labels,
             },
             note: {
-              text: undefined,
+              text: `${linearRegressionResult.options.y} = ${toPrecisionAfterDecimalPoint(linearRegressionResult.coefficients['X.Intercept'][0], 4)} + ${linearRegressionResult.options.x} * ${toPrecisionAfterDecimalPoint(linearRegressionResult.coefficients[linearRegressionResult.options.y][0], 4)}`,
               ...applicationSettingsStore.defaultLegendSettings.note,
             },
             backgroundRect: {
