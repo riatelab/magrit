@@ -82,7 +82,7 @@ async function onClickValidate(
   const contours = await makeContourLayer(
     computedValues.grid,
     thresholds,
-    targetVariable,
+    targetDivisorVariable ? 'value' : targetVariable,
   );
 
   let newData;
@@ -109,7 +109,7 @@ async function onClickValidate(
   } as SmoothedLayerParameters;
 
   const rendererParameters = {
-    variable: targetVariable,
+    variable: targetDivisorVariable ? 'value' : targetVariable,
     method: 'manual',
     classes: nClasses,
     breaks: thresholds,
@@ -144,21 +144,22 @@ async function onClickValidate(
       hasMissingValues: false,
       dataType: 'number',
     } as Variable,
-    {
-      name: targetVariable,
-      type: VariableType.stock,
-      hasMissingValues: false,
-      dataType: 'number',
-    },
   ];
 
   if (targetDivisorVariable) {
     fieldDescriptions.push({
-      name: targetDivisorVariable,
+      name: 'value',
       type: VariableType.stock,
       hasMissingValues: false,
       dataType: 'number',
-    });
+    } as Variable);
+  } else {
+    fieldDescriptions.push({
+      name: targetVariable,
+      type: VariableType.stock,
+      hasMissingValues: false,
+      dataType: 'number',
+    } as Variable);
   }
 
   const newLayerDescription = {
@@ -186,7 +187,7 @@ async function onClickValidate(
     id: generateIdLegend(),
     layerId: newId,
     title: {
-      text: targetVariable,
+      text: targetDivisorVariable ? `${targetVariable} / ${targetDivisorVariable}` : targetVariable,
       ...applicationSettingsStore.defaultLegendSettings.title,
     } as LegendTextElement,
     subtitle: {
@@ -584,6 +585,9 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
 
             const summary = prepareStatisticalSummary(values);
 
+            // TODO: 1) improve how thresholds are computed
+            //       2) allow the only change the number of classes and let the classification
+            //          be recomputed automatically when number of classes changes
             // Predefined thresholds
             const t = [0, 0.04, 0.1, 0.25, 0.4, 0.55, 0.785, 0.925]
               .map((d) => Math.round(d * summary.maximum));
