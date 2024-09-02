@@ -6,6 +6,13 @@
 
 - Nouvelle fonctionnalité permettant de choisir une variable pour le numérateur et pour le dénominateur lors de la création de cartes lissées (Corrige <a href="https://github.com/riatelab/magrit/issues/135">135</a>).
 
+- Ajout d'options permettant de choisir ou non d'afficher l'intervalle de confiance autour de la droite de régression linéaire et, le cas échéant, sa couleur.
+
+- Améliore l'import des fichiers CSV :
+  - en enlevant les valeurs NA présentes dans les colonnes numériques et en les remplaçant par des valeurs nulles,
+  - en enlevant les éventuelles lignes vides en fin de fichier.
+
+
 #### 2.0.8 (2024-08-27)
 
 - Correction de la valeur affichée pour les barres d'échelles (Corrige <a href="https://github.com/riatelab/magrit/issues/137">137</a>).

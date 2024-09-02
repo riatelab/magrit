@@ -6,6 +6,12 @@
 
 - New functionality to select numerator / denominator for smoothed maps (Fixes <a href=“https://github.com/riatelab/magrit/issues/135”>135</a>)
 
+- Add options for choosing whether or not to display the confidence interval around the linear regression line and, if so, its color.
+
+- Improves import of CSV files:
+  - by removing "NA" values from numerical columns and replacing them with null values,
+  - by removing any empty lines at the end of the file.
+
 #### 2.0.8 (2024-08-27)
 
 - Corrected the value displayed for scale bars (Fixes <a href=“https://github.com/riatelab/magrit/issues/137”>137</a>).
