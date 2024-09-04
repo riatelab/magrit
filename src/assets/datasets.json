@@ -479,6 +479,196 @@
     ]
   },
   {
+    "id": "world_209",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 209,
+    "defaultProjection": {
+      "type": "d3",
+      "value": "NaturalEarth2"
+    },
+    "geometry": {
+      "source": "UAR RIATE, 2022",
+      "license": "Public domain"
+    },
+    "data": [
+      {
+        "source": "World Bank",
+        "url": "https://databank.worldbank.org/source/world-development-indicators",
+        "download_date": "2024-06-14",
+        "license": "CC-BY-4.0"
+      },
+      {
+        "source": "United Nations, UAR RIATE",
+        "url": "https://unstats.un.org/unsd/methodology/m49/overview/",
+        "download_date": "2024-06-14",
+        "license": "CC-BY-4.0"
+      },
+      {
+        "source": "Wikipedia",
+        "url": "https://fr.wikipedia.org/wiki/James_Bond#Lieux_d'action_des_films",
+        "download_date": "2024-09-03",
+        "license": "CC-BY-SA-4.0"
+      }
+    ],
+    "fields": [
+      {
+        "name": "ISO2",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "ISO3",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "ISONUM",
+        "dataType": "number",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NAMEen",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NAMEfr",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "REGION_BLOC",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "REGION_UN",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "SUBREGION_UN",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": true,
+        "provenance": 2
+      },
+      {
+        "name": "LAST_DEV",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 2
+      },
+      {
+        "name": "AREA_2021",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "FOREST_AREA_2021",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "POP_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "LIFE_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "FERT_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "HIV_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "CO2_POP_2020",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "GNI_POP_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "INC_20P_2021",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "GDP_INDS_2023",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "HIG_TEC_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "MIL_EXP_2022",
+        "dataType": "number",
+        "type": "ratio",
+        "hasMissingValue": true,
+        "provenance": 1
+      },
+      {
+        "name": "JamesBond",
+        "dataType": "string",
+        "type": "stock",
+        "hasMissingValue": true,
+        "provenance": 3
+      }
+    ]
+  },
+  {
     "id": "world_242",
     "active": false,
     "type": "vector",

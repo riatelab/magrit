@@ -786,6 +786,128 @@ type RootTranslation = {
 				'2': string
 			}
 		}
+		world_209: {
+			/**
+			 * W​o​r​l​d​ ​–​ ​2​0​9​ ​c​o​u​n​t​r​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​2​0​9​ ​c​o​u​n​t​r​i​e​s​ ​o​f​ ​t​h​e​ ​W​o​r​l​d​.​ ​A​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​k​e​y​ ​i​n​d​i​c​a​t​o​r​s​ ​e​x​t​r​a​c​t​e​d​ ​f​r​o​m​ ​U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​a​n​d​ ​W​o​r​l​d​ ​b​a​n​k​ ​(​l​a​s​t​ ​y​e​a​r​ ​a​v​a​i​l​a​b​l​e​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * I​S​O​2​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				ISO2: string
+				/**
+				 * I​S​O​3​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				ISO3: string
+				/**
+				 * I​S​O​ ​3​1​6​6​-​1​ ​n​u​m​e​r​i​c​ ​c​o​d​e
+				 */
+				ISONUM: string
+				/**
+				 * N​a​m​e​ ​(​e​n​)
+				 */
+				NAMEen: string
+				/**
+				 * N​a​m​e​ ​(​f​r​)
+				 */
+				NAMEfr: string
+				/**
+				 * R​e​g​i​o​n​a​l​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REGION_BLOC: string
+				/**
+				 * U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​r​e​g​i​o​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REGION_UN: string
+				/**
+				 * U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​s​u​b​-​r​e​g​i​o​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				SUBREGION_UN: string
+				/**
+				 * B​e​l​o​n​g​i​n​g​ ​t​o​ ​t​h​e​ ​U​N​ ​L​e​a​s​t​ ​D​e​v​e​l​o​p​e​d​ ​C​o​u​n​t​r​i​e​s​ ​l​i​s​t
+				 */
+				LAST_DEV: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​1​ ​(​k​m​²​)
+				 */
+				AREA_2021: string
+				/**
+				 * F​o​r​e​s​t​ ​a​r​e​a​,​ ​2​0​2​1​,​ ​(​k​m​²​)
+				 */
+				FOREST_AREA_2021: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​2
+				 */
+				POP_2023: string
+				/**
+				 * L​i​f​e​ ​e​x​p​e​c​t​a​n​c​y​ ​a​t​ ​b​i​r​t​h​,​ ​2​0​2​2​ ​(​y​e​a​r​s​)
+				 */
+				LIFE_EXP_2022: string
+				/**
+				 * F​e​r​t​i​l​i​t​y​ ​r​a​t​e​,​ ​2​0​2​2​ ​(​b​i​r​t​h​s​ ​p​e​r​ ​w​o​m​a​n​)
+				 */
+				FERT_2022: string
+				/**
+				 * P​r​e​v​a​l​e​n​c​e​ ​o​f​ ​H​I​V​,​2​0​2​2​ ​(​%​ ​o​f​ ​p​o​p​u​l​a​t​i​o​n​ ​a​g​e​s​ ​1​5​-​4​9​)
+				 */
+				HIV_2022: string
+				/**
+				 * C​O​2​ ​e​m​i​s​s​i​o​n​s​,​ ​2​0​2​0​ ​(​m​e​t​r​i​c​ ​t​o​n​s​ ​p​e​r​ ​c​a​p​i​t​a​)
+				 */
+				CO2_POP_2020: string
+				/**
+				 * G​N​I​ ​p​e​r​ ​c​a​p​i​t​a​,​ ​P​P​P​,​ ​2​0​2​2​ ​(​c​u​r​r​e​n​t​ ​i​n​t​e​r​n​a​t​i​o​n​a​l​ ​$​)
+				 */
+				GNI_POP_2023: string
+				/**
+				 * I​n​c​o​m​e​ ​s​h​a​r​e​ ​h​e​l​d​ ​b​y​ ​l​o​w​e​s​t​ ​2​0​%​ ​,​ ​2​0​2​1​ ​(​%​)
+				 */
+				INC_20P_2021: string
+				/**
+				 * I​n​d​u​s​t​r​y​ ​(​i​n​c​l​u​d​i​n​g​ ​c​o​n​s​t​r​u​c​t​i​o​n​)​,​ ​v​a​l​u​e​ ​a​d​d​e​d​,​ ​2​0​2​2​ ​(​%​ ​o​f​ ​G​D​P​)
+				 */
+				GDP_INDS_2023: string
+				/**
+				 * H​i​g​h​-​t​e​c​h​n​o​l​o​g​y​ ​e​x​p​o​r​t​s​,​ ​2​0​2​2​ ​(​%​ ​o​f​ ​m​a​n​u​f​a​c​t​u​r​e​d​ ​e​x​p​o​r​t​s​)
+				 */
+				HIG_TEC_EXP_2022: string
+				/**
+				 * M​i​l​i​t​a​r​y​ ​e​x​p​e​n​d​i​t​u​r​e​,​ ​2​0​2​2​ ​(​%​ ​o​f​ ​G​D​P​)​ 
+				 */
+				MIL_EXP_2022: string
+				/**
+				 * N​u​m​b​e​r​ ​o​f​ ​t​i​m​e​s​ ​J​a​m​e​s​ ​B​o​n​d​ ​h​a​s​ ​v​i​s​i​t​e​d​ ​t​h​e​ ​c​o​u​n​t​r​y
+				 */
+				JamesBond: string
+			}
+			/**
+			 * M​o​n​d​e​,​ ​p​a​y​s​,​ ​N​a​t​i​o​n​s​ ​U​n​i​e​s
+			 */
+			keywords: string
+			/**
+			 * U​A​R​ ​R​I​A​T​E​,​ ​2​0​2​2
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * W​o​r​l​d​ ​B​a​n​k​,​ ​2​0​2​4
+				 */
+				'1': string
+				/**
+				 * U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​(​c​o​n​s​o​l​i​d​a​t​e​d​ ​b​y​ ​R​I​A​T​E​)​,​ ​2​0​2​4
+				 */
+				'2': string
+				/**
+				 * W​i​k​i​p​e​d​i​a​,​ ​2​0​2​4
+				 */
+				'3': string
+			}
+		}
 		world_242: {
 			/**
 			 * W​o​r​l​d​ ​–​ ​2​4​2​ ​c​o​u​n​t​r​i​e​s
@@ -4983,6 +5105,128 @@ export type TranslationFunctions = {
 				 * United Nations (consolidated by RIATE), 2024
 				 */
 				'2': () => LocalizedString
+			}
+		}
+		world_209: {
+			/**
+			 * World – 209 countries
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 209 countries of the World. Associated with key indicators extracted from United Nations and World bank (last year available)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * ISO2 identifier
+				 */
+				ISO2: () => LocalizedString
+				/**
+				 * ISO3 identifier
+				 */
+				ISO3: () => LocalizedString
+				/**
+				 * ISO 3166-1 numeric code
+				 */
+				ISONUM: () => LocalizedString
+				/**
+				 * Name (en)
+				 */
+				NAMEen: () => LocalizedString
+				/**
+				 * Name (fr)
+				 */
+				NAMEfr: () => LocalizedString
+				/**
+				 * Regional belonging
+				 */
+				REGION_BLOC: () => LocalizedString
+				/**
+				 * United Nations region of belonging
+				 */
+				REGION_UN: () => LocalizedString
+				/**
+				 * United Nations sub-region of belonging
+				 */
+				SUBREGION_UN: () => LocalizedString
+				/**
+				 * Belonging to the UN Least Developed Countries list
+				 */
+				LAST_DEV: () => LocalizedString
+				/**
+				 * Total area, 2021 (km²)
+				 */
+				AREA_2021: () => LocalizedString
+				/**
+				 * Forest area, 2021, (km²)
+				 */
+				FOREST_AREA_2021: () => LocalizedString
+				/**
+				 * Total population, 2022
+				 */
+				POP_2023: () => LocalizedString
+				/**
+				 * Life expectancy at birth, 2022 (years)
+				 */
+				LIFE_EXP_2022: () => LocalizedString
+				/**
+				 * Fertility rate, 2022 (births per woman)
+				 */
+				FERT_2022: () => LocalizedString
+				/**
+				 * Prevalence of HIV,2022 (% of population ages 15-49)
+				 */
+				HIV_2022: () => LocalizedString
+				/**
+				 * CO2 emissions, 2020 (metric tons per capita)
+				 */
+				CO2_POP_2020: () => LocalizedString
+				/**
+				 * GNI per capita, PPP, 2022 (current international $)
+				 */
+				GNI_POP_2023: () => LocalizedString
+				/**
+				 * Income share held by lowest 20% , 2021 (%)
+				 */
+				INC_20P_2021: () => LocalizedString
+				/**
+				 * Industry (including construction), value added, 2022 (% of GDP)
+				 */
+				GDP_INDS_2023: () => LocalizedString
+				/**
+				 * High-technology exports, 2022 (% of manufactured exports)
+				 */
+				HIG_TEC_EXP_2022: () => LocalizedString
+				/**
+				 * Military expenditure, 2022 (% of GDP) 
+				 */
+				MIL_EXP_2022: () => LocalizedString
+				/**
+				 * Number of times James Bond has visited the country
+				 */
+				JamesBond: () => LocalizedString
+			}
+			/**
+			 * Monde, pays, Nations Unies
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * UAR RIATE, 2022
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * World Bank, 2024
+				 */
+				'1': () => LocalizedString
+				/**
+				 * United Nations (consolidated by RIATE), 2024
+				 */
+				'2': () => LocalizedString
+				/**
+				 * Wikipedia, 2024
+				 */
+				'3': () => LocalizedString
 			}
 		}
 		world_242: {
