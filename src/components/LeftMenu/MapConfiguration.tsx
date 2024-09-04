@@ -3,6 +3,7 @@ import { JSX, Show } from 'solid-js';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { parseEnRepresentation, toPrecisionAfterDecimalPoint } from '../../helpers/math';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -12,6 +13,7 @@ import { mapStore, setMapStore } from '../../store/MapStore';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
+import DetailsSummary from '../DetailsSummary.tsx';
 
 export default function MapConfiguration(): JSX.Element {
   const { LL } = useI18nContext();
@@ -74,7 +76,7 @@ export default function MapConfiguration(): JSX.Element {
         });
       }}
     />
-    <div>
+    <div class={'mb-5'}>
       <label class="label">{LL().LayoutFeatures.MapMargins()}</label>
       <div>
         <div class="is-flex is-justify-content-space-around">
@@ -156,5 +158,37 @@ export default function MapConfiguration(): JSX.Element {
         </Show>
       </div>
     </div>
+    <DetailsSummary summaryContent={'Centrage de la carte'} initialOpen={false}>
+      <InputFieldNumber
+        label={LL().MapConfiguration.MapCenterX()}
+        value={parseEnRepresentation(toPrecisionAfterDecimalPoint(mapStore.translate[0], 2, 'en'))}
+        onChange={(v) => {
+          setMapStore('translate', [v, mapStore.translate[1]]);
+        }}
+        min={-Infinity}
+        max={Infinity}
+        step={1}
+      />
+      <InputFieldNumber
+        label={LL().MapConfiguration.MapCenterY()}
+        value={parseEnRepresentation(toPrecisionAfterDecimalPoint(mapStore.translate[1], 2, 'en'))}
+        onChange={(v) => {
+          setMapStore('translate', [mapStore.translate[0], v]);
+        }}
+        min={-Infinity}
+        max={Infinity}
+        step={1}
+      />
+      <InputFieldNumber
+        label={LL().MapConfiguration.ZoomFactor()}
+        value={parseEnRepresentation(toPrecisionAfterDecimalPoint(mapStore.scale, 2, 'en'))}
+        onChange={(v) => {
+          setMapStore('scale', v);
+        }}
+        min={-Infinity}
+        max={Infinity}
+        step={1}
+      />
+    </DetailsSummary>
   </div>;
 }

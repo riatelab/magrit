@@ -420,6 +420,10 @@ const fr = {
     ProjectionCenterGamma: 'Rotation de l\'axe γ',
     StandardParallel: 'Parallèle standard',
     StandardParallels: 'Parallèles standards',
+    MapCentering: 'Centrage de la carte',
+    MapCenterX: 'Centrage de la carte (x)',
+    MapCenterY: 'Centrage de la carte (y)',
+    ZoomFactor: 'Zoom de la carte',
   },
   LayoutFeatures: {
     BackgroundColor: 'Couleur de fond',

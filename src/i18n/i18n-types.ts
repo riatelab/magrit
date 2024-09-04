@@ -1393,6 +1393,22 @@ type RootTranslation = {
 		 * S​t​a​n​d​a​r​d​ ​p​a​r​a​l​l​e​l​s
 		 */
 		StandardParallels: string
+		/**
+		 * M​a​p​ ​c​e​n​t​e​r​i​n​g
+		 */
+		MapCentering: string
+		/**
+		 * M​a​p​ ​c​e​n​t​e​r​ ​(​x​)
+		 */
+		MapCenterX: string
+		/**
+		 * M​a​p​ ​c​e​n​t​e​r​ ​(​y​)
+		 */
+		MapCenterY: string
+		/**
+		 * Z​o​o​m​ ​f​a​c​t​o​r
+		 */
+		ZoomFactor: string
 	}
 	LayoutFeatures: {
 		/**
@@ -5709,6 +5725,22 @@ export type TranslationFunctions = {
 		 * Standard parallels
 		 */
 		StandardParallels: () => LocalizedString
+		/**
+		 * Map centering
+		 */
+		MapCentering: () => LocalizedString
+		/**
+		 * Map center (x)
+		 */
+		MapCenterX: () => LocalizedString
+		/**
+		 * Map center (y)
+		 */
+		MapCenterY: () => LocalizedString
+		/**
+		 * Zoom factor
+		 */
+		ZoomFactor: () => LocalizedString
 	}
 	LayoutFeatures: {
 		/**

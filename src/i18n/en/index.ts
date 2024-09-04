@@ -420,6 +420,10 @@ const en = {
     ProjectionCenterGamma: 'γ-axis rotation',
     StandardParallel: 'Standard parallel',
     StandardParallels: 'Standard parallels',
+    MapCentering: 'Map centering',
+    MapCenterX: 'Map center (x)',
+    MapCenterY: 'Map center (y)',
+    ZoomFactor: 'Zoom factor',
   },
   LayoutFeatures: {
     BackgroundColor: 'Background color',
