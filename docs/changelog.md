@@ -12,6 +12,12 @@
   - en enlevant les valeurs NA présentes dans les colonnes numériques et en les remplaçant par des valeurs nulles,
   - en enlevant les éventuelles lignes vides en fin de fichier.
 
+- Ajout d'une entrée dans le menu de gauche pour changer manuellement les attributs scale et translate de la carte.
+
+- Ajout d'une barre de défilement verticale dans le gestionnaire de couche (plutôt que sur l'ensemble du menu de gauche) pour quand un projet contient
+  de nombreuses couches.
+
+- Ajout d'un jeu de données d'exemple "Pays du monde" avec de nombreuses données statistiques (en provenance de la Banque Mondiale, des Nations Unies et de Wikipedia).
 
 #### 2.0.8 (2024-08-27)
 

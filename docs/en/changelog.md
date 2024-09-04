@@ -12,6 +12,12 @@
   - by removing "NA" values from numerical columns and replacing them with null values,
   - by removing any empty lines at the end of the file.
 
+- Add a new entry in the left menu to change the scale and translate attributes of the map.
+
+- Add a vertical scroll bar in the layer manager (rather than on the whole left menu) for when a project contains many layers.
+
+- Add an example dataset “Countries of the world” with various statistical data (from the World Bank, the United Nations and Wikipedia).
+
 #### 2.0.8 (2024-08-27)
 
 - Corrected the value displayed for scale bars (Fixes <a href=“https://github.com/riatelab/magrit/issues/137”>137</a>).
