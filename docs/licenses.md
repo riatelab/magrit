@@ -62,7 +62,7 @@ Différentes bibliothèques et logiciels tiers sont utilisés dans Magrit. Voici
 | solid-sortablejs | https://github.com/Supertigerr/solid-sortablejs | MIT |
 | solid-toast | https://github.com/ardeora/solid-toast | MIT |
 | solid-transition-group | https://github.com/solidjs/solid-transition-group | MIT |
-| statsbreaks | n/a | MIT |
+| statsbreaks | https://github.com/mthh/statsbreaks | MIT |
 | topojson-client | https://github.com/topojson/topojson-client | ISC |
 | topojson-server | https://github.com/topojson/topojson-server | ISC |
 | topojson-simplify | https://github.com/topojson/topojson-simplify | ISC |

@@ -13,8 +13,8 @@ Various third-party libraries and software are used in Magrit. Here is a non-exh
 
 ### Dependencies included in application code
 
-| Library | Link                                                             |  License |
-|---|---|---|
+| Library | Link                                                          |  License |
+|---|--|---|
 | @observablehq/plot | https://github.com/observablehq/plot | ISC |
 | @solid-primitives/autofocus | https://github.com/solidjs-community/solid-primitives | MIT |
 | @stdlib/stats-base-dists-t-cdf | https://github.com/stdlib-js/stats-base-dists-t-cdf | Apache-2.0 |
@@ -62,7 +62,7 @@ Various third-party libraries and software are used in Magrit. Here is a non-exh
 | solid-sortablejs | https://github.com/Supertigerr/solid-sortablejs | MIT |
 | solid-toast | https://github.com/ardeora/solid-toast | MIT |
 | solid-transition-group | https://github.com/solidjs/solid-transition-group | MIT |
-| statsbreaks | n/a | MIT |
+| statsbreaks | https://github.com/mthh/statsbreaks | MIT |
 | topojson-client | https://github.com/topojson/topojson-client | ISC |
 | topojson-server | https://github.com/topojson/topojson-server | ISC |
 | topojson-simplify | https://github.com/topojson/topojson-simplify | ISC |
