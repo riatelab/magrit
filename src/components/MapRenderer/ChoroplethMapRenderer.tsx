@@ -10,6 +10,7 @@ import { getClassifier } from '../../helpers/classification';
 import { isFiniteNumber } from '../../helpers/common';
 import { getSymbolPath } from '../../helpers/svg';
 import { mergeFilterIds } from './common.tsx';
+import d3 from '../../helpers/d3-custom';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -62,7 +63,7 @@ export function choroplethPolygonRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
     >
-    <For each={layerDescription.data.features}>
+    <For each={d3.geoStitch(layerDescription.data).features}>
       {
         (feature) => <path
           fill={

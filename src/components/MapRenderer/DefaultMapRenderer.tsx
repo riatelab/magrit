@@ -7,6 +7,7 @@ import {
 import { extractMeshAndMergedPolygonToGeojson } from '../../helpers/topojson';
 import { mergeFilterIds } from './common.tsx';
 import { getSymbolPath } from '../../helpers/svg';
+import d3 from '../../helpers/d3-custom';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -47,7 +48,7 @@ export function defaultPolygonRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
   >
-    <For each={layerDescription.data.features}>
+    <For each={d3.geoStitch(layerDescription.data).features}>
       {
         (feature) => <path
           d={globalStore.pathGenerator(feature)}

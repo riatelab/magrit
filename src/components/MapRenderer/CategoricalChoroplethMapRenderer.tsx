@@ -8,6 +8,7 @@ import {
 // Helpers
 import { mergeFilterIds } from './common.tsx';
 import { getSymbolPath } from '../../helpers/svg';
+import d3 from '../../helpers/d3-custom';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -67,7 +68,7 @@ export function categoricalChoroplethPolygonRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
   >
-    <For each={layerDescription.data.features}>
+    <For each={d3.geoStitch(layerDescription.data).features}>
       {
         (feature) => <path
           fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
