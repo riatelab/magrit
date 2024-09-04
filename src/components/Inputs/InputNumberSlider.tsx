@@ -1,7 +1,6 @@
 // Imports from solid-js
 import {
   createEffect,
-  createSignal,
   type JSX,
   on,
   onCleanup,
@@ -32,11 +31,6 @@ export default function InputFieldNumberSlider(props: InputFieldNumberSliderProp
   let refSliderNode: HTMLDivElement;
   let slider: NoUiSliderApi;
 
-  const [
-    currentValue,
-    setCurrentValue,
-  ] = createSignal(props.value);
-
   const createSlider = () => {
     slider = noUiSlider.create(refSliderNode, {
       start: props.value,
@@ -49,7 +43,6 @@ export default function InputFieldNumberSlider(props: InputFieldNumberSliderProp
     });
     slider.on('update', (values, handle) => {
       props.onChange(+values[handle]);
-      setCurrentValue(+values[handle]);
     });
   };
 
@@ -95,9 +88,9 @@ export default function InputFieldNumberSlider(props: InputFieldNumberSliderProp
     <input
       class={'input'}
       type="number"
-      value={currentValue()}
+      value={props.value}
       onChange={(e) => {
-        setCurrentValue(+e.currentTarget.value);
+        slider.set(+e.currentTarget.value);
         props.onChange(+e.currentTarget.value);
       }}
       min={props.min}
