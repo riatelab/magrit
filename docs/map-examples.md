@@ -38,3 +38,9 @@ dans un logiciel de dessin vectoriel.
     alt="Carte 'Établissements cinématographiques à Paris'"
     caption="Établissements cinématographiques à Paris"
 />
+
+<ZoomImg
+    src="/example_map_grand_ouest.png"
+    alt="Carte 'Une géographie du peuplement dans le Grand Ouest'"
+    caption="Une géographie du peuplement dans le Grand Ouest (Réalisation: Ronan Ysebaert)"
+/>

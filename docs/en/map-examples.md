@@ -37,3 +37,9 @@ All the map examples shown here are directly exported from Magrit and have not b
     alt="Map 'Cinemas in Paris'"
     caption="Cinemas in Paris"
 />
+
+<ZoomImg
+    src="/example_map_grand_ouest.png"
+    alt="Carte 'Une géographie du peuplement dans le Grand Ouest'"
+    caption="Une géographie du peuplement dans le Grand Ouest (Réalisation: Ronan Ysebaert)"
+/>
