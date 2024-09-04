@@ -38,7 +38,10 @@ import {
   makeDefaultGraticule,
   makeDefaultSphere,
 } from '../../helpers/layers';
-import { Mabs, Msqrt } from '../../helpers/math';
+import {
+  Mabs, Msqrt,
+  parseEnRepresentation, toPrecisionAfterDecimalPoint,
+} from '../../helpers/math';
 import { getTargetSvg } from '../../helpers/svg';
 import {
   addTemporaryPoint,
@@ -76,6 +79,7 @@ import {
   ScaleBarBehavior, ScaleBarStyle,
   ScaleBarMeasureLocation,
 } from '../../global.d';
+import DetailsSummary from '../DetailsSummary.tsx';
 
 const makeDrawingInstructions = (
   LL: Accessor<TranslationFunctions>,
@@ -1062,5 +1066,37 @@ export default function LayoutFeatures(): JSX.Element {
         </button>
       </div>
     </div>
+    <DetailsSummary summaryContent={'Centrage de la carte'} initialOpen={false}>
+      <InputFieldNumber
+        label={'Centrage de la carte (x)'}
+        value={parseEnRepresentation(toPrecisionAfterDecimalPoint(mapStore.translate[0], 2, 'en'))}
+        onChange={(v) => {
+          setMapStore('translate', [v, mapStore.translate[1]]);
+        }}
+        min={-Infinity}
+        max={Infinity}
+        step={1}
+      />
+      <InputFieldNumber
+        label={'Centrage de la carte (y)'}
+        value={parseEnRepresentation(toPrecisionAfterDecimalPoint(mapStore.translate[1], 2, 'en'))}
+        onChange={(v) => {
+          setMapStore('translate', [mapStore.translate[0], v]);
+        }}
+        min={-Infinity}
+        max={Infinity}
+        step={1}
+      />
+      <InputFieldNumber
+        label={'Zoom de la carte'}
+        value={parseEnRepresentation(toPrecisionAfterDecimalPoint(mapStore.scale, 2, 'en'))}
+        onChange={(v) => {
+          setMapStore('scale', v);
+        }}
+        min={-Infinity}
+        max={Infinity}
+        step={1}
+      />
+    </DetailsSummary>
   </div>;
 }

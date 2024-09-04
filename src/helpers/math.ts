@@ -329,8 +329,11 @@ function positionFirstNonZeroDigit(value: number): number {
   return i;
 }
 
-export const formatNum = (n: number, precision: number = 2): string => n
-  .toLocaleString(undefined, { maximumFractionDigits: precision });
+export const formatNum = (
+  n: number,
+  precision: number = 2,
+  locale : string | undefined = undefined,
+): string => n.toLocaleString(locale, { maximumFractionDigits: precision });
 
 /**
  * Returns a string representation of a number with a given precision
@@ -339,22 +342,30 @@ export const formatNum = (n: number, precision: number = 2): string => n
  *
  * @param n
  * @param precision
+ * @param locale
+ * @returns {string}
  */
 export function toPrecisionAfterDecimalPoint(
   n: number | undefined,
   precision: number = 4,
+  locale: string | undefined = undefined,
 ): string {
-  if (!n) return '';
+  if (!n && n !== 0) return '';
   const s = n.toString();
   const numberBeforeDecimalPoint = s.indexOf('.');
   if (numberBeforeDecimalPoint === -1 || Number.isInteger(n)) {
-    return (+n.toFixed(1)).toLocaleString();
+    return (+n.toFixed(1)).toLocaleString(locale);
   }
   // If the number need more than "precision" to be displayed correctly,
   // increment precision as needed.
   const positionFirstNonZero = positionFirstNonZeroDigit(n);
   if (positionFirstNonZero > precision) {
-    return formatNum(n, positionFirstNonZero);
+    return formatNum(n, positionFirstNonZero, locale);
   }
-  return formatNum(n, precision);
+  return formatNum(n, precision, locale);
 }
+
+export const parseEnRepresentation = (s: string): number => {
+  const s1 = s.replace(',', '');
+  return parseFloat(s1);
+};
