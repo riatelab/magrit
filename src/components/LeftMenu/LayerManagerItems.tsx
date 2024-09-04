@@ -311,6 +311,11 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
       (layoutFeatureOrLegend) => layoutFeatureOrLegend.layerId === props.id,
     ) as Legend[]);
 
+  const isPortrayed = props.representationType !== 'default';
+  const hasNoFunctionality = props.representationType === 'sphere'
+    || props.representationType === 'graticule'
+    || props.id.startsWith('Layer-default-world-');
+
   return <div class="layer-manager-item is-flex" onDblClick={() => {
     onClickSettings(props.id, LL);
   }}>
@@ -452,13 +457,9 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
           });
         }}
         title={LL().LeftMenu.FunctionalityChoice()}
-        disabled={
-          props.representationType === 'sphere'
-          || props.representationType === 'graticule'
-          || props.id.startsWith('Layer-default-world-')
-        }
+        disabled={hasNoFunctionality}
       >
-        <OcGoal2/>
+        <OcGoal2 style={isPortrayed && !hasNoFunctionality ? { opacity: 0.65 } : undefined} />
       </button>
     </div>
   </div>;
