@@ -27,7 +27,7 @@ import { draggedElementsAreFiles, droppedElementsAreFiles, prepareFilterAndStore
 import { round } from './helpers/math';
 import parseQueryString from './helpers/query-string';
 import { initDb, storeProject } from './helpers/storage';
-import { isValidProject } from './helpers/project';
+import { isValidProject, patchProject } from './helpers/project';
 
 // Sub-components
 import AboutModal from './components/Modals/AboutModal.tsx';
@@ -266,6 +266,11 @@ const reloadFromProjectObject = async (
     });
     return;
   }
+
+  // Get the different parts of the project
+  // after applying the necessary patches
+  // for making it compatible with the current version of the application
+  // if necessary.
   const {
     version,
     applicationSettings,
@@ -273,7 +278,8 @@ const reloadFromProjectObject = async (
     layoutFeaturesAndLegends,
     map,
     tables,
-  } = obj;
+  } = patchProject(obj);
+
   // Reset the application settings store
   setApplicationSettingsStore(applicationSettings);
   // Reset the layers description store before changing the map store
