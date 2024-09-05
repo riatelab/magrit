@@ -2,7 +2,7 @@
 
 <br />
 
-#### Unreleased
+#### 2.0.9 (2024-09-05)
 
 - Nouvelle fonctionnalité permettant de choisir une variable pour le numérateur et pour le dénominateur lors de la création de cartes lissées (Corrige <a href="https://github.com/riatelab/magrit/issues/135">135</a>).
 
@@ -18,6 +18,10 @@
   de nombreuses couches.
 
 - Ajout d'un jeu de données d'exemple "Pays du monde" avec de nombreuses données statistiques (en provenance de la Banque Mondiale, des Nations Unies et de Wikipedia).
+
+- Ajout de la possibilité de choisir la couleur du texte ainsi que les autres paramètres de police pour les barres d'échelles.
+
+- Ajout de la possibilité de choisir la couleur de la flèche du nord (dans son style "simple" seulement).
 
 #### 2.0.8 (2024-08-27)
 

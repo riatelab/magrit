@@ -2,7 +2,7 @@
 
 <br />
 
-#### Unreleased
+#### 2.0.9 (2024-09-05)
 
 - New functionality to select numerator / denominator for smoothed maps (Fixes <a href=“https://github.com/riatelab/magrit/issues/135”>135</a>)
 
@@ -17,6 +17,10 @@
 - Add a vertical scroll bar in the layer manager (rather than on the whole left menu) for when a project contains many layers.
 
 - Add an example dataset “Countries of the world” with various statistical data (from the World Bank, the United Nations and Wikipedia).
+
+- Add the ability to choose text color and other font settings for scale bars.
+
+- Add the ability to choose the color of the north arrow (in its “simple” style only).
 
 #### 2.0.8 (2024-08-27)
 
