@@ -821,6 +821,7 @@ const en = {
       LogTransform: 'Logarithmic transformation',
       MessageSameVariable: 'The two variables must be different.',
       Compute: 'Compute',
+      DrawConfidenceInterval: 'Draw the confidence interval',
       PearsonCorrelationValue: 'Pearson product-moment correlation coefficient:',
       SpearmanCorrelationValue: 'Spearman\'s rank correlation coefficient:',
       ModelSummary: 'Model summary',

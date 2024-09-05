@@ -327,6 +327,13 @@ export default function FunctionalitySelection(): JSX.Element {
     document.removeEventListener('keydown', listenerEscKey);
   });
 
+  const getModalSizeForFunc = () => {
+    if (selectedFunctionality()!.type === 'simpleLinearRegression') {
+      return 'min(95vw, 1000px)';
+    }
+    return 'min(95vw, 860px)';
+  };
+
   return <div
     class="modal-window modal functionality-selection"
     style={{ display: 'flex' }}
@@ -336,7 +343,7 @@ export default function FunctionalitySelection(): JSX.Element {
   >
     <div class="modal-background" />
     <div class="modal-card" style={{
-      width: !selectedFunctionality() ? 'min(95vw, 1260px)' : 'min(95vw, 860px)',
+      width: (selectedFunctionality() ? getModalSizeForFunc() : 'min(95vw, 1260px)'),
       height: '90vh',
     }}>
       <header class="modal-card-head">

@@ -481,6 +481,11 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
   ] = createSignal<string>('');
 
   const [
+    drawConfidenceInterval,
+    setDrawConfidenceInterval,
+  ] = createSignal<boolean>(false);
+
+  const [
     selectedMatrix,
     setSelectedMatrix,
   ] = createSignal<'pearson' | 'spearman'>('pearson');
@@ -636,6 +641,7 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
         logX={false}
         logY={false}
         drawLine={drawRegressionLine()}
+        drawConfidenceInterval={drawConfidenceInterval()}
       />
       <Show when={linearRegressionResult() === null}>
         <div class="has-text-centered m-4">
@@ -662,9 +668,20 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
       </Show>
     </Show>
     <Show when={linearRegressionResult() !== null}>
+      <div style={{ width: '34%', 'text-align': 'center', margin: 'auto' }}>
+        <InputFieldCheckbox
+          label={LL().FunctionalitiesSection.LinearRegressionOptions.DrawConfidenceInterval()}
+          checked={drawConfidenceInterval()}
+          onChange={(v) => {
+            setDrawConfidenceInterval(v);
+          }}
+        />
+      </div>
+      <hr/>
       <LmSummary {...(linearRegressionResult() as LinearRegressionResult)} />
+      <hr/>
       <DiagnosticPlots {...(linearRegressionResult() as LinearRegressionResult)} />
-      <InformationBeforeValidation />
+      <InformationBeforeValidation/>
       <p class={'m-4'}></p>
       <hr/>
       <InputFieldSelect
@@ -703,7 +720,9 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
           >
             <InputFieldSelect
               label={'Palette'}
-              onChange={(v) => { setPaletteName(v); }}
+              onChange={(v) => {
+                setPaletteName(v);
+              }}
               value={paletteName()}
               layout={'vertical'}
             >
@@ -721,9 +740,11 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
       </Show>
       <Show when={portrayalType() === 'proportionalSymbols'}>
         <InputFieldSelect
-          label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.SymbolType() }
-          onChange={(value) => { setSymbolType(value as ProportionalSymbolsSymbolType); }}
-          value={ symbolType() }
+          label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.SymbolType()}
+          onChange={(value) => {
+            setSymbolType(value as ProportionalSymbolsSymbolType);
+          }}
+          value={symbolType()}
         >
           <For each={
             Object.values(ProportionalSymbolsSymbolType)
@@ -731,26 +752,32 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
           }>
             {
               (st) => <option
-                value={ st }
-              >{ LL().FunctionalitiesSection.ProportionalSymbolsOptions.SymbolTypes[st]() }</option>
+                value={st}
+              >{LL().FunctionalitiesSection.ProportionalSymbolsOptions.SymbolTypes[st]()}</option>
             }
           </For>
         </InputFieldSelect>
         <InputFieldColor
           label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ColorPositiveValues()}
           value={colors()[0]}
-          onChange={(v) => { setColors([v, colors()[1]]); }}
+          onChange={(v) => {
+            setColors([v, colors()[1]]);
+          }}
         />
         <InputFieldColor
           label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ColorPositiveValues()}
           value={colors()[1]}
-          onChange={(v) => { setColors([colors()[0], v]); }}
+          onChange={(v) => {
+            setColors([colors()[0], v]);
+          }}
         />
       </Show>
       <InputFieldCheckbox
         label={LL().FunctionalitiesSection.LinearRegressionOptions.AddScatterPlot()}
         checked={addScatterPlot()}
-        onChange={(v) => { setAddScatterPlot(v); }}
+        onChange={(v) => {
+          setAddScatterPlot(v);
+        }}
       />
     </Show>
     <InputResultName

@@ -232,6 +232,7 @@ export function ScatterPlot(
     logX?: boolean,
     logY?: boolean,
     drawLine?: boolean,
+    drawConfidenceInterval?: boolean,
   },
 ): JSX.Element {
   const ds = createMemo(() => props.dataset.map((d) => {
@@ -286,6 +287,7 @@ export function ScatterPlot(
           x: props.explanatoryVariable,
           y: props.explainedVariable,
           stroke: 'red',
+          fillOpacity: props.drawConfidenceInterval ? 0.1 : 0,
         }) : null,
         Plot.gridX({ stroke: 'currentColor', strokeOpacity: '0.2' }),
         Plot.gridY({ stroke: 'currentColor', strokeOpacity: '0.2' }),

@@ -2827,6 +2827,10 @@ type RootTranslation = {
 			 */
 			Compute: string
 			/**
+			 * D​r​a​w​ ​t​h​e​ ​c​o​n​f​i​d​e​n​c​e​ ​i​n​t​e​r​v​a​l
+			 */
+			DrawConfidenceInterval: string
+			/**
 			 * P​e​a​r​s​o​n​ ​p​r​o​d​u​c​t​-​m​o​m​e​n​t​ ​c​o​r​r​e​l​a​t​i​o​n​ ​c​o​e​f​f​i​c​i​e​n​t​:
 			 */
 			PearsonCorrelationValue: string
@@ -7141,6 +7145,10 @@ export type TranslationFunctions = {
 			 * Compute
 			 */
 			Compute: () => LocalizedString
+			/**
+			 * Draw the confidence interval
+			 */
+			DrawConfidenceInterval: () => LocalizedString
 			/**
 			 * Pearson product-moment correlation coefficient:
 			 */
