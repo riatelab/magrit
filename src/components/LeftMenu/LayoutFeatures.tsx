@@ -487,7 +487,7 @@ const createScaleBar = (LL: Accessor<TranslationFunctions>) => {
       label: {
         text: 'km',
         fontSize: 12,
-        fontFamily: 'Arial',
+        fontFamily: 'Sans-serif',
         fontStyle: 'normal',
         fontWeight: 'normal',
         fontColor: 'black',
