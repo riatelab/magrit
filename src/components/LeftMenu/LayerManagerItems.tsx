@@ -459,7 +459,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
         title={LL().LeftMenu.FunctionalityChoice()}
         disabled={hasNoFunctionality}
       >
-        <OcGoal2 style={isPortrayed && !hasNoFunctionality ? { opacity: 0.65 } : undefined} />
+        <OcGoal2 style={isPortrayed && !hasNoFunctionality ? { opacity: 0.55 } : undefined} />
       </button>
     </div>
   </div>;
