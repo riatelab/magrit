@@ -56,6 +56,10 @@ type RootTranslation = {
 		 * T​h​e​ ​p​r​o​j​e​c​t​ ​i​s​ ​i​n​v​a​l​i​d​ ​a​n​d​ ​c​a​n​n​o​t​ ​b​e​ ​l​o​a​d​e​d​.
 		 */
 		InvalidProject: string
+		/**
+		 * T​h​e​ ​p​r​o​j​e​c​t​ ​w​a​s​ ​s​a​v​e​d​ ​w​i​t​h​ ​a​ ​n​e​w​e​r​ ​v​e​r​s​i​o​n​ ​o​f​ ​M​a​g​r​i​t​.​ ​P​l​e​a​s​e​ ​u​s​e​ ​t​h​e​ ​l​a​s​t​ ​v​e​r​s​i​o​n​ ​o​f​ ​M​a​g​r​i​t​ ​t​o​ ​o​p​e​n​ ​i​t​.
+		 */
+		ProjectSavedWithNewerVersion: string
 	}
 	LoadingMessages: {
 		/**
@@ -4397,6 +4401,10 @@ export type TranslationFunctions = {
 		 * The project is invalid and cannot be loaded.
 		 */
 		InvalidProject: () => LocalizedString
+		/**
+		 * The project was saved with a newer version of Magrit. Please use the last version of Magrit to open it.
+		 */
+		ProjectSavedWithNewerVersion: () => LocalizedString
 	}
 	LoadingMessages: {
 		/**

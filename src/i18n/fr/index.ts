@@ -12,6 +12,7 @@ const fr = {
     SaveEditedData: 'Sauvegarder les modifications effectuées ?',
     ReloadLastProject: 'Un projet a été sauvegardé automatiquement lors de la fermeture de la page le {}. Recharger le ce projet ?',
     InvalidProject: 'Le projet n\'est pas valide - il est impossible de le charger.',
+    ProjectSavedWithNewerVersion: 'Le projet a été sauvegardé avec une version plus récente de Magrit. Merci d\'utiliser une version plus récente de Magrit pour ouvrir ce projet.',
   },
   LoadingMessages: {
     Default: 'Chargement...',

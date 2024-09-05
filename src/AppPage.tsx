@@ -27,7 +27,7 @@ import { draggedElementsAreFiles, droppedElementsAreFiles, prepareFilterAndStore
 import { round } from './helpers/math';
 import parseQueryString from './helpers/query-string';
 import { initDb, storeProject } from './helpers/storage';
-import { isValidProject, patchProject } from './helpers/project';
+import { isValidProject, patchProject, ValidityState } from './helpers/project';
 
 // Sub-components
 import AboutModal from './components/Modals/AboutModal.tsx';
@@ -251,17 +251,29 @@ const reloadFromProjectObject = async (
 
   await yieldOrContinue('smooth');
 
-  // The state we want to use
-  if (!isValidProject(obj)) {
+  // Read the project and detect if it is valid or
+  // if it was saved with a newer version of the application
+  const projectValidityState = isValidProject(obj);
+  if (projectValidityState === ValidityState.Invalid) {
     setReloadingProject(false);
     setNiceAlertStore({
       show: true,
-      content: () => <div
-          class="is-flex is-justify-content-center is-align-items-center"
-          style={{ height: '100%' }}
-        >
-          <h4>{LL().Alerts.InvalidProject()}</h4>
-        </div>,
+      type: 'error',
+      content: () => <div>
+        <h4>{LL().Alerts.InvalidProject()}</h4>
+      </div>,
+      focusOn: 'confirm',
+    });
+    return;
+  }
+  if (projectValidityState === ValidityState.SavedFromNewerVersion) {
+    setReloadingProject(false);
+    setNiceAlertStore({
+      show: true,
+      type: 'error',
+      content: () => <div>
+        <h4>{LL().Alerts.ProjectSavedWithNewerVersion()}</h4>
+      </div>,
       focusOn: 'confirm',
     });
     return;

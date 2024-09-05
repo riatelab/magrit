@@ -12,6 +12,7 @@ const en = {
     SaveEditedData: 'Save changes ?',
     ReloadLastProject: 'A project was automatically saved when the page was closed on {}. Reload this project ?',
     InvalidProject: 'The project is invalid and cannot be loaded.',
+    ProjectSavedWithNewerVersion: 'The project was saved with a newer version of Magrit. Please use the last version of Magrit to open it.',
   },
   LoadingMessages: {
     Default: 'Loading...',
