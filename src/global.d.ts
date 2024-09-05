@@ -1189,7 +1189,7 @@ export interface ScaleBar extends LayoutFeatureBase {
   // The length of the scale bar on the map (in meters)
   distance: number,
   // The label of the scale bar (displayed on top of it)
-  label?: string,
+  label: LegendTextElement,
   // The tick values
   tickValues: number[],
   // The distance between the ticks and the scale bar
@@ -1414,4 +1414,13 @@ interface DropShadowOptions {
 
 interface BlurOptions {
   stdDeviation: number,
+}
+
+interface ProjectDescription {
+  version: string,
+  applicationSettings: ApplicationSettingsStoreType,
+  layers: LayerDescription[],
+  layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
+  map: MapStoreType,
+  tables: TableDescription[],
 }

@@ -35,6 +35,7 @@ const simpleNorthArrow = (props: NorthArrow) => <g
     version="1.1"
     width={props.size}
     height={props.size}
+    fill={props.fillColor}
   >
     <g transform="translate(-51.471 -91.49)">
       <path

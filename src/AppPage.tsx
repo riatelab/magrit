@@ -27,6 +27,7 @@ import { draggedElementsAreFiles, droppedElementsAreFiles, prepareFilterAndStore
 import { round } from './helpers/math';
 import parseQueryString from './helpers/query-string';
 import { initDb, storeProject } from './helpers/storage';
+import { isValidProject } from './helpers/project';
 
 // Sub-components
 import AboutModal from './components/Modals/AboutModal.tsx';
@@ -52,7 +53,6 @@ import {
   globalStore, setGlobalStore, setLoading, setReloadingProject,
 } from './store/GlobalStore';
 import {
-  type MapStoreType,
   mapStore,
   setMapStoreBase,
 } from './store/MapStore';
@@ -66,7 +66,6 @@ import { fileDropStore, setFileDropStore } from './store/FileDropStore';
 import { tableWindowStore } from './store/TableWindowStore';
 import {
   applicationSettingsStore,
-  type ApplicationSettingsStoreType,
   ResizeBehavior,
   setApplicationSettingsStore,
 } from './store/ApplicationSettingsStore';
@@ -77,24 +76,12 @@ import { functionalitySelectionStore } from './store/FunctionalitySelectionStore
 // Types and enums
 import {
   DexieDb,
-  LayerDescription,
-  LayoutFeature,
-  Legend,
-  TableDescription,
+  ProjectDescription,
 } from './global';
 import type { TranslationFunctions } from './i18n/i18n-types';
 
 // Styles
 import './styles/Transitions.css';
-
-interface ProjectDescription {
-  version: string,
-  applicationSettings: ApplicationSettingsStoreType,
-  layers: LayerDescription[],
-  layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
-  map: MapStoreType,
-  tables: TableDescription[],
-}
 
 // Are we in electron ?
 // Currently we need this for:
@@ -254,6 +241,7 @@ const dropHandler = (e: Event, LL: Accessor<TranslationFunctions>): void => {
 
 const reloadFromProjectObject = async (
   obj: ProjectDescription,
+  LL: Accessor<TranslationFunctions>,
 ): Promise<void> => {
   // Set the app in "reloading" mode
   // (it displays a loading overlay and prevents the user from adding new layers
@@ -264,8 +252,20 @@ const reloadFromProjectObject = async (
   await yieldOrContinue('smooth');
 
   // The state we want to use
-  // TODO: we should check the integrity of the project object
-  //  either by using a schema, by checking the presence of the required fields...
+  if (!isValidProject(obj)) {
+    setReloadingProject(false);
+    setNiceAlertStore({
+      show: true,
+      content: () => <div
+          class="is-flex is-justify-content-center is-align-items-center"
+          style={{ height: '100%' }}
+        >
+          <h4>{LL().Alerts.InvalidProject()}</h4>
+        </div>,
+      focusOn: 'confirm',
+    });
+    return;
+  }
   const {
     version,
     applicationSettings,
@@ -475,7 +475,7 @@ const AppPage: () => JSX.Element = () => {
             const result = event.target?.result;
             if (!result) return;
             const obj = JSON.parse(result.toString());
-            reloadFromProjectObject(obj);
+            reloadFromProjectObject(obj, LL);
           };
           reader.readAsText(file);
         };
@@ -498,7 +498,7 @@ const AppPage: () => JSX.Element = () => {
     // Is there a project in the query string ?
     const projectQs = await projectFromQueryString();
     if (projectQs) {
-      reloadFromProjectObject(projectQs);
+      reloadFromProjectObject(projectQs, LL);
     } else {
       // If not, we check if there is a project in the local DB
       const projects = await db.projects.toArray();
@@ -510,7 +510,7 @@ const AppPage: () => JSX.Element = () => {
           content: () => <p>{LL().Alerts.ReloadLastProject(date.toLocaleDateString())}</p>,
           confirmCallback: () => {
             setGlobalStore({ userHasAddedLayer: true });
-            reloadFromProjectObject(data);
+            reloadFromProjectObject(data, LL);
           },
           focusOn: 'confirm',
         });

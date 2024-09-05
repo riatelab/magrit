@@ -11,6 +11,7 @@ const fr = {
     EmptyProject: 'Créer un nouveau projet vide ?',
     SaveEditedData: 'Sauvegarder les modifications effectuées ?',
     ReloadLastProject: 'Un projet a été sauvegardé automatiquement lors de la fermeture de la page le {}. Recharger le ce projet ?',
+    InvalidProject: 'Le projet n\'est pas valide - il est impossible de le charger.',
   },
   LoadingMessages: {
     Default: 'Chargement...',

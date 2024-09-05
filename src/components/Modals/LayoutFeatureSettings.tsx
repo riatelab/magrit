@@ -172,7 +172,7 @@ function makeSettingsScaleBar(
     .find((f) => f.id === layoutFeatureId) as ScaleBar;
   return <>
     <InputFieldSelect
-      label={ LL().LayoutFeatures.Modal.ScaleBarBehavior() }
+      label={LL().LayoutFeatures.Modal.ScaleBarBehavior()}
       onChange={(value) => updateLayoutFeatureProperty(
         layoutFeatureId,
         ['behavior'],
@@ -182,10 +182,10 @@ function makeSettingsScaleBar(
       width={250}
     >
       <option value={ScaleBarBehavior.absoluteSize}>
-        { LL().LayoutFeatures.Modal.ScaleBarAbsoluteSize() }
+        {LL().LayoutFeatures.Modal.ScaleBarAbsoluteSize()}
       </option>
       <option value={ScaleBarBehavior.geographicSize}>
-        { LL().LayoutFeatures.Modal.ScaleBarGeographicSize() }
+        {LL().LayoutFeatures.Modal.ScaleBarGeographicSize()}
       </option>
     </InputFieldSelect>
     <InputFieldSelect
@@ -198,35 +198,35 @@ function makeSettingsScaleBar(
       value={ft.measureLocation}
       width={250}
     >
-     <option value={ScaleBarMeasureLocation.underScaleBar}>
-       { LL().LayoutFeatures.Modal.ScaleBarMeasureLocationUnderScaleBar() }
-     </option>
-     <option value={ScaleBarMeasureLocation.centerMap}>
-       { LL().LayoutFeatures.Modal.ScaleBarMeasureLocationCenterMap() }
-     </option>
+      <option value={ScaleBarMeasureLocation.underScaleBar}>
+        {LL().LayoutFeatures.Modal.ScaleBarMeasureLocationUnderScaleBar()}
+      </option>
+      <option value={ScaleBarMeasureLocation.centerMap}>
+        {LL().LayoutFeatures.Modal.ScaleBarMeasureLocationCenterMap()}
+      </option>
     </InputFieldSelect>
     <InputFieldSelect
-      label={ LL().LayoutFeatures.Modal.ScaleBarType() }
+      label={LL().LayoutFeatures.Modal.ScaleBarType()}
       onChange={(value) => updateLayoutFeatureProperty(
         layoutFeatureId,
         ['style'],
         value,
       )}
-      value={ ft.style }
+      value={ft.style}
       width={250}
     >
       <For each={Object.keys(ScaleBarStyle).filter((d) => d !== 'blackAndWhiteBar')}>
         {
           (style) => <option value={style}>
-            { LL().LayoutFeatures.Modal[style as keyof typeof ScaleBarStyle]() }
+            {LL().LayoutFeatures.Modal[style as keyof typeof ScaleBarStyle]()}
           </option>
         }
       </For>
     </InputFieldSelect>
     <Show when={ft.style !== ScaleBarStyle.simpleLine}>
       <InputFieldNumber
-        label={ LL().LayoutFeatures.Modal.Height() }
-        value={ ft.height }
+        label={LL().LayoutFeatures.Modal.Height()}
+        value={ft.height}
         onChange={(value) => updateLayoutFeatureProperty(
           layoutFeatureId,
           ['height'],
@@ -239,8 +239,8 @@ function makeSettingsScaleBar(
     </Show>
     <Show when={ft.behavior === 'absoluteSize'}>
       <InputFieldNumber
-        label={ LL().LayoutFeatures.Modal.Width() }
-        value={ ft.width }
+        label={LL().LayoutFeatures.Modal.Width()}
+        value={ft.width}
         onChange={(value) => updateLayoutFeatureProperty(
           layoutFeatureId,
           ['width'],
@@ -253,8 +253,8 @@ function makeSettingsScaleBar(
     </Show>
     <Show when={ft.behavior === 'geographicSize'}>
       <InputFieldNumber
-        label={ LL().LayoutFeatures.Modal.Distance() }
-        value={ convertToUnit(ft.distance, ft.unit) }
+        label={LL().LayoutFeatures.Modal.Distance()}
+        value={convertToUnit(ft.distance, ft.unit)}
         onChange={(value) => updateLayoutFeatureProperty(
           layoutFeatureId,
           ['distance'],
@@ -266,7 +266,7 @@ function makeSettingsScaleBar(
       />
     </Show>
     <InputFieldSelect
-      label={ LL().LayoutFeatures.Modal.Units() }
+      label={LL().LayoutFeatures.Modal.Units()}
       onChange={(value) => {
         updateLayoutFeatureProperty(
           layoutFeatureId,
@@ -298,24 +298,24 @@ function makeSettingsScaleBar(
       <For each={Object.keys(DistanceUnit)}>
         {
           (unit) => <option value={unit}>
-            { LL().LayoutFeatures.Modal[unit as keyof typeof DistanceUnit]() }
+            {LL().LayoutFeatures.Modal[unit as keyof typeof DistanceUnit]()}
           </option>
         }
       </For>
     </InputFieldSelect>
     <InputFieldText
-      label={ LL().LayoutFeatures.Modal.UnitLabel() }
+      label={LL().LayoutFeatures.Modal.UnitLabel()}
       onChange={(value) => updateLayoutFeatureProperty(
         layoutFeatureId,
-        ['label'],
+        ['label', 'text'],
         value,
       )}
-      value={ft.label}
+      value={ft.label.text}
       width={200}
     />
     <Show when={ft.style === ScaleBarStyle.blackAndWhiteBar}>
       <InputFieldText
-        label={ LL().LayoutFeatures.Modal.TickValues() }
+        label={LL().LayoutFeatures.Modal.TickValues()}
         onChange={(value) => {
           const ticks = value.split(',').map((v) => +v);
           if (ticks.some((t) => Number.isNaN(t))) {
@@ -331,7 +331,7 @@ function makeSettingsScaleBar(
       />
     </Show>
     <InputFieldRadio
-      label={ LL().LayoutFeatures.Modal.LabelPosition() }
+      label={LL().LayoutFeatures.Modal.LabelPosition()}
       values={[
         { value: 'top', label: LL().LayoutFeatures.Modal.Top() },
         { value: 'bottom', label: LL().LayoutFeatures.Modal.Bottom() },
@@ -343,6 +343,99 @@ function makeSettingsScaleBar(
         value,
       )}
     />
+    <div>
+      <label
+        class="label"
+        style={{ 'margin-bottom': '0.5em' }}
+      >
+        {LL().LayoutFeatures.Modal.FontProperties()}
+      </label>
+    </div>
+    <div class="is-flex is-justify-content-space-around mb-5 pr-3 pl-3">
+      <div class="select">
+        <select
+          class="select"
+          value={ft.label.fontFamily}
+          style={{ width: '120px' }}
+          onChange={(e) => updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['label', 'fontFamily'],
+            e.currentTarget.value,
+          )}
+        >
+          <option disabled>{LL().Fonts.FontFamilyTypes()}</option>
+          <For each={webSafeFonts}>
+            {(font) => <option value={font}>{font}</option>}
+          </For>
+          <option disabled>{LL().Fonts.Fonts()}</option>
+          <For each={fonts}>
+            {(font) => <option value={font}>{font}</option>}
+          </For>
+        </select>
+      </div>
+      <div>
+        <input
+          class="input"
+          type="number"
+          value={ft.label.fontSize}
+          style={{ width: '70px' }}
+          onChange={(e) => updateLayoutFeatureProperty(
+            layoutFeatureId,
+            ['label', 'fontSize'],
+            +e.currentTarget.value,
+          )}
+        />
+        <span
+          style={{ 'vertical-align': 'sub', 'margin-left': '0.2em' }}
+        >px</span>
+      </div>
+      <input
+        class="input"
+        type="color"
+        value={ft.label.fontColor}
+        style={{ width: '70px', padding: '0.2em' }}
+        onChange={(e) => updateLayoutFeatureProperty(
+          layoutFeatureId,
+          ['label', 'fontColor'],
+          e.currentTarget.value,
+        )}
+      />
+      <div class="buttons">
+        <button
+          classList={{
+            button: true,
+            'is-warning': ft.label.fontWeight === 'bold',
+            'is-outlined': ft.label.fontWeight === 'bold',
+          }}
+          aria-label={LL().LayoutFeatures.Modal.Bold()}
+          title={LL().LayoutFeatures.Modal.Bold()}
+          onClick={(e) => {
+            updateLayoutFeatureProperty(
+              layoutFeatureId,
+              ['label', 'fontWeight'],
+              ft.label.fontWeight === 'bold' ? 'normal' : 'bold',
+            );
+          }}
+        ><b>B</b></button>
+        <button
+          classList={{
+            button: true,
+            'is-warning': ft.label.fontStyle === 'italic',
+            'is-outlined': ft.label.fontStyle === 'italic',
+          }}
+          aria-label={LL().LayoutFeatures.Modal.Italic()}
+          title={LL().LayoutFeatures.Modal.Italic()}
+          onClick={(e) => {
+            updateLayoutFeatureProperty(
+              layoutFeatureId,
+              ['label', 'fontStyle'],
+              ft.label.fontStyle === 'italic' ? 'normal' : 'italic',
+            );
+          }}
+        ><i>I</i>
+        </button>
+      </div>
+    </div>
   </>;
 }
 
@@ -803,6 +896,17 @@ function makeSettingsNorthArrow(
       max={100}
       step={1}
     />
+    <Show when={ ft.style === 'simple' }>
+      <InputFieldColor
+        label={LL().LayoutFeatures.Modal.Fill()}
+        value={ft.fillColor}
+        onChange={(newValue) => updateLayoutFeatureProperty(
+          layoutFeatureId,
+          ['fillColor'],
+          newValue,
+        )}
+      />
+    </Show>
     <InputFieldCheckbox
       label={ LL().LayoutFeatures.Modal.RotateToNorth()}
       checked={ ft.autoRotate }

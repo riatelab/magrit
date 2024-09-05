@@ -11,6 +11,7 @@ const en = {
     EmptyProject: 'Create a new empty project ?',
     SaveEditedData: 'Save changes ?',
     ReloadLastProject: 'A project was automatically saved when the page was closed on {}. Reload this project ?',
+    InvalidProject: 'The project is invalid and cannot be loaded.',
   },
   LoadingMessages: {
     Default: 'Loading...',

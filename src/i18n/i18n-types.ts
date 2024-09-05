@@ -52,6 +52,10 @@ type RootTranslation = {
 		 * @param {unknown} 0
 		 */
 		ReloadLastProject: RequiredParams<'0'>
+		/**
+		 * T​h​e​ ​p​r​o​j​e​c​t​ ​i​s​ ​i​n​v​a​l​i​d​ ​a​n​d​ ​c​a​n​n​o​t​ ​b​e​ ​l​o​a​d​e​d​.
+		 */
+		InvalidProject: string
 	}
 	LoadingMessages: {
 		/**
@@ -4389,6 +4393,10 @@ export type TranslationFunctions = {
 		 * A project was automatically saved when the page was closed on {0}. Reload this project ?
 		 */
 		ReloadLastProject: (arg0: unknown) => LocalizedString
+		/**
+		 * The project is invalid and cannot be loaded.
+		 */
+		InvalidProject: () => LocalizedString
 	}
 	LoadingMessages: {
 		/**

@@ -32,7 +32,7 @@ import { Mceil, Mround } from '../../helpers/math';
 import {
   DistanceUnit,
   type LayoutFeature,
-  type Legend,
+  type Legend, LegendTextElement,
   type ScaleBar,
   ScaleBarStyle,
 } from '../../global.d';
@@ -41,10 +41,14 @@ import {
 // for this layout feature
 const initialPosition = 0;
 
-const formatDistance = (distance: number, displayUnit: DistanceUnit, label?: string): string => {
+const formatDistance = (
+  distance: number,
+  displayUnit: DistanceUnit,
+  label: LegendTextElement,
+): string => {
   // We store the distance in meters in the store
   // but we want to be able to display it in meters, kilometers, miles, feet and yards.
-  const l = label ? ` ${label}` : '';
+  const l = label.text ? ` ${label.text}` : '';
   return `${Mround(convertToUnit(distance, displayUnit))} ${l}`;
 };
 
@@ -76,8 +80,13 @@ function SimpleLineScaleBar(props: ScaleBar): JSX.Element {
         x={initialPosition + props.width / 2}
         y={props.labelPosition === 'top' ? initialPosition : initialPosition + 40}
         text-anchor="middle"
-        dominant-baseline={props.labelPosition === 'top' ? 'hanging' : 'auto'}
+        dominant-baseline={props.labelPosition === 'top' ? 'auto' : 'hanging'}
         style={{ 'user-select': 'none' }}
+        fill={props.label.fontColor}
+        font-family={props.label.fontFamily}
+        font-size={props.label.fontSize}
+        font-style={props.label.fontStyle}
+        font-weight={props.label.fontWeight}
       >{formatDistance(props.distance, props.unit, props.label)}</text>
     </g>
   </>;
@@ -86,7 +95,7 @@ function SimpleLineScaleBar(props: ScaleBar): JSX.Element {
 function LineWithTicks(props: ScaleBar & { direction: 'top' | 'bottom' }): JSX.Element {
   const direction = createMemo(() => (props.direction === 'top' ? -1 : 1));
   return <>
-    <g stroke="black" stroke-width={1}>
+    <g stroke={props.label.fontColor} stroke-width={1}>
       <line
         x1={initialPosition}
         y1={initialPosition + 20}
@@ -109,10 +118,15 @@ function LineWithTicks(props: ScaleBar & { direction: 'top' | 'bottom' }): JSX.E
     <g>
       <text
         x={initialPosition + props.width / 2}
-        y={props.labelPosition === 'top' ? initialPosition : initialPosition + 40}
+        y={props.labelPosition === 'top' ? initialPosition + 10 : initialPosition + 30}
         text-anchor="middle"
-        dominant-baseline={props.labelPosition === 'top' ? 'hanging' : 'auto'}
+        dominant-baseline={props.labelPosition === 'top' ? 'auto' : 'hanging'}
         style={{ 'user-select': 'none' }}
+        fill={props.label.fontColor}
+        font-family={props.label.fontFamily}
+        font-size={props.label.fontSize}
+        font-style={props.label.fontStyle}
+        font-weight={props.label.fontWeight}
       >{formatDistance(props.distance, props.unit, props.label)}</text>
     </g>
   </>;
@@ -150,7 +164,7 @@ function BlackAndWhiteBar(props: ScaleBar): JSX.Element {
           x={initialPosition + props.width / 2}
           y={props.labelPosition === 'top' ? initialPosition : initialPosition + 40}
           text-anchor="middle"
-          dominant-baseline={props.labelPosition === 'top' ? 'hanging' : 'auto'}
+          dominant-baseline={props.labelPosition === 'top' ? 'text-bottom' : 'text-top'}
           style={{ 'user-select': 'none' }}
         >{props.label}</text>
       </Show>

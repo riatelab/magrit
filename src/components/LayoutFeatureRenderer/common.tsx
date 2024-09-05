@@ -14,7 +14,7 @@ import { roundToNearest10 } from '../../helpers/math';
 import { globalStore } from '../../store/GlobalStore';
 
 // Subcomponents
-import LayoutFeatureSettings from '../Modals/LayoutFeatureSetting.tsx';
+import LayoutFeatureSettings from '../Modals/LayoutFeatureSettings.tsx';
 
 // Stores
 import { type ContextMenuEntry, setContextMenuStore } from '../../store/ContextMenuStore';
