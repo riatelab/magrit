@@ -32,7 +32,9 @@ import {
   PropSizer,
 } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
-import { Mabs, max, min } from '../../helpers/math';
+import {
+  Mabs, max, min, extent as Mextent,
+} from '../../helpers/math';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 import { generateIdLegend } from '../../helpers/legends';
 
@@ -82,6 +84,7 @@ import type { PortrayalSettingsProps } from './common';
 function onClickValidate(
   referenceLayerId: string,
   targetVariable: string,
+  values: number[],
   refSymbolSize: number,
   refValueForSymbolSize: number,
   colorProperties: {
@@ -90,7 +93,6 @@ function onClickValidate(
   },
   newLayerName: string,
   symbolType: ProportionalSymbolsSymbolType,
-  extent: [number, number],
   avoidOverlapping: boolean,
   displayChartOnMap: boolean,
 ) {
@@ -113,6 +115,10 @@ function onClickValidate(
     colorMode: colorProperties.mode,
     color: colorProperties.value,
   };
+
+  const extent = propSymbolsParameters.colorMode === 'positiveNegative'
+    ? Mextent(values)
+    : Mextent(values.map(Mabs));
 
   // Copy dataset
   const newData = JSON.parse(
@@ -527,10 +533,9 @@ export default function ProportionalSymbolsSettings(
     : []));
 
   const availableColorModes = createMemo(() => {
-    if (hasNegativeValues()) {
-      return [ProportionalSymbolsColorMode.positiveNegative];
-    }
-    const a = [ProportionalSymbolsColorMode.singleColor];
+    const a = hasNegativeValues()
+      ? [ProportionalSymbolsColorMode.positiveNegative, ProportionalSymbolsColorMode.singleColor]
+      : [ProportionalSymbolsColorMode.singleColor];
     if (targetFieldsCategory.length > 0) {
       a.push(ProportionalSymbolsColorMode.categoricalVariable);
     }
@@ -677,12 +682,12 @@ export default function ProportionalSymbolsSettings(
       onClickValidate(
         layerDescription.id,
         targetVariable(),
+        values(),
         refSymbolSize(),
         refValueForSymbolSize(),
         colorProperties,
         layerName,
         symbolType(),
-        [minValues(), maxValues()],
         avoidOverlapping(),
         displayChartOnMap(),
       );
