@@ -117,7 +117,7 @@ function onClickValidate(
   };
 
   const extent = propSymbolsParameters.colorMode === 'positiveNegative'
-    ? Mextent(values)
+    ? [Mextent(values.filter((d) => d >= 0)), Mextent(values.filter((d) => d > 0))]
     : Mextent(values.map(Mabs));
 
   // Copy dataset
@@ -195,20 +195,36 @@ function onClickValidate(
     )
     : [
       ...computeCandidateValuesForSymbolsLegend(
-        0,
-        Mabs(extent[0]),
+        Mabs(extent[0][0]),
+        Mabs(extent[0][1]),
         propSize.scale,
         propSize.getValue,
-        4,
-      ).slice(1).map((d) => -d).toReversed(),
+        3,
+      ).map((d) => -d).toReversed(),
       ...computeCandidateValuesForSymbolsLegend(
-        0,
-        extent[1],
+        extent[1][0],
+        extent[1][1],
         propSize.scale,
         propSize.getValue,
-        4,
-      ).slice(1),
+        3,
+      ),
     ];
+
+  // We are usually having stock values (with no decimals),
+  // but in some cases we may have values with decimals
+  // (and we may have 0.xxx values) so in this case we set the
+  // precision to 1 to avoid to display a bare "0" in the legend
+  const precision = legendValues.map((d) => `${d}`).some((d) => d.includes('0.'))
+    ? getMinimumPrecision(legendValues)
+    : 0;
+
+  // When we have a diverging legend (for positiveNegative color mode)
+  // we set a slightly larger spacing between symbols,
+  // because otherwise (notably if we have values close to 0),
+  // the space between the positive and the negative values seems
+  // too small.
+  const spacingBetweenSymbols = propSymbolsParameters.colorMode !== 'positiveNegative'
+    ? 5 : 10;
 
   // Find a position for the legend
   const legendPosition = getPossibleLegendPosition(150, 150);
@@ -251,7 +267,7 @@ function onClickValidate(
     } as LegendTextElement,
     position: legendPosition,
     visible: true,
-    roundDecimals: 0,
+    roundDecimals: precision,
     backgroundRect: {
       visible: false,
     },
@@ -262,7 +278,7 @@ function onClickValidate(
       || propSymbolsParameters.symbolType === 'line'
     ) ? 'vertical' : 'stacked',
     values: legendValues,
-    spacing: 5,
+    spacing: spacingBetweenSymbols,
     labels: {
       ...applicationSettingsStore.defaultLegendSettings.labels,
     } as LegendTextElement,
