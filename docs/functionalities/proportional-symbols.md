@@ -32,7 +32,8 @@ Si l'option "éviter le chevauchement" est activée, les symboles sont déplacé
 Les symboles peuvent être colorés de différentes manières :
 - couleur unique,
 - selon une variable qualitative,
-- selon une variable quantitative relative.
+- selon une variable quantitative relative,
+- selon que les valeurs sont positives ou négatives.
 
 ## Exemples
 
