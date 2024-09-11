@@ -2,6 +2,14 @@
 
 <br />
 
+#### 2.0.10 (2024-09-11)
+
+- Minor fixes in french translation.
+
+- Restore functionality to represent stock variables with negative values other than
+  with 2 colors representing positive and negative values (i.e. with a qualitative variable or
+  with a relative quantitative variable when present in the dataset).
+
 #### 2.0.9 (2024-09-05)
 
 - New functionality to select numerator / denominator for smoothed maps (Fixes <a href=“https://github.com/riatelab/magrit/issues/135”>135</a>)

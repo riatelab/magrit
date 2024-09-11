@@ -2,6 +2,14 @@
 
 <br />
 
+#### 2.0.10 (2024-09-11)
+
+- Correction mineure dans la traduction française.
+
+- Rétablissement de la fonctionnalité permettant de représenter les variables de stock avec valeurs négatives autrement qu'avec 2
+  couleurs matérialisant les valeurs positives et négatives (i.e avec une variable qualitative ou avec une variable quantitative relative
+  lorsque présentes dans le jeu de données).
+
 #### 2.0.9 (2024-09-05)
 
 - Nouvelle fonctionnalité permettant de choisir une variable pour le numérateur et pour le dénominateur lors de la création de cartes lissées (Corrige <a href="https://github.com/riatelab/magrit/issues/135">135</a>).
