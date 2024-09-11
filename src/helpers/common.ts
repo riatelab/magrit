@@ -150,7 +150,6 @@ export const getMinimumPrecision = (arr: number[]) => {
     }
   }
 
-  // TODO: we should handle the case when minDiff is still Infinity
   return minDiff === Infinity ? 0 : Math.ceil(-Math.log10(minDiff));
 };
 
