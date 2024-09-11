@@ -604,7 +604,7 @@ const fr = {
     },
     ChoroplethOptions: {
       Choropleth: 'Choroplèthe',
-      Classification: 'Classification',
+      Classification: 'Discrétisation',
       ColorScheme: 'Palette de couleurs',
       ColorSchemeInvert: 'Inverser la palette',
       CurrentNumberOfClasses: '{{ Une classe | ?? classes }}',
@@ -850,7 +850,7 @@ const fr = {
       SummaryInfo4: 'Homoscédasticité : la variance des résidus est constante pour toutes les valeurs ajustées.',
       SummaryInfo5: 'Normalité : les résidus suivent une distribution normale.',
       SummaryInfo6: 'Si les graphiques présentés ci-dessus vous ont convaincu que ces hypothèses ont été validées, il est maintenant temps de passer à la représentation des résultats.',
-      ClassificationColorSelection: 'Classification et sélection des couleurs',
+      ClassificationColorSelection: 'Discrétisation et sélection des couleurs',
       StandardizedResiduals: 'Résidus standardisés',
       PortrayalType: 'Type de représentation cartographique',
       PortrayalTypeChoropleth: 'Représentation choroplèthe des résidus standardisés',
