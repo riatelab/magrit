@@ -41,13 +41,13 @@ jobs:
         run: echo "::set-output name=version::$(node -p -e "require('./package.json').version")"
 
       - name: Upload .exe artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: windows-build
           path: release/${{ steps.get_version.outputs.version }}/*.exe
 
       - name: Upload .AppImage artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: linux-build
           path: release/${{ steps.get_version.outputs.version }}/*.AppImage
@@ -91,7 +91,7 @@ jobs:
         run: echo "::set-output name=version::$(node -p -e "require('./package.json').version")"
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: macos-build
           path: release/${{ steps.get_version.outputs.version }}/*.dmg
