@@ -14,7 +14,7 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { randomColorFromCategoricalPalette } from '../../helpers/color';
-import { findSuitableName, isFiniteNumber } from '../../helpers/common';
+import { descendingKeyAccessor, findSuitableName, isFiniteNumber } from '../../helpers/common';
 import { computeCandidateValuesForSymbolsLegend, coordsPointOnFeature, PropSizer } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
 import { generateIdLegend } from '../../helpers/legends';
@@ -103,6 +103,15 @@ function onClickValidate(
     // eslint-disable-next-line no-param-reassign
     feature.geometry.originalCoordinates = feature.geometry.coordinates;
   });
+
+  // As with proportional symbols, we sort the features
+  // by descending value of the target variables
+  // (so that the biggest symbols are drawn first)
+  newData.features
+    .sort(descendingKeyAccessor((d) => Math.max(
+      d.properties[top.variable],
+      d.properties[bottom.variable],
+    )));
 
   const propSizeTop = new PropSizer(
     params.top.referenceValue,
