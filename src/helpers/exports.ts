@@ -414,7 +414,7 @@ export async function exportToGeo(
   format: SupportedGeoFileTypes,
   crs = 'EPSG:4326',
 ) {
-  let result = '';
+  let result: string | Blob;
   let filename = '';
   const ext = `${format}`;
   if (format === SupportedGeoFileTypes.GeoJSON) {

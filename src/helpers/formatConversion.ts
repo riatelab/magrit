@@ -180,16 +180,6 @@ export async function convertTextualTabularDatasetToJSON(
   throw new Error(`Unsupported tabular file extension: ${ext}`);
 }
 
-async function uintArrayToBase64(data: Uint8Array): Promise<string> {
-  const base64url: string = await new Promise((r) => {
-    const reader = new FileReader();
-    reader.onload = () => r(reader.result);
-    reader.readAsDataURL(new Blob([data]));
-  });
-
-  return base64url.substring(base64url.indexOf(',') + 1);
-}
-
 /**
  * Convert the given GeoJSON FeatureCollection to the asked format.
  *
@@ -204,7 +194,7 @@ export async function convertFromGeoJSON(
   layerName: string,
   format: string,
   crs: string,
-): Promise<string> {
+): Promise<string | Blob> {
   // Store the input GeoJSON in a temporary file
   const inputFile = new File(
     [JSON.stringify(featureCollection)],
@@ -233,8 +223,8 @@ export async function convertFromGeoJSON(
       zip.file(fileName, blob, { binary: true });
     }
     await globalThis.gdal.close(input);
-    // Generate the zip file (base64 encoded)
-    return zip.generateAsync({ type: 'base64' });
+    // Generate the zip file (as a Blob)
+    return zip.generateAsync({ type: 'blob' });
   }
   if (format === 'GML') {
     options.push('-t_srs', crs);
@@ -253,11 +243,11 @@ export async function convertFromGeoJSON(
   }
   if (format === 'GPKG') {
     options.push('-t_srs', crs);
-    // For GPKG, we return the binary file, encoded in base64
+    // For GPKG, we return the binary file, as blob
     const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
     const bytes = await globalThis.gdal.getFileBytes(output);
     await globalThis.gdal.close(input);
-    return uintArrayToBase64(bytes);
+    return bytes;
   }
   throw new Error('Unsupported vector file format');
 }
