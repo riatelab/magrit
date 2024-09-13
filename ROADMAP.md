@@ -2,11 +2,6 @@
 
 This document describes the projected roadmap for the project after the publication of v2 (July 2024).
 
-## July-August 2024
-
-- Automate compilation of standalone versions in GitHub Action; enable release of a MacOS version of the application.
-- Bug fixes and minor improvements to the application.
-
 ## Fall 2024
 
 - Add new statistical methods for thematic cartography (notably PCA + hierarchical clustering).
