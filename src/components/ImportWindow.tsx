@@ -441,12 +441,18 @@ const analyzeDataset = async (
       file.file.type === 'application/vnd.ms-excel'
       || file.file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
       || file.file.type === 'application/vnd.oasis.opendocument.spreadsheet'
+      || file.ext === 'xls'
+      || file.ext === 'ods'
+      || file.ext === 'xlsx'
     ) {
       result = await analyseTabularDatasetGDAL(file);
     } else if (
       file.file.type === 'application/geopackage+sqlite3'
       || file.file.type === 'application/gml+xml'
       || file.file.type === 'application/vnd.google-earth.kml+xml'
+      || file.ext === 'gpkg'
+      || file.ext === 'gml'
+      || file.ext === 'kml'
       // TODO: handle zip files...
     ) {
       result = await analyseGeospatialDatasetGDAL(file);
