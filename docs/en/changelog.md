@@ -2,6 +2,14 @@
 
 <br />
 
+#### 2.0.11 (2024-09-13)
+
+- Fix support for importing files whose mime-type was not detected on Windows (KML and Geopackage in particular).
+
+- Fix the display order of entities on mushroom maps.
+
+- Fix export of layers to Shapefile and GeoPackage.
+
 #### 2.0.10 (2024-09-11)
 
 - Minor fixes in french translation.

@@ -2,6 +2,14 @@
 
 <br />
 
+#### 2.0.11 (2024-09-13)
+
+- Corrige le support de l'import de fichiers dont le mime-type était non-détecté sur Windows (KML et Geopackage notamment).
+
+- Corrige l'ordre d'affichage des entités sur les cartes en champignons.
+
+- Corrige l'export des couches au format Shapefile et GeoPackage.
+
 #### 2.0.10 (2024-09-11)
 
 - Correction mineure dans la traduction française.
