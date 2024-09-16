@@ -45,6 +45,7 @@ const simpleNorthArrow = (props: NorthArrow) => <g
   </svg>
 </g>;
 
+/* eslint-disable solid/style-prop */
 const fancyNorthArrow = (props: NorthArrow) => <g
   transform={`rotate(${props.rotation} ${props.size / 2} ${props.size / 2})`}
 >
@@ -386,6 +387,7 @@ const fancyNorthArrow = (props: NorthArrow) => <g
     </g>
   </svg>
 </g>;
+/* eslint-enable solid/style-prop */
 
 /**
  * Compute the angle to north for the the north arrow
@@ -396,7 +398,8 @@ const fancyNorthArrow = (props: NorthArrow) => <g
  */
 const computeAngleToNorth = (
   position: [number, number],
-  projection: any,
+  projection: (
+    [number, number]) => [number, number] & { invert: ([number, number]) => [number, number] },
 ): number => {
   const geoPosition = projection.invert(position);
   if (!geoPosition) {
