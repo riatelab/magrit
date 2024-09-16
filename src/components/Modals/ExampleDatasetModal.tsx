@@ -13,7 +13,9 @@ import {
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
+import { BsMap } from 'solid-icons/bs';
 import { FaSolidDatabase } from 'solid-icons/fa';
+import { HiSolidDocumentText } from 'solid-icons/hi';
 import { ImFilter } from 'solid-icons/im';
 
 // Helpers
@@ -44,6 +46,8 @@ import allDatasets from '../../assets/datasets.json';
 // Types
 import type { DefaultLegend, GeoJSONFeatureCollection, LayerDescription } from '../../global';
 import type { Variable } from '../../helpers/typeDetection';
+
+const templates = [];
 
 interface DataProvider {
   // The source of the geometry / dataset
@@ -85,6 +89,17 @@ interface DatasetEntry {
 }
 
 const datasets = allDatasets.filter((d) => d.active) as DatasetEntry[];
+
+const findMaxEntryPerPage = () => {
+  const height = window.innerHeight;
+  if (height < 680) {
+    return 2;
+  }
+  if (height < 1000) {
+    return 4;
+  }
+  return 6;
+};
 
 function CardDatasetEntry(
   ds: DatasetEntry & { onClick: (arg0: MouseEvent) => void },
@@ -341,6 +356,18 @@ export function addExampleLayer(
 // - A button to confirm the selection and add it to the map
 export default function ExampleDatasetModal(): JSX.Element {
   const { LL } = useI18nContext();
+  // Current tab
+  const [
+    currentTab,
+    setCurrentTab,
+  ] = createSignal<'datasets' | 'templates'>('datasets');
+  // The maximum number of entries per page
+  const [
+    maxEntryPerPage,
+    setMaxEntryPerPage,
+  ] = createSignal(findMaxEntryPerPage());
+
+  // Stuff for the 'datasets' tab:
   // Array of datasets (potentially filtered using the search bar)
   const [
     filteredDatasets,
@@ -357,16 +384,31 @@ export default function ExampleDatasetModal(): JSX.Element {
     setSelectedSearchTerms,
   ] = createSignal<string>('');
   // The page that is currently displayed
-  const [currentPage, setCurrentPage] = createSignal<number>(1);
-
-  // The maximum number of entries per page
-  const maxEntryPerPage = 6;
-
+  const [currentPageDataset, setCurrentPageDataset] = createSignal<number>(1);
   // The offset of the current page (i.e. the index of the first entry of the page)
-  const offset = createMemo(() => (currentPage() - 1) * maxEntryPerPage);
-
+  const offsetDataset = createMemo(() => (currentPageDataset() - 1) * maxEntryPerPage());
   // The total number of pages
-  const totalPages = createMemo(() => Math.ceil(filteredDatasets().length / maxEntryPerPage));
+  const totalPagesDataset = createMemo(
+    () => Math.ceil(filteredDatasets().length / maxEntryPerPage()),
+  );
+
+  // Stuff for the 'templates' tab:
+  const [
+    filteredTemplates,
+    setFilteredTemplates,
+  ] = createSignal<[]>([]);
+  const [
+    selectedTemplate,
+    setSelectedTemplate,
+  ] = createSignal(null);
+  // The page that is currently displayed
+  const [currentPageTemplate, setCurrentPageTemplate] = createSignal<number>(1);
+  // The offset of the current page (i.e. the index of the first entry of the page)
+  const offsetTemplate = createMemo(() => (currentPageTemplate() - 1) * maxEntryPerPage);
+  // The total number of pages
+  const totalPagesTemplate = createMemo(
+    () => Math.ceil(filteredDatasets().length / maxEntryPerPage),
+  );
 
   // Filter the datasets using the search terms
   // (for now we are only filtering on exact matches on the keywords)
@@ -392,6 +434,17 @@ export default function ExampleDatasetModal(): JSX.Element {
     });
   };
 
+  // Filter the templates using the search terms
+  const filterTemp = () => {
+    if (selectedSearchTerms() === '') {
+      return templates;
+    }
+    const terms = selectedSearchTerms()
+      .split(' ')
+      .map((t) => t.toLowerCase());
+    return templates.filter((ds) => ({}));
+  };
+
   onMount(() => {
     setModalStore({
       confirmCallback: () => {
@@ -412,6 +465,14 @@ export default function ExampleDatasetModal(): JSX.Element {
           });
       },
     });
+
+    const modalResizeObserver = new ResizeObserver((entries) => {
+      entries.forEach(() => {
+        setMaxEntryPerPage(findMaxEntryPerPage());
+      });
+    });
+
+    modalResizeObserver.observe(document.querySelector('.catalog-container')!);
   });
 
   createEffect(
@@ -427,95 +488,204 @@ export default function ExampleDatasetModal(): JSX.Element {
     ),
   );
 
-  return <div class="is-flex">
-    <div style={{
-      width: '60%',
-      padding: '1em',
-      margin: '1em',
-      border: 'solid 1px silver',
-      'border-radius': '1em',
-      overflow: 'auto',
-      height: '80vh',
-    }}>
-      <div class="is-flex">
-        <div class="field has-addons" style={{ margin: '1em' }}>
-          <div class="control">
-            <input
-              class="input"
-              type="text"
-              value={selectedSearchTerms()}
-              style={{ width: '300px' }}
-              onChange={(e) => setSelectedSearchTerms(e.currentTarget.value)}
-              placeholder={ LL().DatasetCatalog.placeholderSearchBar() }
+  return <div class="catalog-container" style={{
+    height: '80vh',
+  }}>
+    <div class="tabs is-boxed">
+      <ul style={{ margin: 0 }}>
+        <li classList={{ 'is-active': currentTab() === 'datasets' }}>
+          <a onClick={() => {
+            setCurrentTab('datasets');
+          }}>
+            <span class="icon is-small"><BsMap/></span>
+            <span>{LL().DatasetCatalog.tabDatasets()}</span>
+          </a>
+        </li>
+        <li classList={{ 'is-active': currentTab() === 'templates' }}>
+          <a onClick={() => {
+            setCurrentTab('templates');
+          }}>
+            <span class="icon is-small"><HiSolidDocumentText/></span>
+            <span>{LL().DatasetCatalog.tabTemplates()}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <Show when={currentTab() === 'datasets'}>
+      <div class="is-flex catalog__datasets">
+        <div style={{
+          width: '60%',
+          padding: '1em',
+          margin: '1em',
+          border: 'solid 1px silver',
+          'border-radius': '1em',
+          overflow: 'auto',
+          height: '72vh',
+        }}>
+          <div class="is-flex">
+            <div class="field has-addons" style={{ margin: '1em' }}>
+              <div class="control">
+                <input
+                  class="input"
+                  type="text"
+                  value={selectedSearchTerms()}
+                  style={{ width: '300px' }}
+                  onChange={(e) => setSelectedSearchTerms(e.currentTarget.value)}
+                  placeholder={LL().DatasetCatalog.placeholderSearchBar()}
+                />
+              </div>
+              <div class="control">
+                <button
+                  class="button is-info"
+                  onClick={() => {
+                    setCurrentPageDataset(1);
+                    setFilteredDatasets(filterDs());
+                  }}
+                >
+                  {LL().DatasetCatalog.searchButton()}
+                </button>
+              </div>
+              <div class="control">
+                <button
+                  class="button is-warning"
+                  onClick={() => {
+                    setSelectedSearchTerms('');
+                    setCurrentPageDataset(1);
+                    setFilteredDatasets(filterDs());
+                  }}
+                >
+                  X
+                </button>
+              </div>
+            </div>
+            <div class="field" style={{ margin: '1em', 'justify-content': 'start' }}>
+              <ImFilter
+                style={{
+                  height: '1.5em',
+                  width: '1.5em',
+                  'margin-right': '1em',
+                  opacity: filteredDatasets().length === datasets.length ? 0 : 1,
+                }}
+              />
+              <span>{LL().DatasetCatalog.datasets(filteredDatasets().length)}</span>
+            </div>
+          </div>
+          <Show
+            when={filteredDatasets().length > 0}
+            fallback={<p>{LL().DatasetCatalog.noSearchResult()}</p>}
+          >
+            <DatasetPage
+              setSelectedDataset={setSelectedDataset}
+              offset={offsetDataset()}
+              maxEntryPerPage={maxEntryPerPage()}
+              datasetEntries={filteredDatasets()}
             />
-          </div>
-          <div class="control">
-            <button
-              class="button is-info"
-              onClick={() => {
-                setCurrentPage(1);
-                setFilteredDatasets(filterDs());
-              }}
+            <Pagination
+              totalPages={totalPagesDataset()}
+              onClick={(pageNumber) => setCurrentPageDataset(pageNumber)}
+              currentPage={currentPageDataset()}
+            />
+          </Show>
+        </div>
+        <div style={{
+          width: '40%',
+          padding: '1em',
+          margin: '1em',
+          border: 'solid 1px silver',
+          'border-radius': '1em',
+          overflow: 'auto',
+          height: '72vh',
+        }}>
+          <div>
+            <Show
+              when={selectedDataset() !== null}
+              fallback={<p>{LL().DatasetCatalog.placeholderDatasetDetail()}</p>}
             >
-              { LL().DatasetCatalog.searchButton() }
-            </button>
-          </div>
-          <div class="control">
-            <button
-              class="button is-warning"
-              onClick={() => {
-                setSelectedSearchTerms('');
-                setCurrentPage(1);
-                setFilteredDatasets(filterDs());
-              }}
-            >
-              X
-            </button>
+              <CardDatasetDetail {...selectedDataset() as DatasetEntry} />
+            </Show>
           </div>
         </div>
-        <div class="field" style={{ margin: '1em', 'justify-content': 'start' }}>
-          <ImFilter
-            style={{
-              height: '1.5em', width: '1.5em', 'margin-right': '1em', opacity: filteredDatasets().length === datasets.length ? 0 : 1,
-            }}
-          />
-          <span>{ LL().DatasetCatalog.datasets(filteredDatasets().length) }</span>
+      </div>
+    </Show>
+    <Show when={currentTab() === 'templates'}>
+      <div class="is-flex catalog__templates">
+        <div style={{
+          width: '60%',
+          padding: '1em',
+          margin: '1em',
+          border: 'solid 1px silver',
+          'border-radius': '1em',
+          overflow: 'auto',
+          height: '72vh',
+        }}>
+          <div class="is-flex">
+            <div class="field has-addons" style={{ margin: '1em' }}>
+              <div class="control">
+                <input
+                  class="input"
+                  type="text"
+                  value={selectedSearchTerms()}
+                  style={{ width: '300px' }}
+                  onChange={(e) => setSelectedSearchTerms(e.currentTarget.value)}
+                  placeholder={LL().DatasetCatalog.placeholderSearchBar()}
+                />
+              </div>
+              <div class="control">
+                <button
+                  class="button is-info"
+                  onClick={() => {
+                    setCurrentPageDataset(1);
+                    setFilteredTemplates(filterTemp());
+                  }}
+                >
+                  {LL().DatasetCatalog.searchButton()}
+                </button>
+              </div>
+              <div class="control">
+                <button
+                  class="button is-warning"
+                  onClick={() => {
+                    setSelectedSearchTerms('');
+                    setCurrentPageTemplate(1);
+                    setFilteredDatasets(filterTemp());
+                  }}
+                >
+                  X
+                </button>
+              </div>
+            </div>
+            <div class="field" style={{ margin: '1em', 'justify-content': 'start' }}>
+              <ImFilter
+                style={{
+                  height: '1.5em',
+                  width: '1.5em',
+                  'margin-right': '1em',
+                  opacity: filteredTemplates().length === datasets.length ? 0 : 1,
+                }}
+              />
+              <span>{LL().DatasetCatalog.datasets(filteredTemplates().length)}</span>
+            </div>
+          </div>
+        </div>
+        <div style={{
+          width: '40%',
+          padding: '1em',
+          margin: '1em',
+          border: 'solid 1px silver',
+          'border-radius': '1em',
+          overflow: 'auto',
+          height: '72vh',
+        }}>
+          <div>
+            <Show
+              when={selectedTemplate() !== null}
+              fallback={<p>{LL().DatasetCatalog.placeholderTemplateDetail()}</p>}
+            >
+              <CardDatasetDetail {...selectedTemplate() as DatasetEntry} />
+            </Show>
+          </div>
         </div>
       </div>
-      <Show
-        when={filteredDatasets().length > 0}
-        fallback={<p>{ LL().DatasetCatalog.noSearchResult() }</p>}
-      >
-        <DatasetPage
-          setSelectedDataset={setSelectedDataset}
-          offset={offset()}
-          maxEntryPerPage={maxEntryPerPage}
-          datasetEntries={filteredDatasets()}
-        />
-        <Pagination
-          totalPages={totalPages()}
-          onClick={(pageNumber) => setCurrentPage(pageNumber)}
-          currentPage={currentPage()}
-        />
-      </Show>
-    </div>
-    <div style={{
-      width: '40%',
-      padding: '1em',
-      margin: '1em',
-      border: 'solid 1px silver',
-      'border-radius': '1em',
-      overflow: 'auto',
-      height: '80vh',
-    }}>
-      <div>
-        <Show
-          when={selectedDataset() !== null}
-          fallback={<p>{ LL().DatasetCatalog.placeholderDatasetDetail() }</p>}
-        >
-          <CardDatasetDetail {...selectedDataset() as DatasetEntry} />
-        </Show>
-      </div>
-    </div>
+    </Show>
   </div>;
 }

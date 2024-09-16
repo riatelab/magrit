@@ -318,6 +318,8 @@ const fr = {
   },
   DatasetCatalog: {
     title: 'Catalogue de données d\'exemple',
+    tabDatasets: 'Jeux de données',
+    tabTemplates: 'Templates cartographiques',
     placeholderSearchBar: 'Rechercher un jeu de données...',
     searchButton: 'Rechercher',
     datasets: '{{Un jeu de données | ?? jeux de données}}',
@@ -346,6 +348,7 @@ const fr = {
     features: '{{Un enregistrement | ?? enregistrements}}',
     directLink: 'Lien direct vers le jeu de données',
     placeholderDatasetDetail: 'Sélectionner un jeu de données pour afficher ses détails.',
+    placeholderTemplateDetail: 'Sélectionner un template cartographique pour afficher ses détails.',
     noSearchResult: 'Aucun jeu de données ne correspond à votre recherche.',
     altDatasetPreview: 'Aperçu du jeu de données',
     confirmButton: 'Ajouter à la carte',

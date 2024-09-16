@@ -318,6 +318,8 @@ const en = {
   },
   DatasetCatalog: {
     title: 'Example dataset catalog',
+    tabDatasets: 'Datasets',
+    tabTemplates: 'Cartographic templates',
     placeholderSearchBar: 'Search a dataset...',
     searchButton: 'Search',
     datasets: '{{One dataset | ?? datasets}}',
@@ -346,6 +348,7 @@ const en = {
     features: '{{One feature | ?? features}}',
     directLink: 'Direct link to the dataset',
     placeholderDatasetDetail: 'Select a dataset to see its details.',
+    placeholderTemplateDetail: 'Select a template to see its details.',
     noSearchResult: 'No dataset matches your search.',
     altDatasetPreview: 'Dataset preview',
     confirmButton: 'Add to map',

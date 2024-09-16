@@ -1029,6 +1029,14 @@ type RootTranslation = {
 		 */
 		title: string
 		/**
+		 * D​a​t​a​s​e​t​s
+		 */
+		tabDatasets: string
+		/**
+		 * C​a​r​t​o​g​r​a​p​h​i​c​ ​t​e​m​p​l​a​t​e​s
+		 */
+		tabTemplates: string
+		/**
 		 * S​e​a​r​c​h​ ​a​ ​d​a​t​a​s​e​t​.​.​.
 		 */
 		placeholderSearchBar: string
@@ -1128,6 +1136,10 @@ type RootTranslation = {
 		 * S​e​l​e​c​t​ ​a​ ​d​a​t​a​s​e​t​ ​t​o​ ​s​e​e​ ​i​t​s​ ​d​e​t​a​i​l​s​.
 		 */
 		placeholderDatasetDetail: string
+		/**
+		 * S​e​l​e​c​t​ ​a​ ​t​e​m​p​l​a​t​e​ ​t​o​ ​s​e​e​ ​i​t​s​ ​d​e​t​a​i​l​s​.
+		 */
+		placeholderTemplateDetail: string
 		/**
 		 * N​o​ ​d​a​t​a​s​e​t​ ​m​a​t​c​h​e​s​ ​y​o​u​r​ ​s​e​a​r​c​h​.
 		 */
@@ -5378,6 +5390,14 @@ export type TranslationFunctions = {
 		 */
 		title: () => LocalizedString
 		/**
+		 * Datasets
+		 */
+		tabDatasets: () => LocalizedString
+		/**
+		 * Cartographic templates
+		 */
+		tabTemplates: () => LocalizedString
+		/**
 		 * Search a dataset...
 		 */
 		placeholderSearchBar: () => LocalizedString
@@ -5477,6 +5497,10 @@ export type TranslationFunctions = {
 		 * Select a dataset to see its details.
 		 */
 		placeholderDatasetDetail: () => LocalizedString
+		/**
+		 * Select a template to see its details.
+		 */
+		placeholderTemplateDetail: () => LocalizedString
 		/**
 		 * No dataset matches your search.
 		 */
