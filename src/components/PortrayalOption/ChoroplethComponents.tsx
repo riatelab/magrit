@@ -49,6 +49,7 @@ export function ChoroplethClassificationSelector(
     targetVariable: Accessor<string>,
     targetClassification: Accessor<ClassificationParameters | undefined>,
     setTargetClassification: Setter<ClassificationParameters | undefined>,
+    layerName: string,
   },
 ): JSX.Element {
   const { LL } = useI18nContext();
@@ -205,7 +206,7 @@ export function ChoroplethClassificationSelector(
           setClassificationPanelStore({
             show: true,
             type: 'color',
-            layerName: '',
+            layerName: props.layerName,
             series: props.values(),
             classificationParameters: props.targetClassification(),
             onCancel: () => {},

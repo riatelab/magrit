@@ -804,6 +804,7 @@ export default function ProportionalSymbolsSettings(
             targetVariable={() => targetRatioVariable()!}
             targetClassification={targetClassification}
             setTargetClassification={setTargetClassification}
+            layerName={layerDescription.name}
           />
           <InputFieldCheckbox
             label={LL().FunctionalitiesSection.ChoroplethOptions.DisplayChartOnMap()}

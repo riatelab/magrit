@@ -271,6 +271,7 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
       targetVariable={targetVariable}
       targetClassification={targetClassification}
       setTargetClassification={setTargetClassification}
+      layerName={layerDescription.name}
     />
     <InputFieldCheckbox
       label={LL().FunctionalitiesSection.ChoroplethOptions.DisplayChartOnMap()}
