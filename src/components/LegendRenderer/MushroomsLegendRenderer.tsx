@@ -157,54 +157,51 @@ export default function legendMushrooms(
     <g class="legend-content">
       <For each={legend.values.top.toReversed()}>
         {
-          (value) => {
-            const symbolSize = propSizeTop().scale(value);
-            return <>
-              <path
-                fill={layer.rendererParameters.top.color}
-                fill-opacity={layer.fillOpacity}
-                stroke={layer.strokeColor}
-                stroke-width={layer.strokeWidth}
-                d={semiCirclePath(
-                  symbolSize,
-                  maxRadius(),
-                  heightTitleSubtitle() + maxRadiusTop(),
-                  'top',
-                )}
-              >
-              </path>
-              <text
-                font-size={legend.labels.fontSize}
-                font-family={legend.labels.fontFamily}
-                font-style={legend.labels.fontStyle}
-                font-weight={legend.labels.fontWeight}
-                fill={legend.labels.fontColor}
-                text-anchor="start"
-                dominant-baseline="middle"
-                x={maxRadius() * 2 + defaultSpacing * 2}
-                y={heightTitleSubtitle() + maxRadiusTop() - symbolSize}
-              >{
-                round(value, legend.roundDecimals)
-                  .toLocaleString(
-                    applicationSettingsStore.userLocale,
-                    {
-                      minimumFractionDigits: precisionToMinimumFractionDigits(
-                        legend.roundDecimals,
-                      ),
-                    },
-                  )
-              }</text>
-              <line
-                stroke-width={0.8}
-                stroke-dasharray="2"
-                stroke="black"
-                x1={maxRadius()}
-                y1={heightTitleSubtitle() + maxRadiusTop() - symbolSize}
-                x2={maxRadius() * 2 + defaultSpacing * 2}
-                y2={heightTitleSubtitle() + maxRadiusTop() - symbolSize}
-              ></line>
-            </>;
-          }
+          (value) => <>
+            <path
+              fill={layer.rendererParameters.top.color}
+              fill-opacity={layer.fillOpacity}
+              stroke={layer.strokeColor}
+              stroke-width={layer.strokeWidth}
+              d={semiCirclePath(
+                propSizeTop().scale(value),
+                maxRadius(),
+                heightTitleSubtitle() + maxRadiusTop(),
+                'top',
+              )}
+            >
+            </path>
+            <text
+              font-size={legend.labels.fontSize}
+              font-family={legend.labels.fontFamily}
+              font-style={legend.labels.fontStyle}
+              font-weight={legend.labels.fontWeight}
+              fill={legend.labels.fontColor}
+              text-anchor="start"
+              dominant-baseline="middle"
+              x={maxRadius() * 2 + defaultSpacing * 2}
+              y={heightTitleSubtitle() + maxRadiusTop() - propSizeTop().scale(value)}
+            >{
+              round(value, legend.roundDecimals)
+                .toLocaleString(
+                  applicationSettingsStore.userLocale,
+                  {
+                    minimumFractionDigits: precisionToMinimumFractionDigits(
+                      legend.roundDecimals,
+                    ),
+                  },
+                )
+            }</text>
+            <line
+              stroke-width={0.8}
+              stroke-dasharray="2"
+              stroke="black"
+              x1={maxRadius()}
+              y1={heightTitleSubtitle() + maxRadiusTop() - propSizeTop().scale(value)}
+              x2={maxRadius() * 2 + defaultSpacing * 2}
+              y2={heightTitleSubtitle() + maxRadiusTop() - propSizeTop().scale(value)}
+            ></line>
+          </>
         }
       </For>
       {
@@ -225,81 +222,78 @@ export default function legendMushrooms(
       }
       <For each={legend.values.bottom.toReversed()}>
         {
-          (value) => {
-            const symbolSize = propSizeBottom().scale(value);
-            return <>
-              <path
-                fill={layer.rendererParameters.bottom.color}
-                fill-opacity={layer.fillOpacity}
-                stroke={layer.strokeColor}
-                stroke-width={layer.strokeWidth}
-                d={semiCirclePath(
-                  symbolSize,
-                  maxRadius(),
-                  (heightTitleSubtitle()
-                    + maxRadiusTop()
-                    + sizeTopTitle()
-                    + sizeBottomTitle()
-                    + defaultSpacing),
-                  'bottom',
-                )}
-              ></path>
-              <text
-                font-size={legend.labels.fontSize}
-                font-family={legend.labels.fontFamily}
-                font-style={legend.labels.fontStyle}
-                font-weight={legend.labels.fontWeight}
-                fill={legend.labels.fontColor}
-                text-anchor="start"
-                dominant-baseline="middle"
-                x={maxRadius() * 2 + defaultSpacing * 2}
-                y={
-                  heightTitleSubtitle()
+          (value) => <>
+            <path
+              fill={layer.rendererParameters.bottom.color}
+              fill-opacity={layer.fillOpacity}
+              stroke={layer.strokeColor}
+              stroke-width={layer.strokeWidth}
+              d={semiCirclePath(
+                propSizeBottom().scale(value),
+                maxRadius(),
+                (heightTitleSubtitle()
                   + maxRadiusTop()
                   + sizeTopTitle()
                   + sizeBottomTitle()
-                  + defaultSpacing
-                  + maxRadiusBottom()
-                  - (maxRadiusBottom() - symbolSize)
-                }
-              >{
-                round(value, legend.roundDecimals)
-                  .toLocaleString(
-                    applicationSettingsStore.userLocale,
-                    {
-                      minimumFractionDigits: precisionToMinimumFractionDigits(
-                        legend.roundDecimals,
-                      ),
-                    },
-                  )
-              }</text>
-              <line
-                stroke-width={0.8}
-                stroke-dasharray="2"
-                stroke="black"
-                x1={maxRadius()}
-                y1={
-                  heightTitleSubtitle()
-                  + maxRadiusTop()
-                  + sizeTopTitle()
-                  + sizeBottomTitle()
-                  + defaultSpacing
-                  + maxRadiusBottom()
-                  - (maxRadiusBottom() - symbolSize)
-                }
-                x2={maxRadius() * 2 + defaultSpacing * 2}
-                y2={
-                  heightTitleSubtitle()
-                  + maxRadiusTop()
-                  + sizeTopTitle()
-                  + sizeBottomTitle()
-                  + defaultSpacing
-                  + maxRadiusBottom()
-                  - (maxRadiusBottom() - symbolSize)
-                }
-              ></line>
-            </>;
-          }
+                  + defaultSpacing),
+                'bottom',
+              )}
+            ></path>
+            <text
+              font-size={legend.labels.fontSize}
+              font-family={legend.labels.fontFamily}
+              font-style={legend.labels.fontStyle}
+              font-weight={legend.labels.fontWeight}
+              fill={legend.labels.fontColor}
+              text-anchor="start"
+              dominant-baseline="middle"
+              x={maxRadius() * 2 + defaultSpacing * 2}
+              y={
+                heightTitleSubtitle()
+                + maxRadiusTop()
+                + sizeTopTitle()
+                + sizeBottomTitle()
+                + defaultSpacing
+                + maxRadiusBottom()
+                - (maxRadiusBottom() - propSizeBottom().scale(value))
+              }
+            >{
+              round(value, legend.roundDecimals)
+                .toLocaleString(
+                  applicationSettingsStore.userLocale,
+                  {
+                    minimumFractionDigits: precisionToMinimumFractionDigits(
+                      legend.roundDecimals,
+                    ),
+                  },
+                )
+            }</text>
+            <line
+              stroke-width={0.8}
+              stroke-dasharray="2"
+              stroke="black"
+              x1={maxRadius()}
+              y1={
+                heightTitleSubtitle()
+                + maxRadiusTop()
+                + sizeTopTitle()
+                + sizeBottomTitle()
+                + defaultSpacing
+                + maxRadiusBottom()
+                - (maxRadiusBottom() - propSizeBottom().scale(value))
+              }
+              x2={maxRadius() * 2 + defaultSpacing * 2}
+              y2={
+                heightTitleSubtitle()
+                + maxRadiusTop()
+                + sizeTopTitle()
+                + sizeBottomTitle()
+                + defaultSpacing
+                + maxRadiusBottom()
+                - (maxRadiusBottom() - propSizeBottom().scale(value))
+              }
+            ></line>
+          </>
         }
       </For>
     </g>
