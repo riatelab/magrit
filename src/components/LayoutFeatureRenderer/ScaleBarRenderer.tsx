@@ -67,7 +67,7 @@ const getTickValues = (distance: number) => {
 
 function SimpleLineScaleBar(props: ScaleBar): JSX.Element {
   return <>
-    <g stroke="black" stroke-width={1}>
+    <g stroke={props.label.fontColor} stroke-width={1}>
       <line
         x1={initialPosition}
         y1={initialPosition + 20}
@@ -78,7 +78,7 @@ function SimpleLineScaleBar(props: ScaleBar): JSX.Element {
     <g>
       <text
         x={initialPosition + props.width / 2}
-        y={props.labelPosition === 'top' ? initialPosition : initialPosition + 40}
+        y={initialPosition + 10}
         text-anchor="middle"
         dominant-baseline={props.labelPosition === 'top' ? 'auto' : 'hanging'}
         style={{ 'user-select': 'none' }}
