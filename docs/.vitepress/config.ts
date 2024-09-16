@@ -55,6 +55,16 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
         { text: 'Sélection attributaire', link: '/functionalities/selection-by-attribute' },
       ]
     },
+    {
+      text: 'Tutoriels',
+      collapsed: true,
+      items: [
+        { text: 'Premier pas avec Magrit (données d\'exemple)', link: 'tutorials/tuto1' },
+        { text: 'Premier pas avec Magrit (données personnelles)', link: 'tutorials/tuto2' },
+        { text: 'Utilisation de foncionnalités avancées de Magrit', link: 'tutorials/tuto3' },
+        { text: 'Tutoriel vidéo', link: 'tutorials/video' },
+      ],
+    },
     { text: 'Questions fréquemment posées', link: '/faq' },
     { text: 'Historique des changements', link: '/changelog' },
     { text: 'Licences', link: '/licenses' },
@@ -116,6 +126,16 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
         { text: 'Simplification', link: '/en/functionalities/simplification' },
         { text: 'Selection by attribute', link: '/en/functionalities/selection-by-attribute' },
       ]
+    },
+    {
+      text: 'Tutorials',
+      collapsed: true,
+      items: [
+        { text: 'Getting started with Magrit (example dataset)', link: 'tutorials/tuto1' },
+        { text: 'Getting started with Magrit (own dataset)', link: 'tutorials/tuto2' },
+        { text: 'Using Magrit advanced features', link: 'tutorials/tuto3' },
+        { text: 'Video tutorial', link: 'tutorials/video' },
+      ],
     },
     { text: 'Frequently asked questions', link: '/en/faq' },
     { text: 'Changelog', link: '/en/changelog' },
