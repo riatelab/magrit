@@ -20,6 +20,7 @@ import { webSafeFonts, fonts } from '../../helpers/font';
 import { makeDorlingDemersSimulation } from '../../helpers/geo';
 import { generateIdLegend } from '../../helpers/legends';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
+import { semiCirclePath } from '../../helpers/svg';
 
 // Sub-components
 import DetailsSummary from '../DetailsSummary.tsx';
@@ -51,6 +52,7 @@ import {
 } from '../../store/LayersDescriptionStore';
 import { setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { globalStore } from '../../store/GlobalStore';
 
 // Types / Interfaces
 import {
@@ -80,7 +82,7 @@ import {
   type GeoJSONFeature,
   type ProportionalSymbolSingleColorParameters,
   type LayerDescriptionCategoricalPictogram,
-  type CategoricalPictogramParameters,
+  type CategoricalPictogramParameters, type ID3Element,
 } from '../../global.d';
 
 // Styles
@@ -511,6 +513,35 @@ function makeSettingsDefaultPoint(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
+  const redrawMushrooms = () => {
+    const g = document.getElementById(props.id)!;
+    const pos = ['top', 'bottom'];
+    // Redraw the symbols (circles)
+    g.querySelectorAll('g').forEach((gg) => {
+      const projectedCoords = globalStore.pathGenerator.centroid(
+        // eslint-disable-next-line no-underscore-dangle
+        (gg as SVGGElement & ID3Element).__data__.geometry,
+      );
+      if (!Number.isNaN(projectedCoords[0])) {
+        gg.querySelectorAll('path').forEach((p, i) => {
+          const sizeValue = p.getAttribute('mgt:size-value')!;
+          p.setAttribute(
+            'd',
+            semiCirclePath(
+              +sizeValue,
+              projectedCoords[0],
+              projectedCoords[1],
+              pos[i] as 'top' | 'bottom',
+            ),
+          );
+        });
+        gg.setAttribute('visibility', 'visible');
+      } else {
+        gg.setAttribute('visibility', 'hidden');
+      }
+    });
+  };
+
   return <>
     {/*
       The way the entities are colored depends on the renderer...
@@ -758,7 +789,10 @@ function makeSettingsDefaultPoint(
       <InputFieldNumber
         label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize()}
         value={(props.rendererParameters as MushroomsParameters).top.referenceSize}
-        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'top', 'referenceSize'], v)}
+        onChange={(v) => {
+          debouncedUpdateProp(props.id, ['rendererParameters', 'top', 'referenceSize'], v);
+          redrawMushrooms();
+        }}
         min={1}
         max={200}
         step={0.1}
@@ -766,7 +800,10 @@ function makeSettingsDefaultPoint(
       <InputFieldNumber
         label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.OnValue()}
         value={(props.rendererParameters as MushroomsParameters).top.referenceValue}
-        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'top', 'referenceValue'], v)}
+        onChange={(v) => {
+          debouncedUpdateProp(props.id, ['rendererParameters', 'top', 'referenceValue'], v);
+          redrawMushrooms();
+        }}
         min={1}
         max={99999999999}
         step={0.1}
@@ -782,7 +819,10 @@ function makeSettingsDefaultPoint(
       <InputFieldNumber
         label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize()}
         value={(props.rendererParameters as MushroomsParameters).bottom.referenceSize}
-        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'referenceSize'], v)}
+        onChange={(v) => {
+          debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'referenceSize'], v);
+          redrawMushrooms();
+        }}
         min={1}
         max={200}
         step={0.1}
@@ -790,7 +830,10 @@ function makeSettingsDefaultPoint(
       <InputFieldNumber
         label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.OnValue()}
         value={(props.rendererParameters as MushroomsParameters).bottom.referenceValue}
-        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'referenceValue'], v)}
+        onChange={(v) => {
+          debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'referenceValue'], v);
+          redrawMushrooms();
+        }}
         min={1}
         max={Infinity}
         step={0.1}
