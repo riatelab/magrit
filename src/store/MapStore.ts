@@ -130,14 +130,24 @@ const setMapStore = (...args: any[]) => {
  */
 const fitExtent = (id: string, margin = 0.03) => {
   // Margin so that the extent of the layer is not on the border of the map
-  const marginX = mapStore.mapDimensions.width * margin;
-  const marginY = mapStore.mapDimensions.height * margin;
+  const marginX = (
+    mapStore.mapDimensions.width - mapStore.mapMargins.left - mapStore.mapMargins.right
+  ) * margin;
+  const marginY = (
+    mapStore.mapDimensions.height - mapStore.mapMargins.top - mapStore.mapMargins.bottom
+  ) * margin;
 
   // Fit the extent of the projection to the extent of the layer, with margins
   globalStore.projection.fitExtent(
     [
-      [marginX, marginY],
-      [mapStore.mapDimensions.width - marginX, mapStore.mapDimensions.height - marginY],
+      [
+        mapStore.mapMargins.left + marginX,
+        mapStore.mapMargins.top + marginY,
+      ],
+      [
+        mapStore.mapDimensions.width - mapStore.mapMargins.right - marginX,
+        mapStore.mapDimensions.height - mapStore.mapMargins.bottom - marginY,
+      ],
     ],
     layersDescriptionStore.layers.find((l) => l.id === id)?.data,
   );
