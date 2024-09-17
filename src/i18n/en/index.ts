@@ -1068,6 +1068,7 @@ const en = {
       newColumnType: 'New column type',
       compute: 'Compute',
       formula: 'Formula',
+      alertNotValidVariableType: 'The variable type selected ({0}) is not valid for this field. Type "{1}" will be used instead - You can change the variable type in the field typing modal.',
     },
   },
   FieldsTyping: {

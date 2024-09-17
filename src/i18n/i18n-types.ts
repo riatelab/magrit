@@ -3745,6 +3745,12 @@ type RootTranslation = {
 			 * F​o​r​m​u​l​a
 			 */
 			formula: string
+			/**
+			 * T​h​e​ ​v​a​r​i​a​b​l​e​ ​t​y​p​e​ ​s​e​l​e​c​t​e​d​ ​(​{​0​}​)​ ​i​s​ ​n​o​t​ ​v​a​l​i​d​ ​f​o​r​ ​t​h​i​s​ ​f​i​e​l​d​.​ ​T​y​p​e​ ​"​{​1​}​"​ ​w​i​l​l​ ​b​e​ ​u​s​e​d​ ​i​n​s​t​e​a​d​ ​-​ ​Y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​t​h​e​ ​v​a​r​i​a​b​l​e​ ​t​y​p​e​ ​i​n​ ​t​h​e​ ​f​i​e​l​d​ ​t​y​p​i​n​g​ ​m​o​d​a​l​.
+			 * @param {unknown} 0
+			 * @param {unknown} 1
+			 */
+			alertNotValidVariableType: RequiredParams<'0' | '1'>
 		}
 	}
 	FieldsTyping: {
@@ -8067,6 +8073,10 @@ export type TranslationFunctions = {
 			 * Formula
 			 */
 			formula: () => LocalizedString
+			/**
+			 * The variable type selected ({0}) is not valid for this field. Type "{1}" will be used instead - You can change the variable type in the field typing modal.
+			 */
+			alertNotValidVariableType: (arg0: unknown, arg1: unknown) => LocalizedString
 		}
 	}
 	FieldsTyping: {

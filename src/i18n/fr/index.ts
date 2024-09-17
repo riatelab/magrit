@@ -1068,6 +1068,7 @@ const fr = {
       newColumnType: 'Type du nouveau champ',
       compute: 'Calculer',
       formula: 'Formule',
+      alertNotValidVariableType: 'Le type de variable choisie ({0}) n\'est pas valide pour ce champ. Le type "{1}" sera utilisé à la place - Vous pouvez modifier le type de variable dans la fenêtre de typage des champs.',
     },
   },
   FieldsTyping: {

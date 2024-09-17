@@ -13,11 +13,11 @@ import {
 import AgGridSolid, { AgGridSolidRef } from 'ag-grid-solid';
 import 'ag-grid-community/styles/ag-grid.min.css'; // grid core CSS
 import 'ag-grid-community/styles/ag-theme-quartz.min.css'; // theme
-
 // Imports from other packages
 import alasql from 'alasql';
 import { type AllGeoJSON, area } from '@turf/turf';
 import type { LocalizedString } from 'typesafe-i18n';
+import toast from 'solid-toast';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -27,6 +27,7 @@ import d3 from '../../helpers/d3-custom';
 import { isDarkMode } from '../../helpers/darkmode';
 import { clickLinkFromBlob } from '../../helpers/exports';
 import {
+  type DataType,
   detectTypeField,
   type Variable,
   VariableType,
@@ -344,6 +345,40 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
   return res as DataHandlerFunctions;
 };
 
+/**
+ * Check that the variable type is compatible with the content of the column.
+ * If not, use the detected type.
+ *
+ */
+const checkVariableType = (
+  values: any[],
+  dataType: DataType,
+  detectedType: VariableType,
+  userType: VariableType,
+): boolean => {
+  if (userType === VariableType.unknown) {
+    return true;
+  }
+  if (userType === detectedType) {
+    return true;
+  }
+  if (userType === VariableType.stock) {
+    return dataType === 'number';
+  }
+  const filteredValues = values.filter((v) => v !== null && v !== '' && v !== undefined);
+  const dedupValues = new Set(filteredValues);
+  if (userType === VariableType.ratio) {
+    if (dataType !== 'number') {
+      return false;
+    }
+    return dedupValues.size !== 1;
+  }
+  if (userType === VariableType.identifier) {
+    return filteredValues.length === dedupValues.size;
+  }
+  return true;
+};
+
 export default function TableWindow(): JSX.Element {
   const { LL } = useI18nContext();
   // Extract identifier and editable value from tableWindowStore
@@ -469,14 +504,31 @@ export default function TableWindow(): JSX.Element {
     // Detect the type of the new variable and count the number of missing values
     const t = detectTypeField(newColumn as never[], variableName);
 
+    // Check if the user has chosen a variable type that is compatible with the content of
+    // the column. If not, use the detected type.
+    const isVariableTypeCompatible = checkVariableType(
+      newColumn,
+      t.dataType,
+      t.variableType,
+      newColumnType,
+    );
+    const variableType = isVariableTypeCompatible
+      ? newColumnType
+      : t.variableType;
+    // Also warn the user if the variable type has been changed
+    toast.error(
+      LL().DataTable.NewColumnModal.alertNotValidVariableType(
+        LL().FieldsTyping.VariableTypes[newColumnType as keyof typeof VariableType](),
+        LL().FieldsTyping.VariableTypes[t.variableType as keyof typeof VariableType](),
+      ),
+    );
+
     // Add the new variable to the list of new variables
     // (will be used to update the layer description)
     newVariables.push({
       name: variableName,
       hasMissingValues: t.hasMissingValues,
-      // TODO: check 'newColumnType' it is compatible with the content
-      //  of the new column (and if not, use the one detected and stored in 't.variableType')
-      type: newColumnType,
+      type: variableType,
       dataType: t.dataType,
     } as Variable);
 

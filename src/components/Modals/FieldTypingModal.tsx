@@ -46,6 +46,7 @@ export default function FieldTypingModal(
   }
 
   const hasDuplicates: Record<string, boolean> = {};
+  const hasOnlyOneModality: Record<string, boolean> = {};
 
   dataset.fields.forEach((field) => {
     const varName = field.name;
@@ -53,7 +54,9 @@ export default function FieldTypingModal(
       ? (dataset.data as GeoJSONFeatureCollection).features.map((f) => f.properties[varName])
       : (dataset.data as Record<string, any>[]).map((f) => f[varName]);
     const filteredValues = values.filter((v) => v !== null && v !== '' && v !== undefined);
-    hasDuplicates[varName] = filteredValues.length !== (new Set(filteredValues)).size;
+    const dedupValues = new Set(filteredValues);
+    hasDuplicates[varName] = filteredValues.length !== dedupValues.size;
+    hasOnlyOneModality[varName] = dedupValues.size === 1;
   });
 
   const descriptions = unproxify(dataset.fields as never) as Variable[];
@@ -143,7 +146,7 @@ export default function FieldTypingModal(
                       {LL().FieldsTyping.VariableTypes.stock()}
                     </option>
                   </Show>
-                  <Show when={field.dataType === 'number'}>
+                  <Show when={field.dataType === 'number' && !hasOnlyOneModality[field.name]}>
                     <option value="ratio" selected={field.type === VariableType.ratio}>
                       {LL().FieldsTyping.VariableTypes.ratio()}
                     </option>
