@@ -2,6 +2,22 @@
 
 <br />
 
+#### 2.0.12 (2024-09-17)
+
+- Fix mushrooms map legend update after the reference size of a half-circle has changed.
+
+- Fix the position of mushrooms on the map when a half-circle reference size is changed.
+
+- Fix the position of scale bar text when choosing a scale bar without side ticks.
+
+- Improve the choice of types offered in the field typing modal and checks the type chosen by the user when creating a new column.
+
+- Improve the behavior of the “Zoom to layer” feature to take into account any margins added by the user around the map.
+
+- Improves support for small values in the zoom factor options in the left side menu.
+
+- Add a tutorial to the documentation.
+
 #### 2.0.11 (2024-09-13)
 
 - Fix support for importing files whose mime-type was not detected on Windows (KML and Geopackage in particular).

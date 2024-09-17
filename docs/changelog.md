@@ -2,6 +2,22 @@
 
 <br />
 
+#### 2.0.12 (2024-09-17)
+
+- Corrige la mise à jour de la légende des cartes en champignons après que la taille de référence d'un demi-cercle ait changé.
+
+- Corrige la position des champignons sur la carte lorsque la taille de référence d'un demi-cercle est modifiée.
+
+- Corrige la position du texte de la barre d'échelle lors du choix d'une barre d'échelle sans tirets latéraux.
+
+- Améliore les choix de types proposés dans la fenêtre de typage des champs et vérifie le type choisi par l'utilisateur lors de la création d'une nouvelle colonne.
+
+- Améliore le comportement de la fonctionnalité "Zoom sur la couche" pour prendre en compte les éventuelles marges ajoutées par l'utilisateur autour de la carte.
+
+- Améliore la prise en charge des faibles valeurs dans les options de facteur de zoom du menu latéral gauche.
+
+- Ajout d'un tutoriel à la documentation.
+
 #### 2.0.11 (2024-09-13)
 
 - Corrige le support de l'import de fichiers dont le mime-type était non-détecté sur Windows (KML et Geopackage notamment).
