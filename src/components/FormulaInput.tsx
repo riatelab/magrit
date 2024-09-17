@@ -15,7 +15,7 @@ import alasql from 'alasql';
 
 // Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
-import { capitalizeFirstLetter } from '../helpers/common';
+import { capitalizeFirstLetter, unproxify } from '../helpers/common';
 
 // Types
 import type {
@@ -149,7 +149,7 @@ export default function FormulaInput(
     }
 
     const query = `SELECT ${formula} as newValue FROM ?`;
-    const data = props.records.slice(0, 8);
+    const data = unproxify(props.records.slice(0, 8));
 
     if (hasSpecialFieldId(formula)) {
       data.forEach((d, i) => {
