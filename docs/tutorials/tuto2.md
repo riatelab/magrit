@@ -152,11 +152,18 @@ Il est ensuite possible de valider la jointure en cliquant sur "Confirmation".
     caption="Sélection des champs pour la jointure"
 />
 
-Les données jointes sont ajoutées directement à la table attributaire du fond de carte (c'est-à-dire que celui-ci contient désormais de nouvelles colonnes : )
+Les données jointes sont ajoutées directement à la table attributaire du fond de carte (c'est-à-dire que celui-ci contient désormais de nouvelles colonnes).
 
 ## 4. Représentation des données
 
 ### 4.1 Choix d'une projection cartographique
+
+La projection est un élément important de la cartographie, car elle permet de représenter la surface terrestre sur un plan.
+Plusieurs projections sont disponibles dans Magrit, et il est possible de choisir celle qui convient le mieux à la zone géographique que l'on souhaite représenter.
+
+Par défaut, Magrit utilise la projection cartographique "Natural Earth 2" qui permet de représenter l'ensemble du globe terrestre.
+
+Puisque les données que nous utilisons concernent la Ville de Grenoble, nous allons choisir une projection plus adaptée à cette zone géographique : la projection cartographique officielle de la France Métropolitaine : "RGF93 v1 / Lambert-93 (EPSG:2154)".
 
 <ZoomImg
     src="/tuto2-13.gif"
@@ -251,7 +258,7 @@ Nous choisissons ici de modifier de nombreux éléments de la légende :
 - espacement entre les blocs de couleur (afin qu'ils ne soient plus collés les uns aux autres comme c'est le cas par défaut),
 - taille des différents éléments textuels (titre, sous-titre et étiquettes des classes).
 
-Ce sont ces choix qui permettent de créer une légende plus lisible et plus esthétique (au tout du moins, qui correspond plus à nos attentes) :
+Ce sont ces choix qui permettent de créer une légende plus lisible et plus esthétique (ou tout du moins, qui correspond plus à nos attentes) :
 
 <ZoomImg
     src="/tuto2-lgd.png"
