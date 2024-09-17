@@ -158,7 +158,7 @@ export default function MapConfiguration(): JSX.Element {
         </Show>
       </div>
     </div>
-    <DetailsSummary summaryContent={'Centrage de la carte'} initialOpen={false}>
+    <DetailsSummary summaryContent={LL().MapConfiguration.MapCentering()} initialOpen={false}>
       <InputFieldNumber
         label={LL().MapConfiguration.MapCenterX()}
         value={parseEnRepresentation(toPrecisionAfterDecimalPoint(mapStore.translate[0], 2, 'en'))}
@@ -181,7 +181,10 @@ export default function MapConfiguration(): JSX.Element {
       />
       <InputFieldNumber
         label={LL().MapConfiguration.ZoomFactor()}
-        value={parseEnRepresentation(toPrecisionAfterDecimalPoint(mapStore.scale, 2, 'en'))}
+        value={mapStore.scale > 1
+          ? parseEnRepresentation(toPrecisionAfterDecimalPoint(mapStore.scale, 2, 'en'))
+          : parseEnRepresentation(toPrecisionAfterDecimalPoint(mapStore.scale, 6, 'en'))
+        }
         onChange={(v) => {
           setMapStore('scale', v);
         }}
