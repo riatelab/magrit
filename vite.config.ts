@@ -80,9 +80,9 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     transformMode: { web: [/\.[jt]sx?$/] },
-    setupFiles: ['node_modules/@testing-library/jest-dom/extend-expect.js'],
+    setupFiles: ['@testing-library/jest-dom'],
     // otherwise, solid would be loaded twice:
-    // deps: { registerNodeLoader: true },
+    deps: { registerNodeLoader: true },
     // if you have few tests, try commenting one
     // or both out to improve performance:
     threads: false,
