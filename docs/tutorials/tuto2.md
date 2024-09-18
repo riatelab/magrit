@@ -19,7 +19,7 @@ Pour cela nous allons réaliser une carte de l'abstention au second tour de l'é
 
 La <a href="http://data.metropolegrenoble.fr/" >plateforme Open Data de la Métropole de Grenoble</a>
 met à disposition de nombreux jeux de données, parmi lesquels le découpage des bureaux de vote de la Ville de Grenoble :
-<a href="https://data.metropolegrenoble.fr/visualisation/information/?id=les-bureaux-de-vote" target="_blank" rel="noopener noreferrer">https://data.metropolegrenoble.fr/visualisation/information/?id=les-bureaux-de-vote</a>
+<a href="https://data.metropolegrenoble.fr/visualisation/information/?id=les-bureaux-de-vote" target="_blank" rel="noopener noreferrer">https://data.metropolegrenoble.fr/visualisation/information/?id=les-bureaux-de-vote</a>.
 
 <ZoomImg
     src="/tuto2-1.png"
