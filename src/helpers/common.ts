@@ -165,9 +165,15 @@ export const precisionToMinimumFractionDigits = (precision: number) => {
 
 /* eslint-disable no-return-assign, no-param-reassign, no-sequences */
 export const camelToFlat = (c: string) => (
-  c = c.replace(/[A-Z]|([0-9]+)/g, ' $&'), c[0].toUpperCase() + c.slice(1));
+  c = c.replace(/[A-Z]|([0-9]+)/g, ' $&'), c[0].toUpperCase() + c.slice(1)).trim();
 /* eslint-enable no-return-assign, no-param-reassign, no-sequences */
 
+/*
+ * Deduplicate an array of numbers and return the unique values
+ * in a new array.
+ * @param {Array<number>} values - The array of numbers to deduplicate.
+ * @returns {Array<number>} - The array of unique values.
+ */
 export const getUniqueValues = (values: number[]) => Array.from(new Set(values));
 
 export const sanitizeColumnName = (c: string) => c.replace(/[\r\n]+/g, ' ')
