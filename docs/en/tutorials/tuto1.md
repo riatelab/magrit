@@ -1,5 +1,5 @@
 # Tutorial - Getting started with Magrit
-# Example 2: Using a sample dataset
+# Example 1: Using a sample dataset
 
 We will create a simple thematic map with Magrit using the sample datasets provided.
 
