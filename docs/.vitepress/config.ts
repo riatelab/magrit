@@ -59,8 +59,8 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
       text: 'Tutoriels',
       collapsed: true,
       items: [
-        // { text: 'Premier pas avec Magrit (données d\'exemple)', link: 'tutorials/tuto1' },
-        { text: 'Premier pas avec Magrit (données personnelles)', link: 'tutorials/tuto2' },
+        { text: 'Premier pas avec Magrit (exemple 1)', link: '/tutorials/tuto1' },
+        { text: 'Premier pas avec Magrit (exemple 2)', link: '/tutorials/tuto2' },
         // { text: 'Utilisation de foncionnalités avancées de Magrit', link: 'tutorials/tuto3' },
         // { text: 'Tutoriel vidéo', link: 'tutorials/video' },
       ],
@@ -131,8 +131,8 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
       text: 'Tutorials',
       collapsed: true,
       items: [
-        // { text: 'Getting started with Magrit (example dataset)', link: 'tutorials/tuto1' },
-        { text: 'Getting started with Magrit (own dataset)', link: 'tutorials/tuto2' },
+        { text: 'Getting started with Magrit (example 1)', link: '/en/tutorials/tuto1' },
+        { text: 'Getting started with Magrit (example 2)', link: '/en/tutorials/tuto2' },
         // { text: 'Using Magrit advanced features', link: 'tutorials/tuto3' },
         // { text: 'Video tutorial', link: 'tutorials/video' },
       ],

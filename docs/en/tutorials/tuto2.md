@@ -1,5 +1,5 @@
 # Tutorial - Getting started with Magrit
-# Using your own data
+# Example 2: Using Open Data from Grenoble Metropole
 
 We're going to create a simple thematic map with Magrit using your own data.
 

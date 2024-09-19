@@ -1,11 +1,11 @@
 # Tutoriel - Premier pas avec Magrit
-# Utilisation de données personnelles
+# Exemple 2 : Utilisation de données de la Métropole de Grenoble
 
-Nous allons réaliser une carte thématique simple avec Magrit en utilisant vos propres données.
+Nous allons réaliser une carte thématique simple avec Magrit en utilisant des données ouvertes, récupérables sur le Web.
 
 Cela permettra de découvrir les fonctionnalités de base de l'application (import des données, réalisation d'une jointure, affichage du tableau de données, choix d'une représentation, habillage de la carte et export de la carte).
 
-Pour cela nous allons réaliser une carte de l'abstention au second tour de l'élection législative de 2022, à Grenoble et par bureau de vote.
+Pour cela, nous allons réaliser une carte de l'abstention au second tour de l'élection législative de 2022, à Grenoble et par bureau de vote.
 
 <ZoomImg
     src="/tuto2-fin.png"
