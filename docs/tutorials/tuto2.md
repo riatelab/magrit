@@ -1,5 +1,5 @@
 # Tutoriel - Premier pas avec Magrit
-# Exemple 2 : Utilisation de données de la Métropole de Grenoble
+# Exemple 1 : Utilisation de données de la Métropole de Grenoble
 
 Nous allons réaliser une carte thématique simple avec Magrit en utilisant des données ouvertes, récupérables sur le Web.
 

@@ -2,6 +2,14 @@
 
 <br />
 
+#### 2.0.13 (2024-09-23)
+
+- Fix the lack of verification before alerting the user to an incompatible field type when creating a new column.
+
+- Improve handling of `Infinity` and `NaN` values when creating a new column.
+
+- Add a tutorial and a video to the documentation.
+
 #### 2.0.12 (2024-09-17)
 
 - Fix mushrooms map legend update after the reference size of a half-circle has changed.
@@ -14,7 +22,7 @@
 
 - Improve the behavior of the “Zoom to layer” feature to take into account any margins added by the user around the map.
 
-- Improves support for small values in the zoom factor options in the left side menu.
+- Improve support for small values in the zoom factor options in the left side menu.
 
 - Add a tutorial to the documentation.
 

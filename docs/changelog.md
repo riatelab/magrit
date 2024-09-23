@@ -2,6 +2,14 @@
 
 <br />
 
+#### 2.0.13 (2024-09-23)
+
+- Corrige l'absence de vérification avant d'alerter l'utilisateur.trice à propos d'un type de champ incompatible lors de la création d'une nouvelle colonne.
+
+- Meilleur gestion des valeurs `Infinity` et `NaN` lors de la création d'une nouvelle colonne.
+
+- Ajout d'un tutoriel et d'une vidéo à la documentation.
+
 #### 2.0.12 (2024-09-17)
 
 - Corrige la mise à jour de la légende des cartes en champignons après que la taille de référence d'un demi-cercle ait changé.
