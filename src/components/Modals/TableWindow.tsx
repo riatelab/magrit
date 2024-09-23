@@ -515,14 +515,16 @@ export default function TableWindow(): JSX.Element {
     const variableType = isVariableTypeCompatible
       ? newColumnType
       : t.variableType;
-    // Also warn the user if the variable type has been changed
-    toast.error(
-      LL().DataTable.NewColumnModal.alertNotValidVariableType(
-        LL().FieldsTyping.VariableTypes[newColumnType as keyof typeof VariableType](),
-        LL().FieldsTyping.VariableTypes[t.variableType as keyof typeof VariableType](),
-      ),
-    );
 
+    if (!isVariableTypeCompatible) {
+      // Also warn the user if the variable type has been changed
+      toast.error(
+        LL().DataTable.NewColumnModal.alertNotValidVariableType(
+          LL().FieldsTyping.VariableTypes[newColumnType as keyof typeof VariableType](),
+          LL().FieldsTyping.VariableTypes[t.variableType as keyof typeof VariableType](),
+        ),
+      );
+    }
     // Add the new variable to the list of new variables
     // (will be used to update the layer description)
     newVariables.push({
