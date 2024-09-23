@@ -6,9 +6,9 @@
 
 - Corrige l'absence de vérification avant d'alerter l'utilisateur.trice à propos d'un type de champ incompatible lors de la création d'une nouvelle colonne.
 
-- Meilleur gestion des valeurs `Infinity` et `NaN` lors de la création d'une nouvelle colonne.
+- Améliore la gestion des valeurs `Infinity` et `NaN` lors de la création d'une nouvelle colonne.
 
-- Ajout d'un tutoriel et d'une vidéo à la documentation.
+- Ajout d'une vidéo à la documentation.
 
 #### 2.0.12 (2024-09-17)
 

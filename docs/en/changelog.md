@@ -8,7 +8,7 @@
 
 - Improve handling of `Infinity` and `NaN` values when creating a new column.
 
-- Add a tutorial and a video to the documentation.
+- Add a video to the documentation.
 
 #### 2.0.12 (2024-09-17)
 
