@@ -491,7 +491,8 @@ export default function ExampleDatasetModal(): JSX.Element {
   return <div class="catalog-container" style={{
     height: '80vh',
   }}>
-    <div class="tabs is-boxed">
+  {/*
+  <div class="tabs is-boxed">
       <ul style={{ margin: 0 }}>
         <li classList={{ 'is-active': currentTab() === 'datasets' }}>
           <a onClick={() => {
@@ -511,6 +512,7 @@ export default function ExampleDatasetModal(): JSX.Element {
         </li>
       </ul>
     </div>
+    */}
     <Show when={currentTab() === 'datasets'}>
       <div class="is-flex catalog__datasets">
         <div style={{
