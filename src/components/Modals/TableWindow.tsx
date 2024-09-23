@@ -144,6 +144,13 @@ function NewFieldPanel(
       });
     }
 
+    // Remove positive / negative infinity values and NaN
+    newColumn.forEach((d) => {
+      if (d.newValue === Infinity || d.newValue === -Infinity || Number.isNaN(d.newValue)) {
+        d.newValue = null; // eslint-disable-line no-param-reassign
+      }
+    });
+
     // Update the data
     props.updateData(
       variableName,
