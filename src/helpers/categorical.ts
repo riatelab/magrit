@@ -58,7 +58,9 @@ export const makeCategoriesMapping = (
       color: isNonNull(c[0]) ? colors[j++] : '',
       count: c[1],
     }))
-    .sort((a, b) => a.categoryName - b.categoryName);
+    .sort((a, b) => (
+      // eslint-disable-next-line no-nested-ternary
+      (a.categoryName > b.categoryName) ? 1 : ((b.categoryName > a.categoryName) ? -1 : 0)));
 };
 
 export const makePictoCategoriesMapping = (
@@ -72,4 +74,6 @@ export const makePictoCategoriesMapping = (
     iconContent: images[i % images.length],
     iconDimension: [50, 50],
   } as CategoricalPictogramMapping))
-  .sort((a, b) => a.categoryName - b.categoryName);
+  .sort((a, b) => (
+    // eslint-disable-next-line no-nested-ternary
+    (a.categoryName > b.categoryName) ? 1 : ((b.categoryName > a.categoryName) ? -1 : 0)));
