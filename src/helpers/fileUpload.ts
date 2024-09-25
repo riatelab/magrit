@@ -67,26 +67,27 @@ export function prepareFileExtensions(files: FileList): CustomFileList {
 }
 
 export function draggedElementsAreFiles(e: DragEvent): boolean {
-  if (
-    e.dataTransfer
-    && e.dataTransfer.types
-    && !e.dataTransfer.types.every((el) => el === 'Files' || el === 'application/x-moz-file')
-  ) {
-    return false;
+  if (!e.dataTransfer) return false;
+  const { items } = e.dataTransfer;
+  if (items) {
+    for (let i = 0; i < items.length; i += 1) {
+      if (items[i].kind === 'file') {
+        return true;
+      }
+    }
   }
-  return true;
+  return false;
 }
 
 export function droppedElementsAreFiles(e: DragEvent): {
   isFiles: boolean,
   reason: 'notFiles' | 'directory' | 'emptyFiles' | null,
 } {
-  if (
-    e.dataTransfer
-    && e.dataTransfer.types
-    && !e.dataTransfer.types.every((el) => el === 'Files' || el === 'application/x-moz-file')
-  ) {
-    return { isFiles: false, reason: 'notFiles' };
+  if (!draggedElementsAreFiles(e)) {
+    return {
+      isFiles: false,
+      reason: 'notFiles',
+    };
   }
   // TODO: investigate the use of https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItem/webkitGetAsEntry
   //    to handle directories better than this:
@@ -101,11 +102,9 @@ export function droppedElementsAreFiles(e: DragEvent): {
     };
   }
   if (
-    e.dataTransfer && e.dataTransfer.files
-    && (
-      e.dataTransfer.files.length === 0
-      || Array.from(e.dataTransfer.files).every((f) => f.size === 0)
-    )
+    e.dataTransfer
+    && e.dataTransfer.files
+    && Array.from(e.dataTransfer.files).every((f) => f.size === 0)
   ) {
     return {
       isFiles: false,
