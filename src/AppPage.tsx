@@ -209,7 +209,9 @@ const dropHandler = (e: Event, LL: Accessor<TranslationFunctions>): void => {
     if (draggedElementsStatus.reason === 'directory' || draggedElementsStatus.reason === 'emptyFiles') {
       toast.error(LL().ImportWindow.InstructionNotFolder());
     }
-    setFileDropStore({ show: false, files: [] });
+    if (fileDropStore.files.length < 1) {
+      setFileDropStore({ show: false });
+    }
     return;
   }
 
