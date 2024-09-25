@@ -274,7 +274,6 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
         setCategoriesMapping(
           makeCategoriesMapping(
             makeCategoriesMap(layerDescription.data.features, value),
-            applicationSettingsStore.defaultNoDataColor,
           ),
         );
       }}

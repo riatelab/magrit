@@ -612,7 +612,6 @@ export default function ProportionalSymbolsSettings(
       ? makeCategoriesMapping(
         // eslint-disable-next-line solid/reactivity
         makeCategoriesMap(layerDescription.data.features, targetCategoryVariable()!),
-        applicationSettingsStore.defaultNoDataColor,
       )
       : [],
   );
@@ -821,7 +820,6 @@ export default function ProportionalSymbolsSettings(
             setCategoriesMapping(
               makeCategoriesMapping(
                 makeCategoriesMap(layerDescription.data.features, value),
-                applicationSettingsStore.defaultNoDataColor,
               ),
             );
           }}
