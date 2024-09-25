@@ -229,7 +229,6 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
   ] = createSignal<CategoricalChoroplethMapping[]>(
     makeCategoriesMapping(
       makeCategoriesMap(layerDescription.data.features, targetVariable()),
-      applicationSettingsStore.defaultNoDataColor,
     ),
   );
   const [

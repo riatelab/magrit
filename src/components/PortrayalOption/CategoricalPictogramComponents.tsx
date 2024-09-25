@@ -14,6 +14,7 @@ import Sortable from 'solid-sortablejs';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { randomColor } from '../../helpers/color';
+import { isNonNull } from '../../helpers/common';
 import images from '../../helpers/symbol-library';
 import sanitizeSVG from '../../helpers/sanitize-svg';
 
@@ -41,9 +42,11 @@ export function CategoriesPlot(
     { height: 200, width: undefined },
     props,
   );
-  const domain = createMemo(() => mergedProps.mapping.map((m) => m.categoryName));
-  const range = createMemo(() => Array.from({ length: mergedProps.mapping.length }, randomColor));
-  const data = createMemo(() => mergedProps.mapping.map((m, i) => ({
+  const mapping = createMemo(() => mergedProps.mapping.filter((m) => isNonNull(m.value)));
+
+  const domain = createMemo(() => mapping().map((m) => m.categoryName));
+  const range = createMemo(() => Array.from({ length: mapping().length }, randomColor));
+  const data = createMemo(() => mapping().map((m, i) => ({
     position: i,
     category: m.categoryName,
     color: range()[i],
@@ -239,10 +242,27 @@ export function CategoriesCustomisation(
     disabled,
     setDisabled,
   ] = createSignal<boolean>(false);
+
+  // We need to filter out null entries from the mapping
+  // before we can use it in the Sortable component
+  const mapping = createMemo(() => props.mapping().filter((m) => isNonNull(m.value)));
+
+  // We also need to write a wrapper for the setMapping function
+  // to add null entries back to the mapping
+  const setMapping = (m: CategoricalPictogramMapping[]) => {
+    props.setMapping(
+      mapping()
+        .filter((mm) => !isNonNull(mm.value))
+        .concat(
+          m.filter((mmm) => isNonNull(mmm.value)),
+        ),
+    );
+  };
+
   return <div>
     <Sortable
-      items={props.mapping()}
-      setItems={props.setMapping as any}
+      items={mapping()}
+      setItems={setMapping as any}
       idField={'value'}
       disabled={disabled()}
     >

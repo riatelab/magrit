@@ -12,6 +12,7 @@ import Sortable from 'solid-sortablejs';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { isNonNull } from '../../helpers/common';
 
 // Types / Interfaces / Enums
 import { type CategoricalChoroplethMapping, type CategoricalPictogramMapping } from '../../global.d';
@@ -22,7 +23,7 @@ export function CategoriesSummary(
   },
 ): JSX.Element {
   const { LL } = useI18nContext();
-  const hasNull = createMemo(() => props.mapping.some((m) => m[0] === null));
+  const hasNull = createMemo(() => props.mapping.some((m) => !isNonNull(m.value)));
   const nCategories = createMemo(() => props.mapping.length - (hasNull() ? 1 : 0));
   return <div style={{ 'margin-top': '-1em', 'margin-bottom': '1em' }}>
     <div>
@@ -55,9 +56,11 @@ export function CategoriesPlot(
     { height: 200, width: undefined },
     props,
   );
-  const domain = createMemo(() => mergedProps.mapping.map((m) => m.categoryName));
-  const range = createMemo(() => mergedProps.mapping.map((m) => m.color));
-  const data = createMemo(() => mergedProps.mapping.map((m, i) => ({
+  const mapping = createMemo(() => mergedProps.mapping.filter((m) => isNonNull(m.value)));
+
+  const domain = createMemo(() => mapping().map((m) => m.categoryName));
+  const range = createMemo(() => mapping().map((m) => m.color));
+  const data = createMemo(() => mapping().map((m, i) => ({
     position: i,
     category: m.categoryName,
     color: m.color,
@@ -118,10 +121,26 @@ export function CategoriesCustomisation(
     setDisabled,
   ] = createSignal<boolean>(false);
 
+  // We need to filter out null entries from the mapping
+  // before we can use it in the Sortable component
+  const mapping = createMemo(() => props.mapping().filter((m) => isNonNull(m.value)));
+
+  // We also need to write a wrapper for the setMapping function
+  // to add null entries back to the mapping
+  const setMapping = (m: CategoricalChoroplethMapping[]) => {
+    props.setMapping(
+      mapping()
+        .filter((mm) => !isNonNull(mm.value))
+        .concat(
+          m.filter((mmm) => isNonNull(mmm.value)),
+        ),
+    );
+  };
+
   return <div>
     <Sortable
-      items={props.mapping()}
-      setItems={props.setMapping as any}
+      items={mapping()}
+      setItems={setMapping as any}
       idField={'value'}
       disabled={disabled()}
     >

@@ -14,7 +14,7 @@ import type {
 const selectDefaultColors = (n: number): string[] => {
   let colors;
   if (n <= 7) {
-    // We use colors from the otake ito palette
+    // We use colors from the Okabe-Ito palette
     // which is safe for colorblind people but we skip the first color
     colors = getColors('Okabe_Ito_Categorigal', 8)!.toReversed().slice(0, n);
   } else if (n <= 12) {
@@ -45,16 +45,17 @@ export const makeCategoriesMap = (
 
 export const makeCategoriesMapping = (
   categories: Map<string | number | null, number>,
-  defaultNoDataColor: string = '#ffffff',
 ): CategoricalChoroplethMapping[] => {
   const hasNull = categories.has(null);
   const n = categories.size - (hasNull ? 1 : 0);
   const colors = selectDefaultColors(n);
+  let j = 0;
   return Array.from(categories)
     .map((c, i) => ({
-      value: c[0],
-      categoryName: c[0] ? String(c[0]) : null,
-      color: colors[i] || defaultNoDataColor,
+      value: isNonNull(c[0]) ? c[0] : null,
+      categoryName: isNonNull(c[0]) ? String(c[0]) : null,
+      // eslint-disable-next-line no-plusplus
+      color: isNonNull(c[0]) ? colors[j++] : '',
       count: c[1],
     }))
     .sort((a, b) => a.categoryName - b.categoryName);
@@ -64,8 +65,8 @@ export const makePictoCategoriesMapping = (
   categories: Map<string | number | null, number>,
 ): CategoricalPictogramMapping[] => Array.from(categories)
   .map((c, i) => ({
-    value: c[0],
-    categoryName: c[0] ? String(c[0]) : null,
+    value: isNonNull(c[0]) ? c[0] : null,
+    categoryName: isNonNull(c[0]) ? String(c[0]) : null,
     count: c[1],
     iconType: 'SVG',
     iconContent: images[i % images.length],
