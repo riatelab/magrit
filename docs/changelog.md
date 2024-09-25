@@ -2,6 +2,12 @@
 
 <br />
 
+#### 2.0.14 (2024-09-25)
+
+- Corrige le tri manuel des catégories pour les cartes choroplèthe catégorielles et de pictogrammes lorsque le jeu de données contient des valeurs nulles ou vides.
+
+- Améliore le tri initial des catégories pour les cartes choroplèthe catégorielles et de pictogrammes.
+
 #### 2.0.13 (2024-09-23)
 
 - Corrige l'absence de vérification avant d'alerter l'utilisateur.trice à propos d'un type de champ incompatible lors de la création d'une nouvelle colonne.

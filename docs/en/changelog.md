@@ -2,6 +2,12 @@
 
 <br />
 
+#### 2.0.14 (2024-09-25)
+
+- Fix manual category sorting for categorical choropleth and pictogram maps when the dataset contains null or empty values.
+
+- Improves initial category sorting for categorical choropleth and pictogram maps.
+
 #### 2.0.13 (2024-09-23)
 
 - Fix the lack of verification before alerting the user to an incompatible field type when creating a new column.
