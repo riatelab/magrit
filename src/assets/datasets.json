@@ -111,10 +111,10 @@
     "id": "nuts2",
     "active": true,
     "type": "vector",
-    "totalFeatures": 327,
+    "totalFeatures": 332,
     "defaultProjection": {
-      "type": "proj4",
-      "code": 3035
+      "type": "d3",
+      "value": "NaturalEarth2"
     },
     "geometry": {
       "source": "GISCO",
@@ -165,10 +165,10 @@
     "id": "nuts2_data",
     "active": true,
     "type": "vector",
-    "totalFeatures": 332,
+    "totalFeatures": 327,
     "defaultProjection": {
-      "type": "d3",
-      "value": "NaturalEarth2"
+      "type": "proj4",
+      "code": 3035
     },
     "geometry": {
       "source": "GISCO",

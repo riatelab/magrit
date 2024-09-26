@@ -176,7 +176,7 @@ const en = {
     },
     nuts2: {
       name: 'Europe – NUTS2',
-      abstract: 'The 327 European NUTS2 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom',
+      abstract: 'The 332 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom',
       fields: {
         NUTS_ID: 'NUTS identifier',
         NAME_LATN: 'Name',
@@ -191,7 +191,7 @@ const en = {
     },
     nuts2_data: {
       name: 'Europe - NUTS2 with example data',
-      abstract: 'The 332 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom. Associated with key indicators extracted from Eurostat (last year available) and associated with reference geometries',
+      abstract: 'The 327 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom. Associated with key indicators extracted from Eurostat (last year available) and associated with reference geometries',
       fields: {
         NUTS_ID: 'NUTS identifier',
         NAME_LATN: 'Name',

@@ -176,7 +176,7 @@ const fr = {
     },
     nuts2: {
       name: 'Europe – NUTS2',
-      abstract: 'Les 327 NUTS2 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni',
+      abstract: 'Les 332 NUTS2 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni.',
       fields: {
         NUTS_ID: 'Identifiant de NUTS',
         NAME_LATN: 'Nom',
@@ -191,7 +191,7 @@ const fr = {
     },
     nuts2_data: {
       name: 'Europe – NUTS2 avec données d’exemple',
-      abstract: 'Les 332 NUTS2 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni. Associé à des indicateurs clé extraits d’Eurostat (dernière année disponible) et associé aux géométries de référence',
+      abstract: 'Les 327 NUTS2 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni.  Associé à des indicateurs clé extraits d’Eurostat (dernière année disponible) et associé aux géométries de référence',
       fields: {
         NUTS_ID: 'Identifiant de NUTS',
         NAME_LATN: 'Nom',

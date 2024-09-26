@@ -554,7 +554,7 @@ type RootTranslation = {
 			 */
 			name: string
 			/**
-			 * T​h​e​ ​3​2​7​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​2​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​ ​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m
+			 * T​h​e​ ​3​3​2​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​2​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m
 			 */
 			abstract: string
 			fields: {
@@ -596,7 +596,7 @@ type RootTranslation = {
 			 */
 			name: string
 			/**
-			 * T​h​e​ ​3​3​2​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​2​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m​.​ ​A​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​k​e​y​ ​i​n​d​i​c​a​t​o​r​s​ ​e​x​t​r​a​c​t​e​d​ ​f​r​o​m​ ​E​u​r​o​s​t​a​t​ ​(​l​a​s​t​ ​y​e​a​r​ ​a​v​a​i​l​a​b​l​e​)​ ​a​n​d​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​r​e​f​e​r​e​n​c​e​ ​g​e​o​m​e​t​r​i​e​s
+			 * T​h​e​ ​3​2​7​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​2​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m​.​ ​A​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​k​e​y​ ​i​n​d​i​c​a​t​o​r​s​ ​e​x​t​r​a​c​t​e​d​ ​f​r​o​m​ ​E​u​r​o​s​t​a​t​ ​(​l​a​s​t​ ​y​e​a​r​ ​a​v​a​i​l​a​b​l​e​)​ ​a​n​d​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​r​e​f​e​r​e​n​c​e​ ​g​e​o​m​e​t​r​i​e​s
 			 */
 			abstract: string
 			fields: {
@@ -4921,7 +4921,7 @@ export type TranslationFunctions = {
 			 */
 			name: () => LocalizedString
 			/**
-			 * The 327 European NUTS2 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom
+			 * The 332 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom
 			 */
 			abstract: () => LocalizedString
 			fields: {
@@ -4963,7 +4963,7 @@ export type TranslationFunctions = {
 			 */
 			name: () => LocalizedString
 			/**
-			 * The 332 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom. Associated with key indicators extracted from Eurostat (last year available) and associated with reference geometries
+			 * The 327 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom. Associated with key indicators extracted from Eurostat (last year available) and associated with reference geometries
 			 */
 			abstract: () => LocalizedString
 			fields: {
