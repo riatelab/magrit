@@ -2,6 +2,13 @@
 
 <br />
 
+#### 2.0.15 (unreleased)
+
+- Replace internal ids with layer names in the `id` attribute of SVG elements
+  to make it easier for SVG export users to identify layers (fixes <a href="https://github.com/riatelab/magrit/issues/141">141</a>).
+
+- Improves performance when editing text annotations (and map title and source fields) by not saving every change in the application history (the undo/redo stack).
+
 #### 2.0.14 (2024-09-25)
 
 - Fix manual category sorting for categorical choropleth and pictogram maps when the dataset contains null or empty values.

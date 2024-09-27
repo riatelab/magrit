@@ -2,6 +2,14 @@
 
 <br />
 
+#### 2.0.15 (unreleased)
+
+- Remplace les id internes par les noms de couche dans l'attribut `id` des éléments SVG pour faciliter l'identification
+  des couches par les utilisateur.trice.s de l'export SVG (corrige <a href="https://github.com/riatelab/magrit/issues/141">141</a>).
+
+- Améliore les performances lors de l'édition des étiquettes de texte libre (et les champs titre de la carte et source)
+  en n'enregistrant pas chaque changement dans l'historique de l'application.
+
 #### 2.0.14 (2024-09-25)
 
 - Corrige le tri manuel des catégories pour les cartes choroplèthe catégorielles et de pictogrammes lorsque le jeu de données contient des valeurs nulles ou vides.
