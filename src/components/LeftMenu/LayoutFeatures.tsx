@@ -24,6 +24,7 @@ import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
   setLayersDescriptionStore,
+  setLayersDescriptionStoreBase,
 } from '../../store/LayersDescriptionStore';
 import { mapStore, setMapStore } from '../../store/MapStore';
 import { setModalStore } from '../../store/ModalStore';
@@ -730,7 +731,7 @@ export default function LayoutFeatures(): JSX.Element {
           if (v) {
             if (hasTitle) {
               // Update the title element
-              setLayersDescriptionStore(
+              setLayersDescriptionStoreBase(
                 produce(
                   (draft: LayersDescriptionStoreType) => {
                     draft.layoutFeaturesAndLegends.forEach((d) => {
@@ -761,7 +762,7 @@ export default function LayoutFeatures(): JSX.Element {
                 backgroundRect: { visible: false } as BackgroundRect,
               } as Text;
 
-              setLayersDescriptionStore(
+              setLayersDescriptionStoreBase(
                 produce(
                   (draft: LayersDescriptionStoreType) => {
                     draft.layoutFeaturesAndLegends.push(textDescription);
@@ -773,7 +774,7 @@ export default function LayoutFeatures(): JSX.Element {
             // eslint-disable-next-line no-lonely-if
             if (hasTitle) {
               // Remove the title element
-              setLayersDescriptionStore(
+              setLayersDescriptionStoreBase(
                 produce(
                   (draft: LayersDescriptionStoreType) => {
                     // eslint-disable-next-line no-param-reassign
@@ -800,7 +801,7 @@ export default function LayoutFeatures(): JSX.Element {
           if (v) {
             if (hasSource) {
               // Update the source element
-              setLayersDescriptionStore(
+              setLayersDescriptionStoreBase(
                 produce(
                   (draft: LayersDescriptionStoreType) => {
                     draft.layoutFeaturesAndLegends.forEach((d) => {
@@ -834,7 +835,7 @@ export default function LayoutFeatures(): JSX.Element {
                 backgroundRect: { visible: false } as BackgroundRect,
               } as Text;
 
-              setLayersDescriptionStore(
+              setLayersDescriptionStoreBase(
                 produce(
                   (draft: LayersDescriptionStoreType) => {
                     draft.layoutFeaturesAndLegends.push(textDescription);
@@ -846,7 +847,7 @@ export default function LayoutFeatures(): JSX.Element {
             // eslint-disable-next-line no-lonely-if
             if (hasSource) {
               // Remove the source element
-              setLayersDescriptionStore(
+              setLayersDescriptionStoreBase(
                 produce(
                   (draft: LayersDescriptionStoreType) => {
                     // eslint-disable-next-line no-param-reassign

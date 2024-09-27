@@ -7,8 +7,12 @@ import {
 } from 'solid-js';
 
 // Stores
-import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
-import { setMapStore } from '../../store/MapStore';
+import {
+  layersDescriptionStore,
+  setLayersDescriptionStore,
+  setLayersDescriptionStoreBase,
+} from '../../store/LayersDescriptionStore';
+import { setMapStoreBase } from '../../store/MapStore';
 
 // Subcomponents
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
@@ -68,6 +72,24 @@ const updateLayoutFeatureProperty = (
     },
   ];
   setLayersDescriptionStore(...args);
+};
+
+const updateLayoutFeaturePropertyBase = (
+  layoutFeatureId: string,
+  props: string[],
+  value: string | number | number[] | boolean | undefined | { color: string, width: number },
+) => {
+  const allPropsExceptLast = props.slice(0, props.length - 1);
+  const lastProp = props[props.length - 1];
+  const args = [
+    'layoutFeaturesAndLegends',
+    (f: LayoutFeature | Legend) => f.id === layoutFeatureId,
+    ...allPropsExceptLast,
+    {
+      [lastProp]: value,
+    },
+  ];
+  setLayersDescriptionStoreBase(...args);
 };
 
 function makeSettingsRectangle(
@@ -456,15 +478,15 @@ function makeSettingsText(
       rows={ft.text.split('\n').length}
       bindKeyUpAsChange={true}
       onChange={(value) => {
-        updateLayoutFeatureProperty(
+        updateLayoutFeaturePropertyBase(
           layoutFeatureId,
           ['text'],
           value,
         );
         if (isMapSource) {
-          setMapStore('mapAnnotations', 'source', value);
+          setMapStoreBase('mapAnnotations', 'source', value);
         } else if (isMapTitle) {
-          setMapStore('mapAnnotations', 'title', value);
+          setMapStoreBase('mapAnnotations', 'title', value);
         }
       }}
     />
