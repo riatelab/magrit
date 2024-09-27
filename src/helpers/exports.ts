@@ -15,7 +15,7 @@ import { findCssFontDefinition } from './font';
 // Types / Interfaces
 import {
   type GeoJSONFeatureCollection,
-  LabelsParameters,
+  type LabelsParameters,
   LayoutFeatureType,
 } from '../global.d';
 
@@ -287,6 +287,11 @@ export async function exportMapToSvg(
 
   // Remove stuff from the mgt namespace
   source = source.replace(/\bmgt:[^=]+="[^"]*"/g, '');
+
+  // Replace the internal ids by the layer names
+  layersDescriptionStore.layers.forEach((layer) => {
+    source = source.replaceAll(layer.id, layer.name.replaceAll(' ', '_'));
+  });
 
   // Add the XML declaration at the beginning of the document
   source = `<?xml version="1.0" standalone="no"?>\r\n${source}`;
