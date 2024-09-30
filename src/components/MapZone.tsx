@@ -501,7 +501,7 @@ export default function MapZone(): JSX.Element {
     let targetElement = element;
     // We need to find the first SVG element in the hierarchy that contains data
     // eslint-disable-next-line no-underscore-dangle
-    while (!targetElement.__data__ && it < 10) {
+    while ((!targetElement.__data__ || !targetElement.__data__.geometry) && it < 10) {
       if (!targetElement.parentElement) {
         resetInfoFeature();
         return;
@@ -510,7 +510,7 @@ export default function MapZone(): JSX.Element {
       it += 1;
     }
     // eslint-disable-next-line no-underscore-dangle
-    if (targetElement.__data__) {
+    if (targetElement.__data__ && targetElement.__data__.geometry) {
       onClickFeature(targetElement as SVGGElement & ID3Element);
     } else {
       resetInfoFeature();
