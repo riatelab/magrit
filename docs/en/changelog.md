@@ -2,7 +2,7 @@
 
 <br />
 
-#### 2.0.15 (unreleased)
+#### 2.0.15 (2024-09-30)
 
 - Replace internal ids with layer names in the `id` attribute of SVG elements
   to make it easier for SVG export users to identify layers (fixes <a href="https://github.com/riatelab/magrit/issues/141">141</a>).

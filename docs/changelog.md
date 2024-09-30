@@ -2,7 +2,7 @@
 
 <br />
 
-#### 2.0.15 (unreleased)
+#### 2.0.15 (2024-09-30)
 
 - Remplace les id internes par les noms de couche dans l'attribut `id` des éléments SVG pour faciliter l'identification
   des couches par les utilisateur.trice.s de l'export SVG (corrige <a href="https://github.com/riatelab/magrit/issues/141">141</a>).
