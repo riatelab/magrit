@@ -2,13 +2,15 @@
 
 <br />
 
-#### 2.0.15 (unreleased)
+#### 2.0.15 (2024-09-30)
 
 - Remplace les id internes par les noms de couche dans l'attribut `id` des éléments SVG pour faciliter l'identification
   des couches par les utilisateur.trice.s de l'export SVG (corrige <a href="https://github.com/riatelab/magrit/issues/141">141</a>).
 
 - Améliore les performances lors de l'édition des étiquettes de texte libre (et les champs titre de la carte et source)
   en n'enregistrant pas chaque changement dans l'historique de l'application.
+
+- Mise à jour des jeux de données NUTS2 (par [@rysebaert](https://github.com/rysebaert)).
 
 #### 2.0.14 (2024-09-25)
 
