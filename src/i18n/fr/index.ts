@@ -472,17 +472,12 @@ const fr = {
       PressEscToCancel: 'Appuyez sur "Échap" pour annuler.',
     },
     Modal: {
-      Title: 'Propriétés', // 'Propriétés pour {{ type d'objet }}'
+      Title: 'Propriétés',
       DashedLine: 'Ligne pointillée',
       DisplayArrowHead: 'Afficher la tête de flèche',
-      // FillColor: 'Couleur de remplissage',
-      // FillOpacity: 'Opacité du remplissage',
       Stroke: 'Bordure',
       Line: 'Ligne',
       Fill: 'Remplissage',
-      // StrokeColor: 'Couleur de la bordure',
-      // StrokeWidth: 'Épaisseur de la bordure',
-      // StrokeOpacity: 'Opacité de la bordure',
       RoundCorners: 'Coins arrondis',
       Rotation: 'Rotation',
       RotateManually: 'Rotation manuelle',
