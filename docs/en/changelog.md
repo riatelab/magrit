@@ -9,6 +9,8 @@
 
 - Improves performance when editing text annotations (and map title and source fields) by not saving every change in the application history (the undo/redo stack).
 
+- Update NUTS2 datasets (thanks to [@rysebaert](https://github.com/rysebaert)).
+
 #### 2.0.14 (2024-09-25)
 
 - Fix manual category sorting for categorical choropleth and pictogram maps when the dataset contains null or empty values.
