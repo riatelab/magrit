@@ -311,7 +311,7 @@ function makeSettingsScaleBar(
         }
         updateLayoutFeatureProperty(
           layoutFeatureId,
-          ['label'],
+          ['label', 'text'],
           label,
         );
       }}
