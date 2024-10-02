@@ -36,6 +36,7 @@ Cette méthode, parfois également appelée "amplitudes égales", permet de cré
 
 Cette méthode (notamment démocratisée par l'outil PhilCarto), permet d'effectuer une discrétisation selon la méthode des quartiles tout en isolant les valeurs extrêmes :
 elle produit ainsi 6 classes.
+Les 6 classes sont définies avec les bornes suivantes : minimum, percentile 5 (0.05%), 1er quartile (25%), médiane (50%), 3ème quartile (75%), percentile 95 (95%), maximum.
 
 ### Seuils naturels (algorithme CKMeans)
 
@@ -46,8 +47,9 @@ Cette méthode permet de créer des classes homogènes. En effet l'algorithme vi
 Cette méthode permet de créer des classes homogènes. En effet l'algorithme vise à trouver le nombre de classe souhaité en minimisant la variance intra-classe et en maximisant la variance inter-classe.
 
 ::: warning Dépréciation
+
 Cette méthode est désormais dépréciée en faveur de la méthode CKMeans donnant de meilleurs résultats
-(les entités sont généralement classées comme dans la méthode de Fisher-Jenks mais avec des limites de classes plus faciles à lire)
+(les entités sont classées comme dans la méthode de Fisher-Jenks mais avec des limites de classes plus faciles à lire)
 en un temps de calcul bien plus court. Nous vous conseillons donc d'utiliser la méthode CKMeans à la place.
 
 :::
@@ -67,6 +69,8 @@ Cette méthode de discrétisation permet de créer des classes dont les limites 
 Cette méthode de discrétisation permet de créer des classes pour des séries très déséquilibrées à gauche (avec beaucoup de valeurs faibles et quelques très fortes valeurs).
 
 ### Moyennes emboitées
+
+La méthode des moyennes emboitées permet de créer des classes de manière hiérarchique. Chaque classe est définie par la moyenne des valeurs de la classe parente (ou de l'ensemble de la série pour les deux premières classes).
 
 Le nombre de classes qu'il est possible de choisir pour cette méthode est donc nécessairement une puissance de 2 (2, 4, 8, etc.).
 

@@ -1,13 +1,5 @@
 # Classification panel
 
-::: warning
-
-The english version of the documentation is currently under construction.
-
-Some parts are not yet translated and some translations may be incomplete or inaccurate.
-
-:::
-
 Several methods are proposed for transforming a continuous series of values into a discrete series, i.e. into a finite number of classes.
 
 When creating a choropleth representation, the number of classes and their limit values must be justified statistically and/or thematically.
@@ -15,6 +7,12 @@ When creating a choropleth representation, the number of classes and their limit
 The methods proposed by the tool can be used as they stand, or as reading and analysis guides prior to manual entry of the desired class limits.
 
 ## Overview of the classification panel
+
+<ZoomImg
+    src="../classification.png"
+    alt="Classification panel"
+    caption="Classification panel"
+/>
 
 Several elements are present in this window:
 
@@ -36,6 +34,7 @@ This method, sometimes also called "equal amplitudes", allows the creation of cl
 
 This method (popularized by the PhilCarto tool), allows classification according to the quartile method while isolating extreme values:
 it thus produces 6 classes.
+The 6 classes are defined with the following limits: minimum, percentile 5 (0.05%), 1st quartile (25%), median (50%), 3rd quartile (75%), percentile 95 (95%), maximum.
 
 ## Natural thresholds (CKMeans algorithm)
 
@@ -48,7 +47,7 @@ This method allows the creation of homogeneous classes. Indeed, the algorithm ai
 ::: warning Deprecation
 
 This method is now deprecated in favor of the CKMeans method, which gives better results
-(entities are generally classified as in the Fisher-Jenks method but with class limits that are easier to read)
+(entities are classified as in the Fisher-Jenks method but with class limits that are easier to read)
 in a much shorter calculation time. We therefore recommend using the CKMeans method instead.
 
 :::
@@ -60,14 +59,35 @@ This method of classification does not allow you to directly choose a number of 
 which corresponds to the size of a class as well as the role of the mean (used as a class boundary or
 as a class center).
 
-### Head/tail breaks
-
-### Nested means
-
 ### Geometric progression
 
 This classification method allows you to create classes whose limits are defined by a geometric progression: each class is defined by a multiple of the previous one.
 
+### Head/tail breaks
+
+This classification method can be used to create classes for series that are very unbalanced on the left (with many low values and a few very high values).
+
+### Nested means
+
+The nested means method is used to create classes in a hierarchical fashion. Each class is defined by the average of the values of the parent class.
+
+The number of classes that can be chosen for this method is therefore necessarily a power of 2 (2, 4, 8, etc.).
+
 ### User-defined
 
 This method allows you to define the class limits manually.
+
+## Choosing a color progression
+
+Two types of color progression are available in Magrit:
+- Sequential palettes: used to represent continuously ordered data.
+- Divergent palettes: used to represent data ordered around a central value (e.g., an average, or the value zero, etc.).
+
+The available color palettes are taken from the [dicopal](https://github.com/riatelab/dicopal.js) library
+which offers palettes from a wide range of suppliers: ColorBrewer, Fabio Crameri's Scientific Colour Maps,
+CartoColors, CmOcean, Matplotlib, Light & Bartlein, MyCarta, Tableau, Joshua Stevens, etc.
+
+These palettes can be generated for any number of classes. For divergent palettes,
+options allow you to choose whether or not a central (neutral) class should be present, and
+the position of this class (or of the inflection point, if applicable), enabling you to generate asymmetrical divergent palettes.
+
