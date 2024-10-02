@@ -501,7 +501,7 @@ export default function ClassificationPanel(): JSX.Element {
               <div style={{ 'flex-grow': 2 }}>
                 <p class="label is-marginless">{ LL().ClassificationPanel.meanPosition() }</p>
                 <div class="control">
-                  <label class="radio" for="mean-position-center">
+                  <label class="radio m-2" for="mean-position-center">
                     <input
                       type={'radio'}
                       name={'mean-position'}
@@ -514,7 +514,7 @@ export default function ClassificationPanel(): JSX.Element {
                     />
                     { LL().ClassificationPanel.meanPositionCenter() }
                   </label>
-                  <label class="radio" for="mean-position-break">
+                  <label class="radio m-2" for="mean-position-break">
                     <input
                       type={'radio'}
                       name={'mean-position'}
