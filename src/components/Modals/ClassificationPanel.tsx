@@ -1,7 +1,7 @@
 // Imports from solid-js
 import {
-  createSignal, JSX, Match,
-  onCleanup, onMount,
+  createSignal, JSX, For,
+  Match, onCleanup, onMount,
   Show, Switch,
 } from 'solid-js';
 
@@ -12,7 +12,6 @@ import {
   getSequentialColors,
   PaletteType,
 } from 'dicopal';
-import toast from 'solid-toast';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -21,7 +20,6 @@ import {
   classificationMethodHasOption,
   getClassifier,
   OptionsClassification,
-  parseUserDefinedBreaks,
   prepareStatisticalSummary,
 } from '../../helpers/classification';
 import { isFiniteNumber } from '../../helpers/common';
@@ -47,6 +45,74 @@ import {
   type CustomPalette,
 } from '../../global.d';
 
+// Component for choosing breaks manually
+function ManualBreaks(
+  props: {
+    currentBreaksInfo: ClassificationParameters,
+    setCurrentBreaksInfo: (cp: ClassificationParameters) => void,
+    precision: number,
+  },
+): JSX.Element {
+  const { LL } = useI18nContext();
+  return <div class="mb-2">
+    <For each={props.currentBreaksInfo.breaks}>
+      {
+        (b, i) => <input
+          type="number"
+          value={round(b, props.precision)}
+          disabled={i() === 0 || i() === props.currentBreaksInfo.breaks.length - 1}
+          title={
+            i() === 0 || i() === props.currentBreaksInfo.breaks.length - 1
+              ? LL().ClassificationPanel.breaksCantBeChanged()
+              : ''
+          }
+          onChange={function (e) {
+            // We don't want to update the breaks if the user is typing
+            // a number that is not a valid number or if the value is superior
+            // to the next break or inferior to the previous break.
+            const value = +e.target.value;
+            if (
+              !Number.isFinite(value)
+              || (i() < props.currentBreaksInfo.breaks.length - 1
+                && value >= props.currentBreaksInfo.breaks[i() + 1])
+              || (i() > 0
+                && value <= props.currentBreaksInfo.breaks[i() - 1])
+            ) {
+              // eslint-disable-next-line no-param-reassign
+              this.value = round(b, props.precision);
+              return;
+            }
+            const newBreaks = [...props.currentBreaksInfo.breaks];
+            newBreaks[i()] = value;
+            props.setCurrentBreaksInfo({
+              ...props.currentBreaksInfo,
+              breaks: newBreaks,
+            });
+          }}
+        />
+      }
+    </For>
+  </div>;
+}
+
+// Component to display current breaks
+// based on currentBreaksInfo
+function DisplayBreaks(
+  props: {
+    breaks: number[],
+    precision: number,
+  },
+): JSX.Element {
+  return <div class="mb-2">
+    <p>{
+      props.breaks
+        .map((d) => round(d, props.precision))
+        .join(' - ')
+    }</p>
+  </div>;
+}
+
+// The main component
 export default function ClassificationPanel(): JSX.Element {
   // Function to recompute the classification given the current options.
   // We scope it here to facilitate the use of the signals that are defined below...
@@ -325,7 +391,7 @@ export default function ClassificationPanel(): JSX.Element {
     {
       name: LL().ClassificationPanel.classificationMethods.manual(),
       value: ClassificationMethod.manual,
-      options: [OptionsClassification.breaks],
+      options: [OptionsClassification.breaks, OptionsClassification.numberOfClasses],
     },
   ].filter((d) => d !== null);
 
@@ -461,6 +527,15 @@ export default function ClassificationPanel(): JSX.Element {
                       // eslint-disable-next-line no-param-reassign
                       event.target.value = `${v}`;
                     }
+                    if (classificationMethod() === ClassificationMethod.manual) {
+                      setCustomBreaks(
+                        Array.from({ length: v })
+                          .map((_, i) => (
+                            statSummary.minimum + (
+                              i * (statSummary.maximum - statSummary.minimum)) / v))
+                          .concat([statSummary.maximum]),
+                      );
+                    }
                     setNumberOfClasses(v);
                     updateClassificationParameters();
                   }}
@@ -530,54 +605,33 @@ export default function ClassificationPanel(): JSX.Element {
                 </div>
               </div>
             </Show>
-            <Show when={
-              classificationMethodHasOption(
-                OptionsClassification.breaks,
-                classificationMethod(),
-                entriesClassificationMethod,
-              )
-            }>
-              <div style={{ 'flex-grow': 5 }}>
-                <p class="label is-marginless">{ LL().ClassificationPanel.breaksInput() }</p>
-                <textarea
-                  class={'textarea'}
-                  style={{ 'min-height': '3em', 'max-height': '6em' }}
-                  ref={refTextArea!}
-                  value={currentBreaksInfo().breaks.join(' - ')}
-                >
-                </textarea>
-                <button
-                  class="button"
-                  style={{ width: '100%', height: '2em' }}
-                  onClick={() => {
-                    try {
-                      const b = parseUserDefinedBreaks(
-                        filteredSeries,
-                        refTextArea.value,
-                        statSummary,
-                      );
-                      setCustomBreaks(b);
-                    } catch (e) {
-                      toast.error(LL().ClassificationPanel.errorCustomBreaks(), {
-                        duration: 10000,
-                      });
-                      refTextArea.value = currentBreaksInfo().breaks.join(' - ');
-                      return;
-                    }
-                    updateClassificationParameters();
-                  }}
-                >
-                  { LL().ClassificationPanel.validate() }
-                </button>
-              </div>
-            </Show>
           </div>
+          <Show when={
+            !classificationMethodHasOption(
+              OptionsClassification.breaks,
+              classificationMethod(),
+              entriesClassificationMethod,
+            )
+          }>
+            <DisplayBreaks
+              breaks={currentBreaksInfo().breaks}
+              precision={statSummary.precision}
+            />
+          </Show>
+          <Show when={
+            classificationMethodHasOption(
+              OptionsClassification.breaks,
+              classificationMethod(),
+              entriesClassificationMethod,
+            )
+          }>
+            <ManualBreaks
+              currentBreaksInfo={currentBreaksInfo()}
+              setCurrentBreaksInfo={setCurrentBreaksInfo}
+              precision={statSummary.precision}
+            />
+          </Show>
           <div>
-            <p>{
-              currentBreaksInfo().breaks
-                .map((d) => round(d, statSummary.precision))
-                .join(' - ')
-            }</p>
             <div class="is-flex">
               <div style={{ width: '60%' }}>
                 <div>

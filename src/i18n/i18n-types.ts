@@ -4063,9 +4063,9 @@ type RootTranslation = {
 		 */
 		count: string
 		/**
-		 * E​r​r​o​r​ ​-​ ​T​h​e​ ​c​l​a​s​s​ ​l​i​m​i​t​s​ ​e​n​t​e​r​e​d​ ​a​r​e​ ​i​n​v​a​l​i​d​.​ ​P​l​e​a​s​e​ ​e​n​t​e​r​ ​n​u​m​e​r​i​c​a​l​ ​v​a​l​u​e​s​ ​s​e​p​a​r​a​t​e​d​ ​b​y​ ​d​a​s​h​e​s​ ​t​o​ ​f​o​r​m​ ​a​t​ ​l​e​a​s​t​ ​2​ ​c​l​a​s​s​e​s​.
+		 * T​h​i​s​ ​c​l​a​s​s​ ​b​o​u​n​d​a​r​y​ ​c​a​n​n​o​t​ ​b​e​ ​c​h​a​n​g​e​d​ ​b​e​c​a​u​s​e​ ​i​t​ ​i​s​ ​a​u​t​o​m​a​t​i​c​a​l​l​y​ ​c​a​l​c​u​l​a​t​e​d​.
 		 */
-		errorCustomBreaks: string
+		breaksCantBeChanged: string
 		/**
 		 * L​o​w​e​r​ ​l​i​m​i​t
 		 */
@@ -8389,9 +8389,9 @@ export type TranslationFunctions = {
 		 */
 		count: () => LocalizedString
 		/**
-		 * Error - The class limits entered are invalid. Please enter numerical values separated by dashes to form at least 2 classes.
+		 * This class boundary cannot be changed because it is automatically calculated.
 		 */
-		errorCustomBreaks: () => LocalizedString
+		breaksCantBeChanged: () => LocalizedString
 		/**
 		 * Lower limit
 		 */
