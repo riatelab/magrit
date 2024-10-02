@@ -6,7 +6,7 @@ import { createStore, produce } from 'solid-js/store';
 import { unproxify } from '../helpers/common';
 import d3 from '../helpers/d3-custom';
 import { makeDorlingDemersSimulation, makePolygonFromBbox } from '../helpers/geo';
-import { getD3ProjectionFromProj4, getProjection } from '../helpers/projection';
+import { getD3ProjectionFromProj4, getProjection, projEquals } from '../helpers/projection';
 import { getTargetSvg, redrawPaths } from '../helpers/svg';
 
 // Stores
@@ -337,6 +337,25 @@ createEffect(
             const clippingPolygon = makePolygonFromBbox([xmin, ymin, xmax, ymax]);
 
             projection.preclip(d3.geoClipPolygon(clippingPolygon));
+          } else if (
+            mapStore.projection.code === 'EPSG:3347'
+            || mapStore.projection.code === 'EPSG:3348'
+            || projEquals(
+              mapStore.projection.value,
+              '+proj=lcc +lat_0=63.390675 +lon_0=-91.8666666666667 +lat_1=49 +lat_2=77 +x_0=6200000 +y_0=3000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs',
+            )
+            || projEquals(
+              mapStore.projection.value,
+              '+proj=lcc +lat_0=63.390675 +lon_0=-91.8666666666667 +lat_1=49 +lat_2=77 +x_0=6200000 +y_0=3000000 +ellps=GRS80 +towgs84=-0.991,1.9072,0.5129,-1.25033e-07,-4.6785e-08,-5.6529e-08,0 +units=m +no_defs +type=crs',
+            )
+          ) {
+            // The clipping polygon we were calculating for EPSG:3347 and EPSG:3348
+            // was too small and was the culprit in https://github.com/riatelab/magrit/issues/140.
+            // For now we use a clipping polygon defined manually but (after visual inspection)
+            // it seems we could also don't use any clipping polygon.
+            // To be investigated further as there might be other cases where the clipping
+            // polygon we calculate is too small (?).
+            projection.preclip(d3.geoClipPolygon(makePolygonFromBbox([-180, 0, 0, 90])));
           } else {
             // We want to apply a clipping polygon to the projection
             // if the bounds are not worldwide (i.e. [90,-180,-90,180]).
