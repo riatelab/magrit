@@ -459,7 +459,7 @@ export interface SingleLabelParameters {
   // The font weight of the labels
   fontWeight: 'normal' | 'bold',
   // The text anchor of the labels
-  textAnchor: string,
+  textAnchor: 'start' | 'middle' | 'end',
   // The text alignment of the labels
   textAlignment: string,
   // The text offset of the labels

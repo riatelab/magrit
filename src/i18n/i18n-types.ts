@@ -3281,6 +3281,22 @@ type RootTranslation = {
 		 */
 		YOffset: string
 		/**
+		 * T​e​x​t​ ​a​n​c​h​o​r
+		 */
+		TextAnchor: string
+		/**
+		 * S​t​a​r​t
+		 */
+		TextAnchorStart: string
+		/**
+		 * M​i​d​d​l​e
+		 */
+		TextAnchorMiddle: string
+		/**
+		 * E​n​d
+		 */
+		TextAnchorEnd: string
+		/**
 		 * F​o​n​t​ ​s​t​y​l​e
 		 */
 		FontStyle: string
@@ -7612,6 +7628,22 @@ export type TranslationFunctions = {
 		 * Y offset
 		 */
 		YOffset: () => LocalizedString
+		/**
+		 * Text anchor
+		 */
+		TextAnchor: () => LocalizedString
+		/**
+		 * Start
+		 */
+		TextAnchorStart: () => LocalizedString
+		/**
+		 * Middle
+		 */
+		TextAnchorMiddle: () => LocalizedString
+		/**
+		 * End
+		 */
+		TextAnchorEnd: () => LocalizedString
 		/**
 		 * Font style
 		 */

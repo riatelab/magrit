@@ -187,6 +187,22 @@ function makeSettingsLabels(
   const rendererParameters = props.rendererParameters as LabelsParameters;
   const isProportional = !!props.rendererParameters.proportional;
 
+  const redrawLabels = () => {
+    // We redraw the labels by toggling the visibility of the layer
+    setLayersDescriptionStoreBase(
+      produce((draft: LayersDescriptionStoreType) => {
+        const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
+        layer.visible = false;
+      }),
+    );
+    setLayersDescriptionStoreBase(
+      produce((draft: LayersDescriptionStoreType) => {
+        const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
+        layer.visible = true;
+      }),
+    );
+  };
+
   return <>
     <InputFieldSelect
       disabled={true}
@@ -306,6 +322,27 @@ function makeSettingsLabels(
         );
       }}
     />
+    <InputFieldSelect
+      label={LL().LayerSettings.TextAnchor()}
+      value={rendererParameters.default.textAnchor}
+      onChange={(v) => {
+        updateProp(props.id, ['rendererParameters', 'default', 'textAnchor'], v);
+        // Update the textAnchor properties for each "specific" parameters
+        setLayersDescriptionStoreBase(
+          produce((draft: LayersDescriptionStoreType) => {
+            const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
+            Object.keys((layer.rendererParameters as LabelsParameters).specific).forEach((k) => {
+              // eslint-disable-next-line no-param-reassign
+              layer.rendererParameters.specific[+k].textAnchor = v as 'start' | 'middle' | 'end';
+            });
+          }),
+        );
+      }}
+    >
+      <option value="start">{LL().LayerSettings.TextAnchorStart()}</option>
+      <option value="middle">{LL().LayerSettings.TextAnchorMiddle()}</option>
+      <option value="end">{LL().LayerSettings.TextAnchorEnd()}</option>
+    </InputFieldSelect>
     <InputFieldNumber
       label={ LL().LayerSettings.XOffset() }
       value={rendererParameters.default.textOffset[0]}
@@ -323,6 +360,7 @@ function makeSettingsLabels(
               });
             }),
           );
+          redrawLabels();
         }
       }
       min={-100}
@@ -346,6 +384,7 @@ function makeSettingsLabels(
               });
             }),
           );
+          redrawLabels();
         }
       }
       min={-100}
