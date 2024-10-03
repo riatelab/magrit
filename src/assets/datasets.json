@@ -1271,7 +1271,7 @@
     "totalFeatures": 4028,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2154
+      "code": 2154
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -1373,7 +1373,7 @@
     "totalFeatures": 3699,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2154
+      "code": 2154
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -1475,7 +1475,7 @@
     "totalFeatures": 1207,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2154
+      "code": 2154
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -1577,7 +1577,7 @@
     "totalFeatures": 360,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2154
+      "code": 2154
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -1679,7 +1679,7 @@
     "totalFeatures": 1757,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2154
+      "code": 2154
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -1781,7 +1781,7 @@
     "totalFeatures": 5119,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2154
+      "code": 2154
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -1883,7 +1883,7 @@
     "totalFeatures": 3787,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2154
+      "code": 2154
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -1985,7 +1985,7 @@
     "totalFeatures": 1268,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2154
+      "code": 2154
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -2087,7 +2087,7 @@
     "totalFeatures": 4308,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2154
+      "code": 2154
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -2189,7 +2189,7 @@
     "totalFeatures": 2651,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2154
+      "code": 2154
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -2291,7 +2291,7 @@
     "totalFeatures": 4453,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2154
+      "code": 2154
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -2393,7 +2393,7 @@
     "totalFeatures": 946,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2154
+      "code": 2154
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -2495,7 +2495,7 @@
     "totalFeatures": 1233,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2154
+      "code": 2154
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -2597,7 +2597,7 @@
     "totalFeatures": 32,
     "defaultProjection": {
       "type": "proj4",
-      "value": 5490
+      "code": 5490
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -2699,7 +2699,7 @@
     "totalFeatures": 34,
     "defaultProjection": {
       "type": "proj4",
-      "value": 5490
+      "code": 5490
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -2801,7 +2801,7 @@
     "totalFeatures": 22,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2972
+      "code": 2972
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -2903,7 +2903,7 @@
     "totalFeatures": 24,
     "defaultProjection": {
       "type": "proj4",
-      "value": 2972
+      "code": 2972
     },
     "geometry": {
       "source": "IGN-RIATE",
@@ -3005,7 +3005,7 @@
     "totalFeatures": 17,
     "defaultProjection": {
       "type": "proj4",
-      "value": 4471
+      "code": 4471
     },
     "geometry": {
       "source": "IGN-RIATE",
