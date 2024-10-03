@@ -1263,5 +1263,1841 @@
         "provenance": 1
       }
     ]
+  },
+  {
+    "id": "auv_rh_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 4028,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2154
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "bour_fct_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 3699,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2154
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "bzh_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 1207,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2154
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "cor_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 360,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2154
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "cvdl_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 1757,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2154
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "grand_est_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 5119,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2154
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "hdf_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 3787,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2154
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "idf_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 1268,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2154
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "naqu_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 4308,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2154
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "norm_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 2651,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2154
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "occitanie_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 4453,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2154
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "paca_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 946,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2154
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "pdl_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 1233,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2154
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "guad_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 32,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 5490
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "mart_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 34,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 5490
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "guy_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 22,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2972
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "reu_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 24,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 2972
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
+  },
+  {
+    "id": "may_com",
+    "active": true,
+    "type": "vector",
+    "totalFeatures": 17,
+    "defaultProjection": {
+      "type": "proj4",
+      "value": 4471
+    },
+    "geometry": {
+      "source": "IGN-RIATE",
+      "url": "https://geoservices.ign.fr/adminexpress",
+      "download_date": "2024-07-03",
+      "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+    },
+    "data": [
+      {
+        "source": "IGN-RIATE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ],
+    "fields": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 1
+      }
+    ]
   }
 ]
