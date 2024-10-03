@@ -1022,6 +1022,1194 @@ type RootTranslation = {
 				'2': string
 			}
 		}
+		auv_rh_com: {
+			/**
+			 * A​u​v​e​r​g​n​e​-​R​h​ô​n​e​-​A​l​p​e​s​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​4​0​2​8​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​r​e​g​i​o​n​ ​A​u​v​e​r​g​n​e​-​R​h​ô​n​e​-​A​l​p​e​s​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​A​u​v​e​r​g​n​e​-​R​h​ô​n​e​-​A​l​p​e​s
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		bour_fct_com: {
+			/**
+			 * B​o​u​r​g​o​g​n​e​-​F​r​a​n​c​h​e​-​C​o​m​t​é​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​3​6​9​9​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​r​e​g​i​o​n​ ​B​o​u​r​g​o​g​n​e​-​F​r​a​n​c​h​e​-​C​o​m​t​é​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​B​o​u​r​g​o​g​n​e​-​F​r​a​n​c​h​e​-​C​o​m​t​é
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		bzh_com: {
+			/**
+			 * B​r​e​t​a​g​n​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​1​2​0​7​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​r​e​g​i​o​n​ ​B​r​e​t​a​g​n​e​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​B​r​e​t​a​g​n​e
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		cor_com: {
+			/**
+			 * C​o​r​s​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​3​6​0​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​r​e​g​i​o​n​ ​C​o​r​s​e​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​C​o​r​s​e
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		cvdl_com: {
+			/**
+			 * C​e​n​t​r​e​-​V​a​l​ ​d​e​ ​L​o​i​r​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​1​7​5​7​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​r​e​g​i​o​n​ ​C​e​n​t​r​e​-​V​a​l​ ​d​e​ ​L​o​i​r​e​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​C​e​n​t​r​e​-​V​a​l​ ​d​e​ ​L​o​i​r​e
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		grand_est_com: {
+			/**
+			 * G​r​a​n​d​ ​E​s​t​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​5​1​1​9​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​r​e​g​i​o​n​ ​G​r​a​n​d​ ​E​s​t​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​G​r​a​n​d​ ​E​s​t
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		hdf_com: {
+			/**
+			 * H​a​u​t​s​-​d​e​-​F​r​a​n​c​e​ ​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​3​7​8​7​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​r​e​g​i​o​n​ ​H​a​u​t​s​-​d​e​-​F​r​a​n​c​e​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​H​a​u​t​s​-​d​e​-​F​r​a​n​c​e
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		idf_com: {
+			/**
+			 * Î​l​e​-​d​e​-​F​r​a​n​c​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​1​2​6​8​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​r​e​g​i​o​n​ ​Î​l​e​-​d​e​-​F​r​a​n​c​e​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​Î​l​e​-​d​e​-​F​r​a​n​c​e
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		naqu_com: {
+			/**
+			 * N​o​u​v​e​l​l​e​-​A​q​u​i​t​a​i​n​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​4​3​0​8​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​r​e​g​i​o​n​ ​N​o​u​v​e​l​l​e​-​A​q​u​i​t​a​i​n​e​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​N​o​u​v​e​l​l​e​-​A​q​u​i​t​a​i​n​e
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		norm_com: {
+			/**
+			 * N​o​r​m​a​n​d​i​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​2​6​5​1​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​r​e​g​i​o​n​ ​N​o​r​m​a​n​d​i​e​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​N​o​r​m​a​n​d​i​e
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		occitanie_com: {
+			/**
+			 * O​c​c​i​t​a​n​i​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​4​4​5​3​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​r​e​g​i​o​n​ ​O​c​c​i​t​a​n​i​e​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​O​c​c​i​t​a​n​i​e
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		paca_com: {
+			/**
+			 * P​A​C​A​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​9​4​6​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​r​e​g​i​o​n​ ​P​r​o​v​e​n​c​e​-​A​l​p​e​s​-​C​ô​t​e​ ​d​'​A​z​u​r​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​P​r​o​v​e​n​c​e​-​A​l​p​e​s​-​C​ô​t​e​ ​d​'​A​z​u​r​,​ ​P​A​C​A
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		pdl_com: {
+			/**
+			 * P​a​y​s​ ​d​e​ ​l​a​ ​L​o​i​r​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​1​2​3​3​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​r​e​g​i​o​n​ ​P​a​y​s​ ​d​e​ ​l​a​ ​L​o​i​r​e​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​P​a​y​s​ ​d​e​ ​l​a​ ​L​o​i​r​e
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		guad_com: {
+			/**
+			 * G​u​a​d​e​l​o​u​p​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​3​2​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​G​u​a​d​e​l​o​u​p​e​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​G​u​a​d​e​l​o​u​p​e
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		mart_com: {
+			/**
+			 * M​a​r​t​i​n​i​q​u​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​3​4​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​M​a​r​t​i​n​i​q​u​e​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​M​a​r​t​i​n​i​q​u​e
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		guy_com: {
+			/**
+			 * G​u​y​a​n​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​2​2​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​G​u​y​a​n​e​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​G​u​y​a​n​e
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		reu_com: {
+			/**
+			 * R​é​u​n​i​o​n​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​2​4​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​l​a​ ​R​é​u​n​i​o​n​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​R​é​u​n​i​o​n
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
+		may_com: {
+			/**
+			 * M​a​y​o​t​t​e​ ​–​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s
+			 */
+			name: string
+			/**
+			 * T​h​e​ ​1​4​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​M​a​y​o​t​t​e​ ​(​é​d​i​t​i​o​n​ ​2​0​2​3​)
+			 */
+			abstract: string
+			fields: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​r​e​g​i​o​n​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​M​a​y​o​t​t​e
+			 */
+			keywords: string
+			/**
+			 * ©​ ​I​G​N​ ​C​O​G​-​C​A​R​T​O​ ​s​i​m​p​l​i​f​i​e​d​ ​(​R​I​A​T​E​)
+			 */
+			geometryAttribution: string
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​–​ ​2​0​2​4
+				 */
+				'1': string
+			}
+		}
 	}
 	DatasetCatalog: {
 		/**
@@ -5403,6 +6591,1194 @@ export type TranslationFunctions = {
 				 * United Nations (consolidated by RIATE), 2024
 				 */
 				'2': () => LocalizedString
+			}
+		}
+		auv_rh_com: {
+			/**
+			 * Auvergne-Rhône-Alpes – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 4028 municipalities of region Auvergne-Rhône-Alpes (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Auvergne-Rhône-Alpes
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		bour_fct_com: {
+			/**
+			 * Bourgogne-Franche-Comté – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 3699 municipalities of region Bourgogne-Franche-Comté (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Bourgogne-Franche-Comté
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		bzh_com: {
+			/**
+			 * Bretagne – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 1207 municipalities of region Bretagne (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Bretagne
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		cor_com: {
+			/**
+			 * Corse – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 360 municipalities of region Corse (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Corse
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		cvdl_com: {
+			/**
+			 * Centre-Val de Loire – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 1757 municipalities of region Centre-Val de Loire (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Centre-Val de Loire
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		grand_est_com: {
+			/**
+			 * Grand Est – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 5119 municipalities of region Grand Est (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Grand Est
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		hdf_com: {
+			/**
+			 * Hauts-de-France  – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 3787 municipalities of region Hauts-de-France (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Hauts-de-France
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		idf_com: {
+			/**
+			 * Île-de-France – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 1268 municipalities of region Île-de-France (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Île-de-France
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		naqu_com: {
+			/**
+			 * Nouvelle-Aquitaine – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 4308 municipalities of region Nouvelle-Aquitaine (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Nouvelle-Aquitaine
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		norm_com: {
+			/**
+			 * Normandie – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 2651 municipalities of region Normandie (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Normandie
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		occitanie_com: {
+			/**
+			 * Occitanie – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 4453 municipalities of region Occitanie (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Occitanie
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		paca_com: {
+			/**
+			 * PACA – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 946 municipalities of region Provence-Alpes-Côte d'Azur (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Provence-Alpes-Côte d'Azur, PACA
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		pdl_com: {
+			/**
+			 * Pays de la Loire – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 1233 municipalities of region Pays de la Loire (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Pays de la Loire
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		guad_com: {
+			/**
+			 * Guadeloupe – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 32 municipalities of Guadeloupe (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Guadeloupe
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		mart_com: {
+			/**
+			 * Martinique – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 34 municipalities of Martinique (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Martinique
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		guy_com: {
+			/**
+			 * Guyane – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 22 municipalities of Guyane (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Guyane
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		reu_com: {
+			/**
+			 * Réunion – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 24 municipalities of la Réunion (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Réunion
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
+			}
+		}
+		may_com: {
+			/**
+			 * Mayotte – municipalities
+			 */
+			name: () => LocalizedString
+			/**
+			 * The 14 municipalities of Mayotte (édition 2023)
+			 */
+			abstract: () => LocalizedString
+			fields: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			/**
+			 * France, communes, region, municipalities, Mayotte
+			 */
+			keywords: () => LocalizedString
+			/**
+			 * © IGN COG-CARTO simplified (RIATE)
+			 */
+			geometryAttribution: () => LocalizedString
+			dataAttribution: {
+				/**
+				 * © INSEE – 2024
+				 */
+				'1': () => LocalizedString
 			}
 		}
 	}
