@@ -1,7 +1,9 @@
 import { expect, test } from 'vitest';
 import {
-  camelToFlat, findSuitableName, getNumberOfDecimals, getUniqueValues,
+  camelToFlat, findSuitableName,
+  getNumberOfDecimals, getUniqueValues,
   isFiniteNumber, isNonNull,
+  removeDiacritics,
 } from './common';
 
 test('isFiniteNumber', () => {
@@ -65,4 +67,11 @@ test('findSuitableName', () => {
   expect(findSuitableName('name', ['name', 'other name', 'name (1)', 'name (2)'])).toBe('name (3)');
   expect(findSuitableName('name', ['name', 'other name', 'name (1)', 'name (3)'])).toBe('name (2)');
   expect(findSuitableName('name', ['name (1)', 'name (2)', 'name (3)'])).toBe('name (4)');
+});
+
+test('removeDiaCritics', () => {
+  expect(removeDiacritics('ÉÀÈÇÙ')).toBe('EAECU');
+  expect(removeDiacritics('éàèçù')).toBe('eaecu');
+  expect(removeDiacritics('Île-de-France')).toBe('Ile-de-France');
+  expect(removeDiacritics('île-Île~ô_ö~ ìçé'), 'ile-Ile~o_o~ ice');
 });

@@ -180,3 +180,10 @@ export const sanitizeColumnName = (c: string) => c.replace(/[\r\n]+/g, ' ')
   .replace(/[.,/#!$%^&*;:{}=`~()]/g, ' ')
   .replace(/\s{2,}/g, ' ')
   .replaceAll('\'', '-');
+
+/**
+ * Replace diacritics in a string with their non-diacritic equivalent.
+ * @param {string} str - The string to sanitize.
+ * @returns {string} - The sanitized string.
+ */
+export const removeDiacritics = (str: string) => str.normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
