@@ -2,6 +2,7 @@ import { For, JSX } from 'solid-js';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
+import { mapStore } from '../../store/MapStore';
 
 // Helpers
 import { mergeFilterIds } from './common.tsx';
@@ -30,7 +31,7 @@ export default function graticuleRenderer(layerDescription: LayerDescription): J
     stroke-linecap="round"
     stroke-linejoin="round"
     stroke-dasharray={layerDescription.strokeDasharray}
-    clip-path="url(#clip-sphere)"
+    clip-path={mapStore.projection.type === 'd3' ? 'url(#clip-sphere)' : undefined}
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}

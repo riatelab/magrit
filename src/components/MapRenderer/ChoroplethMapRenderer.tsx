@@ -14,6 +14,7 @@ import d3 from '../../helpers/d3-custom';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
+import { mapStore } from '../../store/MapStore';
 
 // Directives
 import bindData from '../../directives/bind-data';
@@ -53,7 +54,7 @@ export function choroplethPolygonRenderer(
     stroke-opacity={layerDescription.strokeOpacity}
     stroke-linecap="round"
     stroke-linejoin="round"
-    clip-path="url(#clip-sphere)"
+    clip-path={mapStore.projection.type === 'd3' ? 'url(#clip-sphere)' : undefined}
     filter={mergeFilterIds(layerDescription)}
     shape-rendering={
       (layerDescription.strokeWidth === 0 || layerDescription.strokeOpacity === 0)
@@ -105,7 +106,7 @@ export function choroplethPointRenderer(
     stroke-opacity={layerDescription.strokeOpacity}
     stroke-linecap="round"
     stroke-linejoin="round"
-    // clip-path="url(#clip-sphere)"
+    // clip-path={mapStore.projection.type === 'd3' ? 'url(#clip-sphere)' : undefined}
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
@@ -159,7 +160,7 @@ export function choroplethLineRenderer(
     stroke-opacity={layerDescription.strokeOpacity}
     stroke-linecap="round"
     stroke-linejoin="round"
-    clip-path="url(#clip-sphere)"
+    clip-path={mapStore.projection.type === 'd3' ? 'url(#clip-sphere)' : undefined}
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}

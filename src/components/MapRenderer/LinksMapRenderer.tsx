@@ -13,6 +13,7 @@ import applyFilters from '../../helpers/filtering';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
+import { mapStore } from '../../store/MapStore';
 
 // Directives
 import bindData from '../../directives/bind-data';
@@ -59,7 +60,7 @@ export default function linksRenderer(
       stroke-opacity={layerDescription.strokeOpacity}
       stroke-linecap="round"
       stroke-linejoin="round"
-      clip-path="url(#clip-sphere)"
+      clip-path={mapStore.projection.type === 'd3' ? 'url(#clip-sphere)' : undefined}
       filter={mergeFilterIds(layerDescription)}
       mgt:geometry-type={layerDescription.type}
       mgt:portrayal-type={layerDescription.representationType}
@@ -112,7 +113,7 @@ export default function linksRenderer(
     stroke-opacity={layerDescription.strokeOpacity}
     stroke-linecap="round"
     stroke-linejoin="round"
-    clip-path="url(#clip-sphere)"
+    clip-path={mapStore.projection.type === 'd3' ? 'url(#clip-sphere)' : undefined}
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}

@@ -11,6 +11,7 @@ import d3 from '../../helpers/d3-custom';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
+import { mapStore } from '../../store/MapStore';
 
 // Directives
 import bindData from '../../directives/bind-data';
@@ -38,7 +39,7 @@ export function defaultPolygonRenderer(
     stroke-opacity={layerDescription.strokeOpacity}
     stroke-linecap="round"
     stroke-linejoin="round"
-    clip-path="url(#clip-sphere)"
+    clip-path={mapStore.projection.type === 'd3' ? 'url(#clip-sphere)' : undefined}
     filter={mergeFilterIds(layerDescription)}
     shape-rendering={
       (layerDescription.strokeWidth === 0 || layerDescription.strokeOpacity === 0)
@@ -80,7 +81,7 @@ export function defaultPolygonRendererMeshed(
     stroke-opacity={layerDescription.strokeOpacity}
     stroke-linecap="round"
     stroke-linejoin="round"
-    clip-path="url(#clip-sphere)"
+    clip-path={mapStore.projection.type === 'd3' ? 'url(#clip-sphere)' : undefined}
     filter={mergeFilterIds(layerDescription)}
     shape-rendering={layerDescription.shapeRendering}
     mgt:geometry-type={layerDescription.type}
@@ -116,7 +117,7 @@ export function defaultPointRenderer(
     stroke-opacity={layerDescription.strokeOpacity}
     stroke-linecap="round"
     stroke-linejoin="round"
-    // clip-path="url(#clip-sphere)"
+    // clip-path={mapStore.projection.type === 'd3' ? 'url(#clip-sphere)' : undefined}
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
@@ -155,7 +156,7 @@ export function defaultLineRenderer(
     stroke-opacity={layerDescription.strokeOpacity}
     stroke-linecap="round"
     stroke-linejoin="round"
-    clip-path="url(#clip-sphere)"
+    clip-path={mapStore.projection.type === 'd3' ? 'url(#clip-sphere)' : undefined}
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
