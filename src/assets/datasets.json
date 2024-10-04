@@ -2903,7 +2903,7 @@
     "totalFeatures": 24,
     "defaultProjection": {
       "type": "proj4",
-      "code": 2972
+      "code": 2975
     },
     "geometry": {
       "source": "IGN-RIATE",
