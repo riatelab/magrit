@@ -13,9 +13,7 @@ import {
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
-import { BsMap } from 'solid-icons/bs';
 import { FaSolidDatabase } from 'solid-icons/fa';
-import { HiSolidDocumentText } from 'solid-icons/hi';
 import { ImFilter } from 'solid-icons/im';
 
 // Helpers
@@ -23,7 +21,9 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 import rewindLayer from '../../helpers/rewind';
 import { getGeometryType } from '../../helpers/formatConversion';
 import { generateIdLayer, getDefaultRenderingParams } from '../../helpers/layers';
-import { findSuitableName, isFiniteNumber, isNonNull } from '../../helpers/common';
+import {
+  findSuitableName, isFiniteNumber, isNonNull, removeDiacritics,
+} from '../../helpers/common';
 import { makeDefaultLegendDescription } from '../../helpers/legends';
 import { epsgDb, removeNadGrids } from '../../helpers/projection';
 
@@ -46,8 +46,12 @@ import allDatasets from '../../assets/datasets.json';
 // Types
 import type { DefaultLegend, GeoJSONFeatureCollection, LayerDescription } from '../../global';
 import type { Variable } from '../../helpers/typeDetection';
+import type { Translation } from '../../i18n/i18n-types';
 
-const templates = [];
+const templates: TemplateEntry[] = [];
+
+interface TemplateEntry {
+}
 
 interface DataProvider {
   // The source of the geometry / dataset
@@ -64,7 +68,7 @@ interface DataProvider {
 
 interface DatasetEntry {
   // Internal id of the dataset
-  id: string,
+  id: string & keyof Translation['Datasets'],
   // Do we currently propose the dataset in the ui ?
   active: boolean,
   // Type of dataset
@@ -72,14 +76,11 @@ interface DatasetEntry {
   // The total number of features in the dataset (vector)
   // or the total number of pixels in the dataset (raster)
   totalFeatures: number;
-  // Information about the projection that should be used when displaying these data
-  defaultProjection: {
-    type: 'd3' | 'proj4',
-    // In case of d3, a d3 projection name (like NaturalEarth2)
-    value?: string,
-    // In case of proj4, an EPSG code (like 2154)
-    code?: number,
-  },
+  // Information about the cartographic projection in which the dataset
+  // should be displayed
+  // Type is 'd3' for d3 projections (with value like "NaturalEarth2")
+  // and 'proj4' for proj4 projections (with code like 2154)
+  defaultProjection: { type: 'd3', value: 'string' } | { type: 'proj4', code: number },
   // Information about the geometry provider
   geometry: DataProvider,
   // Information about the data provider(s)
@@ -88,7 +89,7 @@ interface DatasetEntry {
   fields: (Variable & { provenance: number })[],
 }
 
-const datasets = allDatasets.filter((d) => d.active) as DatasetEntry[];
+const datasets = allDatasets.filter((d) => d.active) as unknown as DatasetEntry[];
 
 const findMaxEntryPerPage = () => {
   const height = window.innerHeight;
@@ -100,6 +101,12 @@ const findMaxEntryPerPage = () => {
   }
   return 6;
 };
+
+function CardTemplateEntry(
+  t: TemplateEntry & { onClick: (arg0: MouseEvent) => void },
+): JSX.Element {
+  return <div></div>;
+}
 
 function CardDatasetEntry(
   ds: DatasetEntry & { onClick: (arg0: MouseEvent) => void },
@@ -113,12 +120,12 @@ function CardDatasetEntry(
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
       <p class="card-header-title">
         <FaSolidDatabase style={{ height: '1.2em', width: '1.8em' }}/>
-        <span style={{ 'font-size': '1.3em' }}>{ LL().Datasets[ds.id].name }</span>
+        <span style={{ 'font-size': '1.3em' }}>{ LL().Datasets[ds.id].name() }</span>
       </p>
     </header>
     <section class="card-content">
       <div class="content">
-        { LL().Datasets[ds.id].abstract }
+        { LL().Datasets[ds.id].abstract() }
       </div>
     </section>
   </div>;
@@ -152,7 +159,7 @@ function DatasetPage(props: {
 function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
   const { LL } = useI18nContext();
   return <div>
-    <h3>{ LL().Datasets[ds.id].name }</h3>
+    <h3>{ LL().Datasets[ds.id].name() }</h3>
     <h4>{ LL().DatasetCatalog.about() }</h4>
     <div>
       <table>
@@ -186,7 +193,7 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
         <tr>
           <td>{LL().DatasetCatalog.attributionData()}</td>
           <td>{
-            ds.data.map((d, i) => LL().Datasets[ds.id].dataAttribution[i + 1]()).join(', ')}</td>
+            ds.data.map((d, i) => LL().Datasets[ds.id].dataAttribution[`${i + 1}`]()).join(', ')}</td>
         </tr>
         <tr>
           <td>{LL().DatasetCatalog.licenceData()}</td>
@@ -198,7 +205,7 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
     <br/>
     <h4>{LL().DatasetCatalog.description()}</h4>
     <div>
-      <p> {LL().Datasets[ds.id].abstract}</p>
+      <p> {LL().Datasets[ds.id].abstract()}</p>
     </div>
     <br/>
     <h4>{LL().DatasetCatalog.variableDescription()}</h4>
@@ -215,11 +222,11 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
           {
             (variableDescription) => <tr>
               <td>{variableDescription.name}</td>
-              <td>{LL().Datasets[ds.id].fields[variableDescription.name]}</td>
+              <td>{LL().Datasets[ds.id].fields[variableDescription.name]()}</td>
               <td>{
                 variableDescription.provenance === 0
-                  ? LL().Datasets[ds.id].geometryAttribution
-                  : LL().Datasets[ds.id].dataAttribution[variableDescription.provenance]
+                  ? LL().Datasets[ds.id].geometryAttribution()
+                  : LL().Datasets[ds.id].dataAttribution[variableDescription.provenance]()
 
               }</td>
             </tr>
@@ -242,7 +249,7 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
 export function addExampleLayer(
   geojson: GeoJSONFeatureCollection,
   name: string,
-  projection: { type: 'd3' | 'proj4', value?: string, code?: number },
+  projection: { type: 'd3', value: 'string' } | { type: 'proj4', code: number },
   fields: (Variable & { provenance: number })[],
 ): string {
   const rewoundGeojson = rewindLayer(geojson, true);
@@ -294,7 +301,7 @@ export function addExampleLayer(
     shapeRendering: 'auto',
     // shapeRendering: geomType === 'polygon'
     //   && rewoundGeojson.features.length > 10000 ? 'optimizeSpeed' : 'auto',
-  };
+  } as LayerDescription;
 
   const newLegendDescription = makeDefaultLegendDescription(newLayerDescription);
 
@@ -319,13 +326,13 @@ export function addExampleLayer(
     setMapStore(
       'projection',
       {
-        name: projection.value!,
-        value: `geo${projection.value!}`,
+        name: projection.value,
+        value: `geo${projection.value}`,
         type: 'd3',
       },
     );
   } else { // projetion.type === 'proj4'
-    const proj = epsgDb[projection.code!];
+    const proj = epsgDb[projection.code];
     setMapStore(
       'projection',
       {
@@ -396,18 +403,18 @@ export default function ExampleDatasetModal(): JSX.Element {
   const [
     filteredTemplates,
     setFilteredTemplates,
-  ] = createSignal<[]>([]);
+  ] = createSignal<TemplateEntry[]>([]);
   const [
     selectedTemplate,
     setSelectedTemplate,
-  ] = createSignal(null);
+  ] = createSignal<TemplateEntry | null>(null);
   // The page that is currently displayed
   const [currentPageTemplate, setCurrentPageTemplate] = createSignal<number>(1);
   // The offset of the current page (i.e. the index of the first entry of the page)
-  const offsetTemplate = createMemo(() => (currentPageTemplate() - 1) * maxEntryPerPage);
+  const offsetTemplate = createMemo(() => (currentPageTemplate() - 1) * maxEntryPerPage());
   // The total number of pages
   const totalPagesTemplate = createMemo(
-    () => Math.ceil(filteredDatasets().length / maxEntryPerPage),
+    () => Math.ceil(filteredDatasets().length / maxEntryPerPage()),
   );
 
   // Filter the datasets using the search terms
@@ -418,11 +425,11 @@ export default function ExampleDatasetModal(): JSX.Element {
     }
     const terms = selectedSearchTerms()
       .split(' ')
-      .map((t) => t.toLowerCase());
+      .map((t) => removeDiacritics(t.toLowerCase()));
 
     return datasets.filter((ds) => {
       let found = false;
-      const keywords = LL().Datasets[ds.id].keywords().split(',').map((k) => k.trim().toLowerCase());
+      const keywords = LL().Datasets[ds.id].keywords().split(',').map((k) => removeDiacritics(k.trim().toLowerCase()));
       terms.forEach((term: string) => {
         keywords.forEach((keyword: string) => {
           if (keyword.includes(term)) {
@@ -435,13 +442,14 @@ export default function ExampleDatasetModal(): JSX.Element {
   };
 
   // Filter the templates using the search terms
-  const filterTemp = () => {
+  const filterTemp = (): TemplateEntry[] => {
     if (selectedSearchTerms() === '') {
       return templates;
     }
     const terms = selectedSearchTerms()
       .split(' ')
-      .map((t) => t.toLowerCase());
+      .map((t) => removeDiacritics(t.toLowerCase()));
+
     return templates.filter((ds) => ({}));
   };
 
@@ -683,7 +691,7 @@ export default function ExampleDatasetModal(): JSX.Element {
               when={selectedTemplate() !== null}
               fallback={<p>{LL().DatasetCatalog.placeholderTemplateDetail()}</p>}
             >
-              <CardDatasetDetail {...selectedTemplate() as DatasetEntry} />
+              <CardTemplateEntry {...selectedTemplate()} />
             </Show>
           </div>
         </div>

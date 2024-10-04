@@ -123,13 +123,13 @@ export const makeDefaultGraticule = (): LayerDescription => ({
   } as GraticuleParameters,
 });
 
-export const getDefaultRenderingParams = (geomType: string) => {
+export const getDefaultRenderingParams = (geomType: string) : Partial<LayerDescription> => {
   const pal = getPalette('Vivid', 10)!.colors;
   const color = pal[Math.floor(Math.random() * pal.length)];
 
   if (geomType === 'point') {
     return {
-      representationType: 'default',
+      representationType: 'default' as RepresentationType,
       strokeColor: '#212121',
       strokeWidth: 1,
       strokeOpacity: 1,
@@ -142,7 +142,7 @@ export const getDefaultRenderingParams = (geomType: string) => {
   }
   if (geomType === 'linestring') {
     return {
-      representationType: 'default',
+      representationType: 'default' as RepresentationType,
       strokeColor: color,
       strokeWidth: 1.5,
       strokeOpacity: 1,
@@ -151,7 +151,7 @@ export const getDefaultRenderingParams = (geomType: string) => {
   }
   if (geomType === 'polygon') {
     return {
-      representationType: 'default',
+      representationType: 'default' as RepresentationType,
       strokeColor: '#212121',
       strokeWidth: 0.4,
       strokeOpacity: 1,
