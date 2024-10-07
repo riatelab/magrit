@@ -103,12 +103,12 @@ function makeSettingsRectangle(
       label={LL().LayoutFeatures.Modal.Fill()}
       valueColor={ft.fillColor}
       valueOpacity={ft.fillOpacity}
-      onChangeColor={(newValue) => updateLayoutFeatureProperty(
+      onChangeColor={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['fillColor'],
         newValue,
       )}
-      onChangeOpacity={(newValue) => updateLayoutFeatureProperty(
+      onChangeOpacity={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['fillOpacity'],
         newValue,
@@ -119,17 +119,17 @@ function makeSettingsRectangle(
       valueWidth={ft.strokeWidth}
       valueColor={ft.strokeColor}
       valueOpacity={ft.strokeOpacity}
-      onChangeWidth={(newValue) => updateLayoutFeatureProperty(
+      onChangeWidth={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['strokeWidth'],
         newValue,
       )}
-      onChangeColor={(newValue) => updateLayoutFeatureProperty(
+      onChangeColor={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['strokeColor'],
         newValue,
       )}
-      onChangeOpacity={(newValue) => updateLayoutFeatureProperty(
+      onChangeOpacity={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['strokeOpacity'],
         newValue,
@@ -138,7 +138,7 @@ function makeSettingsRectangle(
     <InputFieldNumber
       label={ LL().LayoutFeatures.Modal.Width() }
       value={ ft.width }
-      onChange={(value) => updateLayoutFeatureProperty(
+      onChange={(value) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['width'],
         value,
@@ -150,7 +150,7 @@ function makeSettingsRectangle(
     <InputFieldNumber
       label={ LL().LayoutFeatures.Modal.Height() }
       value={ ft.height }
-      onChange={(value) => updateLayoutFeatureProperty(
+      onChange={(value) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['height'],
         value,
@@ -162,7 +162,7 @@ function makeSettingsRectangle(
     <InputFieldNumber
       label={ LL().LayoutFeatures.Modal.RoundCorners() }
       value={ft.cornerRadius}
-      onChange={(newValue) => updateLayoutFeatureProperty(
+      onChange={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['cornerRadius'],
         newValue,
@@ -174,7 +174,7 @@ function makeSettingsRectangle(
     <InputFieldNumber
       label={ LL().LayoutFeatures.Modal.Rotation() }
       value={ft.rotation}
-      onChange={(newValue) => updateLayoutFeatureProperty(
+      onChange={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['rotation'],
         newValue,
@@ -195,7 +195,7 @@ function makeSettingsScaleBar(
   return <>
     <InputFieldSelect
       label={LL().LayoutFeatures.Modal.ScaleBarBehavior()}
-      onChange={(value) => updateLayoutFeatureProperty(
+      onChange={(value) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['behavior'],
         value,
@@ -212,7 +212,7 @@ function makeSettingsScaleBar(
     </InputFieldSelect>
     <InputFieldSelect
       label={LL().LayoutFeatures.Modal.ScaleBarMeasureLocation()}
-      onChange={(value) => updateLayoutFeatureProperty(
+      onChange={(value) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['measureLocation'],
         value,
@@ -229,7 +229,7 @@ function makeSettingsScaleBar(
     </InputFieldSelect>
     <InputFieldSelect
       label={LL().LayoutFeatures.Modal.ScaleBarType()}
-      onChange={(value) => updateLayoutFeatureProperty(
+      onChange={(value) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['style'],
         value,
@@ -249,7 +249,7 @@ function makeSettingsScaleBar(
       <InputFieldNumber
         label={LL().LayoutFeatures.Modal.Height()}
         value={ft.height}
-        onChange={(value) => updateLayoutFeatureProperty(
+        onChange={(value) => updateLayoutFeaturePropertyBase(
           layoutFeatureId,
           ['height'],
           value,
@@ -263,7 +263,7 @@ function makeSettingsScaleBar(
       <InputFieldNumber
         label={LL().LayoutFeatures.Modal.Width()}
         value={ft.width}
-        onChange={(value) => updateLayoutFeatureProperty(
+        onChange={(value) => updateLayoutFeaturePropertyBase(
           layoutFeatureId,
           ['width'],
           value,
@@ -277,7 +277,7 @@ function makeSettingsScaleBar(
       <InputFieldNumber
         label={LL().LayoutFeatures.Modal.Distance()}
         value={convertToUnit(ft.distance, ft.unit)}
-        onChange={(value) => updateLayoutFeatureProperty(
+        onChange={(value) => updateLayoutFeaturePropertyBase(
           layoutFeatureId,
           ['distance'],
           convertFromUnit(value, ft.unit),
@@ -290,7 +290,7 @@ function makeSettingsScaleBar(
     <InputFieldSelect
       label={LL().LayoutFeatures.Modal.Units()}
       onChange={(value) => {
-        updateLayoutFeatureProperty(
+        updateLayoutFeaturePropertyBase(
           layoutFeatureId,
           ['unit'],
           value,
@@ -309,7 +309,7 @@ function makeSettingsScaleBar(
         } else if (value === DistanceUnit.nmi) {
           label = 'nmi';
         }
-        updateLayoutFeatureProperty(
+        updateLayoutFeaturePropertyBase(
           layoutFeatureId,
           ['label', 'text'],
           label,
@@ -327,7 +327,7 @@ function makeSettingsScaleBar(
     </InputFieldSelect>
     <InputFieldText
       label={LL().LayoutFeatures.Modal.UnitLabel()}
-      onChange={(value) => updateLayoutFeatureProperty(
+      onChange={(value) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['label', 'text'],
         value,
@@ -343,7 +343,7 @@ function makeSettingsScaleBar(
           if (ticks.some((t) => Number.isNaN(t))) {
             return;
           }
-          updateLayoutFeatureProperty(
+          updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['tickValues'],
             ticks,
@@ -359,7 +359,7 @@ function makeSettingsScaleBar(
         { value: 'bottom', label: LL().LayoutFeatures.Modal.Bottom() },
       ]}
       value={ft.labelPosition}
-      onChange={(value) => updateLayoutFeatureProperty(
+      onChange={(value) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['labelPosition'],
         value,
@@ -379,7 +379,7 @@ function makeSettingsScaleBar(
           class="select"
           value={ft.label.fontFamily}
           style={{ width: '120px' }}
-          onChange={(e) => updateLayoutFeatureProperty(
+          onChange={(e) => updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['label', 'fontFamily'],
             e.currentTarget.value,
@@ -401,7 +401,7 @@ function makeSettingsScaleBar(
           type="number"
           value={ft.label.fontSize}
           style={{ width: '70px' }}
-          onChange={(e) => updateLayoutFeatureProperty(
+          onChange={(e) => updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['label', 'fontSize'],
             +e.currentTarget.value,
@@ -416,7 +416,7 @@ function makeSettingsScaleBar(
         type="color"
         value={ft.label.fontColor}
         style={{ width: '70px', padding: '0.2em' }}
-        onChange={(e) => updateLayoutFeatureProperty(
+        onChange={(e) => updateLayoutFeaturePropertyBase(
           layoutFeatureId,
           ['label', 'fontColor'],
           e.currentTarget.value,
@@ -432,7 +432,7 @@ function makeSettingsScaleBar(
           aria-label={LL().LayoutFeatures.Modal.Bold()}
           title={LL().LayoutFeatures.Modal.Bold()}
           onClick={(e) => {
-            updateLayoutFeatureProperty(
+            updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['label', 'fontWeight'],
               ft.label.fontWeight === 'bold' ? 'normal' : 'bold',
@@ -448,7 +448,7 @@ function makeSettingsScaleBar(
           aria-label={LL().LayoutFeatures.Modal.Italic()}
           title={LL().LayoutFeatures.Modal.Italic()}
           onClick={(e) => {
-            updateLayoutFeatureProperty(
+            updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['label', 'fontStyle'],
               ft.label.fontStyle === 'italic' ? 'normal' : 'italic',
@@ -504,7 +504,7 @@ function makeSettingsText(
           class="select"
           value={ft.fontFamily}
           style={{ width: '100px' }}
-          onChange={(e) => updateLayoutFeatureProperty(
+          onChange={(e) => updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['fontFamily'],
             e.currentTarget.value,
@@ -526,7 +526,7 @@ function makeSettingsText(
           type="number"
           value={ft.fontSize}
           style={{ width: '70px' }}
-          onChange={(e) => updateLayoutFeatureProperty(
+          onChange={(e) => updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['fontSize'],
             +e.currentTarget.value,
@@ -541,7 +541,7 @@ function makeSettingsText(
         type="color"
         value={ft.fontColor}
         style={{ width: '70px', padding: '0.2em' }}
-        onChange={(e) => updateLayoutFeatureProperty(
+        onChange={(e) => updateLayoutFeaturePropertyBase(
           layoutFeatureId,
           ['fontColor'],
           e.currentTarget.value,
@@ -559,7 +559,7 @@ function makeSettingsText(
           aria-label={LL().LayoutFeatures.Modal.Bold()}
           title={LL().LayoutFeatures.Modal.Bold()}
           onClick={(e) => {
-            updateLayoutFeatureProperty(
+            updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['fontWeight'],
               ft.fontWeight === 'bold' ? 'normal' : 'bold',
@@ -575,7 +575,7 @@ function makeSettingsText(
           aria-label={LL().LayoutFeatures.Modal.Italic()}
           title={LL().LayoutFeatures.Modal.Italic()}
           onClick={(e) => {
-            updateLayoutFeatureProperty(
+            updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['fontStyle'],
               ft.fontStyle === 'italic' ? 'normal' : 'italic',
@@ -592,7 +592,7 @@ function makeSettingsText(
           aria-label={LL().LayoutFeatures.Modal.Underline()}
           title={LL().LayoutFeatures.Modal.Underline()}
           onClick={(e) => {
-            updateLayoutFeatureProperty(
+            updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['textDecoration'],
               ft.textDecoration === 'underline' ? 'none' : 'underline',
@@ -608,7 +608,7 @@ function makeSettingsText(
           aria-label={LL().LayoutFeatures.Modal.LineThrough()}
           title={LL().LayoutFeatures.Modal.LineThrough()}
           onClick={(e) => {
-            updateLayoutFeatureProperty(
+            updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['textDecoration'],
               ft.textDecoration === 'line-through' ? 'none' : 'line-through',
@@ -628,7 +628,7 @@ function makeSettingsText(
           name="radio-text-anchor"
           value="start"
           {...(ft.textAnchor === 'start' ? { checked: true } : {})}
-          onChange={(e) => updateLayoutFeatureProperty(
+          onChange={(e) => updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['textAnchor'],
             e.currentTarget.value,
@@ -642,7 +642,7 @@ function makeSettingsText(
           name="radio-text-anchor"
           value="middle"
           {...(ft.textAnchor === 'middle' ? { checked: true } : {})}
-          onChange={(e) => updateLayoutFeatureProperty(
+          onChange={(e) => updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['textAnchor'],
             e.currentTarget.value,
@@ -656,7 +656,7 @@ function makeSettingsText(
           name="radio-text-anchor"
           value="end"
           {...(ft.textAnchor === 'end' ? { checked: true } : {})}
-          onChange={(e) => updateLayoutFeatureProperty(
+          onChange={(e) => updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['textAnchor'],
             e.currentTarget.value,
@@ -668,7 +668,7 @@ function makeSettingsText(
     <InputFieldNumber
       label={LL().LayoutFeatures.Modal.Rotation()}
       value={ft.rotation}
-      onChange={(v) => updateLayoutFeatureProperty(
+      onChange={(v) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['rotation'],
         v % 360,
@@ -682,7 +682,7 @@ function makeSettingsText(
       checked={!!ft.halo}
       onChange={(v) => {
         if (v) {
-          updateLayoutFeatureProperty(
+          updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['halo'],
             {
@@ -691,7 +691,7 @@ function makeSettingsText(
             },
           );
         } else {
-          updateLayoutFeatureProperty(
+          updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['halo'],
             undefined,
@@ -708,7 +708,7 @@ function makeSettingsText(
             color: v,
             width: ft.halo!.width,
           };
-          updateLayoutFeatureProperty(layoutFeatureId, ['halo'], haloProps);
+          updateLayoutFeaturePropertyBase(layoutFeatureId, ['halo'], haloProps);
         }}
       />
       <InputFieldNumber
@@ -720,7 +720,7 @@ function makeSettingsText(
               color: ft.halo!.color,
               width: v,
             };
-            updateLayoutFeatureProperty(layoutFeatureId, ['halo'], haloProps);
+            updateLayoutFeaturePropertyBase(layoutFeatureId, ['halo'], haloProps);
           }
         }
         min={0}
@@ -744,17 +744,17 @@ function makeSettingsLine(
       valueWidth={ft.strokeWidth}
       valueColor={ft.strokeColor}
       valueOpacity={ft.strokeOpacity}
-      onChangeWidth={(newValue) => updateLayoutFeatureProperty(
+      onChangeWidth={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['strokeWidth'],
         newValue,
       )}
-      onChangeColor={(newValue) => updateLayoutFeatureProperty(
+      onChangeColor={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['strokeColor'],
         newValue,
       )}
-      onChangeOpacity={(newValue) => updateLayoutFeatureProperty(
+      onChangeOpacity={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['strokeOpacity'],
         newValue,
@@ -763,7 +763,7 @@ function makeSettingsLine(
     <InputFieldCheckbox
       label={LL().LayoutFeatures.Modal.DisplayArrowHead()}
       checked={ft.arrow}
-      onChange={(newValue) => updateLayoutFeatureProperty(
+      onChange={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['arrow'],
         newValue,
@@ -773,7 +773,7 @@ function makeSettingsLine(
   <InputFieldCheckbox
     label={LL().LayoutFeatures.Modal.DashedLine()}
     checked={!!ft.strokeDasharray}
-    onChange={(newValue) => updateLayoutFeatureProperty(
+    onChange={(newValue) => updateLayoutFeaturePropertyBase(
       layoutFeatureId,
       ['strokeDasharray'],
       newValue ? '5 5' : undefined,
@@ -793,7 +793,7 @@ function makeSettingsImage(
     <InputFieldNumber
       label={ LL().LayoutFeatures.Modal.Size() }
       value={ ft.size }
-      onChange={(newValue) => updateLayoutFeatureProperty(
+      onChange={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['size'],
         newValue,
@@ -805,7 +805,7 @@ function makeSettingsImage(
     <InputFieldNumber
       label={ LL().LayoutFeatures.Modal.Rotation() }
       value={ ft.rotation }
-      onChange={(newValue) => updateLayoutFeatureProperty(
+      onChange={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['rotation'],
         newValue,
@@ -819,24 +819,24 @@ function makeSettingsImage(
         label={ LL().LayoutFeatures.Modal.AllowModifyingFillStroke() }
         checked={ ft.allowModifyFillStroke === true }
         onChange={ (newValue) => {
-          updateLayoutFeatureProperty(
+          updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['allowModifyFillStroke'],
             newValue,
           );
           if (!newValue) {
             // We also want to reset the fill and stroke properties
-            updateLayoutFeatureProperty(
+            updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['fillColor'],
               undefined,
             );
-            updateLayoutFeatureProperty(
+            updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['strokeColor'],
               undefined,
             );
-            updateLayoutFeatureProperty(
+            updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['strokeWidth'],
               undefined,
@@ -849,12 +849,12 @@ function makeSettingsImage(
           label={LL().LayoutFeatures.Modal.Fill()}
           valueColor={ft.fillColor || '#ffffff'}
           valueOpacity={ft.fillOpacity || 1}
-          onChangeColor={(newValue) => updateLayoutFeatureProperty(
+          onChangeColor={(newValue) => updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['fillColor'],
             newValue,
           )}
-          onChangeOpacity={(newValue) => updateLayoutFeatureProperty(
+          onChangeOpacity={(newValue) => updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['fillOpacity'],
             newValue,
@@ -865,17 +865,17 @@ function makeSettingsImage(
           valueWidth={ft.strokeWidth || 1}
           valueColor={ft.strokeColor || '#000000'}
           valueOpacity={ft.strokeOpacity || 1}
-          onChangeWidth={(newValue) => updateLayoutFeatureProperty(
+          onChangeWidth={(newValue) => updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['strokeWidth'],
             newValue,
           )}
-          onChangeColor={(newValue) => updateLayoutFeatureProperty(
+          onChangeColor={(newValue) => updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['strokeColor'],
             newValue,
           )}
-          onChangeOpacity={(newValue) => updateLayoutFeatureProperty(
+          onChangeOpacity={(newValue) => updateLayoutFeaturePropertyBase(
             layoutFeatureId,
             ['strokeOpacity'],
             newValue,
@@ -896,7 +896,7 @@ function makeSettingsNorthArrow(
   return <>
     <InputFieldSelect
       label={LL().LayoutFeatures.Modal.NorthArrowType()}
-      onChange={(newValue) => updateLayoutFeatureProperty(
+      onChange={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['style'],
         newValue,
@@ -909,7 +909,7 @@ function makeSettingsNorthArrow(
     <InputFieldNumber
       label={LL().LayoutFeatures.Modal.Size()}
       value={ ft.size }
-      onChange={(newValue) => updateLayoutFeatureProperty(
+      onChange={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['size'],
         newValue,
@@ -922,7 +922,7 @@ function makeSettingsNorthArrow(
       <InputFieldColor
         label={LL().LayoutFeatures.Modal.Fill()}
         value={ft.fillColor}
-        onChange={(newValue) => updateLayoutFeatureProperty(
+        onChange={(newValue) => updateLayoutFeaturePropertyBase(
           layoutFeatureId,
           ['fillColor'],
           newValue,
@@ -932,7 +932,7 @@ function makeSettingsNorthArrow(
     <InputFieldCheckbox
       label={ LL().LayoutFeatures.Modal.RotateToNorth()}
       checked={ ft.autoRotate }
-      onChange={(newValue) => updateLayoutFeatureProperty(
+      onChange={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['autoRotate'],
         newValue,
@@ -942,7 +942,7 @@ function makeSettingsNorthArrow(
       <InputFieldNumber
         label={ LL().LayoutFeatures.Modal.Rotation()}
         value={ ft.rotation }
-        onChange={(newValue) => updateLayoutFeatureProperty(
+        onChange={(newValue) => updateLayoutFeaturePropertyBase(
           layoutFeatureId,
           ['rotation'],
           newValue,
@@ -967,17 +967,17 @@ function makeSettingsFreeDrawing(
       valueWidth={ft.strokeWidth}
       valueColor={ft.strokeColor}
       valueOpacity={ft.strokeOpacity}
-      onChangeWidth={(newValue) => updateLayoutFeatureProperty(
+      onChangeWidth={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['strokeWidth'],
         newValue,
       )}
-      onChangeColor={(newValue) => updateLayoutFeatureProperty(
+      onChangeColor={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['strokeColor'],
         newValue,
       )}
-      onChangeOpacity={(newValue) => updateLayoutFeatureProperty(
+      onChangeOpacity={(newValue) => updateLayoutFeaturePropertyBase(
         layoutFeatureId,
         ['strokeOpacity'],
         newValue,

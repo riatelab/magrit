@@ -44,9 +44,6 @@ import {
   // the changes to the undo/redo stack (because there is a
   // cancel button in the LayerSettings modal)
   setLayersDescriptionStoreBase,
-  // Except for the layoutFeaturesAndLegends, where we want to push the changes
-  // through the undo/redo stack
-  setLayersDescriptionStore,
   updateProp,
   debouncedUpdateProp,
 } from '../../store/LayersDescriptionStore';
@@ -989,7 +986,7 @@ function makeSettingsDefaultPoint(
         onChange={(v) => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStore(
+          setLayersDescriptionStoreBase(
             produce(
               (draft: LayersDescriptionStoreType) => {
                 draft.layoutFeaturesAndLegends.push({
@@ -1042,7 +1039,7 @@ function makeSettingsDefaultPoint(
         onChange={(v) => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStore(
+          setLayersDescriptionStoreBase(
             produce(
               (draft: LayersDescriptionStoreType) => {
                 draft.layoutFeaturesAndLegends.push({
@@ -1097,7 +1094,7 @@ function makeSettingsDefaultPoint(
         onChange={(v) => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStore(
+          setLayersDescriptionStoreBase(
             produce(
               (draft: LayersDescriptionStoreType) => {
                 draft.layoutFeaturesAndLegends.push({
@@ -1151,7 +1148,7 @@ function makeSettingsDefaultPoint(
         onChange={(v) => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStore(
+          setLayersDescriptionStoreBase(
             produce(
               (draft: LayersDescriptionStoreType) => {
                 draft.layoutFeaturesAndLegends.push({
@@ -1597,7 +1594,7 @@ function makeSettingsDefaultLine(
         onChange={(v) => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStore(
+          setLayersDescriptionStoreBase(
             produce(
               (draft: LayersDescriptionStoreType) => {
                 draft.layoutFeaturesAndLegends.push({
@@ -1650,7 +1647,7 @@ function makeSettingsDefaultLine(
         onChange={(v) => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStore(
+          setLayersDescriptionStoreBase(
             produce(
               (draft: LayersDescriptionStoreType) => {
                 draft.layoutFeaturesAndLegends.push({
@@ -1703,7 +1700,7 @@ function makeSettingsDefaultLine(
         onChange={(v) => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStore(
+          setLayersDescriptionStoreBase(
             produce(
               (draft: LayersDescriptionStoreType) => {
                 draft.layoutFeaturesAndLegends.push({
@@ -1759,7 +1756,7 @@ function makeSettingsDefaultLine(
         onChange={(v) => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStore(
+          setLayersDescriptionStoreBase(
             produce(
               (draft: LayersDescriptionStoreType) => {
                 draft.layoutFeaturesAndLegends.push({
@@ -1965,7 +1962,7 @@ function makeSettingsDefaultPolygon(
         onChange={(v) => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStore(
+          setLayersDescriptionStoreBase(
             produce(
               (draft: LayersDescriptionStoreType) => {
                 draft.layoutFeaturesAndLegends.push({
@@ -2015,7 +2012,7 @@ function makeSettingsDefaultPolygon(
         onChange={(v) => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStore(
+          setLayersDescriptionStoreBase(
             produce(
               (draft: LayersDescriptionStoreType) => {
                 draft.layoutFeaturesAndLegends.push({
