@@ -287,9 +287,9 @@ const isConicalProjection = (proj4StringOrWkt: string) => {
 // So we listen here to the mapStore projection property and update the projection accordingly
 createEffect(
   on(
-    () => mapStore.projection.value,
+    () => [mapStore.projection.value, applicationSettingsStore.useProjectionPreclip],
     () => {
-      console.log('MapStore.ts: createEffect: mapStore.projection.value');
+      console.log('MapStore.ts: createEffect: mapStore.projection.value / applicationSettingsStore.useProjectionPreclip');
       // 0. We don't need to execute what follows if the map is not yet initialized
       if (!document.querySelector('svg.map-zone__map')) {
         return;
@@ -317,59 +317,61 @@ createEffect(
         // 2. If the projection defines bounds, we want to apply a clipping polygon
         // to the projection to avoid the projection to be drawn outside of the bounds
         // (which is sometimes computationally very expensive or can cause errors)
-        if (
-          mapStore.projection.bounds
-          && JSON.stringify(mapStore.projection.bounds) !== '[90,-180,-90,180]'
-        ) {
+        if (applicationSettingsStore.useProjectionPreclip) {
           if (
-            mapStore.projection.code === 'EPSG:3035'
-            || mapStore.projection.value === '+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'
+            mapStore.projection.bounds
+            && JSON.stringify(mapStore.projection.bounds) !== '[90,-180,-90,180]'
           ) {
-            // Special case for EPSG:3035 (ETRS89 / LAEA Europe)
-            // where we substantially expand the bounds to avoid the drawn extent
-            // to be too narrow (which the user might find surprising)
-            // Original bounds are: 84.73, -35.58, 24.6, 44.83
-            const ymax = 90;
-            const xmin = -80;
-            const ymin = 0;
-            const xmax = 100;
+            if (
+              mapStore.projection.code === 'EPSG:3035'
+              || mapStore.projection.value === '+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'
+            ) {
+              // Special case for EPSG:3035 (ETRS89 / LAEA Europe)
+              // where we substantially expand the bounds to avoid the drawn extent
+              // to be too narrow (which the user might find surprising)
+              // Original bounds are: 84.73, -35.58, 24.6, 44.83
+              const ymax = 90;
+              const xmin = -80;
+              const ymin = 0;
+              const xmax = 100;
 
-            const clippingPolygon = makePolygonFromBbox([xmin, ymin, xmax, ymax]);
+              const clippingPolygon = makePolygonFromBbox([xmin, ymin, xmax, ymax]);
 
-            projection.preclip(d3.geoClipPolygon(clippingPolygon));
-          } else if (
-            mapStore.projection.code === 'EPSG:3347'
-            || mapStore.projection.code === 'EPSG:3348'
-            || projEquals(
-              mapStore.projection.value,
-              '+proj=lcc +lat_0=63.390675 +lon_0=-91.8666666666667 +lat_1=49 +lat_2=77 +x_0=6200000 +y_0=3000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs',
-            )
-            || projEquals(
-              mapStore.projection.value,
-              '+proj=lcc +lat_0=63.390675 +lon_0=-91.8666666666667 +lat_1=49 +lat_2=77 +x_0=6200000 +y_0=3000000 +ellps=GRS80 +towgs84=-0.991,1.9072,0.5129,-1.25033e-07,-4.6785e-08,-5.6529e-08,0 +units=m +no_defs +type=crs',
-            )
-          ) {
-            // The clipping polygon we were calculating for EPSG:3347 and EPSG:3348
-            // was too small and was the culprit in https://github.com/riatelab/magrit/issues/140.
-            // For now we use a clipping polygon defined manually but (after visual inspection)
-            // it seems we could also don't use any clipping polygon.
-            // To be investigated further as there might be other cases where the clipping
-            // polygon we calculate is too small (?).
-            projection.preclip(d3.geoClipPolygon(makePolygonFromBbox([-180, 0, 0, 90])));
-          } else {
-            // We want to apply a clipping polygon to the projection
-            // if the bounds are not worldwide (i.e. [90,-180,-90,180]).
-            const [ymax0, xmin0, ymin0, xmax0] = mapStore.projection.bounds!;
+              projection.preclip(d3.geoClipPolygon(clippingPolygon));
+            } else if (
+              mapStore.projection.code === 'EPSG:3347'
+              || mapStore.projection.code === 'EPSG:3348'
+              || projEquals(
+                mapStore.projection.value,
+                '+proj=lcc +lat_0=63.390675 +lon_0=-91.8666666666667 +lat_1=49 +lat_2=77 +x_0=6200000 +y_0=3000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs',
+              )
+              || projEquals(
+                mapStore.projection.value,
+                '+proj=lcc +lat_0=63.390675 +lon_0=-91.8666666666667 +lat_1=49 +lat_2=77 +x_0=6200000 +y_0=3000000 +ellps=GRS80 +towgs84=-0.991,1.9072,0.5129,-1.25033e-07,-4.6785e-08,-5.6529e-08,0 +units=m +no_defs +type=crs',
+              )
+            ) {
+              // The clipping polygon we were calculating for EPSG:3347 and EPSG:3348
+              // was too small and was the culprit in https://github.com/riatelab/magrit/issues/140.
+              // For now we use a clipping polygon defined manually but (after visual inspection)
+              // it seems we could also don't use any clipping polygon.
+              // To be investigated further as there might be other cases where the clipping
+              // polygon we calculate is too small (?).
+              projection.preclip(d3.geoClipPolygon(makePolygonFromBbox([-180, 0, 0, 90])));
+            } else {
+              // We want to apply a clipping polygon to the projection
+              // if the bounds are not worldwide (i.e. [90,-180,-90,180]).
+              const [ymax0, xmin0, ymin0, xmax0] = mapStore.projection.bounds!;
 
-            // First we will expand the bounds in each direction
-            const ymax = ymax0 + 25 > 90 ? 90 : ymax0 + 25;
-            const xmin = xmin0 - 35 < -180 ? -180 : xmin0 - 35;
-            const ymin = ymin0 - 25 < -90 ? -90 : ymin0 - 25;
-            const xmax = xmax0 + 35 > 180 ? 180 : xmax0 + 35;
+              // First we will expand the bounds in each direction
+              const ymax = ymax0 + 25 > 90 ? 90 : ymax0 + 25;
+              const xmin = xmin0 - 35 < -180 ? -180 : xmin0 - 35;
+              const ymin = ymin0 - 25 < -90 ? -90 : ymin0 - 25;
+              const xmax = xmax0 + 35 > 180 ? 180 : xmax0 + 35;
 
-            const clippingPolygon = makePolygonFromBbox([xmin, ymin, xmax, ymax]);
+              const clippingPolygon = makePolygonFromBbox([xmin, ymin, xmax, ymax]);
 
-            projection.preclip(d3.geoClipPolygon(clippingPolygon));
+              projection.preclip(d3.geoClipPolygon(clippingPolygon));
+            }
           }
         }
       }

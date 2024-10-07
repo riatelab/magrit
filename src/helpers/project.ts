@@ -1,6 +1,6 @@
 import semver from 'semver';
 import { version } from '../../package.json';
-import { LayoutFeatureType, ProjectDescription } from '../global.d';
+import { LayoutFeatureType, type ProjectDescription } from '../global.d';
 
 export enum ValidityState {
   Valid,
@@ -33,6 +33,16 @@ export const patchProject = (
     });
     // eslint-disable-next-line no-param-reassign
     project.version = '2.0.9';
+  }
+  // In version 2.0.16, we changed the model of the application settings
+  // to add a new option 'useProjectionPreclip' to control whether to apply
+  // a pre-clip on the projection or not.
+  if (semver.lt(projectVersion, '2.0.16')) {
+    console.log('Patching project to version 2.0.16');
+    // eslint-disable-next-line no-param-reassign
+    project.applicationSettings.useProjectionPreclip = true;
+    // eslint-disable-next-line no-param-reassign
+    project.version = '2.0.16';
   }
   return project;
 };

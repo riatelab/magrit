@@ -716,6 +716,7 @@ const fr = {
     DefaultLegendOptions: 'Options par défaut pour la création des légendes',
     DefaultOptionsInformation: 'Ces options seront utilisées pour toutes les nouvelles couches et légendes créées dans l\'application mais n\'auront pas d\'effet sur celles qui existent déjà.',
     CustomPalette: 'Palettes personnalisées',
+    UseProjectionPreClipPolygon: 'Utiliser l\'étendue maximale de la projection (seulement pour les SCR qui fournissent une étendue maximale)',
   },
   LayerManager: {
     point: 'Couche de points - {nFt} {{nFt: entité | entités }} - {nCol} {{nCol: colonne | colonnes }}',

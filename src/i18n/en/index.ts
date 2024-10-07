@@ -716,6 +716,7 @@ const en = {
     DefaultLegendOptions: 'Default options for legends',
     DefaultOptionsInformation: 'These options will be used for new layers / new legends created in the application but will not affect existing ones.',
     CustomPalettes: 'Custom palettes',
+    UseProjectionPreClipPolygon: 'Clip layers on projection extent (only for projected CRS that defines a bounding box)',
   },
   LayerManager: {
     point: 'Point layer - {nFt} {{nFt: feature | features}} - {nCol} {{nCol: column | columns}}',

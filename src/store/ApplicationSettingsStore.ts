@@ -49,6 +49,9 @@ export type ApplicationSettingsStoreType = {
   // is rendered outside the SVG viewport (which is not visible
   // but can be computationally expensive to render).
   useClipExtent: boolean,
+  // Whether to apply a clipping polygon to the projection when possible
+  // (i.e. when using a proj4 projection that defines an extent)
+  useProjectionPreclip: boolean,
   // Default font size for legends
   defaultLegendSettings: {
     spacing: number,
@@ -76,6 +79,7 @@ const [
   resizeBehavior: ResizeBehavior.ShrinkGrow,
   renderVisibility: RenderVisibility.DoNotRender,
   useClipExtent: false,
+  useProjectionPreclip: true,
   snappingGridColor: '#808080',
   defaultLegendSettings: {
     spacing: 5,

@@ -3066,6 +3066,10 @@ type RootTranslation = {
 		 * C​u​s​t​o​m​ ​p​a​l​e​t​t​e​s
 		 */
 		CustomPalettes: string
+		/**
+		 * C​l​i​p​ ​l​a​y​e​r​s​ ​o​n​ ​p​r​o​j​e​c​t​i​o​n​ ​e​x​t​e​n​t​ ​(​o​n​l​y​ ​f​o​r​ ​p​r​o​j​e​c​t​e​d​ ​C​R​S​ ​t​h​a​t​ ​d​e​f​i​n​e​s​ ​a​ ​b​o​u​n​d​i​n​g​ ​b​o​x​)
+		 */
+		UseProjectionPreClipPolygon: string
 	}
 	LayerManager: {
 		/**
@@ -8632,6 +8636,10 @@ export type TranslationFunctions = {
 		 * Custom palettes
 		 */
 		CustomPalettes: () => LocalizedString
+		/**
+		 * Clip layers on projection extent (only for projected CRS that defines a bounding box)
+		 */
+		UseProjectionPreClipPolygon: () => LocalizedString
 	}
 	LayerManager: {
 		/**

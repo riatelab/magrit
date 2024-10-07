@@ -23,6 +23,7 @@ import { webSafeFonts, fonts } from '../../helpers/font';
 
 // Types / Interfaces
 import { type TranslationFunctions } from '../../i18n/i18n-types';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 // This is a modified version of the option table present in LegendSettings.tsx
 function TextOptionTable(
@@ -324,6 +325,12 @@ export default function AboutModal(
           label={props.LL().AboutAndSettingsPanel.DefaultNoDataColor()}
           value={applicationSettingsStore.defaultNoDataColor}
           onChange={(v) => setApplicationSettingsStore('defaultNoDataColor', v)}
+        />
+        <hr />
+        <InputFieldCheckbox
+          label={LL().AboutAndSettingsPanel.UseProjectionPreClipPolygon()}
+          checked={applicationSettingsStore.useProjectionPreclip}
+          onChange={(v) => setApplicationSettingsStore('useProjectionPreclip', v)}
         />
       </div>
     </Show>
