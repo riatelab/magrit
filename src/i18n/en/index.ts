@@ -1321,10 +1321,13 @@ const en = {
     validate: 'Validate',
     missingValues: '{{ One feature without data | ?? features without data }}',
     count: 'Features per class',
-    breaksCantBeChanged: 'This class boundary cannot be changed because it is automatically calculated.',
     lowerLimit: 'Lower limit',
     upperLimit: 'Upper limit',
     size: 'Size (px)',
+    pastedBreaksDontCoverSeries: 'The given breaks do not cover the entire series. The breaks have been adjusted to cover the entire series.',
+    pastedBreaksInvalid: 'The given breaks are invalid. Breaks are unchanged.',
+    copyBreaks: 'Copy breaks to the clipboard',
+    breaksCopied: 'Breaks copied to the clipboard',
   },
   Legend: {
     ContextMenu: {

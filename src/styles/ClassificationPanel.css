@@ -43,3 +43,7 @@
     height: 12vh;
     overflow-y: auto;
 }
+
+.modal-window.classification-panel .copy-breaks {
+    vertical-align: sub;
+}

@@ -1321,10 +1321,13 @@ const fr = {
     validate: 'Valider',
     missingValues: '{{ Une entité sans données | ?? entités sans données }}',
     count: 'Entités par classe',
-    breaksCantBeChanged: 'Cette limite de classe ne peut pas être modifiée manuellement.',
     lowerLimit: 'Limite inférieure',
     upperLimit: 'Limite supérieure',
     size: 'Size (px)',
+    pastedBreaksDontCoverSeries: 'Les limites de classes fournies ne couvrent pas l\'ensemble des valeurs de la série. Elles ont été ajustées pour couvrir l\'ensemble des valeurs.',
+    pastedBreaksInvalid: 'Les limites de classes fournies ne sont pas valides. Les limites actuelles restent inchangées.',
+    copyBreaks: 'Copier les limites de classe dans le presse-papier',
+    breaksCopied: 'Limites de classes copiées dans le presse-papier',
   },
   Legend: {
     ContextMenu: {

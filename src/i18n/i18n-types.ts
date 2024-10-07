@@ -5271,10 +5271,6 @@ type RootTranslation = {
 		 */
 		count: string
 		/**
-		 * T​h​i​s​ ​c​l​a​s​s​ ​b​o​u​n​d​a​r​y​ ​c​a​n​n​o​t​ ​b​e​ ​c​h​a​n​g​e​d​ ​b​e​c​a​u​s​e​ ​i​t​ ​i​s​ ​a​u​t​o​m​a​t​i​c​a​l​l​y​ ​c​a​l​c​u​l​a​t​e​d​.
-		 */
-		breaksCantBeChanged: string
-		/**
 		 * L​o​w​e​r​ ​l​i​m​i​t
 		 */
 		lowerLimit: string
@@ -5286,6 +5282,22 @@ type RootTranslation = {
 		 * S​i​z​e​ ​(​p​x​)
 		 */
 		size: string
+		/**
+		 * T​h​e​ ​g​i​v​e​n​ ​b​r​e​a​k​s​ ​d​o​ ​n​o​t​ ​c​o​v​e​r​ ​t​h​e​ ​e​n​t​i​r​e​ ​s​e​r​i​e​s​.​ ​T​h​e​ ​b​r​e​a​k​s​ ​h​a​v​e​ ​b​e​e​n​ ​a​d​j​u​s​t​e​d​ ​t​o​ ​c​o​v​e​r​ ​t​h​e​ ​e​n​t​i​r​e​ ​s​e​r​i​e​s​.
+		 */
+		pastedBreaksDontCoverSeries: string
+		/**
+		 * T​h​e​ ​g​i​v​e​n​ ​b​r​e​a​k​s​ ​a​r​e​ ​i​n​v​a​l​i​d​.​ ​B​r​e​a​k​s​ ​a​r​e​ ​u​n​c​h​a​n​g​e​d​.
+		 */
+		pastedBreaksInvalid: string
+		/**
+		 * C​o​p​y​ ​b​r​e​a​k​s​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
+		 */
+		copyBreaks: string
+		/**
+		 * B​r​e​a​k​s​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
+		 */
+		breaksCopied: string
 	}
 	Legend: {
 		ContextMenu: {
@@ -10805,10 +10817,6 @@ export type TranslationFunctions = {
 		 */
 		count: () => LocalizedString
 		/**
-		 * This class boundary cannot be changed because it is automatically calculated.
-		 */
-		breaksCantBeChanged: () => LocalizedString
-		/**
 		 * Lower limit
 		 */
 		lowerLimit: () => LocalizedString
@@ -10820,6 +10828,22 @@ export type TranslationFunctions = {
 		 * Size (px)
 		 */
 		size: () => LocalizedString
+		/**
+		 * The given breaks do not cover the entire series. The breaks have been adjusted to cover the entire series.
+		 */
+		pastedBreaksDontCoverSeries: () => LocalizedString
+		/**
+		 * The given breaks are invalid. Breaks are unchanged.
+		 */
+		pastedBreaksInvalid: () => LocalizedString
+		/**
+		 * Copy breaks to the clipboard
+		 */
+		copyBreaks: () => LocalizedString
+		/**
+		 * Breaks copied to the clipboard
+		 */
+		breaksCopied: () => LocalizedString
 	}
 	Legend: {
 		ContextMenu: {
