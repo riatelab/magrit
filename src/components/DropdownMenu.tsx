@@ -168,7 +168,7 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
           overflow: 'auto',
           ...{
             width: props.style?.width && props.style.width.includes('px') ? props.style.width : undefined,
-            position: props.style?.width && props.style.width.includes('px') ? 'fixed' : undefined,
+            position: props.style?.width && props.style.width.includes('px') ? 'absolute' : undefined,
           },
         }}
       >
