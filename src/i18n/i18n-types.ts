@@ -3070,6 +3070,10 @@ type RootTranslation = {
 		 * C​l​i​p​ ​l​a​y​e​r​s​ ​o​n​ ​p​r​o​j​e​c​t​i​o​n​ ​e​x​t​e​n​t​ ​(​o​n​l​y​ ​f​o​r​ ​p​r​o​j​e​c​t​e​d​ ​C​R​S​ ​t​h​a​t​ ​d​e​f​i​n​e​s​ ​a​ ​b​o​u​n​d​i​n​g​ ​b​o​x​)
 		 */
 		UseProjectionPreClipPolygon: string
+		/**
+		 * T​h​i​s​ ​o​p​t​i​o​n​ ​i​s​ ​e​x​p​e​r​i​m​e​n​t​a​l​,​ ​a​n​d​ ​w​e​ ​r​e​c​o​m​m​e​n​d​ ​t​h​a​t​ ​y​o​u​ ​l​e​a​v​e​ ​i​t​ ​a​c​t​i​v​a​t​e​d​ ​b​y​ ​d​e​f​a​u​l​t​.​ ​A​f​t​e​r​ ​c​h​a​n​g​i​n​g​ ​t​h​i​s​ ​o​p​t​i​o​n​,​ ​d​o​n​'​t​ ​f​o​r​g​e​t​ ​t​o​ ​z​o​o​m​ ​i​n​ ​o​n​ ​a​ ​l​a​y​e​r​ ​o​f​ ​i​n​t​e​r​e​s​t​ ​f​r​o​m​ ​t​h​e​ ​l​a​y​e​r​ ​m​a​n​a​g​e​r​.
+		 */
+		UseProjectionPreClipPolygonInfo: string
 	}
 	LayerManager: {
 		/**
@@ -8652,6 +8656,10 @@ export type TranslationFunctions = {
 		 * Clip layers on projection extent (only for projected CRS that defines a bounding box)
 		 */
 		UseProjectionPreClipPolygon: () => LocalizedString
+		/**
+		 * This option is experimental, and we recommend that you leave it activated by default. After changing this option, don't forget to zoom in on a layer of interest from the layer manager.
+		 */
+		UseProjectionPreClipPolygonInfo: () => LocalizedString
 	}
 	LayerManager: {
 		/**

@@ -717,6 +717,7 @@ const fr = {
     DefaultOptionsInformation: 'Ces options seront utilisées pour toutes les nouvelles couches et légendes créées dans l\'application mais n\'auront pas d\'effet sur celles qui existent déjà.',
     CustomPalette: 'Palettes personnalisées',
     UseProjectionPreClipPolygon: 'Utiliser l\'étendue maximale de la projection (seulement pour les SCR qui fournissent une étendue maximale)',
+    UseProjectionPreClipPolygonInfo: 'Cette option est expérimentale, il est conseillé de la laisser activée par défaut. Après avoir modifié cette option, ne pas oublier de zoomer sur une couche d\'intérêt depuis le gestionnaire de couche.',
   },
   LayerManager: {
     point: 'Couche de points - {nFt} {{nFt: entité | entités }} - {nCol} {{nCol: colonne | colonnes }}',

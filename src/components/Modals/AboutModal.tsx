@@ -14,16 +14,17 @@ import { FiExternalLink } from 'solid-icons/fi';
 import { applicationSettingsStore, setApplicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Subcomponents
-import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import magritLogoTypoBaseline from '../../assets/cartouche_baseline_green.svg?url';
+import MessageBlock from '../MessageBlock.tsx';
 
 // Helpers
 import { webSafeFonts, fonts } from '../../helpers/font';
 
 // Types / Interfaces
 import { type TranslationFunctions } from '../../i18n/i18n-types';
-import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 
 // This is a modified version of the option table present in LegendSettings.tsx
 function TextOptionTable(
@@ -312,21 +313,23 @@ export default function AboutModal(
           onChange={(v) => setApplicationSettingsStore('snappingGridColor', v)}
         />
         <hr/>
-        <div class="has-text-centered">
+        <MessageBlock type={'info'}>
           <p>{props.LL().AboutAndSettingsPanel.DefaultOptionsInformation()}</p>
-        </div>
-        <br />
+        </MessageBlock>
         <div class="field-block">
           <label class="label">{props.LL().AboutAndSettingsPanel.DefaultLegendOptions()}</label>
           <TextOptionTable LL={props.LL}/>
         </div>
-        <br />
+        <br/>
         <InputFieldColor
           label={props.LL().AboutAndSettingsPanel.DefaultNoDataColor()}
           value={applicationSettingsStore.defaultNoDataColor}
           onChange={(v) => setApplicationSettingsStore('defaultNoDataColor', v)}
         />
-        <hr />
+        <hr/>
+        <MessageBlock type={'info'}>
+          <p>{LL().AboutAndSettingsPanel.UseProjectionPreClipPolygonInfo()}</p>
+        </MessageBlock>
         <InputFieldCheckbox
           label={LL().AboutAndSettingsPanel.UseProjectionPreClipPolygon()}
           checked={applicationSettingsStore.useProjectionPreclip}
