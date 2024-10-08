@@ -102,6 +102,22 @@ const layerLinkedToHistogramOrBarChart = (
   return ids.includes(layer.id);
 };
 
+const redrawLayer = (targetId: string) => {
+  // We redraw the layer by toggling its visibility
+  setLayersDescriptionStoreBase(
+    produce((draft: LayersDescriptionStoreType) => {
+      const layer = draft.layers.find((l) => l.id === targetId) as LayerDescriptionLabels;
+      layer.visible = false;
+    }),
+  );
+  setLayersDescriptionStoreBase(
+    produce((draft: LayersDescriptionStoreType) => {
+      const layer = draft.layers.find((l) => l.id === targetId) as LayerDescriptionLabels;
+      layer.visible = true;
+    }),
+  );
+};
+
 function AestheticsSection(props: LayerDescription): JSX.Element {
   const { LL } = useI18nContext();
 
@@ -183,22 +199,6 @@ function makeSettingsLabels(
 ): JSX.Element {
   const rendererParameters = props.rendererParameters as LabelsParameters;
   const isProportional = !!props.rendererParameters.proportional;
-
-  const redrawLabels = () => {
-    // We redraw the labels by toggling the visibility of the layer
-    setLayersDescriptionStoreBase(
-      produce((draft: LayersDescriptionStoreType) => {
-        const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
-        layer.visible = false;
-      }),
-    );
-    setLayersDescriptionStoreBase(
-      produce((draft: LayersDescriptionStoreType) => {
-        const layer = draft.layers.find((l) => l.id === props.id) as LayerDescriptionLabels;
-        layer.visible = true;
-      }),
-    );
-  };
 
   return <>
     <InputFieldSelect
@@ -357,7 +357,7 @@ function makeSettingsLabels(
               });
             }),
           );
-          redrawLabels();
+          redrawLayer(props.id);
         }
       }
       min={-100}
@@ -381,7 +381,7 @@ function makeSettingsLabels(
               });
             }),
           );
-          redrawLabels();
+          redrawLayer(props.id);
         }
       }
       min={-100}
@@ -676,7 +676,10 @@ function makeSettingsDefaultPoint(
       <InputFieldNumber
         label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize()}
         value={(props.rendererParameters as ProportionalSymbolsParameters).referenceRadius}
-        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'referenceRadius'], v)}
+        onChange={(v) => {
+          updateProp(props.id, ['rendererParameters', 'referenceRadius'], v);
+          redrawLayer(props.id);
+        }}
         min={1}
         max={200}
         step={0.1}
@@ -684,7 +687,10 @@ function makeSettingsDefaultPoint(
       <InputFieldNumber
         label={ LL().FunctionalitiesSection.ProportionalSymbolsOptions.OnValue() }
         value={(props.rendererParameters as ProportionalSymbolsParameters).referenceValue}
-        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'referenceValue'], v)}
+        onChange={(v) => {
+          updateProp(props.id, ['rendererParameters', 'referenceValue'], v);
+          redrawLayer(props.id);
+        }}
         min={1}
         max={Infinity}
         step={0.1}
