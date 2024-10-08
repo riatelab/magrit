@@ -129,9 +129,16 @@ const autoTypeDataset = (dataset: d3.DSVRowArray<string>): Record<string, any>[]
           || !Number.isNaN(+dataset[j][cols[i]].split(' ').join(''))
         )
       ) {
+        if (dataset[j][cols[i]].startsWith('0') && !dataset[j][cols[i]].startsWith('0.')) {
+          break; // Break now if the value starts with '0' and is not a float
+        }
         // Add the converted value to temporary field if its ok ...
         const tempVal = dataset[j][cols[i]].replace(',', '.').split(' ').join('');
-        tmp.push(isFiniteNumber(tempVal) ? (+tempVal) : tempVal);
+        if (isFiniteNumber(tempVal)) {
+          tmp.push(+tempVal);
+        } else {
+          break;
+        }
       } else if (isFiniteNumber(dataset[j][cols[i]])) {
         tmp.push(+dataset[j][cols[i]]);
       } else if (dataset[j][cols[i]] === 'NA') {
