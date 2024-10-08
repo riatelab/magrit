@@ -32,6 +32,7 @@ import {
   getDefaultClipExtent,
   mapStore,
   setMapStore,
+  setMapStoreBase,
 } from '../store/MapStore';
 
 // Sub-components
@@ -259,7 +260,7 @@ const makeMapResizable = (refMapShadow: HTMLDivElement) => {
           refMapShadow.style.display = 'block';
           initialShadowRect = refMapShadow.getBoundingClientRect();
           currentLock = mapStore.lockZoomPan;
-          setMapStore('lockZoomPan', true);
+          setMapStoreBase('lockZoomPan', true);
         },
         move(event) {
           // Since we are centering the map in its container, we need to
@@ -385,7 +386,7 @@ export default function MapZone(): JSX.Element {
   });
 
   // Update the map store with the new scale and translate
-  setMapStore({
+  setMapStoreBase({
     scale: globalStore.projection.scale(),
     translate: globalStore.projection.translate(),
   });
@@ -828,7 +829,7 @@ export default function MapZone(): JSX.Element {
             <button
               class="button"
               onClick={() => {
-                setMapStore({ lockZoomPan: true });
+                setMapStoreBase({ lockZoomPan: true });
               }}
               aria-label={LL().MapZone.Controls.Lock()}
               title={LL().MapZone.Controls.Lock()}
@@ -839,7 +840,7 @@ export default function MapZone(): JSX.Element {
           <Match when={mapStore.lockZoomPan}>
           <button
               class="button"
-              onClick={() => { setMapStore({ lockZoomPan: false }); }}
+              onClick={() => { setMapStoreBase({ lockZoomPan: false }); }}
               aria-label={LL().MapZone.Controls.Unlock()}
               title={LL().MapZone.Controls.Unlock()}
             >

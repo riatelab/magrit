@@ -15,7 +15,7 @@ import { globalStore, setGlobalStore } from './GlobalStore';
 import {
   layersDescriptionStore,
   LayersDescriptionStoreType,
-  setLayersDescriptionStore,
+  setLayersDescriptionStoreBase,
 } from './LayersDescriptionStore';
 import { applicationSettingsStore } from './ApplicationSettingsStore';
 
@@ -205,7 +205,7 @@ createEffect(
         .some((l) => l.rendererParameters && l.rendererParameters.avoidOverlapping === true);
 
       if (needToRecomputePositions) {
-        setLayersDescriptionStore(
+        setLayersDescriptionStoreBase(
           produce(
             (draft: LayersDescriptionStoreType) => {
               // Recompute position for proportional symbols layers with the avoidOverlapping option
@@ -422,7 +422,7 @@ createEffect(
       // 6. Update the global store with the new
       // scale, translate, rotate, center, parallel and parallels values
       // if they changed
-      setMapStore({
+      setMapStoreBase({
         scale: projection.scale(),
         translate: projection.translate(),
         rotate: projection.rotate ? projection.rotate() : undefined,
