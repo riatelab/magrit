@@ -44,6 +44,12 @@ Après la création de la couche de liens, il est possible de filtrer les liens 
 ## Exemple
 
 <ZoomImg
+    src="/link-mobilite-pro-Ain.png"
+    alt="Exemple de carte, mobilité professionnelle au départ de l'Ain"
+    caption="Exemple de carte, mobilité professionnelle au départ de l'Ain"
+/>
+
+<ZoomImg
     src="/link-map.png"
     alt="Exemple de carte, après sélection de l'origine 'France' et distance inférieure à 1015 km"
     caption="Exemple de carte, après sélection de l'origine 'France' et distance inférieure à 1015 km"

@@ -51,6 +51,12 @@ Once the link layer has been created, it is possible to filter the links to be d
 ## Example
 
 <ZoomImg
+    src="/link-mobilite-pro-Ain.png"
+    alt="Example of a map, professional mobility from Ain (French department)"
+    caption="Example of a map, professional mobility from Ain (French department)"
+/>
+
+<ZoomImg
     src="/link-map.png"
     alt="Example of a map, after selecting the origin 'France' and distance less than 1015 km"
     caption="Example of a map, after selecting the origin 'France' and distance less than 1015 km"
