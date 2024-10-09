@@ -77,9 +77,18 @@ Le nombre de classes qu'il est possible de choisir pour cette méthode est donc 
 ### Saisie manuelle
 
 Il est également possible de saisir manuellement les bornes de classes.
-Cette méthode peut notamment être utile pour créer de "jolies" limites de classes après avoir effectué une discrétisation automatique avec les quantiles
-ou les seuils naturels par exemple.
 
+Cette méthode peut être très utile notamment pour :
+- pour créer de "jolies" limites de classes, ou au moins les ajuster, après avoir effectué une discrétisation automatique avec les quantiles ou les seuils naturels par exemple,
+- pour réutiliser des limites de classes déjà définies dans un autre contexte afin de comparer des cartes.
+
+Noter qu'il est possible de coller depuis le presse-papier des limites de classes séparées par des tirets (par exemple : `0 - 10 - 20 - 30 - 40`) comme montré dans l'animation ci-dessous.
+
+<ZoomImg
+    src="/paste-breaks.gif"
+    alt="Saisie manuelle des limites de classes"
+    caption="Saisie manuelle des limites de classes"
+/>
 
 ## Choix d'une progression de couleurs
 

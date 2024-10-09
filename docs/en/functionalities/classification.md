@@ -75,7 +75,19 @@ The number of classes that can be chosen for this method is therefore necessaril
 
 ### User-defined
 
-This method allows you to define the class limits manually.
+This method allows you to define the class boundaries manually.
+
+This method can be particularly useful for :
+- creating “pretty” class boundaries, or at least adjusting them, after automatic classification with quantiles or breaks for example,
+- reuse class boundaries already defined in another context for map comparison.
+
+Note that class boundaries separated by dashes can be pasted from the clipboard (for example: `0 - 10 - 20 - 30 - 40`), as shown in the image below.
+
+<ZoomImg
+    src="/paste-breaks.gif"
+    alt="Manual entry of class boundaries"
+    caption="Manual entry of class boundaries"
+/>
 
 ## Choosing a color progression
 
