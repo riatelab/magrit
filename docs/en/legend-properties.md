@@ -21,3 +21,9 @@ The resulting window thus depends on the type of map with which the legend is as
     alt="Legend parameters (choropleth map)"
     caption="Legend parameters (choropleth map)"
 />
+
+<ZoomImg
+    src="/legendes.png"
+    alt="Example of legends that can be configured for a choropleth map"
+    caption="Example of legends that can be configured for a choropleth map"
+/>

@@ -21,3 +21,9 @@ La fenêtre obtenue dépend ainsi du type de carte à laquelle la légende est a
     alt="Paramètres de la légende (carte choroplèthe)"
     caption="Paramètres de la légende (carte choroplèthe)"
 />
+
+<ZoomImg
+    src="/legendes.png"
+    alt="Exemple de légendes qui peuvent être configurées pour une carte choroplèthe"
+    caption="Exemple de légendes qui peuvent être configurées pour une carte choroplèthe"
+/>
