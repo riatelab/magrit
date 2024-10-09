@@ -1078,7 +1078,7 @@ function verticalLineLegend(
       '1234567890',
       legend.labels.fontSize,
       legend.labels.fontFamily,
-    ).height / 2 + defaultSpacing,
+    ).height / 2,
   );
 
   const sizesAndPositions = createMemo(() => {
@@ -1105,11 +1105,7 @@ function verticalLineLegend(
     (
       sizesAndPositions()[sizesAndPositions().length - 1].y
       + sizesAndPositions()[sizesAndPositions().length - 1].size / 2
-    ) + getTextSize(
-      legend.note.text,
-      legend.note.fontSize,
-      legend.note.fontFamily,
-    ).height + defaultSpacing
+    ) + legend.labels.fontSize / 2 + defaultSpacing
   ));
 
   onMount(() => {
