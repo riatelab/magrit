@@ -6,31 +6,56 @@ représentation et d'analyse de l'application ; ces jeux de données n'ont toute
 les différents besoins en fonds de carte ou en données thématiques des utilisateurs (des ressources permettant de 
 trouver des jeux de données sont listés plus bas).
 
-::: tip Information
-
-De nouveaux jeux de données doivent être ajoutés dans les semaines à venir (communes françaises par régions, départements, etc.).
-
-:::
-
-<!--
+<ZoomImg
+    src="/example-datasets.png"
+    alt="Fenêtre de sélection des jeux de données d'exemple"
+    caption="Fenêtre de sélection des jeux de données d'exemple"
+/>
 
 ## Données proposées dans l'application
 
 ### NUTS0
 
+Version 2016.
+
 ### NUTS1
+
+Version 2016.
 
 ### NUTS2
 
-### NUTS2 (avec données)
+Version 2016.
+
+### NUTS2 (avec données Eurostat)
+
+Version 2016.
 
 ### NUTS3
 
-### Pays du monde (version 177 pays)
+Version 2016.
 
-### Pays du monde (version 242 pays)
+### Pays du monde (version 209 pays - avec données Banque mondiale / Nations Unies / Wikipedia)
 
--->
+### Quartiers de la ville de Paris
+
+### Communes de France métropolitaine
+
+Édition 2023.
+
+### Communes de France métropolitaine et DROM
+
+Édition 2023.
+
+### Communes de France métropolitaine et DROM (modèle cartographique)
+
+Dans cette version les DROM sont rapprochés de la métropole afin de permettre une meilleure visualisation des données.
+
+Édition 2023.
+
+### Communes de France par région et DROM
+
+Les communes, édition 2023, sont mises à disposition pour chacune des régions françaises et chacun des DROM.
+
 
 ## Où trouver d'autres jeux de données ?
 
