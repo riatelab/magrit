@@ -2,6 +2,27 @@
 
 <br />
 
+#### 2.0.16 (2024-10-09)
+
+- Fix bug with scale bar when changing the distance unit
+
+- Improve classification panel:
+  - by refactoring the component to input manual breaks,
+  - by adding some space between radio buttons for msd classification,
+  - by allowing to easily copy / paste the break values,
+  - by fixing the bug where the dropdown menus (for palettes and classification methods) are not visible (especially on Edge and with small screens).
+
+- Add new datasets of French municipalities split by Région (thanks to [@rysebaert](https://github.com/rysebaert)).
+
+- Fix clipping extent for some EPSG projections (and add an experimental option to disable clipping).
+
+- Don't use unnecessary `clip-path` on SVG elements when the projection doesn't come from d3
+  (in order to fix a layer visibility issue when opening the resulting SVG in Adobe Illustrator).
+
+- Fix performance issues when changing some properties of layout features (by not pushing each change in the undo/redo stack, as an undo button cancels all modifications made in the modal).
+
+- Fix some auto-typing issue when importing a CSV dataset (where identifiers like "01004" where sometimes incorrectly casted to numbers).
+
 #### 2.0.15 (2024-09-30)
 
 - Replace internal ids with layer names in the `id` attribute of SVG elements

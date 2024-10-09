@@ -2,6 +2,27 @@
 
 <br />
 
+#### 2.0.16 (2024-10-09)
+
+- Corrige un bug avec la barre d'échelle lors du changement d'unité de distance
+
+- Améliorations du panneau de classification :
+  - en refactorisant le composant pour saisir les limites manuelles,
+  - en ajoutant de l'espace entre les boutons radio pour la classification msd,
+  - en permettant de copier/coller facilement les limites de classes,
+  - en corrigeant le bug où les menus déroulants (pour les palettes et les méthodes de classification) ne sont pas visibles (en particulier sur Edge et avec les petits écrans).
+
+- Ajout de nouveaux jeux de données de communes françaises divisées par région (par [@rysebaert](https://github.com/rysebaert)).
+
+- Corrige l'étendue d'affichage pour certaines projections EPSG (et ajout d'une option expérimentale pour désactiver le découpage selon leur étendue).
+
+- Suppression de l'attribut `clip-path` inutile sur certains éléments SVG lorsque la projection ne vient pas de d3
+  (afin de corriger un problème de visibilité des calques lors de l'ouverture du SVG résultant dans Adobe Illustrator).
+
+- Corrige de problèmes de performance lors de la modification de certaines propriétés des éléments d'habillage (en n'ajoutant pas chaque modification dans la pile undo/redo, sachant qu'un bouton permet déjà d'annuler toutes les modifications effectuées dans la fenêtre modale).
+
+- Corrige un problème de typage automatique lors de l'importation d'un jeu de données CSV (où des identifiants tels que "01004" étaient parfois incorrectement transformés en nombres).
+
 #### 2.0.15 (2024-09-30)
 
 - Remplace les id internes par les noms de couche dans l'attribut `id` des éléments SVG pour faciliter l'identification
