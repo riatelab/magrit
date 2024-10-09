@@ -1175,7 +1175,17 @@ function verticalLineLegend(
               x={60 + defaultSpacing}
               // Little offset to center the text... lets see if it works for most cases
               y={d.y + 0.5}
-            >{ d.value }</text>
+            >{
+              round(d.value, legend.roundDecimals)
+                .toLocaleString(
+                  applicationSettingsStore.userLocale,
+                  {
+                    minimumFractionDigits: precisionToMinimumFractionDigits(
+                      legend.roundDecimals,
+                    ),
+                  },
+                )
+            }</text>
           </>
         }
       </For>
