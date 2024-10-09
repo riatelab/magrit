@@ -549,35 +549,6 @@ function makeSettingsDefaultPoint(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  const redrawMushrooms = () => {
-    const g = document.getElementById(props.id)!;
-    const pos = ['top', 'bottom'];
-    // Redraw the symbols (circles)
-    g.querySelectorAll('g').forEach((gg) => {
-      const projectedCoords = globalStore.pathGenerator.centroid(
-        // eslint-disable-next-line no-underscore-dangle
-        (gg as SVGGElement & ID3Element).__data__.geometry,
-      );
-      if (!Number.isNaN(projectedCoords[0])) {
-        gg.querySelectorAll('path').forEach((p, i) => {
-          const sizeValue = p.getAttribute('mgt:size-value')!;
-          p.setAttribute(
-            'd',
-            semiCirclePath(
-              +sizeValue,
-              projectedCoords[0],
-              projectedCoords[1],
-              pos[i] as 'top' | 'bottom',
-            ),
-          );
-        });
-        gg.setAttribute('visibility', 'visible');
-      } else {
-        gg.setAttribute('visibility', 'hidden');
-      }
-    });
-  };
-
   return <>
     {/*
       The way the entities are colored depends on the renderer...
@@ -832,8 +803,8 @@ function makeSettingsDefaultPoint(
         label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize()}
         value={(props.rendererParameters as MushroomsParameters).top.referenceSize}
         onChange={(v) => {
-          debouncedUpdateProp(props.id, ['rendererParameters', 'top', 'referenceSize'], v);
-          redrawMushrooms();
+          updateProp(props.id, ['rendererParameters', 'top', 'referenceSize'], v);
+          redrawLayer(props.id);
         }}
         min={1}
         max={200}
@@ -843,8 +814,8 @@ function makeSettingsDefaultPoint(
         label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.OnValue()}
         value={(props.rendererParameters as MushroomsParameters).top.referenceValue}
         onChange={(v) => {
-          debouncedUpdateProp(props.id, ['rendererParameters', 'top', 'referenceValue'], v);
-          redrawMushrooms();
+          updateProp(props.id, ['rendererParameters', 'top', 'referenceValue'], v);
+          redrawLayer(props.id);
         }}
         min={1}
         max={99999999999}
@@ -862,8 +833,8 @@ function makeSettingsDefaultPoint(
         label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ReferenceSize()}
         value={(props.rendererParameters as MushroomsParameters).bottom.referenceSize}
         onChange={(v) => {
-          debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'referenceSize'], v);
-          redrawMushrooms();
+          updateProp(props.id, ['rendererParameters', 'bottom', 'referenceSize'], v);
+          redrawLayer(props.id);
         }}
         min={1}
         max={200}
@@ -873,8 +844,8 @@ function makeSettingsDefaultPoint(
         label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.OnValue()}
         value={(props.rendererParameters as MushroomsParameters).bottom.referenceValue}
         onChange={(v) => {
-          debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'referenceValue'], v);
-          redrawMushrooms();
+          updateProp(props.id, ['rendererParameters', 'bottom', 'referenceValue'], v);
+          redrawLayer(props.id);
         }}
         min={1}
         max={Infinity}
