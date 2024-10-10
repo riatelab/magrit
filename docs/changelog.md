@@ -2,9 +2,15 @@
 
 <br />
 
-#### 2.0.16 (2024-10-09)
+#### 2.0.17 (2024-10-10)
 
-- Corrige un bug avec la barre d'échelle lors du changement d'unité de distance
+- Correction d'un bug, pas totalement corrigé précédemment, sur le redessin des champignons lors de la modification de la taille de référence d'un demi-cercle.
+
+- Amélioration de la documentation pour la tenir à jour avec les derniers changements.
+
+- Correction d'un bug d'espacement sur les légendes (version verticale) de liens.
+
+#### 2.0.16 (2024-10-09)
 
 - Améliorations du panneau de classification :
   - en refactorisant le composant pour saisir les limites manuelles,
@@ -14,12 +20,14 @@
 
 - Ajout de nouveaux jeux de données de communes françaises divisées par région (par [@rysebaert](https://github.com/rysebaert)).
 
+- Corrige un bug avec la barre d'échelle lors du changement d'unité de distance.
+
 - Corrige l'étendue d'affichage pour certaines projections EPSG (et ajout d'une option expérimentale pour désactiver le découpage selon leur étendue).
 
 - Suppression de l'attribut `clip-path` inutile sur certains éléments SVG lorsque la projection ne vient pas de d3
   (afin de corriger un problème de visibilité des calques lors de l'ouverture du SVG résultant dans Adobe Illustrator).
 
-- Corrige de problèmes de performance lors de la modification de certaines propriétés des éléments d'habillage (en n'ajoutant pas chaque modification dans la pile undo/redo, sachant qu'un bouton permet déjà d'annuler toutes les modifications effectuées dans la fenêtre modale).
+- Corrige des problèmes de performance lors de la modification de certaines propriétés des éléments d'habillage (en n'ajoutant pas chaque modification dans la pile undo/redo, sachant qu'un bouton permet déjà d'annuler toutes les modifications effectuées dans la fenêtre modale).
 
 - Corrige un problème de typage automatique lors de l'importation d'un jeu de données CSV (où des identifiants tels que "01004" étaient parfois incorrectement transformés en nombres).
 

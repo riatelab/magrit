@@ -2,9 +2,15 @@
 
 <br />
 
-#### 2.0.16 (2024-10-09)
+#### 2.0.17 (2024-10-10)
 
-- Fix bug with scale bar when changing the distance unit
+- Fix a bug, not fully fixed previously, on the redrawing of mushrooms when changing the reference size of a semicircle.
+
+- Improve documentation to keep it up to date with the latest changes.
+
+- Fix a spacing issue on link legends (vertical version).
+
+#### 2.0.16 (2024-10-09)
 
 - Improve classification panel:
   - by refactoring the component to input manual breaks,
@@ -13,6 +19,8 @@
   - by fixing the bug where the dropdown menus (for palettes and classification methods) are not visible (especially on Edge and with small screens).
 
 - Add new datasets of French municipalities split by Région (thanks to [@rysebaert](https://github.com/rysebaert)).
+
+- Fix bug with scale bar when changing the distance unit.
 
 - Fix clipping extent for some EPSG projections (and add an experimental option to disable clipping).
 
