@@ -2,6 +2,11 @@
 
 <br />
 
+#### 2.0.18 (2024-10-10)
+
+- Correction d'un bug de typage des champs lors de l'import d'un fichier CSV pour les champs contenant des valeurs numériques avec des zéros et des NA, introduced in 2.0.16
+  (Corrige <a href="https://github.com/riatelab/magrit/issues/143">143</a>).
+
 #### 2.0.17 (2024-10-10)
 
 - Correction d'un bug, pas totalement corrigé précédemment, sur le redessin des champignons lors de la modification de la taille de référence d'un demi-cercle.

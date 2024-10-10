@@ -2,6 +2,11 @@
 
 <br />
 
+#### 2.0.18 (2024-10-10)
+
+- Fix a field typing issue when importing a CSV file for fields containing numeric values with zeros and NA, introduced in 2.0.16
+  (Fixes <a href=“https://github.com/riatelab/magrit/issues/143”>143</a>).
+
 #### 2.0.17 (2024-10-10)
 
 - Fix a bug, not fully fixed previously, on the redrawing of mushrooms when changing the reference size of a semicircle.
