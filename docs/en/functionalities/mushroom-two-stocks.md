@@ -1,6 +1,6 @@
-# Mushrooms / Representation of two stocks
+# Mushrooms / Facing semi-circles
 
-This representation method shows two stocks (or two values) on a map using proportional semi-circles.
+This representation method shows two stocks (or two values) on a map using two proportional semi-circles.
 
 This method makes it possible to compare two values for each geographical entity.
 

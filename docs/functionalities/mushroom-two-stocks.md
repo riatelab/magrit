@@ -1,6 +1,6 @@
-# Champignons / Représentation de deux stocks
+# Champignons / Demi-cercles affrontés
 
-Cette méthode de représentation permet de représenter deux stocks (ou deux valeurs) sur une carte en utilisant des demi-cercles proportionnels.
+Cette méthode de représentation permet de représenter deux stocks (ou deux valeurs) sur une carte en utilisant deux demi-cercles proportionnels.
 
 Cette méthode permet ainsi de comparer deux valeurs pour chaque entité géographique.
 
