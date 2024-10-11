@@ -116,7 +116,7 @@ const removeEmptyLines = (rawData: string): string => {
   return lines.filter((l) => l.trim() !== '').join('\n');
 };
 
-const autoTypeDataset = (dataset: d3.DSVRowArray<string>): Record<string, any>[] => {
+export const autoTypeDataset = (dataset: d3.DSVRowArray<string>): Record<string, any>[] => {
   const cols = dataset.columns;
   for (let i = 0; i < cols.length; i += 1) {
     const tmp = [];
