@@ -301,13 +301,11 @@ interface CustomPalette {
   // The number of classes of the palette
   number: number,
   // The kind of palette (sequential, diverging, qualitative)
-  type: 'sequential' | 'diverging' | 'qualitative',
+  type: 'sequential' | 'diverging' | 'qualitative' | 'custom'
   // The colors of the palette
   colors: string[],
   // The provenance of the palette
   provenance: 'dicopal' | 'user',
-  // The prodiver of the palette (only if it comes from dicopal)
-  // provider?: string,
   // Is the palette reversed?
   reversed: boolean,
   // The provider of the palette (only if it comes from dicopal)

@@ -3283,6 +3283,10 @@ type RootTranslation = {
 			 */
 			CurrentPalette: RequiredParams<'p'>
 			/**
+			 * c​u​s​t​o​m​ ​p​a​l​e​t​t​e
+			 */
+			CustomPalette: string
+			/**
 			 * D​i​s​p​l​a​y​ ​a​ ​c​l​a​s​s​ ​s​u​m​m​a​r​y​ ​h​i​s​t​o​g​r​a​m​ ​o​n​ ​t​h​e​ ​m​a​p
 			 */
 			DisplayChartOnMap: string
@@ -5219,6 +5223,10 @@ type RootTranslation = {
 		 */
 		diverging: string
 		/**
+		 * C​u​s​t​o​m
+		 */
+		customPalette: string
+		/**
 		 * P​a​l​e​t​t​e
 		 */
 		palette: string
@@ -5302,6 +5310,18 @@ type RootTranslation = {
 		 * B​r​e​a​k​s​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
 		 */
 		breaksCopied: string
+		/**
+		 * T​h​e​ ​g​i​v​e​n​ ​c​o​l​o​r​ ​i​s​ ​i​n​v​a​l​i​d​.​ ​C​o​l​o​r​ ​i​s​ ​u​n​c​h​a​n​g​e​d​.​ ​P​l​e​a​s​e​ ​e​n​t​e​r​ ​a​ ​v​a​l​i​d​ ​c​o​l​o​r​ ​i​n​ ​h​e​x​a​d​e​c​i​m​a​l​ ​f​o​r​m​a​t​.
+		 */
+		inputColorInvalid: string
+		/**
+		 * T​h​e​ ​g​i​v​e​n​ ​c​o​l​o​r​s​ ​a​r​e​ ​i​n​v​a​l​i​d​.​ ​C​o​l​o​r​s​ ​a​r​e​ ​u​n​c​h​a​n​g​e​d​.
+		 */
+		pastedColorsInvalid: string
+		/**
+		 * T​h​e​ ​n​u​m​b​e​r​ ​o​f​ ​c​o​l​o​r​s​ ​d​o​e​s​ ​n​o​t​ ​m​a​t​c​h​ ​t​h​e​ ​n​u​m​b​e​r​ ​o​f​ ​c​l​a​s​s​e​s​.​ ​C​o​l​o​r​s​ ​a​r​e​ ​u​n​c​h​a​n​g​e​d​.
+		 */
+		pastedColorsWrongLength: string
 	}
 	Legend: {
 		ContextMenu: {
@@ -8862,6 +8882,10 @@ export type TranslationFunctions = {
 			 */
 			CurrentPalette: (arg: { p: unknown }) => LocalizedString
 			/**
+			 * custom palette
+			 */
+			CustomPalette: () => LocalizedString
+			/**
 			 * Display a class summary histogram on the map
 			 */
 			DisplayChartOnMap: () => LocalizedString
@@ -10769,6 +10793,10 @@ export type TranslationFunctions = {
 		 */
 		diverging: () => LocalizedString
 		/**
+		 * Custom
+		 */
+		customPalette: () => LocalizedString
+		/**
 		 * Palette
 		 */
 		palette: () => LocalizedString
@@ -10852,6 +10880,18 @@ export type TranslationFunctions = {
 		 * Breaks copied to the clipboard
 		 */
 		breaksCopied: () => LocalizedString
+		/**
+		 * The given color is invalid. Color is unchanged. Please enter a valid color in hexadecimal format.
+		 */
+		inputColorInvalid: () => LocalizedString
+		/**
+		 * The given colors are invalid. Colors are unchanged.
+		 */
+		pastedColorsInvalid: () => LocalizedString
+		/**
+		 * The number of colors does not match the number of classes. Colors are unchanged.
+		 */
+		pastedColorsWrongLength: () => LocalizedString
 	}
 	Legend: {
 		ContextMenu: {

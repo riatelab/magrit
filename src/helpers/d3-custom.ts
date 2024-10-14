@@ -18,6 +18,9 @@ import {
   zoomTransform,
 } from 'd3-zoom';
 import {
+  scaleLinear,
+} from 'd3-scale';
+import {
   bin,
   nice,
   extent,
@@ -30,6 +33,7 @@ import {
   max,
   deviation,
   variance,
+  range,
   thresholdFreedmanDiaconis,
   thresholdScott,
   thresholdSturges,
@@ -165,6 +169,7 @@ import {
 } from 'd3-ease';
 import {
   interpolateString,
+  quantize,
 } from 'd3-interpolate';
 import {
   brush,
@@ -444,6 +449,7 @@ export default {
   max,
   deviation,
   variance,
+  range,
   thresholdFreedmanDiaconis,
   thresholdScott,
   thresholdSturges,
@@ -461,6 +467,7 @@ export default {
   easeSinOut,
   // Stuff from d3-interpolate
   interpolateString,
+  quantize,
   // Stuff from d3-brush
   brush,
   brushX,
@@ -472,6 +479,8 @@ export default {
   // Stuff from d3-shape
   curveBasis,
   line,
+  // Stuff from d3-scale
+  scaleLinear,
 };
 
 export type {

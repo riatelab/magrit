@@ -775,6 +775,7 @@ const fr = {
       ColorSchemeInvert: 'Inverser la palette',
       CurrentNumberOfClasses: '{{ Une classe | ?? classes }}',
       CurrentPalette: 'palette {p}',
+      CustomPalette: 'palette personnalisée',
       DisplayChartOnMap: 'Afficher un graphique de résumé des classes sur la carte',
       NewLayerName: 'Choroplèthe_{layerName}',
     },
@@ -1308,6 +1309,7 @@ const fr = {
     typeScheme: 'Type de progression colorée',
     sequential: 'Séquentielle',
     diverging: 'Divergente',
+    customPalette: 'Personnalisée',
     palette: 'Palette de couleurs',
     reversePalette: 'Inverser la palette',
     neutralCentralClass: 'Classe centrale neutre',
@@ -1329,6 +1331,9 @@ const fr = {
     pastedBreaksInvalid: 'Les limites de classes fournies ne sont pas valides. Les limites actuelles restent inchangées.',
     copyBreaks: 'Copier les limites de classe dans le presse-papier',
     breaksCopied: 'Limites de classes copiées dans le presse-papier',
+    inputColorInvalid: 'La couleur saisie n\'est pas valide. La couleur actuelle reste inchangée. Merci d\'utiliser un format hexadécimal valide (par exemple #ff0000 pour le rouge).',
+    pastedColorsInvalid: 'Les couleurs copiées ne semblent pas valides. Les couleurs actuelles restent inchangées.',
+    pastedColorsWrongLength: 'Le nombre de couleurs copiées ne correspont pas au nombre de classes. Les couleurs actuelles restent inchangées.',
   },
   Legend: {
     ContextMenu: {

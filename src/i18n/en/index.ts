@@ -775,6 +775,7 @@ const en = {
       ColorSchemeInvert: 'Invert color scheme',
       CurrentNumberOfClasses: '{{ One class | ?? classes }}',
       CurrentPalette: 'palette {p}',
+      CustomPalette: 'custom palette',
       DisplayChartOnMap: 'Display a class summary histogram on the map',
       NewLayerName: 'Choropleth_{layerName}',
     },
@@ -1308,6 +1309,7 @@ const en = {
     typeScheme: 'Color scheme type',
     sequential: 'Sequential',
     diverging: 'Diverging',
+    customPalette: 'Custom',
     palette: 'Palette',
     reversePalette: 'Reverse palette',
     neutralCentralClass: 'Neutral central class',
@@ -1329,6 +1331,9 @@ const en = {
     pastedBreaksInvalid: 'The given breaks are invalid. Breaks are unchanged.',
     copyBreaks: 'Copy breaks to the clipboard',
     breaksCopied: 'Breaks copied to the clipboard',
+    inputColorInvalid: 'The given color is invalid. Color is unchanged. Please enter a valid color in hexadecimal format.',
+    pastedColorsInvalid: 'The given colors are invalid. Colors are unchanged.',
+    pastedColorsWrongLength: 'The number of colors does not match the number of classes. Colors are unchanged.',
   },
   Legend: {
     ContextMenu: {

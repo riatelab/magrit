@@ -24,8 +24,9 @@ import {
   OptionsClassification,
   prepareStatisticalSummary,
 } from '../../helpers/classification';
-import { isFiniteNumber } from '../../helpers/common';
+import { isFiniteNumber, unproxify } from '../../helpers/common';
 import { Mmin, Mround, round } from '../../helpers/math';
+import { interpolateColors } from '../../helpers/color';
 import { makeClassificationPlot, makeColoredBucketPlot, makeDistributionPlot } from '../DistributionPlots.tsx';
 import * as PaletteThumbnails from '../../helpers/palette-thumbnail';
 
@@ -214,6 +215,114 @@ function ManualBreaks(
   </div>;
 }
 
+// Component for creating custom palettes
+function CustomPaletteCreation(
+  props: {
+    currentBreaksInfo: ClassificationParameters,
+    setCurrentBreaksInfo: (cp: ClassificationParameters) => void,
+  },
+): JSX.Element {
+  const { LL } = useI18nContext();
+  return <>
+    <div class="mt-2 is-flex is-justify-content-space-around">
+      <For each={props.currentBreaksInfo.palette.colors}>
+        {
+          (c, i) => <>
+            <input
+              // We want the minimum padding to avoid the color picker to be too big
+              style={{ padding: '0.1rem', 'border-width': '0' }}
+              type="color"
+              value={c}
+              onChange={(e) => {
+                const newColors = [...props.currentBreaksInfo.palette.colors];
+                newColors[i()] = e.target.value;
+                props.setCurrentBreaksInfo({
+                  ...props.currentBreaksInfo,
+                  palette: {
+                    ...props.currentBreaksInfo.palette,
+                    colors: newColors,
+                  },
+                });
+              }}
+            />
+          </>
+        }
+      </For>
+    </div>
+    <div class="is-flex is-justify-content-space-around">
+      <For each={props.currentBreaksInfo.palette.colors}>
+        {
+          (c, i) => <>
+            <input
+              type="text"
+              style={{
+                'max-width': `${425 / 9}px`,
+                'font-size': '0.7rem',
+              }}
+              value={c}
+              onChange={function (e) {
+                if (!/^#[0-9a-f]{6}$/i.test(e.target.value)) {
+                  // Display an error to the user, we need only colors
+                  toast.error(LL().ClassificationPanel.inputColorInvalid());
+                  // Rollback to the previous value
+                  // eslint-disable-next-line no-param-reassign
+                  this.value = c;
+                  return;
+                }
+                // If the color is valid, we update the colors to take it
+                // into account
+                const newColors = [...props.currentBreaksInfo.palette.colors];
+                newColors[i()] = e.target.value;
+                props.setCurrentBreaksInfo({
+                  ...props.currentBreaksInfo,
+                  palette: {
+                    ...props.currentBreaksInfo.palette,
+                    colors: newColors,
+                  },
+                });
+              }}
+              onPaste={(e) => {
+                // We want users to be able to paste a list of colors separated
+                // by spaces or by dashes
+                const pastedData = e.clipboardData && e.clipboardData.getData('text');
+                if (
+                  !pastedData
+                  || (!pastedData.includes('-') && !pastedData.includes(' '))
+                ) {
+                  // The user is not pasting colors, maybe a single color
+                  // so we return and the default behavior will be applied
+                  return;
+                }
+                e.preventDefault();
+                const splitChar = pastedData.includes('-') ? '-' : ' ';
+                const colors = pastedData.split(splitChar).map((d) => d.trim());
+                if (!colors.every((d) => /^#[0-9a-f]{6}$/i.test(d))) {
+                  // Display an error to the user, we need only colors
+                  toast.error(LL().ClassificationPanel.pastedColorsInvalid());
+                  return;
+                }
+                if (colors.length !== props.currentBreaksInfo.palette.colors.length) {
+                  // Display an error to the user, we need the same number of colors
+                  toast.error(LL().ClassificationPanel.pastedColorsWrongLength());
+                  return;
+                }
+                // Update the colors
+                props.setCurrentBreaksInfo({
+                  ...props.currentBreaksInfo,
+                  palette: {
+                    ...props.currentBreaksInfo.palette,
+                    colors,
+                  },
+                });
+              }}
+            />
+          </>
+        }
+      </For>
+    </div>
+  </>;
+}
+
 // Component to display current breaks
 // based on currentBreaksInfo
 function DisplayBreaks(
@@ -295,18 +404,27 @@ export default function ClassificationPanel(): JSX.Element {
     }
     const entitiesByClass = classifier.countByClass();
     const palName = paletteName();
-    const customPalette = {
-      id: `${palName}-${classes}${typeScheme() === 'diverging' ? `-${centralClass()}` : ''}`,
-      name: palName,
-      number: classes,
-      type: typeScheme() as PaletteType,
-      provenance: 'dicopal',
-      reversed: isPaletteReversed(),
-    } as CustomPalette;
+    let customPalette;
 
     if (typeScheme() === 'sequential') {
-      customPalette.colors = getSequentialColors(palName, classes, isPaletteReversed());
+      customPalette = {
+        id: `${palName}-${classes}`,
+        name: palName,
+        number: classes,
+        type: typeScheme() as PaletteType,
+        provenance: 'dicopal',
+        reversed: isPaletteReversed(),
+      } as CustomPalette;
+      customPalette.colors = getSequentialColors(palName as string, classes, isPaletteReversed());
     } else if (typeScheme() === 'diverging') {
+      customPalette = {
+        id: `${palName}-${classes}-${centralClass()}`,
+        name: palName,
+        number: classes,
+        type: typeScheme() as PaletteType,
+        provenance: 'dicopal',
+        reversed: isPaletteReversed(),
+      } as CustomPalette;
       const positionCentralClass = centralClass()!;
       customPalette.divergingOptions = {
         left: positionCentralClass,
@@ -315,16 +433,30 @@ export default function ClassificationPanel(): JSX.Element {
         balanced: true,
       };
       customPalette.colors = getAsymmetricDivergingColors(
-        palName,
+        palName as string,
         customPalette.divergingOptions.left,
         customPalette.divergingOptions.right,
         customPalette.divergingOptions.centralClass,
         customPalette.divergingOptions.balanced,
         isPaletteReversed(),
       );
+    } else if (typeScheme() === 'custom') {
+      const currentColors = currentBreaksInfo().palette.colors;
+      const newColors = interpolateColors(currentColors, classes);
+      const cPalName = newColors.join('-');
+      customPalette = {
+        id: `${cPalName}-${classes}`,
+        name: cPalName,
+        number: classes,
+        type: 'custom',
+        provenance: 'user',
+        reversed: false,
+      } as CustomPalette;
+      customPalette.colors = newColors;
     } else {
       throw new Error('Palette type not found !');
     }
+
     const cp = {
       variable: parameters!.variable,
       method: classificationMethod(),
@@ -411,14 +543,14 @@ export default function ClassificationPanel(): JSX.Element {
     typeScheme,
     setTypeScheme,
   ] = createSignal<'sequential' | 'diverging' | 'custom'>(
-    parameters.palette.type as 'sequential' | 'diverging'
+    parameters.palette.type as 'sequential' | 'diverging' | 'custom'
     || 'sequential',
   );
   // - the color palette chosen by the user for the current classification method
   const [
     paletteName,
     setPaletteName,
-  ] = createSignal<string>(
+  ] = createSignal<string | null>(
     parameters.palette.name
     || 'Algae',
   );
@@ -463,7 +595,7 @@ export default function ClassificationPanel(): JSX.Element {
   const [
     currentBreaksInfo,
     setCurrentBreaksInfo,
-  ] = createSignal<ClassificationParameters>(makeClassificationParameters());
+  ] = createSignal<ClassificationParameters>(unproxify(parameters));
   // - display option for the classification plot
   const [
     classificationPlotOption,
@@ -890,11 +1022,25 @@ export default function ClassificationPanel(): JSX.Element {
                       />
                       {LL().ClassificationPanel.diverging()}
                     </label>
+                    <label class="radio" for="type-scheme-custom">
+                      <input
+                        type={'radio'}
+                        name={'type-scheme'}
+                        id={'type-scheme-custom'}
+                        onChange={() => {
+                          setPaletteName(null);
+                          setTypeScheme('custom');
+                          updateClassificationParameters();
+                        }}
+                        checked={typeScheme() === 'custom'}
+                      />
+                      {LL().ClassificationPanel.customPalette()}
+                    </label>
                   </div>
                 </div>
                 <br/>
                 <div class="is-flex is-justify-content-space-between">
-                  <div>
+                  <div style={{ width: '100%' }}>
                     <p class="label is-marginless">{LL().ClassificationPanel.palette()}</p>
                     <Switch>
                       <Match when={typeScheme() === 'sequential'}>
@@ -927,21 +1073,32 @@ export default function ClassificationPanel(): JSX.Element {
                           }}
                         />
                       </Match>
+                      <Match when={typeScheme() === 'custom'}>
+                        <CustomPaletteCreation
+                          currentBreaksInfo={currentBreaksInfo()}
+                          setCurrentBreaksInfo={setCurrentBreaksInfo}
+                        />
+                      </Match>
                     </Switch>
                   </div>
-                  <div class="control is-flex is-align-items-center mt-4">
-                    <label class="label">
-                      <input
-                        type="checkbox"
-                        checked={isPaletteReversed()}
-                        onChange={(e) => {
-                          setIsPaletteReversed(e.target.checked);
-                          updateClassificationParameters();
-                        }}
-                      />
-                      {LL().ClassificationPanel.reversePalette()}
-                    </label>
-                  </div>
+                  <Show when={typeScheme() !== 'custom'}>
+                    <div
+                      class="control is-flex is-align-items-center mt-4"
+                      style={{ width: '50%' }}
+                    >
+                      <label class="label">
+                        <input
+                          type="checkbox"
+                          checked={isPaletteReversed()}
+                          onChange={(e) => {
+                            setIsPaletteReversed(e.target.checked);
+                            updateClassificationParameters();
+                          }}
+                        />
+                        {LL().ClassificationPanel.reversePalette()}
+                      </label>
+                    </div>
+                  </Show>
                 </div>
                 <Show when={missingValues > 0}>
                   <br/>

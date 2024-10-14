@@ -1,7 +1,10 @@
 import {
-  getAsymmetricDivergingColors, getPalette, getPaletteNumbers, getSequentialColors,
+  getAsymmetricDivergingColors, getPalette,
+  getPaletteNumbers, getSequentialColors,
 } from 'dicopal';
 
+// Helpers
+import d3 from './d3-custom';
 import { Mpow } from './math';
 
 import { CustomPalette } from '../global';
@@ -99,4 +102,40 @@ export function pickTextColorBasedOnBgColor(
   });
   const L = (0.2126 * c[0]) + (0.7152 * c[1]) + (0.0722 * c[2]);
   return (L > 0.179) ? darkColor : lightColor;
+}
+
+/**
+ * Convert a color definition in rgb (e.g. 'rgb(255, 0, 0)') to hexadecimal (e.g. '#ff0000').
+ *
+ * @param rgbString
+ * @returns {string} - The hexadecimal color
+ */
+const rgbToHex = (rgbString: string): string => {
+  if (rgbString.startsWith('#')) return rgbString;
+  const [r, g, b] = rgbString
+    .match(/\d+/g)!.map((x) => parseInt(x, 10));
+  // eslint-disable-next-line no-bitwise
+  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+};
+
+/**
+ * @description Helper to generate colors for a (maybe interpolated) sequential palette,
+ * given an existing sequential palette name.
+ *
+ * @param {string[]} baseColors - Current colors of the palette
+ * @param {number} classNumber - Number of classes wanted
+ * @return {string[]} - The generated palette, as an array of hexadecimal colors.
+ */
+export function interpolateColors(
+  baseColors: string[],
+  classNumber: number,
+): string[] {
+  return d3.quantize(
+    d3.scaleLinear()
+      .domain(
+        d3.range(0, 1 + 1 / baseColors.length, 1 / (baseColors.length - 1)),
+      )
+      .range(baseColors as never[]),
+    classNumber,
+  ).map((d: unknown) => rgbToHex(d as string));
 }

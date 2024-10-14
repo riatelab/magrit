@@ -232,8 +232,11 @@ export function ChoroplethClassificationSelector(
       // eslint-disable-next-line max-len
       LL().FunctionalitiesSection.ChoroplethOptions.CurrentNumberOfClasses(props.targetClassification()!.classes)}
       , {
-      // eslint-disable-next-line max-len
-      LL().FunctionalitiesSection.ChoroplethOptions.CurrentPalette({ p: props.targetClassification()?.palette.name })}
+      props.targetClassification()!.palette.provenance === 'user'
+        ? LL().FunctionalitiesSection.ChoroplethOptions.CustomPalette()
+        // eslint-disable-next-line max-len
+        : LL().FunctionalitiesSection.ChoroplethOptions.CurrentPalette({ p: props.targetClassification()?.palette.name })
+      }
     </div>
   </div>;
 }
