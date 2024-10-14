@@ -24,6 +24,7 @@ import { loadLocale } from './i18n/i18n-util.sync';
 import { toggleDarkMode } from './helpers/darkmode';
 import { clickLinkFromBlob } from './helpers/exports';
 import { draggedElementsAreFiles, droppedElementsAreFiles, prepareFilterAndStoreFiles } from './helpers/fileUpload';
+import { setHtmlLang } from './helpers/lang';
 import { round } from './helpers/math';
 import parseQueryString from './helpers/query-string';
 import { initDb, storeProject } from './helpers/storage';
@@ -349,9 +350,13 @@ const AppPage: () => JSX.Element = () => {
     loadLocale(userLanguage);
     // If yes, set the locale
     setLocale(userLanguage);
+    // Also set it in the root of the HTML document
+    setHtmlLang(userLanguage);
   } else {
     // If not, set the default locale
     setLocale('en');
+    // Also set it in the root of the HTML document
+    setHtmlLang('en');
   }
 
   // Set the maximum dimensions of the map for the current window size

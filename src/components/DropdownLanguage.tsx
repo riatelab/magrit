@@ -12,6 +12,7 @@ import { onClickDropdown, onKeyDownDropdown } from './DropdownMenu.tsx';
 import { useI18nContext } from '../i18n/i18n-solid';
 import { loadLocale } from '../i18n/i18n-util.sync';
 import { Locales } from '../i18n/i18n-types';
+import { setHtmlLang } from '../helpers/lang';
 
 function loadAndSetLocal(locale: Locales, setter: (locale: Locales) => void): void {
   loadLocale(locale);
@@ -80,6 +81,7 @@ export default function DropdownLanguage(): JSX.Element {
               onClick={() => {
                 loadAndSetLocal(entry.value as Locales, setLocale);
                 localStorage.setItem('selected-lang', entry.value);
+                setHtmlLang(entry.value);
               }}
             >
               {entry.name}
