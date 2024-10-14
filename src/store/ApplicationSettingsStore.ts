@@ -17,9 +17,29 @@ export enum ResizeBehavior {
   KeepMapSize,
 }
 
-const getUserLocale = () => (navigator.languages && navigator.languages.length
-  ? navigator.languages[0]
-  : navigator.language || 'en-US');
+const getUserLocale = () => {
+  let l = (navigator.languages && navigator.languages.length
+    ? navigator.languages[0]
+    : navigator.language || 'en-US');
+  if (!l.includes('-')) {
+    // In some cases, the locale is not in the format xx-YY
+    // but only xx (e.g. 'fr' instead of 'fr-FR', 'en' instead of 'en-US', etc.)
+    // we need to fix this as possible... (before we find a better solution
+    // we just handle manually the most common cases...)
+    if (l === 'fr') {
+      l = 'fr-FR';
+    } else if (l === 'en') {
+      l = 'en-US';
+    } else if (l === 'es') {
+      l = 'es-ES';
+    } else if (l === 'de') {
+      l = 'de-DE';
+    } else if (l === 'pt') {
+      l = 'pt-PT';
+    }
+  }
+  return l;
+};
 
 // A bunch of (global) settings for the application
 // (this is not the same as GlobalStore, which contains the state of the application)
