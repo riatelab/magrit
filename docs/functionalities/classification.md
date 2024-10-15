@@ -11,7 +11,7 @@ Les méthodes proposées par l'outil peuvent être utilisées telles quelles ou 
 ## Vue d'ensemble de la fenêtre de discrétisation
 
 <ZoomImg
-    src="../classification.png"
+    src="/classification.png"
     alt="Fenêtre de discrétisation"
     caption="Fenêtre de discrétisation"
 />

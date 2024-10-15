@@ -9,7 +9,7 @@ The methods proposed by the tool can be used as they stand, or as reading and an
 ## Overview of the classification panel
 
 <ZoomImg
-    src="../classification.png"
+    src="/classification.png"
     alt="Classification panel"
     caption="Classification panel"
 />
@@ -78,7 +78,7 @@ The number of classes that can be chosen for this method is therefore necessaril
 This method allows you to define the class boundaries manually.
 
 This method can be particularly useful for :
-- creating “pretty” class boundaries, or at least adjusting them, after automatic classification with quantiles or breaks for example,
+- creating “pretty” class boundaries, or at least adjusting them, after automatic classification with quantiles or natural breaks for example,
 - reuse class boundaries already defined in another context for map comparison.
 
 Note that class boundaries separated by dashes can be pasted from the clipboard (for example: `0 - 10 - 20 - 30 - 40`), as shown in the image below.
