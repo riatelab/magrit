@@ -120,7 +120,7 @@ function ChoroplethHistogram(
       y: {
         nice: false,
         grid: true,
-        ticks: false,
+        ticks: false as never,
       },
       marks: [
         Plot.rectY(breaksData(), {
