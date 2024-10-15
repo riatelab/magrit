@@ -96,7 +96,7 @@ function CategoriesPlot(
 
   return <>
   {
-    props.orientation === 'vertical'
+    props.orientation === 'horizontal'
       ? Plot.plot({
         style: {
           color: props.textProperties.fontColor,
@@ -108,7 +108,7 @@ function CategoriesPlot(
         height: props.height,
         width: props.width,
         marginTop: 10,
-        marginLeft: sizeLargestLabel() * 1.2,
+        marginLeft: 12 + sizeLargestLabel(),
         color: { domain: domain(), range: range() },
         x: {
           label: null,
@@ -145,7 +145,7 @@ function CategoriesPlot(
           fontStyle: props.textProperties.fontStyle,
         },
         marginTop: 10,
-        marginBottom: 7 + 0.5 * sizeLargestLabel(),
+        marginBottom: 10 + 0.6 * sizeLargestLabel(),
         marginLeft: 30,
         color: { domain: domain(), range: range() },
         x: {
