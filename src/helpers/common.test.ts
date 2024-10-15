@@ -2,6 +2,8 @@ import { expect, test } from 'vitest';
 import {
   camelToFlat, findSuitableName,
   getNumberOfDecimals, getUniqueValues,
+  isEqual, isLessThan, isGreaterThan,
+  isLessThanOrEqual, isGreaterThanOrEqual,
   isFiniteNumber, isNonNull,
   removeDiacritics,
 } from './common';
@@ -74,4 +76,44 @@ test('removeDiaCritics', () => {
   expect(removeDiacritics('éàèçù')).toBe('eaecu');
   expect(removeDiacritics('Île-de-France')).toBe('Ile-de-France');
   expect(removeDiacritics('île-Île~ô_ö~ ìçé'), 'ile-Ile~o_o~ ice');
+});
+
+test('isEqual', () => {
+  expect(isEqual(1, 1, 1)).toBe(true);
+  expect(isEqual(1, 1.0000000001, 6)).toBe(true);
+  expect(isEqual(1, 1.0000000001, 10)).toBe(false);
+  expect(isEqual(6.5428, 6.5427763, 4)).toBe(true);
+  expect(isEqual(6.5428, 6.5427763, 5)).toBe(false);
+});
+
+test('isLessThan', () => {
+  expect(isLessThan(1, 2, 1)).toBe(true);
+  expect(isLessThan(1, 1.0000000001, 6)).toBe(false);
+  expect(isLessThan(1, 1.0000000001, 10)).toBe(true);
+  expect(isLessThan(6.5428, 6.5427763, 4)).toBe(false);
+  expect(isLessThan(6.5428, 6.5427763, 5)).toBe(false);
+});
+
+test('isGreaterThan', () => {
+  expect(isGreaterThan(1, 2, 1)).toBe(false);
+  expect(isGreaterThan(1, 1.0000000001, 6)).toBe(false);
+  expect(isGreaterThan(1, 1.0000000001, 10)).toBe(false);
+  expect(isGreaterThan(6.5428, 6.5427763, 4)).toBe(false);
+  expect(isGreaterThan(6.5428, 6.5427763, 5)).toBe(true);
+});
+
+test('isLessThanOrEqual', () => {
+  expect(isLessThanOrEqual(1, 2, 1)).toBe(true);
+  expect(isLessThanOrEqual(1, 1.0000000001, 6)).toBe(true);
+  expect(isLessThanOrEqual(1, 1.0000000001, 10)).toBe(true);
+  expect(isLessThanOrEqual(6.5428, 6.5427763, 4)).toBe(true);
+  expect(isLessThanOrEqual(6.5428, 6.5427763, 5)).toBe(false);
+});
+
+test('isGreaterThanOrEqual', () => {
+  expect(isGreaterThanOrEqual(1, 2, 1)).toBe(false);
+  expect(isGreaterThanOrEqual(1, 1.0000000001, 6)).toBe(true);
+  expect(isGreaterThanOrEqual(1, 1.0000000001, 10)).toBe(false);
+  expect(isGreaterThanOrEqual(6.5428, 6.5427763, 4)).toBe(true);
+  expect(isGreaterThanOrEqual(6.5428, 6.5427763, 5)).toBe(true);
 });

@@ -27,6 +27,7 @@ export function unproxify(value: any): any {
  * used for a given feature or if we should handle it as "no data" for example.
  *
  * @param value
+ * @returns {boolean}
  */
 export function isFiniteNumber(value: any): boolean {
   return value !== null
@@ -42,6 +43,7 @@ export function isFiniteNumber(value: any): boolean {
  * it as "no data" for example.
  *
  * @param value
+ * @returns {boolean}
  */
 export function isNonNull(value: any): boolean {
   return value !== null && value !== undefined && value !== '';
@@ -168,7 +170,7 @@ export const camelToFlat = (c: string) => (
   c = c.replace(/[A-Z]|([0-9]+)/g, ' $&'), c[0].toUpperCase() + c.slice(1)).trim();
 /* eslint-enable no-return-assign, no-param-reassign, no-sequences */
 
-/*
+/**
  * Deduplicate an array of numbers and return the unique values
  * in a new array.
  * @param {Array<number>} values - The array of numbers to deduplicate.
@@ -187,3 +189,61 @@ export const sanitizeColumnName = (c: string) => c.replace(/[\r\n]+/g, ' ')
  * @returns {string} - The sanitized string.
  */
 export const removeDiacritics = (str: string) => str.normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
+
+/**
+ * Check if two numbers are equal within a given epsilon
+ * (given as a precision value).
+ * @param {number} a - The first number.
+ * @param {number} b - The second number.
+ * @param {number} precision - The precision value.
+ */
+export const isEqual = (a: number, b: number, precision: number): boolean => {
+  const epsilon = 10 ** -precision;
+  return Math.abs(a - b) < epsilon;
+};
+
+/**
+ * Check if a number is strictly greater than another within a given epsilon
+ * (given as a precision value).
+ * @param {number} a - The first number (the number to check if it is greater).
+ * @param {number} b - The second number.
+ * @param {number} precision - The precision value.
+ */
+export const isGreaterThan = (a: number, b: number, precision: number): boolean => {
+  const epsilon = 10 ** -precision;
+  return a - b > epsilon;
+};
+
+/**
+ * Check if a number is strictly less than another within a given epsilon
+ * (given as a precision value).
+ * @param {number} a - The first number (the number to check if it is less).
+ * @param {number} b - The second number.
+ * @param {number} precision - The precision value.
+ */
+export const isLessThan = (a: number, b: number, precision: number): boolean => {
+  const epsilon = 10 ** -precision;
+  return b - a > epsilon;
+};
+
+/**
+ * Check if a number is greater than or equal to another within a given epsilon
+ * (given as a precision value).
+ * @param {number} a - The first number (the number to check if it is less).
+ * @param {number} b - The second number.
+ * @param {number} precision - The precision value.
+ */
+export const isLessThanOrEqual = (a: number, b: number, precision: number): boolean => (
+  isLessThan(a, b, precision) || isEqual(a, b, precision)
+);
+
+/**
+ * Check if a number is less than or equal to another within a given epsilon
+ * (given as a precision value).
+ * @param {number} a - The first number (the number to check if it is greater).
+ * @param {number} b - The second number.
+ * @param {number} precision - The precision value.
+ */
+export const isGreaterThanOrEqual = (a: number, b: number, precision: number): boolean => (
+  isGreaterThan(a, b, precision) || isEqual(a, b, precision)
+);
