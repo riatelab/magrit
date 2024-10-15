@@ -1333,7 +1333,9 @@ const fr = {
     breaksCopied: 'Limites de classes copiées dans le presse-papier',
     inputColorInvalid: 'La couleur saisie n\'est pas valide. La couleur actuelle reste inchangée. Merci d\'utiliser un format hexadécimal valide (par exemple #ff0000 pour le rouge).',
     pastedColorsInvalid: 'Les couleurs copiées ne semblent pas valides. Les couleurs actuelles restent inchangées.',
-    pastedColorsWrongLength: 'Le nombre de couleurs copiées ne correspont pas au nombre de classes. Les couleurs actuelles restent inchangées.',
+    pastedColorsWrongLength: 'Le nombre de couleurs copiées ne correspondent pas au nombre de classes. Les couleurs actuelles restent inchangées.',
+    copyPalette: 'Copier la palette de couleurs dans le presse-papier',
+    paletteCopied: 'Palette de couleurs copiée dans le presse-papier',
   },
   Legend: {
     ContextMenu: {

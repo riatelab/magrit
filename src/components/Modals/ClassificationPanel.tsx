@@ -24,7 +24,10 @@ import {
   OptionsClassification,
   prepareStatisticalSummary,
 } from '../../helpers/classification';
-import { isFiniteNumber, unproxify } from '../../helpers/common';
+import {
+  isEqual, isFiniteNumber,
+  isGreaterThan, isLessThan, unproxify,
+} from '../../helpers/common';
 import { Mmin, Mround, round } from '../../helpers/math';
 import { interpolateColors } from '../../helpers/color';
 import { makeClassificationPlot, makeColoredBucketPlot, makeDistributionPlot } from '../DistributionPlots.tsx';
@@ -106,13 +109,27 @@ function ManualBreaks(
             newBreaks.sort((aa, bb) => aa - bb);
             // The first value can be inferior to the minimum
             // but the first value can't be superior to the minimum
-            if (newBreaks[0] > props.statSummary.minimum) {
+            if (
+              isEqual(newBreaks[0], props.statSummary.minimum, props.statSummary.precision)
+            ) {
+              // Replace the first value by the (real) minimum
+              newBreaks[0] = props.statSummary.minimum;
+            } else if (
+              isGreaterThan(newBreaks[0], props.statSummary.minimum, props.statSummary.precision)
+            ) {
               newBreaks.unshift(props.statSummary.minimum);
               dontCoverSeries = true;
             }
             // The last value can be superior to the maximum
             // but the last value can't be inferior to the maximum
-            if (newBreaks[newBreaks.length - 1] < props.statSummary.maximum) {
+            if ( // eslint-disable-next-line max-len
+              isEqual(newBreaks[newBreaks.length - 1], props.statSummary.maximum, props.statSummary.precision)
+            ) {
+              // Replace the last value by the (real) maximum
+              newBreaks[newBreaks.length - 1] = props.statSummary.maximum;
+            } else if ( // eslint-disable-next-line max-len
+              isLessThan(newBreaks[newBreaks.length - 1], props.statSummary.maximum, props.statSummary.precision)
+            ) {
               newBreaks.push(props.statSummary.maximum);
               dontCoverSeries = true;
             }
@@ -147,7 +164,21 @@ function ManualBreaks(
             // but we don't accept values superior to the minimum
             // (the whole series should be covered)
             if (i() === 0) {
-              if (value > props.statSummary.minimum) {
+              if (isEqual(value, props.statSummary.minimum, props.statSummary.precision)) {
+                // Replace the first value by the (real) minimum
+                const newBreaks = [
+                  props.statSummary.minimum,
+                  ...props.currentBreaksInfo.breaks.slice(1),
+                ];
+                props.setCurrentBreaksInfo({
+                  ...props.currentBreaksInfo,
+                  breaks: newBreaks,
+                });
+                // eslint-disable-next-line no-param-reassign
+                this.value = round(props.statSummary.minimum, props.statSummary.precision);
+              } else if (
+                isGreaterThan(value, props.statSummary.minimum, props.statSummary.precision)
+              ) {
                 // Replace the first value by the minimum
                 const newBreaks = [
                   props.statSummary.minimum,
@@ -169,7 +200,21 @@ function ManualBreaks(
             // but we don't accept values inferior to the maximum
             // (the whole series should be covered)
             if (i() === props.currentBreaksInfo.breaks.length - 1) {
-              if (value < props.statSummary.maximum) {
+              if (isEqual(value, props.statSummary.maximum, props.statSummary.precision)) {
+                // Replace the last value by the (real) maximum
+                const newBreaks = [
+                  ...props.currentBreaksInfo.breaks.slice(0, -1),
+                  props.statSummary.maximum,
+                ];
+                props.setCurrentBreaksInfo({
+                  ...props.currentBreaksInfo,
+                  breaks: newBreaks,
+                });
+                // eslint-disable-next-line no-param-reassign
+                this.value = round(props.statSummary.maximum, props.statSummary.precision);
+              } else if (
+                isLessThan(value, props.statSummary.maximum, props.statSummary.precision)
+              ) {
                 // Replace the last value by the maximum
                 const newBreaks = [
                   ...props.currentBreaksInfo.breaks.slice(0, -1),
@@ -223,14 +268,21 @@ function CustomPaletteCreation(
   },
 ): JSX.Element {
   const { LL } = useI18nContext();
-  return <>
-    <div class="mt-2 is-flex is-justify-content-space-around">
+  return <div class="is-overflow-x-auto">
+    <div
+      class="mt-2 is-flex is-justify-content-space-around"
+      style={{ width: props.currentBreaksInfo.classes < 9 ? 'auto' : 'max-content' }}
+    >
       <For each={props.currentBreaksInfo.palette.colors}>
         {
           (c, i) => <>
             <input
               // We want the minimum padding to avoid the color picker to be too big
-              style={{ padding: '0.1rem', 'border-width': '0' }}
+              style={{
+                padding: '0.1rem',
+                'border-width': '0',
+                width: `${425 / 9}px`,
+              }}
               type="color"
               value={c}
               onChange={(e) => {
@@ -249,14 +301,17 @@ function CustomPaletteCreation(
         }
       </For>
     </div>
-    <div class="is-flex is-justify-content-space-around">
+    <div
+      class="is-flex is-justify-content-space-around"
+      style={{ width: props.currentBreaksInfo.classes < 9 ? 'auto' : 'max-content' }}
+    >
       <For each={props.currentBreaksInfo.palette.colors}>
         {
           (c, i) => <>
             <input
               type="text"
               style={{
-                'max-width': `${425 / 9}px`,
+                width: `${425 / 9}px`,
                 'font-size': '0.7rem',
               }}
               value={c}
@@ -320,7 +375,7 @@ function CustomPaletteCreation(
         }
       </For>
     </div>
-  </>;
+  </div>;
 }
 
 // Component to display current breaks
@@ -787,9 +842,20 @@ export default function ClassificationPanel(): JSX.Element {
                   min={3}
                   max={9}
                   onChange={(event) => {
+                    if (event.target.value === '') {
+                      // eslint-disable-next-line no-param-reassign
+                      event.target.value = `${numberOfClasses()}`;
+                      return;
+                    }
+                    // eslint-disable-next-line no-bitwise
+                    let v = +event.target.value | 0;
+                    if (v < 2) {
+                      // eslint-disable-next-line no-param-reassign
+                      event.target.value = '2';
+                      v = 2;
+                    }
                     // If the current method is 'nestedMeans', we need to force
                     // the number of classes to be a power of 2.
-                    let v = +event.target.value;
                     if (classificationMethod() === ClassificationMethod.nestedMeans) {
                       v = 2 ** Math.round(Math.log2(v));
                       // eslint-disable-next-line no-param-reassign
@@ -1041,7 +1107,22 @@ export default function ClassificationPanel(): JSX.Element {
                 <br/>
                 <div class="is-flex is-justify-content-space-between">
                   <div style={{ width: '100%' }}>
-                    <p class="label is-marginless">{LL().ClassificationPanel.palette()}</p>
+                    <p class="label is-marginless">
+                      {LL().ClassificationPanel.palette()}
+                      <AiOutlineCopy
+                        size={16}
+                        title={LL().ClassificationPanel.copyPalette()}
+                        class="is-clickable copy-palette ml-2"
+                        style={{ 'vertical-align': 'text-bottom' }}
+                        onClick={() => {
+                          // Copy the palette to the clipboard and display a success message
+                          navigator.clipboard.writeText(
+                            currentBreaksInfo().palette.colors.join(' - '),
+                          );
+                          toast.success(LL().ClassificationPanel.paletteCopied());
+                        }}
+                      />
+                    </p>
                     <Switch>
                       <Match when={typeScheme() === 'sequential'}>
                         <DropdownMenu

@@ -5322,6 +5322,14 @@ type RootTranslation = {
 		 * T​h​e​ ​n​u​m​b​e​r​ ​o​f​ ​c​o​l​o​r​s​ ​d​o​e​s​ ​n​o​t​ ​m​a​t​c​h​ ​t​h​e​ ​n​u​m​b​e​r​ ​o​f​ ​c​l​a​s​s​e​s​.​ ​C​o​l​o​r​s​ ​a​r​e​ ​u​n​c​h​a​n​g​e​d​.
 		 */
 		pastedColorsWrongLength: string
+		/**
+		 * C​o​p​y​ ​p​a​l​e​t​t​e​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
+		 */
+		copyPalette: string
+		/**
+		 * P​a​l​e​t​t​e​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
+		 */
+		paletteCopied: string
 	}
 	Legend: {
 		ContextMenu: {
@@ -10892,6 +10900,14 @@ export type TranslationFunctions = {
 		 * The number of colors does not match the number of classes. Colors are unchanged.
 		 */
 		pastedColorsWrongLength: () => LocalizedString
+		/**
+		 * Copy palette to the clipboard
+		 */
+		copyPalette: () => LocalizedString
+		/**
+		 * Palette copied to the clipboard
+		 */
+		paletteCopied: () => LocalizedString
 	}
 	Legend: {
 		ContextMenu: {

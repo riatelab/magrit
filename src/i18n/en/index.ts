@@ -1334,6 +1334,8 @@ const en = {
     inputColorInvalid: 'The given color is invalid. Color is unchanged. Please enter a valid color in hexadecimal format.',
     pastedColorsInvalid: 'The given colors are invalid. Colors are unchanged.',
     pastedColorsWrongLength: 'The number of colors does not match the number of classes. Colors are unchanged.',
+    copyPalette: 'Copy palette to the clipboard',
+    paletteCopied: 'Palette copied to the clipboard',
   },
   Legend: {
     ContextMenu: {
