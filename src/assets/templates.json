@@ -1,0 +1,36 @@
+[
+  {
+    "id": "fra_template",
+    "active": true,
+    "layers": [
+      {
+        "id": "fra_template_com",
+        "role": "main",
+        "type": "vector",
+        "totalFeatures": 34945
+      },
+      {
+        "id": "fra_template_neighbors",
+        "role": "layout",
+        "type": "vector",
+        "totalFeatures": 16
+      },
+      {
+        "id": "fra_template_boxes",
+        "role": "layout",
+        "type": "vector",
+        "totalFeatures": 5
+      },
+      {
+        "id": "fra_template_dept",
+        "role": "layout",
+        "type": "vector",
+        "totalFeatures": 101
+      }
+    ],
+    "defaultProjection": {
+       "type": "proj4",
+       "code": 2154
+    }
+  }
+]
