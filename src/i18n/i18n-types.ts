@@ -2211,6 +2211,82 @@ type RootTranslation = {
 			}
 		}
 	}
+	Templates: {
+		fra_template: {
+			/**
+			 * F​r​e​n​c​h​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​(​c​a​r​t​o​g​r​a​p​h​i​c​ ​t​e​m​p​l​a​t​e​)
+			 */
+			name: string
+			/**
+			 * A​ ​m​a​p​ ​t​e​m​p​l​a​t​e​ ​o​f​ ​t​h​e​ ​3​4​9​8​7​ ​F​r​e​n​c​h​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​(​2​0​2​3​ ​e​d​i​t​i​o​n​s​)​ ​b​a​s​e​d​ ​o​n​ ​V​o​r​o​n​o​i​ ​p​o​l​y​g​o​n​s
+			 */
+			abstract: string
+			/**
+			 * F​r​a​n​c​e​,​ ​c​o​m​m​u​n​e​s​,​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​,​ ​m​e​t​r​o​p​o​l​i​t​a​n​ ​a​r​e​a​s
+			 */
+			keywords: string
+			fieldsMainLayer: {
+				/**
+				 * M​u​n​i​c​i​p​a​l​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				INSEE_COM: string
+				/**
+				 * N​a​m​e
+				 */
+				NOM: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​0
+				 */
+				POP_2020: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​3​ ​(​k​m​²​)
+				 */
+				SUPERF_2023: string
+				/**
+				 * "​D​e​p​a​r​t​m​e​n​t​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				DEP: string
+				/**
+				 * "​R​e​g​i​o​n​"​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				REG: string
+				/**
+				 * E​P​C​I​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				EPCI: string
+				/**
+				 * E​m​p​l​o​y​m​e​n​t​ ​a​r​e​a​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				ZE2020: string
+				/**
+				 * U​r​b​a​n​ ​U​n​i​t​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				UU2020: string
+				/**
+				 * L​i​f​e​ ​b​a​s​i​n​ ​o​f​ ​b​e​l​o​n​g​i​n​g
+				 */
+				BV2022: string
+			}
+			layers: {
+				/**
+				 * T​h​e​ ​3​4​9​8​7​ ​F​r​e​n​c​h​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​(​2​0​2​3​ ​e​d​i​t​i​o​n​)​ ​i​n​ ​V​o​r​o​n​o​i​ ​p​o​l​y​g​o​n​s​.​ ​O​v​e​r​s​e​a​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​a​r​e​ ​d​i​s​p​l​a​y​e​d​ ​i​n​ ​b​o​x​e​s​.
+				 */
+				fra_template_com: string
+				/**
+				 * F​r​e​n​c​h​ ​n​e​i​g​h​b​o​u​r​i​n​g​ ​c​o​u​n​t​r​i​e​s​,​ ​f​o​l​l​o​w​i​n​g​ ​t​h​e​ ​g​e​o​g​r​a​p​h​i​c​a​l​ ​c​o​v​e​r​a​g​e​ ​o​f​ ​t​h​e​ ​m​a​p​ ​t​e​m​p​l​a​t​e​.
+				 */
+				fra_template_neighbors: string
+				/**
+				 * B​o​x​e​s​ ​s​u​r​r​o​u​n​d​i​n​g​ ​o​v​e​r​s​e​a​ ​t​e​r​r​i​t​o​r​i​e​s
+				 */
+				fra_template_boxes: string
+				/**
+				 * T​h​e​ ​1​0​1​ ​F​r​e​n​c​h​ ​d​e​p​a​r​t​m​e​n​t​s
+				 */
+				fra_template_dept: string
+			}
+		}
+	}
 	DatasetCatalog: {
 		/**
 		 * E​x​a​m​p​l​e​ ​d​a​t​a​s​e​t​ ​c​a​t​a​l​o​g
@@ -2336,6 +2412,14 @@ type RootTranslation = {
 		 * D​a​t​a​s​e​t​ ​p​r​e​v​i​e​w
 		 */
 		altDatasetPreview: string
+		/**
+		 * T​e​m​p​l​a​t​e​ ​p​r​e​v​i​e​w
+		 */
+		altTemplatePreview: string
+		/**
+		 * L​a​y​e​r​s
+		 */
+		layers: string
 		/**
 		 * A​d​d​ ​t​o​ ​m​a​p
 		 */
@@ -7830,6 +7914,82 @@ export type TranslationFunctions = {
 			}
 		}
 	}
+	Templates: {
+		fra_template: {
+			/**
+			 * French municipalities (cartographic template)
+			 */
+			name: () => LocalizedString
+			/**
+			 * A map template of the 34987 French municipalities (2023 editions) based on Voronoi polygons
+			 */
+			abstract: () => LocalizedString
+			/**
+			 * France, communes, municipalities, metropolitan areas
+			 */
+			keywords: () => LocalizedString
+			fieldsMainLayer: {
+				/**
+				 * Municipal identifier
+				 */
+				INSEE_COM: () => LocalizedString
+				/**
+				 * Name
+				 */
+				NOM: () => LocalizedString
+				/**
+				 * Total population, 2020
+				 */
+				POP_2020: () => LocalizedString
+				/**
+				 * Total area, 2023 (km²)
+				 */
+				SUPERF_2023: () => LocalizedString
+				/**
+				 * "Department" of belonging
+				 */
+				DEP: () => LocalizedString
+				/**
+				 * "Region" of belonging
+				 */
+				REG: () => LocalizedString
+				/**
+				 * EPCI of belonging
+				 */
+				EPCI: () => LocalizedString
+				/**
+				 * Employment area of belonging
+				 */
+				ZE2020: () => LocalizedString
+				/**
+				 * Urban Unit of belonging
+				 */
+				UU2020: () => LocalizedString
+				/**
+				 * Life basin of belonging
+				 */
+				BV2022: () => LocalizedString
+			}
+			layers: {
+				/**
+				 * The 34987 French municipalities (2023 edition) in Voronoi polygons. Oversea municipalities are displayed in boxes.
+				 */
+				fra_template_com: () => LocalizedString
+				/**
+				 * French neighbouring countries, following the geographical coverage of the map template.
+				 */
+				fra_template_neighbors: () => LocalizedString
+				/**
+				 * Boxes surrounding oversea territories
+				 */
+				fra_template_boxes: () => LocalizedString
+				/**
+				 * The 101 French departments
+				 */
+				fra_template_dept: () => LocalizedString
+			}
+		}
+	}
 	DatasetCatalog: {
 		/**
 		 * Example dataset catalog
@@ -7955,6 +8115,14 @@ export type TranslationFunctions = {
 		 * Dataset preview
 		 */
 		altDatasetPreview: () => LocalizedString
+		/**
+		 * Template preview
+		 */
+		altTemplatePreview: () => LocalizedString
+		/**
+		 * Layers
+		 */
+		layers: () => LocalizedString
 		/**
 		 * Add to map
 		 */

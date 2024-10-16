@@ -13,8 +13,11 @@ import {
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
+import { yieldOrContinue } from 'main-thread-scheduling';
 import { FaSolidDatabase } from 'solid-icons/fa';
 import { ImFilter } from 'solid-icons/im';
+import { HiSolidDocumentText } from 'solid-icons/hi';
+import { BsMap } from 'solid-icons/bs';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -26,31 +29,50 @@ import {
 } from '../../helpers/common';
 import { makeDefaultLegendDescription } from '../../helpers/legends';
 import { epsgDb, removeNadGrids } from '../../helpers/projection';
+import { patchProject } from '../../helpers/project';
 
 // Stores
-import { globalStore, setGlobalStore, setLoading } from '../../store/GlobalStore';
+import { setApplicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import {
+  globalStore, setGlobalStore,
+  setLoading, setReloadingProject,
+} from '../../store/GlobalStore';
 import {
   layersDescriptionStore,
   type LayersDescriptionStoreType,
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
 import { setModalStore } from '../../store/ModalStore';
-import { fitExtent, setMapStore } from '../../store/MapStore';
+import { fitExtent, setMapStore, setMapStoreBase } from '../../store/MapStore';
 
 // Subcomponents
 import Pagination from '../Pagination.tsx';
 
 // Assets
 import allDatasets from '../../assets/datasets.json';
+import allTemplates from '../../assets/templates.json';
 
 // Types
-import type { DefaultLegend, GeoJSONFeatureCollection, LayerDescription } from '../../global';
+import {
+  DefaultLegend, GeoJSONFeatureCollection, LayerDescription, ProjectDescription,
+} from '../../global';
 import type { Variable } from '../../helpers/typeDetection';
-import type { Translation } from '../../i18n/i18n-types';
+import type { Translation, TranslationFunctions } from '../../i18n/i18n-types';
 
-const templates: TemplateEntry[] = [];
+type CartographicProjection = { type: 'd3', value: 'string' } | { type: 'proj4', code: number };
 
 interface TemplateEntry {
+  id: string & keyof Translation['Templates'],
+  active: boolean,
+  layers: TemplateLayer[],
+  defaultProjection: CartographicProjection,
+}
+
+interface TemplateLayer {
+  id: string,
+  role: 'main' | 'layout',
+  type: 'vector' | 'raster',
+  totalFeatures: number,
 }
 
 interface DataProvider {
@@ -80,7 +102,7 @@ interface DatasetEntry {
   // should be displayed
   // Type is 'd3' for d3 projections (with value like "NaturalEarth2")
   // and 'proj4' for proj4 projections (with code like 2154)
-  defaultProjection: { type: 'd3', value: 'string' } | { type: 'proj4', code: number },
+  defaultProjection: CartographicProjection,
   // Information about the geometry provider
   geometry: DataProvider,
   // Information about the data provider(s)
@@ -90,6 +112,7 @@ interface DatasetEntry {
 }
 
 const datasets = allDatasets.filter((d) => d.active) as unknown as DatasetEntry[];
+const templates = allTemplates.filter((t) => t.active) as unknown as TemplateEntry[];
 
 const findMaxEntryPerPage = () => {
   const height = window.innerHeight;
@@ -105,7 +128,50 @@ const findMaxEntryPerPage = () => {
 function CardTemplateEntry(
   t: TemplateEntry & { onClick: (arg0: MouseEvent) => void },
 ): JSX.Element {
-  return <div></div>;
+  const { LL } = useI18nContext();
+  return <div
+    class="card is-clickable"
+    style={{ margin: '1em', 'max-height': '208px' }}
+    onClick={(e) => t.onClick(e)}
+  >
+    <header class="card-header" style={{ 'box-shadow': 'none' }}>
+      <p class="card-header-title">
+        <FaSolidDatabase style={{ height: '1.2em', width: '1.8em' }}/>
+        <span style={{ 'font-size': '1.3em' }}>{LL().Templates[t.id].name()}</span>
+      </p>
+    </header>
+    <section class="card-content">
+      <div class="content">
+        {LL().Templates[t.id].abstract()}
+      </div>
+    </section>
+  </div>;
+}
+
+function TemplatePage(
+  props: {
+    templateEntries: TemplateEntry[],
+    setSelectedTemplate: Setter<TemplateEntry | null>,
+    offset: number,
+    maxEntryPerPage: number,
+  },
+): JSX.Element {
+  return <div
+    style={{
+      display: 'grid',
+      'grid-template-columns': '1fr 1fr',
+      height: '78%',
+      'overflow-y': 'auto',
+    }}>
+    <For each={props.templateEntries.slice(props.offset, props.offset + props.maxEntryPerPage)}>
+      {
+        (t) => <CardTemplateEntry
+          {...t}
+          onClick={() => props.setSelectedTemplate(t)}
+        />
+      }
+    </For>
+  </div>;
 }
 
 function CardDatasetEntry(
@@ -114,7 +180,7 @@ function CardDatasetEntry(
   const { LL } = useI18nContext();
   return <div
     class="card is-clickable"
-    style={{ margin: '1em' }}
+    style={{ margin: '1em', 'max-height': '208px' }}
     onClick={(e) => ds.onClick(e)}
   >
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
@@ -156,11 +222,43 @@ function DatasetPage(props: {
   </div>;
 }
 
+function CardTemplateDetail(t: TemplateEntry): JSX.Element {
+  const { LL } = useI18nContext();
+  return <div>
+    <h3>{LL().Templates[t.id].name()}</h3>
+    <h4>{LL().DatasetCatalog.about()}</h4>
+    <div>
+      <table>
+        <tbody>
+        <tr>
+          <td>{LL().DatasetCatalog.layers()}</td>
+          <td>{t.layers.map((l) => LL().Templates[t.id].layers[l.id]()).join(', ')}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <br/>
+    <h4>{LL().DatasetCatalog.description()}</h4>
+    <div>
+      <p>{LL().Templates[t.id].abstract()}</p>
+    </div>
+    <h4>{LL().DatasetCatalog.preview()}</h4>
+    <div class="has-text-centered">
+      <img
+        src={`template/${t.id}.png`}
+        class="image"
+        style={{ border: 'solid 1px silver', width: '300px', margin: 'auto' }}
+        alt={LL().DatasetCatalog.altTemplatePreview()}
+      />
+    </div>
+  </div>;
+}
+
 function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
   const { LL } = useI18nContext();
   return <div>
-    <h3>{ LL().Datasets[ds.id].name() }</h3>
-    <h4>{ LL().DatasetCatalog.about() }</h4>
+    <h3>{LL().Datasets[ds.id].name()}</h3>
+    <h4>{LL().DatasetCatalog.about()}</h4>
     <div>
       <table>
         <tbody>
@@ -246,7 +344,7 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
   </div>;
 }
 
-export function addExampleLayer(
+function addExampleLayer(
   geojson: GeoJSONFeatureCollection,
   name: string,
   projection: { type: 'd3', value: 'string' } | { type: 'proj4', code: number },
@@ -353,6 +451,44 @@ export function addExampleLayer(
   return layerId;
 }
 
+const reloadFromProjectObject = async (obj: ProjectDescription): Promise<void> => {
+  // Set the app in "reloading" mode
+  // (it displays a loading overlay and prevents the user from adding new layers
+  // it  also set a flag the enable restoring the extent of the map
+  // - more details in store/MapStore.ts)
+  setReloadingProject(true);
+
+  await yieldOrContinue('smooth');
+
+  // Get the different parts of the project
+  // after applying the necessary patches
+  // for making it compatible with the current version of the application
+  // if necessary.
+  const {
+    version,
+    applicationSettings,
+    layers,
+    layoutFeaturesAndLegends,
+    map,
+    tables,
+  } = patchProject(obj);
+
+  // Reset the application settings store
+  setApplicationSettingsStore(applicationSettings);
+  // Reset the layers description store before changing the map store
+  // (this avoid redrawing the map for the potential current layers)
+  setLayersDescriptionStore({ layers: [], layoutFeaturesAndLegends: [], tables: [] });
+  // Update the layer description store with the layers and layout features
+  setLayersDescriptionStore({ layers, layoutFeaturesAndLegends, tables });
+  // Update the map store
+  // (this updates the projection and pathGenerator in the global store)
+  setMapStoreBase(map);
+  // Reverse the "userHasAddedLayer" flag
+  setGlobalStore({ userHasAddedLayer: true });
+  // Hide the loading overlay
+  setReloadingProject(false);
+};
+
 // A large modal (or even a full page) that shows the datasets
 // available for the user to choose from.
 //
@@ -363,6 +499,8 @@ export function addExampleLayer(
 // - A button to confirm the selection and add it to the map
 export default function ExampleDatasetModal(): JSX.Element {
   const { LL } = useI18nContext();
+  // Reference to parent element
+  let refParentElement: HTMLDivElement;
   // Current tab
   const [
     currentTab,
@@ -403,7 +541,7 @@ export default function ExampleDatasetModal(): JSX.Element {
   const [
     filteredTemplates,
     setFilteredTemplates,
-  ] = createSignal<TemplateEntry[]>([]);
+  ] = createSignal<TemplateEntry[]>(templates);
   const [
     selectedTemplate,
     setSelectedTemplate,
@@ -414,7 +552,7 @@ export default function ExampleDatasetModal(): JSX.Element {
   const offsetTemplate = createMemo(() => (currentPageTemplate() - 1) * maxEntryPerPage());
   // The total number of pages
   const totalPagesTemplate = createMemo(
-    () => Math.ceil(filteredDatasets().length / maxEntryPerPage()),
+    () => Math.ceil(filteredTemplates().length / maxEntryPerPage()),
   );
 
   // Filter the datasets using the search terms
@@ -450,27 +588,38 @@ export default function ExampleDatasetModal(): JSX.Element {
       .split(' ')
       .map((t) => removeDiacritics(t.toLowerCase()));
 
-    return templates.filter((ds) => ({}));
+    return templates.filter((ds) => true);
   };
 
   onMount(() => {
     setModalStore({
       confirmCallback: () => {
-        setLoading(true);
-        fetch(`dataset/${selectedDataset()!.id}.geojson`)
-          .then((response) => response.json())
-          // eslint-disable-next-line solid/reactivity
-          .then((geojsonData) => {
-            addExampleLayer(
-              geojsonData,
-              selectedDataset()!.id,
-              selectedDataset()!.defaultProjection,
-              selectedDataset()!.fields,
-            );
-          })
-          .finally(() => {
-            setLoading(false);
-          });
+        if (currentTab() === 'datasets') {
+          setLoading(true);
+          fetch(`dataset/${selectedDataset()!.id}.geojson`)
+            .then((response) => response.json())
+            .then((geojsonData) => {
+              addExampleLayer(
+                geojsonData,
+                selectedDataset()!.id,
+                selectedDataset()!.defaultProjection,
+                selectedDataset()!.fields,
+              );
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+        } else { // currentTab() === 'templates'
+          setLoading(true);
+          fetch(`template/${selectedTemplate()!.id}.mjson`)
+            .then((response) => response.json())
+            .then(async (project) => {
+              await reloadFromProjectObject(project);
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+        }
       },
     });
 
@@ -481,13 +630,15 @@ export default function ExampleDatasetModal(): JSX.Element {
     });
 
     modalResizeObserver.observe(document.querySelector('.catalog-container')!);
+
+    (refParentElement.querySelector('input.search-field') as HTMLInputElement).focus();
   });
 
   createEffect(
     on(
-      () => selectedDataset(),
+      () => [selectedDataset(), selectedTemplate()],
       () => {
-        if (selectedDataset() !== null) {
+        if (selectedDataset() !== null || selectedTemplate() !== null) {
           document.querySelector('.modal .button.confirm-button')!.removeAttribute('disabled');
         } else {
           document.querySelector('.modal .button.confirm-button')!.setAttribute('disabled', 'true');
@@ -496,10 +647,27 @@ export default function ExampleDatasetModal(): JSX.Element {
     ),
   );
 
-  return <div class="catalog-container" style={{
-    height: '80vh',
-  }}>
-  {/*
+  createEffect(
+    on(
+      () => currentTab(),
+      () => {
+        // Focus on the search bar when switching tabs
+        (refParentElement.querySelector('input.search-field') as HTMLInputElement)
+          .focus();
+        // Remove any search terms when switching tabs
+        setSelectedSearchTerms('');
+        // Remove any selected dataset / template
+        setSelectedTemplate(null);
+        setSelectedDataset(null);
+      },
+    ),
+  );
+
+  return <div
+    class="catalog-container"
+    style={{ height: '80vh' }}
+    ref={refParentElement!}
+  >
   <div class="tabs is-boxed">
       <ul style={{ margin: 0 }}>
         <li classList={{ 'is-active': currentTab() === 'datasets' }}>
@@ -520,7 +688,6 @@ export default function ExampleDatasetModal(): JSX.Element {
         </li>
       </ul>
     </div>
-    */}
     <Show when={currentTab() === 'datasets'}>
       <div class="is-flex catalog__datasets">
         <div style={{
@@ -536,7 +703,7 @@ export default function ExampleDatasetModal(): JSX.Element {
             <div class="field has-addons" style={{ margin: '1em' }}>
               <div class="control">
                 <input
-                  class="input"
+                  class="input search-field"
                   type="text"
                   value={selectedSearchTerms()}
                   style={{ width: '300px' }}
@@ -632,7 +799,7 @@ export default function ExampleDatasetModal(): JSX.Element {
             <div class="field has-addons" style={{ margin: '1em' }}>
               <div class="control">
                 <input
-                  class="input"
+                  class="input search-field"
                   type="text"
                   value={selectedSearchTerms()}
                   style={{ width: '300px' }}
@@ -676,6 +843,22 @@ export default function ExampleDatasetModal(): JSX.Element {
               <span>{LL().DatasetCatalog.datasets(filteredTemplates().length)}</span>
             </div>
           </div>
+          <Show
+            when={filteredTemplates().length > 0}
+            fallback={<p>{LL().DatasetCatalog.noSearchResult()}</p>}
+          >
+            <TemplatePage
+              setSelectedTemplate={setSelectedTemplate}
+              offset={offsetTemplate()}
+              maxEntryPerPage={maxEntryPerPage()}
+              templateEntries={filteredTemplates()}
+            />
+            <Pagination
+              totalPages={totalPagesTemplate()}
+              onClick={(pageNumber) => setCurrentPageTemplate(pageNumber)}
+              currentPage={currentPageTemplate()}
+            />
+          </Show>
         </div>
         <div style={{
           width: '40%',
@@ -691,7 +874,7 @@ export default function ExampleDatasetModal(): JSX.Element {
               when={selectedTemplate() !== null}
               fallback={<p>{LL().DatasetCatalog.placeholderTemplateDetail()}</p>}
             >
-              <CardTemplateEntry {...selectedTemplate()} />
+              <CardTemplateDetail {...selectedTemplate() as TemplateEntry} />
             </Show>
           </div>
         </div>
