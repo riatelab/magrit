@@ -1,4 +1,4 @@
-import { JSX, For } from 'solid-js';
+import { JSX, For, Show } from 'solid-js';
 import { useI18nContext } from '../i18n/i18n-solid';
 
 interface PaginationProps {
@@ -15,6 +15,9 @@ const makeButtonsToRender = (pps: PaginationProps) => {
   // - current page + 1,
   // - last page.
   // We also want to take care of not having duplicates.
+  if (pps.totalPages === 1) {
+    return [1];
+  }
   let btns = [...new Set([
     1,
     pps.currentPage - 1,
@@ -47,25 +50,29 @@ export default function Pagination(props: PaginationProps): JSX.Element {
 
   // This should never happen due to
   // how the pagination is used in the parent component
-  if (props.currentPage < 0 || props.currentPage > props.totalPages) {
+  if (props.currentPage < 1 || props.currentPage > props.totalPages) {
     throw new Error('Invalid page number');
   }
 
   return <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-    <a
-      class="pagination-previous"
-      onClick={() => props.onClick(props.currentPage - 1 > 0 ? props.currentPage - 1 : 1)}
-    >
-      { LL().Pagination.Previous() }
-    </a>
-    <a
-      class="pagination-next"
-      onClick={() => props.onClick(
-        props.currentPage + 1 > props.totalPages ? props.totalPages : props.currentPage + 1,
-      )}
-    >
-      { LL().Pagination.Next() }
-    </a>
+    <Show when={props.totalPages > 1}>
+      <a
+        class="pagination-previous"
+        aria-disabled={props.currentPage === 1}
+        onClick={() => props.onClick(props.currentPage - 1 > 0 ? props.currentPage - 1 : 1)}
+      >
+        { LL().Pagination.Previous() }
+      </a>
+      <a
+        class="pagination-next"
+        aria-disabled={props.currentPage === props.totalPages}
+        onClick={() => props.onClick(
+          props.currentPage + 1 > props.totalPages ? props.totalPages : props.currentPage + 1,
+        )}
+      >
+        { LL().Pagination.Next() }
+      </a>
+    </Show>
     <ul class="pagination-list">
       <For each={makeButtonsToRender(props)}>
         {
