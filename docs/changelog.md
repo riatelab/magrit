@@ -2,6 +2,21 @@
 
 <br />
 
+#### 2.0.19 (unreleased)
+
+- Améliore le rendu du bar chart utilisé comme élément de légende pour les cartes choroplèthes catégorielles.
+
+- Améliorations du panneau de classification :
+  - en permettant de saisir des palettes personnalisées (en choisissant manuellement chaque couleur),
+  - en permettant de copier / coller la description des palettes personnalisées,
+  - en proposant un sélecteur de nombre de classes dédiés aux moyennes emboitées (pour ne permettre de ne sélectionner que des puissances de 2, corrige <a href="https://github.com/riatelab/magrit/issues/145">145</a>),
+  - en améliorant les fonctions de comparaisons des limites de classes saisies manuellement avec les valeurs des données lors de la vérification de leur validité.
+
+- Ajout d'un menu permettant de sélectionner des templates cartographiques complets (composés de plusieurs couches) dans le fenêtre
+  accueillant les jeux de données d'exemple.
+
+- Ajout de templates cartographiques pour la France et l'Europe (Conception du template, récupération et préparation des données, etc. par [@rysebaert](https://github.com/rysebaert)).
+
 #### 2.0.18 (2024-10-10)
 
 - Correction d'un bug de typage des champs lors de l'import d'un fichier CSV pour les champs contenant des valeurs numériques avec des zéros et des NA, introduced in 2.0.16
@@ -48,9 +63,9 @@
 
 #### 2.0.14 (2024-09-25)
 
-- Corrige le tri manuel des catégories pour les cartes choroplèthe catégorielles et de pictogrammes lorsque le jeu de données contient des valeurs nulles ou vides.
+- Corrige le tri manuel des catégories pour les cartes choroplèthes catégorielles et de pictogrammes lorsque le jeu de données contient des valeurs nulles ou vides.
 
-- Améliore le tri initial des catégories pour les cartes choroplèthe catégorielles et de pictogrammes.
+- Améliore le tri initial des catégories pour les cartes choroplèthes catégorielles et de pictogrammes.
 
 #### 2.0.13 (2024-09-23)
 

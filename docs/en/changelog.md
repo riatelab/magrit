@@ -2,6 +2,21 @@
 
 <br />
 
+
+#### 2.0.19 (unreleased)
+
+- Improve rendering of bar chart legend element used for categorical choropleth maps.
+
+- Improve classification panel:
+  - by allowing the user to choose custom palette colors (by manually choosing the color for each class),
+  - by allowing the user to copy / paste palette colors (to easily reuse the same palette in another project / in another map),
+  - by offering a class number selector dedicated to nested means (to allow only powers of 2 to be selected, fixes <a href=“https://github.com/riatelab/magrit/issues/145”>145</a>),
+  - by improving the comparison functions for classes boundaries given manually by the user. 
+
+- Add a menu for selecting complete cartographic templates (composed of several layers) in the window for example datasets.
+
+- Add map templates for France and Europe (Template design, data retrieval and preparation, etc. all by [@rysebaert](https://github.com/rysebaert)).
+
 #### 2.0.18 (2024-10-10)
 
 - Fix a field typing issue when importing a CSV file for fields containing numeric values with zeros and NA, introduced in 2.0.16
