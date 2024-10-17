@@ -19,7 +19,6 @@ import { setModalStore } from '../../store/ModalStore';
 
 // Sub-components
 import { onClickDropdown, onKeyDownDropdown, setDropdownItemTarget } from '../DropdownMenu.tsx';
-import InputFieldRangeSlider from '../Inputs/InputRangeSlider.tsx';
 import ProjectionSelection from '../Modals/ProjectionSelection.tsx';
 import InputFieldNumberSlider from '../Inputs/InputNumberSlider.tsx';
 
