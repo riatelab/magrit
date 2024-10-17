@@ -50,6 +50,7 @@ import {
   type ClassificationParameters,
   type CustomPalette,
 } from '../../global.d';
+import InputConstrainedSlider from '../Inputs/InputConstrainedSlider.tsx';
 
 // Component for choosing breaks manually
 function ManualBreaks(
@@ -704,7 +705,7 @@ export default function ClassificationPanel(): JSX.Element {
     {
       name: LL().ClassificationPanel.classificationMethods.nestedMeans(),
       value: ClassificationMethod.nestedMeans,
-      options: [OptionsClassification.numberOfClasses],
+      options: [OptionsClassification.constrainedNumberOfClasses],
     },
     {
       name: LL().ClassificationPanel.classificationMethods.headTail(),
@@ -813,11 +814,22 @@ export default function ClassificationPanel(): JSX.Element {
                     .find((d) => d.value === classificationMethod())!
                 }
                 onChange={(value) => {
+                  const oldClassificationMethod = classificationMethod();
                   setClassificationMethod(value as ClassificationMethod);
                   // If the classification method is nestedMeans, we need to force
                   // the number of classes to be a power of 2.
                   if (value === ClassificationMethod.nestedMeans) {
                     setNumberOfClasses(2 ** Math.round(Math.log2(numberOfClasses())));
+                  }
+                  // If the previous classification method was nestedMeans and the
+                  // number of classes was 16, and the user is not switching to
+                  // manual classification, we return to a more reasonable number.
+                  if (
+                    oldClassificationMethod === ClassificationMethod.nestedMeans
+                    && classificationMethod() !== ClassificationMethod.manual
+                    && numberOfClasses() === 16
+                  ) {
+                    setNumberOfClasses(Mmin(d3.thresholdSturges(filteredSeries), 9));
                   }
                   updateClassificationParameters();
                 }}
@@ -854,13 +866,13 @@ export default function ClassificationPanel(): JSX.Element {
                       event.target.value = '2';
                       v = 2;
                     }
-                    // If the current method is 'nestedMeans', we need to force
-                    // the number of classes to be a power of 2.
-                    if (classificationMethod() === ClassificationMethod.nestedMeans) {
-                      v = 2 ** Math.round(Math.log2(v));
-                      // eslint-disable-next-line no-param-reassign
-                      event.target.value = `${v}`;
-                    }
+                    // // If the current method is 'nestedMeans', we need to force
+                    // // the number of classes to be a power of 2.
+                    // if (classificationMethod() === ClassificationMethod.nestedMeans) {
+                    //   v = 2 ** Math.round(Math.log2(v));
+                    //   // eslint-disable-next-line no-param-reassign
+                    //   event.target.value = `${v}`;
+                    // }
                     if (classificationMethod() === ClassificationMethod.manual) {
                       setCustomBreaks(
                         Array.from({ length: v })
@@ -870,6 +882,25 @@ export default function ClassificationPanel(): JSX.Element {
                           .concat([statSummary.maximum]),
                       );
                     }
+                    setNumberOfClasses(v);
+                    updateClassificationParameters();
+                  }}
+                />
+              </div>
+            </Show>
+            <Show when={
+              classificationMethodHasOption(
+                OptionsClassification.constrainedNumberOfClasses,
+                classificationMethod(),
+                entriesClassificationMethod,
+              )
+            }>
+              <div style={{ position: 'relative', right: '140px' }}>
+                <p class="label is-marginless">{LL().ClassificationPanel.numberOfClasses()}</p>
+                <InputConstrainedSlider
+                  value={numberOfClasses()}
+                  allowedValues={[2, 4, 8, 16]}
+                  onChange={(v) => {
                     setNumberOfClasses(v);
                     updateClassificationParameters();
                   }}

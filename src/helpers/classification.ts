@@ -139,6 +139,7 @@ export enum OptionsClassification {
   amplitude,
   meanPosition,
   breaks,
+  constrainedNumberOfClasses,
 }
 
 export const classificationMethodHasOption = (
