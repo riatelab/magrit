@@ -58,16 +58,29 @@ export function bindDragBehavior(
 
   let [positionX, positionY] = props.position;
   let i = 0;
-  const moveElement = async (e: MouseEvent) => {
+
+  const moveElement = async (e: MouseEvent | TouchEvent) => {
     if (((i++) % 2) === 0) { // eslint-disable-line no-plusplus
-      // We skip some mousemove events to improve performance
+      // We skip some mousemove / touchmove events to improve performance
       return;
     }
 
     await yieldOrContinue('smooth');
 
-    const dx = e.clientX - x;
-    const dy = e.clientY - y;
+    let dx: number;
+    let dy: number;
+
+    if (e instanceof MouseEvent) {
+      dx = e.clientX - x;
+      dy = e.clientY - y;
+      x = e.clientX;
+      y = e.clientY;
+    } else {
+      dx = e.touches[0].clientX - x;
+      dy = e.touches[0].clientY - y;
+      x = e.touches[0].clientX;
+      y = e.touches[0].clientY;
+    }
 
     // setLayersDescriptionStore(
     //   'layoutFeaturesAndLegends',
@@ -87,9 +100,6 @@ export function bindDragBehavior(
     positionX += dx;
     positionY += dy;
     refElement.setAttribute('transform', `translate(${positionX}, ${positionY})`);
-
-    x = e.clientX;
-    y = e.clientY;
   };
 
   const deselectElement = async () => {
@@ -98,6 +108,9 @@ export function bindDragBehavior(
     outerSvg.removeEventListener('mousemove', moveElement);
     outerSvg.removeEventListener('mouseup', deselectElement);
     outerSvg.removeEventListener('mouseleave', deselectElement);
+    outerSvg.removeEventListener('touchmove', moveElement);
+    outerSvg.removeEventListener('touchend', deselectElement);
+    outerSvg.removeEventListener('touchcancel', deselectElement);
 
     // Do we want to snap coordinates on a grid ?
     // (if so we do so by rounding the coordinates to the nearest multiple of 10)
@@ -121,43 +134,53 @@ export function bindDragBehavior(
     );
   };
 
+  const startDrag = (e: MouseEvent | TouchEvent) => {
+    // On desktop, dragging only occurs when the user
+    // clicks with the main mouse button (usually the left one).
+    // If the mousedown is triggered by another button, we return immediately.
+    if (e instanceof MouseEvent && e.button > 1) return;
+    e.stopPropagation();
+
+    if (e instanceof MouseEvent) {
+      x = e.clientX;
+      y = e.clientY;
+    } else {
+      x = e.touches[0].clientX;
+      y = e.touches[0].clientY;
+    }
+
+    // Listen on events on the parent SVG element
+    outerSvg.addEventListener('mousemove', moveElement);
+    outerSvg.addEventListener('mouseup', deselectElement);
+    outerSvg.addEventListener('mouseleave', deselectElement);
+    outerSvg.addEventListener('touchmove', moveElement);
+    outerSvg.addEventListener('touchend', deselectElement);
+    outerSvg.addEventListener('touchcancel', deselectElement);
+
+    // Cursor style
+    // Store the previous cursor style of the parent SVG element
+    initialCursor = outerSvg.style.cursor;
+    // First change the cursor of the refElement group to default value
+    // eslint-disable-next-line no-param-reassign
+    refElement.style.cursor = initialCursor || 'default';
+    // Then change the cursor of the parent SVG element to grabbing
+    outerSvg.style.cursor = 'grabbing';
+    // Maybe we should disable pointer events on the refElement group ?
+    // For now we will keep them enabled (so that we can keep
+    // the green color of the legend box when the mouse is over it when dragging)
+    // In case we remove pointer events here, we should
+    // put them back when the mouse is released (in deselectElement)
+  };
+
+  refElement.addEventListener('mousedown', startDrag);
+  refElement.addEventListener('touchstart', startDrag);
+
   refElement.addEventListener('mouseover', () => {
     refElement.style.cursor = 'grab'; // eslint-disable-line no-param-reassign
   });
 
   refElement.addEventListener('mouseout', () => {
     refElement.style.cursor = 'default'; // eslint-disable-line no-param-reassign
-  });
-
-  refElement.addEventListener('mousedown', (e) => {
-    // Dragging only occurs when the user
-    // clicks with the main mouse button (usually the left one).
-    // If the mousedown is triggered by another button, we return immediately.
-    if (e.button > 1) return;
-    e.stopPropagation();
-
-    // isDragging = true;
-    x = e.clientX;
-    y = e.clientY;
-
-    // Listen on events on the parent SVG element
-    outerSvg.addEventListener('mousemove', moveElement);
-    outerSvg.addEventListener('mouseup', deselectElement);
-    outerSvg.addEventListener('mouseleave', deselectElement);
-
-    // Cursor style
-    // Store the previous cursor style of the parent SVG element
-    initialCursor = outerSvg.style.cursor;
-    // First change the cursor of the refElement group to default value
-    refElement.style.cursor = initialCursor || 'default'; // eslint-disable-line no-param-reassign
-    // Then change the cursor of the parent SVG element to grabbing
-    outerSvg.style.cursor = 'grabbing'; // eslint-disable-line no-param-reassign
-
-    // Maybe we should disable pointer events on the refElement group ?
-    // For now we will keep them enabled (so that we can keep
-    // the green color of the legend box when the mouse is over it when dragging)
-    // In case we remove pointer events here, we should
-    // put them back when the mouse is released (in deselectElement)
   });
 }
 

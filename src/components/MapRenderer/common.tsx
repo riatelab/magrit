@@ -34,14 +34,28 @@ export function bindDragBehavior(
   // Variables used to compute the new position of the element and the transform attribute
   let x = 0;
   let y = 0;
-  let positionX;
-  let positionY;
-  let cdx;
-  let cdy;
+  let positionX: number;
+  let positionY: number;
+  let cdx: number;
+  let cdy: number;
 
-  const moveElement = (e: MouseEvent) => {
-    const dx = e.clientX - x;
-    const dy = e.clientY - y;
+  const moveElement = (e: MouseEvent | TouchEvent) => {
+    let dx: number;
+    let dy: number;
+
+    if (e instanceof MouseEvent) {
+      dx = e.clientX - x;
+      dy = e.clientY - y;
+      // Update the position of the mouse
+      x = e.clientX;
+      y = e.clientY;
+    } else {
+      dx = e.touches[0].clientX - x;
+      dy = e.touches[0].clientY - y;
+      // Update the position of the mouse
+      x = e.touches[0].clientX;
+      y = e.touches[0].clientY;
+    }
 
     // Update the cumulative displacement of the element
     cdx += dx;
@@ -50,10 +64,6 @@ export function bindDragBehavior(
     // Update the position of the element
     positionX += dx;
     positionY += dy;
-
-    // Update the position of the mouse
-    x = e.clientX;
-    y = e.clientY;
 
     // Update the transform attribute of the element
     element.setAttribute('transform', `translate(${cdx}, ${cdy})`);
@@ -85,27 +95,35 @@ export function bindDragBehavior(
     // Remove all the event listeners on the parent SVG element
     outerSvg.removeEventListener('mousemove', moveElement);
     outerSvg.removeEventListener('mouseup', deselectElement);
+    outerSvg.removeEventListener('touchmove', moveElement);
+    outerSvg.removeEventListener('touchend', deselectElement);
 
     // Remove the red dot that was displayed at the original position of the element
     outerSvg.removeChild(redDot);
   };
 
-  element.addEventListener('mousedown', (e) => {
+  const startDrag = (e: MouseEvent | TouchEvent) => {
     // If the layer is not movable, we return immediately
     if (
       !(layer.rendererParameters as ProportionalSymbolsParameters | LabelsParameters).movable
     ) return;
 
-    // Dragging only occurs when the user
+    // On desktop, dragging only occurs when the user
     // clicks with the main mouse button (usually the left one).
     // If the mousedown is triggered by another button, we return immediately.
-    if (e.button > 1) return;
+    if (e instanceof MouseEvent && e.button > 1) return;
     e.stopPropagation();
 
-    // Initialize the position of the mouse
+    // Initialize the position of the mouse / touch
     // and the cumulative displacement of the element
-    x = e.clientX;
-    y = e.clientY;
+    if (e instanceof MouseEvent) {
+      x = e.clientX;
+      y = e.clientY;
+    } else {
+      x = e.touches[0].clientX;
+      y = e.touches[0].clientY;
+    }
+
     cdx = 0;
     cdy = 0;
 
@@ -115,6 +133,8 @@ export function bindDragBehavior(
     // Listen on events on the parent SVG element
     outerSvg.addEventListener('mousemove', moveElement);
     outerSvg.addEventListener('mouseup', deselectElement);
+    outerSvg.addEventListener('touchmove', moveElement);
+    outerSvg.addEventListener('touchend', deselectElement);
 
     // Cursor style
     // First change the cursor of the element to grabbing
@@ -130,7 +150,10 @@ export function bindDragBehavior(
     redDot.setAttribute('x', `${xOriginal - (5 / 2)}`);
     redDot.setAttribute('y', `${yOriginal - (5 / 2)}`);
     outerSvg.appendChild(redDot);
-  });
+  };
+
+  element.addEventListener('mousedown', startDrag);
+  element.addEventListener('touchstart', startDrag);
 }
 
 export function mergeFilterIds(layerDescription: LayerDescription): string | undefined {
