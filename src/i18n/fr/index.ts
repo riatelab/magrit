@@ -167,8 +167,8 @@ const fr = {
       },
     },
     nuts0: {
-      name: 'Europe – NUTS0',
-      abstract: 'Les 37 NUTS0 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni',
+      name: 'Europe – NUTS 0',
+      abstract: 'Les 37 NUTS 0 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni',
       fields: {
         NUTS_ID: 'Identifiant de NUTS',
         NAME_LATN: 'Nom',
@@ -182,8 +182,8 @@ const fr = {
       },
     },
     nuts1: {
-      name: 'Europe – NUTS1',
-      abstract: 'Les 125 NUTS1 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni',
+      name: 'Europe – NUTS 1',
+      abstract: 'Les 125 NUTS 1 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni',
       fields: {
         NUTS_ID: 'NUTS identifier',
         NAME_LATN: 'Name',
@@ -197,8 +197,8 @@ const fr = {
       },
     },
     nuts2: {
-      name: 'Europe – NUTS2',
-      abstract: 'Les 332 NUTS2 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni.',
+      name: 'Europe – NUTS 2',
+      abstract: 'Les 332 NUTS 2 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni.',
       fields: {
         NUTS_ID: 'Identifiant de NUTS',
         NAME_LATN: 'Nom',
@@ -212,8 +212,8 @@ const fr = {
       },
     },
     nuts2_data: {
-      name: 'Europe – NUTS2 avec données d’exemple',
-      abstract: 'Les 327 NUTS2 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni.  Associé à des indicateurs clé extraits d’Eurostat (dernière année disponible) et associé aux géométries de référence',
+      name: 'Europe – NUTS 2 avec données d’exemple',
+      abstract: 'Les 327 NUTS 2 européens (version 2016) : UE27, Pays Candidats, Association européenne de libre échange et Royaume-Uni.  Associé à des indicateurs clé extraits d’Eurostat (dernière année disponible) et associé aux géométries de référence',
       fields: {
         NUTS_ID: 'Identifiant de NUTS',
         NAME_LATN: 'Nom',
@@ -483,9 +483,37 @@ const fr = {
     },
   },
   Templates: {
+    eu_template: {
+      name: 'Régions européennes - NUTS (modèle cartographique)',
+      abstract: 'Les régions européennes (NUTS 2 et NUTS 3) avec les pays frontaliers et les régions ultrapériphériques dans des boîtes.',
+      keywords: 'régions, Europe, NUTS3, NUTS2, GISCO, Eurostat',
+      fieldsMainLayer: {
+        NUTS_ID: 'Identifiant NUTS',
+        NAME_LATN: 'Nom',
+        URBN_TYPE: 'Typologie NUTS 3 urbain-rural',
+        MOUNT_TYPE: 'Typologie NUTS 3 de montagne',
+        AREA_2024: 'Superficie totale 2024 (km²)',
+        POP_2023: 'Population 2023',
+      },
+      layers: {
+        label_cities: 'Label des capitales',
+        eu_template_cities: 'Capitales des pays',
+        eu_template_borders: 'Frontières internationales',
+        eu_template_nuts3: 'Les 1482 NUTS 3 européens (version 2021)',
+        eu_template_nuts2: 'Les 327 NUTS 2 européens (version 2021)',
+        eu_template_country_box: 'Couche pays (boîtes)',
+        eu_template_boxes: 'Boîtes',
+        eu_template_country: 'Couche pays (emprise du modèle cartographique)',
+      },
+      geometrySource: {
+        'Natural Earth': '© Natural Earth',
+        RIATE: '© RIATE',
+        'RIATE-GISCO': '© RIATE, à partir des géométries GISCO ',
+      },
+    },
     fra_template: {
       name: 'Communes de France (modèle cartographique)',
-      abstract: 'Les 34987 communes de France (édition 2023) en polygones de Voronoi. Les communes des départements d\'outre-mer sont représentées dans des boîtes.',
+      abstract: 'Les 34987 communes de France (édition 2023) en polygones de Voronoi avec les communes des départements d\'outre-mer représentées dans des boîtes ainsi que les pays frontaliers de la France.',
       keywords: 'France, communes, municipalités, métro',
       fieldsMainLayer: {
         INSEE_COM: 'Identifiant de commune',
@@ -500,10 +528,16 @@ const fr = {
         BV2022: 'Bassin de vie d\'appartenance',
       },
       layers: {
-        fra_template_com: 'Les 34987 communes de France (édition 2023) en polygones de Voronoi. Les communes des départements d\'outre-mer sont représentées dans des boîtes.',
+        fra_template_com: 'Les 34987 communes de France (édition 2023) en polygones de Voronoi. Les communes des départements d\'outre-mer sont représentées dans des boîtes',
         fra_template_neighbors: 'Les pays frontaliers de la France, sur l’emprise du modèle cartographique',
         fra_template_boxes: 'Boîtes englobant les DROM français',
         fra_template_dept: 'Les 101 départements français',
+      },
+      geometrySource: {
+        'RIATE-IGN-Natural Earth': '© RIATE, à partir des centroïdes des communes IGN et des contours simplifiés Natural Earth',
+        'Natural Earth': '© Natural Earth',
+        RIATE: '© RIATE ',
+        RIATE2: '© RIATE – agrégation des géométries communales',
       },
     },
   },

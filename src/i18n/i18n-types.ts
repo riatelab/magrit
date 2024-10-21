@@ -466,11 +466,11 @@ type RootTranslation = {
 		}
 		nuts0: {
 			/**
-			 * E​u​r​o​p​e​ ​–​ ​N​U​T​S​0
+			 * E​u​r​o​p​e​ ​–​ ​N​U​T​S​ ​0
 			 */
 			name: string
 			/**
-			 * T​h​e​ ​3​7​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​0​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​ ​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m
+			 * T​h​e​ ​3​7​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​ ​0​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​ ​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m
 			 */
 			abstract: string
 			fields: {
@@ -508,11 +508,11 @@ type RootTranslation = {
 		}
 		nuts1: {
 			/**
-			 * E​u​r​o​p​e​ ​–​ ​N​U​T​S​1
+			 * E​u​r​o​p​e​ ​–​ ​N​U​T​S​ ​1
 			 */
 			name: string
 			/**
-			 * T​h​e​ ​1​2​5​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​1​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​ ​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m
+			 * T​h​e​ ​1​2​5​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​ ​1​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​ ​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m
 			 */
 			abstract: string
 			fields: {
@@ -550,11 +550,11 @@ type RootTranslation = {
 		}
 		nuts2: {
 			/**
-			 * E​u​r​o​p​e​ ​–​ ​N​U​T​S​2
+			 * E​u​r​o​p​e​ ​–​ ​N​U​T​S​ ​2
 			 */
 			name: string
 			/**
-			 * T​h​e​ ​3​3​2​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​2​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m
+			 * T​h​e​ ​3​3​2​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​ ​2​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m
 			 */
 			abstract: string
 			fields: {
@@ -592,11 +592,11 @@ type RootTranslation = {
 		}
 		nuts2_data: {
 			/**
-			 * E​u​r​o​p​e​ ​-​ ​N​U​T​S​2​ ​w​i​t​h​ ​e​x​a​m​p​l​e​ ​d​a​t​a
+			 * E​u​r​o​p​e​ ​-​ ​N​U​T​S​ ​2​ ​w​i​t​h​ ​e​x​a​m​p​l​e​ ​d​a​t​a
 			 */
 			name: string
 			/**
-			 * T​h​e​ ​3​2​7​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​2​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m​.​ ​A​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​k​e​y​ ​i​n​d​i​c​a​t​o​r​s​ ​e​x​t​r​a​c​t​e​d​ ​f​r​o​m​ ​E​u​r​o​s​t​a​t​ ​(​l​a​s​t​ ​y​e​a​r​ ​a​v​a​i​l​a​b​l​e​)​ ​a​n​d​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​r​e​f​e​r​e​n​c​e​ ​g​e​o​m​e​t​r​i​e​s
+			 * T​h​e​ ​3​2​7​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​ ​2​ ​(​2​0​1​6​ ​v​e​r​s​i​o​n​)​:​ ​E​U​2​7​,​ ​C​a​n​d​i​d​a​t​e​ ​C​o​u​n​t​r​i​e​s​,​ ​E​u​r​o​p​e​a​n​ ​F​r​e​e​ ​T​r​a​d​e​ ​A​s​s​o​c​i​a​t​i​o​n​ ​a​n​d​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m​.​ ​A​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​k​e​y​ ​i​n​d​i​c​a​t​o​r​s​ ​e​x​t​r​a​c​t​e​d​ ​f​r​o​m​ ​E​u​r​o​s​t​a​t​ ​(​l​a​s​t​ ​y​e​a​r​ ​a​v​a​i​l​a​b​l​e​)​ ​a​n​d​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​r​e​f​e​r​e​n​c​e​ ​g​e​o​m​e​t​r​i​e​s
 			 */
 			abstract: string
 			fields: {
@@ -2212,13 +2212,101 @@ type RootTranslation = {
 		}
 	}
 	Templates: {
+		eu_template: {
+			/**
+			 * E​u​r​o​p​e​a​n​ ​U​n​i​o​n​ ​–​ ​N​U​T​S​ ​(​c​a​r​t​o​g​r​a​p​h​i​c​ ​t​e​m​p​l​a​t​e​)
+			 */
+			name: string
+			/**
+			 * E​u​r​o​p​e​a​n​ ​r​e​g​i​o​n​s​ ​(​N​U​T​S​ ​2​ ​a​n​d​ ​N​U​T​S​ ​3​)​ ​w​i​t​h​ ​n​e​i​g​h​b​o​u​r​i​n​g​ ​c​o​u​n​t​r​i​e​s​ ​a​n​d​ ​o​u​t​e​r​m​o​s​t​ ​r​e​g​i​o​n​s​ ​i​n​ ​b​o​x​e​s​.
+			 */
+			abstract: string
+			/**
+			 * r​e​g​i​o​n​s​,​ ​E​u​r​o​p​e​,​ ​N​U​T​S​2​,​ ​N​U​T​S​3​,​ ​G​I​S​C​O​,​ ​E​u​r​o​s​t​a​t
+			 */
+			keywords: string
+			fieldsMainLayer: {
+				/**
+				 * N​U​T​S​ ​i​d​e​n​t​i​f​i​e​r
+				 */
+				NUTS_ID: string
+				/**
+				 * N​o​m
+				 */
+				NAME_LATN: string
+				/**
+				 * U​r​b​a​n​-​r​u​r​a​l​ ​t​y​p​o​l​o​g​y​ ​f​o​r​ ​N​U​T​S​ ​3​ ​r​e​g​i​o​n​s
+				 */
+				URBN_TYPE: string
+				/**
+				 * M​o​u​n​t​a​i​n​ ​t​y​p​o​l​o​g​y​ ​f​o​r​ ​N​U​T​S​ ​3​ ​r​e​g​i​o​n
+				 */
+				MOUNT_TYPE: string
+				/**
+				 * T​o​t​a​l​ ​a​r​e​a​,​ ​2​0​2​4​ ​(​k​m​²​)
+				 */
+				AREA_2024: string
+				/**
+				 * T​o​t​a​l​ ​p​o​p​u​l​a​t​i​o​n​,​ ​2​0​2​3
+				 */
+				POP_2023: string
+			}
+			layers: {
+				/**
+				 * C​o​u​n​t​r​y​ ​c​a​p​i​t​a​l​ ​l​a​b​e​l​s
+				 */
+				label_cities: string
+				/**
+				 * C​o​u​n​t​r​y​ ​c​a​p​i​t​a​l​s
+				 */
+				eu_template_cities: string
+				/**
+				 * I​n​t​e​r​n​a​t​i​o​n​a​l​ ​b​o​u​n​d​a​r​i​e​s
+				 */
+				eu_template_borders: string
+				/**
+				 * T​h​e​ ​1​4​8​2​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​ ​3​ ​(​2​0​2​1​ ​v​e​r​s​i​o​n​)
+				 */
+				eu_template_nuts3: string
+				/**
+				 * T​h​e​ ​3​2​7​ ​E​u​r​o​p​e​a​n​ ​N​U​T​S​ ​2​ ​(​2​0​2​1​ ​v​e​r​s​i​o​n​)
+				 */
+				eu_template_nuts2: string
+				/**
+				 * C​o​u​n​t​r​y​ ​l​a​y​e​r​ ​(​b​o​x​e​s​)
+				 */
+				eu_template_country_box: string
+				/**
+				 * B​o​x​e​s
+				 */
+				eu_template_boxes: string
+				/**
+				 * C​o​u​n​t​r​y​ ​l​a​y​e​r​ ​(​t​e​m​p​l​a​t​e​ ​f​r​a​m​e​)
+				 */
+				eu_template_country: string
+			}
+			geometrySource: {
+				/**
+				 * ©​ ​N​a​t​u​r​a​l​ ​E​a​r​t​h
+				 */
+				'Natural Earth': string
+				/**
+				 * ©​ ​R​I​A​T​E
+				 */
+				RIATE: string
+				/**
+				 * ©​ ​R​I​A​T​E​,​ ​f​r​o​m​ ​G​I​S​C​O​ 
+				 */
+				'RIATE-GISCO': string
+			}
+		}
 		fra_template: {
 			/**
 			 * F​r​e​n​c​h​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​(​c​a​r​t​o​g​r​a​p​h​i​c​ ​t​e​m​p​l​a​t​e​)
 			 */
 			name: string
 			/**
-			 * A​ ​m​a​p​ ​t​e​m​p​l​a​t​e​ ​o​f​ ​t​h​e​ ​3​4​9​8​7​ ​F​r​e​n​c​h​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​(​2​0​2​3​ ​e​d​i​t​i​o​n​s​)​ ​b​a​s​e​d​ ​o​n​ ​V​o​r​o​n​o​i​ ​p​o​l​y​g​o​n​s
+			 * A​ ​m​a​p​ ​t​e​m​p​l​a​t​e​ ​o​f​ ​t​h​e​ ​3​4​9​8​7​ ​F​r​e​n​c​h​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​(​2​0​2​3​ ​e​d​i​t​i​o​n​s​)​ ​b​a​s​e​d​ ​o​n​ ​V​o​r​o​n​o​i​ ​p​o​l​y​g​o​n​s​,​ ​w​i​t​h​ ​t​h​e​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​o​f​ ​t​h​e​ ​o​v​e​r​s​e​a​s​ ​r​e​g​i​o​n​s​ ​d​i​s​p​l​a​y​e​d​ ​i​n​ ​b​o​x​e​s​,​ ​a​n​d​ ​n​e​i​g​h​b​o​u​r​i​n​g​ ​c​o​u​n​t​r​i​e​s​.
 			 */
 			abstract: string
 			/**
@@ -2269,7 +2357,7 @@ type RootTranslation = {
 			}
 			layers: {
 				/**
-				 * T​h​e​ ​3​4​9​8​7​ ​F​r​e​n​c​h​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​(​2​0​2​3​ ​e​d​i​t​i​o​n​)​ ​i​n​ ​V​o​r​o​n​o​i​ ​p​o​l​y​g​o​n​s​.​ ​O​v​e​r​s​e​a​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​a​r​e​ ​d​i​s​p​l​a​y​e​d​ ​i​n​ ​b​o​x​e​s​.
+				 * T​h​e​ ​3​4​9​8​7​ ​F​r​e​n​c​h​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​(​2​0​2​3​ ​e​d​i​t​i​o​n​)​ ​i​n​ ​V​o​r​o​n​o​i​ ​p​o​l​y​g​o​n​s​.​ ​O​v​e​r​s​e​a​ ​m​u​n​i​c​i​p​a​l​i​t​i​e​s​ ​a​r​e​ ​d​i​s​p​l​a​y​e​d​ ​i​n​ ​b​o​x​e​s
 				 */
 				fra_template_com: string
 				/**
@@ -2277,13 +2365,31 @@ type RootTranslation = {
 				 */
 				fra_template_neighbors: string
 				/**
-				 * B​o​x​e​s​ ​s​u​r​r​o​u​n​d​i​n​g​ ​o​v​e​r​s​e​a​ ​t​e​r​r​i​t​o​r​i​e​s
+				 * B​o​x​e​s​ ​s​u​r​r​o​u​n​d​i​n​g​ ​o​v​e​r​s​e​a​ ​t​e​r​r​i​t​o​r​i​e​s​.
 				 */
 				fra_template_boxes: string
 				/**
-				 * T​h​e​ ​1​0​1​ ​F​r​e​n​c​h​ ​d​e​p​a​r​t​m​e​n​t​s
+				 * T​h​e​ ​1​0​1​ ​F​r​e​n​c​h​ ​d​e​p​a​r​t​m​e​n​t​s​.
 				 */
 				fra_template_dept: string
+			}
+			geometrySource: {
+				/**
+				 * ©​ ​R​I​A​T​E​ ​-​ ​f​r​o​m​ ​I​G​N​ ​m​u​n​i​c​i​p​a​l​i​t​y​ ​c​e​n​t​r​o​i​d​s​ ​a​n​d​ ​N​a​t​u​r​a​l​ ​E​a​r​t​h​ ​s​i​m​p​l​i​f​i​e​d​ ​c​o​n​t​o​u​r​s
+				 */
+				'RIATE-IGN-Natural Earth': string
+				/**
+				 * ©​ ​N​a​t​u​r​a​l​ ​E​a​r​t​h
+				 */
+				'Natural Earth': string
+				/**
+				 * ©​ ​R​I​A​T​E​ 
+				 */
+				RIATE: string
+				/**
+				 * ©​ ​R​I​A​T​E​ ​–​ ​m​u​n​i​c​i​p​a​l​ ​g​e​o​m​e​t​r​i​e​s​ ​a​g​g​r​e​g​a​t​e​d
+				 */
+				RIATE2: string
 			}
 		}
 	}
@@ -6169,11 +6275,11 @@ export type TranslationFunctions = {
 		}
 		nuts0: {
 			/**
-			 * Europe – NUTS0
+			 * Europe – NUTS 0
 			 */
 			name: () => LocalizedString
 			/**
-			 * The 37 European NUTS0 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom
+			 * The 37 European NUTS 0 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom
 			 */
 			abstract: () => LocalizedString
 			fields: {
@@ -6211,11 +6317,11 @@ export type TranslationFunctions = {
 		}
 		nuts1: {
 			/**
-			 * Europe – NUTS1
+			 * Europe – NUTS 1
 			 */
 			name: () => LocalizedString
 			/**
-			 * The 125 European NUTS1 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom
+			 * The 125 European NUTS 1 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom
 			 */
 			abstract: () => LocalizedString
 			fields: {
@@ -6253,11 +6359,11 @@ export type TranslationFunctions = {
 		}
 		nuts2: {
 			/**
-			 * Europe – NUTS2
+			 * Europe – NUTS 2
 			 */
 			name: () => LocalizedString
 			/**
-			 * The 332 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom
+			 * The 332 European NUTS 2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom
 			 */
 			abstract: () => LocalizedString
 			fields: {
@@ -6295,11 +6401,11 @@ export type TranslationFunctions = {
 		}
 		nuts2_data: {
 			/**
-			 * Europe - NUTS2 with example data
+			 * Europe - NUTS 2 with example data
 			 */
 			name: () => LocalizedString
 			/**
-			 * The 327 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom. Associated with key indicators extracted from Eurostat (last year available) and associated with reference geometries
+			 * The 327 European NUTS 2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom. Associated with key indicators extracted from Eurostat (last year available) and associated with reference geometries
 			 */
 			abstract: () => LocalizedString
 			fields: {
@@ -7915,13 +8021,101 @@ export type TranslationFunctions = {
 		}
 	}
 	Templates: {
+		eu_template: {
+			/**
+			 * European Union – NUTS (cartographic template)
+			 */
+			name: () => LocalizedString
+			/**
+			 * European regions (NUTS 2 and NUTS 3) with neighbouring countries and outermost regions in boxes.
+			 */
+			abstract: () => LocalizedString
+			/**
+			 * regions, Europe, NUTS2, NUTS3, GISCO, Eurostat
+			 */
+			keywords: () => LocalizedString
+			fieldsMainLayer: {
+				/**
+				 * NUTS identifier
+				 */
+				NUTS_ID: () => LocalizedString
+				/**
+				 * Nom
+				 */
+				NAME_LATN: () => LocalizedString
+				/**
+				 * Urban-rural typology for NUTS 3 regions
+				 */
+				URBN_TYPE: () => LocalizedString
+				/**
+				 * Mountain typology for NUTS 3 region
+				 */
+				MOUNT_TYPE: () => LocalizedString
+				/**
+				 * Total area, 2024 (km²)
+				 */
+				AREA_2024: () => LocalizedString
+				/**
+				 * Total population, 2023
+				 */
+				POP_2023: () => LocalizedString
+			}
+			layers: {
+				/**
+				 * Country capital labels
+				 */
+				label_cities: () => LocalizedString
+				/**
+				 * Country capitals
+				 */
+				eu_template_cities: () => LocalizedString
+				/**
+				 * International boundaries
+				 */
+				eu_template_borders: () => LocalizedString
+				/**
+				 * The 1482 European NUTS 3 (2021 version)
+				 */
+				eu_template_nuts3: () => LocalizedString
+				/**
+				 * The 327 European NUTS 2 (2021 version)
+				 */
+				eu_template_nuts2: () => LocalizedString
+				/**
+				 * Country layer (boxes)
+				 */
+				eu_template_country_box: () => LocalizedString
+				/**
+				 * Boxes
+				 */
+				eu_template_boxes: () => LocalizedString
+				/**
+				 * Country layer (template frame)
+				 */
+				eu_template_country: () => LocalizedString
+			}
+			geometrySource: {
+				/**
+				 * © Natural Earth
+				 */
+				'Natural Earth': () => LocalizedString
+				/**
+				 * © RIATE
+				 */
+				RIATE: () => LocalizedString
+				/**
+				 * © RIATE, from GISCO 
+				 */
+				'RIATE-GISCO': () => LocalizedString
+			}
+		}
 		fra_template: {
 			/**
 			 * French municipalities (cartographic template)
 			 */
 			name: () => LocalizedString
 			/**
-			 * A map template of the 34987 French municipalities (2023 editions) based on Voronoi polygons
+			 * A map template of the 34987 French municipalities (2023 editions) based on Voronoi polygons, with the municipalities of the overseas regions displayed in boxes, and neighbouring countries.
 			 */
 			abstract: () => LocalizedString
 			/**
@@ -7972,7 +8166,7 @@ export type TranslationFunctions = {
 			}
 			layers: {
 				/**
-				 * The 34987 French municipalities (2023 edition) in Voronoi polygons. Oversea municipalities are displayed in boxes.
+				 * The 34987 French municipalities (2023 edition) in Voronoi polygons. Oversea municipalities are displayed in boxes
 				 */
 				fra_template_com: () => LocalizedString
 				/**
@@ -7980,13 +8174,31 @@ export type TranslationFunctions = {
 				 */
 				fra_template_neighbors: () => LocalizedString
 				/**
-				 * Boxes surrounding oversea territories
+				 * Boxes surrounding oversea territories.
 				 */
 				fra_template_boxes: () => LocalizedString
 				/**
-				 * The 101 French departments
+				 * The 101 French departments.
 				 */
 				fra_template_dept: () => LocalizedString
+			}
+			geometrySource: {
+				/**
+				 * © RIATE - from IGN municipality centroids and Natural Earth simplified contours
+				 */
+				'RIATE-IGN-Natural Earth': () => LocalizedString
+				/**
+				 * © Natural Earth
+				 */
+				'Natural Earth': () => LocalizedString
+				/**
+				 * © RIATE 
+				 */
+				RIATE: () => LocalizedString
+				/**
+				 * © RIATE – municipal geometries aggregated
+				 */
+				RIATE2: () => LocalizedString
 			}
 		}
 	}

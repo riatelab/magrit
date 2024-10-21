@@ -1,5 +1,75 @@
 [
   {
+    "id": "eu_template",
+    "active": true,
+    "layers": [
+      {
+        "id": "label_cities",
+        "role": "layout",
+        "type": "vector",
+        "totalFeatures": 44,
+        "source": "Natural Earth",
+        "url": "https://rysebaert.github.io/map_template/"
+      },
+      {
+        "id": "eu_template_cities",
+        "role": "layout",
+        "type": "vector",
+        "totalFeatures": 44,
+        "source": "Natural Earth",
+        "url": "https://rysebaert.github.io/map_template/"
+      },
+      {
+        "id": "eu_template_borders",
+        "role": "layout",
+        "type": "vector",
+        "totalFeatures": 186,
+        "source": "RIATE-GISCO",
+        "url": "https://rysebaert.github.io/map_template/"
+      },
+      {
+        "id": "eu_template_nuts3",
+        "role": "main",
+        "type": "vector",
+        "totalFeatures": 1482,
+        "source": "RIATE-GISCO",
+        "url": "https://rysebaert.github.io/map_template/"
+      },
+      {
+        "id": "eu_template_nuts2",
+        "role": "main",
+        "type": "vector",
+        "totalFeatures": 327,
+        "source": "RIATE-GISCO",
+        "url": "https://rysebaert.github.io/map_template/"
+      },
+      {
+        "id": "eu_template_country_box",
+        "role": "layout",
+        "type": "vector",
+        "totalFeatures": 15,
+        "source": "RIATE-GISCO",
+        "url": "https://rysebaert.github.io/map_template/"
+      },
+      {
+        "id": "eu_template_boxes",
+        "role": "layout",
+        "type": "vector",
+        "totalFeatures": 9,
+        "source": "RIATE",
+        "url": "https://rysebaert.github.io/map_template/"
+      },
+      {
+        "id": "eu_template_country",
+        "role": "layout",
+        "type": "vector",
+        "totalFeatures": 56,
+        "source": "RIATE-GISCO",
+        "url": "https://rysebaert.github.io/map_template/"
+      }
+    ]
+  },
+  {
     "id": "fra_template",
     "active": true,
     "layers": [
@@ -7,25 +77,33 @@
         "id": "fra_template_com",
         "role": "main",
         "type": "vector",
-        "totalFeatures": 34945
+        "totalFeatures": 34945,
+        "source": "RIATE-IGN-Natural Earth",
+        "url": "https://rysebaert.gitpages.huma-num.fr/fr_template/"
       },
       {
         "id": "fra_template_neighbors",
         "role": "layout",
         "type": "vector",
-        "totalFeatures": 16
+        "totalFeatures": 16,
+        "source": "Natural Earth",
+        "url": "https://rysebaert.gitpages.huma-num.fr/fr_template/"
       },
       {
         "id": "fra_template_boxes",
         "role": "layout",
         "type": "vector",
-        "totalFeatures": 5
+        "totalFeatures": 5,
+        "source": "RIATE",
+        "url": "https://rysebaert.gitpages.huma-num.fr/fr_template/"
       },
       {
         "id": "fra_template_dept",
         "role": "layout",
         "type": "vector",
-        "totalFeatures": 101
+        "totalFeatures": 101,
+        "source": "RIATE2",
+        "url": "https://rysebaert.gitpages.huma-num.fr/fr_template/"
       }
     ],
     "defaultProjection": {

@@ -167,8 +167,8 @@ const en = {
       },
     },
     nuts0: {
-      name: 'Europe – NUTS0',
-      abstract: 'The 37 European NUTS0 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom',
+      name: 'Europe – NUTS 0',
+      abstract: 'The 37 European NUTS 0 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom',
       fields: {
         NUTS_ID: 'NUTS identifier',
         NAME_LATN: 'Name',
@@ -182,8 +182,8 @@ const en = {
       },
     },
     nuts1: {
-      name: 'Europe – NUTS1',
-      abstract: 'The 125 European NUTS1 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom',
+      name: 'Europe – NUTS 1',
+      abstract: 'The 125 European NUTS 1 (2016 version) : EU27, Candidate Countries, European Free Trade Association and United Kingdom',
       fields: {
         NUTS_ID: 'NUTS identifier',
         NAME_LATN: 'Name',
@@ -197,8 +197,8 @@ const en = {
       },
     },
     nuts2: {
-      name: 'Europe – NUTS2',
-      abstract: 'The 332 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom',
+      name: 'Europe – NUTS 2',
+      abstract: 'The 332 European NUTS 2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom',
       fields: {
         NUTS_ID: 'NUTS identifier',
         NAME_LATN: 'Name',
@@ -212,8 +212,8 @@ const en = {
       },
     },
     nuts2_data: {
-      name: 'Europe - NUTS2 with example data',
-      abstract: 'The 327 European NUTS2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom. Associated with key indicators extracted from Eurostat (last year available) and associated with reference geometries',
+      name: 'Europe - NUTS 2 with example data',
+      abstract: 'The 327 European NUTS 2 (2016 version): EU27, Candidate Countries, European Free Trade Association and United Kingdom. Associated with key indicators extracted from Eurostat (last year available) and associated with reference geometries',
       fields: {
         NUTS_ID: 'NUTS identifier',
         NAME_LATN: 'Name',
@@ -483,9 +483,37 @@ const en = {
     },
   },
   Templates: {
+    eu_template: {
+      name: 'European Union – NUTS (cartographic template)',
+      abstract: 'European regions (NUTS 2 and NUTS 3) with neighbouring countries and outermost regions in boxes.',
+      keywords: 'regions, Europe, NUTS2, NUTS3, GISCO, Eurostat',
+      fieldsMainLayer: {
+        NUTS_ID: 'NUTS identifier',
+        NAME_LATN: 'Nom',
+        URBN_TYPE: 'Urban-rural typology for NUTS 3 regions',
+        MOUNT_TYPE: 'Mountain typology for NUTS 3 region',
+        AREA_2024: 'Total area, 2024 (km²)',
+        POP_2023: 'Total population, 2023',
+      },
+      layers: {
+        label_cities: 'Country capital labels',
+        eu_template_cities: 'Country capitals',
+        eu_template_borders: 'International boundaries',
+        eu_template_nuts3: 'The 1482 European NUTS 3 (2021 version)',
+        eu_template_nuts2: 'The 327 European NUTS 2 (2021 version)',
+        eu_template_country_box: 'Country layer (boxes)',
+        eu_template_boxes: 'Boxes',
+        eu_template_country: 'Country layer (template frame)',
+      },
+      geometrySource: {
+        'Natural Earth': '© Natural Earth',
+        RIATE: '© RIATE',
+        'RIATE-GISCO': '© RIATE, from GISCO ',
+      },
+    },
     fra_template: {
       name: 'French municipalities (cartographic template)',
-      abstract: 'A map template of the 34987 French municipalities (2023 editions) based on Voronoi polygons',
+      abstract: 'A map template of the 34987 French municipalities (2023 editions) based on Voronoi polygons, with the municipalities of the overseas regions displayed in boxes, and neighbouring countries.',
       keywords: 'France, communes, municipalities, metropolitan areas',
       fieldsMainLayer: {
         INSEE_COM: 'Municipal identifier',
@@ -500,10 +528,16 @@ const en = {
         BV2022: 'Life basin of belonging',
       },
       layers: {
-        fra_template_com: 'The 34987 French municipalities (2023 edition) in Voronoi polygons. Oversea municipalities are displayed in boxes.',
+        fra_template_com: 'The 34987 French municipalities (2023 edition) in Voronoi polygons. Oversea municipalities are displayed in boxes',
         fra_template_neighbors: 'French neighbouring countries, following the geographical coverage of the map template.',
-        fra_template_boxes: 'Boxes surrounding oversea territories',
-        fra_template_dept: 'The 101 French departments',
+        fra_template_boxes: 'Boxes surrounding oversea territories.',
+        fra_template_dept: 'The 101 French departments.',
+      },
+      geometrySource: {
+        'RIATE-IGN-Natural Earth': '© RIATE - from IGN municipality centroids and Natural Earth simplified contours',
+        'Natural Earth': '© Natural Earth',
+        RIATE: '© RIATE ',
+        RIATE2: '© RIATE – municipal geometries aggregated',
       },
     },
   },

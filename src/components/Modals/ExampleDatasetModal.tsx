@@ -18,6 +18,7 @@ import { FaSolidDatabase } from 'solid-icons/fa';
 import { ImFilter } from 'solid-icons/im';
 import { HiSolidDocumentText } from 'solid-icons/hi';
 import { BsMap } from 'solid-icons/bs';
+import { FiExternalLink } from 'solid-icons/fi';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -73,6 +74,8 @@ interface TemplateLayer {
   role: 'main' | 'layout',
   type: 'vector' | 'raster',
   totalFeatures: number,
+  source: string,
+  url: string,
 }
 
 interface DataProvider {
@@ -226,22 +229,30 @@ function CardTemplateDetail(t: TemplateEntry): JSX.Element {
   const { LL } = useI18nContext();
   return <div>
     <h3>{LL().Templates[t.id].name()}</h3>
-    <h4>{LL().DatasetCatalog.about()}</h4>
-    <div>
-      <table>
-        <tbody>
-        <tr>
-          <td>{LL().DatasetCatalog.layers()}</td>
-          <td>{t.layers.map((l) => LL().Templates[t.id].layers[l.id]()).join(', ')}</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-    <br/>
     <h4>{LL().DatasetCatalog.description()}</h4>
     <div>
       <p>{LL().Templates[t.id].abstract()}</p>
     </div>
+    <br />
+    <h4>{LL().DatasetCatalog.layers()}</h4>
+    <ul>
+      <For each={t.layers}>
+        {
+          (l) => (l.role === 'main'
+            ? <li>
+              <b>{LL().Templates[t.id].layers[l.id]()}</b>
+              &nbsp;({LL().Templates[t.id].geometrySource[l.source]},
+              &nbsp;<a href={l.url} target="_blank">source <FiExternalLink /></a>)
+            </li>
+            : <li>
+              {LL().Templates[t.id].layers[l.id]()}
+              &nbsp;({LL().Templates[t.id].geometrySource[l.source]},
+              &nbsp;<a href={l.url} target="_blank">source <FiExternalLink/></a>)
+            </li>)
+        }
+      </For>
+    </ul>
+    <br/>
     <h4>{LL().DatasetCatalog.preview()}</h4>
     <div class="has-text-centered">
       <img
@@ -257,7 +268,12 @@ function CardTemplateDetail(t: TemplateEntry): JSX.Element {
 function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
   const { LL } = useI18nContext();
   return <div>
-    <h3>{LL().Datasets[ds.id].name()}</h3>
+  <h3>{LL().Datasets[ds.id].name()}</h3>
+    <h4>{LL().DatasetCatalog.description()}</h4>
+    <div>
+      <p> {LL().Datasets[ds.id].abstract()}</p>
+    </div>
+    <br/>
     <h4>{LL().DatasetCatalog.about()}</h4>
     <div>
       <table>
@@ -274,7 +290,7 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
         </Show>
         <tr>
           <td>{LL().DatasetCatalog.providerGeometry()}</td>
-          <td>{ds.geometry.source}</td>
+          <td><a href={ds.geometry.url} target="_blank">{ds.geometry.source} <FiExternalLink /></a></td>
         </tr>
         <tr>
           <td>{LL().DatasetCatalog.attributionGeometry()}</td>
@@ -286,7 +302,16 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
         </tr>
         <tr>
           <td>{LL().DatasetCatalog.providerData()}</td>
-          <td>{ds.data.map((d) => d.source).join(', ')}</td>
+          <td>
+            <For each={ds.data}>
+              {
+                (d, i) => <span>
+                  {i() > 0 && ', '}
+                  <a href={d.url} target="_blank">{d.source} <FiExternalLink /></a>
+                </span>
+              }
+            </For>
+          </td>
         </tr>
         <tr>
           <td>{LL().DatasetCatalog.attributionData()}</td>
@@ -300,39 +325,34 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
         </tbody>
       </table>
     </div>
-    <br/>
-    <h4>{LL().DatasetCatalog.description()}</h4>
-    <div>
-      <p> {LL().Datasets[ds.id].abstract()}</p>
-    </div>
-    <br/>
+    <br />
     <h4>{LL().DatasetCatalog.variableDescription()}</h4>
     <table style={{ 'font-size': '0.8rem', width: '100%' }} class="table">
       <thead>
-        <tr>
-          <th>{LL().DatasetCatalog.variable.name()}</th>
-          <th>{LL().DatasetCatalog.variable.description()}</th>
-          <th>{LL().DatasetCatalog.variable.provenance()}</th>
-        </tr>
+      <tr>
+        <th>{LL().DatasetCatalog.variable.name()}</th>
+        <th>{LL().DatasetCatalog.variable.description()}</th>
+        <th>{LL().DatasetCatalog.variable.provenance()}</th>
+      </tr>
       </thead>
       <tbody>
-        <For each={ds.fields}>
-          {
-            (variableDescription) => <tr>
-              <td>{variableDescription.name}</td>
-              <td>{LL().Datasets[ds.id].fields[variableDescription.name]()}</td>
-              <td>{
-                variableDescription.provenance === 0
-                  ? LL().Datasets[ds.id].geometryAttribution()
-                  : LL().Datasets[ds.id].dataAttribution[variableDescription.provenance]()
+      <For each={ds.fields}>
+        {
+          (variableDescription) => <tr>
+            <td>{variableDescription.name}</td>
+            <td>{LL().Datasets[ds.id].fields[variableDescription.name]()}</td>
+            <td>{
+              variableDescription.provenance === 0
+                ? LL().Datasets[ds.id].geometryAttribution()
+                : LL().Datasets[ds.id].dataAttribution[variableDescription.provenance]()
 
-              }</td>
-            </tr>
-          }
-        </For>
+            }</td>
+          </tr>
+        }
+      </For>
       </tbody>
     </table>
-    <h4>{LL().DatasetCatalog.preview() }</h4>
+    <h4>{LL().DatasetCatalog.preview()}</h4>
     <div class="has-text-centered">
       <img
         src={`dataset/${ds.id}.png`}
@@ -588,7 +608,18 @@ export default function ExampleDatasetModal(): JSX.Element {
       .split(' ')
       .map((t) => removeDiacritics(t.toLowerCase()));
 
-    return templates.filter((ds) => true);
+    return templates.filter((t) => {
+      let found = false;
+      const keywords = LL().Templates[t.id].keywords().split(',').map((k) => removeDiacritics(k.trim().toLowerCase()));
+      terms.forEach((term: string) => {
+        keywords.forEach((keyword: string) => {
+          if (keyword.includes(term)) {
+            found = true;
+          }
+        });
+      });
+      return found;
+    });
   };
 
   onMount(() => {
@@ -824,7 +855,7 @@ export default function ExampleDatasetModal(): JSX.Element {
                   onClick={() => {
                     setSelectedSearchTerms('');
                     setCurrentPageTemplate(1);
-                    setFilteredDatasets(filterTemp());
+                    setFilteredTemplates(filterTemp());
                   }}
                 >
                   X
@@ -837,7 +868,7 @@ export default function ExampleDatasetModal(): JSX.Element {
                   height: '1.5em',
                   width: '1.5em',
                   'margin-right': '1em',
-                  opacity: filteredTemplates().length === datasets.length ? 0 : 1,
+                  opacity: filteredTemplates().length === templates.length ? 0 : 1,
                 }}
               />
               <span>{LL().DatasetCatalog.datasets(filteredTemplates().length)}</span>
