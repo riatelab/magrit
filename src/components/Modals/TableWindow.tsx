@@ -22,7 +22,7 @@ import toast from 'solid-toast';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
-import { sanitizeColumnName, unproxify } from '../../helpers/common';
+import { replaceNullByUndefined, sanitizeColumnName, unproxify } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
 import { isDarkMode } from '../../helpers/darkmode';
 import { clickLinkFromBlob } from '../../helpers/exports';
@@ -71,6 +71,14 @@ function formatSampleOutput(
   return formatValidSampleOutput(s.value);
 }
 
+const addMaxWidthAttr = (columnDefs: any[]): any[] => {
+  for (let i = 0; i < columnDefs.length; i += 1) {
+    // eslint-disable-next-line no-param-reassign
+    columnDefs[i].maxWidth = 300;
+  }
+  return columnDefs;
+};
+
 function NewFieldPanel(
   props: {
     typeDs: 'layer' | 'table';
@@ -112,7 +120,7 @@ function NewFieldPanel(
     const lengthDataset = props.rowData().length;
     const formula = replaceSpecialFields(currentFormula(), lengthDataset);
     const query = `SELECT ${formula} as newValue FROM ?`;
-    const data = props.rowData().slice();
+    const data = replaceNullByUndefined(props.rowData().slice());
 
     // Add special fields if needed
     if (hasSpecialFieldId(formula)) {
@@ -146,7 +154,10 @@ function NewFieldPanel(
 
     // Remove positive / negative infinity values and NaN
     newColumn.forEach((d) => {
-      if (d.newValue === Infinity || d.newValue === -Infinity || Number.isNaN(d.newValue)) {
+      if (
+        d.newValue === Infinity || d.newValue === -Infinity
+        || Number.isNaN(d.newValue) || d.newValue === undefined
+      ) {
         d.newValue = null; // eslint-disable-line no-param-reassign
       }
     });
@@ -265,7 +276,7 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
         if (!fd) {
           console.log(`Missing field description for field: ${key}`);
         }
-        const o = { field: key, headerName: key, maxWidth: 300 };
+        const o = { field: key, headerName: key };
         if (fd && fd.dataType === 'number') {
           o.type = 'numericColumn';
           o.cellEditor = 'agNumberCellEditor';
@@ -279,7 +290,7 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
         if (!fd) {
           console.log(`Missing field description for field: ${key}`);
         }
-        const o = { field: key, headerName: key, maxWidth: 300 };
+        const o = { field: key, headerName: key };
         if (fd && fd.dataType === 'number') {
           o.type = 'numericColumn';
           o.cellEditor = 'agNumberCellEditor';
@@ -501,8 +512,7 @@ export default function TableWindow(): JSX.Element {
 
     // Update the column definitions
     setColumnDefs(
-      columnDefs().concat({ field: variableName, headerName: variableName })
-        .map((colDef) => ({ ...colDef, maxWidth: 300 })),
+      columnDefs().concat({ field: variableName, headerName: variableName }),
     );
 
     // Remember that the data has been edited (to ask for confirmation when closing the modal)
@@ -669,7 +679,7 @@ export default function TableWindow(): JSX.Element {
             <AgGridSolid
               ref={ agGridRef! }
               rowData={ rowData() }
-              columnDefs={ columnDefs() }
+              columnDefs={ addMaxWidthAttr(columnDefs()) }
               defaultColDef={ defaultColDef }
               onCellValueChanged={ () => { setDataEdited(true); } }
               suppressDragLeaveHidesColumns={ true }

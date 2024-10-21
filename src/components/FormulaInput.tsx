@@ -15,7 +15,7 @@ import alasql from 'alasql';
 
 // Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
-import { capitalizeFirstLetter, unproxify } from '../helpers/common';
+import { capitalizeFirstLetter, replaceNullByUndefined, unproxify } from '../helpers/common';
 
 // Types
 import type {
@@ -149,7 +149,7 @@ export default function FormulaInput(
     }
 
     const query = `SELECT ${formula} as newValue FROM ?`;
-    const data = unproxify(props.records.slice(0, 8));
+    const data = replaceNullByUndefined(unproxify(props.records.slice(0, 8)));
 
     if (hasSpecialFieldId(formula)) {
       data.forEach((d, i) => {
@@ -224,7 +224,8 @@ export default function FormulaInput(
                   // If the field name contains spaces or special characters,
                   // we need to put it between brackets
                   let fieldValue = field;
-                  if (/[àâäéèêëîïôöùûüç -+]/i.test(fieldValue)) {
+                  // Note that the two dashes are not the same
+                  if (/[àâäéèêëîïôöùûüç --+]/i.test(fieldValue)) {
                     fieldValue = `[${fieldValue}]`;
                   }
                   // Insert the field in the formula

@@ -165,6 +165,31 @@ export const precisionToMinimumFractionDigits = (precision: number) => {
   return precision;
 };
 
+/**
+ * Replace all null values in an array of objects by undefined (returns a new array
+ * with new objects).
+ * @param {Array<Record<string, any>>} obj - The array of objects.
+ * @returns {Array<Record<string, any>>} - The array of objects with replaced null values.
+ */
+export const replaceNullByUndefined = (
+  obj: Record<string, any>[],
+): Record<string, any>[] => {
+  const res = [];
+  const keys = Object.keys(obj[0]);
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < obj.length; i++) {
+    const o = { ...obj[i] };
+    // eslint-disable-next-line no-plusplus
+    for (let j = 0; j < keys.length; j++) {
+      if (o[keys[j]] === null) {
+        o[keys[j]] = undefined;
+      }
+    }
+    res.push(o);
+  }
+  return res;
+};
+
 /* eslint-disable no-return-assign, no-param-reassign, no-sequences */
 export const camelToFlat = (c: string) => (
   c = c.replace(/[A-Z]|([0-9]+)/g, ' $&'), c[0].toUpperCase() + c.slice(1)).trim();
@@ -178,6 +203,11 @@ export const camelToFlat = (c: string) => (
  */
 export const getUniqueValues = (values: number[]) => Array.from(new Set(values));
 
+/**
+ * Sanitize a column name by replacing special characters with spaces.
+ * @param {string} c - The column name to sanitize.
+ * @returns {string} - The sanitized column name.
+ */
 export const sanitizeColumnName = (c: string) => c.replace(/[\r\n]+/g, ' ')
   .replace(/[.,/#!$%^&*;:{}=`~()]/g, ' ')
   .replace(/\s{2,}/g, ' ')
