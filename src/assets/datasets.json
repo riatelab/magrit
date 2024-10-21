@@ -1281,12 +1281,6 @@
     },
     "data": [
       {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
-      {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
         "download_date": "2024-07-03",
@@ -1382,12 +1376,6 @@
       "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
     },
     "data": [
-      {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
       {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
@@ -1485,12 +1473,6 @@
     },
     "data": [
       {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
-      {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
         "download_date": "2024-07-03",
@@ -1586,12 +1568,6 @@
       "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
     },
     "data": [
-      {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
       {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
@@ -1689,12 +1665,6 @@
     },
     "data": [
       {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
-      {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
         "download_date": "2024-07-03",
@@ -1790,12 +1760,6 @@
       "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
     },
     "data": [
-      {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
       {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
@@ -1893,12 +1857,6 @@
     },
     "data": [
       {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
-      {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
         "download_date": "2024-07-03",
@@ -1994,12 +1952,6 @@
       "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
     },
     "data": [
-      {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
       {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
@@ -2097,12 +2049,6 @@
     },
     "data": [
       {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
-      {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
         "download_date": "2024-07-03",
@@ -2198,12 +2144,7 @@
       "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
     },
     "data": [
-      {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
+
       {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
@@ -2301,12 +2242,6 @@
     },
     "data": [
       {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
-      {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
         "download_date": "2024-07-03",
@@ -2402,12 +2337,6 @@
       "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
     },
     "data": [
-      {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
       {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
@@ -2505,12 +2434,6 @@
     },
     "data": [
       {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
-      {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
         "download_date": "2024-07-03",
@@ -2606,12 +2529,6 @@
       "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
     },
     "data": [
-      {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
       {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
@@ -2709,12 +2626,6 @@
     },
     "data": [
       {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
-      {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
         "download_date": "2024-07-03",
@@ -2810,12 +2721,6 @@
       "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
     },
     "data": [
-      {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
       {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
@@ -2913,12 +2818,6 @@
     },
     "data": [
       {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
-      {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
         "download_date": "2024-07-03",
@@ -3014,12 +2913,6 @@
       "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
     },
     "data": [
-      {
-        "source": "IGN-RIATE",
-        "url": "https://geoservices.ign.fr/adminexpress",
-        "download_date": "2024-07-03",
-        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
-      },
       {
         "source": "INSEE",
         "url": "https://www.insee.fr/fr/information/7671844",
