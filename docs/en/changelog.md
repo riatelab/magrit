@@ -2,7 +2,6 @@
 
 <br />
 
-
 #### 2.0.19 (unreleased)
 
 - Improve rendering of bar chart legend element used for categorical choropleth maps.
@@ -16,6 +15,10 @@
 - Add a menu for selecting complete cartographic templates (composed of several layers) in the window for example datasets.
 
 - Add map templates for France and Europe (Template design, data retrieval and preparation, etc. all by [@rysebaert](https://github.com/rysebaert)).
+
+- Fix moving of legends / labels / layout features on touch screens (fixes <a href="https://github.com/riatelab/magrit/issues/146">146</a>).
+
+- Fix the use of some SQL functions in the field calculator when null values are present.
 
 #### 2.0.18 (2024-10-10)
 

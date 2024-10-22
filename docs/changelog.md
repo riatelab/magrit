@@ -17,6 +17,10 @@
 
 - Ajout de templates cartographiques pour la France et l'Europe (Conception du template, récupération et préparation des données, etc. par [@rysebaert](https://github.com/rysebaert)).
 
+- Corrige le déplacement des légendes / étiquettes / éléments d'habillage sur les écrans tactiles (corrige <a href="https://github.com/riatelab/magrit/issues/146">146</a>).
+
+- Corrige l'utilisation de certaines fonction SQL dans la calculatrice de champs lors de la présence de valeur nulles.
+
 #### 2.0.18 (2024-10-10)
 
 - Correction d'un bug de typage des champs lors de l'import d'un fichier CSV pour les champs contenant des valeurs numériques avec des zéros et des NA, introduced in 2.0.16
