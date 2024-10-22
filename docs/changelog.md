@@ -2,7 +2,7 @@
 
 <br />
 
-#### 2.0.19 (unreleased)
+#### 2.0.19 (2024-10-22)
 
 - Améliore le rendu du bar chart utilisé comme élément de légende pour les cartes choroplèthes catégorielles.
 

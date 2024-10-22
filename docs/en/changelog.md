@@ -2,7 +2,7 @@
 
 <br />
 
-#### 2.0.19 (unreleased)
+#### 2.0.19 (2024-10-22)
 
 - Improve rendering of bar chart legend element used for categorical choropleth maps.
 
