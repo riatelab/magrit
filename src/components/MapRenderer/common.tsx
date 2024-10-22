@@ -97,6 +97,7 @@ export function bindDragBehavior(
     outerSvg.removeEventListener('mouseup', deselectElement);
     outerSvg.removeEventListener('touchmove', moveElement);
     outerSvg.removeEventListener('touchend', deselectElement);
+    outerSvg.removeEventListener('touchcancel', deselectElement);
 
     // Remove the red dot that was displayed at the original position of the element
     outerSvg.removeChild(redDot);
@@ -135,6 +136,7 @@ export function bindDragBehavior(
     outerSvg.addEventListener('mouseup', deselectElement);
     outerSvg.addEventListener('touchmove', moveElement);
     outerSvg.addEventListener('touchend', deselectElement);
+    outerSvg.addEventListener('touchcancel', deselectElement);
 
     // Cursor style
     // First change the cursor of the element to grabbing
