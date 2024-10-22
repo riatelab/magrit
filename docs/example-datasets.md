@@ -12,7 +12,7 @@ trouver des jeux de données sont listés plus bas).
     caption="Fenêtre de sélection des jeux de données d'exemple"
 />
 
-## Données proposées dans l'application
+## Fonds de cartes proposés dans l'application
 
 ### NUTS0
 
@@ -56,6 +56,40 @@ Dans cette version les DROM sont rapprochés de la métropole afin de permettre 
 
 Les communes, édition 2023, sont mises à disposition pour chacune des régions françaises et chacun des DROM.
 
+## Templates cartographiques
+
+Plusieurs templates cartographiques sont proposés dans Magrit. Il s'agit d'un ensemble de couches (fond de carte principal et couche d'habillage)
+prêts à être utilisés pour la création de cartes thématiques sur une espace donné.
+
+Deux premiers templates sont proposés et d'autres seront ajoutés dans les prochaines versions.
+
+### Europe
+
+Le template cartographique contient deux couches principales NUTS 2 et NUTS 3 ainsi que différentes couches d'habillage (pays voisins, capitales, boites, etc.).
+
+Dans ce modèle, les territoires ultrapériphériques de l'Union européenne sont rapprochés de l'Europe continentale et disposés dans des boites pour une meilleure visualisation.
+
+Le continent européen est représenté dans la projection cartographique de officiel de l'Union européenne (EPSG:3035).
+
+<ZoomImg
+    src="/eu_template.png"
+    alt="Template cartographique pour l'Europe"
+    caption="Template cartographique pour l'Europe"
+/>
+
+### France 
+
+Le template contient une couche principale des communes de France métropolitaine et DROM ainsi que différentes couches d'habillage (pays voisins, boites, etc.).
+
+Dans ce modèle, les départements et régions d'outre-mer sont rapprochés de la métropole et disposés dans des boites pour une meilleure visualisation.
+
+La France métropolitaine est représentée dans la projection cartographique officielle (EPSG:2154).
+
+<ZoomImg
+    src="/fra_template.png"
+    alt="Template cartographique pour la France"
+    caption="Template cartographique pour la France"
+/>
 
 ## Où trouver d'autres jeux de données ?
 

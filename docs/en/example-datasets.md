@@ -58,3 +58,32 @@ Edition 2023.
 
 The communes, 2023 edition, are available for each of the French regions and DROMs.
 
+## Cartographic templates
+
+## Europe
+
+The cartographic template contains two main layers, NUTS 2 and NUTS 3, as well as a number of layout layers (neighboring countries, capitals, boxes, etc.).
+
+In this template, the outermost territories of the European Union are brought closer to continental Europe and arranged in boxes for better visualization.
+
+The European continent is represented in the official map projection of the European Union (EPSG:3035).
+
+<ZoomImg
+    src="/eu_template.png"
+    alt="Cartographic template for Europe"
+    caption="Template cartographique Europe"
+/>
+
+## France
+
+The template contains a main layer of communes in mainland France and DROM, as well as various layout layers (neighboring countries, boxes, etc.).
+
+In this template, the overseas departments and regions are brought closer to mainland France and arranged in boxes for better visualization.
+
+Metropolitan France is represented in the official map projection (EPSG:2154).
+
+<ZoomImg
+    src="/fra_template.png"
+    alt="Cartographic template for France"
+    caption="Cartographic template France"
+/>

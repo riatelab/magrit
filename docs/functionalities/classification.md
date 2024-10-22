@@ -106,6 +106,16 @@ des options permettent de choisir si une classe centrale (neutre) doit être pr�
 la position de cette classe (ou du point d'inflexion le cas échéant), permettant de générer des
 palettes divergentes asymétriques.
 
+Il est également possible de choisir une palette de couleurs personnalisée en cliquant sur l'option "Palette personnalisée" (voir ci-dessous).
+
+
+<ZoomImg
+    src="/classification-custom-palette.png"
+    alt="Fenêtre de discrétisation avec palette personnalisée"
+    caption="Fenêtre de discrétisation avec palette personnalisée"
+/>
+
+
 ## En savoir plus sur le choix d'une discrétisation en cartographie thématique
 
 Vous pouvez consulter l'article [Géovisualisation des discrétisations : une petite application pédagogique](http://mappemonde.mgm.fr/119geov1/) (par Laurent Jégou),

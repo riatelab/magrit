@@ -103,3 +103,10 @@ These palettes can be generated for any number of classes. For divergent palette
 options allow you to choose whether or not a central (neutral) class should be present, and
 the position of this class (or of the inflection point, if applicable), enabling you to generate asymmetrical divergent palettes.
 
+You can also choose a custom color palette by clicking on the “Custom palette” option (see below).
+
+<ZoomImg
+    src="/classification-custom-palette.png"
+    alt="Custom color palette"
+    caption="Custom color palette"
+/>
