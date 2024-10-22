@@ -1368,6 +1368,7 @@ const fr = {
       pretty: 'Discrétisation avec la méthode "pretty breaks"',
       geometricProgression: 'Discrétisation avec une progression géométrique',
       arithmeticProgression: 'Discrétisation avec une progression arithmétique',
+      nestedMeans: 'Discrétisation en moyennes emboitées',
       headTail: 'Discrétisation avec la méthode "head/tail"',
       manual: 'Discrétisation manuelle',
     },

@@ -20,7 +20,6 @@ import { webSafeFonts, fonts } from '../../helpers/font';
 import { makeDorlingDemersSimulation } from '../../helpers/geo';
 import { generateIdLegend } from '../../helpers/legends';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
-import { semiCirclePath } from '../../helpers/svg';
 
 // Sub-components
 import DetailsSummary from '../DetailsSummary.tsx';
@@ -49,7 +48,6 @@ import {
 } from '../../store/LayersDescriptionStore';
 import { setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
-import { globalStore } from '../../store/GlobalStore';
 
 // Types / Interfaces
 import {
@@ -79,7 +77,7 @@ import {
   type GeoJSONFeature,
   type ProportionalSymbolSingleColorParameters,
   type LayerDescriptionCategoricalPictogram,
-  type CategoricalPictogramParameters, type ID3Element,
+  type CategoricalPictogramParameters, ClassificationMethod,
 } from '../../global.d';
 
 // Styles
@@ -114,6 +112,39 @@ const redrawLayer = (targetId: string) => {
     produce((draft: LayersDescriptionStoreType) => {
       const layer = draft.layers.find((l) => l.id === targetId) as LayerDescriptionLabels;
       layer.visible = true;
+    }),
+  );
+};
+
+/**
+ * Update the note of the legend of a choropleth layer
+ * to change the "Classified using XXX method" if any
+ * and if the classification method has changed.
+ * @param {string} targetId
+ * @param {ClassificationMethod} newMethod
+ * @param {Accessor<TranslationFunctions>} LL
+ */
+const updateLegendNote = (
+  targetId: string,
+  newMethod: ClassificationMethod,
+  LL: Accessor<TranslationFunctions>,
+) => {
+  // All the possible 'Classified using XXX method' messages in the current language
+  const allMessages = Object.values(ClassificationMethod)
+    .map((m) => LL().ClassificationPanel.classificationMethodLegendDescriptions[m]() as string);
+
+  setLayersDescriptionStoreBase(
+    produce((draft: LayersDescriptionStoreType) => {
+      draft.layoutFeaturesAndLegends.forEach((l) => {
+        if (l.layerId === targetId && l.type === LegendType.choropleth) {
+          const legend = l as Legend;
+          if (allMessages.includes(legend.note.text || '')) {
+            // We update the note of the legend
+            legend.note.text = LL()
+              .ClassificationPanel.classificationMethodLegendDescriptions[newMethod]();
+          }
+        }
+      });
     }),
   );
 };
@@ -617,6 +648,8 @@ function makeSettingsDefaultPoint(
                   (l: LayerDescription) => l.id === props.id,
                   { rendererParameters: newParams },
                 );
+
+                updateLegendNote(props.id, newParams.method, LL);
               },
             });
           }}
@@ -713,6 +746,8 @@ function makeSettingsDefaultPoint(
                   'rendererParameters',
                   { color: newParams },
                 );
+
+                updateLegendNote(props.id, newParams.method, LL);
               },
             });
           }}
@@ -1279,6 +1314,8 @@ function makeSettingsDefaultLine(
                   (l: LayerDescription) => l.id === props.id,
                   { rendererParameters: newParams },
                 );
+
+                updateLegendNote(props.id, newParams.method, LL);
               },
             });
           }}
@@ -1437,6 +1474,8 @@ function makeSettingsDefaultLine(
                     'color',
                     newParams,
                   );
+
+                  updateLegendNote(props.id, newParams.method, LL);
                 },
               });
             }}
@@ -1511,6 +1550,8 @@ function makeSettingsDefaultLine(
                   (l: LayerDescription) => l.id === props.id,
                   { rendererParameters: newParams },
                 );
+
+                updateLegendNote(props.id, newParams.method, LL);
               },
             });
           }}
@@ -1831,6 +1872,8 @@ function makeSettingsDefaultPolygon(
                   (l: LayerDescription) => l.id === props.id,
                   { rendererParameters: newParams },
                 );
+
+                updateLegendNote(props.id, newParams.method, LL);
               },
             });
           }}

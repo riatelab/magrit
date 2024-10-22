@@ -5396,6 +5396,10 @@ type RootTranslation = {
 			 */
 			arithmeticProgression: string
 			/**
+			 * C​l​a​s​s​i​f​i​e​d​ ​u​s​i​n​g​ ​n​e​s​t​e​d​ ​m​e​a​n​s
+			 */
+			nestedMeans: string
+			/**
 			 * C​l​a​s​s​i​f​i​e​d​ ​u​s​i​n​g​ ​t​h​e​ ​h​e​a​d​/​t​a​i​l​ ​b​r​e​a​k​ ​m​e​t​h​o​d
 			 */
 			headTail: string
@@ -11191,6 +11195,10 @@ export type TranslationFunctions = {
 			 * Classified using an arithmetic progression
 			 */
 			arithmeticProgression: () => LocalizedString
+			/**
+			 * Classified using nested means
+			 */
+			nestedMeans: () => LocalizedString
 			/**
 			 * Classified using the head/tail break method
 			 */

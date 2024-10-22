@@ -1368,6 +1368,7 @@ const en = {
       pretty: 'Classified using the "pretty breaks" method',
       geometricProgression: 'Classified using a geometric progression',
       arithmeticProgression: 'Classified using an arithmetic progression',
+      nestedMeans: 'Classified using nested means',
       headTail: 'Classified using the head/tail break method',
       manual: 'Classified manually',
     },
