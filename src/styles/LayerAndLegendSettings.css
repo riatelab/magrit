@@ -15,6 +15,10 @@ We have two types of "field":
     height: 2.5em;
 }
 
+.field.mb-0 {
+    margin-bottom: 0 !important;
+}
+
 .field:not(.multi-input) input.input {
     height: 2.3em;
 }

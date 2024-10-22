@@ -2,113 +2,243 @@
   {
     "id": "eu_template",
     "active": true,
+    "url": "https://rysebaert.github.io/map_template/",
     "layers": [
       {
         "id": "label_cities",
         "role": "layout",
         "type": "vector",
         "totalFeatures": 44,
-        "source": "Natural Earth",
-        "url": "https://rysebaert.github.io/map_template/"
+        "source": "Natural Earth"
       },
       {
         "id": "eu_template_cities",
         "role": "layout",
         "type": "vector",
         "totalFeatures": 44,
-        "source": "Natural Earth",
-        "url": "https://rysebaert.github.io/map_template/"
+        "source": "Natural Earth"
       },
       {
         "id": "eu_template_borders",
         "role": "layout",
         "type": "vector",
         "totalFeatures": 186,
-        "source": "RIATE-GISCO",
-        "url": "https://rysebaert.github.io/map_template/"
+        "source": "RIATE-GISCO"
       },
       {
         "id": "eu_template_nuts3",
         "role": "main",
         "type": "vector",
         "totalFeatures": 1482,
-        "source": "RIATE-GISCO",
-        "url": "https://rysebaert.github.io/map_template/"
+        "source": "RIATE-GISCO"
       },
       {
         "id": "eu_template_nuts2",
         "role": "main",
         "type": "vector",
         "totalFeatures": 327,
-        "source": "RIATE-GISCO",
-        "url": "https://rysebaert.github.io/map_template/"
+        "source": "RIATE-GISCO"
       },
       {
         "id": "eu_template_country_box",
         "role": "layout",
         "type": "vector",
         "totalFeatures": 15,
-        "source": "RIATE-GISCO",
-        "url": "https://rysebaert.github.io/map_template/"
+        "source": "RIATE-GISCO"
       },
       {
         "id": "eu_template_boxes",
         "role": "layout",
         "type": "vector",
         "totalFeatures": 9,
-        "source": "RIATE",
-        "url": "https://rysebaert.github.io/map_template/"
+        "source": "RIATE"
       },
       {
         "id": "eu_template_country",
         "role": "layout",
         "type": "vector",
         "totalFeatures": 56,
-        "source": "RIATE-GISCO",
-        "url": "https://rysebaert.github.io/map_template/"
+        "source": "RIATE-GISCO"
+      }
+    ],
+    "fieldsMainLayer": [
+      {
+        "name": "NUTS_ID",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValues": false,
+        "provenance": 0
+      },
+      {
+        "name": "NAME_LATN",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValues": false,
+        "provenance": 0
+      },
+      {
+        "name": "URBN_TYPE",
+        "dataType": "number",
+        "type": "categorical",
+        "hasMissingValues": false,
+        "provenance": 0
+      },
+      {
+        "name": "MOUNT_TYPE",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValues": false,
+        "provenance": 0
+      },
+      {
+        "name": "AREA_2024",
+        "dataType": "string",
+        "type": "stock",
+        "hasMissingValues": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2023",
+        "dataType": "string",
+        "type": "stock",
+        "hasMissingValues": false,
+        "provenance": 0
+      }
+    ],
+    "dataProvenance": [
+      {
+        "source": "Eurostat",
+        "url": "https://ec.europa.eu/eurostat/web/main/data/database",
+        "download_date": "2024-10-03",
+        "license": "https://creativecommons.org/licenses/by/4.0/"
       }
     ]
   },
   {
     "id": "fra_template",
     "active": true,
+    "url": "https://rysebaert.gitpages.huma-num.fr/fr_template/",
     "layers": [
       {
         "id": "fra_template_com",
         "role": "main",
         "type": "vector",
         "totalFeatures": 34945,
-        "source": "RIATE-IGN-Natural Earth",
-        "url": "https://rysebaert.gitpages.huma-num.fr/fr_template/"
+        "source": "RIATE-IGN-Natural Earth"
       },
       {
         "id": "fra_template_neighbors",
         "role": "layout",
         "type": "vector",
         "totalFeatures": 16,
-        "source": "Natural Earth",
-        "url": "https://rysebaert.gitpages.huma-num.fr/fr_template/"
+        "source": "Natural Earth"
       },
       {
         "id": "fra_template_boxes",
         "role": "layout",
         "type": "vector",
         "totalFeatures": 5,
-        "source": "RIATE",
-        "url": "https://rysebaert.gitpages.huma-num.fr/fr_template/"
+        "source": "RIATE"
       },
       {
         "id": "fra_template_dept",
         "role": "layout",
         "type": "vector",
         "totalFeatures": 101,
-        "source": "RIATE2",
-        "url": "https://rysebaert.gitpages.huma-num.fr/fr_template/"
+        "source": "RIATE2"
       }
     ],
-    "defaultProjection": {
-       "type": "proj4",
-       "code": 2154
-    }
+    "fieldsMainLayer": [
+      {
+        "name": "INSEE_COM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "NOM",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "POP_2020",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
+        "name": "SUPERF_2023",
+        "dataType": "number",
+        "type": "stock",
+        "hasMissingValue": false,
+        "provenance": 1
+      },
+      {
+        "name": "DEP",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 2
+      },
+      {
+        "name": "REG",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 2
+      },
+      {
+        "name": "EPCI",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 2
+      },
+      {
+        "name": "ZE2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 2
+      },
+      {
+        "name": "UU2020",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 2
+      },
+      {
+        "name": "BV2022",
+        "dataType": "string",
+        "type": "categorical",
+        "hasMissingValue": false,
+        "provenance": 2
+      }
+    ],
+    "dataProvenance": [
+      {
+        "source": "INSEE",
+        "url": "https://geoservices.ign.fr/adminexpress",
+        "download_date": "2024-07-03",
+        "license": "https://etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/statistiques/2521169",
+        "download_date": "2024-07-03",
+        "license": "https://www.etalab.gouv.fr/licence-ouverte-open-licence"
+      },
+      {
+        "source": "INSEE",
+        "url": "https://www.insee.fr/fr/information/7671844",
+        "download_date": "2024-07-03",
+        "license": "https://www.etalab.gouv.fr/licence-ouverte-open-licence"
+      }
+    ]
   }
 ]

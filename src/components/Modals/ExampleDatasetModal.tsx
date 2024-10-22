@@ -58,7 +58,7 @@ import {
   DefaultLegend, GeoJSONFeatureCollection, LayerDescription, ProjectDescription,
 } from '../../global';
 import type { Variable } from '../../helpers/typeDetection';
-import type { Translation, TranslationFunctions } from '../../i18n/i18n-types';
+import type { Translation } from '../../i18n/i18n-types';
 
 type CartographicProjection = { type: 'd3', value: 'string' } | { type: 'proj4', code: number };
 
@@ -66,7 +66,10 @@ interface TemplateEntry {
   id: string & keyof Translation['Templates'],
   active: boolean,
   layers: TemplateLayer[],
-  defaultProjection: CartographicProjection,
+  // defaultProjection: CartographicProjection,
+  url: string,
+  fieldsMainLayer: (Variable & { provenance: number })[],
+  dataAttribution: DataProvider[],
 }
 
 interface TemplateLayer {
@@ -75,7 +78,6 @@ interface TemplateLayer {
   type: 'vector' | 'raster',
   totalFeatures: number,
   source: string,
-  url: string,
 }
 
 interface DataProvider {
@@ -139,8 +141,8 @@ function CardTemplateEntry(
   >
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
       <p class="card-header-title">
-        <FaSolidDatabase style={{ height: '1.2em', width: '1.8em' }}/>
-        <span style={{ 'font-size': '1.3em' }}>{LL().Templates[t.id].name()}</span>
+        <FaSolidDatabase style={{ height: '1.2em', width: '1.8em', 'margin-right': '0.3em' }}/>
+        <span style={{ 'font-size': '1.2em' }}>{LL().Templates[t.id].name()}</span>
       </p>
     </header>
     <section class="card-content">
@@ -188,8 +190,8 @@ function CardDatasetEntry(
   >
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
       <p class="card-header-title">
-        <FaSolidDatabase style={{ height: '1.2em', width: '1.8em' }}/>
-        <span style={{ 'font-size': '1.3em' }}>{ LL().Datasets[ds.id].name() }</span>
+        <FaSolidDatabase style={{ height: '1.2em', width: '1.8em', 'margin-right': '0.3em' }}/>
+        <span style={{ 'font-size': '1.2em' }}>{ LL().Datasets[ds.id].name() }</span>
       </p>
     </header>
     <section class="card-content">
@@ -233,21 +235,19 @@ function CardTemplateDetail(t: TemplateEntry): JSX.Element {
     <div>
       <p>{LL().Templates[t.id].abstract()}</p>
     </div>
-    <br />
+    <br/>
     <h4>{LL().DatasetCatalog.layers()}</h4>
-    <ul>
+    <ul style={{ 'font-size': '0.9rem' }}>
       <For each={t.layers}>
         {
           (l) => (l.role === 'main'
             ? <li>
               <b>{LL().Templates[t.id].layers[l.id]()}</b>
-              &nbsp;({LL().Templates[t.id].geometrySource[l.source]},
-              &nbsp;<a href={l.url} target="_blank">source <FiExternalLink /></a>)
+              &nbsp;({LL().Templates[t.id].geometrySource[l.source]})
             </li>
             : <li>
               {LL().Templates[t.id].layers[l.id]()}
-              &nbsp;({LL().Templates[t.id].geometrySource[l.source]},
-              &nbsp;<a href={l.url} target="_blank">source <FiExternalLink/></a>)
+              &nbsp;({LL().Templates[t.id].geometrySource[l.source]})
             </li>)
         }
       </For>
@@ -262,20 +262,47 @@ function CardTemplateDetail(t: TemplateEntry): JSX.Element {
         alt={LL().DatasetCatalog.altTemplatePreview()}
       />
     </div>
+    <br/>
+    <h4>{LL().DatasetCatalog.variableDescriptionMainLayer()}</h4>
+    <table style={{ 'font-size': '0.8rem', width: '100%' }} class="table">
+      <thead>
+      <tr>
+        <th>{LL().DatasetCatalog.variable.name()}</th>
+        <th>{LL().DatasetCatalog.variable.description()}</th>
+        <th>{LL().DatasetCatalog.variable.provenance()}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <For each={t.fieldsMainLayer}>
+        {
+          (variableDescription) => <tr>
+            <td>{variableDescription.name}</td>
+            <td>{LL().Templates[t.id].fieldsMainLayer[variableDescription.name]()}</td>
+            <td>{ LL().Templates[t.id].dataAttribution[variableDescription.provenance]()}</td>
+          </tr>
+        }
+      </For>
+      </tbody>
+    </table>
+    <br/>
+    <h4>{LL().DatasetCatalog.moreInformation()}</h4>
+    <div>
+      <p><a href={t.url} target="_blank">Source <FiExternalLink style={{ 'vertical-align': 'text-top' }}/></a></p>
+    </div>
   </div>;
 }
 
 function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
   const { LL } = useI18nContext();
   return <div>
-  <h3>{LL().Datasets[ds.id].name()}</h3>
+    <h3>{LL().Datasets[ds.id].name()}</h3>
     <h4>{LL().DatasetCatalog.description()}</h4>
     <div>
       <p> {LL().Datasets[ds.id].abstract()}</p>
     </div>
     <br/>
     <h4>{LL().DatasetCatalog.about()}</h4>
-    <div>
+    <div style={{ 'font-size': '0.9rem' }}>
       <table>
         <tbody>
         <tr>
@@ -290,7 +317,7 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
         </Show>
         <tr>
           <td>{LL().DatasetCatalog.providerGeometry()}</td>
-          <td><a href={ds.geometry.url} target="_blank">{ds.geometry.source} <FiExternalLink /></a></td>
+          <td><a href={ds.geometry.url} target="_blank">{ds.geometry.source} <FiExternalLink style={{ 'vertical-align': 'text-top' }}/></a></td>
         </tr>
         <tr>
           <td>{LL().DatasetCatalog.attributionGeometry()}</td>
@@ -298,7 +325,12 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
         </tr>
         <tr>
           <td>{LL().DatasetCatalog.licenseGeometry()}</td>
-          <td>{ds.geometry.license}</td>
+          <Show
+            when={ds.geometry.license && ds.geometry.license.startsWith('http')}
+            fallback={<td>{ds.geometry.license}</td>}
+          >
+            <td><a>{ds.geometry.license} <FiExternalLink /></a></td>
+          </Show>
         </tr>
         <tr>
           <td>{LL().DatasetCatalog.providerData()}</td>
@@ -307,7 +339,7 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
               {
                 (d, i) => <span>
                   {i() > 0 && ', '}
-                  <a href={d.url} target="_blank">{d.source} <FiExternalLink /></a>
+                  <a href={d.url} target="_blank">{d.source} <FiExternalLink style={{ 'vertical-align': 'text-top' }}/></a>
                 </span>
               }
             </For>
@@ -320,7 +352,18 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
         </tr>
         <tr>
           <td>{LL().DatasetCatalog.licenceData()}</td>
-          <td>{ds.data.map((d) => d.license).filter((d) => !!d).join(', ')}</td>
+          <td>
+            <For each={ds.data}>
+              {
+                (d, i) => <Show
+                  when={d.license && d.license.startsWith('http')}
+                  fallback={<>{i() > 0 && ', '}{d.license}</>}
+                >
+                  <>{i() > 0 && ', '}<a>{d.license} <FiExternalLink /></a></>
+                </Show>
+              }
+            </For>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -629,6 +672,7 @@ export default function ExampleDatasetModal(): JSX.Element {
           setLoading(true);
           fetch(`dataset/${selectedDataset()!.id}.geojson`)
             .then((response) => response.json())
+            // eslint-disable-next-line solid/reactivity
             .then((geojsonData) => {
               addExampleLayer(
                 geojsonData,

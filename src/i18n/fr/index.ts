@@ -510,6 +510,9 @@ const fr = {
         RIATE: '© RIATE',
         'RIATE-GISCO': '© RIATE, à partir des géométries GISCO ',
       },
+      dataAttribution: {
+        0: 'Eurostat © Union européenne, 1995 – aujourd\'hui',
+      },
     },
     fra_template: {
       name: 'Communes de France (modèle cartographique)',
@@ -539,6 +542,11 @@ const fr = {
         RIATE: '© RIATE ',
         RIATE2: '© RIATE – agrégation des géométries communales',
       },
+      dataAttribution: {
+        0: '© INSEE - 2024',
+        1: '© INSEE - 2024',
+        2: '© INSEE - 2024',
+      },
     },
   },
   DatasetCatalog: {
@@ -549,6 +557,7 @@ const fr = {
     searchButton: 'Rechercher',
     datasets: '{{Un jeu de données | ?? jeux de données}}',
     about: 'À propos',
+    moreInformation: 'Plus d\'informations',
     description: 'Description',
     variableDescription: 'Description des variables',
     variable: {
@@ -578,6 +587,7 @@ const fr = {
     altDatasetPreview: 'Aperçu du jeu de données',
     altTemplatePreview: 'Aperçu du template cartographique',
     layers: 'Couches',
+    variableDescriptionMainLayer: 'Variables de la (ou les) couche(s) principale(s)',
     confirmButton: 'Ajouter à la carte',
     cancelButton: 'Annuler',
   },

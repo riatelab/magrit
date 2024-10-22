@@ -70,7 +70,7 @@ export default function InputConstrainedSlider(props: InputConstrainedSliderProp
   onCleanup(() => {
     if (slider) slider.destroy();
   });
-  return <div class="field pr-2 mr-4" style={{ 'margin-bottom': 'none' }}>
+  return <div class="field pr-2 mr-4 mb-0">
     <Show when={props.label}>
       <label class="label">{props.label}</label>
     </Show>

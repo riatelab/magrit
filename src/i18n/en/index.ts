@@ -510,6 +510,9 @@ const en = {
         RIATE: '© RIATE',
         'RIATE-GISCO': '© RIATE, from GISCO ',
       },
+      dataAttribution: {
+        0: 'Eurostat © European Union, 1995 – today',
+      },
     },
     fra_template: {
       name: 'French municipalities (cartographic template)',
@@ -539,6 +542,11 @@ const en = {
         RIATE: '© RIATE ',
         RIATE2: '© RIATE – municipal geometries aggregated',
       },
+      dataAttribution: {
+        0: '© INSEE - 2024',
+        1: '© INSEE - 2024',
+        2: '© INSEE - 2024',
+      },
     },
   },
   DatasetCatalog: {
@@ -549,8 +557,9 @@ const en = {
     searchButton: 'Search',
     datasets: '{{One dataset | ?? datasets}}',
     about: 'About',
+    moreInformation: 'More information',
     description: 'Description',
-    variableDescription: 'Variable description',
+    variableDescription: 'Variables description',
     variable: {
       name: 'Name',
       description: 'Description',
@@ -578,6 +587,7 @@ const en = {
     altDatasetPreview: 'Dataset preview',
     altTemplatePreview: 'Template preview',
     layers: 'Layers',
+    variableDescriptionMainLayer: 'Variables of the main layer(s)',
     confirmButton: 'Add to map',
     cancelButton: 'Cancel',
   },

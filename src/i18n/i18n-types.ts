@@ -2299,6 +2299,12 @@ type RootTranslation = {
 				 */
 				'RIATE-GISCO': string
 			}
+			dataAttribution: {
+				/**
+				 * E​u​r​o​s​t​a​t​ ​©​ ​E​u​r​o​p​e​a​n​ ​U​n​i​o​n​,​ ​1​9​9​5​ ​–​ ​t​o​d​a​y
+				 */
+				'0': string
+			}
 		}
 		fra_template: {
 			/**
@@ -2391,6 +2397,20 @@ type RootTranslation = {
 				 */
 				RIATE2: string
 			}
+			dataAttribution: {
+				/**
+				 * ©​ ​I​N​S​E​E​ ​-​ ​2​0​2​4
+				 */
+				'0': string
+				/**
+				 * ©​ ​I​N​S​E​E​ ​-​ ​2​0​2​4
+				 */
+				'1': string
+				/**
+				 * ©​ ​I​N​S​E​E​ ​-​ ​2​0​2​4
+				 */
+				'2': string
+			}
 		}
 	}
 	DatasetCatalog: {
@@ -2423,11 +2443,15 @@ type RootTranslation = {
 		 */
 		about: string
 		/**
+		 * M​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n
+		 */
+		moreInformation: string
+		/**
 		 * D​e​s​c​r​i​p​t​i​o​n
 		 */
 		description: string
 		/**
-		 * V​a​r​i​a​b​l​e​ ​d​e​s​c​r​i​p​t​i​o​n
+		 * V​a​r​i​a​b​l​e​s​ ​d​e​s​c​r​i​p​t​i​o​n
 		 */
 		variableDescription: string
 		variable: {
@@ -2526,6 +2550,10 @@ type RootTranslation = {
 		 * L​a​y​e​r​s
 		 */
 		layers: string
+		/**
+		 * V​a​r​i​a​b​l​e​s​ ​o​f​ ​t​h​e​ ​m​a​i​n​ ​l​a​y​e​r​(​s​)
+		 */
+		variableDescriptionMainLayer: string
 		/**
 		 * A​d​d​ ​t​o​ ​m​a​p
 		 */
@@ -8108,6 +8136,12 @@ export type TranslationFunctions = {
 				 */
 				'RIATE-GISCO': () => LocalizedString
 			}
+			dataAttribution: {
+				/**
+				 * Eurostat © European Union, 1995 – today
+				 */
+				'0': () => LocalizedString
+			}
 		}
 		fra_template: {
 			/**
@@ -8200,6 +8234,20 @@ export type TranslationFunctions = {
 				 */
 				RIATE2: () => LocalizedString
 			}
+			dataAttribution: {
+				/**
+				 * © INSEE - 2024
+				 */
+				'0': () => LocalizedString
+				/**
+				 * © INSEE - 2024
+				 */
+				'1': () => LocalizedString
+				/**
+				 * © INSEE - 2024
+				 */
+				'2': () => LocalizedString
+			}
 		}
 	}
 	DatasetCatalog: {
@@ -8232,11 +8280,15 @@ export type TranslationFunctions = {
 		 */
 		about: () => LocalizedString
 		/**
+		 * More information
+		 */
+		moreInformation: () => LocalizedString
+		/**
 		 * Description
 		 */
 		description: () => LocalizedString
 		/**
-		 * Variable description
+		 * Variables description
 		 */
 		variableDescription: () => LocalizedString
 		variable: {
@@ -8335,6 +8387,10 @@ export type TranslationFunctions = {
 		 * Layers
 		 */
 		layers: () => LocalizedString
+		/**
+		 * Variables of the main layer(s)
+		 */
+		variableDescriptionMainLayer: () => LocalizedString
 		/**
 		 * Add to map
 		 */
