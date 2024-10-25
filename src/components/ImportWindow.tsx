@@ -35,7 +35,7 @@ import {
   SupportedGeoFileTypes,
   SupportedTabularFileTypes,
 } from '../helpers/supportedFormats';
-import { findCsvDelimiter, getDatasetInfo } from '../helpers/formatConversion';
+import { findCsvDelimiter, getDatasetInfo, removeEmptyLines } from '../helpers/formatConversion';
 import { removeNadGrids } from '../helpers/projection';
 
 // Stores
@@ -356,7 +356,9 @@ const analyseDatasetTabularText = (
   ext: 'csv' | 'tsv' | 'txt',
 ): DatasetInformation | InvalidDataset => {
   const delimiter = findCsvDelimiter(content);
-  const ds = d3.dsvFormat(delimiter).parse(content);
+  const ds = d3
+    .dsvFormat(delimiter)
+    .parse(removeEmptyLines(content));
   // eslint-disable-next-line no-nested-ternary
   const detailedType = ext === 'csv'
     ? SupportedTabularFileTypes.CSV

@@ -104,16 +104,20 @@ export function findCsvDelimiter(rawText: string): string {
 }
 
 const renameEmptyColumns = (rawData: string): string => {
-  const lines = rawData.split('\n');
+  const lineSeparator = rawData.includes('\r\n') ? '\r\n' : '\n';
+  const lines = rawData.split(lineSeparator);
   const header = lines[0].split(',');
   const renamedHeader = header.map((h, i) => (h === '' || h === '""' ? `column_${i}` : h));
   lines[0] = renamedHeader.join(',');
   return lines.join('\n');
 };
 
-const removeEmptyLines = (rawData: string): string => {
-  const lines = rawData.split('\n');
-  return lines.filter((l) => l.trim() !== '').join('\n');
+export const removeEmptyLines = (rawData: string): string => {
+  const lineSeparator = rawData.includes('\r\n') ? '\r\n' : '\n';
+  return rawData
+    .split(lineSeparator)
+    .filter((l) => l.trim() !== '')
+    .join('\n');
 };
 
 export const autoTypeDataset = (dataset: d3.DSVRowArray<string>): Record<string, any>[] => {
