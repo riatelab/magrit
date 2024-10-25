@@ -60,6 +60,7 @@ import gridRenderer from './MapRenderer/GridRenderer.tsx';
 import linksRenderer from './MapRenderer/LinksMapRenderer.tsx';
 import mushroomRenderer from './MapRenderer/MushroomsMapRenderer.tsx';
 import categoricalPictogramRenderer from './MapRenderer/CategoricalPictogramMapRenderer.tsx';
+import waffleRenderer from './MapRenderer/WaffleMapRenderer.tsx';
 
 // - for rendering the layout features
 import FreeDrawingRenderer from './LayoutFeatureRenderer/FreeDrawingRenderer.tsx';
@@ -122,6 +123,7 @@ import {
   type MushroomsLegend,
   type ChoroplethHistogramLegend,
   type LayerDescriptionCategoricalPictogram,
+  type LayerDescriptionWaffle,
 } from '../global.d';
 
 // Styles
@@ -237,6 +239,8 @@ const dispatchMapRenderer = (layer: LayerDescription) => {
     return mushroomRenderer(layer as LayerDescriptionMushroomLayer);
   } else if (layer.representationType === 'categoricalPictogram') {
     return categoricalPictogramRenderer(layer as LayerDescriptionCategoricalPictogram);
+  } else if (layer.representationType === 'waffle') {
+    return waffleRenderer(layer as LayerDescriptionWaffle);
   }
   return null;
 };

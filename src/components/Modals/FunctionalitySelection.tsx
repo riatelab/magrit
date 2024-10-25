@@ -39,6 +39,7 @@ import SimplificationSettings from '../PortrayalOption/SimplificationSettings.ts
 import PointAggregationSettings from '../PortrayalOption/PointAggregationSettings.tsx';
 import LinearRegressionSettings from '../PortrayalOption/LinearRegressionSettings.tsx';
 import CategoricalPictogramSettings from '../PortrayalOption/CategoricalPictogramSettings.tsx';
+import WaffleSettings from '../PortrayalOption/WaffleSettings.tsx';
 
 // Type / interfaces / enums
 import {
@@ -57,7 +58,7 @@ interface FunctionalityDescription {
   allowedGeometryType?: 'point' | 'linestring' | 'polygon';
 }
 
-const functionalityDescriptions: FunctionalityDescription[] = [
+const functionalityDescriptions: Partial<FunctionalityDescription>[] = [
   {
     name: 'Choropleth',
     type: RepresentationType.choropleth,
@@ -93,6 +94,10 @@ const functionalityDescriptions: FunctionalityDescription[] = [
   {
     name: 'Mushrooms',
     type: RepresentationType.mushrooms,
+  },
+  {
+    name: 'Waffle',
+    type: RepresentationType.waffle,
   },
   {
     name: 'CategoricalPictogram',
@@ -269,6 +274,10 @@ export default function FunctionalitySelection(): JSX.Element {
           // eslint-disable-next-line no-param-reassign
           p.enabled = vars.nStock >= 2 && (geomType === 'polygon' || geomType === 'point');
           break;
+        case RepresentationType.waffle:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = vars.nStock >= 2 && (geomType === 'polygon' || geomType === 'point');
+          break;
         case ProcessingOperationType.aggregation:
           // eslint-disable-next-line no-param-reassign
           p.enabled = nFeatures > 1 && geomType === 'polygon';
@@ -434,6 +443,9 @@ export default function FunctionalitySelection(): JSX.Element {
             </Match>
             <Match when={selectedFunctionality()!.type === RepresentationType.links}>
               <LinksSettings layerId={functionalitySelectionStore.id!}/>
+            </Match>
+            <Match when={selectedFunctionality()!.type === RepresentationType.waffle}>
+              <WaffleSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
             <Match when={selectedFunctionality()!.type === RepresentationType.mushrooms}>
               <MushroomsSettings layerId={functionalitySelectionStore.id!}/>

@@ -3431,6 +3431,10 @@ type RootTranslation = {
 			 * G​e​o​s​p​a​t​i​a​l​ ​l​a​y​e​r​ ​c​r​e​a​t​i​o​n
 			 */
 			LayerCreationFromTable: string
+			/**
+			 * W​a​f​f​l​e​ ​m​a​p
+			 */
+			Waffle: string
 		}
 		/**
 		 * T​a​r​g​e​t​ ​l​a​y​e​r
@@ -4402,6 +4406,37 @@ type RootTranslation = {
 			 */
 			AddScatterPlot: string
 		}
+		WaffleOptions: {
+			/**
+			 * V​a​r​i​a​b​l​e​s​ ​(​t​w​o​ ​o​r​ ​m​o​r​e​)
+			 */
+			Variables: string
+			/**
+			 * S​y​m​b​o​l​ ​t​y​p​e
+			 */
+			SymbolType: string
+			/**
+			 * S​p​a​c​i​n​g
+			 */
+			Spacing: string
+			/**
+			 * N​u​m​b​e​r​ ​o​f​ ​c​o​l​u​m​n​s
+			 */
+			Columns: string
+			/**
+			 * S​y​m​b​o​l​ ​s​i​z​e
+			 */
+			SymbolSize: string
+			/**
+			 * V​a​l​u​e​ ​e​x​p​r​e​s​s​e​d​ ​b​y​ ​e​a​c​h​ ​s​y​m​b​o​l
+			 */
+			SymbolValue: string
+			/**
+			 * W​a​f​f​l​e​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 */
+			NewLayerName: RequiredParams<'layerName'>
+		}
 	}
 	FormulaInput: {
 		/**
@@ -4947,6 +4982,10 @@ type RootTranslation = {
 			 * T​h​i​s​ ​f​u​n​c​t​i​o​n​ ​c​r​e​a​t​e​s​ ​a​ ​g​e​o​s​p​a​t​i​a​l​ ​l​a​y​e​r​ ​f​r​o​m​ ​a​ ​d​a​t​a​ ​t​a​b​l​e​ ​c​o​n​t​a​i​n​i​n​g​ ​c​o​o​r​d​i​n​a​t​e​s​.
 			 */
 			LayerCreationFromTable: string
+			/**
+			 * T​h​i​s​ ​m​e​t​h​o​d​ ​e​n​a​b​l​e​s​ ​t​h​e​ ​c​r​e​a​t​i​o​n​ ​o​f​ ​a​ ​p​o​r​t​r​a​y​a​l​ ​o​f​ ​t​w​o​ ​o​r​ ​m​o​r​e​ ​v​a​r​i​a​b​l​e​s​ ​e​x​p​r​e​s​s​e​d​ ​i​n​ ​c​o​m​p​a​r​a​b​l​e​ ​u​n​i​t​s
+			 */
+			Waffle: string
 		}
 		/**
 		 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​c​r​e​a​t​i​n​g​ ​t​h​e​ ​l​a​y​e​r​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​d​a​t​a​ ​a​n​d​ ​t​h​e​ ​p​a​r​a​m​e​t​e​r​s​ ​o​f​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​f​e​a​t​u​r​e​.​ ​I​f​ ​y​o​u​ ​s​u​s​p​e​c​t​ ​a​ ​b​u​g​,​ ​p​l​e​a​s​e​ ​r​e​p​o​r​t​ ​i​t​ ​o​n​ ​t​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​'​s​ ​G​i​t​H​u​b​ ​r​e​p​o​s​i​t​o​r​y​.​ ​E​r​r​o​r​ ​m​e​s​s​a​g​e​:​ ​{​0​}
@@ -9261,6 +9300,10 @@ export type TranslationFunctions = {
 			 * Geospatial layer creation
 			 */
 			LayerCreationFromTable: () => LocalizedString
+			/**
+			 * Waffle map
+			 */
+			Waffle: () => LocalizedString
 		}
 		/**
 		 * Target layer
@@ -10208,6 +10251,36 @@ export type TranslationFunctions = {
 			 */
 			AddScatterPlot: () => LocalizedString
 		}
+		WaffleOptions: {
+			/**
+			 * Variables (two or more)
+			 */
+			Variables: () => LocalizedString
+			/**
+			 * Symbol type
+			 */
+			SymbolType: () => LocalizedString
+			/**
+			 * Spacing
+			 */
+			Spacing: () => LocalizedString
+			/**
+			 * Number of columns
+			 */
+			Columns: () => LocalizedString
+			/**
+			 * Symbol size
+			 */
+			SymbolSize: () => LocalizedString
+			/**
+			 * Value expressed by each symbol
+			 */
+			SymbolValue: () => LocalizedString
+			/**
+			 * Waffle_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+		}
 	}
 	FormulaInput: {
 		/**
@@ -10753,6 +10826,10 @@ export type TranslationFunctions = {
 			 * This function creates a geospatial layer from a data table containing coordinates.
 			 */
 			LayerCreationFromTable: () => LocalizedString
+			/**
+			 * This method enables the creation of a portrayal of two or more variables expressed in comparable units
+			 */
+			Waffle: () => LocalizedString
 		}
 		/**
 		 * An error occurred while creating the layer. Please check your data and the parameters of the selected feature. If you suspect a bug, please report it on the application's GitHub repository. Error message: {0}

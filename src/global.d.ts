@@ -534,24 +534,26 @@ interface SmoothedLayerParameters {
   smoothingParameters: StewartParameters | KdeParameters,
   // The parameters of the grid used to compute the smoothed layer
   gridParameters: GridParameters,
-  // The (optional) divisior variable used to compute the smoothed layer
+  // The (optional) divisor variable used to compute the smoothed layer
   divisorVariable?: string,
 }
 
 interface WaffleParameters {
   // The variable we want to represent with the waffle
   // (the order is important, because symbols are drawn in the reverse order of the variables)
-  variables: string[],
+  variables: { name: string, displayName: string, color: string }[],
   // The type of symbol used to represent the waffles
   symbolType: ProportionalSymbolsSymbolType.circle | ProportionalSymbolsSymbolType.square,
-  // The radius for each symbol
-  radius: number,
+  // The size for each symbol
+  size: number,
   // The number of columns for the waffle
   columns: number,
   // How much stock is represented by each symbol
   symbolValue: number,
-  // How much space is left between each symbol
+  // How much space between each symbol
   spacing: number,
+  // Whether the waffles can be moved by the user or not
+  movable: boolean,
 }
 
 interface CategoricalPictogramMapping {
