@@ -1,4 +1,6 @@
-import { children, type JSX, type ParentProps } from 'solid-js';
+import {
+  children, type JSX, type ParentProps, createMemo,
+} from 'solid-js';
 import { type LocalizedString } from 'typesafe-i18n';
 import MultipleSelect from '../MultipleSelect.tsx';
 
@@ -9,14 +11,21 @@ interface InputFieldMultiSelectProps {
   width?: number;
   size?: number;
   layout?: 'horizontal' | 'vertical';
+  styles?: { [key: string]: string };
 }
 
 export default function InputFieldMultiSelect(
   props: ParentProps<InputFieldMultiSelectProps>,
 ): JSX.Element {
   const c = children(() => props.children);
-
-  return <div class={props.layout === 'vertical' ? 'field-block' : 'field'} style={{ height: '100%' }}>
+  const styles = createMemo(() => {
+    const s = { ...props.styles };
+    if (!s.height) {
+      s.height = '100%';
+    }
+    return s;
+  });
+  return <div class={props.layout === 'vertical' ? 'field-block' : 'field'} style={styles()}>
     <label class="label">{props.label}</label>
     <MultipleSelect
       onChange={(e) => {
@@ -25,6 +34,7 @@ export default function InputFieldMultiSelect(
       }}
       size={props.size}
       values={props.values}
+      width={props.width}
     >
       { c() }
     </MultipleSelect>

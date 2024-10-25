@@ -12,6 +12,7 @@ interface MultipleSelectProps {
   onChange?: JSX.ChangeEventHandler<HTMLSelectElement, Event>;
   style?: { [key: string]: string };
   values: string[];
+  width?: number;
 }
 
 export default function MultipleSelect(props: ParentProps<MultipleSelectProps>): JSX.Element {
@@ -45,6 +46,7 @@ export default function MultipleSelect(props: ParentProps<MultipleSelectProps>):
       class={'select is-multiple'}
       style={{
         height: 'unset',
+        width: mergedProps.width ? `${mergedProps.width}px` : 'unset',
       }}
     >
       <select
