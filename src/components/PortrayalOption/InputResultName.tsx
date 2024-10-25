@@ -17,7 +17,7 @@ interface ResultNameInputProps {
 
 export default function InputResultName(props: ResultNameInputProps): JSX.Element {
   const { LL } = useI18nContext();
-  return <div class="field-block">
+  return <div class="field-block mt-5">
     <label class="label">{ LL().FunctionalitiesSection.ResultName() }</label>
     <div class="control">
       <input
