@@ -1,7 +1,7 @@
 import d3 from './d3-custom';
 import { globalStore } from '../store/GlobalStore';
 import {
-  degToRadConstant, Mcos, Msin,
+  degToRadConstant, Mcos, Mfloor, Mround, Msin,
 } from './math';
 import {
   type GeoJSONFeature,
@@ -339,6 +339,52 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
           globalStore.projection,
           linkCurvature as LinkCurvature,
         ));
+      });
+    } else if (typePortrayal === 'waffle') {
+      const symbolType = g.getAttribute('mgt:symbol-type')!;
+      const size = +g.getAttribute('mgt:size')!;
+      const columns = +g.getAttribute('mgt:columns')!;
+      const spacing = +g.getAttribute('mgt:spacing')!;
+
+      g.querySelectorAll('g').forEach((gg) => {
+        const coords = globalStore.pathGenerator.centroid(
+          // eslint-disable-next-line no-underscore-dangle
+          (gg as SVGGElement & ID3Element).__data__.geometry,
+        );
+        if (!Number.isNaN(coords[0])) {
+          const offsetCentroidX = (
+            (size + spacing) * (columns) - (size * 1.5)
+          );
+          let symbolIndex = 0;
+          if (symbolType === 'circle') {
+            gg.querySelectorAll('circle').forEach((c) => {
+              const tx = Mround(
+                (symbolIndex % columns) * (2 * size + spacing),
+              );
+              const ty = Mfloor(
+                Mfloor(symbolIndex / columns) * (2 * size + spacing),
+              );
+              symbolIndex += 1;
+              c.setAttribute('cx', `${coords[0] - offsetCentroidX + tx}`);
+              c.setAttribute('cy', `${coords[1] - size - ty}`);
+            });
+          } else { // symbolType === 'square'
+            gg.querySelectorAll('rect').forEach((r) => {
+              const tx = Mround(
+                (symbolIndex % columns) * (2 * size + spacing),
+              );
+              const ty = Mfloor(
+                Mfloor(symbolIndex / columns) * (2 * size + spacing),
+              );
+              r.setAttribute('x', `${coords[0] - offsetCentroidX + tx}`);
+              r.setAttribute('y', `${coords[1] - size - ty}`);
+              symbolIndex += 1;
+            });
+          }
+          gg.setAttribute('visibility', 'visible');
+        } else {
+          gg.setAttribute('visibility', 'hidden');
+        }
       });
     }
   });

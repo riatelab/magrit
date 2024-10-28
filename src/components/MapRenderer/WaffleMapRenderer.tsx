@@ -17,7 +17,7 @@ import bindData from '../../directives/bind-data';
 import { globalStore } from '../../store/GlobalStore';
 
 // Types / Interfaces / Enums
-import { type LayerDescriptionWaffle } from '../../global.d';
+import { type LayerDescriptionWaffle, WaffleParameters } from '../../global.d';
 
 // For now we keep an array of directives
 // because otherwise the import is not detected by the compiler...
@@ -30,7 +30,7 @@ export default function waffleRenderer(
 ): JSX.Element {
   let refElement: SVGGElement;
 
-  const params = layerDescription.rendererParameters;
+  const params: WaffleParameters = layerDescription.rendererParameters;
 
   onMount(() => {
     refElement.querySelectorAll('g')
@@ -51,6 +51,10 @@ export default function waffleRenderer(
     filter={mergeFilterIds(layerDescription)}
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
+    mgt:symbol-type={params.symbolType}
+    mgt:size={params.size}
+    mgt:columns={params.columns}
+    mgt:spacing={params.spacing}
   >
     <For each={layerDescription.data.features}>
       {
@@ -58,48 +62,54 @@ export default function waffleRenderer(
           const projectedCoords = createMemo(
             () => globalStore.projection(feature.geometry.coordinates),
           );
-          const sum = params.variables.reduce(
-            (acc, v) => acc + Mround(+feature.properties[v.name] / params.symbolValue),
-            0,
-          );
-          if (params.symbolType === 'circle') {
-            const offsetCentroidX = (
-              params.spacing + (2 * params.size * params.columns)) / 2 - params.size;
-            return <g>
-              <For each={Array.from({ length: sum })}>
-                {(_, i) => {
-                  const tx = Mround((i() % params.columns) * (2 * params.size + params.spacing));
-                  const ty = Mfloor(
-                    Mfloor(i() / params.columns) * (2 * params.size + params.spacing),
-                  );
-                  return <circle
-                    cx={projectedCoords()[0] + offsetCentroidX + tx}
-                    cy={projectedCoords()[1] - params.size + ty}
-                    r={params.size}
-                    fill={'blue'}
-                  />;
-                }}
-              </For>
-            </g>;
-          } else { // eslint-disable-line no-else-return
-            const offsetCentroidX = (
-              (params.size + params.spacing) * (params.columns - 1) - params.size) / 2;
-            return <g>
-              <For each={Array.from({ length: sum })}>
-                {(_, i) => {
-                  const tx = Mround((i() % params.columns) * (params.size + params.spacing));
-                  const ty = Mfloor(Mfloor(i() / params.columns) * (params.size + params.spacing));
-                  return <rect
-                    x={projectedCoords()[0] + offsetCentroidX + tx}
-                    y={projectedCoords()[1] - params.size + ty}
-                    width={params.size}
-                    height={params.size}
-                    fill={'blue'}
-                  />;
-                }}
-              </For>
-            </g>;
-          }
+
+          // Symbols for each variable
+          const variableSymbols = params.variables.map((variable) => ({
+            ...variable,
+            count: Mround(+feature.properties[variable.name] / params.symbolValue),
+          }));
+
+          // Central position of the symbol block
+          const offsetCentroidX = (
+            (params.size + params.spacing) * (params.columns) - (params.size * 1.5));
+
+          let symbolIndex = 0; // Counter for symbol position
+
+          return <g
+            // @ts-expect-error because use:bind-data isn't a property of this element
+            use:bindData={feature}
+          >
+            <For each={variableSymbols}>
+              {(variable) => <For each={Array.from({ length: variable.count })}>
+                  {(_, i) => {
+                    const tx = Mround(
+                      (symbolIndex % params.columns) * (2 * params.size + params.spacing),
+                    );
+                    const ty = Mfloor(
+                      Mfloor(symbolIndex / params.columns) * (2 * params.size + params.spacing),
+                    );
+                    symbolIndex += 1; // Increment for next position
+                    return params.symbolType === 'circle' ? (
+                      <circle
+                        cx={projectedCoords()[0] - offsetCentroidX + tx}
+                        cy={projectedCoords()[1] - params.size - ty}
+                        r={params.size}
+                        fill={variable.color}
+                      />
+                    ) : (
+                      <rect
+                        x={projectedCoords()[0] - offsetCentroidX + tx}
+                        y={projectedCoords()[1] - params.size - ty}
+                        width={params.size}
+                        height={params.size}
+                        fill={variable.color}
+                      />
+                    );
+                  }}
+                </For>
+              }
+            </For>
+          </g>;
         }
       }
     </For>
