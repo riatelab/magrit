@@ -56,6 +56,7 @@ import {
   type LabelsParameters,
   type LayerDescription,
   type LayerDescriptionLabels,
+  type LayerDescriptionWaffle,
   type LinksParameters,
   type MushroomsParameters,
   type ProportionalSymbolsParameters,
@@ -200,6 +201,152 @@ function AestheticsSection(props: LayerDescription): JSX.Element {
       />
     </Show>
   </div>;
+}
+
+function makeSettingsWaffle(
+  props: LayerDescriptionWaffle,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  return <>
+    <div class="mb-4">
+      <For each={props.rendererParameters.variables}>
+        {
+          (variable) => <div
+            class="is-flex is-justify-content-space-between"
+            style={{ width: '80%', margin: 'auto' }}
+          >
+            <p>
+              <span style={{ 'vertical-align': 'sub' }}>
+                {variable.name}
+              </span>
+            </p>
+            <div>
+              <input
+                class="input"
+                type="text"
+                style={{ width: '15em' }}
+                value={variable.displayName}
+                onChange={(e) => {
+                  const newVariables = props.rendererParameters.variables.map((v) => {
+                    if (v.name === variable.name) {
+                      return {
+                        name: v.name,
+                        color: v.color,
+                        displayName: e.currentTarget.value,
+                      };
+                    }
+                    return v;
+                  });
+                  updateProp(props.id, ['rendererParameters', 'variables'], newVariables);
+                  redrawLayer(props.id);
+                }}
+              />
+            </div>
+            <div>
+              <input
+                class="input"
+                type="color"
+                style={{ width: '10em' }}
+                value={variable.color}
+                onChange={(e) => {
+                  const newVariables = props.rendererParameters.variables.map((v) => {
+                    if (v.name === variable.name) {
+                      return {
+                        name: v.name,
+                        color: e.currentTarget.value,
+                        displayName: v.displayName,
+                      };
+                    }
+                    return v;
+                  });
+                  updateProp(props.id, ['rendererParameters', 'variables'], newVariables);
+                  redrawLayer(props.id);
+                }}
+              />
+            </div>
+          </div>
+        }
+      </For>
+    </div>
+    <InputFieldNumber
+      label={LL().LayerSettings.SymbolSize()}
+      value={props.rendererParameters.size!}
+      onChange={(v) => {
+        updateProp(props.id, ['rendererParameters', 'size'], v);
+        redrawLayer(props.id);
+      }}
+      min={1}
+      strictMin={true}
+      max={20}
+      step={1}
+      bindKeyUpAsChange={true}
+    />
+    <InputFieldNumber
+      label={LL().FunctionalitiesSection.WaffleOptions.Columns()}
+      value={props.rendererParameters.columns!}
+      onChange={(v) => {
+        updateProp(props.id, ['rendererParameters', 'columns'], v);
+        redrawLayer(props.id);
+      }}
+      min={1}
+      strictMin={true}
+      max={20}
+      step={1}
+      bindKeyUpAsChange={true}
+    />
+    <InputFieldNumber
+      label={LL().FunctionalitiesSection.WaffleOptions.Spacing()}
+      value={props.rendererParameters.spacing!}
+      onChange={(v) => {
+        updateProp(props.id, ['rendererParameters', 'spacing'], v);
+        redrawLayer(props.id);
+      }}
+      min={0}
+      strictMin={true}
+      max={20}
+      step={1}
+      bindKeyUpAsChange={true}
+    />
+    <InputFieldNumber
+      label={LL().FunctionalitiesSection.WaffleOptions.SymbolValue()}
+      value={props.rendererParameters.symbolValue!}
+      onChange={(v) => {
+        // TODO: make the same validation step as in WaffleSettings
+        updateProp(props.id, ['rendererParameters', 'symbolValue'], v);
+        redrawLayer(props.id);
+      }}
+      min={1}
+      max={Infinity}
+      step={10}
+    />
+    <InputFieldSelect
+      label={LL().LayerSettings.SymbolAnchor()}
+      onChange={(v) => {
+        updateProp(props.id, ['rendererParameters', 'anchor'], v);
+        redrawLayer(props.id);
+      }}
+      value={props.rendererParameters.anchor}
+    >
+      <option value="start">{LL().LayerSettings.TextAnchorStart()}</option>
+      <option value="middle">{LL().LayerSettings.TextAnchorMiddle()}</option>
+      <option value="end">{LL().LayerSettings.TextAnchorEnd()}</option>
+    </InputFieldSelect>
+    <InputFieldWidthColorOpacity
+      label={LL().LayerSettings.Stroke()}
+      valueWidth={props.strokeWidth!}
+      valueColor={props.strokeColor!}
+      valueOpacity={props.strokeOpacity!}
+      onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
+      onChangeColor={(v) => debouncedUpdateProp(props.id, 'strokeColor', v)}
+      onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
+    />
+    <InputFieldCheckbox
+      label={ LL().LayerSettings.AllowMovingSymbols() }
+      checked={(props.rendererParameters as ProportionalSymbolsParameters).movable}
+      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}
+    />
+    <AestheticsSection {...props} />
+  </>;
 }
 
 function makeSettingsPictograms(
@@ -2095,6 +2242,11 @@ export default function LayerSettings(
   } else if (layerDescription.representationType === 'categoricalPictogram') {
     innerElement = makeSettingsPictograms(
       layerDescription as LayerDescriptionCategoricalPictogram,
+      LL,
+    );
+  } else if (layerDescription.representationType === 'waffle') {
+    innerElement = makeSettingsWaffle(
+      layerDescription as LayerDescriptionWaffle,
       LL,
     );
   } else {
