@@ -5,6 +5,7 @@ interface InputFieldNumberProps {
   label: LocalizedString | string;
   value: number;
   onChange: (number: number) => void;
+  onKeyUp?: (text: string) => void;
   min: number;
   max: number;
   step: number;
@@ -15,6 +16,7 @@ interface InputFieldNumberProps {
   strictMinMax?: boolean;
   strictMin?: boolean;
   strictMax?: boolean;
+  bindKeyUpAsChange?: boolean;
 }
 
 export default function InputFieldNumber(props: InputFieldNumberProps): JSX.Element {
@@ -39,6 +41,10 @@ export default function InputFieldNumber(props: InputFieldNumberProps): JSX.Elem
             e.currentTarget.value = `${mergedProps.max}`;
           }
           mergedProps.onChange(+e.currentTarget.value);
+        }}
+        onKeyUp={(e) => {
+          if (props.onKeyUp) props.onKeyUp(e.currentTarget.value);
+          else if (props.bindKeyUpAsChange && props.onChange) props.onChange(e.currentTarget.value);
         }}
         value={mergedProps.value}
         min={mergedProps.min}
