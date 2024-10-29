@@ -4744,6 +4744,10 @@ type RootTranslation = {
 		 */
 		YOffset: string
 		/**
+		 * S​y​m​b​o​l​ ​a​n​c​h​o​r
+		 */
+		SymbolAnchor: string
+		/**
 		 * T​e​x​t​ ​a​n​c​h​o​r
 		 */
 		TextAnchor: string
@@ -10595,6 +10599,10 @@ export type TranslationFunctions = {
 		 * Y offset
 		 */
 		YOffset: () => LocalizedString
+		/**
+		 * Symbol anchor
+		 */
+		SymbolAnchor: () => LocalizedString
 		/**
 		 * Text anchor
 		 */

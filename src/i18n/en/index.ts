@@ -1187,6 +1187,7 @@ const en = {
     TextColor: 'Text color',
     XOffset: 'X offset',
     YOffset: 'Y offset',
+    SymbolAnchor: 'Symbol anchor',
     TextAnchor: 'Text anchor',
     TextAnchorStart: 'Start',
     TextAnchorMiddle: 'Middle',

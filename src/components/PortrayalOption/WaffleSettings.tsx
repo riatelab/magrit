@@ -187,6 +187,7 @@ function onClickValidate(
     columns,
     symbolValue,
     spacing,
+    anchor: 'middle',
     movable: false,
   };
 

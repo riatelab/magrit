@@ -1187,6 +1187,7 @@ const fr = {
     TextColor: 'Couleur du texte',
     XOffset: 'Décalage en X',
     YOffset: 'Décalage en Y',
+    SymbolAnchor: 'Ancrage du symbole',
     TextAnchor: 'Ancrage du texte',
     TextAnchorStart: 'Début',
     TextAnchorMiddle: 'Milieu',

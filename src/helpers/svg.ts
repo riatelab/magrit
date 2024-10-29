@@ -345,6 +345,7 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
       const size = +g.getAttribute('mgt:size')!;
       const columns = +g.getAttribute('mgt:columns')!;
       const spacing = +g.getAttribute('mgt:spacing')!;
+      const anchor = g.getAttribute('mgt:anchor')!;
 
       g.querySelectorAll('g').forEach((gg) => {
         const coords = globalStore.pathGenerator.centroid(
@@ -352,9 +353,20 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
           (gg as SVGGElement & ID3Element).__data__.geometry,
         );
         if (!Number.isNaN(coords[0])) {
-          const offsetCentroidX = symbolType === 'circle'
-            ? (size + spacing) * (columns / 2) - (size * 0.5)
-            : (size + spacing) * (columns / 2);
+          let offsetCentroidX = 0; // value for anchor = 'start'
+          if (symbolType === 'circle') {
+            if (anchor === 'middle') {
+              offsetCentroidX = (size + spacing) * (columns / 2) - (size * 0.5);
+            } else if (anchor === 'end') {
+              offsetCentroidX = (size + spacing) * columns - size;
+            }
+          } else { // eslint-disable-next-line no-lonely-if
+            if (anchor === 'middle') {
+              offsetCentroidX = (size + spacing) * (columns / 2) - size;
+            } else if (anchor === 'end') {
+              offsetCentroidX = (size + spacing) * columns - size;
+            }
+          }
           let symbolIndex = 0;
           if (symbolType === 'circle') {
             gg.querySelectorAll('circle').forEach((c) => {

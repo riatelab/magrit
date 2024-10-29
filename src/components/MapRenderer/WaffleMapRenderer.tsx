@@ -53,6 +53,7 @@ export default function waffleRenderer(
     mgt:portrayal-type={layerDescription.representationType}
     mgt:symbol-type={params.symbolType}
     mgt:size={params.size}
+    mgt:anchor={params.anchor}
     mgt:columns={params.columns}
     mgt:spacing={params.spacing}
   >
@@ -70,9 +71,22 @@ export default function waffleRenderer(
           }));
 
           // Central position of the symbol block
-          const offsetCentroidX = params.symbolType === 'circle'
-            ? (params.size + params.spacing) * (params.columns / 2) - (params.size * 0.5)
-            : (params.size + params.spacing) * (params.columns / 2);
+          let offsetCentroidX = 0; // value for anchor = 'start'
+
+          if (params.symbolType === 'circle') {
+            if (params.anchor === 'middle') {
+              offsetCentroidX = (params.size + params.spacing)
+                * (params.columns / 2) - (params.size * 0.5);
+            } else if (params.anchor === 'end') {
+              offsetCentroidX = (params.size + params.spacing) * params.columns - params.size;
+            }
+          } else { // eslint-disable-next-line no-lonely-if
+            if (params.anchor === 'middle') {
+              offsetCentroidX = (params.size + params.spacing) * (params.columns / 2);
+            } else if (params.anchor === 'end') {
+              offsetCentroidX = (params.size + params.spacing) * params.columns;
+            }
+          }
 
           let symbolIndex = 0; // Counter for symbol position
 
