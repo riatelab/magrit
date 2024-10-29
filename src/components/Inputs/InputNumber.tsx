@@ -5,7 +5,7 @@ interface InputFieldNumberProps {
   label: LocalizedString | string;
   value: number;
   onChange: (number: number) => void;
-  onKeyUp?: (text: string) => void;
+  onKeyUp?: (text: number) => void;
   min: number;
   max: number;
   step: number;
@@ -19,6 +19,26 @@ interface InputFieldNumberProps {
   bindKeyUpAsChange?: boolean;
 }
 
+function applyStrictMinMax(
+  mergedProps: InputFieldNumberProps,
+  event: Event & { currentTarget: HTMLInputElement },
+) {
+  if (
+    (mergedProps.strictMinMax || mergedProps.strictMin)
+    && +event.currentTarget.value < mergedProps.min
+  ) {
+    // eslint-disable-next-line no-param-reassign
+    event.currentTarget.value = `${mergedProps.min}`;
+  }
+  if (
+    (mergedProps.strictMinMax || mergedProps.strictMax)
+    && +event.currentTarget.value > mergedProps.max
+  ) {
+    // eslint-disable-next-line no-param-reassign
+    event.currentTarget.value = `${mergedProps.max}`;
+  }
+}
+
 export default function InputFieldNumber(props: InputFieldNumberProps): JSX.Element {
   const mergedProps = mergeProps({ width: 200 }, props);
   return <div class={props.layout === 'vertical' ? 'field-block' : 'field'}>
@@ -28,23 +48,17 @@ export default function InputFieldNumber(props: InputFieldNumberProps): JSX.Elem
         class={ mergedProps.rounded ? 'number' : 'input' }
         type="number"
         onChange={(e) => {
-          if (
-            (mergedProps.strictMinMax || mergedProps.strictMin)
-            && +e.currentTarget.value < mergedProps.min
-          ) {
-            e.currentTarget.value = `${mergedProps.min}`;
-          }
-          if (
-            (mergedProps.strictMinMax || mergedProps.strictMax)
-            && +e.currentTarget.value > mergedProps.max
-          ) {
-            e.currentTarget.value = `${mergedProps.max}`;
-          }
+          applyStrictMinMax(mergedProps, e);
           mergedProps.onChange(+e.currentTarget.value);
         }}
         onKeyUp={(e) => {
-          if (props.onKeyUp) props.onKeyUp(e.currentTarget.value);
-          else if (props.bindKeyUpAsChange && props.onChange) props.onChange(e.currentTarget.value);
+          if (props.onKeyUp) {
+            applyStrictMinMax(mergedProps, e);
+            props.onKeyUp(+e.currentTarget.value);
+          } else if (props.bindKeyUpAsChange && props.onChange) {
+            applyStrictMinMax(mergedProps, e);
+            props.onChange(+e.currentTarget.value);
+          }
         }}
         value={mergedProps.value}
         min={mergedProps.min}
