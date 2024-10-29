@@ -1,8 +1,10 @@
 // Imports from solid-js
 import {
+  createEffect,
   createSignal,
   For,
-  type JSX,
+  type JSX, on,
+  Show,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
@@ -13,15 +15,17 @@ import { yieldOrContinue } from 'main-thread-scheduling';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { randomColorFromCategoricalPalette } from '../../helpers/color';
 import {
-  findSuitableName,
+  findSuitableName, isFiniteNumber,
 } from '../../helpers/common';
 import { coordsPointOnFeature } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 import { generateIdLegend } from '../../helpers/legends';
+import { Mmax, Mmin } from '../../helpers/math';
 
 // Sub-components
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
+import InputFieldMultiSelect from '../Inputs/InputMultiSelect.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
@@ -47,7 +51,83 @@ import {
   WaffleParameters,
 } from '../../global.d';
 import type { PortrayalSettingsProps } from './common';
-import InputFieldMultiSelect from '../Inputs/InputMultiSelect.tsx';
+import MessageBlock from '../MessageBlock.tsx';
+
+function guessSymbolValue(
+  layerId: string,
+  selectedVariables: { name: string, displayName: string, color: string }[],
+) {
+  if (selectedVariables.length < 2) {
+    return 0;
+  }
+
+  const ld = layersDescriptionStore.layers.find((l) => l.id === layerId)!;
+
+  let minSum = Infinity;
+  let maxSum = -Infinity;
+
+  // We want to find the maximum sum and the minimum sum
+  // (between all the features) of the selected variables
+  ld.data.features.forEach((feature) => {
+    let sum = 0;
+    selectedVariables.forEach((variable) => {
+      if (isFiniteNumber(feature.properties[variable.name])) {
+        sum += +feature.properties[variable.name];
+      }
+    });
+    maxSum = Mmax(maxSum, sum);
+    minSum = Mmin(minSum, sum);
+  });
+
+  // We want to find a divisor (ideally a multiple of 10) that
+  // allows the user to encode the sum of the selected variables
+  // in a stack of symbols (without having too much symbols for the
+  // features that have the largest sum and without having no symbol
+  // for the features that have the smallest sum)
+  let divisor = 0;
+  const step = maxSum > 100 ? 10 : 1;
+  while (maxSum / divisor > step) {
+    if (minSum / divisor < selectedVariables.length) {
+      break;
+    }
+    divisor += step;
+  }
+
+  return divisor;
+}
+
+function isValidSymbolValue(
+  layerId: string,
+  selectedVariables: { name: string, displayName: string, color: string }[],
+  symbolValue: number,
+) {
+  const ld = layersDescriptionStore.layers.find((l) => l.id === layerId)!;
+
+  let minNumberOfSymbols = Infinity;
+  let maxNumberOfSymbols = -Infinity;
+
+  // We want to find the number of symbols that will be displayed
+  // for each feature
+  ld.data.features.forEach((feature) => {
+    let numberOfSymbols = 0;
+    selectedVariables.forEach((variable) => {
+      if (isFiniteNumber(feature.properties[variable.name])) {
+        numberOfSymbols += +feature.properties[variable.name] / symbolValue;
+      }
+    });
+
+    maxNumberOfSymbols = Mmax(maxNumberOfSymbols, numberOfSymbols);
+    minNumberOfSymbols = Mmin(minNumberOfSymbols, numberOfSymbols);
+  });
+
+  if (maxNumberOfSymbols > 1000) {
+    return { valid: false, reason: 'tooManySymbols' };
+  }
+  // if (minNumberOfSymbols < 1) {
+  //   return { valid: false, reason: 'tooFewSymbols' };
+  // }
+  return { valid: true };
+}
 
 function onClickValidate(
   referenceLayerId: string,
@@ -203,13 +283,13 @@ export default function WaffleSettings(
   const [
     symbolSize,
     setSymbolSize,
-  ] = createSignal<number>(5);
+  ] = createSignal<number>(10);
 
   // Number of columns
   const [
     columns,
     setColumns,
-  ] = createSignal<number>(10);
+  ] = createSignal<number>(5);
 
   // Space between symbols
   const [
@@ -222,6 +302,20 @@ export default function WaffleSettings(
     symbolValue,
     setSymbolValue,
   ] = createSignal<number>(0);
+
+  createEffect(
+    on(
+      () => selectedVariables(),
+      () => {
+        setSymbolValue(
+          guessSymbolValue(
+            layerDescription.id,
+            selectedVariables(),
+          ),
+        );
+      },
+    ),
+  );
 
   const makePortrayal = async () => {
     // Compute a suitable name for the new layer
@@ -334,12 +428,60 @@ export default function WaffleSettings(
       min={0}
       max={Infinity}
       step={1}
+      disabled={selectedVariables().length < 2}
+      bindKeyUpAsChange={true}
     />
+    <Show when={
+      selectedVariables().length >= 2
+      && isValidSymbolValue(
+        layerDescription.id,
+        selectedVariables(),
+        symbolValue(),
+      ).reason === 'tooManySymbols'
+    }>
+      <MessageBlock type={'danger'} useIcon={true}>
+        {
+          LL().FunctionalitiesSection
+            .WaffleOptions.WarningTooManySymbols({
+              value: guessSymbolValue(layerDescription.id, selectedVariables()),
+            })
+        }
+      </MessageBlock>
+    </Show>
+    <Show when={
+      selectedVariables().length >= 2
+      && isValidSymbolValue(
+        layerDescription.id,
+        selectedVariables(),
+        symbolValue(),
+      ).reason === 'tooFewSymbols'
+    }>
+      <MessageBlock type={'danger'} useIcon={true}>
+        {
+          LL().FunctionalitiesSection
+            .WaffleOptions.WarningTooFewSymbols({
+              value: guessSymbolValue(layerDescription.id, selectedVariables()),
+            })
+        }
+      </MessageBlock>
+    </Show>
     <InputResultName
       value={newLayerName()}
       onKeyUp={ (value) => { setNewLayerName(value); }}
       onEnter={makePortrayal}
     />
-    <ButtonValidation label={ LL().FunctionalitiesSection.CreateLayer() } onClick={makePortrayal} />
+    <ButtonValidation
+      label={ LL().FunctionalitiesSection.CreateLayer() }
+      onClick={makePortrayal}
+      disabled={
+        !(selectedVariables().length >= 2
+          && isValidSymbolValue(
+            layerDescription.id,
+            selectedVariables(),
+            symbolValue(),
+          ).valid
+        )
+      }
+    />
   </div>;
 }

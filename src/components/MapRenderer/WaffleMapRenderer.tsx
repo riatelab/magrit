@@ -70,8 +70,9 @@ export default function waffleRenderer(
           }));
 
           // Central position of the symbol block
-          const offsetCentroidX = (
-            (params.size + params.spacing) * (params.columns) - (params.size * 1.5));
+          const offsetCentroidX = params.symbolType === 'circle'
+            ? (params.size + params.spacing) * (params.columns / 2) - (params.size * 0.5)
+            : (params.size + params.spacing) * (params.columns / 2);
 
           let symbolIndex = 0; // Counter for symbol position
 
@@ -83,17 +84,17 @@ export default function waffleRenderer(
               {(variable) => <For each={Array.from({ length: variable.count })}>
                   {(_, i) => {
                     const tx = Mround(
-                      (symbolIndex % params.columns) * (2 * params.size + params.spacing),
+                      (symbolIndex % params.columns) * (params.size + params.spacing),
                     );
                     const ty = Mfloor(
-                      Mfloor(symbolIndex / params.columns) * (2 * params.size + params.spacing),
+                      Mfloor(symbolIndex / params.columns) * (params.size + params.spacing),
                     );
                     symbolIndex += 1; // Increment for next position
                     return params.symbolType === 'circle' ? (
                       <circle
                         cx={projectedCoords()[0] - offsetCentroidX + tx}
-                        cy={projectedCoords()[1] - params.size - ty}
-                        r={params.size}
+                        cy={projectedCoords()[1] - (params.size / 2) - ty}
+                        r={params.size / 2}
                         fill={variable.color}
                       />
                     ) : (

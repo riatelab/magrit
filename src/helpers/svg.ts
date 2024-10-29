@@ -352,29 +352,29 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
           (gg as SVGGElement & ID3Element).__data__.geometry,
         );
         if (!Number.isNaN(coords[0])) {
-          const offsetCentroidX = (
-            (size + spacing) * (columns) - (size * 1.5)
-          );
+          const offsetCentroidX = symbolType === 'circle'
+            ? (size + spacing) * (columns / 2) - (size * 0.5)
+            : (size + spacing) * (columns / 2);
           let symbolIndex = 0;
           if (symbolType === 'circle') {
             gg.querySelectorAll('circle').forEach((c) => {
               const tx = Mround(
-                (symbolIndex % columns) * (2 * size + spacing),
+                (symbolIndex % columns) * (size + spacing),
               );
               const ty = Mfloor(
-                Mfloor(symbolIndex / columns) * (2 * size + spacing),
+                Mfloor(symbolIndex / columns) * (size + spacing),
               );
               symbolIndex += 1;
               c.setAttribute('cx', `${coords[0] - offsetCentroidX + tx}`);
-              c.setAttribute('cy', `${coords[1] - size - ty}`);
+              c.setAttribute('cy', `${coords[1] - (size / 2) - ty}`);
             });
           } else { // symbolType === 'square'
             gg.querySelectorAll('rect').forEach((r) => {
               const tx = Mround(
-                (symbolIndex % columns) * (2 * size + spacing),
+                (symbolIndex % columns) * (size + spacing),
               );
               const ty = Mfloor(
-                Mfloor(symbolIndex / columns) * (2 * size + spacing),
+                Mfloor(symbolIndex / columns) * (size + spacing),
               );
               r.setAttribute('x', `${coords[0] - offsetCentroidX + tx}`);
               r.setAttribute('y', `${coords[1] - size - ty}`);
