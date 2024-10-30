@@ -230,14 +230,27 @@ function onClickValidate(
     },
     // Part specific to waffle legends
     type: LegendType.waffle,
-    // TODO...
+    orientation: 'vertical',
+    labels: {
+      ...applicationSettingsStore.defaultLegendSettings.labels,
+    } as LegendTextElement,
+    boxWidth: 50,
+    boxHeight: 30,
+    boxSpacing: 10,
+    boxCornerRadius: 0,
+    stroke: false,
+    spacingBelowBoxes: 10,
+    valueText: {
+      ...applicationSettingsStore.defaultLegendSettings.labels,
+      text: `→ ${symbolValue} unit(s)`,
+    } as LegendTextElement,
   };
 
   setLayersDescriptionStore(
     produce(
       (draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
-        // draft.layoutFeaturesAndLegends.push(legend);
+        draft.layoutFeaturesAndLegends.push(legend);
       },
     ),
   );

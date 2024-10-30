@@ -25,7 +25,7 @@ import {
   unproxify,
 } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
-import { Mround, round } from '../../helpers/math';
+import { round } from '../../helpers/math';
 import type { TranslationFunctions } from '../../i18n/i18n-types';
 
 // Subcomponents
@@ -47,10 +47,12 @@ import {
   type CategoricalChoroplethLegend,
   type CategoricalPictogramLegend,
   type ChoroplethHistogramLegend,
-  type ChoroplethLegend, type ClassificationParameters,
+  type ChoroplethLegend,
+  type ClassificationParameters,
   DefaultLegend,
   type DiscontinuityLegend,
-  type LabelsLegend, LayerDescription,
+  type LabelsLegend,
+  LayerDescription,
   type LayerDescriptionCategoricalChoropleth,
   type LayerDescriptionChoropleth,
   type LayerDescriptionGriddedLayer,
@@ -65,7 +67,7 @@ import {
   type ProportionalSymbolsLegend,
   type ProportionalSymbolsParameters,
   type ProportionalSymbolsRatioParameters,
-  RepresentationType,
+  RepresentationType, WaffleLegend,
 } from '../../global.d';
 
 /**
@@ -1308,6 +1310,86 @@ function makeSettingsScatterPlot(
   </>;
 }
 
+function makeSettingsWaffle(
+  legend: WaffleLegend,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <>
+    <FieldText legend={legend} LL={LL} role={'title'}/>
+    <FieldText legend={legend} LL={LL} role={'subtitle'}/>
+    <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldNumber
+      label={ LL().Legend.Modal.BoxWidth() }
+      value={ legend.boxWidth }
+      min={0}
+      max={100}
+      step={1}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['boxWidth'], v)}
+    />
+    <InputFieldNumber
+      label={ LL().Legend.Modal.BoxHeight() }
+      value={ legend.boxHeight }
+      min={0}
+      max={100}
+      step={1}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['boxHeight'], v)}
+    />
+    <InputFieldNumber
+      label={ LL().Legend.Modal.BoxCornerRadius() }
+      value={ legend.boxCornerRadius }
+      min={0}
+      max={100}
+      step={1}
+      strictMin={true}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['boxCornerRadius'], v);
+      }}
+    />
+    <InputFieldNumber
+      label={ LL().Legend.Modal.BoxSpacing() }
+      value={ legend.boxSpacing }
+      min={0}
+      max={100}
+      step={1}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['boxSpacing'], v);
+      }}
+    />
+    <InputFieldNumber
+      label={'Spacing below color boxes'}
+      value={legend.spacingBelowBoxes}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['spacingBelowBoxes'], v);
+      }}
+      min={0}
+      max={100}
+      step={1}
+    />
+    <OptionBackgroundRectangle legend={legend} LL={LL} />
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        { LL().Legend.Modal.FontProperties() }
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }} />
+      </p>
+    </div>
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'labels', 'note']}
+      />
+    </Show>
+  </>;
+}
+
 function makeSettingsCategoricalPictogram(
   legend: CategoricalPictogramLegend,
   LL: Accessor<TranslationFunctions>,
@@ -1398,6 +1480,12 @@ function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.
   if (legend.type === LegendType.categoricalPictogram) {
     return makeSettingsCategoricalPictogram(
       legend as CategoricalPictogramLegend,
+      LL,
+    );
+  }
+  if (legend.type === LegendType.waffle) {
+    return makeSettingsWaffle(
+      legend as WaffleLegend,
       LL,
     );
   }

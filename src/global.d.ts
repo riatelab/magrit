@@ -935,10 +935,26 @@ interface DiscontinuityLegend extends LegendBase {
 
 interface WaffleLegend extends LegendBase {
   type: LegendType.waffle,
+  // Whether the legend is horizontal or vertical
+  orientation: Orientation,
+  // The text properties of the labels
+  labels: LegendTextElement,
+  // The width of each box
+  boxWidth: number,
+  // The height of each box
+  boxHeight: number,
+  // The (horizontal or vertical, wrt. 'orientation') spacing between boxes
+  boxSpacing: number,
+  // The corner radius of each box (rx and ry of each rect)
+  boxCornerRadius: number,
+  // Whether to display the stroke of the boxes
+  stroke: boolean,
+  // The space below the boxes (between boxes and
+  // the text about the value encoded in each symbol)
   // Spacing between the symbols
-  spacing: number,
-  // Name of each variable
-  variableNames: string[],
+  spacingBelowBoxes: number,
+  // The text properties about the value encoded in each symbol
+  valueText: LegendTextElement,
 }
 
 interface MushroomsLegend extends LegendBase {

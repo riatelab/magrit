@@ -88,6 +88,7 @@ import legendCategoricalChoroplethBarchart from './LegendRenderer/CategoricalCho
 import legendChoroplethHistogram from './LegendRenderer/ChoroplethHistogramLegend.tsx';
 import lmScatterPlot from './LegendRenderer/LMScatterPlotRenderer.tsx';
 import legendCategoricalPictogram from './LegendRenderer/CategoricalPictogramLegendRenderer.tsx';
+import legendWaffle from './LegendRenderer/WaffleLegendRenderer.tsx';
 
 // Types and enums
 import {
@@ -124,6 +125,7 @@ import {
   type ChoroplethHistogramLegend,
   type LayerDescriptionCategoricalPictogram,
   type LayerDescriptionWaffle,
+  type WaffleLegend,
 } from '../global.d';
 
 // Styles
@@ -199,6 +201,9 @@ const dispatchLegendRenderer = (legend: Legend) => {
   }
   if (legend.type === 'categoricalPictogram') {
     return legendCategoricalPictogram(legend as CategoricalPictogramLegend);
+  }
+  if (legend.type === 'waffle') {
+    return legendWaffle(legend as WaffleLegend);
   }
   return null;
 };
