@@ -362,9 +362,9 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
             }
           } else { // eslint-disable-next-line no-lonely-if
             if (anchor === 'middle') {
-              offsetCentroidX = (size + spacing) * (columns / 2) - size;
+              offsetCentroidX = (size + spacing) * (columns / 2);
             } else if (anchor === 'end') {
-              offsetCentroidX = (size + spacing) * columns - size;
+              offsetCentroidX = (size + spacing) * columns;
             }
           }
           let symbolIndex = 0;
