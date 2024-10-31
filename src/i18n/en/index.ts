@@ -1491,6 +1491,8 @@ const en = {
       DisplayMedian: 'Display median',
       DisplayStdDev: 'Display standard deviation',
       DisplayPopulation: 'Display population',
+      UnitSymbolText: 'Number of units per symbol text',
+      SpacingBelowBoxes: 'Spacing below color boxes',
     },
   },
   CommonTextElement: {

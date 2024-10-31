@@ -5866,6 +5866,14 @@ type RootTranslation = {
 			 * D​i​s​p​l​a​y​ ​p​o​p​u​l​a​t​i​o​n
 			 */
 			DisplayPopulation: string
+			/**
+			 * N​u​m​b​e​r​ ​o​f​ ​u​n​i​t​s​ ​p​e​r​ ​s​y​m​b​o​l​ ​t​e​x​t
+			 */
+			UnitSymbolText: string
+			/**
+			 * S​p​a​c​i​n​g​ ​b​e​l​o​w​ ​c​o​l​o​r​ ​b​o​x​e​s
+			 */
+			SpacingBelowBoxes: string
 		}
 	}
 	CommonTextElement: {
@@ -11716,6 +11724,14 @@ export type TranslationFunctions = {
 			 * Display population
 			 */
 			DisplayPopulation: () => LocalizedString
+			/**
+			 * Number of units per symbol text
+			 */
+			UnitSymbolText: () => LocalizedString
+			/**
+			 * Spacing below color boxes
+			 */
+			SpacingBelowBoxes: () => LocalizedString
 		}
 	}
 	CommonTextElement: {

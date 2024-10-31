@@ -1491,6 +1491,8 @@ const fr = {
       DisplayMedian: 'Afficher la médiane',
       DisplayStdDev: 'Afficher l\'écart-type',
       DisplayPopulation: 'Afficher la population',
+      UnitSymbolText: 'Texte du nombre d\'unités par symbole',
+      SpacingBelowBoxes: 'Espace sous les boites colorées',
     },
   },
   CommonTextElement: {

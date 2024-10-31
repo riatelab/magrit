@@ -1360,8 +1360,13 @@ function makeSettingsWaffle(
         debouncedUpdateProps(legend.id, ['boxSpacing'], v);
       }}
     />
+    <InputFieldText
+      label={LL().Legend.Modal.UnitSymbolText()}
+      value={legend.valueText.text}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['valueText', 'text'], v)}
+    />
     <InputFieldNumber
-      label={'Spacing below color boxes'}
+      label={LL().Legend.Modal.SpacingBelowBoxes()}
       value={legend.spacingBelowBoxes}
       onChange={(v) => {
         debouncedUpdateProps(legend.id, ['spacingBelowBoxes'], v);
