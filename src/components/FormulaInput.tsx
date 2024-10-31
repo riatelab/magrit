@@ -120,6 +120,18 @@ export const filterData = (
   return layerDescription.data.features.filter((_, i) => predicateArray[i]);
 };
 
+const sqlFuncNames = ['power', 'substring', 'substr', 'concat', 'min', 'max', 'count', 'sum', 'avg'];
+
+/**
+ * Check if a string (a field name, in lowercase) is a SQL function name.
+ * This is useful to escape the field name with brackets if needed
+ * in the FormulaInput component.
+ *
+ * @param {string} name - A string (a field name, in lowercase).
+ * @returns {boolean} - True if the string is a SQL function name.
+ */
+export const isFuncName = (name: string): boolean => sqlFuncNames.includes(name);
+
 export default function FormulaInput(
   props: {
     typeDataset: 'layer' | 'table',
@@ -216,7 +228,7 @@ export default function FormulaInput(
               <button
                 class="tag is-warning"
                 title={
-                  /[àâäéèêëîïôöùûüç -+]/i.test(field)
+                  /[àâäéèêëîïôöùûüç -+]/i.test(field) || isFuncName(field.toLocaleLowerCase())
                     ? `${field} - ${LL().FormulaInput.noteSpecialCharacters()}`
                     : field
                 }
@@ -225,7 +237,10 @@ export default function FormulaInput(
                   // we need to put it between brackets
                   let fieldValue = field;
                   // Note that the two dashes are not the same
-                  if (/[àâäéèêëîïôöùûüç --+]/i.test(fieldValue)) {
+                  if (
+                    /[àâäéèêëîïôöùûüç --+]/i.test(fieldValue)
+                    || isFuncName(field.toLocaleLowerCase())
+                  ) {
                     fieldValue = `[${fieldValue}]`;
                   }
                   // Insert the field in the formula
