@@ -27,7 +27,7 @@ import d3 from '../../helpers/d3-custom';
 import { getPaletteWrapper } from '../../helpers/color';
 import {
   descendingKeyAccessor, findSuitableName,
-  getMinimumPrecision, isFiniteNumber,
+  getMinimumPrecision, isFiniteNumber, unproxify,
 } from '../../helpers/common';
 import {
   computeAppropriateResolution,
@@ -103,11 +103,11 @@ function onClickValidate(
     // The user want to analyze the data using an existing polygon layer
     const maskLayerId = meshParams;
     const maskLayer = layersDescriptionStore.layers
-      .find((l) => l.id === maskLayerId)!.data;
+      .find((l) => l.id === maskLayerId)!;
 
     resultLayer = pointAggregationOnLayer(
       referenceLayerDescription.data,
-      maskLayer,
+      maskLayer.data,
       computationType,
       targetVariable,
     );
@@ -116,7 +116,7 @@ function onClickValidate(
       .some((d) => !isFiniteNumber(d.properties[computationType]));
 
     // Description of the new field added to the layer
-    fields = referenceLayerDescription.fields.concat([{
+    fields = unproxify(maskLayer.fields).concat([{
       name: computationType,
       type: typeField as VariableType,
       dataType: DataType.number,
