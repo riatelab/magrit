@@ -14,6 +14,7 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { findSuitableName } from '../../helpers/common';
 import { generateIdLayer, getDefaultRenderingParams } from '../../helpers/layers';
+import { makeDefaultLegendDescription } from '../../helpers/legends';
 
 // Stores
 import {
@@ -62,9 +63,12 @@ async function onClickValidate(
     shapeRendering: 'auto',
   } as LayerDescription;
 
+  const newLegendDescription = makeDefaultLegendDescription(newLayerDescription);
+
   setLayersDescriptionStore(
     produce((draft: LayersDescriptionStoreType) => {
       draft.layers.push(newLayerDescription);
+      draft.layers.push(newLegendDescription);
     }),
   );
 }

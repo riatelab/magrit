@@ -13,6 +13,7 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 import { randomColorFromCategoricalPalette } from '../../helpers/color';
 import { findSuitableName } from '../../helpers/common';
 import { generateIdLayer } from '../../helpers/layers';
+import { makeDefaultLegendDescription } from '../../helpers/legends';
 
 // Stores
 import { setLoading } from '../../store/GlobalStore';
@@ -64,9 +65,12 @@ async function onClickValidate(
     shapeRendering: 'auto',
   } as LayerDescription;
 
+  const newLegendDescription = makeDefaultLegendDescription(newLayerDescription);
+
   setLayersDescriptionStore(
     produce((draft: LayersDescriptionStoreType) => {
       draft.layers.push(newLayerDescription);
+      draft.layoutFeaturesAndLegends.push(newLegendDescription);
     }),
   );
 }
