@@ -1104,6 +1104,7 @@ const fr = {
       SymbolSize: 'Taille du symbole',
       SymbolValue: 'Valeur représentée par chaque symbole',
       NewLayerName: 'Gaufre_{layerName}',
+      SymbolRatioNote: '1 symbol = {value} units',
       WarningTooManySymbols: 'La valeur représentée par chaque symbole est trop faible pour être affichée correctement (trop de symboles seraient générés par le choix de cette valeur). Veuillez choisir une valeur plus grande (par exemple {value}).',
       WarningTooFewSymbols: 'La valeur représentée par chaque symbole est trop élevée pour permettre de distinguer correctement les différentes entités (trop peu de symboles seraient générés par le choix de cette valeur). Veuillez choisir une valeur plus petite (par exemple {value}).',
     },

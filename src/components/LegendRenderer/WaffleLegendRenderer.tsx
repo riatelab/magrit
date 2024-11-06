@@ -163,27 +163,8 @@ function verticalLegendWaffle(
           >{ categoryName }</text>
         }
       </For>
-      <Show when={layer.rendererParameters.symbolType === 'circle'}>
-        <circle
-          cx={legend.boxWidth / 2}
-          cy={positionSymbolValue()}
-          r={layer.rendererParameters.size / 2}
-          fill={'lightgray'}
-          stroke={layer.strokeColor}
-        />
-      </Show>
-      <Show when={layer.rendererParameters.symbolType === 'square'}>
-        <rect
-          x={legend.boxWidth / 2 - layer.rendererParameters.size / 2}
-          y={positionSymbolValue()}
-          width={layer.rendererParameters.size}
-          height={layer.rendererParameters.size}
-          fill={'lightgray'}
-          stroke={layer.strokeColor}
-        />
-      </Show>
       <text
-        x={legend.boxWidth + defaultSpacing}
+        x={0}
         y={positionSymbolValue() + (layer.rendererParameters.symbolType === 'circle' ? 0 : layer.rendererParameters.size / 2)}
         font-size={legend.valueText.fontSize}
         font-family={legend.valueText.fontFamily}

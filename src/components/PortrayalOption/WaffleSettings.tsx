@@ -47,8 +47,10 @@ import {
   type LayerDescriptionWaffle,
   type LegendTextElement,
   LegendType,
-  ProportionalSymbolsSymbolType, RepresentationType,
-  WaffleParameters,
+  ProportionalSymbolsSymbolType,
+  RepresentationType,
+  type WaffleLegend,
+  type WaffleParameters,
 } from '../../global.d';
 import type { PortrayalSettingsProps } from './common';
 import MessageBlock from '../MessageBlock.tsx';
@@ -133,6 +135,7 @@ function onClickValidate(
   referenceLayerId: string,
   targetVariables: { name: string, displayName: string, color: string }[],
   symbolValue: number,
+  symbolValueSentence: string,
   size: number,
   columns: number,
   spacing: number,
@@ -234,17 +237,17 @@ function onClickValidate(
     labels: {
       ...applicationSettingsStore.defaultLegendSettings.labels,
     } as LegendTextElement,
-    boxWidth: 50,
-    boxHeight: 30,
+    boxWidth: size,
+    boxHeight: size,
     boxSpacing: 10,
-    boxCornerRadius: 0,
-    stroke: false,
+    boxCornerRadius: symbolType === 'circle' ? size / 2 : 0,
+    stroke: true,
     spacingBelowBoxes: 10,
     valueText: {
       ...applicationSettingsStore.defaultLegendSettings.labels,
-      text: `→ ${symbolValue} unit(s)`,
+      text: symbolValueSentence,
     } as LegendTextElement,
-  };
+  } as WaffleLegend;
 
   setLayersDescriptionStore(
     produce(
@@ -352,6 +355,7 @@ export default function WaffleSettings(
         layerDescription.id,
         selectedVariables(),
         symbolValue(),
+        LL().FunctionalitiesSection.WaffleOptions.SymbolRatioNote({ value: symbolValue() }),
         symbolSize(),
         columns(),
         space(),
