@@ -16,7 +16,6 @@ import { TranslationFunctions } from '../../i18n/i18n-types';
 import { getPaletteWrapper } from '../../helpers/color';
 import { unproxify } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
-import { webSafeFonts, fonts } from '../../helpers/font';
 import { makeDorlingDemersSimulation } from '../../helpers/geo';
 import { generateIdLegend } from '../../helpers/legends';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
@@ -27,6 +26,7 @@ import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import { webSafeFonts, fonts } from '../../helpers/font';
 import InputFieldText from '../Inputs/InputText.tsx';
 import InputFieldButton from '../Inputs/InputButton.tsx';
 import { CategoriesCustomisation } from '../PortrayalOption/CategoricalChoroplethComponents.tsx';
@@ -34,6 +34,14 @@ import {
   CategoriesCustomisation as CategoriesCustomisationPicto,
 } from '../PortrayalOption/CategoricalPictogramComponents.tsx';
 import { LinksSelectionOnExistingLayer } from '../PortrayalOption/LinksComponents.tsx';
+import MessageBlock from '../MessageBlock.tsx';
+import {
+  InputFieldColorOpacity,
+  InputFieldPaletteOpacity,
+  InputFieldWidthColorOpacity,
+  InputFieldWidthPaletteOpacity,
+} from '../Inputs/InputFieldColorOpacity.tsx';
+import VariableCustomisation from '../PortrayalOption/WaffleComponents.tsx';
 
 // Stores
 import {
@@ -83,13 +91,6 @@ import {
 
 // Styles
 import '../../styles/LayerAndLegendSettings.css';
-import MessageBlock from '../MessageBlock.tsx';
-import {
-  InputFieldColorOpacity,
-  InputFieldPaletteOpacity,
-  InputFieldWidthColorOpacity,
-  InputFieldWidthPaletteOpacity,
-} from '../Inputs/InputFieldColorOpacity.tsx';
 
 const layerLinkedToHistogramOrBarChart = (
   layer: LayerDescription,
@@ -209,64 +210,13 @@ function makeSettingsWaffle(
 ): JSX.Element {
   return <>
     <div class="mb-4">
-      <For each={props.rendererParameters.variables}>
-        {
-          (variable) => <div
-            class="is-flex is-justify-content-space-between"
-            style={{ width: '80%', margin: 'auto' }}
-          >
-            <p>
-              <span style={{ 'vertical-align': 'sub' }}>
-                {variable.name}
-              </span>
-            </p>
-            <div>
-              <input
-                class="input"
-                type="text"
-                style={{ width: '15em' }}
-                value={variable.displayName}
-                onChange={(e) => {
-                  const newVariables = props.rendererParameters.variables.map((v) => {
-                    if (v.name === variable.name) {
-                      return {
-                        name: v.name,
-                        color: v.color,
-                        displayName: e.currentTarget.value,
-                      };
-                    }
-                    return v;
-                  });
-                  updateProp(props.id, ['rendererParameters', 'variables'], newVariables);
-                  redrawLayer(props.id);
-                }}
-              />
-            </div>
-            <div>
-              <input
-                class="input"
-                type="color"
-                style={{ width: '10em' }}
-                value={variable.color}
-                onChange={(e) => {
-                  const newVariables = props.rendererParameters.variables.map((v) => {
-                    if (v.name === variable.name) {
-                      return {
-                        name: v.name,
-                        color: e.currentTarget.value,
-                        displayName: v.displayName,
-                      };
-                    }
-                    return v;
-                  });
-                  updateProp(props.id, ['rendererParameters', 'variables'], newVariables);
-                  redrawLayer(props.id);
-                }}
-              />
-            </div>
-          </div>
-        }
-      </For>
+      <VariableCustomisation
+        variables={() => props.rendererParameters.variables}
+        setVariables={(m) => {
+          updateProp(props.id, ['rendererParameters', 'variables'], m as never);
+          redrawLayer(props.id);
+        }}
+      />
     </div>
     <InputFieldNumber
       label={LL().LayerSettings.SymbolSize()}
