@@ -51,11 +51,11 @@ import type { PortrayalSettingsProps } from './common';
 import {
   type ChoroplethLegend,
   type ClassificationParameters,
-  GeoJSONFeatureCollection,
+  type GeoJSONFeatureCollection,
   GridCellShape,
   type GriddedLayerParameters,
   type GridParameters,
-  LayerDescription,
+  type LayerDescription,
   type LegendTextElement,
   LegendType,
   Orientation,
@@ -206,7 +206,7 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
     .find((l) => l.id === props.layerId)!; // eslint-disable-line solid/reactivity
 
   // The bbox of the layer
-  const bboxLayer = bbox(layerDescription.data);
+  const bboxLayer = bbox(layerDescription.data as any);
 
   // The fields of interest on the selected layer
   const targetFields = layerDescription
