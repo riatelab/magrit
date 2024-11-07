@@ -220,7 +220,7 @@ function onClickValidate(
     id: generateIdLegend(),
     layerId: newId,
     title: {
-      text: 'Waffle',
+      text: '',
       ...applicationSettingsStore.defaultLegendSettings.title,
     } as LegendTextElement,
     subtitle: {

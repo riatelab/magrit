@@ -1324,33 +1324,6 @@ function makeSettingsWaffle(
     <FieldText legend={legend} LL={LL} role={'subtitle'}/>
     <FieldText legend={legend} LL={LL} role={'note'}/>
     <InputFieldNumber
-      label={ LL().Legend.Modal.BoxWidth() }
-      value={ legend.boxWidth }
-      min={0}
-      max={100}
-      step={1}
-      onChange={(v) => debouncedUpdateProps(legend.id, ['boxWidth'], v)}
-    />
-    <InputFieldNumber
-      label={ LL().Legend.Modal.BoxHeight() }
-      value={ legend.boxHeight }
-      min={0}
-      max={100}
-      step={1}
-      onChange={(v) => debouncedUpdateProps(legend.id, ['boxHeight'], v)}
-    />
-    <InputFieldNumber
-      label={ LL().Legend.Modal.BoxCornerRadius() }
-      value={ legend.boxCornerRadius }
-      min={0}
-      max={100}
-      step={1}
-      strictMin={true}
-      onChange={(v) => {
-        debouncedUpdateProps(legend.id, ['boxCornerRadius'], v);
-      }}
-    />
-    <InputFieldNumber
       label={ LL().Legend.Modal.BoxSpacing() }
       value={ legend.boxSpacing }
       min={0}

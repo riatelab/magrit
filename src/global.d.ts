@@ -939,14 +939,8 @@ interface WaffleLegend extends LegendBase {
   orientation: Orientation,
   // The text properties of the labels
   labels: LegendTextElement,
-  // The width of each box
-  boxWidth: number,
-  // The height of each box
-  boxHeight: number,
   // The (horizontal or vertical, wrt. 'orientation') spacing between boxes
   boxSpacing: number,
-  // The corner radius of each box (rx and ry of each rect)
-  boxCornerRadius: number,
   // Whether to display the stroke of the boxes
   stroke: boolean,
   // The space below the boxes (between boxes and

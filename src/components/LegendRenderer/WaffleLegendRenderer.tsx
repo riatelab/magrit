@@ -4,7 +4,6 @@ import {
   For,
   type JSX,
   onMount,
-  Show,
 } from 'solid-js';
 
 // Helpers
@@ -66,7 +65,7 @@ function verticalLegendWaffle(
   });
 
   const boxHeightAndSpacing = createMemo(
-    () => legend.boxHeight + legend.boxSpacing,
+    () => layer.rendererParameters.size + legend.boxSpacing,
   );
 
   const labelsAndColors = createMemo(
@@ -84,8 +83,12 @@ function verticalLegendWaffle(
 
   const positionNote = createMemo(
     () => positionSymbolValue()
-      + (layer.rendererParameters.symbolType === 'circle' ? layer.rendererParameters.size / 2 : layer.rendererParameters.size)
-      + defaultSpacing * 3,
+      + getTextSize(
+        legend.valueText.text,
+        legend.labels.fontSize,
+        legend.labels.fontFamily,
+      ).height
+      + defaultSpacing,
   );
 
   let refElement: SVGGElement;
@@ -104,8 +107,7 @@ function verticalLegendWaffle(
         boxHeightAndSpacing(),
         heightTitle(),
         positionNote(),
-        legend.boxHeight,
-        legend.boxWidth,
+        layer.rendererParameters.size,
         legend.spacingBelowBoxes,
         legend.title.text,
         legend.subtitle.text,
@@ -140,19 +142,20 @@ function verticalLegendWaffle(
             fill={color}
             x={0}
             y={distanceToTop() + i() * boxHeightAndSpacing()}
-            rx={legend.boxCornerRadius}
-            ry={legend.boxCornerRadius}
-            width={legend.boxWidth}
-            height={legend.boxHeight}
+            width={layer.rendererParameters.size}
+            height={layer.rendererParameters.size}
+            rx={layer.rendererParameters.symbolType === 'circle' ? layer.rendererParameters.size / 2 : 0}
+            ry={layer.rendererParameters.symbolType === 'circle' ? layer.rendererParameters.size / 2 : 0}
             stroke={legend.stroke ? layer.strokeColor : undefined}
+            stroke-width={legend.stroke ? layer.strokeWidth : undefined}
           />
         }
       </For>
       <For each={labelsAndColors()}>
         {
           ([categoryName, _], i) => <text
-            x={legend.boxWidth + defaultSpacing}
-            y={distanceToTop() + i() * boxHeightAndSpacing() + (legend.boxHeight / 2)}
+            x={layer.rendererParameters.size + defaultSpacing}
+            y={distanceToTop() + i() * boxHeightAndSpacing() + (layer.rendererParameters.size / 2)}
             font-size={legend.labels.fontSize}
             font-family={legend.labels.fontFamily}
             font-style={legend.labels.fontStyle}
@@ -165,12 +168,12 @@ function verticalLegendWaffle(
       </For>
       <text
         x={0}
-        y={positionSymbolValue() + (layer.rendererParameters.symbolType === 'circle' ? 0 : layer.rendererParameters.size / 2)}
-        font-size={legend.valueText.fontSize}
-        font-family={legend.valueText.fontFamily}
-        font-style={legend.valueText.fontStyle}
-        font-weight={legend.valueText.fontWeight}
-        fill={legend.valueText.fontColor}
+        y={positionSymbolValue()}
+        font-size={legend.labels.fontSize}
+        font-family={legend.labels.fontFamily}
+        font-style={legend.labels.fontStyle}
+        font-weight={legend.labels.fontWeight}
+        fill={legend.labels.fontColor}
         text-anchor="start"
         dominant-baseline="middle"
       >{legend.valueText.text}</text>
