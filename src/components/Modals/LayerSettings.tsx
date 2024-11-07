@@ -231,19 +231,21 @@ function makeSettingsWaffle(
       step={1}
       bindKeyUpAsChange={true}
     />
-    <InputFieldNumber
-      label={LL().FunctionalitiesSection.WaffleOptions.Columns()}
-      value={props.rendererParameters.columns!}
-      onChange={(v) => {
-        updateProp(props.id, ['rendererParameters', 'columns'], v);
-        redrawLayer(props.id);
-      }}
-      min={1}
-      strictMin={true}
-      max={20}
-      step={1}
-      bindKeyUpAsChange={true}
-    />
+    <Show when={props.rendererParameters.columns.type === 'fixed'}>
+      <InputFieldNumber
+        label={LL().FunctionalitiesSection.WaffleOptions.ColumnsNumber()}
+        value={props.rendererParameters.columns.value!}
+        onChange={(v) => {
+          updateProp(props.id, ['rendererParameters', 'columns', 'value'], v);
+          redrawLayer(props.id);
+        }}
+        min={1}
+        strictMin={true}
+        max={20}
+        step={1}
+        bindKeyUpAsChange={true}
+      />
+    </Show>
     <InputFieldNumber
       label={LL().FunctionalitiesSection.WaffleOptions.Spacing()}
       value={props.rendererParameters.spacing!}

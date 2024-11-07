@@ -549,7 +549,7 @@ interface WaffleParameters {
   // The size for each symbol
   size: number,
   // The number of columns for the waffle
-  columns: number,
+  columns: { type: 'dynamic' } | { type: 'fixed', value: number },
   // How much stock is represented by each symbol
   symbolValue: number,
   // How much space between each symbol

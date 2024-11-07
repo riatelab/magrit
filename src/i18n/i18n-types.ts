@@ -4420,9 +4420,21 @@ type RootTranslation = {
 			 */
 			Spacing: string
 			/**
+			 * C​o​l​u​m​n​s​ ​t​y​p​e
+			 */
+			ColumnsType: string
+			/**
+			 * D​y​n​a​m​i​c
+			 */
+			ColumnsDynamic: string
+			/**
+			 * F​i​x​e​d
+			 */
+			ColumnsFixed: string
+			/**
 			 * N​u​m​b​e​r​ ​o​f​ ​c​o​l​u​m​n​s
 			 */
-			Columns: string
+			ColumnsNumber: string
 			/**
 			 * S​y​m​b​o​l​ ​s​i​z​e
 			 */
@@ -10292,9 +10304,21 @@ export type TranslationFunctions = {
 			 */
 			Spacing: () => LocalizedString
 			/**
+			 * Columns type
+			 */
+			ColumnsType: () => LocalizedString
+			/**
+			 * Dynamic
+			 */
+			ColumnsDynamic: () => LocalizedString
+			/**
+			 * Fixed
+			 */
+			ColumnsFixed: () => LocalizedString
+			/**
 			 * Number of columns
 			 */
-			Columns: () => LocalizedString
+			ColumnsNumber: () => LocalizedString
 			/**
 			 * Symbol size
 			 */

@@ -81,6 +81,10 @@ function guessSymbolValue(
     minSum = Mmin(minSum, sum);
   });
 
+  if (maxSum < 45) {
+    return 1;
+  }
+
   // We want to find a divisor (ideally a multiple of 10) that
   // allows the user to encode the sum of the selected variables
   // in a stack of symbols (without having too much symbols for the
@@ -137,7 +141,7 @@ function onClickValidate(
   symbolValue: number,
   symbolValueSentence: string,
   size: number,
-  columns: number,
+  columns: { type: 'dynamic' } | { type: 'fixed', value: number },
   spacing: number,
   symbolType: ProportionalSymbolsSymbolType.circle | ProportionalSymbolsSymbolType.square,
   newLayerName: string,
@@ -302,6 +306,11 @@ export default function WaffleSettings(
     setSymbolSize,
   ] = createSignal<number>(10);
 
+  const [
+    columnsType,
+    setColumnsType,
+  ] = createSignal<'dynamic' | 'fixed'>('fixed');
+
   // Number of columns
   const [
     columns,
@@ -349,6 +358,10 @@ export default function WaffleSettings(
 
     await yieldOrContinue('smooth');
 
+    const ct = columnsType() === 'fixed'
+      ? { type: 'fixed', value: columns() }
+      : { type: 'dynamic' };
+
     // Actually create the portrayal
     setTimeout(() => {
       onClickValidate(
@@ -357,7 +370,7 @@ export default function WaffleSettings(
         symbolValue(),
         LL().FunctionalitiesSection.WaffleOptions.SymbolRatioNote({ value: symbolValue() }),
         symbolSize(),
-        columns(),
+        ct,
         space(),
         symbolType(),
         layerName,
@@ -423,14 +436,28 @@ export default function WaffleSettings(
       max={30}
       step={1}
     />
-    <InputFieldNumber
-      label={LL().FunctionalitiesSection.WaffleOptions.Columns()}
-      value={columns()}
-      onChange={(value) => { setColumns(value); }}
-      min={1}
-      max={30}
-      step={1}
-    />
+    <InputFieldSelect
+      label={LL().FunctionalitiesSection.WaffleOptions.ColumnsType()}
+      value={columnsType()}
+      onChange={(value) => { setColumnsType(value as 'dynamic' | 'fixed'); }}
+    >
+      <option value={'fixed'}>
+        {LL().FunctionalitiesSection.WaffleOptions.ColumnsFixed()}
+      </option>
+      <option value={'dynamic'}>
+        {LL().FunctionalitiesSection.WaffleOptions.ColumnsDynamic()}
+      </option>
+    </InputFieldSelect>
+    <Show when={columnsType() === 'fixed'}>
+      <InputFieldNumber
+        label={LL().FunctionalitiesSection.WaffleOptions.ColumnsNumber()}
+        value={columns()}
+        onChange={(value) => { setColumns(value); }}
+        min={1}
+        max={30}
+        step={1}
+      />
+    </Show>
     <InputFieldNumber
       label={LL().FunctionalitiesSection.WaffleOptions.SymbolSize()}
       value={symbolSize()}

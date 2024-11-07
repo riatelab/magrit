@@ -343,11 +343,11 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
     } else if (typePortrayal === 'waffle') {
       const symbolType = g.getAttribute('mgt:symbol-type')!;
       const size = +g.getAttribute('mgt:size')!;
-      const columns = +g.getAttribute('mgt:columns')!;
       const spacing = +g.getAttribute('mgt:spacing')!;
       const anchor = g.getAttribute('mgt:anchor')!;
 
       g.querySelectorAll('g').forEach((gg) => {
+        const columns = +gg.getAttribute('mgt:columns')!;
         const coords = globalStore.pathGenerator.centroid(
           // eslint-disable-next-line no-underscore-dangle
           (gg as SVGGElement & ID3Element).__data__.geometry,
