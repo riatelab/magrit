@@ -35,7 +35,9 @@ import {
   SupportedGeoFileTypes,
   SupportedTabularFileTypes,
 } from '../helpers/supportedFormats';
-import { findCsvDelimiter, getDatasetInfo, removeEmptyLines } from '../helpers/formatConversion';
+import {
+  extractZipContent, findCsvDelimiter, getDatasetInfo, removeEmptyLines,
+} from '../helpers/formatConversion';
 import { removeNadGrids } from '../helpers/projection';
 
 // Stores
@@ -455,7 +457,6 @@ const analyzeDataset = async (
       || file.ext === 'gpkg'
       || file.ext === 'gml'
       || file.ext === 'kml'
-      // TODO: handle zip files...
     ) {
       result = await analyseGeospatialDatasetGDAL(file);
     } else if (
@@ -492,14 +493,49 @@ const extTransform = (ext) => {
   return ext;
 };
 
-const groupFiles = (
+const groupFiles = async (
   files: CustomFileList,
 ): { [key: string]: { name: string, files: FileEntry[] } } => {
   // We want to group the files by their name (because shapefiles have multiple files)
   // but other files have only one file (and we want to avoid grouping
   // other files than shapefiles).
   const groupedFiles: { [key: string]: { name: string, files: FileEntry[] } } = {};
-  files.forEach((file) => {
+
+  // We want to process Zip files first
+  // to put the content of the zip file in the groupedFiles object
+  if (files.some((file) => file.ext === 'zip')) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const file of files.filter((f) => f.ext === 'zip')) {
+      // eslint-disable-next-line no-await-in-loop
+      const uzfiles = (await extractZipContent(file))
+        .filter((f) => allowedFileExtensions.includes(f.ext) && f.ext !== 'zip');
+      // eslint-disable-next-line no-restricted-syntax, no-await-in-loop
+      for await (const uzfile of uzfiles) {
+        const key = `${uzfile.name}.${extTransform(uzfile.ext)}`;
+        if (groupedFiles[key] === undefined) {
+          groupedFiles[key] = {
+            name: uzfile.name,
+            files: [uzfile],
+          };
+        } else {
+          if (
+            groupedFiles[key].files.some((f) => (
+              f.name === uzfile.name
+              && f.ext === uzfile.ext
+              && f.file.size === uzfile.file.size
+              && f.file.lastModified === uzfile.file.lastModified))
+          ) {
+            // eslint-disable-next-line no-continue
+            continue;
+          }
+          groupedFiles[key].files.push(uzfile);
+        }
+      }
+    }
+  }
+
+  // Process the other files
+  files.filter((file) => file.ext !== 'zip').forEach((file) => {
     const key = `${file.name}.${extTransform(file.ext)}`;
     if (groupedFiles[key] === undefined) {
       groupedFiles[key] = {
@@ -560,7 +596,7 @@ export default function ImportWindow(): JSX.Element {
   const [fileDescriptions] = createResource<any, any>(
     droppedFiles,
     async () => {
-      const groupedFiles = groupFiles(droppedFiles());
+      const groupedFiles = await groupFiles(droppedFiles());
       const invalidToBeRemoved: string[] = [];
       const resultValue = createMutable((await Promise.all(
         Object.keys(groupedFiles)

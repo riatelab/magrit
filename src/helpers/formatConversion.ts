@@ -8,6 +8,7 @@ import { SupportedTabularFileTypes } from './supportedFormats';
 
 // Types
 import type { GeoJSONFeatureCollection, GeoJSONFeature } from '../global';
+import type { FileEntry } from './fileUpload';
 
 /**
  * Convert the given file(s) to a GeoJSON feature collection.
@@ -52,6 +53,22 @@ export async function convertBinaryTabularDatasetToJSON(
     return properties;
   });
 }
+
+export const extractZipContent = async (
+  file: FileEntry,
+): Promise<FileEntry[]> => {
+  const zip = new JSZip();
+  const content = await file.file.arrayBuffer();
+  const zipFile = await zip.loadAsync(content);
+  return Promise.all(Object.keys(zipFile.files)
+    .map((fileName) => zipFile.files[fileName])
+    .filter((f) => !f.dir)
+    .map(async (f) => ({
+      name: f.name.substring(0, f.name.lastIndexOf('.')),
+      ext: f.name.substring(f.name.lastIndexOf('.') + 1, f.name.length).toLowerCase(),
+      file: new File([await f.async('blob')], f.name),
+    })));
+};
 
 export const removeFeaturesWithEmptyGeometry = (layer: GeoJSONFeatureCollection) => {
   // We want features with non-empty geometries

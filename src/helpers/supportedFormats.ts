@@ -95,7 +95,7 @@ export const allowedFileExtensions: string[] = [
   'topojson',
   'gml',
   'kml',
-  'flatgeobuf',
+  // 'flatgeobuf',
   'csv',
   'tsv',
   'xls',
