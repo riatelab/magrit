@@ -68,7 +68,7 @@ async function onClickValidate(
   setLayersDescriptionStore(
     produce((draft: LayersDescriptionStoreType) => {
       draft.layers.push(newLayerDescription);
-      draft.layers.push(newLegendDescription);
+      draft.layoutFeaturesAndLegends.push(newLegendDescription);
     }),
   );
 }
