@@ -2,6 +2,17 @@
 
 <br />
 
+#### 2.0.20 (unreleased)
+
+- Ajout d'un nouveau type de représentation : "Carte en gaufres" (Corrige <a href="https://github.com/riatelab/magrit/issues/132">132</a>).
+
+- Ajout d'une fonctionnalité permettant d'importer des jeu de données zippé (un ou plusieurs jeux de données dans un fichier zip).
+
+- Correction du filtrage des lignes vides sur les jeux de données CSV pour lesquels le séparateur de ligne est `\r\n`.
+
+- Correction des boutons dans le composant FormulaInput lorsque le nom du champ est aussi un nom de fonction sql (comme `count` ou `sum`).
+
+
 #### 2.0.19 (2024-10-22)
 
 - Améliore le rendu du bar chart utilisé comme élément de légende pour les cartes choroplèthes catégorielles.

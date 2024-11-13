@@ -2,6 +2,17 @@
 
 <br />
 
+#### 2.0.20 (unreleased)
+
+- Add a new portrayal type: "Waffle map" (Fixes <a href=“https://github.com/riatelab/magrit/issues/132”>132</a>).
+
+- Add support for importing zipped datasets (zip files containing a single dataset or multiple datasets).
+
+- Fix filtering empty lines on CSV datasets for which the line separator is `\r\n`.
+
+- Fix buttons in FormulaInput component when the field name is also a sql function name (such as `count` or `sum`).
+
+
 #### 2.0.19 (2024-10-22)
 
 - Improve rendering of bar chart legend element used for categorical choropleth maps.
