@@ -77,7 +77,7 @@ function verticalLegendWaffle(
   const positionSymbolValue = createMemo(
     () => distanceToTop()
       + labelsAndColors().length * boxHeightAndSpacing() - legend.boxSpacing
-      + (layer.rendererParameters.symbolType === 'circle' ? layer.rendererParameters.size / 2 : 0)
+      + layer.rendererParameters.size / 2
       + legend.spacingBelowBoxes,
   );
 
