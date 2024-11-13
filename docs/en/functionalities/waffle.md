@@ -13,16 +13,27 @@ When creating a layer, you need to select the following parameters:
 - Symbol type (square or circle),
 - The size of each symbol (radius of the circle or size of one side of the square, in pixels),
 - Conversion ratio (number of units per symbol),
-- Maximum number of columns for symbol display,
+- The behavior of the grid (fixed number of columns or dynamic number of columns),
 - Spacing between each row/column of symbols.
 
-Once the layer has been created, it is possible to modify the color of each stock variable,
-their display order and the name of each variable (as it appears in the legend).
+Once the layer has been created, it is possible to modify :
+
+- the color of each stock variable,
+- their display order,
+- the name of each variable (as it appears in the legend),
+- the anchoring (vertical and horizontal) of symbol groups,
+- the position of each group of symbols (by moving them with the mouse).
 
 ## Example
 
 <ZoomImg
-    src="/waffle.png"
-    alt="Example of a waffle map with 2 stock variables"
-    caption="Example of a waffle map with 2 stock variables"
+    src="/waffle-dynamic.png"
+    alt="Example of a waffle map with 2 stock variables and dynamic number of columns"
+    caption="Example of a waffle map with 2 stock variables and dynamic number of columns"
+/>
+
+<ZoomImg
+    src="/waffle-fixed.png"
+    alt="Example of a waffle map with 2 stock variables and fixed number of columns"
+    caption="Example of a waffle map with 2 stock variables and fixed number of columns"
 />
