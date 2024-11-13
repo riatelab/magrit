@@ -4765,6 +4765,14 @@ type RootTranslation = {
 		 */
 		SymbolAnchor: string
 		/**
+		 * A​n​c​r​a​g​e​ ​h​o​r​i​z​o​n​t​a​l​ ​d​u​ ​s​y​m​b​o​l​e
+		 */
+		SymbolHorizontalAnchor: string
+		/**
+		 * A​n​c​r​a​g​e​ ​v​e​r​t​i​c​a​l​ ​d​u​ ​s​y​m​b​o​l​e
+		 */
+		SymbolVerticalAnchor: string
+		/**
 		 * T​e​x​t​ ​a​n​c​h​o​r
 		 */
 		TextAnchor: string
@@ -4780,6 +4788,14 @@ type RootTranslation = {
 		 * E​n​d
 		 */
 		TextAnchorEnd: string
+		/**
+		 * T​o​p
+		 */
+		TextAnchorTop: string
+		/**
+		 * B​o​t​t​o​m
+		 */
+		TextAnchorBottom: string
 		/**
 		 * F​o​n​t​ ​s​t​y​l​e
 		 */
@@ -10645,6 +10661,14 @@ export type TranslationFunctions = {
 		 */
 		SymbolAnchor: () => LocalizedString
 		/**
+		 * Ancrage horizontal du symbole
+		 */
+		SymbolHorizontalAnchor: () => LocalizedString
+		/**
+		 * Ancrage vertical du symbole
+		 */
+		SymbolVerticalAnchor: () => LocalizedString
+		/**
 		 * Text anchor
 		 */
 		TextAnchor: () => LocalizedString
@@ -10660,6 +10684,14 @@ export type TranslationFunctions = {
 		 * End
 		 */
 		TextAnchorEnd: () => LocalizedString
+		/**
+		 * Top
+		 */
+		TextAnchorTop: () => LocalizedString
+		/**
+		 * Bottom
+		 */
+		TextAnchorBottom: () => LocalizedString
 		/**
 		 * Font style
 		 */

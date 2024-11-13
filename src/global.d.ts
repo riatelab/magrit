@@ -545,7 +545,9 @@ interface WaffleParameters {
   // The type of symbol used to represent the waffles
   symbolType: ProportionalSymbolsSymbolType.circle | ProportionalSymbolsSymbolType.square,
   // Horizontal anchor of the waffle group
-  anchor: 'start' | 'middle' | 'end',
+  horizontalAnchor: 'start' | 'middle' | 'end',
+  // Vertical anchor of the waffle group
+  verticalAnchor: 'top' | 'middle' | 'bottom',
   // The size for each symbol
   size: number,
   // The number of columns for the waffle

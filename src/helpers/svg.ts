@@ -344,27 +344,45 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
       const symbolType = g.getAttribute('mgt:symbol-type')!;
       const size = +g.getAttribute('mgt:size')!;
       const spacing = +g.getAttribute('mgt:spacing')!;
-      const anchor = g.getAttribute('mgt:anchor')!;
+      const horizontalAnchor = g.getAttribute('mgt:horizontalAnchor')!;
+      const verticalAnchor = g.getAttribute('mgt:verticalAnchor')!;
 
       g.querySelectorAll('g').forEach((gg) => {
         const columns = +gg.getAttribute('mgt:columns')!;
+        const totalSymbols = +gg.getAttribute('mgt:totalSymbols')!;
         const coords = globalStore.pathGenerator.centroid(
           // eslint-disable-next-line no-underscore-dangle
           (gg as SVGGElement & ID3Element).__data__.geometry,
         );
         if (!Number.isNaN(coords[0])) {
-          let offsetCentroidX = 0; // value for anchor = 'start'
+          let offsetCentroidX = 0; // value for horizontalAnchor = 'start'
           if (symbolType === 'circle') {
-            if (anchor === 'middle') {
+            if (horizontalAnchor === 'middle') {
               offsetCentroidX = (size + spacing) * (columns / 2) - (size * 0.5);
-            } else if (anchor === 'end') {
+            } else if (horizontalAnchor === 'end') {
               offsetCentroidX = (size + spacing) * columns - size;
             }
           } else { // eslint-disable-next-line no-lonely-if
-            if (anchor === 'middle') {
+            if (horizontalAnchor === 'middle') {
               offsetCentroidX = (size + spacing) * (columns / 2);
-            } else if (anchor === 'end') {
+            } else if (horizontalAnchor === 'end') {
               offsetCentroidX = (size + spacing) * columns;
+            }
+          }
+          let offsetCentroidY = 0; // value for verticalAnchor = 'bottom'
+          if (symbolType === 'circle') {
+            if (verticalAnchor === 'middle') {
+              offsetCentroidY = (size + spacing) * (Mfloor(
+                totalSymbols / columns,
+              ) / 2);
+            } else if (verticalAnchor === 'top') {
+              offsetCentroidY = (size + spacing) * Mfloor(totalSymbols / columns);
+            }
+          } else { // eslint-disable-next-line no-lonely-if
+            if (verticalAnchor === 'middle') {
+              offsetCentroidY = (size + spacing) * (Mfloor(totalSymbols / columns) / 2);
+            } else if (verticalAnchor === 'top') {
+              offsetCentroidY = (size + spacing) * Mfloor(totalSymbols / columns);
             }
           }
           let symbolIndex = 0;
@@ -378,7 +396,7 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
               );
               symbolIndex += 1;
               c.setAttribute('cx', `${coords[0] - offsetCentroidX + tx}`);
-              c.setAttribute('cy', `${coords[1] - (size / 2) - ty}`);
+              c.setAttribute('cy', `${coords[1] + offsetCentroidY - (size / 2) - ty}`);
             });
           } else { // symbolType === 'square'
             gg.querySelectorAll('rect').forEach((r) => {
@@ -389,7 +407,7 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
                 Mfloor(symbolIndex / columns) * (size + spacing),
               );
               r.setAttribute('x', `${coords[0] - offsetCentroidX + tx}`);
-              r.setAttribute('y', `${coords[1] - size - ty}`);
+              r.setAttribute('y', `${coords[1] + offsetCentroidY - size - ty}`);
               symbolIndex += 1;
             });
           }

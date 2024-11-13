@@ -272,16 +272,28 @@ function makeSettingsWaffle(
       step={10}
     />
     <InputFieldSelect
-      label={LL().LayerSettings.SymbolAnchor()}
+      label={LL().LayerSettings.SymbolHorizontalAnchor()}
       onChange={(v) => {
-        updateProp(props.id, ['rendererParameters', 'anchor'], v);
+        updateProp(props.id, ['rendererParameters', 'horizontalAnchor'], v);
         redrawLayer(props.id);
       }}
-      value={props.rendererParameters.anchor}
+      value={props.rendererParameters.horizontalAnchor}
     >
       <option value="start">{LL().LayerSettings.TextAnchorStart()}</option>
       <option value="middle">{LL().LayerSettings.TextAnchorMiddle()}</option>
       <option value="end">{LL().LayerSettings.TextAnchorEnd()}</option>
+    </InputFieldSelect>
+    <InputFieldSelect
+      label={LL().LayerSettings.SymbolVerticalAnchor()}
+      onChange={(v) => {
+        updateProp(props.id, ['rendererParameters', 'verticalAnchor'], v);
+        redrawLayer(props.id);
+      }}
+      value={props.rendererParameters.verticalAnchor}
+    >
+      <option value="top">{LL().LayerSettings.TextAnchorTop()}</option>
+      <option value="middle">{LL().LayerSettings.TextAnchorMiddle()}</option>
+      <option value="bottom">{LL().LayerSettings.TextAnchorBottom()}</option>
     </InputFieldSelect>
     <InputFieldWidthColorOpacity
       label={LL().LayerSettings.Stroke()}

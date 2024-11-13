@@ -55,7 +55,8 @@ export default function waffleRenderer(
     mgt:portrayal-type={layerDescription.representationType}
     mgt:symbol-type={params.symbolType}
     mgt:size={params.size}
-    mgt:anchor={params.anchor}
+    mgt:horizontalAnchor={params.horizontalAnchor}
+    mgt:verticalAnchor={params.verticalAnchor}
     mgt:spacing={params.spacing}
   >
     <For each={layerDescription.data.features}>
@@ -80,21 +81,42 @@ export default function waffleRenderer(
             ? Mmin(params.columns.value, totalSymbols)
             : Mmin(Mround(Msqrt(totalSymbols)), totalSymbols);
 
-          // Central position of the symbol block
+          // Central position of the symbol block (on the x-axis)
           let offsetCentroidX = 0; // value for anchor = 'start'
 
           if (params.symbolType === 'circle') {
-            if (params.anchor === 'middle') {
+            if (params.horizontalAnchor === 'middle') {
               offsetCentroidX = (params.size + params.spacing)
                 * (columns / 2) - (params.size * 0.5);
-            } else if (params.anchor === 'end') {
+            } else if (params.horizontalAnchor === 'end') {
               offsetCentroidX = (params.size + params.spacing) * columns - params.size;
             }
           } else { // eslint-disable-next-line no-lonely-if
-            if (params.anchor === 'middle') {
+            if (params.horizontalAnchor === 'middle') {
               offsetCentroidX = (params.size + params.spacing) * (columns / 2);
-            } else if (params.anchor === 'end') {
+            } else if (params.horizontalAnchor === 'end') {
               offsetCentroidX = (params.size + params.spacing) * columns;
+            }
+          }
+
+          // Central position of the symbol block (on the y-axis)
+          let offsetCentroidY = 0; // value for verticalAnchor = 'bottom'
+
+          if (params.symbolType === 'circle') {
+            if (params.verticalAnchor === 'middle') {
+              offsetCentroidY = (params.size + params.spacing) * (Mfloor(
+                totalSymbols / columns,
+              ) / 2);
+            } else if (params.verticalAnchor === 'top') {
+              offsetCentroidY = (params.size + params.spacing) * Mfloor(totalSymbols / columns);
+            }
+          } else { // eslint-disable-next-line no-lonely-if
+            if (params.verticalAnchor === 'middle') {
+              offsetCentroidY = (params.size + params.spacing) * (Mfloor(
+                totalSymbols / columns,
+              ) / 2);
+            } else if (params.verticalAnchor === 'top') {
+              offsetCentroidY = (params.size + params.spacing) * Mfloor(totalSymbols / columns);
             }
           }
 
@@ -104,10 +126,11 @@ export default function waffleRenderer(
             // @ts-expect-error because use:bind-data isn't a property of this element
             use:bindData={feature}
             mgt:columns={columns}
+            mgt:totalSymbols={totalSymbols}
           >
             <For each={variableSymbols}>
               {(variable) => <For each={Array.from({ length: variable.count })}>
-                  {(_, i) => {
+                  {() => {
                     const tx = Mround(
                       (symbolIndex % columns) * (params.size + params.spacing),
                     );
@@ -118,14 +141,14 @@ export default function waffleRenderer(
                     return params.symbolType === 'circle' ? (
                       <circle
                         cx={projectedCoords()[0] - offsetCentroidX + tx}
-                        cy={projectedCoords()[1] - (params.size / 2) - ty}
+                        cy={projectedCoords()[1] + offsetCentroidY - (params.size / 2) - ty}
                         r={params.size / 2}
                         fill={variable.color}
                       />
                     ) : (
                       <rect
                         x={projectedCoords()[0] - offsetCentroidX + tx}
-                        y={projectedCoords()[1] - params.size - ty}
+                        y={projectedCoords()[1] + offsetCentroidY - params.size - ty}
                         width={params.size}
                         height={params.size}
                         fill={variable.color}

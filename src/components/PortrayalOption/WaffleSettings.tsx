@@ -30,6 +30,7 @@ import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -53,7 +54,6 @@ import {
   type WaffleParameters,
 } from '../../global.d';
 import type { PortrayalSettingsProps } from './common';
-import MessageBlock from '../MessageBlock.tsx';
 
 function guessSymbolValue(
   layerId: string,
@@ -194,7 +194,8 @@ function onClickValidate(
     columns,
     symbolValue,
     spacing,
-    anchor: 'middle',
+    horizontalAnchor: 'middle',
+    verticalAnchor: (columns.type === 'dynamic') ? 'middle' : 'bottom',
     movable: false,
   };
 
