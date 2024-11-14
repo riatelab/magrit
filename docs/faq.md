@@ -44,7 +44,7 @@ Par ailleurs il est possible de sélectionner les familles de polices du systèm
 
 #### - Pourquoi n'est-il pas possible d'afficher un fond de carte type "OpenStreetMap" dans Magrit ?
 
-L'équipe de développement de Magrit a fait le choix de ne pas intégrer de fond de carte type "OpenStreetMap" directement dans l'application pour plusieurs raisons :
+L'équipe de développement de Magrit a fait le choix de ne pas intégrer de fond de carte type "OpenStreetMap" directement dans l'application pour l'instant pour plusieurs raisons :
 
 - **Dépendance à un service tiers** : afficher un fond de carte "OpenStreetMap" nécessite de faire appel à un service tiers (le serveur d'OpenStreetMap, ou d'un autre fournisseur) pour récupérer les tuiles de la carte.
   Cela implique une dépendance à ce service tiers, qui peut être lent ou indisponible et nécessite dans tous les cas une connexion à Internet.
@@ -56,8 +56,6 @@ L'équipe de développement de Magrit a fait le choix de ne pas intégrer de fon
 
 Il existe des application dédiées à la création de cartes sur un fond de carte "OpenStreetMap" (comme [uMap](https://umap.openstreetmap.fr/fr/))
 qui permettent de réaliser facilement des cartes avec des épingles, des boites d'informations affichées au clic, etc.
-
-La possibilité d'intégrer de tels fonds de cartes dans Magrit est toutefois à l'étude pour une version future de l'application.
 
 #### - Les performances de l'application semblent dégradées lors de l'utilisation de certains jeux de données ou lors de l'ajout de nombreux jeux de données ?
 
@@ -76,4 +74,4 @@ Si vous constatez des ralentissements lors de l'utilisation de Magrit, voici que
 - **Réduire le nombre d'entités affichées** : si vous avez de nombreux entités dans vos jeux de données, essayez de filtrer les données pour n'afficher que celles qui sont nécessaires à la création de votre carte.
   Par exemple, si vous avez un jeu de données de communes en France et que vous n'avez besoin que des communes d'un département, filtrez les données (avec la fonctionnalité de sélection de Magrit) pour ne garder que les communes de ce département.
 
-L'équipe de développement de Magrit travaille par ailleurs à améliorer les performances d'affichage de l'application et à proposer des solutions pour gérer des jeux de données plus importants.
+L'équipe de développement de Magrit travaille par ailleurs à améliorer les performances d'affichage de l'application et à proposer des solutions pour gérer des jeux de données plus importants (utilisation de la technologie Canvas ou WebGl par exemple).

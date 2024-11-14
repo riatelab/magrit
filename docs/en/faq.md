@@ -43,14 +43,12 @@ It is also possible to select the font families of the user's operating system w
 
 #### - Why is it not possible to display an "OpenStreetMap" type basemap in Magrit?
 
-The Magrit development team chose not to integrate an “OpenStreetMap” type basemap directly into the application for several reasons:
+The Magrit development team chose not to integrate an “OpenStreetMap” type basemap directly into the application for now for several reasons:
  
 - **Dependence on a third-party service**: displaying an “OpenStreetMap” basemap requires a third-party service (the OpenStreetMap server, or another provider) to retrieve the map tiles. This implies a dependence on this third-party service, which may be slow or unavailable, and in any case requires an Internet connection.
  
 - **Keeping the spirit of the application**: Magrit is a thematic mapping application that lets you create and export customized maps from geographic data. The aim is to highlight the user's data and enable them to represent it clearly and effectively. The addition of an “OpenStreetMap” basemap could divert the user's attention from his own data, making the map more complex to read. On the other hand, it would probably lead to the creation of maps using the Mercator projection in cases where this is not the most appropriate.
    There are applications dedicated to the creation of maps on an “OpenStreetMap” base map (such as [uMap](https://umap.openstreetmap.fr/fr/)), which make it easy to create maps with pins, information boxes displayed on click, etc.
-
-However, the possibility of integrating such base maps into Magrit is being studied for a future version of the application.
 
 #### - The performance of the application seems to be degraded when using certain datasets or when adding many datasets?
 
@@ -69,4 +67,4 @@ If you are experiencing slowdowns when using Magrit, here are a few ways to impr
 - **Reduce the number of entities displayed**: if you have a large number of entities in your datasets, try filtering the data to display only those you need to create your map.
   For example, if you have a dataset of communes in France and you only need communes from one département, filter the data (using Magrit's selection feature) to keep only communes from that département.
 
-The Magrit development team is also working on improving the application's display performance and proposing solutions for managing larger datasets.
+The Magrit development team is also working on improving the application's display performance and proposing solutions for managing larger datasets (e.g. using Canvas or WebGl technology).
