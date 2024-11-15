@@ -2,7 +2,18 @@
 
 <br />
 
-#### 2.0.20 (unreleased)
+::: tip Note
+
+Magrit does not strictly follow the rules of *semantic versioning* (in the form *major*.*minor*.*patch*), but focuses on changes that are directly visible to application users:
+
+- a *major* version (**a**.b.c) for each major redesign of the application (involving, for example, incompatible project files - this has only happened once since 2017),
+- a *minor* version (a.**b**.c) for significant additions (new representation functionality, etc.),
+- a *patch* version (a.b.**c**) for bug fixes and additions of minor functionalities (addition of an option within an existing representation or analysis functionality, etc.).
+
+:::
+
+
+#### 2.1.0 (2024-11-15)
 
 - Add a new portrayal type: "Waffle map" (Fixes <a href=“https://github.com/riatelab/magrit/issues/132”>132</a>).
 
@@ -12,6 +23,7 @@
 
 - Fix buttons in FormulaInput component when the field name is also a sql function name (such as `count` or `sum`).
 
+- Update FAQ in documentation.
 
 #### 2.0.19 (2024-10-22)
 

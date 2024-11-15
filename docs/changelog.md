@@ -2,7 +2,18 @@
 
 <br />
 
-#### 2.0.20 (unreleased)
+::: tip Note
+
+Magrit ne suit pas strictement les règles du *semantic versioning* (versionnement sémantique - sous la forme *majeur*.*mineur*.*patch*) mais se concentre sur les changements directement visibles pour les utilisateur.trice.s de l'application :
+
+- une version *majeure* (**a**.b.c) pour chaque refonte majeure de l'application (entrainant par exemple une incompatibilité des fichiers-projets - cela n'est arrivé qu'une seule fois depuis 2017),
+- une version *mineure* (a.**b**.c) pour les ajouts significatifs (nouvelle fonctionnalité de représentation ou d'analyse, etc.),
+- une version *patch* (a.b.**c**) pour les corrections de bugs et les ajouts de fonctionnalités mineures (ajout d'une option au sein d'une fonctionnalité de représentation ou d'analyse existante, etc.).
+
+:::
+
+
+#### 2.1.0 (2024-11-15)
 
 - Ajout d'un nouveau type de représentation : "Carte en gaufres" (Corrige <a href="https://github.com/riatelab/magrit/issues/132">132</a>).
 
@@ -12,6 +23,7 @@
 
 - Correction des boutons dans le composant FormulaInput lorsque le nom du champ est aussi un nom de fonction sql (comme `count` ou `sum`).
 
+- Mise à jour de la FAQ dans la documentation.
 
 #### 2.0.19 (2024-10-22)
 
