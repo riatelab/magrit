@@ -13,8 +13,8 @@ Différentes bibliothèques et logiciels tiers sont utilisés dans Magrit. Voici
 
 ### Dépendances incluses dans le code de l'application
 
-| Bibliothèque                   | Lien                                                             | Licence                   |
-|---|---|---|
+| Bibliothèque                   | Lien                                                       | Licence                   |
+|--------------------------------|------------------------------------------------------------|---------------------------|
 | @observablehq/plot | https://github.com/observablehq/plot | ISC |
 | @solid-primitives/autofocus | https://github.com/solidjs-community/solid-primitives | MIT |
 | @stdlib/stats-base-dists-t-cdf | https://github.com/stdlib-js/stats-base-dists-t-cdf | Apache-2.0 |
@@ -36,6 +36,7 @@ Différentes bibliothèques et logiciels tiers sont utilisés dans Magrit. Voici
 | d3-geo-projection | https://github.com/d3/d3-geo-projection | ISC |
 | d3-interpolate | https://github.com/d3/d3-interpolate | ISC |
 | d3-quadtree | https://github.com/d3/d3-quadtree | ISC |
+| d3-scale | https://github.com/d3/d3-scale | ISC |
 | d3-selection | https://github.com/d3/d3-selection | ISC |
 | d3-shape | https://github.com/d3/d3-shape | ISC |
 | d3-tile | https://github.com/d3/d3-tile | BSD-3-Clause |
@@ -44,7 +45,7 @@ Différentes bibliothèques et logiciels tiers sont utilisés dans Magrit. Voici
 | dexie | https://github.com/dexie/Dexie.js | Apache-2.0 |
 | dicopal | https://github.com/riatelab/dicopal.js | Apache-2.0 |
 | dompurify | https://github.com/cure53/DOMPurify | (MPL-2.0 OR Apache-2.0) |
-| font-gis | https://github.com/Viglino/font-git | OFL-1.1 |
+| font-gis | https://github.com/Viglino/font-gis | Apache-2.0 |
 | gdal3.js | https://github.com/bugra9/gdal3.js | LGPL-2.1-or-later |
 | geos-wasm | https://registry.npmjs.org/geos-wasm/-/geos-wasm-2.0.0.tgz | LGPL-3.0-or-later |
 | go-cart-wasm | https://github.com/mthh/go-cart-wasm | MIT |
@@ -53,9 +54,10 @@ Différentes bibliothèques et logiciels tiers sont utilisés dans Magrit. Voici
 | main-thread-scheduling | https://github.com/astoilkov/main-thread-scheduling | MIT |
 | mproj | https://github.com/mbloch/mapshaper-proj | MIT |
 | nouislider | https://github.com/leongersen/noUiSlider | MIT |
-| polylabel | https://registry.npmjs.org/polylabel/-/polylabel-1.1.0.tgz | ISC |
+| polylabel | https://github.com/mapbox/polylabel | ISC |
 | proj4 | https://github.com/proj4js/proj4js | MIT |
 | rbush | https://github.com/mourner/rbush | MIT |
+| semver | https://github.com/npm/node-semver | ISC |
 | simple-statistics | https://github.com/simple-statistics/simple-statistics | ISC |
 | solid-icons | https://github.com/x64Bits/solid-icons | MIT |
 | solid-js | https://github.com/solidjs/solid | MIT |
@@ -84,6 +86,7 @@ Différentes bibliothèques et logiciels tiers sont utilisés dans Magrit. Voici
 | @types/polylabel | https://github.com/DefinitelyTyped/DefinitelyTyped | MIT |
 | @types/proj4 | https://github.com/DefinitelyTyped/DefinitelyTyped | MIT |
 | @types/rbush | https://github.com/DefinitelyTyped/DefinitelyTyped | MIT |
+| @types/semver | https://github.com/DefinitelyTyped/DefinitelyTyped | MIT |
 | @types/topojson-client | https://github.com/DefinitelyTyped/DefinitelyTyped | MIT |
 | @types/topojson-server | https://github.com/DefinitelyTyped/DefinitelyTyped | MIT |
 | @types/topojson-simplify | https://github.com/DefinitelyTyped/DefinitelyTyped | MIT |
@@ -93,8 +96,8 @@ Différentes bibliothèques et logiciels tiers sont utilisés dans Magrit. Voici
 | eslint-config-airbnb-typescript | https://github.com/iamturns/eslint-config-airbnb-typescript | MIT |
 | eslint-plugin-solid | https://github.com/solidjs-community/eslint-plugin-solid | MIT |
 | jsdom | https://github.com/jsdom/jsdom | MIT |
-| npm-run-all | https://github.com/mysticatea/npm-run-all | MIT |
-| typescript | https://github.com/Microsoft/TypeScript | Apache-2.0 |
+| npm-run-all2 | https://github.com/bcomnes/npm-run-all2 | MIT |
+| typescript | https://github.com/microsoft/TypeScript | Apache-2.0 |
 | vite | https://github.com/vitejs/vite | MIT |
 | vite-plugin-css-injected-by-js | https://github.com/marco-prontera/vite-plugin-css-injected-by-js | MIT |
 | vite-plugin-eslint | https://github.com/gxmari007/vite-plugin-eslint | MIT |
