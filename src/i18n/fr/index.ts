@@ -44,7 +44,8 @@ const fr = {
     SmoothingComputingGPUKDE: 'Calcul de l\'estimation de densité par noyau sur le GPU...',
     SmoothingComputingGPUStewart: 'Calcul du potentiel de Stewart sur le GPU...',
     SmoothingContours: 'Calcul des contours...',
-    SmoothingIntersection: 'Calcul de l\'intersection entre les contours et la couche de maskage...',
+    SmoothingIntersection: 'Calcul de l\'intersection entre les contours et la couche de masquage...',
+    PreparingForSimplification: 'Préparation du jeu de données pour la simplification...',
   },
   Messages: {
     Information: 'Information',

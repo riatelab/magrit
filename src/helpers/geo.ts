@@ -551,7 +551,7 @@ const cleanRing = (
 
 export const cleanGeometryGeos = async (
   geometry: GeoJSONGeometryType,
-): Promise<GeoJSONGeometryType | null> => {
+): Promise<[GeoJSONGeometryType, number] | null> => {
   // We use geos make valid to clean the geometry
   // but we have to be careful with the result...
   const geom = await makeValid(geometry as any);
@@ -595,21 +595,18 @@ export const cleanGeometryGeos = async (
       // console.log('Geoms', geoms);
       // In the end, we want to avoid GeometryCollections
       // in the dataset we are constructing...
-      if (geoms.length > 1) {
-        return geoms[0];
+      if (geoms.length >= 1) {
+        return [geoms[0], countCoordinates(geoms[0])];
         // return {
         //   type: 'GeometryCollection',
         //   geometries: geoms,
         // };
       }
-      if (geoms.length === 1) {
-        return geoms[0];
-      }
       return null;
     }
     return null;
   }
-  return geom;
+  return [geom, count.after];
 };
 
 /**

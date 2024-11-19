@@ -42,7 +42,7 @@ import { removeNadGrids } from '../helpers/projection';
 
 // Stores
 import { fileDropStore, setFileDropStore } from '../store/FileDropStore';
-import { globalStore, setGlobalStore } from '../store/GlobalStore';
+import { globalStore, setGlobalStore, setLoading } from '../store/GlobalStore';
 import {
   layersDescriptionStore,
   type LayersDescriptionStoreType,
@@ -933,7 +933,7 @@ export default function ImportWindow(): JSX.Element {
             // Remove the "drop" overlay
             setFileDropStore({ show: false, files: [] });
             // Add the "loading" overlay
-            setGlobalStore({ isLoading: true });
+            setLoading(true);
 
             let needToZoomOnTotalExtent;
             const bboxes: [number, number, number, number][] = [];
@@ -1103,14 +1103,13 @@ export default function ImportWindow(): JSX.Element {
               });
             }
 
-            // Remove the "loading" overlay
-            setGlobalStore({ isLoading: false });
-
             // Open the layer manager section on the left menu
             openLayerManager();
 
-            // The layers are loaded and the loading overlay is removed,
-            // we can now display the simplification modal if needed.
+            // The layers are loaded
+            // we can now display the simplification modal if needed
+            // (the loading overlay will be removed in the modal after
+            // the first draw).
             if (dsToSimplify.length > 0) {
               setModalStore({
                 show: true,
@@ -1118,6 +1117,9 @@ export default function ImportWindow(): JSX.Element {
                 content: () => <SimplificationModal ids={dsToSimplify}/>,
                 width: '65vw',
               });
+            } else {
+              // Remove the "loading" overlay
+              setLoading(false);
             }
           }}
         > {LL().ImportWindow.ImportButton(countLayerToImport(fileDescriptions()))}

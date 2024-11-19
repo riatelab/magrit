@@ -11,6 +11,7 @@ import {
 } from 'solid-js';
 
 // Imports from other packages
+import { yieldOrContinue } from 'main-thread-scheduling';
 import { type AllGeoJSON, bbox } from '@turf/turf';
 import topojson, { simplifyTopojson } from '../helpers/topojson';
 import d3 from '../helpers/d3-custom';
@@ -28,6 +29,7 @@ import InputFieldRangeSlider from './Inputs/InputRangeSlider.tsx';
 import {
   layersDescriptionStore,
 } from '../store/LayersDescriptionStore';
+import { setLoading } from '../store/GlobalStore';
 
 // Types / Interfaces / Enums
 import type { GeoJSONFeature, GeoJSONFeatureCollection } from '../global';
@@ -63,28 +65,28 @@ const getSimplificationInfo = async (
   const geoLayer = topojson.feature(topo, topoLayer) as unknown as GeoJSONFeatureCollection;
   let nbGeometries = 0;
   let vertices = 0;
-  // let vertices2 = 0;
-  console.time(`clean, filter and count points ${layerName}`);
+  // console.time(`clean, filter and count points ${layerName}`);
   for (let i = 0; i < geoLayer.features.length; i += 1) {
     const feature = geoLayer.features[i];
-    // eslint-disable-next-line no-param-reassign, no-await-in-loop
-    feature.geometry = await cleanGeometryGeos(feature.geometry);
-    if (feature.geometry) {
-      // We can count the number of points (cleanGeometry removes duplicate points and
-      // ensured that polygons still have more than 3 points)
-      const c = countCoordinates(feature.geometry);
+    // We can count the number of points (cleanGeometry removes duplicate points and
+    // ensured that polygons still have more than 3 points)
+    // eslint-disable-next-line no-await-in-loop
+    const res = await cleanGeometryGeos(feature.geometry);
+    // eslint-disable-next-line no-param-reassign
+    feature.geometry = res === null ? null : res[0];
+    if (res !== null) {
       nbGeometries += 1;
-      vertices += c;
+      vertices += res[1];
     }
   }
   const features = geoLayer.features.filter((f) => f.geometry);
-  console.timeEnd(`clean, filter and count points ${layerName}`);
+  // console.timeEnd(`clean, filter and count points ${layerName}`);
 
   let selfIntersections = null;
   if (checkSelfIntersections) {
-    console.time(`check self intersections ${layerName}`);
+    // console.time(`check self intersections ${layerName}`);
     selfIntersections = findIntersections(topo, layerName);
-    console.timeEnd(`check self intersections ${layerName}`);
+    // console.timeEnd(`check self intersections ${layerName}`);
   }
 
   return {
@@ -210,8 +212,18 @@ export default function Simplification(
     checkIntersections,
     setCheckIntersections,
   ] = createSignal(false);
+  // Signal to know if the canvas has been drawn once
+  const [
+    firstDraw,
+    setFirstDraw,
+  ] = createSignal(false);
 
-  onMount(() => {
+  onMount(async () => {
+    // We display a loading spinner while the component is mounting
+    setLoading(true, 'PreparingForSimplification');
+
+    await yieldOrContinue('smooth');
+
     // Draw on the canvas once the component is mounted
     const canvas = refParentNode.querySelector('canvas')!;
     const context = canvas.getContext('2d')!;
@@ -323,6 +335,11 @@ export default function Simplification(
       // And redraw on the canvas
       draw();
 
+      console.log('draw');
+
+      // If it's the first draw, we set the signal to true
+      if (!firstDraw()) setFirstDraw(true);
+
       // Also draw self intersections as a red dot on the canvas
       s.forEach((si) => {
         drawPoints(si.selfIntersections);
@@ -343,18 +360,37 @@ export default function Simplification(
       simplify();
     }
 
+    createEffect(
+      on(
+        firstDraw,
+        () => {
+          if (firstDraw()) setLoading(false);
+        },
+      ),
+    );
+
     // We create effects to automatically simplify and redraw when the simplification
     // or quantization factors change.
     // We also update the stats if the user wants to check for self intersections.
     createEffect(
-      on(simplificationFactor, simplify),
+      on(
+        quantizationFactor,
+        () => {
+          if (firstDraw()) convertToQuantizedTopojson();
+        },
+      ),
     );
     createEffect(
-      on(quantizationFactor, convertToQuantizedTopojson),
+      on(
+        () => [simplificationFactor(), checkIntersections()],
+        () => {
+          simplify();
+        },
+      ),
     );
-    createEffect(
-      on(checkIntersections, simplify),
-    );
+    // createEffect(
+    //   on(checkIntersections, simplify),
+    // );
   });
 
   return <div

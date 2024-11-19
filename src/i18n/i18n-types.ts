@@ -94,6 +94,10 @@ type RootTranslation = {
 		 * C​l​i​p​p​i​n​g​ ​c​o​n​t​o​u​r​s​ ​w​i​t​h​ ​m​a​s​k​ ​l​a​y​e​r​.​.​.
 		 */
 		SmoothingIntersections: string
+		/**
+		 * P​r​e​p​a​r​i​n​g​ ​t​h​e​ ​d​a​t​a​s​e​t​ ​f​o​r​ ​s​i​m​p​l​i​f​i​c​a​t​i​o​n​.​.​.
+		 */
+		PreparingForSimplification: string
 	}
 	Messages: {
 		/**
@@ -6033,6 +6037,10 @@ export type TranslationFunctions = {
 		 * Clipping contours with mask layer...
 		 */
 		SmoothingIntersections: () => LocalizedString
+		/**
+		 * Preparing the dataset for simplification...
+		 */
+		PreparingForSimplification: () => LocalizedString
 	}
 	Messages: {
 		/**
