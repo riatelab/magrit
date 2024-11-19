@@ -114,10 +114,12 @@ export const getCurrentExtent = (): number[][] => {
  * before actually updating the store.
  */
 const setMapStore = (...args: any[]) => {
-  // Push the current state to the undo stack
-  debouncedPushUndoStack('mapStore', unproxify(mapStore));
-  // Reset the redo stack
-  resetRedoStackStore();
+  if (applicationSettingsStore.useUndoRedo) {
+    // Push the current state to the undo stack
+    debouncedPushUndoStack('mapStore', unproxify(mapStore));
+    // Reset the redo stack
+    resetRedoStackStore();
+  }
   // Update the store
   setMapStoreBase.apply(null, args as never); // eslint-disable-line prefer-spread
 };

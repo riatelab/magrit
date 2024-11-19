@@ -335,6 +335,12 @@ export default function AboutModal(
           checked={applicationSettingsStore.useProjectionPreclip}
           onChange={(v) => setApplicationSettingsStore('useProjectionPreclip', v)}
         />
+        <hr />
+        <InputFieldCheckbox
+          label={LL().AboutAndSettingsPanel.UseUndoRedo()}
+          checked={applicationSettingsStore.useUndoRedo}
+          onChange={(v) => setApplicationSettingsStore('useUndoRedo', v)}
+        />
       </div>
     </Show>
   </>;

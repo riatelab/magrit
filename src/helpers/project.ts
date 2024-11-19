@@ -44,6 +44,13 @@ export const patchProject = (
     // eslint-disable-next-line no-param-reassign
     project.version = '2.0.16';
   }
+  if (semver.lt(projectVersion, '2.1.1')) {
+    console.log('Patching project to version 2.1.1');
+    // eslint-disable-next-line no-param-reassign
+    project.applicationSettings.useUndoRedo = false;
+    // eslint-disable-next-line no-param-reassign
+    project.version = '2.1.1';
+  }
   return project;
 };
 

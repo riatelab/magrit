@@ -1,13 +1,20 @@
 import { createStore } from 'solid-js/store';
+
+// Helpers
 import { makeDefaultGraticule, makeDefaultSphere, makeDefaultWorldLand } from '../helpers/layers';
 import { debounce, unproxify } from '../helpers/common';
+
+// Stores
+import { applicationSettingsStore } from './ApplicationSettingsStore';
+import { debouncedPushUndoStack, resetRedoStackStore } from './stateStackStore';
+
+// Types
 import type {
   LayerDescription,
   LayoutFeature,
   Legend,
   TableDescription,
 } from '../global';
-import { debouncedPushUndoStack, resetRedoStackStore } from './stateStackStore';
 
 export type LayersDescriptionStoreType = {
   layers: LayerDescription[],
@@ -36,10 +43,12 @@ const [
  * before actually updating the store.
  */
 const setLayersDescriptionStore = (...args: any[]) => {
-  // Push the current state to the (undo) state stack
-  debouncedPushUndoStack('layersDescription', unproxify(layersDescriptionStore));
-  // Reset the redo stack
-  resetRedoStackStore();
+  if (applicationSettingsStore.useUndoRedo) {
+    // Push the current state to the (undo) state stack
+    debouncedPushUndoStack('layersDescription', unproxify(layersDescriptionStore));
+    // Reset the redo stack
+    resetRedoStackStore();
+  }
   // Apply the changes to the store
   setLayersDescriptionStoreBase(...args);
 };

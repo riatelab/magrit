@@ -1,5 +1,5 @@
 // Imports from solid-js
-import { JSX, onMount } from 'solid-js';
+import { JSX, onMount, Show } from 'solid-js';
 
 // Imports from other packages
 import {
@@ -11,6 +11,7 @@ import {
 import { ImUndo, ImRedo } from 'solid-icons/im';
 
 // Stores
+import { applicationSettingsStore } from '../store/ApplicationSettingsStore';
 import { stateStackStore } from '../store/stateStackStore';
 
 // Helpers
@@ -65,24 +66,28 @@ export default function HeaderBarApp(): JSX.Element {
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
-          <button
-            class="button button-header-bar"
-            id="button-undo"
-            aria-label={LL().HeaderApp.Undo()}
-            title={LL().HeaderApp.Undo()}
-            disabled={stateStackStore.undoStack.length === 0}
-          >
-            <ImUndo size={'1.5em'}/>
-          </button>
-          <button
-            class="button button-header-bar"
-            id="button-redo"
-            aria-label={LL().HeaderApp.Redo()}
-            title={LL().HeaderApp.Redo()}
-            disabled={stateStackStore.redoStack.length === 0}
-          >
-            <ImRedo size={'1.5em'}/>
-          </button>
+          <Show when={applicationSettingsStore.useUndoRedo}>
+            <button
+              class="button button-header-bar"
+              id="button-undo"
+              aria-label={LL().HeaderApp.Undo()}
+              title={LL().HeaderApp.Undo()}
+              disabled={stateStackStore.undoStack.length === 0}
+            >
+              <ImUndo size={'1.5em'}/>
+            </button>
+          </Show>
+          <Show when={applicationSettingsStore.useUndoRedo}>
+            <button
+              class="button button-header-bar"
+              id="button-redo"
+              aria-label={LL().HeaderApp.Redo()}
+              title={LL().HeaderApp.Redo()}
+              disabled={stateStackStore.redoStack.length === 0}
+            >
+              <ImRedo size={'1.5em'}/>
+            </button>
+          </Show>
           <p style={{ margin: '1em' }}></p>
           <button
             class="button button-header-bar"

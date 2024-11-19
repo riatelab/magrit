@@ -3292,6 +3292,10 @@ type RootTranslation = {
 		 * T​h​i​s​ ​o​p​t​i​o​n​ ​i​s​ ​e​x​p​e​r​i​m​e​n​t​a​l​,​ ​a​n​d​ ​w​e​ ​r​e​c​o​m​m​e​n​d​ ​t​h​a​t​ ​y​o​u​ ​l​e​a​v​e​ ​i​t​ ​a​c​t​i​v​a​t​e​d​ ​b​y​ ​d​e​f​a​u​l​t​.​ ​A​f​t​e​r​ ​c​h​a​n​g​i​n​g​ ​t​h​i​s​ ​o​p​t​i​o​n​,​ ​d​o​n​'​t​ ​f​o​r​g​e​t​ ​t​o​ ​z​o​o​m​ ​i​n​ ​o​n​ ​a​ ​l​a​y​e​r​ ​o​f​ ​i​n​t​e​r​e​s​t​ ​f​r​o​m​ ​t​h​e​ ​l​a​y​e​r​ ​m​a​n​a​g​e​r​.
 		 */
 		UseProjectionPreClipPolygonInfo: string
+		/**
+		 * A​c​t​i​v​a​t​e​ ​u​n​d​o​/​r​e​d​o​ ​f​u​n​c​t​i​o​n​a​l​i​t​i​e​s
+		 */
+		UseUndoRedo: string
 	}
 	LayerManager: {
 		/**
@@ -9222,6 +9226,10 @@ export type TranslationFunctions = {
 		 * This option is experimental, and we recommend that you leave it activated by default. After changing this option, don't forget to zoom in on a layer of interest from the layer manager.
 		 */
 		UseProjectionPreClipPolygonInfo: () => LocalizedString
+		/**
+		 * Activate undo/redo functionalities
+		 */
+		UseUndoRedo: () => LocalizedString
 	}
 	LayerManager: {
 		/**

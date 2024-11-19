@@ -27,6 +27,7 @@ import {
   setLayersDescriptionStore,
 } from '../../store/LayersDescriptionStore';
 import { pushUndoStackStore } from '../../store/stateStackStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Other components
 import SingleLabelEdition from '../Modals/SingleLabelEdition.tsx';
@@ -84,7 +85,9 @@ const bindContextMenu = (
                     }
                   });
                 // 2. Push the whole layersDescriptionStore to the undo stack
-                pushUndoStackStore('layersDescription', lds);
+                if (applicationSettingsStore.useUndoRedo) {
+                  pushUndoStackStore('layersDescription', lds);
+                }
               },
               cancelCallback: () => {
                 // Reset the layer description

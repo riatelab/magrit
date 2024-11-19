@@ -39,6 +39,7 @@ import { setNiceAlertStore } from '../../store/NiceAlertStore';
 import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 import { pushUndoStackStore } from '../../store/stateStackStore';
 import { setTableWindowStore } from '../../store/TableWindowStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Other components / subcomponents
 import LayerSettings from '../Modals/LayerSettings.tsx';
@@ -163,7 +164,9 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
         }
       });
       // 2. Push the whole layersDescriptionStore to the undo stack
-      pushUndoStackStore('layersDescription', lds);
+      if (applicationSettingsStore.useUndoRedo) {
+        pushUndoStackStore('layersDescription', lds);
+      }
     },
     cancelCallback: (): void => {
       // Reset the layerDescription for this layer

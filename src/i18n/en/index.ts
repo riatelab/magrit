@@ -789,6 +789,7 @@ const en = {
     CustomPalettes: 'Custom palettes',
     UseProjectionPreClipPolygon: 'Clip layers on projection extent (only for projected CRS that defines a bounding box)',
     UseProjectionPreClipPolygonInfo: 'This option is experimental, and we recommend that you leave it activated by default. After changing this option, don\'t forget to zoom in on a layer of interest from the layer manager.',
+    UseUndoRedo: 'Activate undo/redo functionalities',
   },
   LayerManager: {
     point: 'Point layer - {nFt} {{nFt: feature | features}} - {nCol} {{nCol: column | columns}}',

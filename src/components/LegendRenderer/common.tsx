@@ -26,6 +26,7 @@ import { getTargetSvg } from '../../helpers/svg';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Subcomponents
 import LegendSettings from '../Modals/LegendSettings.tsx';
@@ -347,7 +348,9 @@ export function makeLegendSettingsModal(
           }
         });
       // 2. Push the whole layersDescriptionStore to the undo stack
-      pushUndoStackStore('layersDescription', lds);
+      if (applicationSettingsStore.useUndoRedo) {
+        pushUndoStackStore('layersDescription', lds);
+      }
     },
     cancelCallback: () => {
       // Reset the legend of the layer on cancel

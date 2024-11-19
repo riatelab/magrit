@@ -86,7 +86,9 @@ export type ApplicationSettingsStoreType = {
   // to align layout features / legends on the map
   snappingGridColor: string,
   // The custom palettes defined by the user
-  customPalettes: CustomPalette[],
+  // customPalettes: CustomPalette[],
+  // Whether to activate the undo/redo feature
+  useUndoRedo: boolean,
 };
 
 const [
@@ -133,6 +135,7 @@ const [
     },
   },
   userLocale: getUserLocale(),
+  useUndoRedo: false,
 } as ApplicationSettingsStoreType);
 
 export {

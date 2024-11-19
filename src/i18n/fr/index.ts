@@ -789,6 +789,7 @@ const fr = {
     CustomPalette: 'Palettes personnalisées',
     UseProjectionPreClipPolygon: 'Utiliser l\'étendue maximale de la projection (seulement pour les SCR qui fournissent une étendue maximale)',
     UseProjectionPreClipPolygonInfo: 'Cette option est expérimentale, il est conseillé de la laisser activée par défaut. Après avoir modifié cette option, ne pas oublier de zoomer sur une couche d\'intérêt depuis le gestionnaire de couche.',
+    UseUndoRedo: 'Activer les fonctions Annuler / Rétablir',
   },
   LayerManager: {
     point: 'Couche de points - {nFt} {{nFt: entité | entités }} - {nCol} {{nCol: colonne | colonnes }}',
