@@ -95,7 +95,7 @@ type RootTranslation = {
 		 */
 		SmoothingIntersections: string
 		/**
-		 * P​r​e​p​a​r​i​n​g​ ​t​h​e​ ​d​a​t​a​s​e​t​ ​f​o​r​ ​s​i​m​p​l​i​f​i​c​a​t​i​o​n​.​.​.
+		 * P​r​e​p​a​r​i​n​g​ ​t​h​e​ ​l​a​y​e​r​ ​f​o​r​ ​s​i​m​p​l​i​f​i​c​a​t​i​o​n​.​.​.
 		 */
 		PreparingForSimplification: string
 	}
@@ -6038,7 +6038,7 @@ export type TranslationFunctions = {
 		 */
 		SmoothingIntersections: () => LocalizedString
 		/**
-		 * Preparing the dataset for simplification...
+		 * Preparing the layer for simplification...
 		 */
 		PreparingForSimplification: () => LocalizedString
 	}

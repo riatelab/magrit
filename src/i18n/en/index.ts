@@ -45,7 +45,7 @@ const en = {
     SmoothingComputingGPUStewart: 'Computing Stewart\'s potential on GPU...',
     SmoothingContours: 'Computing contours...',
     SmoothingIntersections: 'Clipping contours with mask layer...',
-    PreparingForSimplification: 'Preparing the dataset for simplification...',
+    PreparingForSimplification: 'Preparing the layer for simplification...',
   },
   Messages: {
     Information: 'Information',
