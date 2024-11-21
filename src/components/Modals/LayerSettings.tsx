@@ -86,7 +86,9 @@ import {
   type GeoJSONFeature,
   type ProportionalSymbolSingleColorParameters,
   type LayerDescriptionCategoricalPictogram,
-  type CategoricalPictogramParameters, ClassificationMethod,
+  type CategoricalPictogramParameters,
+  ClassificationMethod,
+  type WaffleLegend,
 } from '../../global.d';
 
 // Styles
@@ -126,7 +128,7 @@ const redrawLayer = (targetId: string) => {
  * @param {ClassificationMethod} newMethod
  * @param {Accessor<TranslationFunctions>} LL
  */
-const updateLegendNote = (
+const updateLegendNoteChoro = (
   targetId: string,
   newMethod: ClassificationMethod,
   LL: Accessor<TranslationFunctions>,
@@ -145,6 +147,31 @@ const updateLegendNote = (
             legend.note.text = LL()
               .ClassificationPanel.classificationMethodLegendDescriptions[newMethod]();
           }
+        }
+      });
+    }),
+  );
+};
+
+/**
+ * Update the valueText properties of the waffle legend when the symbolValue
+ * is changed in the layer settings.
+ * @param {string} targetId
+ * @param {number} newValue
+ * @param {Accessor<TranslationFunctions>} LL
+ */
+const updateWaffleLegendValueText = (
+  targetId: string,
+  newValue: number,
+  LL: Accessor<TranslationFunctions>,
+) => {
+  setLayersDescriptionStoreBase(
+    produce((draft: LayersDescriptionStoreType) => {
+      draft.layoutFeaturesAndLegends.forEach((l) => {
+        if (l.type === LegendType.waffle && l.layerId === targetId) {
+          const legend = l as WaffleLegend;
+          legend.valueText.text = LL().FunctionalitiesSection
+            .WaffleOptions.SymbolRatioNote({ value: newValue });
         }
       });
     }),
@@ -265,6 +292,7 @@ function makeSettingsWaffle(
       onChange={(v) => {
         // TODO: make the same validation step as in WaffleSettings
         updateProp(props.id, ['rendererParameters', 'symbolValue'], v);
+        updateWaffleLegendValueText(props.id, v, LL);
         redrawLayer(props.id);
       }}
       min={1}
@@ -760,7 +788,7 @@ function makeSettingsDefaultPoint(
                   { rendererParameters: newParams },
                 );
 
-                updateLegendNote(props.id, newParams.method, LL);
+                updateLegendNoteChoro(props.id, newParams.method, LL);
               },
             });
           }}
@@ -858,7 +886,7 @@ function makeSettingsDefaultPoint(
                   { color: newParams },
                 );
 
-                updateLegendNote(props.id, newParams.method, LL);
+                updateLegendNoteChoro(props.id, newParams.method, LL);
               },
             });
           }}
@@ -1426,7 +1454,7 @@ function makeSettingsDefaultLine(
                   { rendererParameters: newParams },
                 );
 
-                updateLegendNote(props.id, newParams.method, LL);
+                updateLegendNoteChoro(props.id, newParams.method, LL);
               },
             });
           }}
@@ -1586,7 +1614,7 @@ function makeSettingsDefaultLine(
                     newParams,
                   );
 
-                  updateLegendNote(props.id, newParams.method, LL);
+                  updateLegendNoteChoro(props.id, newParams.method, LL);
                 },
               });
             }}
@@ -1662,7 +1690,7 @@ function makeSettingsDefaultLine(
                   { rendererParameters: newParams },
                 );
 
-                updateLegendNote(props.id, newParams.method, LL);
+                updateLegendNoteChoro(props.id, newParams.method, LL);
               },
             });
           }}
@@ -1984,7 +2012,7 @@ function makeSettingsDefaultPolygon(
                   { rendererParameters: newParams },
                 );
 
-                updateLegendNote(props.id, newParams.method, LL);
+                updateLegendNoteChoro(props.id, newParams.method, LL);
               },
             });
           }}
