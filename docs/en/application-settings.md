@@ -50,3 +50,14 @@ For each type of element (title, subtitle, notes, labels), the user can choose f
 ### Default color for no-data values
 
 It is possible to choose the default color for entities without data (this is used in choropleth and categorical choropleth maps).
+
+### Activating the “Undo / Redo” function
+
+It is possible to activate or deactivate the “Undo / Redo” functionality within the application.
+
+This is represented by two buttons in the application's menu bar, in the top right-hand corner of the screen.
+
+This allows you to undo or redo the last actions performed in the application.
+
+This option is disabled by default, as it is particularly resource-hungry and can slow down the application in some cases. We
+recommend activating it only if you have a powerful hardware configuration and/or when working with relatively light datasets.

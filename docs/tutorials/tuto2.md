@@ -17,9 +17,8 @@ Pour cela, nous allons réaliser une carte de l'abstention au second tour de l'�
 
 ### 1.1 Récupération du fond de carte
 
-La <a href="http://data.metropolegrenoble.fr/" >plateforme Open Data de la Métropole de Grenoble</a>
-met à disposition de nombreux jeux de données, parmi lesquels le découpage des bureaux de vote de la Ville de Grenoble :
-<a href="https://data.metropolegrenoble.fr/visualisation/information/?id=les-bureaux-de-vote" target="_blank" rel="noopener noreferrer">https://data.metropolegrenoble.fr/visualisation/information/?id=les-bureaux-de-vote</a>.
+La <a href="http://data.metropolegrenoble.fr/" target="_blank" rel="noopener noreferrer">plateforme Open Data de la Métropole de Grenoble</a>
+met à disposition de nombreux jeux de données, parmi lesquels le découpage des bureaux de vote de la Ville de Grenoble : https://data.metropolegrenoble.fr/visualisation/information/?id=les-bureaux-de-vote.
 
 <ZoomImg
     src="/tuto2-1.png"
@@ -39,7 +38,7 @@ Nous utiliserons le fichier GeoJSON pour cet exemple.
 
 ### 1.2 Récupération des résultats des élections législatives de 2022
 
-Les résultats des élections législatives de 2022 sont également disponibles sur la plateforme Open Data de la Métropole de Grenoble : <a href="https://data.metropolegrenoble.fr/visualisation/information/?id=resultats_des_elections_legislatives_de_la_ville_de_grenoble" target="_blank" rel="noopener noreferrer">https://data.metropolegrenoble.fr/visualisation/information/?id=resultats_des_elections_legislatives_de_la_ville_de_grenoble</a>
+Les résultats des élections législatives de 2022 sont également disponibles sur la plateforme Open Data de la Métropole de Grenoble : https://data.metropolegrenoble.fr/visualisation/information/?id=resultats_des_elections_legislatives_de_la_ville_de_grenoble.
 
 <ZoomImg
     src="/tuto2-3.png"

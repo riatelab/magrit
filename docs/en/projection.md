@@ -56,3 +56,15 @@ When the EPSG code of the desired projection is known, it is advisable to use it
     alt="Selection of a local projection"
     caption="Selection of a local projection"
 />
+
+### Using a projection from a Proj4 or WKT1 character string
+
+It's possible to use a projection from a Proj4 or WKT1 character string.
+
+Simply copy and paste the string Proj4 or WKT1 into the dedicated field and give the projection a name.
+
+<ZoomImg
+    src="/projection-panel3.png"
+    alt="Creation of a projection from a Proj4 or WKT1 character string"
+    caption="Creation of a projection from a Proj4 or WKT1 character string"
+/>

@@ -51,3 +51,13 @@ Pour chaque type d'élément (titre, sous-titre, notes, étiquettes), il est pos
 
 Il est possible de choisir la couleur par défaut pour les entités sans données (utilisée dans les cartes choroplèthes et choroplèthes catégorielles).
 
+### Activation de la fonctionnalité "Annuler / Rétablir"
+
+Il est possible d'activer ou de désactiver la fonctionnalité "Annuler / Rétablir" dans l'application.
+
+Celle-ci se matérialise par le présence de deux boutons dans la barre de menu de l'application, en haut à droite de l'écran.
+
+Il est alors possible d'annuler ou de rétablir les dernières actions effectuées dans l'application.
+
+Cette option est désactivée par défaut car elle s'avère particulièrement gourmande en ressources et peut ralentir l'application dans certains cas. Nous
+recommandons de l'activer uniquement si vous avez une configuration matérielle puissante et / ou lors du travail sur des jeux de données relativement légers.

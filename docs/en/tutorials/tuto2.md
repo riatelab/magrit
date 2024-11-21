@@ -17,8 +17,8 @@ To do this, we're going to create a map of abstention in the second round of the
 
 ### 1.1 Recovering the base map
 
-The <a href="http://data.metropolegrenoble.fr/" >Grenoble Metropole's Open Data platform</a> makes numerous datasets available,
-including the delimitation of polling stations in the City of Grenoble: <a href="https://data.metropolegrenoble.fr/visualisation/information/?id=les-bureaux-de-vote" target="_blank" rel="noopener noreferrer">https://data.metropolegrenoble.fr/visualisation/information/?id=les-bureaux-de-vote</a>.
+The <a href="http://data.metropolegrenoble.fr/" target="_blank" rel="noopener noreferrer">Grenoble Metropole's Open Data platform</a> makes numerous datasets available,
+including the delimitation of polling stations in the City of Grenoble: https://data.metropolegrenoble.fr/visualisation/information/?id=les-bureaux-de-vote.
 
 <ZoomImg
     src="/tuto2-1.png"
@@ -38,7 +38,7 @@ We'll use the GeoJSON file for this example.
 ### 1.2 Retrieving the results of the 2022 legislative elections
 
 
-The results of the 2022 legislative elections are also available on the Grenoble Metropole's Open Data platform: <a href="https://data.metropolegrenoble.fr/visualisation/information/?id=resultats_des_elections_legislatives_de_la_ville_de_grenoble" target="_blank" rel="noopener noreferrer">https://data.metropolegrenoble.fr/visualisation/information/?id=resultats_des_elections_legislatives_de_la_ville_de_grenoble</a>.
+The results of the 2022 legislative elections are also available on the Grenoble Metropole's Open Data platform: https://data.metropolegrenoble.fr/visualisation/information/?id=resultats_des_elections_legislatives_de_la_ville_de_grenoble.
 
 <ZoomImg
     src="/tuto2-3.png"
