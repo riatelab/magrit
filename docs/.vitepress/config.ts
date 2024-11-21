@@ -122,7 +122,7 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
         { text: 'Mushroom (two stocks)', link: '/en/functionalities/mushroom-two-stocks' },
         { text: 'Links / Flows', link: '/en/functionalities/links-flows' },
         { text: 'Pictograms (categorical)', link: '/en/functionalities/categorical-pictograms' },
-        { text: 'Waffle map', link: '/functionalities/waffle' },
+        { text: 'Waffle map', link: '/en/functionalities/waffle' },
         { text: 'Simple linear regression', link: '/en/functionalities/simple-linear-regression' },
         { text: 'Aggregation', link: '/en/functionalities/aggregation' },
         { text: 'Simplification', link: '/en/functionalities/simplification' },
