@@ -12,6 +12,11 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.1.1 (2024-11-21)
+
+- Désactivation de la fonctionnalité "Annuler / Rétablir" par défault pour améliorer les performances.
+
+- Améliore la performance du premier rendu de la carte dans le panneau de simplification des géométries.
 
 #### 2.1.0 (2024-11-15)
 

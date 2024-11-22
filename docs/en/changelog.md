@@ -12,6 +12,11 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.1.1 (2024-11-21)
+
+- Deactivate “Undo/Redo” functionality by default to improve performance.
+
+- Improve first draw performance in geometry simplification modal.
 
 #### 2.1.0 (2024-11-15)
 
