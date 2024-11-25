@@ -89,6 +89,9 @@ export type ApplicationSettingsStoreType = {
   // customPalettes: CustomPalette[],
   // Whether to activate the undo/redo feature
   useUndoRedo: boolean,
+  // Wheter the rendering of the map is done on a SVG element
+  // or on a canvas element
+  useCanvas: boolean,
 };
 
 const [
@@ -136,6 +139,7 @@ const [
   },
   userLocale: getUserLocale(),
   useUndoRedo: false,
+  useCanvas: true,
 } as ApplicationSettingsStoreType);
 
 export {

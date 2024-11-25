@@ -97,3 +97,8 @@
 .map-zone__map g.movable > * {
   cursor: grab;
 }
+
+.map-zone__inner canvas,
+.map-zone__inner svg {
+  position: absolute;
+}

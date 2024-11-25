@@ -341,6 +341,11 @@ export default function AboutModal(
           checked={applicationSettingsStore.useUndoRedo}
           onChange={(v) => setApplicationSettingsStore('useUndoRedo', v)}
         />
+        <InputFieldCheckbox
+          label={'Use canvas'}
+          checked={applicationSettingsStore.useCanvas}
+          onChange={(v) => setApplicationSettingsStore('useCanvas', v)}
+        />
       </div>
     </Show>
   </>;

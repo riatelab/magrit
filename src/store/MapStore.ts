@@ -8,6 +8,7 @@ import d3 from '../helpers/d3-custom';
 import { makeDorlingDemersSimulation, makePolygonFromBbox } from '../helpers/geo';
 import { getD3ProjectionFromProj4, getProjection, projEquals } from '../helpers/projection';
 import { getTargetSvg, redrawPaths } from '../helpers/svg';
+import draw from '../helpers/canvas';
 
 // Stores
 import { debouncedPushUndoStack, resetRedoStackStore } from './stateStackStore';
@@ -176,67 +177,83 @@ createEffect(
         return;
       }
       const targetSvg = document.querySelector('svg.map-zone__map');
-      if (!targetSvg) {
+      const targetCanvas = document.querySelector('canvas.map-zone__map');
+      if (!targetSvg && !targetCanvas) {
         console.log('MapStore.ts: createEffect: mapStore.scale, mapStore.translate, mapStore.rotate: !targetSvg');
         return;
       }
-      // Update projection
-      globalStore.projection
-        .scale(mapStore.scale)
-        .translate(mapStore.translate);
 
-      if (globalStore.projection.rotate) {
-        globalStore.projection.rotate(mapStore.rotate);
-      }
-
-      if (globalStore.projection.parallel) {
-        globalStore.projection.parallel(mapStore.parallel || 0);
-      }
-
-      if (globalStore.projection.parallels) {
-        globalStore.projection.parallels(mapStore.parallels || [0, 0]);
-      }
-
-      // Do we need to recompute positions for proportional symbols layers
-      // with avoidOverlapping option?
-      // (we need to do this if at least one layer has the avoidOverlapping option set to true)
-      // If we don't need to recompute positions, we can just redraw the paths, we avoid calling
-      // setLayersDescriptionStore (which is computationally expensive because it moves
-      // previous state to the undo redo stack)
-      const needToRecomputePositions = layersDescriptionStore.layers
-        .some((l) => l.rendererParameters && l.rendererParameters.avoidOverlapping === true);
-
-      if (needToRecomputePositions) {
-        setLayersDescriptionStoreBase(
-          produce(
-            (draft: LayersDescriptionStoreType) => {
-              // Recompute position for proportional symbols layers with the avoidOverlapping option
-              draft.layers
-                .filter((l) => (
-                  l.rendererParameters && l.rendererParameters.avoidOverlapping === true))
-                .forEach((l) => {
-                  const layerDescription = (
-                    l as LayerDescription & { rendererParameters: ProportionalSymbolsParameters });
-                  if (layerDescription.rendererParameters.avoidOverlapping) {
-                    layerDescription.data.features = makeDorlingDemersSimulation(
-                      unproxify(layerDescription.data.features as never) as GeoJSONFeature[],
-                      layerDescription.rendererParameters.variable,
-                      {
-                        referenceSize: layerDescription.rendererParameters.referenceRadius,
-                        referenceValue: layerDescription.rendererParameters.referenceValue,
-                        symbolType: layerDescription.rendererParameters.symbolType,
-                      },
-                      layerDescription.rendererParameters.iterations,
-                      layerDescription.strokeWidth as number,
-                    );
-                  }
-                });
-            },
-          ),
-        );
-      }
       console.time('redrawPaths');
-      redrawPaths(targetSvg as SVGSVGElement & IZoomable);
+      if (applicationSettingsStore.useCanvas) {
+        draw(
+          targetCanvas as HTMLCanvasElement,
+          mapStore.translate,
+          mapStore.scale,
+          mapStore.mapDimensions.width,
+          mapStore.mapDimensions.height,
+        );
+      } else {
+        // Update projection
+        globalStore.projection
+          .scale(mapStore.scale)
+          .translate(mapStore.translate);
+
+        if (globalStore.projection.rotate) {
+          globalStore.projection.rotate(mapStore.rotate);
+        }
+
+        if (globalStore.projection.parallel) {
+          globalStore.projection.parallel(mapStore.parallel || 0);
+        }
+
+        if (globalStore.projection.parallels) {
+          globalStore.projection.parallels(mapStore.parallels || [0, 0]);
+        }
+
+        // Do we need to recompute positions for proportional symbols layers
+        // with avoidOverlapping option?
+        // (we need to do this if at least one layer has the avoidOverlapping option set to true)
+        // If we don't need to recompute positions, we can just redraw the paths, we avoid calling
+        // setLayersDescriptionStore (which is computationally expensive because it moves
+        // previous state to the undo redo stack)
+        const needToRecomputePositions = layersDescriptionStore.layers
+          .some((l) => l.rendererParameters && l.rendererParameters.avoidOverlapping === true);
+
+        if (needToRecomputePositions) {
+          setLayersDescriptionStoreBase(
+            produce(
+              (draft: LayersDescriptionStoreType) => {
+                // Recompute position for proportional symbols layers with the
+                // avoidOverlapping option
+                draft.layers
+                  .filter((l) => (
+                    l.rendererParameters && l.rendererParameters.avoidOverlapping === true))
+                  .forEach((l) => {
+                    const layerDescription = (
+                      l as LayerDescription & {
+                        rendererParameters: ProportionalSymbolsParameters,
+                      });
+                    if (layerDescription.rendererParameters.avoidOverlapping) {
+                      layerDescription.data.features = makeDorlingDemersSimulation(
+                        unproxify(layerDescription.data.features as never) as GeoJSONFeature[],
+                        layerDescription.rendererParameters.variable,
+                        {
+                          referenceSize: layerDescription.rendererParameters.referenceRadius,
+                          referenceValue: layerDescription.rendererParameters.referenceValue,
+                          symbolType: layerDescription.rendererParameters.symbolType,
+                        },
+                        layerDescription.rendererParameters.iterations,
+                        layerDescription.strokeWidth as number,
+                      );
+                    }
+                  });
+              },
+            ),
+          );
+        }
+
+        redrawPaths(targetSvg as SVGSVGElement & IZoomable);
+      }
       console.timeEnd('redrawPaths');
     },
   ),

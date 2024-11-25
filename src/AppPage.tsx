@@ -1,10 +1,10 @@
 // Imports from solid-js
 import {
   type Accessor,
-  type JSX,
+  type JSX, Match,
   onCleanup,
   onMount,
-  Show,
+  Show, Switch,
 } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
@@ -83,6 +83,7 @@ import type { TranslationFunctions } from './i18n/i18n-types';
 
 // Styles
 import './styles/Transitions.css';
+import MapZoneCanvas from './components/MapZoneCanvas.tsx';
 
 // Are we in electron ?
 // Currently we need this for:
@@ -550,7 +551,14 @@ const AppPage: () => JSX.Element = () => {
     <HeaderBarApp />
     <main>
       <LeftMenu />
-      <MapZone />
+      <Switch>
+        <Match when={applicationSettingsStore.useCanvas}>
+          <MapZoneCanvas />
+        </Match>
+        <Match when={!applicationSettingsStore.useCanvas}>
+          <MapZone />
+        </Match>
+      </Switch>
       <Show when={globalStore.isLoading }>
         <LoadingOverlay />
       </Show>
