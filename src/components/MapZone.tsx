@@ -497,7 +497,7 @@ export default function MapZone(): JSX.Element {
   };
 
   const resetInfoFeature = (delay = 60) => {
-    svgElem.getElementById('cloned-feature')?.remove();
+    svgElem!.getElementById('cloned-feature')?.remove();
     clearTimeout(resetTimeout);
     resetTimeout = setTimeout(() => {
       setGlobalStore({ infoTargetFeature: null });
@@ -508,7 +508,7 @@ export default function MapZone(): JSX.Element {
     const element = document.elementFromPoint(e.clientX, e.clientY);
     if (!element) return;
     let it = 0;
-    let targetElement = element;
+    let targetElement = element as SVGElement & ID3Element;
     // We need to find the first SVG element in the hierarchy that contains data
     // eslint-disable-next-line no-underscore-dangle
     while ((!targetElement.__data__ || !targetElement.__data__.geometry) && it < 10) {
@@ -528,9 +528,9 @@ export default function MapZone(): JSX.Element {
   };
 
   const cleanUpInfoFeature = () => {
-    svgElem.style.cursor = 'default';
+    svgElem!.style.cursor = 'default';
     resetInfoFeature(0);
-    svgElem.removeEventListener('mousemove', onMouseMoveInfo);
+    svgElem!.removeEventListener('mousemove', onMouseMoveInfo);
     window.removeEventListener('keydown', onEscapeKey);
   };
 
@@ -538,9 +538,9 @@ export default function MapZone(): JSX.Element {
     setGlobalStore({ isInfo: !globalStore.isInfo });
     if (globalStore.isInfo) {
       setGlobalStore({ infoTargetFeature: null });
-      svgElem.focus();
-      svgElem.style.cursor = 'help';
-      svgElem.addEventListener('mousemove', onMouseMoveInfo, { passive: true });
+      svgElem!.focus();
+      svgElem!.style.cursor = 'help';
+      svgElem!.addEventListener('mousemove', onMouseMoveInfo, { passive: true });
       window.addEventListener('keydown', onEscapeKey);
     } else {
       cleanUpInfoFeature();
@@ -562,12 +562,12 @@ export default function MapZone(): JSX.Element {
       if (!redraw) {
         const t = e.transform.toString();
         // We just change the transform attribute of the layers
-        svgElem.querySelectorAll('g.layer').forEach((g: Element) => {
+        svgElem!.querySelectorAll('g.layer').forEach((g: Element) => {
           // applyTransformTransition(g as SVGGElement, t, 100);
           g.setAttribute('transform', t);
         });
       } else {
-        const lastTransform = svgElem.__zoom; // eslint-disable-line no-underscore-dangle
+        const lastTransform = svgElem!.__zoom; // eslint-disable-line no-underscore-dangle
         // We need the previous projection scale, rotate and translate values
         // to compute the new ones
         const previousProjectionScale = mapStore.scale;
@@ -626,13 +626,13 @@ export default function MapZone(): JSX.Element {
         }
         if (mapStore.lockZoomPan) {
           // eslint-disable-next-line no-underscore-dangle, no-param-reassign
-          svgElem.__zoom = d3.zoomIdentity;
+          svgElem!.__zoom = d3.zoomIdentity;
         } else if (applicationSettingsStore.zoomBehavior === ZoomBehavior.Redraw) {
           redrawDebounced(e);
         }
       });
 
-    const sel = d3.select(svgElem);
+    const sel = d3.select(svgElem!);
     // Apply the zoom behavior to the SVG element
     zoom.apply(null, [sel]);
     // Remove the default double-click zoom behavior
@@ -641,7 +641,7 @@ export default function MapZone(): JSX.Element {
 
   onMount(() => {
     makeMapZoomable();
-    makeMapResizable(refMapShadow);
+    makeMapResizable(refMapShadow!);
   });
 
   return <div class="map-zone">

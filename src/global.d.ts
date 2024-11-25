@@ -9,11 +9,7 @@ import type { ApplicationSettingsStoreType } from './store/ApplicationSettingsSt
 
 declare namespace globalThis {
   let gdal: Gdal;
-  // let Dexie: DexieConstructor;
-  // db is an instance of Dexie
   let db: DexieDb;
-  // WebR instance
-  // let webR: WebR;
   let geos: never;
 }
 

@@ -223,7 +223,7 @@ export const getD3ProjectionFromProj4 = (proj: InterfaceProjection): GeoProjecti
 };
 
 export const getProjection = (projString: string): InterfaceProjection => {
-  // Here we try to read the proj4 string with mapshaper-proj (mpoj)
+  // Here we try to read the proj4 string with mapshaper-proj (mproj)
   // If it fails, we try with proj4js.
   // If it fails again, we throw an error.
   try {
