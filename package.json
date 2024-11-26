@@ -97,7 +97,7 @@
     "dompurify": "^3.2.1",
     "font-gis": "^1.0.6",
     "gdal3.js": "^2.8.1",
-    "geos-wasm": "^2.0.0",
+    "geos-wasm": "^3.0.1",
     "go-cart-wasm": "^0.3.0",
     "interactjs": "^1.10.27",
     "jszip": "^3.10.1",
