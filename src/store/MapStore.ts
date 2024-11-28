@@ -183,6 +183,66 @@ createEffect(
         return;
       }
 
+      console.time('Update projection');
+      // Update projection
+      globalStore.projection
+        .scale(mapStore.scale)
+        .translate(mapStore.translate);
+
+      if (globalStore.projection.rotate) {
+        globalStore.projection.rotate(mapStore.rotate);
+      }
+
+      if (globalStore.projection.parallel) {
+        globalStore.projection.parallel(mapStore.parallel || 0);
+      }
+
+      if (globalStore.projection.parallels) {
+        globalStore.projection.parallels(mapStore.parallels || [0, 0]);
+      }
+
+      // Do we need to recompute positions for proportional symbols layers
+      // with avoidOverlapping option?
+      // (we need to do this if at least one layer has the avoidOverlapping option set to true)
+      // If we don't need to recompute positions, we can just redraw the paths, we avoid calling
+      // setLayersDescriptionStore (which is computationally expensive because it moves
+      // previous state to the undo redo stack)
+      const needToRecomputePositions = layersDescriptionStore.layers
+        .some((l) => l.rendererParameters && l.rendererParameters.avoidOverlapping === true);
+
+      if (needToRecomputePositions) {
+        setLayersDescriptionStoreBase(
+          produce(
+            (draft: LayersDescriptionStoreType) => {
+              // Recompute position for proportional symbols layers with the
+              // avoidOverlapping option
+              draft.layers
+                .filter((l) => (
+                  l.rendererParameters && l.rendererParameters.avoidOverlapping === true))
+                .forEach((l) => {
+                  const layerDescription = (
+                    l as LayerDescription & {
+                      rendererParameters: ProportionalSymbolsParameters,
+                    });
+                  if (layerDescription.rendererParameters.avoidOverlapping) {
+                    layerDescription.data.features = makeDorlingDemersSimulation(
+                      unproxify(layerDescription.data.features as never) as GeoJSONFeature[],
+                      layerDescription.rendererParameters.variable,
+                      {
+                        referenceSize: layerDescription.rendererParameters.referenceRadius,
+                        referenceValue: layerDescription.rendererParameters.referenceValue,
+                        symbolType: layerDescription.rendererParameters.symbolType,
+                      },
+                      layerDescription.rendererParameters.iterations,
+                      layerDescription.strokeWidth as number,
+                    );
+                  }
+                });
+            },
+          ),
+        );
+      }
+      console.timeEnd('Update projection');
       console.time('redrawPaths');
       if (applicationSettingsStore.useCanvas) {
         draw(
@@ -193,65 +253,6 @@ createEffect(
           mapStore.mapDimensions.height,
         );
       } else {
-        // Update projection
-        globalStore.projection
-          .scale(mapStore.scale)
-          .translate(mapStore.translate);
-
-        if (globalStore.projection.rotate) {
-          globalStore.projection.rotate(mapStore.rotate);
-        }
-
-        if (globalStore.projection.parallel) {
-          globalStore.projection.parallel(mapStore.parallel || 0);
-        }
-
-        if (globalStore.projection.parallels) {
-          globalStore.projection.parallels(mapStore.parallels || [0, 0]);
-        }
-
-        // Do we need to recompute positions for proportional symbols layers
-        // with avoidOverlapping option?
-        // (we need to do this if at least one layer has the avoidOverlapping option set to true)
-        // If we don't need to recompute positions, we can just redraw the paths, we avoid calling
-        // setLayersDescriptionStore (which is computationally expensive because it moves
-        // previous state to the undo redo stack)
-        const needToRecomputePositions = layersDescriptionStore.layers
-          .some((l) => l.rendererParameters && l.rendererParameters.avoidOverlapping === true);
-
-        if (needToRecomputePositions) {
-          setLayersDescriptionStoreBase(
-            produce(
-              (draft: LayersDescriptionStoreType) => {
-                // Recompute position for proportional symbols layers with the
-                // avoidOverlapping option
-                draft.layers
-                  .filter((l) => (
-                    l.rendererParameters && l.rendererParameters.avoidOverlapping === true))
-                  .forEach((l) => {
-                    const layerDescription = (
-                      l as LayerDescription & {
-                        rendererParameters: ProportionalSymbolsParameters,
-                      });
-                    if (layerDescription.rendererParameters.avoidOverlapping) {
-                      layerDescription.data.features = makeDorlingDemersSimulation(
-                        unproxify(layerDescription.data.features as never) as GeoJSONFeature[],
-                        layerDescription.rendererParameters.variable,
-                        {
-                          referenceSize: layerDescription.rendererParameters.referenceRadius,
-                          referenceValue: layerDescription.rendererParameters.referenceValue,
-                          symbolType: layerDescription.rendererParameters.symbolType,
-                        },
-                        layerDescription.rendererParameters.iterations,
-                        layerDescription.strokeWidth as number,
-                      );
-                    }
-                  });
-              },
-            ),
-          );
-        }
-
         redrawPaths(targetSvg as SVGSVGElement & IZoomable);
       }
       console.timeEnd('redrawPaths');

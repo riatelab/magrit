@@ -1,7 +1,8 @@
 // Imports from solid-js
 import {
+  createEffect,
   For, type JSX,
-  Match, onMount,
+  Match, on, onMount,
   Show, Switch,
 } from 'solid-js';
 
@@ -418,6 +419,7 @@ export default function MapZoneCanvas(): JSX.Element {
   };
 
   const makeMapZoomable = (/* svgElem: SVGSVGElement & IZoomable */) => {
+    const previous = { x: 0, y: 0, k: 1 };
     // When applyZoomPan is called with redraw = false,
     // the map is not redrawn, but we set the 'transform' attribute
     // of the layers to the current transform value.
@@ -429,7 +431,7 @@ export default function MapZoneCanvas(): JSX.Element {
     // and remove the transform attribute from the elements on
     // which it was defined).
     const applyZoomPan = (e: MouseEvent & d3.D3ZoomEvent<any, any>) => {
-      const lastTransform = svgElem!.__zoom; // eslint-disable-line no-underscore-dangle
+      const lastTransform = e.transform; // eslint-disable-line no-underscore-dangle
       // We need the previous projection scale, rotate and translate values
       // to compute the new ones
       /* eslint-disable no-underscore-dangle */
@@ -441,16 +443,21 @@ export default function MapZoneCanvas(): JSX.Element {
       // Compute new values for scale and translate from
       // the last zoom event
       const lastScale = lastTransform.k;
-      const scaleValue = lastScale * previousProjectionScale;
-      const translateValue = [
-        lastTransform.x + previousProjectionTranslate[0] * lastScale,
-        lastTransform.y + previousProjectionTranslate[1] * lastScale,
-      ];
+      const scaleValue = (lastScale * previousProjectionScale);
+      const translateValue = previous.k === 1
+        ? [
+          (lastTransform.x - previous.x + previousProjectionTranslate[0] * lastScale),
+          (lastTransform.y - previous.y + previousProjectionTranslate[1] * lastScale),
+        ]
+        : [
+          (lastTransform.x + previousProjectionTranslate[0] * lastScale),
+          (lastTransform.y + previousProjectionTranslate[1] * lastScale),
+        ];
 
       // Update the projection properties in the mapStore - this
       // will update the 'projection' entry in the global store
       // and redraw the map
-      setMapStore({
+      setMapStoreBase({
         scale: scaleValue,
         translate: translateValue,
       });
@@ -458,23 +465,38 @@ export default function MapZoneCanvas(): JSX.Element {
       //   scale: lastTransform.k,
       //   translate: [lastTransform.x, lastTransform.y],
       // });
+
+      svgElem!.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
     };
 
-    const setMapStoreDebounced = debounce((e) => {
-      setMapStore({
-        scale: e.transform.k,
-        translate: [e.transform.x, e.transform.y],
-      });
-    }, 225);
+    const applyZoomPanDebounced = debounce((e) => {
+      applyZoomPan(e);
+      previous.x = e.transform.x;
+      previous.y = e.transform.y;
+      previous.k = e.transform.k;
+    }, 10, true);
 
+    /* eslint-disable no-underscore-dangle, no-param-reassign */
     // Set up the zoom behavior
     const zoom = d3.zoom()
-      .on('zoom.end', (e) => {
-        // Otherwise we apply the zoom/pan
-        // applyZoomPan(e);
-        // resetInfoFeature();
-        setMapStoreDebounced(e);
+      .on('start', () => {
+        previous.x = 0;
+        previous.y = 0;
+        previous.k = 1;
+      })
+      .on('zoom', (e) => {
+        applyZoomPanDebounced(e);
+      })
+      .on('end', (e) => {
+        if (e.transform.k === 1 && e.transform.x === 0 && e.transform.y === 0) {
+          return;
+        }
+        applyZoomPan(e);
+        previous.x = 0;
+        previous.y = 0;
+        previous.k = 1;
       });
+    /* eslint-enable no-underscore-dangle */
 
     const sel = d3.select(svgElem!);
     // Apply the zoom behavior to the SVG element
@@ -496,6 +518,37 @@ export default function MapZoneCanvas(): JSX.Element {
       mapStore.mapDimensions.height,
     );
   });
+
+  createEffect(
+    on(
+      () => layersDescriptionStore.layers
+        .map((layer) => [
+          layer.visible,
+          layer.fillColor,
+          layer.strokeColor,
+          layer.fillOpacity,
+          layer.strokeWidth,
+          layer.strokeOpacity,
+          layer.symbolSize,
+          layer.strokeDasharray,
+        ]),
+      () => {
+        console.log('layersDescriptionStore.layers changed');
+        if (!svgElem) return;
+        /* eslint-disable no-underscore-dangle */
+        const translate = [svgElem!.__zoom.x, svgElem!.__zoom.y];
+        const scale = svgElem!.__zoom.k;
+        draw(
+          canvasElem!,
+          translate,
+          scale,
+          mapStore.mapDimensions.width,
+          mapStore.mapDimensions.height,
+        );
+        /* eslint-enable no-underscore-dangle */
+      },
+    ),
+  );
 
   return <div class="map-zone">
     <div
