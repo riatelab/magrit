@@ -5,6 +5,12 @@ import { makeHexColorWithAlpha } from './color';
 
 import d3 from './d3-custom';
 
+const useDefaultRenderer = new Set([
+  'default',
+  'cartogram',
+  'graticule',
+]);
+
 const draw = (
   canvas: HTMLCanvasElement,
   translate: [number, number],
@@ -13,11 +19,6 @@ const draw = (
   height: number,
 ) => {
   const ctx = canvas.getContext('2d')!;
-  const transform = {
-    x: translate[0],
-    y: translate[1],
-    k: scale,
-  };
   const path = d3.geoPath()
     .projection(globalStore.projection)
     .digits(0)
@@ -26,43 +27,45 @@ const draw = (
   ctx.save();
   ctx.clearRect(0, 0, width, height);
 
-  // ctx.translate(transform.x, transform.y);
-  // ctx.scale(transform.k, transform.k);
+  // ctx.translate(translate[0], translate[1]);
+  // ctx.scale(scale, scale);
 
   layersDescriptionStore.layers
     .filter((layer) => layer.visible)
     .forEach((layer) => {
       ctx.strokeStyle = makeHexColorWithAlpha(layer.strokeColor, layer.strokeOpacity);
       ctx.lineWidth = layer.strokeWidth;
+      // Layer of type 'Sphere'
       if (layer.data.type === 'Sphere') {
         ctx.fillStyle = makeHexColorWithAlpha(layer.fillColor, layer.fillOpacity);
         ctx.beginPath();
         path({ type: 'Sphere' });
         ctx.fill();
         ctx.stroke();
-      } else if (layer.type === 'polygon' || layer.type === 'point') {
+      } else if (
+        useDefaultRenderer.has(layer.representationType)
+        && (layer.type === 'polygon' || layer.type === 'point')
+      ) {
         if (layer.type === 'point') {
           path.pointRadius(layer.symbolSize!);
         }
+        ctx.fillStyle = makeHexColorWithAlpha(layer.fillColor, layer.fillOpacity);
         for (let i = 0, n = layer.data.features.length; i < n; i += 1) {
-          const feature = layer.data.features[i];
-          ctx.fillStyle = makeHexColorWithAlpha(layer.fillColor, layer.fillOpacity);
           ctx.beginPath();
-          path(feature);
+          path(layer.data.features[i]);
           ctx.fill();
           ctx.stroke();
         }
-      } else if (layer.type === 'linestring') {
+      } else if (
+        useDefaultRenderer.has(layer.representationType)
+        && layer.type === 'linestring'
+      ) {
         for (let i = 0, n = layer.data.features.length; i < n; i += 1) {
-          const feature = layer.data.features[i];
           ctx.beginPath();
-          path(feature);
+          path(layer.data.features[i]);
           ctx.stroke();
         }
       }
-      // } else if (layer.type === 'point') {
-      // TODO
-      // }
     });
 
   ctx.restore();

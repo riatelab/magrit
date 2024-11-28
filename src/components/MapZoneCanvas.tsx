@@ -19,7 +19,7 @@ import d3 from '../helpers/d3-custom';
 
 // Helpers
 import { makeHexColorWithAlpha } from '../helpers/color';
-import { debounce } from '../helpers/common';
+import { throttle } from '../helpers/common';
 import { useI18nContext } from '../i18n/i18n-solid';
 import { isLayoutFeature } from '../helpers/layoutFeatures';
 import { findLayerById } from '../helpers/layers';
@@ -469,12 +469,13 @@ export default function MapZoneCanvas(): JSX.Element {
       svgElem!.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
     };
 
-    const applyZoomPanDebounced = debounce((e) => {
+    const applyZoomPanDebounced = throttle((e) => {
+      console.log('inside throttled');
       applyZoomPan(e);
       previous.x = e.transform.x;
       previous.y = e.transform.y;
       previous.k = e.transform.k;
-    }, 10, true);
+    }, 100, false);
 
     /* eslint-disable no-underscore-dangle, no-param-reassign */
     // Set up the zoom behavior
@@ -485,6 +486,7 @@ export default function MapZoneCanvas(): JSX.Element {
         previous.k = 1;
       })
       .on('zoom', (e) => {
+        console.log('is zooming');
         applyZoomPanDebounced(e);
       })
       .on('end', (e) => {

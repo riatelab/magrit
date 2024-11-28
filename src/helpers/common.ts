@@ -99,6 +99,42 @@ export const debounce = (
   };
 };
 
+/**
+ * Throttle a function. Returns a function, that, as long as it continues to be invoked,
+ * will only trigger every 'delay' milliseconds.
+ */
+export const throttle = (
+  func: (...args: any[]) => any,
+  delay: number = 300,
+  leading: boolean = false,
+  trailing: boolean = false,
+  context: any = this,
+) => {
+  let lastCall = 0;
+  let timeoutId: ReturnType<typeof setTimeout>;
+  return (...args: any[]) => {
+    const now = Date.now();
+    if (!lastCall && !leading) {
+      lastCall = now;
+    }
+    const remaining = delay - (now - lastCall);
+    if (remaining <= 0 || remaining > delay) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = undefined;
+      }
+      lastCall = now;
+      func.apply(context, args);
+    } else if (!timeoutId && trailing) {
+      timeoutId = setTimeout(() => {
+        lastCall = leading ? Date.now() : 0;
+        timeoutId = undefined;
+        func.apply(context, args);
+      }, remaining);
+    }
+  };
+};
+
 export const getNumberOfDecimals = (value: number) => {
   if (Math.floor(value) !== value) {
     return value.toString().split('.')[1].length || 0;
