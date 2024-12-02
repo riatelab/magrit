@@ -41,7 +41,7 @@ import type { PortrayalSettingsProps } from './common';
 import { DataType, type Variable, VariableType } from '../../helpers/typeDetection';
 import {
   ClassificationMethod,
-  type DiscontinuityLegend,
+  type GraduatedLineLegend,
   type DiscontinuityParameters,
   type LayerDescription,
   type LegendTextElement,
@@ -134,13 +134,13 @@ function onClickValidate(
     backgroundRect: {
       visible: false,
     },
-    type: LegendType.discontinuity,
+    type: LegendType.graduatedLine,
     orientation: 'horizontal',
     lineLength: 50,
     labels: {
       ...applicationSettingsStore.defaultLegendSettings.labels,
     } as LegendTextElement,
-  } as DiscontinuityLegend;
+  } as GraduatedLineLegend;
 
   setLayersDescriptionStore(
     produce(

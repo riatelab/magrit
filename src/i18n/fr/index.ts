@@ -977,7 +977,7 @@ const fr = {
       LinkPositionShifted: 'Décalée',
       LinkPositionShared: 'Partagée',
       LinkSizeType: 'Type de taille des liens',
-      LinkSizeClassification: 'Discrétisation des tailles',
+      LinkSizeGraduated: 'Taille discrétisée',
       LinkSizeProportional: 'Proportionnelle',
       LinkSizeFixed: 'Fixe',
       LinkSizeProportionalReferenceSize: 'Taille maximale',

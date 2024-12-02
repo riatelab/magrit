@@ -3969,9 +3969,9 @@ type RootTranslation = {
 			 */
 			LinkSizeType: string
 			/**
-			 * L​i​n​k​ ​s​i​z​e​ ​c​l​a​s​s​i​f​i​c​a​t​i​o​n
+			 * G​r​a​d​u​a​t​e​d​ ​l​i​n​k​ ​s​i​z​e
 			 */
-			LinkSizeClassification: string
+			LinkSizeGraduated: string
 			/**
 			 * P​r​o​p​o​r​t​i​o​n​a​l
 			 */
@@ -9890,9 +9890,9 @@ export type TranslationFunctions = {
 			 */
 			LinkSizeType: () => LocalizedString
 			/**
-			 * Link size classification
+			 * Graduated link size
 			 */
-			LinkSizeClassification: () => LocalizedString
+			LinkSizeGraduated: () => LocalizedString
 			/**
 			 * Proportional
 			 */

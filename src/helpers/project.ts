@@ -1,6 +1,10 @@
 import semver from 'semver';
 import { version } from '../../package.json';
-import { LayoutFeatureType, type ProjectDescription } from '../global.d';
+import {
+  LayoutFeatureType,
+  type LegendBase,
+  type ProjectDescription,
+} from '../global.d';
 
 export enum ValidityState {
   Valid,
@@ -48,6 +52,20 @@ export const patchProject = (
     console.log('Patching project to version 2.1.1');
     // eslint-disable-next-line no-param-reassign
     project.applicationSettings.useUndoRedo = false;
+    // eslint-disable-next-line no-param-reassign
+    project.version = '2.1.1';
+  }
+  // In version 2.1.2 we changed the type 'discontinuityLegend' to
+  // 'graduatedLineLegend' (in order to be more generic and use it as
+  // well for graduated links).
+  if (semver.lt(projectVersion, '2.1.2')) {
+    console.log('Patching project to version 2.1.2');
+    project.layoutFeaturesAndLegends.forEach((layoutFeatureOrLegend) => {
+      if (layoutFeatureOrLegend.type === 'discontinuity') {
+        // eslint-disable-next-line no-param-reassign
+        (layoutFeatureOrLegend as LegendBase).type = 'graduatedLine';
+      }
+    });
     // eslint-disable-next-line no-param-reassign
     project.version = '2.1.1';
   }

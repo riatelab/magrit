@@ -977,7 +977,7 @@ const en = {
       LinkPositionShifted: 'Shifted',
       LinkPositionShared: 'Shared',
       LinkSizeType: 'Link size type',
-      LinkSizeClassification: 'Link size classification',
+      LinkSizeGraduated: 'Graduated link size',
       LinkSizeProportional: 'Proportional',
       LinkSizeFixed: 'Fixed',
       LinkSizeProportionalReferenceSize: 'Maximal Size',

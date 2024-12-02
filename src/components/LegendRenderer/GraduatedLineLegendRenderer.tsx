@@ -1,4 +1,5 @@
 import {
+  Accessor,
   createEffect,
   createMemo,
   For,
@@ -28,19 +29,19 @@ import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Types / Interfaces / Enums
-import type { DiscontinuityLegend, LayerDescriptionDiscontinuity } from '../../global';
+import type { GraduatedLineLegend, LayerDescriptionDiscontinuity, LayerDescriptionLinks } from '../../global';
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
-function verticalDiscontinuityLegend(
-  legend: DiscontinuityLegend,
+function verticalGraduatedLineLegend(
+  legend: GraduatedLineLegend,
 ): JSX.Element {
   const { LL } = useI18nContext();
   let refElement: SVGGElement;
   const layer = findLayerById(
     layersDescriptionStore.layers,
     legend.layerId,
-  )! as LayerDescriptionDiscontinuity;
+  )! as LayerDescriptionDiscontinuity | LayerDescriptionLinks;
   const heightTitle = createMemo(
     () => getTextSize(
       legend.title.text,
@@ -68,9 +69,19 @@ function verticalDiscontinuityLegend(
     ).height / 2 + defaultSpacing,
   );
 
+  const classificationParameters = createMemo(() => {
+    if (layer.representationType === 'discontinuity') {
+      return layer.rendererParameters;
+    }
+    if (layer.representationType === 'links') {
+      return layer.rendererParameters.classification;
+    }
+    throw new Error('Unknown representation type');
+  });
+
   const sizesAndPositions = createMemo(() => {
     let lastSize = 0;
-    return layer.rendererParameters.sizes.toReversed()
+    return classificationParameters().sizes.toReversed()
       .map((size) => {
         const result = {
           size,
@@ -84,15 +95,15 @@ function verticalDiscontinuityLegend(
   });
 
   const positionsLabel = createMemo(() => {
-    const reversedBreaks = layer.rendererParameters.breaks
+    const reversedBreaks = classificationParameters().breaks
       .filter((b, i) => (
-        (i === 0 && layer.rendererParameters.sizes[i] > 0)
+        (i === 0 && classificationParameters().sizes[i] > 0)
         || (
-          i > 0 && i < layer.rendererParameters.breaks.length - 1
-          && layer.rendererParameters.sizes[i] > 0
+          i > 0 && i < classificationParameters().breaks.length - 1
+          && classificationParameters().sizes[i] > 0
         )
-        || (i === layer.rendererParameters.breaks.length - 1
-          && layer.rendererParameters.sizes[i - 1] > 0)
+        || (i === classificationParameters().breaks.length - 1
+          && classificationParameters().sizes[i - 1] > 0)
       ))
       .toReversed();
     const tmp = sizesAndPositions()
@@ -206,15 +217,15 @@ function verticalDiscontinuityLegend(
   </g>;
 }
 
-function horizontalDiscontinuityLegend(
-  legend: DiscontinuityLegend,
+function horizontalGraduatedLineLegend(
+  legend: GraduatedLineLegend,
 ): JSX.Element {
   const { LL } = useI18nContext();
   let refElement: SVGGElement;
   const layer = findLayerById(
     layersDescriptionStore.layers,
     legend.layerId,
-  )! as LayerDescriptionDiscontinuity;
+  )! as LayerDescriptionDiscontinuity | LayerDescriptionLinks;
   const heightTitle = createMemo(
     () => getTextSize(
       legend.title.text,
@@ -234,8 +245,18 @@ function horizontalDiscontinuityLegend(
     ).height + defaultSpacing;
   });
 
+  const classificationParameters = createMemo(() => {
+    if (layer.representationType === 'discontinuity') {
+      return layer.rendererParameters;
+    }
+    if (layer.representationType === 'links') {
+      return layer.rendererParameters.classification;
+    }
+    throw new Error('Unknown representation type');
+  });
+
   const maxSize = createMemo(
-    () => layer.rendererParameters.sizes[layer.rendererParameters.sizes.length - 1],
+    () => classificationParameters().sizes[classificationParameters().sizes.length - 1],
   );
 
   const distanceLabelsToTop = createMemo(() => heightTitleSubtitle()
@@ -286,7 +307,7 @@ function horizontalDiscontinuityLegend(
     { makeLegendText(legend.title, [0, 0], 'title') }
     { makeLegendText(legend.subtitle, [0, heightTitle()], 'subtitle') }
     <g class="legend-content">
-      <For each={layer.rendererParameters.sizes.filter((s) => s > 0)}>
+      <For each={classificationParameters().sizes.filter((s) => s > 0)}>
         {
           (size, i) => <line
             x1={i() * legend.lineLength}
@@ -300,15 +321,15 @@ function horizontalDiscontinuityLegend(
         }
       </For>
       <For each={
-        layer.rendererParameters.breaks
+        classificationParameters().breaks
           .filter((b, i) => (
-            (i === 0 && layer.rendererParameters.sizes[i] > 0)
+            (i === 0 && classificationParameters().sizes[i] > 0)
             || (
-              i > 0 && i < layer.rendererParameters.breaks.length - 1
-              && layer.rendererParameters.sizes[i] > 0
+              i > 0 && i < classificationParameters().breaks.length - 1
+              && classificationParameters().sizes[i] > 0
             )
-            || (i === layer.rendererParameters.breaks.length - 1
-              && layer.rendererParameters.sizes[i - 1] > 0)
+            || (i === classificationParameters().breaks.length - 1
+              && classificationParameters().sizes[i - 1] > 0)
           ))
       }>
         {
@@ -344,14 +365,14 @@ function horizontalDiscontinuityLegend(
     }
   </g>;
 }
-export default function legendDiscontinuity(
-  legend: DiscontinuityLegend,
+export default function graduatedLineDiscontinuity(
+  legend: GraduatedLineLegend,
 ): JSX.Element {
   return <>
     {
       ({
-        vertical: verticalDiscontinuityLegend,
-        horizontal: horizontalDiscontinuityLegend,
+        vertical: verticalGraduatedLineLegend,
+        horizontal: horizontalGraduatedLineLegend,
       })[legend.orientation](legend)
     }
   </>;

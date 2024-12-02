@@ -11,6 +11,7 @@ import { produce, unwrap } from 'solid-js/store';
 
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
+import { quantile } from 'statsbreaks';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -44,7 +45,9 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Types / Interfaces / Enums
 import {
+  ClassificationMethod,
   type DefaultLegend,
+  type GraduatedLineLegend,
   type LayerDescription,
   type LayerDescriptionLinks,
   type LegendTextElement,
@@ -68,6 +71,7 @@ function onClickValidate(
   tableDestinationVariable: string,
   tableIntensityVariable: string,
   linkType: LinkType,
+  linkSizeType: 'fixed' | 'graduated' | 'proportional',
   linkHeadType: LinkHeadType,
   linkCurveType: LinkCurvature,
   newName: string,
@@ -135,19 +139,32 @@ function onClickValidate(
     // If the link type is not 'link', we want to use the intensity to
     // determine the width of the links.
     // Otherwise, links have a fixed width.
-    const maxData = newData.features.reduce(
-      (acc, f) => (
-        isFiniteNumber(f.properties.Intensity)
-          ? Math.max(acc, +f.properties.Intensity)
-          : 0),
-      0,
-    );
+    if (linkSizeType === 'proportional') {
+      const maxData = newData.features.reduce(
+        (acc, f) => (
+          isFiniteNumber(f.properties.Intensity)
+            ? Math.max(acc, +f.properties.Intensity)
+            : 0),
+        0,
+      );
 
-    params.sizeType = 'proportional';
-    params.proportional = {
-      referenceRadius: 10,
-      referenceValue: maxData,
-    };
+      params.sizeType = 'proportional';
+      params.proportional = {
+        referenceRadius: 10,
+        referenceValue: maxData,
+      };
+    } else { // so sizeType === 'graduated'
+      const allValues = newData.features
+        .filter((d) => isFiniteNumber(d.properties.Intensity))
+        .map((d) => +d.properties.Intensity);
+      params.sizeType = 'graduated';
+      params.classification = {
+        classificationMethod: ClassificationMethod.quantiles,
+        classes: 4,
+        breaks: quantile(allValues, 4),
+        sizes: [1, 2, 3.5, 5.5],
+      };
+    }
   } else {
     params.sizeType = 'fixed';
   }
@@ -226,52 +243,81 @@ function onClickValidate(
 
   let legend;
   if (linkType !== LinkType.Link) {
-    const values = newData.features.map((d) => +d.properties.Intensity);
-    const [min, max] = extent(values);
+    if (linkSizeType === 'proportional') {
+      const values = newData.features.map((d) => +d.properties.Intensity);
+      const [min, max] = extent(values);
 
-    const propSize = new PropSizer(
-      params.proportional!.referenceValue,
-      params.proportional!.referenceRadius,
-      'line',
-    );
+      const propSize = new PropSizer(
+        params.proportional!.referenceValue,
+        params.proportional!.referenceRadius,
+        'line',
+      );
 
-    const legendValues = computeCandidateValuesForSymbolsLegend(
-      min,
-      max,
-      propSize.scale,
-      propSize.getValue,
-      3,
-    );
-    legend = {
-      // Legend common part
-      id: generateIdLegend(),
-      layerId: newId,
-      title: {
-        text: 'Intensity',
-        ...applicationSettingsStore.defaultLegendSettings.title,
-      } as LegendTextElement,
-      subtitle: {
-        ...applicationSettingsStore.defaultLegendSettings.subtitle,
-      } as LegendTextElement,
-      note: {
-        ...applicationSettingsStore.defaultLegendSettings.note,
-      } as LegendTextElement,
-      position: legendPosition,
-      visible: true,
-      roundDecimals: 0,
-      backgroundRect: {
-        visible: false,
-      },
-      // Part specific to proportional symbols
-      type: LegendType.proportional,
-      layout: 'vertical',
-      values: legendValues,
-      spacing: 5,
-      labels: {
-        ...applicationSettingsStore.defaultLegendSettings.labels,
-      } as LegendTextElement,
-      symbolType: 'line',
-    } as ProportionalSymbolsLegend;
+      const legendValues = computeCandidateValuesForSymbolsLegend(
+        min,
+        max,
+        propSize.scale,
+        propSize.getValue,
+        3,
+      );
+      legend = {
+        // Legend common part
+        id: generateIdLegend(),
+        layerId: newId,
+        title: {
+          text: 'Intensity',
+          ...applicationSettingsStore.defaultLegendSettings.title,
+        } as LegendTextElement,
+        subtitle: {
+          ...applicationSettingsStore.defaultLegendSettings.subtitle,
+        } as LegendTextElement,
+        note: {
+          ...applicationSettingsStore.defaultLegendSettings.note,
+        } as LegendTextElement,
+        position: legendPosition,
+        visible: true,
+        roundDecimals: 0,
+        backgroundRect: {
+          visible: false,
+        },
+        // Part specific to proportional symbols
+        type: LegendType.proportional,
+        layout: 'vertical',
+        values: legendValues,
+        spacing: 5,
+        labels: {
+          ...applicationSettingsStore.defaultLegendSettings.labels,
+        } as LegendTextElement,
+        symbolType: 'line',
+      } as ProportionalSymbolsLegend;
+    } else { // linkSizeType === 'graduated'
+      legend = {
+        id: generateIdLegend(),
+        layerId: newId,
+        title: {
+          text: 'Intensity',
+          ...applicationSettingsStore.defaultLegendSettings.title,
+        } as LegendTextElement,
+        subtitle: {
+          ...applicationSettingsStore.defaultLegendSettings.subtitle,
+        } as LegendTextElement,
+        note: {
+          ...applicationSettingsStore.defaultLegendSettings.note,
+        } as LegendTextElement,
+        position: legendPosition,
+        visible: true,
+        roundDecimals: 2,
+        backgroundRect: {
+          visible: false,
+        },
+        type: LegendType.graduatedLine,
+        orientation: 'horizontal',
+        lineLength: 50,
+        labels: {
+          ...applicationSettingsStore.defaultLegendSettings.labels,
+        } as LegendTextElement,
+      } as GraduatedLineLegend;
+    }
   } else {
     legend = {
       id: generateIdLegend(),
@@ -443,6 +489,11 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
     setLinkCurveType,
   ] = createSignal<LinkCurvature>(LinkCurvature.StraightOnSphere);
 
+  const [
+    linkSizeType,
+    setLinkSizeType,
+  ] = createSignal('fixed');
+
   createEffect(
     () => {
       if (
@@ -461,6 +512,16 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
         setMatchingState(matching);
       } else {
         setMatchingState(null);
+      }
+    },
+  );
+
+  createEffect(
+    () => {
+      if (intensityVariable() === '') {
+        setLinkSizeType('fixed');
+      } else {
+        setLinkSizeType('proportional');
       }
     },
   );
@@ -489,6 +550,7 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
         destinationVariable(),
         intensityVariable(),
         linkType(),
+        linkSizeType(),
         linkHeadType(),
         linkCurveType(),
         layerName,
@@ -616,7 +678,19 @@ export default function LinksSettings(props: PortrayalSettingsProps): JSX.Elemen
         </InputFieldSelect>
       </Show>
       <InputFieldSelect
-        label={ LL().FunctionalitiesSection.LinksOptions.LinkHeadType() }
+        label={LL().FunctionalitiesSection.LinksOptions.LinkSizeType()}
+        onChange={(value) => {
+          setLinkSizeType(value);
+        }}
+        value={linkSizeType()}
+        disabled={intensityVariable() === ''}
+      >
+        <option value={'fixed'} disabled={intensityVariable() !== ''}>{LL().FunctionalitiesSection.LinksOptions.LinkSizeFixed()}</option>
+        <option value={'proportional'}>{LL().FunctionalitiesSection.LinksOptions.LinkSizeProportional()}</option>
+        <option value={'graduated'}>{LL().FunctionalitiesSection.LinksOptions.LinkSizeGraduated()}</option>
+      </InputFieldSelect>
+      <InputFieldSelect
+        label={LL().FunctionalitiesSection.LinksOptions.LinkHeadType()}
         onChange={(value) => {
           setLinkHeadType(value as LinkHeadType);
         }}
