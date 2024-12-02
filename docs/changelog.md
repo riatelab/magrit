@@ -12,6 +12,13 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.1.2 (unreleased)
+
+- Ajout de la possibilité de créer des liens graduées (taille selon la classe après discrétisation) en addition des liens proportionnels
+  et des liens avec une taille fixe.
+
+- Ajout d'une taille minimum pour les liens proportionnels (afin de faciliter la visualisation des liens avec des valeurs très faibles).
+
 #### 2.1.1 (2024-11-21)
 
 - Désactivation de la fonctionnalité "Annuler / Rétablir" par défault pour améliorer les performances.
