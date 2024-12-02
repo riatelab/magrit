@@ -1089,7 +1089,7 @@ function verticalLineLegend(
     let lastPosition = distanceToTop() + propSize().scale(targetValues[0]) / 2;
     return targetValues
       .map((value, i) => {
-        const symbolSize = propSize().scale(value);
+        const symbolSize = propSize().scale(value) + (layerType === 'links' ? 0.35 : 0);
         const result = {
           size: symbolSize,
           x: 0,
@@ -1302,7 +1302,7 @@ function horizontalLineLegend(
   // (and use createMemo to make it reactive)
   const sizesAndPositions = createMemo(() => legend.values
     .map((value, i) => ({
-      size: propSize().scale(value),
+      size: propSize().scale(value) + (layerType === 'links' ? 0.35 : 0),
       x: (60 + legend.spacing) * i,
       y: heightTitleSubtitle() + maxSize() / 2,
       value,

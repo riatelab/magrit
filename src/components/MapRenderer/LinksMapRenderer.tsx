@@ -79,7 +79,7 @@ export default function linksRenderer(
             }
             vector-effect="non-scaling-stroke"
             stroke-width={
-              propSize().scale(+feature.properties.Intensity)
+              propSize().scale(+feature.properties.Intensity) + 0.35
             }
             marker-start={
               (
