@@ -77,7 +77,7 @@ import ImageRenderer from './LayoutFeatureRenderer/ImageRenderer.tsx';
 import legendDefault from './LegendRenderer/DefaultLegendRenderer.tsx';
 import legendChoropleth from './LegendRenderer/ChoroplethLegend.tsx';
 import legendProportionalSymbols from './LegendRenderer/ProportionnalSymbolsLegend.tsx';
-import legendDiscontinuity from './LegendRenderer/DiscontinuityLegendRenderer.tsx';
+import legendGraduatedLine from './LegendRenderer/GraduatedLineLegendRenderer.tsx';
 import {
   categoricalChoroplethLineRenderer,
   categoricalChoroplethPointRenderer,
@@ -120,7 +120,7 @@ import {
   type ProportionalSymbolsLegend,
   type CategoricalChoroplethLegend,
   type CategoricalPictogramLegend,
-  type DiscontinuityLegend,
+  type GraduatedLineLegend,
   type LabelsLegend,
   type LinearRegressionScatterPlot,
   type MushroomsLegend,
@@ -183,8 +183,8 @@ const dispatchLegendRenderer = (legend: Legend) => {
   if (legend.type === 'proportional') {
     return legendProportionalSymbols(legend as ProportionalSymbolsLegend);
   }
-  if (legend.type === 'discontinuity') {
-    return legendDiscontinuity(legend as DiscontinuityLegend);
+  if (legend.type === 'graduatedLine') {
+    return legendGraduatedLine(legend as GraduatedLineLegend);
   }
   if (legend.type === 'labels') {
     return legendLabels(legend as LabelsLegend);
