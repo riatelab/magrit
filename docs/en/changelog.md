@@ -12,6 +12,13 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.1.2 (unreleased)
+
+- Add the possibility of creating graduated links (size according to class after classification) in addition to proportional links
+  and fixed-size links.
+
+- Add a minimum size for proportional links (to ease the visualization of links with very small values).
+
 #### 2.1.1 (2024-11-21)
 
 - Deactivate “Undo/Redo” functionality by default to improve performance.

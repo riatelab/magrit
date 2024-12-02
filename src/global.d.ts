@@ -919,8 +919,8 @@ interface LabelsLegend extends LegendBase {
   labels: LegendTextElement,
 }
 
-interface DiscontinuityLegend extends LegendBase {
-  type: LegendType.discontinuity,
+interface GraduatedLineLegend extends LegendBase {
+  type: LegendType.graduatedLine,
   // Whether the legend is horizontal or vertical
   orientation: Orientation,
   // The text properties of the labels
@@ -1048,7 +1048,7 @@ export type Legend = (
   | CategoricalChoroplethLegend
   | ProportionalSymbolsLegend
   | LabelsLegend
-  | DiscontinuityLegend
+  | GraduatedLineLegend
   | WaffleLegend
   | MushroomsLegend
   | CategoricalChoroplethBarchartLegend
@@ -1074,7 +1074,7 @@ export enum LegendType {
   proportional = 'proportional',
   categoricalChoropleth = 'categoricalChoropleth',
   categoricalPictogram = 'categoricalPictogram',
-  discontinuity = 'discontinuity',
+  graduatedLine = 'graduatedLine',
   labels = 'labels',
   waffle = 'waffle',
   mushrooms = 'mushrooms',

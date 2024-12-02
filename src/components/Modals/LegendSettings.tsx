@@ -50,7 +50,7 @@ import {
   type ChoroplethLegend,
   type ClassificationParameters,
   DefaultLegend,
-  type DiscontinuityLegend,
+  type GraduatedLineLegend,
   type LabelsLegend,
   LayerDescription,
   type LayerDescriptionCategoricalChoropleth,
@@ -699,8 +699,8 @@ function makeSettingsChoroplethLegend(
   </>;
 }
 
-function makeSettingsDiscontinuityLegend(
-  legend: DiscontinuityLegend,
+function makeSettingsGraduatedLineLegend(
+  legend: GraduatedLineLegend,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
   const [
@@ -1428,8 +1428,8 @@ function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.
   if (legend.type === LegendType.proportional) {
     return makeSettingsProportionalSymbolsLegend(legend as ProportionalSymbolsLegend, LL);
   }
-  if (legend.type === LegendType.discontinuity) {
-    return makeSettingsDiscontinuityLegend(legend as DiscontinuityLegend, LL);
+  if (legend.type === LegendType.graduatedLine) {
+    return makeSettingsGraduatedLineLegend(legend as GraduatedLineLegend, LL);
   }
   if (legend.type === LegendType.labels) {
     return makeSettingsLabels(legend as LabelsLegend, LL);

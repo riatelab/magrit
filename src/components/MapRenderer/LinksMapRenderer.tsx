@@ -7,9 +7,10 @@ import {
 
 // Helpers
 import { mergeFilterIds } from './common.tsx';
+import { getClassifier } from '../../helpers/classification';
 import { PropSizer } from '../../helpers/geo';
-import { linkPath } from '../../helpers/svg';
 import applyFilters from '../../helpers/filtering';
+import { linkPath } from '../../helpers/svg';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -20,11 +21,12 @@ import bindData from '../../directives/bind-data';
 
 // Types / Interfaces / Enums
 import {
+  ClassificationMethod,
   type LayerDescriptionLinks,
   LinkCurvature,
   type LinksParameters,
   ProportionalSymbolsSymbolType,
-} from '../../global';
+} from '../../global.d';
 
 // For now we keep an array of directives
 // because otherwise the import is not detected by the compiler...
@@ -79,7 +81,67 @@ export default function linksRenderer(
             }
             vector-effect="non-scaling-stroke"
             stroke-width={
-              propSize().scale(+feature.properties.Intensity)
+              propSize().scale(+feature.properties.Intensity) + 0.35
+            }
+            marker-start={
+              (
+                rendererParameters().type !== 'Exchange'
+                && (rendererParameters().head === 'Arrow'
+                  || rendererParameters().head === 'ArrowOnSymbol')
+              )
+                ? `url(#arrow-head-${layerDescription.strokeColor!.replace('#', '')})`
+                : undefined
+            }
+            marker-end={
+              (rendererParameters().head === 'Arrow' || rendererParameters().head === 'ArrowOnSymbol')
+                ? `url(#arrow-head-${layerDescription.strokeColor!.replace('#', '')})`
+                : undefined
+            }
+            // @ts-expect-error because use:bind-data isn't a property of this element
+            use:bindData={feature}
+          />
+        }
+      </For>
+    </g>;
+  }
+
+  if (rendererParameters().classification) {
+    const classifier = createMemo(() => {
+      const Cls = getClassifier(ClassificationMethod.manual);
+      return new Cls(null, null, rendererParameters().classification!.breaks);
+    });
+
+    return <g
+      id={layerDescription.id}
+      class="layer links"
+      visibility={layerDescription.visible ? undefined : 'hidden'}
+      fill="none"
+      stroke={layerDescription.strokeColor}
+      stroke-opacity={layerDescription.strokeOpacity}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      clip-path={mapStore.projection.type === 'd3' ? 'url(#clip-sphere)' : undefined}
+      filter={mergeFilterIds(layerDescription)}
+      mgt:geometry-type={layerDescription.type}
+      mgt:portrayal-type={layerDescription.representationType}
+      mgt:link-curvature={rendererParameters().curvature}
+    >
+      <For each={filteredFeatures()}>
+        {
+          (feature) => <path
+            d={
+              linkPath(
+                feature,
+                globalStore.pathGenerator,
+                globalStore.projection,
+                rendererParameters().curvature,
+              )
+            }
+            vector-effect="non-scaling-stroke"
+            stroke-width={
+              rendererParameters().classification.sizes[
+                classifier().getClass(+feature.properties.Intensity)
+              ]
             }
             marker-start={
               (

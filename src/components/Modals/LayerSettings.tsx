@@ -1453,8 +1453,6 @@ function makeSettingsDefaultLine(
                   (l: LayerDescription) => l.id === props.id,
                   { rendererParameters: newParams },
                 );
-
-                updateLegendNoteChoro(props.id, newParams.method, LL);
               },
             });
           }}
@@ -1509,7 +1507,44 @@ function makeSettingsDefaultLine(
           />
         </Show>
         <Show when={(props.rendererParameters as LinksParameters).classification}>
-          <></>
+          <div class="field" style={{ 'text-align': 'center' }}>
+            <button
+              class="button"
+              style={{ margin: 'auto' }}
+              onClick={() => {
+                // Save current state of classification parameters
+                const params = unproxify(
+                  (props.rendererParameters as LinksParameters).classification as never,
+                );
+                setClassificationPanelStore({
+                  show: true,
+                  type: 'size',
+                  layerName: props.name,
+                  series: props.data.features
+                    .map((f) => f.properties.Intensity),
+                  classificationParameters: params,
+                  onCancel: () => {
+                    setLayersDescriptionStoreBase(
+                      'layers',
+                      (l: LayerDescription) => l.id === props.id,
+                      'rendererParameters',
+                      'classification',
+                      params,
+                    );
+                  },
+                  onConfirm: (newParams) => {
+                    setLayersDescriptionStoreBase(
+                      'layers',
+                      (l: LayerDescription) => l.id === props.id,
+                      'rendererParameters',
+                      'classification',
+                      newParams,
+                    );
+                  },
+                });
+              }}
+            >{LL().LayerSettings.ChangeClassification()}</button>
+          </div>
         </Show>
       </Show>
       <InputFieldSelect

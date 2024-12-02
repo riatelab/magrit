@@ -319,7 +319,10 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
             </Show>
           </div>
           <div>
-            <div class="is-flex is-flex-direction-column is-justify-content-center">
+            <div
+              class="is-flex is-flex-direction-column is-justify-content-center"
+              style={{ 'min-height': '250px' }}
+            >
               <div class="is-flex is-flex-direction-row is-justify-content-center">
                 <div style={{ width: '160px' }}>{LL().ClassificationPanel.lowerLimit()}</div>
                 <div style={{ width: '160px' }}>{LL().ClassificationPanel.upperLimit()}</div>
