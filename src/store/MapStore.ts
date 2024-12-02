@@ -247,8 +247,6 @@ createEffect(
       if (applicationSettingsStore.useCanvas) {
         draw(
           targetCanvas as HTMLCanvasElement,
-          mapStore.translate,
-          mapStore.scale,
           mapStore.mapDimensions.width,
           mapStore.mapDimensions.height,
         );

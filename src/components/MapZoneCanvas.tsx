@@ -514,8 +514,6 @@ export default function MapZoneCanvas(): JSX.Element {
     makeMapResizable(refMapShadow!);
     draw(
       canvasElem!,
-      [0, 0],
-      1,
       mapStore.mapDimensions.width,
       mapStore.mapDimensions.height,
     );
@@ -538,12 +536,8 @@ export default function MapZoneCanvas(): JSX.Element {
         console.log('layersDescriptionStore.layers changed');
         if (!svgElem) return;
         /* eslint-disable no-underscore-dangle */
-        const translate = [svgElem!.__zoom.x, svgElem!.__zoom.y];
-        const scale = svgElem!.__zoom.k;
         draw(
           canvasElem!,
-          translate,
-          scale,
           mapStore.mapDimensions.width,
           mapStore.mapDimensions.height,
         );
