@@ -61,7 +61,7 @@
     "vite-plugin-top-level-await": "^1.4.4",
     "vite-plugin-wasm": "^3.3.0",
     "vite-svg-loader": "^5.1.0",
-    "vitest": "^2.1.6"
+    "vitest": "^2.1.8"
   },
   "dependencies": {
     "@observablehq/plot": "^0.6.16",
