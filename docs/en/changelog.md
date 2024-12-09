@@ -12,10 +12,10 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-#### 2.1.2 (unreleased)
+#### 2.1.2 (2024-12-09)
 
 - Add the possibility of creating graduated links (size according to class after classification) in addition to proportional links
-  and fixed-size links.
+  and fixed-size links (the option was indicated as existing in the documentation but was not proposed in the interface).
 
 - Add a minimum size for proportional links (to ease the visualization of links with very small values).
 

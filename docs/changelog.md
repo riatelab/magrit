@@ -12,10 +12,10 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
-#### 2.1.2 (unreleased)
+#### 2.1.2 (2024-12-09)
 
-- Ajout de la possibilité de créer des liens graduées (taille selon la classe après discrétisation) en addition des liens proportionnels
-  et des liens avec une taille fixe.
+- Ajout de la possibilité de créer des cartes de liens gradués (taille selon la classe après discrétisation) en addition des liens proportionnels
+  et des liens avec une taille fixe (l'option était indiquée comme existante dans la documentation mais n'était pas proposée dans l'interface).
 
 - Ajout d'une taille minimum pour les liens proportionnels (afin de faciliter la visualisation des liens avec des valeurs très faibles).
 
