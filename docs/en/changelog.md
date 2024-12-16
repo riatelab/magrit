@@ -19,6 +19,10 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 - Add a minimum size for proportional links (to ease the visualization of links with very small values).
 
+- Fix the option to manually move proportional symbols after the “avoid overlapping symbols” option has been enabled then disabled (fixes <a href="https://github.com/riatelab/magrit/issues/147">147</a>).
+
+- Don't propose to move proportional symbols while the "avoid overlapping symbols" is enabled (fixes <a href="https://github.com/riatelab/magrit/issues/147">147</a>).
+
 #### 2.1.1 (2024-11-21)
 
 - Deactivate “Undo/Redo” functionality by default to improve performance.

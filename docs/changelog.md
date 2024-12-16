@@ -19,6 +19,10 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 - Ajout d'une taille minimum pour les liens proportionnels (afin de faciliter la visualisation des liens avec des valeurs très faibles).
 
+- Corriger l'option permettant de déplacer manuellement les symboles proportionnels après que l'option « éviter les symboles qui se chevauchent » a été activée puis désactivée (corrige <a href="https://github.com/riatelab/magrit/issues/147">147</a>).
+
+- Ne pas proposer de déplacer les symboles proportionnels lorsque l'option « éviter les symboles qui se chevauchent » est activée (corrige <a href="https://github.com/riatelab/magrit/issues/147">147</a>).
+
 #### 2.1.1 (2024-11-21)
 
 - Désactivation de la fonctionnalité "Annuler / Rétablir" par défault pour améliorer les performances.
