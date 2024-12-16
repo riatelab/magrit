@@ -33,7 +33,7 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 - Ajout d'un nouveau type de représentation : "Carte en gaufres" (Corrige <a href="https://github.com/riatelab/magrit/issues/132">132</a>).
 
-- Ajout d'une fonctionnalité permettant d'importer des jeu de données zippé (un ou plusieurs jeux de données dans un fichier zip).
+- Ajout d'une fonctionnalité permettant d'importer des jeux de données zippés (un ou plusieurs jeux de données dans un fichier zip).
 
 - Correction du filtrage des lignes vides sur les jeux de données CSV pour lesquels le séparateur de ligne est `\r\n`.
 
@@ -48,7 +48,7 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 - Améliorations du panneau de classification :
   - en permettant de saisir des palettes personnalisées (en choisissant manuellement chaque couleur),
   - en permettant de copier / coller la description des palettes personnalisées,
-  - en proposant un sélecteur de nombre de classes dédiés aux moyennes emboitées (pour ne permettre de ne sélectionner que des puissances de 2, corrige <a href="https://github.com/riatelab/magrit/issues/145">145</a>),
+  - en proposant un sélecteur de nombre de classes dédié aux moyennes emboitées (pour ne permettre de ne sélectionner que des puissances de 2, corrige <a href="https://github.com/riatelab/magrit/issues/145">145</a>),
   - en améliorant les fonctions de comparaisons des limites de classes saisies manuellement avec les valeurs des données lors de la vérification de leur validité.
 
 - Ajout d'un menu permettant de sélectionner des templates cartographiques complets (composés de plusieurs couches) dans le fenêtre
@@ -58,7 +58,7 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 - Corrige le déplacement des légendes / étiquettes / éléments d'habillage sur les écrans tactiles (corrige <a href="https://github.com/riatelab/magrit/issues/146">146</a>).
 
-- Corrige l'utilisation de certaines fonction SQL dans la calculatrice de champs lors de la présence de valeur nulles.
+- Corrige l'utilisation de certaines fonctions SQL dans la calculatrice de champs lors de la présence de valeur nulles.
 
 #### 2.0.18 (2024-10-10)
 
@@ -275,7 +275,7 @@ Les fonctionnalités de l'ancienne version de Magrit sont toujours disponibles
 
 - Correction du débordement des noms de champs dans les options de création des labels (merci à @robLittiere).
 
-- Éviter de rembobiner automatiquement les cartogrammes issue de l'algo de Gastner, Seguy et More.
+- Éviter de rembobiner automatiquement les cartogrammes issus de l'algo de Gastner, Seguy et More.
 
 - Suppression des CSS inutiles de la page 404 (qui incluait le chargement d'une police provenant de Google Fonts).
 
