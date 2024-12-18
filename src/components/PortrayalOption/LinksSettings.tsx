@@ -161,7 +161,7 @@ function onClickValidate(
       params.classification = {
         classificationMethod: ClassificationMethod.quantiles,
         classes: 4,
-        breaks: quantile(allValues, 4),
+        breaks: quantile(allValues, { nb: 4 }),
         sizes: [1, 2, 3.5, 5.5],
       };
     }

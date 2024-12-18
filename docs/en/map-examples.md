@@ -43,3 +43,9 @@ All the map examples shown here are directly exported from Magrit and have not b
     alt="Carte 'Une géographie du peuplement dans le Grand Ouest'"
     caption="Une géographie du peuplement dans le Grand Ouest (Réalisation: Ronan Ysebaert)"
 />
+
+<ZoomImg
+    src="/example-map-co2-seqe.png"
+    alt="2022 SEQE-EU CO2 emissions in mainland France"
+    caption="2022 SEQE-EU CO2 emissions in mainland France"
+/>

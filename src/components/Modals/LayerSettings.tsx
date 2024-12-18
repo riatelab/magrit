@@ -1043,6 +1043,13 @@ function makeSettingsDefaultPoint(
             { avoidOverlapping: checked },
           );
           if (checked) {
+            // First, deactivate the "allow moving symbols" option
+            setLayersDescriptionStoreBase(
+              'layers',
+              (l: LayerDescription) => l.id === props.id,
+              'rendererParameters',
+              { movable: false },
+            );
             // Compute position of the symbols
             setLayersDescriptionStoreBase(
               produce((draft: LayersDescriptionStoreType) => {
@@ -1117,7 +1124,14 @@ function makeSettingsDefaultPoint(
       <InputFieldCheckbox
         label={ LL().LayerSettings.AllowMovingSymbols() }
         checked={(props.rendererParameters as ProportionalSymbolsParameters).movable}
-        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}
+        onChange={(v) => {
+          updateProp(props.id, ['rendererParameters', 'movable'], v);
+          // Redraw the layer to rebind the drag-related events
+          if (v) {
+            redrawLayer(props.id);
+          }
+        }}
+        disabled={(props.rendererParameters as ProportionalSymbolsParameters).avoidOverlapping}
       />
     </Show>
     {/*

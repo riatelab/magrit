@@ -12,12 +12,21 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-#### 2.1.2 (unreleased)
+#### 2.1.3 (2024-12-18)
+
+- Fix the rendering of categorical pictogram maps for features with no value
+  (it now don't display a pictogram for these features instead of displaying a default symbol).
+
+#### 2.1.2 (2024-12-09)
 
 - Add the possibility of creating graduated links (size according to class after classification) in addition to proportional links
-  and fixed-size links.
+  and fixed-size links (the option was indicated as existing in the documentation but was not proposed in the interface).
 
 - Add a minimum size for proportional links (to ease the visualization of links with very small values).
+
+- Fix the option to manually move proportional symbols after the “avoid overlapping symbols” option has been enabled then disabled (fixes <a href="https://github.com/riatelab/magrit/issues/147">147</a>).
+
+- Don't propose to move proportional symbols while the "avoid overlapping symbols" is enabled (fixes <a href="https://github.com/riatelab/magrit/issues/147">147</a>).
 
 #### 2.1.1 (2024-11-21)
 

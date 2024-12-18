@@ -44,3 +44,9 @@ dans un logiciel de dessin vectoriel.
     alt="Carte 'Une géographie du peuplement dans le Grand Ouest'"
     caption="Une géographie du peuplement dans le Grand Ouest (Réalisation: Ronan Ysebaert)"
 />
+
+<ZoomImg
+    src="/example-map-co2-seqe.png"
+    alt="Émissions 2022 de CO2 SEQE-EU en France métropolitaine"
+    caption="Émissions 2022 de CO2 SEQE-EU en France métropolitaine"
+/>
