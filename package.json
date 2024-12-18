@@ -51,7 +51,7 @@
     "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-plugin-solid": "0.14.5",
     "jsdom": "^25.0.1",
-    "npm-run-all2": "^7.0.1",
+    "npm-run-all2": "^7.0.2",
     "typescript": "^5.7.2",
     "vite": "^5.4.11",
     "vite-plugin-css-injected-by-js": "^3.5.2",
