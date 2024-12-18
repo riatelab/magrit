@@ -6,6 +6,7 @@ import {
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { isNonNull } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
 import { sum } from '../../helpers/math';
 import {
@@ -41,6 +42,10 @@ export default function legendCategoricalPictogram(
     legend.layerId,
   ) as LayerDescriptionCategoricalPictogram;
 
+  const mapping = createMemo(
+    () => layer.rendererParameters.mapping.filter((m) => isNonNull(m.value)),
+  );
+
   const heightTitle = () => {
     const titleSize = getTextSize(
       legend.title.text,
@@ -64,7 +69,7 @@ export default function legendCategoricalPictogram(
   const positionNote = createMemo(() => (
     heightTitleSubtitle() // The size necessary for the title and subtitle
     + ( // The size for all the icons and the spacing between them
-      sum(layer.rendererParameters.mapping.map((d) => d.iconDimension[1] + legend.spacing))
+      sum(mapping().map((d) => d.iconDimension[1] + legend.spacing))
       - legend.spacing
     )
     + defaultSpacing * 2 // space between the last icon and the note
@@ -109,14 +114,15 @@ export default function legendCategoricalPictogram(
     {makeLegendText(legend.title, [0, 0], 'title')}
     {makeLegendText(legend.subtitle, [0, heightTitle()], 'subtitle')}
     <g class="legend-content">
-      <For each={layer.rendererParameters.mapping}>
+      <For each={mapping()}>
         {
           (item, i) => {
             if (item.iconType === 'SVG') {
               return <>
                 <g
                   transform={`translate(0, ${heightTitleSubtitle() + (i() === 0 ? 0 : sum(
-                    layer.rendererParameters.mapping.slice(0, i())
+                    mapping()
+                      .slice(0, i())
                       .map((d: CategoricalPictogramMapping) => d.iconDimension[1] + legend.spacing),
                   ))})`}
                   // eslint-disable-next-line solid/no-innerhtml
@@ -134,7 +140,7 @@ export default function legendCategoricalPictogram(
                   dominant-baseline="middle"
                   x={60}
                   y={heightTitleSubtitle() + item.iconDimension[1] / 2 + (i() === 0 ? 0 : sum(
-                    layer.rendererParameters.mapping.slice(0, i())
+                    mapping().slice(0, i())
                       .map((d: CategoricalPictogramMapping) => d.iconDimension[1] + legend.spacing),
                   ))}
                 >{item.categoryName}</text>
@@ -143,7 +149,7 @@ export default function legendCategoricalPictogram(
             return <>
               <g
                 transform={`translate(0, ${heightTitleSubtitle() + item.iconDimension[1] / 2 + (i() === 0 ? 0 : sum(
-                  layer.rendererParameters.mapping.slice(0, i())
+                  mapping().slice(0, i())
                     .map((d: CategoricalPictogramMapping) => d.iconDimension[1] + legend.spacing),
                 ))})`}
               >
@@ -162,7 +168,7 @@ export default function legendCategoricalPictogram(
                   dominant-baseline="middle"
                   x={60}
                   y={heightTitleSubtitle() + (i() === 0 ? 0 : sum(
-                    layer.rendererParameters.mapping.slice(0, i())
+                    mapping().slice(0, i())
                       .map((d: CategoricalPictogramMapping) => d.iconDimension[1] + legend.spacing),
                   ))}
                 >{item.categoryName}</text>
