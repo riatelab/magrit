@@ -53,7 +53,7 @@ Plusieurs opérations sont possibles (certaines sont présentes sous forme d'un 
 - la construction de conditions (`CASE WHEN ... THEN ... ELSE ... END`).
 
 Afin de créer un nouveau champ, il est nécessaire de spécifier le nom du champ à créer, le type de données (stock, ratio, etc.) et la formule de calcul.
-Lorsque la formule est valide, un aperçu des valeurs calculées (3 premières lignes du tableau) est affiché.
+Lorsque la formule est valide, un aperçu des valeurs calculées (8 premières lignes du tableau) est affiché.
 
 <ZoomImg
     src="./data-table-new-field-zoom.png"
@@ -119,5 +119,5 @@ Il est possible de supprimer un champ en effectuant un clic droit sur le nom du 
 
 ## Fermeture du tableau de données
 
-Lors de la fermeture du tableau de données et si des modifications ont été effectuées, une popup de confirmation s'ouvre.
+Lors de la fermeture du tableau de données et si des modifications ont été effectuées, un popup de confirmation s'ouvre.
 Il est possible de sauvegarder les modifications effectuées en cliquant sur le bouton "Confirmation" ou d'annuler les modifications en cliquant sur le bouton "Annulation".
