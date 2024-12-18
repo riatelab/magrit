@@ -38,7 +38,7 @@ jobs:
 
       - name: Read version from package.json
         id: get_version
-        run: echo "::set-output name=version::$(node -p -e "require('./package.json').version")"
+        run: echo "version=$(node -p -e "require('./package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Upload .exe artifacts
         uses: actions/upload-artifact@v4
@@ -88,7 +88,7 @@ jobs:
 
       - name: Read version from package.json
         id: get_version
-        run: echo "::set-output name=version::$(node -p -e "require('./package.json').version")"
+        run: echo "version=$(node -p -e "require('./package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
