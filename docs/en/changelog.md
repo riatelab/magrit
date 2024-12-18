@@ -12,6 +12,11 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.1.3 (2024-12-18)
+
+- Fix the rendering of categorical pictogram maps for features with no value
+  (it now don't display a pictogram for these features instead of displaying a default symbol).
+
 #### 2.1.2 (2024-12-09)
 
 - Add the possibility of creating graduated links (size according to class after classification) in addition to proportional links

@@ -12,6 +12,11 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.1.3 (2024-12-18)
+
+- Corrige le rendu des cartes catégorielles de pictogrammes pour les entités sans valeur
+  (désormais, aucun pictogramme n'est affiché pour ces entités, au lieu d'un symbole par défaut).
+
 #### 2.1.2 (2024-12-09)
 
 - Ajout de la possibilité de créer des cartes de liens gradués (taille selon la classe après discrétisation) en addition des liens proportionnels
