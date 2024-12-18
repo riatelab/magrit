@@ -92,6 +92,7 @@ conditions suivantes :
 CASE WHEN Population < 1000 THEN 'Petite'
      WHEN Population >= 1000 AND Population <= 10000 THEN 'Moyenne'
      ELSE 'Grande'
+END
 ```
 
 #### Extraire le code départemental à partir du code INSEE
