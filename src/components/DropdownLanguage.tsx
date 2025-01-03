@@ -39,6 +39,7 @@ export default function DropdownLanguage(): JSX.Element {
   const entries = [
     { name: 'English', value: 'en' },
     { name: 'Français', value: 'fr' },
+    { name: 'Español', value: 'es' },
   ];
 
   return <div
