@@ -12,7 +12,7 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-#### 2.2.0 (unreleased)
+#### 2.2.0 (2025-01-06)
 
 -  New: Add the translation of the interface in Spanish (thanks to [@cvbrandoe](https://github.com/cvbrandoe)).
 
