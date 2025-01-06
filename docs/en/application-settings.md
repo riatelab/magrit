@@ -11,7 +11,7 @@ This option is available in the application menu bar, at the top right of the sc
 
 It is possible to choose between several languages for the application interface.
 
-Currently only French and English are available, but other languages may be added in the future.
+Currently only French, English and Spanish are available, but other languages may be added in the future.
 
 This option is available in the application menu bar, at the top right of the screen.
 

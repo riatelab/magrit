@@ -12,6 +12,10 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.2.0 (unreleased)
+
+- Nouveau : Ajout de la traduction de l'interface en espagnol (merci à [@cvbrandoe](https://github.com/cvbrandoe)).
+
 #### 2.1.3 (2024-12-18)
 
 - Corrige le rendu des cartes catégorielles de pictogrammes pour les entités sans valeur

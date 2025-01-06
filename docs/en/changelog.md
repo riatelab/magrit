@@ -12,6 +12,10 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.2.0 (unreleased)
+
+-  New: Add the translation of the interface in Spanish (thanks to [@cvbrandoe](https://github.com/cvbrandoe)).
+
 #### 2.1.3 (2024-12-18)
 
 - Fix the rendering of categorical pictogram maps for features with no value
