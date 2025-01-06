@@ -1,5 +1,5 @@
 import { createStore } from 'solid-js/store';
-import { CustomPalette, LegendTextElement } from '../global';
+import type { LegendTextElement } from '../global';
 
 export enum RenderVisibility {
   RenderAsHidden,

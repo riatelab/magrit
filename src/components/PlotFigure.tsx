@@ -6,7 +6,7 @@ import * as Plot from '@observablehq/plot';
 
 export type PlotFigureProps = {
   id: string;
-  options: Record<string, any>;
+  options: Plot.PlotOptions;
   style?: Record<string, string>;
 };
 

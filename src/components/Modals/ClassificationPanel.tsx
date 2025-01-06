@@ -145,11 +145,12 @@ function ManualBreaks(
               breaks: newBreaks,
             });
           }}
-          onChange={function (e) {
+          onChange={(e) => {
             // We don't want to update the breaks if the user is typing
             // a number that is not a valid number or if the value is superior
             // to the next break or inferior to the previous break.
             const value = +e.target.value;
+            const self = e.currentTarget;
             if (
               !isFiniteNumber(value)
               || (i() < props.currentBreaksInfo.breaks.length - 1
@@ -158,7 +159,7 @@ function ManualBreaks(
                 && value <= props.currentBreaksInfo.breaks[i() - 1])
             ) {
               // eslint-disable-next-line no-param-reassign
-              this.value = round(b, props.statSummary.precision);
+              self.value = `${round(b, props.statSummary.precision)}`;
               return;
             }
             // If this is the first break value, we accept values inferior to the minimum
@@ -176,7 +177,7 @@ function ManualBreaks(
                   breaks: newBreaks,
                 });
                 // eslint-disable-next-line no-param-reassign
-                this.value = round(props.statSummary.minimum, props.statSummary.precision);
+                self.value = `${round(props.statSummary.minimum, props.statSummary.precision)}`;
               } else if (
                 isGreaterThan(value, props.statSummary.minimum, props.statSummary.precision)
               ) {
@@ -190,7 +191,7 @@ function ManualBreaks(
                   breaks: newBreaks,
                 });
                 // eslint-disable-next-line no-param-reassign
-                this.value = round(props.statSummary.minimum, props.statSummary.precision);
+                self.value = `${round(props.statSummary.minimum, props.statSummary.precision)}`;
                 // Inform the user that the series should be covered
                 // and that we adjusted the breaks
                 displayWarningDontCoverSeries();
@@ -212,7 +213,7 @@ function ManualBreaks(
                   breaks: newBreaks,
                 });
                 // eslint-disable-next-line no-param-reassign
-                this.value = round(props.statSummary.maximum, props.statSummary.precision);
+                self.value = `${round(props.statSummary.maximum, props.statSummary.precision)}`;
               } else if (
                 isLessThan(value, props.statSummary.maximum, props.statSummary.precision)
               ) {
@@ -226,7 +227,7 @@ function ManualBreaks(
                   breaks: newBreaks,
                 });
                 // eslint-disable-next-line no-param-reassign
-                this.value = round(props.statSummary.maximum, props.statSummary.precision);
+                self.value = `${round(props.statSummary.maximum, props.statSummary.precision)}`;
                 // Inform the user that the series should be covered
                 // and that we adjusted the breaks
                 displayWarningDontCoverSeries();
@@ -316,13 +317,13 @@ function CustomPaletteCreation(
                 'font-size': '0.7rem',
               }}
               value={c}
-              onChange={function (e) {
+              onChange={(e) => {
                 if (!/^#[0-9a-f]{6}$/i.test(e.target.value)) {
                   // Display an error to the user, we need only colors
                   toast.error(LL().ClassificationPanel.inputColorInvalid());
                   // Rollback to the previous value
                   // eslint-disable-next-line no-param-reassign
-                  this.value = c;
+                  e.currentTarget.value = c;
                   return;
                 }
                 // If the color is valid, we update the colors to take it
@@ -551,14 +552,14 @@ export default function ClassificationPanel(): JSX.Element {
     .map((d) => ({
       name: `${d.name} (${d.provider})`,
       value: d.name,
-      prefixImage: PaletteThumbnails[`img${d.provider}${d.name}`] as string,
+      prefixImage: PaletteThumbnails[`img${d.provider}${d.name}` as never] as string,
     }));
 
   const availableDivergingPalettes = getPalettes({ type: 'diverging', number: 8 })
     .map((d) => ({
       name: `${d.name} (${d.provider})`,
       value: d.name,
-      prefixImage: PaletteThumbnails[`img${d.provider}${d.name}`] as string,
+      prefixImage: PaletteThumbnails[`img${d.provider}${d.name}` as never] as string,
     }));
 
   // Signals for the current component:
@@ -664,7 +665,6 @@ export default function ClassificationPanel(): JSX.Element {
   });
 
   let refParentNode: HTMLDivElement;
-  let refTextArea: HTMLTextAreaElement;
 
   const entriesClassificationMethod = [
     {
@@ -727,7 +727,7 @@ export default function ClassificationPanel(): JSX.Element {
       ? (event.key === 'Escape' || event.key === 'Esc')
       : (event.keyCode === 27);
     if (isEscape) {
-      (refParentNode.querySelector(
+      (refParentNode!.querySelector(
         '.classification-panel__cancel-button',
       ) as HTMLElement).click();
     }

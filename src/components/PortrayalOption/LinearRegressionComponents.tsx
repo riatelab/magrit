@@ -36,10 +36,10 @@ function signifCode(p: number) {
   return '';
 }
 
-interface LmSummaryProps {
-  id: string;
-  summary: LinearRegressionResult | MultipleLinearRegressionResult;
-}
+// interface LmSummaryProps {
+//   id: string;
+//   summary: LinearRegressionResult | MultipleLinearRegressionResult;
+// }
 
 export function makeOptionsScaleLocationPlot(
   lm: LinearRegressionResult | MultipleLinearRegressionResult,
@@ -362,7 +362,7 @@ export function LmSummary(
       <tbody>
       <tr>
         <For each={Object.keys(summary.coefficients)}>
-          {(k, i) => <td>{toPrecisionAfterDecimalPoint(summary.coefficients[k][0], 3)}</td>}
+          {(k) => <td>{toPrecisionAfterDecimalPoint(summary.coefficients[k][0], 3)}</td>}
         </For>
       </tr>
       </tbody>

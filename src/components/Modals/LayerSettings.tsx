@@ -374,7 +374,7 @@ function makeSettingsLabels(
     <InputFieldSelect
       disabled={true}
       label={LL().LayerSettings.PortrayedVariable()}
-      onChange={(v) => {}}
+      onChange={() => {}}
       value={props.rendererParameters.variable}
     >
       <option value={props.rendererParameters.variable}>{props.rendererParameters.variable}</option>
@@ -409,7 +409,7 @@ function makeSettingsLabels(
       <InputFieldSelect
         disabled={true}
         label={LL().LayerSettings.VariableForProportionality()}
-        onChange={(v) => {}}
+        onChange={() => {}}
         value={props.rendererParameters.proportional!.variable}
       >
         <option value={props.rendererParameters.proportional!.variable}>
@@ -806,7 +806,7 @@ function makeSettingsDefaultPoint(
       <InputFieldSelect
         disabled={true}
         label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.SymbolType()}
-        onChange={(v) => {}}
+        onChange={() => {}}
         value={(props.rendererParameters as ProportionalSymbolsParameters).symbolType}
       >
         <option value={ProportionalSymbolsSymbolType.circle}>
@@ -1148,7 +1148,7 @@ function makeSettingsDefaultPoint(
         disabled={
           layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        onChange={(v) => {
+        onChange={() => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
           setLayersDescriptionStoreBase(
@@ -1201,7 +1201,7 @@ function makeSettingsDefaultPoint(
         disabled={
           layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        onChange={(v) => {
+        onChange={() => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
           setLayersDescriptionStoreBase(
@@ -1256,7 +1256,7 @@ function makeSettingsDefaultPoint(
         disabled={
           layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        onChange={(v) => {
+        onChange={() => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
           setLayersDescriptionStoreBase(
@@ -1310,7 +1310,7 @@ function makeSettingsDefaultPoint(
         disabled={
           layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        onChange={(v) => {
+        onChange={() => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
           setLayersDescriptionStoreBase(
@@ -1797,7 +1797,7 @@ function makeSettingsDefaultLine(
         disabled={
           layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        onChange={(v) => {
+        onChange={() => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
           setLayersDescriptionStoreBase(
@@ -1850,7 +1850,7 @@ function makeSettingsDefaultLine(
         disabled={
           layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        onChange={(v) => {
+        onChange={() => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
           setLayersDescriptionStoreBase(
@@ -1903,7 +1903,7 @@ function makeSettingsDefaultLine(
         disabled={
           layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        onChange={(v) => {
+        onChange={() => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
           setLayersDescriptionStoreBase(
@@ -1959,7 +1959,7 @@ function makeSettingsDefaultLine(
         disabled={
           layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        onChange={(v) => {
+        onChange={() => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
           setLayersDescriptionStoreBase(
@@ -2167,7 +2167,7 @@ function makeSettingsDefaultPolygon(
         disabled={
           layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        onChange={(v) => {
+        onChange={() => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
           setLayersDescriptionStoreBase(
@@ -2217,7 +2217,7 @@ function makeSettingsDefaultPolygon(
         disabled={
           layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        onChange={(v) => {
+        onChange={() => {
           const legendPosition = getPossibleLegendPosition(300, 250);
 
           setLayersDescriptionStoreBase(

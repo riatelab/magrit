@@ -3,6 +3,7 @@ import {
   createMemo,
   createSignal,
   JSX,
+  type Setter,
 } from 'solid-js';
 
 // Import from other libraries
@@ -33,7 +34,7 @@ export default function VariableCustomisation(
   return <div>
     <Sortable
       items={vars()}
-      setItems={setVars as any}
+      setItems={setVars as Setter<{ name: string, displayName: string, color: string }[]>}
       idField={'name'}
       disabled={disabled()}
     >

@@ -9,7 +9,6 @@ import {
 // Stores
 import {
   layersDescriptionStore,
-  setLayersDescriptionStore,
   setLayersDescriptionStoreBase,
 } from '../../store/LayersDescriptionStore';
 import { setMapStoreBase } from '../../store/MapStore';
@@ -49,36 +48,19 @@ import {
 
 /**
  * Update a single property of a layout feature in the layersDescriptionStore,
- * given its id and the path to the property.
+ * given its id and the path to the property, bypassing the undo/redo mechanism.
  *
  * @param {string} layoutFeatureId - The id of the layout feature to update.
  * @param {string[]} props - The path to the property to update.
- * @param {string | number | number[] | boolean | undefined} value - The new value of the property.
+ * @param {string | number | number[] | boolean
+ * | undefined | { color: string, width: number }} value - The new value of the property.
  * @return {void}
  */
-const updateLayoutFeatureProperty = (
-  layoutFeatureId: string,
-  props: string[],
-  value: string | number | number[] | boolean | undefined | { color: string, width: number },
-) => {
-  const allPropsExceptLast = props.slice(0, props.length - 1);
-  const lastProp = props[props.length - 1];
-  const args = [
-    'layoutFeaturesAndLegends',
-    (f: LayoutFeature | Legend) => f.id === layoutFeatureId,
-    ...allPropsExceptLast,
-    {
-      [lastProp]: value,
-    },
-  ];
-  setLayersDescriptionStore(...args);
-};
-
 const updateLayoutFeaturePropertyBase = (
   layoutFeatureId: string,
   props: string[],
   value: string | number | number[] | boolean | undefined | { color: string, width: number },
-) => {
+): void => {
   const allPropsExceptLast = props.slice(0, props.length - 1);
   const lastProp = props[props.length - 1];
   const args = [
@@ -431,7 +413,7 @@ function makeSettingsScaleBar(
           }}
           aria-label={LL().LayoutFeatures.Modal.Bold()}
           title={LL().LayoutFeatures.Modal.Bold()}
-          onClick={(e) => {
+          onClick={() => {
             updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['label', 'fontWeight'],
@@ -447,7 +429,7 @@ function makeSettingsScaleBar(
           }}
           aria-label={LL().LayoutFeatures.Modal.Italic()}
           title={LL().LayoutFeatures.Modal.Italic()}
-          onClick={(e) => {
+          onClick={() => {
             updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['label', 'fontStyle'],
@@ -558,7 +540,7 @@ function makeSettingsText(
           }}
           aria-label={LL().LayoutFeatures.Modal.Bold()}
           title={LL().LayoutFeatures.Modal.Bold()}
-          onClick={(e) => {
+          onClick={() => {
             updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['fontWeight'],
@@ -574,7 +556,7 @@ function makeSettingsText(
           }}
           aria-label={LL().LayoutFeatures.Modal.Italic()}
           title={LL().LayoutFeatures.Modal.Italic()}
-          onClick={(e) => {
+          onClick={() => {
             updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['fontStyle'],
@@ -591,7 +573,7 @@ function makeSettingsText(
           }}
           aria-label={LL().LayoutFeatures.Modal.Underline()}
           title={LL().LayoutFeatures.Modal.Underline()}
-          onClick={(e) => {
+          onClick={() => {
             updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['textDecoration'],
@@ -607,7 +589,7 @@ function makeSettingsText(
           }}
           aria-label={LL().LayoutFeatures.Modal.LineThrough()}
           title={LL().LayoutFeatures.Modal.LineThrough()}
-          onClick={(e) => {
+          onClick={() => {
             updateLayoutFeaturePropertyBase(
               layoutFeatureId,
               ['textDecoration'],
@@ -1019,7 +1001,7 @@ export default function LayoutFeatureSettings(
           [LayoutFeatureType.Text]: makeSettingsText,
           [LayoutFeatureType.NorthArrow]: makeSettingsNorthArrow,
           [LayoutFeatureType.Image]: makeSettingsImage,
-        })[layoutFeature.type](layoutFeatureId, LL)
+        })[layoutFeature.type as LayoutFeatureType](layoutFeatureId, LL)
       }
     </div>
   </div>;

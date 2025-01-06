@@ -275,7 +275,7 @@ export function computeLinearRegression(
   const sd = ss.standardDeviation(residuals.filter((v) => v !== null) as number[]);
 
   // Compute the standardised residuals and the residual standard error
-  const standardisedResiduals = residuals.map((v, i) => {
+  const standardisedResiduals = residuals.map((v) => {
     if (v === null) {
       return null;
     }
