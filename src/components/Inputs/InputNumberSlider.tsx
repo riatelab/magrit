@@ -84,7 +84,7 @@ export default function InputFieldNumberSlider(props: InputFieldNumberSliderProp
   );
 
   return <div class="field pr-2">
-    <label class="label" style={{ width: '110px' }}>{props.label}</label>
+    <label class="label" style={{ width: '120px' }}>{props.label}</label>
     <input
       class={'input'}
       type="number"
