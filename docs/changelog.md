@@ -12,6 +12,14 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.2.1 *(unreleased)*
+
+- Ajout de projections de d3-geo qui étaient manquantes (Conic Equal-Area, Conic Equidistant).
+
+- Améliore le composant permettant de choisir les parallèles standards pour les projections supportant ce paramètre.
+
+- Corrige le redessin de la carte lorsque le(s) parallèle(s) standard(s) sont modifiés.
+
 #### 2.2.0 (2025-01-06)
 
 - Nouveau : Ajout de la traduction de l'interface en espagnol (merci à [@cvbrandoe](https://github.com/cvbrandoe)).
