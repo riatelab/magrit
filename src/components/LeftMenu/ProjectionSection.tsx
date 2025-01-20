@@ -21,6 +21,7 @@ import { setModalStore } from '../../store/ModalStore';
 import { onClickDropdown, onKeyDownDropdown, setDropdownItemTarget } from '../DropdownMenu.tsx';
 import ProjectionSelection from '../Modals/ProjectionSelection.tsx';
 import InputFieldNumberSlider from '../Inputs/InputNumberSlider.tsx';
+import InputFieldDoubleNumberSlider from '../Inputs/InputDoubleNumberSlider.tsx';
 
 function onChangeProjectionEntry(
   entry: { name: string, value: string, type: string },
@@ -273,10 +274,11 @@ export default function ProjectionSection(): JSX.Element {
           />
         </Show>
         <Show when={hasParallels()}>
-          <InputFieldNumberSlider
+          <InputFieldDoubleNumberSlider
             label={LL().MapConfiguration.StandardParallels()}
-            value={mapStore.parallels || globalStore.projection.parallels()}
+            values={mapStore.parallels || globalStore.projection.parallels()}
             onChange={(v) => {
+              console.log(v);
               setMapStore('parallels', v);
             }}
             min={-90}
