@@ -658,7 +658,7 @@ const es = {
     MoreProjection: 'Más proyecciones...',
     LockZoom: 'Bloquear zoom / posición',
     ShowProjectionParameters: 'Mostrar parámetros de proyección',
-    ProjectionCenterLambda: 'Rotar el eje λ',
+    ProjectionCenterLambda: 'Rotación del eje λ',
     ProjectionCenterPhi: 'Rotación del eje φ',
     ProjectionCenterGamma: 'Rotación del eje γ',
     StandardParallel: 'Paralelo estándar',
