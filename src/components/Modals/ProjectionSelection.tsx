@@ -58,6 +58,8 @@ const availableProjections = [
   // 'Chamberlin',
   'ChamberlinAfrica',
   'Collignon',
+  'ConicEqualArea',
+  'ConicEquidistant',
   'Craig',
   'Craster',
   'CylindricalEqualArea',

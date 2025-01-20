@@ -53,6 +53,8 @@ import {
   geoStream,
   geoTransform,
   // Projections that will be available in the application
+  geoConicEqualArea,
+  geoConicEquidistant,
   geoEquirectangular,
   geoNaturalEarth1,
   geoMercator,
@@ -339,6 +341,8 @@ export default {
   // geoChamberlin,
   geoChamberlinAfrica,
   geoCollignon,
+  geoConicEqualArea,
+  geoConicEquidistant,
   geoCraig,
   geoCraster,
   geoCylindricalEqualArea,
