@@ -114,7 +114,7 @@ export default function InputFieldDoubleNumberSlider(
         type="number"
         value={props.values[1]}
         onChange={(e) => {
-          slider.set([+e.currentTarget.value, props.values[1]]);
+          slider.set([props.values[0], +e.currentTarget.value]);
           props.onChange([props.values[0], +e.currentTarget.value]);
         }}
         min={props.min}
