@@ -16,7 +16,7 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 - Add some d3-geo projections that were missing (Conic Conformal, Conic Equal-Area, Conic Equidistant, Gnomonic, Transverse Mercator).
 
-- Improve the component for defining standard parallels for projection that support this parameter.
+- Improve the component for defining standard parallels for projections that support this parameter.
 
 - Fix the redrawing of the map (wasn't happening) when changing the standard parallel(s) of a projection.
 
