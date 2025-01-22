@@ -13,7 +13,7 @@ import { HiOutlineGlobeAlt, HiSolidDocumentText } from 'solid-icons/hi';
 // Helpers
 import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { camelToFlat, isFiniteNumber } from '../../helpers/common';
+import { camelToFlat, isFiniteNumber, unproxify } from '../../helpers/common';
 import { round } from '../../helpers/math';
 import {
   epsgDb, type EpsgDbEntryType,
@@ -24,16 +24,16 @@ import topojson from '../../helpers/topojson';
 import worldLand from '../../helpers/world-land';
 
 // Stores
-import { setMapStore } from '../../store/MapStore';
+import { mapStore, setMapStore } from '../../store/MapStore';
 
 // Sub-components
 import DropdownMenu from '../DropdownMenu.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
 import MessageBlock from '../MessageBlock.tsx';
+import InputFieldTextarea from '../Inputs/InputTextarea.tsx';
 
 // Types / Interfaces / Enums
 import type { GeoJSONFeatureCollection, ScoredResult } from '../../global.d';
-import InputFieldTextarea from '../Inputs/InputTextarea.tsx';
 
 const worldLandGeo = rewindLayer(
   topojson.feature(
@@ -58,6 +58,9 @@ const availableProjections = [
   // 'Chamberlin',
   'ChamberlinAfrica',
   'Collignon',
+  'ConicConformal',
+  'ConicEqualArea',
+  'ConicEquidistant',
   'Craig',
   'Craster',
   'CylindricalEqualArea',
@@ -81,6 +84,7 @@ const availableProjections = [
   'Ginzburg6',
   'Ginzburg8',
   'Ginzburg9',
+  'Gnomonic',
   'Gringorten',
   'Guyou',
   'Hammer',
@@ -128,6 +132,7 @@ const availableProjections = [
   'SinuMollweide',
   'Sinusoidal',
   'Times',
+  'TransverseMercator',
   'VanDerGrinten',
   'VanDerGrinten2',
   'VanDerGrinten3',
@@ -135,6 +140,7 @@ const availableProjections = [
   'Wagner',
   'Wagner4',
   'Wagner6',
+  // 'Wagner7',
   'Wiechel',
   'Winkel3',
 ].sort();
@@ -210,10 +216,10 @@ function DemoMap(
   const graticule = d3.geoGraticule().step([20, 20])();
 
   const makeMap = () => {
-    refCanvasNode.width = props.width;
-    refCanvasNode.height = props.height;
-    const context = refCanvasNode.getContext('2d')!;
-    const projection = d3[`geo${props.projectionName}`]()
+    refCanvasNode!.width = props.width;
+    refCanvasNode!.height = props.height;
+    const context = refCanvasNode!.getContext('2d')!;
+    const projection = d3[`geo${props.projectionName}` as keyof typeof d3]()
       .fitExtent([[10, 10], [350, 250]], sphere);
     const path = d3.geoPath(projection, context);
     context.beginPath();
@@ -249,6 +255,8 @@ function DemoMap(
 export default function ProjectionSelection() : JSX.Element {
   const { LL } = useI18nContext();
 
+  const curProjInfo = unproxify(mapStore.projection as never);
+
   const [
     currentTab,
     setCurrentTab,
@@ -257,7 +265,11 @@ export default function ProjectionSelection() : JSX.Element {
   const [
     selectedGlobalProjection,
     setSelectedGlobalProjection,
-  ] = createSignal<string>('Airy');
+  ] = createSignal<string>(
+    curProjInfo.type === 'd3' && availableProjections.includes(curProjInfo.name)
+      ? curProjInfo.name
+      : 'Airy',
+  );
   // Signals for "epsg" tab
   const [
     matchingProjections,
@@ -337,7 +349,10 @@ export default function ProjectionSelection() : JSX.Element {
           <DropdownMenu
             id={'projection-selection_global-projection-dropdown'}
             entries={projectionEntries}
-            defaultEntry={projectionEntries[0]}
+            defaultEntry={
+              projectionEntries
+                .find((d) => d.name === camelToFlat(selectedGlobalProjection()))!
+            }
             onChange={(v) => {
               setSelectedGlobalProjection(v);
             }}
@@ -374,7 +389,7 @@ export default function ProjectionSelection() : JSX.Element {
             placeholder={'e.g. EPSG:3035, Lambert-93, Martinique 1938 / UTM zone 20N, ...'}
             onKeyUp={(value) => {
               setMatchingProjections(findMatchingProjections(value));
-              console.log(matchingProjections());
+              // console.log(matchingProjections());
             }}
           />
           <div class="is-flex" style={{ 'column-gap': '1em', height: '29vh' }}>

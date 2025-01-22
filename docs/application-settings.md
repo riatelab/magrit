@@ -11,7 +11,7 @@ Cette option est disponible dans la barre de menu de l'application, en haut à d
 
 Il est possible de choisir entre plusieurs langues pour l'interface de l'application.
 
-Actuellement seuls le français et l'anglais sont disponibles, mais d'autres langues pourront être ajoutées à l'avenir.
+Actuellement seuls le français, l'anglais et l'espagnol sont disponibles, mais d'autres langues pourront être ajoutées à l'avenir.
 
 Cette option est disponible dans la barre de menu de l'application, en haut à droite de l'écran.
 

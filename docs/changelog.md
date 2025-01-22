@@ -12,6 +12,18 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.2.1 (2025-01-20)
+
+- Ajout de projections de d3-geo qui étaient manquantes (Conic Conformal, Conic Equal-Area, Conic Equidistant, Gnomonic, Transverse Mercator).
+
+- Améliore le composant permettant de choisir les parallèles standards pour les projections supportant ce paramètre.
+
+- Corrige le redessin de la carte lorsque le(s) parallèle(s) standard(s) sont modifiés.
+
+#### 2.2.0 (2025-01-06)
+
+- Nouveau : Ajout de la traduction de l'interface en espagnol (merci à [@cvbrandoe](https://github.com/cvbrandoe)).
+
 #### 2.1.3 (2024-12-18)
 
 - Corrige le rendu des cartes catégorielles de pictogrammes pour les entités sans valeur

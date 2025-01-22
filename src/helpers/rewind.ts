@@ -4,7 +4,9 @@
  * which is licensed under the ISC license.
  */
 import d3 from './d3-custom';
-import { GeoJSONFeature, GeoJSONFeatureCollection } from '../global';
+import type {
+  GeoJSONFeature, GeoJSONFeatureCollection, GeoJSONGeometry, GeoJSONGeometryType,
+} from '../global';
 
 const {
   geoTransform,
@@ -13,7 +15,7 @@ const {
   geoArea,
 } = d3;
 
-function projectPolygons(o, stream) {
+function projectPolygons(o: GeoJSONGeometry, stream: d3.GeoStream) {
   let coordinates = [];
   let polygon; let
     line;
@@ -30,7 +32,7 @@ function projectPolygons(o, stream) {
       lineEnd() {
         line.push(line[0].slice());
       },
-      point(x, y) {
+      point(x: number, y: number) {
         line.push([x, y]);
       },
     }),
@@ -42,7 +44,7 @@ function projectPolygons(o, stream) {
   return { ...o, coordinates, rewind: true };
 }
 
-function projectGeometry(o, stream) {
+function projectGeometry(o: GeoJSONGeometryType, stream: d3.GeoStream) {
   // eslint-disable-next-line no-nested-ternary
   return !o
     ? null
@@ -54,22 +56,25 @@ function projectGeometry(o, stream) {
         : o;
 }
 
-function projectFeature(o, stream) {
+function projectFeature(o: GeoJSONFeature, stream: d3.GeoStream) {
   return { ...o, geometry: projectGeometry(o.geometry, stream) };
 }
 
-function projectFeatureCollection(o, stream) {
+function projectFeatureCollection(o: GeoJSONFeatureCollection, stream: d3.GeoStream) {
   return { ...o, features: o.features.map((f) => projectFeature(f, stream)) };
 }
 
-function projectGeometryCollection(obj, stream) {
+function projectGeometryCollection(obj, stream: d3.GeoStream) {
   return {
     ...obj,
-    geometries: obj.geometries.map((o) => projectGeometry(o, stream)),
+    geometries: obj.geometries.map((o: GeoJSONGeometry) => projectGeometry(o, stream)),
   };
 }
 
-const geoProjectSimple = function (object, projection) {
+const geoProjectSimple = (
+  object: GeoJSONFeature | GeoJSONFeatureCollection | GeoJSONGeometry,
+  projection: d3.GeoProjection,
+) => {
   const { stream } = projection;
   let project;
   if (!stream) throw new Error('invalid projection');

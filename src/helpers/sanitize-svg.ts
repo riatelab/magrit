@@ -9,7 +9,6 @@ import DOMPurify from 'dompurify';
  * @param svg
  */
 const sanitizeSVG = (svg: string) => {
-  console.time('sanitizeSVG');
   // Use DOM purify to sanitize the SVG
   // This removes any potentially harmful content (such as scripts)
   const cleanSvg = DOMPurify.sanitize(svg);
@@ -20,8 +19,8 @@ const sanitizeSVG = (svg: string) => {
   const svgDom = doc.documentElement;
 
   // Object to hold the mapping of old IDs and classes to new ones
-  const idMap: Record<string, any> = {};
-  const classMap: Record<string, any> = {};
+  const idMap: Record<string, string> = {};
+  const classMap: Record<string, string> = {};
 
   // Helper to generate a new unique ID or class name
   const generateNewName = (oldName: string) => `mgt-image-${oldName}-${Math.random().toString(36).substr(2, 9)}`;
@@ -71,7 +70,6 @@ const sanitizeSVG = (svg: string) => {
     serializedSvg = serializedSvg.replace(new RegExp(`\\.${oldClass}`, 'g'), `.${newClass}`);
   });
 
-  console.timeEnd('sanitizeSVG');
   return serializedSvg;
 };
 

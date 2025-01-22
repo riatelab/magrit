@@ -441,7 +441,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
       <button
         aria-label={LL().LayerManager.Settings()}
         class="unstyled"
-        onClick={(e) => {
+        onClick={() => {
           onClickSettings(props.id, LL);
         }}
         title={LL().LayerManager.Settings()}

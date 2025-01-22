@@ -17,8 +17,8 @@ import '../../styles/NoUiSliderBulma.css';
 
 interface InputFieldNumberSliderProps {
   label: string;
-  value: number;
-  onChange: (number: number) => void;
+  values: [number, number];
+  onChange: (numbers: [number, number]) => void;
   min: number;
   max: number;
   step: number;
@@ -27,13 +27,15 @@ interface InputFieldNumberSliderProps {
   widthInput?: number;
 }
 
-export default function InputFieldNumberSlider(props: InputFieldNumberSliderProps): JSX.Element {
+export default function InputFieldDoubleNumberSlider(
+  props: InputFieldNumberSliderProps,
+): JSX.Element {
   let refSliderNode: HTMLDivElement;
   let slider: NoUiSliderApi;
 
   const createSlider = () => {
     slider = noUiSlider.create(refSliderNode, {
-      start: props.value,
+      start: props.values,
       range: {
         min: props.min,
         max: props.max,
@@ -42,7 +44,13 @@ export default function InputFieldNumberSlider(props: InputFieldNumberSliderProp
       step: props.step,
     });
     slider.on('update', (values, handle) => {
-      props.onChange(+values[handle]);
+      if (handle === 0) {
+        // Left handle
+        props.onChange([+values[handle], props.values[1]]);
+      } else {
+        // Right handle
+        props.onChange([props.values[0], +values[handle]]);
+      }
     });
   };
 
@@ -84,22 +92,39 @@ export default function InputFieldNumberSlider(props: InputFieldNumberSliderProp
   );
 
   return <div class="field pr-2">
-    <label class="label" style={{ width: '120px' }}>{props.label}</label>
-    <input
-      class={'input'}
-      type="number"
-      value={props.value}
-      onChange={(e) => {
-        slider.set(+e.currentTarget.value);
-        props.onChange(+e.currentTarget.value);
-      }}
-      min={props.min}
-      max={props.max}
-      step={props.step}
-      style={{
-        width: `${props.widthInput || 80}px`,
-      }}
-    />
+    <label class="label" style={{ width: '100px' }}>{props.label}</label>
+    <div>
+      <input
+        class={'input'}
+        type="number"
+        value={props.values[0]}
+        onChange={(e) => {
+          slider.set([+e.currentTarget.value, props.values[1]]);
+          props.onChange([+e.currentTarget.value, props.values[1]]);
+        }}
+        min={props.min}
+        max={props.max}
+        step={props.step}
+        style={{
+          width: `${props.widthInput || 60}px`,
+        }}
+      />
+      <input
+        class={'input'}
+        type="number"
+        value={props.values[1]}
+        onChange={(e) => {
+          slider.set([props.values[0], +e.currentTarget.value]);
+          props.onChange([props.values[0], +e.currentTarget.value]);
+        }}
+        min={props.min}
+        max={props.max}
+        step={props.step}
+        style={{
+          width: `${props.widthInput || 60}px`,
+        }}
+      />
+    </div>
     <div class="control">
       <div
         class="slider slider-styled is-info"

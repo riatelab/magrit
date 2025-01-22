@@ -56,6 +56,9 @@ Magrit est conçu et développé au sein de l'UAR RIATE (CNRS / Université Pari
 
 <VPTeamMembers size="small" :members="contributors" />
 
+La traduction de l'application en espagnol a été réalisée par <a href="https://github.com/cvbrandoe">Carmen Brando</a> (École des Hautes Études en Sciences Sociales).
+
 Des contributions ponctuelles ont également été réalisées par différents utilisateurs :
 des membres (ou anciens membres) de l'UAR RIATE, des membres de l'ESR et des utilisateurs.
-Nous les remercions pour leur implication et leur soutien :heart:.
+
+Nous les remercions pour leur implication et leur soutien :heart:

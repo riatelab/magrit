@@ -12,6 +12,18 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.2.1 (2025-01-20)
+
+- Add some d3-geo projections that were missing (Conic Conformal, Conic Equal-Area, Conic Equidistant, Gnomonic, Transverse Mercator).
+
+- Improve the component for defining standard parallels for projection that support this parameter.
+
+- Fix the redrawing of the map (wasn't happening) when changing the standard parallel(s) of a projection.
+
+#### 2.2.0 (2025-01-06)
+
+-  New: Add the translation of the interface in Spanish (thanks to [@cvbrandoe](https://github.com/cvbrandoe)).
+
 #### 2.1.3 (2024-12-18)
 
 - Fix the rendering of categorical pictogram maps for features with no value

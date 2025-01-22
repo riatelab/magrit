@@ -168,7 +168,10 @@ const fitExtent = (id: string, margin = 0.03) => {
 // and update the projection accordingly, then redraw the paths
 createEffect(
   on(
-    () => [mapStore.scale, mapStore.translate, mapStore.rotate],
+    () => [
+      mapStore.scale, mapStore.translate, mapStore.rotate,
+      mapStore.parallel, mapStore.parallels,
+    ],
     () => {
       if (
         !globalStore.projection

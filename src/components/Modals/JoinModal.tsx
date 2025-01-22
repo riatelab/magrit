@@ -85,7 +85,7 @@ const checkJoin = async (
   };
 
   // For each table field value
-  tableFieldValues.forEach((v, i) => {
+  tableFieldValues.forEach((v) => {
     // If the value is null
     if (v === null) {
       result.nNoDataTable += 1;
@@ -103,7 +103,7 @@ const checkJoin = async (
   });
 
   // For each layer field value
-  layerFieldValues.forEach((v, i) => {
+  layerFieldValues.forEach((v) => {
     // If the value is null
     if (v === null) {
       result.nNoDataLayer += 1;
@@ -323,7 +323,7 @@ export default function JoinPanel(
   const [selectedFields, setSelectedFields] = createSignal<string[]>([]);
 
   onMount(() => {
-    refSuccessButton = refJoinPanel.parentElement!.parentElement!.parentElement!
+    refSuccessButton = refJoinPanel!.parentElement!.parentElement!.parentElement!
       .querySelector('.button.is-success')! as HTMLButtonElement;
 
     refSuccessButton.disabled = true;
@@ -498,7 +498,9 @@ export default function JoinPanel(
             <div class="has-text-centered">
               <MultipleSelect
                 onChange={(e) => {
-                  setSelectedFields(Array.from(e.target.selectedOptions).map((d: any) => d.value));
+                  setSelectedFields(
+                    Array.from(e.target.selectedOptions).map((d: HTMLOptionElement) => d.value),
+                  );
                 }}
                 size={tableDescription.fields.length}
                 values={selectedFields()}

@@ -459,18 +459,18 @@ export default function MapZone(): JSX.Element {
     clearTimeout(resetTimeout);
     // Clone the clicked SVG element and add it on top of the others
     // with a slightly modified style
-    svgElem.getElementById('cloned-feature')?.remove();
+    svgElem!.getElementById('cloned-feature')?.remove();
     const clone = element.cloneNode(true) as SVGElement & ID3Element;
     clone.id = 'cloned-feature';
     clone.style.stroke = 'red';
     clone.style.strokeWidth = '3px';
     clone.style.fill = 'none';
-    svgElem.appendChild(clone);
+    svgElem!.appendChild(clone);
     // Get the layer name for the clicked feature
     let targetGroup = element as SVGElement;
     let i = 0;
     while (targetGroup.parentElement && i < 7) {
-      targetGroup = targetGroup.parentElement! as SVGElement;
+      targetGroup = targetGroup.parentElement;
       if (targetGroup.classList.contains('layer')) break;
       i += 1;
     }
@@ -504,7 +504,7 @@ export default function MapZone(): JSX.Element {
     }, delay);
   };
 
-  const onMouseMoveInfo = (e) => {
+  const onMouseMoveInfo = (e: MouseEvent) => {
     const element = document.elementFromPoint(e.clientX, e.clientY);
     if (!element) return;
     let it = 0;
@@ -516,7 +516,7 @@ export default function MapZone(): JSX.Element {
         resetInfoFeature();
         return;
       }
-      targetElement = targetElement.parentElement;
+      targetElement = targetElement.parentElement as never;
       it += 1;
     }
     // eslint-disable-next-line no-underscore-dangle
@@ -558,7 +558,10 @@ export default function MapZone(): JSX.Element {
     // the values used in the transform attribute up to now
     // and remove the transform attribute from the elements on
     // which it was defined).
-    const applyZoomPan = (e: MouseEvent & d3.D3ZoomEvent<any, any>, redraw: boolean) => {
+    const applyZoomPan = (
+      e: MouseEvent & d3.D3ZoomEvent<SVGSVGElement, unknown>,
+      redraw: boolean,
+    ) => {
       if (!redraw) {
         const t = e.transform.toString();
         // We just change the transform attribute of the layers
@@ -611,7 +614,7 @@ export default function MapZone(): JSX.Element {
           // is set to the identity transform, so that the zoom/pan
           // does not change the map.
           // eslint-disable-next-line no-underscore-dangle, no-param-reassign
-          svgElem.__zoom = d3.zoomIdentity;
+          svgElem!.__zoom = d3.zoomIdentity;
         } else {
           // Otherwise we apply the zoom/pan
           applyZoomPan(e, false);
