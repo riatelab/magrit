@@ -470,12 +470,13 @@ export default function MapZoneCanvas(): JSX.Element {
     };
 
     const applyZoomPanDebounced = throttle((e) => {
-      console.log('inside throttled');
+      console.log('Entering throttled');
       applyZoomPan(e);
       previous.x = e.transform.x;
       previous.y = e.transform.y;
       previous.k = e.transform.k;
-    }, 100, false);
+      console.log('Quitting throttled');
+    }, 500, false, true);
 
     /* eslint-disable no-underscore-dangle, no-param-reassign */
     // Set up the zoom behavior
