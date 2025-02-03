@@ -597,7 +597,7 @@ const es = {
     Instructions: 'Arrastre uno o más conjuntos de datos (geográficos o tabulares) para añadirlos o haga clic en el botón de abajo para seleccionar un archivo',
     Open: 'Abrir...',
     SupportedVectorFormats: 'Los formatos vectoriales soportados son : ESRI Shapefile (.shp, .shx, .dbf, .prj, .cpg), GeoPackage (.gpkg), GeoJSON (.geojson o .json), TopoJSON (.topojson o .json), GML (.gml), KML (.kml)',
-    SupportedTabularFormats: 'Los formatos de archivo tabular admitidos son : Excel (.xls, .xlsx), CSV (.csv), TSV (.tsv) y hojas de cálculo OpenDocument (.ods).',
+    SupportedTabularFormats: 'Los formatos de archivo tabular admitidos son : Excel (.xlsx), CSV (.csv), TSV (.tsv) y hojas de cálculo OpenDocument (.ods).',
     InstructionNotFolder: 'Tenga en cuenta que no es posible importar una carpeta directamente',
     AnalyzingDataset: 'Análisis del conjunto de datos...',
     CancelButton: 'Cancelar',

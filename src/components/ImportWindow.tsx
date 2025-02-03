@@ -205,10 +205,9 @@ const analyseTabularDatasetGDAL = async (
   /* eslint-disable no-nested-ternary */
   const detailedType = result.driverLongName === 'Open Document Spreadsheet'
     ? SupportedTabularFileTypes.ODS
-    : result.driverLongName === 'MS Excel format'
-      ? SupportedTabularFileTypes.XLS
-      : result.driverLongName === 'MS Office Open XML spreadsheet'
-        ? SupportedTabularFileTypes.XLSX : 'Unknown';
+    : result.driverLongName === 'MS Office Open XML spreadsheet'
+      ? SupportedTabularFileTypes.XLSX
+      : 'Unknown';
   /* eslint-enable no-nested-ternary */
 
   return {
@@ -442,10 +441,8 @@ const analyzeDataset = async (
       const content = await file.file.text();
       result = analyseDatasetTabularText(content, name, file.ext as 'csv' | 'tsv' | 'txt');
     } else if (
-      file.file.type === 'application/vnd.ms-excel'
-      || file.file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      file.file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
       || file.file.type === 'application/vnd.oasis.opendocument.spreadsheet'
-      || file.ext === 'xls'
       || file.ext === 'ods'
       || file.ext === 'xlsx'
     ) {

@@ -20,7 +20,6 @@ export enum SupportedTextualTabularFileTypes {
 
 export enum SupportedBinaryTabularFileTypes {
   ODS = 'ods',
-  XLS = 'xls',
   XLSX = 'xlsx',
   GeoPackage = 'gpkg',
 }
@@ -34,7 +33,6 @@ export enum SupportedTabularFileTypes {
   ODS = 'ods',
   TSV = 'tsv',
   TXT = 'txt',
-  XLS = 'xls',
   XLSX = 'xlsx',
   GeoPackage = 'gpkg',
 }
@@ -72,8 +70,7 @@ export const allowedMimeTypes: string[] = [
   // For csv
   'text/csv',
   'text/plain',
-  // For xls, xlsx
-  'application/vnd.ms-excel',
+  // For xlsx
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   // For ods
   'application/vnd.oasis.opendocument.spreadsheet',
@@ -98,7 +95,6 @@ export const allowedFileExtensions: string[] = [
   // 'flatgeobuf',
   'csv',
   'tsv',
-  'xls',
   'xlsx',
   'ods',
 ];

@@ -2586,7 +2586,7 @@ type RootTranslation = {
 		 */
 		SupportedVectorFormats: string
 		/**
-		 * S​u​p​p​o​r​t​e​d​ ​t​a​b​u​l​a​r​ ​f​o​r​m​a​t​s​ ​a​r​e​:​ ​E​x​c​e​l​ ​(​.​x​l​s​,​ ​.​x​l​s​x​)​,​ ​C​S​V​ ​(​.​c​s​v​)​,​ ​T​S​V​ ​(​.​t​s​v​)​ ​a​n​d​ ​O​p​e​n​D​o​c​u​m​e​n​t​ ​S​p​r​e​a​d​s​h​e​e​t​ ​(​.​o​d​s​)​.
+		 * S​u​p​p​o​r​t​e​d​ ​t​a​b​u​l​a​r​ ​f​o​r​m​a​t​s​ ​a​r​e​:​ ​E​x​c​e​l​ ​(​.​x​l​s​x​)​,​ ​C​S​V​ ​(​.​c​s​v​)​,​ ​T​S​V​ ​(​.​t​s​v​)​ ​a​n​d​ ​O​p​e​n​D​o​c​u​m​e​n​t​ ​S​p​r​e​a​d​s​h​e​e​t​ ​(​.​o​d​s​)​.
 		 */
 		SupportedTabularFormats: string
 		/**
@@ -8529,7 +8529,7 @@ export type TranslationFunctions = {
 		 */
 		SupportedVectorFormats: () => LocalizedString
 		/**
-		 * Supported tabular formats are: Excel (.xls, .xlsx), CSV (.csv), TSV (.tsv) and OpenDocument Spreadsheet (.ods).
+		 * Supported tabular formats are: Excel (.xlsx), CSV (.csv), TSV (.tsv) and OpenDocument Spreadsheet (.ods).
 		 */
 		SupportedTabularFormats: () => LocalizedString
 		/**

@@ -597,7 +597,7 @@ const en = {
     Instructions: 'Drag and drop one or more datasets here (geographical or tabular) or click on the button below to select a file.',
     Open: 'Open...',
     SupportedVectorFormats: 'Supported vector formats are: ESRI Shapefile (.shp, .shx, .dbf, .prj, .cpg), GeoPackage (.gpkg), GeoJSON (.geojson or .json), TopoJSON (.topojson or .json), GML (.gml) and KML (.kml).',
-    SupportedTabularFormats: 'Supported tabular formats are: Excel (.xls, .xlsx), CSV (.csv), TSV (.tsv) and OpenDocument Spreadsheet (.ods).',
+    SupportedTabularFormats: 'Supported tabular formats are: Excel (.xlsx), CSV (.csv), TSV (.tsv) and OpenDocument Spreadsheet (.ods).',
     InstructionNotFolder: 'Please note that you can only import files, not folders.',
     AnalyzingDataset: 'Analyzing dataset...',
     CancelButton: 'Cancel',
