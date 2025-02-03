@@ -12,6 +12,10 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.2.2 (unreleased)
+
+- Suppression du support des fichiers XLS (les fichiers XLSX et ODS sont toujours supportés - corrige <a href="https://github.com/riatelab/magrit/issues/148">148</a>).
+
 #### 2.2.1 (2025-01-20)
 
 - Ajout de projections de d3-geo qui étaient manquantes (Conic Conformal, Conic Equal-Area, Conic Equidistant, Gnomonic, Transverse Mercator).
