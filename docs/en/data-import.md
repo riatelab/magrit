@@ -6,7 +6,7 @@ into the application window.
 The data import window can also be opened from the left-hand side menu, in the "Data import" tab, by clicking on "Open data import window...".
 
 The data import window lets you load geographic data files
-(GeoPackage, Shapefile, GeoJSON, TopoJSON, KML, GML) and tabular data (XLS, XLSX, CSV, TSV, ODS).
+(GeoPackage, Shapefile, GeoJSON, TopoJSON, KML, GML) and tabular data (XLSX, CSV, TSV, ODS).
 
 Multiple files can be added at once by selecting them in the dialog window or by dragging and dropping them onto the data import window.
 
@@ -17,7 +17,7 @@ Multiple files can be added at once by selecting them in the dialog window or by
 />
 
 When a file format that can contain multiple layers (GeoPackage or TopoJSON)
-or tables (XLS, XLSX, ODS) is loaded, a list of layers or tables is displayed in
+or tables (XLSX, ODS) is loaded, a list of layers or tables is displayed in
 the data import window.
 You can select one or more layers/tables to be imported by checking the corresponding boxes.
 
