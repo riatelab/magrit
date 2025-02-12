@@ -10,7 +10,7 @@
     "email": "matthieu.viry@cnrs.fr"
   },
   "devDependencies": {
-    "vitepress": "^1.6.2"
+    "vitepress": "^1.6.3s"
   },
   "scripts": {
     "dev": "vitepress dev",
