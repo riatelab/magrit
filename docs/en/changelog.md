@@ -12,7 +12,7 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-#### 2.2.2 (unreleased)
+#### 2.2.2 (2025-02-12)
 
 - Remove support for XLS files (XLSX and ODS files are still supported - fixes <a href="https://github.com/riatelab/magrit/issues/148">148</a>).
 
