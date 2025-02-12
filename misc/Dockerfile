@@ -6,14 +6,14 @@
 #   docker run --publish "9999:9999" -it "magrit:latest"
 
 # Base for amd64
-FROM ubuntu:22.04 as build_amd64
+FROM ubuntu:22.04 AS build_amd64
 LABEL org.opencontainers.image.authors="Matthieu Viry <matthieu.viry@cnrs.fr>"
 WORKDIR /home
 ONBUILD RUN apt-get update \
     && apt-get install -y curl
 
 # Base for arm64
-FROM ubuntu:22.04 as build_arm64
+FROM ubuntu:22.04 AS build_arm64
 LABEL org.opencontainers.image.authors="Matthieu Viry <matthieu.viry@cnrs.fr>"
 WORKDIR /home
 ONBUILD RUN apt-get update \
