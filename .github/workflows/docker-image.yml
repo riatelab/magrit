@@ -40,5 +40,6 @@ jobs:
             linux/arm64
           file: ./misc/Dockerfile
           push: true
+          no-cache: 'true'
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
