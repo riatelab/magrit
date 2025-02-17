@@ -92,18 +92,22 @@ export const getClassificationFunction = (method: ClassificationMethod) => {
 
 export function prepareStatisticalSummary(series: number[]) {
   const [min, max] = extent(series);
+  const mean = d3.mean(series) as number;
 
+  // We compute the variance without the Bessel correction
+  const variance = d3.sum(series.map((d) => (d - mean) ** 2)) / series.length;
+  const standardDeviation = Math.sqrt(variance);
   return {
     population: series.length,
     unique: new Set(series).size,
     minimum: min,
     maximum: max,
-    mean: d3.mean(series) as number,
+    mean,
     median: d3.median(series) as number,
-    standardDeviation: d3.deviation(series) as number,
+    standardDeviation,
     precision: getMinimumPrecision(series),
-    // variance: d3.variance(series),
-    // varianceCoefficient: d3.deviation(series) / d3.mean(series),
+    // variance,
+    // varianceCoefficient: standardDeviation / mean,
   };
 }
 
