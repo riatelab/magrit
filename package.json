@@ -114,7 +114,7 @@
     "solid-sortablejs": "^2.1.2",
     "solid-toast": "^0.5.0",
     "solid-transition-group": "^0.3.0",
-    "statsbreaks": "https://github.com/mthh/statsbreaks.git#6cc1558f83fe60e26f5c946ec7237a2863a8c3ec",
+    "statsbreaks": "https://github.com/mthh/statsbreaks.git#6d757b135f1b4fdaac03ba8f12a5856a9670e42d",
     "topojson-client": "^3.1.0",
     "topojson-server": "^3.0.1",
     "topojson-simplify": "^3.0.3",
