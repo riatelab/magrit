@@ -42,14 +42,19 @@ Les 6 classes sont définies avec les bornes suivantes : minimum, percentile 5 (
 
 Cette méthode permet de créer des classes homogènes. En effet l'algorithme vise à trouver le nombre de classe souhaité en minimisant la variance intra-classe et en maximisant la variance inter-classe.
 
+Les limites de classes tombent ici à mi-chemin entre deux points de données.
+
 ### Seuils naturels (algorithme de Fisher-Jenks)
 
 Cette méthode permet de créer des classes homogènes. En effet l'algorithme vise à trouver le nombre de classe souhaité en minimisant la variance intra-classe et en maximisant la variance inter-classe.
 
+Généralement (par exemple en utilisant d'autres implémentations de Fisher-Jenks), les limites de classes tombent sur des points de données, mais nous avons choisi
+de retourner des limites de classes "plus jolies" qui tombent à mi-chemin entre deux points de données.
+
 ::: warning Dépréciation
 
 Cette méthode est désormais dépréciée en faveur de la méthode CKMeans donnant de meilleurs résultats
-(les entités sont classées comme dans la méthode de Fisher-Jenks mais avec des limites de classes plus faciles à lire)
+(les entités sont généralement classées comme dans la méthode de Fisher-Jenks)
 en un temps de calcul bien plus court. Nous vous conseillons donc d'utiliser la méthode CKMeans à la place.
 
 :::

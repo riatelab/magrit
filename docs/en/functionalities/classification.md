@@ -36,18 +36,22 @@ This method (popularized by the PhilCarto tool), allows classification according
 it thus produces 6 classes.
 The 6 classes are defined with the following limits: minimum, percentile 5 (0.05%), 1st quartile (25%), median (50%), 3rd quartile (75%), percentile 95 (95%), maximum.
 
-## Natural thresholds (CKMeans algorithm)
+## Natural breaks (CKMeans algorithm)
 
 This method allows the creation of homogeneous classes. Indeed, the algorithm aims to find the desired number of classes by minimizing the intra-class variance and maximizing the inter-class variance.
 
-## Natural thresholds (Fisher-Jenks algorithm)
+In this method, class boundaries fall halfway between two data points.
+
+## Natural breaks (Fisher-Jenks algorithm)
 
 This method allows the creation of homogeneous classes. Indeed, the algorithm aims to find the desired number of classes by minimizing the intra-class variance and maximizing the inter-class variance.
+
+Usually (i.e. using other Fisher-Jenks implementation), class boundaries fall on data points, but we have chosen to return “prettier” class boundaries that fall halfway between two data points.
 
 ::: warning Deprecation
 
 This method is now deprecated in favor of the CKMeans method, which gives better results
-(entities are classified as in the Fisher-Jenks method but with class limits that are easier to read)
+(entities are usually classified as in the Fisher-Jenks method)
 in a much shorter calculation time. We therefore recommend using the CKMeans method instead.
 
 :::
