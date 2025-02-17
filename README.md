@@ -16,7 +16,7 @@
 - Everything happens in the browser, so **your data never leaves your computer**.
 - It's intentionally simple (the UI follows the basic steps of map creation).
 - It's **designed for teaching and learning cartography**.
-- It lets you import **your own geometry dataset** (**Shapefile**, **GeoJSON**, **GML**, **GeoPackage**, etc.) and optionally your **tabular file** (CSV, XLS, XLSX, etc.).
+- It lets you import **your own geometry dataset** (**Shapefile**, **GeoJSON**, **GML**, **GeoPackage**, etc.) and optionally your **tabular file** (CSV, XLSX, ODS, etc.).
 - We also provide many sample datasets to try out the various representations and become familiar with the application.
 - It allows you to **render and combine a wide variety of maps**: choropleth, proportional symbols, cartogram, discontinuity, smoothed maps, links, etc.
 - It allows you to **customize the appearance of your maps** in various ways.
