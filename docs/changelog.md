@@ -12,6 +12,12 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.2.3 (2025-02-17)
+
+- Corrige le calcul de l'écart-type dans le panneau de discrétisation (aussi bien pour le calcul des classes avec la méthode "Écart-type" que pour l'affichage des écarts-types sur le graphique).
+
+- Change la manière dont tombent les limites de classes pour la discrétisation "Jenks" (elles tombent désormais sur à mi-chemin entre les valeurs des données plutôt que sur les valeurs elles-mêmes).
+
 #### 2.2.2 (2025-02-12)
 
 - Suppression du support des fichiers XLS (les fichiers XLSX et ODS sont toujours supportés - corrige <a href="https://github.com/riatelab/magrit/issues/148">148</a>).

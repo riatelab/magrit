@@ -12,6 +12,12 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.2.3 (2025-02-17)
+
+- Fixes the standard deviation calculation in the classification panel (both for class calculation with the “Standard deviation” method and for the display of standard deviations on the chart).
+
+- Changes the way class boundaries fall for “Fisher-Jenks” classification (they now fall on the midpoint between data values rather than on the values themselves).
+
 #### 2.2.2 (2025-02-12)
 
 - Remove support for XLS files (XLSX and ODS files are still supported - fixes <a href="https://github.com/riatelab/magrit/issues/148">148</a>).
