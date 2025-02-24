@@ -12,6 +12,11 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.2.4 (2025-02-24)
+
+- Update *world_209* dataset to add `NAMEde` column for German country names and
+  to update the column `REGION_BLOC` with the countries that have left CEDEAO/ECOWAS (Burkina Faso, Mali and Niger, on 25/01/2025).
+
 #### 2.2.3 (2025-02-17)
 
 - Fixes the standard deviation calculation in the classification panel (both for class calculation with the “Standard deviation” method and for the display of standard deviations on the chart).

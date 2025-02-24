@@ -12,6 +12,11 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.2.4 (2025-02-24)
+
+- Mise à jour du jeu de donnée *world_209* afin d'ajouter un colonne `NAMEde` pour le nom en allemand des pays
+  et afin de mettre à jour la colonne `REGION_BLOC` avec les pays ayant quittés la CEDEAO (Burkina Faso, Mali et Niger, le 25/01/2025).
+
 #### 2.2.3 (2025-02-17)
 
 - Corrige le calcul de l'écart-type dans le panneau de discrétisation (aussi bien pour le calcul des classes avec la méthode "Écart-type" que pour l'affichage des écarts-types sur le graphique).
