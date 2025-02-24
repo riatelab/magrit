@@ -548,6 +548,13 @@
         "provenance": 0
       },
       {
+        "name": "NAMEde",
+        "dataType": "string",
+        "type": "identifier",
+        "hasMissingValue": false,
+        "provenance": 0
+      },
+      {
         "name": "REGION_BLOC",
         "dataType": "string",
         "type": "categorical",

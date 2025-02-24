@@ -830,6 +830,10 @@ type RootTranslation = {
 				 */
 				NAMEfr: string
 				/**
+				 * N​a​m​e​ ​(​d​e​)
+				 */
+				NAMEde: string
+				/**
 				 * R​e​g​i​o​n​a​l​ ​b​e​l​o​n​g​i​n​g
 				 */
 				REGION_BLOC: string
@@ -6772,6 +6776,10 @@ export type TranslationFunctions = {
 				 * Name (fr)
 				 */
 				NAMEfr: () => LocalizedString
+				/**
+				 * Name (de)
+				 */
+				NAMEde: () => LocalizedString
 				/**
 				 * Regional belonging
 				 */

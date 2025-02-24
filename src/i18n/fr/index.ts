@@ -281,6 +281,7 @@ const fr = {
         ISONUM: 'Code ISO 3166-1 numeric',
         NAMEen: 'Nom (en)',
         NAMEfr: 'Nom (fr)',
+        NAMEde: 'Nom (de)',
         REGION_BLOC: 'Bloc régional d\'appartenance',
         REGION_UN: 'Région Nation Unies d\'appartenance',
         SUBREGION_UN: 'Sous région Nations Unies d\'appartenance',
