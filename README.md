@@ -21,7 +21,7 @@
 - It allows you to **render and combine a wide variety of maps**: choropleth, proportional symbols, cartogram, discontinuity, smoothed maps, links, etc.
 - It allows you to **customize the appearance of your maps** in various ways.
 - It supports all the most popular modern desktop browsers but we also provide a desktop version for Windows, GNU/Linux and MacOS.
-- Magrit is written in modern JS and uses notably [solid.js](https://github.com/solidjs/solid) and [d3.js](https://github.com/d3/d3) libraries
+- Magrit is written in TypeScript and uses notably [solid.js](https://github.com/solidjs/solid) and [d3.js](https://github.com/d3/d3) libraries
   as well as various WebAssembly modules ([GDAL](https://github.com/bugra9/gdal3.js), [GEOS](https://github.com/chrispahm/geos-wasm), [Contour-wasm](https://github.com/mthh/contour-wasm), [go-cart-wasm](https://github.com/riatelab/go-cart-wasm)).
 
 ## Try it out
@@ -42,7 +42,28 @@ or directly on the Web site ([French](https://magrit.cnrs.fr/changelog.html) or 
 
 Information about changes are also available in the [release notes](https://github.com/riatelab/magrit/releases) of the GitHub repository.
 
-## Development
+## Support us ⭐️
+
+If you find this project helpful, please consider giving it a star to show your support!  
+Your stars help others discover this project and boost its visibility in the GitHub community.
+
+Also, if you use Magrit to make maps for your scientific publications, don't hesitate to cite it (there is no obligation though!).  
+You can click "Cite this repository" in the "About" section of this repository to get the citation in various formats.
+
+Thank you!
+
+## Contributing to Magrit
+
+Contributions are welcome! There are various ways to contribute to the project which are detailed in [CONTRIBUTING](CONTRIBUTING.md) file. You can notably:
+
+- Report bugs or send us feedback.
+- Add new translations or fix existing ones.
+- Contribute code (clone the repo, fix what you want to be fixed and submit a pull request - note that for all non-trivial modifications, it's best to start by opening an issue to discuss it together!).
+
+If you want to read more about what we are planning to do, you can check the [roadmap](ROADMAP.md)
+of the project.
+
+## Instructions for developers
 
 Requirements:
 
@@ -60,7 +81,7 @@ npm install
 npm run dev
 ```
 
-The application will be available at [http://localhost:3000](http://localhost:3000). 
+The application will be available at [http://localhost:3000](http://localhost:3000).
 
 ### Running for development, with electron
 
@@ -85,17 +106,6 @@ npm run build:electron
 ```
 
 The application (for Windows and GNU/Linux) will be built in the `release` directory.
-
-## Contributing to Magrit
-
-Contributions are welcome! There are various ways to contribute to the project which are detailed in [CONTRIBUTING](CONTRIBUTING.md) file! You can notably:
-
-- Report bugs or send us feedback.
-- Add new translations or fix existing ones.
-- Contribute code (you're in the right place! Clone the repo, fix what you want to be fixed and submit a pull request - note that for all non-trivial modifications, it's best to start by opening an issue to discuss it together!).
-
-If you want to read more about what we are planning to do, you can check the [roadmap](ROADMAP.md)
-of the project.
 
 ## License
 
