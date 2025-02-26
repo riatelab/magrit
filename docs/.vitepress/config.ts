@@ -70,6 +70,7 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
     { text: 'Historique des changements', link: '/changelog' },
     { text: 'Licences', link: '/licenses' },
     { text: 'L\'équipe de Magrit', link: '/team' },
+    { text: 'Soutenir Magrit', link: '/support-us' },
     { text: 'Nous contacter', link: '/contact-us' },
   ];
 }
