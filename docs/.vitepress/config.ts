@@ -144,6 +144,7 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
     { text: 'Changelog', link: '/en/changelog' },
     { text: 'Licenses', link: '/en/licenses' },
     { text: 'Team', link: '/en/team' },
+    { text: 'Support us', link: '/support-us' },
     { text: 'Contact us', link: '/en/contact-us' },
   ];
 }
