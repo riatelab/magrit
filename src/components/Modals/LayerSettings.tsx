@@ -98,10 +98,18 @@ const layerLinkedToHistogramOrBarChart = (
   layer: LayerDescription,
   layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
 ): boolean => {
-  const ids = layoutFeaturesAndLegends
-    .filter((l) => l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart')
-    .map((l) => (l as Legend).layerId);
-  return ids.includes(layer.id);
+  const elem = layoutFeaturesAndLegends
+    .find((l) => (l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart') && (l as Legend).layerId === layer.id);
+  return !!elem;
+};
+
+const linkedHistogramOrBarChartVisible = (
+  layer: LayerDescription,
+  layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
+): boolean => {
+  const elem = layoutFeaturesAndLegends
+    .find((l) => (l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart') && (l as Legend).layerId === layer.id);
+  return !!(elem && (elem as Legend).visible);
 };
 
 const redrawLayer = (targetId: string) => {
@@ -1143,49 +1151,72 @@ function makeSettingsDefaultPoint(
       <InputFieldCheckbox
         label={LL().LayerSettings.AddHistogramChoropleth()}
         checked={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+          linkedHistogramOrBarChartVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        disabled={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
-        }
-        onChange={() => {
-          const legendPosition = getPossibleLegendPosition(300, 250);
+        onChange={(v) => {
+          if (v && !layerLinkedToHistogramOrBarChart(
+            props,
+            layersDescriptionStore.layoutFeaturesAndLegends,
+          )) {
+            const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStoreBase(
-            produce(
-              (draft: LayersDescriptionStoreType) => {
-                draft.layoutFeaturesAndLegends.push({
-                  id: generateIdLegend(),
-                  layerId: props.id,
-                  type: LegendType.choroplethHistogram,
-                  position: [legendPosition[0], legendPosition[1]],
-                  width: 300,
-                  height: 250,
-                  visible: true,
-                  roundDecimals: 2,
-                  title: {
-                    text: (props.rendererParameters as ClassificationParameters).variable,
-                    ...applicationSettingsStore.defaultLegendSettings.title,
-                  } as LegendTextElement,
-                  subtitle: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+            setLayersDescriptionStoreBase(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeaturesAndLegends.push({
+                    id: generateIdLegend(),
+                    layerId: props.id,
+                    type: LegendType.choroplethHistogram,
+                    position: [legendPosition[0], legendPosition[1]],
+                    width: 300,
+                    height: 250,
+                    visible: true,
+                    roundDecimals: 2,
+                    title: {
+                      text: (props.rendererParameters as ClassificationParameters).variable,
+                      ...applicationSettingsStore.defaultLegendSettings.title,
+                    } as LegendTextElement,
+                    subtitle: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                    },
+                    axis: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.labels,
+                    },
+                    note: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.note,
+                    },
+                    backgroundRect: {
+                      visible: false,
+                    },
+                  } as ChoroplethHistogramLegend);
+                },
+              ),
+            );
+          } else {
+            const elem = layersDescriptionStore.layoutFeaturesAndLegends
+              .find((l) => (l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart') && l.layerId === props.id);
+
+            if (elem) {
+              setLayersDescriptionStoreBase(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.forEach((l) => {
+                      if (
+                        (l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart')
+                        && l.layerId === props.id
+                      ) {
+                        // eslint-disable-next-line no-param-reassign
+                        l.visible = !l.visible;
+                      }
+                    });
                   },
-                  axis: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.labels,
-                  },
-                  note: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.note,
-                  },
-                  backgroundRect: {
-                    visible: false,
-                  },
-                } as ChoroplethHistogramLegend);
-              },
-            ),
-          );
+                ),
+              );
+            }
+          }
         }}
       />
     </Show>
@@ -1196,51 +1227,73 @@ function makeSettingsDefaultPoint(
       <InputFieldCheckbox
         label={LL().LayerSettings.AddHistogramChoropleth()}
         checked={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+          linkedHistogramOrBarChartVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        disabled={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
-        }
-        onChange={() => {
-          const legendPosition = getPossibleLegendPosition(300, 250);
+        onChange={(v) => {
+          if (v && !layerLinkedToHistogramOrBarChart(
+            props,
+            layersDescriptionStore.layoutFeaturesAndLegends,
+          )) {
+            const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStoreBase(
-            produce(
-              (draft: LayersDescriptionStoreType) => {
-                draft.layoutFeaturesAndLegends.push({
-                  id: generateIdLegend(),
-                  layerId: props.id,
-                  type: LegendType.choroplethHistogram,
-                  position: [legendPosition[0], legendPosition[1]],
-                  width: 300,
-                  height: 250,
-                  visible: true,
-                  roundDecimals: 2,
-                  title: {
-                    text: (
-                      props.rendererParameters as ProportionalSymbolsRatioParameters)
-                      .color.variable,
-                    ...applicationSettingsStore.defaultLegendSettings.title,
-                  } as LegendTextElement,
-                  subtitle: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+            setLayersDescriptionStoreBase(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeaturesAndLegends.push({
+                    id: generateIdLegend(),
+                    layerId: props.id,
+                    type: LegendType.choroplethHistogram,
+                    position: [legendPosition[0], legendPosition[1]],
+                    width: 300,
+                    height: 250,
+                    visible: true,
+                    roundDecimals: 2,
+                    title: {
+                      text: (props.rendererParameters as ProportionalSymbolsRatioParameters)
+                        .color.variable,
+                      ...applicationSettingsStore.defaultLegendSettings.title,
+                    } as LegendTextElement,
+                    subtitle: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                    },
+                    axis: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.labels,
+                    },
+                    note: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.note,
+                    },
+                    backgroundRect: {
+                      visible: false,
+                    },
+                  } as ChoroplethHistogramLegend);
+                },
+              ),
+            );
+          } else {
+            const elem = layersDescriptionStore.layoutFeaturesAndLegends
+              .find((l) => (l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart') && l.layerId === props.id);
+
+            if (elem) {
+              setLayersDescriptionStoreBase(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.forEach((l) => {
+                      if (
+                        (l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart')
+                        && l.layerId === props.id
+                      ) {
+                        // eslint-disable-next-line no-param-reassign
+                        l.visible = !l.visible;
+                      }
+                    });
                   },
-                  axis: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.labels,
-                  },
-                  note: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.note,
-                  },
-                  backgroundRect: {
-                    visible: false,
-                  },
-                } as ChoroplethHistogramLegend);
-              },
-            ),
-          );
+                ),
+              );
+            }
+          }
         }}
       />
     </Show>
@@ -1845,49 +1898,72 @@ function makeSettingsDefaultLine(
       <InputFieldCheckbox
         label={LL().LayerSettings.AddHistogramChoropleth()}
         checked={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+          linkedHistogramOrBarChartVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        disabled={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
-        }
-        onChange={() => {
-          const legendPosition = getPossibleLegendPosition(300, 250);
+        onChange={(v) => {
+          if (v && !layerLinkedToHistogramOrBarChart(
+            props,
+            layersDescriptionStore.layoutFeaturesAndLegends,
+          )) {
+            const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStoreBase(
-            produce(
-              (draft: LayersDescriptionStoreType) => {
-                draft.layoutFeaturesAndLegends.push({
-                  id: generateIdLegend(),
-                  layerId: props.id,
-                  type: LegendType.choroplethHistogram,
-                  position: [legendPosition[0], legendPosition[1]],
-                  width: 300,
-                  height: 250,
-                  visible: true,
-                  roundDecimals: 2,
-                  title: {
-                    text: (props.rendererParameters as ClassificationParameters).variable,
-                    ...applicationSettingsStore.defaultLegendSettings.title,
-                  } as LegendTextElement,
-                  subtitle: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+            setLayersDescriptionStoreBase(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeaturesAndLegends.push({
+                    id: generateIdLegend(),
+                    layerId: props.id,
+                    type: LegendType.choroplethHistogram,
+                    position: [legendPosition[0], legendPosition[1]],
+                    width: 300,
+                    height: 250,
+                    visible: true,
+                    roundDecimals: 2,
+                    title: {
+                      text: (props.rendererParameters as ClassificationParameters).variable,
+                      ...applicationSettingsStore.defaultLegendSettings.title,
+                    } as LegendTextElement,
+                    subtitle: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                    },
+                    axis: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.labels,
+                    },
+                    note: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.note,
+                    },
+                    backgroundRect: {
+                      visible: false,
+                    },
+                  } as ChoroplethHistogramLegend);
+                },
+              ),
+            );
+          } else {
+            const elem = layersDescriptionStore.layoutFeaturesAndLegends
+              .find((l) => (l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart') && l.layerId === props.id);
+
+            if (elem) {
+              setLayersDescriptionStoreBase(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.forEach((l) => {
+                      if (
+                        (l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart')
+                        && l.layerId === props.id
+                      ) {
+                        // eslint-disable-next-line no-param-reassign
+                        l.visible = !l.visible;
+                      }
+                    });
                   },
-                  axis: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.labels,
-                  },
-                  note: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.note,
-                  },
-                  backgroundRect: {
-                    visible: false,
-                  },
-                } as ChoroplethHistogramLegend);
-              },
-            ),
-          );
+                ),
+              );
+            }
+          }
         }}
       />
     </Show>
@@ -1954,49 +2030,72 @@ function makeSettingsDefaultLine(
       <InputFieldCheckbox
         label={LL().LayerSettings.AddHistogramChoropleth()}
         checked={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+          linkedHistogramOrBarChartVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        disabled={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
-        }
-        onChange={() => {
-          const legendPosition = getPossibleLegendPosition(300, 250);
+        onChange={(v) => {
+          if (v && !layerLinkedToHistogramOrBarChart(
+            props,
+            layersDescriptionStore.layoutFeaturesAndLegends,
+          )) {
+            const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStoreBase(
-            produce(
-              (draft: LayersDescriptionStoreType) => {
-                draft.layoutFeaturesAndLegends.push({
-                  id: generateIdLegend(),
-                  layerId: props.id,
-                  type: LegendType.choroplethHistogram,
-                  position: [legendPosition[0], legendPosition[1]],
-                  width: 300,
-                  height: 250,
-                  visible: true,
-                  roundDecimals: 2,
-                  title: {
-                    text: (props.rendererParameters as ClassificationParameters).variable,
-                    ...applicationSettingsStore.defaultLegendSettings.title,
-                  } as LegendTextElement,
-                  subtitle: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+            setLayersDescriptionStoreBase(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeaturesAndLegends.push({
+                    id: generateIdLegend(),
+                    layerId: props.id,
+                    type: LegendType.choroplethHistogram,
+                    position: [legendPosition[0], legendPosition[1]],
+                    width: 300,
+                    height: 250,
+                    visible: true,
+                    roundDecimals: 2,
+                    title: {
+                      text: (props.rendererParameters as ClassificationParameters).variable,
+                      ...applicationSettingsStore.defaultLegendSettings.title,
+                    } as LegendTextElement,
+                    subtitle: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                    },
+                    axis: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.labels,
+                    },
+                    note: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.note,
+                    },
+                    backgroundRect: {
+                      visible: false,
+                    },
+                  } as ChoroplethHistogramLegend);
+                },
+              ),
+            );
+          } else {
+            const elem = layersDescriptionStore.layoutFeaturesAndLegends
+              .find((l) => (l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart') && l.layerId === props.id);
+
+            if (elem) {
+              setLayersDescriptionStoreBase(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.forEach((l) => {
+                      if (
+                        (l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart')
+                        && l.layerId === props.id
+                      ) {
+                        // eslint-disable-next-line no-param-reassign
+                        l.visible = !l.visible;
+                      }
+                    });
                   },
-                  axis: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.labels,
-                  },
-                  note: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.note,
-                  },
-                  backgroundRect: {
-                    visible: false,
-                  },
-                } as ChoroplethHistogramLegend);
-              },
-            ),
-          );
+                ),
+              );
+            }
+          }
         }}
       />
     </Show>
@@ -2162,49 +2261,72 @@ function makeSettingsDefaultPolygon(
       <InputFieldCheckbox
         label={LL().LayerSettings.AddHistogramChoropleth()}
         checked={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
+          linkedHistogramOrBarChartVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
-        disabled={
-          layerLinkedToHistogramOrBarChart(props, layersDescriptionStore.layoutFeaturesAndLegends)
-        }
-        onChange={() => {
-          const legendPosition = getPossibleLegendPosition(300, 250);
+        onChange={(v) => {
+          if (v && !layerLinkedToHistogramOrBarChart(
+            props,
+            layersDescriptionStore.layoutFeaturesAndLegends,
+          )) {
+            const legendPosition = getPossibleLegendPosition(300, 250);
 
-          setLayersDescriptionStoreBase(
-            produce(
-              (draft: LayersDescriptionStoreType) => {
-                draft.layoutFeaturesAndLegends.push({
-                  id: generateIdLegend(),
-                  layerId: props.id,
-                  type: LegendType.choroplethHistogram,
-                  position: [legendPosition[0], legendPosition[1]],
-                  width: 300,
-                  height: 250,
-                  visible: true,
-                  roundDecimals: 2,
-                  title: {
-                    text: (props.rendererParameters as ClassificationParameters).variable,
-                    ...applicationSettingsStore.defaultLegendSettings.title,
-                  } as LegendTextElement,
-                  subtitle: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.subtitle,
+            setLayersDescriptionStoreBase(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeaturesAndLegends.push({
+                    id: generateIdLegend(),
+                    layerId: props.id,
+                    type: LegendType.choroplethHistogram,
+                    position: [legendPosition[0], legendPosition[1]],
+                    width: 300,
+                    height: 250,
+                    visible: true,
+                    roundDecimals: 2,
+                    title: {
+                      text: (props.rendererParameters as ClassificationParameters).variable,
+                      ...applicationSettingsStore.defaultLegendSettings.title,
+                    } as LegendTextElement,
+                    subtitle: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                    },
+                    axis: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.labels,
+                    },
+                    note: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.note,
+                    },
+                    backgroundRect: {
+                      visible: false,
+                    },
+                  } as ChoroplethHistogramLegend);
+                },
+              ),
+            );
+          } else {
+            const elem = layersDescriptionStore.layoutFeaturesAndLegends
+              .find((l) => (l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart') && l.layerId === props.id);
+
+            if (elem) {
+              setLayersDescriptionStoreBase(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.forEach((l) => {
+                      if (
+                        (l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart')
+                        && l.layerId === props.id
+                      ) {
+                        // eslint-disable-next-line no-param-reassign
+                        l.visible = !l.visible;
+                      }
+                    });
                   },
-                  axis: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.labels,
-                  },
-                  note: {
-                    text: undefined,
-                    ...applicationSettingsStore.defaultLegendSettings.note,
-                  },
-                  backgroundRect: {
-                    visible: false,
-                  },
-                } as ChoroplethHistogramLegend);
-              },
-            ),
-          );
+                ),
+              );
+            }
+          }
         }}
       />
     </Show>
