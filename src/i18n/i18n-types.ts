@@ -4861,6 +4861,10 @@ type RootTranslation = {
 		 * D​e​l​e​t​e​ ​l​a​b​e​l
 		 */
 		DeleteLabel: string
+		/**
+		 * A​d​d​ ​t​h​e​ ​s​c​a​t​t​e​r​ ​p​l​o​t​ ​o​n​ ​t​h​e​ ​m​a​p​.​.​.
+		 */
+		AddLinearRegressionScatterPlot: string
 	}
 	JoinPanel: {
 		/**
@@ -10769,6 +10773,10 @@ export type TranslationFunctions = {
 		 * Delete label
 		 */
 		DeleteLabel: () => LocalizedString
+		/**
+		 * Add the scatter plot on the map...
+		 */
+		AddLinearRegressionScatterPlot: () => LocalizedString
 	}
 	JoinPanel: {
 		/**

@@ -1216,6 +1216,7 @@ const en = {
     InformationLabelSettings: 'Please note that modifying the label settings will only affect all the labels of the layer (possibly overwriting the settings defined manually for some labels). If you want to modify the settings of a specific label, you can do so by clicking on the label and then on the "Edit" button in the context menu.',
     EditLabel: 'Edit label',
     DeleteLabel: 'Delete label',
+    AddLinearRegressionScatterPlot: 'Add the scatter plot on the map...',
   },
   JoinPanel: {
     Title: 'Join to a geospatial layer',

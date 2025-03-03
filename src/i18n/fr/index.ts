@@ -1216,6 +1216,7 @@ const fr = {
     InformationLabelSettings: 'Veuillez noter que la modification de ces paramètres s\'appliquera à l\'ensemble des étiquettes de la couche (pouvant ainsi écraser les éventuels styles définis individuellement). Si vous souhaitez modifier les paramètres d\'une seule étiquette, cela est possible en faisant un clic droit sur l\'étiquette en question.',
     EditLabel: 'Éditer l\'étiquette',
     DeleteLabel: 'Supprimer l`étiquette',
+    AddLinearRegressionScatterPlot: 'Ajouter un graphique avec le nuage de points sur la carte...',
   },
   JoinPanel: {
     Title: 'Joindre à une couche géospatiale',

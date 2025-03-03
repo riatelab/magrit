@@ -19,6 +19,8 @@ import d3 from '../../helpers/d3-custom';
 import { makeDorlingDemersSimulation } from '../../helpers/geo';
 import { generateIdLegend } from '../../helpers/legends';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
+import { toPrecisionAfterDecimalPoint } from '../../helpers/math';
+import { LinearRegressionResult } from '../../helpers/statistics';
 
 // Sub-components
 import DetailsSummary from '../DetailsSummary.tsx';
@@ -89,6 +91,8 @@ import {
   type CategoricalPictogramParameters,
   ClassificationMethod,
   type WaffleLegend,
+  type LinearRegressionScatterPlot,
+  type ProportionalSymbolsPositiveNegativeParameters,
 } from '../../global.d';
 
 // Styles
@@ -109,6 +113,24 @@ const linkedHistogramOrBarChartVisible = (
 ): boolean => {
   const elem = layoutFeaturesAndLegends
     .find((l) => (l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart') && (l as Legend).layerId === layer.id);
+  return !!(elem && (elem as Legend).visible);
+};
+
+const layerLinkedToRegressionPlot = (
+  layer: LayerDescription,
+  layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
+): boolean => {
+  const elem = layoutFeaturesAndLegends
+    .find((l) => l.type === 'linearRegressionScatterPlot' && (l as Legend).layerId === layer.id);
+  return !!elem;
+};
+
+const linkedRegressionPlotVisible = (
+  layer: LayerDescription,
+  layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
+): boolean => {
+  const elem = layoutFeaturesAndLegends
+    .find((l) => l.type === 'linearRegressionScatterPlot' && (l as Legend).layerId === layer.id);
   return !!(elem && (elem as Legend).visible);
 };
 
@@ -727,6 +749,8 @@ function makeSettingsDefaultPoint(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
+  const isLinearRegressionResult = (
+    props.layerCreationOptions && props.layerCreationOptions.adjustedRSquared);
   return <>
     {/*
       The way the entities are colored depends on the renderer...
@@ -966,6 +990,27 @@ function makeSettingsDefaultPoint(
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {}}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
+      />
+    </Show>
+    <Show when={
+      props.representationType === 'proportionalSymbols'
+      && (props.rendererParameters as ProportionalSymbolsParametersBase).colorMode === 'positiveNegative'
+    }>
+      <InputFieldColor
+        label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ColorPositiveValues()}
+        value={(props.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[0]}
+        onChange={(v) => {
+          updateProp(props.id, ['rendererParameters', 'color', 0], v);
+          redrawLayer(props.id);
+        }}
+      />
+      <InputFieldColor
+        label={LL().FunctionalitiesSection.ProportionalSymbolsOptions.ColorNegativeValues()}
+        value={(props.rendererParameters as ProportionalSymbolsPositiveNegativeParameters).color[1]}
+        onChange={(v) => {
+          updateProp(props.id, ['rendererParameters', 'color', 1], v);
+          redrawLayer(props.id);
+        }}
       />
     </Show>
     <InputFieldWidthColorOpacity
@@ -1219,6 +1264,80 @@ function makeSettingsDefaultPoint(
           }
         }}
       />
+      <Show when={isLinearRegressionResult}>
+        <InputFieldCheckbox
+          label={LL().LayerSettings.AddLinearRegressionScatterPlot()}
+          checked={
+            linkedRegressionPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
+          }
+          onChange={(v) => {
+            if (v && !layerLinkedToRegressionPlot(
+              props,
+              layersDescriptionStore.layoutFeaturesAndLegends,
+            )) {
+              const legendPosition = getPossibleLegendPosition(300, 300);
+              const linearRegressionResult = props.layerCreationOptions as LinearRegressionResult;
+              setLayersDescriptionStoreBase(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.push({
+                      id: generateIdLegend(),
+                      layerId: props.id,
+                      type: LegendType.linearRegressionScatterPlot,
+                      position: legendPosition,
+                      width: 300,
+                      height: 300,
+                      regressionLineColor: '#FF0000',
+                      confidenceInterval: false,
+                      confidenceIntervalColor: '#FF0000',
+                      dotColor: '#008000',
+                      visible: true,
+                      roundDecimals: 1,
+                      title: {
+                        text: `${linearRegressionResult.options.y} ~ ${linearRegressionResult.options.x}`,
+                        ...applicationSettingsStore.defaultLegendSettings.title,
+                      } as LegendTextElement,
+                      subtitle: {
+                        text: `R² = ${(+linearRegressionResult.rSquared.toFixed(4)).toLocaleString()}`,
+                        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                      },
+                      axis: {
+                        text: undefined,
+                        ...applicationSettingsStore.defaultLegendSettings.labels,
+                      },
+                      note: {
+                        text: `${linearRegressionResult.options.y} = ${toPrecisionAfterDecimalPoint(linearRegressionResult.coefficients['X.Intercept'][0], 4)} + ${linearRegressionResult.options.x} * ${toPrecisionAfterDecimalPoint(linearRegressionResult.coefficients[linearRegressionResult.options.y][0], 4)}`,
+                        ...applicationSettingsStore.defaultLegendSettings.note,
+                      },
+                      backgroundRect: {
+                        visible: false,
+                      },
+                    } as LinearRegressionScatterPlot);
+                  },
+                ),
+              );
+            } else {
+              const elem = layersDescriptionStore.layoutFeaturesAndLegends
+                .find((l) => l.type === 'linearRegressionScatterPlot' && l.layerId === props.id);
+
+              if (elem) {
+                setLayersDescriptionStoreBase(
+                  produce(
+                    (draft: LayersDescriptionStoreType) => {
+                      draft.layoutFeaturesAndLegends.forEach((l) => {
+                        if (l.type === 'linearRegressionScatterPlot' && l.layerId === props.id) {
+                          // eslint-disable-next-line no-param-reassign
+                          l.visible = !l.visible;
+                        }
+                      });
+                    },
+                  ),
+                );
+              }
+            }
+          }}
+        />
+      </Show>
     </Show>
     <Show when={
       props.representationType === 'proportionalSymbols'
@@ -1285,6 +1404,80 @@ function makeSettingsDefaultPoint(
                         (l.type === 'choroplethHistogram' || l.type === 'categoricalChoroplethBarchart')
                         && l.layerId === props.id
                       ) {
+                        // eslint-disable-next-line no-param-reassign
+                        l.visible = !l.visible;
+                      }
+                    });
+                  },
+                ),
+              );
+            }
+          }
+        }}
+      />
+    </Show>
+    <Show when={isLinearRegressionResult}>
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddLinearRegressionScatterPlot()}
+        checked={
+          linkedRegressionPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          if (v && !layerLinkedToRegressionPlot(
+            props,
+            layersDescriptionStore.layoutFeaturesAndLegends,
+          )) {
+            const legendPosition = getPossibleLegendPosition(300, 300);
+            const linearRegressionResult = props.layerCreationOptions as LinearRegressionResult;
+            setLayersDescriptionStoreBase(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeaturesAndLegends.push({
+                    id: generateIdLegend(),
+                    layerId: props.id,
+                    type: LegendType.linearRegressionScatterPlot,
+                    position: legendPosition,
+                    width: 300,
+                    height: 300,
+                    regressionLineColor: '#FF0000',
+                    confidenceInterval: false,
+                    confidenceIntervalColor: '#FF0000',
+                    dotColor: '#008000',
+                    visible: true,
+                    roundDecimals: 1,
+                    title: {
+                      text: `${linearRegressionResult.options.y} ~ ${linearRegressionResult.options.x}`,
+                      ...applicationSettingsStore.defaultLegendSettings.title,
+                    } as LegendTextElement,
+                    subtitle: {
+                      text: `R² = ${(+linearRegressionResult.rSquared.toFixed(4)).toLocaleString()}`,
+                      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                    },
+                    axis: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.labels,
+                    },
+                    note: {
+                      text: `${linearRegressionResult.options.y} = ${toPrecisionAfterDecimalPoint(linearRegressionResult.coefficients['X.Intercept'][0], 4)} + ${linearRegressionResult.options.x} * ${toPrecisionAfterDecimalPoint(linearRegressionResult.coefficients[linearRegressionResult.options.y][0], 4)}`,
+                      ...applicationSettingsStore.defaultLegendSettings.note,
+                    },
+                    backgroundRect: {
+                      visible: false,
+                    },
+                  } as LinearRegressionScatterPlot);
+                },
+              ),
+            );
+          } else {
+            const elem = layersDescriptionStore.layoutFeaturesAndLegends
+              .find((l) => l.type === 'linearRegressionScatterPlot' && l.layerId === props.id);
+
+            if (elem) {
+              setLayersDescriptionStoreBase(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.forEach((l) => {
+                      if (l.type === 'linearRegressionScatterPlot' && l.layerId === props.id) {
                         // eslint-disable-next-line no-param-reassign
                         l.visible = !l.visible;
                       }
@@ -1415,6 +1608,8 @@ function makeSettingsDefaultLine(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
+  const isLinearRegressionResult = (
+    props.layerCreationOptions && props.layerCreationOptions.adjustedRSquared);
   return <>
     {/* Options for default renderer / graticule renderer */}
     <Show when={props.representationType === 'default' || props.representationType === 'graticule'}>
@@ -1966,6 +2161,80 @@ function makeSettingsDefaultLine(
           }
         }}
       />
+      <Show when={isLinearRegressionResult}>
+        <InputFieldCheckbox
+          label={LL().LayerSettings.AddLinearRegressionScatterPlot()}
+          checked={
+            linkedRegressionPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
+          }
+          onChange={(v) => {
+            if (v && !layerLinkedToRegressionPlot(
+              props,
+              layersDescriptionStore.layoutFeaturesAndLegends,
+            )) {
+              const legendPosition = getPossibleLegendPosition(300, 300);
+              const linearRegressionResult = props.layerCreationOptions as LinearRegressionResult;
+              setLayersDescriptionStoreBase(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.push({
+                      id: generateIdLegend(),
+                      layerId: props.id,
+                      type: LegendType.linearRegressionScatterPlot,
+                      position: legendPosition,
+                      width: 300,
+                      height: 300,
+                      regressionLineColor: '#FF0000',
+                      confidenceInterval: false,
+                      confidenceIntervalColor: '#FF0000',
+                      dotColor: '#008000',
+                      visible: true,
+                      roundDecimals: 1,
+                      title: {
+                        text: `${linearRegressionResult.options.y} ~ ${linearRegressionResult.options.x}`,
+                        ...applicationSettingsStore.defaultLegendSettings.title,
+                      } as LegendTextElement,
+                      subtitle: {
+                        text: `R² = ${(+linearRegressionResult.rSquared.toFixed(4)).toLocaleString()}`,
+                        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                      },
+                      axis: {
+                        text: undefined,
+                        ...applicationSettingsStore.defaultLegendSettings.labels,
+                      },
+                      note: {
+                        text: `${linearRegressionResult.options.y} = ${toPrecisionAfterDecimalPoint(linearRegressionResult.coefficients['X.Intercept'][0], 4)} + ${linearRegressionResult.options.x} * ${toPrecisionAfterDecimalPoint(linearRegressionResult.coefficients[linearRegressionResult.options.y][0], 4)}`,
+                        ...applicationSettingsStore.defaultLegendSettings.note,
+                      },
+                      backgroundRect: {
+                        visible: false,
+                      },
+                    } as LinearRegressionScatterPlot);
+                  },
+                ),
+              );
+            } else {
+              const elem = layersDescriptionStore.layoutFeaturesAndLegends
+                .find((l) => l.type === 'linearRegressionScatterPlot' && l.layerId === props.id);
+
+              if (elem) {
+                setLayersDescriptionStoreBase(
+                  produce(
+                    (draft: LayersDescriptionStoreType) => {
+                      draft.layoutFeaturesAndLegends.forEach((l) => {
+                        if (l.type === 'linearRegressionScatterPlot' && l.layerId === props.id) {
+                          // eslint-disable-next-line no-param-reassign
+                          l.visible = !l.visible;
+                        }
+                      });
+                    },
+                  ),
+                );
+              }
+            }
+          }}
+        />
+      </Show>
     </Show>
     <Show when={
       props.representationType === 'proportionalSymbols'
@@ -2112,6 +2381,9 @@ function makeSettingsDefaultPolygon(
       name: `${d.name} (${d.provider})`,
       value: d.name,
     }));
+
+  const isLinearRegressionResult = (
+    props.layerCreationOptions && props.layerCreationOptions.adjustedRSquared);
 
   return <>
     {/*
@@ -2329,6 +2601,80 @@ function makeSettingsDefaultPolygon(
           }
         }}
       />
+      <Show when={isLinearRegressionResult}>
+        <InputFieldCheckbox
+          label={LL().LayerSettings.AddLinearRegressionScatterPlot()}
+          checked={
+            linkedRegressionPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
+          }
+          onChange={(v) => {
+            if (v && !layerLinkedToRegressionPlot(
+              props,
+              layersDescriptionStore.layoutFeaturesAndLegends,
+            )) {
+              const legendPosition = getPossibleLegendPosition(300, 300);
+              const linearRegressionResult = props.layerCreationOptions as LinearRegressionResult;
+              setLayersDescriptionStore(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.push({
+                      id: generateIdLegend(),
+                      layerId: props.id,
+                      type: LegendType.linearRegressionScatterPlot,
+                      position: legendPosition,
+                      width: 300,
+                      height: 300,
+                      regressionLineColor: '#FF0000',
+                      confidenceInterval: false,
+                      confidenceIntervalColor: '#FF0000',
+                      dotColor: '#008000',
+                      visible: true,
+                      roundDecimals: 1,
+                      title: {
+                        text: `${linearRegressionResult.options.y} ~ ${linearRegressionResult.options.x}`,
+                        ...applicationSettingsStore.defaultLegendSettings.title,
+                      } as LegendTextElement,
+                      subtitle: {
+                        text: `R² = ${(+linearRegressionResult.rSquared.toFixed(4)).toLocaleString()}`,
+                        ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                      },
+                      axis: {
+                        text: undefined,
+                        ...applicationSettingsStore.defaultLegendSettings.labels,
+                      },
+                      note: {
+                        text: `${linearRegressionResult.options.y} = ${toPrecisionAfterDecimalPoint(linearRegressionResult.coefficients['X.Intercept'][0], 4)} + ${linearRegressionResult.options.x} * ${toPrecisionAfterDecimalPoint(linearRegressionResult.coefficients[linearRegressionResult.options.y][0], 4)}`,
+                        ...applicationSettingsStore.defaultLegendSettings.note,
+                      },
+                      backgroundRect: {
+                        visible: false,
+                      },
+                    } as LinearRegressionScatterPlot);
+                  },
+                ),
+              );
+            } else {
+              const elem = layersDescriptionStore.layoutFeaturesAndLegends
+                .find((l) => l.type === 'linearRegressionScatterPlot' && l.layerId === props.id);
+
+              if (elem) {
+                setLayersDescriptionStoreBase(
+                  produce(
+                    (draft: LayersDescriptionStoreType) => {
+                      draft.layoutFeaturesAndLegends.forEach((l) => {
+                        if (l.type === 'linearRegressionScatterPlot' && l.layerId === props.id) {
+                          // eslint-disable-next-line no-param-reassign
+                          l.visible = !l.visible;
+                        }
+                      });
+                    },
+                  ),
+                );
+              }
+            }
+          }}
+        />
+      </Show>
     </Show>
     <Show when={props.representationType === 'categoricalChoropleth'}>
       <InputFieldCheckbox
