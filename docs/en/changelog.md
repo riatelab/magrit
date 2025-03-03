@@ -12,6 +12,14 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.2.5 (2025-03-03)
+
+- Modify the option to control whether the class summary chart is displayed in the layer settings modal (fixes <a href="https://github.com/riatelab/magrit/issues/149">149</a>).
+
+- Added missing options in the layer settings modal:
+  - to change the color of proportional symbols in the “positive values / negative values” coloring mode,
+  - to control the display of the scatterplot of linear regression results (as for the chart of class summaries, following fix of <a href="https://github.com/riatelab/magrit/issues/149">149</a>).
+
 ### 2.2.4 (2025-02-24)
 
 - Update *world_209* dataset to add `NAMEde` column for German country names and

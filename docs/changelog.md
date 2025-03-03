@@ -12,6 +12,15 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.2.5 (2025-03-03)
+
+- Modification de l'option permettant de contrôler l'affichage ou non du graphique de résumé par classes
+  dans la fenêtre des paramètres de couche (corrige <a href="https://github.com/riatelab/magrit/issues/149">149</a>).
+
+- Ajout d'options manquantes dans la fenêtre des paramètres de couche :
+  - pour permettre de modifier la couleur des symboles proportionnels dans le mode de coloration "valeurs positives / valeurs négatives",
+  - pour permettre de contrôler l'affichage du nuage de points des résultats de la régression linéaire (comme pour le graphique du résumé par classes, dans la continuité de <a href="https://github.com/riatelab/magrit/issues/149">149</a>).
+
 #### 2.2.4 (2025-02-24)
 
 - Mise à jour du jeu de donnée *world_209* afin d'ajouter un colonne `NAMEde` pour le nom en allemand des pays
