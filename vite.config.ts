@@ -9,6 +9,7 @@ import svgLoader from 'vite-svg-loader';
 // import devtools from 'solid-devtools/vite';
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import electron from 'vite-plugin-electron/simple';
+import { compression } from 'vite-plugin-compression2';
 
 const isDevElectron = process.env.MODE === 'electrondev';
 const isBuildElectron = process.env.MODE === 'electronbuild';
@@ -66,6 +67,11 @@ export default defineConfig({
       renderer: {},
     }) : {},
     jsToBottom(),
+    isElectron ? {} : compression({
+      include: /\.(html|xml|css|json|js|mjs|svg|yaml|yml|toml|wasm|data)$/,
+      compressionOptions: { level: 9 },
+      threshold: 1000,
+    }),
   ],
   server: {
     port: 3000,
