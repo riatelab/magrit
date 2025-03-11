@@ -8,14 +8,14 @@ import {
 
 // Imports from other packages
 import {
-  FaSolidTable,
   FaSolidEye,
   FaSolidEyeSlash,
   FaSolidGears,
-  FaSolidMagnifyingGlass,
-  FaSolidTrash,
-  FaSolidTableCells,
   FaSolidLink,
+  FaSolidMagnifyingGlass,
+  FaSolidTable,
+  FaSolidTableCells,
+  FaSolidTrash,
 } from 'solid-icons/fa';
 import { FiType } from 'solid-icons/fi';
 import { OcGoal2 } from 'solid-icons/oc';
@@ -25,7 +25,7 @@ import { LocalizedString } from 'typesafe-i18n';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
-import { unproxify } from '../../helpers/common';
+import { capitalizeFirstLetter, unproxify } from '../../helpers/common';
 
 // Stores
 import {
@@ -47,12 +47,19 @@ import JoinPanel from '../Modals/JoinModal.tsx';
 import FieldTypingModal from '../Modals/FieldTypingModal.tsx';
 
 // Types / Interfaces / Enums
-import type {
-  LayerDescription,
-  LayoutFeature,
-  Legend,
-  TableDescription,
-} from '../../global';
+import {
+  type CategoricalChoroplethParameters,
+  type ClassificationParameters,
+  type DiscontinuityParameters,
+  type LabelsParameters,
+  type LayerDescription,
+  type LayoutFeature,
+  type Legend,
+  type ProportionalSymbolsParameters,
+  type GriddedLayerParameters,
+  RepresentationType,
+  type TableDescription,
+} from '../../global.d';
 
 // Styles
 import 'font-gis/css/font-gis.css';
@@ -306,6 +313,116 @@ const onClickLegend = (id: string, LL: Accessor<TranslationFunctions>) => {
   }
 };
 
+const formatTitleInfoLayer = (
+  props: LayerDescription,
+  LL: Accessor<TranslationFunctions>,
+): string => {
+  const l1 = LL().LayerManager[props.type]({
+    nFt: props.data.features?.length || 1,
+    nCol: props.fields.length,
+  });
+  if (props.representationType === RepresentationType.default) {
+    return `${l1}`;
+  }
+  if (props.representationType === RepresentationType.choropleth) {
+    const rp = props.rendererParameters as ClassificationParameters;
+    const l2 = LL().LayerManager.Info.Choropleth({
+      variable: rp.variable,
+      nClasses: rp.classes,
+      method: LL().ClassificationPanel.classificationMethods[rp.method](),
+      palette: rp.palette.name,
+    });
+    const lco = props.layerCreationOptions;
+    return lco ? `${l1}${l2}` : `${l1}${l2}`;
+  }
+  if (props.representationType === RepresentationType.proportionalSymbols) {
+    const rp = props.rendererParameters as ProportionalSymbolsParameters;
+    const l2 = LL().LayerManager.Info.ProportionalSymbols({
+      variable: rp.variable,
+      referenceSize: rp.referenceRadius,
+      referenceValue: rp.referenceValue.toLocaleString(),
+      symbolType: LL().FunctionalitiesSection
+        .ProportionalSymbolsOptions.SymbolTypes[rp.symbolType](),
+      colorMode: LL().FunctionalitiesSection
+        .ProportionalSymbolsOptions.ColorModes[rp.colorMode](),
+    });
+    const lco = props.layerCreationOptions;
+    return lco ? `${l1}${l2}` : `${l1}${l2}`;
+  }
+  if (props.representationType === RepresentationType.discontinuity) {
+    const rp = props.rendererParameters as DiscontinuityParameters;
+    const l2 = LL().LayerManager.Info.Discontinuity({
+      variable: rp.variable,
+      type: LL().FunctionalitiesSection.DiscontinuityOptions[capitalizeFirstLetter(rp.type)](),
+      method: rp.classificationMethod,
+      nClasses: rp.classes,
+    });
+    return `${l1}${l2}`;
+  }
+  if (props.representationType === RepresentationType.labels) {
+    const rp = props.rendererParameters as LabelsParameters;
+    const l2 = LL().LayerManager.Info.Labels({
+      variable: rp.variable,
+    });
+    return `${l1}${l2}`;
+  }
+  if (props.representationType === RepresentationType.mushrooms) {
+    const rp = props.rendererParameters as MushroomsParameters;
+    const l2 = LL().LayerManager.Info.Mushrooms({
+      topVar: rp.top.variable,
+      topRefSize: rp.top.referenceSize,
+      topRefValue: rp.top.referenceValue.toLocaleString(),
+      bottomVar: rp.bottom.variable,
+      bottomRefSize: rp.bottom.referenceSize,
+      bottomRefValue: rp.bottom.referenceValue.toLocaleString(),
+    });
+    return `${l1}${l2}`;
+  }
+  if (props.representationType === RepresentationType.categoricalChoropleth) {
+    const rp = props.rendererParameters as CategoricalChoroplethParameters;
+    const l2 = LL().LayerManager.Info.CategoricalChoropleth({
+      variable: rp.variable,
+      nbCat: rp.mapping.length,
+    });
+    return `${l1}${l2}`;
+  }
+  if (props.representationType === RepresentationType.waffle) {
+    const rp = props.rendererParameters as WaffleParameters;
+    const l2 = LL().LayerManager.Info.Waffle({
+      variables: rp.variables.map((d) => d.name).join(', '),
+      symbolType: LL().FunctionalitiesSection
+        .ProportionalSymbolsOptions.SymbolTypes[rp.symbolType](),
+      symbolValue: rp.symbolValue.toLocaleString(),
+    });
+    return `${l1}${l2}`;
+  }
+  if (props.representationType === RepresentationType.cartogram) {
+    const lco = props.layerCreationOptions;
+    const l2 = LL().LayerManager.Info.Cartogram({
+      variable: lco.variable,
+      method: LL().FunctionalitiesSection.CartogramOptions[lco.method](),
+    });
+    return `${l1}${l2}`;
+  }
+  if (props.representationType === RepresentationType.grid) {
+    console.log('foo foo fooo');
+    const rp = props.rendererParameters as ClassificationParameters;
+    const l2 = LL().LayerManager.Info.Choropleth({
+      variable: rp.variable,
+      nClasses: rp.classes,
+      method: LL().ClassificationPanel.classificationMethods[rp.method](),
+      palette: rp.palette.name,
+    });
+    const lco = props.layerCreationOptions as GridParameters;
+    const l3 = LL().LayerManager.Info.Grid({
+      variable: lco.variable,
+      cellType: LL().FunctionalitiesSection.GridOptions[`Cell${capitalizeFirstLetter(lco.cellType)}`](),
+    });
+    return `${l1}${l2}${l3}`;
+  }
+  return `${l1}`;
+};
+
 export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
   const { LL } = useI18nContext();
 
@@ -336,12 +453,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
       <div class="layer-manager-item__icons">
         <div class="layer-manager-item__icons-left">
           <div
-            title={
-              LL().LayerManager[props.type]({
-                nFt: props.data.features?.length || 1,
-                nCol: props.fields.length,
-              })
-            }
+            title={formatTitleInfoLayer(props, LL)}
             style={{ cursor: 'help', 'font-size': '1.1em' }}
           >
             <i

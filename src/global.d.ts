@@ -173,10 +173,23 @@ type LayerDescriptionChoropleth = LayerDescription & {
   rendererParameters: ClassificationParameters,
 };
 
+type LayerDescriptionChoroplethLinearReg = LayerDescription & {
+  representationType: RepresentationType.choropleth,
+  rendererParameters: ClassificationParameters,
+  layerCreationOptions: LinearRegressionResult,
+};
+
 type LayerDescriptionProportionalSymbols = LayerDescription & {
   type: 'point',
   representationType: RepresentationType.proportionalSymbols,
   rendererParameters: ProportionalSymbolsParameters,
+};
+
+type LayerDescriptionProportionalSymbolsLinearReg = LayerDescription & {
+  type: 'point',
+  representationType: RepresentationType.proportionalSymbols,
+  rendererParameters: ProportionalSymbolsParameters,
+  layerCreationOptions: LinearRegressionResult,
 };
 
 type LayerDescriptionLabels = LayerDescription & {

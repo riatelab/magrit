@@ -808,6 +808,20 @@ const fr = {
     Typing: 'Typage des champs',
     Legend: 'Afficher / masquer la légende',
     LegendDisplacement: 'La position de la légende a été modifiée afin de la repositionner dans la zone d\'affichage de la carte.',
+    Info: {
+      Default: '\n\nReprésentation par défaut',
+      Choropleth: '\n\nChoroplèthe\n\nVariable : {variable}\nDiscrétisation : {nClasses} classes ({method})\nPalette : {palette}',
+      ProportionalSymbols: '\n\nSymboles proportionnels\n\nVariable : {variable}\nTaille de référence : {referenceSize}px (sur la valeur {referenceValue})\nType de symbole : {symbolType}\nColoration des symboles : {colorMode}\n',
+      Discontinuity: '\n\nDiscontinuités\n\nVariable : {variable}\nType de discontinuité : {type}\nDiscrétisation: {nClasses} classes ({method})',
+      Labels: '\n\nÉtiquettes\n\nVariable : {variable}\n',
+      CategoricalChoropleth: '\n\nChoropleth catégorielle\n\nVariable : {variable}\nNombre de catégories: {nbCat}',
+      Waffle: '\n\nCarte en gaufres\n\nVariables : {variables}\nType de symbole : {symbolType}\nValeur représentée par chaque symbole : {symbolValue}',
+      Cartogram: '\n\nCartogramme (anamorphose)\n\nVariable : {variable}\nMethod : {method}',
+      Grid: '\n\nCarroyage\n\nVariable : {variable}\nType de cellule : {cellType}',
+      Smoothed: '\n\nLissage\n\nVariable : {variable}\nType de lissage : {smoothingType}',
+      Mushrooms: '\n\nChampignons (Demi-cercles affrontés)\n\nVariable (moitié haute) : {topVar} ({topRefSize}px sur la valeur {topRefValue})\nVariable (moitié basse) : {bottomVar} ({bottomRefSize}px sur la valeur {bottomRefValue})\n',
+      LinearRegression: '\n\nOptions de création de la couche : Régression linéaire\n\nVariable dépendante : {dependentVariable}\nVariable indépendante : {independentVariable}\n',
+    },
   },
   FunctionalitiesSection: {
     FunctionalityTypes: {

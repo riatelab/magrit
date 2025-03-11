@@ -808,6 +808,20 @@ const en = {
     Typing: 'Fields typing',
     Legend: 'Display / hide legend',
     LegendDisplacement: 'The position of the legend has been changed to reposition it in the map display area.',
+    Info: {
+      Default: '\n\nDefault portrayal',
+      Choropleth: '\n\nChoropleth\n\nVariable: {variable}\nClassification: {nClasses} classes ({method})\nPalette: {palette}',
+      ProportionalSymbols: '\n\nProportional symbols\n\nVariable: {variable}\nReference size: {referenceSize}px (on value {referenceValue})\nSymbol type : {symbolType}\nColoring: {colorMode}\n',
+      Discontinuity: '\n\nDiscontinuity\n\nVariable: {variable}\nType: {type}\nClassification: {nClasses} classes ({method})',
+      Labels: '\n\nLabels\n\nVariable: {variable}\n',
+      CategoricalChoropleth: '\n\nCategorical choropleth\n\nVariable: {variable}\nNumber of categories: {nbCat}',
+      Waffle: '\n\nWaffle map\n\nVariables: {variables}\nSymbol type: {symbolType}\nValue depicted by each symbol: {symbolValue}',
+      Cartogram: '\n\nCartogram\n\nVariable: {variable}\nMethod: {method}',
+      Grid: '\n\nGrid\n\nVariable: {variable}\nCell type: {cellType}',
+      Smoothed: '\n\nSmoothing\nVariable: {}\nSmoothing type: {smoothingType}',
+      Mushrooms: '\n\nMushrooms (Facing semi-circles)\nVariable (top): {topVar}({topRefSize}px on value {topRefValue})\nVariable (bottom): {bottomVar}({bottomRefSize}px on value {bottomRefValue})',
+      LinearRegression: '\n\nLayer creation options: Linear Regression\n\nVariable X: {dependentVariable}\nVariable Y: {independentVariable}\n',
+    },
   },
   FunctionalitiesSection: {
     FunctionalityTypes: {

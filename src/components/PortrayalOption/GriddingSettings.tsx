@@ -101,6 +101,8 @@ async function onClickValidate(
     breaks: classifier.classify(numberOfClasses),
     palette: getPaletteWrapper('Carrots', numberOfClasses, true),
     entitiesByClass: classifier.countByClass(),
+    method: 'ckmeans',
+    classes: numberOfClasses,
     variable: `density-${targetVariable}`,
   } as ClassificationParameters;
 

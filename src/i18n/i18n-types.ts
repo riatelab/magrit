@@ -3369,6 +3369,150 @@ type RootTranslation = {
 		 * T​h​e​ ​p​o​s​i​t​i​o​n​ ​o​f​ ​t​h​e​ ​l​e​g​e​n​d​ ​h​a​s​ ​b​e​e​n​ ​c​h​a​n​g​e​d​ ​t​o​ ​r​e​p​o​s​i​t​i​o​n​ ​i​t​ ​i​n​ ​t​h​e​ ​m​a​p​ ​d​i​s​p​l​a​y​ ​a​r​e​a​.
 		 */
 		LegendDisplacement: string
+		Info: {
+			/**
+			 * 
+		​
+		​D​e​f​a​u​l​t​ ​p​o​r​t​r​a​y​a​l
+			 */
+			Default: string
+			/**
+			 * 
+		​
+		​C​h​o​r​o​p​l​e​t​h​
+		​
+		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
+		​C​l​a​s​s​i​f​i​c​a​t​i​o​n​:​ ​{​n​C​l​a​s​s​e​s​}​ ​c​l​a​s​s​e​s​ ​(​{​m​e​t​h​o​d​}​)​
+		​P​a​l​e​t​t​e​:​ ​{​p​a​l​e​t​t​e​}
+			 * @param {unknown} method
+			 * @param {unknown} nClasses
+			 * @param {unknown} palette
+			 * @param {unknown} variable
+			 */
+			Choropleth: RequiredParams<'method' | 'nClasses' | 'palette' | 'variable'>
+			/**
+			 * 
+		​
+		​P​r​o​p​o​r​t​i​o​n​a​l​ ​s​y​m​b​o​l​s​
+		​
+		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
+		​R​e​f​e​r​e​n​c​e​ ​s​i​z​e​:​ ​{​r​e​f​e​r​e​n​c​e​S​i​z​e​}​p​x​ ​(​o​n​ ​v​a​l​u​e​ ​{​r​e​f​e​r​e​n​c​e​V​a​l​u​e​}​)​
+		​S​y​m​b​o​l​ ​t​y​p​e​ ​:​ ​{​s​y​m​b​o​l​T​y​p​e​}​
+		​C​o​l​o​r​i​n​g​:​ ​{​c​o​l​o​r​M​o​d​e​}​
+	
+			 * @param {unknown} colorMode
+			 * @param {unknown} referenceSize
+			 * @param {unknown} referenceValue
+			 * @param {unknown} symbolType
+			 * @param {unknown} variable
+			 */
+			ProportionalSymbols: RequiredParams<'colorMode' | 'referenceSize' | 'referenceValue' | 'symbolType' | 'variable'>
+			/**
+			 * 
+		​
+		​D​i​s​c​o​n​t​i​n​u​i​t​y​
+		​
+		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
+		​T​y​p​e​:​ ​{​t​y​p​e​}​
+		​C​l​a​s​s​i​f​i​c​a​t​i​o​n​:​ ​{​n​C​l​a​s​s​e​s​}​ ​c​l​a​s​s​e​s​ ​(​{​m​e​t​h​o​d​}​)
+			 * @param {unknown} method
+			 * @param {unknown} nClasses
+			 * @param {unknown} type
+			 * @param {unknown} variable
+			 */
+			Discontinuity: RequiredParams<'method' | 'nClasses' | 'type' | 'variable'>
+			/**
+			 * 
+		​
+		​L​a​b​e​l​s​
+		​
+		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
+	
+			 * @param {unknown} variable
+			 */
+			Labels: RequiredParams<'variable'>
+			/**
+			 * 
+		​
+		​C​a​t​e​g​o​r​i​c​a​l​ ​c​h​o​r​o​p​l​e​t​h​
+		​
+		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
+		​N​u​m​b​e​r​ ​o​f​ ​c​a​t​e​g​o​r​i​e​s​:​ ​{​n​b​C​a​t​}
+			 * @param {unknown} nbCat
+			 * @param {unknown} variable
+			 */
+			CategoricalChoropleth: RequiredParams<'nbCat' | 'variable'>
+			/**
+			 * 
+		​
+		​W​a​f​f​l​e​ ​m​a​p​
+		​
+		​V​a​r​i​a​b​l​e​s​:​ ​{​v​a​r​i​a​b​l​e​s​}​
+		​S​y​m​b​o​l​ ​t​y​p​e​:​ ​{​s​y​m​b​o​l​T​y​p​e​}​
+		​V​a​l​u​e​ ​d​e​p​i​c​t​e​d​ ​b​y​ ​e​a​c​h​ ​s​y​m​b​o​l​:​ ​{​s​y​m​b​o​l​V​a​l​u​e​}
+			 * @param {unknown} symbolType
+			 * @param {unknown} symbolValue
+			 * @param {unknown} variables
+			 */
+			Waffle: RequiredParams<'symbolType' | 'symbolValue' | 'variables'>
+			/**
+			 * 
+		​
+		​C​a​r​t​o​g​r​a​m​
+		​
+		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
+		​M​e​t​h​o​d​:​ ​{​m​e​t​h​o​d​}
+			 * @param {unknown} method
+			 * @param {unknown} variable
+			 */
+			Cartogram: RequiredParams<'method' | 'variable'>
+			/**
+			 * 
+		​
+		​G​r​i​d​
+		​
+		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
+		​C​e​l​l​ ​t​y​p​e​:​ ​{​c​e​l​l​T​y​p​e​}
+			 * @param {unknown} cellType
+			 * @param {unknown} variable
+			 */
+			Grid: RequiredParams<'cellType' | 'variable'>
+			/**
+			 * 
+		​
+		​S​m​o​o​t​h​i​n​g​
+		​V​a​r​i​a​b​l​e​:​ ​{​s​m​o​o​t​h​i​n​g​T​y​p​e​}​
+		​S​m​o​o​t​h​i​n​g​ ​t​y​p​e​:​ ​{​s​m​o​o​t​h​i​n​g​T​y​p​e​}
+			 * @param {unknown} smoothingType
+			 */
+			Smoothed: RequiredParams<'smoothingType' | 'smoothingType'>
+			/**
+			 * 
+		​
+		​M​u​s​h​r​o​o​m​s​ ​(​F​a​c​i​n​g​ ​s​e​m​i​-​c​i​r​c​l​e​s​)​
+		​V​a​r​i​a​b​l​e​ ​(​t​o​p​)​:​ ​{​t​o​p​V​a​r​}​(​{​t​o​p​R​e​f​S​i​z​e​}​p​x​ ​o​n​ ​v​a​l​u​e​ ​{​t​o​p​R​e​f​V​a​l​u​e​}​)​
+		​V​a​r​i​a​b​l​e​ ​(​b​o​t​t​o​m​)​:​ ​{​b​o​t​t​o​m​V​a​r​}​(​{​b​o​t​t​o​m​R​e​f​S​i​z​e​}​p​x​ ​o​n​ ​v​a​l​u​e​ ​{​b​o​t​t​o​m​R​e​f​V​a​l​u​e​}​)
+			 * @param {unknown} bottomRefSize
+			 * @param {unknown} bottomRefValue
+			 * @param {unknown} bottomVar
+			 * @param {unknown} topRefSize
+			 * @param {unknown} topRefValue
+			 * @param {unknown} topVar
+			 */
+			Mushrooms: RequiredParams<'bottomRefSize' | 'bottomRefValue' | 'bottomVar' | 'topRefSize' | 'topRefValue' | 'topVar'>
+			/**
+			 * 
+		​
+		​L​a​y​e​r​ ​c​r​e​a​t​i​o​n​ ​o​p​t​i​o​n​s​:​ ​L​i​n​e​a​r​ ​R​e​g​r​e​s​s​i​o​n​
+		​
+		​V​a​r​i​a​b​l​e​ ​X​:​ ​{​d​e​p​e​n​d​e​n​t​V​a​r​i​a​b​l​e​}​
+		​V​a​r​i​a​b​l​e​ ​Y​:​ ​{​i​n​d​e​p​e​n​d​e​n​t​V​a​r​i​a​b​l​e​}​
+	
+			 * @param {unknown} dependentVariable
+			 * @param {unknown} independentVariable
+			 */
+			LinearRegression: RequiredParams<'dependentVariable' | 'independentVariable'>
+		}
 	}
 	FunctionalitiesSection: {
 		FunctionalityTypes: {
@@ -9309,6 +9453,118 @@ export type TranslationFunctions = {
 		 * The position of the legend has been changed to reposition it in the map display area.
 		 */
 		LegendDisplacement: () => LocalizedString
+		Info: {
+			/**
+			 * 
+	
+		Default portrayal
+			 */
+			Default: () => LocalizedString
+			/**
+			 * 
+	
+		Choropleth
+	
+		Variable: {variable}
+		Classification: {nClasses} classes ({method})
+		Palette: {palette}
+			 */
+			Choropleth: (arg: { method: unknown, nClasses: unknown, palette: unknown, variable: unknown }) => LocalizedString
+			/**
+			 * 
+	
+		Proportional symbols
+	
+		Variable: {variable}
+		Reference size: {referenceSize}px (on value {referenceValue})
+		Symbol type : {symbolType}
+		Coloring: {colorMode}
+	
+			 */
+			ProportionalSymbols: (arg: { colorMode: unknown, referenceSize: unknown, referenceValue: unknown, symbolType: unknown, variable: unknown }) => LocalizedString
+			/**
+			 * 
+	
+		Discontinuity
+	
+		Variable: {variable}
+		Type: {type}
+		Classification: {nClasses} classes ({method})
+			 */
+			Discontinuity: (arg: { method: unknown, nClasses: unknown, type: unknown, variable: unknown }) => LocalizedString
+			/**
+			 * 
+	
+		Labels
+	
+		Variable: {variable}
+	
+			 */
+			Labels: (arg: { variable: unknown }) => LocalizedString
+			/**
+			 * 
+	
+		Categorical choropleth
+	
+		Variable: {variable}
+		Number of categories: {nbCat}
+			 */
+			CategoricalChoropleth: (arg: { nbCat: unknown, variable: unknown }) => LocalizedString
+			/**
+			 * 
+	
+		Waffle map
+	
+		Variables: {variables}
+		Symbol type: {symbolType}
+		Value depicted by each symbol: {symbolValue}
+			 */
+			Waffle: (arg: { symbolType: unknown, symbolValue: unknown, variables: unknown }) => LocalizedString
+			/**
+			 * 
+	
+		Cartogram
+	
+		Variable: {variable}
+		Method: {method}
+			 */
+			Cartogram: (arg: { method: unknown, variable: unknown }) => LocalizedString
+			/**
+			 * 
+	
+		Grid
+	
+		Variable: {variable}
+		Cell type: {cellType}
+			 */
+			Grid: (arg: { cellType: unknown, variable: unknown }) => LocalizedString
+			/**
+			 * 
+	
+		Smoothing
+		Variable: {smoothingType}
+		Smoothing type: {smoothingType}
+			 */
+			Smoothed: (arg: { smoothingType: unknown }) => LocalizedString
+			/**
+			 * 
+	
+		Mushrooms (Facing semi-circles)
+		Variable (top): {topVar}({topRefSize}px on value {topRefValue})
+		Variable (bottom): {bottomVar}({bottomRefSize}px on value {bottomRefValue})
+			 */
+			Mushrooms: (arg: { bottomRefSize: unknown, bottomRefValue: unknown, bottomVar: unknown, topRefSize: unknown, topRefValue: unknown, topVar: unknown }) => LocalizedString
+			/**
+			 * 
+	
+		Layer creation options: Linear Regression
+	
+		Variable X: {dependentVariable}
+		Variable Y: {independentVariable}
+	
+			 */
+			LinearRegression: (arg: { dependentVariable: unknown, independentVariable: unknown }) => LocalizedString
+		}
 	}
 	FunctionalitiesSection: {
 		FunctionalityTypes: {
