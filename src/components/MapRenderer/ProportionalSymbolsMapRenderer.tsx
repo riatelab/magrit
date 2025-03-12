@@ -16,6 +16,7 @@ import { PropSizer } from '../../helpers/geo';
 import bindData from '../../directives/bind-data';
 
 // Stores
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
 
 // Types / Interfaces / Enums
@@ -63,7 +64,12 @@ export function proportionalSymbolsPunctualRenderer(
       : layerDescription.rendererParameters.colorMode === 'ratioVariable'
         ? createMemo(() => {
           const Cls = getClassifier(ClassificationMethod.manual);
-          const classifier = new Cls(null, null, layerDescription.rendererParameters.color.breaks);
+          const classifier = new Cls(
+            null,
+            null,
+            applicationSettingsStore.intervalClosure,
+            layerDescription.rendererParameters.color.breaks,
+          );
 
           return (properties: Record<string, any>) => {
             const value = properties[layerDescription.rendererParameters.color.variable];
@@ -177,7 +183,12 @@ export function proportionalSymbolsLinearRenderer(
       : layerDescription.rendererParameters.colorMode === 'ratioVariable'
         ? createMemo(() => {
           const Cls = getClassifier(ClassificationMethod.manual);
-          const classifier = new Cls(null, null, layerDescription.rendererParameters.color.breaks);
+          const classifier = new Cls(
+            null,
+            null,
+            applicationSettingsStore.intervalClosure,
+            layerDescription.rendererParameters.color.breaks,
+          );
 
           return (properties: Record<string, any>) => {
             const value = properties[layerDescription.rendererParameters.color.variable];

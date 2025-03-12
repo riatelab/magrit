@@ -94,7 +94,7 @@ async function onClickValidate(
 
   const numberOfClasses = Mmin(d3.thresholdSturges(getUniqueValues(values)), 7);
 
-  const classifier = new CkmeansClassifier(values, null);
+  const classifier = new CkmeansClassifier(values, null, applicationSettingsStore.intervalClosure);
 
   const rendererParameters = {
     noDataColor: applicationSettingsStore.defaultNoDataColor,

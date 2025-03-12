@@ -28,6 +28,8 @@ import d3 from './d3-custom';
 import { getMinimumPrecision } from './common';
 import { extent, hasNegative } from './math';
 
+import { applicationSettingsStore } from '../store/ApplicationSettingsStore';
+
 import { ClassificationMethod } from '../global.d';
 
 export const getClassifier = (method: ClassificationMethod) => {
@@ -134,7 +136,7 @@ export function getEntitiesByClass(
   breaks: number[],
 ) {
   const Cls = getClassifier(ClassificationMethod.manual);
-  const classifier = new Cls(values, null, breaks);
+  const classifier = new Cls(values, null, applicationSettingsStore.intervalClosure, breaks);
   return classifier.countByClass();
 }
 

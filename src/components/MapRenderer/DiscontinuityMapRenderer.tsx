@@ -10,6 +10,7 @@ import { mergeFilterIds } from './common.tsx';
 import { getClassifier } from '../../helpers/classification';
 
 // Stores
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
 import { mapStore } from '../../store/MapStore';
 
@@ -35,7 +36,12 @@ export default function discontinuityRenderer(
 
   const classifier = createMemo(() => {
     const Cls = getClassifier(ClassificationMethod.manual);
-    return new Cls(null, null, rendererParameters().breaks);
+    return new Cls(
+      null,
+      null,
+      applicationSettingsStore.intervalClosure,
+      rendererParameters().breaks,
+    );
   });
 
   const sizes = createMemo(() => rendererParameters().sizes);

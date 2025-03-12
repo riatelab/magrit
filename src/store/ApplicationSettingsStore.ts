@@ -89,6 +89,8 @@ export type ApplicationSettingsStoreType = {
   // customPalettes: CustomPalette[],
   // Whether to activate the undo/redo feature
   useUndoRedo: boolean,
+  // Are class intervals closed on the left or right?
+  intervalClosure: 'left' | 'right',
 };
 
 const [
@@ -136,6 +138,7 @@ const [
   },
   userLocale: getUserLocale(),
   useUndoRedo: false,
+  intervalClosure: 'right',
 } as ApplicationSettingsStoreType);
 
 export {

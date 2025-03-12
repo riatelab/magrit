@@ -3305,6 +3305,18 @@ type RootTranslation = {
 		 * A​c​t​i​v​a​t​e​ ​u​n​d​o​/​r​e​d​o​ ​f​u​n​c​t​i​o​n​a​l​i​t​i​e​s
 		 */
 		UseUndoRedo: string
+		/**
+		 * C​l​a​s​s​e​s​ ​c​l​o​s​u​r​e
+		 */
+		IntervalClosure: string
+		/**
+		 * R​i​g​h​t​ ​c​l​o​s​u​r​e
+		 */
+		IntervalClosureRight: string
+		/**
+		 * L​e​f​t​ ​c​l​o​s​u​r​e
+		 */
+		IntervalClosureLeft: string
 	}
 	LayerManager: {
 		/**
@@ -9455,6 +9467,18 @@ export type TranslationFunctions = {
 		 * Activate undo/redo functionalities
 		 */
 		UseUndoRedo: () => LocalizedString
+		/**
+		 * Classes closure
+		 */
+		IntervalClosure: () => LocalizedString
+		/**
+		 * Right closure
+		 */
+		IntervalClosureRight: () => LocalizedString
+		/**
+		 * Left closure
+		 */
+		IntervalClosureLeft: () => LocalizedString
 	}
 	LayerManager: {
 		/**

@@ -13,6 +13,7 @@ import { mergeFilterIds } from './common.tsx';
 import d3 from '../../helpers/d3-custom';
 
 // Stores
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
 import { mapStore } from '../../store/MapStore';
 
@@ -41,7 +42,12 @@ export function choroplethPolygonRenderer(
 
   const classifier = createMemo(() => {
     const Cls = getClassifier(ClassificationMethod.manual);
-    return new Cls(null, null, rendererParameters().breaks);
+    return new Cls(
+      null,
+      null,
+      applicationSettingsStore.intervalClosure,
+      rendererParameters().breaks,
+    );
   });
 
   return <g
@@ -93,7 +99,12 @@ export function choroplethPointRenderer(
 
   const classifier = createMemo(() => {
     const Cls = getClassifier(ClassificationMethod.manual);
-    return new Cls(null, null, rendererParameters().breaks);
+    return new Cls(
+      null,
+      null,
+      applicationSettingsStore.intervalClosure,
+      rendererParameters().breaks,
+    );
   });
 
   return <g
@@ -148,7 +159,12 @@ export function choroplethLineRenderer(
 
   const classifier = createMemo(() => {
     const Cls = getClassifier(ClassificationMethod.manual);
-    return new Cls(null, null, rendererParameters().breaks);
+    return new Cls(
+      null,
+      null,
+      applicationSettingsStore.intervalClosure,
+      rendererParameters().breaks,
+    );
   });
 
   return <g

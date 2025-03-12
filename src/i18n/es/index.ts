@@ -792,6 +792,9 @@ const es = {
     UseProjectionPreClipPolygon: 'Utilizar el rango máximo de proyección (sólo para SCRs que proporcionen un rango máximo)',
     UseProjectionPreClipPolygonInfo: 'Esta opción es experimental y recomendamos dejarla activada por defecto. Después de cambiar esta opción, no olvides hacer zoom en una capa de interés desde el gestor de capas.',
     UseUndoRedo: 'Habilitar las funciones Deshacer/Rehacer',
+    IntervalClosure: 'Cierre de intervalos',
+    IntervalClosureRight: 'Cierre a la derecha',
+    IntervalClosureLeft: 'Cierre a la izquierda',
   },
   LayerManager: {
     point: 'Capa de puntos - {nFt} {{nFt: entidad | entidades }} - {nCol} {{nCol: columna | columnas }}',

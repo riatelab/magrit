@@ -16,6 +16,7 @@ import { applicationSettingsStore, setApplicationSettingsStore } from '../../sto
 // Subcomponents
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
+import InputFieldRadio from '../Inputs/InputRadio.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import magritLogoTypoBaseline from '../../assets/cartouche_baseline_green.svg?url';
 import MessageBlock from '../MessageBlock.tsx';
@@ -306,6 +307,16 @@ export default function AboutModal(
           <option value="pt-BR">pt-BR</option>
           <option value="zh-Hans-CN-u-nu-hanidec">zh-Hans-CN-u-nu-hanidec</option>
         </InputFieldSelect>
+        <hr/>
+        <InputFieldRadio
+          label={LL().AboutAndSettingsPanel.IntervalClosure()}
+          values={[
+            { value: 'right', label: LL().AboutAndSettingsPanel.IntervalClosureRight() },
+            { value: 'left', label: LL().AboutAndSettingsPanel.IntervalClosureLeft() },
+          ]}
+          value={applicationSettingsStore.intervalClosure}
+          onChange={(v) => setApplicationSettingsStore('intervalClosure', v as 'left' | 'right')}
+        />
         <hr/>
         <InputFieldColor
           label={props.LL().AboutAndSettingsPanel.SnappingGridColor()}

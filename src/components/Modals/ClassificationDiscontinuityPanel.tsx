@@ -20,6 +20,7 @@ import { makeDistributionPlot } from '../DistributionPlots.tsx';
 import DropdownMenu from '../DropdownMenu.tsx';
 
 // Store
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { classificationPanelStore, setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 
 // Styles
@@ -44,7 +45,9 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
 
   const makeClassificationParameters = (): DiscontinuityParameters => {
     /* eslint-disable @typescript-eslint/no-use-before-define */
-    const classifier = new (getClassifier(classificationMethod()))(filteredSeries, null);
+    const classifier = new (
+      getClassifier(classificationMethod())
+    )(filteredSeries, null, applicationSettingsStore.intervalClosure);
     let breaks;
     let classes;
     if (

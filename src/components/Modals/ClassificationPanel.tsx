@@ -35,10 +35,12 @@ import * as PaletteThumbnails from '../../helpers/palette-thumbnail';
 
 // Sub-components
 import DropdownMenu from '../DropdownMenu.tsx';
+import InputConstrainedSlider from '../Inputs/InputConstrainedSlider.tsx';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldRangeSlider from '../Inputs/InputRangeSlider.tsx';
 
 // Store
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { classificationPanelStore, setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 
 // Styles
@@ -50,7 +52,6 @@ import {
   type ClassificationParameters,
   type CustomPalette,
 } from '../../global.d';
-import InputConstrainedSlider from '../Inputs/InputConstrainedSlider.tsx';
 
 // Component for choosing breaks manually
 function ManualBreaks(
@@ -429,9 +430,11 @@ export default function ClassificationPanel(): JSX.Element {
 
   const makeClassificationParameters = (): ClassificationParameters => {
     /* eslint-disable @typescript-eslint/no-use-before-define */
-    // For now we use 'null' precision, which avoid rounding to occurs in
+    // For now, we use 'null' precision, which avoid rounding to occurs in
     // statsbreaks code.
-    const classifier = new (getClassifier(classificationMethod()))(filteredSeries, null);
+    const classifier = new (
+      getClassifier(classificationMethod())
+    )(filteredSeries, null, applicationSettingsStore.intervalClosure);
     let breaks;
     let classes;
     if (

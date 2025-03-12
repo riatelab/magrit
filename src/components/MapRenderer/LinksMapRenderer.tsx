@@ -13,6 +13,7 @@ import applyFilters from '../../helpers/filtering';
 import { linkPath } from '../../helpers/svg';
 
 // Stores
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { globalStore } from '../../store/GlobalStore';
 import { mapStore } from '../../store/MapStore';
 
@@ -108,7 +109,12 @@ export default function linksRenderer(
   if (rendererParameters().classification) {
     const classifier = createMemo(() => {
       const Cls = getClassifier(ClassificationMethod.manual);
-      return new Cls(null, null, rendererParameters().classification!.breaks);
+      return new Cls(
+        null,
+        null,
+        applicationSettingsStore.intervalClosure,
+        rendererParameters().classification!.breaks,
+      );
     });
 
     return <g
