@@ -417,7 +417,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
       disabled={isLoading() || !!computedValues()}
     >
       <option value="Stewart">{LL().FunctionalitiesSection.SmoothingOptions.Stewart()}</option>
-      <option value="Kde">{LL().FunctionalitiesSection.SmoothingOptions.KDE()}</option>
+      <option value="Kde">{LL().FunctionalitiesSection.SmoothingOptions.Kde()}</option>
     </InputFieldSelect>
     <InputFieldNumber
       label={LL().FunctionalitiesSection.SmoothingOptions.Resolution()}

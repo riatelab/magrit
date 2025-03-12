@@ -48,18 +48,26 @@ import FieldTypingModal from '../Modals/FieldTypingModal.tsx';
 
 // Types / Interfaces / Enums
 import {
+  type CartogramParameters,
   type CategoricalChoroplethParameters,
+  type CategoricalPictogramParameters,
   type ClassificationParameters,
   type DiscontinuityParameters,
+  type GriddedLayerParameters,
   type LabelsParameters,
   type LayerDescription,
   type LayoutFeature,
   type Legend,
+  type LinksParameters,
+  type MushroomsParameters,
   type ProportionalSymbolsParameters,
-  type GriddedLayerParameters,
   RepresentationType,
+  type SmoothedLayerParameters,
+  SmoothingMethod,
   type TableDescription,
+  type WaffleParameters,
 } from '../../global.d';
+import { LinearRegressionResult } from '../../helpers/statistics';
 
 // Styles
 import 'font-gis/css/font-gis.css';
@@ -322,7 +330,8 @@ const formatTitleInfoLayer = (
     nCol: props.fields.length,
   });
   if (props.representationType === RepresentationType.default) {
-    return `${l1}`;
+    const l2 = LL().LayerManager.Info.Default();
+    return `${l1}${l2}`;
   }
   if (props.representationType === RepresentationType.choropleth) {
     const rp = props.rendererParameters as ClassificationParameters;
@@ -333,7 +342,12 @@ const formatTitleInfoLayer = (
       palette: rp.palette.name,
     });
     const lco = props.layerCreationOptions;
-    return lco ? `${l1}${l2}` : `${l1}${l2}`;
+    const l3 = lco ? LL().LayerManager.Info.LinearRegression({
+      dependentVariable: (lco as LinearRegressionResult).options.y,
+      independentVariable: (lco as LinearRegressionResult).options.x,
+      rSquared: (lco as LinearRegressionResult).rSquared,
+    }) : '';
+    return `${l1}${l2}${l3}`;
   }
   if (props.representationType === RepresentationType.proportionalSymbols) {
     const rp = props.rendererParameters as ProportionalSymbolsParameters;
@@ -347,7 +361,12 @@ const formatTitleInfoLayer = (
         .ProportionalSymbolsOptions.ColorModes[rp.colorMode](),
     });
     const lco = props.layerCreationOptions;
-    return lco ? `${l1}${l2}` : `${l1}${l2}`;
+    const l3 = lco ? LL().LayerManager.Info.LinearRegression({
+      dependentVariable: (lco as LinearRegressionResult).options.y,
+      independentVariable: (lco as LinearRegressionResult).options.x,
+      rSquared: (lco as LinearRegressionResult).rSquared,
+    }) : '';
+    return `${l1}${l2}${l3}`;
   }
   if (props.representationType === RepresentationType.discontinuity) {
     const rp = props.rendererParameters as DiscontinuityParameters;
@@ -397,7 +416,7 @@ const formatTitleInfoLayer = (
     return `${l1}${l2}`;
   }
   if (props.representationType === RepresentationType.cartogram) {
-    const lco = props.layerCreationOptions;
+    const lco = props.layerCreationOptions as CartogramParameters;
     const l2 = LL().LayerManager.Info.Cartogram({
       variable: lco.variable,
       method: LL().FunctionalitiesSection.CartogramOptions[lco.method](),
@@ -405,7 +424,6 @@ const formatTitleInfoLayer = (
     return `${l1}${l2}`;
   }
   if (props.representationType === RepresentationType.grid) {
-    console.log('foo foo fooo');
     const rp = props.rendererParameters as ClassificationParameters;
     const l2 = LL().LayerManager.Info.Choropleth({
       variable: rp.variable,
@@ -413,12 +431,66 @@ const formatTitleInfoLayer = (
       method: LL().ClassificationPanel.classificationMethods[rp.method](),
       palette: rp.palette.name,
     });
-    const lco = props.layerCreationOptions as GridParameters;
+    const lco = props.layerCreationOptions as GriddedLayerParameters;
     const l3 = LL().LayerManager.Info.Grid({
       variable: lco.variable,
       cellType: LL().FunctionalitiesSection.GridOptions[`Cell${capitalizeFirstLetter(lco.cellType)}`](),
     });
     return `${l1}${l2}${l3}`;
+  }
+  if (props.representationType === RepresentationType.smoothed) {
+    const rp = props.rendererParameters as ClassificationParameters;
+    const l2 = LL().LayerManager.Info.Choropleth({
+      variable: rp.variable,
+      nClasses: rp.classes,
+      method: LL().ClassificationPanel.classificationMethods[rp.method](),
+      palette: rp.palette.name,
+    });
+    const lco = props.layerCreationOptions as SmoothedLayerParameters;
+    const l3 = lco.divisorVariable
+      ? LL().LayerManager.Info.SmoothedWithDivisorVariable({
+        smoothingType: LL().FunctionalitiesSection.SmoothingOptions[lco.method](),
+        variable: lco.variable,
+        divisorVariable: lco.divisorVariable,
+      })
+      : LL().LayerManager.Info.Smoothed({
+        smoothingType: LL().FunctionalitiesSection.SmoothingOptions[lco.method](),
+        variable: lco.variable,
+      });
+    const l4 = lco.method === SmoothingMethod.Kde
+      ? LL().LayerManager.Info.SmoothedKde({
+        bandwidth: (lco.smoothingParameters as KdeParameters).bandwidth,
+        kernel: LL().FunctionalitiesSection
+          .SmoothingOptions[(lco.smoothingParameters as KdeParameters).kernel](),
+        resolution: lco.gridParameters.resolution,
+      })
+      : LL().LayerManager.Info.SmoothedStewart({
+        func: LL().FunctionalitiesSection
+          .SmoothingOptions[(lco.smoothingParameters as StewartParameters).function](),
+        beta: (lco.smoothingParameters as StewartParameters).beta.toLocaleString(),
+        span: (lco.smoothingParameters as StewartParameters).span.toLocaleString(),
+        resolution: lco.gridParameters.resolution,
+      });
+    return `${l1}${l2}${l3}${l4}`;
+  }
+  if (props.representationType === RepresentationType.links) {
+    const rp = props.rendererParameters as LinksParameters;
+    const l2 = LL().LayerManager.Info.Links({
+      variable: rp.variable,
+      sizeType: LL().FunctionalitiesSection
+        .LinksOptions[`LinkSize${capitalizeFirstLetter(rp.sizeType)}`](),
+      linkType: LL().FunctionalitiesSection
+        .LinksOptions[`LinkType${capitalizeFirstLetter(rp.type)}`](),
+    });
+    return `${l1}${l2}`;
+  }
+  if (props.representationType === RepresentationType.categoricalPictogram) {
+    const rp = props.rendererParameters as CategoricalPictogramParameters;
+    const l2 = LL().LayerManager.Info.CategoricalPictogram({
+      variable: rp.variable,
+      nbCat: rp.mapping.length,
+    });
+    return `${l1}${l2}`;
   }
   return `${l1}`;
 };

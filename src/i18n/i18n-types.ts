@@ -3379,7 +3379,7 @@ type RootTranslation = {
 			/**
 			 * 
 		​
-		​C​h​o​r​o​p​l​e​t​h​
+		​P​o​r​t​r​a​y​a​l​:​ ​C​h​o​r​o​p​l​e​t​h​
 		​
 		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
 		​C​l​a​s​s​i​f​i​c​a​t​i​o​n​:​ ​{​n​C​l​a​s​s​e​s​}​ ​c​l​a​s​s​e​s​ ​(​{​m​e​t​h​o​d​}​)​
@@ -3393,13 +3393,12 @@ type RootTranslation = {
 			/**
 			 * 
 		​
-		​P​r​o​p​o​r​t​i​o​n​a​l​ ​s​y​m​b​o​l​s​
+		​P​o​r​t​r​a​y​a​l​:​ ​P​r​o​p​o​r​t​i​o​n​a​l​ ​s​y​m​b​o​l​s​
 		​
 		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
 		​R​e​f​e​r​e​n​c​e​ ​s​i​z​e​:​ ​{​r​e​f​e​r​e​n​c​e​S​i​z​e​}​p​x​ ​(​o​n​ ​v​a​l​u​e​ ​{​r​e​f​e​r​e​n​c​e​V​a​l​u​e​}​)​
 		​S​y​m​b​o​l​ ​t​y​p​e​ ​:​ ​{​s​y​m​b​o​l​T​y​p​e​}​
-		​C​o​l​o​r​i​n​g​:​ ​{​c​o​l​o​r​M​o​d​e​}​
-	
+		​C​o​l​o​r​i​n​g​:​ ​{​c​o​l​o​r​M​o​d​e​}
 			 * @param {unknown} colorMode
 			 * @param {unknown} referenceSize
 			 * @param {unknown} referenceValue
@@ -3410,7 +3409,7 @@ type RootTranslation = {
 			/**
 			 * 
 		​
-		​D​i​s​c​o​n​t​i​n​u​i​t​y​
+		​P​o​r​t​r​a​y​a​l​:​ ​D​i​s​c​o​n​t​i​n​u​i​t​y​
 		​
 		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
 		​T​y​p​e​:​ ​{​t​y​p​e​}​
@@ -3424,7 +3423,7 @@ type RootTranslation = {
 			/**
 			 * 
 		​
-		​L​a​b​e​l​s​
+		​P​o​r​t​r​a​y​a​l​:​ ​L​a​b​e​l​s​
 		​
 		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
 	
@@ -3434,7 +3433,7 @@ type RootTranslation = {
 			/**
 			 * 
 		​
-		​C​a​t​e​g​o​r​i​c​a​l​ ​c​h​o​r​o​p​l​e​t​h​
+		​P​o​r​t​r​a​y​a​l​:​ ​C​a​t​e​g​o​r​i​c​a​l​ ​c​h​o​r​o​p​l​e​t​h​
 		​
 		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
 		​N​u​m​b​e​r​ ​o​f​ ​c​a​t​e​g​o​r​i​e​s​:​ ​{​n​b​C​a​t​}
@@ -3445,7 +3444,18 @@ type RootTranslation = {
 			/**
 			 * 
 		​
-		​W​a​f​f​l​e​ ​m​a​p​
+		​P​o​r​t​r​a​y​a​l​:​ ​C​a​t​e​g​o​r​i​c​a​l​ ​p​i​c​t​o​g​r​a​m​ ​m​a​p​
+		​
+		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
+		​N​u​m​b​e​r​ ​o​f​ ​c​a​t​e​g​o​r​i​e​s​:​ ​{​n​b​C​a​t​}
+			 * @param {unknown} nbCat
+			 * @param {unknown} variable
+			 */
+			CategoricalPictogram: RequiredParams<'nbCat' | 'variable'>
+			/**
+			 * 
+		​
+		​P​o​r​t​r​a​y​a​l​:​ ​W​a​f​f​l​e​ ​m​a​p​
 		​
 		​V​a​r​i​a​b​l​e​s​:​ ​{​v​a​r​i​a​b​l​e​s​}​
 		​S​y​m​b​o​l​ ​t​y​p​e​:​ ​{​s​y​m​b​o​l​T​y​p​e​}​
@@ -3458,7 +3468,7 @@ type RootTranslation = {
 			/**
 			 * 
 		​
-		​C​a​r​t​o​g​r​a​m​
+		​P​o​r​t​r​a​y​a​l​:​ ​C​a​r​t​o​g​r​a​m​
 		​
 		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
 		​M​e​t​h​o​d​:​ ​{​m​e​t​h​o​d​}
@@ -3469,7 +3479,7 @@ type RootTranslation = {
 			/**
 			 * 
 		​
-		​G​r​i​d​
+		​L​a​y​e​r​ ​c​r​e​a​t​i​o​n​ ​o​p​t​i​o​n​s​:​ ​G​r​i​d​
 		​
 		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
 		​C​e​l​l​ ​t​y​p​e​:​ ​{​c​e​l​l​T​y​p​e​}
@@ -3480,16 +3490,53 @@ type RootTranslation = {
 			/**
 			 * 
 		​
-		​S​m​o​o​t​h​i​n​g​
-		​V​a​r​i​a​b​l​e​:​ ​{​s​m​o​o​t​h​i​n​g​T​y​p​e​}​
-		​S​m​o​o​t​h​i​n​g​ ​t​y​p​e​:​ ​{​s​m​o​o​t​h​i​n​g​T​y​p​e​}
+		​L​a​y​e​r​ ​c​r​e​a​t​i​o​n​ ​o​p​t​i​o​n​s​:​ ​S​m​o​o​t​h​i​n​g​
+		​
+		​S​m​o​o​t​h​i​n​g​ ​t​y​p​e​:​ ​{​s​m​o​o​t​h​i​n​g​T​y​p​e​}​
+		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}
 			 * @param {unknown} smoothingType
+			 * @param {unknown} variable
 			 */
-			Smoothed: RequiredParams<'smoothingType' | 'smoothingType'>
+			Smoothed: RequiredParams<'smoothingType' | 'variable'>
 			/**
 			 * 
 		​
-		​M​u​s​h​r​o​o​m​s​ ​(​F​a​c​i​n​g​ ​s​e​m​i​-​c​i​r​c​l​e​s​)​
+		​L​a​y​e​r​ ​c​r​e​a​t​i​o​n​ ​o​p​t​i​o​n​s​:​ ​S​m​o​o​t​h​i​n​g​
+		​
+		​S​m​o​o​t​h​i​n​g​ ​t​y​p​e​:​ ​{​s​m​o​o​t​h​i​n​g​T​y​p​e​}​
+		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
+		​D​i​v​i​s​o​r​ ​v​a​r​i​a​b​l​e​:​ ​{​d​i​v​i​s​o​r​V​a​r​i​a​b​l​e​}
+			 * @param {unknown} divisorVariable
+			 * @param {unknown} smoothingType
+			 * @param {unknown} variable
+			 */
+			SmoothedWithDivisorVariable: RequiredParams<'divisorVariable' | 'smoothingType' | 'variable'>
+			/**
+			 * 
+		​K​e​r​n​e​l​:​ ​{​k​e​r​n​e​l​}​
+		​B​a​n​d​w​i​d​t​h​:​ ​{​b​a​n​d​w​i​d​t​h​}​
+		​G​r​i​d​ ​r​e​s​o​l​u​t​i​o​n​:​ ​{​r​e​s​o​l​u​t​i​o​n​}​k​m
+			 * @param {unknown} bandwidth
+			 * @param {unknown} kernel
+			 * @param {unknown} resolution
+			 */
+			SmoothedKde: RequiredParams<'bandwidth' | 'kernel' | 'resolution'>
+			/**
+			 * 
+		​F​u​n​c​t​i​o​n​:​ ​{​f​u​n​c​}​
+		​B​e​t​a​:​ ​{​b​e​t​a​}​
+		​S​p​a​n​:​ ​{​s​p​a​n​}​k​m​
+		​G​r​i​d​ ​r​e​s​o​l​u​t​i​o​n​:​ ​{​r​e​s​o​l​u​t​i​o​n​}​k​m
+			 * @param {unknown} beta
+			 * @param {unknown} func
+			 * @param {unknown} resolution
+			 * @param {unknown} span
+			 */
+			SmoothedStewart: RequiredParams<'beta' | 'func' | 'resolution' | 'span'>
+			/**
+			 * 
+		​
+		​P​o​r​t​r​a​y​a​l​:​ ​M​u​s​h​r​o​o​m​s​ ​(​F​a​c​i​n​g​ ​s​e​m​i​-​c​i​r​c​l​e​s​)​
 		​V​a​r​i​a​b​l​e​ ​(​t​o​p​)​:​ ​{​t​o​p​V​a​r​}​(​{​t​o​p​R​e​f​S​i​z​e​}​p​x​ ​o​n​ ​v​a​l​u​e​ ​{​t​o​p​R​e​f​V​a​l​u​e​}​)​
 		​V​a​r​i​a​b​l​e​ ​(​b​o​t​t​o​m​)​:​ ​{​b​o​t​t​o​m​V​a​r​}​(​{​b​o​t​t​o​m​R​e​f​S​i​z​e​}​p​x​ ​o​n​ ​v​a​l​u​e​ ​{​b​o​t​t​o​m​R​e​f​V​a​l​u​e​}​)
 			 * @param {unknown} bottomRefSize
@@ -3507,11 +3554,24 @@ type RootTranslation = {
 		​
 		​V​a​r​i​a​b​l​e​ ​X​:​ ​{​d​e​p​e​n​d​e​n​t​V​a​r​i​a​b​l​e​}​
 		​V​a​r​i​a​b​l​e​ ​Y​:​ ​{​i​n​d​e​p​e​n​d​e​n​t​V​a​r​i​a​b​l​e​}​
-	
+		​R​²​ ​=​ ​{​r​S​q​u​a​r​e​d​}
 			 * @param {unknown} dependentVariable
 			 * @param {unknown} independentVariable
+			 * @param {unknown} rSquared
 			 */
-			LinearRegression: RequiredParams<'dependentVariable' | 'independentVariable'>
+			LinearRegression: RequiredParams<'dependentVariable' | 'independentVariable' | 'rSquared'>
+			/**
+			 * 
+		​
+		​P​o​r​t​r​a​y​a​l​:​ ​L​i​n​k​s​/​f​l​o​w​s​
+		​V​a​r​i​a​b​l​e​:​ ​{​v​a​r​i​a​b​l​e​}​
+		​S​i​z​e​ ​t​y​p​e​:​ ​{​s​i​z​e​T​y​p​e​}​
+		​L​i​n​k​ ​t​y​p​e​:​ ​{​l​i​n​k​T​y​p​e​}
+			 * @param {unknown} linkType
+			 * @param {unknown} sizeType
+			 * @param {unknown} variable
+			 */
+			Links: RequiredParams<'linkType' | 'sizeType' | 'variable'>
 		}
 	}
 	FunctionalitiesSection: {
@@ -3797,7 +3857,7 @@ type RootTranslation = {
 			/**
 			 * K​e​r​n​e​l​ ​d​e​n​s​i​t​y​ ​e​s​t​i​m​a​t​i​o​n
 			 */
-			KDE: string
+			Kde: string
 			/**
 			 * B​a​n​d​w​i​d​t​h​ ​(​k​m​)
 			 */
@@ -9463,7 +9523,7 @@ export type TranslationFunctions = {
 			/**
 			 * 
 	
-		Choropleth
+		Portrayal: Choropleth
 	
 		Variable: {variable}
 		Classification: {nClasses} classes ({method})
@@ -9473,19 +9533,18 @@ export type TranslationFunctions = {
 			/**
 			 * 
 	
-		Proportional symbols
+		Portrayal: Proportional symbols
 	
 		Variable: {variable}
 		Reference size: {referenceSize}px (on value {referenceValue})
 		Symbol type : {symbolType}
 		Coloring: {colorMode}
-	
 			 */
 			ProportionalSymbols: (arg: { colorMode: unknown, referenceSize: unknown, referenceValue: unknown, symbolType: unknown, variable: unknown }) => LocalizedString
 			/**
 			 * 
 	
-		Discontinuity
+		Portrayal: Discontinuity
 	
 		Variable: {variable}
 		Type: {type}
@@ -9495,7 +9554,7 @@ export type TranslationFunctions = {
 			/**
 			 * 
 	
-		Labels
+		Portrayal: Labels
 	
 		Variable: {variable}
 	
@@ -9504,7 +9563,7 @@ export type TranslationFunctions = {
 			/**
 			 * 
 	
-		Categorical choropleth
+		Portrayal: Categorical choropleth
 	
 		Variable: {variable}
 		Number of categories: {nbCat}
@@ -9513,7 +9572,16 @@ export type TranslationFunctions = {
 			/**
 			 * 
 	
-		Waffle map
+		Portrayal: Categorical pictogram map
+	
+		Variable: {variable}
+		Number of categories: {nbCat}
+			 */
+			CategoricalPictogram: (arg: { nbCat: unknown, variable: unknown }) => LocalizedString
+			/**
+			 * 
+	
+		Portrayal: Waffle map
 	
 		Variables: {variables}
 		Symbol type: {symbolType}
@@ -9523,7 +9591,7 @@ export type TranslationFunctions = {
 			/**
 			 * 
 	
-		Cartogram
+		Portrayal: Cartogram
 	
 		Variable: {variable}
 		Method: {method}
@@ -9532,7 +9600,7 @@ export type TranslationFunctions = {
 			/**
 			 * 
 	
-		Grid
+		Layer creation options: Grid
 	
 		Variable: {variable}
 		Cell type: {cellType}
@@ -9541,15 +9609,41 @@ export type TranslationFunctions = {
 			/**
 			 * 
 	
-		Smoothing
-		Variable: {smoothingType}
+		Layer creation options: Smoothing
+	
 		Smoothing type: {smoothingType}
+		Variable: {variable}
 			 */
-			Smoothed: (arg: { smoothingType: unknown }) => LocalizedString
+			Smoothed: (arg: { smoothingType: unknown, variable: unknown }) => LocalizedString
 			/**
 			 * 
 	
-		Mushrooms (Facing semi-circles)
+		Layer creation options: Smoothing
+	
+		Smoothing type: {smoothingType}
+		Variable: {variable}
+		Divisor variable: {divisorVariable}
+			 */
+			SmoothedWithDivisorVariable: (arg: { divisorVariable: unknown, smoothingType: unknown, variable: unknown }) => LocalizedString
+			/**
+			 * 
+		Kernel: {kernel}
+		Bandwidth: {bandwidth}
+		Grid resolution: {resolution}km
+			 */
+			SmoothedKde: (arg: { bandwidth: unknown, kernel: unknown, resolution: unknown }) => LocalizedString
+			/**
+			 * 
+		Function: {func}
+		Beta: {beta}
+		Span: {span}km
+		Grid resolution: {resolution}km
+			 */
+			SmoothedStewart: (arg: { beta: unknown, func: unknown, resolution: unknown, span: unknown }) => LocalizedString
+			/**
+			 * 
+	
+		Portrayal: Mushrooms (Facing semi-circles)
 		Variable (top): {topVar}({topRefSize}px on value {topRefValue})
 		Variable (bottom): {bottomVar}({bottomRefSize}px on value {bottomRefValue})
 			 */
@@ -9561,9 +9655,18 @@ export type TranslationFunctions = {
 	
 		Variable X: {dependentVariable}
 		Variable Y: {independentVariable}
-	
+		R² = {rSquared}
 			 */
-			LinearRegression: (arg: { dependentVariable: unknown, independentVariable: unknown }) => LocalizedString
+			LinearRegression: (arg: { dependentVariable: unknown, independentVariable: unknown, rSquared: unknown }) => LocalizedString
+			/**
+			 * 
+	
+		Portrayal: Links/flows
+		Variable: {variable}
+		Size type: {sizeType}
+		Link type: {linkType}
+			 */
+			Links: (arg: { linkType: unknown, sizeType: unknown, variable: unknown }) => LocalizedString
 		}
 	}
 	FunctionalitiesSection: {
@@ -9845,7 +9948,7 @@ export type TranslationFunctions = {
 			/**
 			 * Kernel density estimation
 			 */
-			KDE: () => LocalizedString
+			Kde: () => LocalizedString
 			/**
 			 * Bandwidth (km)
 			 */
