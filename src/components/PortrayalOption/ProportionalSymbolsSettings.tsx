@@ -566,6 +566,7 @@ export default function ProportionalSymbolsSettings(
     setNewLayerName,
   ] = createSignal<string>(
     LL().FunctionalitiesSection.ProportionalSymbolsOptions.NewLayerName({
+      variable: targetVariable(),
       layerName: layerDescription.name,
     }) as string,
   );
@@ -644,6 +645,20 @@ export default function ProportionalSymbolsSettings(
         if (symbolType() === 'line') {
           setAvoidOverlapping(false);
         }
+      },
+    ),
+  );
+
+  createEffect(
+    on(
+      () => targetVariable(),
+      () => {
+        setNewLayerName(
+          LL().FunctionalitiesSection.ProportionalSymbolsOptions.NewLayerName({
+            variable: targetVariable(),
+            layerName: layerDescription.name,
+          }) as string,
+        );
       },
     ),
   );

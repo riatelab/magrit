@@ -874,7 +874,7 @@ const fr = {
       CurrentPalette: 'palette {p}',
       CustomPalette: 'palette personnalisée',
       DisplayChartOnMap: 'Afficher un graphique de résumé des classes sur la carte',
-      NewLayerName: 'Choroplèthe_{layerName}',
+      NewLayerName: 'Choro_{variable}_{layerName}',
     },
     ProportionalSymbolsOptions: {
       ReferenceSize: 'Taille de référence (px)',
@@ -896,7 +896,7 @@ const fr = {
       ColorNegativeValues: 'Couleur pour les valeurs négatives',
       AvoidOverlapping: 'Éviter le chevauchement des symboles',
       LimitValue: 'Valeur limite',
-      NewLayerName: 'Symboles_proportionnels_{layerName}',
+      NewLayerName: 'Prop_{variable}_{layerName}',
     },
     DiscontinuityOptions: {
       DiscontinuityType: 'Type de discontinuité',
@@ -904,7 +904,7 @@ const fr = {
       Absolute: 'Absolue',
       Classification: 'Type de discrétisation',
       DiscontinuityThreshold: 'Seuil des discontinuité à afficher',
-      NewLayerName: 'Discontinuité_{layerName}',
+      NewLayerName: 'Discontinuité_{variable}_{layerName}',
     },
     SmoothingOptions: {
       DivisorVariable: 'Variable de pondération',
@@ -929,7 +929,7 @@ const fr = {
       ThresholdForContours: 'Valeurs limites des contours à créer',
       ErrorParsingThresholds: 'Erreur lors de l\'analyse des valeurs limites des contours. Veuillez saisir des valeurs séparées par un tiret.',
       ClippingLayer: 'Couche de découpage',
-      NewLayerName: 'Lissage_{layerName}',
+      NewLayerName: 'Lissage_{variables}_{layerName}',
     },
     CartogramOptions: {
       Algorithm: 'Algorithme à utiliser',
@@ -939,7 +939,7 @@ const fr = {
       GastnerSeguyMore: 'Gastner, Seguy & More (2018)',
       WarningGeo: 'La <b>projection cartographique</b> actuelle est géographique (ou son unité est en degrés). Le cartogramme va être calculé dans la projection actuelle. Privilégiez, lorsque que c\'est possible, l\'utilisation de données projetées (avec une unité de distance en mètres par exemple) pour une meilleure précision.',
       WarningMissingOrZeroValues: 'La <b>variable</b> sélectionnée contient des valeurs manquantes ou des valeurs inférieures ou égales à zéro. Ces valeurs seront remplacées par une valeur représentant un fraction de la plus petite valeur positive de la variable sélectionnée.',
-      NewLayerName: 'Cartogramme_{layerName}',
+      NewLayerName: 'Cartogramme_{variable}_{layerName}',
     },
     GridOptions: {
       Resolution: 'Résolution de la grille (km)',
@@ -950,7 +950,7 @@ const fr = {
       CellDiamond: 'Cellule en losange',
       CellTriangle: 'Cellule triangulaire',
       WarningGeo: 'La projection cartographique actuelle est géographique (ou son unité est en degrés). La résolution de la grille est donc exprimée en degrés. Privilégiez, lorsque que c\'est possible, l\'utilisation de données projetées (avec une unité de distance en mètres par exemple) pour une meilleure précision.',
-      NewLayerName: 'Carroyage_{layerName}',
+      NewLayerName: 'Carroyage_{variable}_{layerName}',
     },
     CategoricalChoroplethOptions: {
       DisplayChartOnMap: 'Afficher le diagramme en barre par catégorie sur la carte',
@@ -964,16 +964,16 @@ const fr = {
       Value: 'Valeur :',
       Count: 'Nombre : ',
       WarningNotCategoricalMessage: 'Attention, la variable sélectionnée ne semble pas être catégorielle. Veuillez vérifier que la variable choisie est bien catégorielle ou choisir une autre variable.',
-      NewLayerName: 'Choroplèthe_catégorielle_{layerName}',
+      NewLayerName: 'Catégories_{variable}_{layerName}',
     },
     CategoricalPictogramOptions: {
-      NewLayerName: 'Pictogramme_{layerName}',
+      NewLayerName: 'Picto_{variable}_{layerName}',
       Customize: 'Choisir les pictogrammes et les noms de catégories',
     },
     LabelsOptions: {
       ProportionalSize: 'Taille proportionnelle à une variable',
       Filter: 'Filtrer les étiquettes à créer',
-      NewLayerName: 'Étiquettes_{layerName}',
+      NewLayerName: 'Étiquettes_{variable}_{layerName}',
     },
     LinksOptions: {
       IdentifierField: 'Champ identifiant',
@@ -1015,7 +1015,7 @@ const fr = {
     MushroomsOptions: {
       TopProperties: 'Propriétés de la partie supérieure :',
       BottomProperties: 'Propriétés de la partie inférieure :',
-      NewLayerName: 'Champignons_{layerName}',
+      NewLayerName: 'Champignons_{variables}_{layerName}',
     },
     AggregationOptions: {
       Method: 'Méthode d\'agrégation',
@@ -1053,14 +1053,14 @@ const fr = {
       LayerToUse: 'Couche à utiliser',
       VariableToUse: 'Variable numérique à utiliser',
       FilterEmptyCells: 'Filtrer les cellules vides',
-      NewLayerName: 'Points_agrégés_{layerName}',
+      NewLayerName: 'Points_agrégés_{variable}_{layerName}',
     },
     LineAggregationOptions: {
       ComputationType: 'Type de calcul',
       ComputationTypeTotalDistance: 'Total des distances',
       ComputationTypeWeightedDistance: 'Total des distances, pondéré par un champ',
       ComputationTypeMeanDistance: 'Distance moyenne',
-      NewLayerName: 'Lignes_agrégées_{layerName}',
+      NewLayerName: 'Lignes_agrégées_{variable}_{layerName}',
     },
     LayerFromTableOptions: {
       Mode: 'Mode',
@@ -1076,7 +1076,7 @@ const fr = {
       CoordsNotInCRS: 'Les valeurs contenues dans les champs sélectionnés ne semblent pas être des coordonnées géographiques valides. Veuillez vérifier votre sélection.',
     },
     LinearRegressionOptions: {
-      NewLayerName: 'Régression_linéaire_{layerName}',
+      NewLayerName: 'Reg_linéaire_{xVariable}_{yVariable}_{layerName}',
       DisplayCorrelationMatrix: 'Afficher la matrice de corrélation entre l\'ensemble des variables',
       PearsonCorrelation: 'Corrélation de Pearson',
       SpearmanCorrelation: 'Corrélation de Spearman',
@@ -1131,7 +1131,7 @@ const fr = {
       ColumnsNumber: 'Nombre de colonnes',
       SymbolSize: 'Taille du symbole',
       SymbolValue: 'Valeur représentée par chaque symbole',
-      NewLayerName: 'Gaufre_{layerName}',
+      NewLayerName: 'Gaufre_{variables}_{layerName}',
       SymbolRatioNote: '1 symbol = {value} units',
       WarningTooManySymbols: 'La valeur représentée par chaque symbole est trop faible pour être affichée correctement (trop de symboles seraient générés par le choix de cette valeur). Veuillez choisir une valeur plus grande (par exemple {value}).',
       WarningTooFewSymbols: 'La valeur représentée par chaque symbole est trop élevée pour permettre de distinguer correctement les différentes entités (trop peu de symboles seraient générés par le choix de cette valeur). Veuillez choisir une valeur plus petite (par exemple {value}).',

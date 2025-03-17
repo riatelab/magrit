@@ -1,9 +1,11 @@
 // Import from solid-js
 import {
+  createEffect,
   createMemo,
   createSignal,
   For,
   type JSX,
+  on,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
@@ -200,14 +202,17 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
   // Signals for the current component:
   // the target variable, the target layer name and the classification parameters
   const [targetVariable, setTargetVariable] = createSignal<string>(targetFields[0].name);
+
   const [
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
     LL().FunctionalitiesSection.ChoroplethOptions.NewLayerName({
+      variable: targetVariable(),
       layerName: layerDescription.name,
     }) as string,
   );
+
   const [displayChartOnMap, setDisplayChartOnMap] = createSignal<boolean>(false);
 
   // Collect the values of the target variable (only those that are numbers)
@@ -220,6 +225,21 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
     targetClassification,
     setTargetClassification,
   ] = createSignal<ClassificationParameters>();
+
+  createEffect(
+    on(
+      () => targetVariable(),
+      () => {
+        setNewLayerName(
+          LL().FunctionalitiesSection.ChoroplethOptions.NewLayerName({
+            variable: targetVariable(),
+            layerName: layerDescription.name,
+          }) as string,
+        );
+      },
+    ),
+  );
+
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(

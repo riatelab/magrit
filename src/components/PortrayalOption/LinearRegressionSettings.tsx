@@ -1,5 +1,10 @@
 // Imports from solid-js
-import { createSignal, For, Show } from 'solid-js';
+import {
+  createEffect,
+  createSignal,
+  For,
+  Show,
+} from 'solid-js';
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
@@ -459,15 +464,6 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
   );
 
   // Signals for the current component:
-  const [
-    newLayerName,
-    setNewLayerName,
-  ] = createSignal<string>(
-    LL().FunctionalitiesSection.LinearRegressionOptions.NewLayerName({
-      layerName: layerDescription.name,
-    }) as string,
-  );
-
   // Explained (response) variable
   const [
     explainedVariable,
@@ -479,6 +475,17 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
     explanatoryVariable,
     setExplanatoryVariable,
   ] = createSignal<string>('');
+
+  const [
+    newLayerName,
+    setNewLayerName,
+  ] = createSignal<string>(
+    LL().FunctionalitiesSection.LinearRegressionOptions.NewLayerName({
+      xVariable: explanatoryVariable(),
+      yVariable: explainedVariable(),
+      layerName: layerDescription.name,
+    }) as string,
+  );
 
   const [
     drawConfidenceInterval,
@@ -524,6 +531,21 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
     addScatterPlot,
     setAddScatterPlot,
   ] = createSignal<boolean>(true);
+
+  createEffect(
+    on(
+      () => [explainedVariable(), explanatoryVariable()],
+      () => {
+        setNewLayerName(
+          LL().FunctionalitiesSection.LinearRegressionOptions.NewLayerName({
+            xVariable: explanatoryVariable(),
+            yVariable: explainedVariable(),
+            layerName: layerDescription.name,
+          }) as string,
+        );
+      },
+    ),
+  );
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(

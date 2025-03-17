@@ -874,7 +874,7 @@ const en = {
       CurrentPalette: 'palette {p}',
       CustomPalette: 'custom palette',
       DisplayChartOnMap: 'Display a class summary histogram on the map',
-      NewLayerName: 'Choropleth_{layerName}',
+      NewLayerName: 'Choro_{variable}_{layerName}',
     },
     ProportionalSymbolsOptions: {
       ReferenceSize: 'Reference size (px)',
@@ -896,7 +896,7 @@ const en = {
       ColorNegativeValues: 'Color for negative values',
       AvoidOverlapping: 'Avoid overlapping symbols',
       LimitValue: 'Limit value',
-      NewLayerName: 'Proportional_Symbols_{layerName}',
+      NewLayerName: 'Prop_{variable}_{layerName}',
     },
     DiscontinuityOptions: {
       DiscontinuityType: 'Discontinuity type',
@@ -904,7 +904,7 @@ const en = {
       Absolute: 'Absolute',
       Classification: 'Classification type',
       DiscontinuityThreshold: 'Threshold of discontinuity to display',
-      NewLayerName: 'Discontinuity_{layerName}',
+      NewLayerName: 'Discontinuity_{variable}_{layerName}',
     },
     SmoothingOptions: {
       DivisorVariable: 'Divisor variable',
@@ -929,7 +929,7 @@ const en = {
       ThresholdForContours: 'Threshold for contours',
       ErrorParsingThreshold: 'Error while parsing the threshold. Please use values separated by dashes.',
       ClippingLayer: 'Clipping layer',
-      NewLayerName: 'Smoothing_{layerName}',
+      NewLayerName: 'Smoothing_{variables}_{layerName}',
     },
     CartogramOptions: {
       Algorithm: 'Algorithm to use',
@@ -939,7 +939,7 @@ const en = {
       GastnerSeguyMore: 'Gastner, Seguy & More (2018)',
       WarningGeo: 'The current <b>map projection</b> is geographic (or its unit is degrees). The cartogram will be calculated in the current projection. Whenever possible, you should use projected data (with a distance unit in metres, for example) for greater accuracy.',
       WarningMissingOrZeroValues: 'The <b>variable</b> selected contains missing or zero values. These values will be replaced by a fraction of the smallest positive value in the dataset.',
-      NewLayerName: 'Cartogram_{layerName}',
+      NewLayerName: 'Cartogram_{variable}_{layerName}',
     },
     GridOptions: {
       Resolution: 'Grid resolution (km)',
@@ -950,7 +950,7 @@ const en = {
       CellTriangle: 'Triangle',
       CellDiamond: 'Diamond',
       WarningGeo: 'The current map projection is geographic (or its unit is degrees). The grid resolution is therefore expressed in degrees. Whenever possible, you should use projected data (with a distance unit in metres, for example) for greater accuracy.',
-      NewLayerName: 'Grid_{layerName}',
+      NewLayerName: 'Grid_{variable}_{layerName}',
     },
     CategoricalChoroplethOptions: {
       DisplayChartOnMap: 'Display the frequency bar chart by category on the map',
@@ -964,16 +964,16 @@ const en = {
       Value: 'Value:',
       Count: 'Count:',
       WarningNotCategoricalMessage: 'Please note that the variable selected does not appear to be categorical. Please check that the variable selected is actually categorical or choose another variable.',
-      NewLayerName: 'Categorical_Choropleth_{layerName}',
+      NewLayerName: 'Categories_{variable}_{layerName}',
     },
     CategoricalPictogramOptions: {
-      NewLayerName: 'Pictogram_{layerName}',
+      NewLayerName: 'Picto_{variable}_{layerName}',
       Customize: 'Choose pictograms and category names',
     },
     LabelsOptions: {
       ProportionalSize: 'Proportional size',
       Filter: 'Filter the labels to create',
-      NewLayerName: 'Labels_{layerName}',
+      NewLayerName: 'Labels_{variable}_{layerName}',
     },
     LinksOptions: {
       IdentifierField: 'Identifier field',
@@ -1015,7 +1015,7 @@ const en = {
     MushroomsOptions: {
       TopProperties: 'Properties of the upper part:',
       BottomProperties: 'Properties of the lower part:',
-      NewLayerName: 'Mushrooms_{layerName}',
+      NewLayerName: 'Mushrooms_{variables}_{layerName}',
     },
     AggregationOptions: {
       Method: 'Aggregation method',
@@ -1053,14 +1053,14 @@ const en = {
       LayerToUse: 'Layer to use',
       VariableToUse: 'Numerical variable to use',
       FilterEmptyCells: 'Filter empty cells',
-      NewLayerName: 'Aggregated_points_{layerName}',
+      NewLayerName: 'Aggregated_points_{variable}_{layerName}',
     },
     LineAggregationOptions: {
       ComputationType: 'Computation type',
       ComputationTypeTotalDistance: 'Total distance',
       ComputationTypeWeightedDistance: 'Total distance, weighted by a variable',
       ComputationTypeMeanDistance: 'Mean distance',
-      NewLayerName: 'Aggregated_lines_{layerName}',
+      NewLayerName: 'Aggregated_lines_{variable}_{layerName}',
     },
     LayerFromTableOptions: {
       Mode: 'Mode',
@@ -1076,7 +1076,7 @@ const en = {
       CoordsNotInCRS: 'The values in the selected fields do not appear to be valid geographic coordinates. Please check your selection.',
     },
     LinearRegressionOptions: {
-      NewLayerName: 'Linear_Regression_{layerName}',
+      NewLayerName: 'Linear_Regression_{xVariable}_{yVariable}_{layerName}',
       DisplayCorrelationMatrix: 'Display the correlation matrix between all the variables',
       PearsonCorrelation: 'Pearson product-moment correlation',
       SpearmanCorrelation: 'Spearman\'s rank correlation',
@@ -1131,7 +1131,7 @@ const en = {
       ColumnsNumber: 'Number of columns',
       SymbolSize: 'Symbol size',
       SymbolValue: 'Value expressed by each symbol',
-      NewLayerName: 'Waffle_{layerName}',
+      NewLayerName: 'Waffle_{variables}_{layerName}',
       SymbolRatioNote: '1 symbol = {value} units',
       WarningTooManySymbols: 'The value represented by each symbol is too small to be displayed correctly (too many symbols would be generated by choosing this value). Please choose a larger value (e.g. {value}).',
       WarningTooFewSymbols: 'The value represented by each symbol is too high to correctly distinguish the different entities (too few symbols would be generated by choosing this value). Please choose a smaller value (e.g. {value}).',

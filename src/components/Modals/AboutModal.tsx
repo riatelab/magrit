@@ -24,6 +24,9 @@ import MessageBlock from '../MessageBlock.tsx';
 // Helpers
 import { webSafeFonts, fonts } from '../../helpers/font';
 
+// Styles
+import '../../styles/AboutModal.css';
+
 // Types / Interfaces
 import { type TranslationFunctions } from '../../i18n/i18n-types';
 

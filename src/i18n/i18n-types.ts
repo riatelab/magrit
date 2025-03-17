@@ -3742,10 +3742,11 @@ type RootTranslation = {
 			 */
 			DisplayChartOnMap: string
 			/**
-			 * C​h​o​r​o​p​l​e​t​h​_​{​l​a​y​e​r​N​a​m​e​}
+			 * C​h​o​r​o​_​{​v​a​r​i​a​b​l​e​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
+			 * @param {unknown} variable
 			 */
-			NewLayerName: RequiredParams<'layerName'>
+			NewLayerName: RequiredParams<'layerName' | 'variable'>
 		}
 		ProportionalSymbolsOptions: {
 			/**
@@ -3813,10 +3814,11 @@ type RootTranslation = {
 			 */
 			LimitValue: string
 			/**
-			 * P​r​o​p​o​r​t​i​o​n​a​l​_​S​y​m​b​o​l​s​_​{​l​a​y​e​r​N​a​m​e​}
+			 * P​r​o​p​_​{​v​a​r​i​a​b​l​e​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
+			 * @param {unknown} variable
 			 */
-			NewLayerName: RequiredParams<'layerName'>
+			NewLayerName: RequiredParams<'layerName' | 'variable'>
 		}
 		DiscontinuityOptions: {
 			/**
@@ -3840,10 +3842,11 @@ type RootTranslation = {
 			 */
 			DiscontinuityThreshold: string
 			/**
-			 * D​i​s​c​o​n​t​i​n​u​i​t​y​_​{​l​a​y​e​r​N​a​m​e​}
+			 * D​i​s​c​o​n​t​i​n​u​i​t​y​_​{​v​a​r​i​a​b​l​e​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
+			 * @param {unknown} variable
 			 */
-			NewLayerName: RequiredParams<'layerName'>
+			NewLayerName: RequiredParams<'layerName' | 'variable'>
 		}
 		SmoothingOptions: {
 			/**
@@ -3935,10 +3938,11 @@ type RootTranslation = {
 			 */
 			ClippingLayer: string
 			/**
-			 * S​m​o​o​t​h​i​n​g​_​{​l​a​y​e​r​N​a​m​e​}
+			 * S​m​o​o​t​h​i​n​g​_​{​v​a​r​i​a​b​l​e​s​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
+			 * @param {unknown} variables
 			 */
-			NewLayerName: RequiredParams<'layerName'>
+			NewLayerName: RequiredParams<'layerName' | 'variables'>
 		}
 		CartogramOptions: {
 			/**
@@ -3970,10 +3974,11 @@ type RootTranslation = {
 			 */
 			WarningMissingOrZeroValues: string
 			/**
-			 * C​a​r​t​o​g​r​a​m​_​{​l​a​y​e​r​N​a​m​e​}
+			 * C​a​r​t​o​g​r​a​m​_​{​v​a​r​i​a​b​l​e​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
+			 * @param {unknown} variable
 			 */
-			NewLayerName: RequiredParams<'layerName'>
+			NewLayerName: RequiredParams<'layerName' | 'variable'>
 		}
 		GridOptions: {
 			/**
@@ -4010,10 +4015,11 @@ type RootTranslation = {
 			 */
 			WarningGeo: string
 			/**
-			 * G​r​i​d​_​{​l​a​y​e​r​N​a​m​e​}
+			 * G​r​i​d​_​{​v​a​r​i​a​b​l​e​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
+			 * @param {unknown} variable
 			 */
-			NewLayerName: RequiredParams<'layerName'>
+			NewLayerName: RequiredParams<'layerName' | 'variable'>
 		}
 		CategoricalChoroplethOptions: {
 			/**
@@ -4061,17 +4067,19 @@ type RootTranslation = {
 			 */
 			WarningNotCategoricalMessage: string
 			/**
-			 * C​a​t​e​g​o​r​i​c​a​l​_​C​h​o​r​o​p​l​e​t​h​_​{​l​a​y​e​r​N​a​m​e​}
+			 * C​a​t​e​g​o​r​i​e​s​_​{​v​a​r​i​a​b​l​e​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
+			 * @param {unknown} variable
 			 */
-			NewLayerName: RequiredParams<'layerName'>
+			NewLayerName: RequiredParams<'layerName' | 'variable'>
 		}
 		CategoricalPictogramOptions: {
 			/**
-			 * P​i​c​t​o​g​r​a​m​_​{​l​a​y​e​r​N​a​m​e​}
+			 * P​i​c​t​o​_​{​v​a​r​i​a​b​l​e​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
+			 * @param {unknown} variable
 			 */
-			NewLayerName: RequiredParams<'layerName'>
+			NewLayerName: RequiredParams<'layerName' | 'variable'>
 			/**
 			 * C​h​o​o​s​e​ ​p​i​c​t​o​g​r​a​m​s​ ​a​n​d​ ​c​a​t​e​g​o​r​y​ ​n​a​m​e​s
 			 */
@@ -4087,10 +4095,11 @@ type RootTranslation = {
 			 */
 			Filter: string
 			/**
-			 * L​a​b​e​l​s​_​{​l​a​y​e​r​N​a​m​e​}
+			 * L​a​b​e​l​s​_​{​v​a​r​i​a​b​l​e​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
+			 * @param {unknown} variable
 			 */
-			NewLayerName: RequiredParams<'layerName'>
+			NewLayerName: RequiredParams<'layerName' | 'variable'>
 		}
 		LinksOptions: {
 			/**
@@ -4245,10 +4254,11 @@ type RootTranslation = {
 			 */
 			BottomProperties: string
 			/**
-			 * M​u​s​h​r​o​o​m​s​_​{​l​a​y​e​r​N​a​m​e​}
+			 * M​u​s​h​r​o​o​m​s​_​{​v​a​r​i​a​b​l​e​s​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
+			 * @param {unknown} variables
 			 */
-			NewLayerName: RequiredParams<'layerName'>
+			NewLayerName: RequiredParams<'layerName' | 'variables'>
 		}
 		AggregationOptions: {
 			/**
@@ -4377,10 +4387,11 @@ type RootTranslation = {
 			 */
 			FilterEmptyCells: string
 			/**
-			 * A​g​g​r​e​g​a​t​e​d​_​p​o​i​n​t​s​_​{​l​a​y​e​r​N​a​m​e​}
+			 * A​g​g​r​e​g​a​t​e​d​_​p​o​i​n​t​s​_​{​v​a​r​i​a​b​l​e​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
+			 * @param {unknown} variable
 			 */
-			NewLayerName: RequiredParams<'layerName'>
+			NewLayerName: RequiredParams<'layerName' | 'variable'>
 		}
 		LineAggregationOptions: {
 			/**
@@ -4400,10 +4411,11 @@ type RootTranslation = {
 			 */
 			ComputationTypeMeanDistance: string
 			/**
-			 * A​g​g​r​e​g​a​t​e​d​_​l​i​n​e​s​_​{​l​a​y​e​r​N​a​m​e​}
+			 * A​g​g​r​e​g​a​t​e​d​_​l​i​n​e​s​_​{​v​a​r​i​a​b​l​e​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
+			 * @param {unknown} variable
 			 */
-			NewLayerName: RequiredParams<'layerName'>
+			NewLayerName: RequiredParams<'layerName' | 'variable'>
 		}
 		LayerFromTableOptions: {
 			/**
@@ -4453,10 +4465,12 @@ type RootTranslation = {
 		}
 		LinearRegressionOptions: {
 			/**
-			 * L​i​n​e​a​r​_​R​e​g​r​e​s​s​i​o​n​_​{​l​a​y​e​r​N​a​m​e​}
+			 * L​i​n​e​a​r​_​R​e​g​r​e​s​s​i​o​n​_​{​x​V​a​r​i​a​b​l​e​}​_​{​y​V​a​r​i​a​b​l​e​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
+			 * @param {unknown} xVariable
+			 * @param {unknown} yVariable
 			 */
-			NewLayerName: RequiredParams<'layerName'>
+			NewLayerName: RequiredParams<'layerName' | 'xVariable' | 'yVariable'>
 			/**
 			 * D​i​s​p​l​a​y​ ​t​h​e​ ​c​o​r​r​e​l​a​t​i​o​n​ ​m​a​t​r​i​x​ ​b​e​t​w​e​e​n​ ​a​l​l​ ​t​h​e​ ​v​a​r​i​a​b​l​e​s
 			 */
@@ -4673,10 +4687,11 @@ type RootTranslation = {
 			 */
 			SymbolValue: string
 			/**
-			 * W​a​f​f​l​e​_​{​l​a​y​e​r​N​a​m​e​}
+			 * W​a​f​f​l​e​_​{​v​a​r​i​a​b​l​e​s​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
+			 * @param {unknown} variables
 			 */
-			NewLayerName: RequiredParams<'layerName'>
+			NewLayerName: RequiredParams<'layerName' | 'variables'>
 			/**
 			 * 1​ ​s​y​m​b​o​l​ ​=​ ​{​v​a​l​u​e​}​ ​u​n​i​t​s
 			 * @param {unknown} value
@@ -9848,9 +9863,9 @@ export type TranslationFunctions = {
 			 */
 			DisplayChartOnMap: () => LocalizedString
 			/**
-			 * Choropleth_{layerName}
+			 * Choro_{variable}_{layerName}
 			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			NewLayerName: (arg: { layerName: unknown, variable: unknown }) => LocalizedString
 		}
 		ProportionalSymbolsOptions: {
 			/**
@@ -9918,9 +9933,9 @@ export type TranslationFunctions = {
 			 */
 			LimitValue: () => LocalizedString
 			/**
-			 * Proportional_Symbols_{layerName}
+			 * Prop_{variable}_{layerName}
 			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			NewLayerName: (arg: { layerName: unknown, variable: unknown }) => LocalizedString
 		}
 		DiscontinuityOptions: {
 			/**
@@ -9944,9 +9959,9 @@ export type TranslationFunctions = {
 			 */
 			DiscontinuityThreshold: () => LocalizedString
 			/**
-			 * Discontinuity_{layerName}
+			 * Discontinuity_{variable}_{layerName}
 			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			NewLayerName: (arg: { layerName: unknown, variable: unknown }) => LocalizedString
 		}
 		SmoothingOptions: {
 			/**
@@ -10038,9 +10053,9 @@ export type TranslationFunctions = {
 			 */
 			ClippingLayer: () => LocalizedString
 			/**
-			 * Smoothing_{layerName}
+			 * Smoothing_{variables}_{layerName}
 			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			NewLayerName: (arg: { layerName: unknown, variables: unknown }) => LocalizedString
 		}
 		CartogramOptions: {
 			/**
@@ -10072,9 +10087,9 @@ export type TranslationFunctions = {
 			 */
 			WarningMissingOrZeroValues: () => LocalizedString
 			/**
-			 * Cartogram_{layerName}
+			 * Cartogram_{variable}_{layerName}
 			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			NewLayerName: (arg: { layerName: unknown, variable: unknown }) => LocalizedString
 		}
 		GridOptions: {
 			/**
@@ -10110,9 +10125,9 @@ export type TranslationFunctions = {
 			 */
 			WarningGeo: () => LocalizedString
 			/**
-			 * Grid_{layerName}
+			 * Grid_{variable}_{layerName}
 			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			NewLayerName: (arg: { layerName: unknown, variable: unknown }) => LocalizedString
 		}
 		CategoricalChoroplethOptions: {
 			/**
@@ -10160,15 +10175,15 @@ export type TranslationFunctions = {
 			 */
 			WarningNotCategoricalMessage: () => LocalizedString
 			/**
-			 * Categorical_Choropleth_{layerName}
+			 * Categories_{variable}_{layerName}
 			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			NewLayerName: (arg: { layerName: unknown, variable: unknown }) => LocalizedString
 		}
 		CategoricalPictogramOptions: {
 			/**
-			 * Pictogram_{layerName}
+			 * Picto_{variable}_{layerName}
 			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			NewLayerName: (arg: { layerName: unknown, variable: unknown }) => LocalizedString
 			/**
 			 * Choose pictograms and category names
 			 */
@@ -10184,9 +10199,9 @@ export type TranslationFunctions = {
 			 */
 			Filter: () => LocalizedString
 			/**
-			 * Labels_{layerName}
+			 * Labels_{variable}_{layerName}
 			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			NewLayerName: (arg: { layerName: unknown, variable: unknown }) => LocalizedString
 		}
 		LinksOptions: {
 			/**
@@ -10340,9 +10355,9 @@ export type TranslationFunctions = {
 			 */
 			BottomProperties: () => LocalizedString
 			/**
-			 * Mushrooms_{layerName}
+			 * Mushrooms_{variables}_{layerName}
 			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			NewLayerName: (arg: { layerName: unknown, variables: unknown }) => LocalizedString
 		}
 		AggregationOptions: {
 			/**
@@ -10468,9 +10483,9 @@ export type TranslationFunctions = {
 			 */
 			FilterEmptyCells: () => LocalizedString
 			/**
-			 * Aggregated_points_{layerName}
+			 * Aggregated_points_{variable}_{layerName}
 			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			NewLayerName: (arg: { layerName: unknown, variable: unknown }) => LocalizedString
 		}
 		LineAggregationOptions: {
 			/**
@@ -10490,9 +10505,9 @@ export type TranslationFunctions = {
 			 */
 			ComputationTypeMeanDistance: () => LocalizedString
 			/**
-			 * Aggregated_lines_{layerName}
+			 * Aggregated_lines_{variable}_{layerName}
 			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			NewLayerName: (arg: { layerName: unknown, variable: unknown }) => LocalizedString
 		}
 		LayerFromTableOptions: {
 			/**
@@ -10542,9 +10557,9 @@ export type TranslationFunctions = {
 		}
 		LinearRegressionOptions: {
 			/**
-			 * Linear_Regression_{layerName}
+			 * Linear_Regression_{xVariable}_{yVariable}_{layerName}
 			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			NewLayerName: (arg: { layerName: unknown, xVariable: unknown, yVariable: unknown }) => LocalizedString
 			/**
 			 * Display the correlation matrix between all the variables
 			 */
@@ -10756,9 +10771,9 @@ export type TranslationFunctions = {
 			 */
 			SymbolValue: () => LocalizedString
 			/**
-			 * Waffle_{layerName}
+			 * Waffle_{variables}_{layerName}
 			 */
-			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
+			NewLayerName: (arg: { layerName: unknown, variables: unknown }) => LocalizedString
 			/**
 			 * 1 symbol = {value} units
 			 */

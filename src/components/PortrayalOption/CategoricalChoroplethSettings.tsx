@@ -1,7 +1,11 @@
 // Import from solid-js
 import {
-  createSignal, For,
-  type JSX, Show,
+  createEffect,
+  createSignal,
+  For,
+  type JSX,
+  on,
+  Show,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
@@ -220,6 +224,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
     setNewLayerName,
   ] = createSignal<string>(
     LL().FunctionalitiesSection.CategoricalChoroplethOptions.NewLayerName({
+      variable: targetVariable(),
       layerName: layerDescription.name,
     }) as string,
   );
@@ -235,6 +240,21 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
     displayChartOnMap,
     setDisplayChartOnMap,
   ] = createSignal<boolean>(false);
+
+  createEffect(
+    on(
+      () => targetVariable(),
+      () => {
+        setNewLayerName(
+          LL().FunctionalitiesSection.CategoricalChoroplethOptions.NewLayerName({
+            variable: targetVariable(),
+            layerName: layerDescription.name,
+          }) as string,
+        );
+      },
+    ),
+  );
+
   const makePortrayal = async () => {
     const layerName = findSuitableName(
       newLayerName() || LL().FunctionalitiesSection.NewLayer(),

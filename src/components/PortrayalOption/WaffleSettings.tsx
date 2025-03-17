@@ -344,6 +344,20 @@ export default function WaffleSettings(
     ),
   );
 
+  createEffect(
+    on(
+      () => selectedVariables(),
+      () => {
+        setNewLayerName(
+          LL().FunctionalitiesSection.WaffleOptions.NewLayerName({
+            variables: selectedVariables().join('-'),
+            layerName: layerDescription.name,
+          }) as string,
+        );
+      },
+    ),
+  );
+
   const makePortrayal = async () => {
     // Compute a suitable name for the new layer
     const layerName = findSuitableName(

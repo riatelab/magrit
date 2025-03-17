@@ -1,9 +1,11 @@
 // Imports from solid-js
 import {
+  createEffect,
   createMemo,
   createSignal,
   For,
   type JSX,
+  on,
   Show,
 } from 'solid-js';
 import { produce, unwrap } from 'solid-js/store';
@@ -175,6 +177,7 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
   ] = createSignal<string>(
     LL().FunctionalitiesSection.CartogramOptions.NewLayerName({
       layerName: layerDescription.name,
+      variable: targetVariable(),
     }) as string,
   );
   const [
@@ -197,6 +200,21 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
     }
     return hasMissingOrZero;
   });
+
+
+  createEffect(
+    on(
+      () => targetVariable(),
+      () => {
+        setNewLayerName(
+          LL().FunctionalitiesSection.CartogramOptions.NewLayerName({
+            layerName: layerDescription.name,
+            variable: targetVariable(),
+          }) as string,
+        );
+      },
+    ),
+  );
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(

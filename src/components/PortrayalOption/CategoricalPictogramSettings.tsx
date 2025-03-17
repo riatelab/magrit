@@ -1,7 +1,9 @@
 // Import from solid-js
 import {
+  createEffect,
   createSignal, For,
-  type JSX, Show,
+  type JSX, on,
+  Show,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
@@ -163,14 +165,17 @@ export default function CategoricalPictogramSettings(props: PortrayalSettingsPro
     targetVariable,
     setTargetVariable,
   ] = createSignal<string>(targetFields[0].name);
+
   const [
     newLayerName,
     setNewLayerName,
   ] = createSignal<string>(
     LL().FunctionalitiesSection.CategoricalPictogramOptions.NewLayerName({
+      variable: targetVariable(),
       layerName: layerDescription.name,
     }) as string,
   );
+
   const [
     categoriesMapping,
     setCategoriesMapping,
@@ -180,6 +185,20 @@ export default function CategoricalPictogramSettings(props: PortrayalSettingsPro
         layerDescription.data.features,
         targetVariable(), // eslint-disable-line solid/reactivity
       ),
+    ),
+  );
+
+  createEffect(
+    on(
+      () => targetVariable(),
+      () => {
+        setNewLayerName(
+          LL().FunctionalitiesSection.CategoricalPictogramOptions.NewLayerName({
+            variable: targetVariable(),
+            layerName: layerDescription.name,
+          }) as string,
+        );
+      },
     ),
   );
 

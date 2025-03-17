@@ -1,5 +1,5 @@
 // Import from solid-js
-import type { JSX } from 'solid-js';
+import { createEffect, JSX } from 'solid-js';
 import { createSignal, For, Show } from 'solid-js';
 import { produce } from 'solid-js/store';
 
@@ -273,6 +273,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     setNewLayerName,
   ] = createSignal(
     LL().FunctionalitiesSection.SmoothingOptions.NewLayerName({
+      variables: targetDivisorVariable() !== '' ? `${targetVariable()}-${targetDivisorVariable()}` : targetVariable(),
       layerName: layerDescription.name,
     }) as string,
   );
@@ -337,6 +338,20 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     clippingLayer,
     setClippingLayer,
   ] = createSignal<string>(geomType === 'point' ? '' : layerDescription.id);
+
+  createEffect(
+    on(
+      () => [targetVariable(), targetDivisorVariable()],
+      () => {
+        setNewLayerName(
+          LL().FunctionalitiesSection.SmoothingOptions.NewLayerName({
+            variables: targetDivisorVariable() !== '' ? `${targetVariable()}-${targetDivisorVariable()}` : targetVariable(),
+            layerName: layerDescription.name,
+          }) as string,
+        );
+      },
+    ),
+  );
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(

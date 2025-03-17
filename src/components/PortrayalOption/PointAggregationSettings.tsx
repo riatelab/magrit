@@ -414,14 +414,6 @@ export default function PointAggregationSettings(props: PortrayalSettingsProps):
 
   // Signals for the current component:
   const [
-    newLayerName,
-    setNewLayerName,
-  ] = createSignal<string>(
-    LL().FunctionalitiesSection.PointAggregationOptions.NewLayerName({
-      layerName: layerDescription.name,
-    }) as string,
-  );
-  const [
     layerType,
     setLayerType,
   ] = createSignal<RepresentationType.choropleth | RepresentationType.proportionalSymbols>(
@@ -457,6 +449,29 @@ export default function PointAggregationSettings(props: PortrayalSettingsProps):
     filterEmptyCells,
     setFilterEmptyCells,
   ] = createSignal<boolean>(false);
+  const [
+    newLayerName,
+    setNewLayerName,
+  ] = createSignal<string>(
+    LL().FunctionalitiesSection.PointAggregationOptions.NewLayerName({
+      variable: targetVariable(),
+      layerName: layerDescription.name,
+    }) as string,
+  );
+
+  createEffect(
+    on(
+      () => targetVariable(),
+      () => {
+        setNewLayerName(
+          LL().FunctionalitiesSection.PointAggregationOptions.NewLayerName({
+            variable: targetVariable(),
+            layerName: layerDescription.name,
+          }) as string,
+        );
+      },
+    ),
+  );
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(

@@ -1,9 +1,11 @@
 // Import from solid-js
 import type { JSX } from 'solid-js';
 import {
+  createEffect,
   createSignal,
   For,
   Show,
+  on,
 } from 'solid-js';
 import { produce, unwrap } from 'solid-js/store';
 
@@ -233,21 +235,39 @@ export default function GriddingSettings(props: PortrayalSettingsProps): JSX.Ele
     targetVariable,
     setTargetVariable,
   ] = createSignal<string>(targetFields[0].name);
+
   const [
     cellType,
     setCellType,
   ] = createSignal<GridCellShape>(GridCellShape.square);
+
   const [
     targetResolution,
     setTargetResolution,
   ] = createSignal<number>(appropriateResolution);
+
   const [
     newLayerName,
     setNewLayerName,
   ] = createSignal(
     LL().FunctionalitiesSection.GridOptions.NewLayerName({
+      variable: targetVariable(),
       layerName: layerDescription.name,
     }) as string,
+  );
+
+  createEffect(
+    on(
+      () => targetVariable(),
+      () => {
+        setNewLayerName(
+          LL().FunctionalitiesSection.GridOptions.NewLayerName({
+            variable: targetVariable(),
+            layerName: layerDescription.name,
+          }) as string,
+        );
+      },
+    ),
   );
 
   const makePortrayal = async () => {

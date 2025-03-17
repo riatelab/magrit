@@ -5,6 +5,7 @@ import {
   createSignal,
   For,
   JSX,
+  on,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
@@ -258,6 +259,7 @@ export default function MushroomsSettings(
     setNewLayerName,
   ] = createSignal<string>(
     LL().FunctionalitiesSection.MushroomsOptions.NewLayerName({
+      variables: `${targetVariableTop()}_${targetVariableBottom()}`
       layerName: layerDescription.name,
     }) as string,
   );
@@ -298,6 +300,20 @@ export default function MushroomsSettings(
   createEffect(() => {
     setRefValueBottom(extentBottom()[1]);
   });
+
+  createEffect(
+    on(
+      () => [targetVariableTop(), targetVariableBottom()],
+      () => {
+        setNewLayerName(
+          LL().FunctionalitiesSection.MushroomsOptions.NewLayerName({
+            variables: `${targetVariableTop()}_${targetVariableBottom()}`,
+            layerName: layerDescription.name,
+          }) as string,
+        );
+      }
+    ),
+  );
 
   const makePortrayal = async () => {
     // Compute a suitable name for the new layer

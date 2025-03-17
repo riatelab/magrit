@@ -1,8 +1,10 @@
 // Imports from solid-js
 import {
+  createEffect,
   createSignal,
   For,
   JSX,
+  on,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
@@ -166,29 +168,48 @@ export default function DiscontinuitySettings(
     .fields.filter((variable) => variable.type === 'stock' || variable.type === 'ratio');
 
   const [
-    newLayerName,
-    setNewLayerName,
-  ] = createSignal<string>(
-    LL().FunctionalitiesSection.DiscontinuityOptions.NewLayerName({
-      layerName: layerDescription.name,
-    }) as string,
-  );
-  const [
     classificationMethod,
     setClassificationMethod,
   ] = createSignal<ClassificationMethod>('quantiles' as ClassificationMethod);
+
   const [
     targetVariable,
     setTargetVariable,
   ] = createSignal(targetFields[0].name);
+
+  const [
+    newLayerName,
+    setNewLayerName,
+  ] = createSignal<string>(
+    LL().FunctionalitiesSection.DiscontinuityOptions.NewLayerName({
+      variable: targetVariable(),
+      layerName: layerDescription.name,
+    }) as string,
+  );
+
   const [
     discontinuityType,
     setDiscontinuityType,
   ] = createSignal<'absolute' | 'relative'>('relative');
+
   const [
     selectedColor,
     setSelectedColor,
   ] = createSignal<string>('#960e47');
+
+  createEffect(
+    on(
+      () => targetVariable(),
+      () => {
+        setNewLayerName(
+          LL().FunctionalitiesSection.DiscontinuityOptions.NewLayerName({
+            variable: targetVariable(),
+            layerName: layerDescription.name,
+          }) as string,
+        );
+      },
+    ),
+  );
 
   const makePortrayal = async () => {
     const layerName = findSuitableName(

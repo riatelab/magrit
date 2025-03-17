@@ -221,6 +221,7 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
     setNewLayerName,
   ] = createSignal<string>(
     LL().FunctionalitiesSection.LabelsOptions.NewLayerName({
+      variable: targetVariable(),
       layerName: layerDescription.name,
     }) as string,
   );
@@ -264,6 +265,20 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
     filteredData,
     setFilteredData,
   ] = createSignal<GeoJSONFeature[] | null>(null);
+
+  createEffect(
+    on(
+      () => targetVariable(),
+      () => {
+        setNewLayerName(
+          LL().FunctionalitiesSection.LabelsOptions.NewLayerName({
+            variable: targetVariable(),
+            layerName: layerDescription.name,
+          }) as string,
+        );
+      },
+    ),
+  );
 
   const makePortrayal = async () => {
     // Find a suitable name for the new layer
