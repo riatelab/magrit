@@ -1,0 +1,8 @@
+.tab-settings hr {
+    margin: 0 0 1.25rem 0 !important;
+}
+
+.tab-settings .field,
+.tab-settings .field-block {
+    margin-bottom: 1rem !important;
+}
