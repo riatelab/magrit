@@ -622,7 +622,7 @@ const es = {
     NFeatures: '{{Una entidad | ?? entidades}}',
   },
   MapZone: {
-    DropFilesHere: '¡Arrrastra y suelta aquí tus conjuntos de datos! (o utilice el menú importar datos)',
+    DropFilesHere: '¡Arrastra y suelta aquí tus conjuntos de datos! (o utilice el menú importar datos)',
     Controls: {
       Plus: 'Acercar',
       Minus: 'Alejar',
@@ -1094,7 +1094,7 @@ const es = {
       MultipleR2: 'R² múltiple : {value}',
       AdjustedR2: 'R² ajustada : {value}',
       RSE: 'Error estándar de la estimación : {value} sobre {dof} grados de libertad',
-      DeletedAsMissing: '({value} eliminado{value: s}} como faltante{{valor: s}})',
+      DeletedAsMissing: '({value} eliminado{value: s}} como faltante{{value: s}})',
       DiagnosticPlots: 'Gráficos de diagnóstico',
       ResidualVsFittedValues: 'Residuales frente a valores ajustados',
       ResidualVsFittedInfo1: 'El gráfico de residuos frente al ajuste muestra si los residuos tienen patrones no lineales. Es útil para estudiar:',
@@ -1363,7 +1363,7 @@ const es = {
     FieldName: 'Nombre del campo',
     FieldType: 'Tipo de campo',
     Information1: 'El tipo de variables define las funcionalidades de análisis y representación que ofrece la aplicación',
-    Information2: 'Hay cinco tipos de variables disponibles: identificador (un valor único utilizado para identificar una entidad, como un código o su nombre), categórica (un valor cualitativo nominal u ordinal), ratio (un valor cuantitativo relativo, como una tasa de desempleo o la densidad de población), stock (un valor cuantitativo absoluto, como un stock de población o la producción total de trigo) y desconocida (para variables que no desea utilizar).',
+    Information2: 'Hay cinco tipos de variables disponibles<br>- <b>identificador</b> (un valor único utilizado para identificar una entidad, como un código o su nombre),<br>- <b>categórica</b> (un valor cualitativo nominal u ordinal),<br>- <b>ratio</b> (un valor cuantitativo relativo, como una tasa de desempleo o la densidad de población),<br>- <b>stock</b> (un valor cuantitativo absoluto, como un stock de población o la producción total de trigo),<br>- <b>desconocida</b> (para variables que no desea utilizar).',
     VariableTypes: {
       identifier: 'Identificador',
       ratio: 'Ratio',
