@@ -20,6 +20,8 @@ Cette option est disponible dans la barre de menu de l'application, en haut à d
 Ces paramètres sont accessibles en cliquant sur le bouton (?) dans la barre de menu de l'application, en haut à droite de l'écran
 puis en cliquant sur "Options générales".
 
+Ces options sont stockées dans les fichiers-projet qui peuvent être exportés depuis l'application.
+
 Les options proposées sont les suivantes :
 
 ### Langue par défaut pour le formatage des nombres
@@ -34,6 +36,18 @@ Cela permet de choisir si un nombre (tel que 12345.67) doit être formaté :
 - `es-ES` : 12.345,67
 - `ar-EG` : ١٢٬٣٤٥٫٦٧
 - etc.
+
+### Sens de fermeture des classes pour les représentations utilisant une discrétisation
+
+Il est possible de choisir le sens de fermeture des classes pour les représentations utilisant une discrétisation (cartes choroplèthes, représentation des discontinuités, etc.).
+
+Cette option est nouvelle dans la version 2.3.0 et permet de choisir si les classes sont fermées :
+
+- à gauche (ainsi pour les limites de classes `1 - 3 - 5 - 8 - 10`, les intervalles sont `[1, 3[`, `[3, 5[`, `[5, 8[`, `[8, 10]`)
+
+- à droite (ainsi pour les limites de classes `1 - 3 - 5 - 8 - 10`, les intervalles sont `[1, 3]`, `]3, 5]`, `]5, 8]`, `[8, 10]`)
+
+Ce choix s'applique à toutes les cartes crées dans l'application.
 
 ### Couleur de la grille d'alignement
 

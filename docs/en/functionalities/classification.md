@@ -114,3 +114,18 @@ You can also choose a custom color palette by clicking on the â€œCustom paletteâ
     alt="Custom color palette"
     caption="Custom color palette"
 />
+
+## Selection of interval closure direction
+
+
+In the [application's general options modal](../application-settings), you can choose the interval closure direction for representations using classification (choropleth maps, discontinuity portrayal, etc.).
+
+This option lets you choose whether classes are closed :
+
+- on the left (e.g. for class boundaries `1 - 3 - 5 - 8 - 10`, intervals are `[1, 3[`, `[3, 5[`, `[5, 8[`, `[8, 10]`)
+
+- on the right (so for class limits `1 - 3 - 5 - 8 - 10`, the intervals are `[1, 3]`, `]3, 5]`, `]5, 8]`, `[8, 10]`)
+
+Note that this option is not located in the classification panel specific to each layer, as it applies to all maps produced in the application.
+
+Note also that this option is generally of no consequence to the classification of individuals - some classification methods (Jenks, CKMeans) propose class boundaries located halfway between two data values.

@@ -20,6 +20,8 @@ This option is available in the application menu bar, at the top right of the sc
 Other settings are accessible by clicking on the (?) button in the application menu bar, at the top right of the screen
 and then by clicking on "General options".
 
+These options are stored in project files that can be exported from the application.
+
 The options offered are as follows:
 
 ### Default language for number formatting
@@ -34,6 +36,18 @@ This enables to choose if a number (such as 12345.67) should be formatted as:
 - `es-ES` : 12.345,67
 - `ar-EG` : ١٢٬٣٤٥٫٦٧
 - etc.
+
+### Direction of intervals closure for representations using classification
+
+It is possible to select the direction of intervals closure for representations using classification (choropleth maps, discontinuity representation, etc.).
+
+This option is new in version 2.3.0 and allows you to choose whether classes are closed :
+
+- on the left (thus for class boundaries `1 - 3 - 5 - 8 - 10`, the intervals are `[1, 3[`, `[3, 5[`, `[5, 8[`, `[8, 10]`)
+
+- on the right (thus for class boundaries `1 - 3 - 5 - 8 - 10`, the intervals are `[1, 3]`, `]3, 5]`, `]5, 8]`, `[8, 10]`)
+
+This choice applies to all maps created in the application.
 
 ### Alignment grid color
 

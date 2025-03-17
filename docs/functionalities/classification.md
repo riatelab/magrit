@@ -120,6 +120,19 @@ Il est également possible de choisir une palette de couleurs personnalisée en 
     caption="Fenêtre de discrétisation avec palette personnalisée"
 />
 
+## Choix de la direction de fermeture des intervalles
+
+Il est possible, dans la [fenêtre des options générales de l'application](../application-settings), de choisir le sens de fermeture des intervalles pour les représentations utilisant une discrétisation (cartes choroplèthes, représentation des discontinuités, etc.).
+
+Cette option permet de choisir si les classes sont fermées :
+
+- à gauche (ainsi pour les limites de classes `1 - 3 - 5 - 8 - 10`, les intervalles sont `[1, 3[`, `[3, 5[`, `[5, 8[`, `[8, 10]`)
+
+- à droite (ainsi pour les limites de classes `1 - 3 - 5 - 8 - 10`, les intervalles sont `[1, 3]`, `]3, 5]`, `]5, 8]`, `[8, 10]`)
+
+Notez que cette option n'est pas localisée dans la fenêtre de discrétisation, propre à chaque couche, car elle s'applique à l'ensemble des cartes réalisées dans l'application.
+
+Notez également que cette option est généralement sans conséquence sur la classification  des individus certaines méthodes de discrétisation (Jenks, CKMeans) proposent des limites de classes  situées à mi-chemin entre deux valeurs de données.
 
 ## En savoir plus sur le choix d'une discrétisation en cartographie thématique
 
