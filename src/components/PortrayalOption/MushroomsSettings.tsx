@@ -259,7 +259,7 @@ export default function MushroomsSettings(
     setNewLayerName,
   ] = createSignal<string>(
     LL().FunctionalitiesSection.MushroomsOptions.NewLayerName({
-      variables: `${targetVariableTop()}_${targetVariableBottom()}`
+      variables: `${targetVariableTop()}_${targetVariableBottom()}`,
       layerName: layerDescription.name,
     }) as string,
   );
@@ -311,7 +311,7 @@ export default function MushroomsSettings(
             layerName: layerDescription.name,
           }) as string,
         );
-      }
+      },
     ),
   );
 

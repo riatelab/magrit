@@ -240,7 +240,6 @@ export default function ChoroplethSettings(props: PortrayalSettingsProps): JSX.E
     ),
   );
 
-
   const makePortrayal = async () => {
     const layerName = findSuitableName(
       newLayerName() || LL().FunctionalitiesSection.NewLayer(),

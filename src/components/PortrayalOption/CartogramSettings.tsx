@@ -201,7 +201,6 @@ export default function CartogramSettings(props: PortrayalSettingsProps): JSX.El
     return hasMissingOrZero;
   });
 
-
   createEffect(
     on(
       () => targetVariable(),

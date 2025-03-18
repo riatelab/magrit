@@ -1,6 +1,11 @@
 // Import from solid-js
-import { createEffect, JSX } from 'solid-js';
-import { createSignal, For, Show } from 'solid-js';
+import {
+  createEffect,
+  createSignal,
+  For,
+  type JSX,
+  Show,
+} from 'solid-js';
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
