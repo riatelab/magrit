@@ -36,7 +36,7 @@ import {
   SupportedTabularFileTypes,
 } from '../helpers/supportedFormats';
 import {
-  extractZipContent, findCsvDelimiter, getDatasetInfo, removeEmptyLines,
+  extractZipContent, findCsvDelimiter, getDatasetInfo, sanitizeCsv,
 } from '../helpers/formatConversion';
 import { removeNadGrids } from '../helpers/projection';
 
@@ -359,7 +359,7 @@ const analyseDatasetTabularText = (
   const delimiter = findCsvDelimiter(content);
   const ds = d3
     .dsvFormat(delimiter)
-    .parse(removeEmptyLines(content));
+    .parse(sanitizeCsv(content, delimiter));
   // eslint-disable-next-line no-nested-ternary
   const detailedType = ext === 'csv'
     ? SupportedTabularFileTypes.CSV

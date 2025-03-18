@@ -120,21 +120,77 @@ export function findCsvDelimiter(rawText: string): string {
   return delimiters[maxIndex];
 }
 
-const renameEmptyColumns = (rawData: string): string => {
-  const lineSeparator = rawData.includes('\r\n') ? '\r\n' : '\n';
-  const lines = rawData.split(lineSeparator);
-  const header = lines[0].split(',');
-  const renamedHeader = header.map((h, i) => (h === '' || h === '""' ? `column_${i}` : h));
-  lines[0] = renamedHeader.join(',');
-  return lines.join('\n');
+const PLACEHOLDER = '||PLACEHOLDER||';
+const LINESEPARATOR = '\n';
+
+const replaceNewlinesInQuotes = (csvContent: string): string => {
+  let insideQuotes = false;
+  let newContent = '';
+  for (let i = 0; i < csvContent.length; i += 1) {
+    if (csvContent[i] === '\r') {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+    if (csvContent[i] === '"') {
+      insideQuotes = !insideQuotes;
+    }
+    if (csvContent[i] === LINESEPARATOR && insideQuotes) {
+      newContent += PLACEHOLDER;
+    } else {
+      newContent += csvContent[i];
+    }
+  }
+  return newContent;
 };
 
-export const removeEmptyLines = (rawData: string): string => {
-  const lineSeparator = rawData.includes('\r\n') ? '\r\n' : '\n';
-  return rawData
-    .split(lineSeparator)
+const restoreNewlinesFromPlaceholder = (csvContent: string): string => csvContent
+  .replaceAll(PLACEHOLDER, '\n');
+
+export const sanitizeCsv = (rawData: string, delimiter: string): string => {
+  // Replace new lines in quotes by a placeholder (we will restore them later)
+  // and strip carriage returns
+  let rd = replaceNewlinesInQuotes(rawData);
+
+  // Remove lines that are totally empty
+  rd = rd.split(LINESEPARATOR)
     .filter((l) => l.trim() !== '')
     .join('\n');
+
+  // Split the data into rows and columns
+  const rows = rd.split(LINESEPARATOR)
+    .map((row) => row.split(delimiter));
+
+  // Remove empty columns (no data in the header and no data in any rows)
+  const nonEmptyColumns = rows[0]
+    .map((header, colIndex) => (
+      header.trim() !== ''
+      || rows.some((row, rowIndex) => rowIndex !== 0 && row[colIndex].trim() !== '')));
+
+  const cleanedRows = rows
+    .map((row) => row.filter((_, colIndex) => nonEmptyColumns[colIndex]));
+
+  // Remove lines at the end of the file that only contain empty cells
+  let lastDataRowIndex = cleanedRows.length - 1;
+  while (
+    lastDataRowIndex >= 0
+    && cleanedRows[lastDataRowIndex].every((cell) => cell.trim() === '')
+  ) {
+    lastDataRowIndex -= 1;
+  }
+  const finalRows = cleanedRows.slice(0, lastDataRowIndex + 1);
+
+  // Rename empty columns and sanitize the other ones
+  const renamedHeader = finalRows[0]
+    .map((h, i) => (
+      h === '' || h === '""'
+        ? `column_${i}`
+        : sanitizeColumnName(restoreNewlinesFromPlaceholder(h))));
+
+  // Return cleaned data
+  return [
+    renamedHeader.join(delimiter),
+    ...finalRows.slice(1).map((row) => restoreNewlinesFromPlaceholder(row.join(delimiter))),
+  ].join(LINESEPARATOR);
 };
 
 export const autoTypeDataset = (dataset: d3.DSVRowArray<string>): Record<string, any>[] => {
@@ -192,11 +248,12 @@ export async function convertTextualTabularDatasetToJSON(
   ext: SupportedTabularFileTypes[keyof SupportedTabularFileTypes],
 ): Promise<Record<string, any>[]> {
   if (ext === 'csv' || ext === 'tsv' || ext === 'txt') {
-    let text = await file.text();
-    text = renameEmptyColumns(text);
-    text = removeEmptyLines(text);
+    const text = await file.text();
     const delimiter = findCsvDelimiter(text);
-    return autoTypeDataset(d3.dsvFormat(delimiter).parse(text));
+    return autoTypeDataset(
+      d3.dsvFormat(delimiter)
+        .parse(sanitizeCsv(text, delimiter)),
+    );
   }
   if (ext === 'json') {
     const text = await file.text();
