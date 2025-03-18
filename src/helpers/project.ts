@@ -69,6 +69,14 @@ export const patchProject = (
     // eslint-disable-next-line no-param-reassign
     project.version = '2.1.1';
   }
+  // In version 2.3.O we added the possibility of choosing
+  // whether class intervals are closed on the left or the right
+  // (before they were always closed on the right).
+  if (semver.lt(projectVersion, '2.3.0')) {
+    console.log('Patching project to version 2.3.0');
+    // eslint-disable-next-line no-param-reassign
+    project.applicationSettings.intervalClosure = 'right';
+  }
   return project;
 };
 
