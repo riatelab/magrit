@@ -173,7 +173,7 @@ export default defineConfig({
           copyright: 'Copyright © 2024-present CNRS (UAR 2414 RIATE)'
         },
         nav: [
-          { text: `Version ${packageJson.version}`, link: '#' },
+          { text: `Version ${packageJson.version}`, link: '/changelog' },
           { text: 'Accéder à l\'application', link: '/app/', target: '_self' },
         ]
       },
@@ -193,7 +193,7 @@ export default defineConfig({
           copyright: 'Copyright © 2024-present CNRS (UAR 2414 RIATE)'
         },
         nav: [
-          { text: `Version ${packageJson.version}`, link: '#' },
+          { text: `Version ${packageJson.version}`, link: '/changelog' },
           { text: 'Access the application', link: '/app/', target: '_self' },
         ]
       },
