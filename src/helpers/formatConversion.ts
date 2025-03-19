@@ -159,10 +159,11 @@ export function findCsvDelimiter(rawText: string): string {
   return delimiters[maxIndex];
 }
 
-const PLACEHOLDER = '||PLACEHOLDER||';
+const PLACEHOLDER_LINE_BREAK = '||PLACEHOLDERLB||';
+const PLACEHOLDER_DELIMITER = '||PLACEHOLDERDL||';
 const LINESEPARATOR = '\n';
 
-const replaceNewlinesInQuotes = (csvContent: string): string => {
+const replaceCharsInQuotes = (csvContent: string, delimiter: string): string => {
   let insideQuotes = false;
   let newContent = '';
   for (let i = 0; i < csvContent.length; i += 1) {
@@ -174,7 +175,9 @@ const replaceNewlinesInQuotes = (csvContent: string): string => {
       insideQuotes = !insideQuotes;
     }
     if (csvContent[i] === LINESEPARATOR && insideQuotes) {
-      newContent += PLACEHOLDER;
+      newContent += PLACEHOLDER_LINE_BREAK;
+    } else if (csvContent[i] === delimiter && insideQuotes) {
+      newContent += PLACEHOLDER_DELIMITER;
     } else {
       newContent += csvContent[i];
     }
@@ -182,13 +185,14 @@ const replaceNewlinesInQuotes = (csvContent: string): string => {
   return newContent;
 };
 
-const restoreNewlinesFromPlaceholder = (csvContent: string): string => csvContent
-  .replaceAll(PLACEHOLDER, '\n');
+const restoreCharsFromPlaceholder = (csvContent: string, delimiter: string): string => csvContent
+  .replaceAll(PLACEHOLDER_LINE_BREAK, '\n')
+  .replaceAll(PLACEHOLDER_DELIMITER, delimiter);
 
 export const sanitizeCsv = (rawData: string, delimiter: string): string => {
   // Replace new lines in quotes by a placeholder (we will restore them later)
   // and strip carriage returns
-  let rd = replaceNewlinesInQuotes(rawData);
+  let rd = replaceCharsInQuotes(rawData, delimiter);
 
   // Remove lines that are totally empty
   rd = rd.split(LINESEPARATOR)
@@ -223,12 +227,13 @@ export const sanitizeCsv = (rawData: string, delimiter: string): string => {
     .map((h, i) => (
       h === '' || h === '""'
         ? `column_${i}`
-        : sanitizeColumnName(restoreNewlinesFromPlaceholder(h))));
+        : sanitizeColumnName(restoreCharsFromPlaceholder(h, delimiter))));
 
   // Return cleaned data
   return [
     renamedHeader.join(delimiter),
-    ...finalRows.slice(1).map((row) => restoreNewlinesFromPlaceholder(row.join(delimiter))),
+    ...finalRows.slice(1)
+      .map((row) => restoreCharsFromPlaceholder(row.join(delimiter), delimiter)),
   ].join(LINESEPARATOR);
 };
 
