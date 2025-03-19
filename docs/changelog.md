@@ -12,6 +12,20 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### Unreleased
+
+- Ajout d'une option pour spécifier, pour les représentations qui utilisent une discrétisation, si les classes sont fermées "sur la gauche" ou "sur la droite".
+  Il s'agit d'une modification significative puisque les classes étaient précédemment fermées *à droite* et sont désormais fermées *à gauche* par défaut.
+  Voir la [page de documentation sur les classifications](./functionalities/classification) pour plus d'informations à ce sujet.
+
+- Amélioration des tooltips (au survol d'une couche dans le gestionnaire de couche) pour afficher les informations détaillées de la couche.
+
+- Correction d'un bug à l'ouverture des fichiers XLSX où la ligne de header n'était pas détectée correctement et apparaissait comme la première ligne de données (cf. discussion dans <a href="https://github.com/riatelab/magrit/issues/143">l'issue 143</a>).
+
+- Amélioration du support de fichiers CSV contenant des lignes et/ou colonnes vides (cf. discussion dans <a href="https://github.com/riatelab/magrit/issues/143">l'issue 143</a>).
+
+- Corrections mineures dans la traduction en espagnol.
+
 #### 2.2.5 (2025-03-03)
 
 - Modification de l'option permettant de contrôler l'affichage ou non du graphique de résumé par classes
@@ -23,8 +37,8 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 #### 2.2.4 (2025-02-24)
 
-- Mise à jour du jeu de donnée *world_209* afin d'ajouter un colonne `NAMEde` pour le nom en allemand des pays
-  et afin de mettre à jour la colonne `REGION_BLOC` avec les pays ayant quittés la CEDEAO (Burkina Faso, Mali et Niger, le 25/01/2025).
+- Mise à jour du jeu de donnée *world_209* afin d'ajouter une colonne `NAMEde` pour le nom en allemand des pays
+  et pour mettre à jour la colonne `REGION_BLOC` avec les pays ayant quitté la CEDEAO (Burkina Faso, Mali et Niger, le 25/01/2025).
 
 #### 2.2.3 (2025-02-17)
 

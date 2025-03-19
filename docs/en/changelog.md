@@ -12,6 +12,20 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### Unreleased
+
+- Add an option to specify, for representations using classification, whether classes are closed “on the left” or “on the right”.
+  This is a significant change, since classes were previously closed *on the right* and are now closed *on the left* by default.
+  See the [classification documentation page](./functionalities/classification) for more information on this subject.
+
+- Enhance tooltips (when hovering over a layer in the layer manager) to display detailed information about the layer.
+
+- Fix a bug when opening XLSX files where the header line was not detected correctly and appeared as the first line of data (cf. discussion in <a href="https://github.com/riatelab/magrit/issues/143">issue 143</a>).
+
+- Improve support for CSV files containing empty rows and/or columns (cf. discussion in <a href="https://github.com/riatelab/magrit/issues/143">issue 143</a>).
+
+- Minor fixes in Spanish translation.
+
 #### 2.2.5 (2025-03-03)
 
 - Modify the option to control whether the class summary chart is displayed in the layer settings modal (fixes <a href="https://github.com/riatelab/magrit/issues/149">149</a>).
