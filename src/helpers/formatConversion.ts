@@ -45,13 +45,52 @@ export async function convertBinaryTabularDatasetToJSON(
   const columnsBefore = Object.keys(layer.features[0].properties);
   const columnsAfter = columnsBefore.map((c) => sanitizeColumnName(c));
 
-  return layer.features.map((f: GeoJSONFeature) => {
-    const properties = {};
+  let rows;
+  // We want to take care of the case where the column names are not correctly
+  // identified and became Field1, Field2, etc.
+  // In such cases, we need to take the first data row as the header row.
+  if (columnsAfter.every((c) => c.startsWith('Field'))) {
+    const firstRow = layer.features[0].properties;
     for (let i = 0; i < columnsBefore.length; i += 1) {
-      properties[columnsAfter[i]] = f.properties[columnsBefore[i]];
+      columnsAfter[i] = sanitizeColumnName(firstRow[columnsBefore[i]]);
     }
-    return properties;
-  });
+
+    // We remove the first row from the data
+    layer.features.shift();
+
+    // We update the properties of the features
+    layer.features.forEach((f) => {
+      const properties = {};
+      for (let i = 0; i < columnsBefore.length; i += 1) {
+        properties[columnsAfter[i]] = f.properties[columnsBefore[i]];
+      }
+      // eslint-disable-next-line no-param-reassign
+      f.properties = properties;
+    });
+
+    rows = layer.features.map((f) => f.properties);
+  } else {
+    rows = layer.features.map((f: GeoJSONFeature) => {
+      const properties = {};
+      for (let i = 0; i < columnsBefore.length; i += 1) {
+        properties[columnsAfter[i]] = f.properties[columnsBefore[i]];
+      }
+      return properties;
+    });
+  }
+
+  // Remove lines at the end of the file that only contain empty cells
+  let lastDataRowIndex = rows.length - 1;
+  while (
+    lastDataRowIndex >= 0
+    // eslint-disable-next-line @typescript-eslint/no-loop-func
+    && columnsAfter.every((c) => rows[lastDataRowIndex][c] === undefined)
+  ) {
+    lastDataRowIndex -= 1;
+  }
+
+  // Return the cleaned dataset
+  return rows.slice(0, lastDataRowIndex + 1);
 }
 
 export const extractZipContent = async (
