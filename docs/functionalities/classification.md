@@ -128,7 +128,7 @@ Cette option permet de choisir si les classes sont fermées :
 
 - à gauche (ainsi pour les limites de classes `1 - 3 - 5 - 8 - 10`, les intervalles sont `[1, 3[`, `[3, 5[`, `[5, 8[`, `[8, 10]`)
 
-- à droite (ainsi pour les limites de classes `1 - 3 - 5 - 8 - 10`, les intervalles sont `[1, 3]`, `]3, 5]`, `]5, 8]`, `[8, 10]`)
+- à droite (ainsi pour les limites de classes `1 - 3 - 5 - 8 - 10`, les intervalles sont `[1, 3]`, `]3, 5]`, `]5, 8]`, `]8, 10]`)
 
 Notez que cette option n'est pas localisée dans la fenêtre de discrétisation, propre à chaque couche, car elle s'applique à l'ensemble des cartes réalisées dans l'application.
 

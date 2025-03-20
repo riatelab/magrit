@@ -45,7 +45,7 @@ Cette option est nouvelle dans la version 2.3.0 et permet de choisir si les clas
 
 - à gauche (ainsi pour les limites de classes `1 - 3 - 5 - 8 - 10`, les intervalles sont `[1, 3[`, `[3, 5[`, `[5, 8[`, `[8, 10]`)
 
-- à droite (ainsi pour les limites de classes `1 - 3 - 5 - 8 - 10`, les intervalles sont `[1, 3]`, `]3, 5]`, `]5, 8]`, `[8, 10]`)
+- à droite (ainsi pour les limites de classes `1 - 3 - 5 - 8 - 10`, les intervalles sont `[1, 3]`, `]3, 5]`, `]5, 8]`, `]8, 10]`)
 
 Ce choix s'applique à toutes les cartes crées dans l'application.
 

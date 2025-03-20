@@ -45,7 +45,7 @@ This option is new in version 2.3.0 and allows you to choose whether classes are
 
 - on the left (thus for class boundaries `1 - 3 - 5 - 8 - 10`, the intervals are `[1, 3[`, `[3, 5[`, `[5, 8[`, `[8, 10]`)
 
-- on the right (thus for class boundaries `1 - 3 - 5 - 8 - 10`, the intervals are `[1, 3]`, `]3, 5]`, `]5, 8]`, `[8, 10]`)
+- on the right (thus for class boundaries `1 - 3 - 5 - 8 - 10`, the intervals are `[1, 3]`, `]3, 5]`, `]5, 8]`, `]8, 10]`)
 
 This choice applies to all maps created in the application.
 
