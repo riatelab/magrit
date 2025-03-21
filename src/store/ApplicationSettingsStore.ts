@@ -138,7 +138,7 @@ const [
   },
   userLocale: getUserLocale(),
   useUndoRedo: false,
-  intervalClosure: 'right',
+  intervalClosure: 'left',
 } as ApplicationSettingsStoreType);
 
 export {
