@@ -350,7 +350,7 @@ export default function WaffleSettings(
       () => {
         setNewLayerName(
           LL().FunctionalitiesSection.WaffleOptions.NewLayerName({
-            variables: selectedVariables().join('-'),
+            variables: selectedVariables().map((d) => d.name).join('-'),
             layerName: layerDescription.name,
           }) as string,
         );
