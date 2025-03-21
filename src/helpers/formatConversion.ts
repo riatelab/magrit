@@ -49,7 +49,10 @@ export async function convertBinaryTabularDatasetToJSON(
   // We want to take care of the case where the column names are not correctly
   // identified and became Field1, Field2, etc.
   // In such cases, we need to take the first data row as the header row.
-  if (columnsAfter.every((c) => c.startsWith('Field'))) {
+  if (
+    JSON.stringify(columnsAfter)
+    === JSON.stringify(Array.from({ length: columnsAfter.length }).map((d, i) => `Field${i + 1}`))
+  ) {
     const firstRow = layer.features[0].properties;
     for (let i = 0; i < columnsBefore.length; i += 1) {
       columnsAfter[i] = sanitizeColumnName(firstRow[columnsBefore[i]]);
