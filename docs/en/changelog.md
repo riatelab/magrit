@@ -12,7 +12,7 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-#### Unreleased
+#### 2.3.0 (2025-03-21)
 
 - Add an option to specify, for representations using classification, whether classes are closed “on the left” or “on the right”.
   This is a significant change, since classes were previously closed *on the right* and are now closed *on the left* by default.

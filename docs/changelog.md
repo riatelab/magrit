@@ -12,7 +12,7 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
-#### Unreleased
+#### 2.3.0 (2025-03-21)
 
 - Ajout d'une option pour spécifier, pour les représentations qui utilisent une discrétisation, si les classes sont fermées "sur la gauche" ou "sur la droite".
   Il s'agit d'une modification significative puisque les classes étaient précédemment fermées *à droite* et sont désormais fermées *à gauche* par défaut.
