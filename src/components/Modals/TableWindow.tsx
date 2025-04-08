@@ -9,6 +9,9 @@ import {
   Show,
 } from 'solid-js';
 
+// GeoJSON types
+import type { Feature, FeatureCollection } from 'geojson';
+
 // Ag-grid stuffs
 import AgGridSolid, { AgGridSolidRef } from 'ag-grid-solid';
 import 'ag-grid-community/styles/ag-grid.min.css'; // grid core CSS
@@ -51,8 +54,6 @@ import { resetTableWindowStore, tableWindowStore } from '../../store/TableWindow
 
 // Types / Interfaces / Enums
 import type {
-  GeoJSONFeature,
-  GeoJSONFeatureCollection,
   LayerDescription,
   TableDescription,
 } from '../../global';
@@ -261,9 +262,9 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
 
   // A function to extract the rows from the data
   if (type === 'layer') {
-    res.extractRows = (data) => (unproxify(data as never) as GeoJSONFeatureCollection)
+    res.extractRows = (data) => (unproxify(data as never) as FeatureCollection)
       .features
-      .map((feature: GeoJSONFeature) => feature.properties);
+      .map((feature: Feature) => feature.properties);
   } else {
     res.extractRows = (data) => unproxify(data as never) as any[];
   }
@@ -306,8 +307,8 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
       // changed or new columns have been added/deleted
       const newData = {
         type: 'FeatureCollection',
-        features: (unproxify(dsDescription.data as never) as GeoJSONFeatureCollection).features
-          .map((feature: GeoJSONFeature, i: number) => {
+        features: (unproxify(dsDescription.data as never) as FeatureCollection).features
+          .map((feature: Feature, i: number) => {
             feature.properties = rowData()[i]; // eslint-disable-line no-param-reassign
             return feature;
           }),

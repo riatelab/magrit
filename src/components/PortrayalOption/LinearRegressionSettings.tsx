@@ -8,6 +8,9 @@ import {
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
+// GeoJSON types
+import { Feature, Position } from 'geojson';
+
 // Imports from other packages
 import { getAsymmetricDivergingColors } from 'dicopal';
 
@@ -59,7 +62,6 @@ import {
   type ChoroplethLegend,
   type ClassificationParameters,
   type CustomPalette,
-  type GeoJSONFeature, type GeoJSONPosition,
   type LegendTextElement, type LinearRegressionScatterPlot,
   type ProportionalSymbolsLegend,
   type ProportionalSymbolsPositiveNegativeParameters,
@@ -98,7 +100,7 @@ function onClickValidate(
   let maxStdRes = -Infinity;
   let minRes = Infinity;
   let maxRes = -Infinity;
-  newDataset.features.forEach((f: GeoJSONFeature, i: number) => {
+  newDataset.features.forEach((f: Feature, i: number) => {
     // eslint-disable-next-line no-param-reassign
     f.properties.fitted = linearRegressionResult.fittedValues[i] as (number | null);
     // eslint-disable-next-line no-param-reassign
@@ -254,11 +256,11 @@ function onClickValidate(
     if (
       referenceLayerDescription.type === 'polygon'
     ) {
-      newDataset.features.forEach((feature: GeoJSONFeature) => {
+      newDataset.features.forEach((feature: Feature) => {
         // eslint-disable-next-line no-param-reassign
         feature.geometry = {
           type: 'Point',
-          coordinates: coordsPointOnFeature(feature.geometry as never) as GeoJSONPosition,
+          coordinates: coordsPointOnFeature(feature.geometry as never) as Position,
         };
       });
     }
@@ -270,7 +272,7 @@ function onClickValidate(
     // and also if the user wants to change the position of the
     // symbols manually)
     if (referenceLayerDescription.type !== 'linestring') {
-      newDataset.features.forEach((feature: GeoJSONFeature) => {
+      newDataset.features.forEach((feature: Feature) => {
         // eslint-disable-next-line no-param-reassign
         feature.geometry.originalCoordinates = feature.geometry.coordinates;
       });

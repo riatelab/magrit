@@ -1,8 +1,9 @@
+import type { FeatureCollection } from 'geojson';
 import {
   degToRadConstant, Mceil, Mcos, Mfloor, Msin, SQRT3,
 } from './math';
 
-import { GeoJSONFeatureCollection, GridCellShape } from '../global.d';
+import { GridCellShape } from '../global.d';
 
 export const transformResolution = (
   resolution: number,
@@ -15,9 +16,9 @@ export const transformResolution = (
 const generateSquareGrid = (
   extent: [number, number, number, number],
   cellSize: number,
-): GeoJSONFeatureCollection => {
+): FeatureCollection => {
   let [xmin, ymin, xmax, ymax] = extent;
-  const grid: GeoJSONFeatureCollection = {
+  const grid: FeatureCollection = {
     type: 'FeatureCollection',
     features: [],
   };
@@ -72,9 +73,9 @@ const generateSquareGrid = (
 const generateDiamondGrid = (
   extent: [number, number, number, number],
   cellSize: number,
-): GeoJSONFeatureCollection => {
+): FeatureCollection => {
   let [xmin, ymin, xmax, ymax] = extent;
-  const grid: GeoJSONFeatureCollection = {
+  const grid: FeatureCollection = {
     type: 'FeatureCollection',
     features: [],
   };
@@ -128,7 +129,7 @@ const generateDiamondGrid = (
 const generateHexGrid = (
   extent: [number, number, number, number],
   cellSize: number,
-): GeoJSONFeatureCollection => {
+): FeatureCollection => {
   let [xmin, ymin, xmax, ymax] = extent;
   const hexWidth = SQRT3 * cellSize;
   const hexHeight = 2 * cellSize;
@@ -140,7 +141,7 @@ const generateHexGrid = (
   xmax += hexWidth * 2.5;
   ymax += hexHeight * 2.5;
 
-  const grid: GeoJSONFeatureCollection = {
+  const grid: FeatureCollection = {
     type: 'FeatureCollection',
     features: [],
   };
@@ -188,9 +189,9 @@ const generateHexGrid = (
 const generateTriangularGrid = (
   extent: [number, number, number, number],
   cellSize: number,
-): GeoJSONFeatureCollection => {
+): FeatureCollection => {
   let [xmin, ymin, xmax, ymax] = extent;
-  const grid: GeoJSONFeatureCollection = {
+  const grid: FeatureCollection = {
     type: 'FeatureCollection',
     features: [],
   };

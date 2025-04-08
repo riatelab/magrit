@@ -1,10 +1,10 @@
 import d3 from './d3-custom';
 import rewindLayer from './rewind';
-import { GeoJSONFeatureCollection } from '../global';
+import type { FeatureCollection } from 'geojson';
 
 // From https://github.com/d3/d3-geo/issues/113
-export default function unstitch(a: GeoJSONFeatureCollection) {
-  let d = JSON.parse(JSON.stringify(a)) as GeoJSONFeatureCollection;
+export default function unstitch(a: FeatureCollection): FeatureCollection {
+  let d = JSON.parse(JSON.stringify(a)) as FeatureCollection;
   d = d3.geoProject(
     d,
     d3

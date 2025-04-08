@@ -1,9 +1,13 @@
+// Imports from solid-js
 import {
   Accessor, createEffect,
   createMemo, createSignal,
   type JSX, Match, on, Show, Switch,
 } from 'solid-js';
 import { produce, unwrap } from 'solid-js/store';
+
+// GeoJSON types
+import type { Feature } from 'geojson';
 
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
@@ -38,7 +42,7 @@ import FormulaInput, {
 import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
-import { GeoJSONFeature, LayerDescription } from '../../global';
+import type { LayerDescription } from '../../global';
 
 async function onClickValidate(
   referenceLayerId: string,
@@ -128,7 +132,7 @@ export default function SelectionSettings(
   const [
     filteredData,
     setFilteredData,
-  ] = createSignal<GeoJSONFeature[] | null>(null);
+  ] = createSignal<Feature[] | null>(null);
 
   const makePortrayal = async () => {
     // Check name of the new layer

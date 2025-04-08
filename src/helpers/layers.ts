@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { getPalette } from 'dicopal';
-
+import type { FeatureCollection, MultiLineString } from 'geojson';
 // Helpers
 import d3 from './d3-custom';
 import worldLand from './world-land';
@@ -9,10 +9,8 @@ import { DataType, VariableType } from './typeDetection';
 
 // Types
 import {
-  type GeoJSONFeatureCollection,
   type GraticuleParameters,
   type LayerDescription,
-  type MultiLineString,
   RepresentationType,
 } from '../global';
 
@@ -68,7 +66,7 @@ export const makeDefaultWorldLand = (): LayerDescription => ({
   representationType: 'default' as RepresentationType,
   data: ( // We know types are correct here, so we just use 'never' to avoid type checking
     topojson.feature(worldLand as never, worldLand.objects.world_country as never)
-  ) as unknown as GeoJSONFeatureCollection,
+  ) as unknown as FeatureCollection,
 });
 
 export const makeDefaultSphere = (): LayerDescription => ({

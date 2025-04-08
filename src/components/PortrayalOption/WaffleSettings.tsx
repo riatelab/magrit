@@ -8,6 +8,9 @@ import {
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
+// GeoJSON types
+import { FeatureCollection } from 'geojson';
+
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
 
@@ -44,7 +47,6 @@ import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelecti
 
 // Types / Interfaces / Enums
 import {
-  type GeoJSONFeatureCollection,
   type LayerDescriptionWaffle,
   type LegendTextElement,
   LegendType,
@@ -159,7 +161,7 @@ function onClickValidate(
     JSON.stringify(
       referenceLayerDescription.data,
     ),
-  ) as GeoJSONFeatureCollection;
+  ) as FeatureCollection;
 
   if (
     referenceLayerDescription.type === 'polygon'

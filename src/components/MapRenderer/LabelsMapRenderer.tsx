@@ -7,6 +7,9 @@ import {
   onMount,
 } from 'solid-js';
 
+// GeoJSON types
+import type { Feature } from 'geojson';
+
 // Helpers
 import { bindDragBehavior, mergeFilterIds } from './common.tsx';
 import { unproxify } from '../../helpers/common';
@@ -34,7 +37,6 @@ import SingleLabelEdition from '../Modals/SingleLabelEdition.tsx';
 
 // Types / Interfaces / Enums
 import {
-  type GeoJSONFeature,
   type LabelsParameters,
   type LayerDescription,
   type LayerDescriptionLabels,
@@ -137,7 +139,7 @@ export function defaultLabelsRenderer(
   let refElement: SVGGElement;
   const rendererParameters = layerDescription.rendererParameters as LabelsParameters;
 
-  const getSize = (feature: GeoJSONFeature, fontSizeLabel: number) => {
+  const getSize = (feature: Feature, fontSizeLabel: number) => {
     if (rendererParameters.proportional) {
       const propSize = new PropSizer(
         rendererParameters.proportional!.referenceValue,

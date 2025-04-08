@@ -7,6 +7,9 @@ import {
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
+// GeoJSON types
+import type { Feature, MultiLineString } from 'geojson';
+
 // Imports from other libs
 import { getPalettes } from 'dicopal';
 
@@ -75,7 +78,6 @@ import {
   ProportionalSymbolsSymbolType,
   type ProportionalSymbolsParametersBase,
   type GraticuleParameters,
-  type MultiLineString,
   type LayoutFeature,
   type Legend,
   LegendType,
@@ -85,7 +87,6 @@ import {
   type ChoroplethHistogramLegend,
   type ProportionalSymbolsRatioParameters,
   CustomPalette,
-  type GeoJSONFeature,
   type ProportionalSymbolSingleColorParameters,
   type LayerDescriptionCategoricalPictogram,
   type CategoricalPictogramParameters,
@@ -1110,7 +1111,7 @@ function makeSettingsDefaultPoint(
                   const r = (layerDescription.rendererParameters as ProportionalSymbolsParameters);
                   // eslint-disable-next-line no-param-reassign
                   layerDescription.data.features = makeDorlingDemersSimulation(
-                    unproxify(layerDescription.data.features as never) as GeoJSONFeature[],
+                    unproxify(layerDescription.data.features as never) as Feature[],
                     r.variable,
                     {
                       referenceSize: r.referenceRadius,
@@ -1158,7 +1159,7 @@ function makeSettingsDefaultPoint(
                   const r = (layerDescription.rendererParameters as ProportionalSymbolsParameters);
                   // eslint-disable-next-line no-param-reassign
                   layerDescription.data.features = makeDorlingDemersSimulation(
-                    unproxify(layerDescription.data.features as never) as GeoJSONFeature[],
+                    unproxify(layerDescription.data.features as never) as Feature[],
                     r.variable,
                     {
                       referenceSize: r.referenceRadius,

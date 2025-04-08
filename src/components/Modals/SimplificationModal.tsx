@@ -6,6 +6,9 @@ import {
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
+// GeoJSON types
+import type { Feature } from 'geojson';
+
 // Stores
 import {
   LayersDescriptionStoreType,
@@ -15,9 +18,6 @@ import { setModalStore } from '../../store/ModalStore';
 
 // Subcomponents
 import Simplification from '../Simplification.tsx';
-
-// Types / Interfaces / Enums
-import type { GeoJSONFeature } from '../../global';
 
 export default function SimplificationModal(
   props: {
@@ -29,7 +29,7 @@ export default function SimplificationModal(
   const [
     simplifiedLayers,
     setSimplifiedLayers,
-  ] = createSignal<GeoJSONFeature[][]>([]);
+  ] = createSignal<Feature[][]>([]);
 
   onMount(() => {
     // Set the behavior for when the user clicks on "Confirm"

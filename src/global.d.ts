@@ -1,6 +1,7 @@
 // declare global {
 // import { WebR } from '@r-wasm/webr/webr-main';
 import type { Gdal } from 'gdal3.js/src/index.d';
+import type { Feature, FeatureCollection } from 'geojson';
 import type { Dexie } from 'dexie';
 import type { Variable } from './helpers/typeDetection';
 import type { MapStoreType } from './store/MapStore';
@@ -38,8 +39,8 @@ type LayerDescription = {
   // The type of representation of the layer
   representationType: RepresentationType,
   // The data for the layer
-  // (this is either a GeoJSONFeatureCollection or a Sphere, as a special case)
-  data: GeoJSONFeatureCollection,
+  // (this is either a GeoJSON FeatureCollection or a Sphere, as a special case)
+  data: FeatureCollection,
   // Description of the fields of the layer - undefined if no fields
   fields: Variable[],
   // Whether the layer is visible or not
@@ -1072,7 +1073,7 @@ export type Legend = (
 );
 
 export interface ID3Element {
-  __data__: GeoJSONFeature,
+  __data__: Feature,
 }
 
 export interface IZoomable {
@@ -1345,88 +1346,6 @@ export type ScoredResult<T> = {
 };
 
 export type SearchResults<T> = ScoredResult<T>[];
-
-type GeoJSONRecord = { [key in string | number]: unknown };
-type GeoJSONPosition = [longitude: number, latitude: number, elevation?: number];
-
-interface GeoJSONGeometryBase extends GeoJSONRecord {
-  bbox?: number[];
-}
-
-interface Point extends GeoJSONGeometryBase {
-  type: 'Point',
-  coordinates: GeoJSONPosition,
-}
-
-interface MultiPoint extends GeoJSONGeometryBase {
-  type: 'MultiPoint',
-  coordinates: GeoJSONPosition[],
-}
-
-interface LineString extends GeoJSONGeometryBase {
-  type: 'LineString',
-  coordinates: GeoJSONPosition[],
-}
-
-interface MultiLineString extends GeoJSONGeometryBase {
-  type: 'MultiLineString',
-  coordinates: GeoJSONPosition[][],
-}
-
-interface Polygon extends GeoJSONGeometryBase {
-  type: 'Polygon',
-  coordinates: GeoJSONPosition[][],
-}
-
-interface MultiPolygon extends GeoJSONGeometryBase {
-  type: 'MultiPolygon',
-  coordinates: GeoJSONPosition[][][],
-}
-
-interface GeometryCollection extends GeoJSONGeometryBase {
-  type: 'GeometryCollection',
-  geometries: GeoJSONGeometry[],
-}
-
-// A GeoJSON Feature
-interface GeoJSONFeature {
-  type: string,
-  id?: string | number,
-  bbox?: [number, number, number, number],
-  geometry: GeoJSONGeometryType,
-  properties: GeoJSONRecord,
-}
-
-// GeoJSON Geometry types
-type GeoJSONGeometryType = (
-  Point
-  | MultiPoint
-  | LineString
-  | MultiLineString
-  | Polygon
-  | MultiPolygon
-  | GeometryCollection
-  );
-
-// A GeoJSON Geometry
-interface GeoJSONGeometry {
-  type: string,
-  coordinates: [],
-  bbox?: [number, number, number, number],
-}
-
-// A GeoJSON FeatureCollection
-interface GeoJSONFeatureCollection {
-  type: string,
-  features: GeoJSONFeature[],
-  bbox?: [number, number, number, number],
-  crs?: {
-    type: string,
-    properties: {
-      name: string,
-    },
-  },
-}
 
 interface DropShadowOptions {
   dx: number,

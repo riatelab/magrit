@@ -10,6 +10,9 @@ import { BsMap } from 'solid-icons/bs';
 import { FiExternalLink } from 'solid-icons/fi';
 import { HiOutlineGlobeAlt, HiSolidDocumentText } from 'solid-icons/hi';
 
+// GeoJSON types
+import { FeatureCollection } from 'geojson';
+
 // Helpers
 import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -33,13 +36,13 @@ import MessageBlock from '../MessageBlock.tsx';
 import InputFieldTextarea from '../Inputs/InputTextarea.tsx';
 
 // Types / Interfaces / Enums
-import type { GeoJSONFeatureCollection, ScoredResult } from '../../global.d';
+import type { ScoredResult } from '../../global.d';
 
 const worldLandGeo = rewindLayer(
   topojson.feature(
     worldLand as never,
     worldLand.objects.world_country as never,
-  ) as GeoJSONFeatureCollection,
+  ) as FeatureCollection,
   false,
 );
 

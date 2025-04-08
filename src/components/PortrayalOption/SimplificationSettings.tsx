@@ -5,6 +5,9 @@ import {
 } from 'solid-js';
 import { produce, unwrap } from 'solid-js/store';
 
+// GeoJSON types
+import { Feature } from 'geojson';
+
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
 
@@ -33,11 +36,11 @@ import Simplification from '../Simplification.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Types
-import type { GeoJSONFeature, LayerDescription } from '../../global';
+import type { LayerDescription } from '../../global';
 
 async function onClickValidate(
   referenceLayerId: string,
-  features: GeoJSONFeature[],
+  features: Feature[],
   newLayerName: string,
 ): Promise<void> {
   const referenceDescription = (layersDescriptionStore.layers
@@ -86,7 +89,7 @@ export default function SimplificationSettings(
   const [
     simplifiedLayers,
     setSimplifiedLayers,
-  ] = createSignal<GeoJSONFeature[][]>([]);
+  ] = createSignal<Feature[][]>([]);
 
   const [
     newLayerName,

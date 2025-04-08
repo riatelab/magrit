@@ -1,16 +1,13 @@
+import type { FeatureCollection, Feature, Polygon } from 'geojson';
 import { geojsonToGeosGeom, geosGeomToGeojson } from 'geos-wasm/helpers';
 import getGeos from './geos';
 import topojson from './topojson';
-import {
-  type GeoJSONFeatureCollection,
-  type GeoJSONFeature,
-} from '../global';
 
 export default async function aggregateLayer(
-  layer: GeoJSONFeatureCollection,
+  layer: FeatureCollection,
   variable: string,
   method: 'geos' | 'topojson',
-): Promise<GeoJSONFeatureCollection> {
+): Promise<FeatureCollection> {
   // The set of unique values of the variable
   const uniqueValues = new Set(layer.features.map((f) => f.properties[variable]));
   // The features, grouped according to the unique values of the variable
@@ -18,7 +15,7 @@ export default async function aggregateLayer(
     .filter((f) => f.properties[variable] === value));
 
   if (method === 'geos') {
-    const newFeatures: GeoJSONFeature[] = [];
+    const newFeatures: Feature[] = [];
     const geos = await getGeos();
     // We need to union the features of each group
     featureGroups.forEach((group) => {
@@ -35,7 +32,7 @@ export default async function aggregateLayer(
         type: 'Feature',
         properties: {},
         geometry: unionGeom,
-      } as GeoJSONFeature;
+      } as Feature<Polygon, Record<string, unknown>>;
 
       if (variable !== '') {
         ft.properties[variable] = group[0].properties[variable];
@@ -52,7 +49,7 @@ export default async function aggregateLayer(
     };
   }
   // Otherwise, method === 'topojson'
-  const newFeatures: GeoJSONFeature[] = [];
+  const newFeatures: Feature[] = [];
   featureGroups.forEach((group) => {
     const topo = topojson.topology({ collection: { type: 'FeatureCollection', features: group } });
     const mergedPolygon = topojson.merge(
@@ -63,7 +60,7 @@ export default async function aggregateLayer(
       type: 'Feature',
       properties: {},
       geometry: mergedPolygon,
-    } as GeoJSONFeature;
+    } as Feature<never, Record<string, unknown>>;
 
     if (variable !== '') {
       ft.properties[variable] = group[0].properties[variable];

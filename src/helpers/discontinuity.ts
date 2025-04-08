@@ -1,3 +1,6 @@
+// GeoJSON types
+import type { Feature, FeatureCollection } from 'geojson';
+
 // Stores
 import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 
@@ -6,20 +9,17 @@ import { isFiniteNumber, unproxify } from './common';
 import topojson from './topojson';
 import { Mmax } from './math';
 
-// Types / Interfaces / Enums
-import { GeoJSONFeature, GeoJSONFeatureCollection } from '../global';
-
 const computeDiscontinuity = (
   referenceLayerId: string,
   referenceVariableName: string,
   discontinuityType: 'relative' | 'absolute',
-): GeoJSONFeatureCollection => {
+): FeatureCollection => {
   // Get the reference layer data
   const refLayer = unproxify(
     layersDescriptionStore.layers
       .find((l) => l.id === referenceLayerId)
       ?.data as never,
-  ) as GeoJSONFeatureCollection;
+  ) as FeatureCollection;
 
   // Add a unique id to each feature
   refLayer.features.forEach((f, i) => {
@@ -30,8 +30,8 @@ const computeDiscontinuity = (
   const topology = topojson.topology({ layer: refLayer }, 1e5);
 
   // Functions to get the id of a pair of features
-  const getPairIds = (a: GeoJSONFeature, b: GeoJSONFeature): [string, string] => [`${a.id}__${b.id}`, `${b.id}__${a.id}`];
-  const getIds = (a: GeoJSONFeature, b: GeoJSONFeature): [string, string] => [`${a.id}`, `${b.id}`];
+  const getPairIds = (a: Feature, b: Feature): [string, string] => [`${a.id}__${b.id}`, `${b.id}__${a.id}`];
+  const getIds = (a: Feature, b: Feature): [string, string] => [`${a.id}`, `${b.id}`];
 
   // Compute the discontinuity values between each pair of features
   const resultValue = new Map<string, number>();
@@ -40,7 +40,7 @@ const computeDiscontinuity = (
     topojson.mesh(
       topology,
       topology.objects.layer,
-      (a: GeoJSONFeature, b: GeoJSONFeature) => {
+      (a: Feature, b: Feature) => {
         if (a !== b) {
           const valA = a.properties[referenceVariableName];
           const valB = b.properties[referenceVariableName];
@@ -60,7 +60,7 @@ const computeDiscontinuity = (
     topojson.mesh(
       topology,
       topology.objects.layer,
-      (a: GeoJSONFeature, b: GeoJSONFeature) => {
+      (a: Feature, b: Feature) => {
         if (a !== b) {
           const valA = a.properties[referenceVariableName];
           const valB = b.properties[referenceVariableName];
@@ -96,7 +96,7 @@ const computeDiscontinuity = (
     const geom = topojson.mesh(
       topology,
       topology.objects.layer,
-      (a: GeoJSONFeature, b: GeoJSONFeature) => {
+      (a: Feature, b: Feature) => {
         if (a === b) return false;
         const [refAId, refBId] = getIds(a, b);
         // eslint-disable-next-line no-mixed-operators
@@ -120,7 +120,7 @@ const computeDiscontinuity = (
   // Sort (descending) the features by the computed value
   dRes.sort((a, b) => b.properties.value - a.properties.value);
 
-  // Return the result as a GeoJSONFeatureCollection
+  // Return the result as a FeatureCollection
   return {
     type: 'FeatureCollection',
     features: dRes,

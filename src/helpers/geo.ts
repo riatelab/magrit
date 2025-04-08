@@ -8,6 +8,16 @@ import {
 } from '@turf/turf';
 import polylabel from 'polylabel';
 
+// GeoJSON types
+import type {
+  Feature,
+  FeatureCollection,
+  Geometry,
+  MultiPolygon,
+  Polygon,
+  Position,
+} from 'geojson';
+
 // Helpers
 import d3 from './d3-custom';
 import {
@@ -38,15 +48,10 @@ import { globalStore } from '../store/GlobalStore';
 
 // Types / Interfaces / Enums
 import {
-  type GeoJSONFeature,
-  type GeoJSONFeatureCollection,
-  type GeoJSONGeometry,
-  type GeoJSONGeometryType,
-  type GeoJSONPosition,
   ProportionalSymbolsSymbolType,
 } from '../global.d';
 
-export const getLargestPolygon = (geom: GeoJSONGeometry) => {
+export const getLargestPolygon = (geom: MultiPolygon): Polygon => {
   const areas = [];
   for (let j = 0; j < geom.coordinates.length; j++) { // eslint-disable-line no-plusplus
     areas.push(area({
@@ -65,7 +70,7 @@ export const getLargestPolygon = (geom: GeoJSONGeometry) => {
   };
 };
 
-export const coordsPointOnFeature = (geom: GeoJSONGeometry) => {
+export const coordsPointOnFeature = (geom: Geometry) => {
   if (!geom) return null;
   if (geom.type === 'Point') {
     // Return the point itself
@@ -84,8 +89,8 @@ export const coordsPointOnFeature = (geom: GeoJSONGeometry) => {
   if (geom.type.includes('Polygon')) {
     // Take the largest Polygon if MultiPolygon
     const tGeom = geom.type.includes('Multi')
-      ? getLargestPolygon(geom)
-      : geom;
+      ? getLargestPolygon(geom as MultiPolygon)
+      : geom as Polygon;
     // Compute centroid
     const centroid = d3.geoCentroid(tGeom as never);
     // Return centroid coordinates if they are inside the target polygon ...
@@ -118,12 +123,12 @@ export const coordsPointOnFeature = (geom: GeoJSONGeometry) => {
 };
 
 export const makeCentroidLayer = (
-  layer: GeoJSONFeatureCollection,
+  layer: FeatureCollection,
   type: 'point' | 'linestring' | 'polygon',
   fields?: string[],
-): GeoJSONFeatureCollection => {
+): FeatureCollection => {
   // Copy the dataset
-  const newData = JSON.parse(JSON.stringify(layer)) as GeoJSONFeatureCollection;
+  const newData = JSON.parse(JSON.stringify(layer)) as FeatureCollection;
 
   // Compute the centroid of each feature
   if (type !== 'point') {
@@ -402,7 +407,7 @@ function squareForceCollide() {
 /**
  *
  *
- * @param {GeoJSONFeature[]} features - The features to be simulated
+ * @param {Feature[]} features - The features to be simulated
  * @param {string} variableName - The name of the variable used for computing the size of symbols
  * @param {{
  *  referenceValue: number,
@@ -411,11 +416,11 @@ function squareForceCollide() {
  * }} proportionProperty - Which size, on which value, for which kind of symbol
  * @param {number} iterations - The number of iterations for the simulation
  * @param {number} strokeWidth - The stroke width of the symbols
- * @returns {GeoJSONFeature[]} - The features with the computed coordinates
+ * @returns {Feature[]} - The features with the computed coordinates
  *                               (wrt the current projection)
  */
 export const makeDorlingDemersSimulation = (
-  features: GeoJSONFeature[],
+  features: Feature[],
   variableName: string,
   proportionProperty: {
     referenceValue: number,
@@ -424,7 +429,7 @@ export const makeDorlingDemersSimulation = (
   },
   iterations: number,
   strokeWidth: number,
-): GeoJSONFeature[] => {
+): Feature[] => {
   // Util to compute the size of circles, given the
   // reference value and size set by the user
   const propSizer = new PropSizer(
@@ -436,7 +441,7 @@ export const makeDorlingDemersSimulation = (
   // Extract positions (in projected coordinates) and sizes
   // for the simulation
   const positions: SimulationNode[] = features
-    .map((d: GeoJSONFeature, i: number) => ({
+    .map((d: Feature, i: number) => ({
       x: globalStore.projection(d.geometry.originalCoordinates)[0],
       y: globalStore.projection(d.geometry.originalCoordinates)[1],
       size: isFiniteNumber(d.properties[variableName])
@@ -481,7 +486,7 @@ export const makeDorlingDemersSimulation = (
   return features;
 };
 
-export const countCoordinates = (geometry: GeoJSONGeometryType): number => {
+export const countCoordinates = (geometry: Geometry): number => {
   if (geometry.type === 'Point') {
     return 1;
   }
@@ -517,13 +522,13 @@ export const countCoordinates = (geometry: GeoJSONGeometryType): number => {
 };
 
 const equalPoints = (
-  a: number[] | GeoJSONPosition,
-  b: number[] | GeoJSONPosition,
+  a: number[] | Position,
+  b: number[] | Position,
 ): boolean => a[0] === b[0] && a[1] === b[1];
 
 const cleanConsecutiveIdenticalPoints = (
-  coords: number[][] | GeoJSONPosition[],
-): GeoJSONPosition[] => {
+  coords: number[][] | Position[],
+): Position[] => {
   const newCoords = [coords[0]];
   for (let i = 1; i < coords.length; i += 1) {
     if (!equalPoints(coords[i], coords[i - 1])) {
@@ -531,12 +536,12 @@ const cleanConsecutiveIdenticalPoints = (
     }
   }
   return newCoords
-    .filter((d) => !Number.isNaN(d[0]) || !Number.isNaN(d[1])) as GeoJSONPosition[];
+    .filter((d) => !Number.isNaN(d[0]) || !Number.isNaN(d[1])) as Position[];
 };
 
 const cleanRing = (
-  ring: GeoJSONPosition[] | number[][],
-): GeoJSONPosition[] | null => {
+  ring: Position[] | number[][],
+): Position[] | null => {
   const newRing = cleanConsecutiveIdenticalPoints(ring);
   if (newRing.length > 2) {
     if (equalPoints(newRing[0], newRing[newRing.length - 1])) {
@@ -550,8 +555,8 @@ const cleanRing = (
 };
 
 export const cleanGeometryGeos = async (
-  geometry: GeoJSONGeometryType,
-): Promise<[GeoJSONGeometryType, number] | null> => {
+  geometry: Geometry,
+): Promise<[Geometry, number] | null> => {
   // We use geos make valid to clean the geometry
   // but we have to be careful with the result...
   const geom = await makeValid(geometry as any);
@@ -591,7 +596,7 @@ export const cleanGeometryGeos = async (
         : 'LineString';
       // If it generated a GeometryCollection, try to extract the
       // appropriate geoms
-      const geoms = geom.geometries.filter((g) => g.type.includes(targetType));
+      const geoms = geom.geometries.filter((g: Geometry) => g.type.includes(targetType));
       // console.log('Geoms', geoms);
       // In the end, we want to avoid GeometryCollections
       // in the dataset we are constructing...
@@ -644,7 +649,7 @@ export const computeAppropriateResolution = (box: number[], n: number) => {
   return Math.sqrt(bboxArea / n);
 };
 
-function calculatePolygonArea(ring: GeoJSONPosition[]) {
+function calculatePolygonArea(ring: Position[]) {
   let areaValue = 0;
   const n = ring.length;
   for (let i = 0; i < n; i += 1) {
@@ -655,7 +660,7 @@ function calculatePolygonArea(ring: GeoJSONPosition[]) {
   return Math.abs(areaValue) / 2.0;
 }
 
-export function planarArea(feature: GeoJSONFeature) {
+export function planarArea(feature: Feature) {
   const { geometry } = feature;
   let areaValue = 0;
   if (geometry.type === 'Polygon') {
@@ -709,13 +714,13 @@ const decodeArc = (
 export const findIntersections = (
   topo: any,
   layerName: string,
-): GeoJSONFeature[] => {
+): Feature[] => {
   const layer = topo.objects[layerName];
   // We need to take the arcs from the topology object and check if arcs from one feature
   // intersect with arcs from another feature.
   // Note that we are not interested in the arcs that are shared by two features.
   const features = layer.geometries;
-  const intersections: GeoJSONFeature[] = [];
+  const intersections: Feature[] = [];
   const flatArcsFeature = features
     .map((ft: any) => ft.arcs.flat(Infinity) // eslint-disable-next-line no-bitwise
       .map((arcIx: number) => (arcIx < 0 ? ~arcIx : arcIx)));
@@ -780,7 +785,7 @@ export const findIntersections = (
                 ft.properties['ID-feature1'] = i;
                 // eslint-disable-next-line no-param-reassign
                 ft.properties['ID-feature2'] = j;
-                intersections.push(ft as GeoJSONFeature);
+                intersections.push(ft as Feature);
               }
             });
           }
@@ -813,16 +818,16 @@ export const mergeBboxes = (
  * (defined as xmin, ymin, xmax, ymax).
  *
  * @param {[number, number, number, number]} bounds
- * @returns {GeoJSONGeometry}
+ * @returns {Polygon}
  */
 export const makePolygonFromBbox = (
   bounds: [number, number, number, number],
-): GeoJSONGeometry => {
+): Polygon => {
   const [xmin, ymin, xmax, ymax] = bounds;
   return {
     type: 'Polygon',
     coordinates: [[
       [xmin, ymax], [xmax, ymax], [xmax, ymin], [xmin, ymin], [xmin, ymax],
-    ]] as GeoJSONPosition[][],
+    ]] as Position[][],
   };
 };

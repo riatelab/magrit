@@ -1,13 +1,15 @@
 // Import from other packages
 import JSZip from 'jszip';
 
+// GeoJSON types
+import type { FeatureCollection, Feature } from 'geojson';
+
 // Helpers
 import { isFiniteNumber, sanitizeColumnName } from './common';
 import d3 from './d3-custom';
 import { SupportedTabularFileTypes } from './supportedFormats';
 
 // Types
-import type { GeoJSONFeatureCollection, GeoJSONFeature } from '../global';
 import type { FileEntry } from './fileUpload';
 
 /**
@@ -19,7 +21,7 @@ import type { FileEntry } from './fileUpload';
 export async function convertToGeoJSON(
   fileOrFiles: File | File[],
   params: { openOpts: string[]; opts: string[] } = { opts: [], openOpts: [] },
-): Promise<GeoJSONFeatureCollection> {
+): Promise<FeatureCollection> {
   const openOptions = params.openOpts || [];
   const input = await globalThis.gdal.open(fileOrFiles, openOptions);
   const options = [
@@ -73,7 +75,7 @@ export async function convertBinaryTabularDatasetToJSON(
 
     rows = layer.features.map((f) => f.properties);
   } else {
-    rows = layer.features.map((f: GeoJSONFeature) => {
+    rows = layer.features.map((f: Feature) => {
       const properties = {};
       for (let i = 0; i < columnsBefore.length; i += 1) {
         properties[columnsAfter[i]] = f.properties[columnsBefore[i]];
@@ -112,11 +114,11 @@ export const extractZipContent = async (
     })));
 };
 
-export const removeFeaturesWithEmptyGeometry = (layer: GeoJSONFeatureCollection) => {
+export const removeFeaturesWithEmptyGeometry = (layer: FeatureCollection) => {
   // We want features with non-empty geometries
   // (i.e each geometry is not null nor undefined and there is a non-empty coordinates array).
   const features = layer.features
-    .filter((f: GeoJSONFeature) => (
+    .filter((f: Feature) => (
       f.geometry
       && f.geometry.coordinates
       && f.geometry.coordinates.length > 0));
@@ -129,17 +131,17 @@ export const removeFeaturesWithEmptyGeometry = (layer: GeoJSONFeatureCollection)
 /**
  * Get the geometry type of the given GeoJSON layer.
  *
- * @param {GeoJSONFeatureCollection} geojsonLayer
+ * @param {FeatureCollection} geojsonLayer
  * @returns {string}
  */
-export function getGeometryType(geojsonLayer: GeoJSONFeatureCollection): string {
+export function getGeometryType(geojsonLayer: FeatureCollection): string {
   if (geojsonLayer.type === 'Sphere') {
     return 'polygon';
   }
   // Extract the geometry type from the GeoJSON layer
   // (we don't care if it is a multi geometry - we just want the base type)
   const types: Set<string> = new Set();
-  geojsonLayer.features.forEach((feature: GeoJSONFeature) => {
+  geojsonLayer.features.forEach((feature: Feature) => {
     if (!feature.geometry) return;
     types.add(feature.geometry.type.replace('Multi', ''));
   });
@@ -319,14 +321,14 @@ export async function convertTextualTabularDatasetToJSON(
 /**
  * Convert the given GeoJSON FeatureCollection to the asked format.
  *
- * @param {GeoJSONFeatureCollection} featureCollection - The GeoJSON FeatureCollection to convert
+ * @param {FeatureCollection} featureCollection - The GeoJSON FeatureCollection to convert
  * @param layerName - The name of the layer
  * @param format - The format to convert to
  * @param crs - The destination CRS to use
  * @returns {Promise<string>} The converted file as a string (base64 encoded if binary)
  */
 export async function convertFromGeoJSON(
-  featureCollection: GeoJSONFeatureCollection,
+  featureCollection: FeatureCollection,
   layerName: string,
   format: string,
   crs: string,

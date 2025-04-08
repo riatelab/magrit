@@ -1,7 +1,9 @@
+// GeoJSON types
+import type { Feature, FeatureCollection } from 'geojson';
+
+// Helpers
 import { isFiniteNumber } from './common';
 import { wktToGeojson } from './geos';
-
-import { GeoJSONFeature, GeoJSONFeatureCollection } from '../global';
 
 export const wktSeemsValid = (v: string): boolean => (
   v.startsWith('POINT')
@@ -16,11 +18,11 @@ export const makeLayerFromTableAndXY = async (
   data: Record<string, unknown>[],
   xField: string,
   yField: string,
-): Promise<GeoJSONFeatureCollection> => {
+): Promise<FeatureCollection> => {
   const layer = {
     type: 'FeatureCollection',
     features: [],
-  } as GeoJSONFeatureCollection;
+  } as FeatureCollection;
 
   const keys = Object.keys(data[0])
     .filter((key) => key !== xField && key !== yField);
@@ -43,7 +45,7 @@ export const makeLayerFromTableAndXY = async (
         },
         properties,
       };
-      layer.features.push(feature as GeoJSONFeature);
+      layer.features.push(feature as Feature);
     }
   });
 
@@ -53,11 +55,11 @@ export const makeLayerFromTableAndXY = async (
 export const makeLayerFromTableAndWKT = async (
   data: Record<string, unknown>[],
   wktField: string,
-): Promise<GeoJSONFeatureCollection> => {
+): Promise<FeatureCollection> => {
   const layer = {
     type: 'FeatureCollection',
     features: [],
-  } as GeoJSONFeatureCollection;
+  } as FeatureCollection;
 
   const keys = Object.keys(data[0])
     .filter((key) => key !== wktField);
@@ -79,7 +81,7 @@ export const makeLayerFromTableAndWKT = async (
           type: 'Feature',
           geometry,
           properties,
-        } as GeoJSONFeature);
+        } as Feature);
       } catch (e) {
         console.error('Error while converting WKT to GeoJSON', e);
       }

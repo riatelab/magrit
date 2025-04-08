@@ -10,6 +10,9 @@ import { produce } from 'solid-js/store';
 import type { LocalizedString } from 'typesafe-i18n';
 import { yieldOrContinue } from 'main-thread-scheduling';
 
+// GeoJSON types
+import type { Feature } from 'geojson';
+
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { setLoading } from '../../store/GlobalStore';
@@ -42,7 +45,6 @@ import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
 import {
-  GeoJSONFeature,
   type LabelsLegend,
   type LabelsParameters,
   type LayerDescriptionLabels,
@@ -264,7 +266,7 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
   const [
     filteredData,
     setFilteredData,
-  ] = createSignal<GeoJSONFeature[] | null>(null);
+  ] = createSignal<Feature[] | null>(null);
 
   createEffect(
     on(

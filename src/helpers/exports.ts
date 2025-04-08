@@ -1,6 +1,9 @@
 // Import from other packages
 import { topology } from 'topojson-server';
 
+// GeoJSON types
+import type { FeatureCollection } from 'geojson';
+
 // Stores
 import { getDefaultClipExtent, mapStore } from '../store/MapStore';
 import { globalStore, setGlobalStore } from '../store/GlobalStore';
@@ -14,7 +17,6 @@ import { findCssFontDefinition } from './font';
 
 // Types / Interfaces
 import {
-  type GeoJSONFeatureCollection,
   type LabelsParameters,
   LayoutFeatureType,
 } from '../global.d';
@@ -414,7 +416,7 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
 }
 
 export async function exportToGeo(
-  layer: GeoJSONFeatureCollection,
+  layer: FeatureCollection,
   layerName: string,
   format: SupportedGeoFileTypes,
   crs = 'EPSG:4326',

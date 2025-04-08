@@ -2,6 +2,9 @@
 import { type AllGeoJSON, area, bbox } from '@turf/turf';
 import RBush from 'rbush';
 
+// GeoJSON types
+import { FeatureCollection, Feature, Geometry } from 'geojson';
+
 // Helpers
 import d3 from './d3-custom';
 import { isFiniteNumber } from './common';
@@ -20,11 +23,7 @@ import rewindLayer from './rewind';
 import { mapStore } from '../store/MapStore';
 
 // Types / Interfaces / Enum
-import type {
-  GeoJSONFeature,
-  GeoJSONFeatureCollection,
-  GriddedLayerParameters,
-} from '../global.d';
+import type { GriddedLayerParameters } from '../global.d';
 
 // const transformResolution = (
 //   resolution: number,
@@ -45,7 +44,7 @@ import type {
 //   return newResolution;
 // };
 
-const getBbox = (feature: GeoJSONFeature, ix: number | undefined) => {
+const getBbox = (feature: Feature, ix: number | undefined) => {
   // Note that we use the "recompute" options because there may already be a bounding
   // box stored at the feature level, but its in WGS84 and here we want
   // the bounding box in the current projection of the data.
@@ -60,9 +59,9 @@ const getBbox = (feature: GeoJSONFeature, ix: number | undefined) => {
 };
 
 export const computeGriddedLayer = async (
-  data: GeoJSONFeatureCollection,
+  data: FeatureCollection,
   params: GriddedLayerParameters,
-): Promise<GeoJSONFeatureCollection> => {
+): Promise<FeatureCollection> => {
   // We want to determine if the current map projection is a "geographic" projection (i.e. lat/lon)
   // or a "projected" projection (with meters or feet as units).
   let reprojFunc;
@@ -70,7 +69,7 @@ export const computeGriddedLayer = async (
   let isGeo;
   if (mapStore.projection.type === 'd3') {
     isGeo = true;
-    proj = d3[mapStore.projection.value]()
+    proj = (d3[mapStore.projection.value] as never)()
       .center([0, 0])
       .translate([0, 0])
       .scale(1);
@@ -117,12 +116,12 @@ export const computeGriddedLayer = async (
   // Index all the input features in an R-tree
   const tree = new RBush();
   tree.load(
-    projectedData.features.map((d, i) => getBbox(d, i)),
+    projectedData.features.map((d: Feature, i: number) => getBbox(d, i)),
   );
 
   // Loop over the cells of the clipped grid...
   for (let ixCell = 0; ixCell < clippedGrid.features.length; ixCell += 1) {
-    const cellFeature = clippedGrid.features[ixCell];
+    const cellFeature = clippedGrid.features[ixCell] as Feature<Geometry, Record<string, unknown>>;
     // We want to find all the features that may intersect the current cell
     const boxFeature = getBbox(cellFeature, undefined);
     const ftsTree = tree.search(boxFeature);
@@ -139,8 +138,8 @@ export const computeGriddedLayer = async (
       if (intersection) {
         // We store the share (intersected area / feature area)
         // and the value of the feature
-        const intersectionArea = areaFn(intersection as AllGeoJSON);
-        const featureArea = areaFn(poly as AllGeoJSON);
+        const intersectionArea = areaFn(intersection);
+        const featureArea = areaFn(poly);
         areasPart.push(intersectionArea / featureArea);
         // TODO: the current behavior for missing values is to set them to 0,
         //       but we may want to change this in the future
@@ -155,7 +154,7 @@ export const computeGriddedLayer = async (
     for (let j = 0; j < areasPart.length; j += 1) {
       sum += areasPart[j] * values[j];
     }
-    cellFeature.properties[`density-${params.variable}`] = (sum / areaFn(cellFeature as AllGeoJSON)) * 1000000;
+    cellFeature.properties[`density-${params.variable}`] = (sum / areaFn(cellFeature)) * 1000000;
     cellFeature.properties.sum = sum;
     cellFeature.properties.id = ixCell;
   }

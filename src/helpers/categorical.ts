@@ -1,5 +1,7 @@
 import { getColors } from 'dicopal';
 
+import type { Feature } from 'geojson';
+
 import { isNonNull } from './common';
 import { randomColor } from './color';
 
@@ -8,7 +10,6 @@ import images from './symbol-library';
 import type {
   CategoricalChoroplethMapping,
   CategoricalPictogramMapping,
-  GeoJSONFeature,
 } from '../global';
 
 const selectDefaultColors = (n: number): string[] => {
@@ -31,7 +32,7 @@ const selectDefaultColors = (n: number): string[] => {
 };
 
 export const makeCategoriesMap = (
-  features: GeoJSONFeature[],
+  features: Feature[],
   variable: string,
 ): Map<string | number | null, number> => {
   const m = new Map();

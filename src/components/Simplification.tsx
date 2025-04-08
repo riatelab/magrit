@@ -10,6 +10,9 @@ import {
   Show,
 } from 'solid-js';
 
+// GeoJSON types
+import type { Feature, FeatureCollection } from 'geojson';
+
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
 import { type AllGeoJSON, bbox } from '@turf/turf';
@@ -31,9 +34,6 @@ import {
 } from '../store/LayersDescriptionStore';
 import { setLoading } from '../store/GlobalStore';
 
-// Types / Interfaces / Enums
-import type { GeoJSONFeature, GeoJSONFeatureCollection } from '../global';
-
 // Style
 import '../styles/SimplificationModal.css';
 import '../styles/RangeSlider.css';
@@ -45,8 +45,8 @@ interface SimplificationInfo {
   polygons: number;
   edges: number;
   vertices: number;
-  selfIntersections: GeoJSONFeature[] | null;
-  features: GeoJSONFeature[],
+  selfIntersections: Feature[] | null;
+  features: Feature[],
 }
 
 /**
@@ -62,7 +62,7 @@ const getSimplificationInfo = async (
   checkSelfIntersections: boolean,
 ): Promise<Partial<SimplificationInfo>> => {
   const topoLayer = topo.objects[layerName];
-  const geoLayer = topojson.feature(topo, topoLayer) as unknown as GeoJSONFeatureCollection;
+  const geoLayer = topojson.feature(topo, topoLayer) as unknown as FeatureCollection;
   let nbGeometries = 0;
   let vertices = 0;
   // console.time(`clean, filter and count points ${layerName}`);
@@ -111,7 +111,7 @@ const getSimplificationInfo = async (
 export default function Simplification(
   props: {
     ids: string[], // The ids of the layers to simplify
-    setSimplifiedLayers: Setter<GeoJSONFeature[][]>,
+    setSimplifiedLayers: Setter<Feature[][]>,
     style?: { [k: string]: string },
   },
 ): JSX.Element {
@@ -135,7 +135,7 @@ export default function Simplification(
   // We create a TopoJSON topology from the layers
   // (we need to do this because we want to preserve the topology between the polygons
   // and possibly simplify the same way common arcs between polygons of different layers)
-  const layers: { [k: string]: GeoJSONFeatureCollection } = {};
+  const layers: { [k: string]: FeatureCollection } = {};
   const layerNames: string[] = [];
   const bboxs: [number, number, number, number][] = [];
   descriptions.forEach((description) => {
@@ -268,7 +268,7 @@ export default function Simplification(
       context.restore();
     }
 
-    function drawPoints(points: GeoJSONFeature[] | null) {
+    function drawPoints(points: Feature[] | null) {
       if (!points) return;
       context.save();
       context.translate(transform.x, transform.y);

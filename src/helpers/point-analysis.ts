@@ -7,6 +7,9 @@ import {
   booleanIntersects,
 } from '@turf/turf';
 
+// GeoJSON types
+import type { FeatureCollection } from 'geojson';
+
 // Helpers
 import d3 from './d3-custom';
 import { isFiniteNumber } from './common';
@@ -24,7 +27,6 @@ import { mapStore } from '../store/MapStore';
 
 // Types / Interfaces / Enums
 import {
-  GeoJSONFeatureCollection,
   GridCellShape,
   GridParameters,
   PointAggregationRatioType,
@@ -49,9 +51,9 @@ class RbushPoint extends RBush<CustomPoint> {
 }
 
 const pointAggregationCount = (
-  pointLayer: GeoJSONFeatureCollection,
-  maskLayer: GeoJSONFeatureCollection,
-): GeoJSONFeatureCollection => {
+  pointLayer: FeatureCollection,
+  maskLayer: FeatureCollection,
+): FeatureCollection => {
   const tree = new RbushPoint();
   tree.load(
     pointLayer.features
@@ -88,14 +90,14 @@ const pointAggregationCount = (
   return {
     type: 'FeatureCollection',
     features: resultingFeatures,
-  } as GeoJSONFeatureCollection;
+  } as FeatureCollection;
 };
 
 const pointAggregationWeightedCount = (
-  pointLayer: GeoJSONFeatureCollection,
-  maskLayer: GeoJSONFeatureCollection,
+  pointLayer: FeatureCollection,
+  maskLayer: FeatureCollection,
   variable: string,
-): GeoJSONFeatureCollection => {
+): FeatureCollection => {
   const tree = new RbushPoint();
   tree.load(
     pointLayer.features
@@ -137,14 +139,14 @@ const pointAggregationWeightedCount = (
   return {
     type: 'FeatureCollection',
     features: resultingFeatures,
-  } as GeoJSONFeatureCollection;
+  } as FeatureCollection;
 };
 
 const pointAggregationMean = (
-  pointLayer: GeoJSONFeatureCollection,
-  maskLayer: GeoJSONFeatureCollection,
+  pointLayer: FeatureCollection,
+  maskLayer: FeatureCollection,
   variable: string,
-): GeoJSONFeatureCollection => {
+): FeatureCollection => {
   const tree = new RbushPoint();
   tree.load(
     pointLayer.features
@@ -188,14 +190,14 @@ const pointAggregationMean = (
   return {
     type: 'FeatureCollection',
     features: resultingFeatures,
-  } as GeoJSONFeatureCollection;
+  } as FeatureCollection;
 };
 
 const pointAggregationStandardDeviation = (
-  pointLayer: GeoJSONFeatureCollection,
-  maskLayer: GeoJSONFeatureCollection,
+  pointLayer: FeatureCollection,
+  maskLayer: FeatureCollection,
   variable: string,
-): GeoJSONFeatureCollection => {
+): FeatureCollection => {
   const tree = new RbushPoint();
   tree.load(
     pointLayer.features
@@ -241,13 +243,13 @@ const pointAggregationStandardDeviation = (
   return {
     type: 'FeatureCollection',
     features: resultingFeatures,
-  } as GeoJSONFeatureCollection;
+  } as FeatureCollection;
 };
 
 const applyDensity = (
-  layer: GeoJSONFeatureCollection,
+  layer: FeatureCollection,
   analysisType: PointAggregationRatioType,
-): GeoJSONFeatureCollection => {
+): FeatureCollection => {
   const varNameCount = analysisType === PointAggregationRatioType.Density
     ? 'Count'
     : 'WeightedCount';
@@ -262,11 +264,11 @@ const applyDensity = (
 };
 
 export const pointAggregationOnLayer = (
-  pointLayer: GeoJSONFeatureCollection,
-  maskLayer: GeoJSONFeatureCollection,
+  pointLayer: FeatureCollection,
+  maskLayer: FeatureCollection,
   analysisType: PointAggregationRatioType | PointAggregationStockType,
   targetVariable: string,
-): GeoJSONFeatureCollection => {
+): FeatureCollection => {
   let resultLayer;
 
   if (analysisType === PointAggregationStockType.Count) {
@@ -300,17 +302,17 @@ export const pointAggregationOnLayer = (
 };
 
 export const pointAggregationOnGrid = (
-  pointLayer: GeoJSONFeatureCollection,
+  pointLayer: FeatureCollection,
   gridParameters: GridParameters & { cellType: GridCellShape },
   analysisType: PointAggregationRatioType | PointAggregationStockType,
   targetVariable: string,
-): GeoJSONFeatureCollection => {
+): FeatureCollection => {
   let reprojFunc;
   let proj;
   let isGeo;
   if (mapStore.projection.type === 'd3') {
     isGeo = true;
-    proj = d3[mapStore.projection.value]()
+    proj = (d3[mapStore.projection.value] as never)()
       .center([0, 0])
       .translate([0, 0])
       .scale(1);

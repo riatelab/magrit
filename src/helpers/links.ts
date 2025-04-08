@@ -1,18 +1,18 @@
 import { distance } from '@turf/turf';
-import { GeoJSONFeature, GeoJSONFeatureCollection } from '../global';
+import type { Feature, FeatureCollection, Point } from 'geojson';
 
 function createLinksData(
-  ptsLayer: GeoJSONFeatureCollection,
+  ptsLayer: FeatureCollection<Point>,
   table: object[],
   layerIdentifierVariable: string,
   tableOriginVariable: string,
   tableDestinationVariable: string,
   tableIntensityVariable: string,
-): GeoJSONFeatureCollection {
+): FeatureCollection {
   const linksData = {
     type: 'FeatureCollection',
     features: [],
-  };
+  } as FeatureCollection;
 
   const pts = new Map(
     ptsLayer.features
@@ -39,7 +39,7 @@ function createLinksData(
           type: 'LineString',
           coordinates: [origin, destination],
         },
-      } as GeoJSONFeature);
+      } as Feature);
     }
   });
 
@@ -47,7 +47,7 @@ function createLinksData(
 }
 
 function createSimpleLinksData(
-  ptsLayer: GeoJSONFeatureCollection,
+  ptsLayer: FeatureCollection<Point>,
   table: object[],
   layerIdentifierVariable: string,
   tableOriginVariable: string,
@@ -57,7 +57,7 @@ function createSimpleLinksData(
   const linksData = {
     type: 'FeatureCollection',
     features: [],
-  };
+  } as FeatureCollection;
 
   const pts = new Map(
     ptsLayer.features
@@ -103,7 +103,7 @@ function createSimpleLinksData(
           type: 'LineString',
           coordinates: [ptOrigin, ptDest],
         },
-      } as GeoJSONFeature);
+      } as Feature);
     });
   } else {
     // If there is no tableIntensityVariable, we create a link for each row,
@@ -129,7 +129,7 @@ function createSimpleLinksData(
               type: 'LineString',
               coordinates: [origin, destination],
             },
-          } as GeoJSONFeature);
+          } as Feature);
         }
       }
     });

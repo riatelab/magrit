@@ -17,6 +17,9 @@ import {
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
 
+// GeoJSON types
+import { Feature } from 'geojson';
+
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { unproxify } from '../../helpers/common';
@@ -34,7 +37,7 @@ import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
 import type { Variable } from '../../helpers/typeDetection';
-import type { GeoJSONFeature, LayerDescription, TableDescription } from '../../global';
+import type { LayerDescription, TableDescription } from '../../global';
 
 interface JoinResult {
   nFeaturesTable: number,
@@ -169,8 +172,8 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
     : tableDescription.fields.map((f) => f.name);
 
   // The joined data as an array of GeoJSON features
-  const jointData = layerDescription.data.features.map((ft: GeoJSONFeature) => {
-    const feature = unproxify(ft as never) as GeoJSONFeature;
+  const jointData = layerDescription.data.features.map((ft: Feature) => {
+    const feature = unproxify(ft as never) as Feature;
     const jsonItem = tableIndex.get(String(feature.properties[layerField]));
     if (!jsonItem) {
       if (removeNotMatching) {
@@ -232,7 +235,7 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
         // [layerField]: feature.properties[layerField],
       },
     };
-  }).filter((d) => d !== null) as GeoJSONFeature[];
+  }).filter((d) => d !== null) as Feature[];
 
   const newFieldsDescription = selectFields
     ? unproxify(tableDescription.fields.filter((f) => selectedFields.includes(f.name)))

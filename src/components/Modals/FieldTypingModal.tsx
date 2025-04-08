@@ -3,6 +3,9 @@ import {
   For, JSX, onMount, Show,
 } from 'solid-js';
 
+// GeoJSON types
+import type { FeatureCollection } from 'geojson';
+
 // Stores
 import {
   layersDescriptionStore,
@@ -20,7 +23,7 @@ import { VariableType, Variable } from '../../helpers/typeDetection';
 import MessageBlock from '../MessageBlock.tsx';
 
 // Types / Interfaces / Enums
-import type { GeoJSONFeatureCollection, LayerDescription, TableDescription } from '../../global';
+import type { LayerDescription, TableDescription } from '../../global';
 
 export default function FieldTypingModal(
   props: {
@@ -51,7 +54,7 @@ export default function FieldTypingModal(
   dataset.fields.forEach((field) => {
     const varName = field.name;
     const values = key === 'layers'
-      ? (dataset.data as GeoJSONFeatureCollection).features.map((f) => f.properties[varName])
+      ? (dataset.data as FeatureCollection).features.map((f) => f.properties[varName])
       : (dataset.data as Record<string, any>[]).map((f) => f[varName]);
     const filteredValues = values.filter((v) => v !== null && v !== '' && v !== undefined);
     const dedupValues = new Set(filteredValues);

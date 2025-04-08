@@ -20,6 +20,9 @@ import { HiSolidDocumentText } from 'solid-icons/hi';
 import { BsMap } from 'solid-icons/bs';
 import { FiExternalLink } from 'solid-icons/fi';
 
+// GeoJSON types
+import { FeatureCollection } from 'geojson';
+
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import rewindLayer from '../../helpers/rewind';
@@ -54,9 +57,7 @@ import allDatasets from '../../assets/datasets.json';
 import allTemplates from '../../assets/templates.json';
 
 // Types
-import {
-  DefaultLegend, GeoJSONFeatureCollection, LayerDescription, ProjectDescription,
-} from '../../global';
+import { DefaultLegend, LayerDescription, ProjectDescription } from '../../global';
 import type { Variable } from '../../helpers/typeDetection';
 import type { Translation } from '../../i18n/i18n-types';
 
@@ -408,7 +409,7 @@ function CardDatasetDetail(ds: DatasetEntry): JSX.Element {
 }
 
 function addExampleLayer(
-  geojson: GeoJSONFeatureCollection,
+  geojson: FeatureCollection,
   name: string,
   projection: { type: 'd3', value: 'string' } | { type: 'proj4', code: number },
   fields: (Variable & { provenance: number })[],

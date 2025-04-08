@@ -9,6 +9,9 @@ import {
 } from 'solid-js';
 import { unwrap } from 'solid-js/store';
 
+// GeoJSON types
+import type { Feature } from 'geojson';
+
 // Imports from other packages
 import { area } from '@turf/turf';
 import alasql from 'alasql';
@@ -18,11 +21,7 @@ import { useI18nContext } from '../i18n/i18n-solid';
 import { capitalizeFirstLetter, replaceNullByUndefined, unproxify } from '../helpers/common';
 
 // Types
-import type {
-  GeoJSONFeature,
-  GeoJSONGeometryType,
-  LayerDescription,
-} from '../global';
+import type { LayerDescription } from '../global';
 
 // Insert a value (chosen from the list of fields / special fields / operator)
 // in the formula at the caret position (taking care of the selection if needed)
@@ -93,9 +92,9 @@ export const formatValidSampleOutput = (
 export const filterData = (
   layerDescription: LayerDescription,
   formula: string,
-): GeoJSONFeature[] => {
-  const data = layerDescription.data.features
-    .map((d) => unwrap(d.properties) as Record<string, any>);
+): Feature[] => {
+  const data: Record<string, any>[] = layerDescription.data.features
+    .map((d: Feature<any, Record<string, any>>) => unwrap(d.properties) as Record<string, any>);
   const lengthDataset = data.length;
   const formulaClean = replaceSpecialFields(formula, lengthDataset);
   const query = `SELECT ${formulaClean} as newValue FROM ?`;
@@ -136,7 +135,7 @@ export default function FormulaInput(
   props: {
     typeDataset: 'layer' | 'table',
     records: Record<string, any>[],
-    geometries?: GeoJSONGeometryType[],
+    geometries?: Geometry[],
     currentFormula: Accessor<string>,
     setCurrentFormula: Setter<string>,
     sampleOutput: Accessor<SampleOutputFormat | undefined>,

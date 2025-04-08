@@ -5,6 +5,9 @@ import {
 } from 'solid-js';
 import { produce, unwrap } from 'solid-js/store';
 
+// GeoJSON types
+import { FeatureCollection } from 'geojson';
+
 // Imports from other packages
 import { bbox } from '@turf/turf';
 import { ckmeans } from 'statsbreaks';
@@ -57,7 +60,6 @@ import {
   type ChoroplethLegend,
   ClassificationMethod,
   type ClassificationParameters,
-  type GeoJSONFeatureCollection,
   GridCellShape,
   type GridParameters,
   type LayerDescription,
@@ -190,7 +192,7 @@ function onClickValidate(
     // - 0. Convert the current polygon layer to a point layer
     let minValue = Infinity;
     let maxValue = -Infinity;
-    const newData = JSON.parse(JSON.stringify(resultLayer)) as GeoJSONFeatureCollection;
+    const newData = JSON.parse(JSON.stringify(resultLayer)) as FeatureCollection;
 
     newData.features.forEach((feature) => {
       // eslint-disable-next-line no-param-reassign

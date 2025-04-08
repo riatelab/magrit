@@ -2,7 +2,7 @@ import * as t1 from 'topojson-server';
 import * as t2 from 'topojson-client';
 import * as t3 from 'topojson-simplify';
 
-import type { GeoJSONFeatureCollection } from '../global';
+import type { FeatureCollection } from 'geojson';
 
 const topojson = {
   ...t1,
@@ -14,15 +14,15 @@ const topojson = {
  * Convert a GeoJSON FeatureCollection to a TopoJSON file in order to apply quantization
  * then convert it back to a GeoJSON FeatureCollection.
  *
- * @param {GeoJSONFeatureCollection} geojson
+ * @param {FeatureCollection} geojson
  * @param {number} quantization
  */
 export const convertToTopojsonQuantizeAndBackToGeojson = (
-  geojson: GeoJSONFeatureCollection,
+  geojson: FeatureCollection,
   quantization: number = 1e5,
-): GeoJSONFeatureCollection => {
+): FeatureCollection => {
   const topology = topojson.topology({ collection: geojson }, quantization);
-  return topojson.feature(topology, topology.objects.collection) as GeoJSONFeatureCollection;
+  return topojson.feature(topology, topology.objects.collection) as FeatureCollection;
 };
 
 /**
@@ -65,12 +65,12 @@ export const extractMeshAndMergedPolygonToGeojson = (
  * (one FeatureCollection per layer - as many layers as there are objects in the TopoJSON file).
  *
  * @param {string} topojsonFile - The TopoJSON file to convert
- * @returns {{[key in string]: GeoJSONFeatureCollection}} The converted GeoJSON FeatureCollections
+ * @returns {{[key in string]: FeatureCollection}} The converted GeoJSON FeatureCollections
  */
 export const convertTopojsonToGeojson = (
   topojsonFile: string,
-): { [key in string]: GeoJSONFeatureCollection } => {
-  const layers: { [key in string]: GeoJSONFeatureCollection } = {};
+): { [key in string]: FeatureCollection } => {
+  const layers: { [key in string]: FeatureCollection } = {};
   const topo = JSON.parse(topojsonFile);
   Object.keys(topo.objects)
     .forEach((layerName: string) => {

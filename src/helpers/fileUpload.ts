@@ -1,6 +1,9 @@
 // Imports from solid-js
 import { produce, SetStoreFunction } from 'solid-js/store';
 
+// GeoJSON types
+import type { FeatureCollection } from 'geojson';
+
 // Helpers
 import { findSuitableName, isFiniteNumber, isNonNull } from './common';
 import {
@@ -35,8 +38,9 @@ import { fitExtent } from '../store/MapStore';
 
 // Types
 import type {
-  DefaultLegend, GeoJSONFeatureCollection,
-  LayerDescription, TableDescription,
+  DefaultLegend,
+  LayerDescription,
+  TableDescription,
 } from '../global';
 
 // A file, dropped by the user
@@ -188,7 +192,7 @@ export const prepareFilterAndStoreFiles = (
 };
 
 function addLayer(
-  geojson: GeoJSONFeatureCollection,
+  geojson: FeatureCollection,
   name: string,
   fit: boolean,
   visible: boolean,

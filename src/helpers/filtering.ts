@@ -1,15 +1,16 @@
-import type { Filter, GeoJSONFeature } from '../global';
+import type { Feature } from 'geojson';
+import type { Filter } from '../global';
 
 /**
  * Apply filters to a GeoJSON layer, and return the filtered layer.
  *
- * @param {GeoJSONFeature[]} features - The features to be filtered
+ * @param {Feature[]} features - The features to be filtered
  * @param {Filter} filters - The filters to apply to the layer
  */
 function applyFilters(
-  features: GeoJSONFeature[],
+  features: Feature[],
   filters: Filter[],
-): GeoJSONFeature[] {
+): Feature[] {
   return features.filter((feature) => filters.every((filter) => {
     const value = feature.properties[filter.variable];
     if (value === undefined || value === null) return false;

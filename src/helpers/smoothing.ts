@@ -1,6 +1,9 @@
 // Imports from external packages
 import { pointGrid } from '@turf/turf';
 import type { isobands } from 'contour-wasm';
+import type { FeatureCollection, Feature, Polygon } from 'geojson';
+
+// Vendored GPU.js version
 import { GPU } from '../vendor/gpu-browser';
 
 // Stores
@@ -13,8 +16,6 @@ import { convertToTopojsonQuantizeAndBackToGeojson } from './topojson';
 
 // Types
 import type {
-  GeoJSONFeature,
-  GeoJSONFeatureCollection,
   GridParameters,
   KdeParameters,
   StewartParameters,
@@ -45,7 +46,7 @@ function kmToDeg(km: number): number {
 function customPointGrid(
   bbox: [number, number, number, number],
   resolution: number,
-): GeoJSONFeatureCollection {
+): FeatureCollection {
   const [xMin, yMin, xMax, yMax] = bbox;
   // Turf isn't able to make grid larger than a hemisphere
   // so we handle this case manually (matching the output of turf's pointGrid function)
@@ -67,18 +68,18 @@ function customPointGrid(
     return {
       type: 'FeatureCollection',
       features,
-    } as GeoJSONFeatureCollection;
+    } as FeatureCollection;
   }
   return pointGrid(
     bbox,
     resolution,
-  ) as GeoJSONFeatureCollection;
+  ) as FeatureCollection;
 }
 
 function makePointGrid(
   gridParameters: GridParameters,
   useOffset: boolean,
-): GeoJSONFeatureCollection {
+): FeatureCollection {
   const bb: [number, number, number, number] = [
     gridParameters.xMin,
     gridParameters.yMin,
@@ -108,7 +109,7 @@ function makePointGrid(
   if (bb[3] > 90) {
     bb[3] = 90;
   }
-  return customPointGrid(bb, gridParameters.resolution) as GeoJSONFeatureCollection;
+  return customPointGrid(bb, gridParameters.resolution) as FeatureCollection;
 }
 
 const computeStep = (
@@ -133,10 +134,10 @@ const computeStep = (
 };
 
 export async function makeContourLayer(
-  grid: GeoJSONFeatureCollection,
+  grid: FeatureCollection,
   thresholds: number[],
   variableName: string,
-): Promise<GeoJSONFeatureCollection> {
+): Promise<FeatureCollection> {
   console.time('gridPreparationForContours');
   const xCoords = new Set(grid.features.map((d) => d.geometry.coordinates[0]));
   const yCoords = new Set(grid.features.map((d) => d.geometry.coordinates[1]));
@@ -173,7 +174,7 @@ export async function makeContourLayer(
     options,
   );
 
-  contours.features.forEach((ft: GeoJSONFeature) => {
+  contours.features.forEach((ft: Feature) => {
     // eslint-disable-next-line no-param-reassign
     ft.properties.center_v = (ft.properties.min_v + ft.properties.max_v) / 2;
     // eslint-disable-next-line no-param-reassign
@@ -181,7 +182,7 @@ export async function makeContourLayer(
   });
 
   // Convert the contour layer to TopoJSON, apply the quantization and convert back to GeoJSON
-  return convertToTopojsonQuantizeAndBackToGeojson(contours) as GeoJSONFeatureCollection;
+  return convertToTopojsonQuantizeAndBackToGeojson(contours) as FeatureCollection;
 }
 
 function haversineDistance(lon1: number, lat1: number, lon2: number, lat2: number): number {
@@ -343,8 +344,8 @@ function computeKdeInnerWithDivisor(
 }
 
 const prepareArrays = (
-  grid: GeoJSONFeatureCollection,
-  inputLayer: GeoJSONFeatureCollection,
+  grid: FeatureCollection<Polygon>,
+  inputLayer: FeatureCollection,
   variableNames: string[],
 ): {
   xCells: number[],
@@ -395,13 +396,13 @@ const prepareArrays = (
 };
 
 export async function computeStewartValues(
-  data: GeoJSONFeatureCollection,
+  data: FeatureCollection,
   inputType: 'point' | 'polygon',
   variableName: string,
   gridParameters: GridParameters,
   stewartParameters: StewartParameters,
   divisorVariableName?: string,
-): Promise<[GeoJSONFeatureCollection, number[]]> {
+): Promise<[FeatureCollection, number[]]> {
   // Is there one or two variables ?
   const varArray = divisorVariableName ? [variableName, divisorVariableName] : [variableName];
 
@@ -475,13 +476,13 @@ const computeNormalizer = (values: number[]): number => {
 };
 
 export async function computeKdeValues(
-  data: GeoJSONFeatureCollection,
+  data: FeatureCollection,
   inputType: 'point' | 'polygon',
   variableName: string,
   gridParameters: GridParameters,
   kdeParameters: KdeParameters,
   divisorVariableName?: string,
-): Promise<[GeoJSONFeatureCollection, number[]]> {
+): Promise<[FeatureCollection, number[]]> {
   await setLoadingMessage('SmoothingDataPreparation');
   // Is there one or two variables ?
   const varArray = divisorVariableName ? [variableName, divisorVariableName] : [variableName];

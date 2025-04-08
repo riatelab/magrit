@@ -1,10 +1,10 @@
+import type { Feature } from 'geojson';
 import d3 from './d3-custom';
 import { globalStore } from '../store/GlobalStore';
 import {
   degToRadConstant, Mcos, Mfloor, Mround, Msin,
 } from './math';
 import {
-  type GeoJSONFeature,
   type ID3Element,
   type IZoomable,
   LinkCurvature,
@@ -105,8 +105,8 @@ export const getSymbolPath = (
 };
 
 export const linkPath = (
-  feature: GeoJSONFeature,
-  pathGenerator: ((feature: GeoJSONFeature) => string),
+  feature: Feature,
+  pathGenerator: ((feature: Feature) => string),
   projection: ((coordinates: [number, number]) => [number, number]),
   linkCurvature: LinkCurvature,
 ): string => {

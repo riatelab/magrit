@@ -1,7 +1,6 @@
+import type { Feature, FeatureCollection, Geometry } from 'geojson';
 import initGeosJs from 'geos-wasm';
 import { geojsonToGeosGeom, geosGeomToGeojson } from 'geos-wasm/helpers';
-
-import type { GeoJSONFeature, GeoJSONFeatureCollection, GeoJSONGeometry } from '../global';
 
 /**
  * Get the geos instance, using the singleton pattern.
@@ -17,9 +16,9 @@ async function getGeos() {
 }
 
 async function intersectionFeature(
-  feature1: GeoJSONFeature,
-  feature2: GeoJSONFeature,
-): Promise<GeoJSONFeature | null> {
+  feature1: Feature,
+  feature2: Feature,
+): Promise<Feature<Geometry, Record<string, unknown>> | null> {
   const geos = await getGeos();
 
   const ft1Ptr = geojsonToGeosGeom(feature1, geos);
@@ -40,23 +39,23 @@ async function intersectionFeature(
   return {
     type: 'Feature',
     id: feature1.id,
-    properties: feature1.properties,
+    properties: feature1.properties || {},
     geometry,
-  } as GeoJSONFeature;
+  } as Feature;
 }
 
 /**
  * Compute the intersection of a GeoJSON feature collection (layer1) with
  * the union of the features of another GeoJSON feature collection (layer2).
  *
- * @param {GeoJSONFeatureCollection} layer1 - The layer to clip.
- * @param {GeoJSONFeatureCollection} layer2 - The clipping layer (takes the union of its features).
+ * @param {FeatureCollection} layer1 - The layer to clip.
+ * @param {FeatureCollection} layer2 - The clipping layer (takes the union of its features).
  * @param {boolean} [bufferTrick=false] - Whether to use the buffer trick to
  *                                        try to repair invalid geometries.
  */
 async function intersectionLayer(
-  layer1: GeoJSONFeatureCollection,
-  layer2: GeoJSONFeatureCollection,
+  layer1: FeatureCollection,
+  layer2: FeatureCollection,
   bufferTrick: boolean = false,
 ) {
   // Get the geos instance
@@ -100,7 +99,7 @@ async function intersectionLayer(
         id: ft.id,
         properties: ft.properties,
         geometry,
-      } as GeoJSONFeature);
+      } as Feature);
     }
     // Destroy the clipped feature
     geos.GEOSGeom_destroy(clippedPtr);
@@ -118,7 +117,7 @@ async function intersectionLayer(
   };
 }
 
-async function makeValid(feature: GeoJSONGeometry) {
+async function makeValid(feature: Geometry) {
   const geos = await getGeos();
   const geomPtr = geojsonToGeosGeom(feature, geos);
   const validGeomPtr = geos.GEOSMakeValid(geomPtr);

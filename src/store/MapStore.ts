@@ -2,6 +2,8 @@
 import { createEffect, on } from 'solid-js';
 import { createStore, produce } from 'solid-js/store';
 
+import type { Feature } from 'geojson';
+
 // Helpers
 import { unproxify } from '../helpers/common';
 import d3 from '../helpers/d3-custom';
@@ -21,7 +23,6 @@ import { applicationSettingsStore } from './ApplicationSettingsStore';
 
 // Types
 import type {
-  GeoJSONFeature,
   IZoomable, LayerDescription, ProjectionDefinition, ProportionalSymbolsParameters,
 } from '../global';
 
@@ -222,7 +223,7 @@ createEffect(
                     l as LayerDescription & { rendererParameters: ProportionalSymbolsParameters });
                   if (layerDescription.rendererParameters.avoidOverlapping) {
                     layerDescription.data.features = makeDorlingDemersSimulation(
-                      unproxify(layerDescription.data.features as never) as GeoJSONFeature[],
+                      unproxify(layerDescription.data.features as never) as Feature[],
                       layerDescription.rendererParameters.variable,
                       {
                         referenceSize: layerDescription.rendererParameters.referenceRadius,

@@ -12,6 +12,9 @@ import {
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
+// GeoJSON types
+import type { FeatureCollection, Position } from 'geojson';
+
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
 
@@ -69,7 +72,6 @@ import {
   type ChoroplethHistogramLegend,
   type ChoroplethLegend,
   type ClassificationParameters,
-  type GeoJSONFeatureCollection, type GeoJSONPosition,
   type LayerDescriptionProportionalSymbols,
   type LegendTextElement,
   LegendType, Orientation,
@@ -125,7 +127,7 @@ function onClickValidate(
     JSON.stringify(
       referenceLayerDescription.data,
     ),
-  ) as GeoJSONFeatureCollection;
+  ) as FeatureCollection;
 
   if (
     referenceLayerDescription.type === 'polygon'
@@ -135,7 +137,7 @@ function onClickValidate(
       // eslint-disable-next-line no-param-reassign
       feature.geometry = {
         type: 'Point',
-        coordinates: coordsPointOnFeature(feature.geometry as never) as GeoJSONPosition,
+        coordinates: coordsPointOnFeature(feature.geometry as never) as Position,
       };
     });
   }

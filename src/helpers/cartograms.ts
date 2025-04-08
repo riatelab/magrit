@@ -3,6 +3,9 @@ import initGoCart from 'go-cart-wasm';
 import cartWasmUrl from 'go-cart-wasm/dist/cart.wasm?url';
 import { area, centroid, transformScale } from '@turf/turf';
 
+// GeoJSON types
+import type { Feature, FeatureCollection, MultiPolygon } from 'geojson';
+
 // Helpers
 import { isFiniteNumber, isPositiveFiniteNumber } from './common';
 import d3 from './d3-custom';
@@ -19,18 +22,11 @@ import rewindLayer from './rewind';
 // Stores
 import { mapStore } from '../store/MapStore';
 
-// Types
-import type {
-  GeoJSONFeature,
-  GeoJSONFeatureCollection,
-  GeoJSONGeometry,
-} from '../global';
-
 let goCart: {
   makeCartogram: (
-    data: GeoJSONFeatureCollection,
+    data: FeatureCollection,
     variableName: string,
-  ) => GeoJSONFeatureCollection,
+  ) => FeatureCollection,
 };
 
 async function getGoCart() {
@@ -44,9 +40,9 @@ async function getGoCart() {
 }
 
 export async function computeCartogramGastnerSeguyMore(
-  data: GeoJSONFeatureCollection,
+  data: FeatureCollection,
   variableName: string,
-): Promise<GeoJSONFeatureCollection> {
+): Promise<FeatureCollection> {
   let proj;
   let isGeo;
   let reprojFunc;
@@ -85,9 +81,9 @@ export async function computeCartogramGastnerSeguyMore(
 }
 
 export function computeCartogramOlson(
-  data: GeoJSONFeatureCollection,
+  data: FeatureCollection,
   variableName: string,
-): GeoJSONFeatureCollection {
+): FeatureCollection {
   const nFt = data.features.length;
   const dVal = Array(nFt);
   for (let i = 0; i < nFt; i += 1) {
@@ -158,10 +154,10 @@ interface InfoFeature {
  * @param centroidFn
  */
 const getDougenikInfo = (
-  data: GeoJSONFeatureCollection,
+  data: FeatureCollection,
   values: number[],
-  areaFn: (geom: GeoJSONFeature) => number,
-  centroidFn: (geom: GeoJSONFeature) => [number, number],
+  areaFn: (geom: Feature) => number,
+  centroidFn: (geom: Feature) => [number, number],
 ): DougInfo => {
   const areas = data.features
     .map((f) => areaFn(f as never));
@@ -215,7 +211,7 @@ const getDougenikInfo = (
  * @param allInfo
  */
 const transformFeatureDougenik = (
-  geom: GeoJSONGeometry,
+  geom: Polygon | MultiPolygon,
   info: InfoFeature,
   reductionFactor: number,
   allInfo: InfoFeature[],
@@ -277,7 +273,7 @@ const transformFeatureDougenik = (
 };
 
 const replaceNullAndZeroValues = (
-  features: GeoJSONFeature[],
+  features: Feature[],
   variableName: string,
 ): number[] => {
   // Get the min value of the non null values
@@ -300,13 +296,13 @@ const replaceNullAndZeroValues = (
 };
 
 function makeDougenikCartogram(
-  data: GeoJSONFeatureCollection,
+  data: FeatureCollection,
   variableName: string,
   iterations: number,
-  areaFn: (geom: GeoJSONFeature) => number,
-  centroidFn: (geom: GeoJSONFeature) => [number, number],
-): GeoJSONFeatureCollection {
-  const resultData = JSON.parse(JSON.stringify(data)) as GeoJSONFeatureCollection;
+  areaFn: (geom: Feature) => number,
+  centroidFn: (geom: Feature) => [number, number],
+): FeatureCollection {
+  const resultData = JSON.parse(JSON.stringify(data)) as FeatureCollection;
   const values = replaceNullAndZeroValues(resultData.features, variableName);
 
   for (let i = 0; i < iterations; i += 1) {
@@ -350,13 +346,13 @@ function makeDougenikCartogram(
  * @param data
  * @param variableName
  * @param iterations
- * @return {GeoJSONFeatureCollection}
+ * @return {FeatureCollection}
  */
 export function computeCartogramDougenik(
-  data: GeoJSONFeatureCollection,
+  data: FeatureCollection,
   variableName: string,
   iterations: number,
-): GeoJSONFeatureCollection {
+): FeatureCollection {
   let proj;
   // let isGeo;
   let reprojFunc;

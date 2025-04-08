@@ -9,6 +9,9 @@ import {
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
+// GeoJSON types
+import { FeatureCollection } from 'geojson';
+
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
 import * as Plot from '@observablehq/plot';
@@ -52,7 +55,6 @@ import type { PortrayalSettingsProps } from './common';
 import {
   type ChoroplethLegend,
   type ClassificationParameters,
-  type GeoJSONFeatureCollection,
   type GridParameters,
   KdeKernel,
   type KdeParameters,
@@ -74,7 +76,7 @@ async function onClickValidate(
   gridParams: GridParameters,
   parameters: StewartParameters | KdeParameters,
   thresholds: number[],
-  computedValues: { grid: GeoJSONFeatureCollection, values: number[] },
+  computedValues: { grid: FeatureCollection, values: number[] },
   clippingLayerId: string,
   targetDivisorVariable?: string,
 ) {
@@ -329,7 +331,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
   const [
     computedValues,
     setComputedValues,
-  ] = createSignal<{ grid: GeoJSONFeatureCollection, values: number[] } | null>(null);
+  ] = createSignal<{ grid: FeatureCollection, values: number[] } | null>(null);
   // Thresholds, computed from the values first but maybe changed by the user
   const [
     thresholds,

@@ -7,6 +7,9 @@ import {
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
+// GeoJSON types
+import type { FeatureCollection, Position } from 'geojson';
+
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
 
@@ -46,7 +49,6 @@ import {
   type CategoricalPictogramLegend,
   type CategoricalPictogramMapping,
   type CategoricalPictogramParameters,
-  type GeoJSONFeatureCollection, type GeoJSONPosition,
   type LayerDescriptionCategoricalPictogram,
   type LegendTextElement,
   LegendType, RepresentationType,
@@ -74,14 +76,14 @@ function onClickValidate(
     JSON.stringify(
       referenceLayerDescription.data,
     ),
-  ) as GeoJSONFeatureCollection;
+  ) as FeatureCollection;
 
   if (referenceLayerDescription.type !== 'point') {
     newData.features.forEach((feature) => {
       // eslint-disable-next-line no-param-reassign
       feature.geometry = {
         type: 'Point',
-        coordinates: coordsPointOnFeature(feature.geometry as never) as GeoJSONPosition,
+        coordinates: coordsPointOnFeature(feature.geometry as never) as Position,
       };
     });
   }

@@ -12,6 +12,9 @@ import { produce } from 'solid-js/store';
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
 
+// GeoJSON types
+import { FeatureCollection } from 'geojson';
+
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { randomColorFromCategoricalPalette } from '../../helpers/color';
@@ -41,7 +44,6 @@ import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelecti
 
 // Types / Interfaces / Enums
 import {
-  type GeoJSONFeatureCollection,
   type HalfProportionalMarkParameters,
   type LayerDescriptionMushroomLayer,
   type LegendTextElement,
@@ -79,7 +81,7 @@ function onClickValidate(
     JSON.stringify(
       referenceLayerDescription.data,
     ),
-  ) as GeoJSONFeatureCollection;
+  ) as FeatureCollection;
 
   if (
     referenceLayerDescription.type === 'polygon'

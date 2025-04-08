@@ -3,10 +3,13 @@
  * This is adapted from a notebook of Philippe Rivière: https://observablehq.com/@fil/rewind
  * which is licensed under the ISC license.
  */
-import d3 from './d3-custom';
 import type {
-  GeoJSONFeature, GeoJSONFeatureCollection, GeoJSONGeometry, GeoJSONGeometryType,
-} from '../global';
+  Feature,
+  FeatureCollection,
+  Geometry,
+  Position,
+} from 'geojson';
+import d3 from './d3-custom';
 
 const {
   geoTransform,
@@ -15,10 +18,10 @@ const {
   geoArea,
 } = d3;
 
-function projectPolygons(o: GeoJSONGeometry, stream: d3.GeoStream) {
-  let coordinates = [];
-  let polygon; let
-    line;
+function projectPolygons(o: Geometry, stream: typeof geoStream) {
+  let coordinates: Position[] = [];
+  let polygon;
+  let line;
   geoStream(
     o,
     stream({
@@ -44,7 +47,7 @@ function projectPolygons(o: GeoJSONGeometry, stream: d3.GeoStream) {
   return { ...o, coordinates, rewind: true };
 }
 
-function projectGeometry(o: GeoJSONGeometryType, stream: d3.GeoStream) {
+function projectGeometry(o: Geometry, stream: d3.GeoStream) {
   // eslint-disable-next-line no-nested-ternary
   return !o
     ? null
@@ -56,23 +59,23 @@ function projectGeometry(o: GeoJSONGeometryType, stream: d3.GeoStream) {
         : o;
 }
 
-function projectFeature(o: GeoJSONFeature, stream: d3.GeoStream) {
+function projectFeature(o: Feature, stream: d3.GeoStream) {
   return { ...o, geometry: projectGeometry(o.geometry, stream) };
 }
 
-function projectFeatureCollection(o: GeoJSONFeatureCollection, stream: d3.GeoStream) {
+function projectFeatureCollection(o: FeatureCollection, stream: d3.GeoStream) {
   return { ...o, features: o.features.map((f) => projectFeature(f, stream)) };
 }
 
 function projectGeometryCollection(obj, stream: d3.GeoStream) {
   return {
     ...obj,
-    geometries: obj.geometries.map((o: GeoJSONGeometry) => projectGeometry(o, stream)),
+    geometries: obj.geometries.map((o: Geometry) => projectGeometry(o, stream)),
   };
 }
 
 const geoProjectSimple = (
-  object: GeoJSONFeature | GeoJSONFeatureCollection | GeoJSONGeometry,
+  object: Feature | FeatureCollection | Geometry,
   projection: d3.GeoProjection,
 ) => {
   const { stream } = projection;
@@ -148,14 +151,14 @@ function geoRewindStream(simple = true) {
 }
 
 const rewindFeature = (
-  feature: GeoJSONFeature,
+  feature: Feature,
   simple: boolean,
 ) => geoProjectSimple(feature, geoRewindStream(simple));
 
 const rewindLayer = (
-  layer: GeoJSONFeatureCollection,
+  layer: FeatureCollection,
   simple: boolean = true,
-): GeoJSONFeatureCollection => {
+): FeatureCollection => {
   const features = layer.features.map((feature) => rewindFeature(feature, simple));
   return { ...layer, features };
 };

@@ -9,6 +9,9 @@ import {
 } from 'solid-js';
 import { produce, unwrap } from 'solid-js/store';
 
+// GeoJSON types
+import { FeatureCollection } from 'geojson';
+
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
 import { CkmeansClassifier } from 'statsbreaks';
@@ -53,7 +56,6 @@ import type { PortrayalSettingsProps } from './common';
 import {
   type ChoroplethLegend,
   type ClassificationParameters,
-  type GeoJSONFeatureCollection,
   GridCellShape,
   type GriddedLayerParameters,
   type GridParameters,
@@ -86,7 +88,7 @@ async function onClickValidate(
   } as GriddedLayerParameters;
 
   const newData = await computeGriddedLayer(
-    unwrap(referenceLayerDescription.data as never) as GeoJSONFeatureCollection,
+    unwrap(referenceLayerDescription.data as never) as FeatureCollection,
     layerCreationOptions,
   );
 
