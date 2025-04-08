@@ -155,6 +155,7 @@ import {
   geoWagner7,
   geoWiechel,
   geoWinkel3,
+  geoProject,
 } from 'd3-geo-projection';
 import { geoClipPolygon } from 'd3-geo-polygon';
 import {
@@ -304,6 +305,7 @@ export default {
   geoLength,
   geoGraticule,
   geoIdentity,
+  geoProject,
   geoStream,
   geoTransform,
   selection,
