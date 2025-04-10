@@ -70,7 +70,7 @@ function onChangeProjectionEntry(
         name: proj.name,
         value: removeNadGrids((proj.proj4 || proj.wkt) as string),
         bounds: proj.bbox,
-        code: `EPSG:${proj.code}`,
+        code: `${proj.authority}:${proj.code}`,
         type: 'proj4',
       },
     );

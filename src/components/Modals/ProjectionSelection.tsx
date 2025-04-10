@@ -165,8 +165,14 @@ const findMatchingProjections = (search: string): ScoredResult<EpsgDbEntryType>[
 
   // Directly return the projection if the search string
   // is an EPSG code
-  if (searchString.includes('epsg:') || isFiniteNumber(searchString)) {
-    const code = searchString.replace('epsg:', '');
+  if (
+    searchString.includes('epsg:')
+    || searchString.includes('esri:')
+    || isFiniteNumber(searchString)
+  ) {
+    const code = searchString
+      .replace('epsg:', '')
+      .replace('esri:', '');
     const projection = epsgDb[code];
     if (projection) return [{ score: 1, item: projection }];
   }
@@ -427,7 +433,8 @@ export default function ProjectionSelection() : JSX.Element {
                             }
                           }}
                         >
-                          {elem.item.name} ({elem.item.code}) - <small>Score : {elem.score}</small>
+                          {elem.item.name} ({elem.item.authority}:{elem.item.code}) - <small>
+                          Score : {elem.score}</small>
                         </div>
                       )}
                     </For>
@@ -442,7 +449,7 @@ export default function ProjectionSelection() : JSX.Element {
                 <div style={{ height: '80%', 'overflow-y': 'auto' }}>
                   <p>
                     <b>{selectedProjection()!.name}</b>
-                    &nbsp;({selectedProjection()!.code})
+                    &nbsp;({selectedProjection()!.authority}:{selectedProjection()!.code})
                   </p>
                   <p>
                     <span style={{ 'font-weight': 500 }}>{LL().ProjectionSelection.Kind()}</span> {
@@ -484,7 +491,7 @@ export default function ProjectionSelection() : JSX.Element {
                             (selectedProjection()!.proj4 || selectedProjection()?.wkt) as string,
                           ),
                           bounds: selectedProjection()!.bbox,
-                          code: `EPSG:${selectedProjection()!.code}`,
+                          code: `${selectedProjection()!.authority}:${selectedProjection()!.code}`,
                         },
                       );
                     }}

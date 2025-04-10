@@ -18,6 +18,7 @@ export interface EpsgDbEntryType {
   unit: string | null,
   area: string | null,
   accuracy: number | null,
+  authority: string,
 }
 
 export interface EpsgDbType {
@@ -30,6 +31,16 @@ export const epsgDb: EpsgDbType = Object.fromEntries(
   Object.entries(epsg)
     .filter(([k, v]) => ['CRS-GEOGCRS', 'CRS-PROJCRS'].includes(v.kind) && (v.proj4 || v.wkt))
     .map(([k, v]) => {
+      // We want to store the authority in the entry
+      if (v.wkt && v.wkt.includes('AUTHORITY["ESRI",')) {
+        // eslint-disable-next-line no-param-reassign
+        v.authority = 'ESRI';
+      } else {
+        // eslint-disable-next-line no-param-reassign
+        v.authority = 'EPSG';
+      }
+      // We also want to store the unit in the entry
+      // (when possible)
       if (v.unit !== null) {
         return [k, v];
       }
