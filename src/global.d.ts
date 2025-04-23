@@ -1,6 +1,4 @@
-// declare global {
-// import { WebR } from '@r-wasm/webr/webr-main';
-import type { Gdal } from 'gdal3.js/src/index.d';
+import type { Gdal } from 'gdal3.js/src/index';
 import type { Feature, FeatureCollection } from 'geojson';
 import type { Dexie } from 'dexie';
 import type { Variable } from './helpers/typeDetection';
@@ -8,10 +6,10 @@ import type { MapStoreType } from './store/MapStore';
 import type { LinearRegressionResult } from './helpers/statistics';
 import type { ApplicationSettingsStoreType } from './store/ApplicationSettingsStore';
 
-declare namespace globalThis {
-  let gdal: Gdal;
-  let db: DexieDb;
-  let geos: never;
+interface GlobalThis {
+  gdal: Gdal,
+  db: DexieDb,
+  geos: never,
 }
 
 type DexieDb = Dexie
