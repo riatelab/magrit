@@ -12,6 +12,10 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.3.1 (2025-04-24)
+
+- Fix display of coordinate system code when authority is “ESRI” and not “EPSG” (fixes <a href="https://github.com/riatelab/magrit/issues/152">152</a>).
+
 #### 2.3.0 (2025-03-21)
 
 - Add an option to specify, for representations using classification, whether classes are closed “on the left” or “on the right”.

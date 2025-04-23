@@ -12,6 +12,10 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.3.1 (2025-04-24)
+
+- Correction de l'affichage du code des systèmes de coordonnées quand l'autorité est "ESRI" et non pas "EPSG" (corrige <a href="https://github.com/riatelab/magrit/issues/152">152</a>).
+
 #### 2.3.0 (2025-03-21)
 
 - Ajout d'une option pour spécifier, pour les représentations qui utilisent une discrétisation, si les classes sont fermées "sur la gauche" ou "sur la droite".
