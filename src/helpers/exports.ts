@@ -1,5 +1,6 @@
 // Import from other packages
 import { topology } from 'topojson-server';
+import { fromGeoJSON } from 'geoimport';
 
 // GeoJSON types
 import type { FeatureCollection } from 'geojson';
@@ -11,7 +12,6 @@ import { layersDescriptionStore } from '../store/LayersDescriptionStore';
 
 // Helpers
 import { SupportedGeoFileTypes } from './supportedFormats';
-import { convertFromGeoJSON } from './formatConversion';
 import { getTargetSvg, redrawPaths } from './svg';
 import { findCssFontDefinition } from './font';
 
@@ -177,11 +177,11 @@ function unpatchSvgForFonts(svgElement: SVGElement) {
 /**
  * Create a link to download the given blob as a file.
  *
- * @param blob
- * @param fileName
+ * @param {Blob | File} blobOrFile
+ * @param {string} fileName
  */
-export const clickLinkFromBlob = async (blob: Blob, fileName: string) => {
-  const url = URL.createObjectURL(blob);
+export const clickLinkFromBlob = async (blobOrFile: Blob | File, fileName: string) => {
+  const url = URL.createObjectURL(blobOrFile);
   const dlAnchorElement = document.createElement('a');
   dlAnchorElement.setAttribute('href', url);
   dlAnchorElement.setAttribute('download', fileName);
@@ -421,7 +421,7 @@ export async function exportToGeo(
   format: SupportedGeoFileTypes,
   crs = 'EPSG:4326',
 ) {
-  let result: string | Blob;
+  let result: string | File;
   let filename = '';
   const ext = `${format}`;
   if (format === SupportedGeoFileTypes.GeoJSON) {
@@ -431,30 +431,31 @@ export async function exportToGeo(
     result = JSON.stringify(topology({ layerName: layer }));
     filename = `${layerName}.${ext}`;
   } else if (format === SupportedGeoFileTypes.KML) {
-    result = await convertFromGeoJSON(layer, layerName, 'KML', crs);
+    result = await fromGeoJSON(layer, layerName, 'KML', crs);
     filename = `${layerName}.${ext}`;
   } else if (format === SupportedGeoFileTypes.Shapefile) {
-    result = await convertFromGeoJSON(layer, layerName, 'ESRI Shapefile', crs);
+    result = await fromGeoJSON(layer, layerName, 'ESRI Shapefile', crs);
     filename = `${layerName}.zip`;
   } else if (format === SupportedGeoFileTypes.GML) {
-    result = await convertFromGeoJSON(layer, layerName, 'GML', crs);
+    result = await fromGeoJSON(layer, layerName, 'GML', crs);
     filename = `${layerName}.${ext}`;
   } else if (format === SupportedGeoFileTypes.GeoPackage) {
-    result = await convertFromGeoJSON(layer, layerName, 'GPKG', crs);
+    result = await fromGeoJSON(layer, layerName, 'GPKG', crs);
     filename = `${layerName}.gpkg`;
   } else {
     throw new Error(`Unsupported file format: ${format}`);
   }
 
-  let blob;
+  let blob: Blob | File;
   if (format === SupportedGeoFileTypes.GeoJSON || format === SupportedGeoFileTypes.TopoJSON) {
     blob = new Blob([result], { type: 'application/json' });
   } else if (format === SupportedGeoFileTypes.KML || format === SupportedGeoFileTypes.GML) {
     blob = new Blob([result], { type: 'application/xml' });
-  } else if (format === SupportedGeoFileTypes.Shapefile) {
-    blob = new Blob([result], { type: 'application/zip' });
-  } else if (format === SupportedGeoFileTypes.GeoPackage) {
-    blob = new Blob([result], { type: 'application/geopackage+sqlite3' });
+  } else if (
+    format === SupportedGeoFileTypes.Shapefile
+    || format === SupportedGeoFileTypes.GeoPackage
+  ) {
+    blob = result as File;
   }
 
   return clickLinkFromBlob(blob!, filename)

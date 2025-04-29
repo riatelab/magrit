@@ -1,15 +1,16 @@
 // Imports from solid-js
 import { produce, SetStoreFunction } from 'solid-js/store';
 
+// Imports from other libs
+import { toTable, toGeoJSON } from 'geoimport';
+
 // GeoJSON types
 import type { FeatureCollection } from 'geojson';
 
 // Helpers
 import { findSuitableName, isFiniteNumber, isNonNull } from './common';
 import {
-  convertBinaryTabularDatasetToJSON,
   convertTextualTabularDatasetToJSON,
-  convertToGeoJSON,
   getGeometryType,
   removeFeaturesWithEmptyGeometry,
 } from './formatConversion';
@@ -391,11 +392,7 @@ export const convertAndAddFiles = async (
   // If the file is a binary tabular file, we use GDAL to convert it to JSON
   if (isBinaryTabularFile(files, type)) {
     try {
-      const opts = ['-nln', layerName, '-sql', `SELECT * FROM "${layerName}"`];
-      const res = await convertBinaryTabularDatasetToJSON(
-        files.map((f) => f.file),
-        { opts, openOpts: [] },
-      );
+      const res = await toTable(files.map((f) => f.file)[0], { tableName: layerName });
       return {
         id: addTabularLayer(res, layerName),
         nRemoved: 0,
@@ -409,12 +406,14 @@ export const convertAndAddFiles = async (
   // Otherwise this is a geospatial file and we use GDAL to convert the file to GeoJSON
   let res;
   try {
-    const opts = format === SupportedGeoFileTypes.GeoPackage
-      ? ['-nln', layerName, '-sql', `SELECT * FROM "${layerName}"`]
-      : [];
-    res = await convertToGeoJSON(
+    res = await toGeoJSON(
       files.map((f) => f.file),
-      { opts, openOpts: [] },
+      {
+        layerName,
+        writeBbox: true,
+        rfc7946: false,
+        writeNonFiniteValues: true,
+      },
     );
 
     // Round coordinate precision to 6 digits after the decimal point

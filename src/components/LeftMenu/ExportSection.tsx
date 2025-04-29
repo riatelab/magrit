@@ -275,6 +275,7 @@ export default function ExportSection(): JSX.Element {
             id={'export-section__content__geo__formats'}
             entries={
               Object.keys(SupportedGeoFileTypes)
+                .filter((format) => format !== 'CSV')
                 .map((format) => ({ name: format, value: format }))
             }
             defaultEntry={{ name: LL().ExportSection.SelectFormat() }}

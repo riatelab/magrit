@@ -1,5 +1,6 @@
 // Import from other packages
 import JSZip from 'jszip';
+import { fromTable, fromGeoJSON } from 'geoimport';
 
 // GeoJSON types
 import type { FeatureCollection, Feature } from 'geojson';
@@ -11,92 +12,6 @@ import { SupportedTabularFileTypes } from './supportedFormats';
 
 // Types
 import type { FileEntry } from './fileUpload';
-
-/**
- * Convert the given file(s) to a GeoJSON feature collection.
- *
- * @param fileOrFiles
- * @param params
- */
-export async function convertToGeoJSON(
-  fileOrFiles: File | File[],
-  params: { openOpts: string[]; opts: string[] } = { opts: [], openOpts: [] },
-): Promise<FeatureCollection> {
-  const openOptions = params.openOpts || [];
-  const input = await globalThis.gdal.open(fileOrFiles, openOptions);
-  const options = [
-    '-f', 'GeoJSON',
-    '-t_srs', 'EPSG:4326',
-    '-lco', 'RFC7946=NO',
-    '-lco', 'WRITE_NON_FINITE_VALUES=YES',
-    '-lco', 'WRITE_BBOX=YES',
-  ].concat(params.opts || []);
-  const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
-  const bytes = await globalThis.gdal.getFileBytes(output);
-  await globalThis.gdal.close(input);
-  return JSON.parse(new TextDecoder().decode(bytes));
-}
-
-export async function convertBinaryTabularDatasetToJSON(
-  fileOrFiles: File | File[],
-  params: { openOpts: string[]; opts: string[] } = { opts: [], openOpts: [] },
-): Promise<object[]> {
-  const layer = await convertToGeoJSON(fileOrFiles, params);
-  // We want to strip any line breaks
-  // and punctuation from the column names
-  const columnsBefore = Object.keys(layer.features[0].properties);
-  const columnsAfter = columnsBefore.map((c) => sanitizeColumnName(c));
-
-  let rows;
-  // We want to take care of the case where the column names are not correctly
-  // identified and became Field1, Field2, etc.
-  // In such cases, we need to take the first data row as the header row.
-  if (
-    JSON.stringify(columnsAfter)
-    === JSON.stringify(Array.from({ length: columnsAfter.length }).map((d, i) => `Field${i + 1}`))
-  ) {
-    const firstRow = layer.features[0].properties;
-    for (let i = 0; i < columnsBefore.length; i += 1) {
-      columnsAfter[i] = sanitizeColumnName(firstRow[columnsBefore[i]]);
-    }
-
-    // We remove the first row from the data
-    layer.features.shift();
-
-    // We update the properties of the features
-    layer.features.forEach((f) => {
-      const properties = {};
-      for (let i = 0; i < columnsBefore.length; i += 1) {
-        properties[columnsAfter[i]] = f.properties[columnsBefore[i]];
-      }
-      // eslint-disable-next-line no-param-reassign
-      f.properties = properties;
-    });
-
-    rows = layer.features.map((f) => f.properties);
-  } else {
-    rows = layer.features.map((f: Feature) => {
-      const properties = {};
-      for (let i = 0; i < columnsBefore.length; i += 1) {
-        properties[columnsAfter[i]] = f.properties[columnsBefore[i]];
-      }
-      return properties;
-    });
-  }
-
-  // Remove lines at the end of the file that only contain empty cells
-  let lastDataRowIndex = rows.length - 1;
-  while (
-    lastDataRowIndex >= 0
-    // eslint-disable-next-line @typescript-eslint/no-loop-func
-    && columnsAfter.every((c) => rows[lastDataRowIndex][c] === undefined)
-  ) {
-    lastDataRowIndex -= 1;
-  }
-
-  // Return the cleaned dataset
-  return rows.slice(0, lastDataRowIndex + 1);
-}
 
 export const extractZipContent = async (
   file: FileEntry,
@@ -389,16 +304,3 @@ export async function convertFromGeoJSON(
   }
   throw new Error('Unsupported vector file format');
 }
-
-export const getDatasetInfo = async (
-  fileOrFiles: File | File[],
-  params: { opts?: string[], openOpts?: string[] } = { opts: [], openOpts: [] },
-) => {
-  const openOptions = params.openOpts || [];
-  const options = params.opts || [];
-  const input = await globalThis.gdal.open(fileOrFiles, openOptions);
-  // const result = globalThis.gdal.getInfo(input.datasets[0]);
-  const result = await globalThis.gdal.ogrinfo(input.datasets[0], options);
-  await globalThis.gdal.close(input);
-  return result;
-};

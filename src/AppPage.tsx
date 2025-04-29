@@ -9,10 +9,10 @@ import {
 import { Portal } from 'solid-js/web';
 
 // Imports from other packages
-import initGdalJs from 'gdal3.js';
-import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'; // eslint-disable-line import/extensions
-import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url';
-import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url';
+import { init } from 'geoimport';
+import workerUrl from 'geoimport/dist/static/gdal3.js?url'; // eslint-disable-line import/extensions
+import dataUrl from 'geoimport/dist/static/gdal3WebAssembly.data?url';
+import wasmUrl from 'geoimport/dist/static/gdal3WebAssembly.wasm?url';
 import { Transition } from 'solid-transition-group';
 import toast, { Toaster } from 'solid-toast';
 import { yieldOrContinue } from 'main-thread-scheduling';
@@ -90,7 +90,7 @@ import './styles/Transitions.css';
 // - the beforeunload event
 const isElectron = navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
 
-const loadGdal = async (): Promise<Gdal> => initGdalJs({
+const loadGeoImport = async (): Promise<void> => init({
   paths: {
     // We need a workaround to make it works the same way on electron
     // and in the browser (otherwise we get a double 'file:///' in the URL)
@@ -419,11 +419,9 @@ const AppPage: () => JSX.Element = () => {
   //  it should be refactored / split into smaller functions
   onMount(async () => {
     // Load GDAL
-    // TODO: we should handle the case where gdal isn't fully loaded yet but the user
+    // TODO: we should handle the case where gdal/geoimport isn't fully loaded yet but the user
     //  tries to use it (for example by dropping a file...)
-    loadGdal().then((gdal) => {
-      // @ts-expect-error - we should fix the type of globalThis.gdal
-      globalThis.gdal = gdal;
+    loadGeoImport().then(() => {
       setGdalLoaded(true);
     });
 

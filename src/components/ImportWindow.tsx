@@ -17,6 +17,7 @@ import { VsTriangleDown, VsTriangleRight } from 'solid-icons/vs';
 import toast from 'solid-toast';
 import { AllGeoJSON, bbox as computeBbox } from '@turf/turf';
 import { v4 as uuidv4 } from 'uuid';
+import { info } from 'geoimport';
 
 // Helpers
 import d3 from '../helpers/d3-custom';
@@ -36,7 +37,7 @@ import {
   SupportedTabularFileTypes,
 } from '../helpers/supportedFormats';
 import {
-  extractZipContent, findCsvDelimiter, getDatasetInfo, sanitizeCsv,
+  extractZipContent, findCsvDelimiter, sanitizeCsv,
 } from '../helpers/formatConversion';
 import { removeNadGrids } from '../helpers/projection';
 
@@ -180,10 +181,7 @@ const analyseTabularDatasetGDAL = async (
   let result;
 
   try {
-    result = await getDatasetInfo(
-      ds,
-      { opts: ['-wkt_format', 'WKT1'] },
-    );
+    result = await info(ds);
   } catch (e: any) {
     return {
       name,
@@ -231,10 +229,7 @@ const analyseGeospatialDatasetGDAL = async (
   let result;
 
   try {
-    result = await getDatasetInfo(
-      ds,
-      { opts: ['-wkt_format', 'WKT1'] },
-    );
+    result = await info(ds);
   } catch (e: any) {
     return {
       name,
