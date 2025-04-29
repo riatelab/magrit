@@ -12,6 +12,11 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.3.2 (unreleased)
+
+- Replace the use of [gdal3.js](https://github.com/bugra9/gdal3.js) by the use of [geoimport](https://github.com/riatelab/geoimport) (a high-level wrapper around gdal3.js) to handle the import/export of the various file formats.
+
+
 #### 2.3.1 (2025-04-24)
 
 - Fix display of coordinate system code when authority is “ESRI” and not “EPSG” (fixes <a href="https://github.com/riatelab/magrit/issues/152">152</a>).
