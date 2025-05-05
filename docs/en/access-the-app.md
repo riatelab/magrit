@@ -16,19 +16,50 @@ You can download the version corresponding to your operating system at [https://
 
 ### Supported operating systems
 
-The two fully supported operating systems for Magrit's *Desktop* version are :
+The three supported operating systems for Magrit's *Desktop* version are:
 
 - Windows 64-bit,
-- GNU/Linux 64-bit.
+- GNU/Linux 64-bit,
+- macOS 64-bit.
 
-A version for MacOS is also available, but we are unable to “sign” the application at this time. You will therefore need to authorize installation of the application in your Mac's security settings,
+#### Windows
+
+The Windows version is a [*portable*](https://en.wikipedia.org/wiki/Portable_application){target=_blank} application, meaning it doesn't need to be installed on your system.
+Simply download the executable file, then launch the application by double-clicking on the `Magrit-Windows-2.x.x-portable.exe` file.
+
+#### GNU/Linux
+
+The Linux version is also a [*portable*](https://en.wikipedia.org/wiki/Portable_application){target=_blank} application, meaning it doesn't need to be installed on your system.
+For this reason, the *AppImage* application format has been chosen.
+
+After downloading the application, simply make it executable by typing the following command in the terminal:
+
+```bash
+chmod +x Magrit-Linux-2.x.x.AppImage
+```
+
+Then you can launch the application by double-clicking on the `Magrit-Linux-2.x.x-portable.AppImage` file or by typing the following command in the terminal:
+
+```bash
+./Magrit-Linux-2.x.x.AppImage
+```
+
+If you get an error (especially with Ubuntu >= 23.10), you need to use the `--no-sandbox` parameter to start the application:
+
+```bash
+./Magrit-Linux-2.x.x.AppImage --no-sandbox
+```
+
+#### macOS
+
+A version for macOS is also available, but we are unable to “sign” the application at this time. You will therefore need to authorize installation of the application in your Mac's security settings,
 for example, by typing the following command in the terminal:
 
 ```bash
-xattr -cr [application path]
+xattr -cr Magrit-Mac-2.x.x-Installer.dmg 
 ```
 
-For more information on installing the application on MacOS, or to report a problem with starting the application on MacOS, please consult the [dedicated GitHub issue](https://github.com/riatelab/magrit/issues/136).
+For more information on installing the application on macOS, or to report a problem with starting the application on macOS, please consult the [dedicated GitHub issue](https://github.com/riatelab/magrit/issues/136).
 
 ### Installation
 

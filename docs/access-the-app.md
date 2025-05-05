@@ -16,23 +16,51 @@ Il est possible de télécharger la version correspondant à votre système d'ex
 
 ### Systèmes d'exploitation supportés
 
-Les deux systèmes d'exploitation totalement supportés pour la version *Desktop* de Magrit sont :
+Les trois systèmes d'exploitation supportés pour la version *Desktop* de Magrit sont :
 
 - Windows 64 bits,
-- GNU/Linux 64 bits.
+- GNU/Linux 64 bits,
+- macOS 64 bits.
 
-Une version pour MacOS est également disponible, toutefois nous ne sommes pas en mesure de "signer" l'application pour le moment. Vous devrez donc autoriser l'installation de l'application dans les paramètres de sécurité de votre Mac,
+#### Windows
+
+La version Windows est une application dite [*portable*](https://fr.wikipedia.org/wiki/Application_portable){target=_blank}, c'est-à-dire qu'elle n'a pas besoin d'être installée sur votre système.
+Il suffit de télécharger le fichier l'exécutable puis de lancer l'application en double-cliquant sur le fichier `Magrit-Windows-2.x.x-portable.exe`.
+
+#### GNU/Linux
+
+La version Linux est également une application [*portable*](https://fr.wikipedia.org/wiki/Application_portable){target=_blank}, c'est-à-dire qu'elle n'a pas besoin d'être installée sur votre système.
+Pour cela, le format d'application *AppImage* a été choisi.
+
+Après le téléchargement de l'application, il suffit de la rendre exécutable en tapant la commande suivante dans le terminal :
+
+```bash
+chmod +x Magrit-Linux-2.x.x.AppImage
+```
+
+Puis, vous pouvez lancer l'application en double-cliquant sur le fichier `Magrit-Linux-2.x.x-portable.AppImage` ou en tapant la commande suivante dans le terminal :
+
+```bash
+./Magrit-Linux-2.x.x.AppImage
+```
+
+En cas d'erreur (c'est notamment le cas avec Ubuntu >= 23.10), il est nécessaire d'utiliser le paramètre `--no-sandbox` pour démarrer l'application :
+
+```bash
+./Magrit-Linux-2.x.x.AppImage --no-sandbox
+```
+
+#### macOS
+
+Une version pour macOS est disponible, toutefois nous ne sommes pas en mesure de "signer" l'application pour le moment.
+Vous devrez donc autoriser l'installation de l'application dans les paramètres de sécurité de votre Mac,
 par exemple en tapant la commande suivante dans le terminal :
 
 ```bash
-xattr -cr [chemin de l'application]
+xattr -cr Magrit-Mac-2.x.x-Installer.dmg 
 ```
 
-Pour plus d'informations sur l'installation de l'application sur MacOS ou pour rapporter un problème relatif au démarrage de l'application sur MacOS, merci de consulter l'[issue GitHub dédiee](https://github.com/riatelab/magrit/issues/136).
-
-### Installation
-
-L'application ne demande pas d'installation particulière, il suffit de télécharger le fichier correspondant à votre système d'exploitation, de le décompresser et de lancer l'exécutable.
+Pour plus d'informations sur l'installation de l'application sur macOS ou pour rapporter un problème relatif au démarrage de l'application sur macOS, merci de consulter l'[issue GitHub dédiee](https://github.com/riatelab/magrit/issues/136).
 
 ### Mise à jour
 
