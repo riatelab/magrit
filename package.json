@@ -98,7 +98,7 @@
     "dicopal": "^0.8.1",
     "dompurify": "^3.2.5",
     "font-gis": "^1.0.6",
-    "geoimport": "^0.6.0",
+    "geoimport": "^0.7.0",
     "geos-wasm": "^3.1.1",
     "go-cart-wasm": "^0.5.0",
     "interactjs": "^1.10.27",
