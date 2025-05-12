@@ -16,6 +16,7 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 - Replace the use of [gdal3.js](https://github.com/bugra9/gdal3.js) by the use of [geoimport](https://github.com/riatelab/geoimport) (a high-level wrapper around gdal3.js) to handle the import/export of the various file formats.
 
+- Replaces the use of `feDropShadow` with the use of `feFlood`, `feGaussianBlur` and `feOffset` to create drop shadows on SVG elements (to improve compatibility with SVG editors including Inkscape - fixes <a href="https://github.com/riatelab/magrit/issues/154">issue 154</a>)
 
 #### 2.3.1 (2025-04-24)
 
