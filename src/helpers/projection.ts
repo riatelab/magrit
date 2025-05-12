@@ -1,7 +1,7 @@
 import proj4, { InterfaceProjection } from 'proj4';
 import * as projModule from 'mproj/dist/mproj';
 import wkt from 'wkt-parser';
-import type { Feature, FeatureCollection } from 'geojson';
+import type { Feature, FeatureCollection, Geometry } from 'geojson';
 import d3, { type GeoProjection, type GeoRawProjection } from './d3-custom';
 
 import epsg from '../assets/epsg.json';

@@ -139,7 +139,7 @@ function NewFieldPanel(
     }
 
     // Compute new column
-    const newColumn = alasql(query, [data]);
+    const newColumn: ({ newValue: any }[]) = alasql(query, [data]);
 
     // Remove special fields if needed
     if (hasSpecialFieldId(formula)) {
@@ -166,7 +166,7 @@ function NewFieldPanel(
     // Update the data
     props.updateData(
       variableName,
-      newColumn.map((d: { newValue: never }) => d.newValue),
+      newColumn.map((d) => d.newValue),
       newColumnType(),
     );
   };
@@ -249,7 +249,7 @@ function NewFieldPanel(
 
 interface DataHandlerFunctions {
   extractRows: (data: any) => any[];
-  getColumnDefs: (data: any) => any[];
+  getColumnDefs: (data: any, fieldDescriptions: Variable[]) => any[];
   updateReferenceData: (
     dsDescription: LayerDescription | TableDescription,
     newVariables: Variable[],
@@ -277,7 +277,7 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
         if (!fd) {
           console.log(`Missing field description for field: ${key}`);
         }
-        const o = { field: key, headerName: key };
+        const o: Record<string, unknown> = { field: key, headerName: key };
         if (fd && fd.dataType === 'number') {
           o.type = 'numericColumn';
           o.cellEditor = 'agNumberCellEditor';
@@ -291,7 +291,7 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
         if (!fd) {
           console.log(`Missing field description for field: ${key}`);
         }
-        const o = { field: key, headerName: key };
+        const o: Record<string, unknown> = { field: key, headerName: key };
         if (fd && fd.dataType === 'number') {
           o.type = 'numericColumn';
           o.cellEditor = 'agNumberCellEditor';
@@ -558,7 +558,7 @@ export default function TableWindow(): JSX.Element {
     // Wait for the table to be rendered
     setTimeout(() => {
       // Scroll to the new column
-      agGridRef.api.ensureColumnVisible(variableName);
+      agGridRef!.api.ensureColumnVisible(variableName);
 
       // Highlight the new column for a few seconds
       const headerAndCells = document.querySelectorAll(`[col-id="${variableName}"]`);
@@ -614,7 +614,7 @@ export default function TableWindow(): JSX.Element {
     if (currentPanel() === 'newColumn') {
       setCurrentPanel('table');
     } else {
-      (refParentNode.querySelector('.cancel-button') as HTMLElement).click();
+      (refParentNode!.querySelector('.cancel-button') as HTMLElement).click();
     }
   };
 
@@ -688,7 +688,7 @@ export default function TableWindow(): JSX.Element {
               autoSizeStrategy={{ type: 'fitCellContents' }}
               onGridPreDestroyed={() => {
                 // Unbind the context menu listener on the header cells
-                parentGridRef.querySelector('.ag-header-container')!
+                parentGridRef!.querySelector('.ag-header-container')!
                   .removeEventListener('contextmenu', listenerContextMenuHeader);
               }}
               onGridReady={() => {
@@ -708,7 +708,7 @@ export default function TableWindow(): JSX.Element {
                   // Add a context menu on the headers of the table to propose to remove a column.
                   // We need to add the listener on the parent of the header cells because
                   // all the header cells aren't rendered (only the visible ones).
-                  parentGridRef.querySelector('.ag-header-container')!
+                  parentGridRef!.querySelector('.ag-header-container')!
                     .addEventListener('contextmenu', listenerContextMenuHeader);
                 }, 15);
               }}
