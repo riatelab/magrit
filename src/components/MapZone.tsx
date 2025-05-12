@@ -709,12 +709,37 @@ export default function MapZone(): JSX.Element {
           <For each={layersDescriptionStore.layers}>
             {(layer) => <Show when={layer.visible && !!layer.dropShadow}>
               <filter id={`filter-drop-shadow-${layer.id}`} width="200%" height="200%">
-                <feDropShadow
-                  dx={layer.dropShadow!.dx}
-                  dy={layer.dropShadow!.dy}
-                  stdDeviation={layer.dropShadow!.stdDeviation}
+                <feFlood
+                  id={`fe-flood-${layer.id}`}
                   flood-color={layer.dropShadow!.color}
                   flood-opacity={1}
+                  result={'flood'}
+                />
+                <feComposite
+                  id={`fe-composite-1-${layer.id}`}
+                  result={'composite-1'}
+                  operator={'in'}
+                  in2={'SourceGraphic'}
+                  in={'flood'}
+                />
+                <feGaussianBlur
+                  id={`fe-gaussian-blur-${layer.id}`}
+                  result={'blur'}
+                  stdDeviation={layer.dropShadow!.stdDeviation}
+                  in={'composite-1'}
+                />
+                <feOffset
+                  id={`fe-offset-${layer.id}`}
+                  result={'offset'}
+                  dx={layer.dropShadow!.dx}
+                  dy={layer.dropShadow!.dy}
+                />
+                <feComposite
+                  id={`fe-composite-2-${layer.id}`}
+                  result={'composite-2'}
+                  operator={'over'}
+                  in2={'offset'}
+                  in={'SourceGraphic'}
                 />
               </filter>
             </Show>}
