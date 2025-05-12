@@ -1,6 +1,5 @@
 // Import from other packages
 import JSZip from 'jszip';
-import { fromTable, fromGeoJSON } from 'geoimport';
 
 // GeoJSON types
 import type { FeatureCollection, Feature } from 'geojson';
@@ -231,76 +230,4 @@ export async function convertTextualTabularDatasetToJSON(
     return parsed;
   }
   throw new Error(`Unsupported tabular file extension: ${ext}`);
-}
-
-/**
- * Convert the given GeoJSON FeatureCollection to the asked format.
- *
- * @param {FeatureCollection} featureCollection - The GeoJSON FeatureCollection to convert
- * @param layerName - The name of the layer
- * @param format - The format to convert to
- * @param crs - The destination CRS to use
- * @returns {Promise<string>} The converted file as a string (base64 encoded if binary)
- */
-export async function convertFromGeoJSON(
-  featureCollection: FeatureCollection,
-  layerName: string,
-  format: string,
-  crs: string,
-): Promise<string | Blob> {
-  // Store the input GeoJSON in a temporary file
-  const inputFile = new File(
-    [JSON.stringify(featureCollection)],
-    `${layerName}.geojson`,
-    { type: 'application/geo+json' },
-  );
-  // Open the GeoJSON file
-  const input = await globalThis.gdal.open(inputFile);
-  // Set the options for the conversion
-  const options = [
-    '-f', format,
-  ];
-  // Convert the GeoJSON to the asked format
-  if (format === 'ESRI Shapefile') {
-    options.push('-t_srs', crs);
-    options.push('-lco', 'ENCODING=UTF-8');
-    const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
-    // We will return a zip file (encoded in base 64) containing all the shapefile files
-    const zip = new JSZip();
-    // Add the other files
-    for (let i = 0; i < output.all.length; i += 1) {
-      // eslint-disable-next-line no-await-in-loop
-      const rawData = await globalThis.gdal.getFileBytes(output.all[i]);
-      const blob = new Blob([rawData], { type: '' });
-      const fileName = output.all[i].local.replace('/output/', '');
-      zip.file(fileName, blob, { binary: true });
-    }
-    await globalThis.gdal.close(input);
-    // Generate the zip file (as a Blob)
-    return zip.generateAsync({ type: 'blob' });
-  }
-  if (format === 'GML') {
-    options.push('-t_srs', crs);
-    // For KML and GML, we only return a text file
-    const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
-    const bytes = await globalThis.gdal.getFileBytes(output);
-    await globalThis.gdal.close(input);
-    return new TextDecoder().decode(bytes);
-  }
-  if (format === 'KML') {
-    // For KML and GML, we only return a text file
-    const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
-    const bytes = await globalThis.gdal.getFileBytes(output);
-    await globalThis.gdal.close(input);
-    return new TextDecoder().decode(bytes);
-  }
-  if (format === 'GPKG') {
-    options.push('-t_srs', crs);
-    // For GPKG, we return the binary file, as blob
-    const output = await globalThis.gdal.ogr2ogr(input.datasets[0], options);
-    const bytes = await globalThis.gdal.getFileBytes(output);
-    await globalThis.gdal.close(input);
-    return bytes;
-  }
-  throw new Error('Unsupported vector file format');
 }
