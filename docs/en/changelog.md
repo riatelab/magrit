@@ -18,6 +18,8 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 - Replaces the use of `feDropShadow` with the use of `feFlood`, `feGaussianBlur` and `feOffset` to create drop shadows on SVG elements (to improve compatibility with SVG editors including Inkscape - fixes <a href="https://github.com/riatelab/magrit/issues/154">issue 154</a>)
 
+- Add support for OGC WKT 2 string for defining custom projections.
+
 #### 2.3.1 (2025-04-24)
 
 - Fix display of coordinate system code when authority is “ESRI” and not “EPSG” (fixes <a href="https://github.com/riatelab/magrit/issues/152">152</a>).

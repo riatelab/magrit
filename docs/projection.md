@@ -60,14 +60,14 @@ Lorsque le code EPSG de la projection désirée est connu, il est conseillé de 
     caption="Sélection d'une projection locale"
 />
 
-### Utilisation d'une projection à partir d'une chaîne de caractères Proj4 ou WKT1
+### Utilisation d'une projection à partir d'une chaîne de caractères Proj4, OGC WKT, ESRI WKT ou OGC WKT 2
 
-Il est possible d'utiliser une projection à partir d'une chaîne de caractères Proj4 ou WKT1.
+Il est possible d'utiliser une projection à partir d'une chaîne de caractères Proj4, OGC WKT, ESRI WKT ou OGC WKT 2.
 
-Pour cela, il suffit de copier-coller la chaîne de caractères Proj4 ou WKT1 dans le champ dédié et de donner un nom à la projection.
+Pour cela, il suffit de copier-coller la chaîne de caractères Proj4, OGC WKT, ESRI WKT ou OGC WKT 2 dans le champ dédié et de donner un nom à la projection.
 
 <ZoomImg
     src="/projection-panel3.png"
-    alt="Création d'une projection à partir d'une chaîne de caractères Proj4 ou WKT1"
-    caption="Création d'une projection à partir d'une chaîne de caractères Proj4 ou WKT1"
+    alt="Création d'une projection à partir d'une chaîne de caractères Proj4, OGC WKT, ESRI WKT ou OGC WKT 2"
+    caption="Création d'une projection à partir d'une chaîne de caractères Proj4, OGC WKT, ESRI WKT ou OGC WKT 2"
 />

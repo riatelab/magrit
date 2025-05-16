@@ -18,6 +18,8 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 - Remplace l'utilisation de `feDropShadow` par l'utilisation de `feFlood`, `feGaussianBlur` et `feOffset` pour créer des ombres portées sur les éléments SVG (pour améliorer la compatibilité avec les éditeurs SVG dont notamment Inkscape - corrige <a href="https://github.com/riatelab/magrit/issues/154">l'issue 154</a>).
 
+- Ajoute le support des chaînes de caractères OGC WKT 2 pour la définition de projections personnalisées.
+
 #### 2.3.1 (2025-04-24)
 
 - Correction de l'affichage du code des systèmes de coordonnées quand l'autorité est "ESRI" et non pas "EPSG" (corrige <a href="https://github.com/riatelab/magrit/issues/152">152</a>).
