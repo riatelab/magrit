@@ -1314,7 +1314,7 @@ const fr = {
     ProjectionString: 'Définition de la projection à utiliser :',
     ProjectionName: 'Nom de la projection',
     ProjectionNamePlaceholder: 'Entrer un nom pour la projection créée',
-    InvalidProjectionString: 'Définition non-valide (veuillez noter que seuls les définitions au format proj4 et WKT1 sont actuellement supportées)',
+    InvalidProjectionString: 'Définition non-valide (veuillez noter que seuls les définitions au format Proj4, OGC WKT, ESRI WKT et OGC WKT 2 sont actuellement supportées)',
     ValidProjectionString: 'Définition valide - vous pouvez l\'appliquer en cliquant sur le bouton ci-dessous',
   },
   ImageSymbolSelection: {
@@ -1349,7 +1349,7 @@ const fr = {
     NewColumnModal: {
       BackToDatatable: 'Retour au tableau de données',
       title: 'Nouveau champ',
-      notAcceptedChars: 'Les caractères spéciaux suivants ne sont pas acceptés : .,/#!$%^&*;:{}=`~()\'',
+      notAcceptedChars: 'Les caractères spéciaux suivants ne sont pas acceptés : .,/#!$%^&*;:\{\}=`~()\'', // eslint-disable-line
       name: 'Nom',
       namePlaceholder: 'Saisir le nom du champ',
       newColumnType: 'Type du nouveau champ',

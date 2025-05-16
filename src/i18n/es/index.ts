@@ -1314,7 +1314,7 @@ const es = {
     ProjectionString: 'Definición de la proyección a utilizar:',
     ProjectionName: 'Nombre de la proyección',
     ProjectionNamePlaceholder: 'Introduzca un nombre para la proyección creada',
-    InvalidProjectionString: 'Definición no válida (tenga en cuenta que actualmente sólo se admiten las definiciones proj4 y WKT1)',
+    InvalidProjectionString: 'Definición no válida (tenga en cuenta que actualmente sólo se admiten las definiciones Proj4, OGC WKT, ESRI WKT y OGC WKT 2)',
     ValidProjectionString: 'Definición válida - puede aplicarla haciendo clic en el botón de abajo',
   },
   ImageSymbolSelection: {
@@ -1349,7 +1349,7 @@ const es = {
     NewColumnModal: {
       BackToDatatable: 'Volver a la tabla de datos',
       title: 'Nuevo campo',
-      notAcceptedChars: 'No se aceptan los siguientes caracteres especiales: .,/#!$%^&*;:{}=`~()  &-t\\"',
+      notAcceptedChars: 'No se aceptan los siguientes caracteres especiales: .,/#!$%^&*;:\{\}=`~()\'', // eslint-disable-line
       name: 'Nombre',
       namePlaceholder: 'Introduzca el nombre del campo',
       newColumnType: 'Tipo del nuevo campo',

@@ -1314,7 +1314,7 @@ const en = {
     ProjectionString: 'Definition of the projection',
     ProjectionName: 'Projection name',
     ProjectionNamePlaceholder: 'Enter a name for the new projection',
-    InvalidProjectionString: 'Invalid definition (please note that only proj4 and WKT1 definitions are currently supported)',
+    InvalidProjectionString: 'Invalid definition (please note that only Proj4, OGC WKT, ESRI WKT and OGC WKT 2 definitions are currently supported)',
     ValidProjectionString: 'Valid definition - you can apply it using the button just below',
   },
   ImageSymbolSelection: {
@@ -1349,7 +1349,7 @@ const en = {
     NewColumnModal: {
       BackToDatatable: 'Back to data table',
       title: 'New column',
-      notAcceptedChars: 'The following special characters are not accepted: .,/#!$%^&*;:{}=`~()\'',
+      notAcceptedChars: 'The following special characters are not accepted: .,/#!$%^&*;:\{\}=`~()\'', // eslint-disable-line
       name: 'Name',
       namePlaceholder: 'Type the name of the column',
       newColumnType: 'New column type',

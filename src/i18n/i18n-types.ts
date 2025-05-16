@@ -5374,7 +5374,7 @@ type RootTranslation = {
 		 */
 		ProjectionNamePlaceholder: string
 		/**
-		 * I​n​v​a​l​i​d​ ​d​e​f​i​n​i​t​i​o​n​ ​(​p​l​e​a​s​e​ ​n​o​t​e​ ​t​h​a​t​ ​o​n​l​y​ ​p​r​o​j​4​ ​a​n​d​ ​W​K​T​1​ ​d​e​f​i​n​i​t​i​o​n​s​ ​a​r​e​ ​c​u​r​r​e​n​t​l​y​ ​s​u​p​p​o​r​t​e​d​)
+		 * I​n​v​a​l​i​d​ ​d​e​f​i​n​i​t​i​o​n​ ​(​p​l​e​a​s​e​ ​n​o​t​e​ ​t​h​a​t​ ​o​n​l​y​ ​P​r​o​j​4​,​ ​O​G​C​ ​W​K​T​,​ ​E​S​R​I​ ​W​K​T​ ​a​n​d​ ​O​G​C​ ​W​K​T​ ​2​ ​d​e​f​i​n​i​t​i​o​n​s​ ​a​r​e​ ​c​u​r​r​e​n​t​l​y​ ​s​u​p​p​o​r​t​e​d​)
 		 */
 		InvalidProjectionString: string
 		/**
@@ -11452,7 +11452,7 @@ export type TranslationFunctions = {
 		 */
 		ProjectionNamePlaceholder: () => LocalizedString
 		/**
-		 * Invalid definition (please note that only proj4 and WKT1 definitions are currently supported)
+		 * Invalid definition (please note that only Proj4, OGC WKT, ESRI WKT and OGC WKT 2 definitions are currently supported)
 		 */
 		InvalidProjectionString: () => LocalizedString
 		/**
