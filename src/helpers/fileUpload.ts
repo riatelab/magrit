@@ -8,7 +8,11 @@ import { toTable, toGeoJSON } from 'geoimport';
 import type { FeatureCollection } from 'geojson';
 
 // Helpers
-import { findSuitableName, isFiniteNumber, isNonNull } from './common';
+import {
+  findSuitableName,
+  isFiniteNumber, isNonNull,
+  sanitizeColumnName,
+} from './common';
 import {
   convertTextualTabularDatasetToJSON,
   getGeometryType,
@@ -346,6 +350,40 @@ function addTabularLayer(data: Record<string, any>[], name: string): string {
   return tableId;
 }
 
+const sanitizeColumnNamesRecords = (
+  records: Record<string, unknown>[],
+): Record<string, unknown>[] => {
+  // Get the column names
+  const columns = Object.keys(records[0]);
+  // Create a new array of records with sanitized column names
+  return records.map((record) => {
+    const sanitizedRecord: Record<string, unknown> = {};
+    columns.forEach((column) => {
+      // eslint-disable-next-line no-param-reassign
+      sanitizedRecord[sanitizeColumnName(column)] = record[column];
+    });
+    return sanitizedRecord;
+  });
+};
+
+const sanitizeColumnNamesLayer = (
+  layer: FeatureCollection,
+): FeatureCollection => {
+  // Get the column names
+  const columns = Object.keys(layer.features[0].properties!);
+  // Update the the properties of each feature with sanitized column names
+  layer.features.forEach((feature) => {
+    const sanitizedRecord: Record<string, unknown> = {};
+    columns.forEach((column) => {
+      // eslint-disable-next-line no-param-reassign
+      sanitizedRecord[sanitizeColumnName(column)] = feature.properties![column];
+    });
+    // eslint-disable-next-line no-param-reassign
+    feature.properties = sanitizedRecord;
+  });
+  return layer;
+};
+
 /**
  * Convert a layer and add it to the store (and so to the map).
  *
@@ -374,8 +412,9 @@ export const convertAndAddFiles = async (
     // We want to remove the features with empty geometries
     // (i.e. if the geometry is null or undefined or if the coordinates array is empty)
     const { layer, nbRemoved } = removeFeaturesWithEmptyGeometry(res[layerName]);
+    const layerSanitized = sanitizeColumnNamesLayer(layer);
     return {
-      id: addLayer(layer, layerName, fit, visible),
+      id: addLayer(layerSanitized, layerName, fit, visible),
       nRemoved: nbRemoved,
     };
   }
@@ -393,8 +432,9 @@ export const convertAndAddFiles = async (
   if (isBinaryTabularFile(files, type)) {
     try {
       const res = await toTable(files.map((f) => f.file)[0], { tableName: layerName });
+      const resSanitized = sanitizeColumnNamesRecords(res);
       return {
-        id: addTabularLayer(res, layerName),
+        id: addTabularLayer(resSanitized, layerName),
         nRemoved: 0,
       };
     } catch (e: any) {
@@ -422,8 +462,9 @@ export const convertAndAddFiles = async (
     // We want to remove the features with empty geometries
     // (i.e. if the geometry is null or undefined or if the coordinates array is empty)
     const { layer, nbRemoved } = removeFeaturesWithEmptyGeometry(res);
+    const layerSanitized = sanitizeColumnNamesLayer(layer);
     return {
-      id: addLayer(layer, layerName, fit, visible),
+      id: addLayer(layerSanitized, layerName, fit, visible),
       nRemoved: nbRemoved,
     };
   } catch (e: any) {
