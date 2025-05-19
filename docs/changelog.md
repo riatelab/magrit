@@ -12,7 +12,7 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
-#### 2.3.2 (unreleased)
+#### 2.3.2 (2025-05-19)
 
 - Remplace l'utilisation de [gdal3.js](https://github.com/bugra9/gdal3.js) par l'utilisation de [geoimport](https://github.com/riatelab/geoimport) (un wrapper de haut niveau autour de gdal3.js) pour gérer l'import/export des différents formats de fichiers.
 
