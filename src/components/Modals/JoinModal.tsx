@@ -22,7 +22,7 @@ import { Feature } from 'geojson';
 
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
-import { unproxify } from '../../helpers/common';
+import { removeDiacritics, unproxify } from '../../helpers/common';
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
@@ -34,6 +34,7 @@ import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
 import MultipleSelect from '../MultipleSelect.tsx';
 import MessageBlock from '../MessageBlock.tsx';
+import DetailsSummary from '../DetailsSummary.tsx';
 
 // Types / Interfaces / Enums
 import type { Variable } from '../../helpers/typeDetection';
@@ -48,6 +49,8 @@ interface JoinResult {
   nNoMatchLayer: number,
   nNoDataTable: number,
   nNoDataLayer: number,
+  noMatchLayerFeatures: Record<string, any>[],
+  noMatchTableFeatures: Record<string, any>[],
 }
 
 const checkJoin = async (
@@ -55,6 +58,8 @@ const checkJoin = async (
   tableField: string,
   layerId: string,
   layerField: string,
+  ignoreCase: boolean,
+  normalizeText: boolean,
 ): Promise<JoinResult | undefined> => {
   if (tableId === '' || tableField === '' || layerId === '' || layerField === '') {
     return undefined;
@@ -68,12 +73,21 @@ const checkJoin = async (
     .find((l) => l.id === layerId)!;
 
   // The table field values, all converted to string
-  const tableFieldValues = tableDescription.data
+  let tableFieldValues = tableDescription.data
     .map((d) => `${d[tableField]}`);
 
   // The layer field values, all converted to string
-  const layerFieldValues = layerDescription.data.features
+  let layerFieldValues = layerDescription.data.features
     .map((f) => `${f.properties[layerField]}`);
+
+  if (ignoreCase) {
+    tableFieldValues = tableFieldValues.map((d) => d.toLowerCase());
+    layerFieldValues = layerFieldValues.map((d) => d.toLowerCase());
+  }
+  if (normalizeText) {
+    tableFieldValues = tableFieldValues.map((d) => removeDiacritics(d).replaceAll(' ', '').replaceAll('-', ''));
+    layerFieldValues = layerFieldValues.map((d) => removeDiacritics(d).replaceAll(' ', '').replaceAll('-', ''));
+  }
 
   // The result
   const result: JoinResult = {
@@ -85,10 +99,12 @@ const checkJoin = async (
     nNoMatchLayer: 0,
     nNoDataTable: 0,
     nNoDataLayer: 0,
+    noMatchLayerFeatures: [],
+    noMatchTableFeatures: [],
   };
 
   // For each table field value
-  tableFieldValues.forEach((v) => {
+  tableFieldValues.forEach((v, i) => {
     // If the value is null
     if (v === null) {
       result.nNoDataTable += 1;
@@ -101,12 +117,13 @@ const checkJoin = async (
         result.nMatchTable += 1;
       } else {
         result.nNoMatchTable += 1;
+        result.noMatchTableFeatures.push(tableDescription.data[i]);
       }
     }
   });
 
   // For each layer field value
-  layerFieldValues.forEach((v) => {
+  layerFieldValues.forEach((v, i) => {
     // If the value is null
     if (v === null) {
       result.nNoDataLayer += 1;
@@ -119,6 +136,7 @@ const checkJoin = async (
         result.nMatchLayer += 1;
       } else {
         result.nNoMatchLayer += 1;
+        result.noMatchLayerFeatures.push(layerDescription.data.features[i].properties);
       }
     }
   });
@@ -136,6 +154,8 @@ interface JoinParameters {
   selectFields: boolean,
   selectedFields: string[],
   removeNotMatching: boolean,
+  ignoreCase: boolean,
+  normalizeText: boolean,
 }
 
 const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
@@ -149,7 +169,19 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
     selectFields,
     selectedFields,
     removeNotMatching,
+    ignoreCase,
+    normalizeText,
   } = joinParameters;
+
+  // eslint-disable-next-line no-nested-ternary
+  const transformFn = !ignoreCase && !normalizeText
+    ? (s) => s
+    // eslint-disable-next-line no-nested-ternary
+    : ignoreCase && !normalizeText
+      ? (s) => s.toLowerCase()
+      : normalizeText && !ignoreCase
+        ? (s) => removeDiacritics(s).replaceAll(' ', '').replaceAll('-', '')
+        : (s) => removeDiacritics(s.toLowerCase()).replaceAll(' ', '').replaceAll('-', '');
 
   if (tableId === '' || tableField === '' || layerId === '' || layerField === '') {
     return;
@@ -164,7 +196,7 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
 
   // Use index to speed up the join
   const tableIndex = new Map(
-    tableDescription.data.map((item) => [String(item[tableField]), item]),
+    tableDescription.data.map((item) => [transformFn(String(item[tableField])), item]),
   );
 
   const newFields = selectFields
@@ -174,7 +206,7 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
   // The joined data as an array of GeoJSON features
   const jointData = layerDescription.data.features.map((ft: Feature) => {
     const feature = unproxify(ft as never) as Feature;
-    const jsonItem = tableIndex.get(String(feature.properties[layerField]));
+    const jsonItem = tableIndex.get(transformFn(String(feature.properties[layerField])));
     if (!jsonItem) {
       if (removeNotMatching) {
         return null;
@@ -291,6 +323,8 @@ export default function JoinPanel(
   const [targetLayerId, setTargetLayerId] = createSignal('');
   const [targetFieldTable, setTargetFieldTable] = createSignal('');
   const [targetFieldLayer, setTargetFieldLayer] = createSignal('');
+  const [ignoreCase, setIgnoreCase] = createSignal(false);
+  const [normalizeText, setNormalizeText] = createSignal(false);
 
   const allSelected = createMemo(() => (
     targetLayerId() !== ''
@@ -311,6 +345,8 @@ export default function JoinPanel(
       targetFieldTable(),
       targetLayerId(),
       targetFieldLayer(),
+      ignoreCase(),
+      normalizeText(),
     ),
   );
 
@@ -325,8 +361,43 @@ export default function JoinPanel(
   const [selectFields, setSelectFields] = createSignal(false);
   const [selectedFields, setSelectedFields] = createSignal<string[]>([]);
 
+  const makeTableDetail = (type: 'table' | 'layer', idCol: string) => {
+    const dataId = type === 'layer'
+      ? layersDescriptionStore.layers.find((d) => d.id === targetLayerId()!)!.data.features
+        .map((f) => f.properties[idCol])
+      : tableDescription.data
+        .map((d) => d[idCol]);
+
+    const noMatchArray = type === 'layer'
+      ? joinResult()?.noMatchLayerFeatures
+      : joinResult()?.noMatchTableFeatures;
+
+    const a1 = dataId.filter((v) => noMatchArray.find((d) => `${d[idCol]}` === `${v}`));
+    const a2 = dataId.filter((v) => !noMatchArray.find((d) => `${d[idCol]}` === `${v}`));
+
+    return <div style={{ 'max-height': '130px', 'overflow-y': 'scroll' }}>
+      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style={{ width: '98%' }}>
+        <thead ><tr><th>{idCol}</th></tr></thead>
+        <tbody>
+          <For each={a1}>
+            {
+              (v) => <tr style={{ background: 'pink' }}><td>{v}</td></tr>
+            }
+          </For>
+          <For each={a2}>
+            {
+              (v) => <tr><td>{v}</td></tr>
+            }
+          </For>
+        </tbody>
+      </table>
+    </div>;
+  };
+
   onMount(() => {
-    refSuccessButton = refJoinPanel!.parentElement!.parentElement!.parentElement!
+    const modalCard = refJoinPanel!.parentElement!.parentElement!;
+    modalCard.style.top = '10px';
+    refSuccessButton = modalCard.parentElement!
       .querySelector('.button.is-success')! as HTMLButtonElement;
 
     refSuccessButton.disabled = true;
@@ -345,6 +416,8 @@ export default function JoinPanel(
           selectFields: selectFields(),
           selectedFields: selectedFields(),
           removeNotMatching: removeNoMatch(),
+          ignoreCase: ignoreCase(),
+          normalizeText: normalizeText(),
         });
         if (removeNoMatch()) {
           // We need to rerender the layer to remove the features that do not match
@@ -397,59 +470,105 @@ export default function JoinPanel(
       <p>{LL().JoinPanel.Information()}</p>
       <p>{LL().JoinPanel.Information2()}</p>
     </MessageBlock>
-    <InputFieldSelect
-      label={LL().JoinPanel.TargetLayer()}
-      onChange={(v) => {
-        setTargetLayerId(v);
-      }}
-      value={''}
-    >
-      <option value=''>
-        {LL().JoinPanel.TargetLayerPlaceholder()}
-      </option>
-      <For each={layersDescriptionStore.layers}>
-        {(layer) => <option value={layer.id}>{layer.name}</option>}
-      </For>
-    </InputFieldSelect>
-    <InputFieldSelect
-      label={LL().JoinPanel.JoinFieldTable()}
-      onChange={(v) => {
-        setTargetFieldTable(v);
-      }}
-      value={''}
-    >
-      <option value=''>
-        {LL().JoinPanel.JoinFieldPlaceholder()}
-      </option>
-      <For each={tableDescription.fields}>
-        {(field) => <option value={field.name}>{field.name}</option>}
-      </For>
-    </InputFieldSelect>
-    <InputFieldSelect
-      label={LL().JoinPanel.JoinFieldLayer()}
-      onChange={(v) => {
-        setTargetFieldLayer(v);
-      }}
-      value={''}
-    >
-      <option value=''>
-        {LL().JoinPanel.JoinFieldPlaceholder()}
-      </option>
-      <Show when={targetLayerId() !== ''}>
-        <For each={
-          layersDescriptionStore.layers.find((layer) => layer.id === targetLayerId())!.fields
-        }>
-          {(field) => <option value={field.name}>{field.name}</option>}
+    <div style={{ 'text-align': 'center' }}>
+      <InputFieldSelect
+        label={LL().JoinPanel.TargetLayer()}
+        onChange={(v) => {
+          setTargetLayerId(v);
+        }}
+        layout={'vertical'}
+        width={'300px'}
+        value={''}
+      >
+        <option value=''>
+          {LL().JoinPanel.TargetLayerPlaceholder()}
+        </option>
+        <For each={layersDescriptionStore.layers}>
+          {(layer) => <option value={layer.id}>{layer.name}</option>}
         </For>
-      </Show>
-    </InputFieldSelect>
+      </InputFieldSelect>
+    </div>
+    <Show when={targetLayerId() !== ''}>
+      <hr />
+      <h4>{LL().JoinPanel.NormalizationParameters()}</h4>
+      <div>
+        <InputFieldCheckbox
+          label={LL().JoinPanel.IgnoreCase()}
+          checked={ignoreCase()}
+          onChange={(v) => { setIgnoreCase(v); }}
+        />
+        <InputFieldCheckbox
+          label={LL().JoinPanel.NormalizeText()}
+          checked={normalizeText()}
+          onChange={(v) => { setNormalizeText(v); }}
+        />
+      </div>
+      <hr/>
+      <h4>{LL().JoinPanel.JoinFieldParameters()}</h4>
+      <div class="is-flex is-flex-direction-row">
+        <div style={{ width: '48%', 'text-align': 'center' }}>
+          <InputFieldSelect
+            label={LL().JoinPanel.JoinFieldLayer({
+              layerName: layersDescriptionStore.layers.find((d) => d.id === targetLayerId())!.name,
+            })}
+            onChange={(v) => {
+              setTargetFieldLayer(v);
+            }}
+            layout={'vertical'}
+            width={'100%'}
+            value={''}
+          >
+            <option value=''>
+              {LL().JoinPanel.JoinFieldPlaceholder()}
+            </option>
+            <For each={
+              layersDescriptionStore.layers.find((layer) => layer.id === targetLayerId())!.fields
+            }>
+              {(field) => <option value={field.name}>{field.name}</option>}
+            </For>
+          </InputFieldSelect>
+          <Show when={targetFieldTable() !== '' && targetFieldLayer() !== '' && joinResult()}>
+            {/* <DetailsSummary summaryContent={'Sample data'} initialOpen={false}> */}
+            { makeTableDetail('layer', targetFieldLayer()) }
+            {/* </DetailsSummary> */}
+          </Show>
+        </div>
+        <div style={{ width: '4%', 'text-align': 'center' }}>
+          <p><br /></p>
+          <b>=</b>
+        </div>
+        <div style={{ width: '48%', 'text-align': 'center' }}>
+          <InputFieldSelect
+            label={LL().JoinPanel.JoinFieldTable({ tableName: tableDescription.name })}
+            onChange={(v) => {
+              setTargetFieldTable(v);
+            }}
+            layout={'vertical'}
+            width={'100%'}
+            value={''}
+          >
+            <option value=''>
+              {LL().JoinPanel.JoinFieldPlaceholder()}
+            </option>
+            <For each={tableDescription.fields}>
+              {(field) => <option value={field.name}>{field.name}</option>}
+            </For>
+          </InputFieldSelect>
+          <Show when={targetFieldTable() !== '' && targetFieldLayer() !== '' && joinResult()}>
+            {/* <DetailsSummary summaryContent={'Sample data'} initialOpen={false}> */}
+            { makeTableDetail('table', targetFieldTable()) }
+            {/* </DetailsSummary> */}
+          </Show>
+        </div>
+      </div>
+    </Show>
     <Switch>
       <Match when={joinResult.loading}>
         <p><i>{ LL().JoinPanel.Loading() }</i></p>
       </Match>
       <Match when={!joinResult.loading && joinResult()}>
         <hr/>
-        <h3>{LL().JoinPanel.ResultInformation()}</h3>
+        <h4>{LL().JoinPanel.ResultInformation()}</h4>
         <p>
           <strong>{LL().JoinPanel.MatchedGeometry()}</strong>
           &nbsp;{joinResult()!.nMatchLayer}/{joinResult()?.nFeaturesLayer}

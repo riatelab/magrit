@@ -5119,13 +5119,31 @@ type RootTranslation = {
 		 */
 		TargetLayerPlaceholder: string
 		/**
-		 * S​e​l​e​c​t​ ​t​h​e​ ​f​i​e​l​d​ ​t​o​ ​j​o​i​n​ ​o​n​ ​(​t​a​b​l​e​)
+		 * N​o​r​m​a​l​i​z​a​t​i​o​n​ ​p​a​r​a​m​e​t​e​r​s
 		 */
-		JoinFieldTable: string
+		NormalizationParameters: string
 		/**
-		 * S​e​l​e​c​t​ ​t​h​e​ ​f​i​e​l​d​ ​t​o​ ​j​o​i​n​ ​o​n​ ​(​l​a​y​e​r​)
+		 * C​a​s​e​ ​i​n​s​e​n​s​i​t​i​v​e​ ​(​i​g​n​o​r​e​ ​c​a​s​e​)
 		 */
-		JoinFieldLayer: string
+		IgnoreCase: string
+		/**
+		 * N​o​r​m​a​l​i​z​e​ ​t​e​x​t​ ​(​i​g​n​o​r​e​ ​d​i​a​c​r​i​t​i​c​s​,​ ​h​y​p​h​e​n​s​ ​a​n​d​ ​s​p​a​c​e​s​)
+		 */
+		NormalizeText: string
+		/**
+		 * J​o​i​n​ ​f​i​e​l​d​s
+		 */
+		JoinFieldParameters: string
+		/**
+		 * T​a​b​l​e​ ​{​t​a​b​l​e​N​a​m​e​}
+		 * @param {unknown} tableName
+		 */
+		JoinFieldTable: RequiredParams<'tableName'>
+		/**
+		 * L​a​y​e​r​ ​{​l​a​y​e​r​N​a​m​e​}
+		 * @param {unknown} layerName
+		 */
+		JoinFieldLayer: RequiredParams<'layerName'>
 		/**
 		 * S​e​l​e​c​t​ ​a​ ​f​i​e​l​d
 		 */
@@ -5154,6 +5172,10 @@ type RootTranslation = {
 		 * n​o​ ​d​a​t​a
 		 */
 		NoData: string
+		/**
+		 * J​o​i​n​ ​p​a​r​a​m​e​t​e​r​s
+		 */
+		JoinParameters: string
 		/**
 		 * U​s​e​ ​a​ ​p​r​e​f​i​x​ ​f​o​r​ ​t​h​e​ ​j​o​i​n​e​d​ ​f​i​e​l​d​s​?
 		 */
@@ -11198,13 +11220,29 @@ export type TranslationFunctions = {
 		 */
 		TargetLayerPlaceholder: () => LocalizedString
 		/**
-		 * Select the field to join on (table)
+		 * Normalization parameters
 		 */
-		JoinFieldTable: () => LocalizedString
+		NormalizationParameters: () => LocalizedString
 		/**
-		 * Select the field to join on (layer)
+		 * Case insensitive (ignore case)
 		 */
-		JoinFieldLayer: () => LocalizedString
+		IgnoreCase: () => LocalizedString
+		/**
+		 * Normalize text (ignore diacritics, hyphens and spaces)
+		 */
+		NormalizeText: () => LocalizedString
+		/**
+		 * Join fields
+		 */
+		JoinFieldParameters: () => LocalizedString
+		/**
+		 * Table {tableName}
+		 */
+		JoinFieldTable: (arg: { tableName: unknown }) => LocalizedString
+		/**
+		 * Layer {layerName}
+		 */
+		JoinFieldLayer: (arg: { layerName: unknown }) => LocalizedString
 		/**
 		 * Select a field
 		 */
@@ -11233,6 +11271,10 @@ export type TranslationFunctions = {
 		 * no data
 		 */
 		NoData: () => LocalizedString
+		/**
+		 * Join parameters
+		 */
+		JoinParameters: () => LocalizedString
 		/**
 		 * Use a prefix for the joined fields?
 		 */
