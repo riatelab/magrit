@@ -715,7 +715,7 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
           setPortrayalType(v as 'choropleth' | 'proportionalSymbols');
         }}
         value={portrayalType()}
-        width={400}
+        width={'400px'}
       >
         <option value="choropleth">
           {LL().FunctionalitiesSection.LinearRegressionOptions.PortrayalTypeChoropleth()}

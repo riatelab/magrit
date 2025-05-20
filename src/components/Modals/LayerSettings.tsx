@@ -2460,7 +2460,7 @@ function makeSettingsDefaultPolygon(
           debouncedUpdateProp(props.id, ['rendererParameters', 'palette'], palette);
         }}
         value={(props.rendererParameters as ClassificationParameters).palette.name}
-        width={300}
+        width={'300px'}
       >
         <For each={availableSequentialPalettes}>
           {

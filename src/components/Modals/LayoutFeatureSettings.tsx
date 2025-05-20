@@ -183,7 +183,7 @@ function makeSettingsScaleBar(
         value,
       )}
       value={ft.behavior}
-      width={250}
+      width={'250px'}
     >
       <option value={ScaleBarBehavior.absoluteSize}>
         {LL().LayoutFeatures.Modal.ScaleBarAbsoluteSize()}
@@ -200,7 +200,7 @@ function makeSettingsScaleBar(
         value,
       )}
       value={ft.measureLocation}
-      width={250}
+      width={'250px'}
     >
       <option value={ScaleBarMeasureLocation.underScaleBar}>
         {LL().LayoutFeatures.Modal.ScaleBarMeasureLocationUnderScaleBar()}
@@ -217,7 +217,7 @@ function makeSettingsScaleBar(
         value,
       )}
       value={ft.style}
-      width={250}
+      width={'250px'}
     >
       <For each={Object.keys(ScaleBarStyle).filter((d) => d !== 'blackAndWhiteBar')}>
         {

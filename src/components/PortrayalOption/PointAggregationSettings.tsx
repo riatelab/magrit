@@ -551,7 +551,7 @@ export default function PointAggregationSettings(props: PortrayalSettingsProps):
         setLayerType(v as RepresentationType.choropleth | RepresentationType.proportionalSymbols);
       }}
       value={layerType()}
-      width={300}
+      width={'300px'}
     >
       <option value={RepresentationType.choropleth}>
         {LL().FunctionalitiesSection.PointAggregationOptions.MapTypeRatio()}
