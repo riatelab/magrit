@@ -22,7 +22,7 @@ import { Feature } from 'geojson';
 
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
-import { removeDiacritics, unproxify } from '../../helpers/common';
+import { isNonNull, removeDiacritics, unproxify } from '../../helpers/common';
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
@@ -34,11 +34,13 @@ import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputFieldText from '../Inputs/InputText.tsx';
 import MultipleSelect from '../MultipleSelect.tsx';
 import MessageBlock from '../MessageBlock.tsx';
-import DetailsSummary from '../DetailsSummary.tsx';
 
 // Types / Interfaces / Enums
 import type { Variable } from '../../helpers/typeDetection';
 import type { LayerDescription, TableDescription } from '../../global';
+
+// Style
+import '../../styles/JoinModal.css';
 
 interface JoinResult {
   nFeaturesTable: number,
@@ -53,6 +55,29 @@ interface JoinResult {
   noMatchTableFeatures: Record<string, any>[],
 }
 
+/* eslint-disable no-nested-ternary */
+const getTransformFn = (
+  ignoreCase: boolean,
+  normalizeText: boolean,
+): ((s: any) => string | null) => (
+  !ignoreCase && !normalizeText
+    ? (s: any) => (isNonNull(s) ? `${s}` : null)
+    : ignoreCase && !normalizeText
+      ? (s: any) => (isNonNull(s) ? `${s}`.toLowerCase() : null)
+      : normalizeText && !ignoreCase
+        ? (s: any) => (
+          isNonNull(s)
+            ? removeDiacritics(`${s}`).replaceAll(' ', '').replaceAll('-', '')
+            : null
+        )
+        : (s: any) => (
+          isNonNull(s)
+            ? removeDiacritics(`${s}`.toLowerCase()).replaceAll(' ', '').replaceAll('-', '')
+            : null
+        )
+);
+/* eslint-enable no-nested-ternary */
+
 const checkJoin = async (
   tableId: string,
   tableField: string,
@@ -64,6 +89,10 @@ const checkJoin = async (
   if (tableId === '' || tableField === '' || layerId === '' || layerField === '') {
     return undefined;
   }
+
+  // The transformation function to compare the values
+  const transformFn = getTransformFn(ignoreCase, normalizeText);
+
   // The table description of the reference table
   const tableDescription: TableDescription = layersDescriptionStore.tables
     .find((l) => l.id === tableId)!;
@@ -72,22 +101,13 @@ const checkJoin = async (
   const layerDescription: LayerDescription = layersDescriptionStore.layers
     .find((l) => l.id === layerId)!;
 
-  // The table field values, all converted to string
-  let tableFieldValues = tableDescription.data
-    .map((d) => `${d[tableField]}`);
+  // The table field values, all converted to string to be able to compare it easily
+  const tableFieldValues = tableDescription.data
+    .map((d) => transformFn(d[tableField]));
 
-  // The layer field values, all converted to string
-  let layerFieldValues = layerDescription.data.features
-    .map((f) => `${f.properties[layerField]}`);
-
-  if (ignoreCase) {
-    tableFieldValues = tableFieldValues.map((d) => d.toLowerCase());
-    layerFieldValues = layerFieldValues.map((d) => d.toLowerCase());
-  }
-  if (normalizeText) {
-    tableFieldValues = tableFieldValues.map((d) => removeDiacritics(d).replaceAll(' ', '').replaceAll('-', ''));
-    layerFieldValues = layerFieldValues.map((d) => removeDiacritics(d).replaceAll(' ', '').replaceAll('-', ''));
-  }
+  // The layer field values, all converted to string to be able to compare it easily
+  const layerFieldValues = layerDescription.data.features
+    .map((f) => transformFn(f.properties[layerField]));
 
   // The result
   const result: JoinResult = {
@@ -111,9 +131,8 @@ const checkJoin = async (
     } else {
       // If the value is not null
       // If the value is in the layer field values
-      // Note that we convert the value to string to be able to compare it
       // eslint-disable-next-line no-lonely-if
-      if (layerFieldValues.includes(`${v}`)) {
+      if (layerFieldValues.includes(v)) {
         result.nMatchTable += 1;
       } else {
         result.nNoMatchTable += 1;
@@ -132,7 +151,7 @@ const checkJoin = async (
       // If the value is in the table field values
       // Note that we convert the value to string to be able to compare it
       // eslint-disable-next-line no-lonely-if
-      if (tableFieldValues.includes(`${v}`)) {
+      if (tableFieldValues.includes(v)) {
         result.nMatchLayer += 1;
       } else {
         result.nNoMatchLayer += 1;
@@ -173,19 +192,13 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
     normalizeText,
   } = joinParameters;
 
-  // eslint-disable-next-line no-nested-ternary
-  const transformFn = !ignoreCase && !normalizeText
-    ? (s) => s
-    // eslint-disable-next-line no-nested-ternary
-    : ignoreCase && !normalizeText
-      ? (s) => s.toLowerCase()
-      : normalizeText && !ignoreCase
-        ? (s) => removeDiacritics(s).replaceAll(' ', '').replaceAll('-', '')
-        : (s) => removeDiacritics(s.toLowerCase()).replaceAll(' ', '').replaceAll('-', '');
-
   if (tableId === '' || tableField === '' || layerId === '' || layerField === '') {
     return;
   }
+
+  // The transformation function to compare the values
+  const transformFn = getTransformFn(ignoreCase, normalizeText);
+
   // The table description of the reference table
   const tableDescription: TableDescription = layersDescriptionStore.tables
     .find((l) => l.id === tableId)!;
@@ -196,7 +209,9 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
 
   // Use index to speed up the join
   const tableIndex = new Map(
-    tableDescription.data.map((item) => [transformFn(String(item[tableField])), item]),
+    tableDescription.data
+      .map((item) => [transformFn(item[tableField]), item])
+      .filter(([k, _]) => k !== null),
   );
 
   const newFields = selectFields
@@ -206,7 +221,7 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
   // The joined data as an array of GeoJSON features
   const jointData = layerDescription.data.features.map((ft: Feature) => {
     const feature = unproxify(ft as never) as Feature;
-    const jsonItem = tableIndex.get(transformFn(String(feature.properties[layerField])));
+    const jsonItem = tableIndex.get(transformFn(feature.properties[layerField]));
     if (!jsonItem) {
       if (removeNotMatching) {
         return null;
@@ -332,7 +347,7 @@ export default function JoinPanel(
     && targetFieldLayer() !== ''
   ));
 
-  // We use a resource to check the join, this allow us to easily
+  // We use a resource to check the join, this allows us to easily
   // display a loading indicator while the join is being checked
   const [
     joinResult,
@@ -361,7 +376,7 @@ export default function JoinPanel(
   const [selectFields, setSelectFields] = createSignal(false);
   const [selectedFields, setSelectedFields] = createSignal<string[]>([]);
 
-  const makeTableDetail = (type: 'table' | 'layer', idCol: string) => {
+  const makeTableDetail = (type: 'table' | 'layer', idCol: string): JSX.Element => {
     const dataId = type === 'layer'
       ? layersDescriptionStore.layers.find((d) => d.id === targetLayerId()!)!.data.features
         .map((f) => f.properties[idCol])
@@ -369,19 +384,19 @@ export default function JoinPanel(
         .map((d) => d[idCol]);
 
     const noMatchArray = type === 'layer'
-      ? joinResult()?.noMatchLayerFeatures
-      : joinResult()?.noMatchTableFeatures;
+      ? joinResult()!.noMatchLayerFeatures
+      : joinResult()!.noMatchTableFeatures;
 
     const a1 = dataId.filter((v) => noMatchArray.find((d) => `${d[idCol]}` === `${v}`));
     const a2 = dataId.filter((v) => !noMatchArray.find((d) => `${d[idCol]}` === `${v}`));
 
-    return <div style={{ 'max-height': '130px', 'overflow-y': 'scroll' }}>
-      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style={{ width: '98%' }}>
-        <thead ><tr><th>{idCol}</th></tr></thead>
+    return <div class={'join-panel--table-detail'}>
+      <table class="table is-bordered is-striped is-narrow is-fullwidth">
+        <thead><tr><th>{idCol}</th></tr></thead>
         <tbody>
           <For each={a1}>
             {
-              (v) => <tr style={{ background: 'pink' }}><td>{v}</td></tr>
+              (v) => <tr class={'unmatched'}><td>{v}</td></tr>
             }
           </For>
           <For each={a2}>
@@ -583,13 +598,13 @@ export default function JoinPanel(
             &nbsp;&nbsp;({joinResult()!.nNoDataTable}&nbsp;{LL().JoinPanel.NoData()})
           </Show>
         </p>
-        <hr/>
         <Show when={joinResult()!.nMatchLayer === 0}>
           <MessageBlock type={'danger'} useIcon={true}>
             <p>{LL().JoinPanel.ImpossibleJoin()}</p>
           </MessageBlock>
         </Show>
         <Show when={joinResult()!.nMatchLayer > 0}>
+          <hr/>
           <Show when={joinResult()!.nNoMatchLayer > 0}>
             <InputFieldCheckbox
               label={LL().JoinPanel.RemoveNotMatching()}
