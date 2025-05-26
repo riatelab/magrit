@@ -480,9 +480,12 @@ const createScaleBar = (LL: Accessor<TranslationFunctions>) => {
       id: generateIdLayoutFeature(),
       type: LayoutFeatureType.ScaleBar,
       position: [cursorPt.x, cursorPt.y],
-      width: 100,
+      // We use a NaN width in order to trigger (in ScaleBar renderer)
+      // a mechanism for calculating a “pretty” scalebar distance
+      // (e.g. 1km, 2km, 5km, 10km, 50km, 100km, etc.).
+      width: NaN,
       height: 10,
-      distance: NaN,
+      distance: 10,
       rotation: 0,
       unit: DistanceUnit.km,
       label: {
@@ -498,7 +501,7 @@ const createScaleBar = (LL: Accessor<TranslationFunctions>) => {
       labelPosition: 'top',
       style: ScaleBarStyle.lineWithTicksOnTop,
       backgroundRect: { visible: false } as BackgroundRect,
-      behavior: 'absoluteSize' as ScaleBarBehavior,
+      behavior: 'geographicSize' as ScaleBarBehavior,
       measureLocation: ScaleBarMeasureLocation.centerMap,
     } as ScaleBar;
 

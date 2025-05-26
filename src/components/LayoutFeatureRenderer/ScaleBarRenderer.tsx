@@ -240,13 +240,61 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
     );
   };
 
-  if (
-    Number.isNaN(props.distance)
-    || props.distance === 0
-    || Number.isNaN(props.width)
-    || props.width === 0
-  ) {
+  const getSuggestionDistance = (distance: number): number => {
+    if (distance < 1000) {
+      return 1000;
+    }
+    if (distance < 3500) {
+      return 2000;
+    }
+    if (distance < 7500) {
+      return 5000;
+    }
+    if (distance < 15000) {
+      return 10000;
+    }
+    if (distance < 75000) {
+      return 50000;
+    }
+    if (distance < 150000) {
+      return 100000;
+    }
+    if (distance < 300000) {
+      return 200000;
+    }
+    if (distance < 1000000) {
+      return 500000;
+    }
+    if (distance < 2000000) {
+      return 1000000;
+    }
+    if (distance < 3000000) {
+      return 2000000;
+    }
+    return 3000000;
+  };
+
+  const handleNanWidth = () => {
     handleNanDistance();
+    const distance = getSuggestionDistance(props.distance);
+    const ratio = distance / props.distance;
+    const width = props.width * ratio;
+    setLayersDescriptionStore(
+      'layoutFeaturesAndLegends',
+      (f: LayoutFeature | Legend) => f.id === props.id,
+      {
+        distance,
+        width,
+      },
+    );
+  };
+
+  if (Number.isNaN(props.distance) || props.distance === 0) {
+    handleNanDistance();
+  }
+
+  if (Number.isNaN(props.width) || props.width === 0) {
+    handleNanWidth();
   }
 
   createEffect(
@@ -265,8 +313,8 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
           return;
         }
         setTimeout(() => {
-          // The scale bar is always the same size (in pixels) no matter the zoom level
-          // but we need to recompute the displayed distance
+          // The scale bar is always the same size (in pixels) no matter the zoom level,
+          // but we need to recompute the displayed distance.
           // We need to compute the distance for the given width.
           // Geo coordinates of pt1 and pt2, given the value of
           // the measureLocation property:
@@ -300,8 +348,8 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
           return;
         }
         setTimeout(() => {
-          // The scale bar always represents the same distance on the map, no matter the zoom level
-          // but we need to recompute it's pixel size.
+          // The scale bar always represents the same distance on the map, no matter the zoom level,
+          // but we need to recompute its pixel size.
           if (
             Number.isNaN(props.distance) || props.distance <= 0
             || Number.isNaN(props.width) || props.width <= 0
