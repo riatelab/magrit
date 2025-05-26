@@ -478,7 +478,7 @@ const analyzeDataset = async (
   return result as DatasetInformation;
 };
 
-const extTransform = (ext) => {
+const extTransform = (ext: string): string => {
   if (shapefileExtensions.includes(ext)) {
     return 'shp';
   }
@@ -487,7 +487,7 @@ const extTransform = (ext) => {
 
 const groupFiles = async (
   files: CustomFileList,
-): { [key: string]: { name: string, files: FileEntry[] } } => {
+): Promise<{ [key: string]: { name: string, files: FileEntry[] } }> => {
   // We want to group the files by their name (because shapefiles have multiple files)
   // but other files have only one file (and we want to avoid grouping
   // other files than shapefiles).
@@ -672,7 +672,7 @@ export default function ImportWindow(): JSX.Element {
       : (event.keyCode === 27);
     // We block the escape key if the loading is active
     if (isEscape && !fileDescriptions.loading) {
-      (refParentNode.querySelector('.cancel-button') as HTMLElement).click();
+      (refParentNode!.querySelector('.cancel-button') as HTMLElement).click();
     }
   };
 
