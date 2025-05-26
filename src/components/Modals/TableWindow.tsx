@@ -686,6 +686,7 @@ export default function TableWindow(): JSX.Element {
               suppressDragLeaveHidesColumns={ true }
               suppressColumnMoveAnimation={ true }
               autoSizeStrategy={{ type: 'fitCellContents' }}
+              stopEditingWhenCellsLoseFocus={true}
               onGridPreDestroyed={() => {
                 // Unbind the context menu listener on the header cells
                 parentGridRef!.querySelector('.ag-header-container')!
