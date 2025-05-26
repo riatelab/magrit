@@ -5153,7 +5153,7 @@ type RootTranslation = {
 		 */
 		Loading: string
 		/**
-		 * R​e​s​u​l​t​ ​i​n​f​o​r​m​a​t​i​o​n​:
+		 * R​e​s​u​l​t​ ​i​n​f​o​r​m​a​t​i​o​n
 		 */
 		ResultInformation: string
 		/**
@@ -11252,7 +11252,7 @@ export type TranslationFunctions = {
 		 */
 		Loading: () => LocalizedString
 		/**
-		 * Result information:
+		 * Result information
 		 */
 		ResultInformation: () => LocalizedString
 		/**

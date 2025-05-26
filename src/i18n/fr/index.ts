@@ -1254,7 +1254,7 @@ const fr = {
     JoinFieldLayer: 'Couche {layerName}',
     JoinFieldPlaceholder: 'Sélectionner un champ',
     Loading: 'Calcul des correspondances entre les champs...',
-    ResultInformation: 'Informations sur le résultat de la jointure :',
+    ResultInformation: 'Informations sur le résultat de la jointure',
     MatchedGeometry: 'Géométries ayant une correspondance :',
     MatchedData: 'Entrées du tableau ayant une correspondance :',
     ImpossibleJoin: 'Les choix réalisés ne permettent par de réaliser de jointure.',

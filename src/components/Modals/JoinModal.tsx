@@ -592,20 +592,22 @@ export default function JoinPanel(
       <Match when={!joinResult.loading && joinResult()}>
         <hr/>
         <h4>{LL().JoinPanel.ResultInformation()}</h4>
-        <p>
-          <strong>{LL().JoinPanel.MatchedGeometry()}</strong>
-          &nbsp;{joinResult()!.nMatchLayer}/{joinResult()?.nFeaturesLayer}
-          <Show when={joinResult()!.nNoDataLayer > 0}>
-            &nbsp;&nbsp;({joinResult()!.nNoDataLayer}&nbsp;{LL().JoinPanel.NoData()})
-          </Show>
-        </p>
-        <p>
-          <strong>{LL().JoinPanel.MatchedData()}</strong>
-          &nbsp;{joinResult()?.nMatchTable}/{joinResult()?.nFeaturesTable}
-          <Show when={joinResult()!.nNoDataTable > 0}>
-            &nbsp;&nbsp;({joinResult()!.nNoDataTable}&nbsp;{LL().JoinPanel.NoData()})
-          </Show>
-        </p>
+        <div style={{ display: 'flex', 'text-align': 'center' }}>
+          <div style={{ width: '50%' }}>
+            <strong>{LL().JoinPanel.MatchedGeometry()}</strong>
+            &nbsp;{joinResult()!.nMatchLayer}/{joinResult()?.nFeaturesLayer}
+            <Show when={joinResult()!.nNoDataLayer > 0}>
+              &nbsp;&nbsp;({joinResult()!.nNoDataLayer}&nbsp;{LL().JoinPanel.NoData()})
+            </Show>
+          </div>
+          <div style={{ width: '50%' }}>
+            <strong>{LL().JoinPanel.MatchedData()}</strong>
+            &nbsp;{joinResult()?.nMatchTable}/{joinResult()?.nFeaturesTable}
+            <Show when={joinResult()!.nNoDataTable > 0}>
+              &nbsp;&nbsp;({joinResult()!.nNoDataTable}&nbsp;{LL().JoinPanel.NoData()})
+            </Show>
+          </div>
+        </div>
         <Show when={joinResult()!.nMatchLayer === 0}>
           <MessageBlock type={'danger'} useIcon={true}>
             <p>{LL().JoinPanel.ImpossibleJoin()}</p>

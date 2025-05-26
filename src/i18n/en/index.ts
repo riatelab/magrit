@@ -1254,7 +1254,7 @@ const en = {
     JoinFieldLayer: 'Layer {layerName}',
     JoinFieldPlaceholder: 'Select a field',
     Loading: 'Computing join...',
-    ResultInformation: 'Result information:',
+    ResultInformation: 'Result information',
     MatchedGeometry: 'Geometries having a match:',
     MatchedData: 'Table rows having a match:',
     ImpossibleJoin: 'The choices made do not allow a join to be made.',

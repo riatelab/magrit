@@ -1254,7 +1254,7 @@ const es = {
     JoinFieldLayer: 'Capa {layerName}',
     JoinFieldPlaceholder: 'Selecciona un campo',
     Loading: 'Cálculo de correspondencias entre campos',
-    ResultInformation: 'Información sobre el resultado de la unión:',
+    ResultInformation: 'Información sobre el resultado de la unión',
     MatchedGeometry: 'Geometrías con coincidencia:',
     MatchedData: 'Entradas de tabla con una coincidencia:',
     ImpossibleJoin: 'Las opciones elegidas no permiten realizar una unión',
