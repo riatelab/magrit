@@ -905,7 +905,7 @@ export default function LayoutFeatures(): JSX.Element {
       <label class="label">{LL().LayoutFeatures.MapSkinElements()}</label>
       <div class="is-flex is-justify-content-space-evenly">
         <button
-          class="unstyled"
+          class="unstyled layout-features-section__parent-icon-element"
           title={LL().LayoutFeatures.Line()}
           aria-label={LL().LayoutFeatures.Line()}
         >
@@ -923,7 +923,7 @@ export default function LayoutFeatures(): JSX.Element {
           />
         </button>
         <button
-          class="unstyled"
+          class="unstyled layout-features-section__parent-icon-element"
           title={LL().LayoutFeatures.Rectangle()}
           aria-label={LL().LayoutFeatures.Rectangle()}
           onClick={() => {
@@ -941,7 +941,7 @@ export default function LayoutFeatures(): JSX.Element {
           />
         </button>
         <button
-          class="unstyled"
+          class="unstyled layout-features-section__parent-icon-element"
           title={LL().LayoutFeatures.Graticule()}
           aria-label={LL().LayoutFeatures.Graticule()}
           onClick={() => {
@@ -958,7 +958,7 @@ export default function LayoutFeatures(): JSX.Element {
           />
         </button>
         <button
-          class="unstyled"
+          class="unstyled layout-features-section__parent-icon-element"
           title={LL().LayoutFeatures.Sphere()}
           aria-label={LL().LayoutFeatures.Sphere()}
           onClick={() => {
@@ -975,7 +975,7 @@ export default function LayoutFeatures(): JSX.Element {
           />
         </button>
         <button
-          class="unstyled"
+          class="unstyled layout-features-section__parent-icon-element"
           title={LL().LayoutFeatures.NorthArrow()}
           aria-label={LL().LayoutFeatures.NorthArrow()}
           onClick={() => {
@@ -993,7 +993,7 @@ export default function LayoutFeatures(): JSX.Element {
           />
         </button>
         <button
-          class="unstyled"
+          class="unstyled layout-features-section__parent-icon-element"
           title={LL().LayoutFeatures.ScaleBar()}
           aria-label={LL().LayoutFeatures.ScaleBar()}
           onClick={() => {
@@ -1011,7 +1011,7 @@ export default function LayoutFeatures(): JSX.Element {
           />
         </button>
         <button
-          class="unstyled"
+          class="unstyled layout-features-section__parent-icon-element"
           title={LL().LayoutFeatures.Text()}
           aria-label={LL().LayoutFeatures.Text()}
           onClick={() => {
@@ -1029,7 +1029,7 @@ export default function LayoutFeatures(): JSX.Element {
           />
         </button>
         <button
-          class="unstyled"
+          class="unstyled layout-features-section__parent-icon-element"
           title={LL().LayoutFeatures.Image()}
           aria-label={LL().LayoutFeatures.Image()}
           onClick={() => {
@@ -1051,6 +1051,7 @@ export default function LayoutFeatures(): JSX.Element {
         <button
           classList={{
             unstyled: true,
+            'layout-features-section__parent-icon-element': true,
             'is-outlined': selected() === 'freeDraw',
             'is-warning': selected() === 'freeDraw',
           }}

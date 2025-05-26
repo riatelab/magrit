@@ -97,8 +97,10 @@ The left menu is:
     max-height: 50vh;
     overflow-y: scroll;
 }
+/* End of MapConfiguration section */
 
-.layout-features-section__icon-element {
+/* Layout features section */
+.layout-features-section button.layout-features-section__parent-icon-element {
     width: 27px;
     filter: grayscale(0.7);
     transform: scale(0.9);
@@ -106,16 +108,22 @@ The left menu is:
     -webkit-transform: scale(0.9);
 }
 
-.layout-features-section__icon-element.disabled {
+.layout-features-section button.layout-features-section__parent-icon-element.disabled {
     filter: grayscale(1);
     -webkit-filter: grayscale(1);
     cursor: not-allowed;
 }
 
-.layout-features-section__icon-element:not(.disabled):hover {
+.layout-features-section button.layout-features-section__parent-icon-element:not(.disabled):hover {
     background-color: #c7c7c7;
     filter: grayscale(0);
     transform: scale(1);
     -webkit-filter: grayscale(0);
     -webkit-transform: scale(1);
 }
+
+.layout-features-section__icon-element {
+    user-select: none;
+    pointer-events: none;
+}
+/* End of layout features section */
