@@ -667,8 +667,9 @@ const createFreeDraw = (
   const dragStarted = (ev: d3.D3DragEvent<never, never, never>) => {
     // Push the point to the array
     pts.push([ev.x, ev.y]);
-    // Draw the temporary line
+    // Remove previous iterations of the temporary line
     removeTemporaryLines();
+    // Draw the temporary line
     drawTemporaryLine(pts);
   };
 
@@ -683,29 +684,31 @@ const createFreeDraw = (
     .subject((ev) => [[ev.x, ev.y]])
     .on('start drag', dragStarted)
     .on('end', () => {
-      const freeDrawingDescription = {
-        id: generateIdLayoutFeature(),
-        type: LayoutFeatureType.FreeDrawing,
-        position: [0, 0],
-        strokeColor: '#000000',
-        strokeWidth: 4,
-        strokeOpacity: 1,
-        path: line(pts),
-      } as FreeDrawing;
+      if (pts.length > 1) {
+        const freeDrawingDescription = {
+          id: generateIdLayoutFeature(),
+          type: LayoutFeatureType.FreeDrawing,
+          position: [0, 0],
+          strokeColor: '#000000',
+          strokeWidth: 4,
+          strokeOpacity: 1,
+          path: line(pts),
+        } as FreeDrawing;
 
-      setLayersDescriptionStore(
-        produce(
-          (draft: LayersDescriptionStoreType) => {
-            draft.layoutFeaturesAndLegends.push(freeDrawingDescription);
-          },
-        ),
-      );
+        setLayersDescriptionStore(
+          produce(
+            (draft: LayersDescriptionStoreType) => {
+              draft.layoutFeaturesAndLegends.push(freeDrawingDescription);
+            },
+          ),
+        );
+      }
 
       // Restore the lockZoomPan value
       setMapStore({ lockZoomPan: lockZoomPanValue });
 
       pts = [];
-      // cleanUp();
+      removeTemporaryLines();
     }));
 
   document.body.addEventListener('keydown', onEscape);
