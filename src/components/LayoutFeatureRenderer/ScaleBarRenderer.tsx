@@ -241,35 +241,20 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
   };
 
   const getSuggestionDistance = (distance: number): number => {
-    if (distance < 1000) {
-      return 1000;
-    }
-    if (distance < 3500) {
-      return 2000;
-    }
-    if (distance < 7500) {
-      return 5000;
-    }
-    if (distance < 15000) {
-      return 10000;
-    }
-    if (distance < 75000) {
-      return 50000;
-    }
-    if (distance < 150000) {
-      return 100000;
-    }
-    if (distance < 300000) {
-      return 200000;
-    }
-    if (distance < 1000000) {
-      return 500000;
-    }
-    if (distance < 2000000) {
-      return 1000000;
-    }
-    if (distance < 3000000) {
-      return 2000000;
+    const t = [
+      [1000, 1000],
+      [3500, 2000],
+      [7500, 5000],
+      [15000, 10000],
+      [75000, 50000],
+      [150000, 100000],
+      [300000, 200000],
+      [1000000, 500000],
+      [2000000, 1000000],
+      [3000000, 2000000],
+    ];
+    for (let i = 0; i < t.length; i += 1) {
+      if (distance < t[i][0]) return t[i][1];
     }
     return 3000000;
   };
