@@ -46,7 +46,7 @@ const formatDistance = (
   displayUnit: DistanceUnit,
   label: LegendTextElement,
 ): string => {
-  // We store the distance in meters in the store
+  // We store the distance in meters in the store,
   // but we want to be able to display it in meters, kilometers, miles, feet and yards.
   const l = label.text ? ` ${label.text}` : '';
   return `${Mround(convertToUnit(distance, displayUnit))} ${l}`;
@@ -78,7 +78,7 @@ function SimpleLineScaleBar(props: ScaleBar): JSX.Element {
     <g>
       <text
         x={initialPosition + props.width / 2}
-        y={initialPosition + 10}
+        y={props.labelPosition === 'top' ? initialPosition + 10 : initialPosition + 30}
         text-anchor="middle"
         dominant-baseline={props.labelPosition === 'top' ? 'auto' : 'hanging'}
         style={{ 'user-select': 'none' }}
@@ -205,7 +205,7 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
   let refElement: SVGGElement;
 
   onMount(() => {
-    bindElementsLayoutFeature(refElement, props);
+    bindElementsLayoutFeature(refElement!, props);
   });
 
   createEffect(
@@ -215,7 +215,7 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
         props.rotation, props.tickValues, props.labelPosition,
       ],
       () => {
-        computeRectangleBox(refElement);
+        computeRectangleBox(refElement!);
       },
     ),
   );
@@ -261,6 +261,9 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
         globalStore.projection,
       ],
       () => {
+        if (props.behavior === 'geographicSize') {
+          return;
+        }
         setTimeout(() => {
           // The scale bar is always the same size (in pixels) no matter the zoom level
           // but we need to recompute the displayed distance

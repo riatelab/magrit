@@ -491,7 +491,7 @@ const createScaleBar = (LL: Accessor<TranslationFunctions>) => {
         fontFamily: 'Sans-serif',
         fontStyle: 'normal',
         fontWeight: 'normal',
-        fontColor: 'black',
+        fontColor: '#000000',
       },
       tickValues: [0, 50, 100, 250, 500],
       // tickPadding: 10,
