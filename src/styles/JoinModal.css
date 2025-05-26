@@ -2,35 +2,37 @@
     margin-bottom: unset !important;
 }
 
-.join-panel tbody > tr.unmatched {
+.join-panel .join-panel--table-detail table {
+    border-collapse: separate;
+}
+
+.join-panel tbody tr td:first-child {
+    width: 24%;
+}
+
+.join-panel tbody td.unmatched {
     background-color: #eac4cb !important;
 }
 
-.theme-dark .join-panel tbody > tr.unmatched {
+.theme-dark .join-panel tbody td.unmatched {
     background-color: #4e2a2a !important;
+}
+
+.join-panel .join-panel--table-detail th {
+    background-color: var(--bulma-modal-card-body-background-color);
+    border: solid 1px var(--bulma-border);
 }
 
 .join-panel .join-panel--table-detail {
     width: 100%;
     max-height: 130px;
     overflow-y: scroll;
-    display: inline-block;
-    border-top: 1px solid var(--bulma-border);
+    border: solid 1px var(--bulma-border);
 }
 
 .join-panel .join-panel--table-detail table thead {
     position: sticky;
     top: 0;
-    background-color: var(--bulma-scheme-main-bis);
-    border-bottom: 1px solid var(--bulma-border);
-}
-
-.join-panel .join-panel--table-detail table thead th {
-    border-bottom: 1px solid var(--bulma-border);
-}
-
-.join-panel .join-panel--table-detail tbody {
-    border-bottom: solid 1px var(--bulma-table-cell-border-color);
 }
 
 .join-panel .join-panel--table-detail tbody td {

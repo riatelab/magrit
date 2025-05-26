@@ -379,29 +379,31 @@ export default function JoinPanel(
   const makeTableDetail = (type: 'table' | 'layer', idCol: string): JSX.Element => {
     const dataId = type === 'layer'
       ? layersDescriptionStore.layers.find((d) => d.id === targetLayerId()!)!.data.features
-        .map((f) => f.properties[idCol])
+        .map((f, i) => [i + 1, f.properties[idCol]])
       : tableDescription.data
-        .map((d) => d[idCol]);
+        .map((d, i) => [i + 1, d[idCol]]);
 
     const noMatchArray = type === 'layer'
       ? joinResult()!.noMatchLayerFeatures
       : joinResult()!.noMatchTableFeatures;
 
-    const a1 = dataId.filter((v) => noMatchArray.find((d) => `${d[idCol]}` === `${v}`));
-    const a2 = dataId.filter((v) => !noMatchArray.find((d) => `${d[idCol]}` === `${v}`));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const a1 = dataId.filter(([_, v]) => noMatchArray.find((d) => `${d[idCol]}` === `${v}`));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const a2 = dataId.filter(([_, v]) => !noMatchArray.find((d) => `${d[idCol]}` === `${v}`));
 
     return <div class={'join-panel--table-detail'}>
       <table class="table is-bordered is-striped is-narrow is-fullwidth">
-        <thead><tr><th>{idCol}</th></tr></thead>
+        <thead><tr><th>Id</th><th>{idCol}</th></tr></thead>
         <tbody>
           <For each={a1}>
             {
-              (v) => <tr class={'unmatched'}><td>{v}</td></tr>
+              ([i, v]) => <tr><td>{i}</td><td class={'unmatched'}>{v}</td></tr>
             }
           </For>
           <For each={a2}>
             {
-              (v) => <tr><td>{v}</td></tr>
+              ([i, v]) => <tr><td>{i}</td><td>{v}</td></tr>
             }
           </For>
         </tbody>
@@ -454,7 +456,13 @@ export default function JoinPanel(
 
     createEffect(
       on(
-        () => [targetLayerId(), targetFieldTable(), targetFieldLayer()],
+        () => [
+          targetLayerId(),
+          targetFieldTable(),
+          targetFieldLayer(),
+          ignoreCase(),
+          normalizeText(),
+        ],
         () => {
           refSuccessButton.disabled = !allSelected();
           if (!allSelected()) {
