@@ -277,3 +277,13 @@ export const isLessThanOrEqual = (a: number, b: number, precision: number): bool
 export const isGreaterThanOrEqual = (a: number, b: number, precision: number): boolean => (
   isGreaterThan(a, b, precision) || isEqual(a, b, precision)
 );
+
+/**
+ * Test if an array contains duplicates.
+ *
+ * @param {array} arr
+ * @returns {boolean}
+ */
+export function hasDuplicates(arr: []) {
+  return (new Set(arr)).size !== arr.length;
+}

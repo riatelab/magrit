@@ -148,16 +148,6 @@ export function hasNegative(arr: NumberArray): boolean {
 }
 
 /**
- * Test if an array contains duplicates.
- *
- * @param {array} arr
- * @returns {boolean}
- */
-export function hasDuplicates(arr: []) {
-  return (new Set(arr)).size !== arr.length;
-}
-
-/**
  * Return the haversine distance in kilometers between two points (lat/long coordinates).
  *
  * @param {[number, number]} A - Coordinates of the 1st point as [latitude, longitude].
