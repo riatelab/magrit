@@ -5165,9 +5165,25 @@ type RootTranslation = {
 		 */
 		MatchedData: string
 		/**
-		 * T​h​e​ ​c​h​o​i​c​e​s​ ​m​a​d​e​ ​d​o​ ​n​o​t​ ​a​l​l​o​w​ ​a​ ​j​o​i​n​ ​t​o​ ​b​e​ ​m​a​d​e​.
+		 * T​h​e​ ​c​h​o​i​c​e​s​ ​m​a​d​e​ ​d​o​ ​n​o​t​ ​a​l​l​o​w​ ​a​ ​j​o​i​n​ ​t​o​ ​b​e​ ​m​a​d​e​ ​(​n​o​ ​m​a​t​c​h​ ​f​o​u​n​d​)​.
 		 */
 		ImpossibleJoin: string
+		/**
+		 * M​a​t​c​h​e​s​ ​h​a​v​e​ ​b​e​e​n​ ​f​o​u​n​d​,​ ​b​u​t​ ​t​h​e​ ​i​d​e​n​t​i​f​i​e​r​ ​c​o​l​u​m​n​s​ ​c​o​n​t​a​i​n​ ​d​u​p​l​i​c​a​t​e​s​ ​t​h​a​t​ ​m​a​k​e​ ​i​t​ ​i​m​p​o​s​s​i​b​l​e​ ​t​o​ ​p​e​r​f​o​r​m​ ​t​h​e​ ​j​o​i​n​.
+		 */
+		ImpossibleJoinDuplicate: string
+		/**
+		 * T​h​i​s​ ​i​d​e​n​t​i​f​i​e​r​ ​i​s​ ​n​o​t​ ​u​n​i​q​u​e
+		 */
+		TooltipDuplicate: string
+		/**
+		 * T​h​i​s​ ​i​d​e​n​t​i​f​i​e​r​ ​d​o​e​s​ ​n​o​t​ ​m​a​t​c​h​ ​a​n​y​ ​f​e​a​t​u​r​e​ ​i​n​ ​t​h​e​ ​l​a​y​e​r
+		 */
+		TooltipNoMatchTable: string
+		/**
+		 * T​h​i​s​ ​i​d​e​n​t​i​f​i​e​r​ ​d​o​e​s​ ​n​o​t​ ​m​a​t​c​h​ ​a​n​y​ ​f​e​a​t​u​r​e​ ​i​n​ ​t​h​e​ ​t​a​b​l​e
+		 */
+		TooltipNoMatchLayer: string
 		/**
 		 * n​o​ ​d​a​t​a
 		 */
@@ -11264,9 +11280,25 @@ export type TranslationFunctions = {
 		 */
 		MatchedData: () => LocalizedString
 		/**
-		 * The choices made do not allow a join to be made.
+		 * The choices made do not allow a join to be made (no match found).
 		 */
 		ImpossibleJoin: () => LocalizedString
+		/**
+		 * Matches have been found, but the identifier columns contain duplicates that make it impossible to perform the join.
+		 */
+		ImpossibleJoinDuplicate: () => LocalizedString
+		/**
+		 * This identifier is not unique
+		 */
+		TooltipDuplicate: () => LocalizedString
+		/**
+		 * This identifier does not match any feature in the layer
+		 */
+		TooltipNoMatchTable: () => LocalizedString
+		/**
+		 * This identifier does not match any feature in the table
+		 */
+		TooltipNoMatchLayer: () => LocalizedString
 		/**
 		 * no data
 		 */

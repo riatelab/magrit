@@ -281,9 +281,23 @@ export const isGreaterThanOrEqual = (a: number, b: number, precision: number): b
 /**
  * Test if an array contains duplicates.
  *
- * @param {array} arr
+ * @param {any[]} arr
  * @returns {boolean}
  */
-export function hasDuplicates(arr: []) {
+export function hasDuplicates(arr: any[]): boolean {
   return (new Set(arr)).size !== arr.length;
+}
+
+/**
+ * Count the number of occurrences of each value in an array.
+ *
+ * @param {any[]} arr - The array to count occurrences in.
+ * @return {Record<string, number>} - An object where keys are the values
+ * from the array and values are their counts.
+ */
+export function countOccurrences(arr: any[]): Record<string, number> {
+  return arr.reduce((acc, value) => {
+    acc[value] = (acc[value] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
 }

@@ -16,13 +16,20 @@ import {
 
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
+import { TiInfo } from 'solid-icons/ti';
 
 // GeoJSON types
 import { Feature } from 'geojson';
 
 // Helpers
 import { TranslationFunctions } from '../../i18n/i18n-types';
-import { isNonNull, removeDiacritics, unproxify } from '../../helpers/common';
+import {
+  capitalizeFirstLetter,
+  countOccurrences,
+  isNonNull,
+  removeDiacritics,
+  unproxify,
+} from '../../helpers/common';
 
 // Stores
 import { layersDescriptionStore, setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
@@ -53,6 +60,10 @@ interface JoinResult {
   nNoDataLayer: number,
   noMatchLayerFeatures: Record<string, any>[],
   noMatchTableFeatures: Record<string, any>[],
+  duplicateWithMatchLayer: Record<string, any>[],
+  duplicateWithMatchTable: Record<string, any>[],
+  duplicateWithoutMatchLayer: Record<string, any>[],
+  duplicateWithoutMatchTable: Record<string, any>[],
 }
 
 /* eslint-disable no-nested-ternary */
@@ -109,6 +120,12 @@ const checkJoin = async (
   const layerFieldValues = layerDescription.data.features
     .map((f) => transformFn(f.properties[layerField]));
 
+  // We check if there are duplicates in the table field values
+  const countUniqueTableValues = countOccurrences(tableFieldValues);
+
+  // We check if there are duplicates in the layer field values
+  const countUniqueLayerValues = countOccurrences(layerFieldValues);
+
   // The result
   const result: JoinResult = {
     nFeaturesTable: tableDescription.data.length,
@@ -121,6 +138,10 @@ const checkJoin = async (
     nNoDataLayer: 0,
     noMatchLayerFeatures: [],
     noMatchTableFeatures: [],
+    duplicateWithMatchLayer: [],
+    duplicateWithoutMatchLayer: [],
+    duplicateWithMatchTable: [],
+    duplicateWithoutMatchTable: [],
   };
 
   // For each table field value
@@ -129,14 +150,20 @@ const checkJoin = async (
     if (v === null) {
       result.nNoDataTable += 1;
     } else {
-      // If the value is not null
+      // If the value is not null...
       // If the value is in the layer field values
       // eslint-disable-next-line no-lonely-if
       if (layerFieldValues.includes(v)) {
         result.nMatchTable += 1;
+        if (countUniqueTableValues[v] > 1) {
+          result.duplicateWithMatchTable.push(tableDescription.data[i]);
+        }
       } else {
         result.nNoMatchTable += 1;
         result.noMatchTableFeatures.push(tableDescription.data[i]);
+        if (countUniqueTableValues[v] > 1) {
+          result.duplicateWithoutMatchTable.push(tableDescription.data[i]);
+        }
       }
     }
   });
@@ -147,15 +174,21 @@ const checkJoin = async (
     if (v === null) {
       result.nNoDataLayer += 1;
     } else {
-      // If the value is not null
+      // If the value is not null...
       // If the value is in the table field values
-      // Note that we convert the value to string to be able to compare it
       // eslint-disable-next-line no-lonely-if
       if (tableFieldValues.includes(v)) {
         result.nMatchLayer += 1;
+        if (countUniqueLayerValues[v] > 1) {
+          result.duplicateWithMatchLayer.push(layerDescription.data.features[i].properties);
+        }
       } else {
         result.nNoMatchLayer += 1;
-        result.noMatchLayerFeatures.push(layerDescription.data.features[i].properties);
+        result.noMatchLayerFeatures
+          .push(layerDescription.data.features[i].properties as Record<string, any>);
+        if (countUniqueLayerValues[v] > 1) {
+          result.duplicateWithoutMatchLayer.push(layerDescription.data.features[i].properties);
+        }
       }
     }
   });
@@ -387,21 +420,60 @@ export default function JoinPanel(
       ? joinResult()!.noMatchLayerFeatures
       : joinResult()!.noMatchTableFeatures;
 
+    const duplicateArray = type === 'layer'
+      ? joinResult()!.duplicateWithMatchLayer
+      : joinResult()!.duplicateWithMatchTable;
+
+    // Unmatched features
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const a1 = dataId.filter(([_, v]) => noMatchArray.find((d) => `${d[idCol]}` === `${v}`));
+
+    // Duplicate features
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const a2 = dataId.filter(([_, v]) => !noMatchArray.find((d) => `${d[idCol]}` === `${v}`));
+    const a2 = dataId.filter(([_, v]) => duplicateArray.find((d) => `${d[idCol]}` === `${v}`));
+
+    // Matched features
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const a3 = dataId
+      .filter(([_, v]) => (
+        !noMatchArray.find((d) => `${d[idCol]}` === `${v}`)
+        && !duplicateArray.find((d) => `${d[idCol]}` === `${v}`)));
 
     return <div class={'join-panel--table-detail'}>
       <table class="table is-bordered is-striped is-narrow is-fullwidth">
-        <thead><tr><th>Id</th><th>{idCol}</th></tr></thead>
+        <thead><tr><th></th><th>{idCol}</th></tr></thead>
         <tbody>
           <For each={a1}>
             {
-              ([i, v]) => <tr><td>{i}</td><td class={'unmatched'}>{v}</td></tr>
+              ([i, v]) => <tr>
+                <td>{i}</td>
+                <td class={'unmatched'}>
+                  {v}&nbsp;
+                  <TiInfo
+                    size={16}
+                    style={{ 'vertical-align': 'sub', cursor: 'pointer' }}
+                    title={LL().JoinPanel[`TooltipNoMatch${capitalizeFirstLetter(type)}`]()}
+                  />
+                </td>
+              </tr>
             }
           </For>
           <For each={a2}>
+            {
+              ([i, v]) => <tr>
+                <td>{i}</td>
+                <td class={'duplicate'}>
+                  {v}&nbsp;
+                  <TiInfo
+                    size={16}
+                    style={{ 'vertical-align': 'sub', cursor: 'pointer' }}
+                    title={LL().JoinPanel.TooltipDuplicate()}
+                  />
+                </td>
+              </tr>
+            }
+          </For>
+          <For each={a3}>
             {
               ([i, v]) => <tr><td>{i}</td><td>{v}</td></tr>
             }
@@ -597,23 +669,40 @@ export default function JoinPanel(
             <strong>{LL().JoinPanel.MatchedGeometry()}</strong>
             &nbsp;{joinResult()!.nMatchLayer}/{joinResult()?.nFeaturesLayer}
             <Show when={joinResult()!.nNoDataLayer > 0}>
-              &nbsp;&nbsp;({joinResult()!.nNoDataLayer}&nbsp;{LL().JoinPanel.NoData()})
+              <br />({joinResult()!.nNoDataLayer}&nbsp;{LL().JoinPanel.NoData()})
             </Show>
           </div>
           <div style={{ width: '50%' }}>
             <strong>{LL().JoinPanel.MatchedData()}</strong>
             &nbsp;{joinResult()?.nMatchTable}/{joinResult()?.nFeaturesTable}
             <Show when={joinResult()!.nNoDataTable > 0}>
-              &nbsp;&nbsp;({joinResult()!.nNoDataTable}&nbsp;{LL().JoinPanel.NoData()})
+              <br />({joinResult()!.nNoDataTable}&nbsp;{LL().JoinPanel.NoData()})
             </Show>
           </div>
         </div>
         <Show when={joinResult()!.nMatchLayer === 0}>
+          <br />
           <MessageBlock type={'danger'} useIcon={true}>
             <p>{LL().JoinPanel.ImpossibleJoin()}</p>
           </MessageBlock>
         </Show>
-        <Show when={joinResult()!.nMatchLayer > 0}>
+        <Show when={
+          joinResult()!.nMatchLayer > 0
+          && (
+            joinResult()!.duplicateWithMatchTable.length > 0
+            || joinResult()!.duplicateWithMatchLayer.length > 0
+          )
+        }>
+          <br />
+          <MessageBlock type={'danger'} useIcon={true}>
+            <p>{LL().JoinPanel.ImpossibleJoinDuplicate()}</p>
+          </MessageBlock>
+        </Show>
+        <Show when={
+          joinResult()!.nMatchLayer > 0
+          && joinResult()!.duplicateWithMatchTable.length === 0
+          && joinResult()!.duplicateWithMatchLayer.length === 0
+        }>
           <hr/>
           <Show when={joinResult()!.nNoMatchLayer > 0}>
             <InputFieldCheckbox
@@ -662,17 +751,5 @@ export default function JoinPanel(
         </Show>
       </Match>
     </Switch>
-    {/*
-    <CollapsibleMessageBanner
-      expanded={true}
-      title={LL().Messages.Information()}
-      type={'info'}
-      useIcon={true}
-      style={{ 'margin-bottom': '-2em', 'margin-top': '4em' }}
-    >
-      <p>{LL().JoinPanel.Information()}</p>
-      <p>{LL().JoinPanel.Information2()}</p>
-    </CollapsibleMessageBanner>
-    */}
   </div>;
 }
