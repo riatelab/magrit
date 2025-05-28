@@ -424,6 +424,8 @@ export default function JoinPanel(
       ? joinResult()!.duplicateWithMatchLayer
       : joinResult()!.duplicateWithMatchTable;
 
+    const transformFn = getTransformFn(ignoreCase(), normalizeText());
+
     // Unmatched features
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const a1 = dataId.filter(([_, v]) => noMatchArray.find((d) => `${d[idCol]}` === `${v}`));
@@ -448,7 +450,7 @@ export default function JoinPanel(
               ([i, v]) => <tr>
                 <td>{i}</td>
                 <td class={'unmatched'}>
-                  {v}&nbsp;
+                  {transformFn(v)}&nbsp;
                   <TiInfo
                     size={16}
                     style={{ 'vertical-align': 'sub', cursor: 'pointer' }}
@@ -463,7 +465,7 @@ export default function JoinPanel(
               ([i, v]) => <tr>
                 <td>{i}</td>
                 <td class={'duplicate'}>
-                  {v}&nbsp;
+                  {transformFn(v)}&nbsp;
                   <TiInfo
                     size={16}
                     style={{ 'vertical-align': 'sub', cursor: 'pointer' }}
@@ -475,7 +477,9 @@ export default function JoinPanel(
           </For>
           <For each={a3}>
             {
-              ([i, v]) => <tr><td>{i}</td><td>{v}</td></tr>
+              ([i, v]) => <tr>
+                <td>{i}</td><td>{transformFn(v)}</td>
+              </tr>
             }
           </For>
         </tbody>
