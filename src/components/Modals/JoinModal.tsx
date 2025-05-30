@@ -118,7 +118,7 @@ const checkJoin = async (
 
   // The layer field values, all converted to string to be able to compare it easily
   const layerFieldValues = layerDescription.data.features
-    .map((f) => transformFn(f.properties[layerField]));
+    .map((f) => transformFn(f.properties![layerField]));
 
   // We check if there are duplicates in the table field values
   const countUniqueTableValues = countOccurrences(tableFieldValues);
@@ -180,14 +180,14 @@ const checkJoin = async (
       if (tableFieldValues.includes(v)) {
         result.nMatchLayer += 1;
         if (countUniqueLayerValues[v] > 1) {
-          result.duplicateWithMatchLayer.push(layerDescription.data.features[i].properties);
+          result.duplicateWithMatchLayer.push(layerDescription.data.features[i].properties!);
         }
       } else {
         result.nNoMatchLayer += 1;
         result.noMatchLayerFeatures
           .push(layerDescription.data.features[i].properties as Record<string, any>);
         if (countUniqueLayerValues[v] > 1) {
-          result.duplicateWithoutMatchLayer.push(layerDescription.data.features[i].properties);
+          result.duplicateWithoutMatchLayer.push(layerDescription.data.features[i].properties!);
         }
       }
     }
@@ -244,7 +244,7 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
   const tableIndex = new Map(
     tableDescription.data
       .map((item) => [transformFn(item[tableField]), item])
-      .filter(([k, _]) => k !== null),
+      .filter(([k, _]) => k !== null) as [string, any][],
   );
 
   const newFields = selectFields
@@ -264,7 +264,7 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
         properties: {
           ...feature.properties,
           ...Object.fromEntries(newFields.map((f) => [f, null])),
-          [layerField]: feature.properties[layerField],
+          [layerField]: feature.properties![layerField],
         },
       };
     }
@@ -274,7 +274,7 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
         properties: {
           ...feature.properties,
           ...jsonItem,
-          [layerField]: feature.properties[layerField],
+          [layerField]: feature.properties![layerField],
         },
       };
     }
@@ -298,7 +298,7 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
           ...Object.fromEntries(
             Object.entries(jsonItem).filter(([k, v]) => selectedFields.includes(k)),
           ),
-          [layerField]: feature.properties[layerField],
+          [layerField]: feature.properties![layerField],
         },
       };
     }
@@ -412,7 +412,7 @@ export default function JoinPanel(
   const makeTableDetail = (type: 'table' | 'layer', idCol: string): JSX.Element => {
     const dataId = type === 'layer'
       ? layersDescriptionStore.layers.find((d) => d.id === targetLayerId()!)!.data.features
-        .map((f, i) => [i + 1, f.properties[idCol]])
+        .map((f, i) => [i + 1, f.properties![idCol]])
       : tableDescription.data
         .map((d, i) => [i + 1, d[idCol]]);
 
