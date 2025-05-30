@@ -908,18 +908,18 @@ export default function LayoutFeatures(): JSX.Element {
           class="unstyled layout-features-section__parent-icon-element"
           title={LL().LayoutFeatures.Line()}
           aria-label={LL().LayoutFeatures.Line()}
+          onClick={() => {
+            if (selected() && currentCleanUp) {
+              currentCleanUp();
+            }
+            setSelected('line');
+            createLine(LL);
+          }}
         >
           <img
             class="layout-features-section__icon-element"
             src={layoutFeatureArrow}
             alt={LL().LayoutFeatures.Line()}
-            onClick={() => {
-              if (selected() && currentCleanUp) {
-                currentCleanUp();
-              }
-              setSelected('line');
-              createLine(LL);
-            }}
           />
         </button>
         <button
