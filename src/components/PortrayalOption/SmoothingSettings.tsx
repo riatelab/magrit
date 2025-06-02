@@ -76,7 +76,7 @@ async function onClickValidate(
   gridParams: GridParameters,
   parameters: StewartParameters | KdeParameters,
   thresholds: number[],
-  precisionThreshold: number,
+  precisionThresholds: number,
   computedValues: { grid: FeatureCollection, values: number[] },
   clippingLayerId: string,
   targetDivisorVariable?: string,
@@ -207,7 +207,7 @@ async function onClickValidate(
     } as LegendTextElement,
     position: legendPosition,
     visible: true,
-    roundDecimals: 1,
+    roundDecimals: precisionThresholds,
     backgroundRect: {
       visible: false,
     },
