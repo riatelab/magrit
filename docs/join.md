@@ -10,7 +10,8 @@ Cette opération est appelée "jointure" (c'est également le cas dans les logic
 de données) et s'effectue ici simplement en choisissant le nom de la colonne contenant des valeurs d'identifiants
 dans le jeu de données et dans le fond de carte.
 
-Pour assurer le bon fonctionnement de cette méthode, les valeurs prisent par les identifiants , d'une part pour le fond de carte et d'autre part pour le jeu de données externe, doivent être uniques.
+Pour assurer le bon fonctionnement de cette méthode, les valeurs prises par les identifiants, d'une part pour le fond de
+carte et d'autre part pour le jeu de données externe, doivent être uniques.
 
 ## Exemple théorique
 
@@ -49,6 +50,19 @@ on obtient le jeu de données suivant :
 Le jeu de données géographiques contient désormais les valeurs de densité de population du jeu de données tabulaire,
 permettant d'en réaliser une représentation cartographique.
 
+## Accéder à la fonctionnalité de jointure
+
+Pour accéder à la fonctionnalité de jointure, il faut d'abord avoir ajouté un jeu de données géographique et un jeu
+de données tabulaire.
+Il est ensuite nécessaire de cliquer, dans le gestionnaire de couches, sur le bouton "Jointure" situé sur le jeu de
+données tabulaire à joindre à un jeu de données géographique.
+
+<ZoomImg
+    src="/layer-manager-join-button.png"
+    alt="Bouton de jointure dans le gestionnaire de couches"
+    caption="Bouton de jointure dans le gestionnaire de couches"
+/>
+
 ## Paramètres
 
 Dans Magrit, la jointure s'effectue depuis le jeu de données tabulaires à joindre à un jeu de données géographiques.
@@ -58,12 +72,33 @@ Il est obligatoire de renseigner les paramètres suivants :
 - La colonne de la couche géographique contenant les valeurs d'identifiants,
 - La colonne du jeu de données tabulaires contenant les valeurs d'identifiants.
 
+Il est également possible de renseigner, de manière optionnelle, les paramètres suivants :
+
+- Non-prise en compte de la casse des valeurs d'identifiants,
+- Non-prise en compte des signes diacritiques, des espaces et des tirets dans les valeurs d'identifiants,
+
 Sur la base de ces informations, les correspondances entre les valeurs d'identifiants des deux jeux de données sont établies.
 
-Si aucune correspondances n'est trouvée, il n'est pas possible de réaliser la jointure.
+Si aucune correspondances n'est trouvée (ou si des correspondances multiples sont trouvées,
+c'est-à-dire si plusieurs valeurs d'identifiants du jeu de données géographique correspondent
+à une même valeur d'identifiant du jeu de données tabulaire ou inversement),
+il n'est pas possible de réaliser la jointure.
+
 Si une ou plusieurs correspondances sont trouvées, les données tabulaires sont ajoutées aux entités correspondantes de la couche géographique,
 sur les bases des options suivantes :
 
 - Possibilité de sélectionner les colonnes à ajouter à la couche géographique,
 - Possibilité d'ajouter un préfixe aux colonnes ajoutées,
 - Possibilité de supprimer les entités de la couche géographique pour lesquelles aucune correspondance n'a été trouvée.
+
+<ZoomImg
+    src="/join-modal.png"
+    alt="Fenêtre de jointure"
+    caption="Fenêtre de jointure"
+/>
+
+<ZoomImg
+    src="/join-modal-with-unmatched.png"
+    alt="Fenêtre de jointure (avec des entités sans correspondance)"
+    caption="Fenêtre de jointure (avec des entités sans correspondance)"
+/>

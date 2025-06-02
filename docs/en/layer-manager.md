@@ -43,7 +43,7 @@ reflects the order in which the layers are displayed on the map
 For each data table, you can :
 
 - display summary information about the table,
-- join the data to a geographic layer](./functionalities/join),
+- [join the data to a geographic layer](./join),
 - display the [data table](./data-table),
 - modify the layer's [field typing](./typing),
 - delete the data table.
