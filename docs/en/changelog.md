@@ -12,6 +12,20 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.3.3 (2025-06-02)
+
+- Improve the join creation modal, in particular by showing entries that have not found a match and by allowing
+  normalization of the values taken into account on both sides to make the join
+  (fixes <a href="https://github.com/riatelab/magrit/issues/155">issue 155</a>).
+
+- Enhance the size of the scale bar when it's created so that its distance is “pretty” (1 km, 2 km, 5 km, 10 km, 50 km, etc.),
+  while aiming for a scale bar close to 100px wide.
+
+- Improves the behavior of the “free drawing” layout feature
+  (by removing temporary lines as soon as the cursor is released and by not adding lines composed of a single point).
+
+- Improves the precision of class boundaries for smoothed maps (especially when using a divisor variable).
+
 #### 2.3.2 (2025-05-19)
 
 - Replace the use of [gdal3.js](https://github.com/bugra9/gdal3.js) by the use of [geoimport](https://github.com/riatelab/geoimport) (a high-level wrapper around gdal3.js) to handle the import/export of the various file formats.

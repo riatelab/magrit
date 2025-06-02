@@ -12,6 +12,20 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.3.3 (2025-06-02)
+
+- Améliore la fenêtre de création d'une jointure, notamment en montrant les entrées qui n'ont pas trouvé de correspondance et en
+  permettant de normaliser les valeurs prises en compte de part et d'autre pour faire la jointure
+  (corrige <a href="https://github.com/riatelab/magrit/issues/155">155</a>).
+
+- Améliore la taille de la barre d'échelle lors de sa création pour que sa distance soit "jolie" (1 km, 2 km, 5 km, 10 km, 50 km, etc.)
+  tout en cherchant à avoir une barre d'échelle proche de 100px de large.
+
+- Améliore le comportement de l'élément d'habillage "dessin libre" (en enlevant les lignes temporaires dès que le curseur est relâché
+  et en n'ajoutant pas les lignes composées d'un unique point).
+
+- Améliore la précision des limites de classes pour les cartes lissées (en particulier lors de l'utilisation d'une variable de diviseur).
+
 #### 2.3.2 (2025-05-19)
 
 - Remplace l'utilisation de [gdal3.js](https://github.com/bugra9/gdal3.js) par l'utilisation de [geoimport](https://github.com/riatelab/geoimport) (un wrapper de haut niveau autour de gdal3.js) pour gérer l'import/export des différents formats de fichiers.
