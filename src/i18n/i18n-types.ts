@@ -5185,7 +5185,11 @@ type RootTranslation = {
 		 */
 		TooltipNoMatchLayer: string
 		/**
-		 * n​o​ ​d​a​t​a
+		 * T​h​i​s​ ​f​e​a​t​u​r​e​ ​d​o​e​s​ ​n​o​t​ ​h​a​v​e​ ​a​n​ ​i​d​e​n​t​i​f​i​e​r
+		 */
+		TooltipNoData: string
+		/**
+		 * w​i​t​h​o​u​t​ ​i​d​e​n​t​i​f​i​e​r
 		 */
 		NoData: string
 		/**
@@ -11300,7 +11304,11 @@ export type TranslationFunctions = {
 		 */
 		TooltipNoMatchLayer: () => LocalizedString
 		/**
-		 * no data
+		 * This feature does not have an identifier
+		 */
+		TooltipNoData: () => LocalizedString
+		/**
+		 * without identifier
 		 */
 		NoData: () => LocalizedString
 		/**

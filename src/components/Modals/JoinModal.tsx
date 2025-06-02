@@ -426,19 +426,20 @@ export default function JoinPanel(
 
     const transformFn = getTransformFn(ignoreCase(), normalizeText());
 
-    // Unmatched features
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const a1 = dataId.filter(([_, v]) => noMatchArray.find((d) => `${d[idCol]}` === `${v}`));
-
     // Duplicate features
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const a2 = dataId.filter(([_, v]) => duplicateArray.find((d) => `${d[idCol]}` === `${v}`));
+    const a1 = dataId.filter(([_, v]) => duplicateArray.find((d) => `${d[idCol]}` === `${v}`));
+
+    // Unmatched features and rows without identifier
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const a2 = dataId.filter(([_, v]) => noMatchArray.find((d) => `${d[idCol]}` === `${v}`) || !isNonNull(v));
 
     // Matched features
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const a3 = dataId
       .filter(([_, v]) => (
-        !noMatchArray.find((d) => `${d[idCol]}` === `${v}`)
+        isNonNull(v)
+        && !noMatchArray.find((d) => `${d[idCol]}` === `${v}`)
         && !duplicateArray.find((d) => `${d[idCol]}` === `${v}`)));
 
     return <div class={'join-panel--table-detail'}>
@@ -449,12 +450,12 @@ export default function JoinPanel(
             {
               ([i, v]) => <tr>
                 <td>{i}</td>
-                <td class={'unmatched'}>
+                <td class={'duplicate'}>
                   {transformFn(v)}&nbsp;
                   <TiInfo
                     size={16}
                     style={{ 'vertical-align': 'sub', cursor: 'pointer' }}
-                    title={LL().JoinPanel[`TooltipNoMatch${capitalizeFirstLetter(type)}`]()}
+                    title={LL().JoinPanel.TooltipDuplicate()}
                   />
                 </td>
               </tr>
@@ -464,12 +465,16 @@ export default function JoinPanel(
             {
               ([i, v]) => <tr>
                 <td>{i}</td>
-                <td class={'duplicate'}>
+                <td class={'unmatched'}>
                   {transformFn(v)}&nbsp;
                   <TiInfo
                     size={16}
                     style={{ 'vertical-align': 'sub', cursor: 'pointer' }}
-                    title={LL().JoinPanel.TooltipDuplicate()}
+                    title={
+                      isNonNull(v)
+                        ? LL().JoinPanel[`TooltipNoMatch${capitalizeFirstLetter(type)}`]()
+                        : LL().JoinPanel.TooltipNoData()
+                    }
                   />
                 </td>
               </tr>
