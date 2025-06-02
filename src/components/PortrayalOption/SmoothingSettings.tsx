@@ -38,7 +38,7 @@ import { intersectionLayer } from '../../helpers/geos';
 import { computeAppropriateResolution } from '../../helpers/geo';
 import { generateIdLayer } from '../../helpers/layers';
 import { generateIdLegend } from '../../helpers/legends';
-import { Mpow } from '../../helpers/math';
+import { Mpow, round } from '../../helpers/math';
 import { computeKdeValues, computeStewartValues, makeContourLayer } from '../../helpers/smoothing';
 import { Variable, VariableType } from '../../helpers/typeDetection';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
@@ -76,6 +76,7 @@ async function onClickValidate(
   gridParams: GridParameters,
   parameters: StewartParameters | KdeParameters,
   thresholds: number[],
+  precisionThreshold: number,
   computedValues: { grid: FeatureCollection, values: number[] },
   clippingLayerId: string,
   targetDivisorVariable?: string,
@@ -337,6 +338,10 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
     thresholds,
     setThresholds,
   ] = createSignal<number[] | null>(null);
+  const [
+    precisionThresholds,
+    setPrecisionThresholds,
+  ] = createSignal<number>(seriesSummary() ? seriesSummary()!.precision : 2);
 
   // Clipping layer
   // (if the target layer is a point layer, it defaults to "none" but the user can
@@ -385,6 +390,7 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
         currentParameters()!.grid,
         currentParameters()!.smoothing,
         thresholds()!,
+        precisionThresholds()!,
         computedValues()!,
         clippingLayer(),
         targetDivisorVariable() === '' ? undefined : targetDivisorVariable(),
@@ -612,8 +618,9 @@ export default function SmoothingSettings(props: PortrayalSettingsProps): JSX.El
             //       2) allow the only change the number of classes and let the classification
             //          be recomputed automatically when number of classes changes
             // Predefined thresholds
+            setPrecisionThresholds(summary.maximum - summary.minimum < 1 ? 6 : 2);
             const t = [0, 0.04, 0.1, 0.25, 0.4, 0.55, 0.785, 0.925]
-              .map((d) => Math.round(d * summary.maximum));
+              .map((d) => round(d * summary.maximum, precisionThresholds()));
             t.push(summary.maximum);
 
             // Store all the computed values and the parameters used to compute the values
