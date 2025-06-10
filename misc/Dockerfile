@@ -29,7 +29,7 @@ WORKDIR /home
 # Install dependencies
 RUN apt-get update \
     && apt-get install -y --no-install-recommends locales nginx \
-    && curl -sL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh \
+    && curl -sL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh \
     && bash nodesource_setup.sh \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/* \

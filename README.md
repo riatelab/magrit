@@ -67,7 +67,7 @@ of the project.
 
 Requirements:
 
-- Node.js (>= 20) / NPM (>= 10).
+- Node.js (>= 22) / NPM (>= 10).
 
 ### Installation
 
