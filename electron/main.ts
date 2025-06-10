@@ -2,6 +2,11 @@ import {
   app, dialog, BrowserWindow, shell,
 } from 'electron';
 
+if (process.platform === 'linux') {
+  // cf. https://github.com/electron/electron/issues/46538
+  app.commandLine.appendSwitch('gtk-version', '3');
+}
+
 // Since we only support two languages for now, and use only a few strings here,
 // we can hardcode the translations here.
 const translations = {
