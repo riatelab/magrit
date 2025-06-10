@@ -5127,7 +5127,7 @@ type RootTranslation = {
 		 */
 		IgnoreCase: string
 		/**
-		 * N​o​r​m​a​l​i​z​e​ ​t​e​x​t​ ​(​i​g​n​o​r​e​ ​d​i​a​c​r​i​t​i​c​s​,​ ​h​y​p​h​e​n​s​ ​a​n​d​ ​s​p​a​c​e​s​)
+		 * N​o​r​m​a​l​i​z​e​ ​t​e​x​t​ ​(​i​g​n​o​r​e​ ​d​i​a​c​r​i​t​i​c​s​,​ ​s​p​a​c​e​s​ ​a​n​d​ ​p​u​n​c​t​u​a​t​i​o​n​ ​m​a​r​k​s​)
 		 */
 		NormalizeText: string
 		/**
@@ -11248,7 +11248,7 @@ export type TranslationFunctions = {
 		 */
 		IgnoreCase: () => LocalizedString
 		/**
-		 * Normalize text (ignore diacritics, hyphens and spaces)
+		 * Normalize text (ignore diacritics, spaces and punctuation marks)
 		 */
 		NormalizeText: () => LocalizedString
 		/**

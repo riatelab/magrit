@@ -1248,7 +1248,7 @@ const fr = {
     TargetLayerPlaceholder: 'Sélectionner une couche',
     NormalizationParameters: 'Paramètres de normalisation',
     IgnoreCase: 'Insensible à la casse (ne pas tenir compte de la casse)',
-    NormalizeText: 'Normaliser le texte (ignorer les signes diacritiques, les traits d\'union et les espaces)',
+    NormalizeText: 'Normaliser le texte (ignorer les signes diacritiques, les espaces et les signes de ponctuation)',
     JoinFieldParameters: 'Champs de jointure',
     JoinFieldTable: 'Table {tableName}',
     JoinFieldLayer: 'Couche {layerName}',

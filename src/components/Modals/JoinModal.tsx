@@ -78,12 +78,12 @@ const getTransformFn = (
       : normalizeText && !ignoreCase
         ? (s: any) => (
           isNonNull(s)
-            ? removeDiacritics(`${s}`).replaceAll(' ', '').replaceAll('-', '')
+            ? removeDiacritics(`${s}`).replaceAll(' ', '').replace(/[!"#$%&'’()*+,-./:;<=>?@[\]^_`{|}~]/g, '')
             : null
         )
         : (s: any) => (
           isNonNull(s)
-            ? removeDiacritics(`${s}`.toLowerCase()).replaceAll(' ', '').replaceAll('-', '')
+            ? removeDiacritics(`${s}`.toLowerCase()).replaceAll(' ', '').replace(/[!"#$%&'’()*+,-./:;<=>?@[\]^_`{|}~]/g, '')
             : null
         )
 );

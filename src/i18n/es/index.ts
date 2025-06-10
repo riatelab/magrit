@@ -1248,7 +1248,7 @@ const es = {
     TargetLayerPlaceholder: 'Seleccione una capa',
     NormalizationParameters: 'Parámetros de normalización',
     IgnoreCase: 'Insensible a mayúsculas y minúsculas (ignora mayúsculas y minúsculas)',
-    NormalizeText: 'Normalizar texto (ignorar diacríticos, guiones y espacios)',
+    NormalizeText: 'Normalizar texto (ignorar diacríticos, espacios y signos de puntuación)',
     JoinFieldParameters: 'Campos de unión',
     JoinFieldTable: 'Tabla {tableName}',
     JoinFieldLayer: 'Capa {layerName}',

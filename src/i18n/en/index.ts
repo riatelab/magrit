@@ -1248,7 +1248,7 @@ const en = {
     TargetLayerPlaceholder: 'Select a layer',
     NormalizationParameters: 'Normalization parameters',
     IgnoreCase: 'Case insensitive (ignore case)',
-    NormalizeText: 'Normalize text (ignore diacritics, hyphens and spaces)',
+    NormalizeText: 'Normalize text (ignore diacritics, spaces and punctuation marks)',
     JoinFieldParameters: 'Join fields',
     JoinFieldTable: 'Table {tableName}',
     JoinFieldLayer: 'Layer {layerName}',
