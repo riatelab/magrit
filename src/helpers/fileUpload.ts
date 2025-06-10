@@ -14,6 +14,7 @@ import {
   sanitizeColumnName,
 } from './common';
 import {
+  autoTypeDataset,
   convertTextualTabularDatasetToJSON,
   getGeometryType,
   removeFeaturesWithEmptyGeometry,
@@ -356,7 +357,7 @@ const sanitizeColumnNamesRecords = (
   // Get the column names
   const columns = Object.keys(records[0]);
   // Create a new array of records with sanitized column names
-  return records.map((record) => {
+  const newRecords = records.map((record) => {
     const sanitizedRecord: Record<string, unknown> = {};
     columns.forEach((column) => {
       // eslint-disable-next-line no-param-reassign
@@ -364,6 +365,9 @@ const sanitizeColumnNamesRecords = (
     });
     return sanitizedRecord;
   });
+  const newColumns = Object.keys(newRecords[0]);
+  newRecords.columns = newColumns;
+  return newRecords;
 };
 
 const sanitizeColumnNamesLayer = (
@@ -433,8 +437,9 @@ export const convertAndAddFiles = async (
     try {
       const res = await toTable(files.map((f) => f.file)[0], { tableName: layerName });
       const resSanitized = sanitizeColumnNamesRecords(res);
+      const resTyped = autoTypeDataset(resSanitized);
       return {
-        id: addTabularLayer(resSanitized, layerName),
+        id: addTabularLayer(resTyped, layerName),
         nRemoved: 0,
       };
     } catch (e: any) {

@@ -32,6 +32,21 @@ describe('autoTypeDataset', () => {
     expect(values).toEqual([10, 20, 30, null, 50, null]);
   });
 
+  it('should transforms stringified numbers with \'...\' (used as NA) to numbers with null', () => {
+    const ds = [
+      { id: '1', name: 'a', value: '10' },
+      { id: '2', name: 'b', value: '20' },
+      { id: '3', name: 'c', value: '30' },
+      { id: '4', name: 'd', value: '...' },
+      { id: '5', name: 'e', value: '50' },
+      { id: '6', name: 'f', value: '...' },
+    ];
+    ds.columns = ['id', 'name', 'value'];
+    const result = autoTypeDataset(ds);
+    const values = result.map((d) => d.value);
+    expect(values).toEqual([10, 20, 30, null, 50, null]);
+  });
+
   it('should transforms stringified numbers with NA to numbers with null, even when there is one or more zero values (bug 143)', () => {
     const ds = [
       { id: '1', name: 'a', value: '0' },

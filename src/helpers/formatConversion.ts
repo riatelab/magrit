@@ -185,8 +185,9 @@ export const autoTypeDataset = (dataset: d3.DSVRowArray<string>): Record<string,
         }
       } else if (isFiniteNumber(dataset[j][cols[i]])) {
         tmp.push(+dataset[j][cols[i]]);
-      } else if (dataset[j][cols[i]] === 'NA') {
+      } else if (dataset[j][cols[i]] === 'NA' || dataset[j][cols[i]] === '...') {
         // We also handle a special case for 'NA' values (common in R datasets)
+        // or '...' values
         tmp.push(null);
       } else {
         // Or break early if a value can't be coerced :
