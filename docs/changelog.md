@@ -12,6 +12,10 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.3.4 (2025-06-10)
+
+- Améliore la fonction de normalisation des valeurs lors de la création d'une jointure pour également prendre en compte les signes de ponctuation.
+
 #### 2.3.3 (2025-06-02)
 
 - Améliore la fenêtre de création d'une jointure, notamment en montrant les entrées qui n'ont pas trouvé de correspondance et en

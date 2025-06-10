@@ -53,7 +53,7 @@ jobs:
           path: release/${{ steps.get_version.outputs.version }}/*.AppImage
 
       - name: Upload Artifacts to Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2.2.2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
@@ -97,7 +97,7 @@ jobs:
           path: release/${{ steps.get_version.outputs.version }}/*.dmg
 
       - name: Upload macOS Artifacts to Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v2.2.2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: release/${{ steps.get_version.outputs.version }}/Magrit-Mac-${{ steps.get_version.outputs.version }}-Installer.dmg

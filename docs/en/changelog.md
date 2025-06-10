@@ -12,6 +12,10 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.3.4 (2025-06-10)
+
+- Improve normalization function in join modal to also take into account punctuation characters when normalizing values.
+
 #### 2.3.3 (2025-06-02)
 
 - Improve the join creation modal, in particular by showing entries that have not found a match and by allowing
