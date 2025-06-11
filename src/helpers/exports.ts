@@ -163,18 +163,6 @@ function patchSvgForFonts(
 }
 
 /**
- * Remove the font definitions from the SVG map.
- *
- * @param svgElement
- */
-function unpatchSvgForFonts(svgElement: SVGElement) {
-  const styleElems = Array.from(svgElement.getElementsByTagName('style'));
-  styleElems.forEach((styleElem) => {
-    styleElem.remove();
-  });
-}
-
-/**
  * Create a link to download the given blob as a file.
  *
  * @param {Blob | File} blobOrFile
@@ -229,16 +217,14 @@ export async function exportMapToSvg(
   options: object = {},
 ) {
   const targetSvg = getTargetSvg();
-  // Patch the SVG to include the fonts used in the map
-  patchSvgForFonts(targetSvg);
+
   // Current state of snapping grid
   const displaySnapGrid = globalStore.displaySnappingGrid;
+
   // Function to be executed after the map is exported to SVG
   // (whether it failed or succeeded)
   // in order to restore various settings
   const finallyFn = () => {
-    // Unpatch the SVG to remove the fonts used in the map
-    unpatchSvgForFonts(targetSvg);
     // Restore the projection clip extent and redraw the paths
     globalStore.projection.clipExtent(getDefaultClipExtent());
     // Restore the state of the snapping grid
@@ -246,6 +232,7 @@ export async function exportMapToSvg(
     // Redraw the paths
     redrawPaths(targetSvg);
   };
+
   // Set the projection clip extent if needed
   if (clipToViewPort) {
     const mapDimensions = getMapDimension(targetSvg);
@@ -263,14 +250,29 @@ export async function exportMapToSvg(
     redrawPaths(targetSvg);
   }
 
+  // Hide the snapping grid if it is displayed
   if (displaySnapGrid) {
     setGlobalStore('displaySnappingGrid', false);
   }
 
+  // Clone the SVG element to avoid modifying the original one
+  // when including the fonts and removing the
+  // layout-features/legend boxes
+  const cloned = targetSvg.cloneNode(true) as SVGElement;
+
+  // Patch the SVG to include the fonts used in the map
+  patchSvgForFonts(cloned);
+
+  // Remove the rect elements with the class "legend-box"
+  // and with the class "layout-feature-box"
+  cloned
+    .querySelectorAll('rect.layout-feature-box[fill=transparent], rect.legend-box[fill=transparent]')
+    .forEach((d) => d.remove());
+
   const outputNameClean = cleanOutputName(outputName, 'svg');
 
   const serializer = new XMLSerializer();
-  let source = serializer.serializeToString(targetSvg);
+  let source = serializer.serializeToString(cloned);
 
   // Add namespaces declarations if they are missing
   if (!source.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
@@ -325,15 +327,12 @@ function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
  * @returns {Promise<boolean>}
  */
 export async function exportMapToPng(outputName: string, scaleFactor = 1) {
-  const targetSvg = getTargetSvg();
+  const targetSvg = getTargetSvg().cloneNode(true) as SVGElement;
   const mapDimensions = getMapDimension();
   const targetCanvas = document.createElement('canvas');
   targetCanvas.width = mapDimensions.width;
   targetCanvas.height = mapDimensions.height;
   document.body.appendChild(targetCanvas);
-
-  // Patch the SVG to include the fonts used in the map
-  patchSvgForFonts(targetSvg);
 
   // Current state of snapping grid
   const displaySnapGrid = globalStore.displaySnappingGrid;
@@ -341,7 +340,6 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
   // Cleanup function
   const cleanUp = () => {
     targetCanvas.remove();
-    unpatchSvgForFonts(targetSvg);
     // Restore the state of the snapping grid
     setGlobalStore('displaySnappingGrid', displaySnapGrid);
   };
