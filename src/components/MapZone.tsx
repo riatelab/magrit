@@ -763,7 +763,7 @@ export default function MapZone(): JSX.Element {
           || mapStore.mapMargins.left > 0
           || mapStore.mapMargins.top > 0
         }>
-          <g class="margins-mask">
+          <g class="margin-mask" id="margin-mask">
             <path
               fill-rule="evenodd"
               stroke="none"
