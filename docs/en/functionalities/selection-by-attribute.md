@@ -22,6 +22,11 @@ Several operations are possible (some in the form of a shortcut - blue buttons):
 - string functions (`concat`, `substring`, `lower`, `upper`, `trim` and `replace`).
 - comparison operators (`LIKE`, `=`, `!=`, `>`, `>=`, `<` and `<=`), negation (`NOT`) and logical operations (`AND`, `OR`),- construction of conditions (`CASE WHEN ... THEN ... ELSE ... END`).
 
+Beware, however, of the syntax used to select entities without data: in SQL, it's common to
+use `variable IS NULL` to check if a value is absent. In Magrit, you must use
+`NOT variable` to check if a value is absent (i.e. the variable is not defined or
+its content is empty).
+
 ## Examples of simple selections
 
 ### Selection of entities with a population greater than 10000
@@ -98,3 +103,8 @@ ELSE
 END
 ```
 
+### Selection of countries that have no value for the "REGION_BLOC" field
+
+```sql
+NOT REGION_BLOC
+```

@@ -46,6 +46,11 @@ Several operations are possible (some are present as a shortcut - blue buttons):
 - comparison operators (`LIKE`, `=`, `!=`, `>`, `>=`, `<` and `<=`), negation (`NOT`) and logical operations (`AND`, `OR`),
 - condition construction (`CASE WHEN ... THEN ... ELSE ... END`).
 
+Beware, however, of the syntax used to select entities without data: in SQL, it's common to
+use `variable IS NULL` to check if a value is absent. In Magrit, you must use
+`NOT variable` to check if a value is absent (i.e. the variable is not defined or
+its content is empty).
+
 In order to create a new column, it is mandatory to specify the name of the column to be created, the data type
 (stock, ratio, etc.) and the calculation formula.
 When the formula is valid, a preview of the calculated values (first 8 lines of the table) is displayed.
@@ -83,6 +88,16 @@ For example, to crate a new column "Type of population" based on the "Population
 
 ```sql
 CASE WHEN Population < 1000 THEN 'Small'
+     WHEN Population >= 1000 AND Population <= 10000 THEN 'Medium'
+     ELSE 'Large'
+END
+```
+
+#### Reclassify quantitative data as qualitative (with missing values)
+
+```sql
+CASE WHEN NOT Population THEN 'No data'
+     WHEN Population < 1000 THEN 'Small'
      WHEN Population >= 1000 AND Population <= 10000 THEN 'Medium'
      ELSE 'Large'
 END

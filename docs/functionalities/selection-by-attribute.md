@@ -13,7 +13,7 @@ Les champs actuels de la couche sont accessibles sous forme de raccourcis (bouto
 
 - `$count` : le nombre d'entités dans la couche,
 - `$id` : l'identifiant unique (et interne) de l'entité,
-- `$area` : l'aire de l'entité (si il s'agit d'un polygone).
+- `$area` : l'aire de l'entité (s'il s'agit d'un polygone).
 
 Plusieurs opérations sont possibles (certaines sont présentes sous forme d'un raccourci - boutons bleus) :
 
@@ -22,6 +22,11 @@ Plusieurs opérations sont possibles (certaines sont présentes sous forme d'un 
 - des fonctions de chaînes de caractères (`concat`, `substring`, `lower`, `upper`, `trim` et `replace`).
 - les opérateurs de comparaison (`LIKE`, `=`, `!=`, `>`, `>=`, `<` et `<=`), la négation (`NOT`) et les opérations logiques (`AND`, `OR`),
 - la construction de conditions (`CASE WHEN ... THEN ... ELSE ... END`).
+
+Attention toutefois à la syntaxe permettant de sélectionner les entités sans données : en SQL, il est courant
+d'utiliser `variable IS NULL` pour vérifier si une valeur est absente. Dans Magrit, il faut utiliser
+`NOT variable` pour vérifier si une valeur est absente (c'est-à-dire que la variable n'est pas définie ou
+son contenu est vide).
 
 ## Exemples de sélections simples
 
@@ -98,4 +103,10 @@ CASE WHEN Departement = '94' THEN
 ELSE
   Population >= 1000 AND Population <= 10000
 END
+```
+
+### Sélection des pays qui n'ont pas de valeur pour le champ "REGION_BLOC"
+
+```sql
+NOT REGION_BLOC
 ```

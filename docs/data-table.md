@@ -52,6 +52,12 @@ Plusieurs opérations sont possibles (certaines sont présentes sous forme d'un 
 - les opérateurs de comparaison (`LIKE`, `=`, `!=`, `>`, `>=`, `<` et `<=`), la négation (`NOT`) et les opérations logiques (`AND`, `OR`),
 - la construction de conditions (`CASE WHEN ... THEN ... ELSE ... END`).
 
+Attention toutefois à la syntaxe permettant de sélectionner les entités sans données : en SQL, il est courant
+d'utiliser `variable IS NULL` pour vérifier si une valeur est absente. Dans Magrit, il faut utiliser
+`NOT variable` pour vérifier si une valeur est absente (c'est-à-dire que la variable n'est pas définie ou
+son contenu est vide).
+
+
 Afin de créer un nouveau champ, il est nécessaire de spécifier le nom du champ à créer, le type de données (stock, ratio, etc.) et la formule de calcul.
 Lorsque la formule est valide, un aperçu des valeurs calculées (8 premières lignes du tableau) est affiché.
 
@@ -90,6 +96,16 @@ conditions suivantes :
 
 ```sql
 CASE WHEN Population < 1000 THEN 'Petite'
+     WHEN Population >= 1000 AND Population <= 10000 THEN 'Moyenne'
+     ELSE 'Grande'
+END
+```
+
+#### Reclasser des données quantitatives en données qualitatives (avec valeurs manquantes)
+
+```sql
+CASE WHEN NOT Population THEN 'Aucune donnée'
+     WHEN Population < 1000 THEN 'Petite'
      WHEN Population >= 1000 AND Population <= 10000 THEN 'Moyenne'
      ELSE 'Grande'
 END
