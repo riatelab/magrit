@@ -10,7 +10,7 @@ import {
 import { unwrap } from 'solid-js/store';
 
 // GeoJSON types
-import type { Feature } from 'geojson';
+import type { Feature, Geometry } from 'geojson';
 
 // Imports from other packages
 import { area } from '@turf/turf';
@@ -140,6 +140,7 @@ export default function FormulaInput(
     setCurrentFormula: Setter<string>,
     sampleOutput: Accessor<SampleOutputFormat | undefined>,
     setSampleOutput: Setter<SampleOutputFormat | undefined>,
+    nullAsFalse?: boolean,
   },
 ): JSX.Element {
   let refInputFormula: HTMLTextAreaElement;
@@ -160,7 +161,11 @@ export default function FormulaInput(
     }
 
     const query = `SELECT ${formula} as newValue FROM ?`;
-    const data = replaceNullByUndefined(unproxify(props.records.slice(0, 8)));
+    // We take a (large) sample of the records to compute the sample output
+    // (we do not want to compute the sample output on all the records
+    // but we also don't want to compute on a sample that has only missing values
+    // because it would return an empty result)
+    const data = replaceNullByUndefined(unproxify(props.records.slice(0, 800)));
 
     if (hasSpecialFieldId(formula)) {
       data.forEach((d, i) => {
@@ -176,8 +181,20 @@ export default function FormulaInput(
     }
 
     try {
-      const newColumn = alasql(query, [data]);
+      let newColumn = alasql(query, [data]);
       const allUndefined = newColumn.every((d: any) => d.newValue === undefined);
+      if (props.nullAsFalse) {
+        // We replace null and undefined values by false, for the selection by attribute
+        // functionality, so that records with null or undefined values return "false"
+        // (we need this because in selection by attribute, we check that all results
+        // are boolean values, so we cannot have null or undefined values)
+        newColumn = newColumn.map((d: any) => {
+          if (d.newValue === null || d.newValue === undefined) {
+            d.newValue = false; // eslint-disable-line no-param-reassign
+          }
+          return d;
+        });
+      }
       if (allUndefined) {
         props.setSampleOutput({ type: 'Error', value: 'EmptyResult' });
         // TODO: we may try to parse the query here (as it is syntactically correct
@@ -185,7 +202,8 @@ export default function FormulaInput(
         //   and detect why the output is empty (e.g. a column name is wrong, etc.)
       } else {
         const resultObj: { [key: number]: number | string | boolean } = {};
-        for (let i = 0; i < newColumn.length; i += 1) {
+        // We only take the first 8 results (out 800) to display in the sample output
+        for (let i = 0; i < Math.min(8, newColumn.length); i += 1) {
           if (newColumn[i]) {
             resultObj[i] = newColumn[i].newValue;
           }

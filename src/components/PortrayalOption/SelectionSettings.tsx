@@ -202,6 +202,7 @@ export default function SelectionSettings(
       setCurrentFormula={setFormula}
       sampleOutput={sampleOutput}
       setSampleOutput={setSampleOutput}
+      nullAsFalse={true}
     />
     <div class="control" style={{ display: 'flex', height: '12em' }}>
       <div style={{ display: 'flex', 'align-items': 'center', width: '12%' }}>
