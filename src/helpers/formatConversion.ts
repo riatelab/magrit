@@ -164,6 +164,7 @@ export const autoTypeDataset = (dataset: d3.DSVRowArray<string>): Record<string,
     for (let j = 0; j < dataset.length; j += 1) {
       if (
         dataset[j][cols[i]].replace
+        && dataset[j][cols[i]] !== ''
         && (
           !Number.isNaN(+dataset[j][cols[i]].replace(',', '.'))
           || !Number.isNaN(+dataset[j][cols[i]].split(' ').join(''))
@@ -173,6 +174,7 @@ export const autoTypeDataset = (dataset: d3.DSVRowArray<string>): Record<string,
           dataset[j][cols[i]] !== '0'
           && dataset[j][cols[i]].startsWith('0')
           && !dataset[j][cols[i]].startsWith('0.')
+          && !dataset[j][cols[i]].startsWith('0,')
         ) { // Break now if the value starts with '0' and is not a float neither a 0
           break;
         }
@@ -185,7 +187,14 @@ export const autoTypeDataset = (dataset: d3.DSVRowArray<string>): Record<string,
         }
       } else if (isFiniteNumber(dataset[j][cols[i]])) {
         tmp.push(+dataset[j][cols[i]]);
-      } else if (dataset[j][cols[i]] === 'NA' || dataset[j][cols[i]] === '...') {
+      } else if (
+        dataset[j][cols[i]] === 'NA'
+        || dataset[j][cols[i]] === '...'
+        || dataset[j][cols[i]] === ''
+        || dataset[j][cols[i]] === null
+        || dataset[j][cols[i]] === undefined
+      ) {
+        // If the value is missing, we can convert it to null.
         // We also handle a special case for 'NA' values (common in R datasets)
         // or '...' values
         tmp.push(null);
