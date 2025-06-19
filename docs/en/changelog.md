@@ -12,6 +12,26 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.3.5 (2025-06-19)
+
+- Fix launching of the desktop version with Electron on Linux (cf. https://github.com/electron/electron/issues/46538).
+
+- Improve various minor stuff in SVG exports:
+
+  * add an ID to the margin around the map if any,
+  * remove invisible rectangle box under legend elements when this box is transparent (it is kept for when user adds a background color to the legend).
+
+- Fix selection by attribute when the field contains null / missing values.
+
+- Improve documentation about the SQL syntax to use to select features with null / missing values.
+
+- Manually add `REGION_UN` and `SUBREGION_UN` for the features of the `world_209` dataset
+  for which it was missing (Macao, Hong Kong, Western Sahara, Kosovo and Antarctica) in order
+  to help selection of region / subregion.
+
+- Improve support for importing CSV files where numbers use a comma as decimal separator.
+
+
 #### 2.3.4 (2025-06-10)
 
 - Improve normalization function in join modal to also take into account punctuation characters when normalizing values.

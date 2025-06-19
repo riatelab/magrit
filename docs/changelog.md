@@ -12,6 +12,25 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.3.5 (2025-06-19)
+
+- Corrige le lancement de la version desktop avec Electron pour Linux (cf. https://github.com/electron/electron/issues/46538).
+
+- Amélioration de diverses choses mineures dans les exports SVG :
+
+  * ajout d'un ID à la marge autour de la carte s'il y en a une,
+  * suppression du rectangle invisible sous les éléments de la légende lorsque ce rectangle est transparent (il est conservé lorsque l'utilisateur ajoute une couleur de fond à la légende).
+
+- Correction de la sélection par attribut lorsque le champ contient des valeurs nulles ou manquantes.
+
+- Amélioration de la documentation sur la syntaxe SQL à utiliser pour sélectionner les entités avec des valeurs nulles / manquantes.
+
+- Ajout manuel de `REGION_UN` et `SUBREGION_UN` pour les entités du jeu de données `world_209`
+  pour lesquelles ils étaient manquants (Macao, Hong Kong, Sahara occidental, Kosovo et Antarctique) afin
+  d'aider à la sélection de la région / sous-région.
+
+- Amélioration de la prise en charge de l'import de fichiers CSV dans lesquels les nombres utilisent une virgule comme séparateur décimal.
+
 #### 2.3.4 (2025-06-10)
 
 - Améliore la fonction de normalisation des valeurs lors de la création d'une jointure pour également prendre en compte les signes de ponctuation.
