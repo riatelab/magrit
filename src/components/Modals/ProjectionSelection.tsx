@@ -140,10 +140,9 @@ const availableProjections = [
   'VanDerGrinten2',
   'VanDerGrinten3',
   'VanDerGrinten4',
-  'Wagner',
   'Wagner4',
   'Wagner6',
-  // 'Wagner7',
+  'Wagner7',
   'Wiechel',
   'Winkel3',
 ].sort();

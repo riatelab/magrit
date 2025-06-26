@@ -155,9 +155,13 @@ export default function ProjectionSection(): JSX.Element {
     },
   ]);
 
-  const hasParallel = createMemo(() => !!globalStore.projection?.parallel);
+  const hasParallel = createMemo(() => (
+    !mapStore.projection?.name.startsWith('Wagner') && !!globalStore.projection?.parallel
+  ));
 
-  const hasParallels = createMemo(() => !!globalStore.projection?.parallels);
+  const hasParallels = createMemo(() => (
+    !mapStore.projection?.name.startsWith('Wagner') && !!globalStore.projection?.parallels
+  ));
 
   return <div class="projection-section">
     <div class="field-block">
@@ -278,7 +282,6 @@ export default function ProjectionSection(): JSX.Element {
             label={LL().MapConfiguration.StandardParallels()}
             values={mapStore.parallels || globalStore.projection.parallels()}
             onChange={(v) => {
-              console.log(v);
               setMapStore('parallels', v);
             }}
             min={-90}
