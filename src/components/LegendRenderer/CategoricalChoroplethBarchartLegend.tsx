@@ -78,9 +78,9 @@ function CategoriesPlot(
     width: number,
   },
 ): JSX.Element {
-  const domain = createMemo(() => props.mapping.map((m) => m.categoryName));
-  const range = createMemo(() => props.mapping.map((m) => m.color));
-  const data = createMemo(() => props.mapping.map((m, i) => ({
+  const domain = createMemo(() => props.mapping.filter((m) => m.value).map((m) => m.categoryName));
+  const range = createMemo(() => props.mapping.filter((m) => m.value).map((m) => m.color));
+  const data = createMemo(() => props.mapping.filter((m) => m.value).map((m, i) => ({
     position: i,
     category: m.categoryName,
     color: m.color,
