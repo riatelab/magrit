@@ -7,6 +7,7 @@ import {
 interface CollapsibleSectionProps {
   summaryContent: string,
   initialOpen?: boolean,
+  id?: string,
 }
 
 export default function DetailsSummary(
@@ -14,7 +15,7 @@ export default function DetailsSummary(
 ): JSX.Element {
   const c = children(() => props.children);
 
-  return <details open={props.initialOpen}>
+  return <details open={props.initialOpen} id={props.id}>
     <summary
       class={'mb-4'}
       style={{

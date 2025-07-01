@@ -387,7 +387,7 @@ function makeSettingsPictograms(
         setMapping={(m) => {
           updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
         }}
-        detailed={false}
+        detailed={true}
       />
     </DetailsSummary>
     <AestheticsSection {...props} />
@@ -945,11 +945,16 @@ function makeSettingsDefaultPoint(
             .map((c) => c.color)
         }
         valueOpacity={props.fillOpacity!}
-        onClickPalette={() => {}}
+        onClickPalette={() => {
+          (document.getElementById('details-summary-categorical-choropleth-point')!
+            .firstElementChild as HTMLDetailsElement)
+            .click();
+        }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
       />
       <DetailsSummary
         summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
+        id={'details-summary-categorical-choropleth-point'}
       >
         <CategoriesCustomisation
           mapping={() => (
@@ -958,7 +963,7 @@ function makeSettingsDefaultPoint(
           setMapping={(m) => {
             updateProp(props.id, ['rendererParameters', 'color', 'mapping'], m as never);
           }}
-          detailed={false}
+          detailed={true}
         />
       </DetailsSummary>
       {/* <InputFieldPaletteOpacity
@@ -972,13 +977,14 @@ function makeSettingsDefaultPoint(
     <Show when={props.representationType === 'categoricalChoropleth'}>
       <DetailsSummary
         summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
+        id={'details-summary-categorical-choropleth-point'}
       >
         <CategoriesCustomisation
           mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
           setMapping={(m) => {
             updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
           }}
-          detailed={false}
+          detailed={true}
         />
       </DetailsSummary>
       <InputFieldPaletteOpacity
@@ -989,7 +995,11 @@ function makeSettingsDefaultPoint(
             .map((c) => c.color)
         }
         valueOpacity={props.fillOpacity!}
-        onClickPalette={() => {}}
+        onClickPalette={() => {
+          (document.getElementById('details-summary-categorical-choropleth-point')!
+            .firstElementChild as HTMLDetailsElement)
+            .click();
+        }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
       />
     </Show>
@@ -1939,11 +1949,16 @@ function makeSettingsDefaultLine(
           }
           valueOpacity={props.strokeOpacity!}
           onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
-          onClickPalette={() => {}}
+          onClickPalette={() => {
+            (document.getElementById('details-summary-categorical-choropleth-line')!
+              .firstElementChild as HTMLDetailsElement)
+              .click();
+          }}
           onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
         />
         <DetailsSummary
           summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
+          id={'details-summary-categorical-choropleth-line'}
         >
           <CategoriesCustomisation
             mapping={() => (
@@ -1951,7 +1966,7 @@ function makeSettingsDefaultLine(
             setMapping={(m) => {
               updateProp(props.id, ['rendererParameters', 'color', 'mapping'], m as never);
             }}
-            detailed={false}
+            detailed={true}
           />
         </DetailsSummary>
       </Show>
@@ -2017,18 +2032,23 @@ function makeSettingsDefaultLine(
         }
         valueOpacity={props.strokeOpacity!}
         onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
-        onClickPalette={() => {}}
+        onClickPalette={() => {
+          (document.getElementById('details-summary-categorical-choropleth-line')!
+            .firstElementChild as HTMLDetailsElement)
+            .click();
+        }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
       />
       <DetailsSummary
         summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
+        id={'details-summary-categorical-choropleth-line'}
       >
         <CategoriesCustomisation
           mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
           setMapping={(m) => {
             updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
           }}
-          detailed={false}
+          detailed={true}
         />
       </DetailsSummary>
     </Show>
@@ -2494,6 +2514,7 @@ function makeSettingsDefaultPolygon(
     </Show>
     <Show when={props.representationType === 'categoricalChoropleth'}>
       <DetailsSummary
+        id={'details-summary-categorical-choropleth-polygon'}
         summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
       >
         <CategoriesCustomisation
@@ -2512,7 +2533,11 @@ function makeSettingsDefaultPolygon(
             .map((c) => c.color)
         }
         valueOpacity={props.fillOpacity!}
-        onClickPalette={() => {}}
+        onClickPalette={() => {
+          (document.getElementById('details-summary-categorical-choropleth-polygon')!
+            .firstElementChild as HTMLDetailsElement)
+            .click();
+        }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
       />
     </Show>
