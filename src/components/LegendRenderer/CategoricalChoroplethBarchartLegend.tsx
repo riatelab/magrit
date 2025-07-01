@@ -39,35 +39,6 @@ import {
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
-function makeSortOptions(
-  orientation: Orientation,
-  order: 'ascending' | 'descending' | 'none',
-) {
-  const axisLetter = orientation === 'vertical' ? 'y' : 'x';
-  const axisLetterOpposite = orientation === 'vertical' ? 'x' : 'y';
-
-  if (order === 'ascending') {
-    // We want bars to be sorted by frequency in ascending order
-    return {
-      [axisLetter]: axisLetterOpposite,
-      order: 'ascending',
-    };
-  }
-  if (order === 'descending') {
-    // We want bars to be sorted by frequency in ascending order
-    return {
-      [axisLetter]: axisLetterOpposite,
-      order: 'descending',
-    };
-  }
-
-  // Otherwise want bars to be sorted in the order they were provided
-  return {
-    [axisLetter]: 'position',
-    order: 'ascending',
-  };
-}
-
 function CategoriesPlot(
   props: {
     mapping: CategoricalChoroplethMapping[],
@@ -128,7 +99,12 @@ function CategoriesPlot(
               x: 'frequency',
               fill: 'color',
               channels: { position: (d) => d.position },
-              sort: makeSortOptions(props.orientation, props.order),
+              // eslint-disable-next-line no-nested-ternary
+              sort: props.order === 'ascending'
+                ? { y: 'x', order: 'ascending' }
+                : props.order === 'descending'
+                  ? { y: 'x', reverse: true }
+                  : { y: 'position', order: 'ascending' },
             },
           ),
           Plot.ruleX([0]),
@@ -167,7 +143,12 @@ function CategoriesPlot(
               y: 'frequency',
               fill: 'color',
               channels: { position: (d) => d.position },
-              sort: makeSortOptions(props.orientation, props.order),
+              // eslint-disable-next-line no-nested-ternary
+              sort: props.order === 'ascending'
+                ? { x: 'y', order: 'ascending' }
+                : props.order === 'descending'
+                  ? { x: 'y', reverse: true }
+                  : { x: 'position', order: 'ascending' },
             },
           ),
           Plot.ruleY([0]),
