@@ -12,6 +12,14 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.3.6 (2025-07-15)
+
+- Rename the “Wagner” projection to “Wagner7” and enable its use (fixes <a href="https://github.com/riatelab/magrit/issues/157">issue 157</a>).
+
+- Fix bar chart display for categorical choropleth maps containing null/empty values.
+
+- Fix bar chart sorting for categorical choropleth maps.
+
 #### 2.3.5 (2025-06-19)
 
 - Fix launching of the desktop version with Electron on Linux (cf. https://github.com/electron/electron/issues/46538).

@@ -12,6 +12,14 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.3.6 (2025-07-15)
+
+- Renomme la projection "Wagner" vers "Wagner7" et rend possible son utilisation (corrige <a href="https://github.com/riatelab/magrit/issues/157">l'issue 157</a>).
+
+- Corrige l'affichage du diagramme en barre pour les cartes choroplèthes catégorielles contenant des valeurs nulles / vides.
+
+- Corrige le tri des diagrammes en barre pour les cartes choroplèthes catégorielles.
+
 #### 2.3.5 (2025-06-19)
 
 - Corrige le lancement de la version desktop avec Electron pour Linux (cf. https://github.com/electron/electron/issues/46538).
