@@ -269,6 +269,11 @@ export async function exportMapToSvg(
     .querySelectorAll('rect.layout-feature-box[fill=transparent], rect.legend-box[fill=transparent]')
     .forEach((d) => d.remove());
 
+  // Add the inkscape:groupmode attribute to each layer/layout-feature/legend/margin-mask
+  // (namespace is added later to SVG root element)
+  cloned.querySelectorAll('g.layer, g.layout-feature, g.legend, g.margin-mask')
+    .forEach((d) => d.setAttribute('inkscape:groupmode', 'layer'));
+
   const outputNameClean = cleanOutputName(outputName, 'svg');
 
   const serializer = new XMLSerializer();
@@ -291,6 +296,9 @@ export async function exportMapToSvg(
 
   // Remove stuff from the mgt namespace
   source = source.replace(/\bmgt:[^=]+="[^"]*"/g, '');
+
+  // Add the inkscape namespace
+  source = source.replace(/^<svg/, '<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"');
 
   // Replace the internal ids by the layer names
   layersDescriptionStore.layers.forEach((layer) => {
