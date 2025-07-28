@@ -38,6 +38,7 @@ export default function RectangleRenderer(props: Rectangle): JSX.Element {
 
   return <g
     ref={refElement!}
+    id={props.id.replace('LayoutFeature', 'LayoutFeature-Rectangle')}
     class="layout-feature rectangle"
     onContextMenu={(e) => {
       e.preventDefault();

@@ -43,6 +43,7 @@ export default function TextRenderer(props: Text): JSX.Element {
 
   return <g
     ref={refElement!}
+    id={props.id.replace('LayoutFeature', 'LayoutFeature-Text')}
     class="layout-feature text"
     onContextMenu={(e) => {
       e.preventDefault();

@@ -40,6 +40,7 @@ export default function ImageRenderer(props: Image): JSX.Element {
 
   return <g
     ref={refElement!}
+    id={props.id.replace('LayoutFeature', 'LayoutFeature-Image')}
     class="layout-feature image"
     onContextMenu={(e) => {
       e.preventDefault();

@@ -23,6 +23,7 @@ export default function LineRenderer(props: Line): JSX.Element {
 
   return <g
     ref={refElement!}
+    id={props.id.replace('LayoutFeature', 'LayoutFeature-Line')}
     class="layout-feature line"
     onContextMenu={(e) => {
       e.preventDefault();

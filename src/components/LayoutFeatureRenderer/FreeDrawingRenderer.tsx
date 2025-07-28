@@ -38,6 +38,7 @@ export default function FreeDrawingRenderer(props: FreeDrawing): JSX.Element {
 
   return <g
     ref={refElement!}
+    id={props.id.replace('LayoutFeature', 'LayoutFeature-FreeDrawing')}
     class="layout-feature free-drawing"
     onContextMenu={(e) => {
       e.preventDefault();

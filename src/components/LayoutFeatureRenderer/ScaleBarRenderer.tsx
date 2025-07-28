@@ -362,6 +362,7 @@ export default function ScaleBarRenderer(props: ScaleBar): JSX.Element {
 
   return <g
     ref={refElement!}
+    id={props.id.replace('LayoutFeature', 'LayoutFeature-ScaleBar')}
     class="layout-feature scale-bar"
     onContextMenu={(e) => {
       e.preventDefault();

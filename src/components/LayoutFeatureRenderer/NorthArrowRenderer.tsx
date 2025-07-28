@@ -471,6 +471,7 @@ export default function NorthArrowRenderer(props: NorthArrow): JSX.Element {
 
   return <g
     ref={refElement!}
+    id={props.id.replace('LayoutFeature', 'LayoutFeature-NorthArrow')}
     class="layout-feature north-arrow"
     onContextMenu={(e) => {
       e.preventDefault();
