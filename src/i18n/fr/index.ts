@@ -981,6 +981,7 @@ const fr = {
       Dataset: 'Jeu de données contenant les informations sur les liens',
       OriginId: 'Identifiant des origines',
       DestinationId: 'Identifiant des destinations',
+      FilteringBasedOn: 'Filtrage selon la valeur',
       Intensity: 'Intensité',
       LinkType: 'Type de lien',
       LinkTypeExchange: 'Échange',

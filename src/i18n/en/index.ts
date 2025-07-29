@@ -981,6 +981,7 @@ const en = {
       Dataset: 'Dataset containing links information',
       OriginId: 'Origin identifiers',
       DestinationId: 'Destination identifiers',
+      FilteringBasedOn: 'Filtering by value',
       Intensity: 'Intensity',
       LinkType: 'Link type',
       LinkTypeExchange: 'Exchange',

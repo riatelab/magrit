@@ -272,7 +272,7 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
     </div>
 
     <div>
-      <label class="label">Filtrage selon la valeur <i>Intensity</i></label>
+      <label class="label">{LL().FunctionalitiesSection.LinksOptions.FilteringBasedOn()} <i>Intensity</i></label>
       <BrushableHistogram
         values={props.intensity}
         onBrush={(range) => {
@@ -314,7 +314,7 @@ function LinksSelection(props: LinksSelectionProps): JSX.Element {
     </div>
 
     <div>
-      <label class="label">Filtrage selon la valeur <i>DistanceKm</i></label>
+      <label class="label">{LL().FunctionalitiesSection.LinksOptions.FilteringBasedOn()} <i>DistanceKm</i></label>
       <BrushableHistogram
         values={props.distance}
         onBrush={(range) => {

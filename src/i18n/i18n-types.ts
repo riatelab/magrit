@@ -4123,6 +4123,10 @@ type RootTranslation = {
 			 */
 			DestinationId: string
 			/**
+			 * F​i​l​t​e​r​i​n​g​ ​b​y​ ​v​a​l​u​e
+			 */
+			FilteringBasedOn: string
+			/**
 			 * I​n​t​e​n​s​i​t​y
 			 */
 			Intensity: string
@@ -10266,6 +10270,10 @@ export type TranslationFunctions = {
 			 * Destination identifiers
 			 */
 			DestinationId: () => LocalizedString
+			/**
+			 * Filtering by value
+			 */
+			FilteringBasedOn: () => LocalizedString
 			/**
 			 * Intensity
 			 */
