@@ -12,6 +12,15 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.3.7 (2025-07-29)
+
+- Améliore l'export SVG pour que les différents groupes soient détectés comme des couches dans Inkscape (corrige <a href="https://github.com/riatelab/magrit/issues/160">l'issue 160</a>).
+
+- Ajoute un identifiant aux différents groupes SVG accueillant des éléments d'habillage
+  (ligne / flèche, éléments de texte libre, etc.) pour faciliter leur identification dans Inkscape.
+
+- Corrige plusieurs traductions manquantes dans la fenêtre d'édition des cartes de liens.
+
 #### 2.3.6 (2025-07-15)
 
 - Renomme la projection "Wagner" vers "Wagner7" et rend possible son utilisation (corrige <a href="https://github.com/riatelab/magrit/issues/157">l'issue 157</a>).

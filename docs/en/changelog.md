@@ -12,6 +12,14 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.3.7 (2025-07-29)
+
+- Improve SVG export so that different groups are detected as layers in Inkscape (fixes <a href="https://github.com/riatelab/magrit/issues/160">issue 160</a>).
+
+- Add an identifier to the various SVG groups containing layout elements (lines/arrows, free text elements, etc.) to make them easier to identify in Inkscape.
+
+- Fix some missing translations in the link map editing modal.
+
 #### 2.3.6 (2025-07-15)
 
 - Rename the “Wagner” projection to “Wagner7” and enable its use (fixes <a href="https://github.com/riatelab/magrit/issues/157">issue 157</a>).
@@ -53,10 +61,10 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 - Enhance the size of the scale bar when it's created so that its distance is “pretty” (1 km, 2 km, 5 km, 10 km, 50 km, etc.),
   while aiming for a scale bar close to 100px wide.
 
-- Improves the behavior of the “free drawing” layout feature
+- Improve the behavior of the “free drawing” layout feature
   (by removing temporary lines as soon as the cursor is released and by not adding lines composed of a single point).
 
-- Improves the precision of class boundaries for smoothed maps (especially when using a divisor variable).
+- Improve the precision of class boundaries for smoothed maps (especially when using a divisor variable).
 
 #### 2.3.2 (2025-05-19)
 
