@@ -1765,7 +1765,7 @@ function makeSettingsDefaultLine(
           <InputFieldNumber
             label={ LL().FunctionalitiesSection.LinksOptions.LinkSizeProportionalReferenceSize() }
             value={ (props.rendererParameters as LinksParameters).proportional!.referenceRadius }
-            onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'proportional', 'referenceSize'], v)}
+            onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'proportional', 'referenceRadius'], v)}
             min={1}
             max={50}
             step={0.5}
