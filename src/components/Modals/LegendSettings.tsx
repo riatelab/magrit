@@ -430,7 +430,10 @@ function makeSettingsProportionalSymbolsLegend(
     <div class="field">
       <label class="label">{ LL().Legend.Modal.LegendSymbolLayout() }</label>
       <div class="control">
-        <Show when={(layer.rendererParameters as ProportionalSymbolsParameters).colorMode !== 'positiveNegative'}>
+        <Show when={
+          (layer.rendererParameters as ProportionalSymbolsParameters).colorMode !== 'positiveNegative'
+          && layer.type !== 'linestring'
+        }>
           <label class="radio" style={{ 'margin-right': '2em' }}>
             <input
               type="radio"
