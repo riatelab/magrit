@@ -260,6 +260,12 @@ export async function exportMapToSvg(
   // layout-features/legend boxes
   const cloned = targetSvg.cloneNode(true) as SVGElement;
 
+  // Add namespaces declarations
+  cloned.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  cloned.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+  cloned.setAttribute('xmlns:inkscape', 'http://www.inkscape.org/namespaces/inkscape');
+  cloned.setAttribute('xmlns:sodipodi', 'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd');
+
   // Patch the SVG to include the fonts used in the map
   patchSvgForFonts(cloned);
 
@@ -272,20 +278,13 @@ export async function exportMapToSvg(
   // Add the inkscape:groupmode attribute to each layer/layout-feature/legend/margin-mask
   // (namespace is added later to SVG root element)
   cloned.querySelectorAll('g.layer, g.layout-feature, g.legend, g.margin-mask')
-    .forEach((d) => d.setAttribute('inkscape:groupmode', 'layer'));
-
-  const outputNameClean = cleanOutputName(outputName, 'svg');
+    .forEach((d) => {
+      d.setAttribute('inkscape:groupmode', 'layer');
+      d.setAttribute('sodipodi:role', 'layer');
+    });
 
   const serializer = new XMLSerializer();
   let source = serializer.serializeToString(cloned);
-
-  // Add namespaces declarations if they are missing
-  if (!source.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
-    source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
-  }
-  if (!source.match(/^<svg[^>]+"http:\/\/www\.w3\.org\/1999\/xlink"/)) {
-    source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
-  }
 
   // Remove id / class / etc. of the root of the SVG element that we are
   // using to identify the map in the application
@@ -297,9 +296,6 @@ export async function exportMapToSvg(
   // Remove stuff from the mgt namespace
   source = source.replace(/\bmgt:[^=]+="[^"]*"/g, '');
 
-  // Add the inkscape namespace
-  source = source.replace(/^<svg/, '<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"');
-
   // Replace the internal ids by the layer names
   layersDescriptionStore.layers.forEach((layer) => {
     source = source.replaceAll(layer.id, layer.name.replaceAll(' ', '_'));
@@ -309,6 +305,8 @@ export async function exportMapToSvg(
   source = `<?xml version="1.0" standalone="no"?>\r\n${source}`;
 
   const blob = new Blob([source], { type: 'image/svg+xml' });
+
+  const outputNameClean = cleanOutputName(outputName, 'svg');
 
   return clickLinkFromBlob(blob, outputNameClean)
     .then(() => Promise.resolve(true))
