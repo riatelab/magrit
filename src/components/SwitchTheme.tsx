@@ -15,6 +15,7 @@ export default function SwitchTheme(
   const { LL } = useI18nContext();
   return <button
     aria-label={LL().HeaderApp.NightDayMode()}
+    title={LL().HeaderApp.NightDayMode()}
     class={props.class ? `switch-theme ${props.class}` : 'switch-theme'}
     id={props.id}
     type="button"
