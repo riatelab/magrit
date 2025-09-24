@@ -40,6 +40,7 @@ import NiceAlert from './components/Modals/NiceAlert.tsx';
 import TableWindow from './components/Modals/TableWindow.tsx';
 import ClassificationPanel from './components/Modals/ClassificationPanel.tsx';
 import ClassificationDiscontinuityPanel from './components/Modals/ClassificationDiscontinuityPanel.tsx';
+import ClassificationBivariatePanel from './components/Modals/ClassificationBivariate.tsx';
 import HeaderBarApp from './components/Headers.tsx';
 import ContextMenu from './components/ContextMenu.tsx';
 import ImportWindow from './components/ImportWindow.tsx';
@@ -73,6 +74,7 @@ import {
 import { contextMenuStore } from './store/ContextMenuStore';
 import { undo, redo } from './store/undo-redo';
 import { functionalitySelectionStore } from './store/FunctionalitySelectionStore';
+import { classificationMultivariatePanelStore } from './store/ClassificationMultivariatePanelStore';
 
 // Types and enums
 import {
@@ -566,6 +568,15 @@ const AppPage: () => JSX.Element = () => {
         </Show>
         <Show when={classificationPanelStore.show && classificationPanelStore.type! === 'size'}>
           <ClassificationDiscontinuityPanel />
+        </Show>
+        <Show when={classificationMultivariatePanelStore.show && classificationMultivariatePanelStore.type! === 'bivariate'}>
+          <ClassificationBivariatePanel />
+        </Show>
+        <Show when={
+          classificationMultivariatePanelStore.show
+          && classificationMultivariatePanelStore.type! === 'trivariate'
+        }>
+          <ClassificationBivariatePanel />
         </Show>
         <Show when={tableWindowStore.show}>
           <TableWindow />

@@ -844,6 +844,8 @@ const en = {
       Grid: 'Grid',
       Links: 'Links',
       Mushrooms: 'Mushrooms',
+      BivariateChoropleth: 'Bivariate choropleth',
+      TrivariateChoropleth: 'Trivariate choropleth',
       PointAggregation: 'Point layer aggregation',
       LineAggregation: 'Line layer aggregation',
       SimpleLinearRegression: 'Simple linear regression',
@@ -875,6 +877,12 @@ const en = {
       CustomPalette: 'custom palette',
       DisplayChartOnMap: 'Display a class summary histogram on the map',
       NewLayerName: 'Choro_{variable}_{layerName}',
+    },
+    BivariateChoroplethOptions: {
+      NewLayerName: 'BiChoro_{variable1}_{variable2}_{layerName}',
+    },
+    TrivariateChoroplethOptions: {
+      NewLayerName: 'TriChoro_{variable1}_{variable2}_{variable3}_{layerName}',
     },
     ProportionalSymbolsOptions: {
       ReferenceSize: 'Reference size (px)',

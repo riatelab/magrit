@@ -54,7 +54,7 @@ const fr = {
     ChevronTitle: 'Cliquer pour afficher / masquer',
   },
   HeaderApp: {
-    NightDayMode: 'Night / Day mode',
+    NightDayMode: 'Mode clair / sombre',
     ImportProjet: 'Importer un projet Magrit',
     SaveProject: 'Sauvegarder le projet',
     NewProject: 'Nouveau projet',
@@ -844,6 +844,8 @@ const fr = {
       Grid: 'Carroyage',
       Links: 'Liens',
       Mushrooms: 'Champignons',
+      BivariateChoropleth: 'Choroplèthe bivariée',
+      TrivariateChoropleth: 'Choroplèthe trivariée',
       PointAggregation: 'Agrégation d\'un semis de points',
       LineAggregation: 'Agrégation de lignes',
       SimpleLinearRegression: 'Régression linéaire simple',
@@ -875,6 +877,12 @@ const fr = {
       CustomPalette: 'palette personnalisée',
       DisplayChartOnMap: 'Afficher un graphique de résumé des classes sur la carte',
       NewLayerName: 'Choro_{variable}_{layerName}',
+    },
+    BivariateChoroplethOptions: {
+      NewLayerName: 'BiChoro_{variable1}_{variable2}_{layerName}',
+    },
+    TrivariateChoroplethOptions: {
+      NewLayerName: 'TriChoro_{variable1}_{variable2}_{variable3}_{layerName}',
     },
     ProportionalSymbolsOptions: {
       ReferenceSize: 'Taille de référence (px)',

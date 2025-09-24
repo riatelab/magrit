@@ -40,13 +40,11 @@ import PointAggregationSettings from '../PortrayalOption/PointAggregationSetting
 import LinearRegressionSettings from '../PortrayalOption/LinearRegressionSettings.tsx';
 import CategoricalPictogramSettings from '../PortrayalOption/CategoricalPictogramSettings.tsx';
 import WaffleSettings from '../PortrayalOption/WaffleSettings.tsx';
+import BivariateChoroSettings from '../PortrayalOption/BivariateChoroSettings.tsx';
+import TrivariateChoroSettings from '../PortrayalOption/TrivariateChoroSettings.tsx';
 
 // Type / interfaces / enums
-import {
-  AnalysisOperationType,
-  ProcessingOperationType,
-  RepresentationType,
-} from '../../global.d';
+import { AnalysisOperationType, ProcessingOperationType, RepresentationType } from '../../global.d';
 
 // Styles
 import '../../styles/FunctionalitySelection.css';
@@ -107,6 +105,14 @@ const functionalityDescriptions: Partial<FunctionalityDescription>[] = [
     name: 'Grid',
     type: RepresentationType.grid,
     allowedGeometryType: 'polygon',
+  },
+  {
+    name: 'BivariateChoropleth',
+    type: RepresentationType.bivariateChoropleth,
+  },
+  {
+    name: 'TrivariateChoropleth',
+    type: RepresentationType.trivariateChoropleth,
   },
   {
     name: 'PointAggregation',
@@ -277,6 +283,14 @@ export default function FunctionalitySelection(): JSX.Element {
         case RepresentationType.waffle:
           // eslint-disable-next-line no-param-reassign
           p.enabled = vars.nStock >= 2 && (geomType === 'polygon' || geomType === 'point');
+          break;
+        case RepresentationType.bivariateChoropleth:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = vars.nRatio >= 2;
+          break;
+        case RepresentationType.trivariateChoropleth:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = vars.nRatio >= 3;
           break;
         case ProcessingOperationType.aggregation:
           // eslint-disable-next-line no-param-reassign
@@ -449,6 +463,12 @@ export default function FunctionalitySelection(): JSX.Element {
             </Match>
             <Match when={selectedFunctionality()!.type === RepresentationType.mushrooms}>
               <MushroomsSettings layerId={functionalitySelectionStore.id!}/>
+            </Match>
+            <Match when={selectedFunctionality()!.type === RepresentationType.bivariateChoropleth}>
+              <BivariateChoroSettings layerId={functionalitySelectionStore.id!}/>
+            </Match>
+            <Match when={selectedFunctionality()!.type === RepresentationType.trivariateChoropleth}>
+              <TrivariateChoroSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
             <Match when={selectedFunctionality()!.type === ProcessingOperationType.aggregation}>
               <AggregationSettings layerId={functionalitySelectionStore.id!} />

@@ -76,6 +76,8 @@ type LayerDescription = {
     | MushroomsParameters
     | CategoricalPictogramParameters
     | WaffleParameters
+    | BivariateChoroplethParameters
+    | TrivariateChoroplethParameters
     // | DefaultRendererParameters
   ),
   layerCreationOptions?: (
@@ -249,6 +251,16 @@ type LayerDescriptionLMResultStock = LayerDescriptionProportionalSymbols & {
 
 type LayerDescriptionLMResultRatio = LayerDescriptionChoropleth & {
   layerCreationOptions: LinearRegressionResult,
+};
+
+type LayerDescriptionBivariateChoropleth = LayerDescription & {
+  representationType: RepresentationType.bivariateChoropleth,
+  rendererParameters: BivariateChoroplethParameters,
+};
+
+type LayerDescriptionTrivariateChoropleth = LayerDescription & {
+  representationType: RepresentationType.trivariateChoropleth,
+  rendererParameters: TrivariateChoroplethParameters,
 };
 
 type LayerDescriptionPointAggResultStock = LayerDescriptionProportionalSymbols & {
@@ -619,6 +631,92 @@ interface LinksParameters {
   filters: Filter[],
 }
 
+export interface BivariateChoroplethParameters {
+  variable1: {
+    // The name of the first variable
+    variable: string,
+    // The classification method
+    method: ClassificationMethod,
+    // The number of classes
+    classes: number,
+    // The break values (computed or manually set)
+    breaks: number[],
+    // Entities by class
+    entitiesByClass: number[],
+  },
+  variable2: {
+    // The name of the second variable
+    variable: string,
+    // The classification method
+    method: ClassificationMethod,
+    // The number of classes
+    classes: number,
+    // The break values (computed or manually set)
+    breaks: number[],
+    // Entities by class
+    entitiesByClass: number[],
+  },
+  // The color to use for features with no data
+  noDataColor: string,
+  // The color palette
+  palette: CustomPalette,
+}
+
+export interface TrivariateChoroplethParameters {
+  // The name of the first variable
+  variable1: string,
+  // The name of the second variable
+  variable2: string,
+  // The name of the third variable
+  variable3: string,
+  // Whether to apply mean centering
+  meanCentered: boolean,
+  // The type of color scale (discrete, continuous or sextant)
+  colorScaleType: 'discrete' | 'continuous' | 'sextant',
+}
+
+export interface TriChoroDiscreteParameters extends TrivariateChoroplethParameters {
+  colorScaleType: 'discrete',
+  // The number of classes in the triangular classification
+  classes: 4 | 9 | 16,
+  // The hue of the first component (left corner of the triangle), from 0 to 360
+  hue: number,
+  // The maximum saturation/intensity of the pure colors at the
+  // corners of the triangle, from 0 to 100
+  chroma: number,
+  // The overall lightness of the colors, from 0 to 100
+  lightness: number,
+  // The difference in brightness and saturation between
+  // the center (balanced mix) and the corners (pure components),
+  // from 0 to 1
+  contrast: number,
+  // The extent of the color gradient around the center
+  spread: number,
+}
+
+export interface TriChoroContinuousParameters extends TrivariateChoroplethParameters {
+  colorScaleType: 'continuous',
+  // The hue of the first component (left corner of the triangle), from 0 to 360
+  hue: number,
+  // The maximum saturation/intensity of the pure colors at the
+  // corners of the triangle, from 0 to 100
+  chroma: number,
+  // The overall lightness of the colors, from 0 to 100
+  lightness: number,
+  // The difference in brightness and saturation between
+  // the center (balanced mix) and the corners (pure components),
+  // from 0 to 1
+  contrast: number,
+  // The extent of the color gradient around the center
+  spread: number,
+}
+
+export interface TriChoroSextantParameters extends TrivariateChoroplethParameters {
+  colorScaleType: 'sextant',
+  // The colors for the six sextants (in clockwise order)
+  colors: [string, string, string, string, string, string],
+}
+
 interface Filter {
   // The name of the variable to filter
   variable: string,
@@ -672,6 +770,8 @@ export enum RepresentationType {
   discontinuity = 'discontinuity',
   smoothed = 'smoothed',
   cartogram = 'cartogram',
+  bivariateChoropleth = 'bivariateChoropleth',
+  trivariateChoropleth = 'trivariateChoropleth',
   links = 'links',
   grid = 'grid',
   waffle = 'waffle',
@@ -1053,6 +1153,58 @@ interface CategoricalPictogramLegend extends LegendBase {
   labels: LegendTextElement,
 }
 
+interface BivariateChoroplethLegend extends LegendBase {
+  type: LegendType.bivariateChoropleth,
+  // Whether to display the labels
+  displayLabels: boolean,
+  // Whether to display the break values
+  displayBreakValues: boolean,
+  // The space (horizontal and vertical) between the boxes
+  boxSpacing: number,
+  // The width of each box
+  boxWidth: number,
+  // The height of each box
+  boxHeight: number,
+  // The corner radius of each box (rx and ry of each rect)
+  boxCornerRadius: number,
+  // The stroke width of each box (0 for no stroke)
+  boxStrokeWidth: number,
+  // Whether to display the no-data box
+  noDataBox: boolean,
+}
+
+interface BivariateChoroplethScatterplotLegend extends LegendBase {
+  type: LegendType.bivariateChoroplethScatterplot,
+  // The width of the scatter plot
+  width: number,
+  // The height of the scatter plot
+  height: number,
+  // The properties of the text in the chart axis
+  axis: LegendTextElement,
+  // The rounding of the values displayed on the axes
+  roundDecimals: number,
+  // The color of the regression line
+  regressionLineColor: string,
+  // Whether to display the confidence interval
+  confidenceInterval: boolean,
+  // The color of the confidence interval
+  confidenceIntervalColor: string,
+  // Whether to display the regression line
+  displayRegressionLine: boolean,
+  // Whether to display the count by class on the chart
+  displayCountByClass: boolean,
+}
+
+interface TrivariateChoroplethLegend extends LegendBase {
+  type: LegendType.trivariateChoropleth,
+  // The width of the triangle (the height is computed automatically)
+  width: number,
+  // Whether to display the no-data box
+  noDataBox: boolean,
+  // Where to put the axis labels
+  axisLabelsPosition: 'edge' | 'corner',
+}
+
 export type Legend = (
   ChoroplethLegend
   | CategoricalChoroplethLegend
@@ -1081,6 +1233,9 @@ export interface IZoomable {
 export enum LegendType {
   default = 'default',
   choropleth = 'choropleth',
+  bivariateChoropleth = 'bivariateChoropleth',
+  bivariateChoroplethScatterplot = 'bivariateChoroplethScatterplot',
+  trivariateChoropleth = 'trivariateChoropleth',
   proportional = 'proportional',
   categoricalChoropleth = 'categoricalChoropleth',
   categoricalPictogram = 'categoricalPictogram',

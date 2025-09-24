@@ -844,6 +844,8 @@ const es = {
       Grid: 'Cuadriculación',
       Links: 'Enlaces',
       Mushrooms: 'Hongos',
+      BivariateChoropleth: 'Coroplético bivariada',
+      TrivariateChoropleth: 'Coroplético trivariada',
       PointAggregation: 'Agregación de una serie de puntos',
       LineAggregation: 'Agregación de líneas',
       SimpleLinearRegression: 'Regresión lineal simple',
@@ -875,6 +877,12 @@ const es = {
       CustomPalette: 'paleta personalizada',
       DisplayChartOnMap: 'Mostrar un gráfico resumen de clases en el mapa',
       NewLayerName: 'Coroplético_{variable}_{layerName}',
+    },
+    BivariateChoroplethOptions: {
+      NewLayerName: 'BiChoro_{variable1}_{variable2}_{layerName}',
+    },
+    TrivariateChoroplethOptions: {
+      NewLayerName: 'TriChoro_{variable1}_{variable2}_{variable3}_{layerName}',
     },
     ProportionalSymbolsOptions: {
       ReferenceSize: 'Tamaño de referencia (px)',
@@ -1225,7 +1233,6 @@ const es = {
     TextAnchorMiddle: 'Medio',
     TextAnchorEnd: 'Fin',
     TextAnchorTop: 'Superior',
-    TextAnchorBottom: 'Inferior',
     TextAnchorBottom: 'Inferior',
     FontStyle: 'Estilo de fuente',
     FontWeight: 'Grosor de fuente',

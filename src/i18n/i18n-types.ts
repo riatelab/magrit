@@ -3633,6 +3633,14 @@ type RootTranslation = {
 			 */
 			Mushrooms: string
 			/**
+			 * B​i​v​a​r​i​a​t​e​ ​c​h​o​r​o​p​l​e​t​h
+			 */
+			BivariateChoropleth: string
+			/**
+			 * T​r​i​v​a​r​i​a​t​e​ ​c​h​o​r​o​p​l​e​t​h
+			 */
+			TrivariateChoropleth: string
+			/**
 			 * P​o​i​n​t​ ​l​a​y​e​r​ ​a​g​g​r​e​g​a​t​i​o​n
 			 */
 			PointAggregation: string
@@ -3747,6 +3755,25 @@ type RootTranslation = {
 			 * @param {unknown} variable
 			 */
 			NewLayerName: RequiredParams<'layerName' | 'variable'>
+		}
+		BivariateChoroplethOptions: {
+			/**
+			 * B​i​C​h​o​r​o​_​{​v​a​r​i​a​b​l​e​1​}​_​{​v​a​r​i​a​b​l​e​2​}​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 * @param {unknown} variable1
+			 * @param {unknown} variable2
+			 */
+			NewLayerName: RequiredParams<'layerName' | 'variable1' | 'variable2'>
+		}
+		TrivariateChoroplethOptions: {
+			/**
+			 * T​r​i​C​h​o​r​o​_​{​v​a​r​i​a​b​l​e​1​}​_​{​v​a​r​i​a​b​l​e​2​}​_​{​v​a​r​i​a​b​l​e​3​}​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 * @param {unknown} variable1
+			 * @param {unknown} variable2
+			 * @param {unknown} variable3
+			 */
+			NewLayerName: RequiredParams<'layerName' | 'variable1' | 'variable2' | 'variable3'>
 		}
 		ProportionalSymbolsOptions: {
 			/**
@@ -9801,6 +9828,14 @@ export type TranslationFunctions = {
 			 */
 			Mushrooms: () => LocalizedString
 			/**
+			 * Bivariate choropleth
+			 */
+			BivariateChoropleth: () => LocalizedString
+			/**
+			 * Trivariate choropleth
+			 */
+			TrivariateChoropleth: () => LocalizedString
+			/**
 			 * Point layer aggregation
 			 */
 			PointAggregation: () => LocalizedString
@@ -9912,6 +9947,18 @@ export type TranslationFunctions = {
 			 * Choro_{variable}_{layerName}
 			 */
 			NewLayerName: (arg: { layerName: unknown, variable: unknown }) => LocalizedString
+		}
+		BivariateChoroplethOptions: {
+			/**
+			 * BiChoro_{variable1}_{variable2}_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown, variable1: unknown, variable2: unknown }) => LocalizedString
+		}
+		TrivariateChoroplethOptions: {
+			/**
+			 * TriChoro_{variable1}_{variable2}_{variable3}_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown, variable1: unknown, variable2: unknown, variable3: unknown }) => LocalizedString
 		}
 		ProportionalSymbolsOptions: {
 			/**
