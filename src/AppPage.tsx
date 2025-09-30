@@ -296,17 +296,32 @@ const reloadFromProjectObject = async (
     map,
     tables,
   } = patchProject(obj);
-
+  // Are we in Firefox ?
+  // We need to know that for issue #164 (https://github.com/riatelab/magrit/issues/164)
+  // On FireFox, after reloading a project, the map is not always displayed correctly
+  // when there is a Shadow on a layer of the map.
+  const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
   // Reset the application settings store
   setApplicationSettingsStore(applicationSettings);
-  // Reset the layers description store before changing the map store
-  // (this avoid redrawing the map for the potential current layers)
-  setLayersDescriptionStore({ layers: [], layoutFeaturesAndLegends: [], tables: [] });
-  // Update the layer description store with the layers and layout features
-  setLayersDescriptionStore({ layers, layoutFeaturesAndLegends, tables });
-  // Update the map store
-  // (this updates the projection and pathGenerator in the global store)
-  setMapStoreBase(map);
+  if (!isFirefox) {
+    // Reset the layers description store before changing the map store
+    // (this avoid redrawing the map for the potential current layers)
+    setLayersDescriptionStore({ layers: [], layoutFeaturesAndLegends: [], tables: [] });
+    // Update the layer description store with the layers and layout features
+    setLayersDescriptionStore({ layers, layoutFeaturesAndLegends, tables });
+    // Update the map store
+    // (this updates the projection and pathGenerator in the global store)
+    setMapStoreBase(map);
+  } else {
+    // Update the map store
+    // (this updates the projection and pathGenerator in the global store)
+    setMapStoreBase(map);
+    // Reset the layers description store after changing the map store
+    // (this helps with issue #164)
+    setLayersDescriptionStore({ layers: [], layoutFeaturesAndLegends: [], tables: [] });
+    // Update the layer description store with the layers and layout features
+    setLayersDescriptionStore({ layers, layoutFeaturesAndLegends, tables });
+  }
   // Reverse the "userHasAddedLayer" flag
   setGlobalStore({ userHasAddedLayer: true });
   // Hide the loading overlay
