@@ -12,6 +12,16 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.3.8 (unreleased)
+
+- Permet la désactivation d'une (ou plusieurs) catégories pour les cartes choroplèthes catégorielles et de pictogrammes (corrige <a href="https://github.com/riatelab/magrit/issues/166">l'issue 166</a>).
+
+- Corrige le bug d'affichage des couches avec une ombre lors du rechargement d'un fichier projet sur Firefox (corrige <a href="https://github.com/riatelab/magrit/issues/164">l'issue 164</a>).
+
+- Corrige le changement de la taille de référence pour les couches de liens proportionnels.
+
+- Corrige les types de légendes proposées pour les couches de liens proportionnels (un type supplémentaire inactif était proposé).
+
 #### 2.3.7 (2025-07-29)
 
 - Améliore l'export SVG pour que les différents groupes soient détectés comme des couches dans Inkscape (corrige <a href="https://github.com/riatelab/magrit/issues/160">l'issue 160</a>).

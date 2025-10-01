@@ -12,6 +12,16 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.3.8 (unreleased)
+
+- Allow the deactivation of one (or more) categories for categorical choropleth maps and pictograms (fixes <a href="https://github.com/riatelab/magrit/issues/166">issue 166</a>).
+
+- Fix the display bug when reloading a project file in Firefox that contains layers with shadow (fixes <a href="https://github.com/riatelab/magrit/issues/164">issue 164</a>).
+
+- Fix the change in reference size for proportional link layers.
+
+- Fix the legend types offered for proportional link layers (an additional inactive type was offered).
+
 #### 2.3.7 (2025-07-29)
 
 - Improve SVG export so that different groups are detected as layers in Inkscape (fixes <a href="https://github.com/riatelab/magrit/issues/160">issue 160</a>).
