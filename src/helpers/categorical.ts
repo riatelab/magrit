@@ -58,6 +58,7 @@ export const makeCategoriesMapping = (
       // eslint-disable-next-line no-plusplus
       color: isNonNull(c[0]) ? colors[j++] : '',
       count: c[1],
+      show: true,
     }))
     .sort((a, b) => (a.categoryName || '').localeCompare(b.categoryName || ''));
 };
@@ -72,5 +73,6 @@ export const makePictoCategoriesMapping = (
     iconType: 'SVG',
     iconContent: images[i % images.length],
     iconDimension: [50, 50],
+    show: true,
   } as CategoricalPictogramMapping))
   .sort((a, b) => (a.categoryName || '').localeCompare(b.categoryName || ''));

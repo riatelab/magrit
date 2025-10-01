@@ -92,6 +92,7 @@ function verticalLegend(legendParameters: CategoricalChoroplethLegend): JSX.Elem
 
   const labelsAndColors = createMemo(
     () => rendererParameters.mapping
+      .filter((m) => m.show)
       .map(({ categoryName, color }) => [categoryName, color])
       // No data information has been stored with null value / null category name
       .filter(([categoryName]) => categoryName !== null),

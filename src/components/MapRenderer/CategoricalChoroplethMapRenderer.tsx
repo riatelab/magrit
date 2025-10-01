@@ -39,13 +39,20 @@ export function categoricalChoroplethPolygonRenderer(
   const colorsMap = createMemo(
     () => {
       const map = new Map<string | number | null | undefined, string>(
-        rendererParameters().mapping.map(({ value, color }) => [value, color]),
+        rendererParameters().mapping
+          .map(({ value, color }) => [value, color]),
       );
       map.set('', rendererParameters().noDataColor);
       map.set(null, rendererParameters().noDataColor);
       map.set(undefined, rendererParameters().noDataColor);
       return map;
     },
+  );
+
+  const noShow = createMemo(
+    () => new Set(rendererParameters().mapping
+      .filter((m) => !m.show)
+      .map((m) => m.value)),
   );
 
   return <g
@@ -69,7 +76,10 @@ export function categoricalChoroplethPolygonRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
   >
-    <For each={d3.geoStitch(layerDescription.data).features}>
+    <For each={
+      d3.geoStitch(layerDescription.data).features
+        .filter((f) => !noShow().has(f.properties[layerDescription.rendererParameters.variable]))
+    }>
       {
         (feature) => <path
           fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
@@ -93,13 +103,20 @@ export function categoricalChoroplethPointRenderer(
   const colorsMap = createMemo(
     () => {
       const map = new Map<string | number | null | undefined, string>(
-        rendererParameters().mapping.map(({ value, color }) => [value, color]),
+        rendererParameters().mapping
+          .map(({ value, color }) => [value, color]),
       );
       map.set('', rendererParameters().noDataColor);
       map.set(null, rendererParameters().noDataColor);
       map.set(undefined, rendererParameters().noDataColor);
       return map;
     },
+  );
+
+  const noShow = createMemo(
+    () => new Set(rendererParameters().mapping
+      .filter((m) => !m.show)
+      .map((m) => m.value)),
   );
 
   return <g
@@ -120,7 +137,10 @@ export function categoricalChoroplethPointRenderer(
     mgt:symbol-size={layerDescription.symbolSize}
     mgt:symbol-type={layerDescription.symbolType}
   >
-    <For each={layerDescription.data.features}>
+    <For each={
+      layerDescription.data.features
+        .filter((f) => !noShow().has(f.properties[layerDescription.rendererParameters.variable]))
+    }>
       {
         (feature) => <path
           fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
@@ -150,13 +170,20 @@ export function categoricalChoroplethLineRenderer(
   const colorsMap = createMemo(
     () => {
       const map = new Map<string | number | null | undefined, string>(
-        rendererParameters().mapping.map(({ value, color }) => [value, color]),
+        rendererParameters().mapping
+          .map(({ value, color }) => [value, color]),
       );
       map.set('', rendererParameters().noDataColor);
       map.set(null, rendererParameters().noDataColor);
       map.set(undefined, rendererParameters().noDataColor);
       return map;
     },
+  );
+
+  const noShow = createMemo(
+    () => new Set(rendererParameters().mapping
+      .filter((m) => !m.show)
+      .map((m) => m.value)),
   );
 
   return <g
@@ -174,7 +201,10 @@ export function categoricalChoroplethLineRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
   >
-    <For each={layerDescription.data.features}>
+    <For each={
+      layerDescription.data.features
+        .filter((f) => !noShow().has(f.properties[layerDescription.rendererParameters.variable]))
+    }>
       {
         (feature) => <path
           stroke={

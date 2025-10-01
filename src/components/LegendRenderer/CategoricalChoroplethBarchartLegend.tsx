@@ -49,14 +49,24 @@ function CategoriesPlot(
     width: number,
   },
 ): JSX.Element {
-  const domain = createMemo(() => props.mapping.filter((m) => m.value).map((m) => m.categoryName));
-  const range = createMemo(() => props.mapping.filter((m) => m.value).map((m) => m.color));
-  const data = createMemo(() => props.mapping.filter((m) => m.value).map((m, i) => ({
-    position: i,
-    category: m.categoryName,
-    color: m.color,
-    frequency: m.count,
-  })));
+  const domain = createMemo(() => props.mapping
+    .filter((m) => m.show)
+    .filter((m) => m.value)
+    .map((m) => m.categoryName));
+  const range = createMemo(() => props.mapping
+    .filter((m) => m.show)
+    .filter((m) => m.value)
+    .map((m) => m.color));
+  const data = createMemo(() => props.mapping
+    .filter((m) => m.show)
+    .filter((m) => m.value)
+    .map((m, i) => ({
+      position: i,
+      category: m.categoryName,
+      color: m.color,
+      frequency: m.count,
+    })));
+
   const sizeLargestLabel = createMemo(() => Math.max(
     ...props.mapping.map((m) => getTextSize(
       m.categoryName || '',
