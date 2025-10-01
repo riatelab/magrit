@@ -58,13 +58,14 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
       ]
     },
     {
-      text: 'Tutoriels',
+      text: 'Ressources pédagogiques',
       collapsed: true,
       items: [
         // { text: 'Premier pas avec Magrit (exemple 1)', link: '/tutorials/tuto1' },
-        { text: 'Premier pas avec Magrit (exemple 1)', link: '/tutorials/tuto2' },
+        { text: 'Premier pas avec Magrit (tutoriel)', link: '/tutorials/tuto2' },
         // { text: 'Utilisation de fonctionnalités avancées de Magrit', link: 'tutorials/tuto3' },
         { text: 'Démonstration vidéo', link: '/tutorials/video' },
+        { text: 'Supports de formation', link: '/tutorials/training-materials' },
       ],
     },
     { text: 'Questions fréquemment posées', link: '/faq' },
@@ -133,13 +134,14 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
       ]
     },
     {
-      text: 'Tutorials',
+      text: 'Educational resources',
       collapsed: true,
       items: [
         // { text: 'Getting started with Magrit (example 1)', link: '/en/tutorials/tuto1' },
-        { text: 'Getting started with Magrit (example 1)', link: '/en/tutorials/tuto2' },
+        { text: 'Getting started with Magrit (tutorial)', link: '/en/tutorials/tuto2' },
         // { text: 'Using Magrit advanced features', link: '/en/tutorials/tuto3' },
         { text: 'Video demonstration', link: '/en/tutorials/video' },
+        { text: 'Training materials', link: '/en/tutorials/training-materials' },
       ],
     },
     { text: 'Frequently asked questions', link: '/en/faq' },

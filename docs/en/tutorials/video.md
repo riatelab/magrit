@@ -1,4 +1,4 @@
-# Video tutorial
+# Video demo
 
 The following video (no audio) shows the various steps involved in creating a simple thematic map with Magrit.
 

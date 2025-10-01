@@ -1,4 +1,4 @@
-# Tutoriel vidéo
+# Démonstration vidéo
 
 La vidéo suivante (pas d'audio) présente les différentes étapes pour réaliser une carte thématique simple avec Magrit.
 
