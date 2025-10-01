@@ -22,6 +22,8 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 - Corrige les types de légendes proposées pour les couches de liens proportionnels (un type supplémentaire inactif était proposé).
 
+- Ajout de liens vers des ressources pédagogiques dans la documentation.
+
 #### 2.3.7 (2025-07-29)
 
 - Améliore l'export SVG pour que les différents groupes soient détectés comme des couches dans Inkscape (corrige <a href="https://github.com/riatelab/magrit/issues/160">l'issue 160</a>).
