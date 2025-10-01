@@ -24,6 +24,9 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 - Add links to educational resources in the documentation.
 
+- Reset the type of a field after one of its values has been modified in the data table
+  (for example, if a field contained both numeric and text values and all text values are deleted, the field will be typed as numeric).
+
 #### 2.3.7 (2025-07-29)
 
 - Improve SVG export so that different groups are detected as layers in Inkscape (fixes <a href="https://github.com/riatelab/magrit/issues/160">issue 160</a>).
