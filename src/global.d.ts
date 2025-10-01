@@ -1171,6 +1171,12 @@ interface BivariateChoroplethLegend extends LegendBase {
   boxStrokeWidth: number,
   // Whether to display the no-data box
   noDataBox: boolean,
+  // Whether to rotate the legend by 45 degrees
+  rotate: boolean,
+  // The text properties of the labels (and no-data label if any)
+  labels: LegendTextElement,
+  // The text properties of the break values
+  breakValues: LegendTextElement,
 }
 
 interface BivariateChoroplethScatterplotLegend extends LegendBase {
@@ -1203,6 +1209,10 @@ interface TrivariateChoroplethLegend extends LegendBase {
   noDataBox: boolean,
   // Where to put the axis labels
   axisLabelsPosition: 'edge' | 'corner',
+  // The text properties of the labels (and no-data label if any)
+  labels: LegendTextElement,
+  // The text properties of the break values
+  breakValues: LegendTextElement,
 }
 
 export type Legend = (
