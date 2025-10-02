@@ -1,6 +1,8 @@
 import semver from 'semver';
 import { version } from '../../package.json';
 import {
+  type CategoricalChoroplethParameters,
+  type CategoricalPictogramParameters,
   LayoutFeatureType,
   type LegendBase,
   type ProjectDescription,
@@ -76,6 +78,23 @@ export const patchProject = (
     console.log('Patching project to version 2.3.0');
     // eslint-disable-next-line no-param-reassign
     project.applicationSettings.intervalClosure = 'right';
+  }
+  // In version 2.3.8, we added the possibility to disabled category/categories
+  // in categorical choropleth and categorical symbol maps.
+  if (semver.lt(projectVersion, '2.3.8')) {
+    console.log('Patching project to version 2.3.8');
+    project.layers.forEach((layer) => {
+      if (layer.representationType === 'categoricalChoropleth' || layer.representationType === 'categoricalPictogram') {
+        (
+          layer.rendererParameters as
+            (CategoricalChoroplethParameters | CategoricalPictogramParameters))
+          .mapping
+          .forEach((category) => {
+            // eslint-disable-next-line no-param-reassign
+            category.show = true;
+          });
+      }
+    });
   }
   return project;
 };

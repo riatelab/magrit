@@ -16,6 +16,7 @@ import type { Feature, FeatureCollection } from 'geojson';
 import AgGridSolid, { AgGridSolidRef } from 'ag-grid-solid';
 import 'ag-grid-community/styles/ag-grid.min.css'; // grid core CSS
 import 'ag-grid-community/styles/ag-theme-quartz.min.css'; // theme
+
 // Imports from other packages
 import alasql from 'alasql';
 import { type AllGeoJSON, area } from '@turf/turf';
@@ -321,15 +322,29 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
       const fieldsToRemove = dsDescription.fields
         .filter((f) => !newFieldsName.includes(f.name));
 
+      // Prepare the new fields description
+      const newFields = dsDescription.fields
+        .map((f) => {
+          // If a cell value has been changed, we may need to update the field description
+          // (for example if the user has changed has removed the only string value in a column
+          // of numbers, we need to update the field description to set the dataType to 'number')
+          if (newFieldsName.includes(f.name)) {
+            const values = newData.features.map((d) => d.properties![f.name]);
+            const t = detectTypeField(values as never[], f.name);
+            return { ...f, hasMissingValues: t.hasMissingValues, dataType: t.dataType };
+          }
+          return f;
+        })
+        .concat(newVariables)
+        .filter((v) => !fieldsToRemove.includes(v));
+
       // Update the description of the layer fields
       setLayersDescriptionStore(
         'layers',
         (l: LayerDescription) => l.id === dsDescription.id,
         {
           data: newData,
-          fields: dsDescription.fields
-            .concat(newVariables)
-            .filter((v) => !fieldsToRemove.includes(v)),
+          fields: newFields,
         },
       );
     };
@@ -347,15 +362,29 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
       const fieldsToRemove = dsDescription.fields
         .filter((f) => !newFieldsName.includes(f.name));
 
+      // Prepare the new fields description
+      const newFields = dsDescription.fields
+        .map((f) => {
+          // If a cell value has been changed, we may need to update the field description
+          // (for example if the user has changed has removed the only string value in a column
+          // of numbers, we need to update the field description to set the dataType to 'number')
+          if (newFieldsName.includes(f.name)) {
+            const values = newData.map((d) => d[f.name]);
+            const t = detectTypeField(values as never[], f.name);
+            return { ...f, hasMissingValues: t.hasMissingValues, dataType: t.dataType };
+          }
+          return f;
+        })
+        .concat(newVariables)
+        .filter((v) => !fieldsToRemove.includes(v));
+
       // Update the description of the layer fields
       setLayersDescriptionStore(
         'tables',
         (t: TableDescription) => t.id === dsDescription.id,
         {
           data: newData,
-          fields: dsDescription.fields
-            .concat(newVariables)
-            .filter((v) => !fieldsToRemove.includes(v)),
+          fields: newFields,
         },
       );
     };

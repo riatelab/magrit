@@ -1,12 +1,13 @@
 // Imports from solid-js
 import {
   createMemo, createSignal,
-  For, type JSX,
-  mergeProps, Show,
+  For, type JSX, Match,
+  mergeProps, Show, Switch,
 } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 // Import from other libraries
+import { FaSolidEye, FaSolidEyeSlash } from 'solid-icons/fa';
 import { BsThreeDotsVertical } from 'solid-icons/bs';
 import * as Plot from '@observablehq/plot';
 import Sortable from 'solid-sortablejs';
@@ -44,14 +45,18 @@ export function CategoriesPlot(
   );
   const mapping = createMemo(() => mergedProps.mapping.filter((m) => isNonNull(m.value)));
 
-  const domain = createMemo(() => mapping().map((m) => m.categoryName));
-  const range = createMemo(() => Array.from({ length: mapping().length }, randomColor));
-  const data = createMemo(() => mapping().map((m, i) => ({
-    position: i,
-    category: m.categoryName,
-    color: range()[i],
-    frequency: m.count,
-  })));
+  const domain = createMemo(() => mapping()
+    .filter((m) => m.show)
+    .map((m) => m.categoryName));
+  const range = createMemo(() => Array.from({ length: domain().length }, randomColor));
+  const data = createMemo(() => mapping()
+    .filter((m) => m.show)
+    .map((m, i) => ({
+      position: i,
+      category: m.categoryName,
+      color: range()[i],
+      frequency: m.count,
+    })));
 
   return <div>
     {
@@ -267,103 +272,125 @@ export function CategoriesCustomisation(
       disabled={disabled()}
     >
       {
-        (item) => <div>
+        (item) => <div
+          style={{
+            width: '100%',
+            border: 'solid 0.5px currentColor',
+            display: 'flex',
+            'align-items': 'center',
+            gap: '0.3em',
+          }}
+        >
+          <BsThreeDotsVertical style={{ cursor: 'grab' }} />
+          <Switch>
+            <Match when={item.show}>
+              <FaSolidEye
+                style={{ cursor: 'pointer', padding: '0.5em' }}
+                onClick={() => {
+                  props.setMapping(
+                    props.mapping()
+                      .map((m) => (m.value === item.value ? { ...m, show: false } : m)),
+                  );
+                }}
+              />
+            </Match>
+            <Match when={!item.show}>
+              <FaSolidEyeSlash
+                style={{ cursor: 'pointer', padding: '0.5em' }}
+                onClick={() => {
+                  props.setMapping(
+                    props.mapping()
+                      .map((m) => (m.value === item.value ? { ...m, show: true } : m)),
+                  );
+                }}
+              />
+            </Match>
+          </Switch>
           <div
             style={{
-              width: '100%',
-              border: 'solid 0.5px currentColor',
+              display: 'inline-block',
+              height: '2.5em',
+              width: '2.5em',
+              'background-color': 'whitesmoke',
+              'background-image': getBackgroundValue(item),
+              'background-repeat': 'no-repeat',
+              'background-size': 'cover',
+              'background-position': 'bottom center, 50%, 50%',
+            }}
+            onClick={(e) => {
+              setOverlayParams({
+                position: [e.clientX, e.clientY],
+                icon: { type: item.iconType, content: item.iconContent },
+                setIcon: (icon) => {
+                  props.setMapping(
+                    props.mapping()
+                      .map((m) => (
+                        m.value === item.value
+                          ? { ...m, iconType: icon.type, iconContent: icon.content }
+                          : m
+                      )),
+                  );
+                },
+                close: () => setOverlayParams(null),
+              });
+            }}
+          ></div>
+          <input
+            type="text"
+            style={{ height: '3em', width: '40%' }}
+            value={item.categoryName || ''}
+            onChange={(e) => {
+              props.setMapping(
+                props.mapping()
+                  .map((m) => (
+                    m.value === item.value ? { ...m, categoryName: e.target.value } : m)),
+              );
+              setDisabled(false);
+            }}
+            onFocus={() => { setDisabled(true); }}
+            onFocusOut={() => { setDisabled(false); }}
+          />
+          <div
+            style={{
+              'border-right': 'solid 1px currentColor',
+              height: '3em',
               display: 'flex',
               'align-items': 'center',
-              gap: '0.3em',
+              'padding-right': '0.5em',
             }}
           >
-            <BsThreeDotsVertical style={{ cursor: 'grab' }} />
-            <div
-              style={{
-                display: 'inline-block',
-                height: '2.5em',
-                width: '2.5em',
-                'background-color': 'whitesmoke',
-                'background-image': getBackgroundValue(item),
-                'background-repeat': 'no-repeat',
-                'background-size': 'cover',
-                'background-position': 'bottom center, 50%, 50%',
-              }}
-              onClick={(e) => {
-                setOverlayParams({
-                  position: [e.clientX, e.clientY],
-                  icon: { type: item.iconType, content: item.iconContent },
-                  setIcon: (icon) => {
-                    props.setMapping(
-                      props.mapping()
-                        .map((m) => (
-                          m.value === item.value
-                            ? { ...m, iconType: icon.type, iconContent: icon.content }
-                            : m
-                        )),
-                    );
-                  },
-                  close: () => setOverlayParams(null),
-                });
-              }}
-            ></div>
             <input
-              type="text"
-              style={{ height: '3em', width: '40%' }}
-              value={item.categoryName || ''}
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              value={item.iconDimension[0]}
               onChange={(e) => {
+                const v = parseInt(e.target.value, 10);
                 props.setMapping(
                   props.mapping()
                     .map((m) => (
-                      m.value === item.value ? { ...m, categoryName: e.target.value } : m)),
+                      m.value === item.value
+                        ? { ...m, iconDimension: [v, v] }
+                        : m
+                    )),
                 );
                 setDisabled(false);
               }}
               onFocus={() => { setDisabled(true); }}
               onFocusOut={() => { setDisabled(false); }}
+              style={{ width: '4em' }}
             />
-            <div
-              style={{
-                'border-right': 'solid 1px currentColor',
-                height: '3em',
-                display: 'flex',
-                'align-items': 'center',
-                'padding-right': '0.5em',
-              }}
-            >
-              <input
-                type="number"
-                min="0"
-                max="100"
-                step="1"
-                value={item.iconDimension[0]}
-                onChange={(e) => {
-                  const v = parseInt(e.target.value, 10);
-                  props.setMapping(
-                    props.mapping()
-                      .map((m) => (
-                        m.value === item.value
-                          ? { ...m, iconDimension: [v, v] }
-                          : m
-                      )),
-                  );
-                  setDisabled(false);
-                }}
-                onFocus={() => { setDisabled(true); }}
-                onFocusOut={() => { setDisabled(false); }}
-                style={{ width: '4em' }}
-              />
-              px
-            </div>
-            <Show when={props.detailed}>
-            <div style={{ width: 'calc(100% - (40% + 4em))' }}>
-              &nbsp;({ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Value() }
-              &nbsp;{item.value} -
-              &nbsp;{ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Count() }
-              &nbsp;{item.count})
-            </div>
-            </Show>
+            px
           </div>
+          <Show when={props.detailed}>
+          <div style={{ width: 'calc(100% - (40% + 4em))' }}>
+            &nbsp;({ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Value() }
+            &nbsp;{item.value} -
+            &nbsp;{ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Count() }
+            &nbsp;{item.count})
+          </div>
+          </Show>
         </div>
       }
     </Sortable>

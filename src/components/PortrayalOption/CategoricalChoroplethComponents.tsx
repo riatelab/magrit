@@ -1,11 +1,15 @@
 // Imports from solid-js
 import {
   createMemo, createSignal,
-  JSX, mergeProps, Show,
+  JSX, Match, mergeProps, Show, Switch,
 } from 'solid-js';
 
 // Import from other libraries
-import { FaSolidArrowRight } from 'solid-icons/fa';
+import {
+  FaSolidArrowRight,
+  FaSolidEye,
+  FaSolidEyeSlash,
+} from 'solid-icons/fa';
 import { BsThreeDotsVertical } from 'solid-icons/bs';
 import * as Plot from '@observablehq/plot';
 import Sortable from 'solid-sortablejs';
@@ -58,14 +62,20 @@ export function CategoriesPlot(
   );
   const mapping = createMemo(() => mergedProps.mapping.filter((m) => isNonNull(m.value)));
 
-  const domain = createMemo(() => mapping().map((m) => m.categoryName));
-  const range = createMemo(() => mapping().map((m) => m.color));
-  const data = createMemo(() => mapping().map((m, i) => ({
-    position: i,
-    category: m.categoryName,
-    color: m.color,
-    frequency: m.count,
-  })));
+  const domain = createMemo(() => mapping()
+    .filter((m) => m.show)
+    .map((m) => m.categoryName));
+  const range = createMemo(() => mapping()
+    .filter((m) => m.show)
+    .map((m) => m.color));
+  const data = createMemo(() => mapping()
+    .filter((m) => m.show)
+    .map((m, i) => ({
+      position: i,
+      category: m.categoryName,
+      color: m.color,
+      frequency: m.count,
+    })));
   return <div>
     {
       Plot.plot({
@@ -145,46 +155,69 @@ export function CategoriesCustomisation(
       disabled={disabled()}
     >
       {
-        (item) => <div>
-          <div
-            style={{ width: '100%', border: 'solid 0.5px currentColor' }}
-          >
-            <BsThreeDotsVertical style={{ cursor: 'grab' }} />
-            <input
-              type="color"
-              style={{ height: '2em', 'vertical-align': 'bottom' }}
-              value={item.color}
-              onChange={(e) => {
-                props.setMapping(
-                  props.mapping()
-                    .map((m) => (m.value === item.value ? { ...m, color: e.target.value } : m)),
-                );
-              }}
-            />
-            <input
-              type="text"
-              style={{ height: '2em', width: '45%' }}
-              value={item.categoryName || ''}
-              onChange={(e) => {
-                props.setMapping(
-                  props.mapping()
-                    .map((m) => (
-                      m.value === item.value ? { ...m, categoryName: e.target.value } : m)),
-                );
-                setDisabled(false);
-              }}
-              onFocus={() => { setDisabled(true); }}
-              onFocusOut={() => { setDisabled(false); }}
-            />
-            <Show when={props.detailed}>
-              <span>
-                &nbsp;({ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Value() }
-                &nbsp;{item.value} -
-                &nbsp;{ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Count() }
-                &nbsp;{item.count})
-              </span>
-            </Show>
-          </div>
+        (item) => <div
+          style={{ width: '100%', border: 'solid 0.5px currentColor' }}
+          class="is-flex is-align-items-center"
+        >
+          <BsThreeDotsVertical style={{ cursor: 'grab' }} />
+          <Switch>
+            <Match when={item.show}>
+              <FaSolidEye
+                style={{ cursor: 'pointer', padding: '0.5em' }}
+                onClick={() => {
+                  props.setMapping(
+                    props.mapping()
+                      .map((m) => (m.value === item.value ? { ...m, show: false } : m)),
+                  );
+                }}
+              />
+            </Match>
+            <Match when={!item.show}>
+              <FaSolidEyeSlash
+                style={{ cursor: 'pointer', padding: '0.5em' }}
+                onClick={() => {
+                  props.setMapping(
+                    props.mapping()
+                      .map((m) => (m.value === item.value ? { ...m, show: true } : m)),
+                  );
+                }}
+              />
+            </Match>
+          </Switch>
+          <input
+            type="color"
+            style={{ height: '2em', 'vertical-align': 'bottom', border: 0 }}
+            value={item.color}
+            onChange={(e) => {
+              props.setMapping(
+                props.mapping()
+                  .map((m) => (m.value === item.value ? { ...m, color: e.target.value } : m)),
+              );
+            }}
+          />
+          <input
+            type="text"
+            style={{ height: '2em', width: '45%' }}
+            value={item.categoryName || ''}
+            onChange={(e) => {
+              props.setMapping(
+                props.mapping()
+                  .map((m) => (
+                    m.value === item.value ? { ...m, categoryName: e.target.value } : m)),
+              );
+              setDisabled(false);
+            }}
+            onFocus={() => { setDisabled(true); }}
+            onFocusOut={() => { setDisabled(false); }}
+          />
+          <Show when={props.detailed}>
+            <span>
+              &nbsp;({ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Value() }
+              &nbsp;{item.value} -
+              &nbsp;{ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Count() }
+              &nbsp;{item.count})
+            </span>
+          </Show>
         </div>
       }
     </Sortable>

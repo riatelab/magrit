@@ -456,6 +456,8 @@ export interface CategoricalChoroplethMapping {
   categoryName: string | null,
   color: string,
   count: number,
+  // Whether to show this category or not
+  show: boolean,
 }
 
 export interface GraticuleParameters {
@@ -591,6 +593,8 @@ interface CategoricalPictogramMapping {
   iconDimension: [number, number],
   // The number of values for this category
   count: number,
+  // Whether to show this category or not
+  show: boolean,
 }
 
 interface CategoricalPictogramParameters {

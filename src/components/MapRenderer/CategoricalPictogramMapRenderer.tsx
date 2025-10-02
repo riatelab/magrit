@@ -46,6 +46,12 @@ export default function categoricalPictogramRenderer(
     },
   );
 
+  const noShow = createMemo(
+    () => new Set(layerDescription.rendererParameters.mapping
+      .filter((m) => !m.show)
+      .map((m) => m.value)),
+  );
+
   return <g
     ref={refElement!}
     id={layerDescription.id}
@@ -65,7 +71,11 @@ export default function categoricalPictogramRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
   >
-    <For each={layerDescription.data.features}>
+    <For each={
+      layerDescription.data.features
+        .filter((ft) => !noShow()
+          .has(ft.properties[layerDescription.rendererParameters.variable]))
+    }>
       {
         (feature) => {
           const icon = createMemo(() => symbolMap()

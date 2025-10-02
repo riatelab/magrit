@@ -43,7 +43,9 @@ export default function legendCategoricalPictogram(
   ) as LayerDescriptionCategoricalPictogram;
 
   const mapping = createMemo(
-    () => layer.rendererParameters.mapping.filter((m) => isNonNull(m.value)),
+    () => layer.rendererParameters.mapping
+      .filter((m) => m.show)
+      .filter((m) => isNonNull(m.value)),
   );
 
   const heightTitle = () => {
