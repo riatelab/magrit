@@ -12,7 +12,7 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
-#### 2.3.8 (unreleased)
+#### 2.3.8 (2025-10-02)
 
 - Permet la désactivation d'une (ou plusieurs) catégories pour les cartes choroplèthes catégorielles et de pictogrammes (corrige <a href="https://github.com/riatelab/magrit/issues/166">l'issue 166</a>).
 

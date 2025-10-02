@@ -12,7 +12,7 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-#### 2.3.8 (unreleased)
+#### 2.3.8 (2025-10-02)
 
 - Allow the deactivation of one (or more) categories for categorical choropleth maps and pictograms (fixes <a href="https://github.com/riatelab/magrit/issues/166">issue 166</a>).
 
