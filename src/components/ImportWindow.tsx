@@ -18,6 +18,7 @@ import toast from 'solid-toast';
 import { AllGeoJSON, bbox as computeBbox } from '@turf/turf';
 import { v4 as uuidv4 } from 'uuid';
 import { info } from 'geoimport';
+import wkt from 'wkt-parser';
 
 // Helpers
 import d3 from '../helpers/d3-custom';
@@ -964,6 +965,28 @@ export default function ImportWindow(): JSX.Element {
               .forEach((ds: DatasetDescription) => {
                 ds.info.layers.forEach((l: LayerOrTableDescription) => {
                   if (l.useCRS) {
+                    // We want to ensure that the CRS has a name
+                    // (this is needed later in the application),
+                    // if not we try to extract it from the WKT
+                    // otherwise we set it to "Unknown"
+                    if (l.crs && l.crs.wkt && !l.crs.name) {
+                      try {
+                        const p = wkt(l.crs.wkt);
+                        if (p.name) {
+                          // eslint-disable-next-line no-param-reassign
+                          l.crs.name = p.name;
+                        } else {
+                          // eslint-disable-next-line no-param-reassign
+                          l.crs.name = 'Unknown';
+                        }
+                      } catch (e) {
+                        // eslint-disable-next-line no-param-reassign
+                        l.crs.name = 'Unknown';
+                      }
+                    } else if (l.crs && !l.crs.name) {
+                      // eslint-disable-next-line no-param-reassign
+                      l.crs.name = 'Unknown';
+                    }
                     crsToUse = l.crs;
                   }
                 });

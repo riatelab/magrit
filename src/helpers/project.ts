@@ -18,9 +18,10 @@ export const patchProject = (
   project: ProjectDescription,
 ): ProjectDescription => {
   const projectVersion = project.version;
-  // It seems that at some point we allowed to save a project
-  // with a user-defined projection, but without specifying
-  // a name for this projection. This was a bug and causes errors
+  // At some point we allowed to save a project with user-defined projections
+  // that don't have a name (when checking the "use this projection" box in
+  // the import window).
+  // This was a bug and causes errors
   // when loading the project again. So here we patch this issue
   // (https://github.com/riatelab/magrit/issues/168)
   // by setting a default name ('User-defined projection') if
