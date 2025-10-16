@@ -5139,15 +5139,13 @@ type RootTranslation = {
 		 */
 		JoinFieldParameters: string
 		/**
-		 * T​a​b​l​e​ ​{​t​a​b​l​e​N​a​m​e​}
-		 * @param {unknown} tableName
+		 * T​a​b​l​e
 		 */
-		JoinFieldTable: RequiredParams<'tableName'>
+		JoinFieldTable: string
 		/**
-		 * L​a​y​e​r​ ​{​l​a​y​e​r​N​a​m​e​}
-		 * @param {unknown} layerName
+		 * L​a​y​e​r
 		 */
-		JoinFieldLayer: RequiredParams<'layerName'>
+		JoinFieldLayer: string
 		/**
 		 * S​e​l​e​c​t​ ​a​ ​f​i​e​l​d
 		 */
@@ -11264,13 +11262,13 @@ export type TranslationFunctions = {
 		 */
 		JoinFieldParameters: () => LocalizedString
 		/**
-		 * Table {tableName}
+		 * Table
 		 */
-		JoinFieldTable: (arg: { tableName: unknown }) => LocalizedString
+		JoinFieldTable: () => LocalizedString
 		/**
-		 * Layer {layerName}
+		 * Layer
 		 */
-		JoinFieldLayer: (arg: { layerName: unknown }) => LocalizedString
+		JoinFieldLayer: () => LocalizedString
 		/**
 		 * Select a field
 		 */

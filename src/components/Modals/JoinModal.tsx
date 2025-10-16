@@ -13,6 +13,7 @@ import {
   Show,
   Switch,
 } from 'solid-js';
+import { createVirtualizer } from '@tanstack/solid-virtual';
 
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
@@ -192,7 +193,6 @@ const checkJoin = async (
       }
     }
   });
-
   return result;
 };
 
@@ -426,67 +426,84 @@ export default function JoinPanel(
 
     const transformFn = getTransformFn(ignoreCase(), normalizeText());
 
+    const duplicateSet = new Set(duplicateArray.map((d) => `${d[idCol]}`));
+    const noMatchSet = new Set(noMatchArray.map((d) => `${d[idCol]}`));
+
     // Duplicate features
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const a1 = dataId.filter(([_, v]) => duplicateArray.find((d) => `${d[idCol]}` === `${v}`));
+    const a1 = dataId.filter(([_, v]) => duplicateSet.has(`${v}`));
 
     // Unmatched features and rows without identifier
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const a2 = dataId.filter(([_, v]) => noMatchArray.find((d) => `${d[idCol]}` === `${v}`) || !isNonNull(v));
+    const a2 = dataId.filter(([_, v]) => noMatchSet.has(`${v}`) || !isNonNull(v));
 
     // Matched features
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const a3 = dataId
       .filter(([_, v]) => (
         isNonNull(v)
-        && !noMatchArray.find((d) => `${d[idCol]}` === `${v}`)
-        && !duplicateArray.find((d) => `${d[idCol]}` === `${v}`)));
+        && !noMatchSet.has(`${v}`)
+        && !duplicateSet.has(`${v}`)
+      ));
 
-    return <div class={'join-panel--table-detail'}>
+    const rows: { i: number, v: any, type: 'duplicate' | 'unmatched' | 'matched' }[] = [
+      ...a1.map(([i, v]) => ({ i, v, type: 'duplicate' })),
+      ...a2.map(([i, v]) => ({ i, v, type: 'unmatched' })),
+      ...a3.map(([i, v]) => ({ i, v, type: 'matched' })),
+    ];
+
+    let parentRef: HTMLDivElement | undefined;
+
+    const rowVirtualizer = createVirtualizer({
+      count: rows.length,
+      getScrollElement: () => parentRef,
+      estimateSize: () => 28,
+      overscan: 10,
+    });
+
+    return <div
+      class={'join-panel--table-detail'}
+      ref={parentRef!}
+      style={{ width: '100%' }}
+    >
       <table class="table is-bordered is-striped is-narrow is-fullwidth">
-        <thead><tr><th></th><th>{idCol}</th></tr></thead>
-        <tbody>
-          <For each={a1}>
-            {
-              ([i, v]) => <tr>
-                <td>{i}</td>
-                <td class={'duplicate'}>
-                  {transformFn(v)}&nbsp;
-                  <TiInfo
-                    size={16}
-                    style={{ 'vertical-align': 'sub', cursor: 'pointer' }}
-                    title={LL().JoinPanel.TooltipDuplicate()}
-                  />
+        <tbody style={{ position: 'relative', height: `${rowVirtualizer.getTotalSize()}px` }}>
+        <For each={rowVirtualizer.getVirtualItems()}>
+          {(virtualRow) => {
+            const row = rows[virtualRow.index];
+            let tdClass = '';
+            let infoTitle = '';
+            if (row.type === 'duplicate') {
+              tdClass = 'duplicate';
+              infoTitle = LL().JoinPanel.TooltipDuplicate();
+            } else if (row.type === 'unmatched') {
+              tdClass = 'unmatched';
+              infoTitle = isNonNull(row.v)
+                ? LL().JoinPanel[`TooltipNoMatch${capitalizeFirstLetter(type)}`]()
+                : LL().JoinPanel.TooltipNoData();
+            }
+
+            return (
+              <tr
+                style={{
+                  position: 'absolute',
+                  top: `${virtualRow.start}px`,
+                  height: `${virtualRow.size}px`,
+                  width: '100%',
+                }}
+              >
+                <td>{row.i}</td>
+                <td class={tdClass}>
+                  {transformFn(row.v)}&nbsp;
+                  {(row.type === 'duplicate' || row.type === 'unmatched') && (
+                    <TiInfo
+                      size={16}
+                      style={{ 'vertical-align': 'sub', cursor: 'pointer' }}
+                      title={infoTitle}
+                    />
+                  )}
                 </td>
               </tr>
-            }
-          </For>
-          <For each={a2}>
-            {
-              ([i, v]) => <tr>
-                <td>{i}</td>
-                <td class={'unmatched'}>
-                  {transformFn(v)}&nbsp;
-                  <TiInfo
-                    size={16}
-                    style={{ 'vertical-align': 'sub', cursor: 'pointer' }}
-                    title={
-                      isNonNull(v)
-                        ? LL().JoinPanel[`TooltipNoMatch${capitalizeFirstLetter(type)}`]()
-                        : LL().JoinPanel.TooltipNoData()
-                    }
-                  />
-                </td>
-              </tr>
-            }
-          </For>
-          <For each={a3}>
-            {
-              ([i, v]) => <tr>
-                <td>{i}</td><td>{transformFn(v)}</td>
-              </tr>
-            }
-          </For>
+            );
+          }}
+        </For>
         </tbody>
       </table>
     </div>;
@@ -611,10 +628,14 @@ export default function JoinPanel(
       <h4>{LL().JoinPanel.JoinFieldParameters()}</h4>
       <div class="is-flex is-flex-direction-row">
         <div style={{ width: '48%', 'text-align': 'center' }}>
+          <span class={'join-panel--fields-selection-label'}>
+            { LL().JoinPanel.JoinFieldLayer() }&nbsp;
+            <b>{
+              layersDescriptionStore.layers.find((d) => d.id === targetLayerId())!.name
+            }</b>
+          </span>
           <InputFieldSelect
-            label={LL().JoinPanel.JoinFieldLayer({
-              layerName: layersDescriptionStore.layers.find((d) => d.id === targetLayerId())!.name,
-            })}
+            label={''}
             onChange={(v) => {
               setTargetFieldLayer(v);
             }}
@@ -642,8 +663,12 @@ export default function JoinPanel(
           <b>=</b>
         </div>
         <div style={{ width: '48%', 'text-align': 'center' }}>
+          <span class={'join-panel--fields-selection-label'}>
+            {LL().JoinPanel.JoinFieldTable()}&nbsp;
+            <b>{tableDescription.name}</b>
+          </span>
           <InputFieldSelect
-            label={LL().JoinPanel.JoinFieldTable({ tableName: tableDescription.name })}
+            label={''}
             onChange={(v) => {
               setTargetFieldTable(v);
             }}
