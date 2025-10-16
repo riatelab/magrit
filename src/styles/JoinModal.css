@@ -38,11 +38,6 @@
     border: solid 1px var(--bulma-border);
 }
 
-.join-panel .join-panel--table-detail table thead {
-    position: sticky;
-    top: 0;
-}
-
 .join-panel .join-panel--table-detail tbody td {
     width: 322px;
 }
