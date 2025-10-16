@@ -77,19 +77,47 @@ Il est également possible de renseigner, de manière optionnelle, les paramètr
 - Non-prise en compte de la casse des valeurs d'identifiants,
 - Non-prise en compte des signes diacritiques, des espaces et des tirets dans les valeurs d'identifiants,
 
+<ZoomImg
+    src="/join-modal-before-selection.png"
+    alt="Fenêtre de jointure avant séléction des champs d'identifiants"
+    caption="Fenêtre de jointure avant séléction des champs d'identifiants"
+/>
+
 Sur la base de ces informations, les correspondances entre les valeurs d'identifiants des deux jeux de données sont établies.
+
+## Affichage des colonnes utilisées pour la jointure et des résultats
+
+Un tableau de données est affiché sous le menu déroulant du champ d'identifiant de la couche géographique et du jeu de données tabulaire.
+
+Ce tableau affiche le numéro de ligne et la valeur d'identifiant des deux colonnes utilisées pour la jointure.
+
+Les entrées avec des correspondances uniques sont affichées sans couleurs (il s'agit des correspondances valides pour la jointure).
+
+Si des entrées ont des correspondances multiples, elles sont affichées en rouge (ce qui empêche la jointure de s'effectuer).
+Si des entrées n'ont pas de correspondances ou sont vides, elles sont affichées en orange.
+Les entrées affichées en rouge ou en orange sont remontées en haut du tableau pour faciliter leur identification.
+
+### Résultats
 
 Si aucune correspondances n'est trouvée (ou si des correspondances multiples sont trouvées,
 c'est-à-dire si plusieurs valeurs d'identifiants du jeu de données géographique correspondent
 à une même valeur d'identifiant du jeu de données tabulaire ou inversement),
 il n'est pas possible de réaliser la jointure.
 
-Si une ou plusieurs correspondances sont trouvées, les données tabulaires sont ajoutées aux entités correspondantes de la couche géographique,
+<ZoomImg
+    src="/join-modal-no-match.png"
+    alt="Fenêtre de jointure (aucune correspondance trouvée)"
+    caption="Fenêtre de jointure (aucune correspondance trouvée)"
+/>
+
+Si une ou plusieurs correspondances sont trouvées, les données tabulaires peuvent être ajoutées aux entités correspondantes de la couche géographique,
 sur les bases des options suivantes :
 
 - Possibilité de sélectionner les colonnes à ajouter à la couche géographique,
 - Possibilité d'ajouter un préfixe aux colonnes ajoutées,
 - Possibilité de supprimer les entités de la couche géographique pour lesquelles aucune correspondance n'a été trouvée.
+
+Une section de résumé affiche le nombre de correspondances trouvées dans la couches géographique et dans le jeu de données tabulaire (ainsi que le nombre d'entrées vides le cas échéant).
 
 <ZoomImg
     src="/join-modal.png"
