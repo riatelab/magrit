@@ -16,7 +16,9 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 - Improve the join window when one of the datasets contains many entities by avoiding adding all entries from the join columns to the DOM (fixes <a href="https://github.com/riatelab/magrit/issues/170">issue 170</a>).
 
-- Fixe the loading of datasets with an unnamed projection, as well as project files containing such a dataset, imported with a previous version of the application (fixes <a href="https://github.com/riatelab/magrit/issues/167">issue 167</a>).
+- Fix the loading of datasets with an unnamed projection, as well as project files containing such a dataset, imported with a previous version of the application (fixes <a href="https://github.com/riatelab/magrit/issues/168">issue 168</a>).
+
+- Fix width of magrit logo in title bar for Safari (fixes <a href="https://github.com/riatelab/magrit/issues/171">issue 171</a>).
 
 #### 2.3.8 (2025-10-02)
 

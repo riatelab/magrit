@@ -16,7 +16,9 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 - Améliore la fenêtre de jointure lorsque l'un des jeux de données contient de nombreuses entités en évitant d'ajouter au DOM toutes les entrées des colonnes de jointure (corrige <a href="https://github.com/riatelab/magrit/issues/170">l'issue 170</a>).
 
-- Corrige le chargement de jeux de données avec une projection non-nommée ainsi que les fichiers projets contenant un jeu de données de ce type, importé avec une version précédente de l'application (corrige <a href="https://github.com/riatelab/magrit/issues/167">l'issue 167</a>).
+- Corrige le chargement de jeux de données avec une projection non-nommée ainsi que les fichiers projets contenant un jeu de données de ce type, importé avec une version précédente de l'application (corrige <a href="https://github.com/riatelab/magrit/issues/168">l'issue 168</a>).
+
+- Corrige la largeur du logo de Magrit dans la barre de titre de l'application pour Safari (corrige <a href="https://github.com/riatelab/magrit/issues/171">l'issue 171</a>).
 
 #### 2.3.8 (2025-10-02)
 
