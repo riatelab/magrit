@@ -3,7 +3,6 @@ import { createMemo, For, JSX } from 'solid-js';
 
 // Helpers
 import { mergeFilterIds } from './common.tsx';
-import { setWidthHeight } from '../../helpers/sanitize-svg';
 
 // Directives
 import bindData from '../../directives/bind-data';
@@ -85,23 +84,21 @@ export default function categoricalPictogramRenderer(
             () => globalStore.projection(feature.geometry.coordinates)
               .map((d, i) => d - icon()![2][i] / 2),
           );
-          if (icon()![0] === 'SVG') {
-            return <g
-              transform={`translate(${projectedCoords()[0]}, ${projectedCoords()[1]})`}
-              mgt:icon-dimension={JSON.stringify(icon()![2])}
-              // @ts-expect-error because use:bind-data isn't a property of this element
-              use:bindData={feature}
-              // eslint-disable-next-line solid/no-innerhtml
-              innerHTML={setWidthHeight(icon()![1], icon()![2][0], icon()![2][1])}
-            />;
-          }
           return <g
             transform={`translate(${projectedCoords()[0]}, ${projectedCoords()[1]})`}
             mgt:icon-dimension={JSON.stringify(icon()![2])}
             // @ts-expect-error because use:bind-data isn't a property of this element
             use:bindData={feature}
           >
-            <image width={icon()![2][0]} height={icon()![2][1]} href={icon()![1]}/>
+            <image
+              width={icon()![2][0]}
+              height={icon()![2][1]}
+              href={
+                icon()![0] === 'SVG'
+                  ? `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(icon()![1])))}`
+                  : icon()![1]
+              }
+            />
           </g>;
         }
       }

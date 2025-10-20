@@ -17,7 +17,6 @@ import {
   RectangleBox,
   triggerContextMenuLegend,
 } from './common.tsx';
-import { setWidthHeight } from '../../helpers/sanitize-svg';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -118,65 +117,35 @@ export default function legendCategoricalPictogram(
     <g class="legend-content">
       <For each={mapping()}>
         {
-          (item, i) => {
-            if (item.iconType === 'SVG') {
-              return <>
-                <g
-                  transform={`translate(0, ${heightTitleSubtitle() + (i() === 0 ? 0 : sum(
-                    mapping()
-                      .slice(0, i())
-                      .map((d: CategoricalPictogramMapping) => d.iconDimension[1] + legend.spacing),
-                  ))})`}
-                  // eslint-disable-next-line solid/no-innerhtml
-                  innerHTML={
-                    setWidthHeight(item.iconContent, item.iconDimension[0], item.iconDimension[1])
-                  }
-                />
-                <text
-                  font-size={`${legend.labels.fontSize}px`}
-                  font-family={legend.labels.fontFamily}
-                  font-style={legend.labels.fontStyle}
-                  font-weight={legend.labels.fontWeight}
-                  fill={legend.labels.fontColor}
-                  text-anchor="start"
-                  dominant-baseline="middle"
-                  x={60}
-                  y={heightTitleSubtitle() + item.iconDimension[1] / 2 + (i() === 0 ? 0 : sum(
-                    mapping().slice(0, i())
-                      .map((d: CategoricalPictogramMapping) => d.iconDimension[1] + legend.spacing),
-                  ))}
-                >{item.categoryName}</text>
-              </>;
-            }
-            return <>
-              <g
-                transform={`translate(0, ${heightTitleSubtitle() + item.iconDimension[1] / 2 + (i() === 0 ? 0 : sum(
-                  mapping().slice(0, i())
-                    .map((d: CategoricalPictogramMapping) => d.iconDimension[1] + legend.spacing),
-                ))})`}
-              >
-                <image
-                  width={item.iconDimension[0]}
-                  height={item.iconDimension[1]}
-                  href={item.iconContent}
-                />
-                <text
-                  font-size={`${legend.labels.fontSize}px`}
-                  font-family={legend.labels.fontFamily}
-                  font-style={legend.labels.fontStyle}
-                  font-weight={legend.labels.fontWeight}
-                  fill={legend.labels.fontColor}
-                  text-anchor="start"
-                  dominant-baseline="middle"
-                  x={60}
-                  y={heightTitleSubtitle() + (i() === 0 ? 0 : sum(
-                    mapping().slice(0, i())
-                      .map((d: CategoricalPictogramMapping) => d.iconDimension[1] + legend.spacing),
-                  ))}
-                >{item.categoryName}</text>
-              </g>
-            </>;
-          }
+          (item, i) => (
+            <g
+              transform={`translate(0, ${heightTitleSubtitle() + (i() === 0 ? 0 : sum(
+                mapping().slice(0, i())
+                  .map((d: CategoricalPictogramMapping) => d.iconDimension[1] + legend.spacing),
+              ))})`}
+            >
+              <image
+                width={item.iconDimension[0]}
+                height={item.iconDimension[1]}
+                href={
+                  item.iconType === 'SVG'
+                    ? `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(item.iconContent)))}`
+                    : item.iconContent
+                }
+              />
+              <text
+                font-size={`${legend.labels.fontSize}px`}
+                font-family={legend.labels.fontFamily}
+                font-style={legend.labels.fontStyle}
+                font-weight={legend.labels.fontWeight}
+                fill={legend.labels.fontColor}
+                text-anchor="start"
+                dominant-baseline="middle"
+                x={60}
+                y={item.iconDimension[1] / 2}
+              >{item.categoryName}</text>
+            </g>
+          )
         }
       </For>
     </g>

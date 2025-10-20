@@ -207,7 +207,7 @@ export function IconSelectionOverlay(
         'background-color': 'whitesmoke',
         'background-image': getBackgroundValue({ iconType: imageType(), iconContent: imageContent() }),
         'background-repeat': 'no-repeat',
-        'background-size': 'cover',
+        'background-size': imageType() === 'SVG' ? '100% 100%' : 'cover',
         'background-position': 'bottom center, 50%, 50%',
       }}
     ></div>

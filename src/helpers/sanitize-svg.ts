@@ -1,5 +1,62 @@
 import DOMPurify from 'dompurify';
 
+function getSourceDimensions(svg: string) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svg, 'image/svg+xml');
+  const svgElement = doc.documentElement;
+
+  const viewBox = svgElement.getAttribute('viewBox');
+  if (viewBox) {
+    const parts = viewBox.trim().split(/\s+|,/).map(Number);
+    return {
+      width: parts[2],
+      height: parts[3],
+      x: parts[0],
+      y: parts[1],
+    };
+  }
+
+  const width = svgElement.getAttribute('width');
+  const height = svgElement.getAttribute('height');
+  if (width && height) {
+    return {
+      width: parseFloat(width),
+      height: parseFloat(height),
+      x: 0,
+      y: 0,
+    };
+  }
+
+  try {
+    // As a last resort, try to compute the bounding box
+    // To do this, we need to temporarily add the SVG to the DOM
+    const tempDiv = document.createElement('div');
+    tempDiv.style.position = 'absolute';
+    tempDiv.style.visibility = 'hidden';
+    tempDiv.style.width = '0';
+    tempDiv.style.height = '0';
+    document.body.appendChild(tempDiv);
+    tempDiv.innerHTML = svg;
+    const svgElement2 = tempDiv.querySelector('svg')!;
+    const bbox = svgElement2.getBBox();
+    document.body.removeChild(tempDiv);
+    return {
+      width: bbox.width,
+      height: bbox.height,
+      x: bbox.x,
+      y: bbox.y,
+    };
+  } catch (e) {
+    console.warn('Cannot determine SVG dimensions, using defaults');
+    return {
+      width: 100,
+      height: 100,
+      x: 0,
+      y: 0,
+    };
+  }
+}
+
 /**
  * Sanitize an SVG string (uploaded by the user)
  * to remove any potentially harmful content (such as scripts)
@@ -26,14 +83,14 @@ const sanitizeSVG = (svg: string) => {
   const generateNewName = (oldName: string) => `mgt-image-${oldName}-${Math.random().toString(36).substr(2, 9)}`;
 
   // Step 1: Handle width, height and viewBox attribute at the root level
-  const width = svgDom.getAttribute('width');
-  const height = svgDom.getAttribute('height');
-  const viewBox = svgDom.getAttribute('viewBox');
-  if (width && height && !viewBox) {
-    svgDom.setAttribute('viewBox', `0 0 ${width} ${height}`);
-  }
-  svgDom.removeAttribute('width');
-  svgDom.removeAttribute('height');
+  const dimensions = getSourceDimensions(cleanSvg);
+  svgDom.setAttribute('width', (dimensions.width - dimensions.x).toString());
+  svgDom.setAttribute('height', (dimensions.height - dimensions.y).toString());
+  // svgDom.removeAttribute('viewBox'); // Remove existing viewBox to avoid conflicts
+  svgDom.setAttribute(
+    'viewBox',
+    `${dimensions.x} ${dimensions.y} ${dimensions.width} ${dimensions.height}`,
+  );
 
   // Step 2: Update all IDs
   const elementsWithId = svgDom.querySelectorAll('[id]');
@@ -69,22 +126,31 @@ const sanitizeSVG = (svg: string) => {
     // eslint-disable-next-line no-param-reassign
     serializedSvg = serializedSvg.replace(new RegExp(`\\.${oldClass}`, 'g'), `.${newClass}`);
   });
-
   return serializedSvg;
 };
 
-// eslint-disable-next-line arrow-body-style
-export const setWidthHeight = (svg: string, width: number, height: number) => {
-  // const parser = new DOMParser();
-  // const doc = parser.parseFromString(svg, 'image/svg+xml');
-  // const svgDom = doc.documentElement;
-  //
-  // svgDom.setAttribute('width', width.toString());
-  // svgDom.setAttribute('height', height.toString());
-  //
-  // const serializer = new XMLSerializer();
-  // return serializer.serializeToString(svgDom);
-  return svg.replace('<svg', `<svg width="${width}" height="${height}"`);
+export const setSvgProperties = (
+  props: {
+    content: string,
+    fillColor?: string,
+    strokeColor?: string,
+    strokeWidth?: number,
+    fillOpacity?: number,
+    strokeOpacity?: number,
+  },
+) => {
+  const svg = props.content;
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svg, 'image/svg+xml');
+
+  const svgDom = doc.documentElement;
+  if (props.fillColor) svgDom.setAttribute('fill', props.fillColor);
+  if (props.strokeColor) svgDom.setAttribute('stroke', props.strokeColor);
+  if (props.strokeWidth) svgDom.setAttribute('stroke-width', props.strokeWidth.toString());
+  if (props.fillOpacity) svgDom.setAttribute('fill-opacity', props.fillOpacity.toString());
+  if (props.strokeOpacity) svgDom.setAttribute('stroke-opacity', props.strokeOpacity.toString());
+
+  return (new XMLSerializer()).serializeToString(svgDom);
 };
 
 export default sanitizeSVG;
