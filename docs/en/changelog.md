@@ -12,6 +12,12 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.3.10 (unreleased)
+
+- Improve the resizing of SVG icons added to the map (fixes <a href="https://github.com/riatelab/magrit/issues/169">issue 169</a>).
+
+- Fix the creation of smoothed maps on datasets containing null/empty values.
+
 #### 2.3.9 (2025-10-17)
 
 - Improve the join window when one of the datasets contains many entities by avoiding adding all entries from the join columns to the DOM (fixes <a href="https://github.com/riatelab/magrit/issues/170">issue 170</a>).
