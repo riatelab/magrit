@@ -12,6 +12,14 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.3.9 (2025-10-17)
+
+- Improve the join window when one of the datasets contains many entities by avoiding adding all entries from the join columns to the DOM (fixes <a href="https://github.com/riatelab/magrit/issues/170">issue 170</a>).
+
+- Fix the loading of datasets with an unnamed projection, as well as project files containing such a dataset, imported with a previous version of the application (fixes <a href="https://github.com/riatelab/magrit/issues/168">issue 168</a>).
+
+- Fix width of magrit logo in title bar for Safari (fixes <a href="https://github.com/riatelab/magrit/issues/171">issue 171</a>).
+
 #### 2.3.8 (2025-10-02)
 
 - Allow the deactivation of one (or more) categories for categorical choropleth maps and pictograms (fixes <a href="https://github.com/riatelab/magrit/issues/166">issue 166</a>).

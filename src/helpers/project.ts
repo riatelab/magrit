@@ -18,6 +18,21 @@ export const patchProject = (
   project: ProjectDescription,
 ): ProjectDescription => {
   const projectVersion = project.version;
+  // At some point we allowed to save a project with user-defined projections
+  // that don't have a name (when checking the "use this projection" box in
+  // the import window).
+  // This was a bug and causes errors
+  // when loading the project again. So here we patch this issue
+  // (https://github.com/riatelab/magrit/issues/168)
+  // by setting a default name ('User-defined projection') if
+  // the name is missing.
+  if (project.map?.projection?.type === 'proj4') {
+    if (!project.map.projection.name) {
+      console.log('Patching project to add a name to the user-defined projection');
+      // eslint-disable-next-line no-param-reassign
+      project.map.projection.name = 'User-defined projection';
+    }
+  }
   // In version 2.0.9, we changed the model of the ScaleBar
   // so its optional 'label' property isn't a string anymore
   // but a LegendTextElement (allowing to set a label as well as

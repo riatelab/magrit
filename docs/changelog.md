@@ -12,6 +12,14 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.3.9 (2025-10-17)
+
+- Améliore la fenêtre de jointure lorsque l'un des jeux de données contient de nombreuses entités en évitant d'ajouter au DOM toutes les entrées des colonnes de jointure (corrige <a href="https://github.com/riatelab/magrit/issues/170">l'issue 170</a>).
+
+- Corrige le chargement de jeux de données avec une projection non-nommée ainsi que les fichiers projets contenant un jeu de données de ce type, importé avec une version précédente de l'application (corrige <a href="https://github.com/riatelab/magrit/issues/168">l'issue 168</a>).
+
+- Corrige la largeur du logo de Magrit dans la barre de titre de l'application pour Safari (corrige <a href="https://github.com/riatelab/magrit/issues/171">l'issue 171</a>).
+
 #### 2.3.8 (2025-10-02)
 
 - Permet la désactivation d'une (ou plusieurs) catégories pour les cartes choroplèthes catégorielles et de pictogrammes (corrige <a href="https://github.com/riatelab/magrit/issues/166">l'issue 166</a>).
@@ -24,7 +32,7 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 - Ajout de liens vers des ressources pédagogiques dans la documentation.
 
-- Recalcule le type d'un champ après qu'une de ses valeurs ait été modifiée dans le tableau de données
+- Recalcule le type d'un champ après qu'une de ses valeurs a été modifiée dans le tableau de données
   (par exemple si un champ contenait des valeurs numériques et texte et que toutes les valeurs texte sont supprimées, le champ sera retypé en numérique).
 
 #### 2.3.7 (2025-07-29)
