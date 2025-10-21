@@ -1156,6 +1156,7 @@ const es = {
     '*': 'Multiplicación',
     '-': 'Resta',
     '+': 'Suma',
+    'LOG()': 'Logaritmo natural',
     'POWER()': 'Potencia',
     'CONCAT()': 'Concatenación',
     'SUBSTRING()': 'Extracción de una subcadena de caracteres',

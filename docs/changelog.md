@@ -12,6 +12,14 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.3.10 (2025-10-21)
+
+- Améliore le redimensionnement des pictogrammes SVG ajoutés à la carte (corrige <a href="https://github.com/riatelab/magrit/issues/169">l'issue 169</a>).
+
+- Corrige la création de cartes lissées sur des jeux de données contenant des valeurs nulles / vides.
+
+- Ajoute une fonction `LOG()` au composant permettant de créer de nouvelles colonnes avec des formules SQL-like.
+
 #### 2.3.9 (2025-10-17)
 
 - Améliore la fenêtre de jointure lorsque l'un des jeux de données contient de nombreuses entités en évitant d'ajouter au DOM toutes les entrées des colonnes de jointure (corrige <a href="https://github.com/riatelab/magrit/issues/170">l'issue 170</a>).

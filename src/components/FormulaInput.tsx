@@ -14,7 +14,7 @@ import type { Feature, Geometry } from 'geojson';
 
 // Imports from other packages
 import { area } from '@turf/turf';
-import alasql from 'alasql';
+import alasql from '../helpers/alasql';
 
 // Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
@@ -301,12 +301,12 @@ export default function FormulaInput(
         </For>
       </div>
       <div class="is-flex" style={{ width: '32%', 'flex-flow': 'row-reverse', ...styleBadges }}>
-        <For each={['POWER()', 'SUBSTRING()', 'CONCAT()']}>
+        <For each={['LOG()', 'POWER()', 'SUBSTRING()', 'CONCAT()']}>
           {
             (func) => (
               <button
                 class="tag is-info"
-                title={LL().FormulaInput[func as 'POWER()' | 'SUBSTRING()' | 'CONCAT()']()}
+                title={LL().FormulaInput[func as 'LOG()' | 'POWER()' | 'SUBSTRING()' | 'CONCAT()']()}
                 onClick={() => {
                   // Insert the field in the formula
                   insertInFormula(

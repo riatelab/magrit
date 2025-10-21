@@ -7,6 +7,7 @@ import {
   type LegendBase,
   type ProjectDescription,
 } from '../global.d';
+import sanitizeSVG from './sanitize-svg';
 
 export enum ValidityState {
   Valid,
@@ -32,6 +33,18 @@ export const patchProject = (
       // eslint-disable-next-line no-param-reassign
       project.map.projection.name = 'User-defined projection';
     }
+  }
+  // We need to path the source SVG of images in layout features
+  if (project.layoutFeaturesAndLegends) {
+    project.layoutFeaturesAndLegends.forEach((layoutFeatureOrLegend) => {
+      if (layoutFeatureOrLegend.type === LayoutFeatureType.Image) {
+        const imageFeature = layoutFeatureOrLegend;
+        if (imageFeature.imageType === 'SVG') {
+          // eslint-disable-next-line no-param-reassign
+          imageFeature.content = sanitizeSVG(imageFeature.content);
+        }
+      }
+    });
   }
   // In version 2.0.9, we changed the model of the ScaleBar
   // so its optional 'label' property isn't a string anymore

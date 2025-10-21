@@ -11,6 +11,7 @@ import type {
   CategoricalChoroplethMapping,
   CategoricalPictogramMapping,
 } from '../global';
+import sanitizeSVG from './sanitize-svg';
 
 const selectDefaultColors = (n: number): string[] => {
   let colors;
@@ -71,7 +72,7 @@ export const makePictoCategoriesMapping = (
     categoryName: isNonNull(c[0]) ? String(c[0]) : null,
     count: c[1],
     iconType: 'SVG',
-    iconContent: images[i % images.length],
+    iconContent: sanitizeSVG(images[i % images.length]),
     iconDimension: [50, 50],
     show: true,
   } as CategoricalPictogramMapping))

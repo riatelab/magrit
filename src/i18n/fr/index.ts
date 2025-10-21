@@ -1156,6 +1156,7 @@ const fr = {
     '*': 'Multiplication',
     '-': 'Soustraction',
     '+': 'Addition',
+    'LOG()': 'Logarithme népérien',
     'POWER()': 'Puissance',
     'CONCAT()': 'Concaténation',
     'SUBSTRING()': 'Extraction d\'une sous-chaîne de caractères',

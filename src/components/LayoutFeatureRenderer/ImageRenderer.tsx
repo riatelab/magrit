@@ -15,7 +15,7 @@ import {
   RectangleBox,
   triggerContextMenuLayoutFeature,
 } from './common.tsx';
-import { setWidthHeight } from '../../helpers/sanitize-svg';
+import { setSvgProperties } from '../../helpers/sanitize-svg';
 
 // Types / Interfaces / Enums
 import type { Image } from '../../global';
@@ -52,29 +52,19 @@ export default function ImageRenderer(props: Image): JSX.Element {
     }}
     transform={`translate(${props.position[0]}, ${props.position[1]})`}
   >
-    {
-      props.imageType === 'SVG'
-        ? <g
-          transform={props.rotation !== 0 ? `rotate(${props.rotation} ${props.size / 2} ${props.size / 2})` : undefined}
-          fill={props.fillColor}
-          fill-opacity={props.fillOpacity}
-          stroke={props.strokeColor}
-          stroke-opacity={props.strokeOpacity}
-          stroke-width={props.strokeWidth}
-          // eslint-disable-next-line solid/no-innerhtml
-          innerHTML={setWidthHeight(props.content, props.size, props.size)}
-        ></g>
-        : <g
-          transform={props.rotation !== 0 ? `rotate(${props.rotation} ${props.size / 2} ${props.size / 2})` : undefined}
-          fill={props.fillColor}
-          fill-opacity={props.fillOpacity}
-          stroke={props.strokeColor}
-          stroke-opacity={props.strokeOpacity}
-          stroke-width={props.strokeWidth}
-        >
-          <image width={props.size} height={props.size} href={props.content}/>
-        </g>
-    }
+    <g
+      transform={props.rotation !== 0 ? `rotate(${props.rotation} ${props.size / 2} ${props.size / 2})` : undefined}
+    >
+      <image
+        width={props.size}
+        height={props.size}
+        href={
+          props.imageType === 'SVG'
+            ? `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(setSvgProperties(props))))}`
+            : props.content
+        }
+      />
+    </g>
     <RectangleBox backgroundRect={props.backgroundRect}/>
   </g>;
 }

@@ -176,7 +176,7 @@ export default function ImageSymbolSelection(
         'background-color': 'whitesmoke',
         'background-image': backgroundValue(imageContent()),
         'background-repeat': 'no-repeat',
-        'background-size': 'cover',
+        'background-size': imageType() === 'SVG' ? '100% 100%' : 'cover',
         'background-position': 'bottom center, 50%, 50%',
       }}
     ></div>

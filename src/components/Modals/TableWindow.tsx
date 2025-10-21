@@ -18,10 +18,10 @@ import 'ag-grid-community/styles/ag-grid.min.css'; // grid core CSS
 import 'ag-grid-community/styles/ag-theme-quartz.min.css'; // theme
 
 // Imports from other packages
-import alasql from 'alasql';
 import { type AllGeoJSON, area } from '@turf/turf';
 import type { LocalizedString } from 'typesafe-i18n';
 import toast from 'solid-toast';
+import alasql from '../../helpers/alasql';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
