@@ -4751,6 +4751,10 @@ type RootTranslation = {
 		 */
 		'*': string
 		/**
+		 * N​a​t​u​r​a​l​ ​l​o​g​a​r​i​t​h​m
+		 */
+		'LOG()': string
+		/**
 		 * P​o​w​e​r​ ​o​p​e​r​a​t​o​r
 		 */
 		'POWER()': string
@@ -10873,6 +10877,10 @@ export type TranslationFunctions = {
 		 * Multiplication
 		 */
 		'*': () => LocalizedString
+		/**
+		 * Natural logarithm
+		 */
+		'LOG()': () => LocalizedString
 		/**
 		 * Power operator
 		 */

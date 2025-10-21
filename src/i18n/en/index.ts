@@ -1148,6 +1148,7 @@ const en = {
     '+': 'Addition',
     '-': 'Subtraction',
     '*': 'Multiplication',
+    'LOG()': 'Natural logarithm',
     'POWER()': 'Power operator',
     'CONCAT()': 'Concatenate 2 or more strings',
     'SUBSTRING()': 'Extract a substring',
