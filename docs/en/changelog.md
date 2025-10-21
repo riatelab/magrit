@@ -12,11 +12,13 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-#### 2.3.10 (unreleased)
+#### 2.3.10 (2025-10-21)
 
 - Improve the resizing of SVG icons added to the map (fixes <a href="https://github.com/riatelab/magrit/issues/169">issue 169</a>).
 
 - Fix the creation of smoothed maps on datasets containing null/empty values.
+
+- Add a `LOG()` function to the component allowing new columns to be created with SQL-like formulas.
 
 #### 2.3.9 (2025-10-17)
 

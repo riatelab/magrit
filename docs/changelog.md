@@ -12,11 +12,13 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
-#### 2.3.10 (unreleased)
+#### 2.3.10 (2025-10-21)
 
 - Améliore le redimensionnement des pictogrammes SVG ajoutés à la carte (corrige <a href="https://github.com/riatelab/magrit/issues/169">l'issue 169</a>).
 
 - Corrige la création de cartes lissées sur des jeux de données contenant des valeurs nulles / vides.
+
+- Ajoute une fonction `LOG()` au composant permettant de créer de nouvelles colonnes avec des formules SQL-like.
 
 #### 2.3.9 (2025-10-17)
 
