@@ -1181,6 +1181,12 @@ interface BivariateChoroplethLegend extends LegendBase {
   labels: LegendTextElement,
   // The text properties of the break values
   breakValues: LegendTextElement,
+  // The label of the 1st variable
+  variable1Label: string, // or LegendTextElement ?
+  // The label of the 2nd variable
+  variable2Label: string, // or LegendTextElement ?
+  // The label of the no-data box
+  noDataLabel: string,
 }
 
 interface BivariateChoroplethScatterplotLegend extends LegendBase {
@@ -1231,6 +1237,8 @@ export type Legend = (
   | ChoroplethHistogramLegend
   | LinearRegressionScatterPlot
   | CategoricalPictogramLegend
+  | BivariateChoroplethLegend
+  | TrivariateChoroplethLegend
   | DefaultLegend
 );
 

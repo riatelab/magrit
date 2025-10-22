@@ -7,7 +7,7 @@ import {
 
 // Helpers
 import { getClassifier } from '../../helpers/classification';
-import { isFiniteNumber } from '../../helpers/common';
+import { isNonNull } from '../../helpers/common';
 import { getSymbolPath } from '../../helpers/svg';
 import { mergeFilterIds } from './common.tsx';
 import d3 from '../../helpers/d3-custom';
@@ -23,8 +23,8 @@ import bindData from '../../directives/bind-data';
 // Types / Interfaces / Enums
 import {
   ClassificationMethod,
-  type ClassificationParameters,
-  type LayerDescriptionChoropleth,
+  type BivariateChoroplethParameters,
+  type LayerDescriptionBivariateChoropleth,
 } from '../../global.d';
 
 // For now we keep an array of directives
@@ -33,26 +33,45 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
   bindData,
 ];
 
-export function choroplethPolygonRenderer(
-  layerDescription: LayerDescriptionChoropleth,
+function bivariateClass(
+  v1: any,
+  v2: any,
+  c1: { getClass: (_: number) => number },
+  c2: { getClass: (_: number) => number },
+): number {
+  return 3 * c1.getClass(v1) + c2.getClass(v2);
+}
+
+export function bivariateChoroplethPolygonRenderer(
+  layerDescription: LayerDescriptionBivariateChoropleth,
 ): JSX.Element {
   const rendererParameters = createMemo(
-    () => layerDescription.rendererParameters as ClassificationParameters,
+    () => layerDescription.rendererParameters as BivariateChoroplethParameters,
   );
 
-  const classifier = createMemo(() => {
+  const classifierVar1 = createMemo(() => {
     const Cls = getClassifier(ClassificationMethod.manual);
     return new Cls(
       null,
       null,
       applicationSettingsStore.intervalClosure,
-      rendererParameters().breaks,
+      rendererParameters().variable1.breaks,
+    );
+  });
+
+  const classifierVar2 = createMemo(() => {
+    const Cls = getClassifier(ClassificationMethod.manual);
+    return new Cls(
+      null,
+      null,
+      applicationSettingsStore.intervalClosure,
+      rendererParameters().variable2.breaks,
     );
   });
 
   return <g
     id={layerDescription.id}
-    class="layer choropleth"
+    class="layer bivariate-choropleth"
     visibility={layerDescription.visible ? undefined : 'hidden'}
     fill-opacity={layerDescription.fillOpacity}
     stroke={layerDescription.strokeColor}
@@ -74,9 +93,15 @@ export function choroplethPolygonRenderer(
       {
         (feature) => <path
           fill={
-            isFiniteNumber(feature.properties[rendererParameters().variable])
+            isNonNull(feature.properties![rendererParameters().variable1.variable])
+            && isNonNull(feature.properties![rendererParameters().variable2.variable])
               ? rendererParameters().palette.colors[
-                classifier().getClass(feature.properties[rendererParameters().variable])
+                bivariateClass(
+                  feature.properties![rendererParameters().variable1.variable],
+                  feature.properties![rendererParameters().variable2.variable],
+                  classifierVar1(),
+                  classifierVar2(),
+                )
               ]
               : rendererParameters().noDataColor
           }
@@ -90,26 +115,103 @@ export function choroplethPolygonRenderer(
   </g>;
 }
 
-export function choroplethPointRenderer(
-  layerDescription: LayerDescriptionChoropleth,
+export function bivariateChoroplethLineRenderer(
+  layerDescription: LayerDescriptionBivariateChoropleth,
 ): JSX.Element {
   const rendererParameters = createMemo(
-    () => layerDescription.rendererParameters as ClassificationParameters,
+    () => layerDescription.rendererParameters as BivariateChoroplethParameters,
   );
 
-  const classifier = createMemo(() => {
+  const classifierVar1 = createMemo(() => {
     const Cls = getClassifier(ClassificationMethod.manual);
     return new Cls(
       null,
       null,
       applicationSettingsStore.intervalClosure,
-      rendererParameters().breaks,
+      rendererParameters().variable1.breaks,
+    );
+  });
+
+  const classifierVar2 = createMemo(() => {
+    const Cls = getClassifier(ClassificationMethod.manual);
+    return new Cls(
+      null,
+      null,
+      applicationSettingsStore.intervalClosure,
+      rendererParameters().variable2.breaks,
     );
   });
 
   return <g
     id={layerDescription.id}
-    class="layer choropleth"
+    class="layer bivariate-choropleth"
+    visibility={layerDescription.visible ? undefined : 'hidden'}
+    fill="none"
+    stroke-width={layerDescription.strokeWidth}
+    stroke-opacity={layerDescription.strokeOpacity}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    clip-path={mapStore.projection.type === 'd3' ? 'url(#clip-sphere)' : undefined}
+    filter={mergeFilterIds(layerDescription)}
+    mgt:geometry-type={layerDescription.type}
+    mgt:portrayal-type={layerDescription.representationType}
+  >
+    <For each={layerDescription.data.features}>
+      {
+        (feature) => <path
+          stroke={
+            isNonNull(feature.properties![rendererParameters().variable1.variable])
+            && isNonNull(feature.properties![rendererParameters().variable2.variable])
+              ? rendererParameters().palette.colors[
+                bivariateClass(
+                  feature.properties![rendererParameters().variable1.variable],
+                  feature.properties![rendererParameters().variable2.variable],
+                  classifierVar1(),
+                  classifierVar2(),
+                )
+              ]
+              : rendererParameters().noDataColor
+          }
+          d={globalStore.pathGenerator(feature)}
+          vector-effect="non-scaling-stroke"
+          // @ts-expect-error because use:bind-data isn't a property of this element
+          use:bindData={feature}
+        />
+      }
+    </For>
+  </g>;
+}
+
+export function bivariateChoroplethPointRenderer(
+  layerDescription: LayerDescriptionBivariateChoropleth,
+): JSX.Element {
+  const rendererParameters = createMemo(
+    () => layerDescription.rendererParameters as BivariateChoroplethParameters,
+  );
+
+  const classifierVar1 = createMemo(() => {
+    const Cls = getClassifier(ClassificationMethod.manual);
+    return new Cls(
+      null,
+      null,
+      applicationSettingsStore.intervalClosure,
+      rendererParameters().variable1.breaks,
+    );
+  });
+
+  const classifierVar2 = createMemo(() => {
+    const Cls = getClassifier(ClassificationMethod.manual);
+    return new Cls(
+      null,
+      null,
+      applicationSettingsStore.intervalClosure,
+      rendererParameters().variable2.breaks,
+    );
+  });
+
+  return <g
+    id={layerDescription.id}
+    class="layer bivariate-choropleth"
     visibility={layerDescription.visible ? undefined : 'hidden'}
     fill-opacity={layerDescription.fillOpacity}
     stroke={layerDescription.strokeColor}
@@ -128,9 +230,15 @@ export function choroplethPointRenderer(
       {
         (feature) => <path
           fill={
-            isFiniteNumber(feature.properties[rendererParameters().variable])
+            isNonNull(feature.properties![rendererParameters().variable1.variable])
+            && isNonNull(feature.properties![rendererParameters().variable2.variable])
               ? rendererParameters().palette.colors[
-                classifier().getClass(feature.properties[rendererParameters().variable])
+                bivariateClass(
+                  feature.properties![rendererParameters().variable1.variable],
+                  feature.properties![rendererParameters().variable2.variable],
+                  classifierVar1(),
+                  classifierVar2(),
+                )
               ]
               : rendererParameters().noDataColor
           }
@@ -141,57 +249,6 @@ export function choroplethPointRenderer(
               layerDescription.symbolSize!,
             )
           }
-          vector-effect="non-scaling-stroke"
-          // @ts-expect-error because use:bind-data isn't a property of this element
-          use:bindData={feature}
-        />
-      }
-    </For>
-  </g>;
-}
-
-export function choroplethLineRenderer(
-  layerDescription: LayerDescriptionChoropleth,
-): JSX.Element {
-  const rendererParameters = createMemo(
-    () => layerDescription.rendererParameters as ClassificationParameters,
-  );
-
-  const classifier = createMemo(() => {
-    const Cls = getClassifier(ClassificationMethod.manual);
-    return new Cls(
-      null,
-      null,
-      applicationSettingsStore.intervalClosure,
-      rendererParameters().breaks,
-    );
-  });
-
-  return <g
-    id={layerDescription.id}
-    class="layer choropleth"
-    visibility={layerDescription.visible ? undefined : 'hidden'}
-    fill="none"
-    stroke-width={layerDescription.strokeWidth}
-    stroke-opacity={layerDescription.strokeOpacity}
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    clip-path={mapStore.projection.type === 'd3' ? 'url(#clip-sphere)' : undefined}
-    filter={mergeFilterIds(layerDescription)}
-    mgt:geometry-type={layerDescription.type}
-    mgt:portrayal-type={layerDescription.representationType}
-  >
-    <For each={layerDescription.data.features}>
-      {
-        (feature) => <path
-          stroke={
-            isFiniteNumber(feature.properties[rendererParameters().variable])
-              ? rendererParameters().palette.colors[
-                classifier().getClass(feature.properties[rendererParameters().variable])
-              ]
-              : rendererParameters().noDataColor
-          }
-          d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
           // @ts-expect-error because use:bind-data isn't a property of this element
           use:bindData={feature}

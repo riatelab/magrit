@@ -167,6 +167,8 @@ const simpleRedrawRenderers = new Set(
     'categoricalChoropleth',
     'cartogram',
     'grid',
+    'bivariateChoropleth',
+    'trivariateChoropleth',
   ],
 );
 

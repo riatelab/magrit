@@ -52,6 +52,11 @@ import {
   proportionalSymbolsLinearRenderer,
   proportionalSymbolsPunctualRenderer,
 } from './MapRenderer/ProportionalSymbolsMapRenderer.tsx';
+import {
+  bivariateChoroplethPolygonRenderer,
+  bivariateChoroplethPointRenderer,
+  bivariateChoroplethLineRenderer,
+} from './MapRenderer/BivariateChoroplethMapRenderer.tsx';
 import discontinuityRenderer from './MapRenderer/DiscontinuityMapRenderer.tsx';
 import { defaultLabelsRenderer } from './MapRenderer/LabelsMapRenderer.tsx';
 import graticuleRenderer from './MapRenderer/GraticuleRenderer.tsx';
@@ -89,6 +94,7 @@ import legendChoroplethHistogram from './LegendRenderer/ChoroplethHistogramLegen
 import lmScatterPlot from './LegendRenderer/LMScatterPlotRenderer.tsx';
 import legendCategoricalPictogram from './LegendRenderer/CategoricalPictogramLegendRenderer.tsx';
 import legendWaffle from './LegendRenderer/WaffleLegendRenderer.tsx';
+import legendBivariateChoropleth from './LegendRenderer/BivariateChoroplethLegend.tsx';
 
 // Types and enums
 import {
@@ -126,6 +132,8 @@ import {
   type LayerDescriptionCategoricalPictogram,
   type LayerDescriptionWaffle,
   type WaffleLegend,
+  type LayerDescriptionBivariateChoropleth,
+  type BivariateChoroplethLegend,
 } from '../global.d';
 
 // Styles
@@ -205,6 +213,9 @@ const dispatchLegendRenderer = (legend: Legend) => {
   if (legend.type === 'waffle') {
     return legendWaffle(legend as WaffleLegend);
   }
+  if (legend.type === 'bivariateChoropleth') {
+    return legendBivariateChoropleth(legend as BivariateChoroplethLegend);
+  }
   return null;
 };
 
@@ -246,6 +257,10 @@ const dispatchMapRenderer = (layer: LayerDescription) => {
     return categoricalPictogramRenderer(layer as LayerDescriptionCategoricalPictogram);
   } else if (layer.representationType === 'waffle') {
     return waffleRenderer(layer as LayerDescriptionWaffle);
+  } else if (layer.representationType === 'bivariateChoropleth') {
+    if (layer.type === 'polygon') return bivariateChoroplethPolygonRenderer(layer as LayerDescriptionBivariateChoropleth);
+    if (layer.type === 'point') return bivariateChoroplethPointRenderer(layer as LayerDescriptionBivariateChoropleth);
+    if (layer.type === 'linestring') return bivariateChoroplethLineRenderer(layer as LayerDescriptionBivariateChoropleth);
   }
   return null;
 };
