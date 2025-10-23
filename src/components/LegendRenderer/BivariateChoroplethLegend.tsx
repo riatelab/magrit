@@ -77,17 +77,19 @@ export default function legendBivariateChoropleth(
     legend.displayBreakValues ? 30 : 20));
   // Padding around the legend grid
   const padding = createMemo(() => (legend.displayBreakValues ? 20 : 10));
-  const sizeX = createMemo(() => (legend.rotate ? diagonalSize() : totalSize()) + padding() * 2);
+  // const sizeX = createMemo(() => (legend.rotate ? diagonalSize() : totalSize()) + padding() * 2);
+  const sizeX = createMemo(() => (legend.rotate ? diagonalSize() : totalSize()));
   const sizeY = createMemo(() => (
-    legend.noDataBox
-      ? sizeX() + defaultSpacing + legend.boxWidth / 2 + legend.boxStrokeWidth * 2
-      : sizeX() + legend.boxStrokeWidth * 2
+    sizeX()
+    + (legend.noDataBox
+      ? defaultSpacing + legend.boxWidth / 2 + legend.boxStrokeWidth * 2
+      : legend.boxStrokeWidth * 2)
   ));
   const breaksStep = createMemo(() => legend.boxWidth + legend.boxSpacing / 2);
 
   // FIXME
   const positionNote = createMemo(
-    () => sizeY(),
+    () => distanceToTop() + sizeY() + extraPadding() + padding(),
     // + getTextSize(
     //   legend.valueText.text,
     //   legend.labels.fontSize,
@@ -109,6 +111,10 @@ export default function legendBivariateChoropleth(
       computeRectangleBox(
         refElement,
         distanceToTop(),
+        sizeX(),
+        sizeY(),
+        padding(),
+        extraPadding(),
         // And more...
       );
     }
@@ -134,17 +140,12 @@ export default function legendBivariateChoropleth(
     { makeLegendText(legend.subtitle, [0, heightTitle()], 'subtitle') }
     <g
       class="legend-content"
-      transform={`translate(${sizeX() / 2}, ${sizeX() / 2}) rotate(${legend.rotate ? -135 : -90})`}
+      transform={`translate(${sizeX() / 2 + (legend.rotate ? 0 : extraPadding())}, ${distanceToTop() + sizeX() / 2}) rotate(${legend.rotate ? -135 : -90})`}
     >
       <g
         class="grid-group"
         transform={`translate(${-totalSize() / 2}, ${-totalSize() / 2})`}
       >
-        {/*
-        rotate(x)
-        ${legend.boxWidth + legend.boxSpacing}
-        ${distanceToTop() + legend.boxHeight + legend.boxSpacing}
-        */}
         <For each={[[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]]}>
           {([row, col]) => (
               <rect
@@ -238,6 +239,31 @@ export default function legendBivariateChoropleth(
         </text>
       </Show>
     </g>
+    <Show when={legend.noDataBox}>
+      <g>
+        <rect
+          fill={layer.rendererParameters.noDataColor}
+          x={0}
+          y={distanceToTop() + sizeX() + extraPadding()}
+          rx={legend.boxCornerRadius}
+          ry={legend.boxCornerRadius}
+          width={legend.boxWidth}
+          height={legend.boxWidth / 2}
+          stroke={legend.boxStrokeWidth ? layer.strokeColor : undefined}
+        />
+        <text
+          x={legend.boxWidth + defaultSpacing}
+          y={distanceToTop() + sizeX() + extraPadding() + (legend.boxWidth / 4)}
+          font-size={legend.labels.fontSize}
+          font-family={legend.labels.fontFamily}
+          font-style={legend.labels.fontStyle}
+          font-weight={legend.labels.fontWeight}
+          fill={legend.labels.fontColor}
+          text-anchor="start"
+          dominant-baseline="middle"
+        >{ legend.noDataLabel }</text>
+      </g>
+    </Show>
     {
       makeLegendText(
         legend.note,

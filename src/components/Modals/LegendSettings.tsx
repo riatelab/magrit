@@ -1476,7 +1476,7 @@ function makeSettingsBivariateChoropleth(
       }}
       min={0}
       max={20}
-      step={0.1}
+      step={1}
     />
     <InputFieldNumber
       label={'Box stroke width'}
@@ -1486,13 +1486,23 @@ function makeSettingsBivariateChoropleth(
       }}
       min={0}
       max={20}
-      step={1}
+      step={0.1}
     />
     <InputFieldCheckbox
       label={'Rotate legend'}
       checked={legend.rotate}
       onChange={(v) => updateProps(legend.id, ['rotate'], v)}
     />
+    <OptionBackgroundRectangle legend={legend} LL={LL} />
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        {LL().Legend.Modal.FontProperties()}
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
+      </p>
+    </div>
     <Show when={displayMoreOptions()}>
       <TextOptionTable
         legend={legend}

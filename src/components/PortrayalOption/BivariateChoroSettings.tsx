@@ -97,7 +97,7 @@ function onClickValidate(
       breaks: breaks2,
       entitiesByClass: classifier2.countByClass(),
     },
-    noDataColor: '#d3d3d3',
+    noDataColor: '#ffffff',
     palette: {
       id: 'bupu-bivariate',
       name: 'BuPu bivariate',
