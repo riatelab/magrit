@@ -43,6 +43,7 @@ import InputFieldText from '../Inputs/InputText.tsx';
 
 // Types / Interfaces / Enums
 import {
+  BivariateChoroplethLegend,
   type CategoricalChoroplethBarchartLegend,
   type CategoricalChoroplethLegend,
   type CategoricalPictogramLegend,
@@ -67,7 +68,8 @@ import {
   type ProportionalSymbolsLegend,
   type ProportionalSymbolsParameters,
   type ProportionalSymbolsRatioParameters,
-  RepresentationType, WaffleLegend,
+  RepresentationType,
+  WaffleLegend,
 } from '../../global.d';
 
 /**
@@ -1418,6 +1420,89 @@ function makeSettingsCategoricalPictogram(
   </>;
 }
 
+function makeSettingsBivariateChoropleth(
+  legend: BivariateChoroplethLegend,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <>
+    <FieldText legend={legend} LL={LL} role={'title'}/>
+    <FieldText legend={legend} LL={LL} role={'subtitle'}/>
+    <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldText
+      label={'Label variable 1'}
+      value={legend.variable1Label}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['variable1Label'], v);
+      }}
+    />
+    <InputFieldText
+      label={'Label variable 2'}
+      value={legend.variable2Label}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['variable2Label'], v);
+      }}
+    />
+    <InputFieldNumber
+      label={'Taille des boites'}
+      value={legend.boxWidth}
+      onChange={(v) => {
+        updateProps(legend.id, ['boxWidth'], v);
+        updateProps(legend.id, ['boxHeight'], v);
+      }}
+      min={20}
+      max={100}
+      step={1}
+    />
+    <InputFieldNumber
+      label={'Espace entre les boites'}
+      value={legend.boxSpacing}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['boxSpacing'], v);
+      }}
+      min={0}
+      max={20}
+      step={1}
+    />
+    <InputFieldNumber
+      label={'Corner radius'}
+      value={legend.boxCornerRadius}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['boxCornerRadius'], v);
+      }}
+      min={0}
+      max={20}
+      step={0.1}
+    />
+    <InputFieldNumber
+      label={'Box stroke width'}
+      value={legend.boxStrokeWidth}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['boxStrokeWidth'], v);
+      }}
+      min={0}
+      max={20}
+      step={1}
+    />
+    <InputFieldCheckbox
+      label={'Rotate legend'}
+      checked={legend.rotate}
+      onChange={(v) => updateProps(legend.id, ['rotate'], v)}
+    />
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'labels', 'note']}
+      />
+    </Show>
+  </>;
+}
+
 function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.Element {
   if (legend.type === LegendType.default) {
     return makeSettingsDefault(legend as DefaultLegend, LL);
@@ -1467,6 +1552,12 @@ function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.
   if (legend.type === LegendType.waffle) {
     return makeSettingsWaffle(
       legend as WaffleLegend,
+      LL,
+    );
+  }
+  if (legend.type === LegendType.bivariateChoropleth) {
+    return makeSettingsBivariateChoropleth(
+      legend as BivariateChoroplethLegend,
       LL,
     );
   }

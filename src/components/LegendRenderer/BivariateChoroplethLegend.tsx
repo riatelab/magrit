@@ -72,9 +72,11 @@ export default function legendBivariateChoropleth(
   const diagonalSize = createMemo(
     () => Math.ceil(Math.SQRT2 * totalSize()),
   );
+  // Padding for the labels of the variables
   const extraPadding = createMemo(() => (
     legend.displayBreakValues ? 30 : 20));
-  const padding = createMemo(() => extraPadding() + 5);
+  // Padding around the legend grid
+  const padding = createMemo(() => (legend.displayBreakValues ? 20 : 10));
   const sizeX = createMemo(() => (legend.rotate ? diagonalSize() : totalSize()) + padding() * 2);
   const sizeY = createMemo(() => (
     legend.noDataBox
@@ -85,13 +87,13 @@ export default function legendBivariateChoropleth(
 
   // FIXME
   const positionNote = createMemo(
-    () => sizeY()
+    () => sizeY(),
     // + getTextSize(
     //   legend.valueText.text,
     //   legend.labels.fontSize,
     //   legend.labels.fontFamily,
     // ).height
-    + defaultSpacing,
+    // + defaultSpacing,
   );
 
   let refElement: SVGGElement;
