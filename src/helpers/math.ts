@@ -18,6 +18,7 @@ export const Matan = Math.atan;
 export const Matan2 = Math.atan2;
 export const Mtan = Math.tan;
 export const Macos = Math.acos;
+export const Mrandom = Math.random;
 
 type UnsignedNumberArray = Uint8Array
 | Uint16Array
