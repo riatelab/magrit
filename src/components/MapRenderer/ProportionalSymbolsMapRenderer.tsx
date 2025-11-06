@@ -94,6 +94,15 @@ export function proportionalSymbolsPunctualRenderer(
           );
         });
 
+  const noShow = createMemo(() => {
+    if (layerDescription.rendererParameters.colorMode === 'categoricalVariable') {
+      return new Set(layerDescription.rendererParameters.color.mapping
+        .filter((m) => !m.show)
+        .map((m) => m.value));
+    }
+    return new Set();
+  });
+
   return <g
     ref={refElement!}
     id={layerDescription.id}
@@ -113,7 +122,14 @@ export function proportionalSymbolsPunctualRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
   >
-    <For each={layerDescription.data.features}>
+    <For each={
+      layerDescription.rendererParameters.colorMode !== 'categoricalVariable'
+        ? layerDescription.data.features
+        : layerDescription.data.features
+          .filter((f) => !noShow().has(
+            f.properties[layerDescription.rendererParameters.color.variable],
+          ))
+    }>
       {
         (feature) => {
           const projectedCoords = createMemo(
@@ -213,6 +229,15 @@ export function proportionalSymbolsLinearRenderer(
           );
         });
 
+  const noShow = createMemo(() => {
+    if (layerDescription.rendererParameters.colorMode === 'categoricalVariable') {
+      return new Set(layerDescription.rendererParameters.color.mapping
+        .filter((m) => !m.show)
+        .map((m) => m.value));
+    }
+    return new Set();
+  });
+
   return <g
     ref={refElement!}
     id={layerDescription.id}
@@ -227,7 +252,14 @@ export function proportionalSymbolsLinearRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
   >
-    <For each={layerDescription.data.features}>
+    <For each={
+      layerDescription.rendererParameters.colorMode !== 'categoricalVariable'
+        ? layerDescription.data.features
+        : layerDescription.data.features
+          .filter((f) => !noShow().has(
+            f.properties[layerDescription.rendererParameters.color.variable],
+          ))
+    }>
       {
         (feature) => <path
           d={globalStore.pathGenerator(feature)}
