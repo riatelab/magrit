@@ -23,6 +23,8 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 - Rend possible de fermer toutes les entrées du menu de gauche en accordéon (corrige <a href="https://github.com/riatelab/magrit/issues/173">l'issue 173</a>).
 
+- Mise à jour du jeu de donnée *world_209* afin de tenir compte de l'entrée du Timor Oriental dans l'ASEAN en octobre 2025.
+
 #### 2.3.10 (2025-10-21)
 
 - Améliore le redimensionnement des pictogrammes SVG ajoutés à la carte (corrige <a href="https://github.com/riatelab/magrit/issues/169">l'issue 169</a>).

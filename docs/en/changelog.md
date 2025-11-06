@@ -22,6 +22,8 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 - Make it possible to close all entries in the left-hand accordion menu (fixes <a href="https://github.com/riatelab/magrit/issues/173">issue 173</a>).
 
+- Update of the *world_209* dataset to reflect Timor-Leste's entry into ASEAN in October 2025.
+
 #### 2.3.10 (2025-10-21)
 
 - Improve the resizing of SVG icons added to the map (fixes <a href="https://github.com/riatelab/magrit/issues/169">issue 169</a>).
