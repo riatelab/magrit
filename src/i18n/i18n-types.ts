@@ -916,7 +916,7 @@ type RootTranslation = {
 				 */
 				'1': string
 				/**
-				 * U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​(​c​o​n​s​o​l​i​d​a​t​e​d​ ​b​y​ ​R​I​A​T​E​)​,​ ​2​0​2​4
+				 * U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​(​c​o​n​s​o​l​i​d​a​t​e​d​ ​b​y​ ​R​I​A​T​E​)​,​ ​2​0​2​5
 				 */
 				'2': string
 				/**
@@ -7154,7 +7154,7 @@ export type TranslationFunctions = {
 				 */
 				'1': () => LocalizedString
 				/**
-				 * United Nations (consolidated by RIATE), 2024
+				 * United Nations (consolidated by RIATE), 2025
 				 */
 				'2': () => LocalizedString
 				/**

@@ -304,7 +304,7 @@ const fr = {
       geometryAttribution: 'UAR RIATE, 2022',
       dataAttribution: {
         1: 'Banque Mondiale, 2024',
-        2: 'Nations Unies (consolidé RIATE), 2024',
+        2: 'Nations Unies (consolidé RIATE), 2025',
         3: 'Wikipedia, 2024',
       },
     },
