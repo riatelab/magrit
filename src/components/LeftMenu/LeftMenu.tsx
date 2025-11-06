@@ -34,9 +34,17 @@ export function openLayerManager() {
 export default function LeftMenu(): JSX.Element {
   const { LL } = useI18nContext();
 
+  const expandOrHide = (sectionNumber: number) => {
+    if (expandedSection() !== sectionNumber) {
+      setExpandedSection(sectionNumber);
+    } else {
+      setExpandedSection(0);
+    }
+  };
+
   return <div class="left-menu" style={{ 'overflow-y': 'auto' }}>
 
-    <div class="left-menu__title" onClick={() => setExpandedSection(1)}>
+    <div class="left-menu__title" onClick={() => expandOrHide(1)}>
       <div class="left-menu__title-inner">
         <TbFileImport style={{ height: '1.1em' }}/>
         <span>{LL().LeftMenu.Import()}</span>
@@ -54,7 +62,7 @@ export default function LeftMenu(): JSX.Element {
       </div>
     </Collapse>
 
-    <div class="left-menu__title" onClick={() => setExpandedSection(2)}>
+    <div class="left-menu__title" onClick={() => expandOrHide(2)}>
       <div class="left-menu__title-inner">
         <AiOutlineLayout/>
         <span>{LL().LeftMenu.MapConfiguration()}</span>
@@ -72,7 +80,7 @@ export default function LeftMenu(): JSX.Element {
       </div>
     </Collapse>
 
-    <div class="left-menu__title" onClick={() => setExpandedSection(3)}>
+    <div class="left-menu__title" onClick={() => expandOrHide(3)}>
       <div class="left-menu__title-inner">
         <BsMap/>
         <span>{LL().LeftMenu.Projection()}</span>
@@ -90,7 +98,7 @@ export default function LeftMenu(): JSX.Element {
       </div>
     </Collapse>
 
-    <div class="left-menu__title" onClick={() => setExpandedSection(4)}>
+    <div class="left-menu__title" onClick={() => expandOrHide(4)}>
       <div class="left-menu__title-inner">
         <FiLayers/>
         <span>{LL().LeftMenu.LayerManager()}</span>
@@ -108,7 +116,7 @@ export default function LeftMenu(): JSX.Element {
       </div>
     </Collapse>
 
-    <div class="left-menu__title" onClick={() => setExpandedSection(5)}>
+    <div class="left-menu__title" onClick={() => expandOrHide(5)}>
       <div class="left-menu__title-inner">
         <RiDocumentPagesLine/>
         <span>{LL().LeftMenu.LayoutFeatures()}</span>
@@ -126,7 +134,7 @@ export default function LeftMenu(): JSX.Element {
       </div>
     </Collapse>
 
-    <div class="left-menu__title" onClick={() => setExpandedSection(6)}>
+    <div class="left-menu__title" onClick={() => expandOrHide(6)}>
       <div class="left-menu__title-inner">
         <TiExportOutline/>
         <span>{LL().LeftMenu.ExportSection()}</span>
