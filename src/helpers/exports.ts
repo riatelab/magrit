@@ -23,7 +23,6 @@ import {
 
 /**
  * Get the dimensions of the SVG map element.
- * @param {SVGElement} map
  * @returns {{height: number, width: number}}
  */
 const getMapDimension = (): { height: number, width: number } => ({

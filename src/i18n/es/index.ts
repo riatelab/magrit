@@ -1169,6 +1169,8 @@ const es = {
     ClipSvgCurrentExtent: 'Recortar SVG a la extensión actual',
     Width: 'Anchura (px)',
     Height: 'Altura (px)',
+    ErrorDuringGeoExport: 'Error al exportar en capa geográfica',
+    ErrorCustomCRS: 'Compruebe el sistema de coordenadas de referencia seleccionado o seleccione otro.',
   },
   LayerSettings: {
     LayerSettings: 'Configuración de la capa',

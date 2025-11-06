@@ -6,6 +6,7 @@ import {
 
 // Imports from other libraries
 import { yieldOrContinue } from 'main-thread-scheduling';
+import toast from 'solid-toast';
 
 // Helpers
 import { exportMapToPng, exportMapToSvg, exportToGeo } from '../../helpers/exports';
@@ -64,6 +65,18 @@ function isButtonDisabled(
   return false;
 }
 
+function hasCustomCrs(
+  selectedFormat: string,
+  selectedCrs: string,
+  customCrs: string,
+): boolean {
+  return (
+    !noCrsFormats.includes(selectedFormat)
+    && selectedCrs.indexOf('EPSG') !== 0
+    && customCrs !== ''
+  );
+}
+
 async function exportToGeoWrapper(
   selectedLayer: string,
   selectedFormat: string,
@@ -81,7 +94,7 @@ async function exportToGeoWrapper(
 
   // eslint-disable-next-line no-nested-ternary
   const crs = noCrsFormats.includes(selectedFormat)
-    ? null
+    ? 'EPSG:4326'
     : selectedCrs.indexOf('EPSG') === 0
       ? selectedCrs
       : customCrs;
@@ -327,14 +340,34 @@ export default function ExportSection(): JSX.Element {
             onClick={ async () => {
               setLoading(true, 'ExportPreparation');
               await yieldOrContinue('smooth');
-              await exportToGeoWrapper(
-                selectedLayer()!,
-                selectedFormat()!,
-                selectedCrs()!,
-                customCrs(),
-              );
-              setLoading(false);
-            } }
+              try {
+                await exportToGeoWrapper(
+                  selectedLayer()!,
+                  selectedFormat()!,
+                  selectedCrs()!,
+                  customCrs(),
+                );
+              } catch (e) {
+                const msg = hasCustomCrs(selectedFormat()!, selectedCrs()!, customCrs()!)
+                  ? `${LL().ExportSection.ErrorDuringGeoExport()}\n${LL().ExportSection.ErrorCustomCRS()}`
+                  : LL().ExportSection.ErrorDuringGeoExport();
+                toast.error(
+                  msg,
+                  {
+                    style: {
+                      background: '#1f2937',
+                      color: '#f3f4f6',
+                    },
+                    iconTheme: {
+                      primary: '#38bdf8',
+                      secondary: '#1f2937',
+                    },
+                  },
+                );
+              } finally {
+                setLoading(false);
+              }
+            }}
           >
             { LL().ExportSection.Export() }
           </button>

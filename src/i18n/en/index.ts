@@ -1169,6 +1169,8 @@ const en = {
     ClipSvgCurrentExtent: 'Clip SVG to current extent',
     Width: 'Width (px)',
     Height: 'Height (px)',
+    ErrorDuringGeoExport: 'Error during geographic layer export.',
+    ErrorCustomCRS: 'Please verify the selected coordinate reference system or select another one.',
   },
   LayerSettings: {
     LayerSettings: 'Layer settings',

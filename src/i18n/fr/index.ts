@@ -1169,6 +1169,8 @@ const fr = {
     ClipSvgCurrentExtent: 'Découper le SVG sur l\'emprise actuelle',
     Width: 'Largeur (px)',
     Height: 'Hauteur (px)',
+    ErrorDuringGeoExport: 'Erreur lors de l\'export en couche géographique.',
+    ErrorCustomCRS: 'Veuillez vérifier le système de coordonnées de référence choisi ou en choisir un autre.',
   },
   LayerSettings: {
     LayerSettings: 'Paramètres de la couche',

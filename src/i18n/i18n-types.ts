@@ -4828,6 +4828,14 @@ type RootTranslation = {
 		 * H​e​i​g​h​t​ ​(​p​x​)
 		 */
 		Height: string
+		/**
+		 * E​r​r​o​r​ ​d​u​r​i​n​g​ ​g​e​o​g​r​a​p​h​i​c​ ​l​a​y​e​r​ ​e​x​p​o​r​t​.
+		 */
+		ErrorDuringGeoExport: string
+		/**
+		 * P​l​e​a​s​e​ ​v​e​r​i​f​y​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​c​o​o​r​d​i​n​a​t​e​ ​r​e​f​e​r​e​n​c​e​ ​s​y​s​t​e​m​ ​o​r​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​o​n​e​.
+		 */
+		ErrorCustomCRS: string
 	}
 	LayerSettings: {
 		/**
@@ -10955,6 +10963,14 @@ export type TranslationFunctions = {
 		 * Height (px)
 		 */
 		Height: () => LocalizedString
+		/**
+		 * Error during geographic layer export.
+		 */
+		ErrorDuringGeoExport: () => LocalizedString
+		/**
+		 * Please verify the selected coordinate reference system or select another one.
+		 */
+		ErrorCustomCRS: () => LocalizedString
 	}
 	LayerSettings: {
 		/**
