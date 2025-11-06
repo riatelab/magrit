@@ -916,7 +916,7 @@ type RootTranslation = {
 				 */
 				'1': string
 				/**
-				 * U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​(​c​o​n​s​o​l​i​d​a​t​e​d​ ​b​y​ ​R​I​A​T​E​)​,​ ​2​0​2​4
+				 * U​n​i​t​e​d​ ​N​a​t​i​o​n​s​ ​(​c​o​n​s​o​l​i​d​a​t​e​d​ ​b​y​ ​R​I​A​T​E​)​,​ ​2​0​2​5
 				 */
 				'2': string
 				/**
@@ -4855,6 +4855,14 @@ type RootTranslation = {
 		 * H​e​i​g​h​t​ ​(​p​x​)
 		 */
 		Height: string
+		/**
+		 * E​r​r​o​r​ ​d​u​r​i​n​g​ ​g​e​o​g​r​a​p​h​i​c​ ​l​a​y​e​r​ ​e​x​p​o​r​t​.
+		 */
+		ErrorDuringGeoExport: string
+		/**
+		 * P​l​e​a​s​e​ ​v​e​r​i​f​y​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​c​o​o​r​d​i​n​a​t​e​ ​r​e​f​e​r​e​n​c​e​ ​s​y​s​t​e​m​ ​o​r​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​o​n​e​.
+		 */
+		ErrorCustomCRS: string
 	}
 	LayerSettings: {
 		/**
@@ -7173,7 +7181,7 @@ export type TranslationFunctions = {
 				 */
 				'1': () => LocalizedString
 				/**
-				 * United Nations (consolidated by RIATE), 2024
+				 * United Nations (consolidated by RIATE), 2025
 				 */
 				'2': () => LocalizedString
 				/**
@@ -11002,6 +11010,14 @@ export type TranslationFunctions = {
 		 * Height (px)
 		 */
 		Height: () => LocalizedString
+		/**
+		 * Error during geographic layer export.
+		 */
+		ErrorDuringGeoExport: () => LocalizedString
+		/**
+		 * Please verify the selected coordinate reference system or select another one.
+		 */
+		ErrorCustomCRS: () => LocalizedString
 	}
 	LayerSettings: {
 		/**

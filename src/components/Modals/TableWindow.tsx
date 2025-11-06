@@ -9,6 +9,9 @@ import {
   Show,
 } from 'solid-js';
 
+// Other libraries
+import { getColors } from 'dicopal';
+
 // GeoJSON types
 import type { Feature, FeatureCollection } from 'geojson';
 
@@ -36,6 +39,10 @@ import {
   type Variable,
   VariableType,
 } from '../../helpers/typeDetection';
+import { makeCategoriesMap } from '../../helpers/categorical';
+import sanitizeSVG from '../../helpers/sanitize-svg';
+import images from '../../helpers/symbol-library';
+import { Mfloor, Mrandom } from '../../helpers/math';
 
 // Subcomponents
 import InputFieldButton from '../Inputs/InputButton.tsx';
@@ -54,10 +61,13 @@ import { setNiceAlertStore } from '../../store/NiceAlertStore';
 import { resetTableWindowStore, tableWindowStore } from '../../store/TableWindowStore';
 
 // Types / Interfaces / Enums
-import type {
-  LayerDescription,
-  TableDescription,
-} from '../../global';
+import {
+  type CategoricalChoroplethParameters,
+  type CategoricalPictogramParameters,
+  ImageType,
+  type LayerDescription,
+  type TableDescription,
+} from '../../global.d';
 
 // Styles
 import '../../styles/TableWindow.css';
@@ -347,6 +357,73 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
           fields: newFields,
         },
       );
+
+      // If the layer type is categoricalChoropleth or categoricalPictogram,
+      // we may need to update the CategoricalChoroplethMapping or
+      // the CategoricalPictogramMapping because the number of features by category
+      // may have changed (if the user has edited values in the variable used
+      // for the categorization)
+      const layer = layersDescriptionStore.layers.find((l) => l.id === dsDescription.id)!;
+      if (layer.representationType === 'categoricalChoropleth' || layer.representationType === 'categoricalPictogram') {
+        const rendererParams = layer.rendererParameters as (
+          CategoricalChoroplethParameters | CategoricalPictogramParameters);
+        const v = rendererParams.variable;
+
+        // Count the number of features by category
+        const catMap = makeCategoriesMap(newData.features, v);
+
+        // Update the count property of each category in the mapping
+        const newMapping = rendererParams
+          .mapping
+          .map((category) => ({
+            ...category,
+            count: catMap.get(category.value) || 0,
+          }));
+
+        // Do we also have new categories to add to the mapping?
+        const existingCategories = new Set(
+          rendererParams.mapping.map((category) => category.value),
+        );
+        Array.from(catMap.keys())
+          .forEach((categoryValue) => {
+            if (!existingCategories.has(categoryValue)) {
+              if (layer.representationType === 'categoricalChoropleth') {
+                // Add a new category with a default color
+                newMapping.push({
+                  value: categoryValue,
+                  categoryName: categoryValue !== null ? String(categoryValue) : null,
+                  color: categoryValue !== null ? getColors('Tableau', 20)![Mfloor(Mrandom() * 20)] : '',
+                  count: catMap.get(categoryValue) || 0,
+                  show: true,
+                });
+              } else {
+                // Add a new category with a default symbol
+                newMapping.push({
+                  value: categoryValue,
+                  categoryName: categoryValue !== null ? String(categoryValue) : null,
+                  count: catMap.get(categoryValue) || 0,
+                  iconType: 'SVG' as ImageType,
+                  iconContent: sanitizeSVG(images[Mfloor(Mrandom() * images.length)]),
+                  iconDimension: [50, 50],
+                  show: true,
+                });
+              }
+            }
+          });
+
+        // Do we also need to remove categories from the mapping?
+        const dataCategories = new Set(Array.from(catMap.keys()));
+        const finalMapping = newMapping.filter((category) => dataCategories.has(category.value));
+
+        // Update the layer description store
+        setLayersDescriptionStore(
+          'layers',
+          (l: LayerDescription) => l.id === dsDescription.id,
+          'rendererParameters',
+          'mapping',
+          finalMapping,
+        );
+      }
     };
   } else {
     res.updateReferenceData = (dsDescription, newVariables, rowData) => {

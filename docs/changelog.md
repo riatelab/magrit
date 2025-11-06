@@ -12,6 +12,21 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.3.11 (2025-11-06)
+
+- Ajout d'une section concernant les exports dans la documentation (corrige <a href="https://github.com/riatelab/magrit/issues/175">l'issue 175</a>).
+
+- Améliore la possibilité d'éditer le tableau de données d'une carte choroplèthe catégorielle (corrige <a href="https://github.com/riatelab/magrit/issues/176">l'issue 176</a>).
+
+- Améliore la gestion des erreurs lors de l'export en couche géographique, notamment lors de l'utilisation
+  d'un SRC personnalisé (corrige <a href="https://github.com/riatelab/magrit/issues/174">l'issue 174</a>). 
+
+- Rend possible de fermer toutes les entrées du menu de gauche en accordéon (corrige <a href="https://github.com/riatelab/magrit/issues/173">l'issue 173</a>).
+
+- Mise à jour du jeu de donnée *world_209* afin de tenir compte de :
+  - l'entrée du Timor Oriental dans l'ASEAN en octobre 2025,
+  - l'appartenance du Burkina Faso, du Mali et du Niger l'AES (Alliance des États du Sahel) à la suite de la sortie de la CEDEAO en janvier 2025.
+
 #### 2.3.10 (2025-10-21)
 
 - Améliore le redimensionnement des pictogrammes SVG ajoutés à la carte (corrige <a href="https://github.com/riatelab/magrit/issues/169">l'issue 169</a>).

@@ -31,6 +31,7 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
         { text: 'Mise en page et habillage de la carte', link: '/layout-features' },
         { text: 'Création d\'une représentation', link: '/layer-creation' },
         { text: 'Paramètres de l\'application', link: '/application-settings' },
+        { text: 'Exports', link: '/exports' },
       ]
     },
     {
@@ -107,6 +108,7 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
         { text: 'Map layout features', link: '/en/layout-features' },
         { text: 'Creating a portrayal', link: '/en/layer-creation' },
         { text: 'Application settings', link: '/en/application-settings' },
+        { text: 'Exports', link: '/exports' },
       ]
     },
     {

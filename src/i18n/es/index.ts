@@ -304,7 +304,7 @@ const es = {
       geometryAttribution: 'UAR RIATE, 2022',
       dataAttribution: {
         1: 'Banco Mundial, 2024',
-        2: 'Naciones Unidas (RIATE consolidado), 2024',
+        2: 'Naciones Unidas (RIATE consolidado), 2025',
         3: 'Wikipedia, 2024',
       },
     },
@@ -1177,6 +1177,8 @@ const es = {
     ClipSvgCurrentExtent: 'Recortar SVG a la extensión actual',
     Width: 'Anchura (px)',
     Height: 'Altura (px)',
+    ErrorDuringGeoExport: 'Error al exportar en capa geográfica',
+    ErrorCustomCRS: 'Compruebe el sistema de coordenadas de referencia seleccionado o seleccione otro.',
   },
   LayerSettings: {
     LayerSettings: 'Configuración de la capa',
