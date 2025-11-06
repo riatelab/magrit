@@ -12,7 +12,7 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
-#### 2.3.11 (unreleased)
+#### 2.3.11 (2025-11-06)
 
 - Ajout d'une section concernant les exports dans la documentation (corrige <a href="https://github.com/riatelab/magrit/issues/175">l'issue 175</a>).
 
@@ -23,7 +23,9 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 - Rend possible de fermer toutes les entrées du menu de gauche en accordéon (corrige <a href="https://github.com/riatelab/magrit/issues/173">l'issue 173</a>).
 
-- Mise à jour du jeu de donnée *world_209* afin de tenir compte de l'entrée du Timor Oriental dans l'ASEAN en octobre 2025.
+- Mise à jour du jeu de donnée *world_209* afin de tenir compte de :
+  - l'entrée du Timor Oriental dans l'ASEAN en octobre 2025,
+  - l'appartenance du Burkina Faso, du Mali et du Niger l'AES (Alliance des États du Sahel) à la suite de la sortie de la CEDEAO en janvier 2025.
 
 #### 2.3.10 (2025-10-21)
 

@@ -12,7 +12,7 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-#### 2.3.11 (unreleased)
+#### 2.3.11 (2025-11-06)
 
 - Add a section on exports to the documentation (fixes <a href="https://github.com/riatelab/magrit/issues/175">issue 175</a>).
 
@@ -22,7 +22,9 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 - Make it possible to close all entries in the left-hand accordion menu (fixes <a href="https://github.com/riatelab/magrit/issues/173">issue 173</a>).
 
-- Update of the *world_209* dataset to reflect Timor-Leste's entry into ASEAN in October 2025.
+- Update of the *world_209* dataset to reflect :
+  - Timor-Leste's entry into ASEAN in October 2025,
+  - the membership of Burkina Faso, Mali and Niger in AES (Alliance of Sahel States) following the withdrawal of these three countries from ECOWAS in January 2025.
 
 #### 2.3.10 (2025-10-21)
 
