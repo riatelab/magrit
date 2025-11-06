@@ -411,13 +411,17 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
             }
           });
 
+        // Do we also need to remove categories from the mapping?
+        const dataCategories = new Set(Array.from(catMap.keys()));
+        const finalMapping = newMapping.filter((category) => dataCategories.has(category.value));
+
         // Update the layer description store
         setLayersDescriptionStore(
           'layers',
           (l: LayerDescription) => l.id === dsDescription.id,
           'rendererParameters',
           'mapping',
-          newMapping,
+          finalMapping,
         );
       }
     };
