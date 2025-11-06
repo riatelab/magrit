@@ -12,6 +12,17 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.3.11 (unreleased)
+
+- Ajout d'une section concernant les exports dans la documentation (corrige <a href="https://github.com/riatelab/magrit/issues/175">l'issue 175</a>).
+
+- Améliore la possibilité d'éditer le tableau de données d'une carte choroplèthe catégorielle (corrige <a href="https://github.com/riatelab/magrit/issues/176">l'issue 176</a>).
+
+- Améliore la gestion des erreurs lors de l'export en couche géographique, notamment lors de l'utilisation
+  d'un SRC personnalisé (corrige <a href="https://github.com/riatelab/magrit/issues/174">l'issue 174</a>). 
+
+- Rend possible de fermer toutes les entrées du menu de gauche en accordéon (corrige <a href="https://github.com/riatelab/magrit/issues/173">l'issue 173</a>).
+
 #### 2.3.10 (2025-10-21)
 
 - Améliore le redimensionnement des pictogrammes SVG ajoutés à la carte (corrige <a href="https://github.com/riatelab/magrit/issues/169">l'issue 169</a>).
