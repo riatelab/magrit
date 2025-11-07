@@ -370,7 +370,6 @@ export function triggerContextMenuLegend(
   legendId: string,
   LL: Accessor<TranslationFunctions>,
 ): void {
-  console.log('context menu legend');
   setContextMenuStore({
     show: true,
     position: [event.clientX, event.clientY],
