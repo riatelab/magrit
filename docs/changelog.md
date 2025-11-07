@@ -12,6 +12,15 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+#### 2.3.12 (2025-11-07)
+
+- Corrige le chargement de certains jeux de données contenant des valeurs vides (corrige <a href="https://github.com/riatelab/magrit/issues/179">l'issue 179</a>).
+
+- Améliore la capacité à modifier le tableau de données d'une carte à symboles proportionnels avec des catégories
+  (suite à la correction de l'issue <a href="https://github.com/riatelab/magrit/issues/176">l'issue 176</a>).
+
+- Corrige le recalcul de la taille du rectangle englobant des légendes des cartes choroplèthes catégorielles lors du changement de certains paramètres.
+
 #### 2.3.11 (2025-11-06)
 
 - Ajout d'une section concernant les exports dans la documentation (corrige <a href="https://github.com/riatelab/magrit/issues/175">l'issue 175</a>).
