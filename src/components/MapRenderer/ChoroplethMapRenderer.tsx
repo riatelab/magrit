@@ -33,9 +33,9 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
   bindData,
 ];
 
-export function choroplethPolygonRenderer(
+const prepareParameters = (
   layerDescription: LayerDescriptionChoropleth,
-): JSX.Element {
+) => {
   const rendererParameters = createMemo(
     () => layerDescription.rendererParameters as ClassificationParameters,
   );
@@ -49,6 +49,14 @@ export function choroplethPolygonRenderer(
       rendererParameters().breaks,
     );
   });
+
+  return { rendererParameters, classifier };
+};
+
+export function choroplethPolygonRenderer(
+  layerDescription: LayerDescriptionChoropleth,
+): JSX.Element {
+  const { rendererParameters, classifier } = prepareParameters(layerDescription);
 
   return <g
     id={layerDescription.id}
@@ -93,19 +101,7 @@ export function choroplethPolygonRenderer(
 export function choroplethPointRenderer(
   layerDescription: LayerDescriptionChoropleth,
 ): JSX.Element {
-  const rendererParameters = createMemo(
-    () => layerDescription.rendererParameters as ClassificationParameters,
-  );
-
-  const classifier = createMemo(() => {
-    const Cls = getClassifier(ClassificationMethod.manual);
-    return new Cls(
-      null,
-      null,
-      applicationSettingsStore.intervalClosure,
-      rendererParameters().breaks,
-    );
-  });
+  const { rendererParameters, classifier } = prepareParameters(layerDescription);
 
   return <g
     id={layerDescription.id}
@@ -153,19 +149,7 @@ export function choroplethPointRenderer(
 export function choroplethLineRenderer(
   layerDescription: LayerDescriptionChoropleth,
 ): JSX.Element {
-  const rendererParameters = createMemo(
-    () => layerDescription.rendererParameters as ClassificationParameters,
-  );
-
-  const classifier = createMemo(() => {
-    const Cls = getClassifier(ClassificationMethod.manual);
-    return new Cls(
-      null,
-      null,
-      applicationSettingsStore.intervalClosure,
-      rendererParameters().breaks,
-    );
-  });
+  const { rendererParameters, classifier } = prepareParameters(layerDescription);
 
   return <g
     id={layerDescription.id}
