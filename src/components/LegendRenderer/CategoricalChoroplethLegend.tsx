@@ -323,6 +323,7 @@ function horizontalLegend(legendParameters: CategoricalChoroplethLegend): JSX.El
         distanceBoxesToTop(),
         distanceLabelsToTop(),
         distanceNoteToTop(),
+        legendParameters.boxWidth,
         legendParameters.boxSpacing,
         legendParameters.boxSpacingNoData,
         legendParameters.title.text,
