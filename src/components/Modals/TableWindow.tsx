@@ -66,6 +66,7 @@ import {
   type CategoricalPictogramParameters,
   ImageType,
   type LayerDescription,
+  type ProportionalSymbolsParameters,
   type TableDescription,
 } from '../../global.d';
 
@@ -336,7 +337,7 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
       const newFields = dsDescription.fields
         .map((f) => {
           // If a cell value has been changed, we may need to update the field description
-          // (for example if the user has changed has removed the only string value in a column
+          // (for example if the user has removed the only string value in a column
           // of numbers, we need to update the field description to set the dataType to 'number')
           if (newFieldsName.includes(f.name)) {
             const values = newData.features.map((d) => d.properties![f.name]);
@@ -358,15 +359,25 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
         },
       );
 
-      // If the layer type is categoricalChoropleth or categoricalPictogram,
-      // we may need to update the CategoricalChoroplethMapping or
-      // the CategoricalPictogramMapping because the number of features by category
-      // may have changed (if the user has edited values in the variable used
-      // for the categorization)
+      // If the layer type is categoricalChoropleth (and also proportionalSymbols with
+      // colorMode 'categoricalVariable') or categoricalPictogram we may need to update
+      // the CategoricalChoroplethMapping / CategoricalPictogramMapping because
+      // the number of features by category may have changed (if the user has edited
+      // values in the variable used for the categorization) or categories may have been
+      // added / removed.
       const layer = layersDescriptionStore.layers.find((l) => l.id === dsDescription.id)!;
-      if (layer.representationType === 'categoricalChoropleth' || layer.representationType === 'categoricalPictogram') {
-        const rendererParams = layer.rendererParameters as (
-          CategoricalChoroplethParameters | CategoricalPictogramParameters);
+      if (
+        layer.representationType === 'categoricalChoropleth'
+        || layer.representationType === 'categoricalPictogram'
+        || (layer.representationType === 'proportionalSymbols'
+          && (layer.rendererParameters as ProportionalSymbolsParameters).colorMode === 'categoricalVariable')
+      ) {
+        const rendererParams = layer.representationType === 'proportionalSymbols'
+          // eslint-disable-next-line max-len
+          ? (layer.rendererParameters as ProportionalSymbolsParameters).color as CategoricalChoroplethParameters
+          // eslint-disable-next-line max-len
+          : layer.rendererParameters as (CategoricalChoroplethParameters | CategoricalPictogramParameters);
+
         const v = rendererParams.variable;
 
         // Count the number of features by category
@@ -387,8 +398,8 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
         Array.from(catMap.keys())
           .forEach((categoryValue) => {
             if (!existingCategories.has(categoryValue)) {
-              if (layer.representationType === 'categoricalChoropleth') {
-                // Add a new category with a default color
+              if (layer.representationType === 'categoricalChoropleth' || layer.representationType === 'proportionalSymbols') {
+                // Add a new category with a random default color
                 newMapping.push({
                   value: categoryValue,
                   categoryName: categoryValue !== null ? String(categoryValue) : null,
@@ -397,7 +408,7 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
                   show: true,
                 });
               } else {
-                // Add a new category with a default symbol
+                // Add a new category with a random default symbol
                 newMapping.push({
                   value: categoryValue,
                   categoryName: categoryValue !== null ? String(categoryValue) : null,
@@ -416,13 +427,24 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
         const finalMapping = newMapping.filter((category) => dataCategories.has(category.value));
 
         // Update the layer description store
-        setLayersDescriptionStore(
-          'layers',
-          (l: LayerDescription) => l.id === dsDescription.id,
-          'rendererParameters',
-          'mapping',
-          finalMapping,
-        );
+        if (layer.representationType === 'proportionalSymbols') {
+          setLayersDescriptionStore(
+            'layers',
+            (l: LayerDescription) => l.id === dsDescription.id,
+            'rendererParameters',
+            'color',
+            'mapping',
+            finalMapping,
+          );
+        } else {
+          setLayersDescriptionStore(
+            'layers',
+            (l: LayerDescription) => l.id === dsDescription.id,
+            'rendererParameters',
+            'mapping',
+            finalMapping,
+          );
+        }
       }
     };
   } else {
@@ -443,7 +465,7 @@ const getHandlerFunctions = (type: 'layer' | 'table'): DataHandlerFunctions => {
       const newFields = dsDescription.fields
         .map((f) => {
           // If a cell value has been changed, we may need to update the field description
-          // (for example if the user has changed has removed the only string value in a column
+          // (for example if the user has removed the only string value in a column
           // of numbers, we need to update the field description to set the dataType to 'number')
           if (newFieldsName.includes(f.name)) {
             const values = newData.map((d) => d[f.name]);
@@ -508,8 +530,8 @@ export default function TableWindow(): JSX.Element {
   const { LL } = useI18nContext();
   // Extract identifier and editable value from tableWindowStore
   // and find the layer from layersDescriptionStore
-  // to get the data (we know that this wont change during the lifetime of the component
-  // so we can destructure it)
+  // to get the data (we know that this won't change during the
+  // lifetime of the component so we can destructure it)
   const { identifier, editable } = tableWindowStore;
 
   const dsDescription = identifier!.type === 'layer'

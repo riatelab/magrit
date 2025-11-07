@@ -12,6 +12,14 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+#### 2.3.12 (2025-11-07)
+
+- Fix loading of some tabular datasets with empty values (fixes <a href="https://github.com/riatelab/magrit/issues/179">issue 179</a>).
+
+- Improve the ability to edit the data table of a proportional symbol maps with categorical coloring (following fix of <a href="https://github.com/riatelab/magrit/issues/176">issue 176</a>).
+
+- Fix the recalculation of the size of the bounding rectangle of legends on categorical choropleth maps when some parameters are changed.
+
 #### 2.3.11 (2025-11-06)
 
 - Add a section on exports to the documentation (fixes <a href="https://github.com/riatelab/magrit/issues/175">issue 175</a>).

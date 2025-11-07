@@ -163,7 +163,8 @@ export const autoTypeDataset = (dataset: d3.DSVRowArray<string>): Record<string,
     // Check that all values of this field can be coerced to Number :
     for (let j = 0; j < dataset.length; j += 1) {
       if (
-        dataset[j][cols[i]].replace
+        dataset[j][cols[i]]
+        && dataset[j][cols[i]].replace
         && dataset[j][cols[i]] !== ''
         && (
           !Number.isNaN(+dataset[j][cols[i]].replace(',', '.'))
