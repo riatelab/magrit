@@ -1094,6 +1094,11 @@ function makeSettingsDefaultPoint(
         value={(props.rendererParameters as MushroomsParameters).bottom.color as string}
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'color'], v)}
       />
+      <InputFieldCheckbox
+        label={ LL().LayerSettings.AllowMovingSymbols() }
+        checked={(props.rendererParameters as MushroomsParameters).movable}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}
+      />
     </Show>
     <Show when={props.representationType === 'proportionalSymbols'}>
       <InputFieldCheckbox
