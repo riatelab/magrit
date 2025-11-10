@@ -13,7 +13,12 @@ import {
   OptionsClassification,
 } from '../../helpers/classification';
 import { isFiniteNumber } from '../../helpers/common';
-import { Mmin, round } from '../../helpers/math';
+import {
+  max,
+  min,
+  Mmin,
+  round,
+} from '../../helpers/math';
 import { makeDistributionPlot } from '../DistributionPlots.tsx';
 
 // Sub-components
@@ -70,6 +75,18 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
       breaks = classifier.classify();
       classes = breaks.length - 1;
     } else if (classificationMethod() === ClassificationMethod.manual) {
+      if (customBreaks().length - 1 !== numberOfClasses()) {
+        // The user is changing the number of classes, we need to adjust the custom breaks
+        // (to do so, we use a quantile classification as basis)
+        const tempClassifier = new (
+          getClassifier(ClassificationMethod.quantiles)
+        )(filteredSeries, null, applicationSettingsStore.intervalClosure);
+        const tempBreaks = tempClassifier.classify(numberOfClasses());
+        // We keep the min and max values from the current custom breaks
+        tempBreaks[0] = min(customBreaks());
+        tempBreaks[tempBreaks.length - 1] = max(customBreaks())!;
+        setCustomBreaks(tempBreaks);
+      }
       breaks = classifier.classify(customBreaks());
       classes = breaks.length - 1;
     } else {
@@ -167,7 +184,7 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
     {
       name: LL().ClassificationPanel.classificationMethods.manual(),
       value: ClassificationMethod.manual,
-      options: [OptionsClassification.breaks],
+      options: [OptionsClassification.breaks, OptionsClassification.numberOfClasses],
     },
   ].filter((d) => d !== null);
 
