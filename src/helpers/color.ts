@@ -1,5 +1,5 @@
 import {
-  getAsymmetricDivergingColors, getPalette,
+  getAsymmetricDivergingColors, getPalette, getPalettes,
   getPaletteNumbers, getSequentialColors,
 } from 'dicopal';
 
@@ -8,6 +8,7 @@ import d3 from './d3-custom';
 import { Mpow } from './math';
 
 import { CustomPalette } from '../global';
+import * as PaletteThumbnails from './palette-thumbnail';
 
 export function decimalToHex(d: number, padding = 0): string {
   let hex = d.toString(16);
@@ -139,3 +140,33 @@ export function interpolateColors(
     classNumber,
   ).map((d: unknown) => rgbToHex(d as string));
 }
+
+// eslint-disable-next-line arrow-body-style
+const filterUnwantedSeqPalettes = (d) => {
+  return !(d.provider === 'cmocean' && d.name === 'Gray')
+    && !(d.provider === 'cmocean' && d.name === 'Oxy')
+    && !(d.provider === 'scientific' && d.name === 'Oleron');
+};
+
+// eslint-disable-next-line arrow-body-style
+const filterUnwantedDivPalettes = (d) => {
+  return !(d.provider === 'lightbartlein' && d.name === 'BrownBlue12');
+};
+
+// The palettes we want to propose in the app for sequential schemes
+export const availableSequentialPalettes = getPalettes({ type: 'sequential', number: 8 })
+  .filter(filterUnwantedSeqPalettes)
+  .map((d) => ({
+    name: `${d.name} (${d.provider})`,
+    value: d.name,
+    prefixImage: PaletteThumbnails[`img${d.provider}${d.name}` as never] as string,
+  }));
+
+// The palettes we want to propose in the app for diverging schemes
+export const availableDivergingPalettes = getPalettes({ type: 'diverging', number: 8 })
+  .filter(filterUnwantedDivPalettes)
+  .map((d) => ({
+    name: `${d.name} (${d.provider})`,
+    value: d.name,
+    prefixImage: PaletteThumbnails[`img${d.provider}${d.name}` as never] as string,
+  }));
