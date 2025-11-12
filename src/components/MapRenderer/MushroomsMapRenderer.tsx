@@ -47,7 +47,7 @@ export default function mushroomRenderer(
   ));
 
   onMount(() => {
-    refElement.querySelectorAll('circle, rect')
+    refElement.querySelectorAll('g')
       .forEach((symbolElement, i) => {
         bindDragBehavior(symbolElement as SVGGElement, layerDescription, i);
       });

@@ -795,6 +795,7 @@ function makeSettingsDefaultPoint(
       <div class="field" style={{ 'text-align': 'center' }}>
         <button
           class="button"
+          id={'button-change-classification-pt'}
           style={{ margin: 'auto' }}
           onClick={() => {
             // Save current state of classification parameters
@@ -831,7 +832,11 @@ function makeSettingsDefaultPoint(
         label={LL().LayerSettings.Fill()}
         valuePalette={(props.rendererParameters as ClassificationParameters).palette.colors}
         valueOpacity={props.fillOpacity!}
-        onClickPalette={() => {}}
+        onClickPalette={() => {
+          (document.getElementById('button-change-classification-pt')!
+            .firstElementChild as HTMLDetailsElement)
+            .click();
+        }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
       />
     </Show>
@@ -891,6 +896,7 @@ function makeSettingsDefaultPoint(
       <div class="field" style={{ 'text-align': 'center' }}>
         <button
           class="button"
+          id="button-change-classification-prop-symbols"
           style={{ margin: 'auto' }}
           onClick={() => {
             // Save current state of classification parameters
@@ -929,7 +935,11 @@ function makeSettingsDefaultPoint(
         label={LL().LayerSettings.Fill()}
         valuePalette={(props.rendererParameters!.color as ClassificationParameters).palette.colors}
         valueOpacity={props.fillOpacity!}
-        onClickPalette={() => {}}
+        onClickPalette={() => {
+          (document.getElementById('button-change-classification-prop-symbols')!
+            .firstElementChild as HTMLDetailsElement)
+            .click();
+        }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
       />
     </Show>
@@ -1093,6 +1103,11 @@ function makeSettingsDefaultPoint(
         label={LL().LayerSettings.FillColor()}
         value={(props.rendererParameters as MushroomsParameters).bottom.color as string}
         onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'bottom', 'color'], v)}
+      />
+      <InputFieldCheckbox
+        label={ LL().LayerSettings.AllowMovingSymbols() }
+        checked={(props.rendererParameters as MushroomsParameters).movable}
+        onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}
       />
     </Show>
     <Show when={props.representationType === 'proportionalSymbols'}>
@@ -1913,6 +1928,7 @@ function makeSettingsDefaultLine(
         <div class="field" style={{ 'text-align': 'center' }}>
           <button
             class="button"
+            id="button-change-classification-prop-line"
             style={{ margin: 'auto' }}
             onClick={() => {
               // Save current state of classification parameters
@@ -1957,7 +1973,11 @@ function makeSettingsDefaultLine(
           valuePalette={(props.rendererParameters as ClassificationParameters).palette.colors}
           valueOpacity={props.strokeOpacity!}
           onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
-          onClickPalette={() => {}}
+          onClickPalette={() => {
+            (document.getElementById('button-change-classification-prop-line')!
+              .firstElementChild as HTMLDetailsElement)
+              .click();
+          }}
           onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
         />
       </Show>
@@ -2000,6 +2020,7 @@ function makeSettingsDefaultLine(
       <div class="field" style={{ 'text-align': 'center' }}>
         <button
           class="button"
+          id="button-change-classification-line"
           style={{ margin: 'auto' }}
           onClick={() => {
             // Save current state of classification parameters
@@ -2038,7 +2059,11 @@ function makeSettingsDefaultLine(
         valuePalette={(props.rendererParameters as ClassificationParameters).palette.colors}
         valueOpacity={props.strokeOpacity!}
         onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
-        onClickPalette={() => {}}
+        onClickPalette={() => {
+          (document.getElementById('button-change-classification-line')!
+            .firstElementChild as HTMLDetailsElement)
+            .click();
+        }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
       />
     </Show>
@@ -2473,6 +2498,7 @@ function makeSettingsDefaultPolygon(
       <div class="field" style={{ 'text-align': 'center' }}>
         <button
           class="button"
+          id="button-change-classification-polygon"
           style={{ margin: 'auto' }}
           onClick={() => {
             // Save current state of classification parameters
@@ -2509,7 +2535,11 @@ function makeSettingsDefaultPolygon(
         label={LL().LayerSettings.Fill()}
         valuePalette={(props.rendererParameters as ClassificationParameters).palette.colors}
         valueOpacity={props.fillOpacity!}
-        onClickPalette={() => {}}
+        onClickPalette={() => {
+          (document.getElementById('button-change-classification-polygon')!
+            .firstElementChild as HTMLDetailsElement)
+            .click();
+        }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
       />
     </Show>

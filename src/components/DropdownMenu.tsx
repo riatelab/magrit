@@ -27,6 +27,7 @@ interface DropdownMenuProps {
   style?: { [key: string]: string };
   classList?: { [key: string]: boolean };
   triggerTitle?: string;
+  maxHeight?: string;
 }
 
 function onClickOutsideDropdown(): void {
@@ -114,7 +115,7 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
   let refParentNode: HTMLDivElement;
 
   onMount(() => {
-    const items: NodeListOf<HTMLAnchorElement> = refParentNode.querySelectorAll('.dropdown-item');
+    const items: NodeListOf<HTMLAnchorElement> = refParentNode!.querySelectorAll('.dropdown-item');
     items
       .forEach((item) => {
         item.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -164,7 +165,7 @@ export default function DropdownMenu(props: DropdownMenuProps): JSX.Element {
         class="dropdown-content"
         style={{
           'z-index': 1001,
-          'max-height': '30vh',
+          'max-height': props.maxHeight || '30vh',
           overflow: 'auto',
           ...{
             width: props.style?.width && props.style.width.includes('px') ? props.style.width : undefined,

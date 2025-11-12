@@ -395,7 +395,7 @@ export default function MushroomsSettings(
         setRefValueTop(value);
       }}
       min={1}
-      max={999}
+      max={99999999999}
       step={0.1}
     />
     <InputFieldColor
@@ -436,7 +436,7 @@ export default function MushroomsSettings(
         setRefValueBottom(value);
       }}
       min={1}
-      max={999}
+      max={99999999999}
       step={0.1}
     />
     <InputFieldColor

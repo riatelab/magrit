@@ -8,7 +8,6 @@ import {
 // Imports from other packages
 import {
   getAsymmetricDivergingColors,
-  getPalettes,
   getSequentialColors,
   PaletteType,
 } from 'dicopal';
@@ -29,9 +28,12 @@ import {
   isGreaterThan, isLessThan, unproxify,
 } from '../../helpers/common';
 import { Mmin, Mround, round } from '../../helpers/math';
-import { interpolateColors } from '../../helpers/color';
+import {
+  availableDivergingPalettes,
+  availableSequentialPalettes,
+  interpolateColors,
+} from '../../helpers/color';
 import { makeClassificationPlot, makeColoredBucketPlot, makeDistributionPlot } from '../DistributionPlots.tsx';
-import * as PaletteThumbnails from '../../helpers/palette-thumbnail';
 
 // Sub-components
 import DropdownMenu from '../DropdownMenu.tsx';
@@ -550,20 +552,6 @@ export default function ClassificationPanel(): JSX.Element {
 
   // Basic statistical summary displayed to the user
   const statSummary = prepareStatisticalSummary(filteredSeries);
-
-  const availableSequentialPalettes = getPalettes({ type: 'sequential', number: 8 })
-    .map((d) => ({
-      name: `${d.name} (${d.provider})`,
-      value: d.name,
-      prefixImage: PaletteThumbnails[`img${d.provider}${d.name}` as never] as string,
-    }));
-
-  const availableDivergingPalettes = getPalettes({ type: 'diverging', number: 8 })
-    .map((d) => ({
-      name: `${d.name} (${d.provider})`,
-      value: d.name,
-      prefixImage: PaletteThumbnails[`img${d.provider}${d.name}` as never] as string,
-    }));
 
   // Signals for the current component:
   // - the classification method chosen by the user
@@ -1171,6 +1159,7 @@ export default function ClassificationPanel(): JSX.Element {
                             setPaletteName(value);
                             updateClassificationParameters();
                           }}
+                          maxHeight={'11vh'}
                         />
                       </Match>
                       <Match when={typeScheme() === 'diverging'}>
@@ -1186,6 +1175,7 @@ export default function ClassificationPanel(): JSX.Element {
                             setPaletteName(value);
                             updateClassificationParameters();
                           }}
+                          maxHeight={'11vh'}
                         />
                       </Match>
                       <Match when={typeScheme() === 'custom'}>
