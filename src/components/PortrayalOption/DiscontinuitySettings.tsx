@@ -43,8 +43,8 @@ import type { PortrayalSettingsProps } from './common';
 import { DataType, type Variable, VariableType } from '../../helpers/typeDetection';
 import {
   ClassificationMethod,
-  type GraduatedLineLegend,
   type DiscontinuityParameters,
+  type GraduatedLineLegend,
   type LayerDescription,
   type LegendTextElement,
   LegendType,
@@ -52,10 +52,15 @@ import {
 } from '../../global.d';
 
 const subsetClassificationMethodsForDiscontinuity = [
+  // We propose all the methods, except q6 and head-tail for which the number of classes
+  // is fixed (q6) or determined by the data (head-tail)
   'quantiles',
   'equalIntervals',
-  // 'q6',
   'jenks',
+  'ckmeans',
+  'nestedMeans',
+  // 'q6',
+  // 'headTail',
   'geometricProgression',
 ];
 
@@ -74,8 +79,28 @@ function onClickValidate(
   );
 
   const values = newData.features.map((f) => f.properties.value as number);
+  const uniqueValues = new Set(values);
+  const nbUniqueValues = uniqueValues.size;
 
-  const breaks = getClassificationFunction(classificationMethod)(values, { nb: 4 });
+  // Some classification methods may fail if the number of unique values
+  // is inferior to the number of requested classes,
+  // so we adjust the number of classes, and possibly the classification method
+  // once the discontinuity layer is computed.
+  let nbClasses;
+  let sizes = [2, 5, 9, 14];
+  if (nbUniqueValues <= 1) {
+    // eslint-disable-next-line no-param-reassign
+    classificationMethod = ClassificationMethod.quantiles;
+    nbClasses = 2;
+    sizes = sizes.slice(0, 2);
+  } else if (nbUniqueValues < 4) {
+    nbClasses = nbUniqueValues;
+    sizes = sizes.slice(0, nbUniqueValues);
+  } else {
+    nbClasses = 4;
+  }
+
+  const breaks = getClassificationFunction(classificationMethod)(values, { nb: nbClasses });
 
   const fields = [
     {
@@ -111,9 +136,9 @@ function onClickValidate(
       variable: targetVariable,
       type: discontinuityType,
       classificationMethod,
-      classes: 4,
+      classes: nbClasses,
       breaks,
-      sizes: [2, 5, 9, 14],
+      sizes,
     } as DiscontinuityParameters,
   } as LayerDescription;
 
@@ -237,6 +262,7 @@ export default function DiscontinuitySettings(
           layerName,
         );
       } catch (e) {
+        // @ts-expect-error No problem with 'e' here
         showErrorMessage(e.message ? e.message : `${e}`, LL);
         console.warn('Original error:', e);
       } finally {
