@@ -12,6 +12,18 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+### 2.3.13 (2025-11-19)
+
+- Corrige l'absence du sélecteur "nombre de classes" pour la classification "manuelle" pour les cartes de discontinuités
+  (corrige <a href="https://github.com/riatelab/magrit/issues/180">l'issue 180</a>).
+
+- Rend les symboles déplaçables sur les cartes en champignons / demi-cercles affrontés (corrige <a href="https://github.com/riatelab/magrit/issues/182">l'issue 182</a>).
+
+- Rend possible la création de cartes en gaufres avec une seule variable
+  (corrige <a href="https://github.com/riatelab/magrit/issues/183">l'issue 183</a>).
+
+- Corrige des erreurs dans la documentation du typage des champs.
+
 #### 2.3.12 (2025-11-07)
 
 - Corrige le chargement de certains jeux de données contenant des valeurs vides (corrige <a href="https://github.com/riatelab/magrit/issues/179">l'issue 179</a>).
