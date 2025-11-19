@@ -13,7 +13,7 @@ There are 5 possible data types in Magrit:
 
 ## Stock
 
-Relative quantitative variables (or stock variables) express concrete quantities, and their sum has a meaning.
+Absolute quantitative variables (or stock variables) express concrete quantities, and their sum has a meaning.
 (number of unemployed, total population, for example).
 
 The representation of this type of phenomenon must respect the expression of these quantities and the resulting differences in proportionality between the various elements.

@@ -61,7 +61,7 @@ function guessSymbolValue(
   layerId: string,
   selectedVariables: { name: string, displayName: string, color: string }[],
 ) {
-  if (selectedVariables.length < 2) {
+  if (selectedVariables.length < 1) {
     return 0;
   }
 
@@ -490,11 +490,11 @@ export default function WaffleSettings(
       min={0}
       max={Infinity}
       step={1}
-      disabled={selectedVariables().length < 2}
+      disabled={selectedVariables().length < 1}
       bindKeyUpAsChange={true}
     />
     <Show when={
-      selectedVariables().length >= 2
+      selectedVariables().length >= 1
       && isValidSymbolValue(
         layerDescription.id,
         selectedVariables(),
@@ -511,7 +511,7 @@ export default function WaffleSettings(
       </MessageBlock>
     </Show>
     <Show when={
-      selectedVariables().length >= 2
+      selectedVariables().length >= 1
       && isValidSymbolValue(
         layerDescription.id,
         selectedVariables(),
@@ -536,7 +536,7 @@ export default function WaffleSettings(
       label={ LL().FunctionalitiesSection.CreateLayer() }
       onClick={makePortrayal}
       disabled={
-        !(selectedVariables().length >= 2
+        !(selectedVariables().length >= 1
           && isValidSymbolValue(
             layerDescription.id,
             selectedVariables(),

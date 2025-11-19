@@ -19,7 +19,7 @@ il est donc important de définir le type de chacune des variables du jeu de don
 
 ## Stock
 
-Les variables quantitatives relatives (ou variables de stock) expriment des quantités concrètes et leur somme ont un sens
+Les variables quantitatives absolues (ou variables de stock) expriment des quantités concrètes et leur somme ont un sens
 (nombre de chômeurs, population totale, par exemple).
 
 La représentation de ce type de phénomènes doit respecter l’expression de ces quantités et les différences de proportionnalité entre les différents éléments qui en découlent.
@@ -28,7 +28,7 @@ Exemples : Population totale en milliers d'habitants, Superficie en hectares.
 
 ## Ratios
 
-Les variables quantitatives relative (aussi appelées variable de taux, ou variable de ratios),
+Les variables quantitatives relatives (aussi appelées variables de taux, ou variables de ratios),
 expriment un rapport entre deux quantités dont la somme n’a pas de signification.
 Par extension, on peut y associer les indicateurs composites numériques associant plusieurs indicateurs (indices…).
 

@@ -12,6 +12,17 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.3.13 (2025-11-19)
+
+- Fix the absence of the “number of classes” selector for “manual” classification for discontinuity maps
+  (fixes <a href="https://github.com/riatelab/magrit/issues/180">issue 180</a>).
+
+- Make symbols movable on mushroom/facing semicircle maps (fixes <a href="https://github.com/riatelab/magrit/issues/182">issue 182</a>).
+
+- Enable the creation of waffle maps with a single variable (fixes <a href="https://github.com/riatelab/magrit/issues/183">issue 183</a>).
+
+- Fix errors in the field typing documentation.
+
 #### 2.3.12 (2025-11-07)
 
 - Fix loading of some tabular datasets with empty values (fixes <a href="https://github.com/riatelab/magrit/issues/179">issue 179</a>).
