@@ -14,6 +14,10 @@ import { VsServerProcess } from 'solid-icons/vs';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { summaryForChoosingPortrayal } from '../../helpers/layerDescription';
+import {
+  type FunctionalityDescription,
+  makeListenerEscKey,
+} from './common';
 
 // Stores
 import { functionalitySelectionStore, setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
@@ -50,13 +54,6 @@ import {
 
 // Styles
 import '../../styles/FunctionalitySelection.css';
-
-interface FunctionalityDescription {
-  name: string;
-  type: RepresentationType | ProcessingOperationType | AnalysisOperationType;
-  enabled: boolean;
-  allowedGeometryType?: 'point' | 'linestring' | 'polygon';
-}
 
 const functionalityDescriptions: Partial<FunctionalityDescription>[] = [
   {
@@ -311,29 +308,18 @@ export default function FunctionalitySelection(): JSX.Element {
   // Set the enable flag for the various functionality types
   setFunctionalitiesFlag();
 
-  const listenerEscKey = (event: KeyboardEvent) => {
-    const isEscape = event.key
-      ? (event.key === 'Escape' || event.key === 'Esc')
-      : (event.keyCode === 27);
-    if (isEscape) {
-      // We want a different behavior if a portrayal is selected or not
-      if (selectedFunctionality()) {
-        // Reset selected functionality so we go back to the list of functionality types
-        setSelectedFunctionality(null);
-      } else {
-        // Close the modal
-        (refParentNode.querySelector('.cancel-button') as HTMLElement).click();
-      }
-    }
-  };
-
   onMount(() => {
-    (refParentNode.querySelector('.modal-card-body')! as HTMLDivElement).focus();
+    const listenerEscKey = makeListenerEscKey(
+      refParentNode!,
+      selectedFunctionality,
+      setSelectedFunctionality,
+    );
+    (refParentNode!.querySelector('.modal-card-body')! as HTMLDivElement).focus();
     document.addEventListener('keydown', listenerEscKey);
-  });
 
-  onCleanup(() => {
-    document.removeEventListener('keydown', listenerEscKey);
+    onCleanup(() => {
+      document.removeEventListener('keydown', listenerEscKey!);
+    });
   });
 
   const getModalSizeForFunc = () => {

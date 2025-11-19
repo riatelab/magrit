@@ -13,6 +13,10 @@ import { VsServerProcess } from 'solid-icons/vs';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import {
+  type TableFunctionalityDescription,
+  makeListenerEscKey,
+} from './common';
 
 // Stores
 import { functionalitySelectionStore, setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
@@ -28,12 +32,6 @@ import { TableOperationType } from '../../global.d';
 
 // Styles
 import '../../styles/FunctionalitySelection.css';
-
-interface TableFunctionalityDescription {
-  name: string;
-  type: TableOperationType;
-  enabled: boolean;
-}
 
 const functionalityDescriptions: TableFunctionalityDescription[] = [
   {
@@ -111,29 +109,19 @@ export default function TableFunctionalitySelection(): JSX.Element {
     // eslint-disable-next-line no-param-reassign
     p.enabled = true;
   });
-  const listenerEscKey = (event: KeyboardEvent) => {
-    const isEscape = event.key
-      ? (event.key === 'Escape' || event.key === 'Esc')
-      : (event.keyCode === 27);
-    if (isEscape) {
-      // We want a different behavior if a functionality is selected or not
-      if (selectedFunctionality()) {
-        // Reset selected functionality so we go back to the list of functionality types
-        setSelectedFunctionality(null);
-      } else {
-        // Close the modal
-        (refParentNode.querySelector('.cancel-button') as HTMLElement).click();
-      }
-    }
-  };
 
   onMount(() => {
-    (refParentNode.querySelector('.modal-card-body')! as HTMLDivElement).focus();
+    const listenerEscKey = makeListenerEscKey(
+      refParentNode!,
+      selectedFunctionality,
+      setSelectedFunctionality,
+    );
+    (refParentNode!.querySelector('.modal-card-body')! as HTMLDivElement).focus();
     document.addEventListener('keydown', listenerEscKey);
-  });
 
-  onCleanup(() => {
-    document.removeEventListener('keydown', listenerEscKey);
+    onCleanup(() => {
+      document.removeEventListener('keydown', listenerEscKey!);
+    });
   });
 
   return <div
