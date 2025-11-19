@@ -276,7 +276,7 @@ export default function FunctionalitySelection(): JSX.Element {
           break;
         case RepresentationType.waffle:
           // eslint-disable-next-line no-param-reassign
-          p.enabled = vars.nStock >= 2 && (geomType === 'polygon' || geomType === 'point');
+          p.enabled = vars.nStock >= 1 && (geomType === 'polygon' || geomType === 'point');
           break;
         case ProcessingOperationType.aggregation:
           // eslint-disable-next-line no-param-reassign
