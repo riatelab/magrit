@@ -72,7 +72,7 @@ export default function gridRenderer(
         (feature) => <path
           fill={
             rendererParameters().palette.colors[
-              classifier().getClass(feature.properties[rendererParameters().variable])
+              classifier().getClass(feature.properties![rendererParameters().variable])
             ]
           }
           d={globalStore.pathGenerator(feature)}

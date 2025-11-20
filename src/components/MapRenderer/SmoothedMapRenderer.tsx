@@ -20,8 +20,8 @@ import bindData from '../../directives/bind-data';
 // Types / Interfaces / Enums
 import {
   ClassificationMethod,
+  type ClassificationParameters,
   type LayerDescriptionSmoothedLayer,
-  type SmoothedLayerParameters,
 } from '../../global.d';
 
 // For now we keep an array of directives
@@ -34,7 +34,7 @@ export default function smoothedMapRenderer(
   layerDescription: LayerDescriptionSmoothedLayer,
 ): JSX.Element {
   const rendererParameters = createMemo(
-    () => layerDescription.rendererParameters as SmoothedLayerParameters,
+    () => layerDescription.rendererParameters as ClassificationParameters,
   );
 
   const classifier = createMemo(() => {
@@ -71,7 +71,7 @@ export default function smoothedMapRenderer(
       {
         (feature) => <path
           fill={
-            rendererParameters().palette.colors[classifier().getClass(feature.properties.center_v)]
+            rendererParameters().palette.colors[classifier().getClass(feature.properties!.center_v)]
           }
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"

@@ -8,7 +8,7 @@ import {
 } from 'solid-js';
 
 // GeoJSON types
-import type { Feature } from 'geojson';
+import type { Feature, Point } from 'geojson';
 
 // Helpers
 import { bindDragBehavior, mergeFilterIds } from './common.tsx';
@@ -146,13 +146,13 @@ export function defaultLabelsRenderer(
         rendererParameters.proportional!.referenceSize,
         'square' as any,
       );
-      return propSize.scale(+feature.properties[rendererParameters.proportional.variable]) / 2;
+      return propSize.scale(+feature.properties![rendererParameters.proportional.variable]) / 2;
     }
     return fontSizeLabel;
   };
 
   onMount(() => {
-    refElement.querySelectorAll('text')
+    refElement!.querySelectorAll('text')
       .forEach((textElement, i) => {
         bindDragBehavior(textElement, layerDescription, i);
         bindContextMenu(textElement, layerDescription, i, LL);
@@ -180,12 +180,12 @@ export function defaultLabelsRenderer(
           //  (so that if the symbol is moved, the label is moved too, if
           //   it's hidden, the label is hidden too, etc.)
           const projectedCoords = createMemo(
-            () => globalStore.projection(feature.geometry.coordinates),
+            () => globalStore.projection((feature.geometry as Point).coordinates),
           );
           const getParam = (param: string) => {
             if (param === 'text') {
               if (rendererParameters.specific[i()]) return rendererParameters.specific[i()][param];
-              return feature.properties[rendererParameters.variable];
+              return feature.properties![rendererParameters.variable];
             }
             if (rendererParameters.specific[i()]) return rendererParameters.specific[i()][param];
             return rendererParameters.default[param];

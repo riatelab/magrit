@@ -5,6 +5,9 @@ import {
   JSX,
 } from 'solid-js';
 
+// GeoJSON Types
+import type { Point } from 'geojson';
+
 // Helpers
 import { getClassifier } from '../../helpers/classification';
 import { isFiniteNumber } from '../../helpers/common';
@@ -124,16 +127,16 @@ export function choroplethPointRenderer(
       {
         (feature) => <path
           fill={
-            isFiniteNumber(feature.properties[rendererParameters().variable])
+            isFiniteNumber(feature.properties![rendererParameters().variable])
               ? rendererParameters().palette.colors[
-                classifier().getClass(feature.properties[rendererParameters().variable])
+                classifier().getClass(feature.properties![rendererParameters().variable])
               ]
               : rendererParameters().noDataColor
           }
           d={
             getSymbolPath(
               layerDescription.symbolType!,
-              globalStore.projection(feature.geometry.coordinates),
+              globalStore.projection((feature.geometry as Point).coordinates),
               layerDescription.symbolSize!,
             )
           }
@@ -169,9 +172,9 @@ export function choroplethLineRenderer(
       {
         (feature) => <path
           stroke={
-            isFiniteNumber(feature.properties[rendererParameters().variable])
+            isFiniteNumber(feature.properties![rendererParameters().variable])
               ? rendererParameters().palette.colors[
-                classifier().getClass(feature.properties[rendererParameters().variable])
+                classifier().getClass(feature.properties![rendererParameters().variable])
               ]
               : rendererParameters().noDataColor
           }

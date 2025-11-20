@@ -6,6 +6,9 @@ import {
   onMount,
 } from 'solid-js';
 
+// GeoJSON Types
+import type { Point } from 'geojson';
+
 // Helpers
 import { bindDragBehavior, mergeFilterIds } from './common.tsx';
 import { getClassifier } from '../../helpers/classification';
@@ -44,7 +47,7 @@ export function proportionalSymbolsPunctualRenderer(
   ));
 
   onMount(() => {
-    refElement.querySelectorAll('circle, rect')
+    refElement!.querySelectorAll('circle, rect')
       .forEach((symbolElement, i) => {
         bindDragBehavior(symbolElement as SVGGElement, layerDescription, i);
       });
@@ -127,13 +130,13 @@ export function proportionalSymbolsPunctualRenderer(
         ? layerDescription.data.features
         : layerDescription.data.features
           .filter((f) => !noShow().has(
-            f.properties[layerDescription.rendererParameters.color.variable],
+            f.properties![layerDescription.rendererParameters.color.variable],
           ))
     }>
       {
         (feature) => {
           const projectedCoords = createMemo(
-            () => globalStore.projection(feature.geometry.coordinates),
+            () => globalStore.projection((feature.geometry as Point).coordinates),
           );
           if (
             layerDescription.rendererParameters.symbolType
@@ -141,11 +144,11 @@ export function proportionalSymbolsPunctualRenderer(
           ) {
             return <circle
               r={propSize().scale(
-                feature.properties[layerDescription.rendererParameters.variable],
+                feature.properties![layerDescription.rendererParameters.variable],
               )}
               cx={projectedCoords()[0]}
               cy={projectedCoords()[1]}
-              fill={getColor()(feature.properties)}
+              fill={getColor()(feature.properties!)}
               // @ts-expect-error because use:bind-data isn't a property of this element
               use:bindData={feature}
             ></circle>;
@@ -155,14 +158,14 @@ export function proportionalSymbolsPunctualRenderer(
             === ProportionalSymbolsSymbolType.square
           ) {
             const symbolSize = createMemo(() => propSize().scale(
-              feature.properties[layerDescription.rendererParameters.variable],
+              feature.properties![layerDescription.rendererParameters.variable],
             ));
             return <rect
               width={symbolSize()}
               height={symbolSize()}
               x={projectedCoords()[0] - symbolSize() / 2}
               y={projectedCoords()[1] - symbolSize() / 2}
-              fill={getColor()(feature.properties)}
+              fill={getColor()(feature.properties!)}
               // @ts-expect-error because use:bind-data isn't a property of this element
               use:bindData={feature}
             ></rect>;
@@ -257,16 +260,16 @@ export function proportionalSymbolsLinearRenderer(
         ? layerDescription.data.features
         : layerDescription.data.features
           .filter((f) => !noShow().has(
-            f.properties[layerDescription.rendererParameters.color.variable],
+            f.properties![layerDescription.rendererParameters.color.variable],
           ))
     }>
       {
         (feature) => <path
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
-          stroke={getColor()(feature.properties)}
+          stroke={getColor()(feature.properties!)}
           stroke-width={propSize().scale(
-            feature.properties[layerDescription.rendererParameters.variable],
+            feature.properties![layerDescription.rendererParameters.variable],
           )}
           // @ts-expect-error because use:bind-data isn't a property of this element
           use:bindData={feature}

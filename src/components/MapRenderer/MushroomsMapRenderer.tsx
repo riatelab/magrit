@@ -6,6 +6,9 @@ import {
   onMount,
 } from 'solid-js';
 
+// GeoJSON Types
+import type { Point } from 'geojson';
+
 // Helpers
 import { PropSizer } from '../../helpers/geo';
 import { bindDragBehavior, mergeFilterIds } from './common.tsx';
@@ -47,7 +50,7 @@ export default function mushroomRenderer(
   ));
 
   onMount(() => {
-    refElement.querySelectorAll('g')
+    refElement!.querySelectorAll('g')
       .forEach((symbolElement, i) => {
         bindDragBehavior(symbolElement as SVGGElement, layerDescription, i);
       });
@@ -72,13 +75,13 @@ export default function mushroomRenderer(
       {
         (feature) => {
           const projectedCoords = createMemo(
-            () => globalStore.projection(feature.geometry.coordinates),
+            () => globalStore.projection((feature.geometry as Point).coordinates),
           );
           const sizeTop = createMemo(() => propSizeTop().scale(
-            feature.properties[layerDescription.rendererParameters.top.variable],
+            feature.properties![layerDescription.rendererParameters.top.variable],
           ));
           const sizeBottom = createMemo(() => propSizeBottom().scale(
-            feature.properties[layerDescription.rendererParameters.bottom.variable],
+            feature.properties![layerDescription.rendererParameters.bottom.variable],
           ));
           return <g
             // @ts-expect-error because use:bind-data isn't a property of this element
