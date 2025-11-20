@@ -375,12 +375,15 @@ const sanitizeColumnNamesLayer = (
 ): FeatureCollection => {
   // Get the column names
   const columns = Object.keys(layer.features[0].properties!);
-  // Update the the properties of each feature with sanitized column names
+  // Update the properties of each feature with sanitized column names
   layer.features.forEach((feature) => {
+    // By doing so we also ensure that each feature has a non-null properties object
     const sanitizedRecord: Record<string, unknown> = {};
     columns.forEach((column) => {
-      // eslint-disable-next-line no-param-reassign
-      sanitizedRecord[sanitizeColumnName(column)] = feature.properties![column];
+      if (feature.properties) {
+        // eslint-disable-next-line no-param-reassign
+        sanitizedRecord[sanitizeColumnName(column)] = feature.properties![column];
+      }
     });
     // eslint-disable-next-line no-param-reassign
     feature.properties = sanitizedRecord;
