@@ -833,8 +833,7 @@ function makeSettingsDefaultPoint(
         valuePalette={(props.rendererParameters as ClassificationParameters).palette.colors}
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {
-          (document.getElementById('button-change-classification-pt')!
-            .firstElementChild as HTMLDetailsElement)
+          document.getElementById('button-change-classification-pt')!
             .click();
         }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
@@ -936,8 +935,7 @@ function makeSettingsDefaultPoint(
         valuePalette={(props.rendererParameters!.color as ClassificationParameters).palette.colors}
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {
-          (document.getElementById('button-change-classification-prop-symbols')!
-            .firstElementChild as HTMLDetailsElement)
+          document.getElementById('button-change-classification-prop-symbols')!
             .click();
         }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
@@ -1974,8 +1972,7 @@ function makeSettingsDefaultLine(
           valueOpacity={props.strokeOpacity!}
           onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
           onClickPalette={() => {
-            (document.getElementById('button-change-classification-prop-line')!
-              .firstElementChild as HTMLDetailsElement)
+            document.getElementById('button-change-classification-prop-line')!
               .click();
           }}
           onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
@@ -2060,8 +2057,7 @@ function makeSettingsDefaultLine(
         valueOpacity={props.strokeOpacity!}
         onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
         onClickPalette={() => {
-          (document.getElementById('button-change-classification-line')!
-            .firstElementChild as HTMLDetailsElement)
+          document.getElementById('button-change-classification-line')!
             .click();
         }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
@@ -2536,8 +2532,7 @@ function makeSettingsDefaultPolygon(
         valuePalette={(props.rendererParameters as ClassificationParameters).palette.colors}
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {
-          (document.getElementById('button-change-classification-polygon')!
-            .firstElementChild as HTMLDetailsElement)
+          document.getElementById('button-change-classification-polygon')!
             .click();
         }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
