@@ -6,6 +6,9 @@ import {
   onMount,
 } from 'solid-js';
 
+// GeoJSON Types
+import type { Point } from 'geojson';
+
 // Helpers
 import { bindDragBehavior, mergeFilterIds } from './common.tsx';
 import {
@@ -35,7 +38,7 @@ export default function waffleRenderer(
   const params: WaffleParameters = layerDescription.rendererParameters;
 
   onMount(() => {
-    refElement.querySelectorAll('g')
+    refElement!.querySelectorAll('g')
       .forEach((groupElement, i) => {
         bindDragBehavior(groupElement as SVGGElement, layerDescription, i);
       });
@@ -54,6 +57,7 @@ export default function waffleRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
     mgt:symbol-type={params.symbolType}
+    // @ts-expect-error because mgt:size isn't a property of this element
     mgt:size={params.size}
     mgt:horizontalAnchor={params.horizontalAnchor}
     mgt:verticalAnchor={params.verticalAnchor}
@@ -63,13 +67,13 @@ export default function waffleRenderer(
       {
         (feature) => {
           const projectedCoords = createMemo(
-            () => globalStore.projection(feature.geometry.coordinates),
+            () => globalStore.projection((feature.geometry as Point).coordinates),
           );
 
           // Symbols for each variable
           const variableSymbols = params.variables.map((variable) => ({
             ...variable,
-            count: Mround(+feature.properties[variable.name] / params.symbolValue),
+            count: Mround(+feature.properties![variable.name] / params.symbolValue),
           }));
 
           const totalSymbols = variableSymbols.reduce((acc, variable) => acc + variable.count, 0);

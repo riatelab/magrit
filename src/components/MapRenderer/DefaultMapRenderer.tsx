@@ -3,6 +3,9 @@ import {
   createMemo, For, JSX,
 } from 'solid-js';
 
+// GeoJSON Types
+import type { Point } from 'geojson';
+
 // Helpers
 import { extractMeshAndMergedPolygonToGeojson } from '../../helpers/topojson';
 import { mergeFilterIds } from './common.tsx';
@@ -130,7 +133,7 @@ export function defaultPointRenderer(
           d={
             getSymbolPath(
               layerDescription.symbolType!,
-              globalStore.projection(feature.geometry.coordinates),
+              globalStore.projection((feature.geometry as Point).coordinates),
               layerDescription.symbolSize!,
             )
           }

@@ -1,6 +1,9 @@
 // Imports from solid-js
 import { createMemo, For, JSX } from 'solid-js';
 
+// GeoJSON Types
+import type { Point } from 'geojson';
+
 // Helpers
 import { mergeFilterIds } from './common.tsx';
 
@@ -73,16 +76,16 @@ export default function categoricalPictogramRenderer(
     <For each={
       layerDescription.data.features
         .filter((ft) => !noShow()
-          .has(ft.properties[layerDescription.rendererParameters.variable]))
+          .has(ft.properties![layerDescription.rendererParameters.variable]))
     }>
       {
         (feature) => {
           const icon = createMemo(() => symbolMap()
-            .get(feature.properties[layerDescription.rendererParameters.variable]));
+            .get(feature.properties![layerDescription.rendererParameters.variable]));
           if (!icon()) return <></>;
           const projectedCoords = createMemo(
-            () => globalStore.projection(feature.geometry.coordinates)
-              .map((d, i) => d - icon()![2][i] / 2),
+            () => globalStore.projection((feature.geometry as Point).coordinates)
+              .map((d: number, i: number) => d - icon()![2][i] / 2),
           );
           return <g
             transform={`translate(${projectedCoords()[0]}, ${projectedCoords()[1]})`}
