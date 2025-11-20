@@ -5,6 +5,9 @@ import {
   JSX,
 } from 'solid-js';
 
+// GeoJSON Types
+import type { Point } from 'geojson';
+
 // Helpers
 import { getClassifier } from '../../helpers/classification';
 import { isNonNull } from '../../helpers/common';
@@ -245,7 +248,7 @@ export function bivariateChoroplethPointRenderer(
           d={
             getSymbolPath(
               layerDescription.symbolType!,
-              globalStore.projection(feature.geometry.coordinates),
+              globalStore.projection((feature.geometry as Point).coordinates),
               layerDescription.symbolSize!,
             )
           }

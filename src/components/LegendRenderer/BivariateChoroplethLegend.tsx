@@ -9,6 +9,7 @@ import {
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { precisionToMinimumFractionDigits } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
 import { round } from '../../helpers/math';
 
@@ -28,8 +29,10 @@ import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Types / Interfaces / Enums
-import { type LayerDescriptionBivariateChoropleth, type BivariateChoroplethLegend } from '../../global';
-import { precisionToMinimumFractionDigits } from '../../helpers/common';
+import {
+  type LayerDescriptionBivariateChoropleth,
+  type BivariateChoroplethLegend,
+} from '../../global';
 
 const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
@@ -98,7 +101,6 @@ export default function legendBivariateChoropleth(
   // The position of the no data box if any
   const positionNoDataBox = createMemo(
     () => (legend.rotate
-      // eslint-disable-next-line max-len
       ? distanceToTop() + sizeY() - defaultSpacing * 2
       : distanceToTop() + sizeY() + defaultSpacing * 2),
   );
