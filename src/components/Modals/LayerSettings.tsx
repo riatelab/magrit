@@ -10,13 +10,10 @@ import { produce } from 'solid-js/store';
 // GeoJSON types
 import type { Feature, MultiLineString } from 'geojson';
 
-// Imports from other libs
-import { getPalettes } from 'dicopal';
-
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
-import { getPaletteWrapper } from '../../helpers/color';
+import { availableSequentialPalettes, getPaletteWrapper } from '../../helpers/color';
 import { unproxify } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
 import { makeDorlingDemersSimulation } from '../../helpers/geo';
@@ -2464,12 +2461,6 @@ function makeSettingsDefaultPolygon(
   props: LayerDescription,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
-  const availableSequentialPalettes = getPalettes({ type: 'sequential', number: 8 })
-    .map((d) => ({
-      name: `${d.name} (${d.provider})`,
-      value: d.name,
-    }));
-
   const isLinearRegressionResult = (
     props.layerCreationOptions && props.layerCreationOptions.adjustedRSquared);
 
