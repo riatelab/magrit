@@ -205,6 +205,7 @@ export function defaultLabelsRenderer(
                 ? { stroke: getParam('halo').color, 'stroke-width': getParam('halo').width }
                 : {}
             )}
+            // @ts-expect-error because use:bind-data isn't a property of this element
             use:bindData={feature}
             mgt:offset-x={getParam('textOffset')[0]}
             mgt:offset-y={getParam('textOffset')[1]}

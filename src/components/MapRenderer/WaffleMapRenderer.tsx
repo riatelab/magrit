@@ -57,6 +57,7 @@ export default function waffleRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
     mgt:symbol-type={params.symbolType}
+    // @ts-expect-error because mgt:size isn't a property of this element
     mgt:size={params.size}
     mgt:horizontalAnchor={params.horizontalAnchor}
     mgt:verticalAnchor={params.verticalAnchor}

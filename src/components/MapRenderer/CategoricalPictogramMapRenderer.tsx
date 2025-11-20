@@ -85,7 +85,7 @@ export default function categoricalPictogramRenderer(
           if (!icon()) return <></>;
           const projectedCoords = createMemo(
             () => globalStore.projection((feature.geometry as Point).coordinates)
-              .map((d, i) => d - icon()![2][i] / 2),
+              .map((d: number, i: number) => d - icon()![2][i] / 2),
           );
           return <g
             transform={`translate(${projectedCoords()[0]}, ${projectedCoords()[1]})`}

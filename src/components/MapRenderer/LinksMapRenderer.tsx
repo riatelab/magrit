@@ -82,7 +82,7 @@ export default function linksRenderer(
             }
             vector-effect="non-scaling-stroke"
             stroke-width={
-              propSize().scale(+feature.properties.Intensity) + 0.35
+              propSize().scale(+feature.properties!.Intensity) + 0.35
             }
             marker-start={
               (
@@ -145,8 +145,8 @@ export default function linksRenderer(
             }
             vector-effect="non-scaling-stroke"
             stroke-width={
-              rendererParameters().classification.sizes[
-                classifier().getClass(+feature.properties.Intensity)
+              rendererParameters().classification!.sizes[
+                classifier().getClass(+feature.properties!.Intensity)
               ]
             }
             marker-start={
