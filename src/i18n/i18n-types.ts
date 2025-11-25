@@ -5364,6 +5364,14 @@ type RootTranslation = {
 			 * T​h​i​s​ ​m​e​t​h​o​d​ ​e​n​a​b​l​e​s​ ​t​h​e​ ​c​r​e​a​t​i​o​n​ ​o​f​ ​a​ ​p​o​r​t​r​a​y​a​l​ ​o​f​ ​t​w​o​ ​o​r​ ​m​o​r​e​ ​v​a​r​i​a​b​l​e​s​ ​e​x​p​r​e​s​s​e​d​ ​i​n​ ​c​o​m​p​a​r​a​b​l​e​ ​u​n​i​t​s
 			 */
 			Waffle: string
+			/**
+			 * A​ ​b​i​v​a​r​i​a​t​e​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​m​a​k​e​s​ ​i​t​ ​p​o​s​s​i​b​l​e​ ​t​o​ ​s​i​m​u​l​t​a​n​e​o​u​s​l​y​ ​r​e​p​r​e​s​e​n​t​ ​t​w​o​ ​r​e​l​a​t​i​v​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​r​i​a​b​l​e​s​ ​b​y​ ​c​o​m​b​i​n​i​n​g​ ​t​w​o​ ​c​o​l​o​r​ ​s​c​a​l​e​s​ ​o​v​e​r​ ​t​h​e​ ​s​a​m​e​ ​g​e​o​g​r​a​p​h​i​c​ ​s​p​a​c​e
+			 */
+			BivariateChoropleth: string
+			/**
+			 * A​ ​t​e​r​n​a​r​y​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​m​a​k​e​s​ ​i​t​ ​p​o​s​s​i​b​l​e​ ​t​o​ ​s​i​m​u​l​t​a​n​e​o​u​s​l​y​ ​r​e​p​r​e​s​e​n​t​ ​t​h​r​e​e​ ​r​e​l​a​t​i​v​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​r​i​a​b​l​e​s​ ​b​y​ ​u​s​i​n​g​ ​a​ ​t​r​i​a​n​g​u​l​a​r​ ​d​i​a​g​r​a​m​ ​a​s​ ​a​ ​c​o​l​o​r​-​m​i​x​i​n​g​ ​s​p​a​c​e​ ​a​p​p​l​i​e​d​ ​a​c​r​o​s​s​ ​g​e​o​g​r​a​p​h​i​c​ ​a​r​e​a​s
+			 */
+			TrivariateChoropleth: string
 		}
 		/**
 		 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​c​r​e​a​t​i​n​g​ ​t​h​e​ ​l​a​y​e​r​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​d​a​t​a​ ​a​n​d​ ​t​h​e​ ​p​a​r​a​m​e​t​e​r​s​ ​o​f​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​f​e​a​t​u​r​e​.​ ​I​f​ ​y​o​u​ ​s​u​s​p​e​c​t​ ​a​ ​b​u​g​,​ ​p​l​e​a​s​e​ ​r​e​p​o​r​t​ ​i​t​ ​o​n​ ​t​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​'​s​ ​G​i​t​H​u​b​ ​r​e​p​o​s​i​t​o​r​y​.​ ​E​r​r​o​r​ ​m​e​s​s​a​g​e​:​ ​{​0​}
@@ -11519,6 +11527,14 @@ export type TranslationFunctions = {
 			 * This method enables the creation of a portrayal of two or more variables expressed in comparable units
 			 */
 			Waffle: () => LocalizedString
+			/**
+			 * A bivariate choropleth map makes it possible to simultaneously represent two relative quantitative variables by combining two color scales over the same geographic space
+			 */
+			BivariateChoropleth: () => LocalizedString
+			/**
+			 * A ternary choropleth map makes it possible to simultaneously represent three relative quantitative variables by using a triangular diagram as a color-mixing space applied across geographic areas
+			 */
+			TrivariateChoropleth: () => LocalizedString
 		}
 		/**
 		 * An error occurred while creating the layer. Please check your data and the parameters of the selected feature. If you suspect a bug, please report it on the application's GitHub repository. Error message: {0}

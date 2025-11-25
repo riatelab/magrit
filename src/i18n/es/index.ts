@@ -1311,6 +1311,8 @@ const es = {
       Simplification: 'Esta función simplifica el dibujo de rasgos lineales o poligonales. Esta operación, también conocida como «generalización» en cartografía, da como resultado un conjunto de datos menos detallado y más ligero',
       LayerCreationFromTable: 'Esta función crea una capa geográfica a partir de una tabla de datos que contiene coordenadas',
       Waffle: 'Este método de representación permite representar dos o más poblaciones expresadas en unidades comparables',
+      BivariateChoropleth: 'Un mapa coroplético bivariado permite representar simultáneamente dos variables cuantitativas relativas mediante la combinación de dos escalas de color sobre un mismo espacio geográfico',
+      TrivariateChoropleth: 'Un mapa coroplético ternario permite representar simultáneamente tres variables cuantitativas relativas mediante el uso de un diagrama triangular como espacio de mezcla de colores aplicado al territorio',
     },
     Error: 'Se ha producido un error al crear la capa. Por favor, compruebe sus datos y los parámetros de la característica seleccionada. Si sospecha que se trata de un error, notifíquelo en el repositorio GitHub de la aplicación. Mensaje de error : {0}',
   },

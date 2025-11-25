@@ -1311,6 +1311,8 @@ const en = {
       Simplification: 'This functionality simplifies the drawing of linear or polygonal entities. This operation, also known as \'generalisation\' in cartography, results in a less detailed and lighter dataset.',
       LayerCreationFromTable: 'This function creates a geospatial layer from a data table containing coordinates.',
       Waffle: 'This method enables the creation of a portrayal of two or more variables expressed in comparable units',
+      BivariateChoropleth: 'A bivariate choropleth map makes it possible to simultaneously represent two relative quantitative variables by combining two color scales over the same geographic space',
+      TrivariateChoropleth: 'A ternary choropleth map makes it possible to simultaneously represent three relative quantitative variables by using a triangular diagram as a color-mixing space applied across geographic areas',
     },
     Error: 'An error occurred while creating the layer. Please check your data and the parameters of the selected feature. If you suspect a bug, please report it on the application\'s GitHub repository. Error message: {0}',
   },
