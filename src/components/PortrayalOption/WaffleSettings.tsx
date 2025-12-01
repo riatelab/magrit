@@ -176,12 +176,7 @@ function onClickValidate(
   }
 
   // As with proportional symbols, we store the original position
-  // of the features (we will need it
-  // later if the avoid overlapping option is set
-  // to recompute the new position if the user changes the
-  // settings of proportional symbols or zoom in/out
-  // and also if the user wants to change the position of the
-  // symbols manually)
+  // of the features (we need it for proper dragging behavior)
   newData.features.forEach((feature) => {
     // eslint-disable-next-line no-param-reassign
     feature.geometry.originalCoordinates = feature.geometry.coordinates;

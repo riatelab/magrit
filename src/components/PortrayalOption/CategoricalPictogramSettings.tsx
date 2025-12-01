@@ -88,6 +88,13 @@ function onClickValidate(
     });
   }
 
+  // As with proportional symbols, waffles, etc., we store the original position
+  // of the features (we need it for proper dragging behavior)
+  newData.features.forEach((feature) => {
+    // eslint-disable-next-line no-param-reassign
+    feature.geometry.originalCoordinates = feature.geometry.coordinates;
+  });
+
   const newLayerDescription = {
     id: newId,
     name: newName,

@@ -107,7 +107,7 @@ export const patchProject = (
     // eslint-disable-next-line no-param-reassign
     project.applicationSettings.intervalClosure = 'right';
   }
-  // In version 2.3.8, we added the possibility to disabled category/categories
+  // In version 2.3.8, we added the possibility to disable category/categories
   // in categorical choropleth and categorical symbol maps.
   if (semver.lt(projectVersion, '2.3.8')) {
     console.log('Patching project to version 2.3.8');
@@ -124,6 +124,20 @@ export const patchProject = (
       }
     });
   }
+
+  // In version 2.3.14, we added the possibility to make pictogram symbols movable
+  // in categorical pictogram maps.
+  if (semver.lt(projectVersion, '2.3.14')) {
+    console.log('Patching project to version 2.3.14');
+    project.layers.forEach((layer) => {
+      if (layer.representationType === 'categoricalPictogram') {
+        const rendererParameters = layer.rendererParameters as CategoricalPictogramParameters;
+        // eslint-disable-next-line no-param-reassign
+        rendererParameters.movable = false;
+      }
+    });
+  }
+
   return project;
 };
 

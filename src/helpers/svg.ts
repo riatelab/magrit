@@ -286,7 +286,9 @@ export const redrawPaths = (svgElement: SVGSVGElement & IZoomable) => {
         );
         if (!Number.isNaN(projectedCoords[0])) {
           const iconDimension = JSON.parse(gg.getAttribute('mgt:icon-dimension')!);
-          gg.setAttribute('transform', `translate(${projectedCoords[0] - iconDimension[0] / 2}, ${projectedCoords[1] - iconDimension[1] / 2})`);
+          const img = gg.childNodes[0] as SVGImageElement;
+          img.setAttribute('x', `${projectedCoords[0] - iconDimension[0] / 2}`);
+          img.setAttribute('y', `${projectedCoords[1] - iconDimension[1] / 2}`);
           gg.setAttribute('visibility', 'visible');
         } else {
           gg.setAttribute('visibility', 'hidden');

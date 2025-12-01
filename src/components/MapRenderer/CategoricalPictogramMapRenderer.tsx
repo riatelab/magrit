@@ -1,11 +1,16 @@
 // Imports from solid-js
-import { createMemo, For, JSX } from 'solid-js';
+import {
+  createMemo,
+  For,
+  JSX,
+  onMount,
+} from 'solid-js';
 
 // GeoJSON Types
 import type { Point } from 'geojson';
 
 // Helpers
-import { mergeFilterIds } from './common.tsx';
+import { bindDragBehavior, mergeFilterIds } from './common.tsx';
 
 // Directives
 import bindData from '../../directives/bind-data';
@@ -54,14 +59,17 @@ export default function categoricalPictogramRenderer(
       .map((m) => m.value)),
   );
 
+  onMount(() => {
+    refElement!.querySelectorAll('g')
+      .forEach((groupElement, i) => {
+        bindDragBehavior(groupElement as SVGGElement, layerDescription, i);
+      });
+  });
+
   return <g
     ref={refElement!}
     id={layerDescription.id}
-    classList={{
-      layer: true,
-      categoricalPictogram: true,
-      // movable: layerDescription.rendererParameters.movable,
-    }}
+    class="layer categoricalPictogram"
     visibility={layerDescription.visible ? undefined : 'hidden'}
     fill-opacity={layerDescription.fillOpacity}
     stroke={layerDescription.strokeColor}
@@ -88,7 +96,6 @@ export default function categoricalPictogramRenderer(
               .map((d: number, i: number) => d - icon()![2][i] / 2),
           );
           return <g
-            transform={`translate(${projectedCoords()[0]}, ${projectedCoords()[1]})`}
             mgt:icon-dimension={JSON.stringify(icon()![2])}
             // @ts-expect-error because use:bind-data isn't a property of this element
             use:bindData={feature}
@@ -96,6 +103,8 @@ export default function categoricalPictogramRenderer(
             <image
               width={icon()![2][0]}
               height={icon()![2][1]}
+              x={projectedCoords()[0]}
+              y={projectedCoords()[1]}
               href={
                 icon()![0] === 'SVG'
                   ? `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(icon()![1])))}`
