@@ -3637,7 +3637,7 @@ type RootTranslation = {
 			 */
 			BivariateChoropleth: string
 			/**
-			 * T​r​i​v​a​r​i​a​t​e​ ​c​h​o​r​o​p​l​e​t​h
+			 * T​e​r​n​a​r​y​ ​c​h​o​r​o​p​l​e​t​h
 			 */
 			TrivariateChoropleth: string
 			/**
@@ -5365,11 +5365,11 @@ type RootTranslation = {
 			 */
 			Waffle: string
 			/**
-			 * A​ ​b​i​v​a​r​i​a​t​e​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​m​a​k​e​s​ ​i​t​ ​p​o​s​s​i​b​l​e​ ​t​o​ ​s​i​m​u​l​t​a​n​e​o​u​s​l​y​ ​r​e​p​r​e​s​e​n​t​ ​t​w​o​ ​r​e​l​a​t​i​v​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​r​i​a​b​l​e​s​ ​b​y​ ​c​o​m​b​i​n​i​n​g​ ​t​w​o​ ​c​o​l​o​r​ ​s​c​a​l​e​s​ ​o​v​e​r​ ​t​h​e​ ​s​a​m​e​ ​g​e​o​g​r​a​p​h​i​c​ ​s​p​a​c​e
+			 * A​ ​b​i​v​a​r​i​a​t​e​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​m​a​k​e​s​ ​i​t​ ​p​o​s​s​i​b​l​e​ ​t​o​ ​s​i​m​u​l​t​a​n​e​o​u​s​l​y​ ​r​e​p​r​e​s​e​n​t​ ​t​w​o​ ​r​e​l​a​t​i​v​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​r​i​a​b​l​e​s​ ​b​y​ ​c​o​m​b​i​n​i​n​g​ ​t​w​o​ ​c​o​l​o​r​ ​s​c​a​l​e​s​ ​o​v​e​r​ ​t​h​e​ ​s​a​m​e​ ​g​e​o​g​r​a​p​h​i​c​ ​s​p​a​c​e​.
 			 */
 			BivariateChoropleth: string
 			/**
-			 * A​ ​t​e​r​n​a​r​y​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​m​a​k​e​s​ ​i​t​ ​p​o​s​s​i​b​l​e​ ​t​o​ ​s​i​m​u​l​t​a​n​e​o​u​s​l​y​ ​r​e​p​r​e​s​e​n​t​ ​t​h​r​e​e​ ​r​e​l​a​t​i​v​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​r​i​a​b​l​e​s​ ​b​y​ ​u​s​i​n​g​ ​a​ ​t​r​i​a​n​g​u​l​a​r​ ​d​i​a​g​r​a​m​ ​a​s​ ​a​ ​c​o​l​o​r​-​m​i​x​i​n​g​ ​s​p​a​c​e​ ​a​p​p​l​i​e​d​ ​a​c​r​o​s​s​ ​g​e​o​g​r​a​p​h​i​c​ ​a​r​e​a​s
+			 * A​ ​t​e​r​n​a​r​y​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​m​a​k​e​s​ ​i​t​ ​p​o​s​s​i​b​l​e​ ​t​o​ ​s​i​m​u​l​t​a​n​e​o​u​s​l​y​ ​r​e​p​r​e​s​e​n​t​ ​t​h​r​e​e​ ​r​e​l​a​t​i​v​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​r​i​a​b​l​e​s​ ​b​y​ ​u​s​i​n​g​ ​a​ ​t​r​i​a​n​g​u​l​a​r​ ​d​i​a​g​r​a​m​ ​a​s​ ​a​ ​c​o​l​o​r​-​m​i​x​i​n​g​ ​s​p​a​c​e​ ​a​p​p​l​i​e​d​ ​a​c​r​o​s​s​ ​g​e​o​g​r​a​p​h​i​c​ ​a​r​e​a​s​.
 			 */
 			TrivariateChoropleth: string
 		}
@@ -9850,7 +9850,7 @@ export type TranslationFunctions = {
 			 */
 			BivariateChoropleth: () => LocalizedString
 			/**
-			 * Trivariate choropleth
+			 * Ternary choropleth
 			 */
 			TrivariateChoropleth: () => LocalizedString
 			/**
@@ -11528,11 +11528,11 @@ export type TranslationFunctions = {
 			 */
 			Waffle: () => LocalizedString
 			/**
-			 * A bivariate choropleth map makes it possible to simultaneously represent two relative quantitative variables by combining two color scales over the same geographic space
+			 * A bivariate choropleth map makes it possible to simultaneously represent two relative quantitative variables by combining two color scales over the same geographic space.
 			 */
 			BivariateChoropleth: () => LocalizedString
 			/**
-			 * A ternary choropleth map makes it possible to simultaneously represent three relative quantitative variables by using a triangular diagram as a color-mixing space applied across geographic areas
+			 * A ternary choropleth map makes it possible to simultaneously represent three relative quantitative variables by using a triangular diagram as a color-mixing space applied across geographic areas.
 			 */
 			TrivariateChoropleth: () => LocalizedString
 		}
