@@ -387,6 +387,11 @@ function makeSettingsPictograms(
         detailed={true}
       />
     </DetailsSummary>
+    <InputFieldCheckbox
+      label={ LL().LayerSettings.AllowMovingSymbols() }
+      checked={(props.rendererParameters as CategoricalPictogramParameters).movable}
+      onChange={(v) => debouncedUpdateProp(props.id, ['rendererParameters', 'movable'], v)}
+    />
     <AestheticsSection {...props} />
   </>;
 }

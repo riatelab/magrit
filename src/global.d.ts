@@ -592,6 +592,8 @@ interface CategoricalPictogramParameters {
   // stored as an array of [category, categoryName, icon] tuples,
   // one per category.
   mapping: CategoricalPictogramMapping[],
+  // Whether the pictograms can be moved by the user or not
+  movable: boolean,
 }
 
 interface LinksParameters {
