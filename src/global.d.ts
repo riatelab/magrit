@@ -445,10 +445,8 @@ export interface CategoricalChoroplethParameters {
   // The mapping between categories and colors,
   // stored as an array of
   // [category, categoryName, color, number of values] tuples,
-  // one per category.
+  // one per category (and one for the 'no data' category if any).
   mapping: CategoricalChoroplethMapping[],
-  // The color to use for features with no data
-  noDataColor: string,
 }
 
 export interface CategoricalChoroplethMapping {
@@ -999,8 +997,6 @@ interface CategoricalChoroplethLegend extends LegendBase {
   boxCornerRadius: number,
   // The text properties of the labels (and no-data label if any)
   labels: LegendTextElement,
-  // The label of the no-data box
-  noDataLabel: string,
   // Whether to display the no-data box
   noDataBox: boolean,
   // Whether to display the stroke of the boxes

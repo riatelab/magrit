@@ -1,17 +1,23 @@
+// Imports from external libraries
 import { getColors } from 'dicopal';
-
 import type { Feature } from 'geojson';
 
-import { isNonNull } from './common';
+// Helpers
 import { randomColor } from './color';
+import { isNonNull } from './common';
+import sanitizeSVG from './sanitize-svg';
 
+// Info from stores
+import { applicationSettingsStore } from '../store/ApplicationSettingsStore';
+
+// Picto images
 import images from './symbol-library';
 
+// Types
 import type {
   CategoricalChoroplethMapping,
   CategoricalPictogramMapping,
 } from '../global';
-import sanitizeSVG from './sanitize-svg';
 
 const selectDefaultColors = (n: number): string[] => {
   let colors;
@@ -38,7 +44,7 @@ export const makeCategoriesMap = (
 ): Map<string | number | null, number> => {
   const m = new Map();
   features.forEach((f) => {
-    const value = f.properties[variable];
+    const value = f.properties![variable];
     if (isNonNull(value)) m.set(value, (m.get(value) || 0) + 1);
     else m.set(null, (m.get(null) || 0) + 1);
   });
@@ -55,9 +61,9 @@ export const makeCategoriesMapping = (
   return Array.from(categories)
     .map((c, i) => ({
       value: isNonNull(c[0]) ? c[0] : null,
-      categoryName: isNonNull(c[0]) ? String(c[0]) : null,
+      categoryName: isNonNull(c[0]) ? String(c[0]) : 'No data',
       // eslint-disable-next-line no-plusplus
-      color: isNonNull(c[0]) ? colors[j++] : '',
+      color: isNonNull(c[0]) ? colors[j++] : applicationSettingsStore.defaultNoDataColor,
       count: c[1],
       show: true,
     }))

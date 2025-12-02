@@ -88,14 +88,26 @@ function verticalLegend(legendParameters: CategoricalChoroplethLegend): JSX.Elem
 
   const hasNoData = createMemo(() => legendParameters.noDataBox && layer.data.features.filter(
     (feature) => !isNonNull(feature.properties[rendererParameters.variable]),
-  ).length > 0);
+  ).length > 0 && rendererParameters.mapping.some(
+    (m) => !isNonNull(m.value) && m.show,
+  ));
 
   const labelsAndColors = createMemo(
     () => rendererParameters.mapping
       .filter((m) => m.show)
+      .filter((m) => isNonNull(m.value))
       .map(({ categoryName, color }) => [categoryName, color])
       // No data information has been stored with null value / null category name
       .filter(([categoryName]) => categoryName !== null),
+  );
+
+  const labelAndColorNoData = createMemo(
+    () => {
+      const noDataEntry = rendererParameters.mapping.find(
+        (m) => !isNonNull(m.value),
+      );
+      return noDataEntry ? [noDataEntry?.categoryName, noDataEntry?.color] : null;
+    },
   );
 
   const positionNote = createMemo(() => {
@@ -134,7 +146,7 @@ function verticalLegend(legendParameters: CategoricalChoroplethLegend): JSX.Elem
         legendParameters.subtitle.text,
         legendParameters.note.text,
         legendParameters.roundDecimals,
-        (layer.rendererParameters as CategoricalChoroplethParameters).mapping,
+        rendererParameters.mapping,
       );
     }
   });
@@ -174,7 +186,7 @@ function verticalLegend(legendParameters: CategoricalChoroplethLegend): JSX.Elem
       </For>
       <Show when={hasNoData()}>
         <rect
-          fill={rendererParameters.noDataColor}
+          fill={labelAndColorNoData()![1]}
           x={0}
           y={
             distanceToTop()
@@ -221,7 +233,7 @@ function verticalLegend(legendParameters: CategoricalChoroplethLegend): JSX.Elem
           fill={legendParameters.labels.fontColor}
           text-anchor="start"
           dominant-baseline="middle"
-        >{ legendParameters.noDataLabel }</text>
+        >{ labelAndColorNoData()![0] }</text>
       </Show>
     </g>
     {
@@ -300,10 +312,26 @@ function horizontalLegend(legendParameters: CategoricalChoroplethLegend): JSX.El
 
   const hasNoData = createMemo(() => legendParameters.noDataBox && layer.data.features.filter(
     (feature) => !isNonNull(feature.properties[rendererParameters.variable]),
-  ).length > 0);
+  ).length > 0 && rendererParameters.mapping.some(
+    (m) => !isNonNull(m.value) && m.show,
+  ));
 
   const labelsAndColors = createMemo(
-    () => rendererParameters.mapping.map(({ categoryName, color }) => [categoryName, color]),
+    () => rendererParameters.mapping
+      .filter((m) => m.show)
+      .filter((m) => isNonNull(m.value))
+      .map(({ categoryName, color }) => [categoryName, color])
+      // No data information has been stored with null value / null category name
+      .filter(([categoryName]) => categoryName !== null),
+  );
+
+  const labelAndColorNoData = createMemo(
+    () => {
+      const noDataEntry = rendererParameters.mapping.find(
+        (m) => !isNonNull(m.value),
+      );
+      return noDataEntry ? [noDataEntry?.categoryName, noDataEntry?.color] : null;
+    },
   );
 
   let refElement: SVGGElement;
@@ -330,7 +358,7 @@ function horizontalLegend(legendParameters: CategoricalChoroplethLegend): JSX.El
         legendParameters.subtitle.text,
         legendParameters.note.text,
         legendParameters.roundDecimals,
-        (layer.rendererParameters as CategoricalChoroplethParameters).mapping,
+        rendererParameters.mapping,
       );
     }
   });
@@ -370,7 +398,7 @@ function horizontalLegend(legendParameters: CategoricalChoroplethLegend): JSX.El
       </For>
       <Show when={hasNoData()}>
         <rect
-          fill={rendererParameters.noDataColor}
+          fill={labelAndColorNoData()![1]}
           x={
             labelsAndColors().length * (legendParameters.boxWidth + legendParameters.boxSpacing)
             - legendParameters.boxSpacing
@@ -418,7 +446,7 @@ function horizontalLegend(legendParameters: CategoricalChoroplethLegend): JSX.El
           fill={legendParameters.labels.fontColor}
           text-anchor="middle"
           dominant-baseline="hanging"
-        >{ legendParameters.noDataLabel }</text>
+        >{ labelAndColorNoData()![0] }</text>
       </Show>
     </g>
     { makeLegendText(legendParameters.note, [0, distanceNoteToTop()], 'note') }

@@ -4086,6 +4086,10 @@ type RootTranslation = {
 			 */
 			Value: string
 			/**
+			 * W​i​t​h​o​u​t​ ​v​a​l​u​e
+			 */
+			NoValues: string
+			/**
 			 * C​o​u​n​t​:
 			 */
 			Count: string
@@ -10277,6 +10281,10 @@ export type TranslationFunctions = {
 			 * Value:
 			 */
 			Value: () => LocalizedString
+			/**
+			 * Without value
+			 */
+			NoValues: () => LocalizedString
 			/**
 			 * Count:
 			 */

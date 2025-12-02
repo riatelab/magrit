@@ -35,24 +35,9 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
   bindData,
 ];
 
-export function proportionalSymbolsPunctualRenderer(
+const prepareParameters = (
   layerDescription: LayerDescriptionProportionalSymbols,
-): JSX.Element {
-  let refElement: SVGGElement;
-  // Will scale the symbols according to the value of the variable
-  const propSize = createMemo(() => new PropSizer(
-    layerDescription.rendererParameters.referenceValue,
-    layerDescription.rendererParameters.referenceRadius,
-    layerDescription.rendererParameters.symbolType,
-  ));
-
-  onMount(() => {
-    refElement!.querySelectorAll('circle, rect')
-      .forEach((symbolElement, i) => {
-        bindDragBehavior(symbolElement as SVGGElement, layerDescription, i);
-      });
-  });
-
+) => {
   // eslint-disable-next-line no-nested-ternary
   const getColor = layerDescription.rendererParameters.colorMode === 'singleColor'
     ? createMemo(() => () => layerDescription.rendererParameters.color)
@@ -83,19 +68,24 @@ export function proportionalSymbolsPunctualRenderer(
                 .noDataColor;
           };
         })
-        : createMemo(() => {
-          const map = new Map<string | number | null | undefined, string>(
-            layerDescription.rendererParameters.color
-              .mapping.map(({ value, color }) => [value, color]),
-          );
-          map.set('', layerDescription.rendererParameters.color.noDataColor);
-          map.set(null, layerDescription.rendererParameters.color.noDataColor);
-          map.set(undefined, layerDescription.rendererParameters.color.noDataColor);
-
-          return (properties: Record<string, any>) => map.get(
-            properties[layerDescription.rendererParameters.color.variable],
-          );
-        });
+        : createMemo(
+          () => {
+            const noDataEntry = layerDescription.rendererParameters.color.mapping
+              .find((m) => m.value === null || m.value === undefined || m.value === '');
+            const map = new Map<string | number | null | undefined, string>(
+              layerDescription.rendererParameters.color.mapping
+                .map(({ value, color }) => [value, color]),
+            );
+            if (noDataEntry) {
+              map.set('', noDataEntry.color);
+              map.set(null, noDataEntry.color);
+              map.set(undefined, noDataEntry.color);
+            }
+            return (properties: Record<string, any>) => map.get(
+              properties[layerDescription.rendererParameters.color.variable],
+            );
+          },
+        );
 
   const noShow = createMemo(() => {
     if (layerDescription.rendererParameters.colorMode === 'categoricalVariable') {
@@ -105,6 +95,32 @@ export function proportionalSymbolsPunctualRenderer(
     }
     return new Set();
   });
+
+  return {
+    getColor,
+    noShow,
+  };
+};
+
+export function proportionalSymbolsPunctualRenderer(
+  layerDescription: LayerDescriptionProportionalSymbols,
+): JSX.Element {
+  let refElement: SVGGElement;
+  // Will scale the symbols according to the value of the variable
+  const propSize = createMemo(() => new PropSizer(
+    layerDescription.rendererParameters.referenceValue,
+    layerDescription.rendererParameters.referenceRadius,
+    layerDescription.rendererParameters.symbolType,
+  ));
+
+  onMount(() => {
+    refElement!.querySelectorAll('circle, rect')
+      .forEach((symbolElement, i) => {
+        bindDragBehavior(symbolElement as SVGGElement, layerDescription, i);
+      });
+  });
+
+  const { getColor, noShow } = prepareParameters(layerDescription);
 
   return <g
     ref={refElement!}
@@ -188,58 +204,7 @@ export function proportionalSymbolsLinearRenderer(
     layerDescription.rendererParameters.symbolType,
   ));
 
-  // eslint-disable-next-line no-nested-ternary
-  const getColor = layerDescription.rendererParameters.colorMode === 'singleColor'
-    ? createMemo(() => () => layerDescription.rendererParameters.color)
-    // eslint-disable-next-line no-nested-ternary
-    : layerDescription.rendererParameters.colorMode === 'positiveNegative'
-      ? createMemo(() => (properties: Record<string, any>) => {
-        const value = +properties[layerDescription.rendererParameters.variable];
-        return value >= 0
-          ? layerDescription.rendererParameters.color[0]
-          : layerDescription.rendererParameters.color[1];
-      })
-      : layerDescription.rendererParameters.colorMode === 'ratioVariable'
-        ? createMemo(() => {
-          const Cls = getClassifier(ClassificationMethod.manual);
-          const classifier = new Cls(
-            null,
-            null,
-            applicationSettingsStore.intervalClosure,
-            layerDescription.rendererParameters.color.breaks,
-          );
-
-          return (properties: Record<string, any>) => {
-            const value = properties[layerDescription.rendererParameters.color.variable];
-            return isFiniteNumber(value)
-              ? layerDescription.rendererParameters.color
-                .palette.colors[classifier.getClass(+value)]
-              : layerDescription.rendererParameters.color
-                .noDataColor;
-          };
-        })
-        : createMemo(() => {
-          const map = new Map<string | number | null | undefined, string>(
-            layerDescription.rendererParameters.color
-              .mapping.map(({ value, color }) => [value, color]),
-          );
-          map.set('', layerDescription.rendererParameters.color.noDataColor);
-          map.set(null, layerDescription.rendererParameters.color.noDataColor);
-          map.set(undefined, layerDescription.rendererParameters.color.noDataColor);
-
-          return (properties: Record<string, any>) => map.get(
-            properties[layerDescription.rendererParameters.color.variable],
-          );
-        });
-
-  const noShow = createMemo(() => {
-    if (layerDescription.rendererParameters.colorMode === 'categoricalVariable') {
-      return new Set(layerDescription.rendererParameters.color.mapping
-        .filter((m) => !m.show)
-        .map((m) => m.value));
-    }
-    return new Set();
-  });
+  const { getColor, noShow } = prepareParameters(layerDescription);
 
   return <g
     ref={refElement!}
