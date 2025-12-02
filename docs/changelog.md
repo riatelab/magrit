@@ -12,6 +12,13 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+### 2.3.14 (unreleased)
+
+- Rend les pictogrammes déplaçables sur les cartes catégorielles de pictogrammes (corrige <a href="https://github.com/riatelab/magrit/issues/186">l'issue 186</a>).
+
+- Permet de sélectionner la couleur de la catégorie "no-data" pour les cartes choroplèthes catégorielles et améliore le traitement de cette catégorie spéciale de manière générale
+  (corrige <a href="https://github.com/riatelab/magrit/issues/187">l'issue 187</a>).
+
 ### 2.3.13 (2025-11-19)
 
 - Corrige l'absence du sélecteur "nombre de classes" pour la classification "manuelle" pour les cartes de discontinuités
