@@ -246,38 +246,42 @@ export default function legendBivariateChoropleth(
         (in case we ask to display a rectangle under the legend) that appears too large
         at the bottom.
       */}
-      <g
-        class="legend-labels"
-        transform={`translate(${sizeX() / 2 + (legend.rotate ? 0 : extraPadding())}, ${distanceToTop() + sizeX() / 2}) rotate(${legend.rotate ? -135 : -90})`}
-      >
-        <text
-          x={totalSize() / 2}
-          y={totalSize() / 2 + extraPadding()}
-          font-size={legend.labels.fontSize}
-          font-family={legend.labels.fontFamily}
-          fill={legend.labels.fontColor}
-          text-anchor="end"
-          transform={'rotate(90)'}
+      <Show when={legend.variable2Label !== ''}>
+        <g
+          class="legend-labels"
+          transform={`translate(${sizeX() / 2 + (legend.rotate ? 0 : extraPadding())}, ${distanceToTop() + sizeX() / 2}) rotate(${legend.rotate ? -135 : -90})`}
         >
-          {legend.variable2Label} →
-        </text>
-      </g>
-      <g
-        class="legend-labels"
-        transform={`translate(${sizeX() / 2 + (legend.rotate ? 0 : extraPadding())}, ${distanceToTop() + sizeX() / 2}) rotate(${legend.rotate ? -135 : -90})`}
-      >
-        <text
-          x={-totalSize() / 2}
-          y={totalSize() / 2 + extraPadding()}
-          font-size={legend.labels.fontSize}
-          font-family={legend.labels.fontFamily}
-          fill={legend.labels.fontColor}
-          text-anchor="start"
-          transform={'rotate(180)'}
+          <text
+            x={totalSize() / 2}
+            y={totalSize() / 2 + extraPadding()}
+            font-size={legend.labels.fontSize}
+            font-family={legend.labels.fontFamily}
+            fill={legend.labels.fontColor}
+            text-anchor="end"
+            transform={'rotate(90)'}
+          >
+            {legend.variable2Label} →
+          </text>
+        </g>
+      </Show>
+      <Show when={legend.variable1Label !== ''}>
+        <g
+          class="legend-labels"
+          transform={`translate(${sizeX() / 2 + (legend.rotate ? 0 : extraPadding())}, ${distanceToTop() + sizeX() / 2}) rotate(${legend.rotate ? -135 : -90})`}
         >
-          ← {legend.variable1Label}
-        </text>
-      </g>
+          <text
+            x={-totalSize() / 2}
+            y={totalSize() / 2 + extraPadding()}
+            font-size={legend.labels.fontSize}
+            font-family={legend.labels.fontFamily}
+            fill={legend.labels.fontColor}
+            text-anchor="start"
+            transform={'rotate(180)'}
+          >
+            ← {legend.variable1Label}
+          </text>
+        </g>
+      </Show>
     </Show>
     <Show when={legend.noDataBox}>
       <g>
