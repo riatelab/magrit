@@ -1,14 +1,25 @@
+// Imports from external libraries
 import semver from 'semver';
+
+// The current application version
 import { version } from '../../package.json';
+
+// Helpers
+import sanitizeSVG from './sanitize-svg';
+import { isNonNull } from './common';
+
+// Types, interfaces and enums
 import {
+  CategoricalChoroplethLegend,
   type CategoricalChoroplethParameters,
   type CategoricalPictogramParameters,
   LayoutFeatureType,
   type LegendBase,
   type ProjectDescription,
+  type ProportionalSymbolsParameters,
 } from '../global.d';
-import sanitizeSVG from './sanitize-svg';
 
+// Enum indicating the validity state of a project
 export enum ValidityState {
   Valid,
   Invalid,
@@ -34,6 +45,7 @@ export const patchProject = (
       project.map.projection.name = 'User-defined projection';
     }
   }
+
   // We need to path the source SVG of images in layout features
   if (project.layoutFeaturesAndLegends) {
     project.layoutFeaturesAndLegends.forEach((layoutFeatureOrLegend) => {
@@ -46,6 +58,7 @@ export const patchProject = (
       }
     });
   }
+
   // In version 2.0.9, we changed the model of the ScaleBar
   // so its optional 'label' property isn't a string anymore
   // but a LegendTextElement (allowing to set a label as well as
@@ -68,6 +81,7 @@ export const patchProject = (
     // eslint-disable-next-line no-param-reassign
     project.version = '2.0.9';
   }
+
   // In version 2.0.16, we changed the model of the application settings
   // to add a new option 'useProjectionPreclip' to control whether to apply
   // a pre-clip on the projection or not.
@@ -85,6 +99,7 @@ export const patchProject = (
     // eslint-disable-next-line no-param-reassign
     project.version = '2.1.1';
   }
+
   // In version 2.1.2 we changed the type 'discontinuityLegend' to
   // 'graduatedLineLegend' (in order to be more generic and use it as
   // well for graduated links).
@@ -99,6 +114,7 @@ export const patchProject = (
     // eslint-disable-next-line no-param-reassign
     project.version = '2.1.1';
   }
+
   // In version 2.3.O we added the possibility of choosing
   // whether class intervals are closed on the left or the right
   // (before they were always closed on the right).
@@ -107,6 +123,7 @@ export const patchProject = (
     // eslint-disable-next-line no-param-reassign
     project.applicationSettings.intervalClosure = 'right';
   }
+
   // In version 2.3.8, we added the possibility to disable category/categories
   // in categorical choropleth and categorical symbol maps.
   if (semver.lt(projectVersion, '2.3.8')) {
@@ -125,15 +142,71 @@ export const patchProject = (
     });
   }
 
-  // In version 2.3.14, we added the possibility to make pictogram symbols movable
-  // in categorical pictogram maps.
+  // Two breaking changes were introduced in version 2.3.14
   if (semver.lt(projectVersion, '2.3.14')) {
+    // We added the possibility to make pictogram symbols movable
+    // in categorical pictogram maps.
     console.log('Patching project to version 2.3.14');
     project.layers.forEach((layer) => {
       if (layer.representationType === 'categoricalPictogram') {
         const rendererParameters = layer.rendererParameters as CategoricalPictogramParameters;
         // eslint-disable-next-line no-param-reassign
         rendererParameters.movable = false;
+      }
+    });
+
+    // We also changed how the no-data category is handled
+    // in categorical choropleth maps.
+    project.layers.forEach((layer) => {
+      if (layer.representationType === 'categoricalChoropleth') {
+        const rendererParameters = layer.rendererParameters as CategoricalChoroplethParameters;
+        const noDataCategory = rendererParameters.mapping.find(
+          (category) => !isNonNull(category.value),
+        );
+        if (noDataCategory) {
+          // We also need to find the legend that is linked to this layer to retrieve the label for
+          // the no-data category.
+          const linkedLegend = project.layoutFeaturesAndLegends.find(
+            (layoutFeatureOrLegend) => (
+              layoutFeatureOrLegend.type === 'categoricalChoropleth'
+              && layoutFeatureOrLegend.layerId === layer.id
+            ),
+          ) as CategoricalChoroplethLegend;
+          // eslint-disable-next-line no-param-reassign
+          noDataCategory.show = true;
+          // eslint-disable-next-line no-param-reassign
+          noDataCategory.color = rendererParameters.noDataColor;
+          delete rendererParameters.noDataColor;
+          // eslint-disable-next-line no-param-reassign
+          noDataCategory.categoryName = linkedLegend.noDataLabel;
+        }
+      } else if (
+        layer.representationType === 'proportionalSymbols'
+        && (layer.rendererParameters as ProportionalSymbolsParameters).colorMode === 'categoricalVariable'
+      ) {
+        const rendererParameters = (
+          layer.rendererParameters as ProportionalSymbolsParameters
+        ).color as CategoricalChoroplethParameters;
+        const noDataCategory = rendererParameters.mapping.find(
+          (category) => !isNonNull(category.value),
+        );
+        if (noDataCategory) {
+          // We also need to find the legend that is linked to this layer to retrieve the label for
+          // the no-data category.
+          const linkedLegend = project.layoutFeaturesAndLegends.find(
+            (layoutFeatureOrLegend) => (
+              layoutFeatureOrLegend.type === 'categoricalChoropleth'
+              && layoutFeatureOrLegend.layerId === layer.id
+            ),
+          ) as CategoricalChoroplethLegend;
+          // eslint-disable-next-line no-param-reassign
+          noDataCategory.show = true;
+          // eslint-disable-next-line no-param-reassign
+          noDataCategory.color = rendererParameters.noDataColor;
+          delete rendererParameters.noDataColor;
+          // eslint-disable-next-line no-param-reassign
+          noDataCategory.categoryName = linkedLegend.noDataLabel;
+        }
       }
     });
   }

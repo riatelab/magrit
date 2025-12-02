@@ -962,6 +962,7 @@ const en = {
       YAxisCount: 'Count',
       Customize: 'Customize category names and colors',
       Value: 'Value:',
+      NoValues: 'Without value',
       Count: 'Count:',
       WarningNotCategoricalMessage: 'Please note that the variable selected does not appear to be categorical. Please check that the variable selected is actually categorical or choose another variable.',
       NewLayerName: 'Categories_{variable}_{layerName}',

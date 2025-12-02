@@ -962,6 +962,7 @@ const es = {
       YAxisCount: 'Número',
       Customize: 'Personalizar colores y nombres de clases',
       Value: 'Valor:',
+      NoValues: 'Sin valor',
       Count: 'Número: ',
       WarningNotCategoricalMessage: 'Atención, la variable seleccionada no parece ser categórica. Por favor, compruebe que la variable seleccionada es realmente categórica o elija otra variable',
       NewLayerName: 'Categorías_{variable}_{layerName}',

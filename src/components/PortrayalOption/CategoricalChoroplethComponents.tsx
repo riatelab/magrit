@@ -16,7 +16,7 @@ import Sortable from 'solid-sortablejs';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { isNonNull } from '../../helpers/common';
+import { isNonNull, unproxify } from '../../helpers/common';
 
 // Types / Interfaces / Enums
 import { type CategoricalChoroplethMapping, type CategoricalPictogramMapping } from '../../global.d';
@@ -76,6 +76,7 @@ export function CategoriesPlot(
       color: m.color,
       frequency: m.count,
     })));
+
   return <div>
     {
       Plot.plot({
@@ -135,17 +136,20 @@ export function CategoriesCustomisation(
   // before we can use it in the Sortable component
   const mapping = createMemo(() => props.mapping().filter((m) => isNonNull(m.value)));
 
+  // We keep the null entries in a separate variable
+  //  to be able to add them back later
+  const nulls = createMemo(() => props.mapping().filter((m) => !isNonNull(m.value)));
+
   // We also need to write a wrapper for the setMapping function
   // to add null entries back to the mapping
   const setMapping = (m: CategoricalChoroplethMapping[]) => {
     props.setMapping(
-      mapping()
-        .filter((mm) => !isNonNull(mm.value))
-        .concat(
-          m.filter((mmm) => isNonNull(mmm.value)),
-        ),
+      m.concat(nulls()),
     );
   };
+
+  const countNulls = createMemo(() => props.mapping()
+    .filter((m) => !isNonNull(m.value)).reduce((acc, m) => acc + (m.count || 0), 0));
 
   return <div>
     <Sortable
@@ -212,14 +216,80 @@ export function CategoriesCustomisation(
           />
           <Show when={props.detailed}>
             <span>
-              &nbsp;({ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Value() }
+              &nbsp;{ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Value() }
               &nbsp;{item.value} -
               &nbsp;{ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Count() }
-              &nbsp;{item.count})
+              &nbsp;{item.count}
             </span>
           </Show>
         </div>
       }
     </Sortable>
+    <Show when={countNulls() > 0}>
+      <hr style={{ margin: '0.5em' }} />
+      <div
+        style={{ width: '100%', border: 'solid 0.5px currentColor' }}
+        class="is-flex is-align-items-center"
+      >
+        <BsThreeDotsVertical style={{ cursor: 'grab' }}/>
+        <Switch>
+          <Match when={nulls()[0].show}>
+            <FaSolidEye
+              style={{ cursor: 'pointer', padding: '0.5em' }}
+              onClick={() => {
+                props.setMapping(
+                  props.mapping()
+                    .map((m) => (m.value === nulls()[0].value ? { ...m, show: false } : m)),
+                );
+              }}
+            />
+          </Match>
+          <Match when={!nulls()[0].show}>
+            <FaSolidEyeSlash
+              style={{ cursor: 'pointer', padding: '0.5em' }}
+              onClick={() => {
+                props.setMapping(
+                  props.mapping()
+                    .map((m) => (m.value === nulls()[0].value ? { ...m, show: true } : m)),
+                );
+              }}
+            />
+          </Match>
+        </Switch>
+        <input
+          type="color"
+          style={{ height: '2em', 'vertical-align': 'bottom', border: 0 }}
+          value={nulls()[0].color}
+          onChange={(e) => {
+            props.setMapping(
+              props.mapping()
+                .map((m) => (m.value === nulls()[0].value ? { ...m, color: e.target.value } : m)),
+            );
+          }}
+        />
+        <input
+          type="text"
+          style={{ height: '2em', width: '45%' }}
+          value={nulls()[0].categoryName || ''}
+          onChange={(e) => {
+            props.setMapping(
+              props.mapping()
+                .map((m) => (
+                  m.value === nulls()[0].value ? { ...m, categoryName: e.target.value } : m)),
+            );
+            setDisabled(false);
+          }}
+          onFocus={() => { setDisabled(true); }}
+          onFocusOut={() => { setDisabled(false); }}
+        />
+        <Show when={props.detailed}>
+            <span>
+              &nbsp;{LL().FunctionalitiesSection.CategoricalChoroplethOptions.NoValues()}
+              &nbsp;-&nbsp;{LL().FunctionalitiesSection.CategoricalChoroplethOptions.Count()}
+              &nbsp;{countNulls()}
+            </span>
+        </Show>
+      </div>
+    </Show>
   </div>;
 }

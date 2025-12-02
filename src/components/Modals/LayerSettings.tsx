@@ -990,7 +990,9 @@ function makeSettingsDefaultPoint(
         id={'details-summary-categorical-choropleth-point'}
       >
         <CategoriesCustomisation
-          mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
+          mapping={() => (
+            props.rendererParameters as CategoricalChoroplethParameters).mapping
+          }
           setMapping={(m) => {
             updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
           }}
@@ -2004,7 +2006,8 @@ function makeSettingsDefaultLine(
         >
           <CategoriesCustomisation
             mapping={() => (
-              props.rendererParameters.color! as CategoricalChoroplethParameters).mapping}
+              props.rendererParameters.color! as CategoricalChoroplethParameters).mapping
+            }
             setMapping={(m) => {
               updateProp(props.id, ['rendererParameters', 'color', 'mapping'], m as never);
             }}
@@ -2090,7 +2093,9 @@ function makeSettingsDefaultLine(
         id={'details-summary-categorical-choropleth-line'}
       >
         <CategoriesCustomisation
-          mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
+          mapping={() => (
+            props.rendererParameters as CategoricalChoroplethParameters).mapping
+          }
           setMapping={(m) => {
             updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
           }}
@@ -2585,7 +2590,9 @@ function makeSettingsDefaultPolygon(
         summaryContent={LL().FunctionalitiesSection.CategoricalChoroplethOptions.Customize()}
       >
         <CategoriesCustomisation
-          mapping={() => (props.rendererParameters as CategoricalChoroplethParameters).mapping}
+          mapping={() => (
+            props.rendererParameters as CategoricalChoroplethParameters).mapping
+          }
           setMapping={(m) => {
             updateProp(props.id, ['rendererParameters', 'mapping'], m as never);
           }}

@@ -38,13 +38,17 @@ const prepareParameters = (
 
   const colorsMap = createMemo(
     () => {
+      const noDataEntry = rendererParameters().mapping
+        .find((m) => m.value === null || m.value === undefined || m.value === '');
       const map = new Map<string | number | null | undefined, string>(
         rendererParameters().mapping
           .map(({ value, color }) => [value, color]),
       );
-      map.set('', rendererParameters().noDataColor);
-      map.set(null, rendererParameters().noDataColor);
-      map.set(undefined, rendererParameters().noDataColor);
+      if (noDataEntry) {
+        map.set('', noDataEntry.color);
+        map.set(null, noDataEntry.color);
+        map.set(undefined, noDataEntry.color);
+      }
       return map;
     },
   );

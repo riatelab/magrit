@@ -385,10 +385,10 @@ export function CategoriesCustomisation(
           </div>
           <Show when={props.detailed}>
           <div style={{ width: 'calc(100% - (40% + 4em))' }}>
-            &nbsp;({ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Value() }
+            &nbsp;{ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Value() }
             &nbsp;{item.value} -
             &nbsp;{ LL().FunctionalitiesSection.CategoricalChoroplethOptions.Count() }
-            &nbsp;{item.count})
+            &nbsp;{item.count}
           </div>
           </Show>
         </div>

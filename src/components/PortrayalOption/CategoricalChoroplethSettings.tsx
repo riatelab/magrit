@@ -93,7 +93,6 @@ function onClickValidate(
     shapeRendering: referenceLayerDescription.shapeRendering,
     rendererParameters: {
       variable: targetVariable,
-      noDataColor: applicationSettingsStore.defaultNoDataColor,
       mapping: categoriesMapping,
     } as CategoricalChoroplethParameters,
   } as LayerDescriptionCategoricalChoropleth;
@@ -135,12 +134,11 @@ function onClickValidate(
     boxWidth: 50,
     boxHeight: 30,
     boxSpacing: 5,
-    boxSpacingNoData: 5,
+    boxSpacingNoData: 15,
     boxCornerRadius: 0,
     labels: {
       ...applicationSettingsStore.defaultLegendSettings.labels,
     } as LegendTextElement,
-    noDataLabel: 'No data',
     noDataBox: true,
     stroke: false,
     tick: false,
@@ -236,6 +234,7 @@ export default function CategoricalChoroplethSettings(props: PortrayalSettingsPr
       makeCategoriesMap(layerDescription.data.features, targetVariable()),
     ),
   );
+
   const [
     displayChartOnMap,
     setDisplayChartOnMap,
