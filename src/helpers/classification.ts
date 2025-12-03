@@ -159,3 +159,12 @@ export const classificationMethodHasOption = (
   }
   return t.options.includes(option);
 };
+
+export const bivariateClass = (
+  v1: any,
+  v2: any,
+  c1: { getClass: (_: number) => number },
+  c2: { getClass: (_: number) => number },
+): number => (
+  3 * c1.getClass(v1) + c2.getClass(v2)
+);

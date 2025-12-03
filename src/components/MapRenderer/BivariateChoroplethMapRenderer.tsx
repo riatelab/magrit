@@ -9,7 +9,7 @@ import {
 import type { Point } from 'geojson';
 
 // Helpers
-import { getClassifier } from '../../helpers/classification';
+import { bivariateClass, getClassifier } from '../../helpers/classification';
 import { isNonNull } from '../../helpers/common';
 import { getSymbolPath } from '../../helpers/svg';
 import { mergeFilterIds } from './common.tsx';
@@ -35,15 +35,6 @@ import {
 const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
   bindData,
 ];
-
-function bivariateClass(
-  v1: any,
-  v2: any,
-  c1: { getClass: (_: number) => number },
-  c2: { getClass: (_: number) => number },
-): number {
-  return 3 * c1.getClass(v1) + c2.getClass(v2);
-}
 
 export function bivariateChoroplethPolygonRenderer(
   layerDescription: LayerDescriptionBivariateChoropleth,

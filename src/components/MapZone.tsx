@@ -95,6 +95,7 @@ import lmScatterPlot from './LegendRenderer/LMScatterPlotRenderer.tsx';
 import legendCategoricalPictogram from './LegendRenderer/CategoricalPictogramLegendRenderer.tsx';
 import legendWaffle from './LegendRenderer/WaffleLegendRenderer.tsx';
 import legendBivariateChoropleth from './LegendRenderer/BivariateChoroplethLegend.tsx';
+import legendChoroplethBivariateScatterPlot from './LegendRenderer/BivariateChoroplethScatterPlotLegend.tsx';
 
 // Types and enums
 import {
@@ -134,6 +135,7 @@ import {
   type WaffleLegend,
   type LayerDescriptionBivariateChoropleth,
   type BivariateChoroplethLegend,
+  type BivariateChoroplethScatterplotLegend,
 } from '../global.d';
 
 // Styles
@@ -215,6 +217,9 @@ const dispatchLegendRenderer = (legend: Legend) => {
   }
   if (legend.type === 'bivariateChoropleth') {
     return legendBivariateChoropleth(legend as BivariateChoroplethLegend);
+  }
+  if (legend.type === 'bivariateChoroplethScatterplot') {
+    return legendChoroplethBivariateScatterPlot(legend as BivariateChoroplethScatterplotLegend);
   }
   return null;
 };

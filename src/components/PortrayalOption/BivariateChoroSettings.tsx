@@ -137,6 +137,12 @@ function onClickValidate(
     rendererParameters: params,
   } as LayerDescriptionBivariateChoropleth;
 
+  if (newLayerDescription.type === 'point') {
+    // We also need to transfert the symbolSize and the symbolType parameters
+    newLayerDescription.symbolSize = referenceLayerDescription.symbolSize || 5;
+    newLayerDescription.symbolType = referenceLayerDescription.symbolType || 'circle';
+  }
+
   const legend = {
     // Part common to all legends
     id: generateIdLegend(),

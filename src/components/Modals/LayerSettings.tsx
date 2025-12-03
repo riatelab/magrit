@@ -91,6 +91,8 @@ import {
   type WaffleLegend,
   type LinearRegressionScatterPlot,
   type ProportionalSymbolsPositiveNegativeParameters,
+  type BivariateChoroplethScatterplotLegend,
+  type BivariateChoroplethParameters,
 } from '../../global.d';
 
 // Styles
@@ -129,6 +131,24 @@ const linkedRegressionPlotVisible = (
 ): boolean => {
   const elem = layoutFeaturesAndLegends
     .find((l) => l.type === 'linearRegressionScatterPlot' && (l as Legend).layerId === layer.id);
+  return !!elem && (elem as Legend).visible;
+};
+
+const layerLinkedToScatterPlot = (
+  layer: LayerDescription,
+  layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
+): boolean => {
+  const elem = layoutFeaturesAndLegends
+    .find((l) => l.type === 'bivariateChoroplethScatterplot' && (l as Legend).layerId === layer.id);
+  return !!elem;
+};
+
+const linkedScatterPlotVisible = (
+  layer: LayerDescription,
+  layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
+): boolean => {
+  const elem = layoutFeaturesAndLegends
+    .find((l) => l.type === 'bivariateChoroplethScatterplot' && (l as Legend).layerId === layer.id);
   return !!elem && (elem as Legend).visible;
 };
 
@@ -1651,6 +1671,92 @@ function makeSettingsDefaultPoint(
         }}
       />
     </Show>
+    <Show when={props.representationType === 'bivariateChoropleth'}>
+      <InputFieldCheckbox
+        label={'Add scatter plot'}
+        checked={
+          linkedScatterPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          if (v && !layerLinkedToScatterPlot(
+            props,
+            layersDescriptionStore.layoutFeaturesAndLegends,
+          )) {
+            const legendPosition = getPossibleLegendPosition(400, 400);
+
+            setLayersDescriptionStoreBase(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeaturesAndLegends.push({
+                    id: generateIdLegend(),
+                    layerId: props.id,
+                    type: LegendType.bivariateChoroplethScatterplot,
+                    position: [legendPosition[0], legendPosition[1]],
+                    orientation: 'horizontal',
+                    order: 'none',
+                    visible: true,
+                    title: {
+                      text: (
+                        props.rendererParameters as CategoricalChoroplethParameters).variable,
+                      ...applicationSettingsStore.defaultLegendSettings.title,
+                    } as LegendTextElement,
+                    subtitle: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                    },
+                    note: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.note,
+                    },
+                    backgroundRect: {
+                      visible: false,
+                    },
+                    width: 400,
+                    height: 400,
+                    axis: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.labels,
+                    },
+                    roundDecimals: 2,
+                    regressionLineColor: 'red',
+                    confidenceInterval: true,
+                    confidenceIntervalColor: 'pink',
+                    displayRegressionLine: true,
+                    displayCountByClass: true,
+                    displayClassBreakLines: true,
+                    variable1Label: (
+                      props.rendererParameters as BivariateChoroplethParameters).variable1.variable,
+                    variable2Label: (
+                      props.rendererParameters as BivariateChoroplethParameters).variable2.variable,
+                  } as BivariateChoroplethScatterplotLegend);
+                },
+              ),
+            );
+          } else {
+            const elem = layersDescriptionStore.layoutFeaturesAndLegends
+              .find((l) => l.type === 'bivariateChoroplethScatterplot' && l.layerId === props.id);
+
+            if (elem) {
+              setLayersDescriptionStoreBase(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.forEach((l) => {
+                      if (
+                        l.type === 'bivariateChoroplethScatterplot'
+                        && l.layerId === props.id
+                      ) {
+                        // eslint-disable-next-line no-param-reassign
+                        l.visible = !l.visible;
+                      }
+                    });
+                  },
+                ),
+              );
+            }
+          }
+        }}
+      />
+    </Show>
     <AestheticsSection {...props} />
   </>;
 }
@@ -2463,6 +2569,92 @@ function makeSettingsDefaultLine(
         }}
       />
     </Show>
+    <Show when={props.representationType === 'bivariateChoropleth'}>
+      <InputFieldCheckbox
+        label={'Add scatter plot'}
+        checked={
+          linkedScatterPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          if (v && !layerLinkedToScatterPlot(
+            props,
+            layersDescriptionStore.layoutFeaturesAndLegends,
+          )) {
+            const legendPosition = getPossibleLegendPosition(400, 400);
+
+            setLayersDescriptionStoreBase(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeaturesAndLegends.push({
+                    id: generateIdLegend(),
+                    layerId: props.id,
+                    type: LegendType.bivariateChoroplethScatterplot,
+                    position: [legendPosition[0], legendPosition[1]],
+                    orientation: 'horizontal',
+                    order: 'none',
+                    visible: true,
+                    title: {
+                      text: (
+                        props.rendererParameters as CategoricalChoroplethParameters).variable,
+                      ...applicationSettingsStore.defaultLegendSettings.title,
+                    } as LegendTextElement,
+                    subtitle: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                    },
+                    note: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.note,
+                    },
+                    backgroundRect: {
+                      visible: false,
+                    },
+                    width: 400,
+                    height: 400,
+                    axis: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.labels,
+                    },
+                    roundDecimals: 2,
+                    regressionLineColor: 'red',
+                    confidenceInterval: true,
+                    confidenceIntervalColor: 'pink',
+                    displayRegressionLine: true,
+                    displayCountByClass: true,
+                    displayClassBreakLines: true,
+                    variable1Label: (
+                      props.rendererParameters as BivariateChoroplethParameters).variable1.variable,
+                    variable2Label: (
+                      props.rendererParameters as BivariateChoroplethParameters).variable2.variable,
+                  } as BivariateChoroplethScatterplotLegend);
+                },
+              ),
+            );
+          } else {
+            const elem = layersDescriptionStore.layoutFeaturesAndLegends
+              .find((l) => l.type === 'bivariateChoroplethScatterplot' && l.layerId === props.id);
+
+            if (elem) {
+              setLayersDescriptionStoreBase(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.forEach((l) => {
+                      if (
+                        l.type === 'bivariateChoroplethScatterplot'
+                        && l.layerId === props.id
+                      ) {
+                        // eslint-disable-next-line no-param-reassign
+                        l.visible = !l.visible;
+                      }
+                    });
+                  },
+                ),
+              );
+            }
+          }
+        }}
+      />
+    </Show>
     <AestheticsSection {...props} />
   </>;
 }
@@ -2775,6 +2967,92 @@ function makeSettingsDefaultPolygon(
           }}
         />
       </Show>
+    </Show>
+    <Show when={props.representationType === 'bivariateChoropleth'}>
+      <InputFieldCheckbox
+        label={'Add scatter plot'}
+        checked={
+          linkedScatterPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          if (v && !layerLinkedToScatterPlot(
+            props,
+            layersDescriptionStore.layoutFeaturesAndLegends,
+          )) {
+            const legendPosition = getPossibleLegendPosition(400, 400);
+
+            setLayersDescriptionStoreBase(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeaturesAndLegends.push({
+                    id: generateIdLegend(),
+                    layerId: props.id,
+                    type: LegendType.bivariateChoroplethScatterplot,
+                    position: [legendPosition[0], legendPosition[1]],
+                    orientation: 'horizontal',
+                    order: 'none',
+                    visible: true,
+                    title: {
+                      text: (
+                        props.rendererParameters as CategoricalChoroplethParameters).variable,
+                      ...applicationSettingsStore.defaultLegendSettings.title,
+                    } as LegendTextElement,
+                    subtitle: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                    },
+                    note: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.note,
+                    },
+                    backgroundRect: {
+                      visible: false,
+                    },
+                    width: 400,
+                    height: 400,
+                    axis: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.labels,
+                    },
+                    roundDecimals: 2,
+                    regressionLineColor: 'red',
+                    confidenceInterval: true,
+                    confidenceIntervalColor: 'pink',
+                    displayRegressionLine: true,
+                    displayCountByClass: true,
+                    displayClassBreakLines: true,
+                    variable1Label: (
+                      props.rendererParameters as BivariateChoroplethParameters).variable1.variable,
+                    variable2Label: (
+                      props.rendererParameters as BivariateChoroplethParameters).variable2.variable,
+                  } as BivariateChoroplethScatterplotLegend);
+                },
+              ),
+            );
+          } else {
+            const elem = layersDescriptionStore.layoutFeaturesAndLegends
+              .find((l) => l.type === 'bivariateChoroplethScatterplot' && l.layerId === props.id);
+
+            if (elem) {
+              setLayersDescriptionStoreBase(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.forEach((l) => {
+                      if (
+                        l.type === 'bivariateChoroplethScatterplot'
+                        && l.layerId === props.id
+                      ) {
+                        // eslint-disable-next-line no-param-reassign
+                        l.visible = !l.visible;
+                      }
+                    });
+                  },
+                ),
+              );
+            }
+          }
+        }}
+      />
     </Show>
     <Show when={props.representationType === 'categoricalChoropleth'}>
       <InputFieldCheckbox

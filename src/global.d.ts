@@ -635,31 +635,24 @@ interface LinksParameters {
   filters: Filter[],
 }
 
+export interface BivariateVariableDescription {
+  // The name of the first variable
+  variable: string,
+  // The classification method
+  method: ClassificationMethod,
+  // The number of classes
+  classes: number,
+  // The break values (computed or manually set)
+  breaks: number[],
+  // Entities by class
+  entitiesByClass: number[],
+}
+
 export interface BivariateChoroplethParameters {
-  variable1: {
-    // The name of the first variable
-    variable: string,
-    // The classification method
-    method: ClassificationMethod,
-    // The number of classes
-    classes: number,
-    // The break values (computed or manually set)
-    breaks: number[],
-    // Entities by class
-    entitiesByClass: number[],
-  },
-  variable2: {
-    // The name of the second variable
-    variable: string,
-    // The classification method
-    method: ClassificationMethod,
-    // The number of classes
-    classes: number,
-    // The break values (computed or manually set)
-    breaks: number[],
-    // Entities by class
-    entitiesByClass: number[],
-  },
+  // The description of the first variable
+  variable1: BivariateVariableDescription,
+  // The description of the second variable
+  variable2: BivariateVariableDescription,
   // The color to use for features with no data
   noDataColor: string,
   // The color palette
@@ -1207,6 +1200,12 @@ interface BivariateChoroplethScatterplotLegend extends LegendBase {
   displayRegressionLine: boolean,
   // Whether to display the count by class on the chart
   displayCountByClass: boolean,
+  // Whether to display the dashed lines for the class breaks
+  displayClassBreakLines: boolean,
+  // The label of the 1st variable
+  variable1Label: string, // or LegendTextElement ?
+  // The label of the 2nd variable
+  variable2Label: string, // or LegendTextElement ?
 }
 
 interface TrivariateChoroplethLegend extends LegendBase {
@@ -1236,6 +1235,7 @@ export type Legend = (
   | LinearRegressionScatterPlot
   | CategoricalPictogramLegend
   | BivariateChoroplethLegend
+  | BivariateChoroplethScatterplotLegend
   | TrivariateChoroplethLegend
   | DefaultLegend
 );
