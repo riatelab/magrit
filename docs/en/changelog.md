@@ -12,6 +12,14 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.3.14 (unreleased)
+
+- Make symbols movable on categorical pictogram maps (fixes <a href="https://github.com/riatelab/magrit/issues/186">issue 186</a>).
+
+- Enables the selection of the color for the no-data category for categorical choropleth maps
+  and improves the processing of this special category in general (fixes <a href="https://github.com/riatelab/magrit/issues/187">issue 187</a>).
+
+
 ### 2.3.13 (2025-11-19)
 
 - Fix the absence of the “number of classes” selector for “manual” classification for discontinuity maps
