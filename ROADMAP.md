@@ -3,7 +3,7 @@
 This document describes the roadmap for the project after the publication of v2 (July 2024).
 
 
-## Summer-Autumn 2025
+## Winter 2025-2026 and later
 
 - Explore the support of raster datasets (this implies deciding how to render these datasets "by default" but also proposing representation and analysis functionalities dedicated to this new type of data).
 - Explore support for tiled raster background maps (such as OpenStreetMap tiles).
