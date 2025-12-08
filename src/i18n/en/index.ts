@@ -1482,6 +1482,8 @@ const en = {
     copyPalette: 'Copy palette to the clipboard',
     paletteCopied: 'Palette copied to the clipboard',
   },
+  BivariateClassificationPanel: {
+  },
   Legend: {
     ContextMenu: {
       EditSettings: 'Edit settings...',

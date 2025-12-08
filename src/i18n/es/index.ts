@@ -1482,6 +1482,8 @@ const es = {
     copyPalette: 'Copia la paleta de colores al portapapeles',
     paletteCopied: 'Paleta de colores copiada al portapapeles',
   },
+  BivariateClassificationPanel: {
+  },
   Legend: {
     ContextMenu: {
       EditSettings: 'Modificar la parametros...',

@@ -1482,6 +1482,8 @@ const fr = {
     copyPalette: 'Copier la palette de couleurs dans le presse-papier',
     paletteCopied: 'Palette de couleurs copiée dans le presse-papier',
   },
+  BivariateClassificationPanel: {
+  },
   Legend: {
     ContextMenu: {
       EditSettings: 'Modifier les paramètres...',

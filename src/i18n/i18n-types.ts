@@ -5982,6 +5982,8 @@ type RootTranslation = {
 		 */
 		paletteCopied: string
 	}
+	BivariateClassificationPanel: {
+	}
 	Legend: {
 		ContextMenu: {
 			/**
@@ -12142,6 +12144,8 @@ export type TranslationFunctions = {
 		 * Palette copied to the clipboard
 		 */
 		paletteCopied: () => LocalizedString
+	}
+	BivariateClassificationPanel: {
 	}
 	Legend: {
 		ContextMenu: {

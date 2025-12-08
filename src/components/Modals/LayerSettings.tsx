@@ -58,6 +58,7 @@ import {
 } from '../../store/LayersDescriptionStore';
 import { setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { setClassificationMultivariatePanelStore } from '../../store/ClassificationMultivariatePanelStore';
 
 // Types / Interfaces
 import {
@@ -827,7 +828,7 @@ function makeSettingsDefaultPoint(
               type: 'color',
               layerName: props.name,
               series: props.data.features
-                .map((f) => f.properties[(
+                .map((f) => f.properties![(
                   props.rendererParameters as ClassificationParameters).variable]),
               classificationParameters: params,
               onCancel: () => {
@@ -856,6 +857,58 @@ function makeSettingsDefaultPoint(
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {
           document.getElementById('button-change-classification-pt')!
+            .click();
+        }}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
+      />
+    </Show>
+    <Show when={props.representationType === 'bivariateChoropleth'}>
+      <div class="field" style={{ 'text-align': 'center' }}>
+        <button
+          class="button"
+          id="button-change-bi-classification-point"
+          style={{ margin: 'auto' }}
+          onClick={() => {
+            // Save current state of classification parameters
+            const params = unproxify(props.rendererParameters as never);
+            const series = [
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as BivariateChoroplethParameters).variable1.variable]),
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as BivariateChoroplethParameters).variable2.variable]),
+            ];
+            setClassificationMultivariatePanelStore({
+              show: true,
+              type: 'bivariate',
+              layerName: props.name,
+              series,
+              classificationParameters: params,
+              onCancel: () => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: params },
+                );
+              },
+              onConfirm: (newParams) => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: newParams },
+                );
+              },
+            });
+          }}
+        >{LL().LayerSettings.ChangeClassification()}</button>
+      </div>
+      <InputFieldPaletteOpacity
+        label={LL().LayerSettings.Fill()}
+        valuePalette={(props.rendererParameters as BivariateChoroplethParameters).palette.colors}
+        valueOpacity={props.fillOpacity!}
+        onClickPalette={() => {
+          document.getElementById('button-change-bi-classification-point')!
             .click();
         }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
@@ -927,7 +980,7 @@ function makeSettingsDefaultPoint(
               type: 'color',
               layerName: props.name,
               series: props.data.features
-                .map((f) => f.properties[(
+                .map((f) => f.properties![(
                   props.rendererParameters!.color as ClassificationParameters).variable]),
               classificationParameters: params,
               onCancel: () => {
@@ -1857,7 +1910,7 @@ function makeSettingsDefaultLine(
               type: 'size',
               layerName: props.name,
               series: props.data.features
-                .map((f) => f.properties.value),
+                .map((f) => f.properties!.value),
               classificationParameters: params,
               onCancel: () => {
                 setLayersDescriptionStoreBase(
@@ -1940,7 +1993,7 @@ function makeSettingsDefaultLine(
                   type: 'size',
                   layerName: props.name,
                   series: props.data.features
-                    .map((f) => f.properties.Intensity),
+                    .map((f) => f.properties!.Intensity),
                   classificationParameters: params,
                   onCancel: () => {
                     setLayersDescriptionStoreBase(
@@ -2048,7 +2101,7 @@ function makeSettingsDefaultLine(
                 type: 'color',
                 layerName: props.name,
                 series: props.data.features
-                  .map((f) => f.properties[(
+                  .map((f) => f.properties![(
                     props.rendererParameters as ClassificationParameters).variable]),
                 classificationParameters: params,
                 onCancel: () => {
@@ -2138,7 +2191,7 @@ function makeSettingsDefaultLine(
               type: 'color',
               layerName: props.name,
               series: props.data.features
-                .map((f) => f.properties[(
+                .map((f) => f.properties![(
                   props.rendererParameters as ClassificationParameters).variable]),
               classificationParameters: params,
               onCancel: () => {
@@ -2570,6 +2623,58 @@ function makeSettingsDefaultLine(
       />
     </Show>
     <Show when={props.representationType === 'bivariateChoropleth'}>
+      <div class="field" style={{ 'text-align': 'center' }}>
+        <button
+          class="button"
+          id="button-change-bi-classification-line"
+          style={{ margin: 'auto' }}
+          onClick={() => {
+            // Save current state of classification parameters
+            const params = unproxify(props.rendererParameters as never);
+            const series = [
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as BivariateChoroplethParameters).variable1.variable]),
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as BivariateChoroplethParameters).variable2.variable]),
+            ];
+            setClassificationMultivariatePanelStore({
+              show: true,
+              type: 'bivariate',
+              layerName: props.name,
+              series,
+              classificationParameters: params,
+              onCancel: () => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: params },
+                );
+              },
+              onConfirm: (newParams) => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: newParams },
+                );
+              },
+            });
+          }}
+        >{LL().LayerSettings.ChangeClassification()}</button>
+      </div>
+      <InputFieldWidthPaletteOpacity
+        label={LL().LayerSettings.Line()}
+        valueWidth={props.strokeWidth!}
+        valuePalette={(props.rendererParameters as BivariateChoroplethParameters).palette.colors}
+        valueOpacity={props.strokeOpacity!}
+        onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
+        onClickPalette={() => {
+          document.getElementById('button-change-bi-classification-line')!
+            .click();
+        }}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
+      />
       <InputFieldCheckbox
         label={'Add scatter plot'}
         checked={
@@ -2697,7 +2802,7 @@ function makeSettingsDefaultPolygon(
               type: 'color',
               layerName: props.name,
               series: props.data.features
-                .map((f) => f.properties[(
+                .map((f) => f.properties![(
                   props.rendererParameters as ClassificationParameters).variable]),
               classificationParameters: params,
               onCancel: () => {
@@ -2726,6 +2831,58 @@ function makeSettingsDefaultPolygon(
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {
           document.getElementById('button-change-classification-polygon')!
+            .click();
+        }}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
+      />
+    </Show>
+    <Show when={props.representationType === 'bivariateChoropleth'}>
+      <div class="field" style={{ 'text-align': 'center' }}>
+        <button
+          class="button"
+          id="button-change-bi-classification-polygon"
+          style={{ margin: 'auto' }}
+          onClick={() => {
+            // Save current state of classification parameters
+            const params = unproxify(props.rendererParameters as never);
+            const series = [
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as BivariateChoroplethParameters).variable1.variable]),
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as BivariateChoroplethParameters).variable2.variable]),
+            ];
+            setClassificationMultivariatePanelStore({
+              show: true,
+              type: 'bivariate',
+              layerName: props.name,
+              series,
+              classificationParameters: params,
+              onCancel: () => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: params },
+                );
+              },
+              onConfirm: (newParams) => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: newParams },
+                );
+              },
+            });
+          }}
+        >{LL().LayerSettings.ChangeClassification()}</button>
+      </div>
+      <InputFieldPaletteOpacity
+        label={LL().LayerSettings.Fill()}
+        valuePalette={(props.rendererParameters as BivariateChoroplethParameters).palette.colors}
+        valueOpacity={props.fillOpacity!}
+        onClickPalette={() => {
+          document.getElementById('button-change-bi-classification-polygon')!
             .click();
         }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
