@@ -12,7 +12,7 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
-### 2.3.14 (unreleased)
+### 2.3.14 (2025-12-08)
 
 - Rend les pictogrammes déplaçables sur les cartes catégorielles de pictogrammes (corrige <a href="https://github.com/riatelab/magrit/issues/186">l'issue 186</a>).
 
