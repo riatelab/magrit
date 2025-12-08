@@ -12,7 +12,7 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-### 2.3.14 (unreleased)
+### 2.3.14 (2025-12-08)
 
 - Make symbols movable on categorical pictogram maps (fixes <a href="https://github.com/riatelab/magrit/issues/186">issue 186</a>).
 
