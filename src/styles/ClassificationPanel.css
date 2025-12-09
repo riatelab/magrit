@@ -10,9 +10,19 @@
     text-align: right;
 }
 
+.modal-window.classification-panel table.bivariate tr td {
+    text-align: center;
+    vertical-align: middle;
+}
+
 .modal-window.classification-panel table {
     width: 70%;
     margin: 12% auto 0 auto;
+}
+
+.modal-window.classification-panel table.bivariate {
+    width: 90%;
+    margin: 8% auto 0 auto;
 }
 
 .modal-window.classification-panel p.label {

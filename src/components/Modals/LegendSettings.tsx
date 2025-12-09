@@ -43,17 +43,18 @@ import InputFieldText from '../Inputs/InputText.tsx';
 
 // Types / Interfaces / Enums
 import {
-  BivariateChoroplethLegend,
+  type BivariateChoroplethLegend,
+  type BivariateChoroplethScatterplotLegend,
   type CategoricalChoroplethBarchartLegend,
   type CategoricalChoroplethLegend,
   type CategoricalPictogramLegend,
   type ChoroplethHistogramLegend,
   type ChoroplethLegend,
   type ClassificationParameters,
-  DefaultLegend,
+  type DefaultLegend,
   type GraduatedLineLegend,
   type LabelsLegend,
-  LayerDescription,
+  type LayerDescription,
   type LayerDescriptionCategoricalChoropleth,
   type LayerDescriptionChoropleth,
   type LayerDescriptionGriddedLayer,
@@ -61,13 +62,13 @@ import {
   type LayerDescriptionSmoothedLayer,
   type LayoutFeature,
   type Legend,
-  LegendType,
   type LinearRegressionScatterPlot,
   type MushroomsLegend,
   type ProportionalSymbolCategoryParameters,
   type ProportionalSymbolsLegend,
   type ProportionalSymbolsParameters,
   type ProportionalSymbolsRatioParameters,
+  LegendType,
   RepresentationType,
   WaffleLegend,
 } from '../../global.d';
@@ -539,10 +540,10 @@ function makeSettingsChoroplethLegend(
 
   const hasNoData = legend.type === 'categoricalChoropleth'
     ? layer.data.features.filter(
-      (feature) => !isNonNull(feature.properties[choroVariable]),
+      (feature) => !isNonNull(feature.properties![choroVariable]),
     ).length > 0
     : layer.data.features.filter(
-      (feature) => !isFiniteNumber(feature.properties[choroVariable]),
+      (feature) => !isFiniteNumber(feature.properties![choroVariable]),
     ).length > 0;
 
   return <>
@@ -980,7 +981,7 @@ function makeSettingsChoroplethHistogram(
   const classificationParameters = getClassificationParameters(refLayerDescription);
 
   const filteredSeries = refLayerDescription.data.features
-    .map((d) => d.properties[classificationParameters.variable])
+    .map((d) => d.properties![classificationParameters.variable])
     .filter((d) => isFiniteNumber(d))
     .map((d) => +d);
 
@@ -1042,9 +1043,9 @@ function makeSettingsChoroplethHistogram(
         if (v) {
           updateProps(legend.id, ['medianOptions'], {
             color: '#00ff00', width: 2, value: statSummary.median,
-          });
+          } as never);
         } else {
-          updateProps(legend.id, ['medianOptions'], undefined);
+          updateProps(legend.id, ['medianOptions'], undefined as never);
         }
       }}
     />
@@ -1100,10 +1101,10 @@ function makeSettingsChoroplethHistogram(
             ['populationOptions'],
             {
               color: '#1100fe', width: 1, series: filteredSeries, height: 5,
-            },
+            } as never,
           );
         } else {
-          updateProps(legend.id, ['populationOptions'], undefined);
+          updateProps(legend.id, ['populationOptions'], undefined as never);
         }
       }}
     />
@@ -1409,6 +1410,55 @@ function makeSettingsCategoricalPictogram(
   </>;
 }
 
+function makeSettingsBivariateChoroplethScatterplot(
+  legend: BivariateChoroplethScatterplotLegend,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <>
+    <FieldText legend={legend} LL={LL} role={'title'}/>
+    <FieldText legend={legend} LL={LL} role={'subtitle'}/>
+    <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldNumber
+      label={LL().Legend.Modal.Width()}
+      value={legend.width}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['width'], v)}
+      min={10}
+      max={800}
+      step={1}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.Height()}
+      value={legend.height}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['height'], v)}
+      min={10}
+      max={800}
+      step={1}
+    />
+    <OptionBackgroundRectangle legend={legend} LL={LL}/>
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        {LL().Legend.Modal.FontProperties()}
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
+      </p>
+    </div>
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'axis', 'note']}
+      />
+    </Show>
+  </>;
+}
+
 function makeSettingsBivariateChoropleth(
   legend: BivariateChoroplethLegend,
   LL: Accessor<TranslationFunctions>,
@@ -1557,6 +1607,12 @@ function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.
   if (legend.type === LegendType.bivariateChoropleth) {
     return makeSettingsBivariateChoropleth(
       legend as BivariateChoroplethLegend,
+      LL,
+    );
+  }
+  if (legend.type === LegendType.bivariateChoroplethScatterplot) {
+    return makeSettingsBivariateChoroplethScatterplot(
+      legend as BivariateChoroplethScatterplotLegend,
       LL,
     );
   }

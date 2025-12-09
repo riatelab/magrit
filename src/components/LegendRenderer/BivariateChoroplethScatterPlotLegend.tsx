@@ -8,7 +8,6 @@ import {
 
 // Import from other libraries
 import * as Plot from '@observablehq/plot';
-import type { PlotOptions } from '@observablehq/plot';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -109,6 +108,13 @@ function BivariateChoroScatterPlot(
     Plot.plot({
       width: props.width,
       height: props.height,
+      style: {
+        color: props.axis.fontColor,
+        fontFamily: props.axis.fontFamily,
+        fontSize: `${props.axis.fontSize}px`,
+        fontWeight: props.axis.fontWeight,
+        fontStyle: props.axis.fontStyle,
+      },
       x: {
         label: props.variable2Label,
       },

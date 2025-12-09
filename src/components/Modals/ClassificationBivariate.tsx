@@ -7,7 +7,9 @@ import {
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { unproxify } from '../../helpers/common';
+import { prepareStatisticalSummary } from '../../helpers/classification';
+import { isFiniteNumber, unproxify } from '../../helpers/common';
+import { round } from '../../helpers/math';
 
 // Stores
 import { classificationMultivariatePanelStore, setClassificationMultivariatePanelStore } from '../../store/ClassificationMultivariatePanelStore';
@@ -27,6 +29,18 @@ export default function ClassificationBivariatePanel(): JSX.Element {
 
   const parameters = classificationMultivariatePanelStore
     .classificationParameters as BivariateChoroplethParameters;
+
+  const filteredSeriesVar1 = classificationMultivariatePanelStore.series![0]
+    .filter((d) => isFiniteNumber(d))
+    .map((d) => +d);
+
+  const filteredSeriesVar2 = classificationMultivariatePanelStore.series![1]
+    .filter((d) => isFiniteNumber(d))
+    .map((d) => +d);
+
+  // Basic statistical summary displayed to the user
+  const statSummaryVar1 = prepareStatisticalSummary(filteredSeriesVar1);
+  const statSummaryVar2 = prepareStatisticalSummary(filteredSeriesVar2);
 
   console.log('Bivariate classification parameters:', parameters);
 
@@ -85,6 +99,57 @@ export default function ClassificationBivariatePanel(): JSX.Element {
       </header>
       <section class="modal-card-body">
         <div class="is-flex">
+          <div style={{ width: '40%', 'text-align': 'center' }}>
+            <h3> { LL().ClassificationPanel.summary() }</h3>
+            <div>
+              <table class="table bivariate is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>{ parameters.variable1.variable }</th>
+                    <th>{ parameters.variable2.variable }</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  {/* eslint-disable-next-line solid/no-innerhtml */}
+                  <td innerHTML={LL().ClassificationPanel.population().replace(' (', '<br />(')}></td>
+                  <td>{ statSummaryVar1.population }</td>
+                  <td>{ statSummaryVar2.population }</td>
+                </tr>
+                <tr>
+                  <td>{ LL().ClassificationPanel.minimum() }</td>
+                  <td>{ round(statSummaryVar1.minimum, statSummaryVar1.precision) }</td>
+                  <td>{ round(statSummaryVar2.minimum, statSummaryVar2.precision) }</td>
+                </tr>
+                <tr>
+                  <td>{ LL().ClassificationPanel.maximum() }</td>
+                  <td>{ round(statSummaryVar1.maximum, statSummaryVar1.precision) }</td>
+                  <td>{ round(statSummaryVar2.maximum, statSummaryVar2.precision) }</td>
+                </tr>
+                <tr>
+                  <td>{ LL().ClassificationPanel.mean() }</td>
+                  <td>{ round(statSummaryVar1.mean, statSummaryVar1.precision) }</td>
+                  <td>{ round(statSummaryVar2.mean, statSummaryVar2.precision) }</td>
+                </tr>
+                <tr>
+                  <td>{ LL().ClassificationPanel.median() }</td>
+                  <td>{ round(statSummaryVar1.median, statSummaryVar1.precision) }</td>
+                  <td>{ round(statSummaryVar2.median, statSummaryVar2.precision) }</td>
+                </tr>
+                <tr>
+                  <td>{ LL().ClassificationPanel.standardDeviation() }</td>
+                  <td>{ round(statSummaryVar1.standardDeviation, statSummaryVar1.precision) }</td>
+                  <td>{ round(statSummaryVar2.standardDeviation, statSummaryVar2.precision) }</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div style={{ width: '55%', 'text-align': 'center' }}>
+            <h3> { LL().ClassificationPanel.distribution() } </h3>
+            <div></div>
+          </div>
         </div>
       </section>
       <footer class="modal-card-foot">
