@@ -537,10 +537,10 @@ function makeSettingsChoroplethLegend(
 
   const hasNoData = legend.type === 'categoricalChoropleth'
     ? layer.data.features.filter(
-      (feature) => !isNonNull(feature.properties[choroVariable]),
+      (feature) => !isNonNull(feature.properties![choroVariable]),
     ).length > 0
     : layer.data.features.filter(
-      (feature) => !isFiniteNumber(feature.properties[choroVariable]),
+      (feature) => !isFiniteNumber(feature.properties![choroVariable]),
     ).length > 0;
 
   return <>
@@ -963,7 +963,11 @@ function makeSettingsChoroplethHistogram(
 
   // The values that we are gonna use for the classification
   function getClassificationParameters(layerDescription: LayerDescription) {
-    if (layerDescription.representationType === 'choropleth') {
+    if (
+      layerDescription.representationType === 'choropleth'
+      || layerDescription.representationType === 'smoothed'
+      || layerDescription.representationType === 'grid'
+    ) {
       return layerDescription.rendererParameters as ClassificationParameters;
     }
     if (
@@ -978,7 +982,7 @@ function makeSettingsChoroplethHistogram(
   const classificationParameters = getClassificationParameters(refLayerDescription);
 
   const filteredSeries = refLayerDescription.data.features
-    .map((d) => d.properties[classificationParameters.variable])
+    .map((d) => d.properties![classificationParameters.variable])
     .filter((d) => isFiniteNumber(d))
     .map((d) => +d);
 

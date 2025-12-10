@@ -175,7 +175,11 @@ export default function legendChoroplethHistogram(
   )!;
 
   function getClassificationParameters(layerDescription: LayerDescription) {
-    if (layerDescription.representationType === 'choropleth') {
+    if (
+      layerDescription.representationType === 'choropleth'
+      || layerDescription.representationType === 'smoothed'
+      || layerDescription.representationType === 'grid'
+    ) {
       return layerDescription.rendererParameters as ClassificationParameters;
     }
     if (
