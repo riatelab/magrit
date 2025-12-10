@@ -12,6 +12,12 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.3.15 (2025-12-10)
+
+- Fix font usage in PNG exports (fixes <a href="https://github.com/riatelab/magrit/issues/189">issue 189</a>).
+
+- Enable displaying histogram for grid layers (fixes <a href="https://github.com/riatelab/magrit/issues/188">issue 188</a>).
+
 ### 2.3.14 (2025-12-08)
 
 - Make symbols movable on categorical pictogram maps (fixes <a href="https://github.com/riatelab/magrit/issues/186">issue 186</a>).

@@ -12,6 +12,12 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+### 2.3.15 (2025-12-10)
+
+- Corrige l'usage des polices d'écritures dans les exports PNG (corrige <a href="https://github.com/riatelab/magrit/issues/189">l'issue 189</a>).
+
+- Rend possible l'affichage d'un histogramme comme légende pour les cartes carroyées (corrige <a href="https://github.com/riatelab/magrit/issues/188">l'issue 188</a>).
+
 ### 2.3.14 (2025-12-08)
 
 - Rend les pictogrammes déplaçables sur les cartes catégorielles de pictogrammes (corrige <a href="https://github.com/riatelab/magrit/issues/186">l'issue 186</a>).
