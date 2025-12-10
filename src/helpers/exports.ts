@@ -339,6 +339,9 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
   targetCanvas.height = mapDimensions.height;
   document.body.appendChild(targetCanvas);
 
+  // Patch the SVG to include the fonts used in the map
+  patchSvgForFonts(targetSvg);
+
   // Current state of snapping grid
   const displaySnapGrid = globalStore.displaySnappingGrid;
 

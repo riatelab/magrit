@@ -966,7 +966,11 @@ function makeSettingsChoroplethHistogram(
 
   // The values that we are gonna use for the classification
   function getClassificationParameters(layerDescription: LayerDescription) {
-    if (layerDescription.representationType === 'choropleth') {
+    if (
+      layerDescription.representationType === 'choropleth'
+      || layerDescription.representationType === 'smoothed'
+      || layerDescription.representationType === 'grid'
+    ) {
       return layerDescription.rendererParameters as ClassificationParameters;
     }
     if (
