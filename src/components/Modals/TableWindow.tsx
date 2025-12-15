@@ -92,6 +92,9 @@ const addMaxWidthAttr = (columnDefs: any[]): any[] => {
   return columnDefs;
 };
 
+// eslint-disable-next-line no-useless-escape
+const hasForbiddenChars = (str: string): boolean => /[.,\/#!$%\^&\*;:\[\]\{\}=`~()']/.test(str);
+
 function NewFieldPanel(
   props: {
     typeDs: 'layer' | 'table';
@@ -121,7 +124,8 @@ function NewFieldPanel(
     setSampleOutput,
   ] = createSignal<SampleOutputFormat | undefined>(undefined);
 
-  const isEnabledCompute = createMemo(() => newColumnName() !== ''
+  const isComputeEnabled = createMemo(() => newColumnName() !== ''
+    && !hasForbiddenChars(newColumnName())
     && newColumnType() !== VariableType.unknown
     && currentFormula() !== ''
     && sampleOutput() !== undefined
@@ -194,11 +198,11 @@ function NewFieldPanel(
             type="text"
             placeholder={LL().DataTable.NewColumnModal.namePlaceholder()}
             value={newColumnName()}
-            onChange={(e) => {
-              setNewColumnName(e.target.value);
+            onKeyUp={(e) => {
+              setNewColumnName(e.currentTarget.value);
             }}
           />
-          <p class="message is-danger">&nbsp;{LL().DataTable.NewColumnModal.notAcceptedChars()}</p>
+          <p class="message is-danger">&nbsp;{LL().DataTable.NewColumnModal.notAcceptedChars('.,/#!$%^&*;:{}[]=`~()\'')}</p>
         </div>
       </div>
       <div class="field-block">
@@ -252,7 +256,7 @@ function NewFieldPanel(
       <br/>
       <InputFieldButton
         label={LL().DataTable.NewColumnModal.compute()}
-        disabled={!isEnabledCompute()}
+        disabled={!isComputeEnabled()}
         onClick={onClickCompute}
       />
     </div>

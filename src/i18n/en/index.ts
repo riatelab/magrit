@@ -1364,7 +1364,7 @@ const en = {
     NewColumnModal: {
       BackToDatatable: 'Back to data table',
       title: 'New column',
-      notAcceptedChars: 'The following special characters are not accepted: .,/#!$%^&*;:\{\}=`~()\'', // eslint-disable-line
+      notAcceptedChars: 'The following special characters are not accepted: {}', // eslint-disable-line
       name: 'Name',
       namePlaceholder: 'Type the name of the column',
       newColumnType: 'New column type',

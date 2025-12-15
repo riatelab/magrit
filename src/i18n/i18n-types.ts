@@ -5549,7 +5549,7 @@ type RootTranslation = {
 			 */
 			title: string
 			/**
-			 * T​h​e​ ​f​o​l​l​o​w​i​n​g​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r​s​ ​a​r​e​ ​n​o​t​ ​a​c​c​e​p​t​e​d​:​ ​.​,​/​#​!​$​%​^​&​*​;​:​{​0​}​=​`​~​(​)​'
+			 * T​h​e​ ​f​o​l​l​o​w​i​n​g​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r​s​ ​a​r​e​ ​n​o​t​ ​a​c​c​e​p​t​e​d​:​ ​{​0​}
 			 * @param {unknown} 0
 			 */
 			notAcceptedChars: RequiredParams<'0'>
@@ -11685,7 +11685,7 @@ export type TranslationFunctions = {
 			 */
 			title: () => LocalizedString
 			/**
-			 * The following special characters are not accepted: .,/#!$%^&*;:{0}=`~()'
+			 * The following special characters are not accepted: {0}
 			 */
 			notAcceptedChars: (arg0: unknown) => LocalizedString
 			/**
