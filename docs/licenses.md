@@ -1,6 +1,6 @@
 # Licences et logiciels tiers
 
-L'application Magrit (documentation incluse) est régit par la licence GPL-3.0 dont les termes sont disponibles [en ligne](https://www.gnu.org/licenses/gpl-3.0-standalone.html)
+L'application Magrit (documentation incluse) est régie par la licence GPL-3.0 dont les termes sont disponibles [en ligne](https://www.gnu.org/licenses/gpl-3.0-standalone.html)
 ainsi que dans le fichier [`LICENSE`](https://github.com/riatelab/magrit/blob/master/LICENSE) à la racine du dépôt de code.
 
 <div style="text-align: center;">

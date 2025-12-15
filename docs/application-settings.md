@@ -47,13 +47,13 @@ Cette option est nouvelle dans la version 2.3.0 et permet de choisir si les clas
 
 - à droite (ainsi pour les limites de classes `1 - 3 - 5 - 8 - 10`, les intervalles sont `[1, 3]`, `]3, 5]`, `]5, 8]`, `]8, 10]`)
 
-Ce choix s'applique à toutes les cartes crées dans l'application.
+Ce choix s'applique à toutes les cartes créées dans l'application.
 
 ### Couleur de la grille d'alignement
 
 Il est possible de choisir la couleur de la grille d'alignement qui a pour but d'aider à positionner les éléments sur la carte.
 
-Cette grille peut-être affichée dans la section ["Mise en page et éléments d'habillage"](./layout-features) du menu latéral gauche de l'application.
+Cette grille peut être affichée dans la section ["Mise en page et éléments d'habillage"](./layout-features) du menu latéral gauche de l'application.
 
 ### Options par défault pour les légendes et graphiques
 
@@ -69,7 +69,7 @@ Il est possible de choisir la couleur par défaut pour les entités sans donnée
 
 Il est possible d'activer ou de désactiver la fonctionnalité "Annuler / Rétablir" dans l'application.
 
-Celle-ci se matérialise par le présence de deux boutons dans la barre de menu de l'application, en haut à droite de l'écran.
+Celle-ci se matérialise par la présence de deux boutons dans la barre de menu de l'application, en haut à droite de l'écran.
 
 Il est alors possible d'annuler ou de rétablir les dernières actions effectuées dans l'application.
 
