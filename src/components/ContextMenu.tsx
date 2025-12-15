@@ -20,7 +20,7 @@ export default function ContextMenu(): JSX.Element {
   // if it overflows the window
   onMount(() => {
     // const contextMenu = refParentNode.querySelector('.dropdown-menu') as HTMLElement;
-    const contextMenuRect = refMenuNode.getBoundingClientRect();
+    const contextMenuRect = refMenuNode!.getBoundingClientRect();
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
     if (contextMenuRect.right > windowWidth) {

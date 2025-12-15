@@ -42,7 +42,7 @@ Les champs actuels de la couche sont accessibles sous forme de raccourcis (bouto
 
 - `$count` : le nombre d'entités dans la couche,
 - `$id` : l'identifiant unique (et interne) de l'entité,
-- `$area` : l'aire de l'entité (si il s'agit d'un polygone).
+- `$area` : l'aire de l'entité (s'il s'agit d'un polygone).
 
 Plusieurs opérations sont possibles (certaines sont présentes sous forme d'un raccourci - boutons bleus) :
 

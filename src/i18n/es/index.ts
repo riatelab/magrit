@@ -1374,7 +1374,7 @@ const es = {
     NewColumnModal: {
       BackToDatatable: 'Volver a la tabla de datos',
       title: 'Nuevo campo',
-      notAcceptedChars: 'No se aceptan los siguientes caracteres especiales: .,/#!$%^&*;:\{\}=`~()\'', // eslint-disable-line
+      notAcceptedChars: 'No se aceptan los siguientes caracteres especiales: {}', // eslint-disable-line
       name: 'Nombre',
       namePlaceholder: 'Introduzca el nombre del campo',
       newColumnType: 'Tipo del nuevo campo',

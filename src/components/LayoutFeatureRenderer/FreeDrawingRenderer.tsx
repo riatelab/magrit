@@ -24,14 +24,14 @@ export default function FreeDrawingRenderer(props: FreeDrawing): JSX.Element {
   let refElement: SVGGElement;
 
   onMount(() => {
-    bindElementsLayoutFeature(refElement, props);
+    bindElementsLayoutFeature(refElement!, props);
   });
 
   createEffect(
     on(
       () => props.strokeWidth,
       () => {
-        computeRectangleBox(refElement);
+        computeRectangleBox(refElement!);
       },
     ),
   );

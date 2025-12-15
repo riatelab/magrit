@@ -431,15 +431,15 @@ function addExampleLayer(
     if (field.dataType === 'number') {
       rewoundGeojson.features.forEach((ft) => {
         // eslint-disable-next-line no-param-reassign
-        ft.properties[field.name] = isFiniteNumber(ft.properties[field.name])
-          ? +ft.properties[field.name]
+        ft.properties![field.name] = isFiniteNumber(ft.properties![field.name])
+          ? +ft.properties![field.name]
           : null;
       });
     } else {
       rewoundGeojson.features.forEach((ft) => {
         // eslint-disable-next-line no-param-reassign
-        ft.properties[field.name] = isNonNull(ft.properties[field.name])
-          ? ft.properties[field.name]
+        ft.properties![field.name] = isNonNull(ft.properties![field.name])
+          ? ft.properties![field.name]
           : null;
       });
     }
@@ -467,7 +467,8 @@ function addExampleLayer(
 
   const newLegendDescription = makeDefaultLegendDescription(newLayerDescription);
 
-  const fit = layersDescriptionStore.layers.length === 0 || !globalStore.userHasAddedLayer;
+  const fitAndChangeCrs = (
+    layersDescriptionStore.layers.length === 0 || !globalStore.userHasAddedLayer);
 
   setLayersDescriptionStore(
     produce(
@@ -483,32 +484,31 @@ function addExampleLayer(
     ),
   );
 
-  // Change the projection of the map if needed
-  if (projection.type === 'd3') {
-    setMapStore(
-      'projection',
-      {
-        name: projection.value,
-        value: `geo${projection.value}`,
-        type: 'd3',
-      },
-    );
-  } else { // projetion.type === 'proj4'
-    const proj = epsgDb[projection.code];
-    setMapStore(
-      'projection',
-      {
-        name: proj.name,
-        value: removeNadGrids((proj.proj4 || proj.wkt) as string),
-        bounds: proj.bbox,
-        code: `EPSG:${proj.code}`,
-        type: 'proj4',
-      },
-    );
-  }
+  // Change projection and fit extent to the new layer if it's the first layer added
+  if (fitAndChangeCrs) {
+    if (projection.type === 'd3') {
+      setMapStore(
+        'projection',
+        {
+          name: projection.value,
+          value: `geo${projection.value}`,
+          type: 'd3',
+        },
+      );
+    } else { // projetion.type === 'proj4'
+      const proj = epsgDb[projection.code];
+      setMapStore(
+        'projection',
+        {
+          name: proj.name,
+          value: removeNadGrids((proj.proj4 || proj.wkt) as string),
+          bounds: proj.bbox,
+          code: `EPSG:${proj.code}`,
+          type: 'proj4',
+        },
+      );
+    }
 
-  // Fit extent to the new layer if its the first layer added
-  if (fit) {
     fitExtent(layerId);
   }
 
@@ -707,7 +707,7 @@ export default function ExampleDatasetModal(): JSX.Element {
 
     modalResizeObserver.observe(document.querySelector('.catalog-container')!);
 
-    (refParentElement.querySelector('input.search-field') as HTMLInputElement).focus();
+    (refParentElement!.querySelector('input.search-field') as HTMLInputElement).focus();
   });
 
   createEffect(
@@ -728,7 +728,7 @@ export default function ExampleDatasetModal(): JSX.Element {
       () => currentTab(),
       () => {
         // Focus on the search bar when switching tabs
-        (refParentElement.querySelector('input.search-field') as HTMLInputElement)
+        (refParentElement!.querySelector('input.search-field') as HTMLInputElement)
           .focus();
         // Remove any search terms when switching tabs
         setSelectedSearchTerms('');

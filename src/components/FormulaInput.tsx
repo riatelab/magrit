@@ -94,7 +94,7 @@ export const filterData = (
   formula: string,
 ): Feature[] => {
   const data: Record<string, any>[] = layerDescription.data.features
-    .map((d: Feature<any, Record<string, any>>) => unwrap(d.properties) as Record<string, any>);
+    .map((d: Feature) => unwrap(d.properties) as Record<string, any>);
   const lengthDataset = data.length;
   const formulaClean = replaceSpecialFields(formula, lengthDataset);
   const query = `SELECT ${formulaClean} as newValue FROM ?`;
@@ -245,7 +245,7 @@ export default function FormulaInput(
               <button
                 class="tag is-warning"
                 title={
-                  /[àâäéèêëîïôöùûüç -+]/i.test(field) || isFuncName(field.toLocaleLowerCase())
+                  /[àâäéèêëîïôöùûüç -+]/i.test(field) || /^\d+$/.test(field) || isFuncName(field.toLocaleLowerCase())
                     ? `${field} - ${LL().FormulaInput.noteSpecialCharacters()}`
                     : field
                 }
@@ -256,6 +256,7 @@ export default function FormulaInput(
                   // Note that the two dashes are not the same
                   if (
                     /[àâäéèêëîïôöùûüç --+]/i.test(fieldValue)
+                    || /^\d+$/.test(fieldValue)
                     || isFuncName(field.toLocaleLowerCase())
                   ) {
                     fieldValue = `[${fieldValue}]`;

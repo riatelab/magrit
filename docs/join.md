@@ -117,7 +117,7 @@ sur les bases des options suivantes :
 - Possibilité d'ajouter un préfixe aux colonnes ajoutées,
 - Possibilité de supprimer les entités de la couche géographique pour lesquelles aucune correspondance n'a été trouvée.
 
-Une section de résumé affiche le nombre de correspondances trouvées dans la couches géographique et dans le jeu de données tabulaire (ainsi que le nombre d'entrées vides le cas échéant).
+Une section de résumé affiche le nombre de correspondances trouvées dans la couche géographique et dans le jeu de données tabulaire (ainsi que le nombre d'entrées vides le cas échéant).
 
 <ZoomImg
     src="/join-modal.png"
