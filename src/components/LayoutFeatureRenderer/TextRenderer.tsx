@@ -29,14 +29,14 @@ export default function TextRenderer(props: Text): JSX.Element {
   let refElement: SVGGElement;
 
   onMount(() => {
-    bindElementsLayoutFeature(refElement, props);
+    bindElementsLayoutFeature(refElement!, props);
   });
 
   createEffect(
     on( // We need to recompute the rectangle box when following properties change
       () => [props.fontSize, props.text, props.rotation, props.textAnchor, props.fontFamily],
       () => {
-        computeRectangleBox(refElement);
+        computeRectangleBox(refElement!);
       },
     ),
   );

@@ -20,8 +20,8 @@ export default function InfoFeatureBox(): JSX.Element {
   const { LL } = useI18nContext();
 
   const setStyle = () => {
-    const { height } = refElement.getBoundingClientRect();
-    refElement.style.top = `calc(50% - ${height / 2}px + var(--header-height) / 2)`;
+    const { height } = refElement!.getBoundingClientRect();
+    refElement!.style.top = `calc(50% - ${height / 2}px + var(--header-height) / 2)`;
   };
 
   onMount(() => {

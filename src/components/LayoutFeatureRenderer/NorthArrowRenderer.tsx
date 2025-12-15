@@ -6,6 +6,9 @@ import {
   onMount,
 } from 'solid-js';
 
+// GeoJSON types
+import type { Position } from 'geojson';
+
 // Stores
 import { globalStore } from '../../store/GlobalStore';
 import { setLayersDescriptionStore } from '../../store/LayersDescriptionStore';
@@ -390,16 +393,15 @@ const fancyNorthArrow = (props: NorthArrow) => <g
 /* eslint-enable solid/style-prop */
 
 /**
- * Compute the angle to north for the the north arrow
+ * Compute the angle to north for the north arrow
  *
- * @param {[number, number]} position - The current position of the north arrow (in pixels)
- * @param {any} projection - The current projection
+ * @param {Position} position - The current position of the north arrow (in pixels)
+ * @param {Function} projection - The current projection
  * @return {number} - Angle to use as rotation value for the north arrow
  */
 const computeAngleToNorth = (
-  position: [number, number],
-  projection: (
-    [number, number]) => [number, number] & { invert: ([number, number]) => [number, number] },
+  position: Position,
+  projection: ((a: Position) => Position) & { invert: (a: Position) => Position },
 ): number => {
   const geoPosition = projection.invert(position);
   if (!geoPosition) {
@@ -422,7 +424,7 @@ export default function NorthArrowRenderer(props: NorthArrow): JSX.Element {
   let refElement: SVGGElement;
 
   onMount(() => {
-    bindElementsLayoutFeature(refElement, props);
+    bindElementsLayoutFeature(refElement!, props);
   });
 
   // We need to recompute the rectangle box when following properties change
@@ -430,7 +432,7 @@ export default function NorthArrowRenderer(props: NorthArrow): JSX.Element {
     on(
       () => [props.size, props.rotation, props.style],
       () => {
-        computeRectangleBox(refElement);
+        computeRectangleBox(refElement!);
       },
     ),
   );

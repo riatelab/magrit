@@ -25,7 +25,7 @@ export default function ImageRenderer(props: Image): JSX.Element {
   let refElement: SVGGElement;
 
   onMount(() => {
-    bindElementsLayoutFeature(refElement, props);
+    bindElementsLayoutFeature(refElement!, props);
   });
 
   // We need to recompute the rectangle box when following properties change
@@ -33,7 +33,7 @@ export default function ImageRenderer(props: Image): JSX.Element {
     on(
       () => [props.size, props.rotation],
       () => {
-        computeRectangleBox(refElement);
+        computeRectangleBox(refElement!);
       },
     ),
   );

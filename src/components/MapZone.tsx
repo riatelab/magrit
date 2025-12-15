@@ -467,7 +467,7 @@ export default function MapZone(): JSX.Element {
     clone.style.fill = 'none';
     svgElem!.appendChild(clone);
     // Get the layer name for the clicked feature
-    let targetGroup = element as SVGElement;
+    let targetGroup: SVGElement | HTMLElement = element;
     let i = 0;
     while (targetGroup.parentElement && i < 7) {
       targetGroup = targetGroup.parentElement;

@@ -77,12 +77,18 @@ function CardFunctionality(
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
       <p class="card-header-title">
         <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
-        { LL().FunctionalitiesSection.FunctionalityTypes[pDesc.name]() }
+        {
+          /* @ts-expect-error We know the name is a key of FunctionalityTypes */
+          LL().FunctionalitiesSection.FunctionalityTypes[pDesc.name]()
+        }
       </p>
     </header>
     <section class="card-content" style={{ padding: '1em' }}>
       <div class="content">
-        { LL().PortrayalSelection.ShortDescriptions[pDesc.name]() }
+        {
+          /* @ts-expect-error We know the name is a key of FunctionalityTypes */
+          LL().PortrayalSelection.ShortDescriptions[pDesc.name]()
+        }
       </div>
     </section>
   </div>;
@@ -141,7 +147,11 @@ export default function TableFunctionalitySelection(): JSX.Element {
           <p class="modal-card-title">
             {LL().PortrayalSelection.Title2()}
             &nbsp;-&nbsp;
-            {LL().FunctionalitiesSection.FunctionalityTypes[selectedFunctionality()!.name]}</p>
+            {
+              /* @ts-expect-error We know the name is a key of FunctionalityTypes */
+              LL().FunctionalitiesSection.FunctionalityTypes[selectedFunctionality()!.name]
+            }
+          </p>
         </Show>
       </header>
       <section class="modal-card-body is-flex is-flex-direction-column">

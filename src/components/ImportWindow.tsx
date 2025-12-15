@@ -199,7 +199,7 @@ const analyseTabularDatasetGDAL = async (
     addToProject: true,
     simplify: false,
     fitMap: false,
-  }));
+  } as LayerOrTableDescription));
 
   /* eslint-disable no-nested-ternary */
   const detailedType = result.driverLongName === 'Open Document Spreadsheet'
@@ -252,7 +252,7 @@ const analyseGeospatialDatasetGDAL = async (
         addToProject: true,
         simplify: false,
         fitMap: false,
-      };
+      } as LayerOrTableDescription;
     } else { // eslint-disable-line no-else-return
       // We have a tabular layer
       return {
@@ -263,7 +263,7 @@ const analyseGeospatialDatasetGDAL = async (
         addToProject: true,
         simplify: false,
         fitMap: false,
-      };
+      } as LayerOrTableDescription;
     }
   });
 

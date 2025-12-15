@@ -94,7 +94,7 @@ export const filterData = (
   formula: string,
 ): Feature[] => {
   const data: Record<string, any>[] = layerDescription.data.features
-    .map((d: Feature<any, Record<string, any>>) => unwrap(d.properties) as Record<string, any>);
+    .map((d: Feature) => unwrap(d.properties) as Record<string, any>);
   const lengthDataset = data.length;
   const formulaClean = replaceSpecialFields(formula, lengthDataset);
   const query = `SELECT ${formulaClean} as newValue FROM ?`;

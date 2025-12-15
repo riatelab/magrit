@@ -24,14 +24,14 @@ export default function RectangleRenderer(props: Rectangle): JSX.Element {
   let refElement: SVGGElement;
 
   onMount(() => {
-    bindElementsLayoutFeature(refElement, props);
+    bindElementsLayoutFeature(refElement!, props);
   });
 
   createEffect(
     on(
       () => [props.width, props.height, props.rotation, props.cornerRadius],
       () => {
-        computeRectangleBox(refElement);
+        computeRectangleBox(refElement!);
       },
     ),
   );

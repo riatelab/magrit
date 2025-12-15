@@ -18,7 +18,7 @@ export default function LineRenderer(props: Line): JSX.Element {
   let refElement: SVGGElement;
 
   onMount(() => {
-    bindElementsLayoutFeature(refElement, props);
+    bindElementsLayoutFeature(refElement!, props);
   });
 
   return <g
