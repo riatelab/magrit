@@ -784,6 +784,7 @@ const es = {
     linkGithubIssues: 'Informe de error',
     documentation: 'Documentación',
     SnappingGridColor: 'Color de la cuadrícula de alineamiento',
+    SnappingGridSize: 'Tamaño de las celdas de la cuadrícula de alineamiento',
     LocaleNumberFormatting: 'Idioma para dar formato a los números en el mapa',
     DefaultNoDataColor: 'Color por defecto para valores ausentes',
     DefaultLegendOptions: 'Opciones por defecto para crear leyendas',

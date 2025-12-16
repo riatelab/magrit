@@ -85,6 +85,9 @@ export type ApplicationSettingsStoreType = {
   // The color of the snapping grid that the user can display
   // to align layout features / legends on the map
   snappingGridColor: string,
+  // The spacing of the snapping grid that the user can display
+  // to align layout features / legends on the map
+  snappingGridSize: number,
   // The custom palettes defined by the user
   // customPalettes: CustomPalette[],
   // Whether to activate the undo/redo feature
@@ -105,6 +108,7 @@ const [
   useClipExtent: false,
   useProjectionPreclip: true,
   snappingGridColor: '#808080',
+  snappingGridSize: 10,
   defaultLegendSettings: {
     spacing: 5,
     title: {

@@ -814,12 +814,12 @@ export default function MapZone(): JSX.Element {
             <defs>
               <pattern
                 id="grid-pattern"
-                width="10"
-                height="10"
+                width={ applicationSettingsStore.snappingGridSize }
+                height={ applicationSettingsStore.snappingGridSize }
                 patternUnits="userSpaceOnUse"
               >
                 <path
-                  d="M 10 0 L 0 0 0 10"
+                  d={ `M ${applicationSettingsStore.snappingGridSize} 0 L 0 0 0 ${applicationSettingsStore.snappingGridSize}` }
                   fill="none"
                   stroke={applicationSettingsStore.snappingGridColor}
                   stroke-width="0.5"
