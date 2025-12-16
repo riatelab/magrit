@@ -55,7 +55,7 @@
     ],
     "license": "https://spdx.org/licenses/GPL-3.0-or-later",
     "name": "Magrit",
-    "version": "2.3.15",
+    "version": "2.3.16",
     "relatedLink": "https://magrit.cnrs.fr/",
     "developmentStatus": "active",
     "issueTracker": "https://github.com/riatelab/magrit/issues",

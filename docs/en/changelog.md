@@ -12,13 +12,15 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-### 2.3.16 (unreleased)
+### 2.3.16 (2025-12-16)
 
 - Add an option to control the size of cells in the snapping grid (fixes <a href="https://github.com/riatelab/magrit/issues/192">issue 192</a>).
 
+- Add additional restrictions on field names that can be created from the field calculator.
+
 - Fix the bug preventing the display of the legend for point layers created from a tabular dataset (fixes <a href="https://github.com/riatelab/magrit/issues/191">issue 191</a>).
 
-- Add additional restrictions on field names that can be created from the field calculator.
+- Changes the projection change strategy when adding a sample dataset (if the map has no layer, the projection of the added dataset is used and the map is centered on that dataset; otherwise, the projection and centering of the map is retained).
 
 ### 2.3.15 (2025-12-10)
 

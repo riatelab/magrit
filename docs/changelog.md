@@ -12,13 +12,16 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
-### 2.3.16 (unreleased)
+### 2.3.16 (2025-12-16)
 
 - Ajout d'une option permettant de contrôler la taille des cellules de la grille d'alignement (corrige <a href="https://github.com/riatelab/magrit/issues/192">l'issue 192</a>).
 
+- Ajout de restrictions supplémentaires concernant les noms de champs pouvant être créés avec la calculatrice de champs.
+
 - Corrige le bug empêchant l'affichage de la légende pour les couches de points créées à partir d'un jeu de données tabulaire (corrige <a href="https://github.com/riatelab/magrit/issues/191">l'issue 191</a>).
 
-- Ajout de restrictions supplémentaires concernant les noms de champs pouvant être créés avec la calculatrice de champs.
+- Change la stratégie de changement de projection lors de l'ajout d'un jeu de données d'exemple
+  (si la carte n'a pas de couche, la projection du jeu de données ajouté est utilisée et la carte est centrée sur ce jeu de données ; sinon, la projection et le centrage de la carte est conservée).
 
 ### 2.3.15 (2025-12-10)
 
