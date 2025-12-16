@@ -327,7 +327,7 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
       () => {
         if (propVariable() !== '') {
           const values = layerDescription.data.features
-            .map((feature) => feature.properties[propVariable()])
+            .map((feature) => feature.properties![propVariable()])
             .filter((value) => isFiniteNumber(value))
             .map((value: any) => +value);
 
@@ -390,7 +390,10 @@ export default function LabelsSettings(props: PortrayalSettingsProps): JSX.Eleme
     <Show when={filter()}>
       <FormulaInput
         typeDataset={'layer'}
-        records={layerDescription.data.features.map((d) => d.properties)}
+        records={
+          layerDescription.data.features
+            .map((d) => d.properties) as Record<string, any>[]
+        }
         geometries={layerDescription.data.features.map((d) => d.geometry)}
         currentFormula={formula}
         setCurrentFormula={setFormula}

@@ -102,26 +102,26 @@ function onClickValidate(
   let maxRes = -Infinity;
   newDataset.features.forEach((f: Feature, i: number) => {
     // eslint-disable-next-line no-param-reassign
-    f.properties.fitted = linearRegressionResult.fittedValues[i] as (number | null);
+    f.properties!.fitted = linearRegressionResult.fittedValues[i] as (number | null);
     // eslint-disable-next-line no-param-reassign
-    f.properties.residual = linearRegressionResult.residuals[i] as (number | null);
+    f.properties!.residual = linearRegressionResult.residuals[i] as (number | null);
     // eslint-disable-next-line no-param-reassign
-    f.properties.standardizedResidual = linearRegressionResult
+    f.properties!.standardizedResidual = linearRegressionResult
       .standardisedResiduals[i] as (number | null);
-    if (f.properties.standardizedResidual !== null) {
-      if ((f.properties.standardizedResidual as number) < minStdRes) {
-        minStdRes = f.properties.standardizedResidual as number;
+    if (f.properties!.standardizedResidual !== null) {
+      if ((f.properties!.standardizedResidual) < minStdRes) {
+        minStdRes = f.properties!.standardizedResidual;
       }
-      if (f.properties.standardizedResidual as number > maxStdRes) {
-        maxStdRes = f.properties.standardizedResidual as number;
+      if (f.properties!.standardizedResidual > maxStdRes) {
+        maxStdRes = f.properties!.standardizedResidual;
       }
     }
-    if (f.properties.residual !== null) {
-      if ((f.properties.residual as number) < minRes) {
-        minRes = f.properties.residual as number;
+    if (f.properties!.residual !== null) {
+      if ((f.properties!.residual) < minRes) {
+        minRes = f.properties!.residual;
       }
-      if ((f.properties.residual as number) > maxRes) {
-        maxRes = f.properties.residual as number;
+      if ((f.properties!.residual) > maxRes) {
+        maxRes = f.properties!.residual;
       }
     }
   });
@@ -446,11 +446,12 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
 
   // Identifier variable (useful for tooltip
   // on the various chart that are displayed in this component)
-  // TODO: In the future we might ask the user to select the identifier variable...
   const identifierVariable = layerDescription.fields.find((f) => f.type === 'identifier')?.name;
-  const identifiers = identifierVariable
-    ? dataset.map((d) => d[identifierVariable])
-    : undefined;
+
+  // TODO: In the future we might ask the user to select the identifier variable...
+  // const identifiers = identifierVariable
+  //   ? dataset.map((d) => d[identifierVariable])
+  //   : undefined;
 
   // The pearson correlation matrix between the variables
   const pearsonMatrix = makeCorrelationMatrix(

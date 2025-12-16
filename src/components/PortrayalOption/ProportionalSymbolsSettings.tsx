@@ -74,11 +74,14 @@ import {
   type ClassificationParameters,
   type LayerDescriptionProportionalSymbols,
   type LegendTextElement,
-  LegendType, Orientation,
+  LegendType,
+  Orientation,
   type ProportionalSymbolCategoryParameters,
   ProportionalSymbolsColorMode,
-  type ProportionalSymbolsLegend, type ProportionalSymbolsRatioParameters,
-  ProportionalSymbolsSymbolType, RepresentationType,
+  type ProportionalSymbolsLegend,
+  type ProportionalSymbolsRatioParameters,
+  ProportionalSymbolsSymbolType,
+  RepresentationType,
   type VectorType,
 } from '../../global.d';
 import type { PortrayalSettingsProps } from './common';

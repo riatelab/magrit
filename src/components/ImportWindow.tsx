@@ -183,7 +183,7 @@ const analyseTabularDatasetGDAL = async (
 
   try {
     result = await info(ds);
-  } catch (e: any) {
+  } catch (e) {
     return {
       name,
       valid: false,
@@ -231,7 +231,7 @@ const analyseGeospatialDatasetGDAL = async (
 
   try {
     result = await info(ds);
-  } catch (e: any) {
+  } catch (e) {
     return {
       name,
       valid: false,
@@ -1070,7 +1070,7 @@ export default function ImportWindow(): JSX.Element {
                 if (simplify) {
                   dsToSimplify.push(id);
                 }
-              } catch (e: any) {
+              } catch (e) {
                 // We catch the error here and display a toast
                 // toast.error(`Error while reading file: ${e.message ? e.message : e}`);
                 toast.error(LL().ImportWindow.ErrorReadingFile({

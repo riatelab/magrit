@@ -92,7 +92,9 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
     } else {
       throw new Error('Classification method not found !');
     }
-    const entitiesByClass = classifier.countByClass();
+
+    // TODO: we may want to use this later to show the number of entities in each class
+    // const entitiesByClass = classifier.countByClass();
 
     const sizes: number[] = [];
     if (classes > selectedSizes().length) {
@@ -128,12 +130,18 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
     .filter((d) => isFiniteNumber(d))
     .map((d) => +d);
 
-  const missingValues = classificationPanelStore.series!.length - filteredSeries.length;
+  // TODO: show missing values info to the user?
+  // const missingValues = classificationPanelStore.series!.length - filteredSeries.length;
 
   const allValuesSuperiorToZero = filteredSeries.every((d) => d > 0);
 
   // Basic statistical summary displayed to the user
   const statSummary = prepareStatisticalSummary(filteredSeries);
+
+  // Use a precision that is at least 1 for better user experience
+  if (statSummary.precision < 1) {
+    statSummary.precision = 1;
+  }
 
   const entriesClassificationMethod = [
     {
@@ -358,8 +366,8 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
                       value={round(customBreaks()[index()], statSummary.precision)}
                       step={parseFloat(`1e-${statSummary.precision}`)}
                       onChange={(ev) => {
-                        // is the selected boundary greater than the previous one?
-                        // is the selected boundary smaller than the next one?
+                        // Is the selected boundary greater than the previous one?
+                        // Is the selected boundary smaller than the next one?
                         if (
                           ev.target.value === ''
                           || +ev.target.value <= (customBreaks()[index() - 1] || -Infinity)
