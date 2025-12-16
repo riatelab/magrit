@@ -212,7 +212,7 @@ function addLayer(
   // Detect the type of fields
   const fieldsDescription: Variable[] = fieldsName.map((field) => {
     const o = detectTypeField(
-      rewoundGeojson.features.map((ft) => ft.properties[field]) as never[],
+      rewoundGeojson.features.map((ft) => ft.properties![field]) as never[],
       field,
     );
     return {
@@ -228,15 +228,15 @@ function addLayer(
     if (field.dataType === 'number') {
       rewoundGeojson.features.forEach((ft) => {
         // eslint-disable-next-line no-param-reassign
-        ft.properties[field.name] = isFiniteNumber(ft.properties[field.name])
-          ? +ft.properties[field.name]
+        ft.properties![field.name] = isFiniteNumber(ft.properties![field.name])
+          ? +ft.properties![field.name]
           : null;
       });
     } else {
       rewoundGeojson.features.forEach((ft) => {
         // eslint-disable-next-line no-param-reassign
-        ft.properties[field.name] = isNonNull(ft.properties[field.name])
-          ? ft.properties[field.name]
+        ft.properties![field.name] = isNonNull(ft.properties![field.name])
+          ? ft.properties![field.name]
           : null;
       });
     }
@@ -260,7 +260,7 @@ function addLayer(
     shapeRendering: 'auto',
     // shapeRendering: geomType === 'polygon'
     //   && rewoundGeojson.features.length > 10000 ? 'optimizeSpeed' : 'auto',
-  };
+  } as LayerDescription;
 
   const newLegendDescription = makeDefaultLegendDescription(newLayerDescription);
 
@@ -272,8 +272,8 @@ function addLayer(
         //   draft.layers = [];
         //   setGlobalStore({ userHasAddedLayer: true });
         // }
-        draft.layers.push(newLayerDescription as LayerDescription);
-        draft.layoutFeaturesAndLegends.push(newLegendDescription as DefaultLegend);
+        draft.layers.push(newLayerDescription);
+        draft.layoutFeaturesAndLegends.push(newLegendDescription);
       },
     ),
   );
@@ -353,18 +353,19 @@ function addTabularLayer(data: Record<string, any>[], name: string): string {
 
 const sanitizeColumnNamesRecords = (
   records: Record<string, unknown>[],
-): Record<string, unknown>[] => {
+): Record<string, unknown>[] & { columns: string[] } => {
   // Get the column names
   const columns = Object.keys(records[0]);
   // Create a new array of records with sanitized column names
-  const newRecords = records.map((record) => {
-    const sanitizedRecord: Record<string, unknown> = {};
-    columns.forEach((column) => {
-      // eslint-disable-next-line no-param-reassign
-      sanitizedRecord[sanitizeColumnName(column)] = record[column];
-    });
-    return sanitizedRecord;
-  });
+  const newRecords = records
+    .map((record) => {
+      const sanitizedRecord: Record<string, unknown> = {};
+      columns.forEach((column) => {
+        // eslint-disable-next-line no-param-reassign
+        sanitizedRecord[sanitizeColumnName(column)] = record[column];
+      });
+      return sanitizedRecord;
+    }) as Record<string, unknown>[] & { columns: string[] };
   const newColumns = Object.keys(newRecords[0]);
   newRecords.columns = newColumns;
   return newRecords;
