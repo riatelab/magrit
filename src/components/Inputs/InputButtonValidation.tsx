@@ -11,7 +11,7 @@ export default function ButtonValidation(props: ButtonValidationProps): JSX.Elem
     <button
       aria-label={props.label}
       class="button is-success portrayal-section__button-validation"
-      onClick={props.onClick}
+      onClick={() => props.onClick()}
       disabled={props.disabled}
     >
       { props.label }

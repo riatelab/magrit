@@ -1,9 +1,7 @@
 // Imports from solid-js
 import {
-  createEffect,
   createSignal,
   type JSX,
-  on,
   onCleanup,
   onMount,
   Show,
@@ -44,7 +42,7 @@ export default function InputConstrainedSlider(props: InputConstrainedSliderProp
   ] = createSignal(props.value); // eslint-disable-line solid/reactivity
 
   const createSlider = () => {
-    slider = noUiSlider.create(refSliderNode, {
+    slider = noUiSlider.create(refSliderNode!, {
       start: props.value,
       step: 1,
       range: {
@@ -57,6 +55,7 @@ export default function InputConstrainedSlider(props: InputConstrainedSliderProp
       },
     });
 
+    // eslint-disable-next-line solid/reactivity
     slider.on('update', (values, handle) => {
       props.onChange(+values[handle]);
       setCurrentValue(+values[handle]);

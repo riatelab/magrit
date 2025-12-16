@@ -12,7 +12,7 @@ function applyFilters(
   filters: Filter[],
 ): Feature[] {
   return features.filter((feature) => filters.every((filter) => {
-    const value = feature.properties[filter.variable];
+    const value = feature.properties![filter.variable];
     if (value === undefined || value === null) return false;
     switch (filter.operator) {
       case '==':

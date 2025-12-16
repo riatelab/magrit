@@ -34,7 +34,7 @@ export default function InputFieldDoubleNumberSlider(
   let slider: NoUiSliderApi;
 
   const createSlider = () => {
-    slider = noUiSlider.create(refSliderNode, {
+    slider = noUiSlider.create(refSliderNode!, {
       start: props.values,
       range: {
         min: props.min,
@@ -43,6 +43,8 @@ export default function InputFieldDoubleNumberSlider(
       connect: props.connect !== undefined ? props.connect : false,
       step: props.step,
     });
+
+    // eslint-disable-next-line solid/reactivity
     slider.on('update', (values, handle) => {
       if (handle === 0) {
         // Left handle

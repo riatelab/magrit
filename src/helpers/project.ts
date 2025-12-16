@@ -211,6 +211,15 @@ export const patchProject = (
     });
   }
 
+  // In 2.3.16, we added the possibility to control the size of the snapping grid
+  // in the application settings.
+  if (semver.lt(projectVersion, '2.3.16')) {
+    console.log('Patching project to version 2.3.16');
+    if (!project.applicationSettings.snappingGridSize) {
+      // eslint-disable-next-line no-param-reassign
+      project.applicationSettings.snappingGridSize = 10;
+    }
+  }
   return project;
 };
 

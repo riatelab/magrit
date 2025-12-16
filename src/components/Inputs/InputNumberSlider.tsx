@@ -32,7 +32,7 @@ export default function InputFieldNumberSlider(props: InputFieldNumberSliderProp
   let slider: NoUiSliderApi;
 
   const createSlider = () => {
-    slider = noUiSlider.create(refSliderNode, {
+    slider = noUiSlider.create(refSliderNode!, {
       start: props.value,
       range: {
         min: props.min,
@@ -41,6 +41,8 @@ export default function InputFieldNumberSlider(props: InputFieldNumberSliderProp
       connect: props.connect !== undefined ? props.connect : false,
       step: props.step,
     });
+
+    // eslint-disable-next-line solid/reactivity
     slider.on('update', (values, handle) => {
       props.onChange(+values[handle]);
     });

@@ -21,7 +21,7 @@ import d3 from '../helpers/d3-custom';
 
 // Helpers
 import { useI18nContext } from '../i18n/i18n-solid';
-import { cleanGeometryGeos, countCoordinates, findIntersections } from '../helpers/geo';
+import { cleanGeometryGeos, findIntersections } from '../helpers/geo';
 import { round } from '../helpers/math';
 
 // Other components
@@ -225,7 +225,7 @@ export default function Simplification(
     await yieldOrContinue('smooth');
 
     // Draw on the canvas once the component is mounted
-    const canvas = refParentNode.querySelector('canvas')!;
+    const canvas = refParentNode!.querySelector('canvas')!;
     const context = canvas.getContext('2d')!;
     const { width, height } = canvas.getBoundingClientRect();
 

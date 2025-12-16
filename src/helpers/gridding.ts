@@ -17,7 +17,6 @@ import {
   reprojWithD3,
   reprojWithProj4,
 } from './projection';
-import rewindLayer from './rewind';
 
 // Stores
 import { mapStore } from '../store/MapStore';

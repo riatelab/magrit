@@ -47,7 +47,8 @@ import MessageBlock from '../MessageBlock.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 
 // Types / Interfaces / Enums
-import { type LayerDescription } from '../../global.d';
+import { type DefaultLegend, type LayerDescription } from '../../global.d';
+import { makeDefaultLegendDescription } from '../../helpers/legends';
 
 function validateFieldsXY(
   tableId: string,
@@ -157,9 +158,12 @@ async function onClickValidate(
       shapeRendering: 'auto',
     } as LayerDescription;
 
+    const newLegendDescription = makeDefaultLegendDescription(newLayerDescription);
+
     setLayersDescriptionStore(
       produce((draft: LayersDescriptionStoreType) => {
         draft.layers.push(newLayerDescription);
+        draft.layoutFeaturesAndLegends.push(newLegendDescription);
       }),
     );
   } else {

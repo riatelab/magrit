@@ -119,10 +119,10 @@ export default function ExportSection(): JSX.Element {
   ];
 
   const [clipCurrentExtentChecked, setClipCurrentExtentChecked] = createSignal(true);
-  const [selectedLayer, setSelectedLayer] = createSignal(null);
-  const [selectedFormat, setSelectedFormat] = createSignal(null);
-  const [selectedCrs, setSelectedCrs] = createSignal(null);
-  const [customCrs, setCustomCrs] = createSignal('');
+  const [selectedLayer, setSelectedLayer] = createSignal<string | null>(null);
+  const [selectedFormat, setSelectedFormat] = createSignal<string | null>(null);
+  const [selectedCrs, setSelectedCrs] = createSignal<string | null>(null);
+  const [customCrs, setCustomCrs] = createSignal<string>('');
   const [
     exportWidth,
     setExportWidth,

@@ -38,7 +38,7 @@ export default function InputFieldRangeSlider(props: InputFieldRangeNumberProps)
   ] = createSignal(props.value); // eslint-disable-line solid/reactivity
 
   const createSlider = () => {
-    slider = noUiSlider.create(refSliderNode, {
+    slider = noUiSlider.create(refSliderNode!, {
       start: props.value,
       range: {
         min: props.min,
@@ -47,6 +47,8 @@ export default function InputFieldRangeSlider(props: InputFieldRangeNumberProps)
       connect: props.connect !== undefined ? props.connect : false,
       step: props.step,
     });
+
+    // eslint-disable-next-line solid/reactivity
     slider.on('update', (values, handle) => {
       props.onChange(+values[handle]);
       setCurrentValue(+values[handle]);

@@ -1,7 +1,6 @@
 // Import from solid-js
 import {
   children,
-  createMemo,
   type JSX,
   Match,
   ParentProps,

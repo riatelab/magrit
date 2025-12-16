@@ -32,7 +32,7 @@ export default function InputFieldRangeDoubleSlider(
   ] = createSignal(props.values);
 
   onMount(() => {
-    slider = noUiSlider.create(refSliderNode, {
+    slider = noUiSlider.create(refSliderNode!, {
       start: props.values,
       range: {
         min: props.min,
@@ -41,6 +41,7 @@ export default function InputFieldRangeDoubleSlider(
       connect: props.connect !== undefined ? props.connect : false,
       step: props.step,
     });
+
     slider.on('update', (values, handle) => {
       console.log(values);
       props.onChange(values[handle].map(Number) as [number, number]);

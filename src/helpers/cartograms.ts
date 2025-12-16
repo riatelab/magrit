@@ -4,7 +4,13 @@ import cartWasmUrl from 'go-cart-wasm/dist/cart.wasm?url';
 import { area, centroid, transformScale } from '@turf/turf';
 
 // GeoJSON types
-import type { Feature, FeatureCollection, MultiPolygon } from 'geojson';
+import type {
+  Feature,
+  FeatureCollection,
+  MultiPolygon,
+  Polygon,
+  Position,
+} from 'geojson';
 
 // Helpers
 import { isFiniteNumber, isPositiveFiniteNumber } from './common';
@@ -87,7 +93,7 @@ export function computeCartogramOlson(
   const nFt = data.features.length;
   const dVal = Array(nFt);
   for (let i = 0; i < nFt; i += 1) {
-    const t = data.features[i].properties[variableName];
+    const t = data.features[i].properties![variableName];
     dVal[i] = {
       id: i,
       // If the value is not a number, we deliberately set it to 0.1.
@@ -216,7 +222,7 @@ const transformFeatureDougenik = (
   reductionFactor: number,
   allInfo: InfoFeature[],
 ) => {
-  const geoms: [number, number][][][] = geom.type === 'MultiPolygon'
+  const geoms: Position[][][] = geom.type === 'MultiPolygon'
     ? geom.coordinates
     : [geom.coordinates];
   const initialGeometryType = geom.type;
@@ -279,7 +285,7 @@ const replaceNullAndZeroValues = (
   // Get the min value of the non null values
   let minValue = Infinity;
   features.forEach((f) => {
-    const value = f.properties[variableName];
+    const value = f.properties![variableName];
     if (isPositiveFiniteNumber(value)) {
       minValue = Mmin(minValue, +value);
     }
@@ -290,7 +296,7 @@ const replaceNullAndZeroValues = (
 
   // Replace null values with the min value
   return features.map((f) => {
-    const value = f.properties[variableName];
+    const value = f.properties![variableName];
     return !isPositiveFiniteNumber(value) ? rv : +value;
   });
 };
@@ -333,7 +339,7 @@ function makeDougenikCartogram(
 
   resultData.features.forEach((f, i) => {
     // eslint-disable-next-line no-param-reassign
-    f.properties.area_error = areas[i] / areaTotal / (values[i] / valueTotal);
+    f.properties!.area_error = areas[i] / areaTotal / (values[i] / valueTotal);
   });
 
   return resultData;

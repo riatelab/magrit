@@ -157,7 +157,7 @@ export const makeCentroidLayer = (
       const o = {};
       fields.forEach((field) => {
         // eslint-disable-next-line no-param-reassign
-        o[field] = feature.properties[field];
+        o[field] = feature.properties![field];
       });
       feature.properties = o; // eslint-disable-line no-param-reassign
     });
@@ -444,8 +444,8 @@ export const makeDorlingDemersSimulation = (
     .map((d: Feature, i: number) => ({
       x: globalStore.projection(d.geometry.originalCoordinates)[0],
       y: globalStore.projection(d.geometry.originalCoordinates)[1],
-      size: isFiniteNumber(d.properties[variableName])
-        ? propSizer.scale(d.properties[variableName])
+      size: isFiniteNumber(d.properties![variableName])
+        ? propSizer.scale(d.properties![variableName])
         : null,
       padding: strokeWidth / 2,
       index: i,
@@ -480,7 +480,7 @@ export const makeDorlingDemersSimulation = (
     // eslint-disable-next-line no-param-reassign
     features[d.index].geometry.coordinates = globalStore.projection.invert([d.x, d.y]);
     // eslint-disable-next-line no-param-reassign
-    features[d.index].properties.size = d.size;
+    features[d.index].properties!.size = d.size;
   });
 
   return features;
@@ -526,33 +526,33 @@ const equalPoints = (
   b: number[] | Position,
 ): boolean => a[0] === b[0] && a[1] === b[1];
 
-const cleanConsecutiveIdenticalPoints = (
-  coords: number[][] | Position[],
-): Position[] => {
-  const newCoords = [coords[0]];
-  for (let i = 1; i < coords.length; i += 1) {
-    if (!equalPoints(coords[i], coords[i - 1])) {
-      newCoords.push(coords[i]);
-    }
-  }
-  return newCoords
-    .filter((d) => !Number.isNaN(d[0]) || !Number.isNaN(d[1])) as Position[];
-};
+// const cleanConsecutiveIdenticalPoints = (
+//   coords: number[][] | Position[],
+// ): Position[] => {
+//   const newCoords = [coords[0]];
+//   for (let i = 1; i < coords.length; i += 1) {
+//     if (!equalPoints(coords[i], coords[i - 1])) {
+//       newCoords.push(coords[i]);
+//     }
+//   }
+//   return newCoords
+//     .filter((d) => !Number.isNaN(d[0]) || !Number.isNaN(d[1])) as Position[];
+// };
 
-const cleanRing = (
-  ring: Position[] | number[][],
-): Position[] | null => {
-  const newRing = cleanConsecutiveIdenticalPoints(ring);
-  if (newRing.length > 2) {
-    if (equalPoints(newRing[0], newRing[newRing.length - 1])) {
-      return newRing;
-    }
-    // Close the ring
-    newRing.push(newRing[0]);
-    return newRing;
-  }
-  return null;
-};
+// const cleanRing = (
+//   ring: Position[] | number[][],
+// ): Position[] | null => {
+//   const newRing = cleanConsecutiveIdenticalPoints(ring);
+//   if (newRing.length > 2) {
+//     if (equalPoints(newRing[0], newRing[newRing.length - 1])) {
+//       return newRing;
+//     }
+//     // Close the ring
+//     newRing.push(newRing[0]);
+//     return newRing;
+//   }
+//   return null;
+// };
 
 export const cleanGeometryGeos = async (
   geometry: Geometry,

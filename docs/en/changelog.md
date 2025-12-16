@@ -12,6 +12,14 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.3.16 (unreleased)
+
+- Add an option to control the size of cells in the snapping grid (fixes <a href="https://github.com/riatelab/magrit/issues/192">issue 192</a>).
+
+- Fix the bug preventing the display of the legend for point layers created from a tabular dataset (fixes <a href="https://github.com/riatelab/magrit/issues/191">issue 191</a>).
+
+- Add additional restrictions on field names that can be created from the field calculator.
+
 ### 2.3.15 (2025-12-10)
 
 - Fix font usage in PNG exports (fixes <a href="https://github.com/riatelab/magrit/issues/189">issue 189</a>).

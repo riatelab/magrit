@@ -16,6 +16,7 @@ import { applicationSettingsStore, setApplicationSettingsStore } from '../../sto
 // Subcomponents
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
+import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldRadio from '../Inputs/InputRadio.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import magritLogoTypoBaseline from '../../assets/cartouche_baseline_green.svg?url';
@@ -325,6 +326,14 @@ export default function AboutModal(
           label={props.LL().AboutAndSettingsPanel.SnappingGridColor()}
           value={applicationSettingsStore.snappingGridColor}
           onChange={(v) => setApplicationSettingsStore('snappingGridColor', v)}
+        />
+        <InputFieldNumber
+          label={props.LL().AboutAndSettingsPanel.SnappingGridSize()}
+          value={applicationSettingsStore.snappingGridSize}
+          onChange={(v) => setApplicationSettingsStore('snappingGridSize', v)}
+          min={1}
+          max={100}
+          step={1}
         />
         <hr/>
         <MessageBlock type={'info'}>
