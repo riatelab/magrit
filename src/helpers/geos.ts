@@ -57,7 +57,7 @@ async function intersectionLayer(
   layer1: FeatureCollection,
   layer2: FeatureCollection,
   bufferTrick: boolean = false,
-) {
+): FeatureCollection {
   // Get the geos instance
   const geos = await getGeos();
   // We want to clip layer1 with layer2, so we will union all the features of layer2

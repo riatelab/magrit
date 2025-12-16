@@ -1,6 +1,10 @@
+// Imports from other libraries
 import { v4 as uuidv4 } from 'uuid';
 import { getPalette } from 'dicopal';
+
+// GeoJSON types
 import type { FeatureCollection, MultiLineString } from 'geojson';
+
 // Helpers
 import d3 from './d3-custom';
 import worldLand from './world-land';
