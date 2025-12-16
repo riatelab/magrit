@@ -6,13 +6,17 @@ import {
 } from 'solid-js';
 
 // Helpers
+import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { prepareStatisticalSummary } from '../../helpers/classification';
+import { makeClassificationMenuEntries, prepareStatisticalSummary } from '../../helpers/classification';
 import { isFiniteNumber, unproxify } from '../../helpers/common';
-import { round } from '../../helpers/math';
+import { Mmin, round } from '../../helpers/math';
 
 // Stores
 import { classificationMultivariatePanelStore, setClassificationMultivariatePanelStore } from '../../store/ClassificationMultivariatePanelStore';
+
+// Subcomponents
+import DropdownMenu from '../DropdownMenu.tsx';
 
 // Styles
 import '../../styles/ClassificationPanel.css';
@@ -41,6 +45,9 @@ export default function ClassificationBivariatePanel(): JSX.Element {
   // Basic statistical summary displayed to the user
   const statSummaryVar1 = prepareStatisticalSummary(filteredSeriesVar1);
   const statSummaryVar2 = prepareStatisticalSummary(filteredSeriesVar2);
+
+  const allValuesSuperiorToZeroVar1 = filteredSeriesVar1.every((d) => d > 0);
+  const allValuesSuperiorToZeroVar2 = filteredSeriesVar2.every((d) => d > 0);
 
   console.log('Bivariate classification parameters:', parameters);
 
@@ -79,7 +86,44 @@ export default function ClassificationBivariatePanel(): JSX.Element {
     currentClassifInfo,
     setCurrentClassifInfo,
   ] = createSignal<BivariateChoroplethParameters>(unproxify(parameters));
+
   let refParentNode: HTMLDivElement;
+
+  const entriesClassificationMethodVar1 = makeClassificationMenuEntries(
+    LL,
+    statSummaryVar1.unique,
+    allValuesSuperiorToZeroVar1,
+  );
+
+  const entriesClassificationMethodVar2 = makeClassificationMenuEntries(
+    LL,
+    statSummaryVar2.unique,
+    allValuesSuperiorToZeroVar2,
+  );
+
+  const listenerEscKey = (event: KeyboardEvent) => {
+    // TODO: in many cases this modal is opened on the top of another modal
+    //       we should take care to only close this one, not the other one
+    //       (currently they both get closed)
+    const isEscape = event.key
+      ? (event.key === 'Escape' || event.key === 'Esc')
+      : (event.keyCode === 27);
+    if (isEscape) {
+      (refParentNode!.querySelector(
+        '.classification-panel__cancel-button',
+      ) as HTMLElement).click();
+    }
+  };
+
+  onMount(() => {
+    // We could set focus on the confirm button when the modal is shown
+    // as in some other modal, although it is not as important here...
+    document.body.addEventListener('keydown', listenerEscKey);
+  });
+
+  onCleanup(() => {
+    document.body.removeEventListener('keydown', listenerEscKey);
+  });
 
   return <div
     class="modal-window modal classification-panel"
@@ -149,6 +193,47 @@ export default function ClassificationBivariatePanel(): JSX.Element {
           <div style={{ width: '55%', 'text-align': 'center' }}>
             <h3> { LL().ClassificationPanel.distribution() } </h3>
             <div></div>
+          </div>
+        </div>
+        <hr />
+        <div>
+          <div
+            style={{ width: '50%', 'text-align': 'center' }}
+            class="is-flex is-flex-direction-column"
+          >
+            <div class="is-flex is-flex-direction-row">
+              <p>Variable 1</p>
+              <DropdownMenu
+                id={'dropdown-classification-method-var1'}
+                style={{ width: '220px' }}
+                entries={entriesClassificationMethodVar1}
+                defaultEntry={
+                  entriesClassificationMethodVar1
+                    .find((d) => d.value === classificationMethodVar1())!
+                }
+                onChange={(value) => {
+                  console.log('Changed var1 classification method to:', value);
+                }}
+              />
+            </div>
+            <div class="is-flex is-flex-direction-row">
+              <p style={{ 'vertical-align': 'bottom' }}>Variable 2</p>
+              <DropdownMenu
+                id={'dropdown-classification-method-var2'}
+                style={{ width: '220px' }}
+                entries={entriesClassificationMethodVar2}
+                defaultEntry={
+                  entriesClassificationMethodVar2
+                    .find((d) => d.value === classificationMethodVar2())!
+                }
+                onChange={(value) => {
+                  console.log('Changed var2 classification method to:', value);
+                }}
+              />
+            </div>
+          </div>
+          <div style={{ width: '50%', 'text-align': 'center' }}>
+
           </div>
         </div>
       </section>

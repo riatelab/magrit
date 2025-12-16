@@ -20,6 +20,7 @@ import d3 from '../../helpers/d3-custom';
 import {
   classificationMethodHasOption,
   getClassifier,
+  makeClassificationMenuEntries,
   OptionsClassification,
   prepareStatisticalSummary,
 } from '../../helpers/classification';
@@ -657,58 +658,11 @@ export default function ClassificationPanel(): JSX.Element {
 
   let refParentNode: HTMLDivElement;
 
-  const entriesClassificationMethod = [
-    {
-      name: LL().ClassificationPanel.classificationMethods.quantiles(),
-      value: ClassificationMethod.quantiles,
-      options: [OptionsClassification.numberOfClasses],
-    },
-    {
-      name: LL().ClassificationPanel.classificationMethods.equalIntervals(),
-      value: ClassificationMethod.equalIntervals,
-      options: [OptionsClassification.numberOfClasses],
-    },
-    statSummary.unique > 6 ? {
-      name: LL().ClassificationPanel.classificationMethods.q6(),
-      value: ClassificationMethod.q6,
-      options: [],
-    } : null,
-    {
-      name: LL().ClassificationPanel.classificationMethods.ckmeans(),
-      value: ClassificationMethod.ckmeans,
-      options: [OptionsClassification.numberOfClasses],
-    },
-    {
-      name: LL().ClassificationPanel.classificationMethods.jenks(),
-      value: ClassificationMethod.jenks,
-      options: [OptionsClassification.numberOfClasses],
-    },
-    {
-      name: LL().ClassificationPanel.classificationMethods.standardDeviation(),
-      value: ClassificationMethod.standardDeviation,
-      options: [OptionsClassification.amplitude, OptionsClassification.meanPosition],
-    },
-    allValuesSuperiorToZero ? {
-      name: LL().ClassificationPanel.classificationMethods.geometricProgression(),
-      value: ClassificationMethod.geometricProgression,
-      options: [OptionsClassification.numberOfClasses],
-    } : null,
-    {
-      name: LL().ClassificationPanel.classificationMethods.nestedMeans(),
-      value: ClassificationMethod.nestedMeans,
-      options: [OptionsClassification.constrainedNumberOfClasses],
-    },
-    {
-      name: LL().ClassificationPanel.classificationMethods.headTail(),
-      value: ClassificationMethod.headTail,
-      options: [],
-    },
-    {
-      name: LL().ClassificationPanel.classificationMethods.manual(),
-      value: ClassificationMethod.manual,
-      options: [OptionsClassification.breaks, OptionsClassification.numberOfClasses],
-    },
-  ].filter((d) => d !== null);
+  const entriesClassificationMethod = makeClassificationMenuEntries(
+    LL,
+    statSummary.unique,
+    allValuesSuperiorToZero,
+  );
 
   const listenerEscKey = (event: KeyboardEvent) => {
     // TODO: in many cases this modal is opened on the top of another modal

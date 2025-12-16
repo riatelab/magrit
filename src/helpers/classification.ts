@@ -1,3 +1,7 @@
+// Imports from solid-js
+import type { Accessor } from 'solid-js';
+
+// Imports from other external libraries
 import {
   ArithmeticProgressionClassifier,
   CustomBreaksClassifier,
@@ -24,12 +28,16 @@ import {
   msd,
 } from 'statsbreaks';
 
+// Helpers
 import d3 from './d3-custom';
+import type { TranslationFunctions } from '../i18n/i18n-types';
 import { getMinimumPrecision } from './common';
 import { extent, hasNegative } from './math';
 
+// Stores
 import { applicationSettingsStore } from '../store/ApplicationSettingsStore';
 
+// Types, interfaces and enums
 import { ClassificationMethod } from '../global.d';
 
 export const getClassifier = (method: ClassificationMethod) => {
@@ -168,3 +176,60 @@ export const bivariateClass = (
 ): number => (
   3 * c1.getClass(v1) + c2.getClass(v2)
 );
+
+export const makeClassificationMenuEntries = (
+  LL: Accessor<TranslationFunctions>,
+  nbUnique: number,
+  allValuesSuperiorToZero: boolean,
+) => [
+  {
+    name: LL().ClassificationPanel.classificationMethods.quantiles(),
+    value: ClassificationMethod.quantiles,
+    options: [OptionsClassification.numberOfClasses],
+  },
+  {
+    name: LL().ClassificationPanel.classificationMethods.equalIntervals(),
+    value: ClassificationMethod.equalIntervals,
+    options: [OptionsClassification.numberOfClasses],
+  },
+  nbUnique > 6 ? {
+    name: LL().ClassificationPanel.classificationMethods.q6(),
+    value: ClassificationMethod.q6,
+    options: [],
+  } : null,
+  {
+    name: LL().ClassificationPanel.classificationMethods.ckmeans(),
+    value: ClassificationMethod.ckmeans,
+    options: [OptionsClassification.numberOfClasses],
+  },
+  {
+    name: LL().ClassificationPanel.classificationMethods.jenks(),
+    value: ClassificationMethod.jenks,
+    options: [OptionsClassification.numberOfClasses],
+  },
+  {
+    name: LL().ClassificationPanel.classificationMethods.standardDeviation(),
+    value: ClassificationMethod.standardDeviation,
+    options: [OptionsClassification.amplitude, OptionsClassification.meanPosition],
+  },
+  allValuesSuperiorToZero ? {
+    name: LL().ClassificationPanel.classificationMethods.geometricProgression(),
+    value: ClassificationMethod.geometricProgression,
+    options: [OptionsClassification.numberOfClasses],
+  } : null,
+  {
+    name: LL().ClassificationPanel.classificationMethods.nestedMeans(),
+    value: ClassificationMethod.nestedMeans,
+    options: [OptionsClassification.constrainedNumberOfClasses],
+  },
+  {
+    name: LL().ClassificationPanel.classificationMethods.headTail(),
+    value: ClassificationMethod.headTail,
+    options: [],
+  },
+  {
+    name: LL().ClassificationPanel.classificationMethods.manual(),
+    value: ClassificationMethod.manual,
+    options: [OptionsClassification.breaks, OptionsClassification.numberOfClasses],
+  },
+].filter((d) => d !== null);
