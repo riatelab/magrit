@@ -157,7 +157,7 @@ export const makeCentroidLayer = (
       const o = {};
       fields.forEach((field) => {
         // eslint-disable-next-line no-param-reassign
-        o[field] = feature.properties[field];
+        o[field] = feature.properties![field];
       });
       feature.properties = o; // eslint-disable-line no-param-reassign
     });
@@ -444,8 +444,8 @@ export const makeDorlingDemersSimulation = (
     .map((d: Feature, i: number) => ({
       x: globalStore.projection(d.geometry.originalCoordinates)[0],
       y: globalStore.projection(d.geometry.originalCoordinates)[1],
-      size: isFiniteNumber(d.properties[variableName])
-        ? propSizer.scale(d.properties[variableName])
+      size: isFiniteNumber(d.properties![variableName])
+        ? propSizer.scale(d.properties![variableName])
         : null,
       padding: strokeWidth / 2,
       index: i,
@@ -480,7 +480,7 @@ export const makeDorlingDemersSimulation = (
     // eslint-disable-next-line no-param-reassign
     features[d.index].geometry.coordinates = globalStore.projection.invert([d.x, d.y]);
     // eslint-disable-next-line no-param-reassign
-    features[d.index].properties.size = d.size;
+    features[d.index].properties!.size = d.size;
   });
 
   return features;
