@@ -12,6 +12,14 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+### 2.3.16 (unreleased)
+
+- Ajout d'une option permettant de contrôler la taille des cellules de la grille d'alignement (corrige <a href="https://github.com/riatelab/magrit/issues/192">l'issue 192</a>).
+
+- Corrige le bug empêchant l'affichage de la légende pour les couches de points créées à partir d'un jeu de données tabulaire (corrige <a href="https://github.com/riatelab/magrit/issues/191">l'issue 191</a>).
+
+- Ajout de restrictions supplémentaires concernant les noms de champs pouvant être créés avec la calculatrice de champs.
+
 ### 2.3.15 (2025-12-10)
 
 - Corrige l'usage des polices d'écritures dans les exports PNG (corrige <a href="https://github.com/riatelab/magrit/issues/189">l'issue 189</a>).
