@@ -453,7 +453,7 @@ export default function JoinPanel(
 
     const rowVirtualizer = createVirtualizer({
       count: rows.length,
-      getScrollElement: () => parentRef,
+      getScrollElement: () => parentRef!,
       estimateSize: () => 28,
       overscan: 10,
     });

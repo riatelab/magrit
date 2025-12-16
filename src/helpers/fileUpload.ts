@@ -44,7 +44,6 @@ import { fitExtent } from '../store/MapStore';
 
 // Types
 import type {
-  DefaultLegend,
   LayerDescription,
   TableDescription,
 } from '../global';
@@ -446,7 +445,7 @@ export const convertAndAddFiles = async (
         id: addTabularLayer(resTyped, layerName),
         nRemoved: 0,
       };
-    } catch (e: any) {
+    } catch (e) {
       console.error(e);
       throw e;
     }
@@ -476,7 +475,7 @@ export const convertAndAddFiles = async (
       id: addLayer(layerSanitized, layerName, fit, visible),
       nRemoved: nbRemoved,
     };
-  } catch (e: any) {
+  } catch (e) {
     console.error(e);
     throw e;
   }
