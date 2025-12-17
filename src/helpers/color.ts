@@ -2,6 +2,7 @@ import {
   getAsymmetricDivergingColors, getPalette, getPalettes,
   getPaletteNumbers, getSequentialColors,
 } from 'dicopal';
+import chroma from 'chroma-js';
 
 // Helpers
 import d3 from './d3-custom';
@@ -170,3 +171,121 @@ export const availableDivergingPalettes = getPalettes({ type: 'diverging', numbe
     value: d.name,
     prefixImage: PaletteThumbnails[`img${d.provider}${d.name}` as never] as string,
   }));
+
+export const bivariatePalettes = [
+  {
+    name: 'RdBu',
+    provider: 'Joshua Stevens',
+    colors: [
+      '#e8e8e8', '#e4acac', '#c85a5a',
+      '#b0d5df', '#ad9ea5', '#985356',
+      '#64acbe', '#627f8c', '#574249',
+    ],
+  },
+  {
+    name: 'BuPu',
+    provider: 'Joshua Stevens',
+    colors: [
+      '#e8e8e8', '#ace4e4', '#5ac8c8',
+      '#dfb0d6', '#a5add3', '#5698b9',
+      '#be64ac', '#8c62aa', '#3b4994',
+    ],
+  },
+  {
+    name: 'GnBu',
+    provider: 'Joshua Stevens',
+    colors: [
+      '#e8e8e8', '#b5c0da', '#6c83b5',
+      '#b8d6be', '#90b2b3', '#567994',
+      '#73ae80', '#5a9178', '#2a5a5b',
+    ],
+  },
+  {
+    name: 'PuOr',
+    provider: 'Joshua Stevens',
+    colors: [
+      '#e8e8e8', '#e4d9ac', '#c8b35a',
+      '#cbb8d7', '#c8ada0', '#af8e53',
+      '#9972af', '#976b82', '#804d36',
+    ],
+  },
+  {
+    name: 'BuRd',
+    colors: [
+      '#e8e8e8', '#d8a4a4', '#c75a5a',
+      '#a6b1d3', '#a6a4a4', '#a65a5a',
+      '#657cbf', '#657ca4', '#655a5a',
+    ],
+  },
+].map((p) => ({
+  id: `${p.name}-bivariate`,
+  name: p.provider ? `${p.name} (${p.provider})` : p.name,
+  number: 9,
+  type: 'custom',
+  colors: p.colors,
+  provenance: 'user',
+  reversed: false,
+} as CustomPalette));
+
+const makeBivariatePaletteThumbnail = (palette: CustomPalette): string => {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d')!;
+  const size = 60;
+  canvas.width = size;
+  canvas.height = size;
+
+  const cellSize = size / 3;
+
+  for (let i = 0; i < 3; i += 1) {
+    for (let j = 0; j < 3; j += 1) {
+      ctx.fillStyle = palette.colors[i * 3 + j];
+      ctx.fillRect(j * cellSize, (2 - i) * cellSize, cellSize, cellSize);
+    }
+  }
+
+  return canvas.toDataURL();
+};
+
+export const availableBivariatePalettes = bivariatePalettes.map((d) => ({
+  name: d.name,
+  value: d.id,
+  prefixImage: makeBivariatePaletteThumbnail(d),
+}));
+
+/**
+ * Generate bivariate colors from a base lightest color and two ("end")
+ * colors for the two variables.
+ * @param {string} color1
+ * @param {string} color2
+ * @param {string} lightest
+ * @param {number} rows
+ * @param {'Lab' | 'RGB' | 'Lch'} colorMode
+ * @param {'darken' | 'multiply'} blendMode
+ */
+export const generateBivariateColors = (
+  color1: string,
+  color2: string,
+  lightest: string,
+  rows: number = 3,
+  colorMode: 'Lab' | 'RGB' | 'Lch' = 'Lab',
+  blendMode: 'darken' | 'multiply' = 'darken',
+) => {
+  const scale1 = chroma.scale([color1, lightest])
+    .mode(colorMode)
+    .correctLightness()
+    .colors(rows);
+  const scale2 = chroma.scale([color2, lightest])
+    .mode(colorMode)
+    .correctLightness()
+    .colors(rows);
+
+  const data = [];
+
+  for (let i = 0; i < rows; i += 1) {
+    for (let j = 0; j < rows; j += 1) {
+      data.push(chroma.blend(scale1[i], scale2[j], blendMode));
+    }
+  }
+
+  return data;
+};

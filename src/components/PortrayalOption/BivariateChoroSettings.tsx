@@ -26,6 +26,7 @@ import {
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { getClassifier } from '../../helpers/classification';
 import { findSuitableName, getMinimumPrecision, isFiniteNumber } from '../../helpers/common';
+import { bivariatePalettes } from '../../helpers/color';
 import { generateIdLayer } from '../../helpers/layers';
 import { generateIdLegend } from '../../helpers/legends';
 import { VariableType } from '../../helpers/typeDetection';
@@ -41,7 +42,8 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
-  type BivariateChoroplethLegend, ClassificationMethod, CustomPalette,
+  type BivariateChoroplethLegend,
+  ClassificationMethod,
   type LayerDescriptionBivariateChoropleth,
   type LegendTextElement,
   LegendType,
@@ -98,19 +100,7 @@ function onClickValidate(
       entitiesByClass: classifier2.countByClass(),
     },
     noDataColor: '#ffffff',
-    palette: {
-      id: 'bupu-bivariate',
-      name: 'BuPu bivariate',
-      number: 9,
-      type: 'custom',
-      colors: [
-        '#e8e8e8', '#ace4e4', '#5ac8c8',
-        '#dfb0d6', '#a5add3', '#5698b9',
-        '#be64ac', '#8c62aa', '#3b4994',
-      ],
-      provenance: 'user',
-      reversed: false,
-    } as CustomPalette,
+    palette: bivariatePalettes[1],
   };
 
   // How many decimals to display in the legend

@@ -10,6 +10,7 @@ import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { makeClassificationMenuEntries, prepareStatisticalSummary } from '../../helpers/classification';
 import { isFiniteNumber, unproxify } from '../../helpers/common';
+import { availableBivariatePalettes } from '../../helpers/color';
 import { Mmin, round } from '../../helpers/math';
 
 // Stores
@@ -27,6 +28,38 @@ import {
   ClassificationMethod,
   type CustomPalette,
 } from '../../global.d';
+
+function BivariateLegendPreview(props: {
+  colorScheme: CustomPalette,
+}): JSX.Element {
+  const numClassesPerVar = Math.sqrt(props.colorScheme.colors.length);
+  const cellSize = 20;
+  const range = Array.from({ length: numClassesPerVar }, (_, i) => i);
+
+  return <svg
+    width={cellSize * numClassesPerVar}
+    height={cellSize * numClassesPerVar}
+    style={{ border: '1px solid #000' }}
+  >
+    <For each={range}>
+      {
+        (i) => (
+          <For each={range}>
+            {
+              (j) => <rect
+                  x={j * cellSize}
+                  y={(numClassesPerVar - 1 - i) * cellSize}
+                  width={cellSize}
+                  height={cellSize}
+                  fill={props.colorScheme.colors[i * numClassesPerVar + j]}
+                />
+            }
+          </For>
+        )
+      }
+    </For>
+  </svg>;
+}
 
 export default function ClassificationBivariatePanel(): JSX.Element {
   const { LL } = useI18nContext();
@@ -231,9 +264,21 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                 }}
               />
             </div>
+            <DropdownMenu
+              id={'dropdown-bivariate-palette'}
+              style={{ width: '220px' }}
+              entries={availableBivariatePalettes}
+              defaultEntry={
+                availableBivariatePalettes
+                  .find((d) => d.value === colorScheme().id)!
+              }
+              onChange={(value) => {
+                console.log('Changed color scheme to:', value);
+              }}
+            />
           </div>
           <div style={{ width: '50%', 'text-align': 'center' }}>
-
+            <BivariateLegendPreview colorScheme={colorScheme()} />
           </div>
         </div>
       </section>
