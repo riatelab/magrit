@@ -2,13 +2,21 @@
 import {
   createSignal, JSX, For,
   Match, onCleanup, onMount,
-  Show, Switch,
+  Show, Switch, createMemo,
 } from 'solid-js';
+
+// Imports from other libraries
+import * as Plot from '@observablehq/plot';
 
 // Helpers
 import d3 from '../../helpers/d3-custom';
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { makeClassificationMenuEntries, prepareStatisticalSummary } from '../../helpers/classification';
+import {
+  bivariateClass,
+  getClassifier,
+  makeClassificationMenuEntries,
+  prepareStatisticalSummary,
+} from '../../helpers/classification';
 import { isFiniteNumber, unproxify } from '../../helpers/common';
 import { availableBivariatePalettes } from '../../helpers/color';
 import { Mmin, round } from '../../helpers/math';
@@ -18,6 +26,7 @@ import { classificationMultivariatePanelStore, setClassificationMultivariatePane
 
 // Subcomponents
 import DropdownMenu from '../DropdownMenu.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
 
 // Styles
 import '../../styles/ClassificationPanel.css';
@@ -28,6 +37,16 @@ import {
   ClassificationMethod,
   type CustomPalette,
 } from '../../global.d';
+import PlotFigure from '../PlotFigure.tsx';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+
+const paletteMenuEntries = [
+  ...availableBivariatePalettes,
+  {
+    name: 'Custom...',
+    value: 'Custom',
+  },
+];
 
 function BivariateLegendPreview(props: {
   colorScheme: CustomPalette,
@@ -74,6 +93,17 @@ export default function ClassificationBivariatePanel(): JSX.Element {
   const filteredSeriesVar2 = classificationMultivariatePanelStore.series![1]
     .filter((d) => isFiniteNumber(d))
     .map((d) => +d);
+
+  const ds = classificationMultivariatePanelStore.series![0].map((d, i) => ({
+    [parameters.variable1.variable]: isFiniteNumber(d)
+      ? d
+      : undefined,
+    [parameters.variable2.variable]: isFiniteNumber(
+      classificationMultivariatePanelStore.series![1][i],
+    )
+      ? classificationMultivariatePanelStore.series![1][i]
+      : undefined,
+  }));
 
   // Basic statistical summary displayed to the user
   const statSummaryVar1 = prepareStatisticalSummary(filteredSeriesVar1);
@@ -122,6 +152,39 @@ export default function ClassificationBivariatePanel(): JSX.Element {
 
   let refParentNode: HTMLDivElement;
 
+  const classifierVar1 = createMemo(() => {
+    const Cls = getClassifier(ClassificationMethod.manual);
+    return new Cls(
+      null,
+      null,
+      applicationSettingsStore.intervalClosure,
+      parameters.variable1.breaks,
+    );
+  });
+
+  const classifierVar2 = createMemo(() => {
+    const Cls = getClassifier(ClassificationMethod.manual);
+    return new Cls(
+      null,
+      null,
+      applicationSettingsStore.intervalClosure,
+      parameters.variable2.breaks,
+    );
+  });
+
+  const bivariateClasses = (d: Record<string, any>) => {
+    const classVar1 = classifierVar1().getClass(d[parameters.variable1.variable]);
+    const classVar2 = classifierVar2().getClass(d[parameters.variable2.variable]);
+    return [classVar1, classVar2];
+  };
+
+  const bc = (d: Record<string, any>) => bivariateClass(
+    d[parameters.variable1.variable],
+    d[parameters.variable2.variable],
+    classifierVar1(),
+    classifierVar2(),
+  );
+
   const entriesClassificationMethodVar1 = makeClassificationMenuEntries(
     LL,
     statSummaryVar1.unique,
@@ -166,7 +229,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
     role="dialog"
   >
     <div class="modal-background" />
-    <div class="modal-card">
+    <div class="modal-card" style={{ height: '85vh' }}>
       <header class="modal-card-head">
         <p class="modal-card-title">
           { LL().ClassificationPanel.title() }&nbsp;
@@ -176,7 +239,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
       </header>
       <section class="modal-card-body">
         <div class="is-flex">
-          <div style={{ width: '40%', 'text-align': 'center' }}>
+          <div style={{ width: '45%', 'text-align': 'center' }}>
             <h3> { LL().ClassificationPanel.summary() }</h3>
             <div>
               <table class="table bivariate is-bordered is-striped is-narrow is-hoverable is-fullwidth">
@@ -224,61 +287,122 @@ export default function ClassificationBivariatePanel(): JSX.Element {
             </div>
           </div>
           <div style={{ width: '55%', 'text-align': 'center' }}>
-            <h3> { LL().ClassificationPanel.distribution() } </h3>
-            <div></div>
+            <h3> { LL().ClassificationPanel.classification() } </h3>
+            <div class="is-flex" style={{ 'justify-content': 'space-around' }}>
+              <InputFieldSelect
+                label={'Variable 1'}
+                layout={'vertical'}
+                onChange={(value) => {
+                  console.log('Changed var1 classification method to:', value);
+                }}
+                value={classificationMethodVar1()}
+              >
+                <For each={entriesClassificationMethodVar1}>
+                  {
+                    (entry) => <option value={entry.value}>
+                      { entry.name }
+                    </option>
+                  }
+                </For>
+              </InputFieldSelect>
+              <InputFieldSelect
+                label={'Variable 2'}
+                layout={'vertical'}
+                onChange={(value) => {
+                  console.log('Changed var2 classification method to:', value);
+                }}
+                value={classificationMethodVar2()}
+              >
+                <For each={entriesClassificationMethodVar2}>
+                  {
+                    (entry) => <option value={entry.value}>
+                      { entry.name }
+                    </option>
+                  }
+                </For>
+              </InputFieldSelect>
+            </div>
+            <h3> { 'Couleur' } </h3>
+            <div>
+              <DropdownMenu
+                id={'dropdown-bivariate-palette'}
+                style={{ width: '220px', 'margin-bottom': '18px' }}
+                entries={paletteMenuEntries}
+                defaultEntry={
+                  paletteMenuEntries
+                    .find((d) => d.value === colorScheme().id)!
+                }
+                onChange={(value) => {
+                  setColorScheme(value);
+                }}
+              />
+              <br />
+              <div style={{ width: '100%', 'text-align': 'center' }}>
+                <BivariateLegendPreview colorScheme={colorScheme()} />
+              </div>
+            </div>
           </div>
         </div>
         <hr />
-        <div>
+        <div style={{ 'text-align': 'center' }}>
+          <h3> { LL().ClassificationPanel.distribution() } </h3>
+          <div>
+            <PlotFigure
+              id={'scatter-plot-bivariate-distribution'}
+              options={{
+                style: {
+                  background: 'white',
+                  color: 'black',
+                  height: '33vh',
+                },
+                // height: 400,
+                x: {
+                  label: parameters.variable2.variable,
+                },
+                y: {
+                  label: parameters.variable1.variable,
+                },
+                marks: [
+                  Plot.dot(ds, {
+                    y: parameters.variable1.variable,
+                    x: parameters.variable2.variable,
+                    // fill: 'red',
+                    fill: (d) => parameters.palette.colors[bc(d)],
+                    r: 1.4,
+                  }),
+                  Plot.text(
+                    ds,
+                    Plot.groupZ(
+                      { text: 'count', x: 'mean', y: 'mean' },
+                      {
+                        fontSize: 14,
+                        stroke: 'width',
+                        strokeWidth: 8,
+                        fill: 'black',
+                        y: parameters.variable1.variable,
+                        x: parameters.variable2.variable,
+                        z: (d) => bivariateClasses(d).toString(),
+                      },
+                    ),
+                  ),
+                  Plot.ruleX([classifierVar2().breaks[0]], { }),
+                  Plot.ruleY([classifierVar1().breaks[0]], { }),
+                  classifierVar2().breaks.slice(1, -1).map((vx) => [
+                    Plot.ruleX([vx], { strokeDasharray: 4, strokeOpacity: 0.4 }),
+                  ]),
+                  classifierVar1().breaks.slice(1, -1).map((vy) => [
+                    Plot.ruleY([vy], { strokeDasharray: 4, strokeOpacity: 0.4 }),
+                  ]),
+                ],
+              }}
+            />
+          </div>
           <div
             style={{ width: '50%', 'text-align': 'center' }}
             class="is-flex is-flex-direction-column"
           >
-            <div class="is-flex is-flex-direction-row">
-              <p>Variable 1</p>
-              <DropdownMenu
-                id={'dropdown-classification-method-var1'}
-                style={{ width: '220px' }}
-                entries={entriesClassificationMethodVar1}
-                defaultEntry={
-                  entriesClassificationMethodVar1
-                    .find((d) => d.value === classificationMethodVar1())!
-                }
-                onChange={(value) => {
-                  console.log('Changed var1 classification method to:', value);
-                }}
-              />
-            </div>
-            <div class="is-flex is-flex-direction-row">
-              <p style={{ 'vertical-align': 'bottom' }}>Variable 2</p>
-              <DropdownMenu
-                id={'dropdown-classification-method-var2'}
-                style={{ width: '220px' }}
-                entries={entriesClassificationMethodVar2}
-                defaultEntry={
-                  entriesClassificationMethodVar2
-                    .find((d) => d.value === classificationMethodVar2())!
-                }
-                onChange={(value) => {
-                  console.log('Changed var2 classification method to:', value);
-                }}
-              />
-            </div>
-            <DropdownMenu
-              id={'dropdown-bivariate-palette'}
-              style={{ width: '220px' }}
-              entries={availableBivariatePalettes}
-              defaultEntry={
-                availableBivariatePalettes
-                  .find((d) => d.value === colorScheme().id)!
-              }
-              onChange={(value) => {
-                console.log('Changed color scheme to:', value);
-              }}
-            />
           </div>
           <div style={{ width: '50%', 'text-align': 'center' }}>
-            <BivariateLegendPreview colorScheme={colorScheme()} />
           </div>
         </div>
       </section>
