@@ -43,7 +43,7 @@ import { ClassificationMethod } from '../global.d';
 export const getClassifier = (method: ClassificationMethod) => {
   switch (method) {
     case ClassificationMethod.arithmeticProgression:
-      return ArithmeticProgressionClassifier();
+      return ArithmeticProgressionClassifier;
     case ClassificationMethod.manual:
       return CustomBreaksClassifier;
     case ClassificationMethod.equalIntervals:
@@ -181,6 +181,7 @@ export const makeClassificationMenuEntries = (
   LL: Accessor<TranslationFunctions>,
   nbUnique: number,
   allValuesSuperiorToZero: boolean,
+  fixedClasses: number | false = false,
 ) => [
   {
     name: LL().ClassificationPanel.classificationMethods.quantiles(),
@@ -192,7 +193,7 @@ export const makeClassificationMenuEntries = (
     value: ClassificationMethod.equalIntervals,
     options: [OptionsClassification.numberOfClasses],
   },
-  nbUnique > 6 ? {
+  nbUnique > 6 && (fixedClasses === 6 || fixedClasses === false) ? {
     name: LL().ClassificationPanel.classificationMethods.q6(),
     value: ClassificationMethod.q6,
     options: [],
@@ -207,26 +208,26 @@ export const makeClassificationMenuEntries = (
     value: ClassificationMethod.jenks,
     options: [OptionsClassification.numberOfClasses],
   },
-  {
+  fixedClasses === false ? {
     name: LL().ClassificationPanel.classificationMethods.standardDeviation(),
     value: ClassificationMethod.standardDeviation,
     options: [OptionsClassification.amplitude, OptionsClassification.meanPosition],
-  },
+  } : null,
   allValuesSuperiorToZero ? {
     name: LL().ClassificationPanel.classificationMethods.geometricProgression(),
     value: ClassificationMethod.geometricProgression,
     options: [OptionsClassification.numberOfClasses],
   } : null,
-  {
+  fixedClasses === false ? {
     name: LL().ClassificationPanel.classificationMethods.nestedMeans(),
     value: ClassificationMethod.nestedMeans,
     options: [OptionsClassification.constrainedNumberOfClasses],
-  },
-  {
+  } : null,
+  fixedClasses === false ? {
     name: LL().ClassificationPanel.classificationMethods.headTail(),
     value: ClassificationMethod.headTail,
     options: [],
-  },
+  } : null,
   {
     name: LL().ClassificationPanel.classificationMethods.manual(),
     value: ClassificationMethod.manual,

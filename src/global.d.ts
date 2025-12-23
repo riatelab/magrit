@@ -648,6 +648,8 @@ export interface BivariateVariableDescription {
   entitiesByClass: number[],
 }
 
+type AllowManualBreaks = Pick<ClassificationParameters & BivariateVariableDescription, 'variable' | 'method' | 'classes' | 'breaks'>;
+
 export interface BivariateChoroplethParameters {
   // The description of the first variable
   variable1: BivariateVariableDescription,

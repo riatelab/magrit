@@ -267,7 +267,7 @@ export const generateBivariateColors = (
   color2: string,
   lightest: string,
   rows: number = 3,
-  colorMode: 'Lab' | 'RGB' | 'Lch' = 'Lab',
+  colorMode: 'lab' | 'rgb' | 'lch' = 'lab',
   blendMode: 'darken' | 'multiply' = 'darken',
 ) => {
   const scale1 = chroma.scale([color1, lightest])
@@ -283,9 +283,9 @@ export const generateBivariateColors = (
 
   for (let i = 0; i < rows; i += 1) {
     for (let j = 0; j < rows; j += 1) {
-      data.push(chroma.blend(scale1[i], scale2[j], blendMode));
+      data.push(chroma.blend(scale1[i], scale2[j], blendMode).hex());
     }
   }
 
-  return data;
+  return data.reverse();
 };
