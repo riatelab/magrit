@@ -640,6 +640,19 @@ function makeSettingsChoroplethLegend(
           step={1}
           onChange={(v) => debouncedUpdateProps(legend.id, ['boxSpacingNoData'], v)}
         />
+        <Show when={legend.type === 'choropleth'}>
+          <div class="field">
+            <label class="label">{LL().Legend.Modal.NoDataLabel()}</label>
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                value={(legend as ChoroplethLegend).noDataLabel}
+                onChange={(ev) => debouncedUpdateProps(legend.id, ['noDataLabel'], ev.target.value)}
+              />
+            </div>
+          </div>
+        </Show>
       </Show>
     </Show>
     <div class="field">
