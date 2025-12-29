@@ -93,7 +93,7 @@ const addMaxWidthAttr = (columnDefs: any[]): any[] => {
 };
 
 // eslint-disable-next-line no-useless-escape
-const hasForbiddenChars = (str: string): boolean => /[.,\/#!$%\^&\*;:\[\]\{\}=`~()']/.test(str);
+const hasForbiddenChars = (str: string): boolean => /[.,\/#!$%\^&\*;:\[\]\{\}=`~()\\']/.test(str);
 
 function NewFieldPanel(
   props: {
@@ -202,7 +202,7 @@ function NewFieldPanel(
               setNewColumnName(e.currentTarget.value);
             }}
           />
-          <p class="message is-danger">&nbsp;{LL().DataTable.NewColumnModal.notAcceptedChars('.,/#!$%^&*;:{}[]=`~()\'')}</p>
+          <p class="message is-danger">&nbsp;{LL().DataTable.NewColumnModal.notAcceptedChars('.,/#!$%^&*;:{}[]=`~()\'\\')}</p>
         </div>
       </div>
       <div class="field-block">
