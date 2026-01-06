@@ -12,6 +12,14 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.3.17 (unreleased)
+
+- Fix some missing English translation strings (fixes <a href="https://github.com/riatelab/magrit/issues/194">issue 194</a> and <a href="https://github.com/riatelab/magrit/issues/197">issue 197</a>).
+
+- Fix missing no-data box label in legend settings (fixes <a href="https://github.com/riatelab/magrit/issues/196">issue 196</a>).
+
+- Improve escaping of field names in FormulaInput component (fixes <a href="https://github.com/riatelab/magrit/issues/195">issue 195</a>).
+
 ### 2.3.16 (2025-12-16)
 
 - Add an option to control the size of cells in the snapping grid (fixes <a href="https://github.com/riatelab/magrit/issues/192">issue 192</a>).
