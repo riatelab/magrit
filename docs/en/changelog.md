@@ -12,7 +12,7 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-### 2.3.17 (unreleased)
+### 2.3.17 (2026-01-06)
 
 - Fix some missing English translation strings (fixes <a href="https://github.com/riatelab/magrit/issues/194">issue 194</a> and <a href="https://github.com/riatelab/magrit/issues/197">issue 197</a>).
 
