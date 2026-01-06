@@ -12,6 +12,14 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+### 2.3.17 (2026-01-06)
+
+- Correction de certaines chaînes de traduction anglaise manquantes (corrige <a href="https://github.com/riatelab/magrit/issues/194">l'issue 194</a> et <a href="https://github.com/riatelab/magrit/issues/197">l'issue 197</a>).
+
+- Correction de la boite permettant de changer le label des données "No-data" manquant dans la légende (corrige <a href="https://github.com/riatelab/magrit/issues/196">l'issue 196</a>).
+
+- Améliorer l'échappement des noms de champs dans le composant FormulaInput (corrige <a href="https://github.com/riatelab/magrit/issues/195">l'issue 195</a>).
+
 ### 2.3.16 (2025-12-16)
 
 - Ajout d'une option permettant de contrôler la taille des cellules de la grille d'alignement (corrige <a href="https://github.com/riatelab/magrit/issues/192">l'issue 192</a>).
