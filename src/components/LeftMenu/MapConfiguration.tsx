@@ -15,6 +15,30 @@ import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import DetailsSummary from '../DetailsSummary.tsx';
 
+const InputMargin = (
+  props: { position: 'bottom' | 'top' | 'left' | 'right' },
+): JSX.Element => (
+  <input
+    type="number"
+    class="input"
+    style={{ width: '80px', height: '1.8em' }}
+    value={mapStore.mapMargins[props.position]}
+    min={0}
+    onKeyUp={(e) => {
+      if (+(e.currentTarget.value) <= 0) {
+        return;
+      }
+      setMapStore('mapMargins', props.position, Number(e.currentTarget.value));
+    }}
+    onChange={(e) => {
+      if (+(e.currentTarget.value) <= 0) {
+        e.currentTarget.value = '0';
+      }
+      setMapStore('mapMargins', props.position, Number(e.currentTarget.value));
+    }}
+  />
+);
+
 export default function MapConfiguration(): JSX.Element {
   const { LL } = useI18nContext();
 
@@ -80,46 +104,14 @@ export default function MapConfiguration(): JSX.Element {
       <label class="label">{LL().LayoutFeatures.MapMargins()}</label>
       <div>
         <div class="is-flex is-justify-content-space-around">
-          <input
-            type="number"
-            class="input"
-            style={{ width: '80px', height: '1.8em' }}
-            value={mapStore.mapMargins.top}
-            onChange={(e) => {
-              setMapStore('mapMargins', 'top', Number(e.currentTarget.value));
-            }}
-          />
+          <InputMargin position={'top'} />
         </div>
         <div class="is-flex is-justify-content-space-around">
-          <input
-            type="number"
-            class="input"
-            style={{ width: '80px', height: '1.8em' }}
-            value={mapStore.mapMargins.left}
-            onChange={(e) => {
-              setMapStore('mapMargins', 'left', Number(e.currentTarget.value));
-            }}
-          />
-          <input
-            type="number"
-            class="input"
-            style={{ width: '80px', height: '1.8em' }}
-            value={mapStore.mapMargins.right}
-            onChange={(e) => {
-              setMapStore('mapMargins', 'right', Number(e.currentTarget.value));
-            }}
-          />
+          <InputMargin position={'left'} />
+          <InputMargin position={'right'} />
         </div>
         <div class="is-flex is-justify-content-space-around">
-          <input
-            type="number"
-            class="input"
-            style={{ width: '80px', height: '1.8em' }}
-            value={mapStore.mapMargins.bottom}
-            onChange={(e) => {
-              setMapStore('mapMargins', 'bottom', Number(e.currentTarget.value));
-            }}
-          />
+          <InputMargin position={'bottom'} />
         </div>
         <Show
           when={
