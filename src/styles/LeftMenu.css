@@ -43,6 +43,10 @@ The left menu is:
     overflow: unset;
 }
 
+.collapse-panel {
+    will-change: max-height, opacity;
+}
+
 .collapse-transition {
     transition: height var(--sc-auto-duration) cubic-bezier(0.65, 0, 0.35, 1);
     border: solid 1px var(--border-color) !important;

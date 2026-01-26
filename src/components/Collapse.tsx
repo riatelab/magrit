@@ -1,154 +1,116 @@
-/** The code of this component is modified from the following MIT licensed code:
- * https://github.com/smastrom/solid-collapse (License: MIT, Author: smastrom)
- */
 import {
+  JSX,
   createEffect,
   createSignal,
-  mergeProps,
-  ParentComponent,
-  untrack,
+  onCleanup,
+  splitProps,
 } from 'solid-js';
 
 type CollapseProps = {
-  /** Reactive boolean to trigger collapse. */
+  /** Whether the content is visible or collapsed */
   value: boolean;
-  /** Class with a transition (height) property. */
+  /**
+   * Animation duration in milliseconds,
+   * defaults to 0 (no animation)
+   */
+  duration?: number;
+  /** Content to be collapsed/expanded */
+  children: JSX.Element;
+  /** Additional CSS class */
   class?: string;
-  /** Callback on expand transition completed. */
-  onExpanded?: () => void;
-  /** Callback on collapse transition completed. */
-  onCollapsed?: () => void;
-  id?: string;
-  role?: string;
-  'aria-labelledby'?: string;
 };
 
 /**
- * Forked from:
- * https://github.com/mui/material-ui/blob/master/packages/mui-material/src/styles/createTransitions.js#L35
+ * Collapse component, used to show/hide content with a smooth animation and create accordions.
+ * This is a lightweight rewrite of the previous component, after ditching solid-collapse
+ * due to issues that we had with it (see https://github.com/riatelab/magrit/issues/202).
+ * It uses ResizeObserver which is supported in all modern browsers since 2020
+ * (source: https://caniuse.com/?search=ResizeObserver).
+ * @param {CollapseProps} props
+ * @constructor
  */
+export default function Collapse(props: CollapseProps) {
+  const [local, others] = splitProps(props, ['value', 'duration', 'children', 'class']);
+  const duration = () => local.duration ?? 0;
 
-function getAutoDuration(height = 0) {
-  if (height === 0) {
-    return 0;
-  }
+  let contentRef: HTMLDivElement | undefined;
+  const [height, setHeight] = createSignal(0);
+  const [shouldRender, setShouldRender] = createSignal(local.value);
+  // To remove from the flow during closing (to avoid affecting surrounding layout)
+  const [isClosing, setIsClosing] = createSignal(false);
 
-  const constant = height / 36;
-  return Math.round((4 + 15 * constant ** 0.25 + constant / 5) * 10);
-}
-
-function getHeightStyles(height = 0) {
-  return {
-    '--sc-auto-duration': `${getAutoDuration(height)}ms`,
-    height: `${height}px`,
+  // Mesure content height and set it
+  let ro: ResizeObserver | undefined;
+  const measure = () => {
+    if (!contentRef) return;
+    setHeight(contentRef.scrollHeight);
   };
-}
-
-const fixedStyles = {
-  padding: 0,
-  border: 0,
-  margin: 0,
-  height: 'auto',
-};
-
-const collapsedStyles = {
-  display: 'none',
-  ...fixedStyles,
-};
-
-const performanceStyles = {
-  'will-change': 'height',
-};
-
-const hiddenStyles = {
-  overflow: 'hidden',
-  height: 0,
-};
-
-const nextFrame = typeof window !== 'undefined' ? requestAnimationFrame : () => {};
-
-const Collapse: ParentComponent<CollapseProps> = (props) => {
-  let collapseElem: HTMLElement;
-
-  const mergedProps = mergeProps(
-    {
-      class: 'collapse-transition',
-      value: true,
-      onCollapsed: () => {},
-      onExpanded: () => {},
-      role: 'region',
-    },
-    props,
-  );
-
-  // eslint-disable-next-line solid/reactivity
-  const [style, setStyle] = createSignal(!mergedProps.value ? collapsedStyles : fixedStyles);
-
-  createEffect((prevValue) => {
-    const isExpanding = mergedProps.value;
-    const isUpdate = typeof prevValue !== 'undefined' && prevValue !== isExpanding;
-
-    untrack(() => {
-      if (isUpdate) {
-        requestAnimationFrame(() => {
-          if (isExpanding) {
-            setStyle({
-              ...fixedStyles,
-              ...performanceStyles,
-              ...hiddenStyles,
-            });
-            nextFrame(() => {
-              setStyle((prevStyle) => ({
-                ...prevStyle,
-                ...getHeightStyles(collapseElem.scrollHeight),
-              }));
-            });
-          } else {
-            setStyle((prevStyle) => ({
-              ...prevStyle,
-              ...performanceStyles,
-              ...getHeightStyles(collapseElem.scrollHeight),
-            }));
-            nextFrame(() => {
-              setStyle((prevStyle) => ({
-                ...prevStyle,
-                ...hiddenStyles,
-              }));
-            });
-          }
-        });
-      }
+  const attachObserver = () => {
+    ro?.disconnect();
+    if (!contentRef) return;
+    ro = new ResizeObserver(() => {
+      // Update height only if opened
+      if (local.value) measure();
     });
+    ro.observe(contentRef);
+  };
+  onCleanup(() => ro?.disconnect());
 
-    return isExpanding;
+  // Handle open/close changes
+  createEffect(() => {
+    if (local.value) {
+      setShouldRender(true);
+      requestAnimationFrame(() => {
+        setIsClosing(false);
+        attachObserver();
+        measure();
+      });
+    } else {
+      if (shouldRender()) setIsClosing(true);
+      setHeight(0);
+    }
   });
 
-  function onTransitionEnd(event: TransitionEvent) {
-    if (event.target === collapseElem && event.propertyName === 'height') {
-      if (mergedProps.value) {
-        if (
-          collapseElem?.scrollHeight === parseFloat((event.target as HTMLElement).style.height)
-        ) {
-          setStyle(fixedStyles);
-          mergedProps.onExpanded();
-        }
-      } else if (collapseElem?.style.height === '0px') {
-        setStyle(collapsedStyles);
-        mergedProps.onCollapsed();
-      }
+  createEffect(() => {
+    if (shouldRender()) {
+      requestAnimationFrame(() => {
+        attachObserver();
+        measure();
+      });
+    } else {
+      ro?.disconnect();
     }
-  }
-  return <div
-    style={style()}
-    id={mergedProps.id}
-    ref={(ref: HTMLElement) => { collapseElem = ref; }}
-    aria-labelledby={mergedProps['aria-labelledby']}
-    role={mergedProps.role}
-    class={mergedProps.class}
-    onTransitionEnd={onTransitionEnd}
-  >
-    {mergedProps.children}
-  </div>;
-};
+  });
 
-export default Collapse;
+  const handleTransitionEnd: JSX.EventHandlerUnion<HTMLDivElement, TransitionEvent> = (e) => {
+    if (e.target !== e.currentTarget) return;
+    if (!local.value) {
+      setShouldRender(false);
+      setIsClosing(false);
+    }
+  };
+
+  return (
+    <div
+      {...others}
+      class={`collapse ${local.class ?? ''}`.trim()}
+      aria-hidden={!local.value}
+      style={{
+        position: isClosing() ? 'absolute' : 'relative',
+        width: '100%',
+        'max-height': `${height()}px`,
+        opacity: local.value ? 1 : 0,
+        overflow: local.value ? 'visible' : 'hidden',
+        transition: `max-height ${duration()}ms ease, opacity ${Math.round(duration() * 0.7)}ms ease`,
+        'pointer-events': isClosing() ? 'none' : 'auto',
+      }}
+      onTransitionEnd={handleTransitionEnd}
+    >
+      {shouldRender() && (
+        <div ref={contentRef} class="collapse__inner">
+          {local.children}
+        </div>
+      )}
+    </div>
+  );
+}
