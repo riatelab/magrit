@@ -1046,6 +1046,16 @@ function makeSettingsDefaultPoint(
       onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
     />
     <Show when={props.representationType === 'mushrooms'}>
+      <InputFieldNumber
+        label={LL().LayerSettings.FillOpacity()}
+        value={props.fillOpacity as number}
+        onChange={(v) => debouncedUpdateProp(props.id, ['fillOpacity'], v)}
+        min={0}
+        max={1}
+        step={0.1}
+        strictMin={true}
+        strictMax={true}
+      />
       <div class="mt-4 mb-5 has-text-weight-bold">
         {LL().FunctionalitiesSection.MushroomsOptions.TopProperties()}
       </div>
