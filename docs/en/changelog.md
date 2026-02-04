@@ -12,6 +12,17 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.3.18 (unreleased)
+
+- Refactor the accordion component used in the left menu to fix some height calculation issues
+  (fixes <a href="https://github.com/riatelab/magrit/issues/202">issue 202</a>).
+
+- Improve map margins input components (to update the map on keyup rather than on change, and limit the minimum value to 0).
+
+- Enable the fill opacity setting for mushroom maps (fixes <a href="https://github.com/riatelab/magrit/issues/201">issue 201</a>).
+
+- Fix some missing English translation strings (fixes <a href="https://github.com/riatelab/magrit/issues/203">issue 203</a>).
+
 ### 2.3.17 (2026-01-06)
 
 - Fix some missing English translation strings (fixes <a href="https://github.com/riatelab/magrit/issues/194">issue 194</a> and <a href="https://github.com/riatelab/magrit/issues/197">issue 197</a>).

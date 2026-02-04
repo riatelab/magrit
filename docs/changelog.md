@@ -12,6 +12,18 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+### 2.3.18 (unreleased)
+
+- Refactorisation du composant accordéon utilisé dans le menu de gauche pour corriger des problèmes de calcul de hauteur sur certains navigateurs
+  (corrige <a href="https://github.com/riatelab/magrit/issues/202">l'issue 202</a>).
+
+- Améliore les composants de saisie des marges de la carte (pour mettre à jour la carte lors de l'événement de `key-up` plutôt que `change`).
+
+- Rend possible le changement de l'opacité du remplissage pour les cartes en champignons
+  (corrige <a href="https://github.com/riatelab/magrit/issues/201">l'issue 201</a>).
+
+- Correction de certaines chaînes de traduction anglaise manquantes (corrige <a href="https://github.com/riatelab/magrit/issues/203">l'issue 203</a>).
+
 ### 2.3.17 (2026-01-06)
 
 - Correction de certaines chaînes de traduction anglaise manquantes (corrige <a href="https://github.com/riatelab/magrit/issues/194">l'issue 194</a> et <a href="https://github.com/riatelab/magrit/issues/197">l'issue 197</a>).
