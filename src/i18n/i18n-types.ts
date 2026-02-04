@@ -2859,7 +2859,7 @@ type RootTranslation = {
 		 */
 		MapMargins: string
 		/**
-		 * C​o​u​l​e​u​r
+		 * C​o​l​o​r
 		 */
 		Color: string
 		/**
@@ -9100,7 +9100,7 @@ export type TranslationFunctions = {
 		 */
 		MapMargins: () => LocalizedString
 		/**
-		 * Couleur
+		 * Color
 		 */
 		Color: () => LocalizedString
 		/**

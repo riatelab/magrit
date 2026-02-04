@@ -673,7 +673,7 @@ const en = {
     BackgroundColor: 'Background color',
     Opacity: 'Opacity',
     MapMargins: 'Map margins',
-    Color: 'Couleur',
+    Color: 'Color',
     Title: 'Title',
     Source: 'Source',
     MapSkinElements: 'Map skin elements',
