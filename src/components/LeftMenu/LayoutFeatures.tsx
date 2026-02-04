@@ -792,7 +792,7 @@ export default function LayoutFeatures(): JSX.Element {
             }
           }
         }}
-        width={280}
+        width={250}
       />
       <InputFieldText
         label={LL().LayoutFeatures.Source()}
@@ -865,7 +865,7 @@ export default function LayoutFeatures(): JSX.Element {
             }
           }
         }}
-        width={280}
+        width={250}
       />
     </div>
     <InputFieldColor
