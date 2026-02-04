@@ -12,7 +12,7 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
-### 2.3.18 (unreleased)
+### 2.3.18 (2026-02-04)
 
 - Refactorisation du composant accordéon utilisé dans le menu de gauche pour corriger des problèmes de calcul de hauteur sur certains navigateurs
   (corrige <a href="https://github.com/riatelab/magrit/issues/202">l'issue 202</a>).

@@ -12,7 +12,7 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-### 2.3.18 (unreleased)
+### 2.3.18 (2026-02-04)
 
 - Refactor the accordion component used in the left menu to fix some height calculation issues
   (fixes <a href="https://github.com/riatelab/magrit/issues/202">issue 202</a>).
