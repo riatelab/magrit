@@ -39,6 +39,12 @@ export default function Collapse(props: CollapseProps) {
   // To remove from the flow during closing (to avoid affecting surrounding layout)
   const [isClosing, setIsClosing] = createSignal(false);
 
+  // Cleanup after close transition
+  const cleanupAfterClose = () => {
+    setShouldRender(false);
+    setIsClosing(false);
+  };
+
   // Mesure content height and set it
   let ro: ResizeObserver | undefined;
   const measure = () => {
@@ -82,11 +88,17 @@ export default function Collapse(props: CollapseProps) {
     }
   });
 
+  createEffect(() => {
+    if (!local.value && shouldRender() && duration() === 0) {
+      // No animation, we clean up immediately
+      queueMicrotask(cleanupAfterClose);
+    }
+  });
+
   const handleTransitionEnd: JSX.EventHandlerUnion<HTMLDivElement, TransitionEvent> = (e) => {
     if (e.target !== e.currentTarget) return;
-    if (!local.value) {
-      setShouldRender(false);
-      setIsClosing(false);
+    if (!local.value && duration() > 0) {
+      cleanupAfterClose();
     }
   };
 
