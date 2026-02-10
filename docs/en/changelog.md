@@ -12,6 +12,12 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.3.19 (unreleased)
+
+- Add several missing azimuthal projections from d3-geo (Azimuthal Equal-Area, Azimuthal Equidistant, and Stereographic).
+
+- Fix a bug that prevented to use the "Use this projection" checkbox from working during import in certain special cases.
+
 ### 2.3.18 (2026-02-04)
 
 - Refactor the accordion component used in the left menu to fix some height calculation issues
