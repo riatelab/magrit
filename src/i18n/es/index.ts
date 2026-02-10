@@ -620,6 +620,7 @@ const es = {
     ErrorReadingFile: 'Error al leer el archivo {file} : {message}',
     RemovedEmptyFeatures: '{{ nRemoved: Ninguna entidad | Una entidad | ? entidades }} con geometría vacía eliminada{{nRemoved: s}} del conjunto de datos {name}.',
     NFeatures: '{{Una entidad | ?? entidades}}',
+    FailedToUseProjection: 'No se pudo utilizar la proyección {name}',
   },
   MapZone: {
     DropFilesHere: '¡Arrastra y suelta aquí tus conjuntos de datos! (o utilice el menú importar datos)',

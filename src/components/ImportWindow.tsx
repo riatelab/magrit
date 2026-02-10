@@ -40,7 +40,7 @@ import {
 import {
   extractZipContent, findCsvDelimiter, sanitizeCsv,
 } from '../helpers/formatConversion';
-import { removeNadGrids } from '../helpers/projection';
+import { epsgDb, removeNadGrids } from '../helpers/projection';
 
 // Stores
 import { fileDropStore, setFileDropStore } from '../store/FileDropStore';
@@ -605,8 +605,8 @@ export default function ImportWindow(): JSX.Element {
 
             const dsInfo = await analyzeDataset({ [fd.name]: fd });
             if ('valid' in dsInfo && !dsInfo.valid) {
-              // We have an invalid dataset that we don't wan't to add to the list.
-              // We display a toast message to inform the user and we remove the file
+              // We have an invalid dataset that we don't want to add to the list.
+              // We display a toast message to inform the user, and we remove the file
               // from the fileDropStore (see below).
               toast.error(LL().ImportWindow.ErrorReadingFile({
                 file: fileName,
@@ -992,16 +992,40 @@ export default function ImportWindow(): JSX.Element {
                 });
               });
             if (crsToUse) {
-              setMapStore(
-                'projection',
-                {
-                  type: 'proj4',
-                  name: crsToUse.name,
-                  value: removeNadGrids(crsToUse.wkt as string),
-                  bounds: crsToUse.bounds,
-                  code: crsToUse.code,
-                },
-              );
+              // In some cases (see issue #205, https://github.com/riatelab/magrit/issues/205), GDAL
+              // detected the code, so we have its code, bounds and name, but not its WKT.
+              // But we need a definition of the projection to use it in the application,
+              // so in this case we try to get the proj4 string from the code.
+              if (
+                crsToUse.code
+                && crsToUse.code.length > 0
+                && (!crsToUse.wkt || crsToUse.wkt.length === 0)
+              ) {
+                const code = crsToUse.code
+                  .replace('EPSG:', '')
+                  .replace('ESRI:', '');
+                if (epsgDb[code] && epsgDb[code].wkt) {
+                  // eslint-disable-next-line no-param-reassign
+                  crsToUse.wkt = epsgDb[code].wkt;
+                } else if (epsgDb[code] && epsgDb[code].proj4) {
+                  // eslint-disable-next-line no-param-reassign
+                  crsToUse.wkt = epsgDb[code].proj4;
+                }
+              }
+              if (crsToUse.wkt) {
+                setMapStore(
+                  'projection',
+                  {
+                    type: 'proj4',
+                    name: crsToUse.name,
+                    value: removeNadGrids(crsToUse.wkt as string),
+                    bounds: crsToUse.bounds,
+                    code: crsToUse.code,
+                  },
+                );
+              } else {
+                toast.error(LL().ImportWindow.FailedToUseProjection({ name: crsToUse.name || crsToUse.code || 'Unknown' }));
+              }
             }
             // Disable type checking here as we will reuse immediately the content of the array
             const dsToImport: never[][] = [];

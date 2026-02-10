@@ -620,6 +620,7 @@ const en = {
     ErrorReadingFile: 'Error while reading file {file}: {message}',
     RemovedEmptyFeatures: 'Removed {{ nRemoved:0 feature | a feature | ?? features }} without geometry from dataset {name}.',
     NFeatures: '{{ One feature | ?? features }}',
+    FailedToUseProjection: 'Failed to use projection {name}',
   },
   MapZone: {
     DropFilesHere: 'Drag and drop your file(s) here ! (or use the import menu)',

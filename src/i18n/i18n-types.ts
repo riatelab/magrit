@@ -2681,6 +2681,11 @@ type RootTranslation = {
 		 * {​{​O​n​e​ ​f​e​a​t​u​r​e​|​?​?​ ​f​e​a​t​u​r​e​s​}​}
 		 */
 		NFeatures: string
+		/**
+		 * F​a​i​l​e​d​ ​t​o​ ​u​s​e​ ​p​r​o​j​e​c​t​i​o​n​ ​{​n​a​m​e​}
+		 * @param {unknown} name
+		 */
+		FailedToUseProjection: RequiredParams<'name'>
 	}
 	MapZone: {
 		/**
@@ -8923,6 +8928,10 @@ export type TranslationFunctions = {
 		 * {{One feature|?? features}}
 		 */
 		NFeatures: (arg0: number | string | boolean) => LocalizedString
+		/**
+		 * Failed to use projection {name}
+		 */
+		FailedToUseProjection: (arg: { name: unknown }) => LocalizedString
 	}
 	MapZone: {
 		/**
