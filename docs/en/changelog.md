@@ -12,11 +12,11 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-### 2.3.19 (unreleased)
+### 2.3.19 (2026-02-17)
 
-- Add several missing azimuthal projections from d3-geo (Azimuthal Equal-Area, Azimuthal Equidistant, and Stereographic).
+- Add several missing azimuthal projections from d3-geo (Azimuthal Equal-Area, Azimuthal Equidistant, and Stereographic) (fixes <a href="https://github.com/riatelab/magrit/issues/204">issue 204</a>).
 
-- Fix a bug that prevented to use the "Use this projection" checkbox from working during import in certain special cases.
+- Fix a bug that prevented to use the "Use this projection" checkbox from working during import in certain special cases (fixes <a href="https://github.com/riatelab/magrit/issues/205">issue 205</a>).
 
 ### 2.3.18 (2026-02-04)
 
