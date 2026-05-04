@@ -1024,6 +1024,8 @@ interface CategoricalChoroplethBarchartLegend extends LegendBase {
   // Whether to order the bars by the number of occurrence
   // or by the order of the categories
   order: 'ascending' | 'descending' | 'none',
+  // Whether to display or not the no data category
+  displayNoData: boolean,
 }
 
 interface LinearRegressionScatterPlot extends LegendBase {

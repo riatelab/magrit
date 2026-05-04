@@ -6224,6 +6224,10 @@ type RootTranslation = {
 			 * S​p​a​c​i​n​g​ ​b​e​l​o​w​ ​c​o​l​o​r​ ​b​o​x​e​s
 			 */
 			SpacingBelowBoxes: string
+			/**
+			 * D​i​s​p​l​a​y​ ​"​n​o​ ​d​a​t​a​"​ ​e​n​t​r​y
+			 */
+			DisplayNoData: string
 		}
 	}
 	CommonTextElement: {
@@ -12365,6 +12369,10 @@ export type TranslationFunctions = {
 			 * Spacing below color boxes
 			 */
 			SpacingBelowBoxes: () => LocalizedString
+			/**
+			 * Display "no data" entry
+			 */
+			DisplayNoData: () => LocalizedString
 		}
 	}
 	CommonTextElement: {

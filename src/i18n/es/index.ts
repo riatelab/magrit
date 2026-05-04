@@ -1544,6 +1544,7 @@ const es = {
       DisplayPopulation: 'Mostrar la población',
       UnitSymbolText: 'Texto para el número de unidades por símbolo',
       SpacingBelowBoxes: 'Espacio bajo las cajas coloreadas',
+      DisplayNoData: 'Mostrar la entrada "no data"',
     },
   },
   CommonTextElement: {

@@ -1544,6 +1544,7 @@ const fr = {
       DisplayPopulation: 'Afficher la population',
       UnitSymbolText: 'Texte du nombre d\'unités par symbole',
       SpacingBelowBoxes: 'Espace sous les boites colorées',
+      DisplayNoData: 'Afficher l\'entrée "no data"',
     },
   },
   CommonTextElement: {

@@ -1166,6 +1166,11 @@ function makeSettginsCategoricalChoroplethBarchart(
     <FieldText legend={legend} LL={LL} role={'title'}/>
     <FieldText legend={legend} LL={LL} role={'subtitle'}/>
     <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldCheckbox
+      label={LL().Legend.Modal.DisplayNoData()}
+      checked={legend.displayNoData}
+      onChange={(v) => { updateProps(legend.id, ['displayNoData'], v); }}
+    />
     <InputFieldNumber
       label={LL().Legend.Modal.Width()}
       value={legend.width}
