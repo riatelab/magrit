@@ -75,6 +75,17 @@ When the formula is invalid, an error message is displayed and the preview is no
     caption="Data table - New column with invalid formula"
 />
 
+### Field names and formula syntax
+
+In formulas, when a field name contains spaces or special characters (hyphens, accents, etc.) or starts with a digit,
+it is necessary to enclose it in brackets (`[ ]`) for the formula to be valid.
+
+For example, to use a field named "18_24", it is necessary to enclose it in brackets when writing the formula:
+
+```sql
+[18_24] / Pop_2020
+```
+
 ### Example of formula
 
 #### Reclassifying quantitative data into qualitative data
