@@ -245,7 +245,7 @@ export default function FormulaInput(
               <button
                 class="tag is-warning"
                 title={
-                  /[àâäéèêëîïôöùûüç€ -+]/i.test(field) || /^\d+$/.test(field) || isFuncName(field.toLocaleLowerCase())
+                  /[àâäéèêëîïôöùûüç€ -+]/i.test(field) || /^\d/.test(field) || isFuncName(field.toLocaleLowerCase())
                     ? `${field} - ${LL().FormulaInput.noteSpecialCharacters()}`
                     : field
                 }
@@ -256,7 +256,7 @@ export default function FormulaInput(
                   // Note that the two dashes are not the same
                   if (
                     /[àâäéèêëîïôöùûüç€ --+]/i.test(fieldValue)
-                    || /^\d+$/.test(fieldValue)
+                    || /^\d/.test(fieldValue)
                     || isFuncName(field.toLocaleLowerCase())
                   ) {
                     fieldValue = `[${fieldValue}]`;
