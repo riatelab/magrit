@@ -12,6 +12,24 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.3.20 (unreleased)
+
+- Cast null results as being falsy when using FormulaInput for label filtering
+  (fixes <a href="https://github.com/riatelab/magrit/issues/211">issue 211</a>).
+
+- Update ISO3 code for Kosovo and Western Sahara
+  (fixes <a href="https://github.com/riatelab/magrit/issues/217">issue 217</a>).
+
+- Add option to display 'no data' entry on categorical bar chart
+  (fixes <a href="https://github.com/riatelab/magrit/issues/218">issue 218</a>).
+
+- Improve the aggregation of geometries that cross the antimeridian
+  (fixes <a href="https://github.com/riatelab/magrit/issues/216">issue 216</a>).
+
+- Escape field names that starts with a number in FormulaInput
+  (fixes <a href="https://github.com/riatelab/magrit/issues/220">issue 220</a>).
+
+
 ### 2.3.19 (2026-02-17)
 
 - Add several missing azimuthal projections from d3-geo (Azimuthal Equal-Area, Azimuthal Equidistant, and Stereographic) (fixes <a href="https://github.com/riatelab/magrit/issues/204">issue 204</a>).

@@ -12,6 +12,23 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+### 2.3.20 (unreleased)
+
+- Traite les résultats nuls comme des valeurs fausses lors de l'utilisation de FormulaInput pour le filtrage des labels
+  (corrige <a href="https://github.com/riatelab/magrit/issues/211">l'issue 211</a>).
+
+- Mis à jour du code ISO 3 pour le Kosovo et le Sahara occidental
+  (corrige <a href="https://github.com/riatelab/magrit/issues/217">l'issue 217</a>).
+
+- Ajout d'une option permettant d'afficher les entrées "sans données" sur les graphiques à barres des cartes catégorielles
+  (corrige <a href="https://github.com/riatelab/magrit/issues/218">l'issue 218</a>).
+
+- Améliore l'agrégation des géométries qui traversent l'antiméridien
+  (corrige <a href="https://github.com/riatelab/magrit/issues/216">l'issue 216</a>).
+
+- Échappe les noms de champs commençant par un chiffre dans FormulaInput
+  (corrige <a href="https://github.com/riatelab/magrit/issues/220">l'issue 220</a>).
+
 ### 2.3.19 (2026-02-17)
 
 - Ajout de plusieurs projections azimutales de d3-geo (Azimuthal Equal-Area, Azimuthal Equidistant et Stereographic) qui étaient manquantes (corrige <a href="https://github.com/riatelab/magrit/issues/204">l'issue 204</a>).
