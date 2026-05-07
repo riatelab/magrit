@@ -12,7 +12,7 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
-### 2.3.20 (unreleased)
+### 2.3.20 (2026-05-07)
 
 - Traite les résultats nuls comme des valeurs fausses lors de l'utilisation de FormulaInput pour le filtrage des labels
   (corrige <a href="https://github.com/riatelab/magrit/issues/211">l'issue 211</a>).

@@ -12,7 +12,7 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-### 2.3.20 (unreleased)
+### 2.3.20 (2026-05-07)
 
 - Cast null results as being falsy when using FormulaInput for label filtering
   (fixes <a href="https://github.com/riatelab/magrit/issues/211">issue 211</a>).
