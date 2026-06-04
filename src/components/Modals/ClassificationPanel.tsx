@@ -752,7 +752,11 @@ export default function ClassificationPanel(): JSX.Element {
       </header>
       <section class="modal-card-body">
         <div class="is-flex">
-          <div style={{ width: '40%', 'text-align': 'center' }}>
+          <div style={{ width: '56%', 'text-align': 'center' }}>
+            <h3> { LL().ClassificationPanel.distribution() } </h3>
+            <div> { makeDistributionPlot(filteredSeries) } </div>
+          </div>
+          <div style={{ width: '44%', 'text-align': 'center' }}>
             <h3> { LL().ClassificationPanel.summary() }</h3>
             <div>
               <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
@@ -784,10 +788,6 @@ export default function ClassificationPanel(): JSX.Element {
                 </tbody>
               </table>
             </div>
-          </div>
-          <div style={{ width: '55%', 'text-align': 'center' }}>
-            <h3> { LL().ClassificationPanel.distribution() } </h3>
-            <div> { makeDistributionPlot(filteredSeries) } </div>
           </div>
         </div>
         <hr />
@@ -994,7 +994,7 @@ export default function ClassificationPanel(): JSX.Element {
           </Show>
           <div>
             <div class="is-flex">
-              <div style={{ width: '60%' }}>
+              <div style={{ width: '56%' }}>
                 <div>
                   {
                     makeClassificationPlot(
@@ -1075,7 +1075,7 @@ export default function ClassificationPanel(): JSX.Element {
                   </div>
                 </div>
               </div>
-              <div style={{ width: '45%', 'text-align': 'left', padding: '0 2em' }}>
+              <div style={{ width: '44%', 'text-align': 'left', padding: '0 1.6em' }}>
                 <div style={{ 'flex-grow': 1 }}>
                   <p class="label is-marginless has-text-centered mb-2">
                     {LL().ClassificationPanel.typeScheme()}
