@@ -8,7 +8,7 @@ import { isDarkMode } from '../helpers/darkmode';
 
 // D3 and math helpers
 import d3 from '../helpers/d3-custom';
-import { pickTextColorBasedOnBgColor } from '../helpers/color';
+import { bestContrastColor, pickTextColorBasedOnBgColor } from '../helpers/color';
 import {
   extent,
   lowerQuartile,
@@ -153,8 +153,7 @@ export function makeClassificationPlot(
           x: (d) => d,
           y1: 0,
           y2: 7.5,
-          stroke: 'red',
-          width: 1,
+          stroke: bestContrastColor(classifParam.palette.colors),
         })
         : null,
       Plot.ruleY([0]),
