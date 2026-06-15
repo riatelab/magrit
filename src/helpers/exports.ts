@@ -342,6 +342,16 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
   // Patch the SVG to include the fonts used in the map
   patchSvgForFonts(targetSvg);
 
+  // Remove vector-effect attribute if the scaleFactor is not 1
+  // (otherwise, in firefox, the width of path is not preserved as we expect / as in chromium
+  // when rescaling the canvas)
+  if (scaleFactor !== 1) {
+    targetSvg.querySelectorAll('[vector-effect="non-scaling-stroke"]')
+      .forEach((el) => {
+        el.removeAttribute('vector-effect');
+      });
+  }
+
   // Current state of snapping grid
   const displaySnapGrid = globalStore.displaySnappingGrid;
 
