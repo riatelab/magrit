@@ -11,6 +11,7 @@
   margin: auto;
   border: var(--border-color) solid 2px;
   display: flex;
+  background: white;
 }
 
 .map-zone__shadow {
