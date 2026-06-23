@@ -12,6 +12,20 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.3.21 (unreleased)
+
+- Fix sorting of entities for proportional symbols in order to take negative values into account.
+
+- Change the position of the distribution chart in the classification panel (in order to align it with the class distribution chart so that they can be more easily compared).
+
+- Change the color of the rug plot (in the classification panel) so that its color is always different from the colors in the palette on which it is displayed.
+
+- Fix SVG path width when exporting to PNG with upscaling/downscaling in Firefox
+  (fixes <a href="https://github.com/riatelab/magrit/issues/226">issue 226</a>).
+
+- Add rectangle with map dimensions below other elements when exporting to SVG
+  (fixes <a href="https://github.com/riatelab/magrit/issues/219">issue 219</a>).
+
 ### 2.3.20 (2026-05-07)
 
 - Cast null results as being falsy when using FormulaInput for label filtering

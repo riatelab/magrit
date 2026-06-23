@@ -12,6 +12,22 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+### 2.3.21 (unreleased)
+
+- Correction du tri des entités pour les symboles proportionnels afin de prendre en compte les valeurs négatives.
+
+- Modification de la position du graphique de distribution dans le panneau de classification
+  (afin de l'aligner sur le graphique de répartition des classes et de faciliter leur comparaison).
+
+- Modification de la couleur du *rug plot* (dans le panneau de classification) afin qu'elle soit toujours différente
+  des couleurs de la palette sur laquelle il s'affiche.
+
+- Correction de la largeur des chemins SVG lors de l'export au format PNG avec mise à l'échelle (agrandissement/réduction) dans Firefox
+  (corrige <a href="https://github.com/riatelab/magrit/issues/226">l'issue 226</a>).
+
+- Ajout d'un rectangle indiquant les dimensions de la carte sous les autres éléments lors de l'exportation au format SVG
+  (corrige <a href="https://github.com/riatelab/magrit/issues/219">l'issue 219</a>).
+
 ### 2.3.20 (2026-05-07)
 
 - Traite les résultats nuls comme des valeurs fausses lors de l'utilisation de FormulaInput pour le filtrage des labels
