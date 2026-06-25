@@ -881,6 +881,8 @@ const fr = {
       NewLayerName: 'Choro_{variable}_{layerName}',
     },
     BivariateChoroplethOptions: {
+      ClassificationVariable1: 'Classification variable 1',
+      ClassificationVariable2: 'Classification variable 2',
       NewLayerName: 'BiChoro_{variable1}_{variable2}_{layerName}',
     },
     TrivariateChoroplethOptions: {
@@ -1253,7 +1255,7 @@ const fr = {
     InformationLabelSettings: 'Veuillez noter que la modification de ces paramètres s\'appliquera à l\'ensemble des étiquettes de la couche (pouvant ainsi écraser les éventuels styles définis individuellement). Si vous souhaitez modifier les paramètres d\'une seule étiquette, cela est possible en faisant un clic droit sur l\'étiquette en question.',
     EditLabel: 'Éditer l\'étiquette',
     DeleteLabel: 'Supprimer l`étiquette',
-    AddLinearRegressionScatterPlot: 'Ajouter un graphique avec le nuage de points sur la carte...',
+    AddScatterPlot: 'Ajouter un graphique avec le nuage de points sur la carte...',
   },
   JoinPanel: {
     Title: 'Joindre à une couche géospatiale',

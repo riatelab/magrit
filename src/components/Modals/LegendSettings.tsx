@@ -1461,6 +1461,29 @@ function makeSettingsBivariateChoroplethScatterplot(
       max={800}
       step={1}
     />
+    <InputFieldNumber
+      label={'Radius'} // TODO: use i18n
+      value={legend.radius}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['radius'], v)}
+      min={0.1}
+      max={10}
+      step={0.1}
+    />
+    <InputFieldCheckbox
+      label={'Display regression line'} // TODO: use i18n
+      checked={legend.displayRegressionLine}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['displayRegressionLine'], v)}
+    />
+    <InputFieldCheckbox
+      label={'Display count by class'} // TODO: use i18n
+      checked={legend.displayCountByClass}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['displayCountByClass'], v)}
+    />
+    <InputFieldCheckbox
+      label={'Display class break lines'} // TODO: use i18n
+      checked={legend.displayClassBreakLines}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['displayClassBreakLines'], v)}
+    />
     <OptionBackgroundRectangle legend={legend} LL={LL}/>
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}

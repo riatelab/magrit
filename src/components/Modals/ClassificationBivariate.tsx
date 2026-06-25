@@ -1,8 +1,8 @@
 // Imports from solid-js
 import {
   createSignal, JSX, For,
-  Match, onCleanup, onMount,
-  Show, Switch, createMemo,
+  onCleanup, onMount,
+  Show,
 } from 'solid-js';
 
 // Imports from other libraries
@@ -31,6 +31,7 @@ import { classificationMultivariatePanelStore, setClassificationMultivariatePane
 // Subcomponents
 import { ManualBreaks } from '../ClassificationHelpers.tsx';
 import DropdownMenu from '../DropdownMenu.tsx';
+import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import PlotFigure from '../PlotFigure.tsx';
 
@@ -106,14 +107,14 @@ function ColorPicker(
 
 function BivariateLegendPreview(props: {
   colorScheme: CustomPalette,
+  cellSize: number,
 }): JSX.Element {
   const numClassesPerVar = Math.sqrt(props.colorScheme.colors.length);
-  const cellSize = 20;
   const range = Array.from({ length: numClassesPerVar }, (_, i) => i);
 
   return <svg
-    width={cellSize * numClassesPerVar}
-    height={cellSize * numClassesPerVar}
+    width={props.cellSize * numClassesPerVar}
+    height={props.cellSize * numClassesPerVar}
     style={{ border: '1px solid #000' }}
   >
     <For each={range}>
@@ -122,10 +123,10 @@ function BivariateLegendPreview(props: {
           <For each={range}>
             {
               (j) => <rect
-                  x={j * cellSize}
-                  y={(numClassesPerVar - 1 - i) * cellSize}
-                  width={cellSize}
-                  height={cellSize}
+                  x={j * props.cellSize}
+                  y={(numClassesPerVar - 1 - i) * props.cellSize}
+                  width={props.cellSize}
+                  height={props.cellSize}
                   fill={props.colorScheme.colors[i * numClassesPerVar + j]}
                 />
             }
@@ -244,6 +245,15 @@ export default function ClassificationBivariatePanel(): JSX.Element {
       ? classificationMultivariatePanelStore.series![1][i]
       : undefined,
   }));
+
+  let missingValues = 0;
+
+  classificationMultivariatePanelStore.series![0].forEach((d1, i) => {
+    const d2 = classificationMultivariatePanelStore.series![1][i];
+    if (!isFiniteNumber(d1) || !isFiniteNumber(d2)) {
+      missingValues += 1;
+    }
+  });
 
   // Basic statistical summary displayed to the user
   const statSummaryVar1 = prepareStatisticalSummary(filteredSeriesVar1);
@@ -385,7 +395,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
     role="dialog"
   >
     <div class="modal-background" />
-    <div class="modal-card" style={{ height: '85vh', width: '90vw' }}>
+    <div class="modal-card" style={{ height: '89vh', width: '90vw' }}>
       <header class="modal-card-head">
         <p class="modal-card-title">
           { LL().ClassificationPanel.title() }&nbsp;
@@ -395,7 +405,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
       </header>
       <section class="modal-card-body">
         <div class="is-flex">
-          <div style={{ width: '45%', 'text-align': 'center' }}>
+          <div style={{ width: '55%', 'text-align': 'center' }}>
             <h3> { LL().ClassificationPanel.summary() }</h3>
             <div>
               <table class="table bivariate is-bordered is-striped is-narrow is-hoverable is-fullwidth">
@@ -409,7 +419,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                 <tbody>
                 <tr>
                   {/* eslint-disable-next-line solid/no-innerhtml */}
-                  <td innerHTML={LL().ClassificationPanel.population().replace(' (', '<br />(')}></td>
+                  <td innerHTML={LL().ClassificationPanel.population()}></td>
                   <td>{ statSummaryVar1.population }</td>
                   <td>{ statSummaryVar2.population }</td>
                 </tr>
@@ -442,19 +452,20 @@ export default function ClassificationBivariatePanel(): JSX.Element {
               </table>
             </div>
           </div>
-          <div style={{ width: '55%', 'text-align': 'center' }}>
+          <div style={{ width: '45%', 'text-align': 'center' }}>
             <h3> { LL().ClassificationPanel.classification() } </h3>
-            <div class="is-flex" style={{ 'justify-content': 'space-around' }}>
+            <div class="is-flex" style={{ 'justify-content': 'space-around', 'flex-direction': 'column' }}>
               <div>
                 <InputFieldSelect
-                  label={'Variable 1'}
+                  label={`${LL().FunctionalitiesSection.CommonOptions.Variable()} 1`}
                   layout={'vertical'}
                   onChange={(value) => {
-                    console.log('Changed var1 classification method to:', value);
+                    // console.log('Changed var1 classification method to:', value);
                     setClassificationMethodVar1(value as ClassificationMethod);
                     updateClassificationParameters();
                   }}
                   value={classificationMethodVar1()}
+                  width={'260px'}
                 >
                   <For each={entriesClassificationMethodVar1}>
                     {
@@ -485,9 +496,10 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                   />
                 </Show>
               </div>
+              <br />
               <div>
                 <InputFieldSelect
-                  label={'Variable 2'}
+                  label={`${LL().FunctionalitiesSection.CommonOptions.Variable()} 2`}
                   layout={'vertical'}
                   onChange={(value) => {
                     console.log('Changed var2 classification method to:', value);
@@ -495,6 +507,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                     updateClassificationParameters();
                   }}
                   value={classificationMethodVar2()}
+                  width={'260px'}
                 >
                   <For each={entriesClassificationMethodVar2}>
                     {
@@ -525,11 +538,69 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                 </Show>
               </div>
             </div>
+          </div>
+        </div>
+        <hr />
+        <div class="is-flex">
+          <div style={{ width: '55%', 'text-align': 'center' }}>
+            <h3> { LL().ClassificationPanel.distribution() } </h3>
+            <div>
+              <PlotFigure
+                id={'scatter-plot-bivariate-distribution'}
+                options={{
+                  style: {
+                    background: 'white',
+                    color: 'black',
+                    // height: '20vh',
+                  },
+                  height: 380,
+                  x: {
+                    label: currentClassifInfo().variable2.variable,
+                  },
+                  y: {
+                    label: currentClassifInfo().variable1.variable,
+                  },
+                  marks: [
+                    Plot.dot(ds, {
+                      y: currentClassifInfo().variable1.variable,
+                      x: currentClassifInfo().variable2.variable,
+                      fill: (d) => currentClassifInfo().palette.colors[bc(d)],
+                      r: 3,
+                    }),
+                    Plot.text(
+                      ds,
+                      Plot.groupZ(
+                        { text: 'count', x: 'mean', y: 'mean' },
+                        {
+                          fontSize: 14,
+                          stroke: 'width',
+                          strokeWidth: 8,
+                          fill: 'black',
+                          y: currentClassifInfo().variable1.variable,
+                          x: currentClassifInfo().variable2.variable,
+                          z: (d) => bivariateClasses(d).toString(),
+                        },
+                      ),
+                    ),
+                    Plot.ruleX([classifierVar2.breaks[0]], { }),
+                    Plot.ruleY([classifierVar1.breaks[0]], { }),
+                    classifierVar2.breaks.slice(1, -1).map((vx: number) => [
+                      Plot.ruleX([vx], { strokeDasharray: 4, strokeOpacity: 0.4 }),
+                    ]),
+                    classifierVar1.breaks.slice(1, -1).map((vy: number) => [
+                      Plot.ruleY([vy], { strokeDasharray: 4, strokeOpacity: 0.4 }),
+                    ]),
+                  ],
+                }}
+              />
+            </div>
+          </div>
+          <div style={{ width: '45%', 'text-align': 'center' }}>
             <h3> { 'Couleur' } </h3>
             <div>
               <DropdownMenu
                 id={'dropdown-bivariate-palette'}
-                style={{ width: '220px', 'margin-bottom': '18px' }}
+                style={{ width: '260px', 'margin-bottom': '18px' }}
                 entries={paletteMenuEntries}
                 defaultEntry={
                   paletteMenuEntries
@@ -543,7 +614,10 @@ export default function ClassificationBivariatePanel(): JSX.Element {
               />
               <br />
               <div style={{ width: '100%', 'text-align': 'center' }}>
-                <BivariateLegendPreview colorScheme={currentClassifInfo().palette} />
+                <BivariateLegendPreview
+                  colorScheme={currentClassifInfo().palette}
+                  cellSize={30}
+                />
                 <Show when={colorScheme() === 'Custom'}>
                   <ColorPicker
                     colors={[
@@ -560,68 +634,19 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                 </Show>
               </div>
             </div>
-          </div>
-        </div>
-        <hr />
-        <div style={{ 'text-align': 'center' }}>
-          <h3> { LL().ClassificationPanel.distribution() } </h3>
-          <div>
-            <PlotFigure
-              id={'scatter-plot-bivariate-distribution'}
-              options={{
-                style: {
-                  background: 'white',
-                  color: 'black',
-                  height: '33vh',
-                },
-                // height: 400,
-                x: {
-                  label: currentClassifInfo().variable2.variable,
-                },
-                y: {
-                  label: currentClassifInfo().variable1.variable,
-                },
-                marks: [
-                  Plot.dot(ds, {
-                    y: currentClassifInfo().variable1.variable,
-                    x: currentClassifInfo().variable2.variable,
-                    // fill: 'red',
-                    fill: (d) => currentClassifInfo().palette.colors[bc(d)],
-                    r: 1.4,
-                  }),
-                  Plot.text(
-                    ds,
-                    Plot.groupZ(
-                      { text: 'count', x: 'mean', y: 'mean' },
-                      {
-                        fontSize: 14,
-                        stroke: 'width',
-                        strokeWidth: 8,
-                        fill: 'black',
-                        y: currentClassifInfo().variable1.variable,
-                        x: currentClassifInfo().variable2.variable,
-                        z: (d) => bivariateClasses(d).toString(),
-                      },
-                    ),
-                  ),
-                  Plot.ruleX([classifierVar2.breaks[0]], { }),
-                  Plot.ruleY([classifierVar1.breaks[0]], { }),
-                  classifierVar2.breaks.slice(1, -1).map((vx: number) => [
-                    Plot.ruleX([vx], { strokeDasharray: 4, strokeOpacity: 0.4 }),
-                  ]),
-                  classifierVar1.breaks.slice(1, -1).map((vy: number) => [
-                    Plot.ruleY([vy], { strokeDasharray: 4, strokeOpacity: 0.4 }),
-                  ]),
-                ],
-              }}
-            />
-          </div>
-          <div
-            style={{ width: '50%', 'text-align': 'center' }}
-            class="is-flex is-flex-direction-column"
-          >
-          </div>
-          <div style={{ width: '50%', 'text-align': 'center' }}>
+            <Show when={missingValues > 0}>
+              <br/><br />
+              <InputFieldColor
+                label={LL().ClassificationPanel.missingValues(missingValues)}
+                value={noDataColor()}
+                onChange={(c) => {
+                  setNoDataColor(c);
+                  updateClassificationParameters();
+                }}
+                layout={'vertical'}
+                width={90}
+              />
+            </Show>
           </div>
         </div>
       </section>

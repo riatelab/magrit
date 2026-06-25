@@ -1377,7 +1377,7 @@ function makeSettingsDefaultPoint(
       />
       <Show when={isLinearRegressionResult}>
         <InputFieldCheckbox
-          label={LL().LayerSettings.AddLinearRegressionScatterPlot()}
+          label={LL().LayerSettings.AddScatterPlot()}
           checked={
             linkedRegressionPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
           }
@@ -1529,7 +1529,7 @@ function makeSettingsDefaultPoint(
     </Show>
     <Show when={isLinearRegressionResult}>
       <InputFieldCheckbox
-        label={LL().LayerSettings.AddLinearRegressionScatterPlot()}
+        label={LL().LayerSettings.AddScatterPlot()}
         checked={
           linkedRegressionPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
@@ -1776,6 +1776,7 @@ function makeSettingsDefaultPoint(
                     },
                     width: 400,
                     height: 400,
+                    radius: 2,
                     axis: {
                       text: undefined,
                       ...applicationSettingsStore.defaultLegendSettings.labels,
@@ -2427,7 +2428,7 @@ function makeSettingsDefaultLine(
       />
       <Show when={isLinearRegressionResult}>
         <InputFieldCheckbox
-          label={LL().LayerSettings.AddLinearRegressionScatterPlot()}
+          label={LL().LayerSettings.AddScatterPlot()}
           checked={
             linkedRegressionPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
           }
@@ -2686,7 +2687,7 @@ function makeSettingsDefaultLine(
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
       />
       <InputFieldCheckbox
-        label={'Add scatter plot'}
+        label={LL().LayerSettings.AddScatterPlot()}
         checked={
           linkedScatterPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
@@ -2726,6 +2727,7 @@ function makeSettingsDefaultLine(
                     },
                     width: 400,
                     height: 400,
+                    radius: 2,
                     axis: {
                       text: undefined,
                       ...applicationSettingsStore.defaultLegendSettings.labels,
@@ -3062,7 +3064,7 @@ function makeSettingsDefaultPolygon(
       />
       <Show when={isLinearRegressionResult}>
         <InputFieldCheckbox
-          label={LL().LayerSettings.AddLinearRegressionScatterPlot()}
+          label={LL().LayerSettings.AddScatterPlot()}
           checked={
             linkedRegressionPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
           }
@@ -3177,6 +3179,7 @@ function makeSettingsDefaultPolygon(
                     },
                     width: 400,
                     height: 400,
+                    radius: 2,
                     axis: {
                       text: undefined,
                       ...applicationSettingsStore.defaultLegendSettings.labels,

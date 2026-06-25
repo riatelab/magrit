@@ -881,6 +881,8 @@ const es = {
       NewLayerName: 'Coroplético_{variable}_{layerName}',
     },
     BivariateChoroplethOptions: {
+      ClassificationVariable1: 'Discretización de la variable 1',
+      ClassificationVariable2: 'Discretización de la variable 2',
       NewLayerName: 'BiChoro_{variable1}_{variable2}_{layerName}',
     },
     TrivariateChoroplethOptions: {
@@ -1253,7 +1255,7 @@ const es = {
     InformationLabelSettings: 'Tenga en cuenta que el cambio de estos ajustes se aplicará a todas las etiquetas de la capa (sobrescribiendo cualquier estilo definido individualmente). Si desea modificar la configuración de una sola etiqueta, puede hacerlo haciendo clic con el botón derecho en la etiqueta en cuestión',
     EditLabel: 'Editar la etiqueta',
     DeleteLabel: 'Borrar la etiqueta',
-    AddLinearRegressionScatterPlot: 'Añadir un gráfico con la nube de puntos en el mapa...',
+    AddScatterPlot: 'Añadir un gráfico con la nube de puntos en el mapa...',
   },
   JoinPanel: {
     Title: 'Unir a una capa geoespacial',

@@ -203,6 +203,21 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
   const targetFields = layerDescription
     .fields.filter((variable) => variable.type === VariableType.ratio);
 
+  const proposedClassifications = [
+    {
+      name: LL().ClassificationPanel.classificationMethods.quantiles(),
+      value: ClassificationMethod.quantiles,
+    },
+    {
+      name: LL().ClassificationPanel.classificationMethods.equalIntervals(),
+      value: ClassificationMethod.equalIntervals,
+    },
+    {
+      name: LL().ClassificationPanel.classificationMethods.ckmeans(),
+      value: ClassificationMethod.ckmeans,
+    },
+  ];
+
   // Signals for the current component:
   // - the target variables,
   const [targetVariable1, setTargetVariable1] = createSignal<string>(targetFields[0].name);
@@ -277,7 +292,7 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
 
   return <div class="portrayal-section__portrayal-options-bivariatechoropleth">
     <InputFieldSelect
-      label={ LL().FunctionalitiesSection.CommonOptions.Variable() }
+      label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 1` }
       onChange={(value) => {
         setTargetVariable1(value);
       }}
@@ -288,7 +303,7 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
       </For>
     </InputFieldSelect>
     <InputFieldSelect
-      label={ LL().FunctionalitiesSection.CommonOptions.Variable() }
+      label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 2` }
       onChange={(value) => {
         setTargetVariable2(value);
       }}
@@ -299,25 +314,33 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
       </For>
     </InputFieldSelect>
     <InputFieldSelect
-      label={'Classification variable 1'}
+      label={LL().FunctionalitiesSection.BivariateChoroplethOptions.ClassificationVariable1()}
       onChange={(value) => {
         setClassificationVar1(value);
       }}
       value={'quantiles'}
     >
-     <For each={['quantiles', 'ckmeans']}>
-       { (method) => <option value={ method }>{ method }</option> }
+     <For each={proposedClassifications}>
+       {
+         (method) => <option value={ method.value }>
+           { method.name }
+         </option>
+       }
      </For>
     </InputFieldSelect>
     <InputFieldSelect
-      label={'Classification variable 2'}
+      label={LL().FunctionalitiesSection.BivariateChoroplethOptions.ClassificationVariable2()}
       onChange={(value) => {
         setClassificationVar2(value);
       }}
       value={'quantiles'}
     >
-      <For each={['quantiles', 'ckmeans']}>
-        { (method) => <option value={ method }>{ method }</option> }
+      <For each={proposedClassifications}>
+        {
+          (method) => <option value={ method.value }>
+            { method.name }
+          </option>
+        }
       </For>
     </InputFieldSelect>
     <InputResultName

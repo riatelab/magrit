@@ -881,6 +881,8 @@ const en = {
       NewLayerName: 'Choro_{variable}_{layerName}',
     },
     BivariateChoroplethOptions: {
+      ClassificationVariable1: 'Classification variable 1',
+      ClassificationVariable2: 'Classification variable 2',
       NewLayerName: 'BiChoro_{variable1}_{variable2}_{layerName}',
     },
     TrivariateChoroplethOptions: {
@@ -1253,7 +1255,7 @@ const en = {
     InformationLabelSettings: 'Please note that modifying the label settings will only affect all the labels of the layer (possibly overwriting the settings defined manually for some labels). If you want to modify the settings of a specific label, you can do so by clicking on the label and then on the "Edit" button in the context menu.',
     EditLabel: 'Edit label',
     DeleteLabel: 'Delete label',
-    AddLinearRegressionScatterPlot: 'Add the scatter plot on the map...',
+    AddScatterPlot: 'Add the scatter plot on the map...',
   },
   JoinPanel: {
     Title: 'Join to a geospatial layer',

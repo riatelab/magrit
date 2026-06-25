@@ -3767,6 +3767,14 @@ type RootTranslation = {
 		}
 		BivariateChoroplethOptions: {
 			/**
+			 * C​l​a​s​s​i​f​i​c​a​t​i​o​n​ ​v​a​r​i​a​b​l​e​ ​1
+			 */
+			ClassificationVariable1: string
+			/**
+			 * C​l​a​s​s​i​f​i​c​a​t​i​o​n​ ​v​a​r​i​a​b​l​e​ ​2
+			 */
+			ClassificationVariable2: string
+			/**
 			 * B​i​C​h​o​r​o​_​{​v​a​r​i​a​b​l​e​1​}​_​{​v​a​r​i​a​b​l​e​2​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
 			 * @param {unknown} variable1
@@ -5151,7 +5159,7 @@ type RootTranslation = {
 		/**
 		 * A​d​d​ ​t​h​e​ ​s​c​a​t​t​e​r​ ​p​l​o​t​ ​o​n​ ​t​h​e​ ​m​a​p​.​.​.
 		 */
-		AddLinearRegressionScatterPlot: string
+		AddScatterPlot: string
 	}
 	JoinPanel: {
 		/**
@@ -9995,6 +10003,14 @@ export type TranslationFunctions = {
 		}
 		BivariateChoroplethOptions: {
 			/**
+			 * Classification variable 1
+			 */
+			ClassificationVariable1: () => LocalizedString
+			/**
+			 * Classification variable 2
+			 */
+			ClassificationVariable2: () => LocalizedString
+			/**
 			 * BiChoro_{variable1}_{variable2}_{layerName}
 			 */
 			NewLayerName: (arg: { layerName: unknown, variable1: unknown, variable2: unknown }) => LocalizedString
@@ -11332,7 +11348,7 @@ export type TranslationFunctions = {
 		/**
 		 * Add the scatter plot on the map...
 		 */
-		AddLinearRegressionScatterPlot: () => LocalizedString
+		AddScatterPlot: () => LocalizedString
 	}
 	JoinPanel: {
 		/**

@@ -21,8 +21,8 @@
 }
 
 .modal-window.classification-panel table.bivariate {
-    width: 90%;
-    margin: 8% auto 0 auto;
+    width: 80%;
+    margin: 1% auto 0 auto;
 }
 
 .modal-window.classification-panel p.label {

@@ -1190,6 +1190,8 @@ interface BivariateChoroplethScatterplotLegend extends LegendBase {
   width: number,
   // The height of the scatter plot
   height: number,
+  // The radius of each dot
+  radius: number,
   // The properties of the text in the chart axis
   axis: LegendTextElement,
   // The rounding of the values displayed on the axes
