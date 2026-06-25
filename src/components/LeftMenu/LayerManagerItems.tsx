@@ -630,7 +630,7 @@ export function LayerManagerLayerItem(props: LayerDescription): JSX.Element {
         }}
         title={LL().LayerManager.Settings()}
       >
-        <FaSolidGears size={'1.1em'}/>
+        <FaSolidGears size={'1.1em'} />
       </button>
     </div>
     <div class="layer-manager-item__action">

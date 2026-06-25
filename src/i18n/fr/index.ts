@@ -620,6 +620,7 @@ const fr = {
     ErrorReadingFile: 'Erreur lors de la lecture du fichier {file} : {message}',
     RemovedEmptyFeatures: '{{ nRemoved:Aucune entité | Une entité | ?? entités }} avec une géométrie vide retirée{{nRemoved:s}} du jeu de données {name}.',
     NFeatures: '{{Une entité | ?? entités}}',
+    FailedToUseProjection: 'Impossible d\'utiliser la projection {name}',
   },
   MapZone: {
     DropFilesHere: 'Glisser-déposer vos jeux de données ici ! (ou utiliser le menu d\'import des données)',
@@ -1555,6 +1556,7 @@ const fr = {
       DisplayPopulation: 'Afficher la population',
       UnitSymbolText: 'Texte du nombre d\'unités par symbole',
       SpacingBelowBoxes: 'Espace sous les boites colorées',
+      DisplayNoData: 'Afficher l\'entrée "no data"',
     },
   },
   CommonTextElement: {

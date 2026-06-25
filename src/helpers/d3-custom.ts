@@ -53,6 +53,8 @@ import {
   geoStream,
   geoTransform,
   // Projections that will be available in the application
+  geoAzimuthalEqualArea,
+  geoAzimuthalEquidistant,
   geoConicConformal,
   geoConicEqualArea,
   geoConicEquidistant,
@@ -62,6 +64,7 @@ import {
   geoMercator,
   geoOrthographic,
   geoEqualEarth,
+  geoStereographic,
   geoTransverseMercator,
 } from 'd3-geo';
 import {
@@ -205,6 +208,8 @@ export default {
   geoAitoff,
   geoArmadillo,
   geoAugust,
+  geoAzimuthalEqualArea,
+  geoAzimuthalEquidistant,
   geoBaker,
   geoBerghaus,
   geoBertin1953,
@@ -284,6 +289,7 @@ export default {
   geoSatellite,
   geoSinuMollweide,
   geoSinusoidal,
+  geoStereographic,
   geoStitch,
   geoTimes,
   geoTransverseMercator,

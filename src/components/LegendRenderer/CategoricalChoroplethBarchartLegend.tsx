@@ -44,24 +44,22 @@ function CategoriesPlot(
     mapping: CategoricalChoroplethMapping[],
     orientation: Orientation,
     order: 'ascending' | 'descending' | 'none',
+    displayNoData: boolean,
     textProperties: LegendTextElement,
     height: number,
     width: number,
   },
 ): JSX.Element {
   const domain = createMemo(() => props.mapping
-    .filter((m) => m.show)
-    .filter((m) => m.value)
+    .filter((m) => m.show && (props.displayNoData ? true : m.value))
     .map((m) => m.categoryName));
   const range = createMemo(() => props.mapping
-    .filter((m) => m.show)
-    .filter((m) => m.value)
+    .filter((m) => m.show && (props.displayNoData ? true : m.value))
     .map((m) => m.color));
   const data = createMemo(() => props.mapping
-    .filter((m) => m.show)
-    .filter((m) => m.value)
+    .filter((m) => m.show && (props.displayNoData ? true : m.value))
     .map((m, i) => ({
-      position: i,
+      position: !m.value ? Infinity : i,
       category: m.categoryName,
       color: m.color,
       frequency: m.count,
@@ -209,7 +207,7 @@ export default function legendCategoricalChoroplethBarchart(
   onMount(() => {
     // We need to wait for the legend to be rendered before we can compute its size
     // and bind the drag behavior and the mouse enter / leave behavior.
-    bindElementsLegend(refElement, legend);
+    bindElementsLegend(refElement!, legend);
   });
 
   // Recompute the size of the rectangle box when the legend is updated
@@ -221,7 +219,7 @@ export default function legendCategoricalChoroplethBarchart(
         legend.title.text, legend.subtitle.text, legend.note.text,
       ],
       () => {
-        computeRectangleBox(refElement);
+        computeRectangleBox(refElement!);
       },
     ),
   );
@@ -251,6 +249,7 @@ export default function legendCategoricalChoroplethBarchart(
         mapping={getCategoricalParameters(layer).mapping}
         orientation={legend.orientation}
         order={legend.order}
+        displayNoData={legend.displayNoData}
         textProperties={legend.axis}
         width={legend.width}
         height={legend.height}

@@ -5,7 +5,7 @@ import { JSX, createSignal } from 'solid-js';
 import { AiOutlineLayout } from 'solid-icons/ai';
 import { BsMap } from 'solid-icons/bs';
 import { FiLayers } from 'solid-icons/fi';
-import { TbFileImport } from 'solid-icons/tb';
+import { TbOutlineFileImport } from 'solid-icons/tb';
 import { TiExportOutline } from 'solid-icons/ti';
 import { RiDocumentPagesLine } from 'solid-icons/ri';
 
@@ -46,7 +46,7 @@ export default function LeftMenu(): JSX.Element {
 
     <div class="left-menu__title" onClick={() => expandOrHide(1)}>
       <div class="left-menu__title-inner">
-        <TbFileImport style={{ height: '1.1em' }}/>
+        <TbOutlineFileImport style={{ height: '1.1em' }}/>
         <span>{LL().LeftMenu.Import()}</span>
       </div>
       <button

@@ -28,6 +28,17 @@ d'utiliser `variable IS NULL` pour vérifier si une valeur est absente. Dans Mag
 `NOT variable` pour vérifier si une valeur est absente (c'est-à-dire que la variable n'est pas définie ou
 son contenu est vide).
 
+### Nom des champs et syntaxe des formules
+
+Dans les formules, lorsque le nom d'un champ contient des espaces ou des caractères spéciaux (tirets, accents, etc.) ou débute par un chiffre,
+il est nécessaire de l'entourer de crochets (`[ ]`) pour que la formule soit valide.
+
+Par exemple, pour utiliser un champ nommé "18_24", il est nécessaire de l'entourer de crochets lors de l'écriture de la formule :
+
+```sql
+[18_24] > 1000
+```
+
 ## Exemples de sélections simples
 
 ### Sélection des entités dont la population est supérieure à 10000

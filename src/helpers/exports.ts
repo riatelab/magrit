@@ -265,6 +265,23 @@ export async function exportMapToSvg(
   cloned.setAttribute('xmlns:inkscape', 'http://www.inkscape.org/namespaces/inkscape');
   cloned.setAttribute('xmlns:sodipodi', 'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd');
 
+  // We want to add a rectangle the size of the map,
+  // positioned below all other elements,
+  // and with the background color chosen by the user
+  const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  const mapDimensions = getMapDimension();
+  bg.setAttribute('x', '0');
+  bg.setAttribute('y', '0');
+  bg.setAttribute('width', `${mapDimensions.width}`);
+  bg.setAttribute('height', `${mapDimensions.height}`);
+  bg.setAttribute('fill', mapStore.backgroundColor);
+  bg.setAttribute('fill-opacity', `${mapStore.backgroundColorOpacity}`);
+  cloned.insertBefore(bg, cloned.firstChild);
+
+  // Consequently, we need to remove the style attribute (that contains info about the background)
+  // of the root SVG node
+  cloned.removeAttribute('style');
+
   // Patch the SVG to include the fonts used in the map
   patchSvgForFonts(cloned);
 
@@ -341,6 +358,16 @@ export async function exportMapToPng(outputName: string, scaleFactor = 1) {
 
   // Patch the SVG to include the fonts used in the map
   patchSvgForFonts(targetSvg);
+
+  // Remove vector-effect attribute if the scaleFactor is not 1
+  // (otherwise, in firefox, the width of path is not preserved as we expect / as in chromium
+  // when rescaling the canvas)
+  if (scaleFactor !== 1) {
+    targetSvg.querySelectorAll('[vector-effect="non-scaling-stroke"]')
+      .forEach((el) => {
+        el.removeAttribute('vector-effect');
+      });
+  }
 
   // Current state of snapping grid
   const displaySnapGrid = globalStore.displaySnappingGrid;

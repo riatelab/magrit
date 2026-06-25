@@ -620,6 +620,7 @@ const en = {
     ErrorReadingFile: 'Error while reading file {file}: {message}',
     RemovedEmptyFeatures: 'Removed {{ nRemoved:0 feature | a feature | ?? features }} without geometry from dataset {name}.',
     NFeatures: '{{ One feature | ?? features }}',
+    FailedToUseProjection: 'Failed to use projection {name}',
   },
   MapZone: {
     DropFilesHere: 'Drag and drop your file(s) here ! (or use the import menu)',
@@ -673,7 +674,7 @@ const en = {
     BackgroundColor: 'Background color',
     Opacity: 'Opacity',
     MapMargins: 'Map margins',
-    Color: 'Couleur',
+    Color: 'Color',
     Title: 'Title',
     Source: 'Source',
     MapSkinElements: 'Map skin elements',
@@ -1555,6 +1556,7 @@ const en = {
       DisplayPopulation: 'Display population',
       UnitSymbolText: 'Number of units per symbol text',
       SpacingBelowBoxes: 'Spacing below color boxes',
+      DisplayNoData: 'Display "no data" entry',
     },
   },
   CommonTextElement: {

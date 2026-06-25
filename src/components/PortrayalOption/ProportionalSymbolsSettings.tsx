@@ -172,10 +172,10 @@ function onClickValidate(
       );
     }
   }
-  // Sort the features by descending value of the target variable
+  // Sort the features by descending (absolute) value of the target variable
   // (so that the biggest symbols are drawn first)
   newData.features
-    .sort(descendingKeyAccessor((d) => d.properties[targetVariable]));
+    .sort(descendingKeyAccessor((d) => Mabs(d.properties[targetVariable])));
 
   const propSize = new PropSizer(
     propSymbolsParameters.referenceValue,

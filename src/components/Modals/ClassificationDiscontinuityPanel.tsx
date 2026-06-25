@@ -249,7 +249,11 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
       </header>
       <section class="modal-card-body" style={{ 'padding-bottom': '4em' }}>
         <div class="is-flex">
-          <div style={{ width: '40%', 'text-align': 'center' }}>
+          <div style={{ width: '56%', 'text-align': 'center' }}>
+            <h3> {LL().ClassificationPanel.distribution()} </h3>
+            <div> {makeDistributionPlot(filteredSeries)} </div>
+          </div>
+          <div style={{ width: '44%', 'text-align': 'center' }}>
             <h3> {LL().ClassificationPanel.summary()}</h3>
             <div>
               <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
@@ -281,10 +285,6 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
                 </tbody>
               </table>
             </div>
-          </div>
-          <div style={{ width: '55%', 'text-align': 'center' }}>
-            <h3> {LL().ClassificationPanel.distribution()} </h3>
-            <div> {makeDistributionPlot(filteredSeries)} </div>
           </div>
         </div>
         <hr/>

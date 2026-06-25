@@ -12,6 +12,55 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.3.21 (unreleased)
+
+- Fix sorting of entities for proportional symbols in order to take negative values into account.
+
+- Change the position of the distribution chart in the classification panel (in order to align it with the class distribution chart so that they can be more easily compared).
+
+- Change the color of the rug plot (in the classification panel) so that its color is always different from the colors in the palette on which it is displayed.
+
+- Fix SVG path width when exporting to PNG with upscaling/downscaling in Firefox
+  (fixes <a href="https://github.com/riatelab/magrit/issues/226">issue 226</a>).
+
+- Add rectangle with map dimensions below other elements when exporting to SVG
+  (fixes <a href="https://github.com/riatelab/magrit/issues/219">issue 219</a>).
+
+### 2.3.20 (2026-05-07)
+
+- Cast null results as being falsy when using FormulaInput for label filtering
+  (fixes <a href="https://github.com/riatelab/magrit/issues/211">issue 211</a>).
+
+- Update ISO3 code for Kosovo and Western Sahara
+  (fixes <a href="https://github.com/riatelab/magrit/issues/217">issue 217</a>).
+
+- Add option to display 'no data' entry on categorical bar chart
+  (fixes <a href="https://github.com/riatelab/magrit/issues/218">issue 218</a>).
+
+- Improve the aggregation of geometries that cross the antimeridian
+  (fixes <a href="https://github.com/riatelab/magrit/issues/216">issue 216</a>).
+
+- Escape field names that starts with a number in FormulaInput
+  (fixes <a href="https://github.com/riatelab/magrit/issues/220">issue 220</a>).
+
+
+### 2.3.19 (2026-02-17)
+
+- Add several missing azimuthal projections from d3-geo (Azimuthal Equal-Area, Azimuthal Equidistant, and Stereographic) (fixes <a href="https://github.com/riatelab/magrit/issues/204">issue 204</a>).
+
+- Fix a bug that prevented to use the "Use this projection" checkbox from working during import in certain special cases (fixes <a href="https://github.com/riatelab/magrit/issues/205">issue 205</a>).
+
+### 2.3.18 (2026-02-04)
+
+- Refactor the accordion component used in the left menu to fix some height calculation issues
+  (fixes <a href="https://github.com/riatelab/magrit/issues/202">issue 202</a>).
+
+- Improve map margins input components (to update the map on keyup rather than on change, and limit the minimum value to 0).
+
+- Enable the fill opacity setting for mushroom maps (fixes <a href="https://github.com/riatelab/magrit/issues/201">issue 201</a>).
+
+- Fix some missing English translation strings (fixes <a href="https://github.com/riatelab/magrit/issues/203">issue 203</a>).
+
 ### 2.3.17 (2026-01-06)
 
 - Fix some missing English translation strings (fixes <a href="https://github.com/riatelab/magrit/issues/194">issue 194</a> and <a href="https://github.com/riatelab/magrit/issues/197">issue 197</a>).

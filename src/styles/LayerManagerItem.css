@@ -66,10 +66,13 @@
 
 .layer-manager-item__action > button svg {
     filter: drop-shadow(3px 3px 6px darkgray);
-    fill: var(--bulma-primary);
+    fill: var(--bulma-primary) !important;
     height: 1.5em;
     width: 1.5em;
-    stroke: currentColor;
+}
+
+.layer-manager-item__action > button svg path {
+    fill: var(--bulma-primary) !important;
 }
 
 .layer-manager-item__action > button[disabled] svg {

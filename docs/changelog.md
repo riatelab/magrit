@@ -12,6 +12,57 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+### 2.3.21 (unreleased)
+
+- Correction du tri des entités pour les symboles proportionnels afin de prendre en compte les valeurs négatives.
+
+- Modification de la position du graphique de distribution dans le panneau de classification
+  (afin de l'aligner sur le graphique de répartition des classes et de faciliter leur comparaison).
+
+- Modification de la couleur du *rug plot* (dans le panneau de classification) afin qu'elle soit toujours différente
+  des couleurs de la palette sur laquelle il s'affiche.
+
+- Correction de la largeur des chemins SVG lors de l'export au format PNG avec mise à l'échelle (agrandissement/réduction) dans Firefox
+  (corrige <a href="https://github.com/riatelab/magrit/issues/226">l'issue 226</a>).
+
+- Ajout d'un rectangle indiquant les dimensions de la carte sous les autres éléments lors de l'exportation au format SVG
+  (corrige <a href="https://github.com/riatelab/magrit/issues/219">l'issue 219</a>).
+
+### 2.3.20 (2026-05-07)
+
+- Traite les résultats nuls comme des valeurs fausses lors de l'utilisation de FormulaInput pour le filtrage des labels
+  (corrige <a href="https://github.com/riatelab/magrit/issues/211">l'issue 211</a>).
+
+- Mis à jour du code ISO 3 pour le Kosovo et le Sahara occidental
+  (corrige <a href="https://github.com/riatelab/magrit/issues/217">l'issue 217</a>).
+
+- Ajout d'une option permettant d'afficher les entrées "sans données" sur les graphiques à barres des cartes catégorielles
+  (corrige <a href="https://github.com/riatelab/magrit/issues/218">l'issue 218</a>).
+
+- Améliore l'agrégation des géométries qui traversent l'antiméridien
+  (corrige <a href="https://github.com/riatelab/magrit/issues/216">l'issue 216</a>).
+
+- Échappe les noms de champs commençant par un chiffre dans FormulaInput
+  (corrige <a href="https://github.com/riatelab/magrit/issues/220">l'issue 220</a>).
+
+### 2.3.19 (2026-02-17)
+
+- Ajout de plusieurs projections azimutales de d3-geo (Azimuthal Equal-Area, Azimuthal Equidistant et Stereographic) qui étaient manquantes (corrige <a href="https://github.com/riatelab/magrit/issues/204">l'issue 204</a>).
+
+- Correction d'un bug empêchant d'utiliser la checkbox "Utiliser cette projection" lors de l'import dans certains cas spéciaux (corrige <a href="https://github.com/riatelab/magrit/issues/205">l'issue 205</a>).
+
+### 2.3.18 (2026-02-04)
+
+- Refactorisation du composant accordéon utilisé dans le menu de gauche pour corriger des problèmes de calcul de hauteur sur certains navigateurs
+  (corrige <a href="https://github.com/riatelab/magrit/issues/202">l'issue 202</a>).
+
+- Améliore les composants de saisie des marges de la carte (pour mettre à jour la carte lors de l'événement de `key-up` plutôt que `change`).
+
+- Rend possible le changement de l'opacité du remplissage pour les cartes en champignons
+  (corrige <a href="https://github.com/riatelab/magrit/issues/201">l'issue 201</a>).
+
+- Correction de certaines chaînes de traduction anglaise manquantes (corrige <a href="https://github.com/riatelab/magrit/issues/203">l'issue 203</a>).
+
 ### 2.3.17 (2026-01-06)
 
 - Correction de certaines chaînes de traduction anglaise manquantes (corrige <a href="https://github.com/riatelab/magrit/issues/194">l'issue 194</a> et <a href="https://github.com/riatelab/magrit/issues/197">l'issue 197</a>).

@@ -57,7 +57,6 @@ d'utiliser `variable IS NULL` pour vérifier si une valeur est absente. Dans Mag
 `NOT variable` pour vérifier si une valeur est absente (c'est-à-dire que la variable n'est pas définie ou
 son contenu est vide).
 
-
 Afin de créer un nouveau champ, il est nécessaire de spécifier le nom du champ à créer, le type de données (stock, ratio, etc.) et la formule de calcul.
 Lorsque la formule est valide, un aperçu des valeurs calculées (8 premières lignes du tableau) est affiché.
 
@@ -81,6 +80,17 @@ Lorsque la formule n'est pas valide, un message d'erreur est affiché et le bout
     alt="Tableau de données - Nouveau champ avec formule invalide"
     caption="Tableau de données - Nouveau champ avec formule invalide"
 />
+
+### Nom des champs et syntaxe des formules
+
+Dans les formules, lorsque le nom d'un champ contient des espaces ou des caractères spéciaux (tirets, accents, etc.) ou débute par un chiffre,
+il est nécessaire de l'entourer de crochets (`[ ]`) pour que la formule soit valide.
+
+Par exemple, pour utiliser un champ nommé "18_24", il est nécessaire de l'entourer de crochets lors de l'écriture de la formule :
+
+```sql
+[18_24] / Pop_2020
+```
 
 ### Exemples de formules
 

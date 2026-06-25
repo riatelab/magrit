@@ -27,6 +27,17 @@ use `variable IS NULL` to check if a value is absent. In Magrit, you must use
 `NOT variable` to check if a value is absent (i.e. the variable is not defined or
 its content is empty).
 
+### Field names and formula syntax
+
+In formulas, when a field name contains spaces or special characters (hyphens, accents, etc.) or starts with a digit,
+it is necessary to enclose it in brackets (`[ ]`) for the formula to be valid.
+
+For example, to use a field named "18_24", it is necessary to enclose it in brackets when writing the formula:
+
+```sql
+[18_24] > 1000
+```
+
 ## Examples of simple selections
 
 ### Selection of entities with a population greater than 10000

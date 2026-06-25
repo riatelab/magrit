@@ -11,6 +11,7 @@ import { produce } from 'solid-js/store';
 
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
+import { type AllGeoJSON, bbox } from '@turf/turf';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -98,6 +99,8 @@ export default function AggregationSettings(
   const layerDescription = layersDescriptionStore.layers
     .find((layer) => layer.id === props.layerId) as LayerDescription;
 
+  const layerBbox = bbox(layerDescription.data as AllGeoJSON);
+
   const targetFields = layerDescription
     .fields.filter((variable) => variable.type === 'categorical');
 
@@ -119,6 +122,16 @@ export default function AggregationSettings(
     aggregationMethod,
     setAggregationMethod,
   ] = createSignal<'topojson' | 'geos'>('geos');
+
+  // If the layer crosses the antimeridian or the poles, we cannot use the 'geos' method,
+  // so we use the 'topojson' method
+  // (the way we choose between 'geos' and 'topojson' could probably be improved)
+  if (
+    (layerBbox[0] < -179.9 && layerBbox[2] > 179.9)
+    || (layerBbox[1] < -89.9 && layerBbox[3] > 89.9)
+  ) {
+    setAggregationMethod('topojson');
+  }
 
   const makePortrayal = async () => {
     // Check name of the new layer

@@ -2681,6 +2681,11 @@ type RootTranslation = {
 		 * {​{​O​n​e​ ​f​e​a​t​u​r​e​|​?​?​ ​f​e​a​t​u​r​e​s​}​}
 		 */
 		NFeatures: string
+		/**
+		 * F​a​i​l​e​d​ ​t​o​ ​u​s​e​ ​p​r​o​j​e​c​t​i​o​n​ ​{​n​a​m​e​}
+		 * @param {unknown} name
+		 */
+		FailedToUseProjection: RequiredParams<'name'>
 	}
 	MapZone: {
 		/**
@@ -2859,7 +2864,7 @@ type RootTranslation = {
 		 */
 		MapMargins: string
 		/**
-		 * C​o​u​l​e​u​r
+		 * C​o​l​o​r
 		 */
 		Color: string
 		/**
@@ -6256,6 +6261,10 @@ type RootTranslation = {
 			 * S​p​a​c​i​n​g​ ​b​e​l​o​w​ ​c​o​l​o​r​ ​b​o​x​e​s
 			 */
 			SpacingBelowBoxes: string
+			/**
+			 * D​i​s​p​l​a​y​ ​"​n​o​ ​d​a​t​a​"​ ​e​n​t​r​y
+			 */
+			DisplayNoData: string
 		}
 	}
 	CommonTextElement: {
@@ -8960,6 +8969,10 @@ export type TranslationFunctions = {
 		 * {{One feature|?? features}}
 		 */
 		NFeatures: (arg0: number | string | boolean) => LocalizedString
+		/**
+		 * Failed to use projection {name}
+		 */
+		FailedToUseProjection: (arg: { name: unknown }) => LocalizedString
 	}
 	MapZone: {
 		/**
@@ -9137,7 +9150,7 @@ export type TranslationFunctions = {
 		 */
 		MapMargins: () => LocalizedString
 		/**
-		 * Couleur
+		 * Color
 		 */
 		Color: () => LocalizedString
 		/**
@@ -12423,6 +12436,10 @@ export type TranslationFunctions = {
 			 * Spacing below color boxes
 			 */
 			SpacingBelowBoxes: () => LocalizedString
+			/**
+			 * Display "no data" entry
+			 */
+			DisplayNoData: () => LocalizedString
 		}
 	}
 	CommonTextElement: {
