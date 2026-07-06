@@ -1462,7 +1462,15 @@ function makeSettingsBivariateChoroplethScatterplot(
       step={1}
     />
     <InputFieldNumber
-      label={'Radius'} // TODO: use i18n
+      label={LL().Legend.Modal.RoundDecimals()}
+      value={legend.roundDecimals}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['roundDecimals'], v)}
+      min={-3}
+      max={30}
+      step={1}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.Radius()}
       value={legend.radius}
       onChange={(v) => debouncedUpdateProps(legend.id, ['radius'], v)}
       min={0.1}
@@ -1470,17 +1478,17 @@ function makeSettingsBivariateChoroplethScatterplot(
       step={0.1}
     />
     <InputFieldCheckbox
-      label={'Display regression line'} // TODO: use i18n
+      label={LL().Legend.Modal.DisplayRegressionLine()}
       checked={legend.displayRegressionLine}
       onChange={(v) => debouncedUpdateProps(legend.id, ['displayRegressionLine'], v)}
     />
     <InputFieldCheckbox
-      label={'Display count by class'} // TODO: use i18n
+      label={LL().Legend.Modal.DisplayCountByClass()}
       checked={legend.displayCountByClass}
       onChange={(v) => debouncedUpdateProps(legend.id, ['displayCountByClass'], v)}
     />
     <InputFieldCheckbox
-      label={'Display class break lines'} // TODO: use i18n
+      label={LL().Legend.Modal.DisplayClassBreakLines()}
       checked={legend.displayClassBreakLines}
       onChange={(v) => debouncedUpdateProps(legend.id, ['displayClassBreakLines'], v)}
     />
@@ -1518,21 +1526,21 @@ function makeSettingsBivariateChoropleth(
     <FieldText legend={legend} LL={LL} role={'subtitle'}/>
     <FieldText legend={legend} LL={LL} role={'note'}/>
     <InputFieldText
-      label={'Label variable 1'}
+      label={LL().Legend.Modal.LabelVar1()}
       value={legend.variable1Label}
       onChange={(v) => {
         debouncedUpdateProps(legend.id, ['variable1Label'], v);
       }}
     />
     <InputFieldText
-      label={'Label variable 2'}
+      label={LL().Legend.Modal.LabelVar2()}
       value={legend.variable2Label}
       onChange={(v) => {
         debouncedUpdateProps(legend.id, ['variable2Label'], v);
       }}
     />
     <InputFieldNumber
-      label={'Taille des boites'}
+      label={LL().Legend.Modal.BoxSize()}
       value={legend.boxWidth}
       onChange={(v) => {
         updateProps(legend.id, ['boxWidth'], v);
@@ -1543,7 +1551,15 @@ function makeSettingsBivariateChoropleth(
       step={1}
     />
     <InputFieldNumber
-      label={'Espace entre les boites'}
+      label={LL().Legend.Modal.RoundDecimals()}
+      value={legend.roundDecimals}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['roundDecimals'], v)}
+      min={-3}
+      max={30}
+      step={1}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.BoxSpacing()}
       value={legend.boxSpacing}
       onChange={(v) => {
         debouncedUpdateProps(legend.id, ['boxSpacing'], v);
@@ -1553,7 +1569,7 @@ function makeSettingsBivariateChoropleth(
       step={1}
     />
     <InputFieldNumber
-      label={'Corner radius'}
+      label={LL().Legend.Modal.BoxCornerRadius()}
       value={legend.boxCornerRadius}
       onChange={(v) => {
         debouncedUpdateProps(legend.id, ['boxCornerRadius'], v);
@@ -1563,7 +1579,7 @@ function makeSettingsBivariateChoropleth(
       step={1}
     />
     <InputFieldNumber
-      label={'Box stroke width'}
+      label={LL().Legend.Modal.BoxStrokeWidth()}
       value={legend.boxStrokeWidth}
       onChange={(v) => {
         debouncedUpdateProps(legend.id, ['boxStrokeWidth'], v);
@@ -1573,7 +1589,7 @@ function makeSettingsBivariateChoropleth(
       step={0.1}
     />
     <InputFieldCheckbox
-      label={'Rotate legend'}
+      label={LL().Legend.Modal.RotateLegend()}
       checked={legend.rotate}
       onChange={(v) => updateProps(legend.id, ['rotate'], v)}
     />

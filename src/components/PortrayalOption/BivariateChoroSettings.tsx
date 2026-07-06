@@ -138,14 +138,12 @@ function onClickValidate(
     id: generateIdLegend(),
     layerId: newId,
     title: {
-      text: 'targetVariable',
       ...applicationSettingsStore.defaultLegendSettings.title,
     } as LegendTextElement,
     subtitle: {
       ...applicationSettingsStore.defaultLegendSettings.subtitle,
     } as LegendTextElement,
     note: {
-      text: 'noteContent',
       ...applicationSettingsStore.defaultLegendSettings.note,
     } as LegendTextElement,
     position: legendPosition,

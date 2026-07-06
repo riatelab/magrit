@@ -6273,6 +6273,38 @@ type RootTranslation = {
 			 * D​i​s​p​l​a​y​ ​"​n​o​ ​d​a​t​a​"​ ​e​n​t​r​y
 			 */
 			DisplayNoData: string
+			/**
+			 * R​a​d​i​u​s
+			 */
+			Radius: string
+			/**
+			 * D​i​s​p​l​a​y​ ​r​e​g​r​e​s​s​i​o​n​ ​l​i​n​e
+			 */
+			DisplayRegressionLine: string
+			/**
+			 * D​i​s​p​l​a​y​ ​c​o​u​n​t​ ​b​y​ ​c​l​a​s​s
+			 */
+			DisplayCountByClass: string
+			/**
+			 * D​i​s​p​l​a​y​ ​c​l​a​s​s​ ​b​r​e​a​k​ ​l​i​n​e​s
+			 */
+			DisplayClassBreakLines: string
+			/**
+			 * L​a​b​e​l​ ​v​a​r​i​a​b​l​e​ ​1
+			 */
+			LabelVar1: string
+			/**
+			 * L​a​b​e​l​ ​v​a​r​i​a​b​l​e​ ​2
+			 */
+			LabelVar2: string
+			/**
+			 * B​o​x​ ​s​i​z​e
+			 */
+			BoxSize: string
+			/**
+			 * R​o​t​a​t​e​ ​L​e​g​e​n​d
+			 */
+			RotateLegend: string
 		}
 	}
 	CommonTextElement: {
@@ -12456,6 +12488,38 @@ export type TranslationFunctions = {
 			 * Display "no data" entry
 			 */
 			DisplayNoData: () => LocalizedString
+			/**
+			 * Radius
+			 */
+			Radius: () => LocalizedString
+			/**
+			 * Display regression line
+			 */
+			DisplayRegressionLine: () => LocalizedString
+			/**
+			 * Display count by class
+			 */
+			DisplayCountByClass: () => LocalizedString
+			/**
+			 * Display class break lines
+			 */
+			DisplayClassBreakLines: () => LocalizedString
+			/**
+			 * Label variable 1
+			 */
+			LabelVar1: () => LocalizedString
+			/**
+			 * Label variable 2
+			 */
+			LabelVar2: () => LocalizedString
+			/**
+			 * Box size
+			 */
+			BoxSize: () => LocalizedString
+			/**
+			 * Rotate Legend
+			 */
+			RotateLegend: () => LocalizedString
 		}
 	}
 	CommonTextElement: {

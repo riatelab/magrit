@@ -29,7 +29,7 @@ import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 import { classificationMultivariatePanelStore, setClassificationMultivariatePanelStore } from '../../store/ClassificationMultivariatePanelStore';
 
 // Subcomponents
-import { ManualBreaks } from '../ClassificationHelpers.tsx';
+import { DisplayBreaks, ManualBreaks } from '../ClassificationHelpers.tsx';
 import DropdownMenu from '../DropdownMenu.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
@@ -395,12 +395,11 @@ export default function ClassificationBivariatePanel(): JSX.Element {
     role="dialog"
   >
     <div class="modal-background" />
-    <div class="modal-card" style={{ height: '89vh', width: '90vw' }}>
+    <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">
           { LL().ClassificationPanel.title() }&nbsp;
-          - {classificationMultivariatePanelStore.layerName}&nbsp;
-          - {parameters.variable1.variable} &amp; {parameters.variable2.variable}
+          - {classificationMultivariatePanelStore.layerName}
         </p>
       </header>
       <section class="modal-card-body">
@@ -460,7 +459,6 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                   label={`${LL().FunctionalitiesSection.CommonOptions.Variable()} 1`}
                   layout={'vertical'}
                   onChange={(value) => {
-                    // console.log('Changed var1 classification method to:', value);
                     setClassificationMethodVar1(value as ClassificationMethod);
                     updateClassificationParameters();
                   }}
@@ -475,6 +473,18 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                     }
                   </For>
                 </InputFieldSelect>
+                <Show when={
+                  !classificationMethodHasOption(
+                    OptionsClassification.breaks,
+                    classificationMethodVar1(),
+                    entriesClassificationMethodVar1,
+                  )
+                }>
+                  <DisplayBreaks
+                    breaks={currentClassifInfo().variable1.breaks}
+                    precision={statSummaryVar1.precision}
+                  />
+                </Show>
                 <Show when={
                   classificationMethodHasOption(
                     OptionsClassification.breaks,
@@ -502,7 +512,6 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                   label={`${LL().FunctionalitiesSection.CommonOptions.Variable()} 2`}
                   layout={'vertical'}
                   onChange={(value) => {
-                    console.log('Changed var2 classification method to:', value);
                     setClassificationMethodVar2(value as ClassificationMethod);
                     updateClassificationParameters();
                   }}
@@ -517,6 +526,18 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                     }
                   </For>
                 </InputFieldSelect>
+                <Show when={
+                  !classificationMethodHasOption(
+                    OptionsClassification.breaks,
+                    classificationMethodVar2(),
+                    entriesClassificationMethodVar2,
+                  )
+                }>
+                  <DisplayBreaks
+                    breaks={currentClassifInfo().variable2.breaks}
+                    precision={statSummaryVar2.precision}
+                  />
+                </Show>
                 <Show when={
                   classificationMethodHasOption(
                     OptionsClassification.breaks,
@@ -548,11 +569,6 @@ export default function ClassificationBivariatePanel(): JSX.Element {
               <PlotFigure
                 id={'scatter-plot-bivariate-distribution'}
                 options={{
-                  style: {
-                    background: 'white',
-                    color: 'black',
-                    // height: '20vh',
-                  },
                   height: 380,
                   x: {
                     label: currentClassifInfo().variable2.variable,
@@ -611,6 +627,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                   setColorScheme(value);
                   updateClassificationParameters();
                 }}
+                maxHeight={'20vh'}
               />
               <br />
               <div style={{ width: '100%', 'text-align': 'center' }}>

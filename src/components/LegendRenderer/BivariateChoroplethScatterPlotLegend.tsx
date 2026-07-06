@@ -117,9 +117,11 @@ function BivariateChoroScatterPlot(
       },
       x: {
         label: props.variable2Label,
+        tickFormat: (d) => formatValue(d),
       },
       y: {
         label: props.variable1Label,
+        tickFormat: (d) => formatValue(d),
       },
       // inset: 10,
       marks: [

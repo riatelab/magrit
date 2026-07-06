@@ -1736,7 +1736,7 @@ function makeSettingsDefaultPoint(
     </Show>
     <Show when={props.representationType === 'bivariateChoropleth'}>
       <InputFieldCheckbox
-        label={'Add scatter plot'}
+        label={LL().LayerSettings.AddScatterPlot()}
         checked={
           linkedScatterPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
@@ -3139,7 +3139,7 @@ function makeSettingsDefaultPolygon(
     </Show>
     <Show when={props.representationType === 'bivariateChoropleth'}>
       <InputFieldCheckbox
-        label={'Add scatter plot'}
+        label={LL().LayerSettings.AddScatterPlot()}
         checked={
           linkedScatterPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
