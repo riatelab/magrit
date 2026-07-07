@@ -1,0 +1,69 @@
+// Imports from solid-js
+import {
+  createSignal, JSX, For,
+  onCleanup, onMount,
+  Show, Accessor,
+} from 'solid-js';
+
+// Imports from other libraries
+import * as Plot from '@observablehq/plot';
+
+// Subcomponents
+import PlotFigure from '../PlotFigure.tsx';
+import { BivariateChoroplethParameters } from '../../global';
+
+// eslint-disable-next-line import/prefer-default-export
+export function BivariateDistributionPlot(
+  props: {
+    ds: { [x: string]: any }[],
+    currentClassifInfo: Accessor<BivariateChoroplethParameters>,
+    bivariateClasses: (d: Record<string, any>) => any[],
+    classifierVar1: () => any,
+    classifierVar2: () => any,
+    bc: (d: Record<string, any>) => number,
+  },
+): JSX.Element {
+  return <PlotFigure
+    id={'scatter-plot-bivariate-distribution'}
+    options={{
+      height: 380,
+      x: {
+        label: props.currentClassifInfo().variable2.variable,
+      },
+      y: {
+        label: props.currentClassifInfo().variable1.variable,
+      },
+      marks: [
+        Plot.dot(props.ds, {
+          y: props.currentClassifInfo().variable1.variable,
+          x: props.currentClassifInfo().variable2.variable,
+          fill: (d) => props.currentClassifInfo().palette.colors[props.bc(d)],
+          r: 3,
+        }),
+        Plot.text(
+          props.ds,
+          Plot.groupZ(
+            { text: 'count', x: 'mean', y: 'mean' },
+            {
+              fontSize: 14,
+              stroke: 'width',
+              strokeWidth: 8,
+              fill: 'black',
+              y: props.currentClassifInfo().variable1.variable,
+              x: props.currentClassifInfo().variable2.variable,
+              z: (d) => props.bivariateClasses(d).toString(),
+            },
+          ),
+        ),
+        Plot.ruleX([props.classifierVar2().breaks[0]], { }),
+        Plot.ruleY([props.classifierVar1().breaks[0]], { }),
+        props.classifierVar2().breaks.slice(1, -1).map((vx: number) => [
+          Plot.ruleX([vx], { strokeDasharray: 4, strokeOpacity: 0.4 }),
+        ]),
+        props.classifierVar1().breaks.slice(1, -1).map((vy: number) => [
+          Plot.ruleY([vy], { strokeDasharray: 4, strokeOpacity: 0.4 }),
+        ]),
+      ],
+    }}
+  />;
+}

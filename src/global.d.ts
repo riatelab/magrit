@@ -646,6 +646,8 @@ export interface BivariateVariableDescription {
   breaks: number[],
   // Entities by class
   entitiesByClass: number[],
+  // Whether the variable is reversed when attributing color
+  reversed: boolean,
 }
 
 type AllowManualBreaks = Pick<ClassificationParameters & BivariateVariableDescription, 'variable' | 'method' | 'classes' | 'breaks'>;

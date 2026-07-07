@@ -11,9 +11,11 @@ import * as Plot from '@observablehq/plot';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import {
-  bivariateClass, classificationMethodHasOption,
+  bivariateClass,
+  classificationMethodHasOption,
   getClassifier,
-  makeClassificationMenuEntries, OptionsClassification,
+  makeClassificationMenuEntries,
+  OptionsClassification,
   prepareStatisticalSummary,
 } from '../../helpers/classification';
 import { isFiniteNumber, unproxify } from '../../helpers/common';
@@ -33,6 +35,7 @@ import { DisplayBreaks, ManualBreaks } from '../ClassificationHelpers.tsx';
 import DropdownMenu from '../DropdownMenu.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import { BivariateDistributionPlot } from '../PortrayalOption/BivariateChoroComponents.tsx';
 import PlotFigure from '../PlotFigure.tsx';
 
 // Styles
@@ -200,6 +203,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
         breaks: breaks1,
         entitiesByClass: entitiesByClassVar1,
         classes: 3,
+        reversed: false,
       },
       variable2: {
         variable: parameters.variable2.variable,
@@ -207,6 +211,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
         breaks: breaks2,
         entitiesByClass: entitiesByClassVar2,
         classes: 3,
+        reversed: false,
       },
       palette,
       noDataColor: noDataColor(),
@@ -566,6 +571,14 @@ export default function ClassificationBivariatePanel(): JSX.Element {
           <div style={{ width: '55%', 'text-align': 'center' }}>
             <h3> { LL().ClassificationPanel.distribution() } </h3>
             <div>
+              <BivariateDistributionPlot
+                ds={ds}
+                currentClassifInfo={currentClassifInfo}
+                bivariateClasses={bivariateClasses}
+                classifierVar1={() => classifierVar1}
+                classifierVar2={() => classifierVar2}
+                bc={bc}
+              />
               <PlotFigure
                 id={'scatter-plot-bivariate-distribution'}
                 options={{

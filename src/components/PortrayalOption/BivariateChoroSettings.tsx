@@ -1,5 +1,6 @@
 // Import from solid-js
 import {
+  Accessor,
   createEffect,
   createMemo,
   createSignal,
@@ -24,7 +25,7 @@ import {
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
-import { getClassifier } from '../../helpers/classification';
+import { bivariateClass, getClassifier } from '../../helpers/classification';
 import { findSuitableName, getMinimumPrecision, isFiniteNumber } from '../../helpers/common';
 import { bivariatePalettes } from '../../helpers/color';
 import { generateIdLayer } from '../../helpers/layers';
@@ -34,6 +35,7 @@ import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
 // Subcomponents
 import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
+import { BivariateDistributionPlot } from './BivariateChoroComponents.tsx';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
 import InputResultName from './InputResultName.tsx';
@@ -42,7 +44,8 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
-  type BivariateChoroplethLegend,
+  type BivariateChoroplethLegend, BivariateChoroplethParameters,
+  type BivariateVariableDescription,
   ClassificationMethod,
   type LayerDescriptionBivariateChoropleth,
   type LegendTextElement,
@@ -90,7 +93,8 @@ function onClickValidate(
       classes: 3,
       breaks: breaks1,
       entitiesByClass: classifier1.countByClass(),
-    },
+      reversed: false,
+    } as BivariateVariableDescription,
     variable2: {
       variable: targetVariables[1],
       method: targetClassifications[1],
@@ -98,7 +102,8 @@ function onClickValidate(
       classes: 3,
       breaks: breaks2,
       entitiesByClass: classifier2.countByClass(),
-    },
+      reversed: false,
+    } as BivariateVariableDescription,
     noDataColor: '#ffffff',
     palette: bivariatePalettes[1],
   };
@@ -231,6 +236,86 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
     setClassificationVar2,
   ] = createSignal<string>('quantiles');
 
+  // - the filtered series, needed for classifier and plot
+  const filteredSeriesVar1 = createMemo(() => {
+    const s = layerDescription.data.features
+      .map((f) => f.properties![targetVariable1()] as number);
+    return s.filter((v) => isFiniteNumber(v)).map((d) => +d);
+  });
+
+  const filteredSeriesVar2 = createMemo(() => {
+    const s = layerDescription.data.features
+      .map((f) => f.properties![targetVariable2()] as number);
+    return s.filter((v) => isFiniteNumber(v)).map((d) => +d);
+  });
+
+  const classifierVar1 = createMemo(() => new (
+    getClassifier(classificationVar1() as ClassificationMethod)
+  )(filteredSeriesVar1(), null, applicationSettingsStore.intervalClosure));
+
+  const classifierVar2 = createMemo(() => new (
+    getClassifier(classificationVar2() as ClassificationMethod)
+  )(filteredSeriesVar2(), null, applicationSettingsStore.intervalClosure));
+
+  const parameters: Accessor<BivariateChoroplethParameters> = createMemo(() => {
+    const breaks1 = classifierVar1().classify(3);
+    const breaks2 = classifierVar2().classify(3);
+
+    return {
+      variable1: {
+        variable: targetVariable1(),
+        method: classificationVar1(),
+        classification: classificationVar1() as ClassificationMethod,
+        classes: 3,
+        breaks: breaks1,
+        entitiesByClass: classifierVar1().countByClass(),
+        reversed: false,
+      } as BivariateVariableDescription,
+      variable2: {
+        variable: targetVariable2(),
+        method: classificationVar2(),
+        classification: classificationVar2() as ClassificationMethod,
+        classes: 3,
+        breaks: breaks2,
+        entitiesByClass: classifierVar2().countByClass(),
+        reversed: false,
+      } as BivariateVariableDescription,
+      noDataColor: '#ffffff',
+      palette: bivariatePalettes[1],
+    };
+  });
+
+  const bivariateClasses = (d: Record<string, any>) => {
+    const classVar1 = classifierVar1().getClass(d[parameters().variable1.variable]);
+    const classVar2 = classifierVar2().getClass(d[parameters().variable2.variable]);
+    return [classVar1, classVar2];
+  };
+
+  const bc = (d: Record<string, any>) => bivariateClass(
+    d[parameters().variable1.variable],
+    d[parameters().variable2.variable],
+    classifierVar1(),
+    classifierVar2(),
+  );
+
+  const makeDs = () => {
+    const s1 = layerDescription.data.features
+      .map((f) => f.properties![targetVariable1()] as number);
+    const s2 = layerDescription.data.features
+      .map((f) => f.properties![targetVariable2()] as number);
+
+    return layerDescription.data.features.map((f, i) => ({
+      [parameters().variable1.variable]: isFiniteNumber(
+        f.properties![parameters().variable1.variable],
+      ) ? f.properties![parameters().variable1.variable]
+        : undefined,
+      [parameters().variable2.variable]: isFiniteNumber(
+        f.properties![parameters().variable2.variable],
+      ) ? f.properties![parameters().variable2.variable]
+        : undefined,
+    }));
+  };
+
   const [
     newLayerName,
     setNewLayerName,
@@ -289,58 +374,74 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
   };
 
   return <div class="portrayal-section__portrayal-options-bivariatechoropleth">
-    <InputFieldSelect
-      label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 1` }
-      onChange={(value) => {
-        setTargetVariable1(value);
-      }}
-      value={ targetVariable1() }
-    >
-      <For each={targetFields}>
-        { (variable) => <option value={ variable.name }>{ variable.name }</option> }
-      </For>
-    </InputFieldSelect>
-    <InputFieldSelect
-      label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 2` }
-      onChange={(value) => {
-        setTargetVariable2(value);
-      }}
-      value={ targetVariable2() }
-    >
-      <For each={targetFields}>
-        { (variable) => <option value={ variable.name }>{ variable.name }</option> }
-      </For>
-    </InputFieldSelect>
-    <InputFieldSelect
-      label={LL().FunctionalitiesSection.BivariateChoroplethOptions.ClassificationVariable1()}
-      onChange={(value) => {
-        setClassificationVar1(value);
-      }}
-      value={'quantiles'}
-    >
-     <For each={proposedClassifications}>
-       {
-         (method) => <option value={ method.value }>
-           { method.name }
-         </option>
-       }
-     </For>
-    </InputFieldSelect>
-    <InputFieldSelect
-      label={LL().FunctionalitiesSection.BivariateChoroplethOptions.ClassificationVariable2()}
-      onChange={(value) => {
-        setClassificationVar2(value);
-      }}
-      value={'quantiles'}
-    >
-      <For each={proposedClassifications}>
-        {
-          (method) => <option value={ method.value }>
-            { method.name }
-          </option>
-        }
-      </For>
-    </InputFieldSelect>
+    <div class={'is-flex is-justify-content-space-around'}>
+      <InputFieldSelect
+        label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 1` }
+        onChange={(value) => {
+          setTargetVariable1(value);
+        }}
+        value={ targetVariable1() }
+        layout={'vertical'}
+      >
+        <For each={targetFields}>
+          { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+        </For>
+      </InputFieldSelect>
+      <InputFieldSelect
+        label={LL().FunctionalitiesSection.BivariateChoroplethOptions.ClassificationVariable1()}
+        onChange={(value) => {
+          setClassificationVar1(value);
+        }}
+        value={classificationVar1()}
+        layout={'vertical'}
+      >
+        <For each={proposedClassifications}>
+          {
+            (method) => <option value={ method.value }>
+              { method.name }
+            </option>
+          }
+        </For>
+      </InputFieldSelect>
+    </div>
+    <div class={'is-flex is-justify-content-space-around'}>
+      <InputFieldSelect
+        label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 2` }
+        onChange={(value) => {
+          setTargetVariable2(value);
+        }}
+        value={ targetVariable2() }
+        layout={'vertical'}
+      >
+        <For each={targetFields}>
+          { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+        </For>
+      </InputFieldSelect>
+      <InputFieldSelect
+        label={LL().FunctionalitiesSection.BivariateChoroplethOptions.ClassificationVariable2()}
+        onChange={(value) => {
+          setClassificationVar2(value);
+        }}
+        value={classificationVar2()}
+        layout={'vertical'}
+      >
+        <For each={proposedClassifications}>
+          {
+            (method) => <option value={ method.value }>
+              { method.name }
+            </option>
+          }
+        </For>
+      </InputFieldSelect>
+    </div>
+    <BivariateDistributionPlot
+      ds={makeDs()}
+      currentClassifInfo={parameters}
+      bivariateClasses={bivariateClasses}
+      classifierVar1={classifierVar1}
+      classifierVar2={classifierVar2}
+      bc={bc}
+    />
     <InputResultName
       value={newLayerName()}
       onKeyUp={ (value) => { setNewLayerName(value); }}
