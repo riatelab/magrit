@@ -6,13 +6,14 @@ interface InputFieldCheckboxProps {
   label: LocalizedString | string;
   checked: boolean;
   onChange: (checked: boolean) => void;
+  width?: string;
   disabled?: boolean;
 }
 
 export default function InputFieldCheckbox(props: InputFieldCheckboxProps): JSX.Element {
   const id = `checkbox-${uuidv4()}`;
 
-  return <div class="field">
+  return <div class="field" style={{ width: props.width }}>
     <label for={id} class="label">{ props.label }</label>
     <input
       id={id}
