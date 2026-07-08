@@ -3781,6 +3781,10 @@ type RootTranslation = {
 			 * @param {unknown} variable2
 			 */
 			NewLayerName: RequiredParams<'layerName' | 'variable1' | 'variable2'>
+			/**
+			 * R​e​v​e​r​s​e​d​ ​p​a​l​e​t​t​e
+			 */
+			Reversed: string
 		}
 		TrivariateChoroplethOptions: {
 			/**
@@ -6000,6 +6004,10 @@ type RootTranslation = {
 		paletteCopied: string
 	}
 	BivariateClassificationPanel: {
+		/**
+		 * D​i​r​e​c​t​i​o​n​ ​o​f​ ​t​h​e​ ​p​r​o​g​r​e​s​s​i​o​n
+		 */
+		ProgressionDirection: string
 	}
 	Legend: {
 		ContextMenu: {
@@ -10046,6 +10054,10 @@ export type TranslationFunctions = {
 			 * BiChoro_{variable1}_{variable2}_{layerName}
 			 */
 			NewLayerName: (arg: { layerName: unknown, variable1: unknown, variable2: unknown }) => LocalizedString
+			/**
+			 * Reversed palette
+			 */
+			Reversed: () => LocalizedString
 		}
 		TrivariateChoroplethOptions: {
 			/**
@@ -12215,6 +12227,10 @@ export type TranslationFunctions = {
 		paletteCopied: () => LocalizedString
 	}
 	BivariateClassificationPanel: {
+		/**
+		 * Direction of the progression
+		 */
+		ProgressionDirection: () => LocalizedString
 	}
 	Legend: {
 		ContextMenu: {

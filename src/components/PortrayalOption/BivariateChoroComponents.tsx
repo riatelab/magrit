@@ -29,9 +29,11 @@ export function BivariateDistributionPlot(
       height: 380,
       x: {
         label: props.currentClassifInfo().variable2.variable,
+        reverse: props.currentClassifInfo().variable2.reversed,
       },
       y: {
         label: props.currentClassifInfo().variable1.variable,
+        reverse: props.currentClassifInfo().variable1.reversed,
       },
       marks: [
         Plot.dot(props.ds, {
@@ -55,8 +57,12 @@ export function BivariateDistributionPlot(
             },
           ),
         ),
-        Plot.ruleX([props.classifierVar2().breaks[0]], { }),
-        Plot.ruleY([props.classifierVar1().breaks[0]], { }),
+        Plot.ruleX([
+          props.classifierVar2().breaks[props.currentClassifInfo().variable2.reversed ? 3 : 0],
+        ], { }),
+        Plot.ruleY([
+          props.classifierVar1().breaks[props.currentClassifInfo().variable1.reversed ? 3 : 0],
+        ], { }),
         props.classifierVar2().breaks.slice(1, -1).map((vx: number) => [
           Plot.ruleX([vx], { strokeDasharray: 4, strokeOpacity: 0.4 }),
         ]),

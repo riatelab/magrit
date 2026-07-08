@@ -884,6 +884,7 @@ const fr = {
       ClassificationVariable1: 'Classification variable 1',
       ClassificationVariable2: 'Classification variable 2',
       NewLayerName: 'BiChoro_{variable1}_{variable2}_{layerName}',
+      Reversed: 'Inverser la palette',
     },
     TrivariateChoroplethOptions: {
       NewLayerName: 'TriChoro_{variable1}_{variable2}_{variable3}_{layerName}',
@@ -1487,6 +1488,7 @@ const fr = {
     paletteCopied: 'Palette de couleurs copiée dans le presse-papier',
   },
   BivariateClassificationPanel: {
+    ProgressionDirection: 'Sens de la progression',
   },
   Legend: {
     ContextMenu: {

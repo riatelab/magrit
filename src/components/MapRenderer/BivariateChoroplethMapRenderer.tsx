@@ -95,6 +95,8 @@ export function bivariateChoroplethPolygonRenderer(
                   feature.properties![rendererParameters().variable2.variable],
                   classifierVar1(),
                   classifierVar2(),
+                  rendererParameters().variable1.reversed,
+                  rendererParameters().variable2.reversed,
                 )
               ]
               : rendererParameters().noDataColor
@@ -162,6 +164,8 @@ export function bivariateChoroplethLineRenderer(
                   feature.properties![rendererParameters().variable2.variable],
                   classifierVar1(),
                   classifierVar2(),
+                  rendererParameters().variable1.reversed,
+                  rendererParameters().variable2.reversed,
                 )
               ]
               : rendererParameters().noDataColor
@@ -232,6 +236,8 @@ export function bivariateChoroplethPointRenderer(
                   feature.properties![rendererParameters().variable2.variable],
                   classifierVar1(),
                   classifierVar2(),
+                  rendererParameters().variable1.reversed,
+                  rendererParameters().variable2.reversed,
                 )
               ]
               : rendererParameters().noDataColor

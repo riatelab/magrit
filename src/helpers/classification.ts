@@ -173,8 +173,13 @@ export const bivariateClass = (
   v2: any,
   c1: { getClass: (_: number) => number },
   c2: { getClass: (_: number) => number },
+  reversedV1: boolean,
+  reversedV2: boolean,
 ): number => (
-  3 * c1.getClass(v1) + c2.getClass(v2)
+  3 * (
+    reversedV1 ? 2 - c1.getClass(v1) : c1.getClass(v1)) + (
+    reversedV2 ? 2 - c2.getClass(v2) : c2.getClass(v2)
+  )
 );
 
 export const makeClassificationMenuEntries = (

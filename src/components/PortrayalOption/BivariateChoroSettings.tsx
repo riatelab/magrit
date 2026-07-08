@@ -44,19 +44,19 @@ import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 // Types
 import type { PortrayalSettingsProps } from './common';
 import {
-  type BivariateChoroplethLegend, BivariateChoroplethParameters,
+  type BivariateChoroplethLegend,
+  type BivariateChoroplethParameters,
   type BivariateVariableDescription,
-  ClassificationMethod,
   type LayerDescriptionBivariateChoropleth,
   type LegendTextElement,
+  ClassificationMethod,
   LegendType,
   RepresentationType,
 } from '../../global.d';
 
 function onClickValidate(
   referenceLayerId: string,
-  targetVariables: [string, string],
-  targetClassifications: [string, string],
+  params: BivariateChoroplethParameters,
   newName: string,
 ) {
   // The layer description of the reference layer
@@ -67,49 +67,20 @@ function onClickValidate(
     throw new Error('Unexpected Error: Reference layer not found');
   }
 
-  // Find a position for the legend
-  const legendPosition = getPossibleLegendPosition(300, 300);
-
-  // Prepare the parameters of the bivariate choropleth
   const values1 = referenceLayerDescription
     .data
-    .features.map((f) => f.properties[targetVariables[0]] as number);
+    .features.map((f) => f.properties![params.variable1.variable] as number);
   const values2 = referenceLayerDescription
     .data
-    .features.map((f) => f.properties[targetVariables[1]] as number);
+    .features.map((f) => f.properties![params.variable2.variable] as number);
 
   const hasNoData = (values1.concat(values2)).some((v) => !isFiniteNumber(v));
 
-  const classifier1 = new (getClassifier(targetClassifications[0]))(values1, null);
-  const classifier2 = new (getClassifier(targetClassifications[1]))(values2, null);
-  const breaks1 = classifier1.classify(3);
-  const breaks2 = classifier2.classify(3);
-
-  const params = {
-    variable1: {
-      variable: targetVariables[0],
-      method: targetClassifications[0],
-      classification: targetClassifications[0] as ClassificationMethod,
-      classes: 3,
-      breaks: breaks1,
-      entitiesByClass: classifier1.countByClass(),
-      reversed: false,
-    } as BivariateVariableDescription,
-    variable2: {
-      variable: targetVariables[1],
-      method: targetClassifications[1],
-      classification: targetClassifications[1] as ClassificationMethod,
-      classes: 3,
-      breaks: breaks2,
-      entitiesByClass: classifier2.countByClass(),
-      reversed: false,
-    } as BivariateVariableDescription,
-    noDataColor: '#ffffff',
-    palette: bivariatePalettes[1],
-  };
+  // Find a position for the legend
+  const legendPosition = getPossibleLegendPosition(300, 300);
 
   // How many decimals to display in the legend
-  const minPrecision = getMinimumPrecision(breaks1.concat(breaks2));
+  const minPrecision = getMinimumPrecision(params.variable1.breaks.concat(params.variable2.breaks));
 
   // Generate ID of new layer
   const newId = generateIdLayer();
@@ -178,8 +149,8 @@ function onClickValidate(
       fontStyle: 'normal',
       fontWeight: 'normal',
     } as LegendTextElement,
-    variable1Label: targetVariables[0],
-    variable2Label: targetVariables[1],
+    variable1Label: params.variable1.variable,
+    variable2Label: params.variable2.variable,
     noDataLabel: 'No data',
   } as BivariateChoroplethLegend;
 
@@ -236,6 +207,16 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
     setClassificationVar2,
   ] = createSignal<string>('quantiles');
 
+  // - whether the classification is reversed for each ot the variables
+  const [
+    reversedVar1,
+    setReversedVar1,
+  ] = createSignal<boolean>(false);
+  const [
+    reversedVar2,
+    setReversedVar2,
+  ] = createSignal<boolean>(false);
+
   // - the filtered series, needed for classifier and plot
   const filteredSeriesVar1 = createMemo(() => {
     const s = layerDescription.data.features
@@ -269,7 +250,7 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
         classes: 3,
         breaks: breaks1,
         entitiesByClass: classifierVar1().countByClass(),
-        reversed: false,
+        reversed: reversedVar1(),
       } as BivariateVariableDescription,
       variable2: {
         variable: targetVariable2(),
@@ -278,7 +259,7 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
         classes: 3,
         breaks: breaks2,
         entitiesByClass: classifierVar2().countByClass(),
-        reversed: false,
+        reversed: reversedVar2(),
       } as BivariateVariableDescription,
       noDataColor: '#ffffff',
       palette: bivariatePalettes[1],
@@ -286,8 +267,12 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
   });
 
   const bivariateClasses = (d: Record<string, any>) => {
-    const classVar1 = classifierVar1().getClass(d[parameters().variable1.variable]);
-    const classVar2 = classifierVar2().getClass(d[parameters().variable2.variable]);
+    const classVar1 = !reversedVar1()
+      ? classifierVar1().getClass(d[parameters().variable1.variable])
+      : 2 - classifierVar1().getClass(d[parameters().variable1.variable]);
+    const classVar2 = !reversedVar2()
+      ? classifierVar2().getClass(d[parameters().variable2.variable])
+      : 2 - classifierVar2().getClass(d[parameters().variable2.variable]);
     return [classVar1, classVar2];
   };
 
@@ -296,15 +281,13 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
     d[parameters().variable2.variable],
     classifierVar1(),
     classifierVar2(),
+    reversedVar1(),
+    reversedVar2(),
   );
 
-  const makeDs = () => {
-    const s1 = layerDescription.data.features
-      .map((f) => f.properties![targetVariable1()] as number);
-    const s2 = layerDescription.data.features
-      .map((f) => f.properties![targetVariable2()] as number);
-
-    return layerDescription.data.features.map((f, i) => ({
+  const makeDs = () => layerDescription
+    .data.features
+    .map((f) => ({
       [parameters().variable1.variable]: isFiniteNumber(
         f.properties![parameters().variable1.variable],
       ) ? f.properties![parameters().variable1.variable]
@@ -314,7 +297,6 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
       ) ? f.properties![parameters().variable2.variable]
         : undefined,
     }));
-  };
 
   const [
     newLayerName,
@@ -360,8 +342,7 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
     setTimeout(() => {
       onClickValidate(
         layerDescription.id,
-        [targetVariable1(), targetVariable2()],
-        [classificationVar1(), classificationVar2()],
+        parameters(),
         layerName,
       );
 
@@ -403,6 +384,11 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
           }
         </For>
       </InputFieldSelect>
+      <InputFieldCheckbox
+        label={LL().FunctionalitiesSection.BivariateChoroplethOptions.Reversed()}
+        checked={reversedVar1()}
+        onChange={(value) => setReversedVar1(value)}
+      />
     </div>
     <div class={'is-flex is-justify-content-space-around'}>
       <InputFieldSelect
@@ -433,6 +419,11 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
           }
         </For>
       </InputFieldSelect>
+      <InputFieldCheckbox
+        label={LL().FunctionalitiesSection.BivariateChoroplethOptions.Reversed()}
+        checked={reversedVar2()}
+        onChange={(value) => { setReversedVar2(value); }}
+      />
     </div>
     <BivariateDistributionPlot
       ds={makeDs()}

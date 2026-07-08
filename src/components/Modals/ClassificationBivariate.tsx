@@ -35,8 +35,8 @@ import { DisplayBreaks, ManualBreaks } from '../ClassificationHelpers.tsx';
 import DropdownMenu from '../DropdownMenu.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import { BivariateDistributionPlot } from '../PortrayalOption/BivariateChoroComponents.tsx';
-import PlotFigure from '../PlotFigure.tsx';
 
 // Styles
 import '../../styles/ClassificationPanel.css';
@@ -203,7 +203,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
         breaks: breaks1,
         entitiesByClass: entitiesByClassVar1,
         classes: 3,
-        reversed: false,
+        reversed: reversedVar1(),
       },
       variable2: {
         variable: parameters.variable2.variable,
@@ -211,7 +211,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
         breaks: breaks2,
         entitiesByClass: entitiesByClassVar2,
         classes: 3,
-        reversed: false,
+        reversed: reversedVar2(),
       },
       palette,
       noDataColor: noDataColor(),
@@ -284,6 +284,16 @@ export default function ClassificationBivariatePanel(): JSX.Element {
   ] = createSignal<ClassificationMethod>(
     parameters.variable2.method,
   );
+  // - is variable 1 reversed ?
+  const [
+    reversedVar1,
+    setReversedVar1,
+  ] = createSignal<boolean>(parameters.variable1.reversed);
+  // - is variable 2 reversed ?
+  const [
+    reversedVar2,
+    setReversedVar2,
+  ] = createSignal<boolean>(parameters.variable2.reversed);
   // - the breaks chosen by the user for the
   //   current classification method for each variable
   //   (only if 'manual' is chosen)
@@ -342,8 +352,12 @@ export default function ClassificationBivariatePanel(): JSX.Element {
   );
 
   const bivariateClasses = (d: Record<string, any>) => {
-    const classVar1 = classifierVar1.getClass(d[parameters.variable1.variable]);
-    const classVar2 = classifierVar2.getClass(d[parameters.variable2.variable]);
+    const classVar1 = reversedVar1()
+      ? 2 - classifierVar1.getClass(d[parameters.variable1.variable])
+      : classifierVar1.getClass(d[parameters.variable1.variable]);
+    const classVar2 = reversedVar2()
+      ? 2 - classifierVar2.getClass(d[parameters.variable2.variable])
+      : classifierVar2.getClass(d[parameters.variable2.variable]);
     return [classVar1, classVar2];
   };
 
@@ -352,6 +366,8 @@ export default function ClassificationBivariatePanel(): JSX.Element {
     d[parameters.variable2.variable],
     classifierVar1,
     classifierVar2,
+    reversedVar1(),
+    reversedVar2(),
   );
 
   const entriesClassificationMethodVar1 = makeClassificationMenuEntries(
@@ -579,53 +595,31 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                 classifierVar2={() => classifierVar2}
                 bc={bc}
               />
-              <PlotFigure
-                id={'scatter-plot-bivariate-distribution'}
-                options={{
-                  height: 380,
-                  x: {
-                    label: currentClassifInfo().variable2.variable,
-                  },
-                  y: {
-                    label: currentClassifInfo().variable1.variable,
-                  },
-                  marks: [
-                    Plot.dot(ds, {
-                      y: currentClassifInfo().variable1.variable,
-                      x: currentClassifInfo().variable2.variable,
-                      fill: (d) => currentClassifInfo().palette.colors[bc(d)],
-                      r: 3,
-                    }),
-                    Plot.text(
-                      ds,
-                      Plot.groupZ(
-                        { text: 'count', x: 'mean', y: 'mean' },
-                        {
-                          fontSize: 14,
-                          stroke: 'width',
-                          strokeWidth: 8,
-                          fill: 'black',
-                          y: currentClassifInfo().variable1.variable,
-                          x: currentClassifInfo().variable2.variable,
-                          z: (d) => bivariateClasses(d).toString(),
-                        },
-                      ),
-                    ),
-                    Plot.ruleX([classifierVar2.breaks[0]], { }),
-                    Plot.ruleY([classifierVar1.breaks[0]], { }),
-                    classifierVar2.breaks.slice(1, -1).map((vx: number) => [
-                      Plot.ruleX([vx], { strokeDasharray: 4, strokeOpacity: 0.4 }),
-                    ]),
-                    classifierVar1.breaks.slice(1, -1).map((vy: number) => [
-                      Plot.ruleY([vy], { strokeDasharray: 4, strokeOpacity: 0.4 }),
-                    ]),
-                  ],
-                }}
-              />
             </div>
           </div>
           <div style={{ width: '45%', 'text-align': 'center' }}>
-            <h3> { 'Couleur' } </h3>
+            <h3> { LL().BivariateClassificationPanel.ProgressionDirection() } </h3>
+            <div class={'is-flex is-justify-content-space-around'}>
+              <InputFieldCheckbox
+                label={`${LL().FunctionalitiesSection.CommonOptions.Variable()} 1 - ${LL().FunctionalitiesSection.BivariateChoroplethOptions.Reversed()}`}
+                checked={reversedVar1()}
+                onChange={(value) => {
+                  setReversedVar1(value);
+                  updateClassificationParameters();
+                }}
+                width={'45%'}
+              />
+              <InputFieldCheckbox
+                label={`${LL().FunctionalitiesSection.CommonOptions.Variable()} 2 - ${LL().FunctionalitiesSection.BivariateChoroplethOptions.Reversed()}`}
+                checked={reversedVar2()}
+                onChange={(value) => {
+                  setReversedVar2(value);
+                  updateClassificationParameters();
+                }}
+                width={'45%'}
+              />
+            </div>
+            <h3> { LL().FunctionalitiesSection.CommonOptions.Color() } </h3>
             <div>
               <DropdownMenu
                 id={'dropdown-bivariate-palette'}

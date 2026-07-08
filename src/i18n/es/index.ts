@@ -884,6 +884,7 @@ const es = {
       ClassificationVariable1: 'Discretización de la variable 1',
       ClassificationVariable2: 'Discretización de la variable 2',
       NewLayerName: 'BiChoro_{variable1}_{variable2}_{layerName}',
+      Reversed: 'Invertir la paleta',
     },
     TrivariateChoroplethOptions: {
       NewLayerName: 'TriChoro_{variable1}_{variable2}_{variable3}_{layerName}',
@@ -1487,6 +1488,7 @@ const es = {
     paletteCopied: 'Paleta de colores copiada al portapapeles',
   },
   BivariateClassificationPanel: {
+    ProgressionDirection: 'Sentido de la progresión',
   },
   Legend: {
     ContextMenu: {
