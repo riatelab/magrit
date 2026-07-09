@@ -2,11 +2,8 @@
 import {
   createSignal, JSX, For,
   onCleanup, onMount,
-  Show,
+  Show, createMemo,
 } from 'solid-js';
-
-// Imports from other libraries
-import * as Plot from '@observablehq/plot';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -65,12 +62,14 @@ function ColorPicker(
     onChange: (colors: [string, string, string]) => void,
   },
 ): JSX.Element {
+  const { LL } = useI18nContext();
   const [baseColor, setBaseColor] = createSignal<string>(props.colors[0]);
   const [endColorVar1, setEndColorVar1] = createSignal<string>(props.colors[1]);
   const [endColorVar2, setEndColorVar2] = createSignal<string>(props.colors[2]);
   return <div class="is-flex is-align-items-center is-justify-content-center is-flex-wrap-wrap" style={{ gap: '12px' }}>
     <div class="is-flex is-flex-direction-column is-align-items-center">
-      <label for="base-color-picker"> Base color </label>
+      {/* eslint-disable-next-line solid/no-innerhtml */}
+      <label for="base-color-picker" innerHTML={LL().BivariateClassificationPanel.BaseColor()}></label>
       <input
         id="base-color-picker"
         type="color"
@@ -82,7 +81,8 @@ function ColorPicker(
       />
     </div>
     <div class="is-flex is-flex-direction-column is-align-items-center">
-      <label for="end-color-var1-picker"> Variable 1 end color </label>
+      {/* eslint-disable-next-line solid/no-innerhtml */}
+      <label for="end-color-var1-picker" innerHTML={LL().BivariateClassificationPanel.EndColorVar1()}></label>
       <input
         id="end-color-var1-picker"
         type="color"
@@ -94,7 +94,8 @@ function ColorPicker(
       />
     </div>
     <div class="is-flex is-flex-direction-column is-align-items-center">
-      <label for="end-color-var2-picker"> Variable 2 end color </label>
+      {/* eslint-disable-next-line solid/no-innerhtml */}
+      <label for="end-color-var2-picker" innerHTML={LL().BivariateClassificationPanel.EndColorVar2()}></label>
       <input
         id="end-color-var2-picker"
         type="color"
@@ -168,34 +169,6 @@ export default function ClassificationBivariatePanel(): JSX.Element {
     }
     const entitiesByClassVar2 = classifierVar2.countByClass(breaks2);
 
-    let palette: CustomPalette;
-    console.log(bivariatePalettes, colorScheme());
-    if (
-      bivariatePalettes
-        .map((d) => d.id)
-        .includes(colorScheme())
-    ) {
-      palette = bivariatePalettes.find((d) => d.id === colorScheme())!;
-    } else {
-      const newColors = generateBivariateColors(
-        customBaseColors()[1],
-        customBaseColors()[2],
-        customBaseColors()[0],
-        3,
-        'rgb',
-        'multiply',
-      );
-      palette = {
-        id: `custom-bivariate-${customBaseColors()[0]}-${customBaseColors()[1]}-${customBaseColors()[2]}`,
-        name: 'Custom bivariate palette',
-        type: 'custom',
-        colors: newColors,
-        provenance: 'user',
-        reversed: false,
-        number: 9,
-      };
-    }
-
     const newParameters: BivariateChoroplethParameters = {
       variable1: {
         variable: parameters.variable1.variable,
@@ -213,17 +186,12 @@ export default function ClassificationBivariatePanel(): JSX.Element {
         classes: 3,
         reversed: reversedVar2(),
       },
-      palette,
+      palette: paletteColors(),
       noDataColor: noDataColor(),
     };
     setCurrentClassifInfo(newParameters);
     setCustomBreaksVar1(breaks1);
     setCustomBreaksVar2(breaks2);
-    setCustomBaseColors([
-      palette.colors[0],
-      palette.colors[2],
-      palette.colors[6],
-    ]);
     console.log('Updated bivariate classification parameters:', newParameters);
   }; /* eslint-enable @typescript-eslint/no-use-before-define */
 
@@ -318,9 +286,45 @@ export default function ClassificationBivariatePanel(): JSX.Element {
     setCustomBaseColors,
   ] = createSignal<[string, string, string]>([
     parameters.palette.colors[0],
-    parameters.palette.colors[2],
     parameters.palette.colors[6],
+    parameters.palette.colors[2],
   ]);
+  // - the colors that compose the palette
+  const paletteColors = createMemo<CustomPalette>(() => {
+    let palette: CustomPalette;
+    if (
+      bivariatePalettes
+        .map((d) => d.id)
+        .includes(colorScheme())
+    ) {
+      palette = bivariatePalettes.find((d) => d.id === colorScheme())!;
+      setCustomBaseColors([
+        palette.colors[0],
+        palette.colors[6],
+        palette.colors[2],
+      ]);
+    } else {
+      const newColors = generateBivariateColors(
+        customBaseColors()[1],
+        customBaseColors()[2],
+        customBaseColors()[0],
+        3,
+        'lab',
+        'multiply',
+      );
+      palette = {
+        id: `custom-bivariate-${customBaseColors()[0]}-${customBaseColors()[1]}-${customBaseColors()[2]}`,
+        name: 'Custom bivariate palette',
+        type: 'custom',
+        colors: newColors,
+        provenance: 'user',
+        reversed: false,
+        number: 9,
+      };
+    }
+
+    return palette;
+  });
   // - the color chosen by the user for the no data values
   const [
     noDataColor,
@@ -598,28 +602,28 @@ export default function ClassificationBivariatePanel(): JSX.Element {
             </div>
           </div>
           <div style={{ width: '45%', 'text-align': 'center' }}>
-            <h3> { LL().BivariateClassificationPanel.ProgressionDirection() } </h3>
+            <h3> { LL().BivariateClassificationPanel.VariableDirection() } </h3>
             <div class={'is-flex is-justify-content-space-around'}>
               <InputFieldCheckbox
-                label={`${LL().FunctionalitiesSection.CommonOptions.Variable()} 1 - ${LL().FunctionalitiesSection.BivariateChoroplethOptions.Reversed()}`}
+                label={`${LL().FunctionalitiesSection.CommonOptions.Variable()} 1 - ${LL().FunctionalitiesSection.BivariateChoroplethOptions.ReversedAxis()}`}
                 checked={reversedVar1()}
                 onChange={(value) => {
                   setReversedVar1(value);
                   updateClassificationParameters();
                 }}
-                width={'45%'}
+                width={'40%'}
               />
               <InputFieldCheckbox
-                label={`${LL().FunctionalitiesSection.CommonOptions.Variable()} 2 - ${LL().FunctionalitiesSection.BivariateChoroplethOptions.Reversed()}`}
+                label={`${LL().FunctionalitiesSection.CommonOptions.Variable()} 2 - ${LL().FunctionalitiesSection.BivariateChoroplethOptions.ReversedAxis()}`}
                 checked={reversedVar2()}
                 onChange={(value) => {
                   setReversedVar2(value);
                   updateClassificationParameters();
                 }}
-                width={'45%'}
+                width={'40%'}
               />
             </div>
-            <h3> { LL().FunctionalitiesSection.CommonOptions.Color() } </h3>
+            <h3 style={{ 'margin-top': 0 }}> { LL().FunctionalitiesSection.CommonOptions.Color() } </h3>
             <div>
               <DropdownMenu
                 id={'dropdown-bivariate-palette'}
@@ -636,40 +640,39 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                 }}
                 maxHeight={'20vh'}
               />
-              <br />
-              <div style={{ width: '100%', 'text-align': 'center' }}>
+              <div style={{ width: '100%', 'text-align': 'center', 'margin-bottom': '12px' }}>
                 <BivariateLegendPreview
                   colorScheme={currentClassifInfo().palette}
                   cellSize={30}
                 />
-                <Show when={colorScheme() === 'Custom'}>
+                <Show when={colorScheme().toLowerCase().startsWith('custom')}>
                   <ColorPicker
                     colors={[
                       currentClassifInfo().palette.colors[0],
-                      currentClassifInfo().palette.colors[2],
                       currentClassifInfo().palette.colors[6],
+                      currentClassifInfo().palette.colors[2],
                     ]}
                     onChange={(colors) => {
                       setCustomBaseColors(colors);
                       updateClassificationParameters();
                     }}
                   />
-                  <br />
                 </Show>
               </div>
             </div>
             <Show when={missingValues > 0}>
-              <br/><br />
-              <InputFieldColor
-                label={LL().ClassificationPanel.missingValues(missingValues)}
-                value={noDataColor()}
-                onChange={(c) => {
-                  setNoDataColor(c);
-                  updateClassificationParameters();
-                }}
-                layout={'vertical'}
-                width={90}
-              />
+              <div style={{ width: '60%', margin: 'auto' }}>
+                <InputFieldColor
+                  label={LL().ClassificationPanel.missingValues(missingValues)}
+                  value={noDataColor()}
+                  onChange={(c) => {
+                    setNoDataColor(c);
+                    updateClassificationParameters();
+                  }}
+                  layout={'horizontal'}
+                  width={90}
+                />
+              </div>
             </Show>
           </div>
         </div>

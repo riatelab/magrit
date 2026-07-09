@@ -290,11 +290,11 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
     .map((f) => ({
       [parameters().variable1.variable]: isFiniteNumber(
         f.properties![parameters().variable1.variable],
-      ) ? f.properties![parameters().variable1.variable]
+      ) ? +f.properties![parameters().variable1.variable]
         : undefined,
       [parameters().variable2.variable]: isFiniteNumber(
         f.properties![parameters().variable2.variable],
-      ) ? f.properties![parameters().variable2.variable]
+      ) ? +f.properties![parameters().variable2.variable]
         : undefined,
     }));
 
@@ -356,74 +356,76 @@ export default function BivariateChoroSettings(props: PortrayalSettingsProps): J
 
   return <div class="portrayal-section__portrayal-options-bivariatechoropleth">
     <div class={'is-flex is-justify-content-space-around'}>
-      <InputFieldSelect
-        label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 1` }
-        onChange={(value) => {
-          setTargetVariable1(value);
-        }}
-        value={ targetVariable1() }
-        layout={'vertical'}
-      >
-        <For each={targetFields}>
-          { (variable) => <option value={ variable.name }>{ variable.name }</option> }
-        </For>
-      </InputFieldSelect>
-      <InputFieldSelect
-        label={LL().FunctionalitiesSection.BivariateChoroplethOptions.ClassificationVariable1()}
-        onChange={(value) => {
-          setClassificationVar1(value);
-        }}
-        value={classificationVar1()}
-        layout={'vertical'}
-      >
-        <For each={proposedClassifications}>
-          {
-            (method) => <option value={ method.value }>
-              { method.name }
-            </option>
-          }
-        </For>
-      </InputFieldSelect>
-      <InputFieldCheckbox
-        label={LL().FunctionalitiesSection.BivariateChoroplethOptions.Reversed()}
-        checked={reversedVar1()}
-        onChange={(value) => setReversedVar1(value)}
-      />
-    </div>
-    <div class={'is-flex is-justify-content-space-around'}>
-      <InputFieldSelect
-        label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 2` }
-        onChange={(value) => {
-          setTargetVariable2(value);
-        }}
-        value={ targetVariable2() }
-        layout={'vertical'}
-      >
-        <For each={targetFields}>
-          { (variable) => <option value={ variable.name }>{ variable.name }</option> }
-        </For>
-      </InputFieldSelect>
-      <InputFieldSelect
-        label={LL().FunctionalitiesSection.BivariateChoroplethOptions.ClassificationVariable2()}
-        onChange={(value) => {
-          setClassificationVar2(value);
-        }}
-        value={classificationVar2()}
-        layout={'vertical'}
-      >
-        <For each={proposedClassifications}>
-          {
-            (method) => <option value={ method.value }>
-              { method.name }
-            </option>
-          }
-        </For>
-      </InputFieldSelect>
-      <InputFieldCheckbox
-        label={LL().FunctionalitiesSection.BivariateChoroplethOptions.Reversed()}
-        checked={reversedVar2()}
-        onChange={(value) => { setReversedVar2(value); }}
-      />
+      <div>
+        <InputFieldSelect
+          label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 1` }
+          onChange={(value) => {
+            setTargetVariable1(value);
+          }}
+          value={ targetVariable1() }
+          layout={'vertical'}
+        >
+          <For each={targetFields}>
+            { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+          </For>
+        </InputFieldSelect>
+        <InputFieldSelect
+          label={LL().FunctionalitiesSection.ChoroplethOptions.Classification()}
+          onChange={(value) => {
+            setClassificationVar1(value);
+          }}
+          value={classificationVar1()}
+          layout={'vertical'}
+        >
+          <For each={proposedClassifications}>
+            {
+              (method) => <option value={ method.value }>
+                { method.name }
+              </option>
+            }
+          </For>
+        </InputFieldSelect>
+        <InputFieldCheckbox
+          label={LL().FunctionalitiesSection.BivariateChoroplethOptions.ReversedAxis()}
+          checked={reversedVar1()}
+          onChange={(value) => setReversedVar1(value)}
+        />
+      </div>
+      <div>
+        <InputFieldSelect
+          label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 2` }
+          onChange={(value) => {
+            setTargetVariable2(value);
+          }}
+          value={ targetVariable2() }
+          layout={'vertical'}
+        >
+          <For each={targetFields}>
+            { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+          </For>
+        </InputFieldSelect>
+        <InputFieldSelect
+          label={LL().FunctionalitiesSection.ChoroplethOptions.Classification()}
+          onChange={(value) => {
+            setClassificationVar2(value);
+          }}
+          value={classificationVar2()}
+          layout={'vertical'}
+        >
+          <For each={proposedClassifications}>
+            {
+              (method) => <option value={ method.value }>
+                { method.name }
+              </option>
+            }
+          </For>
+        </InputFieldSelect>
+        <InputFieldCheckbox
+          label={LL().FunctionalitiesSection.BivariateChoroplethOptions.ReversedAxis()}
+          checked={reversedVar2()}
+          onChange={(value) => { setReversedVar2(value); }}
+        />
+      </div>
     </div>
     <BivariateDistributionPlot
       ds={makeDs()}

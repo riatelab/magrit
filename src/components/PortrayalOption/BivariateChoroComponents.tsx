@@ -1,8 +1,7 @@
 // Imports from solid-js
 import {
-  createSignal, JSX, For,
-  onCleanup, onMount,
-  Show, Accessor,
+  type JSX,
+  Accessor,
 } from 'solid-js';
 
 // Imports from other libraries
@@ -15,11 +14,11 @@ import { BivariateChoroplethParameters } from '../../global';
 // eslint-disable-next-line import/prefer-default-export
 export function BivariateDistributionPlot(
   props: {
-    ds: { [x: string]: any }[],
+    ds: { [x: string]: number | undefined }[],
     currentClassifInfo: Accessor<BivariateChoroplethParameters>,
-    bivariateClasses: (d: Record<string, any>) => any[],
-    classifierVar1: () => any,
-    classifierVar2: () => any,
+    bivariateClasses: (d: Record<string, any>) => number[],
+    classifierVar1: () => { breaks: number[] },
+    classifierVar2: () => { breaks: number[] },
     bc: (d: Record<string, any>) => number,
   },
 ): JSX.Element {
@@ -41,6 +40,7 @@ export function BivariateDistributionPlot(
           x: props.currentClassifInfo().variable2.variable,
           fill: (d) => props.currentClassifInfo().palette.colors[props.bc(d)],
           r: 3,
+          tip: true,
         }),
         Plot.text(
           props.ds,

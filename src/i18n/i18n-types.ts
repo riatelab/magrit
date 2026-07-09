@@ -3782,9 +3782,9 @@ type RootTranslation = {
 			 */
 			NewLayerName: RequiredParams<'layerName' | 'variable1' | 'variable2'>
 			/**
-			 * R​e​v​e​r​s​e​d​ ​p​a​l​e​t​t​e
+			 * R​e​v​e​r​s​e​ ​a​x​i​s
 			 */
-			Reversed: string
+			ReversedAxis: string
 		}
 		TrivariateChoroplethOptions: {
 			/**
@@ -6005,9 +6005,21 @@ type RootTranslation = {
 	}
 	BivariateClassificationPanel: {
 		/**
-		 * D​i​r​e​c​t​i​o​n​ ​o​f​ ​t​h​e​ ​p​r​o​g​r​e​s​s​i​o​n
+		 * D​i​r​e​c​t​i​o​n​ ​o​f​ ​t​h​e​ ​v​a​r​i​a​b​l​e
 		 */
-		ProgressionDirection: string
+		VariableDirection: string
+		/**
+		 * B​a​s​e​ ​c​o​l​o​r​<​b​r​ ​/​>​(​l​i​g​h​t​e​s​t​)
+		 */
+		BaseColor: string
+		/**
+		 * E​n​d​ ​c​o​l​o​r​<​b​r​ ​/​>​(​v​a​r​i​a​b​l​e​ ​1​)
+		 */
+		EndColorVar1: string
+		/**
+		 * E​n​d​ ​c​o​l​o​r​<​b​r​ ​/​>​(​v​a​r​i​a​b​l​e​ ​2​)
+		 */
+		EndColorVar2: string
 	}
 	Legend: {
 		ContextMenu: {
@@ -10055,9 +10067,9 @@ export type TranslationFunctions = {
 			 */
 			NewLayerName: (arg: { layerName: unknown, variable1: unknown, variable2: unknown }) => LocalizedString
 			/**
-			 * Reversed palette
+			 * Reverse axis
 			 */
-			Reversed: () => LocalizedString
+			ReversedAxis: () => LocalizedString
 		}
 		TrivariateChoroplethOptions: {
 			/**
@@ -12228,9 +12240,21 @@ export type TranslationFunctions = {
 	}
 	BivariateClassificationPanel: {
 		/**
-		 * Direction of the progression
+		 * Direction of the variable
 		 */
-		ProgressionDirection: () => LocalizedString
+		VariableDirection: () => LocalizedString
+		/**
+		 * Base color<br />(lightest)
+		 */
+		BaseColor: () => LocalizedString
+		/**
+		 * End color<br />(variable 1)
+		 */
+		EndColorVar1: () => LocalizedString
+		/**
+		 * End color<br />(variable 2)
+		 */
+		EndColorVar2: () => LocalizedString
 	}
 	Legend: {
 		ContextMenu: {

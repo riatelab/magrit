@@ -188,35 +188,71 @@ export default function legendBivariateChoropleth(
         </For>
       </g>
       <Show when={legend.displayBreakValues}>
-        <For each={
-          layer.rendererParameters.variable1.reversed
-            ? layer.rendererParameters.variable1.breaks.slice(1, 3)
-            : layer.rendererParameters.variable1.breaks.slice(1, 3).reverse()
-        }>
-          {(breakValue, index) => (
-            <text
-              x={-totalSize() / 2 + breaksStep()(index() + 1)}
-              y={totalSize() / 2 + 12}
-              text-anchor="middle"
-              font-size={legend.labels.fontSize}
-              font-family={legend.labels.fontFamily}
-              fill={legend.labels.fontColor}
-              transform={'rotate(180)'}
-            >
-              {
-                round(breakValue, legend.roundDecimals)
-                  .toLocaleString(
-                    applicationSettingsStore.userLocale,
-                    {
-                      minimumFractionDigits: precisionToMinimumFractionDigits(
-                        legend.roundDecimals || 0,
-                      ),
-                    },
-                  )
-              }
-            </text>
-          )}
-        </For>
+        <Switch>
+          <Match when={!legend.rotate}>
+            <For each={
+              layer.rendererParameters.variable1.reversed
+                ? layer.rendererParameters.variable1.breaks.slice(1, 3).reverse()
+                : layer.rendererParameters.variable1.breaks.slice(1, 3)
+            }>
+              {(breakValue, index) => (
+                <text
+                  x={-totalSize() / 2 + breaksStep()(index() + 1)}
+                  y={-totalSize() / 2 - 4}
+                  text-anchor="middle"
+                  font-size={legend.labels.fontSize}
+                  font-family={legend.labels.fontFamily}
+                  fill={legend.labels.fontColor}
+                  transform={'rotate(0)'}
+                >
+                  {
+                    round(breakValue, legend.roundDecimals)
+                      .toLocaleString(
+                        applicationSettingsStore.userLocale,
+                        {
+                          minimumFractionDigits: precisionToMinimumFractionDigits(
+                            legend.roundDecimals || 0,
+                          ),
+                        },
+                      )
+                  }
+                </text>
+              )}
+            </For>
+          </Match>
+          <Match when={legend.rotate}>
+            <For each={
+              layer.rendererParameters.variable1.reversed
+                ? layer.rendererParameters.variable1.breaks.slice(1, 3)
+                : layer.rendererParameters.variable1.breaks.slice(1, 3).reverse()
+            }>
+              {(breakValue, index) => (
+                <text
+                  x={-totalSize() / 2 + breaksStep()(index() + 1)}
+                  y={totalSize() / 2 + 12}
+                  text-anchor="middle"
+                  font-size={legend.labels.fontSize}
+                  font-family={legend.labels.fontFamily}
+                  fill={legend.labels.fontColor}
+                  transform={'rotate(180)'}
+                >
+                  {
+                    round(breakValue, legend.roundDecimals)
+                      .toLocaleString(
+                        applicationSettingsStore.userLocale,
+                        {
+                          minimumFractionDigits: precisionToMinimumFractionDigits(
+                            legend.roundDecimals || 0,
+                          ),
+                        },
+                      )
+                  }
+                </text>
+              )}
+            </For>
+          </Match>
+        </Switch>
+
         <For each={
           layer.rendererParameters.variable2.reversed
             ? layer.rendererParameters.variable2.breaks.slice(1, 3).reverse()
@@ -292,39 +328,78 @@ export default function legendBivariateChoropleth(
         </g>
       </Show>
       <Show when={legend.variable1Label !== ''}>
-        <g
-          class="legend-labels"
-          transform={`translate(${sizeX() / 2 + (legend.rotate ? 0 : extraPadding())}, ${distanceToTop() + sizeX() / 2}) rotate(${legend.rotate ? -135 : -90})`}
-        >
-          <Switch>
-            <Match when={!layer.rendererParameters.variable1.reversed}>
-              <text
-                x={-totalSize() / 2}
-                y={totalSize() / 2 + extraPadding()}
-                font-size={legend.labels.fontSize}
-                font-family={legend.labels.fontFamily}
-                fill={legend.labels.fontColor}
-                text-anchor="start"
-                transform={'rotate(180)'}
-              >
-                ← {legend.variable1Label}
-              </text>
-            </Match>
-            <Match when={layer.rendererParameters.variable1.reversed}>
-              <text
-                x={-totalSize() / 2}
-                y={totalSize() / 2 + extraPadding()}
-                font-size={legend.labels.fontSize}
-                font-family={legend.labels.fontFamily}
-                fill={legend.labels.fontColor}
-                text-anchor="start"
-                transform={'rotate(180)'}
-              >
-                {legend.variable1Label} →
-              </text>
-            </Match>
-          </Switch>
-        </g>
+        <Switch>
+          <Match when={legend.rotate}>
+            <g
+              class="legend-labels"
+              transform={`translate(${sizeX() / 2}, ${distanceToTop() + sizeX() / 2}) rotate(-135)`}
+            >
+              <Switch>
+                <Match when={!layer.rendererParameters.variable1.reversed}>
+                  <text
+                    x={-totalSize() / 2}
+                    y={totalSize() / 2 + extraPadding()}
+                    font-size={legend.labels.fontSize}
+                    font-family={legend.labels.fontFamily}
+                    fill={legend.labels.fontColor}
+                    text-anchor="start"
+                    transform={'rotate(180)'}
+                  >
+                    ← {legend.variable1Label}
+                  </text>
+                </Match>
+                <Match when={layer.rendererParameters.variable1.reversed}>
+                  <text
+                    x={-totalSize() / 2}
+                    y={totalSize() / 2 + extraPadding()}
+                    font-size={legend.labels.fontSize}
+                    font-family={legend.labels.fontFamily}
+                    fill={legend.labels.fontColor}
+                    text-anchor="start"
+                    transform={'rotate(180)'}
+                  >
+                    {legend.variable1Label} →
+                  </text>
+                </Match>
+              </Switch>
+            </g>
+          </Match>
+          <Match when={!legend.rotate}>
+            <g
+              class="legend-labels"
+              transform={`translate(${sizeX() / 2 + extraPadding()}, ${distanceToTop() + sizeX() / 2}) rotate(-90)`}
+            >
+              <Switch>
+                <Match when={!layer.rendererParameters.variable1.reversed}>
+                  <text
+                    x={totalSize() / 2}
+                    y={-totalSize() / 2 - extraPadding() / 1.3}
+                    font-size={legend.labels.fontSize}
+                    font-family={legend.labels.fontFamily}
+                    fill={legend.labels.fontColor}
+                    text-anchor="end"
+                    transform={'rotate(0)'}
+                  >
+                    {legend.variable1Label} →
+                  </text>
+                </Match>
+                <Match when={layer.rendererParameters.variable1.reversed}>
+                  <text
+                    x={totalSize() / 2}
+                    y={-totalSize() / 2 - extraPadding()}
+                    font-size={legend.labels.fontSize}
+                    font-family={legend.labels.fontFamily}
+                    fill={legend.labels.fontColor}
+                    text-anchor="end"
+                    transform={'rotate(0)'}
+                  >
+                    ← {legend.variable1Label}
+                  </text>
+                </Match>
+              </Switch>
+            </g>
+          </Match>
+        </Switch>
       </Show>
     </Show>
     <Show when={legend.noDataBox}>

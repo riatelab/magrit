@@ -209,14 +209,6 @@ export const bivariatePalettes = [
       '#9972af', '#976b82', '#804d36',
     ],
   },
-  {
-    name: 'BuRd',
-    colors: [
-      '#e8e8e8', '#d8a4a4', '#c75a5a',
-      '#a6b1d3', '#a6a4a4', '#a65a5a',
-      '#657cbf', '#657ca4', '#655a5a',
-    ],
-  },
 ].map((p) => ({
   id: `${p.name}-bivariate`,
   name: p.provider ? `${p.name} (${p.provider})` : p.name,
