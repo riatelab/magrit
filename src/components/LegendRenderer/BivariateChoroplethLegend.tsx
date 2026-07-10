@@ -73,6 +73,7 @@ export default function legendBivariateChoropleth(
   });
 
   // How many boxes on each side of the bivariate legend grid
+  // TODO: use reactive value
   const gridSize = 3;
 
   // Padding for the labels of the variables
