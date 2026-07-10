@@ -373,7 +373,7 @@ export default function legendBivariateChoropleth(
                 <Match when={!layer.rendererParameters.variable1.reversed}>
                   <text
                     x={totalSize() / 2}
-                    y={-totalSize() / 2 - extraPadding() / 1.3}
+                    y={-totalSize() / 2 - extraPadding() / 1.4}
                     font-size={legend.labels.fontSize}
                     font-family={legend.labels.fontFamily}
                     fill={legend.labels.fontColor}
@@ -386,7 +386,7 @@ export default function legendBivariateChoropleth(
                 <Match when={layer.rendererParameters.variable1.reversed}>
                   <text
                     x={totalSize() / 2}
-                    y={-totalSize() / 2 - extraPadding()}
+                    y={-totalSize() / 2 - extraPadding() / 1.4}
                     font-size={legend.labels.fontSize}
                     font-family={legend.labels.fontFamily}
                     fill={legend.labels.fontColor}
@@ -410,13 +410,13 @@ export default function legendBivariateChoropleth(
           y={positionNoDataBox()}
           rx={legend.boxCornerRadius}
           ry={legend.boxCornerRadius}
-          width={legend.boxWidth}
-          height={legend.boxWidth / 2}
+          width={legend.boxWidth * 0.66}
+          height={legend.boxWidth * 0.66}
           stroke={legend.boxStrokeWidth ? layer.strokeColor : undefined}
         />
         <text
-          x={legend.boxWidth + defaultSpacing}
-          y={positionNoDataBox() + (legend.boxWidth / 4)}
+          x={legend.boxWidth * 0.66 + defaultSpacing}
+          y={positionNoDataBox() + ((legend.boxWidth * 0.66) / 2)}
           font-size={legend.labels.fontSize}
           font-family={legend.labels.fontFamily}
           font-style={legend.labels.fontStyle}
