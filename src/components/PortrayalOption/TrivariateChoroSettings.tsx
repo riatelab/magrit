@@ -5,21 +5,32 @@ import {
   createSignal,
   For,
   type JSX,
-  on,
+  on, Show,
 } from 'solid-js';
 import { produce } from 'solid-js/store';
 
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
+import {
+  tricolore,
+  tricoloreSextant,
+  TricoloreViz,
+  CompositionUtils,
+} from 'tricolore';
 
 // Stores
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
+import { generateIdLayer } from '../../helpers/layers';
 
 // Subcomponents
+import ButtonValidation from '../Inputs/InputButtonValidation.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import InputResultName from './InputResultName.tsx';
+import MessageBlock from '../MessageBlock.tsx';
 import { openLayerManager } from '../LeftMenu/LeftMenu.tsx';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 
@@ -29,8 +40,7 @@ import { VariableType } from '../../helpers/typeDetection';
 import { findSuitableName } from '../../helpers/common';
 import { setFunctionalitySelectionStore } from '../../store/FunctionalitySelectionStore';
 import { setLoading } from '../../store/GlobalStore';
-
-import { generateIdLayer } from '../../helpers/layers';
+import { TricoloreScaleType } from '../../global.d';
 
 function onClickValidate(
   referenceLayerId: string,
@@ -70,6 +80,18 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
   const [targetVariable1, setTargetVariable1] = createSignal<string>(targetFields[0].name);
   const [targetVariable2, setTargetVariable2] = createSignal<string>(targetFields[1].name);
   const [targetVariable3, setTargetVariable3] = createSignal<string>(targetFields[2].name);
+
+  // - whether to use mean centering
+  const [useMeanCentering, setUseMeanCentering] = createSignal<boolean>(false);
+
+  // - whether the color scale is discrete, continuous or sextant
+  const [
+    colorScaleType,
+    setColorScaleType,
+  ] = createSignal<TricoloreScaleType>(TricoloreScaleType.Discrete);
+
+  // TODO: add logic to check
+  const isTernaryComposition = createMemo(() => false);
 
   const [
     newLayerName,
@@ -163,5 +185,35 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
         { (variable) => <option value={ variable.name }>{ variable.name }</option> }
       </For>
     </InputFieldSelect>
+    <Show when={!isTernaryComposition()}>
+      <MessageBlock type={'danger'} useIcon={true}>
+        { LL().FunctionalitiesSection.TrivariateChoroplethOptions.InformationTernaryComposition() }
+      </MessageBlock>
+    </Show>
+    <Show when={isTernaryComposition()}>
+      <InputFieldSelect
+        label={ LL().FunctionalitiesSection.TrivariateChoroplethOptions.ColorScaleType() }
+        onChange={(value) => { setColorScaleType(value as TricoloreScaleType); }}
+        value={colorScaleType()}
+      >
+        <For each={Object.entries(TricoloreScaleType)}>
+          {([key, value]) => <option value={key}>{value}</option>}
+        </For>
+      </InputFieldSelect>
+      <InputFieldCheckbox
+        label={ LL().FunctionalitiesSection.TrivariateChoroplethOptions.UseMeanCentering() }
+        checked={useMeanCentering()}
+        onChange={(value) => { setUseMeanCentering(value); }}
+      />
+    </Show>
+    <InputResultName
+      value={newLayerName()}
+      onKeyUp={(value) => { setNewLayerName(value); }}
+      onEnter={ makePortrayal }
+    />
+    <ButtonValidation
+      label={ LL().FunctionalitiesSection.CreateLayer() }
+      onClick={ makePortrayal }
+    />
   </div>;
 }

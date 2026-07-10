@@ -663,6 +663,12 @@ export interface BivariateChoroplethParameters {
   palette: CustomPalette,
 }
 
+export enum TricoloreScaleType {
+  Discrete = 'Discrete',
+  Continuous = 'Continuous',
+  Sextant = 'Sextant',
+}
+
 export interface TrivariateChoroplethParameters {
   // The name of the first variable
   variable1: string,
@@ -673,11 +679,11 @@ export interface TrivariateChoroplethParameters {
   // Whether to apply mean centering
   meanCentered: boolean,
   // The type of color scale (discrete, continuous or sextant)
-  colorScaleType: 'discrete' | 'continuous' | 'sextant',
+  colorScaleType: TricoloreScaleType,
 }
 
 export interface TriChoroDiscreteParameters extends TrivariateChoroplethParameters {
-  colorScaleType: 'discrete',
+  colorScaleType: TricoloreScaleType.Discrete,
   // The number of classes in the triangular classification
   classes: 4 | 9 | 16,
   // The hue of the first component (left corner of the triangle), from 0 to 360
@@ -696,7 +702,7 @@ export interface TriChoroDiscreteParameters extends TrivariateChoroplethParamete
 }
 
 export interface TriChoroContinuousParameters extends TrivariateChoroplethParameters {
-  colorScaleType: 'continuous',
+  colorScaleType: TricoloreScaleType.Continuous,
   // The hue of the first component (left corner of the triangle), from 0 to 360
   hue: number,
   // The maximum saturation/intensity of the pure colors at the
@@ -713,7 +719,7 @@ export interface TriChoroContinuousParameters extends TrivariateChoroplethParame
 }
 
 export interface TriChoroSextantParameters extends TrivariateChoroplethParameters {
-  colorScaleType: 'sextant',
+  colorScaleType: TricoloreScaleType.Sextant,
   // The colors for the six sextants (in clockwise order)
   colors: [string, string, string, string, string, string],
 }
