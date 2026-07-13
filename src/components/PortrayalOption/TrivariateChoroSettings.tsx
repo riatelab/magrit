@@ -161,33 +161,6 @@ function onClickValidate(
   );
 }
 
-function validateTernaryPoints(
-  P: ([number, number, number] | null)[],
-  sumValue: number = 1,
-  tol: number = 1e-5,
-): void {
-  // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < P.length; i++) {
-    const p = P[i];
-    if (!p) {
-      // eslint-disable-next-line no-continue
-      continue;
-    }
-    if (p.length !== 3) {
-      throw new Error(`Ternary point must have exactly 3 components, got ${p.length} at position ${i} of the input array`);
-    }
-
-    if (p.some((val) => val < 0)) {
-      throw new Error(`Ternary point contains negative values: [${p}] at position ${i} of the input array`);
-    }
-
-    const sum = p[0] + p[1] + p[2];
-    if (Math.abs(sum - sumValue) > tol) {
-      throw new Error(`Ternary point components must sum to ${sumValue}, got ${sum}: [${p}] at position ${i} of the input array`);
-    }
-  }
-}
-
 export default function TrivariateChoroSettings(props: PortrayalSettingsProps): JSX.Element {
   const { LL } = useI18nContext();
 
@@ -248,9 +221,7 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
   const isTernaryComposition = createMemo(() => {
     let isValid;
     try {
-      // TODO: use CompositionUtils.validateTernaryPoints once the
-      //  tolerance is added to the function signature in tricolore
-      validateTernaryPoints(filteredPts() as [number, number, number][], 1, 1e-1);
+      CompositionUtils.validateTernaryPoints(filteredPts() as [number, number, number][], 1, 1e-1);
       isValid = true;
     } catch (err) {
       console.log(err);
@@ -289,7 +260,6 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
         plotDiv!.innerHTML = '';
         if (!isTernaryComposition()) return;
         const p = new TricoloreViz(
-          plotDiv!,
           300,
           300,
           {
@@ -303,8 +273,9 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
           ? CompositionUtils.centre(filteredPts())
           : [1 / 3, 1 / 3, 1 / 3];
         const labels = [`⟵ ${targetVariable1()}`, `⟵ ${targetVariable2()}`, `${targetVariable3()} ⟶`];
+        let svg;
         if (colorScaleType() === TricoloreScaleType.Sextant) {
-          p.createSextantPlot(filteredPts(), {
+          svg = p.createSextantPlot(filteredPts(), {
             center,
             labels,
             values: sextantColors(),
@@ -313,7 +284,7 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
             labelPosition: 'edge',
           });
         } else if (colorScaleType() === TricoloreScaleType.Discrete) {
-          p.createDiscretePlot(filteredPts(), {
+          svg = p.createDiscretePlot(filteredPts(), {
             center,
             hue: colorScaleParams.hue,
             chroma: colorScaleParams.chroma,
@@ -327,7 +298,7 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
             breaks: Msqrt(nClasses()),
           });
         } else { // TricoloreScaleType.Continuous
-          p.createContinuousPlot(filteredPts(), {
+          svg = p.createContinuousPlot(filteredPts(), {
             center,
             hue: colorScaleParams.hue,
             chroma: colorScaleParams.chroma,
@@ -340,6 +311,7 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
             labelPosition: 'edge',
           });
         }
+        plotDiv.appendChild(svg);
       },
     ),
   );
