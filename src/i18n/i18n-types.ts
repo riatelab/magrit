@@ -3788,6 +3788,30 @@ type RootTranslation = {
 		}
 		TrivariateChoroplethOptions: {
 			/**
+			 * C​o​l​o​r​ ​s​c​a​l​e​ ​t​y​p​e
+			 */
+			ColorScaleType: string
+			/**
+			 * D​i​s​c​r​e​t​e
+			 */
+			Discrete: string
+			/**
+			 * C​o​n​t​i​n​u​o​u​s
+			 */
+			Continuous: string
+			/**
+			 * S​e​x​t​a​n​t
+			 */
+			Sextant: string
+			/**
+			 * F​o​r​ ​e​a​c​h​ ​e​n​t​i​t​y​,​ ​t​h​e​ ​s​u​m​ ​o​f​ ​t​h​e​ ​t​h​r​e​e​ ​v​a​r​i​a​b​l​e​s​ ​m​u​s​t​ ​e​q​u​a​l​ ​1​ ​(​o​r​ ​1​0​0​%​)​.
+			 */
+			InformationTernaryComposition: string
+			/**
+			 * U​s​e​ ​m​e​a​n​ ​c​e​n​t​e​r​i​n​g
+			 */
+			UseMeanCentering: string
+			/**
 			 * T​r​i​C​h​o​r​o​_​{​v​a​r​i​a​b​l​e​1​}​_​{​v​a​r​i​a​b​l​e​2​}​_​{​v​a​r​i​a​b​l​e​3​}​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
 			 * @param {unknown} variable1
@@ -10072,6 +10096,30 @@ export type TranslationFunctions = {
 			ReversedAxis: () => LocalizedString
 		}
 		TrivariateChoroplethOptions: {
+			/**
+			 * Color scale type
+			 */
+			ColorScaleType: () => LocalizedString
+			/**
+			 * Discrete
+			 */
+			Discrete: () => LocalizedString
+			/**
+			 * Continuous
+			 */
+			Continuous: () => LocalizedString
+			/**
+			 * Sextant
+			 */
+			Sextant: () => LocalizedString
+			/**
+			 * For each entity, the sum of the three variables must equal 1 (or 100%).
+			 */
+			InformationTernaryComposition: () => LocalizedString
+			/**
+			 * Use mean centering
+			 */
+			UseMeanCentering: () => LocalizedString
 			/**
 			 * TriChoro_{variable1}_{variable2}_{variable3}_{layerName}
 			 */

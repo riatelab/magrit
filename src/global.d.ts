@@ -680,10 +680,13 @@ export interface TrivariateChoroplethParameters {
   meanCentered: boolean,
   // The type of color scale (discrete, continuous or sextant)
   colorScaleType: TricoloreScaleType,
+  // The parameters of the color scale
+  colorScaleOptions: TriChoroDiscreteOpts | TriChoroContinuousOpts | TriChoroSextantOpts,
+  // The color to use for features with no data
+  noDataColor: string,
 }
 
-export interface TriChoroDiscreteParameters extends TrivariateChoroplethParameters {
-  colorScaleType: TricoloreScaleType.Discrete,
+export interface TriChoroDiscreteOpts {
   // The number of classes in the triangular classification
   classes: 4 | 9 | 16,
   // The hue of the first component (left corner of the triangle), from 0 to 360
@@ -701,8 +704,7 @@ export interface TriChoroDiscreteParameters extends TrivariateChoroplethParamete
   spread: number,
 }
 
-export interface TriChoroContinuousParameters extends TrivariateChoroplethParameters {
-  colorScaleType: TricoloreScaleType.Continuous,
+export interface TriChoroContinuousOpts {
   // The hue of the first component (left corner of the triangle), from 0 to 360
   hue: number,
   // The maximum saturation/intensity of the pure colors at the
@@ -718,8 +720,7 @@ export interface TriChoroContinuousParameters extends TrivariateChoroplethParame
   spread: number,
 }
 
-export interface TriChoroSextantParameters extends TrivariateChoroplethParameters {
-  colorScaleType: TricoloreScaleType.Sextant,
+export interface TriChoroSextantOpts {
   // The colors for the six sextants (in clockwise order)
   colors: [string, string, string, string, string, string],
 }
@@ -1230,6 +1231,10 @@ interface TrivariateChoroplethLegend extends LegendBase {
   noDataBox: boolean,
   // Where to put the axis labels
   axisLabelsPosition: 'edge' | 'corner',
+  // Whether to display the center
+  displayCenter: boolean,
+  // Whether to display lines (TODO: improve this in Tricolore library)
+  displayLines: boolean,
   // The text properties of the labels (and no-data label if any)
   labels: LegendTextElement,
   // The text properties of the break values

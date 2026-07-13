@@ -887,6 +887,12 @@ const es = {
       ReversedAxis: 'Invertir el eje',
     },
     TrivariateChoroplethOptions: {
+      ColorScaleType: 'Tipo de escala de color',
+      Discrete: 'Discreta',
+      Continuous: 'Continua',
+      Sextant: 'Sextante',
+      UseMeanCentering: 'Usar centrado en la media',
+      InformationTernaryComposition: 'Para cada entidad, la suma de las tres variables debe ser igual a 1 (o al 100 %).',
       NewLayerName: 'TriChoro_{variable1}_{variable2}_{variable3}_{layerName}',
     },
     ProportionalSymbolsOptions: {
