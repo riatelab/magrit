@@ -49,10 +49,11 @@ import {
   type TriChoroDiscreteOpts,
   type TriChoroContinuousOpts,
   type LayerDescriptionTrivariateChoropleth,
-  RepresentationType,
   type TrivariateChoroplethParameters,
   type LegendTextElement,
-  LegendType, TrivariateChoroplethLegend,
+  type TrivariateChoroplethLegend,
+  LegendType,
+  RepresentationType,
 } from '../../global.d';
 
 type SextantColorArray = [string, string, string, string, string, string];
@@ -263,10 +264,10 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
           300,
           300,
           {
-            top: 10,
-            right: 30,
+            top: 0,
+            right: 0,
             bottom: 30,
-            left: 30,
+            left: 0,
           },
         );
         const center = useMeanCentering()
@@ -387,39 +388,44 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
   );
 
   return <div class="portrayal-section__portrayal-options-trivariatechoropleth">
-    <InputFieldSelect
-      label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 1` }
-      onChange={(value) => {
-        setTargetVariable1(value);
-      }}
-      value={ targetVariable1() }
-    >
-      <For each={targetFields}>
-        { (variable) => <option value={ variable.name }>{ variable.name }</option> }
-      </For>
-    </InputFieldSelect>
-    <InputFieldSelect
-      label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 2` }
-      onChange={(value) => {
-        setTargetVariable2(value);
-      }}
-      value={ targetVariable2() }
-    >
-      <For each={targetFields}>
-        { (variable) => <option value={ variable.name }>{ variable.name }</option> }
-      </For>
-    </InputFieldSelect>
-    <InputFieldSelect
-      label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 3` }
-      onChange={(value) => {
-        setTargetVariable3(value);
-      }}
-      value={ targetVariable3() }
-    >
-      <For each={targetFields}>
-        { (variable) => <option value={ variable.name }>{ variable.name }</option> }
-      </For>
-    </InputFieldSelect>
+    <div class={'is-flex is-justify-content-space-evenly'}>
+      <InputFieldSelect
+        label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 1` }
+        onChange={(value) => {
+          setTargetVariable1(value);
+        }}
+        value={ targetVariable1() }
+        layout={'vertical'}
+      >
+        <For each={targetFields}>
+          { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+        </For>
+      </InputFieldSelect>
+      <InputFieldSelect
+        label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 2` }
+        onChange={(value) => {
+          setTargetVariable2(value);
+        }}
+        value={ targetVariable2() }
+        layout={'vertical'}
+      >
+        <For each={targetFields}>
+          { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+        </For>
+      </InputFieldSelect>
+      <InputFieldSelect
+        label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 3` }
+        onChange={(value) => {
+          setTargetVariable3(value);
+        }}
+        value={ targetVariable3() }
+        layout={'vertical'}
+      >
+        <For each={targetFields}>
+          { (variable) => <option value={ variable.name }>{ variable.name }</option> }
+        </For>
+      </InputFieldSelect>
+    </div>
     <Show when={!isTernaryComposition()}>
       <MessageBlock type={'danger'} useIcon={true}>
         { LL().FunctionalitiesSection.TrivariateChoroplethOptions.InformationTernaryComposition() }
@@ -523,7 +529,13 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
         </div>
       </Show>
     </Show>
-    <div class={'has-text-centered'} ref={plotDiv!}></div>
+    <div
+      class={'has-text-centered'}
+      // TODO: fix what follows when the size of the canvas inside the triangle
+      //       is improved on tricolore side
+      style={{ 'margin-top': colorScaleType() !== TricoloreScaleType.Sextant ? '-35px' : '-15px' }}
+      ref={plotDiv!}
+    ></div>
     <InputResultName
       value={newLayerName()}
       onKeyUp={(value) => { setNewLayerName(value); }}
