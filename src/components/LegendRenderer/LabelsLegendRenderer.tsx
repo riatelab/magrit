@@ -77,18 +77,19 @@ export default function legendLabels(
   ));
 
   onMount(() => {
-    bindElementsLegend(refElement, legend);
+    bindElementsLegend(refElement!, legend);
   });
 
   createEffect(() => {
     computeRectangleBox(
-      refElement,
+      refElement!,
       heightTitle(),
       heightTitleSubtitle(),
       positionNote(),
       legend.title.text,
       legend.subtitle.text,
       legend.note.text,
+      legend.note.fontSize,
     );
   });
 

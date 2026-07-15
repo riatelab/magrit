@@ -88,7 +88,7 @@ function onClickValidate(
     meanCentered: meanCentering,
     colorScaleType,
     colorScaleOptions: params,
-    noDataColor: 'grey',
+    noDataColor: '#dedede',
   } as TrivariateChoroplethParameters;
 
   const newLayerDescription = {
@@ -137,9 +137,12 @@ function onClickValidate(
     type: LegendType.trivariateChoropleth,
     width: 340,
     noDataBox: hasNoData,
+    noDataLabel: 'No data',
+    displayData: true,
     displayCenter: false,
     displayLines: false,
     axisLabelsPosition: 'edge',
+    axisLabels: [`⟵ ${targetVariables[0]}`, `⟵ ${targetVariables[1]}`, `${targetVariables[2]} ⟶`],
     labels: {
       ...applicationSettingsStore.defaultLegendSettings.labels,
     } as LegendTextElement,
@@ -206,8 +209,9 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
   const seriesVar3 = createMemo(() => layerDescription.data.features
     .map((f) => f.properties![targetVariable3()] as number));
 
-  // - the filtered points
-  const filteredPts = createMemo(() => seriesVar1().map((pt, i) => {
+  // - the ternary points, as [number, number, number] or null if at least one of
+  //   the component is not a finite number
+  const pts = createMemo(() => seriesVar1().map((pt, i) => {
     if (
       isFiniteNumber(pt)
       && isFiniteNumber(seriesVar2()[i])
@@ -222,7 +226,7 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
   const isTernaryComposition = createMemo(() => {
     let isValid;
     try {
-      CompositionUtils.validateTernaryPoints(filteredPts() as [number, number, number][], 1, 1e-1);
+      CompositionUtils.validateTernaryPoints(pts() as [number, number, number][], 1, 1e-1);
       isValid = true;
     } catch (err) {
       console.log(err);
@@ -251,7 +255,7 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
   createEffect(
     on(
       () => [
-        useMeanCentering(), filteredPts(), colorScaleType(), sextantColors(),
+        useMeanCentering(), pts(), colorScaleType(), sextantColors(),
         nClasses(), colorScaleParams.hue, colorScaleParams.chroma, colorScaleParams.lightness,
         colorScaleParams.contrast, colorScaleParams.spread,
       ],
@@ -271,12 +275,15 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
           },
         );
         const center = useMeanCentering()
-          ? CompositionUtils.centre(filteredPts())
+          ? CompositionUtils.centre(
+            pts()
+              .filter((d) => d !== null) as [number, number, number][],
+          )
           : [1 / 3, 1 / 3, 1 / 3];
         const labels = [`⟵ ${targetVariable1()}`, `⟵ ${targetVariable2()}`, `${targetVariable3()} ⟶`];
         let svg;
         if (colorScaleType() === TricoloreScaleType.Sextant) {
-          svg = p.createSextantPlot(filteredPts(), {
+          svg = p.createSextantPlot(pts(), {
             center,
             labels,
             values: sextantColors(),
@@ -285,7 +292,7 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
             labelPosition: 'edge',
           });
         } else if (colorScaleType() === TricoloreScaleType.Discrete) {
-          svg = p.createDiscretePlot(filteredPts(), {
+          svg = p.createDiscretePlot(pts(), {
             center,
             hue: colorScaleParams.hue,
             chroma: colorScaleParams.chroma,
@@ -299,7 +306,7 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
             breaks: Msqrt(nClasses()),
           });
         } else { // TricoloreScaleType.Continuous
-          svg = p.createContinuousPlot(filteredPts(), {
+          svg = p.createContinuousPlot(pts(), {
             center,
             hue: colorScaleParams.hue,
             chroma: colorScaleParams.chroma,
@@ -351,8 +358,8 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
         : colorScaleType() === TricoloreScaleType.Discrete
           ? { classes: nClasses(), ...unproxify(colorScaleParams) } as TriChoroDiscreteOpts
           : { ...unproxify(colorScaleParams) } as TriChoroContinuousOpts;
-      const hasNoData = filteredPts().length === filteredPts().filter((d) => d).length;
-
+      const hasNoData = pts().length !== pts().filter((d) => d !== null).length;
+      console.log(hasNoData);
       onClickValidate(
         layerDescription.id,
         [targetVariable1(), targetVariable2(), targetVariable3()],
@@ -388,7 +395,7 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
   );
 
   return <div class="portrayal-section__portrayal-options-trivariatechoropleth">
-    <div class={'is-flex is-justify-content-space-evenly'}>
+    <div class={'is-flex is-justify-content-space-between'}>
       <InputFieldSelect
         label={ `${LL().FunctionalitiesSection.CommonOptions.Variable()} 1` }
         onChange={(value) => {
@@ -529,13 +536,7 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
         </div>
       </Show>
     </Show>
-    <div
-      class={'has-text-centered'}
-      // TODO: fix what follows when the size of the canvas inside the triangle
-      //       is improved on tricolore side
-      style={{ 'margin-top': colorScaleType() !== TricoloreScaleType.Sextant ? '-35px' : '-15px' }}
-      ref={plotDiv!}
-    ></div>
+    <div class={'has-text-centered'} ref={plotDiv!}></div>
     <InputResultName
       value={newLayerName()}
       onKeyUp={(value) => { setNewLayerName(value); }}

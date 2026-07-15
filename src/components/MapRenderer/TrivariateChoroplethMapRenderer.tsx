@@ -66,16 +66,15 @@ export function trivariateChoroplethPolygonRenderer(
   });
 
   const center = createMemo(() => (rendererParameters().meanCentered
-    ? CompositionUtils.centre(values())
+    ? CompositionUtils.centre(values().filter((d) => d !== null) as [number, number, number][])
     : [1 / 3, 1 / 3, 1 / 3]));
 
   const colors = createMemo(() => {
     if (rendererParameters().colorScaleType === TricoloreScaleType.Sextant) {
-      return tricoloreSextant(
-        values(),
-        center(),
-        (rendererParameters().colorScaleOptions as TriChoroSextantOpts).colors,
-      );
+      return tricoloreSextant(values(), {
+        center: center(),
+        values: (rendererParameters().colorScaleOptions as TriChoroSextantOpts).colors,
+      });
     }
     return tricolore(values(), {
       center: center(),
@@ -216,7 +215,7 @@ export function trivariateChoroplethLineRenderer(
       {
         (feature, i) => <path
           stroke={'grey'}
-          fill={colors()[i] ?? rendererParameters().noDataColor}
+          fill={colors()[i()] ?? rendererParameters().noDataColor}
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
           // @ts-expect-error because use:bind-data isn't a property of this element
@@ -311,7 +310,7 @@ export function trivariateChoroplethPointRenderer(
     <For each={layerDescription.data.features}>
       {
         (feature, i) => <path
-          fill={colors()[i] ?? rendererParameters().noDataColor}
+          fill={colors()[i()] ?? rendererParameters().noDataColor}
           d={
             getSymbolPath(
               layerDescription.symbolType!,

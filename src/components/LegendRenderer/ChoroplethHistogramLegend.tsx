@@ -218,7 +218,7 @@ export default function legendChoroplethHistogram(
       () => [
         heightTitle(), heightSubtitle(),
         legend.height, legend.width,
-        legend.title.text, legend.subtitle.text, legend.note.text,
+        legend.title.text, legend.subtitle.text, legend.note.text, legend.note.fontSize,
       ],
       () => {
         computeRectangleBox(refElement!);

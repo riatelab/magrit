@@ -1785,7 +1785,7 @@ function makeSettingsDefaultPoint(
                     regressionLineColor: 'red',
                     confidenceInterval: true,
                     confidenceIntervalColor: 'pink',
-                    displayRegressionLine: true,
+                    displayRegressionLine: false,
                     displayCountByClass: true,
                     displayClassBreakLines: true,
                     variable1Label: (
@@ -2736,7 +2736,7 @@ function makeSettingsDefaultLine(
                     regressionLineColor: 'red',
                     confidenceInterval: true,
                     confidenceIntervalColor: 'pink',
-                    displayRegressionLine: true,
+                    displayRegressionLine: false,
                     displayCountByClass: true,
                     displayClassBreakLines: true,
                     variable1Label: (
@@ -3188,7 +3188,7 @@ function makeSettingsDefaultPolygon(
                     regressionLineColor: 'red',
                     confidenceInterval: true,
                     confidenceIntervalColor: 'pink',
-                    displayRegressionLine: true,
+                    displayRegressionLine: false,
                     displayCountByClass: true,
                     displayClassBreakLines: true,
                     variable1Label: (

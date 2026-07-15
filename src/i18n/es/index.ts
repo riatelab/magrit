@@ -1576,8 +1576,10 @@ const es = {
       DisplayClassBreakLines: 'Mostrar las líneas de separación de clases',
       LabelVar1: 'Etiqueta variable 1',
       LabelVar2: 'Etiqueta variable 2',
+      LabelVar3: 'Etiqueta variable 3',
       BoxSize: 'Tamaño de las cajas',
       RotateLegend: 'Girar la leyenda',
+      DisplayData: 'Mostrar datos',
     },
   },
   CommonTextElement: {

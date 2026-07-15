@@ -181,7 +181,7 @@ export default function lmScatterPlot(
   onMount(() => {
     // We need to wait for the legend to be rendered before we can compute its size
     // and bind the drag behavior and the mouse enter / leave behavior.
-    bindElementsLegend(refElement, legend);
+    bindElementsLegend(refElement!, legend);
   });
 
   // Recompute the size of the rectangle box when the legend is updated
@@ -190,10 +190,10 @@ export default function lmScatterPlot(
       () => [
         heightTitle(), heightSubtitle(),
         legend.height, legend.width,
-        legend.title.text, legend.subtitle.text, legend.note.text,
+        legend.title.text, legend.subtitle.text, legend.note.text, legend.note.fontSize,
       ],
       () => {
-        computeRectangleBox(refElement);
+        computeRectangleBox(refElement!);
       },
     ),
   );

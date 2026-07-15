@@ -133,14 +133,15 @@ export default function legendBivariateChoropleth(
   createEffect(() => {
     if (refElement! && layer.visible && legend.visible) {
       computeRectangleBox(
-        refElement,
+        refElement!,
         distanceToTop(),
         sizeX(),
         sizeY(),
         breaksStep(),
         positionNote(),
         legend.displayBreakValues,
-        legend.note?.text,
+        legend.note.text,
+        legend.note.fontSize,
         // And more...
       );
     }

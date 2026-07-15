@@ -6342,6 +6342,10 @@ type RootTranslation = {
 			 */
 			LabelVar2: string
 			/**
+			 * L​a​b​e​l​ ​v​a​r​i​a​b​l​e​ ​3
+			 */
+			LabelVar3: string
+			/**
 			 * B​o​x​ ​s​i​z​e
 			 */
 			BoxSize: string
@@ -6349,6 +6353,10 @@ type RootTranslation = {
 			 * R​o​t​a​t​e​ ​L​e​g​e​n​d
 			 */
 			RotateLegend: string
+			/**
+			 * D​i​s​p​l​a​y​ ​d​a​t​a
+			 */
+			DisplayData: string
 		}
 	}
 	CommonTextElement: {
@@ -12601,6 +12609,10 @@ export type TranslationFunctions = {
 			 */
 			LabelVar2: () => LocalizedString
 			/**
+			 * Label variable 3
+			 */
+			LabelVar3: () => LocalizedString
+			/**
 			 * Box size
 			 */
 			BoxSize: () => LocalizedString
@@ -12608,6 +12620,10 @@ export type TranslationFunctions = {
 			 * Rotate Legend
 			 */
 			RotateLegend: () => LocalizedString
+			/**
+			 * Display data
+			 */
+			DisplayData: () => LocalizedString
 		}
 	}
 	CommonTextElement: {

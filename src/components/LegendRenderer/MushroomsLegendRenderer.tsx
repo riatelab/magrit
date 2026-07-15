@@ -132,6 +132,7 @@ export default function legendMushrooms(
         legend.title.text,
         legend.subtitle.text,
         legend.note.text,
+        legend.note.fontSize,
         legend.roundDecimals,
       );
     }

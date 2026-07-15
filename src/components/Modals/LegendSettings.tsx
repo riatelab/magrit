@@ -68,6 +68,7 @@ import {
   type ProportionalSymbolsLegend,
   type ProportionalSymbolsParameters,
   type ProportionalSymbolsRatioParameters,
+  type TrivariateChoroplethLegend,
   LegendType,
   RepresentationType,
   WaffleLegend,
@@ -1613,6 +1614,73 @@ function makeSettingsBivariateChoropleth(
   </>;
 }
 
+function makeSettingsTrivariateChoropleth(
+  legend: TrivariateChoroplethLegend,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <>
+    <FieldText legend={legend} LL={LL} role={'title'}/>
+    <FieldText legend={legend} LL={LL} role={'subtitle'}/>
+    <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldText
+      label={LL().Legend.Modal.LabelVar1()}
+      value={legend.axisLabels[0].replace('⟵ ', '')}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['axisLabels', 0], `⟵ ${v}`);
+      }}
+    />
+    <InputFieldText
+      label={LL().Legend.Modal.LabelVar2()}
+      value={legend.axisLabels[1].replace('⟵ ', '')}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['axisLabels', 1], `⟵ ${v}`);
+      }}
+    />
+    <InputFieldText
+      label={LL().Legend.Modal.LabelVar3()}
+      value={legend.axisLabels[2].replace(' ⟶', '')}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['axisLabels', 2], `${v} ⟶`);
+      }}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.Width()}
+      value={legend.width}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['width'], v)}
+      min={100}
+      max={800}
+      step={1}
+    />
+    <InputFieldCheckbox
+      label={LL().Legend.Modal.DisplayData()}
+      checked={legend.displayData}
+      onChange={(v) => updateProps(legend.id, ['displayData'], v)}
+    />
+    <OptionBackgroundRectangle legend={legend} LL={LL} />
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        {LL().Legend.Modal.FontProperties()}
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
+      </p>
+    </div>
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'labels', 'note']}
+      />
+    </Show>
+  </>;
+}
+
 function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.Element {
   if (legend.type === LegendType.default) {
     return makeSettingsDefault(legend as DefaultLegend, LL);
@@ -1674,6 +1742,12 @@ function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.
   if (legend.type === LegendType.bivariateChoroplethScatterplot) {
     return makeSettingsBivariateChoroplethScatterplot(
       legend as BivariateChoroplethScatterplotLegend,
+      LL,
+    );
+  }
+  if (legend.type === LegendType.trivariateChoropleth) {
+    return makeSettingsTrivariateChoropleth(
+      legend as TrivariateChoroplethLegend,
       LL,
     );
   }

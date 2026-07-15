@@ -114,6 +114,7 @@ function stackedSquareLegend(
         legend.title.text,
         legend.subtitle.text,
         legend.note.text,
+        legend.note.fontSize,
         legend.roundDecimals,
         legend.values,
       );

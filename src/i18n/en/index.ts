@@ -1576,8 +1576,10 @@ const en = {
       DisplayClassBreakLines: 'Display class break lines',
       LabelVar1: 'Label variable 1',
       LabelVar2: 'Label variable 2',
+      LabelVar3: 'Label variable 3',
       BoxSize: 'Box size',
       RotateLegend: 'Rotate Legend',
+      DisplayData: 'Display data',
     },
   },
   CommonTextElement: {

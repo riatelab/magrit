@@ -111,13 +111,13 @@ function verticalLegend(
   onMount(() => {
     // We need to wait for the legend to be rendered before we can compute its size
     // and bind the drag behavior and the mouse enter / leave behavior.
-    bindElementsLegend(refElement, legendParameters);
+    bindElementsLegend(refElement!, legendParameters);
   });
 
   createEffect(() => {
-    if (refElement && layer.visible && legendParameters.visible) {
+    if (refElement! && layer.visible && legendParameters.visible) {
       computeRectangleBox(
-        refElement,
+        refElement!,
         distanceToTop(),
         boxHeightAndSpacing(),
         heightTitle(),
@@ -129,6 +129,7 @@ function verticalLegend(
         legendParameters.title.text,
         legendParameters.subtitle.text,
         legendParameters.note.text,
+        legendParameters.note.fontSize,
         legendParameters.roundDecimals,
       );
     }

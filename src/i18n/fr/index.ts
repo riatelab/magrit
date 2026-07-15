@@ -1576,8 +1576,10 @@ const fr = {
       DisplayClassBreakLines: 'Afficher la séparation entre les classes',
       LabelVar1: 'Étiquette variable 1',
       LabelVar2: 'Étiquette variable 2',
+      LabelVar3: 'Étiquette variable 3',
       BoxSize: 'Taille des boites',
       RotateLegend: 'Faire pivoter la légende',
+      DisplayData: 'Afficher les données',
     },
   },
   CommonTextElement: {

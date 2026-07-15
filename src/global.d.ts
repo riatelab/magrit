@@ -1229,8 +1229,14 @@ interface TrivariateChoroplethLegend extends LegendBase {
   width: number,
   // Whether to display the no-data box
   noDataBox: boolean,
+  // The label of the no-data box
+  noDataLabel: string,
   // Where to put the axis labels
   axisLabelsPosition: 'edge' | 'corner',
+  // The name of the axis (defaults to variable name)
+  axisLabels: [string, string, string],
+  // Whether to display the data
+  displayData: boolean,
   // Whether to display the center
   displayCenter: boolean,
   // Whether to display lines (TODO: improve this in Tricolore library)

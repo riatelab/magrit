@@ -43,7 +43,7 @@ const defaultSpacing = applicationSettingsStore.defaultLegendSettings.spacing;
 
 function BivariateChoroScatterPlot(
   props: BivariateChoroplethScatterplotLegend & {
-    dataset: Record<string, any>[],
+    dataset: Record<string, never>[],
     variable1: BivariateVariableDescription,
     variable2: BivariateVariableDescription,
     colors: string[],
@@ -92,7 +92,7 @@ function BivariateChoroScatterPlot(
     );
   });
 
-  const bivariateClasses = (d: Record<string, any>) => {
+  const bivariateClasses = (d: Record<string, never>) => {
     const classVar1 = !props.variable1.reversed
       ? classifierVar1().getClass(d[props.variable1.variable])
       : 2 - classifierVar1().getClass(d[props.variable1.variable]);
@@ -102,7 +102,7 @@ function BivariateChoroScatterPlot(
     return [classVar1, classVar2];
   };
 
-  const bc = (d: Record<string, any>) => bivariateClass(
+  const bc = (d: Record<string, never>) => bivariateClass(
     d[props.variable1.variable],
     d[props.variable2.variable],
     classifierVar1(),
@@ -188,7 +188,7 @@ export default function legendChoroplethBivariateScatterPlot(
   )! as LayerDescriptionBivariateChoropleth;
 
   const dataset = createMemo(() => {
-    const a: Record<string, any>[] = [];
+    const a: Record<string, never>[] = [];
     layer.data.features.forEach((f) => {
       a.push({
         // eslint-disable-next-line max-len
@@ -231,6 +231,7 @@ export default function legendChoroplethBivariateScatterPlot(
         legend.title.text,
         legend.subtitle.text,
         legend.note.text,
+        legend.note.fontSize,
       ],
       () => {
         computeRectangleBox(refElement!);
