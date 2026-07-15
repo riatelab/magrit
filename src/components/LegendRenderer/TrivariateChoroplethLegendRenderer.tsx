@@ -8,7 +8,7 @@ import {
 } from 'solid-js';
 
 // Imports from other packages
-import { CompositionUtils, TricoloreViz } from 'tricolore';
+import { CompositionUtils, type TernaryPoint, TricoloreViz } from 'tricolore';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -66,26 +66,10 @@ export default function legendTrivariateChoropleth(
       legend.subtitle.text,
       legend.subtitle.fontSize,
       legend.subtitle.fontFamily,
-    ).height
+    ).height + defaultSpacing
     : 0));
 
   // const legendHeight = createMemo(() => (Msqrt(3) / 2) * legend.width);
-
-  // const distanceToTop = createMemo(() => {
-  //   let vDistanceToTop = 0;
-  //   if (legend.title) {
-  //     vDistanceToTop += heightTitle() + defaultSpacing;
-  //   }
-  //   if (legend.subtitle.text) {
-  //     vDistanceToTop += getTextSize(
-  //       legend.subtitle.text,
-  //       legend.subtitle.fontSize,
-  //       legend.subtitle.fontFamily,
-  //     ).height + defaultSpacing;
-  //   }
-  //   // vDistanceToTop += legend.boxSpacing / 2;
-  //   return vDistanceToTop;
-  // });
 
   const hasNoData = createMemo(() => {
     if (!legend.noDataBox) return false;
@@ -126,6 +110,8 @@ export default function legendTrivariateChoropleth(
       },
     );
 
+    // TODO : make seriesVar1, seriesVar2, seriesVar3 and pts memo
+    //        so they can be shared by hasNoData and createInnerLegend
     const seriesVar1 = layer.data.features
       .map((f) => f.properties![layer.rendererParameters.variable1] as number);
 
@@ -144,7 +130,7 @@ export default function legendTrivariateChoropleth(
         return [+pt, +seriesVar2[i], +seriesVar3[i]];
       }
       return null;
-    });
+    }) as (TernaryPoint | null)[];
 
     const center = layer.rendererParameters.meanCentered
       ? CompositionUtils.centre(pts.filter((d) => d !== null) as [number, number, number][])
@@ -223,7 +209,7 @@ export default function legendTrivariateChoropleth(
   return <g
     ref={refElement!}
     id={legend.id}
-    class="legend bichoro"
+    class="legend trichoro"
     for={layer.id}
     transform={`translate(${legend.position[0]}, ${legend.position[1]})`}
     visibility={layer.visible && legend.visible ? undefined : 'hidden'}
@@ -248,14 +234,14 @@ export default function legendTrivariateChoropleth(
         <rect
           fill={layer.rendererParameters.noDataColor}
           x={0}
-          y={heightTitle() + heightSubtitle() + legend.width - defaultSpacing * 6}
+          y={legend.width - defaultSpacing * 2}
           width={40}
           height={30}
           stroke={layer.strokeColor}
         />
         <text
           x={40 + defaultSpacing}
-          y={heightTitle() + heightSubtitle() + legend.width - defaultSpacing * 6 + 15}
+          y={legend.width - (defaultSpacing * 2) + 15}
           font-size={legend.labels.fontSize}
           font-family={legend.labels.fontFamily}
           font-style={legend.labels.fontStyle}
@@ -271,7 +257,12 @@ export default function legendTrivariateChoropleth(
     {
       makeLegendText(
         legend.note,
-        [0, heightTitle() + heightSubtitle() + legend.width - defaultSpacing * 6 + 60],
+        [
+          0,
+          hasNoData()
+            ? heightTitle() + heightSubtitle() + legend.width + 30 + defaultSpacing
+            : heightTitle() + heightSubtitle() + legend.width - defaultSpacing,
+        ],
         'note',
         { 'text-anchor': 'start' },
       )
