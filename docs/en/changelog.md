@@ -12,7 +12,7 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-### 2.3.21 (unreleased)
+### 2.3.21 (2026-07-16)
 
 - Fix sorting of entities for proportional symbols in order to take negative values into account.
 

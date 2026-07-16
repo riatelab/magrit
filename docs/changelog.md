@@ -12,7 +12,7 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
-### 2.3.21 (unreleased)
+### 2.3.21 (2026-07-16)
 
 - Correction du tri des entités pour les symboles proportionnels afin de prendre en compte les valeurs négatives.
 
