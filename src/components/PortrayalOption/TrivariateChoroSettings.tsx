@@ -222,15 +222,23 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
     return null;
   }));
 
-  // - whether the selected variables are forming an array of ternary points
+  // - whether the selected variables are forming an array of ternary points (for now we only
+  //   check that they sum to 1 or to 100)
   const isTernaryComposition = createMemo(() => {
     let isValid;
     try {
       CompositionUtils.validateTernaryPoints(pts() as [number, number, number][], 1, 1e-1);
       isValid = true;
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       isValid = false;
+      try {
+        CompositionUtils.validateTernaryPoints(pts() as [number, number, number][], 100, 1e-1);
+        isValid = true;
+      } catch (err2) {
+        // console.log(err2);
+        isValid = false;
+      }
     }
     return isValid;
   });
