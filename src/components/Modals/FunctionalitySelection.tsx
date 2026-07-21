@@ -105,11 +105,11 @@ const functionalityDescriptions: Partial<FunctionalityDescription>[] = [
   },
   {
     name: 'BivariateChoropleth',
-    type: RepresentationType.bivariateChoropleth,
+    type: AnalysisOperationType.bivariateChoropleth,
   },
   {
     name: 'TrivariateChoropleth',
-    type: RepresentationType.trivariateChoropleth,
+    type: AnalysisOperationType.trivariateChoropleth,
   },
   {
     name: 'PointAggregation',
@@ -168,19 +168,23 @@ function CardFunctionality(
   >
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
       <p class="card-header-title">
-        <Switch>
-          <Match when={Object.values(RepresentationType).includes(pDesc.type)}>
-            <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
-          </Match>
-          <Match when={Object.values(ProcessingOperationType).includes(pDesc.type)}>
-            <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
-          </Match>
-          <Match when={Object.values(AnalysisOperationType).includes(pDesc.type)}>
-            <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
-          </Match>
-        </Switch>
         { LL().FunctionalitiesSection.FunctionalityTypes[pDesc.name]() }
       </p>
+      <div style={{ padding: 'var(--bulma-card-header-padding) !important' }}>
+        <span class="tag is-dark">
+          <Switch>
+            <Match when={Object.values(RepresentationType).includes(pDesc.type)}>
+              <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+            </Match>
+            <Match when={Object.values(ProcessingOperationType).includes(pDesc.type)}>
+              <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+            </Match>
+            <Match when={Object.values(AnalysisOperationType).includes(pDesc.type)}>
+              <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+            </Match>
+          </Switch>
+        </span>
+      </div>
     </header>
     <section class="card-content" style={{ padding: '1em' }}>
       <div class="content">
@@ -281,11 +285,11 @@ export default function FunctionalitySelection(): JSX.Element {
           // eslint-disable-next-line no-param-reassign
           p.enabled = vars.nStock >= 1 && (geomType === 'polygon' || geomType === 'point');
           break;
-        case RepresentationType.bivariateChoropleth:
+        case AnalysisOperationType.bivariateChoropleth:
           // eslint-disable-next-line no-param-reassign
           p.enabled = vars.nRatio >= 2;
           break;
-        case RepresentationType.trivariateChoropleth:
+        case AnalysisOperationType.trivariateChoropleth:
           // eslint-disable-next-line no-param-reassign
           p.enabled = vars.nRatio >= 3;
           break;
@@ -389,6 +393,36 @@ export default function FunctionalitySelection(): JSX.Element {
               }}
             >{LL().PortrayalSelection.OpenTypingModal()}</a>
           </div>
+          <div style={{ display: 'flex', 'flex-direction': 'row', 'justify-content': 'center' }}>
+            <div class="field is-grouped is-grouped-multiline">
+              <div class="control">
+                <div class="tags has-addons">
+                  <span class="tag is-dark">
+                    <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+                  </span>
+                  <span class="tag is-success">Cartographie</span>
+                </div>
+              </div>
+              <div class="control">
+                <div class="tags has-addons">
+                  <span class="tag is-dark">
+                    <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+                  </span>
+                  <span class="tag is-warning">Geo-traitement</span>
+                </div>
+              </div>
+              <div class="control">
+                <div class="tags has-addons">
+                  <span class="tag is-dark">
+                    <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+                  </span>
+                  <span class="tag is-danger">
+                    Exploration
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
           <section style={{ height: '100%', overflow: 'auto', padding: '1em' }}>
             <div
               style={{
@@ -450,10 +484,12 @@ export default function FunctionalitySelection(): JSX.Element {
             <Match when={selectedFunctionality()!.type === RepresentationType.mushrooms}>
               <MushroomsSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
-            <Match when={selectedFunctionality()!.type === RepresentationType.bivariateChoropleth}>
+            {/* eslint-disable-next-line max-len */}
+            <Match when={selectedFunctionality()!.type === AnalysisOperationType.bivariateChoropleth}>
               <BivariateChoroSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
-            <Match when={selectedFunctionality()!.type === RepresentationType.trivariateChoropleth}>
+            {/* eslint-disable-next-line max-len */}
+            <Match when={selectedFunctionality()!.type === AnalysisOperationType.trivariateChoropleth}>
               <TrivariateChoroSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
             <Match when={selectedFunctionality()!.type === ProcessingOperationType.aggregation}>

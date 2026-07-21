@@ -778,8 +778,6 @@ export enum RepresentationType {
   discontinuity = 'discontinuity',
   smoothed = 'smoothed',
   cartogram = 'cartogram',
-  bivariateChoropleth = 'bivariateChoropleth',
-  trivariateChoropleth = 'trivariateChoropleth',
   links = 'links',
   grid = 'grid',
   waffle = 'waffle',
@@ -803,6 +801,8 @@ export enum TableOperationType {
 export enum AnalysisOperationType {
   pointAggregation = 'pointAggregation',
   simpleLinearRegression = 'simpleLinearRegression',
+  bivariateChoropleth = 'bivariateChoropleth',
+  trivariateChoropleth = 'trivariateChoropleth',
   multipleLinearRegression = 'multipleLinearRegression',
   principalComponentAnalysis = 'principalComponentAnalysis',
 }
