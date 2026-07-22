@@ -440,7 +440,13 @@ export default function FunctionalitySelection(): JSX.Element {
                   'is-grey': !displayRepresentation(),
                 }}
                 style={{ 'user-select': 'none' }}
-                onClick={() => setDisplayRepresentation(!displayRepresentation())}
+                onClick={() => {
+                  if (!displayRepresentation()) {
+                    setDisplayRepresentation(true);
+                    setDisplayProcessing(false);
+                    setDisplayAnalysis(false);
+                  }
+                }}
               >
                 <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
                 { LL().FunctionalitiesSection.Tags.Representation() }
@@ -455,7 +461,13 @@ export default function FunctionalitySelection(): JSX.Element {
                   'is-grey': !displayAnalysis(),
                 }}
                 style={{ 'user-select': 'none' }}
-                onClick={() => setDisplayAnalysis(!displayAnalysis())}
+                onClick={() => {
+                  if (!displayAnalysis()) {
+                    setDisplayAnalysis(true);
+                    setDisplayRepresentation(false);
+                    setDisplayProcessing(false);
+                  }
+                }}
               >
                 <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
                 { LL().FunctionalitiesSection.Tags.Exploration() }
@@ -470,7 +482,13 @@ export default function FunctionalitySelection(): JSX.Element {
                   'is-grey': !displayProcessing(),
                 }}
                 style={{ 'user-select': 'none' }}
-                onClick={() => setDisplayProcessing(!displayProcessing())}
+                onClick={() => {
+                  if (!displayProcessing()) {
+                    setDisplayProcessing(true);
+                    setDisplayRepresentation(false);
+                    setDisplayAnalysis(false);
+                  }
+                }}
               >
                 <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
                 { LL().FunctionalitiesSection.Tags.GeoProcessing() }
