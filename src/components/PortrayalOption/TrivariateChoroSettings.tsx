@@ -12,7 +12,7 @@ import { createStore, produce } from 'solid-js/store';
 
 // Imports from other packages
 import { yieldOrContinue } from 'main-thread-scheduling';
-import { CompositionUtils, TricoloreViz } from 'tricolore';
+import { CompositionUtils, Viz } from 'tricolore';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -272,18 +272,18 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
         // Clean up previous plot if any
         plotDiv!.innerHTML = '';
         if (!isTernaryComposition()) return;
-        const p = new TricoloreViz(
-          300,
-          300,
-          {
+        const dimensions = {
+          width: 300,
+          height: 300,
+          margin: {
             top: 0,
             right: 0,
             bottom: 30,
             left: 0,
           },
-        );
+        };
         const center = useMeanCentering()
-          ? CompositionUtils.centre(
+          ? CompositionUtils.center(
             pts()
               .filter((d) => d !== null) as [number, number, number][],
           )
@@ -291,16 +291,16 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
         const labels = [`⟵ ${targetVariable1()}`, `⟵ ${targetVariable2()}`, `${targetVariable3()} ⟶`];
         let svg;
         if (colorScaleType() === TricoloreScaleType.Sextant) {
-          svg = p.createSextantPlot(pts(), {
+          svg = Viz.createSextantPlot(pts(), {
             center,
             labels,
             values: sextantColors(),
             showCenter: false,
             showLines: false,
             labelPosition: 'edge',
-          });
+          }, dimensions);
         } else if (colorScaleType() === TricoloreScaleType.Discrete) {
-          svg = p.createDiscretePlot(pts(), {
+          svg = Viz.createDiscretePlot(pts(), {
             center,
             hue: colorScaleParams.hue,
             chroma: colorScaleParams.chroma,
@@ -312,9 +312,9 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
             showLines: false,
             labelPosition: 'edge',
             breaks: Msqrt(nClasses()),
-          });
+          }, dimensions);
         } else { // TricoloreScaleType.Continuous
-          svg = p.createContinuousPlot(pts(), {
+          svg = Viz.createContinuousPlot(pts(), {
             center,
             hue: colorScaleParams.hue,
             chroma: colorScaleParams.chroma,
@@ -325,7 +325,7 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
             showCenter: false,
             showLines: false,
             labelPosition: 'edge',
-          });
+          }, dimensions);
         }
         plotDiv.appendChild(svg);
       },

@@ -8,7 +8,7 @@ import {
 } from 'solid-js';
 
 // Imports from other packages
-import { CompositionUtils, type TernaryPoint, TricoloreViz } from 'tricolore';
+import { CompositionUtils, type TernaryPoint, Viz } from 'tricolore';
 
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
@@ -99,16 +99,16 @@ export default function legendTrivariateChoropleth(
   console.log(hasNoData());
 
   const createInnerLegend = () => {
-    const p = new TricoloreViz(
-      legend.width,
-      legend.width,
-      {
+    const dimensions = {
+      width: legend.width,
+      height: legend.width,
+      margin: {
         top: 0,
         right: 0,
         bottom: 30,
         left: 0,
       },
-    );
+    };
 
     // TODO : make seriesVar1, seriesVar2, seriesVar3 and pts memo
     //        so they can be shared by hasNoData and createInnerLegend
@@ -133,12 +133,12 @@ export default function legendTrivariateChoropleth(
     }) as (TernaryPoint | null)[];
 
     const center = layer.rendererParameters.meanCentered
-      ? CompositionUtils.centre(pts.filter((d) => d !== null) as [number, number, number][])
+      ? CompositionUtils.center(pts.filter((d) => d !== null) as [number, number, number][])
       : [1 / 3, 1 / 3, 1 / 3];
 
     let svg;
     if (layer.rendererParameters.colorScaleType === TricoloreScaleType.Sextant) {
-      svg = p.createSextantPlot(pts, {
+      svg = Viz.createSextantPlot(pts, {
         center,
         labels: legend.axisLabels,
         values: (layer.rendererParameters.colorScaleOptions as TriChoroSextantOpts).colors,
@@ -146,9 +146,9 @@ export default function legendTrivariateChoropleth(
         showCenter: legend.displayCenter,
         showLines: legend.displayLines,
         labelPosition: 'edge',
-      });
+      }, dimensions);
     } else if (layer.rendererParameters.colorScaleType === TricoloreScaleType.Discrete) {
-      svg = p.createDiscretePlot(pts, {
+      svg = Viz.createDiscretePlot(pts, {
         center,
         hue: (layer.rendererParameters.colorScaleOptions as TriChoroDiscreteOpts).hue,
         chroma: (layer.rendererParameters.colorScaleOptions as TriChoroDiscreteOpts).chroma,
@@ -161,9 +161,9 @@ export default function legendTrivariateChoropleth(
         showLines: legend.displayLines,
         labelPosition: 'edge',
         breaks: Msqrt((layer.rendererParameters.colorScaleOptions as TriChoroDiscreteOpts).classes),
-      });
+      }, dimensions);
     } else { // TricoloreScaleType.Continuous
-      svg = p.createContinuousPlot(pts, {
+      svg = Viz.createContinuousPlot(pts, {
         center,
         hue: (layer.rendererParameters.colorScaleOptions as TriChoroContinuousOpts).hue,
         chroma: (layer.rendererParameters.colorScaleOptions as TriChoroContinuousOpts).chroma,
@@ -175,7 +175,7 @@ export default function legendTrivariateChoropleth(
         showCenter: legend.displayCenter,
         showLines: legend.displayLines,
         labelPosition: 'edge',
-      });
+      }, dimensions);
     }
     return svg;
   };

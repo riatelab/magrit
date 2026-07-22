@@ -66,7 +66,7 @@ export function trivariateChoroplethPolygonRenderer(
   });
 
   const center = createMemo(() => (rendererParameters().meanCentered
-    ? CompositionUtils.centre(values().filter((d) => d !== null) as [number, number, number][])
+    ? CompositionUtils.center(values().filter((d) => d !== null) as [number, number, number][])
     : [1 / 3, 1 / 3, 1 / 3]));
 
   const colors = createMemo(() => {
@@ -163,7 +163,7 @@ export function trivariateChoroplethLineRenderer(
   });
 
   const center = createMemo(() => (rendererParameters().meanCentered
-    ? CompositionUtils.centre(values())
+    ? CompositionUtils.center(values())
     : [1 / 3, 1 / 3, 1 / 3]));
 
   const colors = createMemo(() => {
@@ -256,7 +256,7 @@ export function trivariateChoroplethPointRenderer(
   });
 
   const center = createMemo(() => (rendererParameters().meanCentered
-    ? CompositionUtils.centre(values())
+    ? CompositionUtils.center(values())
     : [1 / 3, 1 / 3, 1 / 3]));
 
   const colors = createMemo(() => {
