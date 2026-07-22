@@ -834,6 +834,11 @@ const en = {
     },
   },
   FunctionalitiesSection: {
+    Tags: {
+      Representation: 'Representation',
+      GeoProcessing: 'Geoprocessing',
+      Exploration: 'Exploration',
+    },
     FunctionalityTypes: {
       Choropleth: 'Choropleth',
       ProportionalSymbols: 'Proportional symbols',
@@ -1301,13 +1306,13 @@ const en = {
     Layer: 'Layer:',
     Table: 'Table:',
     Back: 'Back to functionality selection',
-    Information: 'Select the functionality you wish to apply to your data layer. Greyed-out functionalities indicate that your dataset does not contain any data allowing you to use it. If you suspect this is an error, you can change the field type in the Layer Manager.',
+    Information: 'Select the functionality you wish to apply to your data layer. Greyed-out functionalities indicate that your dataset does not contain any data allowing you to use it. If you suspect this is an error, you can change the field type:',
     OpenTypingModal: 'Verify or change field types',
     ShortDescriptions: {
       Choropleth: 'A choropleth map lets you assign a color to geographic objects according to the values of a relative quantitative variable (rates, indices).',
       ProportionalSymbols: 'A proportional symbol map lets you vary the area of a symbol in proportion to the value of an absolute quantitative variable.',
       Labels: 'Adds labels ( which may be proportional to a value) to a background map according to the values of a variable.',
-      Discontinuity: 'A discontinuity map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable, but with a discontinuity at a given threshold.',
+      Discontinuity: 'A discontinuity map is a thematic map in which the boundaries (or borders) between the entities being studied are highlighted.',
       CategoricalChoropleth: 'A categorical choropleth map is a thematic map in which areas are shaded or patterned in proportion to the value of a categorical variable.',
       CategoricalPictogram: 'A categorical pictogram map is a thematic map in which pictograms are used to represent different values.',
       Smoothed: 'A smoothed map makes it possible to shift from a discrete to a continuous representation by taking into account the neighborhood values of each geographic object.',

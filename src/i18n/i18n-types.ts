@@ -3596,6 +3596,20 @@ type RootTranslation = {
 		}
 	}
 	FunctionalitiesSection: {
+		Tags: {
+			/**
+			 * R​e​p​r​e​s​e​n​t​a​t​i​o​n
+			 */
+			Representation: string
+			/**
+			 * G​e​o​p​r​o​c​e​s​s​i​n​g
+			 */
+			GeoProcessing: string
+			/**
+			 * E​x​p​l​o​r​a​t​i​o​n
+			 */
+			Exploration: string
+		}
 		FunctionalityTypes: {
 			/**
 			 * C​h​o​r​o​p​l​e​t​h
@@ -5329,7 +5343,7 @@ type RootTranslation = {
 		 */
 		Back: string
 		/**
-		 * S​e​l​e​c​t​ ​t​h​e​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​a​p​p​l​y​ ​t​o​ ​y​o​u​r​ ​d​a​t​a​ ​l​a​y​e​r​.​ ​G​r​e​y​e​d​-​o​u​t​ ​f​u​n​c​t​i​o​n​a​l​i​t​i​e​s​ ​i​n​d​i​c​a​t​e​ ​t​h​a​t​ ​y​o​u​r​ ​d​a​t​a​s​e​t​ ​d​o​e​s​ ​n​o​t​ ​c​o​n​t​a​i​n​ ​a​n​y​ ​d​a​t​a​ ​a​l​l​o​w​i​n​g​ ​y​o​u​ ​t​o​ ​u​s​e​ ​i​t​.​ ​I​f​ ​y​o​u​ ​s​u​s​p​e​c​t​ ​t​h​i​s​ ​i​s​ ​a​n​ ​e​r​r​o​r​,​ ​y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​t​h​e​ ​f​i​e​l​d​ ​t​y​p​e​ ​i​n​ ​t​h​e​ ​L​a​y​e​r​ ​M​a​n​a​g​e​r​.
+		 * S​e​l​e​c​t​ ​t​h​e​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​a​p​p​l​y​ ​t​o​ ​y​o​u​r​ ​d​a​t​a​ ​l​a​y​e​r​.​ ​G​r​e​y​e​d​-​o​u​t​ ​f​u​n​c​t​i​o​n​a​l​i​t​i​e​s​ ​i​n​d​i​c​a​t​e​ ​t​h​a​t​ ​y​o​u​r​ ​d​a​t​a​s​e​t​ ​d​o​e​s​ ​n​o​t​ ​c​o​n​t​a​i​n​ ​a​n​y​ ​d​a​t​a​ ​a​l​l​o​w​i​n​g​ ​y​o​u​ ​t​o​ ​u​s​e​ ​i​t​.​ ​I​f​ ​y​o​u​ ​s​u​s​p​e​c​t​ ​t​h​i​s​ ​i​s​ ​a​n​ ​e​r​r​o​r​,​ ​y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​t​h​e​ ​f​i​e​l​d​ ​t​y​p​e​:
 		 */
 		Information: string
 		/**
@@ -5350,7 +5364,7 @@ type RootTranslation = {
 			 */
 			Labels: string
 			/**
-			 * A​ ​d​i​s​c​o​n​t​i​n​u​i​t​y​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​a​r​e​a​s​ ​a​r​e​ ​s​h​a​d​e​d​ ​o​r​ ​p​a​t​t​e​r​n​e​d​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​,​ ​b​u​t​ ​w​i​t​h​ ​a​ ​d​i​s​c​o​n​t​i​n​u​i​t​y​ ​a​t​ ​a​ ​g​i​v​e​n​ ​t​h​r​e​s​h​o​l​d​.
+			 * A​ ​d​i​s​c​o​n​t​i​n​u​i​t​y​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​b​o​u​n​d​a​r​i​e​s​ ​(​o​r​ ​b​o​r​d​e​r​s​)​ ​b​e​t​w​e​e​n​ ​t​h​e​ ​e​n​t​i​t​i​e​s​ ​b​e​i​n​g​ ​s​t​u​d​i​e​d​ ​a​r​e​ ​h​i​g​h​l​i​g​h​t​e​d​.
 			 */
 			Discontinuity: string
 			/**
@@ -9919,6 +9933,20 @@ export type TranslationFunctions = {
 		}
 	}
 	FunctionalitiesSection: {
+		Tags: {
+			/**
+			 * Representation
+			 */
+			Representation: () => LocalizedString
+			/**
+			 * Geoprocessing
+			 */
+			GeoProcessing: () => LocalizedString
+			/**
+			 * Exploration
+			 */
+			Exploration: () => LocalizedString
+		}
 		FunctionalityTypes: {
 			/**
 			 * Choropleth
@@ -11602,7 +11630,7 @@ export type TranslationFunctions = {
 		 */
 		Back: () => LocalizedString
 		/**
-		 * Select the functionality you wish to apply to your data layer. Greyed-out functionalities indicate that your dataset does not contain any data allowing you to use it. If you suspect this is an error, you can change the field type in the Layer Manager.
+		 * Select the functionality you wish to apply to your data layer. Greyed-out functionalities indicate that your dataset does not contain any data allowing you to use it. If you suspect this is an error, you can change the field type:
 		 */
 		Information: () => LocalizedString
 		/**
@@ -11623,7 +11651,7 @@ export type TranslationFunctions = {
 			 */
 			Labels: () => LocalizedString
 			/**
-			 * A discontinuity map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable, but with a discontinuity at a given threshold.
+			 * A discontinuity map is a thematic map in which the boundaries (or borders) between the entities being studied are highlighted.
 			 */
 			Discontinuity: () => LocalizedString
 			/**

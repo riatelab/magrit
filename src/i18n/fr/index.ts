@@ -834,6 +834,11 @@ const fr = {
     },
   },
   FunctionalitiesSection: {
+    Tags: {
+      Representation: 'Représentation',
+      GeoProcessing: 'Géotraitement',
+      Exploration: 'Exploration',
+    },
     FunctionalityTypes: {
       Choropleth: 'Choroplèthe',
       ProportionalSymbols: 'Symboles proportionnels',
@@ -1301,13 +1306,13 @@ const fr = {
     Layer: 'Couche :',
     Table: 'Tableau :',
     Back: 'Retour au choix d\'une fonctionnalité',
-    Information: 'Sélectionnez la fonctionnalité que vous souhaitez appliquer à votre couche de données. Les fonctionnalités grisées indiquent que votre jeu de données ne contient pas de données permettant de l\'utiliser. Si vous pensez qu\'il s\'agit d\'une erreur, vous pouvez modifier le type des champs dans le gestionnaire de couches.',
+    Information: 'Sélectionnez la fonctionnalité que vous souhaitez appliquer à votre couche de données. Les fonctionnalités grisées indiquent que votre jeu de données ne contient pas de données permettant de l\'utiliser. Si vous pensez qu\'il s\'agit d\'une erreur, vous pouvez modifier le type des champs :',
     OpenTypingModal: 'Vérifier ou modifier le typage des champs',
     ShortDescriptions: {
       Choropleth: 'Une carte choroplèthe permet d’affecter une couleur aux objets géographiques en fonction des valeurs d’une variable quantitative relative (taux, indices).',
       ProportionalSymbols: 'Une carte à symboles proportionnels permet de faire varier la surface d’un symbole proportionnellement à une valeur d’une variable quantitative absolue.',
       Labels: 'Permet d’ajouter des étiquettes (éventuellement proportionnelles à une valeur) à un fond de carte selon les valeurs d’une variable.',
-      Discontinuity: 'Une carte avec discontinuité est une carte thématique dans laquelle les discontinuités sont mises en évidence.',
+      Discontinuity: 'Une carte avec discontinuité est une carte thématique dans laquelle les limites (ou frontières) entre les entités étudiées sont mises en évidence.',
       CategoricalChoropleth: 'Une carte choroplèthe catégorielle est une carte thématique dans laquelle les zones sont colorées ou ombrées en fonction de la valeur d\'une variable catégorielle.',
       CategoricalPictogram: 'Une carte de pictogrammes catégoriels est une carte thématique dans laquelle des pictogrammes sont utilisés pour représenter des valeurs différentes.',
       Smoothed: 'Une carte lissée permet de passer d’une représentation discrète à une représentation continue en prenant en compte les valeurs du voisinage de chaque objet géographique.',

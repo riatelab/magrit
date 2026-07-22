@@ -132,19 +132,39 @@ const functionalityDescriptions: Partial<FunctionalityDescription>[] = [
     name: 'Simplification',
     type: ProcessingOperationType.simplification,
   },
-].map((p) => ({ ...p, enabled: false }));
+].map((p) => ({
+  ...p,
+  enabled: false,
+  // eslint-disable-next-line no-nested-ternary
+  category: Object.values(RepresentationType).includes(p.type)
+    ? 'Representation'
+    : Object.values(ProcessingOperationType).includes(p.type)
+      ? 'ProcessingOperation'
+      : 'AnalysisOperation',
+}));
 
 function CardFunctionality(
   pDesc: FunctionalityDescription & {
     onClick: ((arg0: MouseEvent | KeyboardEvent, arg1: FunctionalityDescription) => void),
+    display: boolean,
   },
 ): JSX.Element {
   const { LL } = useI18nContext();
+  // eslint-disable-next-line no-nested-ternary
+  const col = Object.values(RepresentationType).includes(pDesc.type)
+    ? 'var(--bulma-success)'
+    : Object.values(ProcessingOperationType).includes(pDesc.type)
+      ? 'var(--bulma-danger)'
+      : 'var(--bulma-warning)';
   return <div
     classList={{
       card: true,
       'is-clickable': pDesc.enabled,
       'is-disabled': !pDesc.enabled,
+    }}
+    style={{
+      'border-left': `solid 4px ${col}`,
+      display: pDesc.display ? undefined : 'none',
     }}
     onClick={
       // We don't care about pDesc reactivity here
@@ -167,26 +187,22 @@ function CardFunctionality(
     tabindex={pDesc.enabled ? 0 : undefined}
   >
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
-      <p class="card-header-title">
+      <p class="card-header-title" style={{ 'padding-bottom': '0 !important' }}>
+        <Switch>
+          <Match when={Object.values(RepresentationType).includes(pDesc.type)}>
+            <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+          </Match>
+          <Match when={Object.values(ProcessingOperationType).includes(pDesc.type)}>
+            <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+          </Match>
+          <Match when={Object.values(AnalysisOperationType).includes(pDesc.type)}>
+            <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+          </Match>
+        </Switch>
         { LL().FunctionalitiesSection.FunctionalityTypes[pDesc.name]() }
       </p>
-      <div style={{ padding: 'var(--bulma-card-header-padding) !important' }}>
-        <span class="tag is-dark">
-          <Switch>
-            <Match when={Object.values(RepresentationType).includes(pDesc.type)}>
-              <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
-            </Match>
-            <Match when={Object.values(ProcessingOperationType).includes(pDesc.type)}>
-              <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
-            </Match>
-            <Match when={Object.values(AnalysisOperationType).includes(pDesc.type)}>
-              <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
-            </Match>
-          </Switch>
-        </span>
-      </div>
     </header>
-    <section class="card-content" style={{ padding: '1em' }}>
+    <section class="card-content" style={{ padding: '0 1em 1em 1em' }}>
       <div class="content">
         { LL().PortrayalSelection.ShortDescriptions[pDesc.name]() }
       </div>
@@ -206,6 +222,22 @@ export default function FunctionalitySelection(): JSX.Element {
     setSelectedFunctionality,
   ] = createSignal<FunctionalityDescription | null>(null);
   let refParentNode: HTMLDivElement;
+
+  // Filters for func categories
+  const [
+    displayRepresentation,
+    setDisplayRepresentation,
+  ] = createSignal<boolean>(true);
+
+  const [
+    displayAnalysis,
+    setDisplayAnalysis,
+  ] = createSignal<boolean>(true);
+
+  const [
+    displayProcessing,
+    setDisplayProcessing,
+  ] = createSignal<boolean>(true);
 
   // Clone the functionalityDescriptions array
   const [
@@ -319,8 +351,9 @@ export default function FunctionalitySelection(): JSX.Element {
           break;
       }
       return p;
-    }).filter((d) => (
-      d.allowedGeometryType ? d.allowedGeometryType === geomType : true)));
+    }));
+    // .filter((d) => (
+    // d.allowedGeometryType ? d.allowedGeometryType === geomType : true)));
   };
 
   // Set the enable flag for the various functionality types
@@ -361,7 +394,9 @@ export default function FunctionalitySelection(): JSX.Element {
     }}>
       <header class="modal-card-head">
         <Show when={!selectedFunctionality()}>
-          <p class="modal-card-title">{ LL().PortrayalSelection.Title() }</p>
+          <p class="modal-card-title">
+            { LL().PortrayalSelection.Title() } - { layerName }
+          </p>
         </Show>
         <Show when={selectedFunctionality()}>
           <p class="modal-card-title">
@@ -373,54 +408,73 @@ export default function FunctionalitySelection(): JSX.Element {
       <section class="modal-card-body is-flex is-flex-direction-column">
         <Show when={!selectedFunctionality()}>
           <MessageBlock type={'info'}>
-            <p>{ LL().PortrayalSelection.Information() }</p>
+            <p>
+              { LL().PortrayalSelection.Information() }
+              &nbsp;<a
+                class="is-clickable"
+                href={'#'}
+                style={{ 'text-decoration': 'underline', color: '#00b2ff' }}
+                onClick={() => {
+                  setModalStore({
+                    show: true,
+                    content: () => <FieldTypingModal type={'layer'} id={functionalitySelectionStore.id} />,
+                    title: LL().FieldsTyping.ModalTitle(),
+                    escapeKey: 'cancel',
+                    confirmCallback: () => { setFunctionalitiesFlag(); },
+                  });
+                }}
+              >
+                {LL().PortrayalSelection.OpenTypingModal()}
+              </a>
+            </p>
           </MessageBlock>
-          <div class="has-text-centered mb-4">
-            {LL().PortrayalSelection.Layer()}
-            &nbsp;<b>{ layerName }</b> -
-            &nbsp;<a
-              class="is-clickable"
-              href={'#'}
-              style={{ 'text-decoration': 'underline', color: '#00b2ff' }}
-              onClick={() => {
-                setModalStore({
-                  show: true,
-                  content: () => <FieldTypingModal type={'layer'} id={functionalitySelectionStore.id} />,
-                  title: LL().FieldsTyping.ModalTitle(),
-                  escapeKey: 'cancel',
-                  confirmCallback: () => { setFunctionalitiesFlag(); },
-                });
-              }}
-            >{LL().PortrayalSelection.OpenTypingModal()}</a>
-          </div>
           <div style={{ display: 'flex', 'flex-direction': 'row', 'justify-content': 'center' }}>
             <div class="field is-grouped is-grouped-multiline">
-              <div class="control">
-                <div class="tags has-addons">
-                  <span class="tag is-dark">
-                    <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
-                  </span>
-                  <span class="tag is-success">Cartographie</span>
-                </div>
-              </div>
-              <div class="control">
-                <div class="tags has-addons">
-                  <span class="tag is-dark">
-                    <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
-                  </span>
-                  <span class="tag is-warning">Geo-traitement</span>
-                </div>
-              </div>
-              <div class="control">
-                <div class="tags has-addons">
-                  <span class="tag is-dark">
-                    <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
-                  </span>
-                  <span class="tag is-danger">
-                    Exploration
-                  </span>
-                </div>
-              </div>
+              <span
+                classList={{
+                  tag: true,
+                  'is-medium': true,
+                  'is-clickable': true,
+                  'is-success': displayRepresentation(),
+                  'is-light': !displayRepresentation(),
+                  'is-grey': !displayRepresentation(),
+                }}
+                style={{ 'user-select': 'none' }}
+                onClick={() => setDisplayRepresentation(!displayRepresentation())}
+              >
+                <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+                { LL().FunctionalitiesSection.Tags.Representation() }
+              </span>
+              <span
+                classList={{
+                  tag: true,
+                  'is-medium': true,
+                  'is-clickable': true,
+                  'is-warning': displayAnalysis(),
+                  'is-light': !displayAnalysis(),
+                  'is-grey': !displayAnalysis(),
+                }}
+                style={{ 'user-select': 'none' }}
+                onClick={() => setDisplayAnalysis(!displayAnalysis())}
+              >
+                <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+                { LL().FunctionalitiesSection.Tags.Exploration() }
+              </span>
+              <span
+                classList={{
+                  tag: true,
+                  'is-medium': true,
+                  'is-clickable': true,
+                  'is-danger': displayProcessing(),
+                  'is-light': !displayProcessing(),
+                  'is-grey': !displayProcessing(),
+                }}
+                style={{ 'user-select': 'none' }}
+                onClick={() => setDisplayProcessing(!displayProcessing())}
+              >
+                <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+                { LL().FunctionalitiesSection.Tags.GeoProcessing() }
+              </span>
             </div>
           </div>
           <section style={{ height: '100%', overflow: 'auto', padding: '1em' }}>
@@ -438,6 +492,14 @@ export default function FunctionalitySelection(): JSX.Element {
                     onClick={(e, pDesc) => {
                       setSelectedFunctionality(pDesc);
                     }}
+                    display={
+                      // eslint-disable-next-line no-nested-ternary
+                      p.category === 'Representation'
+                        ? displayRepresentation()
+                        : p.category === 'ProcessingOperation'
+                          ? displayProcessing()
+                          : displayAnalysis()
+                    }
                   />
                 }
               </For>
