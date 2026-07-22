@@ -232,12 +232,12 @@ export default function FunctionalitySelection(): JSX.Element {
   const [
     displayAnalysis,
     setDisplayAnalysis,
-  ] = createSignal<boolean>(true);
+  ] = createSignal<boolean>(false);
 
   const [
     displayProcessing,
     setDisplayProcessing,
-  ] = createSignal<boolean>(true);
+  ] = createSignal<boolean>(false);
 
   // Clone the functionalityDescriptions array
   const [
