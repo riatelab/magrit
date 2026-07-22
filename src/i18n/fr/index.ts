@@ -1329,7 +1329,7 @@ const fr = {
       LayerCreationFromTable: 'Cette fonctionnalité permet de créer une couche géographique à partir d\'un tableau de données contenant des coordonnées',
       Waffle: 'Cette méthode de représentation permet de représenter deux stocks ou plus, exprimés dans des unités comparables',
       BivariateChoropleth: 'Une carte choroplèthe bivariée permet de représenter simultanément deux variables quantitatives relatives en combinant deux gammes de couleurs sur un même espace géographique.',
-      TrivariateChoropleth: 'Une carte choroplèthe ternaire permet de représenter simultanément trois variables quantitatives relatives en utilisant un diagramme triangulaire servant d’espace de mélange des couleurs appliquées au territoire.',
+      TrivariateChoropleth: 'Une carte choroplèthe trivariée permet de représenter simultanément trois variables quantitatives relatives en utilisant un diagramme triangulaire servant d’espace de mélange des couleurs appliquées au territoire.',
     },
     Error: 'Une erreur s\'est produite lors de la création de la couche. Veuillez vérifier vos données ainsi que les paramètres de la fonctionnalité sélectionnée. Si vous pensez qu\'ils s\'agit d\'un bug, merci de le signaler sur le dépôt GitHub de l\'application. Message de l\'erreur : {0}',
   },
