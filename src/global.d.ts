@@ -1195,6 +1195,8 @@ interface BivariateChoroplethLegend extends LegendBase {
 
 interface BivariateChoroplethScatterplotLegend extends LegendBase {
   type: LegendType.bivariateChoroplethScatterplot,
+  // Whether the class color is on the dots or on the areas
+  colorOn: 'dots' | 'areas',
   // The width of the scatter plot
   width: number,
   // The height of the scatter plot
@@ -1216,7 +1218,11 @@ interface BivariateChoroplethScatterplotLegend extends LegendBase {
   // Whether to display the count by class on the chart
   displayCountByClass: boolean,
   // Whether to display the dashed lines for the class breaks
+  // (only when colorOn === 'dots')
   displayClassBreakLines: boolean,
+  // The color of the dots
+  // (only when colorOn === 'areas')
+  dotColor: string,
   // The label of the 1st variable
   variable1Label: string, // or LegendTextElement ?
   // The label of the 2nd variable

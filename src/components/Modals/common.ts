@@ -11,6 +11,7 @@ export interface FunctionalityDescription {
   type: RepresentationType | ProcessingOperationType | AnalysisOperationType;
   enabled: boolean;
   allowedGeometryType?: 'point' | 'linestring' | 'polygon';
+  category: 'Representation' | 'ProcessingOperation' | 'AnalysisOperation';
 }
 
 export interface TableFunctionalityDescription {

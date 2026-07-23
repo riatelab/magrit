@@ -1774,6 +1774,7 @@ function makeSettingsDefaultPoint(
                     backgroundRect: {
                       visible: false,
                     },
+                    colorOn: 'dots',
                     width: 400,
                     height: 400,
                     radius: 2,
@@ -1788,6 +1789,7 @@ function makeSettingsDefaultPoint(
                     displayRegressionLine: false,
                     displayCountByClass: true,
                     displayClassBreakLines: true,
+                    dotColor: 'black',
                     variable1Label: (
                       props.rendererParameters as BivariateChoroplethParameters).variable1.variable,
                     variable2Label: (
@@ -2725,6 +2727,7 @@ function makeSettingsDefaultLine(
                     backgroundRect: {
                       visible: false,
                     },
+                    colorOn: 'dots',
                     width: 400,
                     height: 400,
                     radius: 2,
@@ -2739,6 +2742,7 @@ function makeSettingsDefaultLine(
                     displayRegressionLine: false,
                     displayCountByClass: true,
                     displayClassBreakLines: true,
+                    dotColor: 'black',
                     variable1Label: (
                       props.rendererParameters as BivariateChoroplethParameters).variable1.variable,
                     variable2Label: (
@@ -3177,6 +3181,7 @@ function makeSettingsDefaultPolygon(
                     backgroundRect: {
                       visible: false,
                     },
+                    colorOn: 'dots',
                     width: 400,
                     height: 400,
                     radius: 2,
@@ -3191,6 +3196,7 @@ function makeSettingsDefaultPolygon(
                     displayRegressionLine: false,
                     displayCountByClass: true,
                     displayClassBreakLines: true,
+                    dotColor: 'black',
                     variable1Label: (
                       props.rendererParameters as BivariateChoroplethParameters).variable1.variable,
                     variable2Label: (

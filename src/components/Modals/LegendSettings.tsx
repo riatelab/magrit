@@ -1446,6 +1446,14 @@ function makeSettingsBivariateChoroplethScatterplot(
     <FieldText legend={legend} LL={LL} role={'title'}/>
     <FieldText legend={legend} LL={LL} role={'subtitle'}/>
     <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldSelect
+      label={LL().Legend.Modal.ColorOn()}
+      value={legend.colorOn}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['colorOn'], v)}
+    >
+      <option value="dots">{LL().Legend.Modal.Dots()}</option>
+      <option value="areas">{LL().Legend.Modal.Areas()}</option>
+    </InputFieldSelect>
     <InputFieldNumber
       label={LL().Legend.Modal.Width()}
       value={legend.width}
@@ -1470,6 +1478,13 @@ function makeSettingsBivariateChoroplethScatterplot(
       max={30}
       step={1}
     />
+    <Show when={legend.colorOn === 'areas'}>
+      <InputFieldColor
+        label={LL().Legend.Modal.DotColor()}
+        value={legend.dotColor}
+        onChange={(v) => debouncedUpdateProps(legend.id, ['dotColor'], v)}
+      />
+    </Show>
     <InputFieldNumber
       label={LL().Legend.Modal.Radius()}
       value={legend.radius}
@@ -1488,11 +1503,13 @@ function makeSettingsBivariateChoroplethScatterplot(
       checked={legend.displayCountByClass}
       onChange={(v) => debouncedUpdateProps(legend.id, ['displayCountByClass'], v)}
     />
-    <InputFieldCheckbox
-      label={LL().Legend.Modal.DisplayClassBreakLines()}
-      checked={legend.displayClassBreakLines}
-      onChange={(v) => debouncedUpdateProps(legend.id, ['displayClassBreakLines'], v)}
-    />
+    <Show when={legend.colorOn === 'dots'}>
+      <InputFieldCheckbox
+        label={LL().Legend.Modal.DisplayClassBreakLines()}
+        checked={legend.displayClassBreakLines}
+        onChange={(v) => debouncedUpdateProps(legend.id, ['displayClassBreakLines'], v)}
+      />
+    </Show>
     <OptionBackgroundRectangle legend={legend} LL={LL}/>
     <div
       onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
@@ -1553,7 +1570,7 @@ function makeSettingsBivariateChoropleth(
     />
     <InputFieldNumber
       label={LL().Legend.Modal.RoundDecimals()}
-      value={legend.roundDecimals}
+      value={legend.roundDecimals!}
       onChange={(v) => debouncedUpdateProps(legend.id, ['roundDecimals'], v)}
       min={-3}
       max={30}

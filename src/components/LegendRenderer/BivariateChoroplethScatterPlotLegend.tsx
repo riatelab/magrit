@@ -4,6 +4,7 @@ import {
   type JSX,
   on,
   onMount,
+  Show,
 } from 'solid-js';
 
 // Import from other libraries
@@ -111,69 +112,158 @@ function BivariateChoroScatterPlot(
     props.variable2.reversed,
   );
 
-  return <>{
-    Plot.plot({
-      width: props.width,
-      height: props.height,
-      style: {
-        color: props.axis.fontColor,
-        fontFamily: props.axis.fontFamily,
-        fontSize: `${props.axis.fontSize}px`,
-        fontWeight: props.axis.fontWeight,
-        fontStyle: props.axis.fontStyle,
-      },
-      x: {
-        label: props.variable2Label,
-        tickFormat: (d) => formatValue(d),
-        reverse: props.variable2.reversed,
-      },
-      y: {
-        label: props.variable1Label,
-        tickFormat: (d) => formatValue(d),
-        reverse: props.variable1.reversed,
-      },
-      // inset: 10,
-      marks: [
-        Plot.linearRegressionY(ds(), {
-          y: props.variable1.variable,
-          x: props.variable2.variable,
-          opacity: props.displayRegressionLine ? 0.5 : 0,
-        }),
-        Plot.dot(ds(), {
-          y: props.variable1.variable,
-          x: props.variable2.variable,
-          fill: (d) => props.colors[bc(d)],
-          // tip: true,
-          r: props.radius,
-        }),
-        props.displayCountByClass ? Plot.text(
-          ds(),
-          Plot.groupZ(
-            { text: 'count', x: 'mean', y: 'mean' },
-            {
-              fontSize: 14,
-              stroke: 'white',
-              strokeWidth: 8,
-              fill: 'currentColor',
+  const countByClass = createMemo(() => {
+    const cbc: Record<string, number> = {};
+    ds().forEach((d) => {
+      const t = bc(d);
+      if (!cbc[t]) cbc[t] = 1;
+      else cbc[t] += 1;
+    });
+    return cbc;
+  });
+
+  const rectCoords = createMemo(() => classifierVar1().breaks
+    .map((by: number, iy: number) => classifierVar2().breaks
+      .map((bx: number, ix: number) => [
+        bx,
+        classifierVar2().breaks[ix + 1],
+        by,
+        classifierVar1().breaks[iy + 1],
+      ]))
+    .flat()
+    .filter((d: [number, number, number, number]) => d[0] && d[1] && d[2] && d[3]));
+
+  return <>
+    <Show when={props.colorOn === 'dots'}>
+      {
+        Plot.plot({
+          width: props.width,
+          height: props.height,
+          style: {
+            color: props.axis.fontColor,
+            fontFamily: props.axis.fontFamily,
+            fontSize: `${props.axis.fontSize}px`,
+            fontWeight: props.axis.fontWeight,
+            fontStyle: props.axis.fontStyle,
+          },
+          x: {
+            label: props.variable2Label,
+            tickFormat: (d) => formatValue(d),
+            reverse: props.variable2.reversed,
+          },
+          y: {
+            label: props.variable1Label,
+            tickFormat: (d) => formatValue(d),
+            reverse: props.variable1.reversed,
+          },
+          // inset: 10,
+          marks: [
+            Plot.linearRegressionY(ds(), {
               y: props.variable1.variable,
               x: props.variable2.variable,
-              z: (d) => bivariateClasses(d).toString(),
-            },
-          ),
-        ) : null,
-        Plot.ruleX([classifierVar2().breaks[!props.variable1.reversed ? 0 : 3]], { }),
-        Plot.ruleY([classifierVar1().breaks[!props.variable2.reversed ? 0 : 3]], { }),
-        props.displayClassBreakLines
-          ? classifierVar2().breaks.slice(1, -1).map((vx: number) => [
-            Plot.ruleX([vx], { strokeDasharray: 4, strokeOpacity: 0.4 }),
-          ]) : null,
-        props.displayClassBreakLines
-          ? classifierVar1().breaks.slice(1, -1).map((vy: number) => [
-            Plot.ruleY([vy], { strokeDasharray: 4, strokeOpacity: 0.4 }),
-          ]) : null,
-      ],
-    })
-  }</>;
+              opacity: props.displayRegressionLine ? 0.5 : 0,
+            }),
+            Plot.dot(ds(), {
+              y: props.variable1.variable,
+              x: props.variable2.variable,
+              fill: (d) => props.colors[bc(d)],
+              // tip: true,
+              r: props.radius,
+            }),
+            props.displayCountByClass ? Plot.text(
+              ds(),
+              Plot.groupZ(
+                { text: 'count', x: 'mean', y: 'mean' },
+                {
+                  fontSize: 14,
+                  stroke: 'white',
+                  strokeWidth: 8,
+                  fill: 'currentColor',
+                  y: props.variable1.variable,
+                  x: props.variable2.variable,
+                  z: (d) => bivariateClasses(d).toString(),
+                },
+              ),
+            ) : null,
+            Plot.ruleX([classifierVar2().breaks[!props.variable1.reversed ? 0 : 3]], { }),
+            Plot.ruleY([classifierVar1().breaks[!props.variable2.reversed ? 0 : 3]], { }),
+            props.displayClassBreakLines
+              ? classifierVar2().breaks.slice(1, -1).map((vx: number) => [
+                Plot.ruleX([vx], { strokeDasharray: 4, strokeOpacity: 0.4 }),
+              ]) : null,
+            props.displayClassBreakLines
+              ? classifierVar1().breaks.slice(1, -1).map((vy: number) => [
+                Plot.ruleY([vy], { strokeDasharray: 4, strokeOpacity: 0.4 }),
+              ]) : null,
+          ],
+        })
+      }
+    </Show>
+    <Show when={props.colorOn === 'areas'}>
+      {
+        Plot.plot({
+          width: props.width,
+          height: props.height,
+          style: {
+            color: props.axis.fontColor,
+            fontFamily: props.axis.fontFamily,
+            fontSize: `${props.axis.fontSize}px`,
+            fontWeight: props.axis.fontWeight,
+            fontStyle: props.axis.fontStyle,
+          },
+          x: {
+            label: props.variable2Label,
+            tickFormat: (d) => formatValue(d),
+            reverse: props.variable2.reversed,
+          },
+          y: {
+            label: props.variable1Label,
+            tickFormat: (d) => formatValue(d),
+            reverse: props.variable1.reversed,
+          },
+          // inset: 10,
+          marks: [
+            Plot.rect(
+              rectCoords(),
+              {
+                x1: '0',
+                y1: '2',
+                x2: '1',
+                y2: '3',
+                fill: (d, i) => props.colors[i],
+              },
+            ),
+            Plot.linearRegressionY(ds(), {
+              y: props.variable1.variable,
+              x: props.variable2.variable,
+              opacity: props.displayRegressionLine ? 0.5 : 0,
+            }),
+            Plot.dot(ds(), {
+              y: props.variable1.variable,
+              x: props.variable2.variable,
+              fill: props.dotColor,
+              // tip: true,
+              r: props.radius,
+            }),
+            props.displayCountByClass ? Plot.text(
+              rectCoords(),
+              {
+                x: (d) => (d[0] + d[1]) / 2,
+                y: (d) => (d[2] + d[3]) / 2,
+                text: (d, i) => countByClass()[i],
+                fontSize: 14,
+                stroke: 'white',
+                strokeWidth: 8,
+                fill: 'currentColor',
+              },
+            ) : null,
+            Plot.ruleX([classifierVar2().breaks[!props.variable1.reversed ? 0 : 3]], { }),
+            Plot.ruleY([classifierVar1().breaks[!props.variable2.reversed ? 0 : 3]], { }),
+          ],
+        })
+      }
+    </Show>
+  </>;
 }
 
 export default function legendChoroplethBivariateScatterPlot(
