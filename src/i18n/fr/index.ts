@@ -1585,6 +1585,9 @@ const fr = {
       BoxSize: 'Taille des boites',
       RotateLegend: 'Faire pivoter la légende',
       DisplayData: 'Afficher les données',
+      ColorOn: 'Affichage de la couleur des classes',
+      Dots: 'Sur les points',
+      Areas: 'Sur les surfaces',
     },
   },
   CommonTextElement: {

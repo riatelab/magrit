@@ -22,7 +22,7 @@ import {
 } from './common.tsx';
 import { isFiniteNumber, precisionToMinimumFractionDigits } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
-import { round } from '../../helpers/math';
+import { max, min, round } from '../../helpers/math';
 import { bivariateClass, getClassifier } from '../../helpers/classification';
 
 // Stores
@@ -122,16 +122,42 @@ function BivariateChoroScatterPlot(
     return cbc;
   });
 
-  const rectCoords = createMemo(() => classifierVar1().breaks
-    .map((by: number, iy: number) => classifierVar2().breaks
-      .map((bx: number, ix: number) => [
-        bx,
-        classifierVar2().breaks[ix + 1],
-        by,
-        classifierVar1().breaks[iy + 1],
-      ]))
-    .flat()
-    .filter((d: [number, number, number, number]) => d[0] && d[1] && d[2] && d[3]));
+  const ymargin = createMemo(() => (
+    (classifierVar1().breaks[3] - classifierVar1().breaks[0]) * 0.025));
+  const xmargin = createMemo(() => (
+    (classifierVar2().breaks[3] - classifierVar2().breaks[0]) * 0.025));
+
+  const rectCoords = createMemo(() => {
+    const b1: number[] = [
+      classifierVar1().breaks[0] - ymargin(),
+      classifierVar1().breaks[1],
+      classifierVar1().breaks[2],
+      classifierVar1().breaks[3] + ymargin(),
+    ];
+    const b2: number[] = [
+      classifierVar2().breaks[0] - xmargin(),
+      classifierVar2().breaks[1],
+      classifierVar2().breaks[2],
+      classifierVar2().breaks[3] + xmargin(),
+    ];
+    const bk1 = props.variable1.reversed
+      ? b1.slice().reverse()
+      : b1;
+    const bk2 = props.variable2.reversed
+      ? b2.slice().reverse()
+      : b2;
+
+    return bk1
+      .map((by: number, iy: number) => bk2
+        .map((bx: number, ix: number) => [
+          bx,
+          bk2[ix + 1],
+          by,
+          bk1[iy + 1],
+        ]))
+      .flat()
+      .filter((d) => d[0] && d[1] && d[2] && d[3]);
+  });
 
   return <>
     <Show when={props.colorOn === 'dots'}>
@@ -150,13 +176,20 @@ function BivariateChoroScatterPlot(
             label: props.variable2Label,
             tickFormat: (d) => formatValue(d),
             reverse: props.variable2.reversed,
+            domain: [
+              classifierVar2().breaks[0] - xmargin(),
+              classifierVar2().breaks[3] + xmargin(),
+            ],
           },
           y: {
             label: props.variable1Label,
             tickFormat: (d) => formatValue(d),
             reverse: props.variable1.reversed,
+            domain: [
+              classifierVar1().breaks[0] - ymargin(),
+              classifierVar1().breaks[3] + ymargin(),
+            ],
           },
-          // inset: 10,
           marks: [
             Plot.linearRegressionY(ds(), {
               y: props.variable1.variable,
@@ -185,8 +218,16 @@ function BivariateChoroScatterPlot(
                 },
               ),
             ) : null,
-            Plot.ruleX([classifierVar2().breaks[!props.variable1.reversed ? 0 : 3]], { }),
-            Plot.ruleY([classifierVar1().breaks[!props.variable2.reversed ? 0 : 3]], { }),
+            Plot.ruleX([
+              classifierVar2().breaks[!props.variable1.reversed ? 0 : 3] + (
+                props.variable1.reversed ? xmargin() : -xmargin()
+              ),
+            ], { }),
+            Plot.ruleY([
+              classifierVar1().breaks[!props.variable2.reversed ? 0 : 3] + (
+                props.variable2.reversed ? ymargin() : -ymargin()
+              ),
+            ], { }),
             props.displayClassBreakLines
               ? classifierVar2().breaks.slice(1, -1).map((vx: number) => [
                 Plot.ruleX([vx], { strokeDasharray: 4, strokeOpacity: 0.4 }),
@@ -221,7 +262,6 @@ function BivariateChoroScatterPlot(
             tickFormat: (d) => formatValue(d),
             reverse: props.variable1.reversed,
           },
-          // inset: 10,
           marks: [
             Plot.rect(
               rectCoords(),
@@ -257,8 +297,16 @@ function BivariateChoroScatterPlot(
                 fill: 'currentColor',
               },
             ) : null,
-            Plot.ruleX([classifierVar2().breaks[!props.variable1.reversed ? 0 : 3]], { }),
-            Plot.ruleY([classifierVar1().breaks[!props.variable2.reversed ? 0 : 3]], { }),
+            Plot.ruleX([
+              classifierVar2().breaks[!props.variable1.reversed ? 0 : 3] + (
+                props.variable1.reversed ? xmargin() : -xmargin()
+              ),
+            ], { }),
+            Plot.ruleY([
+              classifierVar1().breaks[!props.variable2.reversed ? 0 : 3] + (
+                props.variable2.reversed ? ymargin() : -ymargin()
+              ),
+            ], { }),
           ],
         })
       }
@@ -348,7 +396,7 @@ export default function legendChoroplethBivariateScatterPlot(
     {makeLegendText(legend.title, [legend.width / 2, 0], 'title', { 'text-anchor': 'middle' })}
     {makeLegendText(legend.subtitle, [legend.width / 2, heightTitle()], 'subtitle', { 'text-anchor': 'middle' })}
     <g
-      transform={`translate(0, ${heightTitle() + heightSubtitle() - defaultSpacing * 2})`}
+      transform={`translate(0, ${heightTitle() + heightSubtitle()})`}
     >
       <BivariateChoroScatterPlot
         {...legend}
@@ -361,7 +409,7 @@ export default function legendChoroplethBivariateScatterPlot(
     {
       makeLegendText(
         legend.note,
-        [legend.width / 2, heightTitle() + heightSubtitle() + legend.height - defaultSpacing * 2],
+        [legend.width / 2, heightTitle() + heightSubtitle() + legend.height + defaultSpacing],
         'note',
         { 'text-anchor': 'middle' },
       )

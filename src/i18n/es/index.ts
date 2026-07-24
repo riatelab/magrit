@@ -1585,6 +1585,9 @@ const es = {
       BoxSize: 'Tamaño de las cajas',
       RotateLegend: 'Girar la leyenda',
       DisplayData: 'Mostrar datos',
+      ColorOn: 'Mostrar colores de las clases',
+      Dots: 'En los puntos',
+      Areas: 'En las áreas',
     },
   },
   CommonTextElement: {

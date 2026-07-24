@@ -1585,6 +1585,9 @@ const en = {
       BoxSize: 'Box size',
       RotateLegend: 'Rotate Legend',
       DisplayData: 'Display data',
+      ColorOn: 'Display class colors',
+      Dots: 'On the dots',
+      Areas: 'On the areas',
     },
   },
   CommonTextElement: {

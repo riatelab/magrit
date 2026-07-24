@@ -82,13 +82,14 @@ import {
  *
  * @param {string} legendId - The id of the legend to update.
  * @param {string[]} props - The path to the property to update.
- * @param {string | number | boolean} value - The new value of the property.
+ * @param {string | number | boolean | Record<string, any> | undefined} value - The
+ * new value of the property.
  * @return {void}
  */
 const updateProps = (
   legendId: string,
   props: string[],
-  value: string | number | boolean,
+  value: string | number | boolean | Record<string, any> | undefined,
 ): void => {
   const allPropsExceptLast = props.slice(0, props.length - 1);
   const lastProp = props[props.length - 1];
@@ -1157,7 +1158,7 @@ function makeSettingsChoroplethHistogram(
   </>;
 }
 
-function makeSettginsCategoricalChoroplethBarchart(
+function makeSettingsCategoricalChoroplethBarchart(
   legend: CategoricalChoroplethBarchartLegend,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
@@ -1721,7 +1722,7 @@ function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.
     return makeSettingsMushrooms(legend as MushroomsLegend, LL);
   }
   if (legend.type === LegendType.categoricalChoroplethBarchart) {
-    return makeSettginsCategoricalChoroplethBarchart(
+    return makeSettingsCategoricalChoroplethBarchart(
       legend as CategoricalChoroplethBarchartLegend,
       LL,
     );

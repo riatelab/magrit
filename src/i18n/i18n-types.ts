@@ -6371,6 +6371,18 @@ type RootTranslation = {
 			 * D​i​s​p​l​a​y​ ​d​a​t​a
 			 */
 			DisplayData: string
+			/**
+			 * D​i​s​p​l​a​y​ ​c​l​a​s​s​ ​c​o​l​o​r​s
+			 */
+			ColorOn: string
+			/**
+			 * O​n​ ​t​h​e​ ​d​o​t​s
+			 */
+			Dots: string
+			/**
+			 * O​n​ ​t​h​e​ ​a​r​e​a​s
+			 */
+			Areas: string
 		}
 	}
 	CommonTextElement: {
@@ -12652,6 +12664,18 @@ export type TranslationFunctions = {
 			 * Display data
 			 */
 			DisplayData: () => LocalizedString
+			/**
+			 * Display class colors
+			 */
+			ColorOn: () => LocalizedString
+			/**
+			 * On the dots
+			 */
+			Dots: () => LocalizedString
+			/**
+			 * On the areas
+			 */
+			Areas: () => LocalizedString
 		}
 	}
 	CommonTextElement: {
