@@ -71,32 +71,30 @@ export default function legendTrivariateChoropleth(
 
   // const legendHeight = createMemo(() => (Msqrt(3) / 2) * legend.width);
 
+  const seriesVar1 = createMemo(() => layer.data.features
+    .map((f) => f.properties![layer.rendererParameters.variable1] as number));
+
+  const seriesVar2 = createMemo(() => layer.data.features
+    .map((f) => f.properties![layer.rendererParameters.variable2] as number));
+
+  const seriesVar3 = createMemo(() => layer.data.features
+    .map((f) => f.properties![layer.rendererParameters.variable3] as number));
+
   const hasNoData = createMemo(() => {
     if (!legend.noDataBox) return false;
-    const seriesVar1 = layer.data.features
-      .map((f) => f.properties![layer.rendererParameters.variable1] as number);
-
-    const seriesVar2 = layer.data.features
-      .map((f) => f.properties![layer.rendererParameters.variable2] as number);
-
-    const seriesVar3 = layer.data.features
-      .map((f) => f.properties![layer.rendererParameters.variable3] as number);
-
-    const pts = seriesVar1.map((pt, i) => {
+    const pts = seriesVar1().map((pt, i) => {
       if (
         isFiniteNumber(pt)
-        && isFiniteNumber(seriesVar2[i])
-        && isFiniteNumber(seriesVar3[i])
+        && isFiniteNumber(seriesVar2()[i])
+        && isFiniteNumber(seriesVar3()[i])
       ) {
-        return [+pt, +seriesVar2[i], +seriesVar3[i]];
+        return [+pt, +seriesVar2()[i], +seriesVar3()[i]];
       }
       return null;
     });
 
     return pts.filter((d) => d !== null).length !== pts.length;
   });
-
-  console.log(hasNoData());
 
   const createInnerLegend = () => {
     const dimensions = {
@@ -110,35 +108,26 @@ export default function legendTrivariateChoropleth(
       },
     };
 
-    // TODO : make seriesVar1, seriesVar2, seriesVar3 and pts memo
-    //        so they can be shared by hasNoData and createInnerLegend
-    const seriesVar1 = layer.data.features
-      .map((f) => f.properties![layer.rendererParameters.variable1] as number);
-
-    const seriesVar2 = layer.data.features
-      .map((f) => f.properties![layer.rendererParameters.variable2] as number);
-
-    const seriesVar3 = layer.data.features
-      .map((f) => f.properties![layer.rendererParameters.variable3] as number);
-
-    const pts = seriesVar1.map((pt, i) => {
+    const pts = seriesVar1().map((pt, i) => {
       if (
         isFiniteNumber(pt)
-        && isFiniteNumber(seriesVar2[i])
-        && isFiniteNumber(seriesVar3[i])
+        && isFiniteNumber(seriesVar2()[i])
+        && isFiniteNumber(seriesVar3()[i])
       ) {
-        return [+pt, +seriesVar2[i], +seriesVar3[i]];
+        return [+pt, +seriesVar2()[i], +seriesVar3()[i]];
       }
       return null;
     }) as (TernaryPoint | null)[];
 
-    const center = layer.rendererParameters.meanCentered
-      ? CompositionUtils.center(pts.filter((d) => d !== null) as [number, number, number][])
+    const ptsFiltered = pts.filter((d) => d !== null);
+
+    const center: [number, number, number] = layer.rendererParameters.meanCentered
+      ? CompositionUtils.center(ptsFiltered)
       : [1 / 3, 1 / 3, 1 / 3];
 
     let svg;
     if (layer.rendererParameters.colorScaleType === TricoloreScaleType.Sextant) {
-      svg = Viz.createSextantPlot(pts, {
+      svg = Viz.createSextantPlot(ptsFiltered, {
         center,
         labels: legend.axisLabels,
         values: (layer.rendererParameters.colorScaleOptions as TriChoroSextantOpts).colors,
@@ -148,7 +137,7 @@ export default function legendTrivariateChoropleth(
         labelPosition: 'edge',
       }, dimensions);
     } else if (layer.rendererParameters.colorScaleType === TricoloreScaleType.Discrete) {
-      svg = Viz.createDiscretePlot(pts, {
+      svg = Viz.createDiscretePlot(ptsFiltered, {
         center,
         hue: (layer.rendererParameters.colorScaleOptions as TriChoroDiscreteOpts).hue,
         chroma: (layer.rendererParameters.colorScaleOptions as TriChoroDiscreteOpts).chroma,
@@ -163,7 +152,7 @@ export default function legendTrivariateChoropleth(
         breaks: Msqrt((layer.rendererParameters.colorScaleOptions as TriChoroDiscreteOpts).classes),
       }, dimensions);
     } else { // TricoloreScaleType.Continuous
-      svg = Viz.createContinuousPlot(pts, {
+      svg = Viz.createContinuousPlot(ptsFiltered, {
         center,
         hue: (layer.rendererParameters.colorScaleOptions as TriChoroContinuousOpts).hue,
         chroma: (layer.rendererParameters.colorScaleOptions as TriChoroContinuousOpts).chroma,
@@ -228,6 +217,15 @@ export default function legendTrivariateChoropleth(
     {makeLegendText(legend.subtitle, [0, heightTitle()], 'subtitle')}
     <g
       transform={`translate(0, ${heightTitle() + heightSubtitle()})`}
+      // We set these font properties on this parent group so that
+      // both the no data element and the inner tricolore legend
+      // benefit from it (except the values along
+      // the axes, for which the font size doesn't apply)
+      font-size={legend.labels.fontSize}
+      font-family={legend.labels.fontFamily}
+      font-style={legend.labels.fontStyle}
+      font-weight={legend.labels.fontWeight}
+      fill={legend.labels.fontColor}
     >
       { createInnerLegend() }
       <Show when={hasNoData()}>
@@ -242,11 +240,6 @@ export default function legendTrivariateChoropleth(
         <text
           x={40 + defaultSpacing}
           y={legend.width - (defaultSpacing * 2) + 15}
-          font-size={legend.labels.fontSize}
-          font-family={legend.labels.fontFamily}
-          font-style={legend.labels.fontStyle}
-          font-weight={legend.labels.fontWeight}
-          fill={legend.labels.fontColor}
           text-anchor="start"
           dominant-baseline="middle"
         >
