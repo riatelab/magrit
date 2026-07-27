@@ -22,7 +22,7 @@ import {
 } from './common.tsx';
 import { isFiniteNumber, precisionToMinimumFractionDigits } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
-import { max, min, round } from '../../helpers/math';
+import { round } from '../../helpers/math';
 import { bivariateClass, getClassifier } from '../../helpers/classification';
 
 // Stores
@@ -32,10 +32,7 @@ import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 // Type
 import {
   type BivariateChoroplethScatterplotLegend,
-  type BivariateChoroplethParameters,
-  type LayerDescription,
   type LayerDescriptionBivariateChoropleth,
-  type LegendTextElement,
   type BivariateVariableDescription,
   ClassificationMethod,
 } from '../../global.d';
@@ -113,11 +110,21 @@ function BivariateChoroScatterPlot(
   );
 
   const countByClass = createMemo(() => {
-    const cbc: Record<string, number> = {};
+    // Initialize each class count to 0 to
+    // also display count when there is no data in a class
+    const cbc: Record<number, number> = {
+      0: 0,
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+      6: 0,
+      7: 0,
+      8: 0,
+    };
     ds().forEach((d) => {
-      const t = bc(d);
-      if (!cbc[t]) cbc[t] = 1;
-      else cbc[t] += 1;
+      cbc[bc(d as never)] += 1;
     });
     return cbc;
   });
@@ -203,29 +210,45 @@ function BivariateChoroScatterPlot(
               // tip: true,
               r: props.radius,
             }),
+            // If we want to display class count at the barycenter
+            // of the points of the class:
+            // props.displayCountByClass ? Plot.text(
+            //   ds(),
+            //   Plot.groupZ(
+            //     { text: 'count', x: 'mean', y: 'mean' },
+            //     {
+            //       fontSize: 14,
+            //       stroke: 'white',
+            //       strokeWidth: 8,
+            //       fill: 'currentColor',
+            //       y: props.variable1.variable,
+            //       x: props.variable2.variable,
+            //       z: (d) => bivariateClasses(d).toString(),
+            //     },
+            //   ),
+            // ) : null,
+            // If we want to display class count at the center
+            // of the rectangle of the class:
             props.displayCountByClass ? Plot.text(
-              ds(),
-              Plot.groupZ(
-                { text: 'count', x: 'mean', y: 'mean' },
-                {
-                  fontSize: 14,
-                  stroke: 'white',
-                  strokeWidth: 8,
-                  fill: 'currentColor',
-                  y: props.variable1.variable,
-                  x: props.variable2.variable,
-                  z: (d) => bivariateClasses(d).toString(),
-                },
-              ),
+              rectCoords(),
+              {
+                x: (d) => (d[0] + d[1]) / 2,
+                y: (d) => (d[2] + d[3]) / 2,
+                text: (d, i) => countByClass()[i],
+                fontSize: 14,
+                stroke: 'white',
+                strokeWidth: 8,
+                fill: 'currentColor',
+              },
             ) : null,
             Plot.ruleX([
-              classifierVar2().breaks[!props.variable1.reversed ? 0 : 3] + (
-                props.variable1.reversed ? xmargin() : -xmargin()
+              classifierVar2().breaks[!props.variable2.reversed ? 0 : 3] + (
+                props.variable2.reversed ? xmargin() : -xmargin()
               ),
             ], { }),
             Plot.ruleY([
-              classifierVar1().breaks[!props.variable2.reversed ? 0 : 3] + (
-                props.variable2.reversed ? ymargin() : -ymargin()
+              classifierVar1().breaks[!props.variable1.reversed ? 0 : 3] + (
+                props.variable1.reversed ? ymargin() : -ymargin()
               ),
             ], { }),
             props.displayClassBreakLines
@@ -298,13 +321,13 @@ function BivariateChoroScatterPlot(
               },
             ) : null,
             Plot.ruleX([
-              classifierVar2().breaks[!props.variable1.reversed ? 0 : 3] + (
-                props.variable1.reversed ? xmargin() : -xmargin()
+              classifierVar2().breaks[!props.variable2.reversed ? 0 : 3] + (
+                props.variable2.reversed ? xmargin() : -xmargin()
               ),
             ], { }),
             Plot.ruleY([
-              classifierVar1().breaks[!props.variable2.reversed ? 0 : 3] + (
-                props.variable2.reversed ? ymargin() : -ymargin()
+              classifierVar1().breaks[!props.variable1.reversed ? 0 : 3] + (
+                props.variable1.reversed ? ymargin() : -ymargin()
               ),
             ], { }),
           ],
