@@ -773,6 +773,12 @@ export enum RepresentationType {
   proportionalSymbols = 'proportionalSymbols',
   categoricalChoropleth = 'categoricalChoropleth',
   categoricalPictogram = 'categoricalPictogram',
+  // Next two Representation types are also AnalysisOperation types
+  // this shouldn't be a problem (because other AnalysisOperations
+  // lead to the creation of existing Representations, but not
+  // bi- tri-choro that load to their one Representation)
+  bivariateChoropleth = 'bivariateChoropleth',
+  trivariateChoropleth = 'trivariateChoropleth',
   // proportionalSymbolsAndCategories = 'proportionalSymbolsAndCategories',
   // proportionalSymbolsAndRatio = 'proportionalSymbolsAndRatio',
   discontinuity = 'discontinuity',
