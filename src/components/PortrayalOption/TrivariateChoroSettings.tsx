@@ -327,6 +327,7 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
             labelPosition: 'edge',
           }, dimensions);
         }
+        svg.setAttribute('fill', 'var(--bulma-label-color)');
         plotDiv.appendChild(svg);
       },
     ),
