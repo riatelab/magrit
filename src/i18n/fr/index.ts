@@ -1497,6 +1497,7 @@ const fr = {
     pastedColorsWrongLength: 'Le nombre de couleurs copiées ne correspondent pas au nombre de classes. Les couleurs actuelles restent inchangées.',
     copyPalette: 'Copier la palette de couleurs dans le presse-papier',
     paletteCopied: 'Palette de couleurs copiée dans le presse-papier',
+    noDataColor: 'Couleur pour les valeurs manquantes',
   },
   BivariateClassificationPanel: {
     VariableDirection: 'Sens de la variable',

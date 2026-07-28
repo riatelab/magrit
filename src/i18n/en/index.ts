@@ -1497,6 +1497,7 @@ const en = {
     pastedColorsWrongLength: 'The number of colors does not match the number of classes. Colors are unchanged.',
     copyPalette: 'Copy palette to the clipboard',
     paletteCopied: 'Palette copied to the clipboard',
+    noDataColor: 'Color for missing values',
   },
   BivariateClassificationPanel: {
     VariableDirection: 'Direction of the variable',

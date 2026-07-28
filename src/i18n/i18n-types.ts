@@ -6040,6 +6040,10 @@ type RootTranslation = {
 		 * P​a​l​e​t​t​e​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
 		 */
 		paletteCopied: string
+		/**
+		 * C​o​l​o​r​ ​f​o​r​ ​m​i​s​s​i​n​g​ ​v​a​l​u​e​s
+		 */
+		noDataColor: string
 	}
 	BivariateClassificationPanel: {
 		/**
@@ -12333,6 +12337,10 @@ export type TranslationFunctions = {
 		 * Palette copied to the clipboard
 		 */
 		paletteCopied: () => LocalizedString
+		/**
+		 * Color for missing values
+		 */
+		noDataColor: () => LocalizedString
 	}
 	BivariateClassificationPanel: {
 		/**

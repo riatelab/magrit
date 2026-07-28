@@ -1497,6 +1497,7 @@ const es = {
     pastedColorsWrongLength: 'El número de colores copiados no coincide con el número de clases. Los colores actuales no se modifican',
     copyPalette: 'Copia la paleta de colores al portapapeles',
     paletteCopied: 'Paleta de colores copiada al portapapeles',
+    noDataColor: 'Color para los valores faltantes',
   },
   BivariateClassificationPanel: {
     VariableDirection: 'Sentido de la variable',
