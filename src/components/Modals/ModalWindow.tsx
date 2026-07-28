@@ -33,8 +33,24 @@ export default function DefaultModal(): JSX.Element {
       const isEscape = event.key
         ? (event.key === 'Escape' || event.key === 'Esc')
         : (event.keyCode === 27);
+      // There is some kind of conflict when classification panel (for choro, bichoro, trichoro
+      // and discontinuity) is opened on top of another modal window.
+      // This issue is as follows :
+      //   - layerSettings modal is opened,
+      //   - classification modal is opened on top,
+      //   - user hit "Esc" key,
+      //   - both classification panel and layer settings modal are closed
+      //     (while this should only close classification panel),
+      //   - the app is unusable (because the modal windows have both
+      //     closed but some overlays have remained).
+      // To avoid this, we skip the action of this listener (so that only classification
+      // modal is closed) if there is a classe "classification-panel" in the DOM.
+      // If the issue persists on some browser / for some user, we could consider
+      // not attaching the `listenerEscKey` of each classification modal...
+      const isClassificationModalOpen = !!document.querySelector('.classification-panel');
+      if (isClassificationModalOpen) return;
       if (isEscape) {
-        (refParentNode.querySelector(`.${behavior}-button`) as HTMLElement).click();
+        (refParentNode!.querySelector(`.${behavior}-button`) as HTMLElement).click();
       }
     };
   };
@@ -44,7 +60,7 @@ export default function DefaultModal(): JSX.Element {
 
   // Listener for when the browser window is resized
   const windowResizeListener = () => {
-    const modal = refParentNode.querySelector('.modal-card') as HTMLElement;
+    const modal = refParentNode!.querySelector('.modal-card') as HTMLElement;
     const modalRect = modal.getBoundingClientRect();
 
     // Reset the position of the modal to the center
@@ -70,7 +86,7 @@ export default function DefaultModal(): JSX.Element {
     // Bind the escape key to the chosen behavior
     document.addEventListener('keydown', listenerEscKey);
     // Get the position of the modal (it is centered by default using CSS)
-    const modal = refParentNode.querySelector('.modal-card') as HTMLElement;
+    const modal = refParentNode!.querySelector('.modal-card') as HTMLElement;
     const modalRect = modal.getBoundingClientRect();
     // Set the position of the modal
     modal.style.position = 'fixed';

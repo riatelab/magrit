@@ -43,6 +43,11 @@ export const makeListenerEscKey = (
     ? (event.key === 'Escape' || event.key === 'Esc')
     : (event.keyCode === 27);
 
+  // If the classification panel is opened on top of the (Table)FunctionalitySelection,
+  // and the users hit "Esc" key, they probably want to only close the classification panel
+  const isClassificationModalOpen = !!document.querySelector('.classification-panel');
+  if (isClassificationModalOpen) return;
+
   if (isEscape) {
     // We want a different behavior if a functionality is selected or not
     if (selectedFunctionality()) {

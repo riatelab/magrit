@@ -92,9 +92,10 @@ import {
   type ProportionalSymbolsParametersBase,
   type ProportionalSymbolsPositiveNegativeParameters,
   type ProportionalSymbolsRatioParameters,
-  ProportionalSymbolsSymbolType, TriChoroSextantOpts,
+  ProportionalSymbolsSymbolType,
+  type TriChoroSextantOpts,
   TricoloreScaleType,
-  TrivariateChoroplethParameters,
+  type TrivariateChoroplethParameters,
   type WaffleLegend,
 } from '../../global.d';
 

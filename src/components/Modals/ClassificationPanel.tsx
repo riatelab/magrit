@@ -419,9 +419,6 @@ export default function ClassificationPanel(): JSX.Element {
   );
 
   const listenerEscKey = (event: KeyboardEvent) => {
-    // TODO: in many cases this modal is opened on the top of another modal
-    //       we should take care to only close this one, not the other one
-    //       (currently they both get closed)
     const isEscape = event.key
       ? (event.key === 'Escape' || event.key === 'Esc')
       : (event.keyCode === 27);
