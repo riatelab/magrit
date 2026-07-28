@@ -136,11 +136,11 @@ const functionalityDescriptions: Partial<FunctionalityDescription>[] = [
   ...p,
   enabled: false,
   // eslint-disable-next-line no-nested-ternary
-  category: Object.values(RepresentationType).includes(p.type)
-    ? 'Representation'
+  category: Object.values(AnalysisOperationType).includes(p.type)
+    ? 'AnalysisOperation'
     : Object.values(ProcessingOperationType).includes(p.type)
       ? 'ProcessingOperation'
-      : 'AnalysisOperation',
+      : 'Representation',
 }));
 
 function CardFunctionality(
@@ -151,11 +151,11 @@ function CardFunctionality(
 ): JSX.Element {
   const { LL } = useI18nContext();
   // eslint-disable-next-line no-nested-ternary
-  const col = Object.values(RepresentationType).includes(pDesc.type)
-    ? 'var(--bulma-success)'
+  const col = Object.values(AnalysisOperationType).includes(pDesc.type)
+    ? 'var(--bulma-warning)'
     : Object.values(ProcessingOperationType).includes(pDesc.type)
       ? 'var(--bulma-danger)'
-      : 'var(--bulma-warning)';
+      : 'var(--bulma-success)';
   return <div
     classList={{
       card: true,
@@ -189,14 +189,14 @@ function CardFunctionality(
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
       <p class="card-header-title" style={{ 'padding-bottom': '0 !important' }}>
         <Switch>
-          <Match when={Object.values(RepresentationType).includes(pDesc.type)}>
-            <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+          <Match when={Object.values(AnalysisOperationType).includes(pDesc.type)}>
+            <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
           </Match>
           <Match when={Object.values(ProcessingOperationType).includes(pDesc.type)}>
             <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
           </Match>
-          <Match when={Object.values(AnalysisOperationType).includes(pDesc.type)}>
-            <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+          <Match when={Object.values(RepresentationType).includes(pDesc.type)}>
+            <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
           </Match>
         </Switch>
         { LL().FunctionalitiesSection.FunctionalityTypes[pDesc.name]() }
@@ -469,7 +469,7 @@ export default function FunctionalitySelection(): JSX.Element {
                   }
                 }}
               >
-                <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+                <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
                 { LL().FunctionalitiesSection.Tags.Exploration() }
               </span>
               <span
@@ -490,7 +490,7 @@ export default function FunctionalitySelection(): JSX.Element {
                   }
                 }}
               >
-                <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+                <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
                 { LL().FunctionalitiesSection.Tags.GeoProcessing() }
               </span>
             </div>
