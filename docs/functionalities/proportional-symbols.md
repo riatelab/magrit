@@ -35,6 +35,21 @@ Les symboles peuvent être colorés de différentes manières :
 - selon une variable quantitative relative,
 - selon que les valeurs sont positives ou négatives.
 
+## Taille de référence
+
+Lorsque vous définissez la valeur de référence et la taille de référence,
+les symboles sont mis à l'échelle de sorte que la taille de référence corresponde toujours à la même surface de symbole,
+quel que soit le type de symbole choisi :
+
+- Pour les carrés, la taille de référence est la longueur du côté du carré dessiné pour la valeur de référence
+  (donc une taille de référence de 100 px signifie un carré de 100 × 100 px, soit une surface de 10 000 px²).
+- Pour les cercles, la taille de référence définit une surface équivalente : le cercle dessiné pour la valeur de référence
+  a la même surface qu'un carré de la taille de référence
+  (donc une taille de référence de 100 px signifie une surface de 10 000 px², ce qui correspond à un cercle d'un rayon
+  d'environ 56,4 px — et non pas un rayon de 100 px).
+- Pour les lignes, la taille de référence correspond simplement à la largeur de ligne utilisée pour la valeur de référence ;
+  les autres largeurs de ligne sont mises à l'échelle proportionnellement aux valeurs (et non à une surface équivalente).
+
 ## Exemples
 
 
