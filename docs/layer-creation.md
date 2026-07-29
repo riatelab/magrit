@@ -7,7 +7,13 @@
     caption="Fenêtre de création d'une nouvelle représentation ou d'une nouvelle couche"
 />
 
-Il est possible de créer une nouvelle représentation à partir d'une couche de données géographiques ou d'un tableau de données.
+Il est possible de créer une nouvelle représentation à partir d'une couche de données géographiques ou d'un tableau de données. Toutes les options proposées dans cette fenêtre créent une nouvelle couche qui sera ajoutée au gestionnaire de couche et à la carte.
+
+Les fonctionnalités proposées sont regroupées en trois catégories :
+
+- **Représentation** : des représentations cartographiques classiques, dédiées à la visualisation des données.
+- **Exploration** : des représentations statistiques plus avancées, dédiés à l'exploration des données et donc les résultats cartographiques sont à utiliser avec précaution en raison de la nature exploratoire de ces représentations.
+- **Géo-traitement** : des traitements géographiques sur les données, utiles à la préparation des données pour la cartographie.
 
 Les fonctionnalités accessibles dépendent du type de données (géographiques ou tabulaires) sélectionné
 et du type de variables contenu (stock, ratio, etc.) dans les données.
