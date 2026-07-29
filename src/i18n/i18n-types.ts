@@ -3676,7 +3676,7 @@ type RootTranslation = {
 			 */
 			SimpleLinearRegression: string
 			/**
-			 * A​g​g​r​e​g​a​t​i​o​n
+			 * D​i​s​s​o​l​v​e
 			 */
 			Aggregation: string
 			/**
@@ -4356,7 +4356,7 @@ type RootTranslation = {
 		}
 		AggregationOptions: {
 			/**
-			 * A​g​g​r​e​g​a​t​i​o​n​ ​m​e​t​h​o​d
+			 * D​i​s​s​o​l​v​e​ ​m​e​t​h​o​d
 			 */
 			Method: string
 			/**
@@ -4364,11 +4364,11 @@ type RootTranslation = {
 			 */
 			None: string
 			/**
-			 * I​f​ ​n​o​ ​f​i​e​l​d​ ​i​s​ ​s​e​l​e​c​t​e​d​,​ ​t​h​e​ ​a​g​g​r​e​g​a​t​i​o​n​ ​w​i​l​l​ ​b​e​ ​d​o​n​e​ ​o​n​ ​t​h​e​ ​w​h​o​l​e​ ​l​a​y​e​r​.
+			 * I​f​ ​n​o​ ​f​i​e​l​d​ ​i​s​ ​s​e​l​e​c​t​e​d​,​ ​t​h​e​ ​d​i​s​s​o​l​v​e​ ​o​p​e​r​a​t​i​o​n​ ​w​i​l​l​ ​b​e​ ​d​o​n​e​ ​o​n​ ​t​h​e​ ​e​n​t​i​r​e​ ​l​a​y​e​r​.
 			 */
 			Information: string
 			/**
-			 * A​g​g​r​e​g​a​t​e​d​_​{​l​a​y​e​r​N​a​m​e​}
+			 * D​i​s​s​o​l​v​e​d​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
 			 */
 			NewLayerName: RequiredParams<'layerName'>
@@ -5408,7 +5408,7 @@ type RootTranslation = {
 			 */
 			Mushrooms: string
 			/**
-			 * T​h​i​s​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​e​n​a​b​l​e​s​ ​p​o​l​y​g​o​n​a​l​ ​e​n​t​i​t​i​e​s​ ​t​o​ ​b​e​ ​a​g​g​r​e​g​a​t​e​d​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​f​i​e​l​d​ ​(​o​r​ ​a​l​l​ ​e​n​t​i​t​i​e​s​ ​i​f​ ​n​o​ ​f​i​e​l​d​ ​i​s​ ​s​e​l​e​c​t​e​d​)​.
+			 * T​h​i​s​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​e​n​a​b​l​e​s​ ​p​o​l​y​g​o​n​a​l​ ​e​n​t​i​t​i​e​s​ ​t​o​ ​b​e​ ​d​i​s​s​o​l​v​e​d​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​f​i​e​l​d​ ​(​o​r​ ​a​l​l​ ​e​n​t​i​t​i​e​s​ ​i​f​ ​n​o​ ​f​i​e​l​d​ ​i​s​ ​s​e​l​e​c​t​e​d​)​.
 			 */
 			Aggregation: string
 			/**
@@ -10029,7 +10029,7 @@ export type TranslationFunctions = {
 			 */
 			SimpleLinearRegression: () => LocalizedString
 			/**
-			 * Aggregation
+			 * Dissolve
 			 */
 			Aggregation: () => LocalizedString
 			/**
@@ -10679,7 +10679,7 @@ export type TranslationFunctions = {
 		}
 		AggregationOptions: {
 			/**
-			 * Aggregation method
+			 * Dissolve method
 			 */
 			Method: () => LocalizedString
 			/**
@@ -10687,11 +10687,11 @@ export type TranslationFunctions = {
 			 */
 			None: () => LocalizedString
 			/**
-			 * If no field is selected, the aggregation will be done on the whole layer.
+			 * If no field is selected, the dissolve operation will be done on the entire layer.
 			 */
 			Information: () => LocalizedString
 			/**
-			 * Aggregated_{layerName}
+			 * Dissolved_{layerName}
 			 */
 			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
@@ -11711,7 +11711,7 @@ export type TranslationFunctions = {
 			 */
 			Mushrooms: () => LocalizedString
 			/**
-			 * This functionality enables polygonal entities to be aggregated according to the value of a field (or all entities if no field is selected).
+			 * This functionality enables polygonal entities to be dissolved according to the value of a field (or all entities if no field is selected).
 			 */
 			Aggregation: () => LocalizedString
 			/**
