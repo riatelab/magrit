@@ -95,17 +95,57 @@ const getDefaultClipExtent = () => (
  *
  */
 export const getCurrentExtent = (): number[][] => {
+  const defaultExtent = [[-179.0, 85], [179.0, -85]];
   try {
     const topLeft = globalStore.projection.invert([10, 10]);
     const bottomRight = globalStore.projection.invert(
       [mapStore.mapDimensions.width - 10, mapStore.mapDimensions.height - 10],
     );
-    if (topLeft[0] > 180 || topLeft[0] < -180 || topLeft[1] > 90 || topLeft[1] < -90) {
-      return [[-179.0, 85], [179.0, -85]];
+
+    // Guard against missing / non-array results
+    if (!topLeft || !bottomRight) {
+      return defaultExtent;
     }
+
+    const [tlLon, tlLat] = topLeft;
+    const [brLon, brLat] = bottomRight;
+
+    // Guard against NaN / Infinity (can happen near projection singularities,
+    // e.g. Hammer, Aitoff, Mollweide, etc.)
+    if (
+      !Number.isFinite(tlLon) || !Number.isFinite(tlLat)
+      || !Number.isFinite(brLon) || !Number.isFinite(brLat)
+    ) {
+      return defaultExtent;
+    }
+
+    // Guard against out-of-bounds longitude / latitude values
+    if (
+      tlLon > 180 || tlLon < -180 || tlLat > 90 || tlLat < -90
+      || brLon > 180 || brLon < -180 || brLat > 90 || brLat < -90
+    ) {
+      return defaultExtent;
+    }
+
+    // Guard against a degenerate / incoherent box:
+    // topLeft should be north of bottomRight, and west of bottomRight
+    // (ignoring antimeridian-crossing cases, which we treat as suspicious too)
+    if (tlLat <= brLat || tlLon >= brLon) {
+      return defaultExtent;
+    }
+
+    // Guard against an extent that is unreasonably large
+    // (a sign that invert() returned wildly distorted coordinates
+    // near a projection's singularities / edges)
+    const lonSpan = brLon - tlLon;
+    const latSpan = tlLat - brLat;
+    if (lonSpan > 358 || latSpan > 178) {
+      return defaultExtent;
+    }
+
     return [topLeft, bottomRight];
   } catch (e) {
-    return [[-179.0, 85], [179.0, -85]];
+    return defaultExtent;
   }
 };
 
