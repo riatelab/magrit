@@ -42,7 +42,6 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
         { text: 'Discrétisation', link: '/functionalities/classification' },
         { text: 'Symboles proportionnels', link: '/functionalities/proportional-symbols' },
         { text: 'Choroplèthe catégorielle', link: '/functionalities/categorical-choropleth' },
-        { text: 'Agrégation d\'un semis de points', link: '/functionalities/point-aggregation' },
         { text: 'Étiquettes', link: '/functionalities/labels' },
         { text: 'Carroyage', link: '/functionalities/gridding' },
         { text: 'Cartogramme', link: '/functionalities/cartogram' },
@@ -53,9 +52,10 @@ function sidebarFr(): DefaultTheme.SidebarItem[] {
         { text: 'Pictogrammes (catégoriels)', link: '/functionalities/categorical-pictograms' },
         { text: 'Carte en gaufre', link: '/functionalities/waffle' },
         { text: 'Régression linéaire simple', link: '/functionalities/simple-linear-regression' },
+        { text: 'Agrégation d\'un semis de points', link: '/functionalities/point-aggregation' },
         { text: 'Choroplèthe bivarée', link: '/functionalities/bivariate' },
         { text: 'Choroplèthe trivariée', link: '/functionalities/trivariate' },
-        { text: 'Agrégation', link: '/functionalities/aggregation' },
+        { text: 'Fusion (par attribut)', link: '/functionalities/dissolve' },
         { text: 'Généralisation', link: '/functionalities/simplification' },
         { text: 'Sélection attributaire', link: '/functionalities/selection-by-attribute' },
       ]
@@ -110,7 +110,7 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
         { text: 'Map layout features', link: '/en/layout-features' },
         { text: 'Creating a portrayal', link: '/en/layer-creation' },
         { text: 'Application settings', link: '/en/application-settings' },
-        { text: 'Exports', link: '/exports' },
+        { text: 'Exports', link: '/en/exports' },
       ]
     },
     {
@@ -121,7 +121,6 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
         { text: 'Classification', link: '/en/functionalities/classification' },
         { text: 'Proportional symbols', link: '/en/functionalities/proportional-symbols' },
         { text: 'Categorical choropleth', link: '/en/functionalities/categorical-choropleth' },
-        { text: 'Point aggregation', link: '/en/functionalities/point-aggregation' },
         { text: 'Labels', link: '/en/functionalities/labels' },
         { text: 'Gridding', link: '/en/functionalities/gridding' },
         { text: 'Cartogram', link: '/en/functionalities/cartogram' },
@@ -132,9 +131,10 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
         { text: 'Pictograms (categorical)', link: '/en/functionalities/categorical-pictograms' },
         { text: 'Waffle map', link: '/en/functionalities/waffle' },
         { text: 'Simple linear regression', link: '/en/functionalities/simple-linear-regression' },
+        { text: 'Point aggregation', link: '/en/functionalities/point-aggregation' },
         { text: 'Bivariate choropleth', link: '/en/functionalities/bivariate' },
         { text: 'Trivariate choropleth', link: '/en/functionalities/trivariate' },
-        { text: 'Aggregation', link: '/en/functionalities/aggregation' },
+        { text: 'Dissolve (by attribute)', link: '/en/functionalities/dissolve' },
         { text: 'Simplification', link: '/en/functionalities/simplification' },
         { text: 'Selection by attribute', link: '/en/functionalities/selection-by-attribute' },
       ]
@@ -154,7 +154,7 @@ function sidebarEn(): DefaultTheme.SidebarItem[] {
     { text: 'Changelog', link: '/en/changelog' },
     { text: 'Licenses', link: '/en/licenses' },
     { text: 'Team', link: '/en/team' },
-    { text: 'Support us', link: '/support-us' },
+    { text: 'Support us', link: '/en/support-us' },
     { text: 'Contact us', link: '/en/contact-us' },
   ];
 }
@@ -203,7 +203,7 @@ export default defineConfig({
           copyright: 'Copyright © 2024-present CNRS (UAR 2414 RIATE)'
         },
         nav: [
-          { text: `Version ${packageJson.version}`, link: '/changelog' },
+          { text: `Version ${packageJson.version}`, link: '/en/changelog' },
           { text: 'Access the application', link: '/app/', target: '_self' },
         ]
       },
