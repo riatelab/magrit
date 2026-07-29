@@ -12,6 +12,25 @@ Trois méthodes de création de cartogrammes sont disponibles dans Magrit :
 
 Les méthodes (1) et (3) offrent des résultats comparables en termes de qualité visuelle, mais la méthode (1) est généralement plus rapide.
 
+## Attributs créés sur la couche de résultat
+
+Les trois méthodes de création de cartogrammes créent un nouvel attribut sur la couche de résultat.
+Cet attribut a une signification légèrement différente selon la méthode utilisée :
+
+- Pour la méthode (1), l'attribut créé est `area_error`, il représente l'écart entre la surface
+  calculée et la surface cible (pour déterminer dans quelle mesure la taille calculée d'une entité
+  correspond à celle qu'elle devrait avoir si elle avait été redimensionnée de manière parfaite ;
+  nous l'affichons dans Magrit car elle nous renseigne sur la "qualité" du redimensionnement).
+  Cette valeur sert également de "condition d'arrêt" en interne pour contrôler le moment où l'algorithme doit s'arrêter.
+- Pour la méthode (2), l'attribut créé est `scale`, il s'agit de la valeur de la transformation d'échelle
+  appliquée à chaque entité (une échelle de 2 rendrait l'objet 200% plus grand).
+- Pour la méthode (3), l'attribut créé est `area_error`, il représente l'écart entre la surface
+  souhaitée pour un polygone (proportionnelle à la valeur statistique) et sa surface actuelle.
+  Il est également utilisé comme indicateur de la convergence de l'algorithme (et nous l'affichons également dans Magrit
+  car il nous renseigne sur la "qualité" du redimensionnement), mais pas comme condition d'arrêt dans notre implémentation,
+  puisque l'utilisateur sélectionne manuellement le nombre d'itérations.
+
+
 ## Exemple
 
 <ZoomImg

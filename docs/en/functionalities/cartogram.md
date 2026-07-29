@@ -12,6 +12,25 @@ Three methods for creating cartograms are available in Magrit:
 
 Methods (1) and (3) offer comparable results in terms of visual quality, but method (1) is generally faster.
 
+## Attributes created on the result layer
+
+The three methods of creating cartograms create a new attribute on the result layer.
+This attribute has a slightly different meaning depending on the method used:
+
+- For method (1), the created attribute is `area_error`, this represents the error between the calculated
+  area and the target area (to determine how closely the calculated size of an entity matches what it
+  should be if it had been resized perfectly; we display it in Magrit because it informs us about how
+  "good" the resizing is). This value is also used as a "stop condition" internally to control when the
+  algorithm should stop.
+- For method (2), the created attribute is `scale`, this is by how much we apply the scale transformation
+  to each feature (a scale of 2 would make the object 200% larger).
+- For method (3), the created attribute is `area_error`, this represents the ratio between the desired target
+  area for a polygon (proportional to the statistical value) and its current area.
+  It is also used as an indicator of the algorithm’s convergence (and we also display it in Magrit because
+  it informs us about how "good" the resizing is), but not as a stopping condition in our implementation,
+  since the user manually selects the number of iterations.
+
+
 ## Example
 
 <ZoomImg
