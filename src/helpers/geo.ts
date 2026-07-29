@@ -350,6 +350,8 @@ interface SimulationNode {
   index: number,
 }
 
+// const jiggle = () => (Math.random() - 0.5) * 1e-6;
+
 /* eslint-disable */
 function squareForceCollide() {
   let nodes: SimulationNode[];
@@ -368,13 +370,27 @@ function squareForceCollide() {
           let y = d.y - q.data.y;
           const xSpacing = d.padding + (q.data.size + d.size) / 2;
           const ySpacing = d.padding + (q.data.size + d.size) / 2;
-          const absX = Math.abs(x);
-          const absY = Math.abs(y);
+          let absX = Math.abs(x);
+          let absY = Math.abs(y);
           let l;
           let lx;
           let ly;
 
           if (absX < xSpacing && absY < ySpacing) {
+            // The points have zero distance (same coordinates),
+            // so we force a slight random displacement
+            if (x === 0 && y === 0) {
+              // We use a constant for displacement so that it doesn't
+              // change too much when zooming/paning but this tends to
+              // force a horizontal layout for points with the same coordinates.
+              // Conversely, a random value will alternate between horizontal
+              // and vertical layouts... but this changes with every zoom or pan.
+              x = 0.0000001; // or jiggle()
+              y = 0.0000001; // or jiggle()
+              absX = Math.abs(x);
+              absY = Math.abs(y);
+            }
+
             l = Math.sqrt(x * x + y * y);
             lx = (absX - xSpacing) / l;
             ly = (absY - ySpacing) / l;
