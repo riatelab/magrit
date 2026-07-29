@@ -10,6 +10,12 @@ This method was popularized by [Emile Cheysson](https://www.davidrumsey.com/luna
 
 The representation parameters are the same as for proportional symbols, except that it is necessary to choose parameters for two values instead of one.
 
+## Reference size
+
+The same logic applies as for proportional symbols of type "circle":
+the half-circle drawn for the reference value corresponds to half of a full circle whose area
+would be 10,000 px² for a reference size of 100 px.
+
 ## Examples
 
 <ZoomImg

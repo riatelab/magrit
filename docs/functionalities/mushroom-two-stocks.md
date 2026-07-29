@@ -11,6 +11,12 @@ Cette méthode a notamment été popularisée par [Emile Cheysson](https://www.d
 Les paramètres de la représentation sont les mêmes que pour les symboles proportionnels, si ce n'est qu'il est nécessaire de choisir
 les paramètres pour deux valeurs au lieu d'une.
 
+## Taille de référence
+
+La même logique s'applique que pour les symboles proportionnels de type "cercle" : le demi-cercle dessiné
+pour la valeur de référence correspond à la moitié d'un cercle complet dont la surface serait de 10 000 px²
+pour une taille de référence de 100 px.
+
 ## Exemples
 
 <ZoomImg
