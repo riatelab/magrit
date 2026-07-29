@@ -12,7 +12,7 @@ Il est possible de créer une nouvelle représentation à partir d'une couche de
 Les fonctionnalités proposées sont regroupées en trois catégories :
 
 - **Représentation** : des représentations cartographiques classiques, dédiées à la visualisation des données.
-- **Exploration** : des représentations statistiques plus avancées, dédiés à l'exploration des données et donc les résultats cartographiques sont à utiliser avec précaution en raison de la nature exploratoire de ces représentations.
+- **Exploration** : des représentations statistiques plus avancées, dédiés à l'exploration des données et dont les résultats cartographiques sont à utiliser avec précaution en raison de la nature exploratoire de ces représentations.
 - **Géo-traitement** : des traitements géographiques sur les données, utiles à la préparation des données pour la cartographie.
 
 Les fonctionnalités accessibles dépendent du type de données (géographiques ou tabulaires) sélectionné

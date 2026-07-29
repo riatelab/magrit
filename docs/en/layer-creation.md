@@ -11,7 +11,7 @@ It is possible to create a new representation from a layer of geographic data or
 The functionalities offered are grouped into three categories:
 
 - **Representation**: classic cartographic representations, dedicated to data visualization.
-- **Exploration**: more advanced statistical representations, dedicated to data exploration, and therefore the cartographic results should be used with caution due to the exploratory nature of these representations.
+- **Exploration**: more advanced statistical representations, dedicated to data exploration, and whose cartographic results should be used with caution due to the exploratory nature of these representations.
 - **Geo-processing**: geographic data processing, useful for preparing data for cartography.
 
 The available functionalities depend on the type of data (geographic or tabular) selected

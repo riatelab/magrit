@@ -39,7 +39,19 @@ de cartes choroplèthes côte à côte, *small multiples*, etc.).
 
 ## Aide à la lecture de la légende
 
+Pour aider à la lecture du diagramme ternaire, il est possible d'utiliser le schéma suivant : 
+
+
+Sur ce schéma, chaque sommet du triangle correspond à une variable pure (100 %).
+Le sens de lecture pour chaque variable est ensuite indiqué par les barres de graduation
+qui sont indiquées sur les côtés du triangle. Ainsi, pour chaque unité spatiale, la position du point à l’intérieur
+du triangle indique les proportions relatives des trois variables, et la couleur de ce point est ensuite reportée sur la carte.
+
 
 ## Exemple
 
-
+<ZoomImg
+    src="/example-trichoro-sextant-black-bg.png"
+    alt="Exemple de carte choroplèthe trivariée (secteurs d'activités économiques - coloration par sextant)"
+    caption="Exemple de carte choroplèthe trivariée (secteurs d'activités économiques - coloration par sextant)"
+/>

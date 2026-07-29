@@ -51,3 +51,9 @@ l'outil de cartographie des résidus d’une régression linéaire.
 
 ## Exemple
 
+<ZoomImg
+    src="/example-bichoro-diabetes-obesity.png"
+    alt="Exemple de carte choroplèthe bivariée (diabète et obésité)"
+    caption="Exemple de carte choroplèthe bivariée (diabète et obésité)"
+/>
+
