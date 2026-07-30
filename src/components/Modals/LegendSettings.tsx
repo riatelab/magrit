@@ -1447,6 +1447,20 @@ function makeSettingsBivariateChoroplethScatterplot(
     <FieldText legend={legend} LL={LL} role={'title'}/>
     <FieldText legend={legend} LL={LL} role={'subtitle'}/>
     <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldText
+      label={LL().Legend.Modal.LabelVar1()}
+      value={legend.variable1Label}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['variable1Label'], v);
+      }}
+    />
+    <InputFieldText
+      label={LL().Legend.Modal.LabelVar2()}
+      value={legend.variable2Label}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['variable2Label'], v);
+      }}
+    />
     <InputFieldSelect
       label={LL().Legend.Modal.ColorOn()}
       value={legend.colorOn}

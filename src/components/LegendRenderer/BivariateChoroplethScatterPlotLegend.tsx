@@ -90,15 +90,18 @@ function BivariateChoroScatterPlot(
     );
   });
 
-  const bivariateClasses = (d: Record<string, never>) => {
-    const classVar1 = !props.variable1.reversed
-      ? classifierVar1().getClass(d[props.variable1.variable])
-      : 2 - classifierVar1().getClass(d[props.variable1.variable]);
-    const classVar2 = !props.variable2.reversed
-      ? classifierVar2().getClass(d[props.variable2.variable])
-      : 2 - classifierVar2().getClass(d[props.variable2.variable]);
-    return [classVar1, classVar2];
-  };
+  // Only usefull if we restore the old positionning of count by class,
+  // on the barycenter of the points of the class,
+  // instead of the center of the rectangle of the class
+  // const bivariateClasses = (d: Record<string, never>) => {
+  //   const classVar1 = !props.variable1.reversed
+  //     ? classifierVar1().getClass(d[props.variable1.variable])
+  //     : 2 - classifierVar1().getClass(d[props.variable1.variable]);
+  //   const classVar2 = !props.variable2.reversed
+  //     ? classifierVar2().getClass(d[props.variable2.variable])
+  //     : 2 - classifierVar2().getClass(d[props.variable2.variable]);
+  //   return [classVar1, classVar2];
+  // };
 
   const bc = (d: Record<string, never>) => bivariateClass(
     d[props.variable1.variable],

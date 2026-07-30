@@ -112,7 +112,7 @@ export default function legendBivariateChoropleth(
   const positionNote = createMemo(() => {
     let vPosition;
     if (legend.noDataBox) {
-      vPosition = positionNoDataBox();
+      vPosition = positionNoDataBox() + defaultSpacing;
     } else {
       vPosition = distanceToTop() + sizeY() + defaultSpacing * (legend.rotate ? -1 : 3);
     }
@@ -182,7 +182,8 @@ export default function legendBivariateChoropleth(
                 height={legend.boxHeight}
                 rx={legend.boxCornerRadius}
                 ry={legend.boxCornerRadius}
-                stroke={'black'}
+                // stroke={'black'}
+                stroke={legend.boxStrokeWidth ? layer.strokeColor : undefined}
                 stroke-width={legend.boxStrokeWidth}
                 fill={layer.rendererParameters.palette.colors[col * 3 + row]}
               />
@@ -414,7 +415,9 @@ export default function legendBivariateChoropleth(
           ry={legend.boxCornerRadius}
           width={legend.boxWidth * 0.66}
           height={legend.boxWidth * 0.66}
+          // stroke={'black'}
           stroke={legend.boxStrokeWidth ? layer.strokeColor : undefined}
+          stroke-width={legend.boxStrokeWidth}
         />
         <text
           x={legend.boxWidth * 0.66 + defaultSpacing}
