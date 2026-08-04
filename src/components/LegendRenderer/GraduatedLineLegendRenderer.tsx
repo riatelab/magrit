@@ -129,11 +129,11 @@ function verticalGraduatedLineLegend(
   ));
 
   onMount(() => {
-    bindElementsLegend(refElement, legend);
+    bindElementsLegend(refElement!, legend);
   });
 
   createEffect(() => {
-    if (refElement && layer.visible && legend.visible) {
+    if (refElement! && layer.visible && legend.visible) {
       computeRectangleBox(
         refElement,
         heightTitle(),
@@ -145,6 +145,7 @@ function verticalGraduatedLineLegend(
         legend.title.text,
         legend.subtitle.text,
         legend.note.text,
+        legend.note.fontSize,
         legend.roundDecimals,
       );
     }

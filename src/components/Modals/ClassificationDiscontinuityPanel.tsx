@@ -1,6 +1,11 @@
 // Imports from solid-js
 import {
-  createSignal, For, JSX, Show,
+  createSignal,
+  For,
+  JSX,
+  onCleanup,
+  onMount,
+  Show,
 } from 'solid-js';
 
 // Helpers
@@ -230,6 +235,25 @@ export default function ClassificationDiscontinuityPanel(): JSX.Element {
     setCurrentBreaksInfo,
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
   ] = createSignal<DiscontinuityParameters>(makeClassificationParameters());
+
+  const listenerEscKey = (event: KeyboardEvent) => {
+    const isEscape = event.key
+      ? (event.key === 'Escape' || event.key === 'Esc')
+      : (event.keyCode === 27);
+    if (isEscape) {
+      (refParentNode!.querySelector(
+        '.classification-panel__cancel-button',
+      ) as HTMLElement).click();
+    }
+  };
+
+  onMount(() => {
+    document.body.addEventListener('keydown', listenerEscKey);
+  });
+
+  onCleanup(() => {
+    document.body.removeEventListener('keydown', listenerEscKey);
+  });
 
   return <div
     class="modal-window modal classification-panel"

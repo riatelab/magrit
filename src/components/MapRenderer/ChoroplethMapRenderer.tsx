@@ -80,7 +80,7 @@ export function choroplethPolygonRenderer(
     }
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
-    >
+  >
     <For each={d3.geoStitch(layerDescription.data).features}>
       {
         (feature) => <path

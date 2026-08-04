@@ -267,7 +267,7 @@ export function CategoriesCustomisation(
   return <div>
     <Sortable
       items={mapping()}
-      setItems={setMapping as any}
+      setItems={setMapping as (m: CategoricalPictogramMapping[]) => void}
       idField={'value'}
       disabled={disabled()}
     >

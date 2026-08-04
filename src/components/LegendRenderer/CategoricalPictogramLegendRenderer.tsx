@@ -77,19 +77,20 @@ export default function legendCategoricalPictogram(
   ));
 
   onMount(() => {
-    bindElementsLegend(refElement, legend);
+    bindElementsLegend(refElement!, legend);
   });
 
   createEffect(() => {
-    if (refElement && layer.visible && legend.visible) {
+    if (refElement! && layer.visible && legend.visible) {
       computeRectangleBox(
-        refElement,
+        refElement!,
         heightTitle(),
         heightTitleSubtitle(),
         positionNote(),
         legend.title.text,
         legend.subtitle.text,
         legend.note.text,
+        legend.note.fontSize,
         legend.spacing,
         layer.rendererParameters.mapping,
       );

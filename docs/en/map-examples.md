@@ -21,9 +21,21 @@ All the map examples shown here are directly exported from Magrit and have not b
 />
 
 <ZoomImg
+    src="/example-trichoro-discrete-edu-black-banner.png"
+    alt="Highest attained education levels in EU in 2016"
+    caption="Highest attained education levels in EU in 2016"
+/>
+
+<ZoomImg
     src="/example_map_world_tree.png"
     alt="Map 'Head in the trees?'"
     caption="Head in the trees? (Realization: Ronan Ysebaert)"
+/>
+
+<ZoomImg
+    src="/example-map-co2-seqe.png"
+    alt="2022 SEQE-EU CO2 emissions in mainland France"
+    caption="2022 SEQE-EU CO2 emissions in mainland France"
 />
 
 <ZoomImg
@@ -45,7 +57,7 @@ All the map examples shown here are directly exported from Magrit and have not b
 />
 
 <ZoomImg
-    src="/example-map-co2-seqe.png"
-    alt="2022 SEQE-EU CO2 emissions in mainland France"
-    caption="2022 SEQE-EU CO2 emissions in mainland France"
+    src="/example-bichoro-diabetes-obesity.png"
+    alt="Diabetes and obesity by county in the United States"
+    caption="Diabetes and obesity by county in the United States"
 />

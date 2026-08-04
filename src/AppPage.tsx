@@ -40,6 +40,8 @@ import NiceAlert from './components/Modals/NiceAlert.tsx';
 import TableWindow from './components/Modals/TableWindow.tsx';
 import ClassificationPanel from './components/Modals/ClassificationPanel.tsx';
 import ClassificationDiscontinuityPanel from './components/Modals/ClassificationDiscontinuityPanel.tsx';
+import ClassificationBivariatePanel from './components/Modals/ClassificationBivariate.tsx';
+import ClassificationTrivariatePanel from './components/Modals/ClassificationTrivariate.tsx';
 import HeaderBarApp from './components/Headers.tsx';
 import ContextMenu from './components/ContextMenu.tsx';
 import ImportWindow from './components/ImportWindow.tsx';
@@ -73,20 +75,18 @@ import {
 import { contextMenuStore } from './store/ContextMenuStore';
 import { undo, redo } from './store/undo-redo';
 import { functionalitySelectionStore } from './store/FunctionalitySelectionStore';
+import { classificationMultivariatePanelStore } from './store/ClassificationMultivariatePanelStore';
 
 // Types and enums
-import {
-  DexieDb,
-  ProjectDescription,
-} from './global';
+import type { DexieDb, ProjectDescription } from './global.d';
 import type { TranslationFunctions } from './i18n/i18n-types';
 
 // Styles
 import './styles/Transitions.css';
 
 // Are we in electron ?
-// Currently we need this for:
-// - the path to the data and wasm files(gdal3.js)
+// Currently, we need this for:
+// - the path to the data and wasm files (gdal3.js)
 // - the beforeunload event
 const isElectron = navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
 
@@ -248,7 +248,7 @@ const reloadFromProjectObject = async (
 ): Promise<void> => {
   // Set the app in "reloading" mode
   // (it displays a loading overlay and prevents the user from adding new layers
-  // it  also set a flag the enable restoring the extent of the map
+  // it  also set a flag that enables restoring the extent of the map
   // - more details in store/MapStore.ts)
   setReloadingProject(true);
 
@@ -303,7 +303,7 @@ const reloadFromProjectObject = async (
   setApplicationSettingsStore(applicationSettings);
   if (!isFirefox) {
     // Reset the layers description store before changing the map store
-    // (this avoid redrawing the map for the potential current layers)
+    // (this avoids redrawing the map for the potential current layers)
     setLayersDescriptionStore({ layers: [], layoutFeaturesAndLegends: [], tables: [] });
     // Update the layer description store with the layers and layout features
     setLayersDescriptionStore({ layers, layoutFeaturesAndLegends, tables });
@@ -556,6 +556,7 @@ const AppPage: () => JSX.Element = () => {
     }
     // We only keep the last project in the DB
     // so at this point we can delete all projects
+    // (we dont need to use await, we can "fire and forget")
     db.projects.clear();
   });
 
@@ -582,6 +583,18 @@ const AppPage: () => JSX.Element = () => {
         <Show when={classificationPanelStore.show && classificationPanelStore.type! === 'size'}>
           <ClassificationDiscontinuityPanel />
         </Show>
+        <Show when={
+          classificationMultivariatePanelStore.show
+          && classificationMultivariatePanelStore.type! === 'bivariate'
+        }>
+          <ClassificationBivariatePanel />
+        </Show>
+        <Show when={
+          classificationMultivariatePanelStore.show
+          && classificationMultivariatePanelStore.type! === 'trivariate'
+        }>
+          <ClassificationTrivariatePanel />
+        </Show>
         <Show when={tableWindowStore.show}>
           <TableWindow />
         </Show>
@@ -593,7 +606,7 @@ const AppPage: () => JSX.Element = () => {
         <ImportWindow />
       </Show>
       {/*
-        We put the NiceAlert component outside of the previous Transition component
+        We put the NiceAlert component outside the previous Transition component,
         and we put it lower than it in the DOM
         because we want it to be displayed on top of the other modals
         (for example when asking for confirmation when closing

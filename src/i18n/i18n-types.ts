@@ -3596,6 +3596,20 @@ type RootTranslation = {
 		}
 	}
 	FunctionalitiesSection: {
+		Tags: {
+			/**
+			 * R​e​p​r​e​s​e​n​t​a​t​i​o​n
+			 */
+			Representation: string
+			/**
+			 * G​e​o​p​r​o​c​e​s​s​i​n​g
+			 */
+			GeoProcessing: string
+			/**
+			 * E​x​p​l​o​r​a​t​i​o​n
+			 */
+			Exploration: string
+		}
 		FunctionalityTypes: {
 			/**
 			 * C​h​o​r​o​p​l​e​t​h
@@ -3642,6 +3656,14 @@ type RootTranslation = {
 			 */
 			Mushrooms: string
 			/**
+			 * B​i​v​a​r​i​a​t​e​ ​c​h​o​r​o​p​l​e​t​h
+			 */
+			BivariateChoropleth: string
+			/**
+			 * T​r​i​v​a​r​i​a​t​e​ ​c​h​o​r​o​p​l​e​t​h
+			 */
+			TrivariateChoropleth: string
+			/**
 			 * P​o​i​n​t​ ​l​a​y​e​r​ ​a​g​g​r​e​g​a​t​i​o​n
 			 */
 			PointAggregation: string
@@ -3654,7 +3676,7 @@ type RootTranslation = {
 			 */
 			SimpleLinearRegression: string
 			/**
-			 * A​g​g​r​e​g​a​t​i​o​n
+			 * D​i​s​s​o​l​v​e
 			 */
 			Aggregation: string
 			/**
@@ -3756,6 +3778,61 @@ type RootTranslation = {
 			 * @param {unknown} variable
 			 */
 			NewLayerName: RequiredParams<'layerName' | 'variable'>
+		}
+		BivariateChoroplethOptions: {
+			/**
+			 * C​l​a​s​s​i​f​i​c​a​t​i​o​n​ ​v​a​r​i​a​b​l​e​ ​1
+			 */
+			ClassificationVariable1: string
+			/**
+			 * C​l​a​s​s​i​f​i​c​a​t​i​o​n​ ​v​a​r​i​a​b​l​e​ ​2
+			 */
+			ClassificationVariable2: string
+			/**
+			 * B​i​C​h​o​r​o​_​{​v​a​r​i​a​b​l​e​1​}​_​{​v​a​r​i​a​b​l​e​2​}​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 * @param {unknown} variable1
+			 * @param {unknown} variable2
+			 */
+			NewLayerName: RequiredParams<'layerName' | 'variable1' | 'variable2'>
+			/**
+			 * R​e​v​e​r​s​e​ ​a​x​i​s
+			 */
+			ReversedAxis: string
+		}
+		TrivariateChoroplethOptions: {
+			/**
+			 * C​o​l​o​r​ ​s​c​a​l​e​ ​t​y​p​e
+			 */
+			ColorScaleType: string
+			/**
+			 * D​i​s​c​r​e​t​e
+			 */
+			Discrete: string
+			/**
+			 * C​o​n​t​i​n​u​o​u​s
+			 */
+			Continuous: string
+			/**
+			 * S​e​x​t​a​n​t
+			 */
+			Sextant: string
+			/**
+			 * F​o​r​ ​e​a​c​h​ ​e​n​t​i​t​y​,​ ​t​h​e​ ​s​u​m​ ​o​f​ ​t​h​e​ ​t​h​r​e​e​ ​v​a​r​i​a​b​l​e​s​ ​m​u​s​t​ ​e​q​u​a​l​ ​1​ ​(​o​r​ ​1​0​0​%​)​.
+			 */
+			InformationTernaryComposition: string
+			/**
+			 * U​s​e​ ​m​e​a​n​ ​c​e​n​t​e​r​i​n​g
+			 */
+			UseMeanCentering: string
+			/**
+			 * T​r​i​C​h​o​r​o​_​{​v​a​r​i​a​b​l​e​1​}​_​{​v​a​r​i​a​b​l​e​2​}​_​{​v​a​r​i​a​b​l​e​3​}​_​{​l​a​y​e​r​N​a​m​e​}
+			 * @param {unknown} layerName
+			 * @param {unknown} variable1
+			 * @param {unknown} variable2
+			 * @param {unknown} variable3
+			 */
+			NewLayerName: RequiredParams<'layerName' | 'variable1' | 'variable2' | 'variable3'>
 		}
 		ProportionalSymbolsOptions: {
 			/**
@@ -4279,7 +4356,7 @@ type RootTranslation = {
 		}
 		AggregationOptions: {
 			/**
-			 * A​g​g​r​e​g​a​t​i​o​n​ ​m​e​t​h​o​d
+			 * D​i​s​s​o​l​v​e​ ​m​e​t​h​o​d
 			 */
 			Method: string
 			/**
@@ -4287,11 +4364,11 @@ type RootTranslation = {
 			 */
 			None: string
 			/**
-			 * I​f​ ​n​o​ ​f​i​e​l​d​ ​i​s​ ​s​e​l​e​c​t​e​d​,​ ​t​h​e​ ​a​g​g​r​e​g​a​t​i​o​n​ ​w​i​l​l​ ​b​e​ ​d​o​n​e​ ​o​n​ ​t​h​e​ ​w​h​o​l​e​ ​l​a​y​e​r​.
+			 * I​f​ ​n​o​ ​f​i​e​l​d​ ​i​s​ ​s​e​l​e​c​t​e​d​,​ ​t​h​e​ ​d​i​s​s​o​l​v​e​ ​o​p​e​r​a​t​i​o​n​ ​w​i​l​l​ ​b​e​ ​d​o​n​e​ ​o​n​ ​t​h​e​ ​e​n​t​i​r​e​ ​l​a​y​e​r​.
 			 */
 			Information: string
 			/**
-			 * A​g​g​r​e​g​a​t​e​d​_​{​l​a​y​e​r​N​a​m​e​}
+			 * D​i​s​s​o​l​v​e​d​_​{​l​a​y​e​r​N​a​m​e​}
 			 * @param {unknown} layerName
 			 */
 			NewLayerName: RequiredParams<'layerName'>
@@ -5124,7 +5201,7 @@ type RootTranslation = {
 		/**
 		 * A​d​d​ ​t​h​e​ ​s​c​a​t​t​e​r​ ​p​l​o​t​ ​o​n​ ​t​h​e​ ​m​a​p​.​.​.
 		 */
-		AddLinearRegressionScatterPlot: string
+		AddScatterPlot: string
 	}
 	JoinPanel: {
 		/**
@@ -5266,7 +5343,7 @@ type RootTranslation = {
 		 */
 		Back: string
 		/**
-		 * S​e​l​e​c​t​ ​t​h​e​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​a​p​p​l​y​ ​t​o​ ​y​o​u​r​ ​d​a​t​a​ ​l​a​y​e​r​.​ ​G​r​e​y​e​d​-​o​u​t​ ​f​u​n​c​t​i​o​n​a​l​i​t​i​e​s​ ​i​n​d​i​c​a​t​e​ ​t​h​a​t​ ​y​o​u​r​ ​d​a​t​a​s​e​t​ ​d​o​e​s​ ​n​o​t​ ​c​o​n​t​a​i​n​ ​a​n​y​ ​d​a​t​a​ ​a​l​l​o​w​i​n​g​ ​y​o​u​ ​t​o​ ​u​s​e​ ​i​t​.​ ​I​f​ ​y​o​u​ ​s​u​s​p​e​c​t​ ​t​h​i​s​ ​i​s​ ​a​n​ ​e​r​r​o​r​,​ ​y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​t​h​e​ ​f​i​e​l​d​ ​t​y​p​e​ ​i​n​ ​t​h​e​ ​L​a​y​e​r​ ​M​a​n​a​g​e​r​.
+		 * S​e​l​e​c​t​ ​t​h​e​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​a​p​p​l​y​ ​t​o​ ​y​o​u​r​ ​d​a​t​a​ ​l​a​y​e​r​.​ ​G​r​e​y​e​d​-​o​u​t​ ​f​u​n​c​t​i​o​n​a​l​i​t​i​e​s​ ​i​n​d​i​c​a​t​e​ ​t​h​a​t​ ​y​o​u​r​ ​d​a​t​a​s​e​t​ ​d​o​e​s​ ​n​o​t​ ​c​o​n​t​a​i​n​ ​a​n​y​ ​d​a​t​a​ ​a​l​l​o​w​i​n​g​ ​y​o​u​ ​t​o​ ​u​s​e​ ​i​t​.​ ​I​f​ ​y​o​u​ ​s​u​s​p​e​c​t​ ​t​h​i​s​ ​i​s​ ​a​n​ ​e​r​r​o​r​,​ ​y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​t​h​e​ ​f​i​e​l​d​ ​t​y​p​e​:
 		 */
 		Information: string
 		/**
@@ -5287,7 +5364,7 @@ type RootTranslation = {
 			 */
 			Labels: string
 			/**
-			 * A​ ​d​i​s​c​o​n​t​i​n​u​i​t​y​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​a​r​e​a​s​ ​a​r​e​ ​s​h​a​d​e​d​ ​o​r​ ​p​a​t​t​e​r​n​e​d​ ​i​n​ ​p​r​o​p​o​r​t​i​o​n​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​v​a​r​i​a​b​l​e​,​ ​b​u​t​ ​w​i​t​h​ ​a​ ​d​i​s​c​o​n​t​i​n​u​i​t​y​ ​a​t​ ​a​ ​g​i​v​e​n​ ​t​h​r​e​s​h​o​l​d​.
+			 * A​ ​d​i​s​c​o​n​t​i​n​u​i​t​y​ ​m​a​p​ ​i​s​ ​a​ ​t​h​e​m​a​t​i​c​ ​m​a​p​ ​i​n​ ​w​h​i​c​h​ ​t​h​e​ ​b​o​u​n​d​a​r​i​e​s​ ​(​o​r​ ​b​o​r​d​e​r​s​)​ ​b​e​t​w​e​e​n​ ​t​h​e​ ​e​n​t​i​t​i​e​s​ ​b​e​i​n​g​ ​s​t​u​d​i​e​d​ ​a​r​e​ ​h​i​g​h​l​i​g​h​t​e​d​.
 			 */
 			Discontinuity: string
 			/**
@@ -5331,7 +5408,7 @@ type RootTranslation = {
 			 */
 			Mushrooms: string
 			/**
-			 * T​h​i​s​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​e​n​a​b​l​e​s​ ​p​o​l​y​g​o​n​a​l​ ​e​n​t​i​t​i​e​s​ ​t​o​ ​b​e​ ​a​g​g​r​e​g​a​t​e​d​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​f​i​e​l​d​ ​(​o​r​ ​a​l​l​ ​e​n​t​i​t​i​e​s​ ​i​f​ ​n​o​ ​f​i​e​l​d​ ​i​s​ ​s​e​l​e​c​t​e​d​)​.
+			 * T​h​i​s​ ​f​u​n​c​t​i​o​n​a​l​i​t​y​ ​e​n​a​b​l​e​s​ ​p​o​l​y​g​o​n​a​l​ ​e​n​t​i​t​i​e​s​ ​t​o​ ​b​e​ ​d​i​s​s​o​l​v​e​d​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​t​h​e​ ​v​a​l​u​e​ ​o​f​ ​a​ ​f​i​e​l​d​ ​(​o​r​ ​a​l​l​ ​e​n​t​i​t​i​e​s​ ​i​f​ ​n​o​ ​f​i​e​l​d​ ​i​s​ ​s​e​l​e​c​t​e​d​)​.
 			 */
 			Aggregation: string
 			/**
@@ -5350,6 +5427,14 @@ type RootTranslation = {
 			 * T​h​i​s​ ​m​e​t​h​o​d​ ​e​n​a​b​l​e​s​ ​t​h​e​ ​c​r​e​a​t​i​o​n​ ​o​f​ ​a​ ​p​o​r​t​r​a​y​a​l​ ​o​f​ ​t​w​o​ ​o​r​ ​m​o​r​e​ ​v​a​r​i​a​b​l​e​s​ ​e​x​p​r​e​s​s​e​d​ ​i​n​ ​c​o​m​p​a​r​a​b​l​e​ ​u​n​i​t​s
 			 */
 			Waffle: string
+			/**
+			 * A​ ​b​i​v​a​r​i​a​t​e​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​m​a​k​e​s​ ​i​t​ ​p​o​s​s​i​b​l​e​ ​t​o​ ​s​i​m​u​l​t​a​n​e​o​u​s​l​y​ ​r​e​p​r​e​s​e​n​t​ ​t​w​o​ ​r​e​l​a​t​i​v​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​r​i​a​b​l​e​s​ ​b​y​ ​c​o​m​b​i​n​i​n​g​ ​t​w​o​ ​c​o​l​o​r​ ​s​c​a​l​e​s​ ​o​v​e​r​ ​t​h​e​ ​s​a​m​e​ ​g​e​o​g​r​a​p​h​i​c​ ​s​p​a​c​e​.
+			 */
+			BivariateChoropleth: string
+			/**
+			 * A​ ​t​r​i​v​a​r​i​a​t​e​ ​c​h​o​r​o​p​l​e​t​h​ ​m​a​p​ ​m​a​k​e​s​ ​i​t​ ​p​o​s​s​i​b​l​e​ ​t​o​ ​s​i​m​u​l​t​a​n​e​o​u​s​l​y​ ​r​e​p​r​e​s​e​n​t​ ​t​h​r​e​e​ ​r​e​l​a​t​i​v​e​ ​q​u​a​n​t​i​t​a​t​i​v​e​ ​v​a​r​i​a​b​l​e​s​ ​b​y​ ​u​s​i​n​g​ ​a​ ​t​r​i​a​n​g​u​l​a​r​ ​d​i​a​g​r​a​m​ ​a​s​ ​a​ ​c​o​l​o​r​-​m​i​x​i​n​g​ ​s​p​a​c​e​ ​a​p​p​l​i​e​d​ ​a​c​r​o​s​s​ ​g​e​o​g​r​a​p​h​i​c​ ​a​r​e​a​s​.
+			 */
+			TrivariateChoropleth: string
 		}
 		/**
 		 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​c​r​e​a​t​i​n​g​ ​t​h​e​ ​l​a​y​e​r​.​ ​P​l​e​a​s​e​ ​c​h​e​c​k​ ​y​o​u​r​ ​d​a​t​a​ ​a​n​d​ ​t​h​e​ ​p​a​r​a​m​e​t​e​r​s​ ​o​f​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​f​e​a​t​u​r​e​.​ ​I​f​ ​y​o​u​ ​s​u​s​p​e​c​t​ ​a​ ​b​u​g​,​ ​p​l​e​a​s​e​ ​r​e​p​o​r​t​ ​i​t​ ​o​n​ ​t​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​'​s​ ​G​i​t​H​u​b​ ​r​e​p​o​s​i​t​o​r​y​.​ ​E​r​r​o​r​ ​m​e​s​s​a​g​e​:​ ​{​0​}
@@ -5955,6 +6040,28 @@ type RootTranslation = {
 		 * P​a​l​e​t​t​e​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
 		 */
 		paletteCopied: string
+		/**
+		 * C​o​l​o​r​ ​f​o​r​ ​m​i​s​s​i​n​g​ ​v​a​l​u​e​s
+		 */
+		noDataColor: string
+	}
+	BivariateClassificationPanel: {
+		/**
+		 * D​i​r​e​c​t​i​o​n​ ​o​f​ ​t​h​e​ ​v​a​r​i​a​b​l​e
+		 */
+		VariableDirection: string
+		/**
+		 * B​a​s​e​ ​c​o​l​o​r​<​b​r​ ​/​>​(​l​i​g​h​t​e​s​t​)
+		 */
+		BaseColor: string
+		/**
+		 * E​n​d​ ​c​o​l​o​r​<​b​r​ ​/​>​(​v​a​r​i​a​b​l​e​ ​1​)
+		 */
+		EndColorVar1: string
+		/**
+		 * E​n​d​ ​c​o​l​o​r​<​b​r​ ​/​>​(​v​a​r​i​a​b​l​e​ ​2​)
+		 */
+		EndColorVar2: string
 	}
 	Legend: {
 		ContextMenu: {
@@ -6228,6 +6335,62 @@ type RootTranslation = {
 			 * D​i​s​p​l​a​y​ ​"​n​o​ ​d​a​t​a​"​ ​e​n​t​r​y
 			 */
 			DisplayNoData: string
+			/**
+			 * R​a​d​i​u​s
+			 */
+			Radius: string
+			/**
+			 * D​i​s​p​l​a​y​ ​r​e​g​r​e​s​s​i​o​n​ ​l​i​n​e
+			 */
+			DisplayRegressionLine: string
+			/**
+			 * D​i​s​p​l​a​y​ ​c​o​u​n​t​ ​b​y​ ​c​l​a​s​s
+			 */
+			DisplayCountByClass: string
+			/**
+			 * D​i​s​p​l​a​y​ ​c​l​a​s​s​ ​b​r​e​a​k​ ​l​i​n​e​s
+			 */
+			DisplayClassBreakLines: string
+			/**
+			 * L​a​b​e​l​ ​v​a​r​i​a​b​l​e​ ​1
+			 */
+			LabelVar1: string
+			/**
+			 * L​a​b​e​l​ ​v​a​r​i​a​b​l​e​ ​2
+			 */
+			LabelVar2: string
+			/**
+			 * L​a​b​e​l​ ​v​a​r​i​a​b​l​e​ ​3
+			 */
+			LabelVar3: string
+			/**
+			 * B​o​x​ ​s​i​z​e
+			 */
+			BoxSize: string
+			/**
+			 * R​o​t​a​t​e​ ​L​e​g​e​n​d
+			 */
+			RotateLegend: string
+			/**
+			 * D​i​s​p​l​a​y​ ​d​a​t​a
+			 */
+			DisplayData: string
+			/**
+			 * D​i​s​p​l​a​y​ ​c​l​a​s​s​ ​c​o​l​o​r​s
+			 */
+			ColorOn: string
+			/**
+			 * O​n​ ​t​h​e​ ​d​o​t​s
+			 */
+			Dots: string
+			/**
+			 * O​n​ ​t​h​e​ ​a​r​e​a​s
+			 */
+			Areas: string
+			/**
+			 * R​o​t​a​t​e​ ​t​i​c​k​ ​l​a​b​e​l​s
+			 */
+			RotateTickLabels: string
 		}
 	}
 	CommonTextElement: {
@@ -9790,6 +9953,20 @@ export type TranslationFunctions = {
 		}
 	}
 	FunctionalitiesSection: {
+		Tags: {
+			/**
+			 * Representation
+			 */
+			Representation: () => LocalizedString
+			/**
+			 * Geoprocessing
+			 */
+			GeoProcessing: () => LocalizedString
+			/**
+			 * Exploration
+			 */
+			Exploration: () => LocalizedString
+		}
 		FunctionalityTypes: {
 			/**
 			 * Choropleth
@@ -9836,6 +10013,14 @@ export type TranslationFunctions = {
 			 */
 			Mushrooms: () => LocalizedString
 			/**
+			 * Bivariate choropleth
+			 */
+			BivariateChoropleth: () => LocalizedString
+			/**
+			 * Trivariate choropleth
+			 */
+			TrivariateChoropleth: () => LocalizedString
+			/**
 			 * Point layer aggregation
 			 */
 			PointAggregation: () => LocalizedString
@@ -9848,7 +10033,7 @@ export type TranslationFunctions = {
 			 */
 			SimpleLinearRegression: () => LocalizedString
 			/**
-			 * Aggregation
+			 * Dissolve
 			 */
 			Aggregation: () => LocalizedString
 			/**
@@ -9947,6 +10132,54 @@ export type TranslationFunctions = {
 			 * Choro_{variable}_{layerName}
 			 */
 			NewLayerName: (arg: { layerName: unknown, variable: unknown }) => LocalizedString
+		}
+		BivariateChoroplethOptions: {
+			/**
+			 * Classification variable 1
+			 */
+			ClassificationVariable1: () => LocalizedString
+			/**
+			 * Classification variable 2
+			 */
+			ClassificationVariable2: () => LocalizedString
+			/**
+			 * BiChoro_{variable1}_{variable2}_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown, variable1: unknown, variable2: unknown }) => LocalizedString
+			/**
+			 * Reverse axis
+			 */
+			ReversedAxis: () => LocalizedString
+		}
+		TrivariateChoroplethOptions: {
+			/**
+			 * Color scale type
+			 */
+			ColorScaleType: () => LocalizedString
+			/**
+			 * Discrete
+			 */
+			Discrete: () => LocalizedString
+			/**
+			 * Continuous
+			 */
+			Continuous: () => LocalizedString
+			/**
+			 * Sextant
+			 */
+			Sextant: () => LocalizedString
+			/**
+			 * For each entity, the sum of the three variables must equal 1 (or 100%).
+			 */
+			InformationTernaryComposition: () => LocalizedString
+			/**
+			 * Use mean centering
+			 */
+			UseMeanCentering: () => LocalizedString
+			/**
+			 * TriChoro_{variable1}_{variable2}_{variable3}_{layerName}
+			 */
+			NewLayerName: (arg: { layerName: unknown, variable1: unknown, variable2: unknown, variable3: unknown }) => LocalizedString
 		}
 		ProportionalSymbolsOptions: {
 			/**
@@ -10450,7 +10683,7 @@ export type TranslationFunctions = {
 		}
 		AggregationOptions: {
 			/**
-			 * Aggregation method
+			 * Dissolve method
 			 */
 			Method: () => LocalizedString
 			/**
@@ -10458,11 +10691,11 @@ export type TranslationFunctions = {
 			 */
 			None: () => LocalizedString
 			/**
-			 * If no field is selected, the aggregation will be done on the whole layer.
+			 * If no field is selected, the dissolve operation will be done on the entire layer.
 			 */
 			Information: () => LocalizedString
 			/**
-			 * Aggregated_{layerName}
+			 * Dissolved_{layerName}
 			 */
 			NewLayerName: (arg: { layerName: unknown }) => LocalizedString
 		}
@@ -11275,7 +11508,7 @@ export type TranslationFunctions = {
 		/**
 		 * Add the scatter plot on the map...
 		 */
-		AddLinearRegressionScatterPlot: () => LocalizedString
+		AddScatterPlot: () => LocalizedString
 	}
 	JoinPanel: {
 		/**
@@ -11417,7 +11650,7 @@ export type TranslationFunctions = {
 		 */
 		Back: () => LocalizedString
 		/**
-		 * Select the functionality you wish to apply to your data layer. Greyed-out functionalities indicate that your dataset does not contain any data allowing you to use it. If you suspect this is an error, you can change the field type in the Layer Manager.
+		 * Select the functionality you wish to apply to your data layer. Greyed-out functionalities indicate that your dataset does not contain any data allowing you to use it. If you suspect this is an error, you can change the field type:
 		 */
 		Information: () => LocalizedString
 		/**
@@ -11438,7 +11671,7 @@ export type TranslationFunctions = {
 			 */
 			Labels: () => LocalizedString
 			/**
-			 * A discontinuity map is a thematic map in which areas are shaded or patterned in proportion to the value of a variable, but with a discontinuity at a given threshold.
+			 * A discontinuity map is a thematic map in which the boundaries (or borders) between the entities being studied are highlighted.
 			 */
 			Discontinuity: () => LocalizedString
 			/**
@@ -11482,7 +11715,7 @@ export type TranslationFunctions = {
 			 */
 			Mushrooms: () => LocalizedString
 			/**
-			 * This functionality enables polygonal entities to be aggregated according to the value of a field (or all entities if no field is selected).
+			 * This functionality enables polygonal entities to be dissolved according to the value of a field (or all entities if no field is selected).
 			 */
 			Aggregation: () => LocalizedString
 			/**
@@ -11501,6 +11734,14 @@ export type TranslationFunctions = {
 			 * This method enables the creation of a portrayal of two or more variables expressed in comparable units
 			 */
 			Waffle: () => LocalizedString
+			/**
+			 * A bivariate choropleth map makes it possible to simultaneously represent two relative quantitative variables by combining two color scales over the same geographic space.
+			 */
+			BivariateChoropleth: () => LocalizedString
+			/**
+			 * A trivariate choropleth map makes it possible to simultaneously represent three relative quantitative variables by using a triangular diagram as a color-mixing space applied across geographic areas.
+			 */
+			TrivariateChoropleth: () => LocalizedString
 		}
 		/**
 		 * An error occurred while creating the layer. Please check your data and the parameters of the selected feature. If you suspect a bug, please report it on the application's GitHub repository. Error message: {0}
@@ -12100,6 +12341,28 @@ export type TranslationFunctions = {
 		 * Palette copied to the clipboard
 		 */
 		paletteCopied: () => LocalizedString
+		/**
+		 * Color for missing values
+		 */
+		noDataColor: () => LocalizedString
+	}
+	BivariateClassificationPanel: {
+		/**
+		 * Direction of the variable
+		 */
+		VariableDirection: () => LocalizedString
+		/**
+		 * Base color<br />(lightest)
+		 */
+		BaseColor: () => LocalizedString
+		/**
+		 * End color<br />(variable 1)
+		 */
+		EndColorVar1: () => LocalizedString
+		/**
+		 * End color<br />(variable 2)
+		 */
+		EndColorVar2: () => LocalizedString
 	}
 	Legend: {
 		ContextMenu: {
@@ -12373,6 +12636,62 @@ export type TranslationFunctions = {
 			 * Display "no data" entry
 			 */
 			DisplayNoData: () => LocalizedString
+			/**
+			 * Radius
+			 */
+			Radius: () => LocalizedString
+			/**
+			 * Display regression line
+			 */
+			DisplayRegressionLine: () => LocalizedString
+			/**
+			 * Display count by class
+			 */
+			DisplayCountByClass: () => LocalizedString
+			/**
+			 * Display class break lines
+			 */
+			DisplayClassBreakLines: () => LocalizedString
+			/**
+			 * Label variable 1
+			 */
+			LabelVar1: () => LocalizedString
+			/**
+			 * Label variable 2
+			 */
+			LabelVar2: () => LocalizedString
+			/**
+			 * Label variable 3
+			 */
+			LabelVar3: () => LocalizedString
+			/**
+			 * Box size
+			 */
+			BoxSize: () => LocalizedString
+			/**
+			 * Rotate Legend
+			 */
+			RotateLegend: () => LocalizedString
+			/**
+			 * Display data
+			 */
+			DisplayData: () => LocalizedString
+			/**
+			 * Display class colors
+			 */
+			ColorOn: () => LocalizedString
+			/**
+			 * On the dots
+			 */
+			Dots: () => LocalizedString
+			/**
+			 * On the areas
+			 */
+			Areas: () => LocalizedString
+			/**
+			 * Rotate tick labels
+			 */
+			RotateTickLabels: () => LocalizedString
 		}
 	}
 	CommonTextElement: {

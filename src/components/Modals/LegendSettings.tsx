@@ -43,16 +43,18 @@ import InputFieldText from '../Inputs/InputText.tsx';
 
 // Types / Interfaces / Enums
 import {
+  type BivariateChoroplethLegend,
+  type BivariateChoroplethScatterplotLegend,
   type CategoricalChoroplethBarchartLegend,
   type CategoricalChoroplethLegend,
   type CategoricalPictogramLegend,
   type ChoroplethHistogramLegend,
   type ChoroplethLegend,
   type ClassificationParameters,
-  DefaultLegend,
+  type DefaultLegend,
   type GraduatedLineLegend,
   type LabelsLegend,
-  LayerDescription,
+  type LayerDescription,
   type LayerDescriptionCategoricalChoropleth,
   type LayerDescriptionChoropleth,
   type LayerDescriptionGriddedLayer,
@@ -60,14 +62,16 @@ import {
   type LayerDescriptionSmoothedLayer,
   type LayoutFeature,
   type Legend,
-  LegendType,
   type LinearRegressionScatterPlot,
   type MushroomsLegend,
   type ProportionalSymbolCategoryParameters,
   type ProportionalSymbolsLegend,
   type ProportionalSymbolsParameters,
   type ProportionalSymbolsRatioParameters,
-  RepresentationType, WaffleLegend,
+  type TrivariateChoroplethLegend,
+  LegendType,
+  RepresentationType,
+  WaffleLegend,
 } from '../../global.d';
 
 /**
@@ -78,13 +82,14 @@ import {
  *
  * @param {string} legendId - The id of the legend to update.
  * @param {string[]} props - The path to the property to update.
- * @param {string | number | boolean} value - The new value of the property.
+ * @param {string | number | boolean | Record<string, any> | undefined} value - The
+ * new value of the property.
  * @return {void}
  */
 const updateProps = (
   legendId: string,
   props: string[],
-  value: string | number | boolean,
+  value: string | number | boolean | Record<string, any> | undefined,
 ): void => {
   const allPropsExceptLast = props.slice(0, props.length - 1);
   const lastProp = props[props.length - 1];
@@ -1057,9 +1062,9 @@ function makeSettingsChoroplethHistogram(
         if (v) {
           updateProps(legend.id, ['medianOptions'], {
             color: '#00ff00', width: 2, value: statSummary.median,
-          });
+          } as never);
         } else {
-          updateProps(legend.id, ['medianOptions'], undefined);
+          updateProps(legend.id, ['medianOptions'], undefined as never);
         }
       }}
     />
@@ -1115,10 +1120,10 @@ function makeSettingsChoroplethHistogram(
             ['populationOptions'],
             {
               color: '#1100fe', width: 1, series: filteredSeries, height: 5,
-            },
+            } as never,
           );
         } else {
-          updateProps(legend.id, ['populationOptions'], undefined);
+          updateProps(legend.id, ['populationOptions'], undefined as never);
         }
       }}
     />
@@ -1153,7 +1158,7 @@ function makeSettingsChoroplethHistogram(
   </>;
 }
 
-function makeSettginsCategoricalChoroplethBarchart(
+function makeSettingsCategoricalChoroplethBarchart(
   legend: CategoricalChoroplethBarchartLegend,
   LL: Accessor<TranslationFunctions>,
 ): JSX.Element {
@@ -1429,6 +1434,290 @@ function makeSettingsCategoricalPictogram(
   </>;
 }
 
+function makeSettingsBivariateChoroplethScatterplot(
+  legend: BivariateChoroplethScatterplotLegend,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <>
+    <FieldText legend={legend} LL={LL} role={'title'}/>
+    <FieldText legend={legend} LL={LL} role={'subtitle'}/>
+    <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldText
+      label={LL().Legend.Modal.LabelVar1()}
+      value={legend.variable1Label}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['variable1Label'], v);
+      }}
+    />
+    <InputFieldText
+      label={LL().Legend.Modal.LabelVar2()}
+      value={legend.variable2Label}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['variable2Label'], v);
+      }}
+    />
+    <InputFieldSelect
+      label={LL().Legend.Modal.ColorOn()}
+      value={legend.colorOn}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['colorOn'], v)}
+    >
+      <option value="dots">{LL().Legend.Modal.Dots()}</option>
+      <option value="areas">{LL().Legend.Modal.Areas()}</option>
+    </InputFieldSelect>
+    <InputFieldNumber
+      label={LL().Legend.Modal.Width()}
+      value={legend.width}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['width'], v)}
+      min={10}
+      max={800}
+      step={1}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.Height()}
+      value={legend.height}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['height'], v)}
+      min={10}
+      max={800}
+      step={1}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.RoundDecimals()}
+      value={legend.roundDecimals}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['roundDecimals'], v)}
+      min={-3}
+      max={30}
+      step={1}
+    />
+    <Show when={legend.colorOn === 'areas'}>
+      <InputFieldColor
+        label={LL().Legend.Modal.DotColor()}
+        value={legend.dotColor}
+        onChange={(v) => debouncedUpdateProps(legend.id, ['dotColor'], v)}
+      />
+    </Show>
+    <InputFieldNumber
+      label={LL().Legend.Modal.Radius()}
+      value={legend.radius}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['radius'], v)}
+      min={0.1}
+      max={10}
+      step={0.1}
+    />
+    <InputFieldCheckbox
+      label={LL().Legend.Modal.DisplayRegressionLine()}
+      checked={legend.displayRegressionLine}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['displayRegressionLine'], v)}
+    />
+    <InputFieldCheckbox
+      label={LL().Legend.Modal.DisplayCountByClass()}
+      checked={legend.displayCountByClass}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['displayCountByClass'], v)}
+    />
+    <Show when={legend.colorOn === 'dots'}>
+      <InputFieldCheckbox
+        label={LL().Legend.Modal.DisplayClassBreakLines()}
+        checked={legend.displayClassBreakLines}
+        onChange={(v) => debouncedUpdateProps(legend.id, ['displayClassBreakLines'], v)}
+      />
+    </Show>
+    <OptionBackgroundRectangle legend={legend} LL={LL}/>
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        {LL().Legend.Modal.FontProperties()}
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
+      </p>
+    </div>
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'axis', 'note']}
+      />
+    </Show>
+  </>;
+}
+
+function makeSettingsBivariateChoropleth(
+  legend: BivariateChoroplethLegend,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <>
+    <FieldText legend={legend} LL={LL} role={'title'}/>
+    <FieldText legend={legend} LL={LL} role={'subtitle'}/>
+    <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldText
+      label={LL().Legend.Modal.LabelVar1()}
+      value={legend.variable1Label}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['variable1Label'], v);
+      }}
+    />
+    <InputFieldText
+      label={LL().Legend.Modal.LabelVar2()}
+      value={legend.variable2Label}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['variable2Label'], v);
+      }}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.BoxSize()}
+      value={legend.boxWidth}
+      onChange={(v) => {
+        updateProps(legend.id, ['boxWidth'], v);
+        updateProps(legend.id, ['boxHeight'], v);
+      }}
+      min={20}
+      max={100}
+      step={1}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.RoundDecimals()}
+      value={legend.roundDecimals!}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['roundDecimals'], v)}
+      min={-3}
+      max={30}
+      step={1}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.BoxSpacing()}
+      value={legend.boxSpacing}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['boxSpacing'], v);
+      }}
+      min={0}
+      max={20}
+      step={1}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.BoxCornerRadius()}
+      value={legend.boxCornerRadius}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['boxCornerRadius'], v);
+      }}
+      min={0}
+      max={20}
+      step={1}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.BoxStrokeWidth()}
+      value={legend.boxStrokeWidth}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['boxStrokeWidth'], v);
+      }}
+      min={0}
+      max={20}
+      step={0.1}
+    />
+    <InputFieldCheckbox
+      label={LL().Legend.Modal.RotateLegend()}
+      checked={legend.rotate}
+      onChange={(v) => updateProps(legend.id, ['rotate'], v)}
+    />
+    <OptionBackgroundRectangle legend={legend} LL={LL} />
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        {LL().Legend.Modal.FontProperties()}
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
+      </p>
+    </div>
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'labels', 'note']}
+      />
+    </Show>
+  </>;
+}
+
+function makeSettingsTrivariateChoropleth(
+  legend: TrivariateChoroplethLegend,
+  LL: Accessor<TranslationFunctions>,
+): JSX.Element {
+  const [
+    displayMoreOptions,
+    setDisplayMoreOptions,
+  ] = createSignal<boolean>(false);
+
+  return <>
+    <FieldText legend={legend} LL={LL} role={'title'}/>
+    <FieldText legend={legend} LL={LL} role={'subtitle'}/>
+    <FieldText legend={legend} LL={LL} role={'note'}/>
+    <InputFieldText
+      label={LL().Legend.Modal.LabelVar1()}
+      value={legend.axisLabels[0].replace('⟵ ', '')}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['axisLabels', 0], `⟵ ${v}`);
+      }}
+    />
+    <InputFieldText
+      label={LL().Legend.Modal.LabelVar2()}
+      value={legend.axisLabels[1].replace('⟵ ', '')}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['axisLabels', 1], `⟵ ${v}`);
+      }}
+    />
+    <InputFieldText
+      label={LL().Legend.Modal.LabelVar3()}
+      value={legend.axisLabels[2].replace(' ⟶', '')}
+      onChange={(v) => {
+        debouncedUpdateProps(legend.id, ['axisLabels', 2], `${v} ⟶`);
+      }}
+    />
+    <InputFieldNumber
+      label={LL().Legend.Modal.Width()}
+      value={legend.width}
+      onChange={(v) => debouncedUpdateProps(legend.id, ['width'], v)}
+      min={100}
+      max={800}
+      step={1}
+    />
+    <InputFieldCheckbox
+      label={LL().Legend.Modal.RotateTickLabels()}
+      checked={legend.rotateTickLabels}
+      onChange={(v) => updateProps(legend.id, ['rotateTickLabels'], v)}
+    />
+    <InputFieldCheckbox
+      label={LL().Legend.Modal.DisplayData()}
+      checked={legend.displayData}
+      onChange={(v) => updateProps(legend.id, ['displayData'], v)}
+    />
+    <OptionBackgroundRectangle legend={legend} LL={LL} />
+    <div
+      onClick={() => setDisplayMoreOptions(!displayMoreOptions())}
+      style={{ cursor: 'pointer' }}
+    >
+      <p class="label">
+        {LL().Legend.Modal.FontProperties()}
+        <FaSolidPlus style={{ 'vertical-align': 'text-bottom', margin: 'auto 0.5em' }}/>
+      </p>
+    </div>
+    <Show when={displayMoreOptions()}>
+      <TextOptionTable
+        legend={legend}
+        LL={LL}
+        textProperties={['title', 'subtitle', 'labels', 'note']}
+      />
+    </Show>
+  </>;
+}
+
 function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.Element {
   if (legend.type === LegendType.default) {
     return makeSettingsDefault(legend as DefaultLegend, LL);
@@ -1452,7 +1741,7 @@ function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.
     return makeSettingsMushrooms(legend as MushroomsLegend, LL);
   }
   if (legend.type === LegendType.categoricalChoroplethBarchart) {
-    return makeSettginsCategoricalChoroplethBarchart(
+    return makeSettingsCategoricalChoroplethBarchart(
       legend as CategoricalChoroplethBarchartLegend,
       LL,
     );
@@ -1478,6 +1767,24 @@ function getInnerPanel(legend: Legend, LL: Accessor<TranslationFunctions>): JSX.
   if (legend.type === LegendType.waffle) {
     return makeSettingsWaffle(
       legend as WaffleLegend,
+      LL,
+    );
+  }
+  if (legend.type === LegendType.bivariateChoropleth) {
+    return makeSettingsBivariateChoropleth(
+      legend as BivariateChoroplethLegend,
+      LL,
+    );
+  }
+  if (legend.type === LegendType.bivariateChoroplethScatterplot) {
+    return makeSettingsBivariateChoroplethScatterplot(
+      legend as BivariateChoroplethScatterplotLegend,
+      LL,
+    );
+  }
+  if (legend.type === LegendType.trivariateChoropleth) {
+    return makeSettingsTrivariateChoropleth(
+      legend as TrivariateChoroplethLegend,
       LL,
     );
   }

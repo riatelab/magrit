@@ -52,6 +52,16 @@ import {
   proportionalSymbolsLinearRenderer,
   proportionalSymbolsPunctualRenderer,
 } from './MapRenderer/ProportionalSymbolsMapRenderer.tsx';
+import {
+  bivariateChoroplethPolygonRenderer,
+  bivariateChoroplethPointRenderer,
+  bivariateChoroplethLineRenderer,
+} from './MapRenderer/BivariateChoroplethMapRenderer.tsx';
+import {
+  trivariateChoroplethPointRenderer,
+  trivariateChoroplethLineRenderer,
+  trivariateChoroplethPolygonRenderer,
+} from './MapRenderer/TrivariateChoroplethMapRenderer.tsx';
 import discontinuityRenderer from './MapRenderer/DiscontinuityMapRenderer.tsx';
 import { defaultLabelsRenderer } from './MapRenderer/LabelsMapRenderer.tsx';
 import graticuleRenderer from './MapRenderer/GraticuleRenderer.tsx';
@@ -89,6 +99,9 @@ import legendChoroplethHistogram from './LegendRenderer/ChoroplethHistogramLegen
 import lmScatterPlot from './LegendRenderer/LMScatterPlotRenderer.tsx';
 import legendCategoricalPictogram from './LegendRenderer/CategoricalPictogramLegendRenderer.tsx';
 import legendWaffle from './LegendRenderer/WaffleLegendRenderer.tsx';
+import legendBivariateChoropleth from './LegendRenderer/BivariateChoroplethLegend.tsx';
+import legendChoroplethBivariateScatterPlot from './LegendRenderer/BivariateChoroplethScatterPlotLegend.tsx';
+import legendTrivariateChoropleth from './LegendRenderer/TrivariateChoroplethLegendRenderer.tsx';
 
 // Types and enums
 import {
@@ -104,6 +117,8 @@ import {
   type LayerDescriptionMushroomLayer,
   type LayerDescriptionProportionalSymbols,
   type LayerDescriptionSmoothedLayer,
+  type LayerDescriptionBivariateChoropleth,
+  type LayerDescriptionTrivariateChoropleth,
   LayoutFeatureType,
   type FreeDrawing,
   type LayoutFeature,
@@ -126,6 +141,9 @@ import {
   type LayerDescriptionCategoricalPictogram,
   type LayerDescriptionWaffle,
   type WaffleLegend,
+  type BivariateChoroplethLegend,
+  type BivariateChoroplethScatterplotLegend,
+  type TrivariateChoroplethLegend,
 } from '../global.d';
 
 // Styles
@@ -205,6 +223,15 @@ const dispatchLegendRenderer = (legend: Legend) => {
   if (legend.type === 'waffle') {
     return legendWaffle(legend as WaffleLegend);
   }
+  if (legend.type === 'bivariateChoropleth') {
+    return legendBivariateChoropleth(legend as BivariateChoroplethLegend);
+  }
+  if (legend.type === 'bivariateChoroplethScatterplot') {
+    return legendChoroplethBivariateScatterPlot(legend as BivariateChoroplethScatterplotLegend);
+  }
+  if (legend.type === 'trivariateChoropleth') {
+    return legendTrivariateChoropleth(legend as TrivariateChoroplethLegend);
+  }
   return null;
 };
 
@@ -246,6 +273,14 @@ const dispatchMapRenderer = (layer: LayerDescription) => {
     return categoricalPictogramRenderer(layer as LayerDescriptionCategoricalPictogram);
   } else if (layer.representationType === 'waffle') {
     return waffleRenderer(layer as LayerDescriptionWaffle);
+  } else if (layer.representationType === 'bivariateChoropleth') {
+    if (layer.type === 'polygon') return bivariateChoroplethPolygonRenderer(layer as LayerDescriptionBivariateChoropleth);
+    if (layer.type === 'point') return bivariateChoroplethPointRenderer(layer as LayerDescriptionBivariateChoropleth);
+    if (layer.type === 'linestring') return bivariateChoroplethLineRenderer(layer as LayerDescriptionBivariateChoropleth);
+  } else if (layer.representationType === 'trivariateChoropleth') {
+    if (layer.type === 'polygon') return trivariateChoroplethPolygonRenderer(layer as LayerDescriptionTrivariateChoropleth);
+    if (layer.type === 'point') return trivariateChoroplethPointRenderer(layer as LayerDescriptionTrivariateChoropleth);
+    if (layer.type === 'linestring') return trivariateChoroplethLineRenderer(layer as LayerDescriptionTrivariateChoropleth);
   }
   return null;
 };

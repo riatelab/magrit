@@ -28,7 +28,7 @@ import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldColor from '../Inputs/InputColor.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
 import InputFieldSelect from '../Inputs/InputSelect.tsx';
-import { webSafeFonts, fonts } from '../../helpers/font';
+import { fonts, webSafeFonts } from '../../helpers/font';
 import InputFieldText from '../Inputs/InputText.tsx';
 import InputFieldButton from '../Inputs/InputButton.tsx';
 import { CategoriesCustomisation } from '../PortrayalOption/CategoricalChoroplethComponents.tsx';
@@ -47,6 +47,7 @@ import VariableCustomisation from '../PortrayalOption/WaffleComponents.tsx';
 
 // Stores
 import {
+  debouncedUpdateProp,
   layersDescriptionStore,
   type LayersDescriptionStoreType,
   // In this component we use the base version of the store to avoid pushing
@@ -54,43 +55,48 @@ import {
   // cancel button in the LayerSettings modal)
   setLayersDescriptionStoreBase,
   updateProp,
-  debouncedUpdateProp,
 } from '../../store/LayersDescriptionStore';
 import { setClassificationPanelStore } from '../../store/ClassificationPanelStore';
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { setClassificationMultivariatePanelStore } from '../../store/ClassificationMultivariatePanelStore';
 
 // Types / Interfaces
 import {
+  type BivariateChoroplethParameters,
+  type BivariateChoroplethScatterplotLegend,
+  type CategoricalChoroplethBarchartLegend,
   type CategoricalChoroplethParameters,
+  type CategoricalPictogramParameters,
+  type ChoroplethHistogramLegend,
+  ClassificationMethod,
   type ClassificationParameters,
+  CustomPalette,
+  type GraticuleParameters,
   type LabelsParameters,
   type LayerDescription,
+  type LayerDescriptionCategoricalPictogram,
   type LayerDescriptionLabels,
   type LayerDescriptionWaffle,
-  type LinksParameters,
-  type MushroomsParameters,
-  type ProportionalSymbolsParameters,
-  LinkCurvature,
-  LinkHeadType,
-  ProportionalSymbolsSymbolType,
-  type ProportionalSymbolsParametersBase,
-  type GraticuleParameters,
   type LayoutFeature,
   type Legend,
-  LegendType,
   type LegendTextElement,
-  type CategoricalChoroplethBarchartLegend,
-  type ProportionalSymbolCategoryParameters,
-  type ChoroplethHistogramLegend,
-  type ProportionalSymbolsRatioParameters,
-  CustomPalette,
-  type ProportionalSymbolSingleColorParameters,
-  type LayerDescriptionCategoricalPictogram,
-  type CategoricalPictogramParameters,
-  ClassificationMethod,
-  type WaffleLegend,
+  LegendType,
   type LinearRegressionScatterPlot,
+  LinkCurvature,
+  LinkHeadType,
+  type LinksParameters,
+  type MushroomsParameters,
+  type ProportionalSymbolCategoryParameters,
+  type ProportionalSymbolSingleColorParameters,
+  type ProportionalSymbolsParameters,
+  type ProportionalSymbolsParametersBase,
   type ProportionalSymbolsPositiveNegativeParameters,
+  type ProportionalSymbolsRatioParameters,
+  ProportionalSymbolsSymbolType,
+  type TriChoroSextantOpts,
+  TricoloreScaleType,
+  type TrivariateChoroplethParameters,
+  type WaffleLegend,
 } from '../../global.d';
 
 // Styles
@@ -129,6 +135,24 @@ const linkedRegressionPlotVisible = (
 ): boolean => {
   const elem = layoutFeaturesAndLegends
     .find((l) => l.type === 'linearRegressionScatterPlot' && (l as Legend).layerId === layer.id);
+  return !!elem && (elem as Legend).visible;
+};
+
+const layerLinkedToScatterPlot = (
+  layer: LayerDescription,
+  layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
+): boolean => {
+  const elem = layoutFeaturesAndLegends
+    .find((l) => l.type === 'bivariateChoroplethScatterplot' && (l as Legend).layerId === layer.id);
+  return !!elem;
+};
+
+const linkedScatterPlotVisible = (
+  layer: LayerDescription,
+  layoutFeaturesAndLegends: (LayoutFeature | Legend)[],
+): boolean => {
+  const elem = layoutFeaturesAndLegends
+    .find((l) => l.type === 'bivariateChoroplethScatterplot' && (l as Legend).layerId === layer.id);
   return !!elem && (elem as Legend).visible;
 };
 
@@ -737,7 +761,7 @@ function makeSettingsLabels(
                 .forEach((k) => {
                   // eslint-disable-next-line no-param-reassign
                   layer.rendererParameters.specific[+k].text = layer.data.features[+k]
-                    .properties[layer.rendererParameters.variable];
+                    .properties![layer.rendererParameters.variable];
                 });
             }),
           );
@@ -807,7 +831,7 @@ function makeSettingsDefaultPoint(
               type: 'color',
               layerName: props.name,
               series: props.data.features
-                .map((f) => f.properties[(
+                .map((f) => f.properties![(
                   props.rendererParameters as ClassificationParameters).variable]),
               classificationParameters: params,
               onCancel: () => {
@@ -836,6 +860,120 @@ function makeSettingsDefaultPoint(
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {
           document.getElementById('button-change-classification-pt')!
+            .click();
+        }}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
+      />
+    </Show>
+    <Show when={props.representationType === 'bivariateChoropleth'}>
+      <div class="field" style={{ 'text-align': 'center' }}>
+        <button
+          class="button"
+          id="button-change-bi-classification-point"
+          style={{ margin: 'auto' }}
+          onClick={() => {
+            // Save current state of classification parameters
+            const params = unproxify(props.rendererParameters as never);
+            const series = [
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as BivariateChoroplethParameters).variable1.variable]),
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as BivariateChoroplethParameters).variable2.variable]),
+            ];
+            setClassificationMultivariatePanelStore({
+              show: true,
+              type: 'bivariate',
+              layerName: props.name,
+              series,
+              classificationParameters: params,
+              onCancel: () => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: params },
+                );
+              },
+              onConfirm: (newParams) => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: newParams },
+                );
+              },
+            });
+          }}
+        >{LL().LayerSettings.ChangeClassification()}</button>
+      </div>
+      <InputFieldPaletteOpacity
+        label={LL().LayerSettings.Fill()}
+        valuePalette={(props.rendererParameters as BivariateChoroplethParameters).palette.colors}
+        valueOpacity={props.fillOpacity!}
+        onClickPalette={() => {
+          document.getElementById('button-change-bi-classification-point')!
+            .click();
+        }}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
+      />
+    </Show>
+    <Show when={props.representationType === 'trivariateChoropleth'}>
+      <div class="field" style={{ 'text-align': 'center' }}>
+        <button
+          class="button"
+          id="button-change-tri-classification-point"
+          style={{ margin: 'auto' }}
+          onClick={() => {
+            // Save current state of classification parameters
+            const params = unproxify(props.rendererParameters as never);
+            const series = [
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as TrivariateChoroplethParameters).variable1]),
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as TrivariateChoroplethParameters).variable2]),
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as TrivariateChoroplethParameters).variable3]),
+            ];
+            setClassificationMultivariatePanelStore({
+              show: true,
+              type: 'trivariate',
+              layerName: props.name,
+              series,
+              classificationParameters: params,
+              onCancel: () => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: params },
+                );
+              },
+              onConfirm: (newParams) => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: newParams },
+                );
+              },
+            });
+          }}
+        >{LL().LayerSettings.ChangeClassification()}</button>
+      </div>
+      <InputFieldPaletteOpacity
+        label={LL().LayerSettings.Fill()}
+        valuePalette={
+          (props
+            .rendererParameters as TrivariateChoroplethParameters)
+            .colorScaleType === TricoloreScaleType.Sextant
+            ? ((props.rendererParameters as TrivariateChoroplethParameters)
+              .colorScaleOptions as TriChoroSextantOpts).colors
+            : ['#FF0000', '#FF8000', '#FFFF00', '#80FF00', '#00FF80', '#00FFFF', '#0080FF', '#8000FF']
+        }
+        valueOpacity={props.fillOpacity!}
+        onClickPalette={() => {
+          document.getElementById('button-change-tri-classification-point')!
             .click();
         }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
@@ -907,7 +1045,7 @@ function makeSettingsDefaultPoint(
               type: 'color',
               layerName: props.name,
               series: props.data.features
-                .map((f) => f.properties[(
+                .map((f) => f.properties![(
                   props.rendererParameters!.color as ClassificationParameters).variable]),
               classificationParameters: params,
               onCancel: () => {
@@ -1304,7 +1442,7 @@ function makeSettingsDefaultPoint(
       />
       <Show when={isLinearRegressionResult}>
         <InputFieldCheckbox
-          label={LL().LayerSettings.AddLinearRegressionScatterPlot()}
+          label={LL().LayerSettings.AddScatterPlot()}
           checked={
             linkedRegressionPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
           }
@@ -1456,7 +1594,7 @@ function makeSettingsDefaultPoint(
     </Show>
     <Show when={isLinearRegressionResult}>
       <InputFieldCheckbox
-        label={LL().LayerSettings.AddLinearRegressionScatterPlot()}
+        label={LL().LayerSettings.AddScatterPlot()}
         checked={
           linkedRegressionPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
         }
@@ -1661,6 +1799,95 @@ function makeSettingsDefaultPoint(
         }}
       />
     </Show>
+    <Show when={props.representationType === 'bivariateChoropleth'}>
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddScatterPlot()}
+        checked={
+          linkedScatterPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          if (v && !layerLinkedToScatterPlot(
+            props,
+            layersDescriptionStore.layoutFeaturesAndLegends,
+          )) {
+            const legendPosition = getPossibleLegendPosition(400, 400);
+
+            setLayersDescriptionStoreBase(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeaturesAndLegends.push({
+                    id: generateIdLegend(),
+                    layerId: props.id,
+                    type: LegendType.bivariateChoroplethScatterplot,
+                    position: [legendPosition[0], legendPosition[1]],
+                    orientation: 'horizontal',
+                    order: 'none',
+                    visible: true,
+                    title: {
+                      text: (
+                        props.rendererParameters as CategoricalChoroplethParameters).variable,
+                      ...applicationSettingsStore.defaultLegendSettings.title,
+                    } as LegendTextElement,
+                    subtitle: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                    },
+                    note: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.note,
+                    },
+                    backgroundRect: {
+                      visible: false,
+                    },
+                    colorOn: 'dots',
+                    width: 400,
+                    height: 400,
+                    radius: 2,
+                    axis: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.labels,
+                    },
+                    roundDecimals: 2,
+                    regressionLineColor: 'red',
+                    confidenceInterval: true,
+                    confidenceIntervalColor: 'pink',
+                    displayRegressionLine: false,
+                    displayCountByClass: true,
+                    displayClassBreakLines: true,
+                    dotColor: 'black',
+                    variable1Label: (
+                      props.rendererParameters as BivariateChoroplethParameters).variable1.variable,
+                    variable2Label: (
+                      props.rendererParameters as BivariateChoroplethParameters).variable2.variable,
+                  } as BivariateChoroplethScatterplotLegend);
+                },
+              ),
+            );
+          } else {
+            const elem = layersDescriptionStore.layoutFeaturesAndLegends
+              .find((l) => l.type === 'bivariateChoroplethScatterplot' && l.layerId === props.id);
+
+            if (elem) {
+              setLayersDescriptionStoreBase(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.forEach((l) => {
+                      if (
+                        l.type === 'bivariateChoroplethScatterplot'
+                        && l.layerId === props.id
+                      ) {
+                        // eslint-disable-next-line no-param-reassign
+                        l.visible = !l.visible;
+                      }
+                    });
+                  },
+                ),
+              );
+            }
+          }
+        }}
+      />
+    </Show>
     <AestheticsSection {...props} />
   </>;
 }
@@ -1761,7 +1988,7 @@ function makeSettingsDefaultLine(
               type: 'size',
               layerName: props.name,
               series: props.data.features
-                .map((f) => f.properties.value),
+                .map((f) => f.properties!.value),
               classificationParameters: params,
               onCancel: () => {
                 setLayersDescriptionStoreBase(
@@ -1844,7 +2071,7 @@ function makeSettingsDefaultLine(
                   type: 'size',
                   layerName: props.name,
                   series: props.data.features
-                    .map((f) => f.properties.Intensity),
+                    .map((f) => f.properties!.Intensity),
                   classificationParameters: params,
                   onCancel: () => {
                     setLayersDescriptionStoreBase(
@@ -1952,7 +2179,7 @@ function makeSettingsDefaultLine(
                 type: 'color',
                 layerName: props.name,
                 series: props.data.features
-                  .map((f) => f.properties[(
+                  .map((f) => f.properties![(
                     props.rendererParameters as ClassificationParameters).variable]),
                 classificationParameters: params,
                 onCancel: () => {
@@ -2042,7 +2269,7 @@ function makeSettingsDefaultLine(
               type: 'color',
               layerName: props.name,
               series: props.data.features
-                .map((f) => f.properties[(
+                .map((f) => f.properties![(
                   props.rendererParameters as ClassificationParameters).variable]),
               classificationParameters: params,
               onCancel: () => {
@@ -2268,7 +2495,7 @@ function makeSettingsDefaultLine(
       />
       <Show when={isLinearRegressionResult}>
         <InputFieldCheckbox
-          label={LL().LayerSettings.AddLinearRegressionScatterPlot()}
+          label={LL().LayerSettings.AddScatterPlot()}
           checked={
             linkedRegressionPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
           }
@@ -2473,6 +2700,211 @@ function makeSettingsDefaultLine(
         }}
       />
     </Show>
+    <Show when={props.representationType === 'bivariateChoropleth'}>
+      <div class="field" style={{ 'text-align': 'center' }}>
+        <button
+          class="button"
+          id="button-change-bi-classification-line"
+          style={{ margin: 'auto' }}
+          onClick={() => {
+            // Save current state of classification parameters
+            const params = unproxify(props.rendererParameters as never);
+            const series = [
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as BivariateChoroplethParameters).variable1.variable]),
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as BivariateChoroplethParameters).variable2.variable]),
+            ];
+            setClassificationMultivariatePanelStore({
+              show: true,
+              type: 'bivariate',
+              layerName: props.name,
+              series,
+              classificationParameters: params,
+              onCancel: () => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: params },
+                );
+              },
+              onConfirm: (newParams) => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: newParams },
+                );
+              },
+            });
+          }}
+        >{LL().LayerSettings.ChangeClassification()}</button>
+      </div>
+      <InputFieldWidthPaletteOpacity
+        label={LL().LayerSettings.Line()}
+        valueWidth={props.strokeWidth!}
+        valuePalette={(props.rendererParameters as BivariateChoroplethParameters).palette.colors}
+        valueOpacity={props.strokeOpacity!}
+        onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
+        onClickPalette={() => {
+          document.getElementById('button-change-bi-classification-line')!
+            .click();
+        }}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
+      />
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddScatterPlot()}
+        checked={
+          linkedScatterPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          if (v && !layerLinkedToScatterPlot(
+            props,
+            layersDescriptionStore.layoutFeaturesAndLegends,
+          )) {
+            const legendPosition = getPossibleLegendPosition(400, 400);
+
+            setLayersDescriptionStoreBase(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeaturesAndLegends.push({
+                    id: generateIdLegend(),
+                    layerId: props.id,
+                    type: LegendType.bivariateChoroplethScatterplot,
+                    position: [legendPosition[0], legendPosition[1]],
+                    orientation: 'horizontal',
+                    order: 'none',
+                    visible: true,
+                    title: {
+                      text: (
+                        props.rendererParameters as CategoricalChoroplethParameters).variable,
+                      ...applicationSettingsStore.defaultLegendSettings.title,
+                    } as LegendTextElement,
+                    subtitle: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                    },
+                    note: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.note,
+                    },
+                    backgroundRect: {
+                      visible: false,
+                    },
+                    colorOn: 'dots',
+                    width: 400,
+                    height: 400,
+                    radius: 2,
+                    axis: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.labels,
+                    },
+                    roundDecimals: 2,
+                    regressionLineColor: 'red',
+                    confidenceInterval: true,
+                    confidenceIntervalColor: 'pink',
+                    displayRegressionLine: false,
+                    displayCountByClass: true,
+                    displayClassBreakLines: true,
+                    dotColor: 'black',
+                    variable1Label: (
+                      props.rendererParameters as BivariateChoroplethParameters).variable1.variable,
+                    variable2Label: (
+                      props.rendererParameters as BivariateChoroplethParameters).variable2.variable,
+                  } as BivariateChoroplethScatterplotLegend);
+                },
+              ),
+            );
+          } else {
+            const elem = layersDescriptionStore.layoutFeaturesAndLegends
+              .find((l) => l.type === 'bivariateChoroplethScatterplot' && l.layerId === props.id);
+
+            if (elem) {
+              setLayersDescriptionStoreBase(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.forEach((l) => {
+                      if (
+                        l.type === 'bivariateChoroplethScatterplot'
+                        && l.layerId === props.id
+                      ) {
+                        // eslint-disable-next-line no-param-reassign
+                        l.visible = !l.visible;
+                      }
+                    });
+                  },
+                ),
+              );
+            }
+          }
+        }}
+      />
+    </Show>
+    <Show when={props.representationType === 'trivariateChoropleth'}>
+      <div class="field" style={{ 'text-align': 'center' }}>
+        <button
+          class="button"
+          id="button-change-tri-classification-line"
+          style={{ margin: 'auto' }}
+          onClick={() => {
+            // Save current state of classification parameters
+            const params = unproxify(props.rendererParameters as never);
+            const series = [
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as TrivariateChoroplethParameters).variable1]),
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as TrivariateChoroplethParameters).variable2]),
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as TrivariateChoroplethParameters).variable3]),
+            ];
+            setClassificationMultivariatePanelStore({
+              show: true,
+              type: 'trivariate',
+              layerName: props.name,
+              series,
+              classificationParameters: params,
+              onCancel: () => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: params },
+                );
+              },
+              onConfirm: (newParams) => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: newParams },
+                );
+              },
+            });
+          }}
+        >{LL().LayerSettings.ChangeClassification()}</button>
+      </div>
+      <InputFieldWidthPaletteOpacity
+        label={LL().LayerSettings.Line()}
+        valueWidth={props.strokeWidth!}
+        valuePalette={
+          (props
+            .rendererParameters as TrivariateChoroplethParameters)
+            .colorScaleType === TricoloreScaleType.Sextant
+            ? ((props.rendererParameters as TrivariateChoroplethParameters)
+              .colorScaleOptions as TriChoroSextantOpts).colors
+            : ['#FF0000', '#FF8000', '#FFFF00', '#80FF00', '#00FF80', '#00FFFF', '#0080FF', '#8000FF']
+        }
+        valueOpacity={props.strokeOpacity!}
+        onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'strokeOpacity', v)}
+        onClickPalette={() => {
+          document.getElementById('button-change-tri-classification-line')!
+            .click();
+        }}
+      />
+    </Show>
     <AestheticsSection {...props} />
   </>;
 }
@@ -2515,7 +2947,7 @@ function makeSettingsDefaultPolygon(
               type: 'color',
               layerName: props.name,
               series: props.data.features
-                .map((f) => f.properties[(
+                .map((f) => f.properties![(
                   props.rendererParameters as ClassificationParameters).variable]),
               classificationParameters: params,
               onCancel: () => {
@@ -2544,6 +2976,120 @@ function makeSettingsDefaultPolygon(
         valueOpacity={props.fillOpacity!}
         onClickPalette={() => {
           document.getElementById('button-change-classification-polygon')!
+            .click();
+        }}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
+      />
+    </Show>
+    <Show when={props.representationType === 'bivariateChoropleth'}>
+      <div class="field" style={{ 'text-align': 'center' }}>
+        <button
+          class="button"
+          id="button-change-bi-classification-polygon"
+          style={{ margin: 'auto' }}
+          onClick={() => {
+            // Save current state of classification parameters
+            const params = unproxify(props.rendererParameters as never);
+            const series = [
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as BivariateChoroplethParameters).variable1.variable]),
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as BivariateChoroplethParameters).variable2.variable]),
+            ];
+            setClassificationMultivariatePanelStore({
+              show: true,
+              type: 'bivariate',
+              layerName: props.name,
+              series,
+              classificationParameters: params,
+              onCancel: () => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: params },
+                );
+              },
+              onConfirm: (newParams) => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: newParams },
+                );
+              },
+            });
+          }}
+        >{LL().LayerSettings.ChangeClassification()}</button>
+      </div>
+      <InputFieldPaletteOpacity
+        label={LL().LayerSettings.Fill()}
+        valuePalette={(props.rendererParameters as BivariateChoroplethParameters).palette.colors}
+        valueOpacity={props.fillOpacity!}
+        onClickPalette={() => {
+          document.getElementById('button-change-bi-classification-polygon')!
+            .click();
+        }}
+        onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
+      />
+    </Show>
+    <Show when={props.representationType === 'trivariateChoropleth'}>
+      <div class="field" style={{ 'text-align': 'center' }}>
+        <button
+          class="button"
+          id="button-change-tri-classification-polygon"
+          style={{ margin: 'auto' }}
+          onClick={() => {
+            // Save current state of classification parameters
+            const params = unproxify(props.rendererParameters as never);
+            const series = [
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as TrivariateChoroplethParameters).variable1]),
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as TrivariateChoroplethParameters).variable2]),
+              props.data.features
+                .map((f) => f.properties![(
+                  props.rendererParameters as TrivariateChoroplethParameters).variable3]),
+            ];
+            setClassificationMultivariatePanelStore({
+              show: true,
+              type: 'trivariate',
+              layerName: props.name,
+              series,
+              classificationParameters: params,
+              onCancel: () => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: params },
+                );
+              },
+              onConfirm: (newParams) => {
+                setLayersDescriptionStoreBase(
+                  'layers',
+                  (l: LayerDescription) => l.id === props.id,
+                  { rendererParameters: newParams },
+                );
+              },
+            });
+          }}
+        >{LL().LayerSettings.ChangeClassification()}</button>
+      </div>
+      <InputFieldPaletteOpacity
+        label={LL().LayerSettings.Fill()}
+        valuePalette={
+          (props
+            .rendererParameters as TrivariateChoroplethParameters)
+            .colorScaleType === TricoloreScaleType.Sextant
+            ? ((props.rendererParameters as TrivariateChoroplethParameters)
+              .colorScaleOptions as TriChoroSextantOpts).colors
+            : ['#FF0000', '#FF8000', '#FFFF00', '#80FF00', '#00FF80', '#00FFFF', '#0080FF', '#8000FF']
+        }
+        valueOpacity={props.fillOpacity!}
+        onClickPalette={() => {
+          document.getElementById('button-change-tri-classification-polygon')!
             .click();
         }}
         onChangeOpacity={(v) => debouncedUpdateProp(props.id, 'fillOpacity', v)}
@@ -2713,7 +3259,7 @@ function makeSettingsDefaultPolygon(
       />
       <Show when={isLinearRegressionResult}>
         <InputFieldCheckbox
-          label={LL().LayerSettings.AddLinearRegressionScatterPlot()}
+          label={LL().LayerSettings.AddScatterPlot()}
           checked={
             linkedRegressionPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
           }
@@ -2724,7 +3270,7 @@ function makeSettingsDefaultPolygon(
             )) {
               const legendPosition = getPossibleLegendPosition(300, 300);
               const linearRegressionResult = props.layerCreationOptions as LinearRegressionResult;
-              setLayersDescriptionStore(
+              setLayersDescriptionStoreBase(
                 produce(
                   (draft: LayersDescriptionStoreType) => {
                     draft.layoutFeaturesAndLegends.push({
@@ -2785,6 +3331,95 @@ function makeSettingsDefaultPolygon(
           }}
         />
       </Show>
+    </Show>
+    <Show when={props.representationType === 'bivariateChoropleth'}>
+      <InputFieldCheckbox
+        label={LL().LayerSettings.AddScatterPlot()}
+        checked={
+          linkedScatterPlotVisible(props, layersDescriptionStore.layoutFeaturesAndLegends)
+        }
+        onChange={(v) => {
+          if (v && !layerLinkedToScatterPlot(
+            props,
+            layersDescriptionStore.layoutFeaturesAndLegends,
+          )) {
+            const legendPosition = getPossibleLegendPosition(400, 400);
+
+            setLayersDescriptionStoreBase(
+              produce(
+                (draft: LayersDescriptionStoreType) => {
+                  draft.layoutFeaturesAndLegends.push({
+                    id: generateIdLegend(),
+                    layerId: props.id,
+                    type: LegendType.bivariateChoroplethScatterplot,
+                    position: [legendPosition[0], legendPosition[1]],
+                    orientation: 'horizontal',
+                    order: 'none',
+                    visible: true,
+                    title: {
+                      text: (
+                        props.rendererParameters as CategoricalChoroplethParameters).variable,
+                      ...applicationSettingsStore.defaultLegendSettings.title,
+                    } as LegendTextElement,
+                    subtitle: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.subtitle,
+                    },
+                    note: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.note,
+                    },
+                    backgroundRect: {
+                      visible: false,
+                    },
+                    colorOn: 'dots',
+                    width: 400,
+                    height: 400,
+                    radius: 2,
+                    axis: {
+                      text: undefined,
+                      ...applicationSettingsStore.defaultLegendSettings.labels,
+                    },
+                    roundDecimals: 2,
+                    regressionLineColor: 'red',
+                    confidenceInterval: true,
+                    confidenceIntervalColor: 'pink',
+                    displayRegressionLine: false,
+                    displayCountByClass: true,
+                    displayClassBreakLines: true,
+                    dotColor: 'black',
+                    variable1Label: (
+                      props.rendererParameters as BivariateChoroplethParameters).variable1.variable,
+                    variable2Label: (
+                      props.rendererParameters as BivariateChoroplethParameters).variable2.variable,
+                  } as BivariateChoroplethScatterplotLegend);
+                },
+              ),
+            );
+          } else {
+            const elem = layersDescriptionStore.layoutFeaturesAndLegends
+              .find((l) => l.type === 'bivariateChoroplethScatterplot' && l.layerId === props.id);
+
+            if (elem) {
+              setLayersDescriptionStoreBase(
+                produce(
+                  (draft: LayersDescriptionStoreType) => {
+                    draft.layoutFeaturesAndLegends.forEach((l) => {
+                      if (
+                        l.type === 'bivariateChoroplethScatterplot'
+                        && l.layerId === props.id
+                      ) {
+                        // eslint-disable-next-line no-param-reassign
+                        l.visible = !l.visible;
+                      }
+                    });
+                  },
+                ),
+              );
+            }
+          }
+        }}
+      />
     </Show>
     <Show when={props.representationType === 'categoricalChoropleth'}>
       <InputFieldCheckbox

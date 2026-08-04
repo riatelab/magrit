@@ -76,6 +76,8 @@ type LayerDescription = {
     | MushroomsParameters
     | CategoricalPictogramParameters
     | WaffleParameters
+    | BivariateChoroplethParameters
+    | TrivariateChoroplethParameters
     // | DefaultRendererParameters
   ),
   layerCreationOptions?: (
@@ -249,6 +251,16 @@ type LayerDescriptionLMResultStock = LayerDescriptionProportionalSymbols & {
 
 type LayerDescriptionLMResultRatio = LayerDescriptionChoropleth & {
   layerCreationOptions: LinearRegressionResult,
+};
+
+type LayerDescriptionBivariateChoropleth = LayerDescription & {
+  representationType: RepresentationType.bivariateChoropleth,
+  rendererParameters: BivariateChoroplethParameters,
+};
+
+type LayerDescriptionTrivariateChoropleth = LayerDescription & {
+  representationType: RepresentationType.trivariateChoropleth,
+  rendererParameters: TrivariateChoroplethParameters,
 };
 
 type LayerDescriptionPointAggResultStock = LayerDescriptionProportionalSymbols & {
@@ -623,6 +635,96 @@ interface LinksParameters {
   filters: Filter[],
 }
 
+export interface BivariateVariableDescription {
+  // The name of the first variable
+  variable: string,
+  // The classification method
+  method: ClassificationMethod,
+  // The number of classes
+  classes: number,
+  // The break values (computed or manually set)
+  breaks: number[],
+  // Entities by class
+  entitiesByClass: number[],
+  // Whether the variable is reversed when attributing color
+  reversed: boolean,
+}
+
+type AllowManualBreaks = Pick<ClassificationParameters & BivariateVariableDescription, 'variable' | 'method' | 'classes' | 'breaks'>;
+
+export interface BivariateChoroplethParameters {
+  // The description of the first variable
+  variable1: BivariateVariableDescription,
+  // The description of the second variable
+  variable2: BivariateVariableDescription,
+  // The color to use for features with no data
+  noDataColor: string,
+  // The color palette
+  palette: CustomPalette,
+}
+
+export enum TricoloreScaleType {
+  Discrete = 'Discrete',
+  Continuous = 'Continuous',
+  Sextant = 'Sextant',
+}
+
+export interface TrivariateChoroplethParameters {
+  // The name of the first variable
+  variable1: string,
+  // The name of the second variable
+  variable2: string,
+  // The name of the third variable
+  variable3: string,
+  // Whether to apply mean centering
+  meanCentered: boolean,
+  // The type of color scale (discrete, continuous or sextant)
+  colorScaleType: TricoloreScaleType,
+  // The parameters of the color scale
+  colorScaleOptions: TriChoroDiscreteOpts | TriChoroContinuousOpts | TriChoroSextantOpts,
+  // The color to use for features with no data
+  noDataColor: string,
+}
+
+export interface TriChoroDiscreteOpts {
+  // The number of classes in the triangular classification
+  classes: 4 | 9 | 16,
+  // The hue of the first component (left corner of the triangle), from 0 to 360
+  hue: number,
+  // The maximum saturation/intensity of the pure colors at the
+  // corners of the triangle, from 0 to 100
+  chroma: number,
+  // The overall lightness of the colors, from 0 to 100
+  lightness: number,
+  // The difference in brightness and saturation between
+  // the center (balanced mix) and the corners (pure components),
+  // from 0 to 1
+  contrast: number,
+  // The extent of the color gradient around the center
+  spread: number,
+}
+
+export interface TriChoroContinuousOpts {
+  // The hue of the first component (left corner of the triangle), from 0 to 360
+  hue: number,
+  // The maximum saturation/intensity of the pure colors at the
+  // corners of the triangle, from 0 to 100
+  chroma: number,
+  // The overall lightness of the colors, from 0 to 100
+  lightness: number,
+  // The difference in brightness and saturation between
+  // the center (balanced mix) and the corners (pure components),
+  // from 0 to 1
+  contrast: number,
+  // The extent of the color gradient around the center
+  spread: number,
+}
+
+export interface TriChoroSextantOpts {
+  // The colors for the six sextants (in clockwise order)
+  colors: [string, string, string, string, string, string],
+}
+
 interface Filter {
   // The name of the variable to filter
   variable: string,
@@ -671,6 +773,12 @@ export enum RepresentationType {
   proportionalSymbols = 'proportionalSymbols',
   categoricalChoropleth = 'categoricalChoropleth',
   categoricalPictogram = 'categoricalPictogram',
+  // Next two Representation types are also AnalysisOperation types
+  // this shouldn't be a problem (because other AnalysisOperations
+  // lead to the creation of existing Representations, but not
+  // bi- tri-choro that load to their one Representation)
+  bivariateChoropleth = 'bivariateChoropleth',
+  trivariateChoropleth = 'trivariateChoropleth',
   // proportionalSymbolsAndCategories = 'proportionalSymbolsAndCategories',
   // proportionalSymbolsAndRatio = 'proportionalSymbolsAndRatio',
   discontinuity = 'discontinuity',
@@ -699,6 +807,8 @@ export enum TableOperationType {
 export enum AnalysisOperationType {
   pointAggregation = 'pointAggregation',
   simpleLinearRegression = 'simpleLinearRegression',
+  bivariateChoropleth = 'bivariateChoropleth',
+  trivariateChoropleth = 'trivariateChoropleth',
   multipleLinearRegression = 'multipleLinearRegression',
   principalComponentAnalysis = 'principalComponentAnalysis',
 }
@@ -1057,6 +1167,100 @@ interface CategoricalPictogramLegend extends LegendBase {
   labels: LegendTextElement,
 }
 
+interface BivariateChoroplethLegend extends LegendBase {
+  type: LegendType.bivariateChoropleth,
+  // Whether to display the labels
+  displayLabels: boolean,
+  // Whether to display the break values
+  displayBreakValues: boolean,
+  // The space (horizontal and vertical) between the boxes
+  boxSpacing: number,
+  // The width of each box
+  boxWidth: number,
+  // The height of each box
+  boxHeight: number,
+  // The corner radius of each box (rx and ry of each rect)
+  boxCornerRadius: number,
+  // The stroke width of each box (0 for no stroke)
+  boxStrokeWidth: number,
+  // Whether to display the no-data box
+  noDataBox: boolean,
+  // Whether to rotate the legend by 45 degrees
+  rotate: boolean,
+  // The text properties of the labels (and no-data label if any)
+  labels: LegendTextElement,
+  // The text properties of the break values
+  breakValues: LegendTextElement,
+  // The label of the 1st variable
+  variable1Label: string, // or LegendTextElement ?
+  // The label of the 2nd variable
+  variable2Label: string, // or LegendTextElement ?
+  // The label of the no-data box
+  noDataLabel: string,
+}
+
+interface BivariateChoroplethScatterplotLegend extends LegendBase {
+  type: LegendType.bivariateChoroplethScatterplot,
+  // Whether the class color is on the dots or on the areas
+  colorOn: 'dots' | 'areas',
+  // The width of the scatter plot
+  width: number,
+  // The height of the scatter plot
+  height: number,
+  // The radius of each dot
+  radius: number,
+  // The properties of the text in the chart axis
+  axis: LegendTextElement,
+  // The rounding of the values displayed on the axes
+  roundDecimals: number,
+  // The color of the regression line
+  regressionLineColor: string,
+  // Whether to display the confidence interval
+  confidenceInterval: boolean,
+  // The color of the confidence interval
+  confidenceIntervalColor: string,
+  // Whether to display the regression line
+  displayRegressionLine: boolean,
+  // Whether to display the count by class on the chart
+  displayCountByClass: boolean,
+  // Whether to display the dashed lines for the class breaks
+  // (only when colorOn === 'dots')
+  displayClassBreakLines: boolean,
+  // The color of the dots
+  // (only when colorOn === 'areas')
+  dotColor: string,
+  // The label of the 1st variable
+  variable1Label: string, // or LegendTextElement ?
+  // The label of the 2nd variable
+  variable2Label: string, // or LegendTextElement ?
+}
+
+interface TrivariateChoroplethLegend extends LegendBase {
+  type: LegendType.trivariateChoropleth,
+  // The width of the triangle (the height is computed automatically)
+  width: number,
+  // Whether to display the no-data box
+  noDataBox: boolean,
+  // The label of the no-data box
+  noDataLabel: string,
+  // Where to put the axis labels
+  axisLabelsPosition: 'edge' | 'corner',
+  // The name of the axis (defaults to variable name)
+  axisLabels: [string, string, string],
+  // Whether to display the data
+  displayData: boolean,
+  // Whether to display the center
+  displayCenter: boolean,
+  // Whether to display lines (TODO: improve this in Tricolore library)
+  displayLines: boolean,
+  // Whether to rotate tick labels in order to improve readability
+  rotateTickLabels: boolean,
+  // The text properties of the labels (and no-data label if any)
+  labels: LegendTextElement,
+  // The text properties of the break values
+  breakValues: LegendTextElement,
+}
+
 export type Legend = (
   ChoroplethLegend
   | CategoricalChoroplethLegend
@@ -1069,6 +1273,9 @@ export type Legend = (
   | ChoroplethHistogramLegend
   | LinearRegressionScatterPlot
   | CategoricalPictogramLegend
+  | BivariateChoroplethLegend
+  | BivariateChoroplethScatterplotLegend
+  | TrivariateChoroplethLegend
   | DefaultLegend
 );
 
@@ -1085,6 +1292,9 @@ export interface IZoomable {
 export enum LegendType {
   default = 'default',
   choropleth = 'choropleth',
+  bivariateChoropleth = 'bivariateChoropleth',
+  bivariateChoroplethScatterplot = 'bivariateChoroplethScatterplot',
+  trivariateChoropleth = 'trivariateChoropleth',
   proportional = 'proportional',
   categoricalChoropleth = 'categoricalChoropleth',
   categoricalPictogram = 'categoricalPictogram',

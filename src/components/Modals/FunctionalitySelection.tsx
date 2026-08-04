@@ -44,13 +44,11 @@ import PointAggregationSettings from '../PortrayalOption/PointAggregationSetting
 import LinearRegressionSettings from '../PortrayalOption/LinearRegressionSettings.tsx';
 import CategoricalPictogramSettings from '../PortrayalOption/CategoricalPictogramSettings.tsx';
 import WaffleSettings from '../PortrayalOption/WaffleSettings.tsx';
+import BivariateChoroSettings from '../PortrayalOption/BivariateChoroSettings.tsx';
+import TrivariateChoroSettings from '../PortrayalOption/TrivariateChoroSettings.tsx';
 
 // Type / interfaces / enums
-import {
-  AnalysisOperationType,
-  ProcessingOperationType,
-  RepresentationType,
-} from '../../global.d';
+import { AnalysisOperationType, ProcessingOperationType, RepresentationType } from '../../global.d';
 
 // Styles
 import '../../styles/FunctionalitySelection.css';
@@ -106,6 +104,14 @@ const functionalityDescriptions: Partial<FunctionalityDescription>[] = [
     allowedGeometryType: 'polygon',
   },
   {
+    name: 'BivariateChoropleth',
+    type: AnalysisOperationType.bivariateChoropleth,
+  },
+  {
+    name: 'TrivariateChoropleth',
+    type: AnalysisOperationType.trivariateChoropleth,
+  },
+  {
     name: 'PointAggregation',
     type: AnalysisOperationType.pointAggregation,
     allowedGeometryType: 'point',
@@ -126,19 +132,39 @@ const functionalityDescriptions: Partial<FunctionalityDescription>[] = [
     name: 'Simplification',
     type: ProcessingOperationType.simplification,
   },
-].map((p) => ({ ...p, enabled: false }));
+].map((p) => ({
+  ...p,
+  enabled: false,
+  // eslint-disable-next-line no-nested-ternary
+  category: Object.values(AnalysisOperationType).includes(p.type)
+    ? 'AnalysisOperation'
+    : Object.values(ProcessingOperationType).includes(p.type)
+      ? 'ProcessingOperation'
+      : 'Representation',
+}));
 
 function CardFunctionality(
   pDesc: FunctionalityDescription & {
     onClick: ((arg0: MouseEvent | KeyboardEvent, arg1: FunctionalityDescription) => void),
+    display: boolean,
   },
 ): JSX.Element {
   const { LL } = useI18nContext();
+  // eslint-disable-next-line no-nested-ternary
+  const col = Object.values(AnalysisOperationType).includes(pDesc.type)
+    ? 'var(--bulma-warning)'
+    : Object.values(ProcessingOperationType).includes(pDesc.type)
+      ? 'var(--bulma-danger)'
+      : 'var(--bulma-success)';
   return <div
     classList={{
       card: true,
       'is-clickable': pDesc.enabled,
       'is-disabled': !pDesc.enabled,
+    }}
+    style={{
+      'border-left': `solid 4px ${col}`,
+      display: pDesc.display ? undefined : 'none',
     }}
     onClick={
       // We don't care about pDesc reactivity here
@@ -161,22 +187,22 @@ function CardFunctionality(
     tabindex={pDesc.enabled ? 0 : undefined}
   >
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
-      <p class="card-header-title">
+      <p class="card-header-title" style={{ 'padding-bottom': '0 !important' }}>
         <Switch>
-          <Match when={Object.values(RepresentationType).includes(pDesc.type)}>
-            <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+          <Match when={Object.values(AnalysisOperationType).includes(pDesc.type)}>
+            <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
           </Match>
           <Match when={Object.values(ProcessingOperationType).includes(pDesc.type)}>
             <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
           </Match>
-          <Match when={Object.values(AnalysisOperationType).includes(pDesc.type)}>
-            <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+          <Match when={Object.values(RepresentationType).includes(pDesc.type)}>
+            <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
           </Match>
         </Switch>
         { LL().FunctionalitiesSection.FunctionalityTypes[pDesc.name]() }
       </p>
     </header>
-    <section class="card-content" style={{ padding: '1em' }}>
+    <section class="card-content" style={{ padding: '0 1em 1em 1em' }}>
       <div class="content">
         { LL().PortrayalSelection.ShortDescriptions[pDesc.name]() }
       </div>
@@ -196,6 +222,22 @@ export default function FunctionalitySelection(): JSX.Element {
     setSelectedFunctionality,
   ] = createSignal<FunctionalityDescription | null>(null);
   let refParentNode: HTMLDivElement;
+
+  // Filters for func categories
+  const [
+    displayRepresentation,
+    setDisplayRepresentation,
+  ] = createSignal<boolean>(true);
+
+  const [
+    displayAnalysis,
+    setDisplayAnalysis,
+  ] = createSignal<boolean>(false);
+
+  const [
+    displayProcessing,
+    setDisplayProcessing,
+  ] = createSignal<boolean>(false);
 
   // Clone the functionalityDescriptions array
   const [
@@ -275,6 +317,14 @@ export default function FunctionalitySelection(): JSX.Element {
           // eslint-disable-next-line no-param-reassign
           p.enabled = vars.nStock >= 1 && (geomType === 'polygon' || geomType === 'point');
           break;
+        case AnalysisOperationType.bivariateChoropleth:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = vars.nRatio >= 2;
+          break;
+        case AnalysisOperationType.trivariateChoropleth:
+          // eslint-disable-next-line no-param-reassign
+          p.enabled = vars.nRatio >= 3;
+          break;
         case ProcessingOperationType.aggregation:
           // eslint-disable-next-line no-param-reassign
           p.enabled = nFeatures > 1 && geomType === 'polygon';
@@ -301,8 +351,9 @@ export default function FunctionalitySelection(): JSX.Element {
           break;
       }
       return p;
-    }).filter((d) => (
-      d.allowedGeometryType ? d.allowedGeometryType === geomType : true)));
+    }));
+    // .filter((d) => (
+    // d.allowedGeometryType ? d.allowedGeometryType === geomType : true)));
   };
 
   // Set the enable flag for the various functionality types
@@ -343,7 +394,9 @@ export default function FunctionalitySelection(): JSX.Element {
     }}>
       <header class="modal-card-head">
         <Show when={!selectedFunctionality()}>
-          <p class="modal-card-title">{ LL().PortrayalSelection.Title() }</p>
+          <p class="modal-card-title">
+            { LL().PortrayalSelection.Title() } - { layerName }
+          </p>
         </Show>
         <Show when={selectedFunctionality()}>
           <p class="modal-card-title">
@@ -355,25 +408,92 @@ export default function FunctionalitySelection(): JSX.Element {
       <section class="modal-card-body is-flex is-flex-direction-column">
         <Show when={!selectedFunctionality()}>
           <MessageBlock type={'info'}>
-            <p>{ LL().PortrayalSelection.Information() }</p>
+            <p>
+              { LL().PortrayalSelection.Information() }
+              &nbsp;<a
+                class="is-clickable"
+                href={'#'}
+                style={{ 'text-decoration': 'underline', color: '#00b2ff' }}
+                onClick={() => {
+                  setModalStore({
+                    show: true,
+                    content: () => <FieldTypingModal type={'layer'} id={functionalitySelectionStore.id} />,
+                    title: LL().FieldsTyping.ModalTitle(),
+                    escapeKey: 'cancel',
+                    confirmCallback: () => { setFunctionalitiesFlag(); },
+                  });
+                }}
+              >
+                {LL().PortrayalSelection.OpenTypingModal()}
+              </a>
+            </p>
           </MessageBlock>
-          <div class="has-text-centered mb-4">
-            {LL().PortrayalSelection.Layer()}
-            &nbsp;<b>{ layerName }</b> -
-            &nbsp;<a
-              class="is-clickable"
-              href={'#'}
-              style={{ 'text-decoration': 'underline', color: '#00b2ff' }}
-              onClick={() => {
-                setModalStore({
-                  show: true,
-                  content: () => <FieldTypingModal type={'layer'} id={functionalitySelectionStore.id} />,
-                  title: LL().FieldsTyping.ModalTitle(),
-                  escapeKey: 'cancel',
-                  confirmCallback: () => { setFunctionalitiesFlag(); },
-                });
-              }}
-            >{LL().PortrayalSelection.OpenTypingModal()}</a>
+          <div style={{ display: 'flex', 'flex-direction': 'row', 'justify-content': 'center' }}>
+            <div class="field is-grouped is-grouped-multiline">
+              <span
+                classList={{
+                  tag: true,
+                  'is-medium': true,
+                  'is-clickable': true,
+                  'is-success': displayRepresentation(),
+                  'is-light': !displayRepresentation(),
+                  'is-grey': !displayRepresentation(),
+                }}
+                style={{ 'user-select': 'none' }}
+                onClick={() => {
+                  if (!displayRepresentation()) {
+                    setDisplayRepresentation(true);
+                    setDisplayProcessing(false);
+                    setDisplayAnalysis(false);
+                  }
+                }}
+              >
+                <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+                { LL().FunctionalitiesSection.Tags.Representation() }
+              </span>
+              <span
+                classList={{
+                  tag: true,
+                  'is-medium': true,
+                  'is-clickable': true,
+                  'is-warning': displayAnalysis(),
+                  'is-light': !displayAnalysis(),
+                  'is-grey': !displayAnalysis(),
+                }}
+                style={{ 'user-select': 'none' }}
+                onClick={() => {
+                  if (!displayAnalysis()) {
+                    setDisplayAnalysis(true);
+                    setDisplayRepresentation(false);
+                    setDisplayProcessing(false);
+                  }
+                }}
+              >
+                <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+                { LL().FunctionalitiesSection.Tags.Exploration() }
+              </span>
+              <span
+                classList={{
+                  tag: true,
+                  'is-medium': true,
+                  'is-clickable': true,
+                  'is-danger': displayProcessing(),
+                  'is-light': !displayProcessing(),
+                  'is-grey': !displayProcessing(),
+                }}
+                style={{ 'user-select': 'none' }}
+                onClick={() => {
+                  if (!displayProcessing()) {
+                    setDisplayProcessing(true);
+                    setDisplayRepresentation(false);
+                    setDisplayAnalysis(false);
+                  }
+                }}
+              >
+                <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+                { LL().FunctionalitiesSection.Tags.GeoProcessing() }
+              </span>
+            </div>
           </div>
           <section style={{ height: '100%', overflow: 'auto', padding: '1em' }}>
             <div
@@ -390,6 +510,14 @@ export default function FunctionalitySelection(): JSX.Element {
                     onClick={(e, pDesc) => {
                       setSelectedFunctionality(pDesc);
                     }}
+                    display={
+                      // eslint-disable-next-line no-nested-ternary
+                      p.category === 'Representation'
+                        ? displayRepresentation()
+                        : p.category === 'ProcessingOperation'
+                          ? displayProcessing()
+                          : displayAnalysis()
+                    }
                   />
                 }
               </For>
@@ -435,6 +563,14 @@ export default function FunctionalitySelection(): JSX.Element {
             </Match>
             <Match when={selectedFunctionality()!.type === RepresentationType.mushrooms}>
               <MushroomsSettings layerId={functionalitySelectionStore.id!}/>
+            </Match>
+            {/* eslint-disable-next-line max-len */}
+            <Match when={selectedFunctionality()!.type === AnalysisOperationType.bivariateChoropleth}>
+              <BivariateChoroSettings layerId={functionalitySelectionStore.id!}/>
+            </Match>
+            {/* eslint-disable-next-line max-len */}
+            <Match when={selectedFunctionality()!.type === AnalysisOperationType.trivariateChoropleth}>
+              <TrivariateChoroSettings layerId={functionalitySelectionStore.id!}/>
             </Match>
             <Match when={selectedFunctionality()!.type === ProcessingOperationType.aggregation}>
               <AggregationSettings layerId={functionalitySelectionStore.id!} />

@@ -1,3 +1,7 @@
+// Imports from solid-js
+import type { Accessor } from 'solid-js';
+
+// Imports from other external libraries
 import {
   ArithmeticProgressionClassifier,
   CustomBreaksClassifier,
@@ -24,18 +28,22 @@ import {
   msd,
 } from 'statsbreaks';
 
+// Helpers
 import d3 from './d3-custom';
+import type { TranslationFunctions } from '../i18n/i18n-types';
 import { getMinimumPrecision } from './common';
 import { extent, hasNegative } from './math';
 
+// Stores
 import { applicationSettingsStore } from '../store/ApplicationSettingsStore';
 
+// Types, interfaces and enums
 import { ClassificationMethod } from '../global.d';
 
 export const getClassifier = (method: ClassificationMethod) => {
   switch (method) {
     case ClassificationMethod.arithmeticProgression:
-      return ArithmeticProgressionClassifier();
+      return ArithmeticProgressionClassifier;
     case ClassificationMethod.manual:
       return CustomBreaksClassifier;
     case ClassificationMethod.equalIntervals:
@@ -159,3 +167,75 @@ export const classificationMethodHasOption = (
   }
   return t.options.includes(option);
 };
+
+export const bivariateClass = (
+  v1: any,
+  v2: any,
+  c1: { getClass: (_: number) => number },
+  c2: { getClass: (_: number) => number },
+  reversedV1: boolean,
+  reversedV2: boolean,
+): number => (
+  3 * (
+    reversedV1 ? 2 - c1.getClass(v1) : c1.getClass(v1)) + (
+    reversedV2 ? 2 - c2.getClass(v2) : c2.getClass(v2)
+  )
+);
+
+export const makeClassificationMenuEntries = (
+  LL: Accessor<TranslationFunctions>,
+  nbUnique: number,
+  allValuesSuperiorToZero: boolean,
+  fixedClasses: number | false = false,
+) => [
+  {
+    name: LL().ClassificationPanel.classificationMethods.quantiles(),
+    value: ClassificationMethod.quantiles,
+    options: [OptionsClassification.numberOfClasses],
+  },
+  {
+    name: LL().ClassificationPanel.classificationMethods.equalIntervals(),
+    value: ClassificationMethod.equalIntervals,
+    options: [OptionsClassification.numberOfClasses],
+  },
+  nbUnique > 6 && (fixedClasses === 6 || fixedClasses === false) ? {
+    name: LL().ClassificationPanel.classificationMethods.q6(),
+    value: ClassificationMethod.q6,
+    options: [],
+  } : null,
+  {
+    name: LL().ClassificationPanel.classificationMethods.ckmeans(),
+    value: ClassificationMethod.ckmeans,
+    options: [OptionsClassification.numberOfClasses],
+  },
+  {
+    name: LL().ClassificationPanel.classificationMethods.jenks(),
+    value: ClassificationMethod.jenks,
+    options: [OptionsClassification.numberOfClasses],
+  },
+  fixedClasses === false ? {
+    name: LL().ClassificationPanel.classificationMethods.standardDeviation(),
+    value: ClassificationMethod.standardDeviation,
+    options: [OptionsClassification.amplitude, OptionsClassification.meanPosition],
+  } : null,
+  allValuesSuperiorToZero ? {
+    name: LL().ClassificationPanel.classificationMethods.geometricProgression(),
+    value: ClassificationMethod.geometricProgression,
+    options: [OptionsClassification.numberOfClasses],
+  } : null,
+  fixedClasses === false ? {
+    name: LL().ClassificationPanel.classificationMethods.nestedMeans(),
+    value: ClassificationMethod.nestedMeans,
+    options: [OptionsClassification.constrainedNumberOfClasses],
+  } : null,
+  fixedClasses === false ? {
+    name: LL().ClassificationPanel.classificationMethods.headTail(),
+    value: ClassificationMethod.headTail,
+    options: [],
+  } : null,
+  {
+    name: LL().ClassificationPanel.classificationMethods.manual(),
+    value: ClassificationMethod.manual,
+    options: [OptionsClassification.breaks, OptionsClassification.numberOfClasses],
+  },
+].filter((d) => d !== null);

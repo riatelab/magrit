@@ -1,0 +1,699 @@
+// Imports from solid-js
+import {
+  createSignal, JSX, For,
+  onCleanup, onMount,
+  Show, createMemo,
+} from 'solid-js';
+
+// Helpers
+import { useI18nContext } from '../../i18n/i18n-solid';
+import {
+  bivariateClass,
+  classificationMethodHasOption,
+  getClassifier,
+  makeClassificationMenuEntries,
+  OptionsClassification,
+  prepareStatisticalSummary,
+} from '../../helpers/classification';
+import { isFiniteNumber, unproxify } from '../../helpers/common';
+import {
+  availableBivariatePalettes,
+  bivariatePalettes,
+  generateBivariateColors,
+} from '../../helpers/color';
+import { Mmin, round } from '../../helpers/math';
+
+// Stores
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
+import { classificationMultivariatePanelStore, setClassificationMultivariatePanelStore } from '../../store/ClassificationMultivariatePanelStore';
+
+// Subcomponents
+import { DisplayBreaks, ManualBreaks } from '../ClassificationHelpers.tsx';
+import DropdownMenu from '../DropdownMenu.tsx';
+import InputFieldColor from '../Inputs/InputColor.tsx';
+import InputFieldSelect from '../Inputs/InputSelect.tsx';
+import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
+import { BivariateDistributionPlot } from '../PortrayalOption/BivariateChoroComponents.tsx';
+
+// Styles
+import '../../styles/ClassificationPanel.css';
+
+// Types, interfaces and enums
+import {
+  type BivariateChoroplethParameters,
+  type BivariateVariableDescription,
+  ClassificationMethod,
+  type CustomPalette,
+} from '../../global.d';
+
+const paletteMenuEntries = [
+  ...availableBivariatePalettes,
+  {
+    name: 'Custom...',
+    value: 'Custom',
+  },
+];
+
+// Function that allows to pick a base color and
+// two "end" colors for the bivariate palette
+function ColorPicker(
+  props: {
+    colors: [string, string, string],
+    onChange: (colors: [string, string, string]) => void,
+  },
+): JSX.Element {
+  const { LL } = useI18nContext();
+  const [baseColor, setBaseColor] = createSignal<string>(props.colors[0]);
+  const [endColorVar1, setEndColorVar1] = createSignal<string>(props.colors[1]);
+  const [endColorVar2, setEndColorVar2] = createSignal<string>(props.colors[2]);
+  return <div class="is-flex is-align-items-center is-justify-content-center is-flex-wrap-wrap" style={{ gap: '12px' }}>
+    <div class="is-flex is-flex-direction-column is-align-items-center">
+      {/* eslint-disable-next-line solid/no-innerhtml */}
+      <label for="base-color-picker" innerHTML={LL().BivariateClassificationPanel.BaseColor()}></label>
+      <input
+        id="base-color-picker"
+        type="color"
+        value={baseColor()}
+        onInput={(e) => {
+          setBaseColor(e.currentTarget.value);
+          props.onChange([baseColor(), endColorVar1(), endColorVar2()]);
+        }}
+      />
+    </div>
+    <div class="is-flex is-flex-direction-column is-align-items-center">
+      {/* eslint-disable-next-line solid/no-innerhtml */}
+      <label for="end-color-var1-picker" innerHTML={LL().BivariateClassificationPanel.EndColorVar1()}></label>
+      <input
+        id="end-color-var1-picker"
+        type="color"
+        value={endColorVar1()}
+        onInput={(e) => {
+          setEndColorVar1(e.currentTarget.value);
+          props.onChange([baseColor(), endColorVar1(), endColorVar2()]);
+        }}
+      />
+    </div>
+    <div class="is-flex is-flex-direction-column is-align-items-center">
+      {/* eslint-disable-next-line solid/no-innerhtml */}
+      <label for="end-color-var2-picker" innerHTML={LL().BivariateClassificationPanel.EndColorVar2()}></label>
+      <input
+        id="end-color-var2-picker"
+        type="color"
+        value={endColorVar2()}
+        onInput={(e) => {
+          setEndColorVar2(e.currentTarget.value);
+          props.onChange([baseColor(), endColorVar1(), endColorVar2()]);
+        }}
+      />
+    </div>
+  </div>;
+}
+
+function BivariateLegendPreview(props: {
+  colorScheme: CustomPalette,
+  cellSize: number,
+}): JSX.Element {
+  const numClassesPerVar = Math.sqrt(props.colorScheme.colors.length);
+  const range = Array.from({ length: numClassesPerVar }, (_, i) => i);
+
+  return <svg
+    width={props.cellSize * numClassesPerVar}
+    height={props.cellSize * numClassesPerVar}
+    style={{ border: '1px solid #000' }}
+  >
+    <For each={range}>
+      {
+        (i) => (
+          <For each={range}>
+            {
+              (j) => <rect
+                  x={j * props.cellSize}
+                  y={(numClassesPerVar - 1 - i) * props.cellSize}
+                  width={props.cellSize}
+                  height={props.cellSize}
+                  fill={props.colorScheme.colors[i * numClassesPerVar + j]}
+                />
+            }
+          </For>
+        )
+      }
+    </For>
+  </svg>;
+}
+
+export default function ClassificationBivariatePanel(): JSX.Element {
+  // Function to recompute the classification given the current options.
+  // We scope it here to facilitate the use of the signals that are defined below...
+  const updateClassificationParameters = () => {
+    /* eslint-disable @typescript-eslint/no-use-before-define */
+    classifierVar1 = new (
+      getClassifier(classificationMethodVar1())
+    )(filteredSeriesVar1, null, applicationSettingsStore.intervalClosure);
+    let breaks1;
+    if (classificationMethodVar1() === ClassificationMethod.manual) {
+      breaks1 = classifierVar1.classify(customBreaksVar1());
+    } else {
+      breaks1 = classifierVar1.classify(parameters.variable1.classes);
+    }
+    const entitiesByClassVar1 = classifierVar1.countByClass(breaks1);
+
+    classifierVar2 = new (
+      getClassifier(classificationMethodVar2())
+    )(filteredSeriesVar2, null, applicationSettingsStore.intervalClosure);
+    let breaks2;
+
+    if (classificationMethodVar2() === ClassificationMethod.manual) {
+      breaks2 = classifierVar2.classify(customBreaksVar2());
+    } else {
+      breaks2 = classifierVar2.classify(parameters.variable2.classes);
+    }
+    const entitiesByClassVar2 = classifierVar2.countByClass(breaks2);
+
+    const newParameters: BivariateChoroplethParameters = {
+      variable1: {
+        variable: parameters.variable1.variable,
+        method: classificationMethodVar1(),
+        breaks: breaks1,
+        entitiesByClass: entitiesByClassVar1,
+        classes: 3,
+        reversed: reversedVar1(),
+      },
+      variable2: {
+        variable: parameters.variable2.variable,
+        method: classificationMethodVar2(),
+        breaks: breaks2,
+        entitiesByClass: entitiesByClassVar2,
+        classes: 3,
+        reversed: reversedVar2(),
+      },
+      palette: paletteColors(),
+      noDataColor: noDataColor(),
+    };
+    setCurrentClassifInfo(newParameters);
+    setCustomBreaksVar1(breaks1);
+    setCustomBreaksVar2(breaks2);
+    console.log('Updated bivariate classification parameters:', newParameters);
+  }; /* eslint-enable @typescript-eslint/no-use-before-define */
+
+  const { LL } = useI18nContext();
+
+  const parameters = classificationMultivariatePanelStore
+    .classificationParameters as BivariateChoroplethParameters;
+
+  const filteredSeriesVar1 = classificationMultivariatePanelStore.series![0]
+    .filter((d) => isFiniteNumber(d))
+    .map((d) => +d);
+
+  const filteredSeriesVar2 = classificationMultivariatePanelStore.series![1]
+    .filter((d) => isFiniteNumber(d))
+    .map((d) => +d);
+
+  const ds = classificationMultivariatePanelStore.series![0].map((d, i) => ({
+    [parameters.variable1.variable]: isFiniteNumber(d)
+      ? d
+      : undefined,
+    [parameters.variable2.variable]: isFiniteNumber(
+      classificationMultivariatePanelStore.series![1][i],
+    )
+      ? classificationMultivariatePanelStore.series![1][i]
+      : undefined,
+  }));
+
+  let missingValues = 0;
+
+  classificationMultivariatePanelStore.series![0].forEach((d1, i) => {
+    const d2 = classificationMultivariatePanelStore.series![1][i];
+    if (!isFiniteNumber(d1) || !isFiniteNumber(d2)) {
+      missingValues += 1;
+    }
+  });
+
+  // Basic statistical summary displayed to the user
+  const statSummaryVar1 = prepareStatisticalSummary(filteredSeriesVar1);
+  const statSummaryVar2 = prepareStatisticalSummary(filteredSeriesVar2);
+
+  const allValuesSuperiorToZeroVar1 = filteredSeriesVar1.every((d) => d > 0);
+  const allValuesSuperiorToZeroVar2 = filteredSeriesVar2.every((d) => d > 0);
+
+  console.log('Bivariate classification parameters:', parameters);
+
+  // Signals for the current component:
+  // - the classification for the variable 1
+  const [
+    classificationMethodVar1,
+    setClassificationMethodVar1,
+  ] = createSignal<ClassificationMethod>(
+    parameters.variable1.method,
+  );
+  // - the classification for the variable 2
+  const [
+    classificationMethodVar2,
+    setClassificationMethodVar2,
+  ] = createSignal<ClassificationMethod>(
+    parameters.variable2.method,
+  );
+  // - is variable 1 reversed ?
+  const [
+    reversedVar1,
+    setReversedVar1,
+  ] = createSignal<boolean>(parameters.variable1.reversed);
+  // - is variable 2 reversed ?
+  const [
+    reversedVar2,
+    setReversedVar2,
+  ] = createSignal<boolean>(parameters.variable2.reversed);
+  // - the breaks chosen by the user for the
+  //   current classification method for each variable
+  //   (only if 'manual' is chosen)
+  const [
+    customBreaksVar1,
+    setCustomBreaksVar1,
+  ] = createSignal<number[]>(parameters.variable1.breaks);
+  const [
+    customBreaksVar2,
+    setCustomBreaksVar2,
+  ] = createSignal<number[]>(parameters.variable2.breaks);
+  // - the color scheme
+  const [
+    colorScheme,
+    setColorScheme,
+  ] = createSignal<string>(
+    parameters.palette.id,
+  );
+  // Base color, end color for var1 and end color for var2
+  const [
+    customBaseColors,
+    setCustomBaseColors,
+  ] = createSignal<[string, string, string]>([
+    parameters.palette.colors[0],
+    parameters.palette.colors[6],
+    parameters.palette.colors[2],
+  ]);
+  // - the colors that compose the palette
+  const paletteColors = createMemo<CustomPalette>(() => {
+    let palette: CustomPalette;
+    if (
+      bivariatePalettes
+        .map((d) => d.id)
+        .includes(colorScheme())
+    ) {
+      palette = bivariatePalettes.find((d) => d.id === colorScheme())!;
+      setCustomBaseColors([
+        palette.colors[0],
+        palette.colors[6],
+        palette.colors[2],
+      ]);
+    } else {
+      const newColors = generateBivariateColors(
+        customBaseColors()[1],
+        customBaseColors()[2],
+        customBaseColors()[0],
+        3,
+        'lab',
+        'multiply',
+      );
+      palette = {
+        id: `custom-bivariate-${customBaseColors()[0]}-${customBaseColors()[1]}-${customBaseColors()[2]}`,
+        name: 'Custom bivariate palette',
+        type: 'custom',
+        colors: newColors,
+        provenance: 'user',
+        reversed: false,
+        number: 9,
+      };
+    }
+
+    return palette;
+  });
+  // - the color chosen by the user for the no data values
+  const [
+    noDataColor,
+    setNoDataColor,
+  ] = createSignal<string>(
+    parameters.noDataColor,
+  );
+  // - the current classification information
+  //   (given the last option that changed, or the default breaks)
+  const [
+    currentClassifInfo,
+    setCurrentClassifInfo,
+  ] = createSignal<BivariateChoroplethParameters>(unproxify(parameters));
+
+  let refParentNode: HTMLDivElement;
+
+  let classifierVar1 = new (getClassifier(ClassificationMethod.manual))(
+    null,
+    null,
+    applicationSettingsStore.intervalClosure,
+    parameters.variable1.breaks,
+  );
+
+  let classifierVar2 = new (getClassifier(ClassificationMethod.manual))(
+    null,
+    null,
+    applicationSettingsStore.intervalClosure,
+    parameters.variable2.breaks,
+  );
+
+  const bivariateClasses = (d: Record<string, any>) => {
+    const classVar1 = reversedVar1()
+      ? 2 - classifierVar1.getClass(d[parameters.variable1.variable])
+      : classifierVar1.getClass(d[parameters.variable1.variable]);
+    const classVar2 = reversedVar2()
+      ? 2 - classifierVar2.getClass(d[parameters.variable2.variable])
+      : classifierVar2.getClass(d[parameters.variable2.variable]);
+    return [classVar1, classVar2];
+  };
+
+  const bc = (d: Record<string, any>) => bivariateClass(
+    d[parameters.variable1.variable],
+    d[parameters.variable2.variable],
+    classifierVar1,
+    classifierVar2,
+    reversedVar1(),
+    reversedVar2(),
+  );
+
+  const entriesClassificationMethodVar1 = makeClassificationMenuEntries(
+    LL,
+    statSummaryVar1.unique,
+    allValuesSuperiorToZeroVar1,
+    3,
+  );
+
+  const entriesClassificationMethodVar2 = makeClassificationMenuEntries(
+    LL,
+    statSummaryVar2.unique,
+    allValuesSuperiorToZeroVar2,
+    3,
+  );
+
+  const listenerEscKey = (event: KeyboardEvent) => {
+    const isEscape = event.key
+      ? (event.key === 'Escape' || event.key === 'Esc')
+      : (event.keyCode === 27);
+    if (isEscape) {
+      (refParentNode!.querySelector(
+        '.classification-panel__cancel-button',
+      ) as HTMLElement).click();
+    }
+  };
+
+  onMount(() => {
+    // We could set focus on the confirm button when the modal is shown
+    // as in some other modal, although it is not as important here...
+    document.body.addEventListener('keydown', listenerEscKey);
+  });
+
+  onCleanup(() => {
+    document.body.removeEventListener('keydown', listenerEscKey);
+  });
+
+  return <div
+    class="modal-window modal classification-panel"
+    style={{ display: 'flex' }}
+    ref={refParentNode!}
+    aria-modal="true"
+    role="dialog"
+  >
+    <div class="modal-background" />
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">
+          { LL().ClassificationPanel.title() }&nbsp;
+          - {classificationMultivariatePanelStore.layerName}
+        </p>
+      </header>
+      <section class="modal-card-body">
+        <div class="is-flex">
+          <div style={{ width: '55%', 'text-align': 'center' }}>
+            <h3> { LL().ClassificationPanel.summary() }</h3>
+            <div>
+              <table class="table bivariate is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>{ parameters.variable1.variable }</th>
+                    <th>{ parameters.variable2.variable }</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  {/* eslint-disable-next-line solid/no-innerhtml */}
+                  <td innerHTML={LL().ClassificationPanel.population()}></td>
+                  <td>{ statSummaryVar1.population }</td>
+                  <td>{ statSummaryVar2.population }</td>
+                </tr>
+                <tr>
+                  <td>{ LL().ClassificationPanel.minimum() }</td>
+                  <td>{ round(statSummaryVar1.minimum, statSummaryVar1.precision) }</td>
+                  <td>{ round(statSummaryVar2.minimum, statSummaryVar2.precision) }</td>
+                </tr>
+                <tr>
+                  <td>{ LL().ClassificationPanel.maximum() }</td>
+                  <td>{ round(statSummaryVar1.maximum, statSummaryVar1.precision) }</td>
+                  <td>{ round(statSummaryVar2.maximum, statSummaryVar2.precision) }</td>
+                </tr>
+                <tr>
+                  <td>{ LL().ClassificationPanel.mean() }</td>
+                  <td>{ round(statSummaryVar1.mean, statSummaryVar1.precision) }</td>
+                  <td>{ round(statSummaryVar2.mean, statSummaryVar2.precision) }</td>
+                </tr>
+                <tr>
+                  <td>{ LL().ClassificationPanel.median() }</td>
+                  <td>{ round(statSummaryVar1.median, statSummaryVar1.precision) }</td>
+                  <td>{ round(statSummaryVar2.median, statSummaryVar2.precision) }</td>
+                </tr>
+                <tr>
+                  <td>{ LL().ClassificationPanel.standardDeviation() }</td>
+                  <td>{ round(statSummaryVar1.standardDeviation, statSummaryVar1.precision) }</td>
+                  <td>{ round(statSummaryVar2.standardDeviation, statSummaryVar2.precision) }</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div style={{ width: '45%', 'text-align': 'center' }}>
+            <h3> { LL().ClassificationPanel.classification() } </h3>
+            <div class="is-flex" style={{ 'justify-content': 'space-around', 'flex-direction': 'column' }}>
+              <div>
+                <InputFieldSelect
+                  label={`${LL().FunctionalitiesSection.CommonOptions.Variable()} 1`}
+                  layout={'vertical'}
+                  onChange={(value) => {
+                    setClassificationMethodVar1(value as ClassificationMethod);
+                    updateClassificationParameters();
+                  }}
+                  value={classificationMethodVar1()}
+                  width={'260px'}
+                >
+                  <For each={entriesClassificationMethodVar1}>
+                    {
+                      (entry) => <option value={entry.value}>
+                        { entry.name }
+                      </option>
+                    }
+                  </For>
+                </InputFieldSelect>
+                <Show when={
+                  !classificationMethodHasOption(
+                    OptionsClassification.breaks,
+                    classificationMethodVar1(),
+                    entriesClassificationMethodVar1,
+                  )
+                }>
+                  <DisplayBreaks
+                    breaks={currentClassifInfo().variable1.breaks}
+                    precision={statSummaryVar1.precision}
+                  />
+                </Show>
+                <Show when={
+                  classificationMethodHasOption(
+                    OptionsClassification.breaks,
+                    classificationMethodVar1(),
+                    entriesClassificationMethodVar1,
+                  )
+                }>
+                  <ManualBreaks
+                    currentBreaksInfo={currentClassifInfo().variable1}
+                    setCurrentBreaksInfo={(v) => {
+                      const classifInfo = currentClassifInfo();
+                      classifInfo.variable1 = v as BivariateVariableDescription;
+                      setCurrentClassifInfo(classifInfo);
+                      setCustomBreaksVar1(v.breaks);
+                      updateClassificationParameters();
+                    }}
+                    statSummary={statSummaryVar1}
+                    fixedNumberOfClasses={3}
+                  />
+                </Show>
+              </div>
+              <br />
+              <div>
+                <InputFieldSelect
+                  label={`${LL().FunctionalitiesSection.CommonOptions.Variable()} 2`}
+                  layout={'vertical'}
+                  onChange={(value) => {
+                    setClassificationMethodVar2(value as ClassificationMethod);
+                    updateClassificationParameters();
+                  }}
+                  value={classificationMethodVar2()}
+                  width={'260px'}
+                >
+                  <For each={entriesClassificationMethodVar2}>
+                    {
+                      (entry) => <option value={entry.value}>
+                        { entry.name }
+                      </option>
+                    }
+                  </For>
+                </InputFieldSelect>
+                <Show when={
+                  !classificationMethodHasOption(
+                    OptionsClassification.breaks,
+                    classificationMethodVar2(),
+                    entriesClassificationMethodVar2,
+                  )
+                }>
+                  <DisplayBreaks
+                    breaks={currentClassifInfo().variable2.breaks}
+                    precision={statSummaryVar2.precision}
+                  />
+                </Show>
+                <Show when={
+                  classificationMethodHasOption(
+                    OptionsClassification.breaks,
+                    classificationMethodVar2(),
+                    entriesClassificationMethodVar2,
+                  )
+                }>
+                  <ManualBreaks
+                    currentBreaksInfo={currentClassifInfo().variable2}
+                    setCurrentBreaksInfo={(v) => {
+                      const classifInfo = currentClassifInfo();
+                      classifInfo.variable2 = v as BivariateVariableDescription;
+                      setCustomBreaksVar2(v.breaks);
+                      updateClassificationParameters();
+                    }}
+                    statSummary={statSummaryVar2}
+                    fixedNumberOfClasses={3}
+                  />
+                </Show>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="is-flex">
+          <div style={{ width: '55%', 'text-align': 'center' }}>
+            <h3> { LL().ClassificationPanel.distribution() } </h3>
+            <div>
+              <BivariateDistributionPlot
+                ds={ds}
+                currentClassifInfo={currentClassifInfo}
+                bivariateClasses={bivariateClasses}
+                classifierVar1={() => classifierVar1}
+                classifierVar2={() => classifierVar2}
+                bc={bc}
+              />
+            </div>
+          </div>
+          <div style={{ width: '45%', 'text-align': 'center' }}>
+            <h3> { LL().BivariateClassificationPanel.VariableDirection() } </h3>
+            <div class={'is-flex is-justify-content-space-around'}>
+              <InputFieldCheckbox
+                label={`${LL().FunctionalitiesSection.CommonOptions.Variable()} 1 - ${LL().FunctionalitiesSection.BivariateChoroplethOptions.ReversedAxis()}`}
+                checked={reversedVar1()}
+                onChange={(value) => {
+                  setReversedVar1(value);
+                  updateClassificationParameters();
+                }}
+                width={'40%'}
+              />
+              <InputFieldCheckbox
+                label={`${LL().FunctionalitiesSection.CommonOptions.Variable()} 2 - ${LL().FunctionalitiesSection.BivariateChoroplethOptions.ReversedAxis()}`}
+                checked={reversedVar2()}
+                onChange={(value) => {
+                  setReversedVar2(value);
+                  updateClassificationParameters();
+                }}
+                width={'40%'}
+              />
+            </div>
+            <h3 style={{ 'margin-top': 0 }}> { LL().FunctionalitiesSection.CommonOptions.Color() } </h3>
+            <div>
+              <DropdownMenu
+                id={'dropdown-bivariate-palette'}
+                style={{ width: '260px', 'margin-bottom': '18px' }}
+                entries={paletteMenuEntries}
+                defaultEntry={
+                  paletteMenuEntries
+                    .find((d) => d.value === colorScheme())
+                  || paletteMenuEntries[paletteMenuEntries.length - 1]
+                }
+                onChange={(value) => {
+                  setColorScheme(value);
+                  updateClassificationParameters();
+                }}
+                maxHeight={'20vh'}
+              />
+              <div style={{ width: '100%', 'text-align': 'center', 'margin-bottom': '12px' }}>
+                <BivariateLegendPreview
+                  colorScheme={currentClassifInfo().palette}
+                  cellSize={30}
+                />
+                <Show when={colorScheme().toLowerCase().startsWith('custom')}>
+                  <ColorPicker
+                    colors={[
+                      currentClassifInfo().palette.colors[0],
+                      currentClassifInfo().palette.colors[6],
+                      currentClassifInfo().palette.colors[2],
+                    ]}
+                    onChange={(colors) => {
+                      setCustomBaseColors(colors);
+                      updateClassificationParameters();
+                    }}
+                  />
+                </Show>
+              </div>
+            </div>
+            <Show when={missingValues > 0}>
+              <div style={{ width: '60%', margin: 'auto' }}>
+                <InputFieldColor
+                  label={LL().ClassificationPanel.missingValues(missingValues)}
+                  value={noDataColor()}
+                  onChange={(c) => {
+                    setNoDataColor(c);
+                    updateClassificationParameters();
+                  }}
+                  layout={'horizontal'}
+                  width={90}
+                />
+              </div>
+            </Show>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button
+          class="button is-success classification-panel__confirm-button"
+          onClick={() => {
+            if (classificationMultivariatePanelStore.onConfirm) {
+              classificationMultivariatePanelStore.onConfirm(currentClassifInfo());
+            }
+            setClassificationMultivariatePanelStore({ show: false });
+          }}
+        >{LL().SuccessButton()}</button>
+        <button
+          class="button classification-panel__cancel-button"
+          onClick={() => {
+            if (classificationMultivariatePanelStore.onCancel) {
+              classificationMultivariatePanelStore.onCancel();
+            }
+            setClassificationMultivariatePanelStore({ show: false });
+          }}
+        >{ LL().CancelButton() }</button>
+      </footer>
+    </div>
+  </div>;
+}

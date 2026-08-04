@@ -13,7 +13,8 @@ import type { PlotOptions } from '@observablehq/plot';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import {
-  bindElementsLegend, computeRectangleBox,
+  bindElementsLegend,
+  computeRectangleBox,
   getTextSize,
   makeLegendSettingsModal,
   makeLegendText,
@@ -153,7 +154,7 @@ function ChoroplethHistogram(
             y1: 0,
             y2: (props.populationOptions.height * max(breaksData().map((d) => d.y))) / 100,
             stroke: props.populationOptions.color,
-            width: 1,
+            strokeWidth: 1,
           })
           // Plot.ruleX([minmax[0]]),
           : null,
@@ -208,7 +209,7 @@ export default function legendChoroplethHistogram(
   onMount(() => {
     // We need to wait for the legend to be rendered before we can compute its size
     // and bind the drag behavior and the mouse enter / leave behavior.
-    bindElementsLegend(refElement, legend);
+    bindElementsLegend(refElement!, legend);
   });
 
   // Recompute the size of the rectangle box when the legend is updated
@@ -217,10 +218,10 @@ export default function legendChoroplethHistogram(
       () => [
         heightTitle(), heightSubtitle(),
         legend.height, legend.width,
-        legend.title.text, legend.subtitle.text, legend.note.text,
+        legend.title.text, legend.subtitle.text, legend.note.text, legend.note.fontSize,
       ],
       () => {
-        computeRectangleBox(refElement);
+        computeRectangleBox(refElement!);
       },
     ),
   );
