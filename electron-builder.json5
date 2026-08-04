@@ -17,6 +17,7 @@
         "arch": ["x64"]
       }
     ],
+    "icon": "build/icon.png",
     "artifactName": "${productName}-Windows-${version}-portable.${ext}"
   },
   "nsis": {
@@ -33,6 +34,6 @@
     "target": ["AppImage"],
     "artifactName": "${productName}-Linux-${version}.${ext}",
     "category": "Education",
-    "icon": "build/icon.icns"
+    "icon": "build/icon.png"
   }
 }

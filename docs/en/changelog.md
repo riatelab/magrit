@@ -12,6 +12,25 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.4.0 (2026-08-04)
+
+- Add the ability to create bivariate choropleth maps
+  (fixes <a href="https://github.com/riatelab/magrit/issues/161">issue 161</a>).
+
+- Add the ability to create trivariate choropleth maps for ternary composition data
+  (fixes <a href="https://github.com/riatelab/magrit/issues/158">issue 158</a>).
+
+- Add various details to the documentation regarding proportional symbols, facing
+  semicircle (mushroom) maps, and cartograms
+  (fixes issues <a href="https://github.com/riatelab/magrit/issues/200">200</a> and <a href="https://github.com/riatelab/magrit/issues/215">215</a>).
+
+- Fix the `getCurrentExtent` logic called when changing the map projection
+  (fixes <a href="https://github.com/riatelab/magrit/issues/227">issue 227</a>).
+
+- Fix proportional square symbols when the “avoid overlaps” option is enabled for datasets
+  containing multiple features with exactly the same coordinates (fixes <a href="https://github.com/riatelab/magrit/issues/198">Issue 198</a>).
+
+
 ### 2.3.21 (2026-07-16)
 
 - Fix sorting of entities for proportional symbols in order to take negative values into account.
