@@ -257,7 +257,7 @@ export default function legendTrivariateChoropleth(
           0,
           hasNoData()
             ? heightTitle() + heightSubtitle() + legend.width + 30 + defaultSpacing
-            : heightTitle() + heightSubtitle() + legend.width - defaultSpacing,
+            : heightTitle() + heightSubtitle() + legend.width + defaultSpacing,
         ],
         'note',
         { 'text-anchor': 'start' },
