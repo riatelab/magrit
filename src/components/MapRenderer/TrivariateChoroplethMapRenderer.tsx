@@ -23,9 +23,9 @@ import bindData from '../../directives/bind-data';
 // Types / Interfaces / Enums
 import {
   type LayerDescriptionTrivariateChoropleth,
-  TriChoroContinuousOpts,
-  TriChoroDiscreteOpts,
-  TriChoroSextantOpts,
+  type TriChoroContinuousOpts,
+  type TriChoroDiscreteOpts,
+  type TriChoroSextantOpts,
   TricoloreScaleType,
   type TrivariateChoroplethParameters,
 } from '../../global.d';
@@ -214,8 +214,7 @@ export function trivariateChoroplethLineRenderer(
     <For each={layerDescription.data.features}>
       {
         (feature, i) => <path
-          stroke={'grey'}
-          fill={colors()[i()] ?? rendererParameters().noDataColor}
+          stroke={colors()[i()] ?? rendererParameters().noDataColor}
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
           // @ts-expect-error because use:bind-data isn't a property of this element
