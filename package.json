@@ -122,7 +122,7 @@
     "topojson-client": "^3.1.0",
     "topojson-server": "^3.0.1",
     "topojson-simplify": "^3.0.3",
-    "tricolore": "^0.7.0",
+    "tricolore": "^0.8.0",
     "typesafe-i18n": "^5.27.1",
     "uuid": "^14.0.0",
     "wkt-parser": "^1.5.5"

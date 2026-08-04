@@ -135,6 +135,7 @@ export default function legendTrivariateChoropleth(
         showCenter: legend.displayCenter,
         showLines: legend.displayLines,
         labelPosition: 'edge',
+        rotateTickLabels: legend.rotateTickLabels,
       }, dimensions);
     } else if (layer.rendererParameters.colorScaleType === TricoloreScaleType.Discrete) {
       svg = Viz.createDiscretePlot(ptsFiltered, {
@@ -149,6 +150,7 @@ export default function legendTrivariateChoropleth(
         showCenter: legend.displayCenter,
         showLines: legend.displayLines,
         labelPosition: 'edge',
+        rotateTickLabels: legend.rotateTickLabels,
         breaks: Msqrt((layer.rendererParameters.colorScaleOptions as TriChoroDiscreteOpts).classes),
       }, dimensions);
     } else { // TricoloreScaleType.Continuous
@@ -164,6 +166,7 @@ export default function legendTrivariateChoropleth(
         showCenter: legend.displayCenter,
         showLines: legend.displayLines,
         labelPosition: 'edge',
+        rotateTickLabels: legend.rotateTickLabels,
       }, dimensions);
     }
     return svg;

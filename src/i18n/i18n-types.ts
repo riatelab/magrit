@@ -6387,6 +6387,10 @@ type RootTranslation = {
 			 * O​n​ ​t​h​e​ ​a​r​e​a​s
 			 */
 			Areas: string
+			/**
+			 * R​o​t​a​t​e​ ​t​i​c​k​ ​l​a​b​e​l​s
+			 */
+			RotateTickLabels: string
 		}
 	}
 	CommonTextElement: {
@@ -12684,6 +12688,10 @@ export type TranslationFunctions = {
 			 * On the areas
 			 */
 			Areas: () => LocalizedString
+			/**
+			 * Rotate tick labels
+			 */
+			RotateTickLabels: () => LocalizedString
 		}
 	}
 	CommonTextElement: {

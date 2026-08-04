@@ -141,6 +141,7 @@ function onClickValidate(
     displayData: true,
     displayCenter: false,
     displayLines: false,
+    rotateTickLabels: false,
     axisLabelsPosition: 'edge',
     axisLabels: [`⟵ ${targetVariables[0]}`, `⟵ ${targetVariables[1]}`, `${targetVariables[2]} ⟶`],
     labels: {

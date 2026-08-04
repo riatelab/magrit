@@ -1253,6 +1253,8 @@ interface TrivariateChoroplethLegend extends LegendBase {
   displayCenter: boolean,
   // Whether to display lines (TODO: improve this in Tricolore library)
   displayLines: boolean,
+  // Whether to rotate tick labels in order to improve readability
+  rotateTickLabels: boolean,
   // The text properties of the labels (and no-data label if any)
   labels: LegendTextElement,
   // The text properties of the break values

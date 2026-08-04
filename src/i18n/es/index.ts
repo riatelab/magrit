@@ -1589,6 +1589,7 @@ const es = {
       ColorOn: 'Mostrar colores de las clases',
       Dots: 'En los puntos',
       Areas: 'En las áreas',
+      RotateTickLabels: 'Girar las etiquetas de las marcas de escala',
     },
   },
   CommonTextElement: {

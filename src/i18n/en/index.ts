@@ -1589,6 +1589,7 @@ const en = {
       ColorOn: 'Display class colors',
       Dots: 'On the dots',
       Areas: 'On the areas',
+      RotateTickLabels: 'Rotate tick labels',
     },
   },
   CommonTextElement: {

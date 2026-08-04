@@ -1689,6 +1689,11 @@ function makeSettingsTrivariateChoropleth(
       step={1}
     />
     <InputFieldCheckbox
+      label={LL().Legend.Modal.RotateTickLabels()}
+      checked={legend.rotateTickLabels}
+      onChange={(v) => updateProps(legend.id, ['rotateTickLabels'], v)}
+    />
+    <InputFieldCheckbox
       label={LL().Legend.Modal.DisplayData()}
       checked={legend.displayData}
       onChange={(v) => updateProps(legend.id, ['displayData'], v)}

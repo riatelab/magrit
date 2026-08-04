@@ -1589,6 +1589,7 @@ const fr = {
       ColorOn: 'Affichage de la couleur des classes',
       Dots: 'Sur les points',
       Areas: 'Sur les surfaces',
+      RotateTickLabels: 'Pivoter les étiquettes des graduations',
     },
   },
   CommonTextElement: {
