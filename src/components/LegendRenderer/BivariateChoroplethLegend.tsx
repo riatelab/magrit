@@ -78,7 +78,7 @@ export default function legendBivariateChoropleth(
 
   // Padding for the labels of the variables
   const extraPadding = createMemo(() => (
-    legend.displayBreakValues ? 30 : 20));
+    legend.displayBreakValues ? 35 : 25));
   // Padding around the legend grid (not used for now since
   // we let the axis labels overflow on the left when the legend is rotated)
   // const padding = createMemo(() => (legend.displayBreakValues ? 20 : 10));
@@ -201,7 +201,7 @@ export default function legendBivariateChoropleth(
               {(breakValue, index) => (
                 <text
                   x={-totalSize() / 2 + breaksStep()(index() + 1)}
-                  y={-totalSize() / 2 - 4}
+                  y={-totalSize() / 2 - 7}
                   text-anchor="middle"
                   font-size={legend.labels.fontSize}
                   font-family={legend.labels.fontFamily}
@@ -232,7 +232,7 @@ export default function legendBivariateChoropleth(
               {(breakValue, index) => (
                 <text
                   x={-totalSize() / 2 + breaksStep()(index() + 1)}
-                  y={totalSize() / 2 + 12}
+                  y={totalSize() / 2 + 15}
                   text-anchor="middle"
                   font-size={legend.labels.fontSize}
                   font-family={legend.labels.fontFamily}
@@ -264,7 +264,7 @@ export default function legendBivariateChoropleth(
           {(breakValue, index) => (
             <text
               x={-totalSize() / 2 + breaksStep()(index() + 1)}
-              y={totalSize() / 2 + 12}
+              y={totalSize() / 2 + 15}
               text-anchor="middle"
               font-size={legend.labels.fontSize}
               font-family={legend.labels.fontFamily}
