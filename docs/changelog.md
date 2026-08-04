@@ -12,6 +12,23 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+### 2.4.0 (2026-08-04)
+
+- Ajout de la possibilité de réaliser des cartes choroplèthes bivariées
+  (corrige <a href="https://github.com/riatelab/magrit/issues/161">l'issue 161</a>).
+
+- Ajout de la possibilité de réaliser des choroplèthes trivariées, pour des données de composition ternaire
+  (corrige <a href="https://github.com/riatelab/magrit/issues/158">l'issue 158</a>).
+
+- Ajout de différents détails dans la documentation concernant les symboles proportionnels, les cartes en demi-cercles affrontés
+  et les cartogrammes (corrige les issues <a href="https://github.com/riatelab/magrit/issues/200">200</a> et <a href="https://github.com/riatelab/magrit/issues/215">215</a>).
+
+- Correction de la logique `getCurrentExtent` appelée lors du changement de projection cartographique
+  (corrige <a href="https://github.com/riatelab/magrit/issues/227">l'issue 227</a>).
+
+- Correction des symboles proportionnels carrés avec l'option "éviter les chevauchements" activées pour les jeux de données contenant
+  plusieurs entités avec exactement les mêmes coordonnées (corrige <a href="https://github.com/riatelab/magrit/issues/198">l'issue 198</a>).
+
 ### 2.3.21 (2026-07-16)
 
 - Correction du tri des entités pour les symboles proportionnels afin de prendre en compte les valeurs négatives.
