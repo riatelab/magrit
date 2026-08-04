@@ -227,16 +227,22 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
   //   check that they sum to 1 or to 100)
   const isTernaryComposition = createMemo(() => {
     let isValid;
+    // We are (very) tolerant and use a tolerance of :
+    // - 0.1 when we suspect the ternary composition must sum to 1
+    // - 1 when we suspect the ternary composition must sum to 100
+    // (anyway, we will "close" the composition later)
     try {
       CompositionUtils.validateTernaryPoints(pts() as [number, number, number][], 1, 1e-1);
       isValid = true;
     } catch (err) {
+      // err could be used to track the culprit value...
       // console.log(err);
       isValid = false;
       try {
-        CompositionUtils.validateTernaryPoints(pts() as [number, number, number][], 100, 1e-1);
+        CompositionUtils.validateTernaryPoints(pts() as [number, number, number][], 100, 1);
         isValid = true;
       } catch (err2) {
+        // err2 could be used to track the culprit value...
         // console.log(err2);
         isValid = false;
       }
