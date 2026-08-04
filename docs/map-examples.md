@@ -22,9 +22,22 @@ dans un logiciel de dessin vectoriel.
 />
 
 <ZoomImg
+    src="/example-trichoro-discrete-edu-black-banner.png"
+    alt="Highest attained education levels in EU in 2016"
+    caption="Highest attained education levels in EU in 2016"
+/>
+
+<ZoomImg
     src="/example_map_world_tree.png"
     alt="Carte 'La tête dans les arbres ?'"
     caption="La tête dans les arbres ? (Réalisation: Ronan Ysebaert)"
+/>
+
+
+<ZoomImg
+    src="/example-map-co2-seqe.png"
+    alt="Émissions 2022 de CO2 SEQE-EU en France métropolitaine"
+    caption="Émissions 2022 de CO2 SEQE-EU en France métropolitaine"
 />
 
 <ZoomImg
@@ -46,7 +59,7 @@ dans un logiciel de dessin vectoriel.
 />
 
 <ZoomImg
-    src="/example-map-co2-seqe.png"
-    alt="Émissions 2022 de CO2 SEQE-EU en France métropolitaine"
-    caption="Émissions 2022 de CO2 SEQE-EU en France métropolitaine"
+    src="/example-bichoro-diabetes-obesity.png"
+    alt="Diabetes and obesity by county in the United States"
+    caption="Diabetes and obesity by county in the United States"
 />

@@ -21,7 +21,37 @@ en secteur d'activités économiques (primaire, secondaire tertiaire), la compos
 Cette propriété permet de mettre en évidence des profils de composition et des déséquilibres entre les trois dimensions,
 offrant parfois une vision synthétique des dynamiques spatiales à l’œuvre.
 
-## Risques et alternatives
+## Aide à la lecture de la légende
+
+Pour aider à la lecture du diagramme ternaire, il est possible d'utiliser le schéma suivant. Pour lire les valeurs de chaque variable pour l'unique point représenté, il suffit de suivre les barres rouges qui partent du point en direction de chaque arête (c'est-à-dire en direction de chaque axe de graduation). La valeur pour chaque variable est ensuite lue sur l'axe correspondant.
+
+
+<ZoomImg
+    src="/trico-explanation.png"
+    alt="Aide à la lecture de la légende d'une carte choroplèthe trivariée"
+    caption="Aide à la lecture de la légende d'une carte choroplèthe trivariée"
+/>
+
+Nous pouvons ainsi voir ici que les valeurs sont d'environ 40 % pour la variable 1 (ISCED 0-2), 45 % pour la variable 2 (ISCED 3-4) et 15 % pour la variable 3 (ISCED 5-8).
+
+L'utilisation de la rotation des valeurs affichées sur les axes (disponible en option) permet de faciliter la lecture des valeurs pour chaque variable, en les affichant dans le sens de lecture de la variable correspondante.
+
+
+## Exemple
+
+<ZoomImg
+    src="/example-trichoro-discrete-edu-black-banner.png"
+    alt="Exemple de carte choroplèthe trivariée (Niveau d'éducation le plus élevé - coloration en 9 classes)"
+    caption="Exemple de carte choroplèthe trivariée (Niveau d'éducation le plus élevé - coloration en 9 classes)"
+/>
+
+<ZoomImg
+    src="/example-trichoro-sextant-black-bg.png"
+    alt="Exemple de carte choroplèthe trivariée (secteurs d'activités économiques - coloration par sextant - centrage sur la moyenne)"
+    caption="Exemple de carte choroplèthe trivariée (secteurs d'activités économiques - coloration par sextant - centrage sur la moyenne)"
+/>
+
+## Limites et alternatives
 
 Les cartes choroplèthes trivariées, bien que puissantes pour visualiser des compositions, présentent des limites
 qu’il est important de prendre en compte.
@@ -36,22 +66,3 @@ Enfin, ce type de représentation suppose que les trois variables forment une co
 Si cette condition n’est pas respectée, ou si les variables n’ont pas de lien logique entre elles, la carte peut
 générer des fausses interprétations. Dans ce cas, il peut être préférable de recourir à d’autres méthodes (comparaison
 de cartes choroplèthes côte à côte, *small multiples*, etc.).
-
-## Aide à la lecture de la légende
-
-Pour aider à la lecture du diagramme ternaire, il est possible d'utiliser le schéma suivant : 
-
-
-Sur ce schéma, chaque sommet du triangle correspond à une variable pure (100 %).
-Le sens de lecture pour chaque variable est ensuite indiqué par les barres de graduation
-qui sont indiquées sur les côtés du triangle. Ainsi, pour chaque unité spatiale, la position du point à l’intérieur
-du triangle indique les proportions relatives des trois variables, et la couleur de ce point est ensuite reportée sur la carte.
-
-
-## Exemple
-
-<ZoomImg
-    src="/example-trichoro-sextant-black-bg.png"
-    alt="Exemple de carte choroplèthe trivariée (secteurs d'activités économiques - coloration par sextant)"
-    caption="Exemple de carte choroplèthe trivariée (secteurs d'activités économiques - coloration par sextant)"
-/>
