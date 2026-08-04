@@ -320,7 +320,7 @@ function BivariateChoroScatterPlot(
                 fontSize: 14,
                 stroke: 'white',
                 strokeWidth: 8,
-                fill: 'currentColor',
+                fill: 'black',
               },
             ) : null,
             Plot.ruleX([
