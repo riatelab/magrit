@@ -7,6 +7,7 @@ import { version } from '../../package.json';
 // Helpers
 import sanitizeSVG from './sanitize-svg';
 import { isNonNull } from './common';
+import { Msqrt } from './math';
 
 // Types, interfaces and enums
 import {
@@ -17,6 +18,9 @@ import {
   type LegendBase,
   type ProjectDescription,
   type ProportionalSymbolsParameters,
+  type TriChoroDiscreteOpts,
+  TricoloreScaleType,
+  type TrivariateChoroplethParameters,
 } from '../global.d';
 
 // Enum indicating the validity state of a project
@@ -92,6 +96,9 @@ export const patchProject = (
     // eslint-disable-next-line no-param-reassign
     project.version = '2.0.16';
   }
+
+  // In 2.1.1 we changed the default value of the application settings
+  // "use undo/redo"
   if (semver.lt(projectVersion, '2.1.1')) {
     console.log('Patching project to version 2.1.1');
     // eslint-disable-next-line no-param-reassign
@@ -112,7 +119,7 @@ export const patchProject = (
       }
     });
     // eslint-disable-next-line no-param-reassign
-    project.version = '2.1.1';
+    project.version = '2.1.2';
   }
 
   // In version 2.3.O we added the possibility of choosing
@@ -122,6 +129,8 @@ export const patchProject = (
     console.log('Patching project to version 2.3.0');
     // eslint-disable-next-line no-param-reassign
     project.applicationSettings.intervalClosure = 'right';
+    // eslint-disable-next-line no-param-reassign
+    project.version = '2.3.0';
   }
 
   // In version 2.3.8, we added the possibility to disable category/categories
@@ -140,6 +149,8 @@ export const patchProject = (
           });
       }
     });
+    // eslint-disable-next-line no-param-reassign
+    project.version = '2.3.8';
   }
 
   // Two breaking changes were introduced in version 2.3.14
@@ -209,6 +220,8 @@ export const patchProject = (
         }
       }
     });
+    // eslint-disable-next-line no-param-reassign
+    project.version = '2.3.14';
   }
 
   // In 2.3.16, we added the possibility to control the size of the snapping grid
@@ -219,6 +232,28 @@ export const patchProject = (
       // eslint-disable-next-line no-param-reassign
       project.applicationSettings.snappingGridSize = 10;
     }
+    // eslint-disable-next-line no-param-reassign
+    project.version = '2.3.16';
+  }
+
+  // In 2.4.0, we added trivariate choropleth but there was a bug
+  // (https://github.com/riatelab/magrit/issues/228)
+  // with how the number of classes was stored
+  if (semver.lt(projectVersion, '2.4.1')) {
+    console.log('Patching project to version 2.4.1');
+    project.layers.forEach((layer) => {
+      if (layer.representationType === 'trivariateChoropleth') {
+        const rendererParameters = layer.rendererParameters as TrivariateChoroplethParameters;
+        if (rendererParameters.colorScaleType === TricoloreScaleType.Discrete) {
+          rendererParameters.colorScaleOptions = {
+            ...rendererParameters.colorScaleOptions,
+            classes: Msqrt((rendererParameters.colorScaleOptions as TriChoroDiscreteOpts).classes),
+          };
+        }
+      }
+    });
+    // eslint-disable-next-line no-param-reassign
+    project.version = '2.4.1';
   }
   return project;
 };
