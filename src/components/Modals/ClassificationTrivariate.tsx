@@ -17,7 +17,7 @@ import { CompositionUtils, Viz } from 'tricolore';
 // Helpers
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { isFiniteNumber, unproxify } from '../../helpers/common';
-import { Msqrt } from '../../helpers/math';
+import { Mpow, Msqrt } from '../../helpers/math';
 
 // Stores
 import {
@@ -120,7 +120,7 @@ export default function ClassificationTrivariatePanel(): JSX.Element {
   ] = createSignal<4 | 9 | 16>(
     parameters.colorScaleType !== TricoloreScaleType.Discrete
       ? 9
-      : (parameters.colorScaleOptions as TriChoroDiscreteOpts).classes,
+      : Mpow((parameters.colorScaleOptions as TriChoroDiscreteOpts).classes, 2),
   );
 
   const [
@@ -209,7 +209,7 @@ export default function ClassificationTrivariatePanel(): JSX.Element {
         const params = colorScaleType() === TricoloreScaleType.Sextant
           ? { colors: sextantColors() } as TriChoroSextantOpts
           : colorScaleType() === TricoloreScaleType.Discrete
-            ? { classes: nClasses(), ...unproxify(colorScaleParams) } as TriChoroDiscreteOpts
+            ? { classes: Msqrt(nClasses()), ...unproxify(colorScaleParams) } as TriChoroDiscreteOpts
             : { ...unproxify(colorScaleParams) } as TriChoroContinuousOpts;
 
         setCurrentClassifInfo({

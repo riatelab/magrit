@@ -372,7 +372,7 @@ export default function TrivariateChoroSettings(props: PortrayalSettingsProps): 
       const params = colorScaleType() === TricoloreScaleType.Sextant
         ? { colors: sextantColors() } as TriChoroSextantOpts
         : colorScaleType() === TricoloreScaleType.Discrete
-          ? { classes: nClasses(), ...unproxify(colorScaleParams) } as TriChoroDiscreteOpts
+          ? { classes: Msqrt(nClasses()), ...unproxify(colorScaleParams) } as TriChoroDiscreteOpts
           : { ...unproxify(colorScaleParams) } as TriChoroContinuousOpts;
       const hasNoData = pts().length !== pts().filter((d) => d !== null).length;
       console.log(hasNoData);

@@ -14,7 +14,6 @@ import { CompositionUtils, type TernaryPoint, Viz } from 'tricolore';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { isFiniteNumber } from '../../helpers/common';
 import { findLayerById } from '../../helpers/layers';
-import { Msqrt } from '../../helpers/math';
 
 // Subcomponents and helpers for legend rendering
 import {
@@ -151,7 +150,7 @@ export default function legendTrivariateChoropleth(
         showLines: legend.displayLines,
         labelPosition: 'edge',
         rotateTickLabels: legend.rotateTickLabels,
-        breaks: Msqrt((layer.rendererParameters.colorScaleOptions as TriChoroDiscreteOpts).classes),
+        breaks: (layer.rendererParameters.colorScaleOptions as TriChoroDiscreteOpts).classes,
       }, dimensions);
     } else { // TricoloreScaleType.Continuous
       svg = Viz.createContinuousPlot(ptsFiltered, {
