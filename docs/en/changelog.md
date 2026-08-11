@@ -12,6 +12,11 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.4.1 (2026-08-11)
+
+- Fix map colors for trivariate choropleth maps with the "discrete" mode
+  (fixes <a href="https://github.com/riatelab/magrit/issues/228">issue 228</a>).
+
 ### 2.4.0 (2026-08-04)
 
 - Add the ability to create bivariate choropleth maps

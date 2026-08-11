@@ -12,6 +12,11 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+### 2.4.1 (2026-08-11)
+
+- Corrige la coloration de la carte pour les cartes choroplèthes trivariées lorsque le mode "discret"
+  est activé (corrige <a href="https://github.com/riatelab/magrit/issues/228">l'issue 228</a>).
+
 ### 2.4.0 (2026-08-04)
 
 - Ajout de la possibilité de réaliser des cartes choroplèthes bivariées
