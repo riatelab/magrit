@@ -26,6 +26,20 @@ It can be seen here that the values are approximately 40% for variable 1 (ISCED 
 
 Using the rotation of the values displayed on the axes (available as an option) makes it easier to read the values for each variable, by displaying them in the reading direction of the corresponding variable.
 
+## Settings for controlling colors
+
+In the "discrete" and "continuous" coloring modes, the colors are controlled by a set of parameters that enables adjusting the hue, saturation, and brightness of the colors assigned to each of the three components.
+It is therefore not possible to directly choose the colors for the three components, but rather to define a coloring scheme that will be applied to triangle.
+This ensures consistency in the data representation (same chroma and same brightness) and avoids arbitrary color choices that could mislead the interpretation of the results.
+
+As such, the settings values used to control colors are as follows:
+
+- Hue: Defines the hue of the first component (p1 - left corner). The hues of the other two components are automatically set to +120° (for p2 - top corner) and +240° (for p3 - right corner) on the color wheel, forming a triadic scheme.
+- Chroma: Controls the maximum saturation/intensity of the colors at the corners of the triangle. The higher this value, the more vivid and distinct the colors.
+- Lightness: Determines the overall brightness of the palette. Affects all colors in the triangle.
+- Contrast: Controls the difference in brightness and saturation between the center (balanced mix) and the corners (pure components). Higher contrast makes the corners more distinct from the center.
+- Spread: Controls the extent of the color gradient around the center. A higher value concentrates color differentiation near the center.
+
 ## Example
 
 <ZoomImg

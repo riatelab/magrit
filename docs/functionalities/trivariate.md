@@ -36,6 +36,19 @@ Nous pouvons ainsi voir ici que les valeurs sont d'environ 40 % pour la variable
 
 L'utilisation de la rotation des valeurs affichées sur les axes (disponible en option) permet de faciliter la lecture des valeurs pour chaque variable, en les affichant dans le sens de lecture de la variable correspondante.
 
+## Paramètres pour contrôler les couleurs
+
+Dans les modes de coloration "discret" et "continu", les couleurs sont contrôlées par un ensemble de paramètres permettant de régler la teinte, la saturation et la luminosité des couleurs attribuées à chacune des trois composantes.
+Il n'est donc pas possible de choisir directement les couleurs des trois composantes, mais plutôt de définir un schéma de coloration qui sera appliqué au triangle.
+Cela garantit la cohérence de la représentation des données (même intensité chromatique et même luminosité) et évite les choix de couleurs arbitraires qui pourraient induire en erreur lors de l'interprétation des résultats.
+
+Ainsi, les valeurs des paramètres utilisés pour contrôler les couleurs sont les suivantes :
+
+- *Hue* (teinte) : définit la teinte du premier composant (p1 – coin gauche). Les teintes des deux autres composants sont automatiquement fixées à +120° (pour p2 – coin supérieur) et +240° (pour p3 – coin droit) sur le cercle chromatique, formant ainsi un schéma triadique.
+- *Chroma* (saturation / intensité chromatique) : contrôle la saturation/intensité maximale des couleurs aux sommets du triangle. Plus cette valeur est élevée, plus les couleurs sont vives et distinctes.
+- *Lightness* (Luminosité) : détermine la luminosité globale de la palette. Elle affecte toutes les couleurs du triangle.
+- *Contrast* (Contraste) : contrôle la différence de luminosité et de saturation entre le centre (mélange équilibré) et les coins (composantes pures). Un contraste plus élevé rend les coins plus distincts du centre.
+- *Spread* (Étendue) : contrôle l'étendue du dégradé de couleurs autour du centre. Une valeur plus élevée concentre la différenciation des couleurs près du centre.
 
 ## Exemple
 
