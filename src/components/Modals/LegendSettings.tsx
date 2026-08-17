@@ -44,6 +44,7 @@ import InputFieldText from '../Inputs/InputText.tsx';
 // Types / Interfaces / Enums
 import {
   type BivariateChoroplethLegend,
+  type BivariateChoroplethParameters,
   type BivariateChoroplethScatterplotLegend,
   type CategoricalChoroplethBarchartLegend,
   type CategoricalChoroplethLegend,
@@ -69,9 +70,10 @@ import {
   type ProportionalSymbolsParameters,
   type ProportionalSymbolsRatioParameters,
   type TrivariateChoroplethLegend,
+  type TrivariateChoroplethParameters,
+  type WaffleLegend,
   LegendType,
   RepresentationType,
-  WaffleLegend,
 } from '../../global.d';
 
 /**
@@ -1554,6 +1556,22 @@ function makeSettingsBivariateChoropleth(
     setDisplayMoreOptions,
   ] = createSignal<boolean>(false);
 
+  const refLayerDescription = findLayerById(
+    layersDescriptionStore.layers,
+    legend.layerId,
+  )!;
+
+  const rdparams = (refLayerDescription.rendererParameters as BivariateChoroplethParameters);
+
+  const values1 = refLayerDescription
+    .data
+    .features.map((f) => f.properties![rdparams.variable1.variable] as number);
+  const values2 = refLayerDescription
+    .data
+    .features.map((f) => f.properties![rdparams.variable2.variable] as number);
+
+  const hasNoData = (values1.concat(values2)).some((v) => !isFiniteNumber(v));
+
   return <>
     <FieldText legend={legend} LL={LL} role={'title'}/>
     <FieldText legend={legend} LL={LL} role={'subtitle'}/>
@@ -1572,6 +1590,24 @@ function makeSettingsBivariateChoropleth(
         debouncedUpdateProps(legend.id, ['variable2Label'], v);
       }}
     />
+    <Show when={hasNoData}>
+      <InputFieldCheckbox
+        label={LL().Legend.Modal.NoDataBox()}
+        checked={legend.noDataBox}
+        onChange={(v) => {
+          debouncedUpdateProps(legend.id, ['noDataBox'], v);
+        }}
+      />
+      <Show when={legend.noDataBox}>
+        <InputFieldText
+          label={LL().Legend.Modal.NoDataLabel()}
+          value={legend.noDataLabel}
+          onChange={(v) => {
+            debouncedUpdateProps(legend.id, ['noDataLabel'], v);
+          }}
+        />
+      </Show>
+    </Show>
     <InputFieldNumber
       label={LL().Legend.Modal.BoxSize()}
       value={legend.boxWidth}
@@ -1655,6 +1691,26 @@ function makeSettingsTrivariateChoropleth(
     setDisplayMoreOptions,
   ] = createSignal<boolean>(false);
 
+  const refLayerDescription = findLayerById(
+    layersDescriptionStore.layers,
+    legend.layerId,
+  )!;
+
+  const rdparams = (refLayerDescription.rendererParameters as TrivariateChoroplethParameters);
+
+  const values1 = refLayerDescription
+    .data
+    .features.map((f) => f.properties![rdparams.variable1] as number);
+  const values2 = refLayerDescription
+    .data
+    .features.map((f) => f.properties![rdparams.variable2] as number);
+
+  const values3 = refLayerDescription
+    .data
+    .features.map((f) => f.properties![rdparams.variable3] as number);
+
+  const hasNoData = (values1.concat(values2).concat(values3)).some((v) => !isFiniteNumber(v));
+
   return <>
     <FieldText legend={legend} LL={LL} role={'title'}/>
     <FieldText legend={legend} LL={LL} role={'subtitle'}/>
@@ -1680,6 +1736,24 @@ function makeSettingsTrivariateChoropleth(
         debouncedUpdateProps(legend.id, ['axisLabels', 2], `${v} ⟶`);
       }}
     />
+    <Show when={hasNoData}>
+      <InputFieldCheckbox
+        label={LL().Legend.Modal.NoDataBox()}
+        checked={legend.noDataBox}
+        onChange={(v) => {
+          debouncedUpdateProps(legend.id, ['noDataBox'], v);
+        }}
+      />
+      <Show when={legend.noDataBox}>
+        <InputFieldText
+          label={LL().Legend.Modal.NoDataLabel()}
+          value={legend.noDataLabel}
+          onChange={(v) => {
+            debouncedUpdateProps(legend.id, ['noDataLabel'], v);
+          }}
+        />
+      </Show>
+    </Show>
     <InputFieldNumber
       label={LL().Legend.Modal.Width()}
       value={legend.width}
