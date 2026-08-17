@@ -234,14 +234,14 @@ export default function legendTrivariateChoropleth(
         <rect
           fill={layer.rendererParameters.noDataColor}
           x={0}
-          y={legend.width - defaultSpacing * 2}
+          y={legend.width - defaultSpacing}
           width={40}
           height={30}
           stroke={layer.strokeColor}
         />
         <text
           x={40 + defaultSpacing}
-          y={legend.width - (defaultSpacing * 2) + 15}
+          y={legend.width - defaultSpacing + 15}
           text-anchor="start"
           dominant-baseline="middle"
         >
