@@ -12,6 +12,14 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.4.2 (unreleased)
+
+- Add an option to modify the text of the "no data" box in the legend settings of bivariate and trivariate choropleth maps
+  (fixes <a href="https://github.com/riatelab/magrit/issues/229">issue 229</a>).
+
+- Add a section in the documentation of trivariate choropleth maps regarding the parameters used to control
+  colors in the "discrete" and "continuous" modes (fixes <a href="https://github.com/riatelab/magrit/issues/229">issue 229</a>).
+
 ### 2.4.1 (2026-08-11)
 
 - Fix map colors for trivariate choropleth maps with the "discrete" mode
