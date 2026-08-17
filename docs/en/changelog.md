@@ -12,7 +12,7 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
-### 2.4.2 (unreleased)
+### 2.4.2 (2026-08-17)
 
 - Add an option to modify the text of the "no data" box in the legend settings of bivariate and trivariate choropleth maps
   (fixes <a href="https://github.com/riatelab/magrit/issues/229">issue 229</a>).

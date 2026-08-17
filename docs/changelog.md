@@ -12,7 +12,7 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
-### 2.4.2 (unreleased)
+### 2.4.2 (2026-08-17)
 
 - Ajout d'une option pour modifier le texte de la boite "no data" dans les paramètres de légendes des cartes choroplèthes
   bivariées et trivariées (corrige <a href="https://github.com/riatelab/magrit/issues/229">l'issue 229</a>).
