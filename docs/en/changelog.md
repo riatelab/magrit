@@ -20,6 +20,8 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 - Add a section in the documentation of trivariate choropleth maps regarding the parameters used to control
   colors in the "discrete" and "continuous" modes (fixes <a href="https://github.com/riatelab/magrit/issues/229">issue 229</a>).
 
+- Slightly improve position of no data box for trivariate choropleth map legends.
+
 ### 2.4.1 (2026-08-11)
 
 - Fix map colors for trivariate choropleth maps with the "discrete" mode

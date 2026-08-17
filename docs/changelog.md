@@ -20,6 +20,8 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 - Ajout d'une section dans la documentation des cartes choroplèthes trivariées à propos des paramètres utilisées pour contrôler
   les couleurs dans les modes "discret" et "continu" (corrige <a href="https://github.com/riatelab/magrit/issues/229">l'issue 229</a>).
 
+- Améliore légèrement le positionnement de la boite "No data" pour les légendes des carte choroplèthes trivariées.
+
 ### 2.4.1 (2026-08-11)
 
 - Corrige la coloration de la carte pour les cartes choroplèthes trivariées lorsque le mode "discret"
