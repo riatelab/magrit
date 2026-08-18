@@ -1,15 +1,16 @@
 import {
   getAsymmetricDivergingColors, getPalette, getPalettes,
   getPaletteNumbers, getSequentialColors,
+  type Palette,
 } from 'dicopal';
 import chroma from 'chroma-js';
 
 // Helpers
 import d3 from './d3-custom';
 import { Mpow } from './math';
-
-import { CustomPalette } from '../global';
 import * as PaletteThumbnails from './palette-thumbnail';
+
+import type { CustomPalette } from '../global';
 
 export function decimalToHex(d: number, padding = 0): string {
   let hex = d.toString(16);
@@ -143,14 +144,14 @@ export function interpolateColors(
 }
 
 // eslint-disable-next-line arrow-body-style
-const filterUnwantedSeqPalettes = (d) => {
+const filterUnwantedSeqPalettes = (d: Palette) => {
   return !(d.provider === 'cmocean' && d.name === 'Gray')
     && !(d.provider === 'cmocean' && d.name === 'Oxy')
     && !(d.provider === 'scientific' && d.name === 'Oleron');
 };
 
 // eslint-disable-next-line arrow-body-style
-const filterUnwantedDivPalettes = (d) => {
+const filterUnwantedDivPalettes = (d: Palette) => {
   return !(d.provider === 'lightbartlein' && d.name === 'BrownBlue12');
 };
 
@@ -322,7 +323,7 @@ function deltaE(c1: LabColor, c2: LabColor) {
  */
 export function bestContrastColor(
   palette: string[],
-  candidates = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#a65628'],
+  candidates: string[] = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#a65628'],
 ): string {
   const paletteLab = palette.map(hexToLab);
 
