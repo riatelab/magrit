@@ -335,7 +335,11 @@ interface CustomPalette {
     centralClass: boolean,
     balanced: boolean,
     // customCentralClass?: string,
-  }
+  },
+  // Option for bivariate palettes that are created by the user
+  bivariateOptions?: {
+    blendMode: 'multiply' | 'darken',
+  },
 }
 
 interface ClassificationParameters {

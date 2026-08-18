@@ -21,7 +21,7 @@ import {
   bivariatePalettes,
   generateBivariateColors,
 } from '../../helpers/color';
-import { Mmin, round } from '../../helpers/math';
+import { round } from '../../helpers/math';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -286,6 +286,11 @@ export default function ClassificationBivariatePanel(): JSX.Element {
     parameters.palette.colors[6],
     parameters.palette.colors[2],
   ]);
+  // How to blend colors for custom bivariate palettes created by the user ?
+  const [
+    blendingMode,
+    setBlendingMode,
+  ] = createSignal<'darken' | 'multiply'>(parameters.palette.bivariateOptions?.blendMode ?? 'multiply');
   // - the colors that compose the palette
   const paletteColors = createMemo<CustomPalette>(() => {
     let palette: CustomPalette;
@@ -307,7 +312,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
         customBaseColors()[0],
         3,
         'lab',
-        'multiply',
+        blendingMode(),
       );
       palette = {
         id: `custom-bivariate-${customBaseColors()[0]}-${customBaseColors()[1]}-${customBaseColors()[2]}`,
@@ -317,6 +322,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
         provenance: 'user',
         reversed: false,
         number: 9,
+        bivariateOptions: { blendMode: blendingMode() },
       };
     }
 
@@ -651,6 +657,20 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                       updateClassificationParameters();
                     }}
                   />
+                  <div style={{ width: '60%', margin: 'auto' }} class="mt-4">
+                    <InputFieldSelect
+                      label={'Blending mode'}
+                      onChange={(v) => {
+                        setBlendingMode(v as 'darken' | 'multiply');
+                        updateClassificationParameters();
+                      }}
+                      value={blendingMode()}
+                      width={'140px'}
+                    >
+                      <option value={'multiply'}>Multiply</option>
+                      <option value={'darken'}>Darken</option>
+                    </InputFieldSelect>
+                  </div>
                 </Show>
               </div>
             </div>
