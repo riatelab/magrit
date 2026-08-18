@@ -20,3 +20,8 @@ Ce type de représentation peut également être utilisé pour représenter des 
     caption="Carte choroplèthe catégorielle des communes de la région Île-de-France, colorées selon leur département d'appartenance (+ diagramme en barres)"
 />
 
+<ZoomImg
+    src="/example-ecoulement-petit-cours-deau-2.png"
+    alt="Carte choroplèthe catégorielle (implantation ponctuelle) de l'écoulement des petits cours d'eau de France Métropolitaine, colorés selon leur type d'écoulement"
+    caption="Carte choroplèthe catégorielle (implantation ponctuelle) de l'écoulement des petits cours d'eau de France Métropolitaine, colorés selon leur type d'écoulement"
+/>

@@ -61,3 +61,9 @@ All the map examples shown here are directly exported from Magrit and have not b
     alt="Diabetes and obesity by county in the United States"
     caption="Diabetes and obesity by county in the United States"
 />
+
+<ZoomImg
+    src="/example-ecoulement-petit-cours-deau-2.png"
+    alt="Flow of small watercourses in Metropolitan France on August 1, 2026, colored according to their type of flow"
+    caption="Flow of small watercourses in Metropolitan France on August 1, 2026, colored according to their type of flow"
+/>

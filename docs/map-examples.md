@@ -63,3 +63,9 @@ dans un logiciel de dessin vectoriel.
     alt="Diabetes and obesity by county in the United States"
     caption="Diabetes and obesity by county in the United States"
 />
+
+<ZoomImg
+    src="/example-ecoulement-petit-cours-deau-2.png"
+    alt="Écoulement des petits cours d'eau de France Métropolitaine au 1er août 2026, colorés selon leur type d'écoulement"
+    caption="Écoulement des petits cours d'eau de France Métropolitaine au 1er août 2026, colorés selon leur type d'écoulement"
+/>

@@ -19,3 +19,9 @@ This type of representation can also be used to represent data grouped into clas
     alt="Categorical choropleth map of the communes of the Île-de-France region, colored according to their department of origin (+ bar chart)"
     caption="Categorical choropleth map of the communes of the Île-de-France region, colored according to their department of origin (+ bar chart)"
 />
+
+<ZoomImg
+    src="/example-ecoulement-petit-cours-deau-2.png"
+    alt="Categorical choropleth map (point implantation) of the flow of small watercourses in Metropolitan France, colored according to their type of flow"
+    caption="Categorical choropleth map (point implantation) of the flow of small watercourses in Metropolitan France, colored according to their type of flow"
+/>
