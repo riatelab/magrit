@@ -192,7 +192,6 @@ export default function ClassificationBivariatePanel(): JSX.Element {
     setCurrentClassifInfo(newParameters);
     setCustomBreaksVar1(breaks1);
     setCustomBreaksVar2(breaks2);
-    console.log('Updated bivariate classification parameters:', newParameters);
   }; /* eslint-enable @typescript-eslint/no-use-before-define */
 
   const { LL } = useI18nContext();
@@ -234,8 +233,6 @@ export default function ClassificationBivariatePanel(): JSX.Element {
 
   const allValuesSuperiorToZeroVar1 = filteredSeriesVar1.every((d) => d > 0);
   const allValuesSuperiorToZeroVar2 = filteredSeriesVar2.every((d) => d > 0);
-
-  console.log('Bivariate classification parameters:', parameters);
 
   // Signals for the current component:
   // - the classification for the variable 1
