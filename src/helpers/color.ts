@@ -210,6 +210,24 @@ export const bivariatePalettes = [
       '#9972af', '#976b82', '#804d36',
     ],
   },
+  {
+    name: 'Rose & Teal',
+    provider: 'Staridas Geography',
+    colors: [
+      '#FAEEC6', '#98B8A0', '#24837B',
+      '#E7A7AF', '#9A7FA1', '#435892',
+      '#CE5D97', '#913E9F', '#4125A6',
+    ],
+  },
+  {
+    name: 'Coral & Blue',
+    provider: 'Staridas Geography',
+    colors: [
+      '#E6E4D9', '#9DB3CC', '#4385BE',
+      '#EDAB9A', '#C4869F', '#9962A1',
+      '#E8705F', '#D94F74', '#C72286',
+    ],
+  },
 ].map((p) => ({
   id: `${p.name}-bivariate`,
   name: p.provider ? `${p.name} (${p.provider})` : p.name,
