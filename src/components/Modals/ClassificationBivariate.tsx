@@ -624,7 +624,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
             <div>
               <DropdownMenu
                 id={'dropdown-bivariate-palette'}
-                style={{ width: '260px', 'margin-bottom': '18px' }}
+                style={{ width: '300px', 'margin-bottom': '18px' }}
                 entries={paletteMenuEntries}
                 defaultEntry={
                   paletteMenuEntries
@@ -635,7 +635,7 @@ export default function ClassificationBivariatePanel(): JSX.Element {
                   setColorScheme(value);
                   updateClassificationParameters();
                 }}
-                maxHeight={'20vh'}
+                maxHeight={'16vh'}
               />
               <div style={{ width: '100%', 'text-align': 'center', 'margin-bottom': '12px' }}>
                 <BivariateLegendPreview
