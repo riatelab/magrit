@@ -264,11 +264,9 @@ export const generateBivariateColors = (
 ) => {
   const scale1 = chroma.scale([color1, lightest])
     .mode(colorMode)
-    .correctLightness()
     .colors(rows);
   const scale2 = chroma.scale([color2, lightest])
     .mode(colorMode)
-    .correctLightness()
     .colors(rows);
 
   const data = [];
