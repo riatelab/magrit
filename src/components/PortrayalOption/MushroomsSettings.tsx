@@ -239,13 +239,13 @@ export default function MushroomsSettings(
   // Reactive variable that contains the values of the target variable
   // for the top part of the mushroom.
   const valuesTop = createMemo(() => layerDescription.data.features
-    .map((feature) => feature.properties[targetVariableTop()])
-    .filter((value) => isFiniteNumber(value))
+    .map((feature) => feature.properties![targetVariableTop()])
+    .filter((value) => isFiniteNumber(value) && value !== 0)
     .map((value: any) => +value) as number[]);
 
   const valuesBottom = createMemo(() => layerDescription.data.features
-    .map((feature) => feature.properties[targetVariableBottom()])
-    .filter((value) => isFiniteNumber(value))
+    .map((feature) => feature.properties![targetVariableBottom()])
+    .filter((value) => isFiniteNumber(value) && value !== 0)
     .map((value: any) => +value) as number[]);
 
   // Reactive variables that contains the extent (min and max) of the target variables
@@ -265,12 +265,6 @@ export default function MushroomsSettings(
       layerName: layerDescription.name,
     }) as string,
   );
-  // const [
-  //   symbolType,
-  //   setSymbolType,
-  // ] = createSignal<ProportionalSymbolsSymbolType.circle | ProportionalSymbolsSymbolType.square>(
-  //   'circle',
-  // );
   const [
     refSymbolSizeTop,
     setRefSymbolSizeTop,

@@ -4,6 +4,7 @@ import {
   For,
   JSX,
   onMount,
+  Show,
 } from 'solid-js';
 
 // GeoJSON Types
@@ -87,34 +88,38 @@ export default function mushroomRenderer(
             // @ts-expect-error because use:bind-data isn't a property of this element
             use:bindData={feature}
           >
-            <path
-              fill={layerDescription.rendererParameters.top.color}
-              mgt:size-value={sizeTop()}
-              d={
-                semiCirclePath(
-                  sizeTop(),
-                  projectedCoords()[0],
-                  projectedCoords()[1],
-                  'top',
-                )
-              }
-              // @ts-expect-error because use:bind-data isn't a property of this element
-              use:bindData={feature}
-            ></path>
-            <path
-              fill={layerDescription.rendererParameters.bottom.color}
-              mgt:size-value={sizeBottom()}
-              d={
-                semiCirclePath(
-                  sizeBottom(),
-                  projectedCoords()[0],
-                  projectedCoords()[1],
-                  'bottom',
-                )
-              }
-              // @ts-expect-error because use:bind-data isn't a property of this element
-              use:bindData={feature}
-            ></path>
+            <Show when={feature.properties![layerDescription.rendererParameters.top.variable]}>
+              <path
+                fill={layerDescription.rendererParameters.top.color}
+                mgt:size-value={sizeTop()}
+                d={
+                  semiCirclePath(
+                    sizeTop(),
+                    projectedCoords()[0],
+                    projectedCoords()[1],
+                    'top',
+                  )
+                }
+                // @ts-expect-error because use:bind-data isn't a property of this element
+                use:bindData={feature}
+              ></path>
+            </Show>
+            <Show when={feature.properties![layerDescription.rendererParameters.bottom.variable]}>
+              <path
+                fill={layerDescription.rendererParameters.bottom.color}
+                mgt:size-value={sizeBottom()}
+                d={
+                  semiCirclePath(
+                    sizeBottom(),
+                    projectedCoords()[0],
+                    projectedCoords()[1],
+                    'bottom',
+                  )
+                }
+                // @ts-expect-error because use:bind-data isn't a property of this element
+                use:bindData={feature}
+              ></path>
+            </Show>
           </g>;
         }
       }
