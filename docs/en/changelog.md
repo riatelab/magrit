@@ -12,6 +12,14 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 :::
 
+### 2.4.3 (unreleased)
+
+- Add an option to choose the color-blending method for the palettes of bivariate choropleth maps.
+
+- Replace ALENA (NAFTA) by ACEUM (USMCA) in the `world_209` dataset.
+
+- Improve handling of zero/null values in mushroom maps (fixes <a href="https://github.com/riatelab/magrit/issues/232">issue 232</a>).
+
 ### 2.4.2 (2026-08-17)
 
 - Add an option to modify the text of the "no data" box in the legend settings of bivariate and trivariate choropleth maps

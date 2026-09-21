@@ -12,6 +12,14 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 :::
 
+### 2.4.3 (unreleased)
+
+- Ajout d'une option pour choisir la méthode de mélange des couleurs pour les palettes des cartes choroplèthes bivariées.
+
+- Remplacement de l'ALENA (NAFTA) par l'ACEUM (USMCA) dans le jeu de données `world_209`.
+
+- Améliore la gestion des valeurs nulles / zéros pour les cartes en champignons (corrige <a href="https://github.com/riatelab/magrit/issues/232">l'issue 232</a>).
+
 ### 2.4.2 (2026-08-17)
 
 - Ajout d'une option pour modifier le texte de la boite "no data" dans les paramètres de légendes des cartes choroplèthes
@@ -20,7 +28,7 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 - Ajout d'une section dans la documentation des cartes choroplèthes trivariées à propos des paramètres utilisées pour contrôler
   les couleurs dans les modes "discret" et "continu" (corrige <a href="https://github.com/riatelab/magrit/issues/229">l'issue 229</a>).
 
-- Améliore légèrement le positionnement de la boite "No data" pour les légendes des carte choroplèthes trivariées.
+- Améliore légèrement le positionnement de la boite "No data" pour les légendes des cartes choroplèthes trivariées.
 
 ### 2.4.1 (2026-08-11)
 
