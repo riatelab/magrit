@@ -55,6 +55,7 @@ const en = {
   },
   HeaderApp: {
     NightDayMode: 'Night / Day mode',
+    ProjectNamePlaceholder: 'Enter the project name',
     ImportProjet: 'Import a Magrit project',
     SaveProject: 'Save project',
     NewProject: 'New project',

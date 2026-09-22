@@ -124,6 +124,10 @@ type RootTranslation = {
 		 */
 		NightDayMode: string
 		/**
+		 * E​n​t​e​r​ ​t​h​e​ ​p​r​o​j​e​c​t​ ​n​a​m​e
+		 */
+		ProjectNamePlaceholder: string
+		/**
 		 * I​m​p​o​r​t​ ​a​ ​M​a​g​r​i​t​ ​p​r​o​j​e​c​t
 		 */
 		ImportProjet: string
@@ -6541,6 +6545,10 @@ export type TranslationFunctions = {
 		 * Night / Day mode
 		 */
 		NightDayMode: () => LocalizedString
+		/**
+		 * Enter the project name
+		 */
+		ProjectNamePlaceholder: () => LocalizedString
 		/**
 		 * Import a Magrit project
 		 */

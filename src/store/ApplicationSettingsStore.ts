@@ -44,6 +44,9 @@ const getUserLocale = () => {
 // A bunch of (global) settings for the application
 // (this is not the same as GlobalStore, which contains the state of the application)
 export type ApplicationSettingsStoreType = {
+  // The name of the current project (can stay empty/undefined, but otherwise it is used
+  // for naming the various exports that can be made by the app)
+  projectName: string | undefined;
   // The default color scheme for the Choropleth representation
   defaultColorScheme: string,
   // The default "no data" color for the Choropleth representation
@@ -100,6 +103,7 @@ const [
   applicationSettingsStore,
   setApplicationSettingsStore,
 ] = createStore({
+  projectName: undefined,
   defaultColorScheme: 'YlOrRd',
   defaultNoDataColor: '#ffffff',
   zoomBehavior: ZoomBehavior.Redraw,

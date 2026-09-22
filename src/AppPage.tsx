@@ -22,7 +22,7 @@ import { useI18nContext } from './i18n/i18n-solid';
 import { isLocale } from './i18n/i18n-util';
 import { loadLocale } from './i18n/i18n-util.sync';
 import { toggleDarkMode } from './helpers/darkmode';
-import { clickLinkFromBlob } from './helpers/exports';
+import { cleanOutputName, clickLinkFromBlob } from './helpers/exports';
 import { draggedElementsAreFiles, droppedElementsAreFiles, prepareFilterAndStoreFiles } from './helpers/fileUpload';
 import { setHtmlLang } from './helpers/lang';
 import { round } from './helpers/math';
@@ -494,7 +494,12 @@ const AppPage: () => JSX.Element = () => {
         const projectObj = prepareExportProject();
         const serializedProject = JSON.stringify(projectObj, null, 0);
         const blob = new Blob([serializedProject], { type: 'application/json' });
-        return clickLinkFromBlob(blob, 'export-project.mjson')
+        const fileName = cleanOutputName(
+          applicationSettingsStore.projectName || 'export-project',
+          'mjson',
+          'export-project',
+        );
+        return clickLinkFromBlob(blob, fileName)
           .finally(() => {
             setLoading(false);
           });

@@ -24,6 +24,7 @@ import { mapStore } from '../../store/MapStore';
 import DropdownMenu from '../DropdownMenu.tsx';
 import InputFieldCheckbox from '../Inputs/InputCheckbox.tsx';
 import InputFieldNumber from '../Inputs/InputNumber.tsx';
+import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 const noCrsFormats = ['GeoJSON', 'CSV', 'KML', 'TopoJSON'];
 
@@ -204,7 +205,8 @@ export default function ExportSection(): JSX.Element {
             onClick={ async () => {
               setLoading(true, 'ExportPreparation');
               await yieldOrContinue('smooth');
-              await exportMapToSvg('export.svg', clipCurrentExtentChecked());
+              const fileName = `${applicationSettingsStore.projectName || 'export'}`;
+              await exportMapToSvg(fileName, clipCurrentExtentChecked());
               setLoading(false, 'ExportPreparation');
             }}
             class="button is-success"
@@ -255,7 +257,8 @@ export default function ExportSection(): JSX.Element {
               setLoading(true, 'ExportPreparation');
               await yieldOrContinue('smooth');
               const scaleFactor = exportHeight() / mapStore.mapDimensions.height;
-              await exportMapToPng('export.png', scaleFactor);
+              const fileName = `${applicationSettingsStore.projectName || 'export'}`;
+              await exportMapToPng(fileName, scaleFactor);
               setLoading(false, 'ExportPreparation');
             }}
             class="button is-success"

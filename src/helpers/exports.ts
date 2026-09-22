@@ -39,28 +39,46 @@ const getMapDimension = (): { height: number, width: number } => ({
  *
  * @param {string} outputName
  * @param {string} extension
+ * @param {string} fallbackName
  * @returns {string}
  */
-const cleanOutputName = (outputName: string, extension: string) => {
-  // Remove any extension from the output name
-  const newName = outputName.toLowerCase().indexOf(extension) > -1
-    ? outputName.substring(0, outputName.lastIndexOf('.'))
-    : outputName;
+export const cleanOutputName = (
+  outputName: string,
+  extension: string,
+  fallbackName: string = 'export',
+): string => {
+  // Normalize the output name to remove any accentuated characters / diacritics
+  let newName = outputName.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-  // Remove any invalid characters from the output name and ensure it is not too long
-  const regexpName = /^[().a-z0-9_-]+$/i;
-  if (regexpName.test(newName) && newName.length < 250) {
-    return `${newName}.${extension}`;
+  // Replace ligatures with their corresponding characters
+  // (not handled by the previous normalization)
+  newName = newName.replace(/œ/g, 'oe').replace(/Œ/g, 'OE');
+
+  // Replace spaces with underscores
+  newName = newName.replace(/\s+/g, '_');
+
+  // Remove any character that is not a letter, a number, an underscore, a hyphen, or a dot
+  newName = newName.replace(/[^a-zA-Z0-9._-]+/g, '');
+
+  // Avoid underscore repetition (e.g., "my__file" becomes "my_file"),
+  // and clean up leading/trailing underscores
+  newName = newName.replace(/_+/g, '_').replace(/^[_-]+|[_-]+$/g, '');
+
+  // Ensure it is not too long, otherwise we truncate it to 100 characters
+  if (newName.length > 100) {
+    newName = newName.substring(0, 100);
+  } else if (newName.length === 0) {
+    // If the name is empty, we use a fallback name
+    newName = fallbackName;
   }
 
-  // Otherwise, return a default name
-  return `export.${extension}`;
+  // Add the extension
+  return `${newName}.${extension}`;
 };
 
 /**
- * Reused from Magrit source code (https://github.com/riatelab/magrit/blob/e91931fd4ed72a919f995ef24707c7593e4482a8/client/js/map_export.js#L140),
+ * Reused from Magrit v1 source code (https://github.com/riatelab/magrit/blob/e91931fd4ed72a919f995ef24707c7593e4482a8/client/js/map_export.js#L140),
  * originally from http://stackoverflow.com/a/26047748/5050917.
- *
  */
 function changeResolution(canvas: HTMLCanvasElement, scaleFactor: number) {
   // Set up CSS size if it's not set up already

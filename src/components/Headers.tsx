@@ -11,7 +11,7 @@ import {
 import { ImUndo, ImRedo } from 'solid-icons/im';
 
 // Stores
-import { applicationSettingsStore } from '../store/ApplicationSettingsStore';
+import { applicationSettingsStore, setApplicationSettingsStore } from '../store/ApplicationSettingsStore';
 import { stateStackStore } from '../store/stateStackStore';
 
 // Helpers
@@ -65,7 +65,24 @@ export default function HeaderBarApp(): JSX.Element {
       <div class="navbar-start">
       </div>
       <div class="navbar-end">
-        <div class="navbar-item">
+        <div class="navbar-item" style={{ gap: '.5rem' }}>
+          <input
+            class="input"
+            type="text"
+            value={applicationSettingsStore.projectName ? applicationSettingsStore.projectName : ''}
+            placeholder={LL().HeaderApp.ProjectNamePlaceholder()}
+            onKeyUp={(e) => {
+              setApplicationSettingsStore('projectName', e.currentTarget.value);
+            }}
+          />
+          <div
+            class="vertical-divider"
+            style={{
+              width: '1px',
+              height: '2.4em',
+              background: 'var(--bulma-border)',
+            }}
+          ></div>
           <Show when={applicationSettingsStore.useUndoRedo}>
             <button
               class="button button-header-bar"
@@ -76,8 +93,6 @@ export default function HeaderBarApp(): JSX.Element {
             >
               <ImUndo size={'1.5em'}/>
             </button>
-          </Show>
-          <Show when={applicationSettingsStore.useUndoRedo}>
             <button
               class="button button-header-bar"
               id="button-redo"
@@ -87,8 +102,15 @@ export default function HeaderBarApp(): JSX.Element {
             >
               <ImRedo size={'1.5em'}/>
             </button>
+            <div
+              class="vertical-divider"
+              style={{
+                width: '1px',
+                height: '2.4em',
+                background: 'var(--bulma-border)',
+              }}
+            ></div>
           </Show>
-          <p style={{ margin: '1em' }}></p>
           <button
             class="button button-header-bar"
             id="button-new-project"

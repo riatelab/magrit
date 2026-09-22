@@ -55,6 +55,7 @@ const es = {
   },
   HeaderApp: {
     NightDayMode: 'Modo Noche / Día',
+    ProjectNamePlaceholder: 'Inserte el nombre del proyecto',
     ImportProjet: 'Importar un proyecto Magrit',
     SaveProject: 'Guardar el proyecto',
     NewProject: 'Nuevo proyecto',
