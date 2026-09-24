@@ -74,6 +74,8 @@ export default function HeaderBarApp(): JSX.Element {
             onKeyUp={(e) => {
               setApplicationSettingsStore('projectName', e.currentTarget.value);
             }}
+            style={{ width: '25em' }}
+            title={LL().HeaderApp.ProjectNamePlaceholder()}
           />
           <div
             class="vertical-divider"
