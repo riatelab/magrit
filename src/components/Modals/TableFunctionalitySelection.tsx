@@ -76,7 +76,7 @@ function CardFunctionality(
   >
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
       <p class="card-header-title">
-        <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+        <VsServerProcess style={{ margin: '0 0.5em 0.5em 0.25em', width: '2em', height: '2em' }} />
         {
           /* @ts-expect-error We know the name is a key of FunctionalityTypes */
           LL().FunctionalitiesSection.FunctionalityTypes[pDesc.name]()

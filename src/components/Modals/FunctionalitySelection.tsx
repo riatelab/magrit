@@ -53,7 +53,7 @@ import { AnalysisOperationType, ProcessingOperationType, RepresentationType } fr
 // Styles
 import '../../styles/FunctionalitySelection.css';
 
-const functionalityDescriptions: Partial<FunctionalityDescription>[] = [
+const functionalityDescriptions: FunctionalityDescription[] = [
   {
     name: 'Choropleth',
     type: RepresentationType.choropleth,
@@ -136,9 +136,9 @@ const functionalityDescriptions: Partial<FunctionalityDescription>[] = [
   ...p,
   enabled: false,
   // eslint-disable-next-line no-nested-ternary
-  category: Object.values(AnalysisOperationType).includes(p.type)
+  category: Object.values(AnalysisOperationType).includes(p.type as never)
     ? 'AnalysisOperation'
-    : Object.values(ProcessingOperationType).includes(p.type)
+    : Object.values(ProcessingOperationType).includes(p.type as never)
       ? 'ProcessingOperation'
       : 'Representation',
 }));
@@ -151,9 +151,9 @@ function CardFunctionality(
 ): JSX.Element {
   const { LL } = useI18nContext();
   // eslint-disable-next-line no-nested-ternary
-  const col = Object.values(AnalysisOperationType).includes(pDesc.type)
+  const col = Object.values(AnalysisOperationType).includes(pDesc.type as never)
     ? 'var(--bulma-warning)'
-    : Object.values(ProcessingOperationType).includes(pDesc.type)
+    : Object.values(ProcessingOperationType).includes(pDesc.type as never)
       ? 'var(--bulma-danger)'
       : 'var(--bulma-success)';
   return <div
@@ -163,6 +163,7 @@ function CardFunctionality(
       'is-disabled': !pDesc.enabled,
     }}
     style={{
+      height: '100%',
       'border-left': `solid 4px ${col}`,
       display: pDesc.display ? undefined : 'none',
     }}
@@ -187,24 +188,30 @@ function CardFunctionality(
     tabindex={pDesc.enabled ? 0 : undefined}
   >
     <header class="card-header" style={{ 'box-shadow': 'none' }}>
-      <p class="card-header-title" style={{ 'padding-bottom': '0 !important' }}>
+      <p class="card-header-title">
         <Switch>
-          <Match when={Object.values(AnalysisOperationType).includes(pDesc.type)}>
-            <ImStatsBars style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+          <Match when={Object.values(AnalysisOperationType).includes(pDesc.type as never)}>
+            <ImStatsBars style={{ margin: '0 0.5em 0.25em 0.25em', width: '2em', height: '2em' }} />
           </Match>
-          <Match when={Object.values(ProcessingOperationType).includes(pDesc.type)}>
-            <VsServerProcess style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+          <Match when={Object.values(ProcessingOperationType).includes(pDesc.type as never)}>
+            <VsServerProcess style={{ margin: '0 0.5em 0.25em 0.25em', width: '2em', height: '2em' }} />
           </Match>
-          <Match when={Object.values(RepresentationType).includes(pDesc.type)}>
-            <FaSolidMapLocationDot style={{ margin: '0 0.5em 0 0.25em', width: '2em', height: '2em' }} />
+          <Match when={Object.values(RepresentationType).includes(pDesc.type as never)}>
+            <FaSolidMapLocationDot style={{ margin: '0 0.5em 0.25em 0.25em', width: '2em', height: '2em' }} />
           </Match>
         </Switch>
-        { LL().FunctionalitiesSection.FunctionalityTypes[pDesc.name]() }
+        {
+          /* @ts-expect-error We know the name is a key of FunctionalityTypes */
+          LL().FunctionalitiesSection.FunctionalityTypes[pDesc.name]()
+        }
       </p>
     </header>
-    <section class="card-content" style={{ padding: '0 1em 1em 1em' }}>
+    <section class="card-content" style={{ padding: '0 1em 0.25em 1em' }}>
       <div class="content">
-        { LL().PortrayalSelection.ShortDescriptions[pDesc.name]() }
+        {
+          /* @ts-expect-error We know the name is a key of FunctionalityTypes */
+          LL().PortrayalSelection.ShortDescriptions[pDesc.name]()
+        }
       </div>
     </section>
   </div>;
@@ -402,7 +409,11 @@ export default function FunctionalitySelection(): JSX.Element {
           <p class="modal-card-title">
             { LL().PortrayalSelection.Title2() }
             &nbsp;-&nbsp;
-            { LL().FunctionalitiesSection.FunctionalityTypes[selectedFunctionality()!.name] }</p>
+            {
+              /* @ts-expect-error We know the name is a key of FunctionalityTypes */
+              LL().FunctionalitiesSection.FunctionalityTypes[selectedFunctionality()!.name]
+            }
+          </p>
         </Show>
       </header>
       <section class="modal-card-body is-flex is-flex-direction-column">
@@ -439,7 +450,7 @@ export default function FunctionalitySelection(): JSX.Element {
                   'is-light': !displayRepresentation(),
                   'is-grey': !displayRepresentation(),
                 }}
-                style={{ 'user-select': 'none' }}
+                style={{ 'user-select': 'none', height: '2.5em', 'font-weight': 'bold' }}
                 onClick={() => {
                   if (!displayRepresentation()) {
                     setDisplayRepresentation(true);
@@ -460,7 +471,7 @@ export default function FunctionalitySelection(): JSX.Element {
                   'is-light': !displayAnalysis(),
                   'is-grey': !displayAnalysis(),
                 }}
-                style={{ 'user-select': 'none' }}
+                style={{ 'user-select': 'none', height: '2.5em', 'font-weight': 'bold' }}
                 onClick={() => {
                   if (!displayAnalysis()) {
                     setDisplayAnalysis(true);
@@ -481,7 +492,7 @@ export default function FunctionalitySelection(): JSX.Element {
                   'is-light': !displayProcessing(),
                   'is-grey': !displayProcessing(),
                 }}
-                style={{ 'user-select': 'none' }}
+                style={{ 'user-select': 'none', height: '2.5em', 'font-weight': 'bold' }}
                 onClick={() => {
                   if (!displayProcessing()) {
                     setDisplayProcessing(true);
