@@ -16,6 +16,8 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 - Add an option to choose the color-blending method for the palettes of bivariate choropleth maps.
 
+- Add a component that allows you to optionally enter the name of the current project (export names are now based on this name if it is specified).
+
 - Replace ALENA (NAFTA) by ACEUM (USMCA) in the `world_209` dataset.
 
 - Improve handling of zero/null values in mushroom maps (fixes <a href="https://github.com/riatelab/magrit/issues/232">issue 232</a>).

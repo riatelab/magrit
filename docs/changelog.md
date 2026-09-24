@@ -16,6 +16,8 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 - Ajout d'une option pour choisir la méthode de mélange des couleurs pour les palettes des cartes choroplèthes bivariées.
 
+- Ajout d'un composant permettant de saisir (optionnellement) le nom du projet en cours (les noms des exports sont désormais basés sur ce nom s'il est spécifié).
+
 - Remplacement de l'ALENA (NAFTA) par l'ACEUM (USMCA) dans le jeu de données `world_209`.
 
 - Améliore la gestion des valeurs nulles / zéros pour les cartes en champignons (corrige <a href="https://github.com/riatelab/magrit/issues/232">l'issue 232</a>).
