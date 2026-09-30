@@ -16,7 +16,11 @@ Magrit does not strictly follow the rules of *semantic versioning* (in the form 
 
 - Add an option to choose the color-blending method for the palettes of bivariate choropleth maps.
 
-- Add a component that allows you to optionally enter the name of the current project (export names are now based on this name if it is specified).
+- Add a component that allows users to optionally enter the name of the current project (export names are now based on this name if it is specified).
+
+- Merge the "Layer Settings" and "Legend Settings" modal windows into a single modal window with multiple tabs
+  (this eliminates the need to switch back and forth between the two modal windows, while keeping the method
+  for accessing these settings exactly the same: either from the layer manager or from the legend on the map).
 
 - Replace ALENA (NAFTA) by ACEUM (USMCA) in the `world_209` dataset.
 

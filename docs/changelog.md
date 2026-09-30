@@ -18,6 +18,10 @@ Magrit ne suit pas strictement les règles du *semantic versioning* (versionneme
 
 - Ajout d'un composant permettant de saisir (optionnellement) le nom du projet en cours (les noms des exports sont désormais basés sur ce nom s'il est spécifié).
 
+- Fusion des fenêtres modale "paramètres de la couche" et "paramètres de la légende" dans une même fenêtre modale
+  contenant plusieurs onglets (cela évite les aller-retours entre les deux boites modales, tout en conservant à l'identique la manière
+  d'accéder à ces paramètres : soit depuis le gestionnaire de couche, soit depuis la légende présente sur la carte).
+
 - Remplacement de l'ALENA (NAFTA) par l'ACEUM (USMCA) dans le jeu de données `world_209`.
 
 - Améliore la gestion des valeurs nulles / zéros pour les cartes en champignons (corrige <a href="https://github.com/riatelab/magrit/issues/232">l'issue 232</a>).
