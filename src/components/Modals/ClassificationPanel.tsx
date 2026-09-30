@@ -136,15 +136,24 @@ function CustomPaletteCreation(
                 const pastedData = e.clipboardData && e.clipboardData.getData('text');
                 if (
                   !pastedData
-                  || (!pastedData.includes('-') && !pastedData.includes(' '))
+                  || (
+                    !pastedData.includes('-')
+                    && !pastedData.includes(' ')
+                    && !pastedData.includes(',')
+                  )
                 ) {
                   // The user is not pasting colors, maybe a single color
                   // so we return and the default behavior will be applied
                   return;
                 }
                 e.preventDefault();
-                const splitChar = pastedData.includes('-') ? '-' : ' ';
-                const colors = pastedData.split(splitChar).map((d) => d.trim());
+                // eslint-disable-next-line no-nested-ternary
+                const splitChar = pastedData.includes('-')
+                  ? '-'
+                  : pastedData.includes(',')
+                    ? ','
+                    : ' ';
+                const colors = pastedData.split(splitChar).map((d) => d.replaceAll('"', '').trim());
                 if (!colors.every((d) => /^#[0-9a-f]{6}$/i.test(d))) {
                   // Display an error to the user, we need only colors
                   toast.error(LL().ClassificationPanel.pastedColorsInvalid());
