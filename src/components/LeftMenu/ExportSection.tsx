@@ -14,6 +14,7 @@ import { useI18nContext } from '../../i18n/i18n-solid';
 import { isExportableLayer } from '../../helpers/layerDescription';
 import { Mround } from '../../helpers/math';
 import { SupportedGeoFileTypes } from '../../helpers/supportedFormats';
+import { makeOnClickTabButton } from '../../helpers/tabs';
 
 // Stores
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
@@ -28,30 +29,7 @@ import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 const noCrsFormats = ['GeoJSON', 'CSV', 'KML', 'TopoJSON'];
 
-function onClickTabButton(event: Event & { currentTarget: HTMLAnchorElement }, tab: string) {
-  const tabsParentElement = event.currentTarget.parentElement!.parentElement!.parentElement!;
-
-  // Change the active tab, reflect the change in the aria-selected attribute
-  const tabButtons = tabsParentElement.querySelectorAll('li.is-active');
-  for (let i = 0; i < tabButtons.length; i++) { // eslint-disable-line no-plusplus
-    tabButtons[i].classList.remove('is-active');
-    tabButtons[i].firstElementChild!.setAttribute('aria-selected', 'false');
-  }
-  event.currentTarget.parentElement!.classList.add('is-active');
-  event.currentTarget.setAttribute('aria-selected', 'true');
-  // Get all elements with class="tab-content" and hide them
-  const tabContent = document.querySelectorAll('.export-section__content > div');
-  for (let i = 0; i < tabContent.length; i++) { // eslint-disable-line no-plusplus
-    tabContent[i].classList.add('is-hidden');
-    tabContent[i].setAttribute('hidden', 'hidden');
-  }
-
-  // Remove the class 'is-hidden' on the tab that should be opened by the button
-  // and the attribute 'hidden'
-  const displayedTab = document.getElementById(`export-section__content__${tab}`) as HTMLElement;
-  displayedTab.classList.remove('is-hidden');
-  displayedTab.removeAttribute('hidden');
-}
+const onClickTabButton = makeOnClickTabButton('export-section');
 
 function isButtonDisabled(
   selectedLayer: string | null,
