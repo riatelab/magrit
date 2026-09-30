@@ -397,7 +397,7 @@ export default function FunctionalitySelection(): JSX.Element {
     <div class="modal-background" />
     <div class="modal-card" style={{
       width: (selectedFunctionality() ? getModalSizeForFunc() : 'min(95vw, 1260px)'),
-      height: '90vh',
+      height: '92vh',
     }}>
       <header class="modal-card-head">
         <Show when={!selectedFunctionality()}>
