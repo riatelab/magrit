@@ -14,7 +14,7 @@ import { makeOnClickTabButton } from '../../helpers/tabs';
 import { layersDescriptionStore } from '../../store/LayersDescriptionStore';
 
 // Subcomponents
-import LayerSettings from './LayerSettings.tsx';
+import LayerSettings from './LayerSettings.tsx'; // eslint-disable-line import/no-cycle
 import LegendSettings from './LegendSettings.tsx';
 
 // Types / Interfaces / Enums

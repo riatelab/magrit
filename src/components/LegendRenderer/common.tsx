@@ -29,7 +29,7 @@ import { globalStore } from '../../store/GlobalStore';
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Subcomponents
-import LayerAndLegendSettings from '../Modals/LayerAndLegendSettings.tsx';
+import LayerAndLegendSettings from '../Modals/LayerAndLegendSettings.tsx'; // eslint-disable-line import/no-cycle
 
 // Types / interfaces / enums
 import type {

@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { applicationSettingsStore } from '../store/ApplicationSettingsStore';
 
+// eslint-disable-next-line import/no-cycle
 import { getPossibleLegendPosition } from '../components/LegendRenderer/common.tsx';
 
 import {

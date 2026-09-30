@@ -17,6 +17,7 @@ import { availableSequentialPalettes, getPaletteWrapper } from '../../helpers/co
 import { unproxify } from '../../helpers/common';
 import d3 from '../../helpers/d3-custom';
 import { makeDorlingDemersSimulation } from '../../helpers/geo';
+// eslint-disable-next-line import/no-cycle
 import { generateIdLegend } from '../../helpers/legends';
 import { getPossibleLegendPosition } from '../LegendRenderer/common.tsx';
 import { toPrecisionAfterDecimalPoint } from '../../helpers/math';
