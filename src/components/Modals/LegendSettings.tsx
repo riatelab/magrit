@@ -1878,7 +1878,6 @@ export default function LegendSettings(
     .find((el) => el.id === legendId) as Legend;
 
   return <div class="legend-settings">
-    <br />
     <div class="legend-settings__content">
       {
         getInnerPanel(legendDescription, LL)

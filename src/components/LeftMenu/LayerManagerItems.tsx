@@ -42,7 +42,7 @@ import { setTableWindowStore } from '../../store/TableWindowStore';
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Other components / subcomponents
-import LayerSettings from '../Modals/LayerSettings.tsx';
+import LayerAndLegendSettings from '../Modals/LayerAndLegendSettings.tsx';
 import JoinPanel from '../Modals/JoinModal.tsx';
 import FieldTypingModal from '../Modals/FieldTypingModal.tsx';
 
@@ -149,10 +149,15 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
   const layerDescription = layersDescriptionStore.layers.find((l) => l.id === id)!;
   const initialLayerDescription = JSON.parse(JSON.stringify(layerDescription));
 
+  // Reference(s) to the legend(s) linked to this layer
+  const legends = layersDescriptionStore.layoutFeaturesAndLegends
+    .filter((el) => (el as Legend).layerId === id)
+    .map((el) => unproxify(el as Legend));
+
   setModalStore({
     show: true,
-    content: () => <LayerSettings id={ id } LL={ LL } />,
-    title: LL().LayerSettings.LayerSettings(),
+    content: () => <LayerAndLegendSettings id={ id } LL={ LL } caller={ id } />,
+    title: LL().LayerAndLegendSettings.Title(),
     confirmCallback: (): void => {
       // First, we check that the user didn't set an empty layer name
       if (layerDescription.name === '') {
@@ -178,6 +183,15 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
           Object.assign(l, initialLayerDescription);
         }
       });
+      legends.forEach((legend) => {
+        lds.layoutFeaturesAndLegends
+          .forEach((elem: LayoutFeature | Legend) => {
+            if (elem.id === legend.id) {
+              // eslint-disable-next-line no-param-reassign
+              elem = legend;
+            }
+          });
+      });
       // 2. Push the whole layersDescriptionStore to the undo stack
       if (applicationSettingsStore.useUndoRedo) {
         pushUndoStackStore('layersDescription', lds);
@@ -190,9 +204,17 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
         (l: LayerDescription) => l.id === id,
         initialLayerDescription,
       );
+      // Reset the legend description of the linked legend(s)
+      legends.forEach((legend) => {
+        setLayersDescriptionStoreBase(
+          'layoutFeaturesAndLegends',
+          (l: LayoutFeature | Legend) => l.id === legend.id,
+          legend,
+        );
+      });
     },
     escapeKey: 'cancel',
-    width: 'min(95vw, 720px)',
+    width: 'min(95vw, 650px)',
   });
 };
 

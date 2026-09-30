@@ -1198,8 +1198,15 @@ const es = {
     ErrorDuringGeoExport: 'Error al exportar en capa geográfica',
     ErrorCustomCRS: 'Compruebe el sistema de coordenadas de referencia seleccionado o seleccione otro.',
   },
+  LayerAndLegendSettings: {
+    Title: 'Configuración de la capa y la leyenda',
+    Description: 'Selección del tipo de elemento que se desea modificar (capa, leyenda, gráfico)',
+    Layer: 'Capa',
+    Legend: 'Leyenda',
+    Chart: 'Gráfico',
+  },
   LayerSettings: {
-    LayerSettings: 'Configuración de la capa',
+    // LayerSettings: 'Configuración de la capa',
     Name: 'Nombre',
     Value: 'Valor',
     Fill: 'Relleno',
@@ -1514,7 +1521,7 @@ const es = {
       Down: 'Bajar',
     },
     Modal: {
-      Title: 'Parámetros de la leyenda',
+      // Title: 'Parámetros de la leyenda',
       LegendTitle: 'Título de la leyenda',
       LegendSubtitle: 'Subtítulo de la leyenda',
       LegendNote: 'Nota de la leyenda',

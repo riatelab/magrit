@@ -1198,8 +1198,15 @@ const en = {
     ErrorDuringGeoExport: 'Error during geographic layer export.',
     ErrorCustomCRS: 'Please verify the selected coordinate reference system or select another one.',
   },
+  LayerAndLegendSettings: {
+    Title: 'Layer and legend settings',
+    Description: 'Select the type of element to edit (map, legend, chart)',
+    Layer: 'Layer',
+    Legend: 'Legend',
+    Chart: 'Chart',
+  },
   LayerSettings: {
-    LayerSettings: 'Layer settings',
+    // LayerSettings: 'Layer settings',
     Name: 'Name',
     Value: 'Value',
     Fill: 'Fill',
@@ -1514,7 +1521,7 @@ const en = {
       Down: 'Down',
     },
     Modal: {
-      Title: 'Legend settings',
+      // Title: 'Legend settings',
       LegendTitle: 'Legend title',
       LegendSubtitle: 'Legend subtitle',
       LegendNote: 'Legend note',

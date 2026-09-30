@@ -4931,11 +4931,29 @@ type RootTranslation = {
 		 */
 		ErrorCustomCRS: string
 	}
-	LayerSettings: {
+	LayerAndLegendSettings: {
 		/**
-		 * L​a​y​e​r​ ​s​e​t​t​i​n​g​s
+		 * L​a​y​e​r​ ​a​n​d​ ​l​e​g​e​n​d​ ​s​e​t​t​i​n​g​s
 		 */
-		LayerSettings: string
+		Title: string
+		/**
+		 * S​e​l​e​c​t​ ​t​h​e​ ​t​y​p​e​ ​o​f​ ​e​l​e​m​e​n​t​ ​t​o​ ​e​d​i​t​ ​(​m​a​p​,​ ​l​e​g​e​n​d​,​ ​c​h​a​r​t​)
+		 */
+		Description: string
+		/**
+		 * L​a​y​e​r
+		 */
+		Layer: string
+		/**
+		 * L​e​g​e​n​d
+		 */
+		Legend: string
+		/**
+		 * C​h​a​r​t
+		 */
+		Chart: string
+	}
+	LayerSettings: {
 		/**
 		 * N​a​m​e
 		 */
@@ -6087,10 +6105,6 @@ type RootTranslation = {
 			Down: string
 		}
 		Modal: {
-			/**
-			 * L​e​g​e​n​d​ ​s​e​t​t​i​n​g​s
-			 */
-			Title: string
 			/**
 			 * L​e​g​e​n​d​ ​t​i​t​l​e
 			 */
@@ -11242,11 +11256,29 @@ export type TranslationFunctions = {
 		 */
 		ErrorCustomCRS: () => LocalizedString
 	}
-	LayerSettings: {
+	LayerAndLegendSettings: {
 		/**
-		 * Layer settings
+		 * Layer and legend settings
 		 */
-		LayerSettings: () => LocalizedString
+		Title: () => LocalizedString
+		/**
+		 * Select the type of element to edit (map, legend, chart)
+		 */
+		Description: () => LocalizedString
+		/**
+		 * Layer
+		 */
+		Layer: () => LocalizedString
+		/**
+		 * Legend
+		 */
+		Legend: () => LocalizedString
+		/**
+		 * Chart
+		 */
+		Chart: () => LocalizedString
+	}
+	LayerSettings: {
 		/**
 		 * Name
 		 */
@@ -12392,10 +12424,6 @@ export type TranslationFunctions = {
 			Down: () => LocalizedString
 		}
 		Modal: {
-			/**
-			 * Legend settings
-			 */
-			Title: () => LocalizedString
 			/**
 			 * Legend title
 			 */

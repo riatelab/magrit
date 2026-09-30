@@ -1198,8 +1198,15 @@ const fr = {
     ErrorDuringGeoExport: 'Erreur lors de l\'export en couche géographique.',
     ErrorCustomCRS: 'Veuillez vérifier le système de coordonnées de référence choisi ou en choisir un autre.',
   },
+  LayerAndLegendSettings: {
+    Title: 'Paramètre de la couche et de la légende',
+    Description: 'Sélection du type d\'élément à modifier (couche, légende, graphique)',
+    Layer: 'Couche',
+    Legend: 'Légende',
+    Chart: 'Graphique',
+  },
   LayerSettings: {
-    LayerSettings: 'Paramètres de la couche',
+    // LayerSettings: 'Paramètres de la couche',
     Name: 'Nom',
     Value: 'Value',
     Fill: 'Remplissage',
@@ -1514,7 +1521,7 @@ const fr = {
       Down: 'Descendre',
     },
     Modal: {
-      Title: 'Paramètres de la légende',
+      // Title: 'Paramètres de la légende',
       LegendTitle: 'Titre de la légende',
       LegendSubtitle: 'Sous-titre de la légende',
       LegendNote: 'Note de la légende',

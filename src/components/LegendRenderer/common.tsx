@@ -29,11 +29,12 @@ import { globalStore } from '../../store/GlobalStore';
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
 
 // Subcomponents
-import LegendSettings from '../Modals/LegendSettings.tsx';
+import LayerAndLegendSettings from '../Modals/LayerAndLegendSettings.tsx';
 
 // Types / interfaces / enums
 import type {
   BackgroundRect,
+  LayerDescription,
   LayoutFeature,
   Legend,
   LegendTextElement,
@@ -325,11 +326,23 @@ export function makeLegendSettingsModal(
     layersDescriptionStore.layoutFeaturesAndLegends
       .find((l) => l.id === legendId)! as never,
   );
+  const { layerId } = legendProperties;
+
+  // Parameter of the layer linked to this legend
+  const layerDescription = layersDescriptionStore.layers.find((l) => l.id === layerId)!;
+  const initialLayerDescription = JSON.parse(JSON.stringify(layerDescription));
+
+  // Other legend linked to this layer
+  const otherLegend = unproxify(
+    layersDescriptionStore.layoutFeaturesAndLegends
+      .find((l) => (l as Legend).layerId === layerId && l.id !== legendId),
+  );
+
   // Open the modal
   setModalStore({
     show: true,
-    content: () => <LegendSettings legendId={legendId} LL={LL} />,
-    title: LL().Legend.Modal.Title(),
+    content: () => <LayerAndLegendSettings id={layerId} LL={LL} caller={legendId} />,
+    title: LL().LayerAndLegendSettings.Title(),
     confirmCallback: () => {
       // The legend was updated directly in the panel,
       // skipping the undo/redo stack. So on confirm we
@@ -347,6 +360,20 @@ export function makeLegendSettingsModal(
             elem = legendProperties;
           }
         });
+      lds.layers.forEach((l: LayerDescription) => {
+        if (l.id === layerId) {
+          Object.assign(l, initialLayerDescription);
+        }
+      });
+      if (otherLegend) {
+        lds.layoutFeaturesAndLegends
+          .forEach((elem: LayoutFeature | Legend) => {
+            if (elem.id === otherLegend.id) {
+              // eslint-disable-next-line no-param-reassign
+              elem = otherLegend;
+            }
+          });
+      }
       // 2. Push the whole layersDescriptionStore to the undo stack
       if (applicationSettingsStore.useUndoRedo) {
         pushUndoStackStore('layersDescription', lds);
@@ -359,9 +386,23 @@ export function makeLegendSettingsModal(
         (l: LayoutFeature | Legend) => l.id === legendId,
         legendProperties,
       );
+      // Reset the layerDescription for this layer
+      setLayersDescriptionStoreBase(
+        'layers',
+        (l: LayerDescription) => l.id === layerId,
+        initialLayerDescription,
+      );
+      // Reset the other legend if any
+      if (otherLegend) {
+        setLayersDescriptionStoreBase(
+          'layoutFeaturesAndLegends',
+          (l: LayoutFeature | Legend) => l.id === otherLegend.id,
+          otherLegend,
+        );
+      }
     },
     escapeKey: 'cancel',
-    width: '620px',
+    width: 'min(95vw, 650px)',
   });
 }
 
