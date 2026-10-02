@@ -35,7 +35,7 @@ import {
   setMapStoreBase,
 } from '../store/MapStore';
 
-// Sub-components
+// Subcomponents
 // - for rendering the layers
 import {
   defaultLineRenderer,
@@ -170,6 +170,7 @@ const gatherArrowColors = (
   layers.forEach((layer) => {
     if (layer.representationType === 'links') {
       const linksParams = (layer as LayerDescriptionLinks).rendererParameters;
+      // @ts-expect-error We dont have the ArrowOnSymbol head for now
       if (linksParams.head === 'Arrow' || linksParams.head === 'ArrowOnSymbol') {
         arrowColors.add(layer.strokeColor!);
       }
@@ -446,7 +447,7 @@ export default function MapZone(): JSX.Element {
     // How much we want to zoom in/out
     const factor = 0.15;
     // We zoom in/out on the axis of the centre of the map
-    // (i.e the center of the container, not the center of the data)
+    // (i.e. the center of the container, not the center of the data)
     const center = [
       mapStore.mapDimensions.width / 2,
       mapStore.mapDimensions.height / 2,
@@ -657,7 +658,7 @@ export default function MapZone(): JSX.Element {
         }
       })
       .on('end', (e) => {
-        // Clicking on the map triggers a zoom event
+        // Clicking on the map triggers a zoom event,
         // but we don't want to redraw the map in this case
         if (e.transform.k === 1 && e.transform.x === 0 && e.transform.y === 0) {
           return;
