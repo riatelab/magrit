@@ -169,31 +169,31 @@ const onClickSettings = (id: string, LL: Accessor<TranslationFunctions>) => {
           initialLayerDescription.name,
         );
       }
-      // The properties of the layer was updated directly in the panel,
-      // skipping the undo/redo stack. So on confirm we
-      // push the whole previous state to the undo stack
-      // (in case the user wants to cancel the all the changes
-      // made in the panel after closing it)
-      // 0. Unproxify the whole layersDescriptionStore
-      const lds = unproxify(layersDescriptionStore);
-      // 1. Find the layer in the layersDescriptionStore
-      //    and replace its properties by the old one
-      lds.layers.forEach((l: LayerDescription) => {
-        if (l.id === id) {
-          Object.assign(l, initialLayerDescription);
-        }
-      });
-      legends.forEach((legend) => {
-        lds.layoutFeaturesAndLegends
-          .forEach((elem: LayoutFeature | Legend) => {
-            if (elem.id === legend.id) {
-              // eslint-disable-next-line no-param-reassign
-              elem = legend;
-            }
-          });
-      });
-      // 2. Push the whole layersDescriptionStore to the undo stack
       if (applicationSettingsStore.useUndoRedo) {
+        // The properties of the layer was updated directly in the panel,
+        // skipping the undo/redo stack. So on confirm we
+        // push the whole previous state to the undo stack
+        // (in case the user wants to cancel the all the changes
+        // made in the panel after closing it)
+        // 0. Unproxify the whole layersDescriptionStore
+        const lds = unproxify(layersDescriptionStore);
+        // 1. Find the layer in the layersDescriptionStore
+        //    and replace its properties by the old one
+        lds.layers.forEach((l: LayerDescription) => {
+          if (l.id === id) {
+            Object.assign(l, initialLayerDescription);
+          }
+        });
+        legends.forEach((legend) => {
+          lds.layoutFeaturesAndLegends
+            .forEach((elem: LayoutFeature | Legend) => {
+              if (elem.id === legend.id) {
+                // eslint-disable-next-line no-param-reassign
+                elem = legend;
+              }
+            });
+        });
+        // 2. Push the whole layersDescriptionStore to the undo stack
         pushUndoStackStore('layersDescription', lds);
       }
     },

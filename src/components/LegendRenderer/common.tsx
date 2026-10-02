@@ -344,38 +344,48 @@ export function makeLegendSettingsModal(
     content: () => <LayerAndLegendSettings id={layerId} LL={LL} caller={legendId} />,
     title: LL().LayerAndLegendSettings.Title(),
     confirmCallback: () => {
-      // The legend was updated directly in the panel,
-      // skipping the undo/redo stack. So on confirm we
-      // push the whole previous state to the undo stack
-      // (in case the user wants to cancel the all the changes
-      // made in the panel after closing it)
-      // 0. Unproxify the whole layersDescriptionStore
-      const lds = unproxify(layersDescriptionStore);
-      // 1. Find the layer in the layersDescriptionStore
-      //    and replace the new legend with the previous one
-      lds.layoutFeaturesAndLegends
-        .forEach((elem: LayoutFeature | Legend) => {
-          if (elem.id === legendId) {
-            // eslint-disable-next-line no-param-reassign
-            elem = legendProperties;
-          }
-        });
-      lds.layers.forEach((l: LayerDescription) => {
-        if (l.id === layerId) {
-          Object.assign(l, initialLayerDescription);
-        }
-      });
-      if (otherLegend) {
+      // Check that the user didn't set an empty layer name
+      if (layerDescription.name === '') {
+        // Restore previous name
+        setLayersDescriptionStoreBase(
+          'layers',
+          (l: LayerDescription) => l.id === layerId,
+          'name',
+          initialLayerDescription.name,
+        );
+      }
+      if (applicationSettingsStore.useUndoRedo) {
+        // The legend was updated directly in the panel,
+        // skipping the undo/redo stack. So on confirm we
+        // push the whole previous state to the undo stack
+        // (in case the user wants to cancel the all the changes
+        // made in the panel after closing it)
+        // 0. Unproxify the whole layersDescriptionStore
+        const lds = unproxify(layersDescriptionStore);
+        // 1. Find the layer in the layersDescriptionStore
+        //    and replace the new legend with the previous one
         lds.layoutFeaturesAndLegends
           .forEach((elem: LayoutFeature | Legend) => {
-            if (elem.id === otherLegend.id) {
+            if (elem.id === legendId) {
               // eslint-disable-next-line no-param-reassign
-              elem = otherLegend;
+              elem = legendProperties;
             }
           });
-      }
-      // 2. Push the whole layersDescriptionStore to the undo stack
-      if (applicationSettingsStore.useUndoRedo) {
+        lds.layers.forEach((l: LayerDescription) => {
+          if (l.id === layerId) {
+            Object.assign(l, initialLayerDescription);
+          }
+        });
+        if (otherLegend) {
+          lds.layoutFeaturesAndLegends
+            .forEach((elem: LayoutFeature | Legend) => {
+              if (elem.id === otherLegend.id) {
+                // eslint-disable-next-line no-param-reassign
+                elem = otherLegend;
+              }
+            });
+        }
+        // 2. Push the whole layersDescriptionStore to the undo stack
         pushUndoStackStore('layersDescription', lds);
       }
     },
