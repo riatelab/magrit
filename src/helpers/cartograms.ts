@@ -89,6 +89,7 @@ export async function computeCartogramGastnerSeguyMore(
 export function computeCartogramOlson(
   data: FeatureCollection,
   variableName: string,
+  outputFieldName = 'scale',
 ): FeatureCollection {
   const nFt = data.features.length;
   const dVal = Array(nFt);
@@ -124,7 +125,7 @@ export function computeCartogramOlson(
     const ft = data.features[i];
     const s = dVal[i].scale;
     features[i] = transformScale(ft as never, s);
-    features[i].properties = { ...ft.properties, scale: s };
+    features[i].properties = { ...ft.properties, [outputFieldName]: s };
   }
 
   return {
@@ -307,6 +308,7 @@ function makeDougenikCartogram(
   iterations: number,
   areaFn: (geom: Feature) => number,
   centroidFn: (geom: Feature) => [number, number],
+  outputFieldName: string,
 ): FeatureCollection {
   const resultData = JSON.parse(JSON.stringify(data)) as FeatureCollection;
   const values = replaceNullAndZeroValues(resultData.features, variableName);
@@ -339,7 +341,7 @@ function makeDougenikCartogram(
 
   resultData.features.forEach((f, i) => {
     // eslint-disable-next-line no-param-reassign
-    f.properties!.area_error = areas[i] / areaTotal / (values[i] / valueTotal);
+    f.properties![outputFieldName] = areas[i] / areaTotal / (values[i] / valueTotal);
   });
 
   return resultData;
@@ -358,6 +360,7 @@ export function computeCartogramDougenik(
   data: FeatureCollection,
   variableName: string,
   iterations: number,
+  outputFieldName = 'area_error',
 ): FeatureCollection {
   let proj;
   // let isGeo;
@@ -387,6 +390,7 @@ export function computeCartogramDougenik(
     iterations,
     planarArea,
     (f) => centroid(f as never).geometry.coordinates as [number, number],
+    outputFieldName,
   );
 
   // Unproject the data back to WGS84
