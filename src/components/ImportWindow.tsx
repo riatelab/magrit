@@ -298,21 +298,27 @@ const analyzeDatasetTopoJSON = (
     name,
     detailedType: SupportedGeoFileTypes.TopoJSON,
     complete: true,
-    layers: Object.keys(obj.objects).map((layerName) => ({
-      name: layerName,
-      type: 'geo',
-      features: obj.objects[layerName].geometries.length,
-      geometryType: obj.objects[layerName].geometries[0]?.type || 'unknown',
-      crs: {
-        name: 'WGS 84',
-        code: 'EPSG:4326',
-        wkt: 'GEOGCS["WGS 84", DATUM["WGS_1984", SPHEROID["WGS 84",6378137,298.257223563, AUTHORITY["EPSG","7030"]], AUTHORITY["EPSG","6326"]], PRIMEM["Greenwich",0, AUTHORITY["EPSG","8901"]], UNIT["degree",0.0174532925199433, AUTHORITY["EPSG","9122"]], AUTHORITY["EPSG","4326"]]',
-      },
-      addToProject: true,
-      simplify: false,
-      fitMap: false,
-      useCRS: false,
-    })),
+    layers: Object.keys(obj.objects).map((layerName) => {
+      const topologyObject = obj.objects[layerName];
+      const geometries = topologyObject.type === 'GeometryCollection'
+        ? topologyObject.geometries
+        : [topologyObject];
+      return {
+        name: layerName,
+        type: 'geo',
+        features: geometries.length,
+        geometryType: geometries[0]?.type || 'unknown',
+        crs: {
+          name: 'WGS 84',
+          code: 'EPSG:4326',
+          wkt: 'GEOGCS["WGS 84", DATUM["WGS_1984", SPHEROID["WGS 84",6378137,298.257223563, AUTHORITY["EPSG","7030"]], AUTHORITY["EPSG","6326"]], PRIMEM["Greenwich",0, AUTHORITY["EPSG","8901"]], UNIT["degree",0.0174532925199433, AUTHORITY["EPSG","9122"]], AUTHORITY["EPSG","4326"]]',
+        },
+        addToProject: true,
+        simplify: false,
+        fitMap: false,
+        useCRS: false,
+      };
+    }),
   };
 };
 
