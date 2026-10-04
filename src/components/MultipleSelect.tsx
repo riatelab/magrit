@@ -25,9 +25,8 @@ export default function MultipleSelect(props: ParentProps<MultipleSelectProps>):
       () => mergedProps.values,
       () => {
         for (let i = 0; i < selectNode.options.length; i += 1) {
-          if (mergedProps.values.includes(selectNode.options[i].value)) {
-            selectNode.options[i].selected = true;
-          }
+          selectNode.options[i].selected = mergedProps.values
+            .includes(selectNode.options[i].value);
         }
       },
     ),
@@ -35,9 +34,8 @@ export default function MultipleSelect(props: ParentProps<MultipleSelectProps>):
 
   onMount(() => {
     for (let i = 0; i < selectNode.options.length; i += 1) {
-      if (mergedProps.values.includes(selectNode.options[i].value)) {
-        selectNode.options[i].selected = true;
-      }
+      selectNode.options[i].selected = mergedProps.values
+        .includes(selectNode.options[i].value);
     }
   });
 
