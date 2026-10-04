@@ -124,8 +124,12 @@ function NewFieldPanel(
     setSampleOutput,
   ] = createSignal<SampleOutputFormat | undefined>(undefined);
 
+  const hasDuplicateName = () => props.columnDefs()
+    .some((column) => column.field === sanitizeColumnName(newColumnName()));
+
   const isComputeEnabled = createMemo(() => newColumnName() !== ''
     && !hasForbiddenChars(newColumnName())
+    && !hasDuplicateName()
     && newColumnType() !== VariableType.unknown
     && currentFormula() !== ''
     && sampleOutput() !== undefined
@@ -195,6 +199,7 @@ function NewFieldPanel(
         <div class="control">
           <input
             class="input"
+            classList={{ 'is-danger': newColumnName() !== '' && hasDuplicateName() }}
             type="text"
             placeholder={LL().DataTable.NewColumnModal.namePlaceholder()}
             value={newColumnName()}
