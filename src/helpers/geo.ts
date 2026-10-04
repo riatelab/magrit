@@ -776,7 +776,6 @@ export const findIntersections = (
         const arc1 = topo.arcs[uniqueArcs1[k]];
         const pts1 = decodeArc(arc1, topo.transform);
         for (let l = 0; l < uniqueArcs2.length; l += 1) {
-          if (k === l) continue; // eslint-disable-line no-continue
           const arc2 = topo.arcs[uniqueArcs2[l]];
           const pts2 = decodeArc(arc2, topo.transform);
           // console.log(pts1, pts2);
