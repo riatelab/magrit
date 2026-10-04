@@ -292,7 +292,17 @@ export const generateBivariateColors = (
 
   for (let i = 0; i < rows; i += 1) {
     for (let j = 0; j < rows; j += 1) {
-      data.push(chroma.blend(scale1[i], scale2[j], blendMode).hex());
+      // When one variable is at the neutral end, keep the other variable's
+      // ramp color unchanged. Blending against a non-white neutral can clip it.
+      if (i === rows - 1 && j === rows - 1) {
+        data.push(chroma(lightest).hex());
+      } else if (j === rows - 1) {
+        data.push(scale1[i]);
+      } else if (i === rows - 1) {
+        data.push(scale2[j]);
+      } else {
+        data.push(chroma.blend(scale1[i], scale2[j], blendMode).hex());
+      }
     }
   }
 
