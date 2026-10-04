@@ -51,15 +51,15 @@ function CategoriesPlot(
   },
 ): JSX.Element {
   const domain = createMemo(() => props.mapping
-    .filter((m) => m.show && (props.displayNoData ? true : m.value))
+    .filter((m) => m.show && (props.displayNoData || m.value !== null))
     .map((m) => m.categoryName));
   const range = createMemo(() => props.mapping
-    .filter((m) => m.show && (props.displayNoData ? true : m.value))
+    .filter((m) => m.show && (props.displayNoData || m.value !== null))
     .map((m) => m.color));
   const data = createMemo(() => props.mapping
-    .filter((m) => m.show && (props.displayNoData ? true : m.value))
+    .filter((m) => m.show && (props.displayNoData || m.value !== null))
     .map((m, i) => ({
-      position: !m.value ? Infinity : i,
+      position: m.value === null ? Infinity : i,
       category: m.categoryName,
       color: m.color,
       frequency: m.count,
