@@ -368,6 +368,7 @@ function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
  */
 export async function exportMapToPng(outputName: string, scaleFactor = 1) {
   const targetSvg = getTargetSvg().cloneNode(true) as SVGElement;
+  targetSvg.querySelector('.grid')?.remove();
   const mapDimensions = getMapDimension();
   const targetCanvas = document.createElement('canvas');
   targetCanvas.width = mapDimensions.width;
