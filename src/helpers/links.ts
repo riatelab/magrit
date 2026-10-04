@@ -73,8 +73,14 @@ function createSimpleLinksData(
       const origin = pts.get(`${d[tableOriginVariable]}`);
       const destination = pts.get(`${d[tableDestinationVariable]}`);
       if (origin && destination) {
-        const key = `${d[tableOriginVariable]}_${d[tableDestinationVariable]}`;
-        const keyReversed = `${d[tableDestinationVariable]}_${d[tableOriginVariable]}`;
+        const key = JSON.stringify([
+          `${d[tableOriginVariable]}`,
+          `${d[tableDestinationVariable]}`,
+        ]);
+        const keyReversed = JSON.stringify([
+          `${d[tableDestinationVariable]}`,
+          `${d[tableOriginVariable]}`,
+        ]);
         if (+d[tableIntensityVariable] > 0) {
           if (links.has(key)) {
             links.set(key, links.get(key) + +d[tableIntensityVariable]);
@@ -88,7 +94,7 @@ function createSimpleLinksData(
     });
 
     links.forEach((value, key) => {
-      const [origin, destination] = key.split('_');
+      const [origin, destination] = JSON.parse(key) as [string, string];
       const ptOrigin = pts.get(origin);
       const ptDest = pts.get(destination);
       linksData.features.push({
@@ -113,8 +119,14 @@ function createSimpleLinksData(
       const origin = pts.get(`${d[tableOriginVariable]}`);
       const destination = pts.get(`${d[tableDestinationVariable]}`);
       if (origin && destination) {
-        const key = `${d[tableOriginVariable]}_${d[tableDestinationVariable]}`;
-        const keyReversed = `${d[tableDestinationVariable]}_${d[tableOriginVariable]}`;
+        const key = JSON.stringify([
+          `${d[tableOriginVariable]}`,
+          `${d[tableDestinationVariable]}`,
+        ]);
+        const keyReversed = JSON.stringify([
+          `${d[tableDestinationVariable]}`,
+          `${d[tableOriginVariable]}`,
+        ]);
         if (!links.has(key) && !links.has(keyReversed)) {
           links.add(key);
           links.add(keyReversed);
