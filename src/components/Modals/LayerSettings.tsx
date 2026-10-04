@@ -2180,8 +2180,9 @@ function makeSettingsDefaultLine(
                 type: 'color',
                 layerName: props.name,
                 series: props.data.features
-                  .map((f) => f.properties![(
-                    props.rendererParameters as ClassificationParameters).variable]),
+                  .map((f) => f.properties![
+                    (props.rendererParameters.color as ClassificationParameters).variable
+                  ]),
                 classificationParameters: params,
                 onCancel: () => {
                   setLayersDescriptionStoreBase(
