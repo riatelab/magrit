@@ -5,14 +5,15 @@ import type { Feature, FeatureCollection } from 'geojson';
 import { isFiniteNumber } from './common';
 import { wktToGeojson } from './geos';
 
-export const wktSeemsValid = (v: string): boolean => (
-  v.startsWith('POINT')
-  || v.startsWith('LINESTRING')
-  || v.startsWith('POLYGON')
-  || v.startsWith('MULTIPOINT')
-  || v.startsWith('MULTILINESTRING')
-  || v.startsWith('MULTIPOLYGON')
-);
+export const wktSeemsValid = (v: string): boolean => {
+  const geometry = v.trimStart().toUpperCase();
+  return geometry.startsWith('POINT')
+    || geometry.startsWith('LINESTRING')
+    || geometry.startsWith('POLYGON')
+    || geometry.startsWith('MULTIPOINT')
+    || geometry.startsWith('MULTILINESTRING')
+    || geometry.startsWith('MULTIPOLYGON');
+};
 
 export const makeLayerFromTableAndXY = async (
   data: Record<string, unknown>[],
