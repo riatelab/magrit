@@ -271,7 +271,7 @@ const reprojGeom = (
       .map((coords) => projFunc([coords[0], coords[1]]));
   } else if (geom.type === 'MultiLineString') {
     // eslint-disable-next-line no-param-reassign
-    geom.coordinates
+    geom.coordinates = geom.coordinates
       .map((line) => line.map(
         (coords) => projFunc([coords[0], coords[1]]),
       ));
