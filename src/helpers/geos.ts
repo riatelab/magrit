@@ -83,11 +83,9 @@ async function intersectionLayer(
   const features = [];
   for (let i = 0; i < layer1.features.length; i += 1) {
     const ft = layer1.features[i];
+    const featurePtr = geojsonToGeosGeom(ft, geos);
     // Pointer to the clipped feature
-    const clippedPtr = geos.GEOSIntersection(
-      geojsonToGeosGeom(ft, geos),
-      clippingGeom,
-    );
+    const clippedPtr = geos.GEOSIntersection(featurePtr, clippingGeom);
     // Convert back to GeoJSON
     const geometry = geosGeomToGeojson(clippedPtr, geos);
 
@@ -103,6 +101,8 @@ async function intersectionLayer(
     }
     // Destroy the clipped feature
     geos.GEOSGeom_destroy(clippedPtr);
+    // Destroy the input feature geometry created for this intersection
+    geos.GEOSGeom_destroy(featurePtr);
   }
 
   // Destroy the geoms of layer2
