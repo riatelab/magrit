@@ -443,6 +443,13 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
 
   // Extract properties from the layer description
   const dataset = layerDescription.data.features.map((f) => f.properties) as Record<string, any>[];
+  const completeObservations = () => dataset.filter((row) => {
+    const x = row[explanatoryVariable()];
+    const y = row[explainedVariable()];
+    return x !== null && x !== undefined && x !== ''
+      && y !== null && y !== undefined && y !== ''
+      && Number.isFinite(Number(x)) && Number.isFinite(Number(y));
+  }).length;
 
   // Identifier variable (useful for tooltip
   // on the various chart that are displayed in this component)
@@ -673,6 +680,7 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
         <div class="has-text-centered m-4">
           <button
             class="button"
+            disabled={completeObservations() < 3}
             onClick={() => {
               setDrawRegressionLine(!drawRegressionLine());
               setLinearRegressionResult(
