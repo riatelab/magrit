@@ -154,7 +154,8 @@ function onClickValidate(
   if (portrayalOptions.type === 'choropleth') {
     // Prepare the classification parameters
     const palName = portrayalOptions.palette as string;
-    const breaks = [minStdRes, -1.5, -0.5, 0.5, 1.5, maxStdRes];
+    const breaks = [minStdRes, -1.5, -0.5, 0.5, 1.5, maxStdRes]
+      .sort((a, b) => a - b);
     const classificationParameters = {
       variable: 'standardizedResidual',
       method: 'manual',
@@ -172,7 +173,7 @@ function onClickValidate(
       noDataColor: applicationSettingsStore.defaultNoDataColor,
       entitiesByClass: getEntitiesByClass(
         linearRegressionResult.standardisedResiduals,
-        [minStdRes, -1.5, -0.5, 0.5, 1.5, maxStdRes],
+        breaks,
       ),
     } as ClassificationParameters;
 
