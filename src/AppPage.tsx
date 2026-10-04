@@ -551,18 +551,15 @@ const AppPage: () => JSX.Element = () => {
         setNiceAlertStore({
           show: true,
           content: () => <p>{LL().Alerts.ReloadLastProject(date.toLocaleDateString())}</p>,
-          confirmCallback: () => {
+          confirmCallback: async () => {
             setGlobalStore({ userHasAddedLayer: true });
-            reloadFromProjectObject(data, LL);
+            await reloadFromProjectObject(data, LL);
+            await db.projects.clear();
           },
           focusOn: 'confirm',
         });
       }
     }
-    // We only keep the last project in the DB
-    // so at this point we can delete all projects
-    // (we dont need to use await, we can "fire and forget")
-    db.projects.clear();
   });
 
   return <>
