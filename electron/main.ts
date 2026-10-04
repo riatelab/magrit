@@ -72,7 +72,7 @@ function createWindow() {
         localize('Cancel', currentLocale),
         localize('Exit', currentLocale),
       ],
-      cancelId: 1,
+      cancelId: 0,
       defaultId: 0,
     }).then(({ response }) => {
       if (response) {
