@@ -146,9 +146,15 @@ export const setSvgProperties = (
   const svgDom = doc.documentElement;
   if (props.fillColor) svgDom.setAttribute('fill', props.fillColor);
   if (props.strokeColor) svgDom.setAttribute('stroke', props.strokeColor);
-  if (props.strokeWidth) svgDom.setAttribute('stroke-width', props.strokeWidth.toString());
-  if (props.fillOpacity) svgDom.setAttribute('fill-opacity', props.fillOpacity.toString());
-  if (props.strokeOpacity) svgDom.setAttribute('stroke-opacity', props.strokeOpacity.toString());
+  if (props.strokeWidth !== undefined) {
+    svgDom.setAttribute('stroke-width', props.strokeWidth.toString());
+  }
+  if (props.fillOpacity !== undefined) {
+    svgDom.setAttribute('fill-opacity', props.fillOpacity.toString());
+  }
+  if (props.strokeOpacity !== undefined) {
+    svgDom.setAttribute('stroke-opacity', props.strokeOpacity.toString());
+  }
 
   return (new XMLSerializer()).serializeToString(svgDom);
 };
