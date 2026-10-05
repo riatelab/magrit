@@ -1,8 +1,6 @@
 import {
   children,
   createEffect,
-  on,
-  onMount,
   type JSX,
   type ParentProps, mergeProps,
 } from 'solid-js';
@@ -16,50 +14,34 @@ interface MultipleSelectProps {
 }
 
 export default function MultipleSelect(props: ParentProps<MultipleSelectProps>): JSX.Element {
-  let selectNode: HTMLSelectElement;
-  const mergedProps = mergeProps({ size: 3, style: { height: 'unset' } }, props);
+  let selectNode!: HTMLSelectElement;
+  const mergedProps = mergeProps({ size: 3 }, props);
   const c = children(() => mergedProps.children);
 
-  createEffect(
-    on(
-      () => mergedProps.values,
-      () => {
-        for (let i = 0; i < selectNode.options.length; i += 1) {
-          if (mergedProps.values.includes(selectNode.options[i].value)) {
-            selectNode.options[i].selected = true;
-          }
-        }
-      },
-    ),
-  );
-
-  onMount(() => {
+  createEffect(() => {
+    c(); // Option dependency
+    const values = mergedProps.values; // eslint-disable-line prefer-destructuring
     for (let i = 0; i < selectNode.options.length; i += 1) {
-      if (mergedProps.values.includes(selectNode.options[i].value)) {
-        selectNode.options[i].selected = true;
-      }
+      selectNode.options[i].selected = values.includes(selectNode.options[i].value);
     }
   });
 
-  return <div class={'control'}>
-    <div
-      class={'select is-multiple'}
-      style={{
-        height: 'unset',
-        width: mergedProps.width ? `${mergedProps.width}px` : 'unset',
-      }}
-    >
-      <select
-        onChange={(e) => {
-          if (mergedProps.onChange) mergedProps.onChange(e);
-        }}
-        multiple={true}
-        size={mergedProps.size}
-        style={mergedProps.style}
-        ref={selectNode!}
+  return (
+    <div class="control">
+      <div
+        class="select is-multiple"
+        style={{ height: 'unset', width: mergedProps.width !== undefined ? `${mergedProps.width}px` : 'unset' }}
       >
-        {c()}
-      </select>
+        <select
+          multiple
+          size={mergedProps.size ?? 3}
+          style={{ height: 'unset', ...mergedProps.style }}
+          onChange={(e) => mergedProps.onChange?.(e)}
+          ref={selectNode}
+        >
+          {c()}
+        </select>
+      </div>
     </div>
-  </div>;
+  );
 }
