@@ -75,7 +75,14 @@ export const convertTopojsonToGeojson = (
   Object.keys(topo.objects)
     .forEach((layerName: string) => {
       const layer = topojson.feature(topo, topo.objects[layerName]);
-      layers[layerName] = layer;
+      if (layer.type === 'Feature') {
+        layers[layerName] = {
+          type: 'FeatureCollection',
+          features: [layer],
+        };
+      } else {
+        layers[layerName] = layer;
+      }
     });
   return layers;
 };
