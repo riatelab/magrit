@@ -2180,8 +2180,9 @@ function makeSettingsDefaultLine(
                 type: 'color',
                 layerName: props.name,
                 series: props.data.features
-                  .map((f) => f.properties![(
-                    props.rendererParameters as ClassificationParameters).variable]),
+                  .map((f) => f.properties![
+                    (props.rendererParameters.color as ClassificationParameters).variable
+                  ]),
                 classificationParameters: params,
                 onCancel: () => {
                   setLayersDescriptionStoreBase(
@@ -2210,7 +2211,9 @@ function makeSettingsDefaultLine(
         <InputFieldWidthPaletteOpacity
           label={LL().LayerSettings.Line()}
           valueWidth={props.strokeWidth!}
-          valuePalette={(props.rendererParameters as ClassificationParameters).palette.colors}
+          valuePalette={
+            (props.rendererParameters.color as ClassificationParameters).palette.colors
+          }
           valueOpacity={props.strokeOpacity!}
           onChangeWidth={(v) => debouncedUpdateProp(props.id, 'strokeWidth', v)}
           onClickPalette={() => {
