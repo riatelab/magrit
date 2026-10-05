@@ -1111,6 +1111,7 @@ const en = {
       ExplanatoryVariable: 'Explanatory variable',
       LogTransform: 'Logarithmic transformation',
       MessageSameVariable: 'The two variables must be different.',
+      MessageMinimumRequiredObservations: 'At least 3 complete observations are required to calculate meaningful regression residuals. With only 2 observations, the fitted line passes through both points, leaving no residual degrees of freedom.',
       Compute: 'Compute',
       DrawConfidenceInterval: 'Draw the confidence interval',
       PearsonCorrelationValue: 'Pearson product-moment correlation coefficient:',

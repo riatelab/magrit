@@ -4598,6 +4598,10 @@ type RootTranslation = {
 			 */
 			MessageSameVariable: string
 			/**
+			 * A​t​ ​l​e​a​s​t​ ​3​ ​c​o​m​p​l​e​t​e​ ​o​b​s​e​r​v​a​t​i​o​n​s​ ​a​r​e​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​c​a​l​c​u​l​a​t​e​ ​m​e​a​n​i​n​g​f​u​l​ ​r​e​g​r​e​s​s​i​o​n​ ​r​e​s​i​d​u​a​l​s​.​ ​W​i​t​h​ ​o​n​l​y​ ​2​ ​o​b​s​e​r​v​a​t​i​o​n​s​,​ ​t​h​e​ ​f​i​t​t​e​d​ ​l​i​n​e​ ​p​a​s​s​e​s​ ​t​h​r​o​u​g​h​ ​b​o​t​h​ ​p​o​i​n​t​s​,​ ​l​e​a​v​i​n​g​ ​n​o​ ​r​e​s​i​d​u​a​l​ ​d​e​g​r​e​e​s​ ​o​f​ ​f​r​e​e​d​o​m​.
+			 */
+			MessageMinimumRequiredObservations: string
+			/**
 			 * C​o​m​p​u​t​e
 			 */
 			Compute: string
@@ -10932,6 +10936,10 @@ export type TranslationFunctions = {
 			 * The two variables must be different.
 			 */
 			MessageSameVariable: () => LocalizedString
+			/**
+			 * At least 3 complete observations are required to calculate meaningful regression residuals. With only 2 observations, the fitted line passes through both points, leaving no residual degrees of freedom.
+			 */
+			MessageMinimumRequiredObservations: () => LocalizedString
 			/**
 			 * Compute
 			 */

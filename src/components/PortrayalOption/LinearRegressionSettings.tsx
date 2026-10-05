@@ -1,6 +1,7 @@
 // Imports from solid-js
 import {
   createEffect,
+  createMemo,
   createSignal,
   For,
   on,
@@ -536,6 +537,14 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
     setAddScatterPlot,
   ] = createSignal<boolean>(true);
 
+  const completeObservations = createMemo(() => dataset.filter((row) => {
+    const x = row[explanatoryVariable()];
+    const y = row[explainedVariable()];
+    return x !== null && x !== undefined && x !== ''
+      && y !== null && y !== undefined && y !== ''
+      && Number.isFinite(Number(x)) && Number.isFinite(Number(y));
+  }).length);
+
   createEffect(
     on(
       () => [explainedVariable(), explanatoryVariable()],
@@ -670,9 +679,19 @@ export default function LinearRegressionSettings(props: PortrayalSettingsProps) 
         drawConfidenceInterval={drawConfidenceInterval()}
       />
       <Show when={linearRegressionResult() === null}>
+        <Show when={completeObservations() < 3}>
+          <MessageBlock type={'danger'}>
+            <p>{
+              LL()
+                .FunctionalitiesSection.LinearRegressionOptions
+                .MessageMinimumRequiredObservations()
+            }</p>
+          </MessageBlock>
+        </Show>
         <div class="has-text-centered m-4">
           <button
             class="button"
+            disabled={completeObservations() < 3}
             onClick={() => {
               setDrawRegressionLine(!drawRegressionLine());
               setLinearRegressionResult(

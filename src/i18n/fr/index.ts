@@ -1111,6 +1111,7 @@ const fr = {
       ExplanatoryVariable: 'Variable explicative',
       LogTransform: 'Transformation logarithmique',
       MessageSameVariable: 'Les deux variables sélectionnées doivent être différentes.',
+      MessageMinimumRequiredObservations: 'Au moins trois observations complètes sont nécessaires pour calculer des résidus de régression significatifs. Avec seulement deux observations, la droite d\'ajustement passe par les deux points, ne laissant aucun degré de liberté résiduel.',
       Compute: 'Calculer',
       DrawConfidenceInterval: 'Afficher l\'intervalle de confiance',
       PearsonCorrelationValue: 'Corrélation de Pearson :',

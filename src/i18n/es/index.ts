@@ -1111,6 +1111,7 @@ const es = {
       ExplanatoryVariable: 'Variable explicativa',
       LogTransform: 'Transformación logarítmica',
       MessageSameVariable: 'Las dos variables seleccionadas deben ser diferentes',
+      MessageMinimumRequiredObservations: 'Se necesitan al menos tres observaciones completas para calcular residuos de regresión significativos. Con solo dos observaciones, la recta ajustada pasa por ambos puntos, por lo que no quedan grados de libertad residuales.',
       Compute: ' Calcular',
       DrawConfidenceInterval: 'Mostrar el intervalo de confianza',
       PearsonCorrelationValue: 'Correlación de Pearson :',
