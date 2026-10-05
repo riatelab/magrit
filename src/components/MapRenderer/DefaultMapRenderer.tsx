@@ -8,9 +8,9 @@ import type { Point } from 'geojson';
 
 // Helpers
 import { extractMeshAndMergedPolygonToGeojson } from '../../helpers/topojson';
+import { getGeoStitchedFeatures } from '../../helpers/geoStitchCache';
 import { mergeFilterIds } from './common.tsx';
 import { getSymbolPath } from '../../helpers/svg';
-import d3 from '../../helpers/d3-custom';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -31,6 +31,10 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
 export function defaultPolygonRenderer(
   layerDescription: LayerDescription,
 ): JSX.Element {
+  const stitchedFeatures = createMemo(
+    () => getGeoStitchedFeatures(layerDescription.data),
+  );
+
   return <g
     id={layerDescription.id}
     class="layer default"
@@ -52,7 +56,7 @@ export function defaultPolygonRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
   >
-    <For each={d3.geoStitch(layerDescription.data).features}>
+    <For each={stitchedFeatures()}>
       {
         (feature) => <path
           d={globalStore.pathGenerator(feature)}

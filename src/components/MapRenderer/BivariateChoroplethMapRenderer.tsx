@@ -10,10 +10,10 @@ import type { Point } from 'geojson';
 
 // Helpers
 import { bivariateClass, getClassifier } from '../../helpers/classification';
+import { getGeoStitchedFeatures } from '../../helpers/geoStitchCache';
 import { isNonNull } from '../../helpers/common';
 import { getSymbolPath } from '../../helpers/svg';
 import { mergeFilterIds } from './common.tsx';
-import d3 from '../../helpers/d3-custom';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -41,6 +41,9 @@ export function bivariateChoroplethPolygonRenderer(
 ): JSX.Element {
   const rendererParameters = createMemo(
     () => layerDescription.rendererParameters as BivariateChoroplethParameters,
+  );
+  const stitchedFeatures = createMemo(
+    () => getGeoStitchedFeatures(layerDescription.data),
   );
 
   const classifierVar1 = createMemo(() => {
@@ -83,7 +86,7 @@ export function bivariateChoroplethPolygonRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
   >
-    <For each={d3.geoStitch(layerDescription.data).features}>
+    <For each={stitchedFeatures()}>
       {
         (feature) => <path
           fill={

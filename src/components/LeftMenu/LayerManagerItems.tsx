@@ -26,6 +26,7 @@ import { LocalizedString } from 'typesafe-i18n';
 import { useI18nContext } from '../../i18n/i18n-solid';
 import { TranslationFunctions } from '../../i18n/i18n-types';
 import { capitalizeFirstLetter, unproxify } from '../../helpers/common';
+import { clearGeoStitchCache } from '../../helpers/geoStitchCache';
 
 // Stores
 import {
@@ -123,6 +124,12 @@ const onClickTrashLayer = (id: string, LL: Accessor<TranslationFunctions>) => {
   </>;
 
   const onDeleteConfirmed = (): void => {
+    const lyr = layersDescriptionStore.layers
+      .find((layerDescription) => layerDescription.id !== id);
+    // Remove the FeatureCollection from the geoStitchCache
+    if (lyr?.type === 'polygon') {
+      clearGeoStitchCache(lyr!.data);
+    }
     // Remove the layer from layersDescriptionStore.layers
     const layers = layersDescriptionStore.layers
       .filter((layerDescription) => layerDescription.id !== id);

@@ -8,10 +8,10 @@ import type { Point } from 'geojson';
 import { CompositionUtils, tricolore, tricoloreSextant } from 'tricolore';
 
 // Helpers
+import { getGeoStitchedFeatures } from '../../helpers/geoStitchCache';
 import { isFiniteNumber } from '../../helpers/common';
 import { getSymbolPath } from '../../helpers/svg';
 import { mergeFilterIds } from './common.tsx';
-import d3 from '../../helpers/d3-custom';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -41,6 +41,9 @@ export function trivariateChoroplethPolygonRenderer(
 ): JSX.Element {
   const rendererParameters = createMemo(
     () => layerDescription.rendererParameters as TrivariateChoroplethParameters,
+  );
+  const stitchedFeatures = createMemo(
+    () => getGeoStitchedFeatures(layerDescription.data),
   );
 
   const values = createMemo(() => {
@@ -119,7 +122,7 @@ export function trivariateChoroplethPolygonRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
   >
-    <For each={d3.geoStitch(layerDescription.data).features}>
+    <For each={stitchedFeatures()}>
       {
         (feature, i) => <path
           fill={colors()[i()] ?? rendererParameters().noDataColor}

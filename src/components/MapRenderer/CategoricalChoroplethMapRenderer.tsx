@@ -5,10 +5,13 @@ import {
   JSX,
 } from 'solid-js';
 
+// GeoJSON Types
+import type { Point } from 'geojson';
+
 // Helpers
+import { getGeoStitchedFeatures } from '../../helpers/geoStitchCache';
 import { mergeFilterIds } from './common.tsx';
 import { getSymbolPath } from '../../helpers/svg';
-import d3 from '../../helpers/d3-custom';
 
 // Stores
 import { globalStore } from '../../store/GlobalStore';
@@ -66,6 +69,13 @@ export function categoricalChoroplethPolygonRenderer(
   layerDescription: LayerDescriptionCategoricalChoropleth,
 ): JSX.Element {
   const { colorsMap, noShow } = prepareParameters(layerDescription);
+  const stitchedFeatures = createMemo(
+    () => getGeoStitchedFeatures(layerDescription.data),
+  );
+  const visibleFeatures = createMemo(
+    () => stitchedFeatures()
+      .filter((f) => !noShow().has(f.properties?.[layerDescription.rendererParameters.variable])),
+  );
 
   return <g
     id={layerDescription.id}
@@ -88,13 +98,10 @@ export function categoricalChoroplethPolygonRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
   >
-    <For each={
-      d3.geoStitch(layerDescription.data).features
-        .filter((f) => !noShow().has(f.properties[layerDescription.rendererParameters.variable]))
-    }>
+    <For each={visibleFeatures()}>
       {
         (feature) => <path
-          fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
+          fill={colorsMap().get(feature.properties?.[layerDescription.rendererParameters.variable])}
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"
           // @ts-expect-error because use:bind-data isn't a property of this element
@@ -130,15 +137,15 @@ export function categoricalChoroplethPointRenderer(
   >
     <For each={
       layerDescription.data.features
-        .filter((f) => !noShow().has(f.properties[layerDescription.rendererParameters.variable]))
+        .filter((f) => !noShow().has(f.properties?.[layerDescription.rendererParameters.variable]))
     }>
       {
         (feature) => <path
-          fill={colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])}
+          fill={colorsMap().get(feature.properties?.[layerDescription.rendererParameters.variable])}
           d={
             getSymbolPath(
               layerDescription.symbolType!,
-              globalStore.projection(feature.geometry.coordinates),
+              globalStore.projection((feature.geometry as Point).coordinates),
               layerDescription.symbolSize!,
             )
           }
@@ -173,12 +180,12 @@ export function categoricalChoroplethLineRenderer(
   >
     <For each={
       layerDescription.data.features
-        .filter((f) => !noShow().has(f.properties[layerDescription.rendererParameters.variable]))
+        .filter((f) => !noShow().has(f.properties?.[layerDescription.rendererParameters.variable]))
     }>
       {
         (feature) => <path
           stroke={
-            colorsMap().get(feature.properties[layerDescription.rendererParameters.variable])
+            colorsMap().get(feature.properties?.[layerDescription.rendererParameters.variable])
           }
           d={globalStore.pathGenerator(feature)}
           vector-effect="non-scaling-stroke"

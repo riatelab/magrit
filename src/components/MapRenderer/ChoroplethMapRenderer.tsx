@@ -11,9 +11,9 @@ import type { Point } from 'geojson';
 // Helpers
 import { getClassifier } from '../../helpers/classification';
 import { isFiniteNumber } from '../../helpers/common';
+import { getGeoStitchedFeatures } from '../../helpers/geoStitchCache';
 import { getSymbolPath } from '../../helpers/svg';
 import { mergeFilterIds } from './common.tsx';
-import d3 from '../../helpers/d3-custom';
 
 // Stores
 import { applicationSettingsStore } from '../../store/ApplicationSettingsStore';
@@ -60,6 +60,9 @@ export function choroplethPolygonRenderer(
   layerDescription: LayerDescriptionChoropleth,
 ): JSX.Element {
   const { rendererParameters, classifier } = prepareParameters(layerDescription);
+  const stitchedFeatures = createMemo(
+    () => getGeoStitchedFeatures(layerDescription.data),
+  );
 
   return <g
     id={layerDescription.id}
@@ -81,13 +84,13 @@ export function choroplethPolygonRenderer(
     mgt:geometry-type={layerDescription.type}
     mgt:portrayal-type={layerDescription.representationType}
   >
-    <For each={d3.geoStitch(layerDescription.data).features}>
+    <For each={stitchedFeatures()}>
       {
         (feature) => <path
           fill={
-            isFiniteNumber(feature.properties[rendererParameters().variable])
+            isFiniteNumber(feature.properties?.[rendererParameters().variable])
               ? rendererParameters().palette.colors[
-                classifier().getClass(feature.properties[rendererParameters().variable])
+                classifier().getClass(feature.properties?.[rendererParameters().variable])
               ]
               : rendererParameters().noDataColor
           }
