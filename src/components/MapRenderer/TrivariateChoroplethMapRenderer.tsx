@@ -36,6 +36,8 @@ const directives = [ // eslint-disable-line @typescript-eslint/no-unused-vars
   bindData,
 ];
 
+type TrivariatePoint = [number, number, number];
+
 export function trivariateChoroplethPolygonRenderer(
   layerDescription: LayerDescriptionTrivariateChoropleth,
 ): JSX.Element {
@@ -68,18 +70,22 @@ export function trivariateChoroplethPolygonRenderer(
     });
   });
 
+  const validValues = createMemo(
+    () => values().filter((d): d is TrivariatePoint => d !== null),
+  );
+
   const center = createMemo(() => (rendererParameters().meanCentered
-    ? CompositionUtils.center(values().filter((d) => d !== null) as [number, number, number][])
+    ? CompositionUtils.center(validValues())
     : [1 / 3, 1 / 3, 1 / 3]));
 
   const colors = createMemo(() => {
     if (rendererParameters().colorScaleType === TricoloreScaleType.Sextant) {
-      return tricoloreSextant(values(), {
+      return tricoloreSextant(values() as TrivariatePoint[], {
         center: center(),
         values: (rendererParameters().colorScaleOptions as TriChoroSextantOpts).colors,
       });
     }
-    return tricolore(values(), {
+    return tricolore(values() as TrivariatePoint[], {
       center: center(),
       breaks: rendererParameters().colorScaleType === TricoloreScaleType.Discrete
         ? (rendererParameters().colorScaleOptions as TriChoroDiscreteOpts).classes
@@ -165,19 +171,22 @@ export function trivariateChoroplethLineRenderer(
     });
   });
 
+  const validValues = createMemo(
+    () => values().filter((d): d is TrivariatePoint => d !== null),
+  );
+
   const center = createMemo(() => (rendererParameters().meanCentered
-    ? CompositionUtils.center(values())
+    ? CompositionUtils.center(validValues())
     : [1 / 3, 1 / 3, 1 / 3]));
 
   const colors = createMemo(() => {
     if (rendererParameters().colorScaleType === TricoloreScaleType.Sextant) {
-      return tricoloreSextant(
-        values(),
-        center(),
-        (rendererParameters().colorScaleOptions as TriChoroSextantOpts).colors,
-      );
+      return tricoloreSextant(values() as TrivariatePoint[], {
+        center: center(),
+        values: (rendererParameters().colorScaleOptions as TriChoroSextantOpts).colors,
+      });
     }
-    return tricolore(values(), {
+    return tricolore(values() as TrivariatePoint[], {
       center: center(),
       breaks: rendererParameters().colorScaleType === TricoloreScaleType.Discrete
         ? (rendererParameters().colorScaleOptions as TriChoroDiscreteOpts).classes
@@ -257,19 +266,22 @@ export function trivariateChoroplethPointRenderer(
     });
   });
 
+  const validValues = createMemo(
+    () => values().filter((d): d is TrivariatePoint => d !== null),
+  );
+
   const center = createMemo(() => (rendererParameters().meanCentered
-    ? CompositionUtils.center(values())
+    ? CompositionUtils.center(validValues())
     : [1 / 3, 1 / 3, 1 / 3]));
 
   const colors = createMemo(() => {
     if (rendererParameters().colorScaleType === TricoloreScaleType.Sextant) {
-      return tricoloreSextant(
-        values(),
-        center(),
-        (rendererParameters().colorScaleOptions as TriChoroSextantOpts).colors,
-      );
+      return tricoloreSextant(values() as TrivariatePoint[], {
+        center: center(),
+        values: (rendererParameters().colorScaleOptions as TriChoroSextantOpts).colors,
+      });
     }
-    return tricolore(values(), {
+    return tricolore(values() as TrivariatePoint[], {
       center: center(),
       breaks: rendererParameters().colorScaleType === TricoloreScaleType.Discrete
         ? (rendererParameters().colorScaleOptions as TriChoroDiscreteOpts).classes
