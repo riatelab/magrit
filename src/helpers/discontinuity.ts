@@ -30,7 +30,10 @@ const computeDiscontinuity = (
   const topology = topojson.topology({ layer: refLayer }, 1e5);
 
   // Functions to get the id of a pair of features
-  const getPairIds = (a: Feature, b: Feature): [string, string] => [`${a.id}__${b.id}`, `${b.id}__${a.id}`];
+  const getPairIds = (a: Feature, b: Feature): [string, string] => [
+    JSON.stringify([`${a.id}`, `${b.id}`]),
+    JSON.stringify([`${b.id}`, `${a.id}`]),
+  ];
   const getIds = (a: Feature, b: Feature): [string, string] => [`${a.id}`, `${b.id}`];
 
   // Compute the discontinuity values between each pair of features
@@ -91,7 +94,7 @@ const computeDiscontinuity = (
   const dRes = [];
   for (let i = 0; i < nbFt; i += 1) {
     const idFt = arrDisc[i][0];
-    const [aId, bId] = idFt.split('__');
+    const [aId, bId] = JSON.parse(idFt) as [string, string];
     const val = arrDisc[i][1];
     const geom = topojson.mesh(
       topology,
