@@ -115,8 +115,12 @@ export function proportionalSymbolsPunctualRenderer(
 
   onMount(() => {
     refElement!.querySelectorAll('circle, rect')
-      .forEach((symbolElement, i) => {
-        bindDragBehavior(symbolElement as SVGGElement, layerDescription, i);
+      .forEach((symbolElement) => {
+        bindDragBehavior(
+          symbolElement as SVGGElement,
+          layerDescription,
+          Number(symbolElement.getAttribute('data-feature-index')),
+        );
       });
   });
 
@@ -164,6 +168,7 @@ export function proportionalSymbolsPunctualRenderer(
               )}
               cx={projectedCoords()[0]}
               cy={projectedCoords()[1]}
+              data-feature-index={layerDescription.data.features.indexOf(feature)}
               fill={getColor()(feature.properties!)}
               // @ts-expect-error because use:bind-data isn't a property of this element
               use:bindData={feature}
@@ -181,6 +186,7 @@ export function proportionalSymbolsPunctualRenderer(
               height={symbolSize()}
               x={projectedCoords()[0] - symbolSize() / 2}
               y={projectedCoords()[1] - symbolSize() / 2}
+              data-feature-index={layerDescription.data.features.indexOf(feature)}
               fill={getColor()(feature.properties!)}
               // @ts-expect-error because use:bind-data isn't a property of this element
               use:bindData={feature}

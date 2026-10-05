@@ -61,8 +61,12 @@ export default function categoricalPictogramRenderer(
 
   onMount(() => {
     refElement!.querySelectorAll('g')
-      .forEach((groupElement, i) => {
-        bindDragBehavior(groupElement as SVGGElement, layerDescription, i);
+      .forEach((groupElement) => {
+        bindDragBehavior(
+          groupElement as SVGGElement,
+          layerDescription,
+          Number(groupElement.getAttribute('data-feature-index')),
+        );
       });
   });
 
@@ -97,6 +101,7 @@ export default function categoricalPictogramRenderer(
           );
           return <g
             mgt:icon-dimension={JSON.stringify(icon()![2])}
+            data-feature-index={layerDescription.data.features.indexOf(feature)}
             // @ts-expect-error because use:bind-data isn't a property of this element
             use:bindData={feature}
           >
