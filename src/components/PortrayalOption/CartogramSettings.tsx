@@ -69,13 +69,24 @@ async function onClickValidate(
   }
 
   const inputData = unproxify(referenceLayerDescription.data as never);
+  const defaultOutputField = cartogramMethod === CartogramMethod.Olson ? 'scale' : 'area_error';
+  const existingFieldNames = new Set(referenceLayerDescription.fields.map((field) => field.name));
+  let outputField = defaultOutputField;
+  let suffix = 1;
+  while (existingFieldNames.has(outputField)) {
+    outputField = `${defaultOutputField} (${suffix})`;
+    suffix += 1;
+  }
+  const originalOutputValues = inputData.features.map(
+    (feature: { properties?: Record<string, unknown> }) => feature.properties?.[defaultOutputField],
+  );
 
   let newData;
   if (cartogramMethod === CartogramMethod.Olson) {
     newData = computeCartogramOlson(
       inputData,
       targetVariable,
-      mapStore.projection,
+      outputField,
     );
   } else if (cartogramMethod === CartogramMethod.GastnerSeguyMore) {
     newData = await computeCartogramGastnerSeguyMore(
@@ -88,7 +99,19 @@ async function onClickValidate(
       inputData,
       targetVariable,
       iterations,
+      outputField,
     );
+  }
+
+  if (cartogramMethod === CartogramMethod.GastnerSeguyMore) {
+    newData.features.forEach((feature, index) => {
+      const properties = feature.properties!;
+      const generatedValue = properties.area_error;
+      if (existingFieldNames.has(defaultOutputField)) {
+        properties[defaultOutputField] = originalOutputValues[index];
+      }
+      properties[outputField] = generatedValue;
+    });
   }
 
   const newFields = unproxify(referenceLayerDescription.fields as never) as Variable[];
@@ -99,7 +122,7 @@ async function onClickValidate(
   ) {
     // There is a new "area-error" field
     newFields.push({
-      name: 'area_error',
+      name: outputField,
       type: VariableType.ratio,
       hasMissingValues: false,
       dataType: 'number' as DataType,
@@ -107,7 +130,7 @@ async function onClickValidate(
   } else { // cartogramMethod === CartogramMethod.Olson
     // There is a new "scale" field
     newFields.push({
-      name: 'scale',
+      name: outputField,
       type: VariableType.ratio,
       hasMissingValues: false,
       dataType: 'number' as DataType,
