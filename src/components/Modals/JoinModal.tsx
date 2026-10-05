@@ -263,7 +263,10 @@ const doJoin = async (joinParameters: JoinParameters): Promise<void> => {
         ...feature,
         properties: {
           ...feature.properties,
-          ...Object.fromEntries(newFields.map((f) => [f, null])),
+          ...Object.fromEntries(newFields.map((f) => [
+            usePrefix ? `${prefixValue}${f}` : f,
+            null,
+          ])),
           [layerField]: feature.properties![layerField],
         },
       };
