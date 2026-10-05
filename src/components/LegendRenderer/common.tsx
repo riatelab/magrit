@@ -364,26 +364,20 @@ export function makeLegendSettingsModal(
         const lds = unproxify(layersDescriptionStore);
         // 1. Find the layer in the layersDescriptionStore
         //    and replace the new legend with the previous one
-        lds.layoutFeaturesAndLegends
-          .forEach((elem: LayoutFeature | Legend) => {
-            if (elem.id === legendId) {
-              // eslint-disable-next-line no-param-reassign
-              elem = legendProperties;
-            }
-          });
+        lds.layoutFeaturesAndLegends = lds.layoutFeaturesAndLegends
+          .map((elem: LayoutFeature | Legend) => (elem.id === legendId
+            ? legendProperties
+            : elem));
         lds.layers.forEach((l: LayerDescription) => {
           if (l.id === layerId) {
             Object.assign(l, initialLayerDescription);
           }
         });
         if (otherLegend) {
-          lds.layoutFeaturesAndLegends
-            .forEach((elem: LayoutFeature | Legend) => {
-              if (elem.id === otherLegend.id) {
-                // eslint-disable-next-line no-param-reassign
-                elem = otherLegend;
-              }
-            });
+          lds.layoutFeaturesAndLegends = lds.layoutFeaturesAndLegends
+            .map((elem: LayoutFeature | Legend) => (elem.id === otherLegend.id
+              ? otherLegend
+              : elem));
         }
         // 2. Push the whole layersDescriptionStore to the undo stack
         pushUndoStackStore('layersDescription', lds);
